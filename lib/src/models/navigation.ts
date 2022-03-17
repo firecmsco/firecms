@@ -73,14 +73,27 @@ export interface Navigation {
 }
 
 export type ResolvedEntityCollection = EntityCollection & {
-    modifiable: boolean;
+    editable?: boolean;
 }
 
 /**
  * @category Models
  */
-export type ResolvedNavigation = Navigation & {
-    storedCollections?: EntityCollection[];
+export type ResolvedNavigation = {
+    /**
+     * List of the mapped collections in the CMS.
+     * Each entry relates to a collection in the root database.
+     * Each of the navigation entries in this field
+     * generates an entry in the main menu.
+     */
+    collections?: ResolvedEntityCollection[];
+
+    /**
+     * Custom additional views created by the developer, added to the main
+     * navigation
+     */
+    views?: CMSView[];
+
 }
 
 /**

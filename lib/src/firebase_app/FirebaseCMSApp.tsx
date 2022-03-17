@@ -79,14 +79,19 @@ export function FirebaseCMSApp({
         firebaseConfigLoading,
         configError,
         firebaseConfigError
-    } = useInitialiseFirebase({ onFirebaseInit, firebaseConfig });
+    } = useInitialiseFirebase({
+        onFirebaseInit,
+        firebaseConfig
+    });
 
     const authDelegate: FirebaseAuthDelegate = useFirebaseAuthDelegate({
         firebaseApp,
         signInOptions
     });
 
-    const configPersistence = useBuildFirestoreConfigurationPersistence({ firebaseApp: firebaseApp });
+    const configPersistence = useBuildFirestoreConfigurationPersistence({
+        firebaseApp
+    });
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
     const schemaRegistry = useBuildSchemaRegistry({
@@ -101,7 +106,9 @@ export function FirebaseCMSApp({
         textSearchController,
         schemaRegistry
     });
-    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
+    const storageSource = useFirebaseStorageSource({
+        firebaseApp
+    });
 
     if (configError) {
         return <div> {configError} </div>;

@@ -26,6 +26,7 @@ import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../Table";
 import { getIconForProperty } from "../../util/property_utils";
 import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
+import { resolveEnumValues } from "../../util/entities";
 
 export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = {
 
@@ -180,11 +181,11 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
     }, []);
 
     const buildFilterableFromProperty = useCallback((property: ResolvedProperty,
-                                                     isArray: boolean = false): TableColumnFilter | undefined => {
+                                                     isArray = false): TableColumnFilter | undefined => {
 
         if (property.dataType === "number" || property.dataType === "string") {
             const name = property.name;
-            const enumValues = property.enumValues;
+            const enumValues = property.enumValues ? resolveEnumValues(property.enumValues, schemaRegistry.enumConfigs) : [];
             return {
                 dataType: property.dataType,
                 isArray,

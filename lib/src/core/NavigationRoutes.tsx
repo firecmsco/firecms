@@ -11,9 +11,7 @@ import { useNavigation } from "../hooks";
 import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
 import { NotFoundPage } from "./components/NotFoundPage";
 import { CollectionEditor } from "../collection_editor/CollectionEditor";
-import { EntityCollectionRoute } from "./components/EntityCollectionRoute";
 import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
-import { Box } from "@mui/material";
 
 /**
  * @category Components
@@ -92,34 +90,13 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                       <EntityCollectionView
                                           path={collection.path}
                                           collection={collection}
-                                          editable={false}/>
+                                          editable={collection.editable}/>
                                   </BreadcrumbUpdater>
                               }/>;
             }
         );
 
-
-    const sortedStoredCollections = [...(navigation.storedCollections ?? [])]
-        .sort((a, b) => b.path.length - a.path.length);
-
-    const storedCollectionRoutes = sortedStoredCollections
-        .map((collection) => {
-                const urlPath = navigationContext.buildUrlCollectionPath(collection.path);
-                return <Route path={urlPath + "/*"}
-                              key={`navigation_${collection.path}`}
-                              element={
-                                  <BreadcrumbUpdater
-                                      path={urlPath}
-                                      title={collection.name}>
-                                      <EntityCollectionRoute
-                                          path={collection.path}
-                                          collection={collection}/>
-                                  </BreadcrumbUpdater>
-                              }/>;
-            }
-        );
-
-    const collectionEditRoutes = (navigation.storedCollections ?? [])
+    const collectionEditRoutes = (navigation.collections?.filter((c) => c.editable) ?? [])
         .map((collection) => {
                 const urlPath = navigationContext.buildUrlEditCollectionPath({
                     path: collection.path
@@ -191,8 +168,6 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
             {schemasEditRoutes}
 
             {collectionRoutes}
-
-            {storedCollectionRoutes}
 
             {addNewCollectionRoute}
 

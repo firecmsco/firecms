@@ -38,7 +38,6 @@ export function EnumValuesChip({
         small={small}/>;
 }
 
-
 interface EnumChipProps {
     colorSeed: string;
     colorSchemaKey?: ChipColor;

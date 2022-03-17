@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Dialog } from "@mui/material";
+import { Dialog, useMediaQuery, useTheme } from "@mui/material";
 
 import { SchemaEditor } from "./SchemaEditor";
 import { EntitySchema } from "../index";
@@ -28,7 +28,9 @@ export function SchemaEditorDialog({
             PaperProps={{
                 sx: (theme) => ({
                     height: "100%",
-                    maxHeight: "900px",
+                    "@media (min-height:900px)": {
+                        maxHeight: "900px"
+                    },
                     background: theme.palette.background.default
                 })
             }}

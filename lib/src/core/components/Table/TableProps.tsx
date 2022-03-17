@@ -127,7 +127,6 @@ export type TableColumnFilter = {
     enumValues?: TableEnumValues;
 };
 
-
 /**
  * @see Table
  * @category Components

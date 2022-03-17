@@ -1,5 +1,4 @@
 import { EnumValueConfig } from "../../../../../models";
-import { styled } from "@mui/material/styles";
 import { ArrayEnumPreview, EnumValuesChip } from "../../../../../preview";
 import React, { useEffect, useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
@@ -7,26 +6,6 @@ import {
     enumToObjectEntries,
     isEnumValueDisabled
 } from "../../../../util/enums";
-
-const PREFIX = "TableSelect";
-
-const classes = {
-    selectRoot: `${PREFIX}-selectRoot`
-};
-
-const StyledSelect = styled(Select)((
-    {
-        theme
-    }
-) => ({
-    [`& .${classes.selectRoot}`]: {
-        display: "flex",
-        alignItems: "center",
-        height: "100%",
-        padding: "0px 0 0px",
-        background: "transparent !important"
-    }
-}));
 
 export function TableSelect(props: {
     name: string;
@@ -79,14 +58,13 @@ export function TableSelect(props: {
     }, [focused, ref]);
 
     return (
-        <StyledSelect
+        <Select
             variant={"standard"}
             key={`table_select_${name}`}
             inputRef={ref}
             sx={{
                 height: "100%"
             }}
-            classes={{ select: classes.selectRoot }}
             open={open}
             disabled={disabled}
             multiple={multiple}
@@ -94,8 +72,12 @@ export function TableSelect(props: {
             onOpen={handleOpen}
             fullWidth
             inputProps={{
-                style: {
-                    height: "100%"
+                sx: {
+                    height: "100% !important",
+                    display: "flex",
+                    alignItems: "center",
+                    padding: "0px 0 0px",
+                    background: "transparent !important"
                 }
             }}
             disableUnderline
@@ -162,6 +144,6 @@ export function TableSelect(props: {
                     );
                 }
             })}
-        </StyledSelect>
+        </Select>
     );
 }

@@ -8,6 +8,7 @@ import {
     Navigation,
     NavigationBuilder,
     NavigationContext,
+    ResolvedEntityCollection,
     ResolvedNavigation,
     SchemaOverrideHandler,
     SchemaRegistry,
@@ -76,7 +77,7 @@ export function useBuildNavigationContext<UserType>({
             return;
         }
         setNavigationLoading(true);
-        resolveNavigation({
+        resolveNavigationBuilder({
             navigationOrBuilder,
             authController,
             dateTimeFormat,
@@ -102,7 +103,7 @@ export function useBuildNavigationContext<UserType>({
         }
 
         try {
-            const result: ResolvedNavigation = getNavigation({
+            const result: ResolvedNavigation = resolveNavigation({
                 navigation: resolvedUserNavigation,
                 configPersistence
             })
@@ -123,10 +124,7 @@ export function useBuildNavigationContext<UserType>({
         entityId?: string
     ): EntityCollection<M> => {
 
-        const collections = [
-            ...(navigation?.collections ?? []),
-            ...(navigation?.storedCollections ?? [])
-        ];
+        const collections = [...(navigation?.collections ?? [])];
 
         const baseCollection = getCollectionByPath<M>(removeInitialAndTrailingSlashes(path), collections);
 
@@ -226,15 +224,7 @@ export function useBuildNavigationContext<UserType>({
                 name: collection.name,
                 path: collection.path,
                 type: "collection",
-                description: collection.description?.trim(),
-                group: collection.group?.trim()
-            } as TopNavigationEntry)),
-            ...(resolvedNavigation.storedCollections ?? []).map(collection => ({
-                url: buildUrlCollectionPath(collection.path),
-                name: collection.name,
-                path: collection.path,
-                type: "stored_collection",
-                editUrl: buildUrlEditCollectionPath({ path: collection.path }),
+                editUrl: collection.editable ? buildUrlEditCollectionPath({ path: collection.path }) : undefined,
                 description: collection.description?.trim(),
                 group: collection.group?.trim()
             } as TopNavigationEntry)),
@@ -277,22 +267,22 @@ export function useBuildNavigationContext<UserType>({
     };
 }
 
-async function resolveNavigation<UserType = any>({
-                                                     navigationOrBuilder,
-                                                     authController,
-                                                     dateTimeFormat,
-                                                     locale,
-                                                     dataSource,
-                                                     storageSource
-                                                 }:
-                                                     {
-                                                         navigationOrBuilder?: Navigation | NavigationBuilder<UserType>,
-                                                         authController: AuthController<UserType>,
-                                                         dateTimeFormat?: string,
-                                                         locale?: Locale,
-                                                         dataSource: DataSource,
-                                                         storageSource: StorageSource
-                                                     }): Promise<ResolvedNavigation | undefined> {
+async function resolveNavigationBuilder<UserType = any>({
+                                                            navigationOrBuilder,
+                                                            authController,
+                                                            dateTimeFormat,
+                                                            locale,
+                                                            dataSource,
+                                                            storageSource
+                                                        }:
+                                                            {
+                                                                navigationOrBuilder?: Navigation | NavigationBuilder<UserType>,
+                                                                authController: AuthController<UserType>,
+                                                                dateTimeFormat?: string,
+                                                                locale?: Locale,
+                                                                dataSource: DataSource,
+                                                                storageSource: StorageSource
+                                                            }): Promise<Navigation | undefined> {
     if (typeof navigationOrBuilder === "function") {
         return navigationOrBuilder({
             user: authController.user,
@@ -307,14 +297,14 @@ async function resolveNavigation<UserType = any>({
     }
 }
 
-const getNavigation = ({
-                           navigation,
-                           configPersistence
-                       }:
-                           {
-                               navigation?: ResolvedNavigation,
-                               configPersistence?: ConfigurationPersistence
-                           }
+const resolveNavigation = ({
+                               navigation,
+                               configPersistence
+                           }:
+                               {
+                                   navigation?: Navigation,
+                                   configPersistence?: ConfigurationPersistence
+                               }
 ): ResolvedNavigation => {
 
     if (!navigation && !configPersistence) {
@@ -323,11 +313,18 @@ const getNavigation = ({
 
     const fetchedCollections = configPersistence?.collections;
     if (fetchedCollections) {
+        const resolvedFetchedCollections: ResolvedEntityCollection[] = fetchedCollections.map(c => ({
+            ...c,
+            editable: true
+        }));
         if (navigation) {
-            // navigation.collections = populatedCollections.filter((col) => !navigation?.collections.map(c => c.path).includes(col.path));
-            navigation.storedCollections = fetchedCollections.filter((col) => !navigation?.collections?.map(c => c.path).includes(col.path));
+            const storedCollections = resolvedFetchedCollections
+                .filter((col) => !navigation?.collections?.map(c => c.path).includes(col.path));
+            navigation.collections = navigation.collections
+                ? [...navigation.collections, ...storedCollections]
+                : storedCollections;
         } else {
-            navigation = { storedCollections: fetchedCollections };
+            navigation = { collections: fetchedCollections };
         }
     }
 

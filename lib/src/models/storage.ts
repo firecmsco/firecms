@@ -34,7 +34,7 @@ export interface DownloadConfig {
  * The full set of object metadata, including read-only properties.
  * @public
  */
-export declare interface DownloadMetadata  {
+export declare interface DownloadMetadata {
     /**
      * The bucket this object is contained in.
      */

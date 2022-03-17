@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useCallback, useRef, useState } from "react";
-import { Box, Button, Dialog } from "@mui/material";
+import { Box, Button, Dialog, useTheme } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import {
     EntitySchema,
@@ -75,7 +75,9 @@ export function NewSchemaEditorDialog<M>({
             PaperProps={{
                 sx: (theme) => ({
                     height: "100%",
-                    maxHeight: "900px",
+                    "@media (min-height:900px)": {
+                        maxHeight: "900px"
+                    },
                     background: theme.palette.background.default
                 })
             }}

@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useState } from "react";
 import {
     Box,
     CardActionArea,
@@ -33,7 +33,6 @@ import Delete from "@mui/icons-material/Delete";
 import { MoreVert } from "@mui/icons-material";
 import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
 import { TopNavigationEntry, TopNavigationResult } from "../../models";
-
 
 /**
  * Default entry view for the CMS under the path "/"
