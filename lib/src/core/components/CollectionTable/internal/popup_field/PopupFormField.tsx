@@ -13,9 +13,9 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 import {
     Entity,
-    EntitySchema,
+    EntityCollection,
     EntityValues,
-    FormContext,
+    FormContext, ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty
 } from "../../../../../models";
@@ -31,8 +31,8 @@ import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
 import { isReadOnly } from "../../../../util/entities";
-import { useSchemaRegistry } from "../../../../../hooks/useSchemaRegistry";
 import { CustomDialogActions } from "../../../CustomDialogActions";
+import { getResolvedCollection } from "../../../../useBuildCollectionRegistry";
 
 
 interface PopupFormFieldProps<M extends { [Key: string]: any }> {
@@ -41,7 +41,7 @@ interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     path: string;
     tableKey: string;
     propertyId?: keyof M;
-    schema?: string | EntitySchema<M>;
+    collection?: EntityCollection<M>;
     cellRect?: DOMRect;
     open: boolean;
     onClose: () => void;
@@ -60,7 +60,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                                      entity,
                                                                      customFieldValidator,
                                                                      propertyId,
-                                                                     schema: inputSchema,
+                                                                     collection: inputCollection,
                                                                      path,
                                                                      cellRect,
                                                                      setPreventOutsideClick,
@@ -73,10 +73,10 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     // const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
-    const schemaRegistry = useSchemaRegistry();
-    const schema = inputSchema
-        ? schemaRegistry.getResolvedSchema({
-            schema: inputSchema,
+
+    const collection: ResolvedEntityCollection<M> | undefined = inputCollection
+        ? getResolvedCollection<M>({
+            collection: inputCollection,
             path,
             values: entity?.values,
             entityId: entity?.id
@@ -172,13 +172,13 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     );
 
     const validationSchema = useMemo(() => {
-        if (!schema) return;
+        if (!collection) return;
         return getYupEntitySchema(
-            propertyId && schema.properties[propertyId]
-                ? { [propertyId]: schema.properties[propertyId] } as ResolvedProperties<any>
+            propertyId && collection.properties[propertyId as string]
+                ? { [propertyId]: collection.properties[propertyId as string] } as ResolvedProperties<any>
                 : {} as ResolvedProperties<any>,
             customFieldValidator);
-    }, [path, propertyId, schema]);
+    }, [path, propertyId, collection]);
 
     const adaptResize = () => {
         return updatePopupLocation(popupLocation);
@@ -235,19 +235,19 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         return <ErrorView
                             error={"PopupFormField misconfiguration"}/>;
 
-                    if (!schema)
+                    if (!collection)
                         return <></>;
 
                     const disabled = isSubmitting;
 
                     const context: FormContext<M> = {
-                        schema,
+                        collection,
                         entityId: entity.id,
                         values,
                         path
                     };
 
-                    const property: ResolvedProperty<any> | undefined = schema.properties[propertyId];
+                    const property: ResolvedProperty<any> | undefined = collection.properties[propertyId];
 
                     return (
                         <Box

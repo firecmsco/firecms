@@ -11,7 +11,7 @@ import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { ErrorView, ReferenceDialog } from "../../core";
 
-import { useClearRestoreValue, useNavigation } from "../../hooks";
+import { useClearRestoreValue, useNavigationContext } from "../../hooks";
 import { getReferenceFrom } from "../../core/util/entities";
 
 
@@ -51,7 +51,7 @@ export function ArrayOfReferencesFieldBinding({
         setValue
     });
 
-    const navigationContext = useNavigation();
+    const navigationContext = useNavigationContext();
     const collectionResolver: EntityCollection | undefined = useMemo(() => {
         return ofProperty.path ? navigationContext.getCollection(ofProperty.path) : undefined;
     }, [ofProperty.path]);

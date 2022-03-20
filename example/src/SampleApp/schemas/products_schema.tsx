@@ -1,7 +1,7 @@
 import {
     AdditionalColumnDelegate,
     AsyncPreviewComponent,
-    buildSchema,
+    buildCollection,
     EntityCallbacks,
     EntityCustomView,
     ExtraActionsParams
@@ -11,15 +11,63 @@ import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
 import { SampleExtraActions } from "../collection_actions/SampleExtraActions";
 import { SampleProductsView } from "../custom_schema_view/SampleProductsView";
 import { Locale, Product } from "../types";
-import { categories, locales } from "./enums";
+import { categories, currencies, locales } from "./enums";
 
 const sampleView: EntityCustomView = {
     path: "sample_custom_view",
     name: "Custom view",
-    builder: ({ schema, entity, modifiedValues }) =>
+    builder: ({ collection, entity, modifiedValues }) =>
         <SampleProductsView entity={entity}
                             modifiedValues={modifiedValues}/>
 };
+
+export const productExtraActionBuilder = ({
+                                              selectionController
+                                          }: ExtraActionsParams) => {
+    return (
+        <SampleExtraActions
+            selectionController={selectionController}/>
+    );
+};
+
+
+export const localeCollection = buildCollection<Locale>({
+    path: "locales",
+    customId: locales,
+    name: "Locale",
+    properties: {
+        name: {
+            name: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        description: {
+            name: "Description",
+            validation: { required: true },
+            dataType: "string",
+            multiline: true
+        },
+        selectable: {
+            name: "Selectable",
+            description: "Is this locale selectable",
+            longDescription: "Changing this value triggers a cloud function that updates the parent product",
+            dataType: "boolean"
+        },
+        video: {
+            name: "Video",
+            dataType: "string",
+            validation: { required: false },
+            storage: {
+                storagePath: "videos",
+                acceptedFiles: ["video/*"],
+                fileName: (context) => {
+                    return context.file.name;
+                }
+            },
+            columnWidth: 400
+        }
+    }
+});
 
 
 const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
@@ -30,14 +78,56 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
             context.dataSource.fetchEntity({
                 path: entity.path,
                 entityId: entity.id,
-                schema: localeSchema
+                collection: localeCollection
             }).then((entity) => entity?.values.name)
         }/>
 };
 
-export const productSchema = buildSchema<Product>({
-    id: "product",
+export const productCallbacks: EntityCallbacks = {
+    onPreSave: ({
+                    collection,
+                    path,
+                    entityId,
+                    values,
+                    status
+                }) => {
+        values.uppercase_name = values.name.toUpperCase();
+        return values;
+    },
+
+    onSaveSuccess: (props) => {
+        console.log("onSaveSuccess", props);
+    },
+
+    onDelete: (props) => {
+        console.log("onDelete", props);
+    },
+
+    onPreDelete: (props) => {
+        const email: string | undefined = props.context.authController.user?.email;
+        if (!email || !email.endsWith("@camberi.com"))
+            throw Error("Product deletion not allowed in this demo");
+    }
+};
+
+export const productsCollection = buildCollection<Product>({
+    path: "products",
+    // inlineEditing: false,
+    callbacks: productCallbacks,
     name: "Product",
+    editable: true,
+    group: "Main",
+    description: "List of the products currently sold in our shop",
+    textSearchEnabled: true,
+    permissions: ({ authController }) => ({
+        edit: true,
+        create: true,
+        // we use some custom logic by storing user data in the `extra`
+        // field of the user
+        delete: authController.extra?.roles.includes("admin")
+    }),
+    extraActions: productExtraActionBuilder,
+    subcollections: [localeCollection],
     views: [
         sampleView
     ],
@@ -95,7 +185,7 @@ export const productSchema = buildSchema<Product>({
         currency: {
             dataType: "string",
             name: "Currency",
-            enumValues: "currencies",
+            enumValues: currencies,
             validation: {
                 required: true
             }
@@ -192,78 +282,3 @@ export const productSchema = buildSchema<Product>({
 
 });
 
-export const productCallbacks: EntityCallbacks = {
-    onPreSave: ({
-                    schema,
-                    path,
-                    entityId,
-                    values,
-                    status
-                }) => {
-        values.uppercase_name = values.name.toUpperCase();
-        return values;
-    },
-
-    onSaveSuccess: (props) => {
-        console.log("onSaveSuccess", props);
-    },
-
-    onDelete: (props) => {
-        console.log("onDelete", props);
-    },
-
-    onPreDelete: (props) => {
-        const email: string | undefined = props.context.authController.user?.email;
-        if (!email || !email.endsWith("@camberi.com"))
-            throw Error("Product deletion not allowed in this demo");
-    }
-};
-
-
-export const localeSchema = buildSchema<Locale>({
-    id: "locale",
-    customId: locales,
-    name: "Locale",
-    properties: {
-        name: {
-            name: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        description: {
-            name: "Description",
-            validation: { required: true },
-            dataType: "string",
-            multiline: true
-        },
-        selectable: {
-            name: "Selectable",
-            description: "Is this locale selectable",
-            longDescription: "Changing this value triggers a cloud function that updates the parent product",
-            dataType: "boolean"
-        },
-        video: {
-            name: "Video",
-            dataType: "string",
-            validation: { required: false },
-            storage: {
-                storagePath: "videos",
-                acceptedFiles: ["video/*"],
-                fileName: (context) => {
-                    return context.file.name;
-                }
-            },
-            columnWidth: 400
-        }
-    }
-});
-
-
-export const productExtraActionBuilder = ({
-                                              selectionController
-                                          }: ExtraActionsParams) => {
-    return (
-        <SampleExtraActions
-            selectionController={selectionController}/>
-    );
-};

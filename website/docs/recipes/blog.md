@@ -230,7 +230,7 @@ Let's make use of another feature of FireCMS: custom views for entities!
 
 FireCMS allows you to add additional views to your entity views, that are
 defined as React components. The props you receive for building this
-component are the entity schema, the original entity and the modified values.
+component are the entity collection, the original entity and the modified values.
 
 In this case, we will create some React components to represent our blog entry
 like the frontend app would do. This is the same code that you could
@@ -245,13 +245,13 @@ You can find the code for `BlogEntryPreview` in https://github.com/Camberi/firec
 ## Complete code:
 
 If we put together all the parts that we have build in this tutorial,
-we get the following code for the blog schema:
+we get the following code for the blog collection:
 
 
 ```tsx
-import { buildSchema, buildProperty } from "@camberi/firecms";
+import { buildCollection, buildProperty } from "@camberi/firecms";
 
-export const blogSchema = buildSchema({
+export const blogSchema = buildCollection({
     name: "Blog entry",
     views: [{
         path: "preview",

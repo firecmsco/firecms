@@ -60,7 +60,7 @@ import {
     AuthDelegate,
     Authenticator,
     buildCollection,
-    buildSchema,
+    buildCollection,
     CircularProgressCenter,
     createCMSDefaultTheme,
     FirebaseLoginView,
@@ -82,7 +82,7 @@ const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
 ];
 
-const productSchema = buildSchema({
+const productSchema = buildCollection({
     name: "Product",
     properties: {
         name: {
@@ -127,7 +127,7 @@ export function CustomCMSApp() {
         collections: [
             buildCollection({
                 path: "products",
-                schema: productSchema,
+                collection: productSchema,
                 name: "Products",
                 permissions: ({ user }) => ({
                     edit: true,

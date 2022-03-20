@@ -36,7 +36,7 @@ const navigation: NavigationBuilder = async ({ user }: NavigationBuilderProps) =
     collections: [
         buildCollection({
             path: "products",
-            schema: productSchema,
+            collection: productSchema,
             name: "Products"
         })
     ]

@@ -24,13 +24,11 @@ import { useAuthController, useFireCMSContext } from "../../../hooks";
 import {
     Entity,
     EntityCollection,
-    EntitySchema,
     ExportConfig,
     SelectionController
 } from "../../../models";
 
 export type EntityCollectionViewActionsProps<M> = {
-    schema: EntitySchema<M>;
     collection: EntityCollection<M>;
     path: string;
     selectionEnabled: boolean;
@@ -42,7 +40,6 @@ export type EntityCollectionViewActionsProps<M> = {
 }
 
 export function EntityCollectionViewActions<M>({
-                                                   schema,
                                                    collection,
                                                    onNewClick,
                                                    exportable,
@@ -66,7 +63,7 @@ export function EntityCollectionViewActions<M>({
             size="large"
             variant="contained"
             color="primary">
-            Add {schema.name}
+            Add {collection.name}
         </Button>
         : <Button
             onClick={onNewClick}
@@ -115,7 +112,7 @@ export function EntityCollectionViewActions<M>({
         : undefined;
 
     const exportButton = exportable &&
-        <ExportButton schema={schema}
+        <ExportButton collection={collection}
                       exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
                       path={path}/>;
     return (

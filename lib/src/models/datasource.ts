@@ -1,6 +1,6 @@
-import { Entity, EntitySchema, EntityStatus, EntityValues } from "./entities";
-import { FilterValues } from "./collections";
-import { ResolvedEntitySchema, ResolvedProperty } from "./resolved_entities";
+import { Entity, EntityStatus, EntityValues } from "./entities";
+import { EntityCollection, FilterValues } from "./collections";
+import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 
 /**
  * @category Datasource
@@ -8,7 +8,7 @@ import { ResolvedEntitySchema, ResolvedProperty } from "./resolved_entities";
 export interface FetchEntityProps<M> {
     path: string;
     entityId: string;
-    schema: string | EntitySchema<M>
+    collection: EntityCollection<M>
 }
 
 /**
@@ -24,7 +24,7 @@ export type ListenEntityProps<M> = FetchEntityProps<M> & {
  */
 export interface FetchCollectionProps<M> {
     path: string;
-    schema: string | EntitySchema<M> | ResolvedEntitySchema<M>;
+    collection: EntityCollection<M> | ResolvedEntityCollection<M>;
     filter?: FilterValues<Extract<keyof M, string>>,
     limit?: number;
     startAfter?: any[];
@@ -51,7 +51,7 @@ export interface SaveEntityProps<M> {
     values: Partial<EntityValues<M>>;
     entityId?: string; // can be empty for new entities
     previousValues?: Partial<EntityValues<M>>;
-    schema: string | EntitySchema<M> | ResolvedEntitySchema<M>;
+    collection: EntityCollection<M> | ResolvedEntityCollection<M>;
     status: EntityStatus;
 }
 
@@ -73,7 +73,7 @@ export interface DataSource {
     /**
      * Fetch data from a collection
      * @param path
-     * @param schema
+     * @param collection
      * @param filter
      * @param limit
      * @param startAfter
@@ -85,7 +85,7 @@ export interface DataSource {
      */
     fetchCollection<M>({
                            path,
-                           schema,
+                           collection,
                            filter,
                            limit,
                            startAfter,
@@ -99,7 +99,7 @@ export interface DataSource {
      * Listen to a entities in a given path. If you don't implement this method
      * `fetchCollection` will be used instead, with no real time updates.
      * @param path
-     * @param schema
+     * @param collection
      * @param onUpdate
      * @param onError
      * @param filter
@@ -114,7 +114,7 @@ export interface DataSource {
     listenCollection?<M>(
         {
             path,
-            schema,
+            collection,
             filter,
             limit,
             startAfter,
@@ -127,15 +127,15 @@ export interface DataSource {
     ): () => void;
 
     /**
-     * Retrieve an entity given a path and a schema
+     * Retrieve an entity given a path and a collection
      * @param path
      * @param entityId
-     * @param schema
+     * @param collection
      */
     fetchEntity<M>({
                        path,
                        entityId,
-                       schema
+                       collection
                    }: FetchEntityProps<M>
     ): Promise<Entity<M> | undefined>;
 
@@ -143,7 +143,7 @@ export interface DataSource {
      * Get realtime updates on one entity.
      * @param path
      * @param entityId
-     * @param schema
+     * @param collection
      * @param onUpdate
      * @param onError
      * @return Function to cancel subscription
@@ -151,7 +151,7 @@ export interface DataSource {
     listenEntity?<M>({
                          path,
                          entityId,
-                         schema,
+                         collection,
                          onUpdate,
                          onError
                      }: ListenEntityProps<M>): () => void;
@@ -160,7 +160,7 @@ export interface DataSource {
      * Save entity to the specified path
      * @param path
      * @param id
-     * @param schema
+     * @param collection
      * @param status
      */
     saveEntity<M>(
@@ -168,7 +168,7 @@ export interface DataSource {
             path,
             entityId,
             values,
-            schema,
+            collection,
             status
         }: SaveEntityProps<M>): Promise<Entity<M>>;
 

@@ -4,7 +4,7 @@ import { Box, Drawer as MuiDrawer } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { FireCMSAppBar } from "./internal/FireCMSAppBar";
 import { useLocation } from "react-router-dom";
-import { useNavigation } from "../hooks";
+import { useNavigationContext } from "../hooks";
 import { CircularProgressCenter } from "./components";
 
 
@@ -59,7 +59,7 @@ export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
 
 
 
-    const navigationContext = useNavigation();
+    const navigationContext = useNavigationContext();
     const [drawerOpen, setDrawerOpen] = React.useState(false);
     const containerRef = useRestoreScroll();
 

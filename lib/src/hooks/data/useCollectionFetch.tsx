@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Entity, EntitySchema, FilterValues } from "../../models";
+import { Entity, EntityCollection, FilterValues } from "../../models";
 import { useDataSource } from "./useDataSource";
 
 /**
@@ -13,9 +13,9 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
     path: string;
 
     /**
-     * Schema of the entity displayed by this collection
+     * collection of the entity displayed by this collection
      */
-    schema: string | EntitySchema<M>
+    collection: EntityCollection<M>
 
     /**
      * Number of entities to fetch
@@ -55,7 +55,7 @@ export interface CollectionFetchResult<M extends { [Key: string]: any }> {
 }
 
 /**
- * This hook is used to fetch collections using a given schema
+ * This hook is used to fetch collections using a given collection
  * @param path
  * @param schemaResolver
  * @param filterValues
@@ -68,7 +68,7 @@ export interface CollectionFetchResult<M extends { [Key: string]: any }> {
 export function useCollectionFetch<M>(
     {
         path,
-        schema,
+        collection,
         filterValues,
         sortBy,
         itemCount,
@@ -117,7 +117,7 @@ export function useCollectionFetch<M>(
         if (dataSource.listenCollection) {
             return dataSource.listenCollection<M>({
                 path,
-                schema,
+                collection,
                 onUpdate: onEntitiesUpdate,
                 onError,
                 searchString,
@@ -130,7 +130,7 @@ export function useCollectionFetch<M>(
         } else {
             dataSource.fetchCollection<M>({
                 path,
-                schema,
+                collection,
                 searchString,
                 filter: filterValues,
                 limit: itemCount,

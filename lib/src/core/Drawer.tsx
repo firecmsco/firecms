@@ -14,7 +14,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import ShowChartIcon from '@mui/icons-material/ShowChart';
-import { useNavigation } from "../hooks";
+import { useNavigationContext } from "../hooks";
 import { FireCMSLogo } from "./components/FireCMSLogo";
 import { TopNavigationEntry, TopNavigationResult } from "../models";
 
@@ -36,7 +36,7 @@ export function Drawer({
                            closeDrawer
                        }: DrawerProps) {
 
-    const navigationContext = useNavigation();
+    const navigationContext = useNavigationContext();
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");

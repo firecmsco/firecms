@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { EntityCollection } from "../../models";
 import EntityCollectionView from "./EntityCollectionView/EntityCollectionView";
 import { CircularProgressCenter } from "./CircularProgressCenter";
-import { useConfigurationPersistence } from "../../hooks/useConfigurationPersistence";
-import { CollectionEditor } from "../../collection_editor/CollectionEditor";
+import {
+    useConfigurationPersistence
+} from "../../hooks/useConfigurationPersistence";
 import { ErrorView } from "./ErrorView";
 
 /**
@@ -44,13 +45,10 @@ export function EntityCollectionRoute<M extends { [Key: string]: any }>({
                                      editable={false}/>;
 
     else if (storedCollection) {
-        if (storedCollection.schemaId)
             return <EntityCollectionView
                 editable={true}
                 path={path}
                 collection={storedCollection}/>;
-        else
-            return <CollectionEditor path={path}/>;
     } else if (loading)
         return <CircularProgressCenter/>;
 

@@ -7,11 +7,9 @@ import {
     FireCMSHomePage,
     SchemaEditor
 } from "./components";
-import { useNavigation } from "../hooks";
+import { useNavigationContext } from "../hooks";
 import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
 import { NotFoundPage } from "./components/NotFoundPage";
-import { CollectionEditor } from "../collection_editor/CollectionEditor";
-import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
 
 /**
  * @category Components
@@ -35,8 +33,8 @@ export type NavigationRoutesProps = {
 export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
     const location = useLocation();
-    const navigationContext = useNavigation();
-    const schemaRegistry = useSchemaRegistry();
+    const navigationContext = useNavigationContext();
+    
     const navigation = navigationContext.navigation;
 
     if (!navigation)
@@ -107,24 +105,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                   <BreadcrumbUpdater
                                       path={urlPath}
                                       title={collection.name}>
-                                      <CollectionEditor path={collection.path}/>
-                                  </BreadcrumbUpdater>
-                              }/>;
-            }
-        );
-
-    const schemasEditRoutes = (schemaRegistry.schemas ?? [])
-        .map((schema) => {
-                const urlPath = navigationContext.buildUrlEditSchemaPath({
-                    id: schema.id
-                });
-                return <Route path={urlPath + "/*"}
-                              key={`navigation_${schema.id}`}
-                              element={
-                                  <BreadcrumbUpdater
-                                      path={urlPath}
-                                      title={"Schema editor"}>
-                                      <SchemaEditor schemaId={schema.id}/>
+                                      <SchemaEditor path={collection.path}/>
                                   </BreadcrumbUpdater>
                               }/>;
             }
@@ -138,7 +119,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                    <BreadcrumbUpdater
                        path={newCollectionPath}
                        title={"New collection"}>
-                       <CollectionEditor/>
+                       <SchemaEditor/>
                    </BreadcrumbUpdater>
                }/>
     );
@@ -164,8 +145,6 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
         <Routes location={baseLocation}>
 
             {collectionEditRoutes}
-
-            {schemasEditRoutes}
 
             {collectionRoutes}
 

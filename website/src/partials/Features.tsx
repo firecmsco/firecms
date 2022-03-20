@@ -227,7 +227,7 @@ function Features() {
                                         showLineNumbers={false}
                                         style={isDarkTheme ? vs2015 : atomOneLight}
                                     >
-                                        {`const productSchema: EntitySchema = buildSchema({
+                                        {`const productSchema: EntitySchema = buildCollection({
     name: "Product",
     properties: {
         name: {

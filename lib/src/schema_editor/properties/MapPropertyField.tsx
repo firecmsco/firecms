@@ -40,7 +40,7 @@ export function MapPropertyField({}: {}) {
     const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
         const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
         if (!fullId)
-            throw Error("Schema editor miss config");
+            throw Error("collection editor miss config");
 
         const propertiesPath = idToPropertiesPath(fullId);
         const propertiesOrderPath = namespaceToPropertiesOrderPath(namespace);

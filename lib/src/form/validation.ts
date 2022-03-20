@@ -67,7 +67,7 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
     const property = propertyContext.property;
     if (typeof property === "function") {
         console.log("Error in property", propertyContext);
-        throw Error("PropertyBuilders can only be defined as the root properties in entity schemas, not in child properties");
+        throw Error("PropertyBuilders can only be defined as the root properties in entity collections, not in child properties");
     }
 
     if (property.dataType === "string") {
@@ -116,22 +116,22 @@ function getYupStringSchema({
                                 customFieldValidator,
                                 name
                             }: PropertyContext<string>): StringSchema {
-    let schema: StringSchema<any> = yup.string();
+    let collection: StringSchema<any> = yup.string();
     const validation = property.validation;
     if (property.enumValues) {
         if (validation?.required)
-            schema = schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required");
-        schema = schema.oneOf(
+            collection = collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required");
+        collection = collection.oneOf(
             enumToObjectEntries(property.enumValues)
                 .map(([key, _]) => key)
         );
     }
     if (validation) {
-        schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
-            : schema.notRequired().nullable(true);
+        collection = validation.required
+            ? collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            : collection.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
-            schema = schema.test("unique", "This value already exists and should be unique",
+            collection = collection.test("unique", "This value already exists and should be unique",
                 (value, context) =>
                     customFieldValidator({
                         name,
@@ -139,18 +139,18 @@ function getYupStringSchema({
                         parentProperty,
                         value
                     }));
-        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.name} must be min ${validation.min} characters long`);
-        if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.name} must be max ${validation.max} characters long`);
-        if (validation.matches) schema = schema.matches(validation.matches, validation.matchesMessage ? { message: validation.matchesMessage } : undefined);
-        if (validation.trim) schema = schema.trim();
-        if (validation.lowercase) schema = schema.lowercase();
-        if (validation.uppercase) schema = schema.uppercase();
-        if (property.email) schema = schema.email(`${property.name} must be an email`);
-        if (property.url) schema = schema.url(`${property.name} must be a url`);
+        if (validation.min || validation.min === 0) collection = collection.min(validation.min, `${property.name} must be min ${validation.min} characters long`);
+        if (validation.max || validation.max === 0) collection = collection.max(validation.max, `${property.name} must be max ${validation.max} characters long`);
+        if (validation.matches) collection = collection.matches(validation.matches, validation.matchesMessage ? { message: validation.matchesMessage } : undefined);
+        if (validation.trim) collection = collection.trim();
+        if (validation.lowercase) collection = collection.lowercase();
+        if (validation.uppercase) collection = collection.uppercase();
+        if (property.email) collection = collection.email(`${property.name} must be an email`);
+        if (property.url) collection = collection.url(`${property.name} must be a url`);
     } else {
-        schema = schema.notRequired().nullable(true);
+        collection = collection.notRequired().nullable(true);
     }
-    return schema;
+    return collection;
 }
 
 function getYupNumberSchema({
@@ -160,13 +160,13 @@ function getYupNumberSchema({
                                 name
                             }: PropertyContext<number>): NumberSchema {
     const validation = property.validation;
-    let schema: NumberSchema<any> = yup.number().typeError("Must be a number");
+    let collection: NumberSchema<any> = yup.number().typeError("Must be a number");
     if (validation) {
-        schema = validation.required
-            ? schema.required(validation.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
-            : schema.notRequired().nullable(true);
+        collection = validation.required
+            ? collection.required(validation.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            : collection.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
-            schema = schema.test("unique",
+            collection = collection.test("unique",
                 "This value already exists and should be unique",
                 (value) => customFieldValidator({
                     name,
@@ -174,17 +174,17 @@ function getYupNumberSchema({
                     parentProperty,
                     value
                 }));
-        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.name} must be higher or equal to ${validation.min}`);
-        if (validation.max || validation.max === 0) schema = schema.max(validation.max, `${property.name} must be lower or equal to ${validation.max}`);
-        if (validation.lessThan || validation.lessThan === 0) schema = schema.lessThan(validation.lessThan, `${property.name} must be higher than ${validation.lessThan}`);
-        if (validation.moreThan || validation.moreThan === 0) schema = schema.moreThan(validation.moreThan, `${property.name} must be lower than ${validation.moreThan}`);
-        if (validation.positive) schema = schema.positive(`${property.name} must be positive`);
-        if (validation.negative) schema = schema.negative(`${property.name} must be negative`);
-        if (validation.integer) schema = schema.integer(`${property.name} must be an integer`);
+        if (validation.min || validation.min === 0) collection = collection.min(validation.min, `${property.name} must be higher or equal to ${validation.min}`);
+        if (validation.max || validation.max === 0) collection = collection.max(validation.max, `${property.name} must be lower or equal to ${validation.max}`);
+        if (validation.lessThan || validation.lessThan === 0) collection = collection.lessThan(validation.lessThan, `${property.name} must be higher than ${validation.lessThan}`);
+        if (validation.moreThan || validation.moreThan === 0) collection = collection.moreThan(validation.moreThan, `${property.name} must be lower than ${validation.moreThan}`);
+        if (validation.positive) collection = collection.positive(`${property.name} must be positive`);
+        if (validation.negative) collection = collection.negative(`${property.name} must be negative`);
+        if (validation.integer) collection = collection.integer(`${property.name} must be an integer`);
     } else {
-        schema = schema.notRequired().nullable(true);
+        collection = collection.notRequired().nullable(true);
     }
-    return schema;
+    return collection;
 }
 
 function getYupGeoPointSchema({
@@ -193,10 +193,10 @@ function getYupGeoPointSchema({
                                   customFieldValidator,
                                   name
                               }: PropertyContext<GeoPoint>): AnySchema {
-    let schema: ObjectSchema<any> = yup.object();
+    let collection: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation?.unique && customFieldValidator && name)
-        schema = schema.test("unique",
+        collection = collection.test("unique",
             "This value already exists and should be unique",
             (value) => customFieldValidator({
                 name,
@@ -205,11 +205,11 @@ function getYupGeoPointSchema({
                 value
             }));
     if (validation?.required) {
-        schema = schema.required(validation.requiredMessage).nullable(true);
+        collection = collection.required(validation.requiredMessage).nullable(true);
     } else {
-        schema = schema.notRequired().nullable(true);
+        collection = collection.notRequired().nullable(true);
     }
-    return schema;
+    return collection;
 }
 
 function getYupDateSchema({
@@ -221,14 +221,14 @@ function getYupDateSchema({
     if (property.autoValue) {
         return yup.object().nullable(true);
     }
-    let schema: DateSchema<any> = yup.date();
+    let collection: DateSchema<any> = yup.date();
     const validation = property.validation;
     if (validation) {
-        schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
-            : schema.notRequired().nullable(true);
+        collection = validation.required
+            ? collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            : collection.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
-            schema = schema.test("unique",
+            collection = collection.test("unique",
                 "This value already exists and should be unique",
                 (value) => customFieldValidator({
                     name,
@@ -236,12 +236,12 @@ function getYupDateSchema({
                     parentProperty,
                     value
                 }));
-        if (validation.min) schema = schema.min(validation.min, `${property.name} must be after ${validation.min}`);
-        if (validation.max) schema = schema.max(validation.max, `${property.name} must be before ${validation.min}`);
+        if (validation.min) collection = collection.min(validation.min, `${property.name} must be after ${validation.min}`);
+        if (validation.max) collection = collection.max(validation.max, `${property.name} must be before ${validation.min}`);
     } else {
-        schema = schema.notRequired().nullable(true);
+        collection = collection.notRequired().nullable(true);
     }
-    return schema;
+    return collection;
 }
 
 function getYupReferenceSchema({
@@ -250,14 +250,14 @@ function getYupReferenceSchema({
                                                                      customFieldValidator,
                                                                      name
                                                                  }: PropertyContext<EntityReference>): AnySchema {
-    let schema: ObjectSchema<any> = yup.object();
+    let collection: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {
-        schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
-            : schema.notRequired().nullable(true);
+        collection = validation.required
+            ? collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            : collection.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
-            schema = schema.test("unique",
+            collection = collection.test("unique",
                 "This value already exists and should be unique",
                 (value) => customFieldValidator({
                     name,
@@ -266,9 +266,9 @@ function getYupReferenceSchema({
                     value
                 }));
     } else {
-        schema = schema.notRequired().nullable(true);
+        collection = collection.notRequired().nullable(true);
     }
-    return schema;
+    return collection;
 }
 
 function getYupBooleanSchema({
@@ -277,14 +277,14 @@ function getYupBooleanSchema({
                                  customFieldValidator,
                                  name
                              }: PropertyContext<boolean>): BooleanSchema {
-    let schema: BooleanSchema<any> = yup.boolean();
+    let collection: BooleanSchema<any> = yup.boolean();
     const validation = property.validation;
     if (validation) {
-        schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
-            : schema.notRequired().nullable(true);
+        collection = validation.required
+            ? collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            : collection.notRequired().nullable(true);
         if (validation.unique && customFieldValidator && name)
-            schema = schema.test("unique",
+            collection = collection.test("unique",
                 "This value already exists and should be unique",
                 (value) => customFieldValidator({
                     name,
@@ -293,9 +293,9 @@ function getYupBooleanSchema({
                     value
                 }));
     } else {
-        schema = schema.notRequired().nullable(true);
+        collection = collection.notRequired().nullable(true);
     }
-    return schema;
+    return collection;
 }
 
 function hasUniqueInArrayModifier(property: ResolvedProperty): boolean | [string, ResolvedProperty][] {
@@ -315,20 +315,20 @@ function getYupArraySchema({
                                   name
                               }: PropertyContext<any[]>): ArraySchema<any> {
 
-    let schema: ArraySchema<any> = yup.array();
+    let collection: ArraySchema<any> = yup.array();
 
     if (property.of) {
-        schema = schema.of(mapPropertyToYup({
+        collection = collection.of(mapPropertyToYup({
             property: property.of,
             parentProperty: property
         }));
         const arrayUniqueFields = hasUniqueInArrayModifier(property.of);
         if (arrayUniqueFields) {
             if (typeof arrayUniqueFields === "boolean") {
-                schema = schema.uniqueInArray(v => v, `${property.name} should have unique values within the array`);
+                collection = collection.uniqueInArray(v => v, `${property.name} should have unique values within the array`);
             } else if (Array.isArray(arrayUniqueFields)) {
                 arrayUniqueFields.forEach(([name, childProperty]) => {
-                        schema = schema.uniqueInArray(v => v && v[name], `${property.name} → ${childProperty.name ?? name}: should have unique values within the array`);
+                        collection = collection.uniqueInArray(v => v && v[name], `${property.name} → ${childProperty.name ?? name}: should have unique values within the array`);
                     }
                 );
             }
@@ -337,13 +337,13 @@ function getYupArraySchema({
     const validation = property.validation;
 
     if (validation) {
-        schema = validation.required
-            ? schema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
-            : schema.notRequired().nullable(true);
-        if (validation.min || validation.min === 0) schema = schema.min(validation.min, `${property.name} should be min ${validation.min} entries long`);
-        if (validation.max) schema = schema.max(validation.max, `${property.name} should be max ${validation.max} entries long`);
+        collection = validation.required
+            ? collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            : collection.notRequired().nullable(true);
+        if (validation.min || validation.min === 0) collection = collection.min(validation.min, `${property.name} should be min ${validation.min} entries long`);
+        if (validation.max) collection = collection.max(validation.max, `${property.name} should be max ${validation.max} entries long`);
     } else {
-        schema = schema.notRequired().nullable(true);
+        collection = collection.notRequired().nullable(true);
     }
-    return schema;
+    return collection;
 }

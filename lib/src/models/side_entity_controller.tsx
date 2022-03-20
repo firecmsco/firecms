@@ -1,10 +1,9 @@
 import { EntityCollection } from "./collections";
-import { EntitySchema } from "./entities";
 import { EntityCallbacks } from "./entity_callbacks";
 import { EntityPermissionsBuilder } from "./permissions";
 import { User } from "./user";
 import {
-    ResolvedEntitySchema
+    ResolvedEntityCollection
 } from "./resolved_entities";
 
 /**
@@ -46,10 +45,10 @@ export interface SideEntityPanelProps<M = any, UserType = User> {
     permissions?: EntityPermissionsBuilder<M, UserType>;
 
     /**
-     * Schema representing the entities of this view.
+     * collection representing the entities of this view.
      * If you leave it blank it will be induced by your navigation
      */
-    schema?: string | EntitySchema<M> | ResolvedEntitySchema<M>;
+    collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
 
     /**
      * You can add subcollections to your entity in the same way you define the root
@@ -66,7 +65,7 @@ export interface SideEntityPanelProps<M = any, UserType = User> {
 
     /**
      * Should update the URL when opening the dialog.
-     * Consider that if the schema that you provide is not defined in the base
+     * Consider that if the collection that you provide is not defined in the base
      * config of your `FireCMS` component, you will not be able to recreate
      * the state if copying the URL to a different window.
      */
@@ -89,7 +88,7 @@ export interface SideEntityController {
     sidePanels: SideEntityPanelProps[];
 
     /**
-     * Open a new entity sideDialog. By default, the schema and configuration
+     * Open a new entity sideDialog. By default, the collection and configuration
      * of the view is fetched from the collections you have specified in the
      * navigation.
      * At least you need to pass the path of the entity you would like

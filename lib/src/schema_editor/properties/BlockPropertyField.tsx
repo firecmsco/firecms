@@ -42,7 +42,7 @@ export function BlockPropertyField({}: {}) {
     const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
         const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
         if (!fullId)
-            throw Error("Schema editor miss config");
+            throw Error("collection editor miss config");
 
         setFieldValue(`oneOf.${idToPropertiesPath(fullId)}`, undefined, false);
         const propertiesOrderPath = `oneOf.${namespaceToPropertiesOrderPath(namespace)}`;

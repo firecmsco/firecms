@@ -34,7 +34,6 @@ import { isReadOnly } from "../core/util/entities";
 import equal from "react-fast-compare"
 import { useDebounce } from "../core/internal/useDebounce";
 
-
 /**
  * This factory method renders a form field creating the corresponding configuration
  * from a property. For example if bound to a string property, it will generate
@@ -47,7 +46,7 @@ import { useDebounce } from "../core/internal/useDebounce";
  *
  * Please note that if you build a custom field in a component, the
  * **validation** passed in the property will have no effect. You need to set
- * the validation in the `EntitySchema` definition.
+ * the validation in the `EntityCollection` definition.
  *
  * @param name You can use nested names such as `address.street` or `friends[2]`
  * @param property

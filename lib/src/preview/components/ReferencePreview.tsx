@@ -16,13 +16,12 @@ import { EntityReference, ResolvedProperty } from "../../models";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { PreviewSize, PropertyPreview, SkeletonComponent } from "../internal";
 
-import { ErrorView } from "../../core";
+import { ErrorView, getResolvedCollection } from "../../core";
 import {
     useEntityFetch,
-    useNavigation,
+    useNavigationContext,
     useSideEntityController
 } from "../../hooks";
-import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
 export type ReferencePreviewProps = {
     path: string | false;
@@ -56,8 +55,7 @@ function ReferencePreviewInternal<M>({
                                          onClick
                                      }: ReferencePreviewProps) {
 
-    const navigationContext = useNavigation();
-    const schemaRegistry = useSchemaRegistry();
+    const navigationContext = useNavigationContext();
     const sideEntityController = useSideEntityController();
 
     if (!path) {
@@ -81,13 +79,13 @@ function ReferencePreviewInternal<M>({
     } = useEntityFetch({
         path: reference.path,
         entityId: reference.id,
-        schema: collection.schemaId,
+        collection,
         useCache: true
     });
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const schema = useMemo(() => schemaRegistry.getResolvedSchema({
-        schema: collection.schemaId,
+    const resolvedCollection = useMemo(() => getResolvedCollection({
+        collection,
         path: path,
         values: entity?.values
     }), [collection]);
@@ -95,10 +93,10 @@ function ReferencePreviewInternal<M>({
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const listProperties = useMemo(() => {
-        if (!schema) return [];
+        if (!resolvedCollection) return [];
         let res = previewProperties;
         if (!res || !res.length) {
-            res = Object.keys(schema.properties);
+            res = Object.keys(resolvedCollection.properties);
         }
 
         if (size === "small" || size === "regular")
@@ -106,7 +104,7 @@ function ReferencePreviewInternal<M>({
         else if (size === "tiny")
             res = res.slice(0, 1);
         return res;
-    }, [previewProperties, schema?.properties, size]);
+    }, [previewProperties, resolvedCollection?.properties, size]);
 
     let body: JSX.Element;
 
@@ -114,9 +112,9 @@ function ReferencePreviewInternal<M>({
         return <ErrorView error={error} tooltip={tooltip}/>;
     }
 
-    if (!schema) {
+    if (!resolvedCollection) {
         return <ErrorView
-            error={"Could not find schema with id " + collection.schemaId}/>
+            error={"Could not find collection with id " + resolvedCollection}/>
     }
 
     if (!reference) {
@@ -152,7 +150,7 @@ function ReferencePreviewInternal<M>({
                             : <Skeleton variant="text"/>)}
 
                     {listProperties && listProperties.map((key) => {
-                        const childProperty = schema.properties[key as string];
+                        const childProperty = resolvedCollection.properties[key as string];
                         if (!childProperty) return null;
 
                         return (
@@ -183,7 +181,7 @@ function ReferencePreviewInternal<M>({
                                     sideEntityController.open({
                                         entityId: entity.id,
                                         path: entity.path,
-                                        schema: schema,
+                                        collection: resolvedCollection,
                                         updateUrl: true
                                     });
                                 }}>

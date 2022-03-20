@@ -9,7 +9,7 @@ associated with an entity schema. You can find collections
 at the **top level** of the navigation tree (the entries displayed in the home
 page and the navigation drawer), or as **subcollections**
 
-Once you have defined at least one entity schema, you can include it in a
+Once you have defined at least one entity collection, you can include it in a
 **collection**. 
 
 You can find collection views as the first level of navigation in
@@ -25,7 +25,7 @@ in [Entity collections](../api/interfaces/entitycollection)
   view is in the root the path, it is equal to the absolute one. This path also
   determines the URL in FireCMS.
 
-* `subcollections` Following the Firestore document and collection schema, you
+* `subcollections` Following the Firestore document and collection collection, you
   can add subcollections to your entity in the same way you define the root
   collections.
 
@@ -97,7 +97,7 @@ import { buildCollection } from "@camberi/firecms";
 
 const productsCollection = buildCollection<Product>({
     path: "products",
-    schema: productSchema,
+    collection: productSchema,
     name: "Products",
     group: "Main",
     description: "List of the products currently sold in our shop",
@@ -135,7 +135,7 @@ property values.
 
 ```tsx
 import {
-    buildSchema,
+    buildCollection,
     buildCollection,
     AdditionalColumnDelegate
 } from "@camberi/firecms";
@@ -154,7 +154,7 @@ export const fullNameAdditionalColumn: AdditionalColumnDelegate<User> = {
 
 const usersCollection = buildCollection<User>({
     path: "users",
-    schema: buildSchema<User>({
+    collection: buildCollection<User>({
         name: "User",
         properties: {
             name: { dataType: "string", title: "Name" }
@@ -184,7 +184,7 @@ export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
             context.dataSource.fetchEntity({
               path: entity.path,
               entityId: entity.id,
-              schema: localeSchema
+              collection: localeSchema
             }).then((entity) => entity.values.name)
           }/>
 };
@@ -225,7 +225,7 @@ import { buildCollection } from "@camberi/firecms";
 
 const productsCollection = buildCollection<Product>({
     path: "products",
-    schema: productSchema,
+    collection: productSchema,
     name: "Products",
     indexes: [
         {

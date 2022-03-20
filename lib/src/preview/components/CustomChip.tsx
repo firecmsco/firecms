@@ -60,7 +60,7 @@ export function CustomChip({
                            }: EnumChipProps) {
 
     const theme = useTheme();
-    const schema = useMemo(() =>
+    const collection = useMemo(() =>
         colorSchemaKey
             ? getColorSchemeForKey(colorSchemaKey)
             : getColorSchemeForSeed(colorSeed), [colorSeed, colorSchemaKey]);
@@ -69,8 +69,8 @@ export function CustomChip({
         <Chip
             sx={{
                 maxWidth: "100%",
-                backgroundColor: error ? "#eee" : schema.color,
-                color: error ? "red" : schema.text,
+                backgroundColor: error ? "#eee" : collection.color,
+                color: error ? "red" : collection.text,
                 fontWeight: theme!.typography.fontWeightRegular
             }}
             size={small ? "small" : "medium"}

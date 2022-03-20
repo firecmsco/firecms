@@ -7,6 +7,7 @@ import {
     SaveEntityProps
 } from "../../models";
 import { useDataSource } from "./useDataSource";
+import { getResolvedCollection } from "../../core";
 
 /**
  * @category Hooks and utilities
@@ -23,7 +24,7 @@ export type SaveEntityWithCallbacksProps<M> =
 
 /**
  * This function is in charge of saving an entity to the datasource.
- * It will run all the save callbacks specified in the schema.
+ * It will run all the save callbacks specified in the collection.
  * It is also possible to attach callbacks on save success or error, and callback
  * errors.
  *
@@ -31,7 +32,7 @@ export type SaveEntityWithCallbacksProps<M> =
  * `onSaveFailure` and `onPreSave` callbacks, you can use the `saveEntity` method
  * in the datasource ({@link useDataSource}).
  *
- * @param schema
+ * @param collection
  * @param path
  * @param entityId
  * @param callbacks
@@ -48,7 +49,7 @@ export type SaveEntityWithCallbacksProps<M> =
  * @category Hooks and utilities
  */
 export async function saveEntityWithCallbacks<M, UserType>({
-                                                               schema,
+                                                               collection,
                                                                path,
                                                                entityId,
                                                                callbacks,
@@ -69,18 +70,16 @@ export async function saveEntityWithCallbacks<M, UserType>({
 
     let updatedValues: Partial<EntityValues<M>>;
 
-    const schemaRegistry = context.schemaRegistry;
-
     if (callbacks?.onPreSave) {
         try {
-            const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
-                schema,
+            const resolvedCollection = getResolvedCollection<M>({
+                collection,
                 path,
                 values: previousValues as EntityValues<M>,
                 entityId
             });
             updatedValues = await callbacks.onPreSave({
-                schema: resolvedSchema,
+                collection: resolvedCollection,
                 path,
                 entityId,
                 values,
@@ -99,7 +98,7 @@ export async function saveEntityWithCallbacks<M, UserType>({
     }
 
     return dataSource.saveEntity({
-        schema,
+        collection,
         path,
         entityId,
         values: updatedValues,
@@ -108,14 +107,14 @@ export async function saveEntityWithCallbacks<M, UserType>({
     }).then((entity) => {
         try {
             if (callbacks?.onSaveSuccess) {
-                const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
-                    schema,
+                const resolvedCollection = getResolvedCollection<M>({
+                    collection,
                     path,
                     values: updatedValues as EntityValues<M>,
                     entityId
                 });
                 callbacks.onSaveSuccess({
-                    schema: resolvedSchema,
+                    collection: resolvedCollection,
                     path,
                     entityId: entity.id,
                     values: updatedValues,
@@ -134,14 +133,14 @@ export async function saveEntityWithCallbacks<M, UserType>({
         .catch((e) => {
             if (callbacks?.onSaveFailure) {
 
-                const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
-                    schema,
+                const resolvedCollection = getResolvedCollection<M>({
+                    collection,
                     path,
                     values: updatedValues as EntityValues<M>,
                     entityId
                 });
                 callbacks.onSaveFailure({
-                    schema: resolvedSchema,
+                    collection: resolvedCollection,
                     path,
                     entityId,
                     values: updatedValues,

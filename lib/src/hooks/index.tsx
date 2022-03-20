@@ -5,7 +5,7 @@ export * from "./data/save";
 export * from "./data/delete";
 
 export * from "../form/useClearRestoreValue";
-export * from "./useNavigation";
+export * from "./useNavigationContext";
 
 export * from "./useResolvedNavigationFrom";
 

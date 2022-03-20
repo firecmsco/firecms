@@ -73,18 +73,13 @@ export function resolveNavigationFrom<M, UserType>({
     const navigationContext = context.navigationContext;
     const navigation = context.navigationContext.navigation;
 
-    const schemas = context.schemaRegistry.schemas;
-
     if (!navigation) {
         throw Error("Calling getNavigationFrom, but main navigation has not yet been initialised");
     }
 
-
     const navigationEntries = getNavigationEntriesFromPathInternal({
         path,
         collections: navigation.collections ?? [],
-        schemas,
-        findSchema: context.schemaRegistry.findSchema
     });
 
     const resultPromises: Promise<ResolvedNavigationEntry<any>>[] = navigationEntries
@@ -99,7 +94,7 @@ export function resolveNavigationFrom<M, UserType>({
                 return dataSource.fetchEntity({
                     path: entry.path,
                     entityId: entry.entityId,
-                    schema: collection.schemaId
+                    collection: collection
                 })
                     .then((entity) => {
                         if (!entity) return undefined;

@@ -23,7 +23,7 @@ containing a `string` and an error snackbar will be displayed.
 import React from "react";
 
 import {
-    buildSchema,
+    buildCollection,
     EntityOnDeleteProps,
     EntityOnSaveProps
 } from "@camberi/firecms";
@@ -33,7 +33,7 @@ type Product = {
     uppercase_name: string;
 }
 
-const productSchema = buildSchema<Product>({
+const productSchema = buildCollection<Product>({
 
     name: "Product",
     properties: {
@@ -53,7 +53,7 @@ const productSchema = buildSchema<Product>({
 
 const productCallbacks = buildEntityCallbacks({
     onPreSave: ({
-                    schema,
+                    collection,
                     path,
                     entityId,
                     values,
@@ -72,7 +72,7 @@ const productCallbacks = buildEntityCallbacks({
     },
 
     onPreDelete: ({
-                      schema,
+                      collection,
                       path,
                       entityId,
                       entity,

@@ -21,11 +21,10 @@ import {
     Entity,
     EntityCallbacks,
     EntityCollection,
-    EntitySchema,
+    EntityPermissionsBuilder,
     EntityStatus,
     EntityValues,
-    EntityPermissionsBuilder,
-    ResolvedEntitySchema
+    ResolvedEntityCollection
 } from "../../models";
 import { CircularProgressCenter } from "../components";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
@@ -42,7 +41,7 @@ import {
     useSnackbarController
 } from "../../hooks";
 import { canEditEntity } from "../util/permissions";
-import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
+import { getResolvedCollection } from "../useBuildCollectionRegistry";
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as any;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as any;
@@ -50,7 +49,7 @@ const EntityPreview = lazy(() => import("../components/EntityPreview")) as any;
 
 export interface EntityViewProps<M, UserType> {
     path: string;
-    schema: string | EntitySchema<M>
+    collection: EntityCollection<M>
     entityId?: string;
     copy?: boolean;
     selectedSubpath?: string;
@@ -68,7 +67,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                            selectedSubpath,
                                                                            copy,
                                                                            permissions,
-                                                                           schema,
+                                                                           collection,
                                                                            subcollections,
                                                                            onModifiedValues,
                                                                            width
@@ -80,7 +79,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const sideEntityController = useSideEntityController();
     const snackbarController = useSnackbarController();
     const context = useFireCMSContext();
-    const schemaRegistry = useSchemaRegistry();
+
     const authController = useAuthController<UserType>();
 
     const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
@@ -98,19 +97,19 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     } = useEntityFetch<M>({
         path,
         entityId: currentEntityId,
-        schema,
+        collection: collection,
         useCache: false
     });
 
-    const resolvedSchema: ResolvedEntitySchema<M> = useMemo(() => schemaRegistry.getResolvedSchema<M>({
-        schema,
+    const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => getResolvedCollection<M>({
+        collection,
         path,
         entityId,
         values: modifiedValues,
         previousValues: entity?.values
-    }), [schema, schema, path, entityId, modifiedValues]);
+    }), [collection, collection, path, entityId, modifiedValues]);
 
-    const customViews = resolvedSchema.views;
+    const customViews = resolvedCollection.views;
     const customViewsCount = customViews?.length ?? 0;
 
     useEffect(() => {
@@ -152,7 +151,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const onSaveSuccessHookError = useCallback((e: Error) => {
         snackbarController.open({
             type: "error",
-            title: `${resolvedSchema.name}: Error after saving (entity is saved)`,
+            title: `${resolvedCollection.name}: Error after saving (entity is saved)`,
             message: e?.message
         });
         console.error(e);
@@ -164,7 +163,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
         snackbarController.open({
             type: "success",
-            message: `${resolvedSchema.name}: Saved correctly`
+            message: `${resolvedCollection.name}: Saved correctly`
         });
 
         setStatus("existing");
@@ -179,7 +178,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
         snackbarController.open({
             type: "error",
-            title: `${resolvedSchema.name}: Error saving`,
+            title: `${resolvedCollection.name}: Error saving`,
             message: e?.message
         });
 
@@ -188,13 +187,13 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }, []);
 
     const onEntitySave = useCallback(async ({
-                                                schema,
+                                                collection,
                                                 path,
                                                 entityId,
                                                 values,
                                                 previousValues
                                             }: {
-        schema: EntitySchema<M>,
+        collection: EntityCollection<M>,
         path: string,
         entityId: string | undefined,
         values: EntityValues<M>,
@@ -210,7 +209,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             callbacks,
             values,
             previousValues,
-            schema,
+            collection,
             status,
             dataSource,
             context,
@@ -233,7 +232,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     key={`form_${path}_${entity?.id ?? "new"}`}
                     status={status}
                     path={path}
-                    schema={schema}
+                    collection={collection}
                     onEntitySave={onEntitySave}
                     onDiscard={onDiscard}
                     onValuesChanged={setModifiedValues}
@@ -246,7 +245,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             <EntityPreview
                 entity={entity}
                 path={path}
-                schema={resolvedSchema}/>
+                collection={resolvedCollection}/>
         </Suspense>
     );
 
@@ -270,7 +269,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     hidden={tabsPosition !== colIndex}>
                     <ErrorBoundary>
                         {customView.builder({
-                            schema: resolvedSchema,
+                            collection: resolvedCollection,
                             entity,
                             modifiedValues: modifiedValues ?? entity?.values
                         })}
@@ -370,7 +369,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 scrollButtons="auto"
             >
                 <Tab
-                    label={resolvedSchema.name}
+                    label={resolvedCollection.name}
                     sx={{
                         fontSize: "0.875rem",
                         minWidth: "140px"
@@ -466,22 +465,26 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                         flexDirection: "row"
                     }}>
 
-                        <Box
-                            role="tabpanel"
-                            hidden={!largeLayout && !mainViewSelected}
-                            sx={{
-                                width: resolvedWidth ?? CONTAINER_WIDTH,
-                                maxWidth: "100%",
-                                height: "100%",
-                                overflow: "auto",
-                                [theme.breakpoints.down("sm")]: {
-                                    maxWidth: CONTAINER_FULL_WIDTH,
-                                    width: CONTAINER_FULL_WIDTH
-                                }
-                            }}>
-                            {dataLoading
-                                ? <CircularProgressCenter/>
-                                : body}
+                        <Box sx={{
+                            position: "relative",
+                        }}>
+                            <Box
+                                role="tabpanel"
+                                hidden={!largeLayout && !mainViewSelected}
+                                sx={{
+                                    width: resolvedWidth ?? CONTAINER_WIDTH,
+                                    maxWidth: "100%",
+                                    height: "100%",
+                                    overflow: "auto",
+                                    [theme.breakpoints.down("sm")]: {
+                                        maxWidth: CONTAINER_FULL_WIDTH,
+                                        width: CONTAINER_FULL_WIDTH
+                                    }
+                                }}>
+                                {dataLoading
+                                    ? <CircularProgressCenter/>
+                                    : body}
+                            </Box>
                         </Box>
 
                         {customViewsView}

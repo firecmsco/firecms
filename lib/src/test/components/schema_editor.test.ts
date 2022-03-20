@@ -1,12 +1,8 @@
-import {
-    propertiesToTree,
-    treeToProperties
-} from "../../schema_editor/util";
-import { EntitySchema } from "../../models";
+import { EntityCollection } from "../../models";
 import util from "util";
 
-export const productSchema: EntitySchema = {
-    id: "product",
+export const productSchema: EntityCollection = {
+    path: "product",
     name: "Product",
     views: [
         {
@@ -75,10 +71,3 @@ export const productSchema: EntitySchema = {
         }),
     }
 };
-
-it("Schema editor", () => {
-    const tree = propertiesToTree(productSchema.properties);
-    console.log(util.inspect(tree, false, 100, true));
-    const [properties] = treeToProperties(tree);
-    expect(productSchema.properties).toEqual(properties);
-});

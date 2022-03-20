@@ -9,7 +9,6 @@ import {
 } from "./CollectionTable/internal/CollectionRowActions";
 import { useDataSource } from "../../hooks";
 import { ErrorView } from "./ErrorView";
-import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 import { CustomDialogActions } from "./CustomDialogActions";
 
 /**
@@ -85,24 +84,18 @@ export function ReferenceDialog(
     }: ReferenceDialogProps) {
 
     const dataSource = useDataSource();
-    const schemaRegistry = useSchemaRegistry();
-
-    const schema = schemaRegistry.getResolvedSchema({
-        schema: collection.schemaId,
-        path
-    });
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
 
     useEffect(() => {
         let unmounted = false;
-        if (selectedEntityIds && schema) {
+        if (selectedEntityIds && collection) {
             Promise.all(
                 selectedEntityIds.map((entityId) => {
                     return dataSource.fetchEntity({
                         path,
                         entityId,
-                        schema: collection.schemaId
+                        collection
                     });
                 }))
                 .then((entities) => {
@@ -164,9 +157,9 @@ export function ReferenceDialog(
 
     };
 
-    if (!schema) {
+    if (!collection) {
         return <ErrorView
-            error={"Could not find schema with id " + collection.schemaId}/>
+            error={"Could not find collection with id " + collection}/>
     }
 
     return (
@@ -194,7 +187,7 @@ export function ReferenceDialog(
                                      onEntityClick={onEntityClick}
                                      tableRowActionsBuilder={tableRowActionsBuilder}
                                      Title={<Typography variant={"h6"}>
-                                         {`Select ${schema.name}`}
+                                         {`Select ${collection.name}`}
                                      </Typography>}
                                      inlineEditing={false}
                                      Actions={<Button onClick={onClear}

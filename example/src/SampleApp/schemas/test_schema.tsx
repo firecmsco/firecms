@@ -1,8 +1,8 @@
 import {
+    buildCollection,
     buildProperties,
     buildProperty,
     buildPropertyBuilder,
-    buildSchema,
     EntityCallbacks,
     EnumValues,
     resolveNavigationFrom
@@ -52,8 +52,41 @@ const relaxedStatus:EnumValues = [
     }
 ];
 
-export const testEntitySchema = buildSchema({
-    id: "test",
+export const testCallbacks: EntityCallbacks = {
+
+    onPreSave: ({
+                    collection,
+                    path,
+                    entityId,
+                    values,
+                    status,
+                    context
+                }) => {
+        return resolveNavigationFrom({
+            path: `${path}/${entityId}`,
+            context
+        }).then((navigationEntries) => {
+            console.log("navigationEntries", navigationEntries);
+            return values;
+        });
+    }
+};
+
+const validatedCustom = buildProperty({
+    dataType: "map",
+    name: "Validated custom field",
+    properties: {
+        sample: {
+            name: "Sample",
+            dataType: "string",
+        }
+    },
+    Field: CustomField
+});
+
+export const testCollection = buildCollection({
+    callbacks: testCallbacks,
+    path: "test_entity",
     customId: false,
     name: "Test entity",
     properties: {
@@ -199,17 +232,7 @@ export const testEntitySchema = buildSchema({
                 { id: "apple", label: "Apple" },
             ]
         },
-        validated_custom: {
-            dataType: "map",
-            name: "Validated custom field",
-            properties: {
-                sample: {
-                    name: "Sample",
-                    dataType: "string",
-                }
-            },
-            Field: CustomField
-        },
+        validated_custom: validatedCustom,
         content: {
             name: "Content",
             description: "Example of a complex array with multiple properties as children",
@@ -435,23 +458,3 @@ export const testEntitySchema = buildSchema({
         }
     ]
 });
-
-export const testCallbacks: EntityCallbacks = {
-
-    onPreSave: ({
-                    schema,
-                    path,
-                    entityId,
-                    values,
-                    status,
-                    context
-                }) => {
-        return resolveNavigationFrom({
-            path: `${path}/${entityId}`,
-            context
-        }).then((navigationEntries) => {
-            console.log("navigationEntries", navigationEntries);
-            return values;
-        });
-    }
-};

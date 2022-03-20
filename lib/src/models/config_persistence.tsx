@@ -1,9 +1,7 @@
-import { EntitySchema } from "./entities";
 import { EntityCollection } from "./collections";
-import { EnumConfig } from "./properties";
 
 /**
- * Use this controller to access the configuration that is stored extenally,
+ * Use this controller to access the configuration that is stored externally,
  * and not defined in code
  */
 export interface ConfigurationPersistence {
@@ -12,28 +10,10 @@ export interface ConfigurationPersistence {
 
     collections?: EntityCollection[];
 
-    /**
-     * Entity schemas
-     * Should be undefined when loading and empty if there are no results
-     */
-    schemas?: EntitySchema[];
-
-    /**
-     * Enumeration configs
-     * Should be undefined when loading and empty if there are no results
-     */
-    enumConfigs?: EnumConfig[];
-
     getCollection: <M>(path: string) => Promise<EntityCollection<M>>;
 
-    getSchema: <M>(schemaId: string) => Promise<EntitySchema<M>>;
-
-    saveCollection: <M>(path: string, collection: EntityCollection<M>) => Promise<void>;
+    saveCollection: <M>(collection: EntityCollection<M>) => Promise<void>;
 
     deleteCollection: <M>(path: string) => Promise<void>;
-
-    saveSchema: <M>(schema: EntitySchema<M>) => Promise<void>;
-
-    saveEnum: (schema: EnumConfig) => Promise<void>;
 
 }

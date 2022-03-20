@@ -18,7 +18,7 @@ import {
     useStorageSource
 } from "@camberi/firecms";
 import { Product } from "../types";
-import { productSchema } from "../schemas/products_schema";
+import { productsCollection } from "../schemas/products_schema";
 
 /**
  * This is a sample view used to render the content of a blog entry.
@@ -156,7 +156,7 @@ function ProductGroupPreview({ references }: { references: EntityReference[] }) 
             Promise.all(references.map((ref) => dataSource.fetchEntity({
                 path: ref.path,
                 entityId: ref.id,
-                schema: productSchema
+                collection: productsCollection
             })))
                 .then((results) => results.filter(r => !!r) as Entity<Product>[])
                 .then((results) => setProducts(results));

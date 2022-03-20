@@ -3,9 +3,9 @@ import {
     AdditionalColumnDelegate,
     CollectionSize,
     Entity,
-    EntitySchema,
+    EntityCollection,
     FireCMSContext,
-    ResolvedEntitySchema,
+    ResolvedEntityCollection,
     ResolvedProperty
 } from "../../../models";
 import React, { useCallback, useEffect, useMemo } from "react";
@@ -25,8 +25,11 @@ import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../Table";
 import { getIconForProperty } from "../../util/property_utils";
-import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 import { resolveEnumValues } from "../../util/entities";
+import {
+    getResolvedCollection,
+    resolveProperty
+} from "../../useBuildCollectionRegistry";
 
 export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = {
 
@@ -36,9 +39,9 @@ export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = 
     path: string;
 
     /**
-     * Use to resolve the schema properties for specific path, entity id or values
+     * Use to resolve the collection properties for specific path, entity id or values
      */
-    schema: string | EntitySchema<M>
+    collection: EntityCollection<M>
 
     /**
      * Properties displayed in this collection. If this property is not set
@@ -116,12 +119,12 @@ type SelectedCellProps<M> =
         cellRect: DOMRect;
         width: number,
         height: number,
-        schema: string | EntitySchema<M>,
+        collection: EntityCollection<M>,
         entity: Entity<M>
     };
 
 export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserType>({
-                                                                                         schema: inputSchema,
+                                                                                         collection: inputCollection,
                                                                                          additionalColumns,
                                                                                          displayedProperties,
                                                                                          path,
@@ -133,7 +136,6 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 ): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
-    const schemaRegistry = useSchemaRegistry();
 
     const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
     const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
@@ -185,7 +187,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
         if (property.dataType === "number" || property.dataType === "string") {
             const name = property.name;
-            const enumValues = property.enumValues ? resolveEnumValues(property.enumValues, schemaRegistry.enumConfigs) : [];
+            const enumValues = property.enumValues ? resolveEnumValues(property.enumValues) : [];
             return {
                 dataType: property.dataType,
                 isArray,
@@ -214,14 +216,10 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     }, []);
 
-    const resolvedSchema: ResolvedEntitySchema<M> = schemaRegistry.getResolvedSchema({
-        schema: inputSchema,
+    const resolvedCollection: ResolvedEntityCollection<M> = getResolvedCollection({
+        collection: inputCollection,
         path
     });
-
-    const schema = typeof inputSchema === "string" ? schemaRegistry.findSchema(inputSchema) : inputSchema;
-    if (!schema)
-        throw Error("Unable to find schema with id " + inputSchema);
 
     const propertyCellRenderer = useCallback(({
                                       column,
@@ -234,13 +232,15 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
         const propertyId = column.dataKey;
 
-        const property = schemaRegistry.getResolvedProperty({
+        const propertyOrBuilder = inputCollection.properties[propertyId];
+        const property = resolveProperty({
+            propertyOrBuilder,
             propertyId,
-            schema,
             path,
             values: entity.values,
             entityId: entity.id
         });
+
         if (!property)
             return null;
 
@@ -277,7 +277,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                         entity,
                         cellRect,
                         propertyId,
-                        schema
+                        collection: inputCollection
                     });
                 }
             };
@@ -294,7 +294,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                         entity,
                         cellRect,
                         propertyId,
-                        schema
+                        collection: inputCollection
                     });
                 }
             };
@@ -351,7 +351,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
             </ErrorBoundary>;
         }
 
-    }, [focused, inlineEditing, onCellValueChange, path, schema, select, selectedCell?.columnIndex, selectedCell?.entity.id, size]);
+    }, [focused, inlineEditing, onCellValueChange, path, inputCollection, select, selectedCell?.columnIndex, selectedCell?.entity.id, size]);
 
     const additionalCellRenderer = useCallback(({
                                         column,
@@ -392,9 +392,9 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     }, [additionalColumnsMap, size]);
 
-    const allColumns: TableColumn<M>[] = (Object.keys(resolvedSchema.properties) as (keyof M)[])
+    const allColumns: TableColumn<M>[] = (Object.keys(resolvedCollection.properties) as (keyof M)[])
         .map((key) => {
-            const property = resolvedSchema.properties[key];
+            const property = resolvedCollection.properties[key];
             return ({
                 key: key as string,
                 property,
@@ -444,7 +444,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
             cellRect={popupCell?.cellRect}
             columnIndex={popupCell?.columnIndex}
             propertyId={popupCell?.propertyId}
-            schema={popupCell?.schema}
+            collection={popupCell?.collection}
             entity={popupCell?.entity}
             tableKey={tableKey.current}
             customFieldValidator={customFieldValidator}

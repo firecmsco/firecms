@@ -1,12 +1,10 @@
-import { EntitySchema } from "./entities";
 import { EntityCollection } from "./collections";
 import { EntityCallbacks } from "./entity_callbacks";
 import { User } from "./user";
 import { EntityPermissionsBuilder } from "./permissions";
 
-
 /**
- * Used to override schemas based on the collection path and entityId.
+ * Used to override collections based on the collection path and entityId.
  * @category Models
  */
 export type SchemaOverrideHandler = (props: {
@@ -16,7 +14,7 @@ export type SchemaOverrideHandler = (props: {
 
 /**
  * You can return these parameters to override properties in a {@link SchemaOverrideHandler}.
- * Useful if you want to apply schemas to specific entities.
+ * Useful if you want to apply collections to specific entities.
  * @category Models
  */
 export type SchemaOverride<M = any, UserType = User> = {
@@ -27,9 +25,9 @@ export type SchemaOverride<M = any, UserType = User> = {
     permissions?: EntityPermissionsBuilder<M, UserType>;
 
     /**
-     * Schema representing the entities of this view
+     * collection representing the entities of this view
      */
-    schema?: EntitySchema<M>;
+    collection?: EntityCollection<M>;
 
     /**
      * You can add subcollections to your entity in the same way you define the root

@@ -1,6 +1,6 @@
 import { EntityValues } from "./entities";
 import { CMSType, Property } from "./properties";
-import { ResolvedEntitySchema, ResolvedProperty } from "./resolved_entities";
+import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 
 /**
  * When building a custom field you need to create a React component that takes
@@ -117,9 +117,9 @@ export interface FieldProps<T extends CMSType, CustomProps = any, M extends { [K
 export interface FormContext<M extends { [Key: string]: any }> {
 
     /**
-     * Schema of the entity being modified
+     * collection of the entity being modified
      */
-    schema: ResolvedEntitySchema<M>;
+    collection: ResolvedEntityCollection<M>;
 
     /**
      * Current values of the entity

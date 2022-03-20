@@ -40,6 +40,8 @@ export function SelectBinding<T extends EnumType>({
 
     const enumValues = property.enumValues;
 
+    console.log("enumValues", enumValues);
+
     useClearRestoreValue({
         property,
         value,

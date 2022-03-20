@@ -1,16 +1,15 @@
 import * as React from "react";
 import { useCallback, useRef, useState } from "react";
-import { Box, Button, Dialog, useTheme } from "@mui/material";
+import { Box, Button, Dialog } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import {
-    EntitySchema,
+    EntityCollection,
     SchemaEditorForm,
     useSnackbarController
 } from "../index";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
 import { Form, Formik } from "formik";
 import { YupSchema } from "./SchemaYupValidation";
-import { prepareSchemaForPersistence } from "../core/util/schemas";
 import {
     useConfigurationPersistence
 } from "../hooks/useConfigurationPersistence";
@@ -20,11 +19,13 @@ import { SchemaDetailsForm } from "./SchemaDetailsForm";
 
 export interface NewSchemaEditorDialogProps {
     open: boolean;
-    handleClose: (schema?: EntitySchema) => void;
+    group?: string;
+    handleClose: (collection?: EntityCollection) => void;
 }
 
 export function NewSchemaEditorDialog<M>({
                                              open,
+                                             group,
                                              handleClose
                                          }: NewSchemaEditorDialogProps) {
 
@@ -32,7 +33,7 @@ export function NewSchemaEditorDialog<M>({
     const snackbarController = useSnackbarController();
 
     if (!configurationPersistence)
-        throw Error("Can't use the schema editor without specifying a `ConfigurationPersistence`");
+        throw Error("Can't use the collection editor without specifying a `ConfigurationPersistence`");
 
     // Use this ref to store which properties have errors
     const propertyErrorsRef = useRef({});
@@ -41,9 +42,8 @@ export function NewSchemaEditorDialog<M>({
 
     const [error, setError] = React.useState<Error | undefined>();
 
-    const saveSchema = useCallback((schema: EntitySchema<M>): Promise<boolean> => {
-        const newSchema = prepareSchemaForPersistence(schema);
-        return configurationPersistence.saveSchema(newSchema)
+    const saveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
+        return configurationPersistence.saveCollection(collection)
             .then(() => {
                 setError(undefined);
                 return true;
@@ -53,16 +53,17 @@ export function NewSchemaEditorDialog<M>({
                 console.error(e);
                 snackbarController.open({
                     type: "error",
-                    title: "Error persisting schema",
+                    title: "Error persisting collection",
                     message: "Details in the console"
                 });
                 return false;
             });
     }, [configurationPersistence, snackbarController]);
 
-    const initialValues: EntitySchema = {
-        id: "",
+    const initialValues: EntityCollection = {
+        path: "",
         name: "",
+        group: group,
         properties: {},
         propertiesOrder: []
     };
@@ -89,18 +90,18 @@ export function NewSchemaEditorDialog<M>({
                     if (mode === "properties") return propertyErrorsRef.current;
                     return undefined;
                 }}
-                onSubmit={(newSchema: EntitySchema, formikHelpers) => {
+                onSubmit={(newCollection: EntityCollection, formikHelpers) => {
                     if (mode === "details") {
                         setMode("properties");
                         formikHelpers.resetForm({
-                            values: newSchema,
-                            touched: { id: true, name: true }
+                            values: newCollection,
+                            touched: { path: true, name: true }
                         });
                     } else {
-                        saveSchema(newSchema).then(() => {
+                        saveCollection(newCollection).then(() => {
                             formikHelpers.resetForm({ values: initialValues });
                             setMode("details");
-                            handleClose(newSchema);
+                            handleClose(newCollection);
                         });
                     }
                 }}
@@ -119,7 +120,7 @@ export function NewSchemaEditorDialog<M>({
                                 flexGrow: 1
                             }}>
                                 {mode === "details" &&
-                                    <SchemaDetailsForm isNewSchema={true}/>}
+                                    <SchemaDetailsForm isNewCollection={true}/>}
 
                                 {mode === "properties" &&
                                     <SchemaEditorForm
@@ -153,7 +154,7 @@ export function NewSchemaEditorDialog<M>({
                                         ? <SaveIcon/>
                                         : undefined}
                                 >
-                                    {mode === "details" ? "Next" : "Create schema"}
+                                    {mode === "details" ? "Next" : "Create collection"}
                                 </LoadingButton>
                             </CustomDialogActions>
                         </Form>

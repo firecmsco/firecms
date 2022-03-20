@@ -1,25 +1,23 @@
 import { FirebaseApp } from "firebase/app";
 import {
     collection,
+    deleteDoc,
     deleteField,
     doc,
     DocumentSnapshot,
     Firestore,
     getDoc,
-    deleteDoc,
     getFirestore,
     onSnapshot,
     setDoc
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef } from "react";
 import { ConfigurationPersistence } from "../../models/config_persistence";
+import { EntityCollection, Properties } from "../../models";
 import {
-    EntityCollection,
-    EntitySchema,
-    EnumConfig,
-    Properties
-} from "../../models";
-import { sortProperties } from "../../core/util/schemas";
+    prepareCollectionForPersistence,
+    sortProperties
+} from "../../core/util/collections";
 
 /**
  * @category Firebase
@@ -34,21 +32,14 @@ export interface FirestoreConfigurationPersistenceProps {
 
 const DEFAULT_CONFIG_PATH = "__FIRECMS";
 
-const docToSchema = (doc: DocumentSnapshot) => {
+const docToCollection = (doc: DocumentSnapshot) => {
     const data = doc.data();
     if (!data)
-        throw Error("Entity schema has not been persisted correctly");
+        throw Error("Entity collection has not been persisted correctly");
     const propertiesOrder = data.propertiesOrder;
     const properties = data.properties as Properties ?? {};
     const sortedProperties = sortProperties(properties, propertiesOrder);
-    return { ...data, properties: sortedProperties } as EntitySchema;
-}
-
-const docToEnum = (doc: DocumentSnapshot) => {
-    const data = doc.data();
-    if (!data)
-        throw Error("Enum config has not been persisted correctly");
-    return { id: doc.id, ...data } as EnumConfig;
+    return { ...data, properties: sortedProperties } as EntityCollection;
 }
 
 export function useBuildFirestoreConfigurationPersistence({
@@ -59,13 +50,8 @@ export function useBuildFirestoreConfigurationPersistence({
     const firestoreRef = useRef<Firestore>();
     const firestore = firestoreRef.current;
 
-    const [collectionsLoading, setCollectionsLoading] = React.useState<boolean>(true);
-    const [schemasLoading, setSchemasLoading] = React.useState<boolean>(true);
-    const [enumsLoading, setEnumsLoading] = React.useState<boolean>(true);
-
+    const [loading, setLoading] = React.useState<boolean>(true);
     const [collections, setCollections] = React.useState<EntityCollection[] | undefined>();
-    const [schemas, setSchemas] = React.useState<EntitySchema[] | undefined>();
-    const [enumConfigs, setEnumConfigs] = React.useState<EnumConfig[] | undefined>();
 
     const [error, setError] = React.useState<Error | undefined>();
 
@@ -81,50 +67,12 @@ export function useBuildFirestoreConfigurationPersistence({
             {
                 next: (snapshot) => {
                     setError(undefined);
-                    const newCollections = snapshot.docs.map((doc) => doc.data() as EntityCollection);
+                    const newCollections = snapshot.docs.map((doc) => docToCollection(doc));
                     setCollections(newCollections);
-                    setCollectionsLoading(false);
+                    setLoading(false);
                 },
                 error: (e) => {
-                    setCollectionsLoading(false);
-                    setError(e);
-                }
-            }
-        );
-    }, [firestore]);
-
-    useEffect(() => {
-        if (!firestore) return;
-
-        return onSnapshot(collection(firestore, configPath, "config", "schemas"),
-            {
-                next: (snapshot) => {
-                    setError(undefined);
-                    const newSchemas = snapshot.docs.map(docToSchema);
-                    setSchemas(newSchemas);
-                    setSchemasLoading(false);
-                },
-                error: (e) => {
-                    setSchemasLoading(false);
-                    setError(e);
-                }
-            }
-        );
-    }, [firestore]);
-
-    useEffect(() => {
-        if (!firestore) return;
-
-        return onSnapshot(collection(firestore, configPath, "config", "snums"),
-            {
-                next: (snapshot) => {
-                    setError(undefined);
-                    const newSchemas = snapshot.docs.map(docToEnum);
-                    setEnumConfigs(newSchemas);
-                    setEnumsLoading(false);
-                },
-                error: (e) => {
-                    setEnumsLoading(false);
+                    setLoading(false);
                     setError(e);
                 }
             }
@@ -143,50 +91,19 @@ export function useBuildFirestoreConfigurationPersistence({
         return deleteDoc(ref);
     }, [firestore]);
 
-    const getSchema = useCallback(<M extends { [Key: string]: any }>(schemaId: string): Promise<EntitySchema<M>> => {
+    const saveCollection = useCallback(<M extends { [Key: string]: any }>(collectionData: EntityCollection<M>): Promise<void> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const ref = doc(firestore, configPath, "config", "schemas", schemaId);
-        return getDoc(ref).then(docToSchema);
-    }, [firestore]);
-
-    const saveCollection = useCallback(<M extends { [Key: string]: any }>(path: string, collectionData: EntityCollection<M>): Promise<void> => {
-        if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const ref = doc(firestore, configPath, "config", "collections", path);
-        return setDoc(ref, collectionData, { merge: true });
-    }, [firestore]);
-
-    const saveSchema = useCallback(<M extends { [Key: string]: any }>(schema: EntitySchema<M>): Promise<void> => {
-        if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.log("saveSchema", schema);
-        const ref = doc(firestore, configPath, "config", "schemas", schema.id);
-        try {
-            return setDoc(ref, setUndefinedToDelete(schema as unknown as Record<string, unknown>), { merge: true });
-        } catch (e) {
-            return Promise.reject(e);
-        }
-    }, [firestore]);
-
-    const saveEnum = useCallback((enumConfig: EnumConfig): Promise<void> => {
-        if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.log("saveEnum", enumConfig);
-        const ref = doc(firestore, configPath, "config", "enums", enumConfig.id);
-        try {
-            return setDoc(ref, setUndefinedToDelete(enumConfig as unknown as Record<string, unknown>), { merge: true });
-        } catch (e) {
-            return Promise.reject(e);
-        }
+        const cleanedCollection = prepareCollectionForPersistence(collectionData);
+        console.log("saveCollection", cleanedCollection);
+        const ref = doc(firestore, configPath, "config", "collections", collectionData.path);
+        return setDoc(ref, cleanedCollection, { merge: true });
     }, [firestore]);
 
     return {
-        loading: collectionsLoading || schemasLoading || enumsLoading,
+        loading,
         collections,
-        schemas,
-        enumConfigs,
         getCollection,
-        getSchema,
         saveCollection,
-        saveSchema,
-        saveEnum,
         deleteCollection
     }
 }

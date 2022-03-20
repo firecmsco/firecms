@@ -2,7 +2,7 @@ import {
     Entity,
     EntityReference,
     ExportConfig,
-    ResolvedEntitySchema,
+    ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty
 } from "../../models";
@@ -15,15 +15,15 @@ interface Header {
 
 export function downloadCSV<M>(data: Entity<M>[],
                                additionalData: Record<string, any>[] | undefined,
-                               schema: ResolvedEntitySchema<M>,
+                               collection: ResolvedEntityCollection<M>,
                                path: string,
                                exportConfig: ExportConfig | undefined) {
-    const properties = schema.properties;
+    const properties = collection.properties;
     const headers = getExportHeaders(properties, path, exportConfig);
     const exportableData = getExportableData(data, additionalData, properties, headers);
     const headersData = entryToCSVRow(headers.map(h => h.label));
     const csvData = exportableData.map(entry => entryToCSVRow(entry));
-    downloadBlob([headersData, ...csvData], `${schema.name}.csv`, "text/csv");
+    downloadBlob([headersData, ...csvData], `${collection.name}.csv`, "text/csv");
 }
 
 export function getExportableData(data: any[],

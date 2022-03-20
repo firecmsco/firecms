@@ -6,17 +6,15 @@ import {
     FetchEntityProps,
     ResolvedProperty,
     SaveEntityProps,
-    SchemaRegistry,
     useFirestoreDataSource
 } from "@camberi/firecms";
 import { FirebaseApp } from "firebase/app";
 
-type CustomDataSourceProps = { firebaseApp?: FirebaseApp; schemaRegistry: SchemaRegistry };
+type CustomDataSourceProps = { firebaseApp?: FirebaseApp };
 
-export function useCustomDatasource({ firebaseApp, schemaRegistry }: CustomDataSourceProps):DataSource {
+export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps):DataSource {
     const firestoreDataSource = useFirestoreDataSource({
         firebaseApp,
-        schemaRegistry
     });
 
     return {

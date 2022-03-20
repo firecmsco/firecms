@@ -25,7 +25,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { Link as ReactLink } from "react-router-dom";
 
 import { Markdown } from "../../preview";
-import { useNavigation } from "../../hooks";
+import { useNavigationContext } from "../../hooks";
 import {
     useConfigurationPersistence
 } from "../../hooks/useConfigurationPersistence";
@@ -33,6 +33,11 @@ import Delete from "@mui/icons-material/Delete";
 import { MoreVert } from "@mui/icons-material";
 import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
 import { TopNavigationEntry, TopNavigationResult } from "../../models";
+import { SchemaEditorDialog } from "../../schema_editor/SchemaEditorDialog";
+import {
+    NewSchemaEditorDialog,
+    NewSchemaEditorDialogProps
+} from "../../schema_editor/NewSchemaEditorDialog";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -43,9 +48,12 @@ import { TopNavigationEntry, TopNavigationResult } from "../../models";
  */
 export function FireCMSHomePage() {
 
-    const navigationContext = useNavigation();
+    const navigationContext = useNavigationContext();
     const configurationPersistence = useConfigurationPersistence();
     const configurationPersistenceEnabled = Boolean(configurationPersistence);
+
+    const [newSchemaDialogOpen, setNewSchemaDialogOpen] = useState<Partial<NewSchemaEditorDialogProps> | undefined>();
+    const [editSelectedPath, setEditSelectedPath] = useState<string | undefined>();
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
@@ -53,6 +61,9 @@ export function FireCMSHomePage() {
     const navigationResult: TopNavigationResult = navigationContext.topLevelNavigation;
     const [collectionToBeDeleted, setCollectionToBeDeleted] = useState<TopNavigationEntry | undefined>();
 
+    const onEditCollectionClicked = useCallback((entry: TopNavigationEntry) => {
+        setEditSelectedPath(entry.path);
+    }, []);
     const onDeleteCollectionClicked = useCallback((entry: TopNavigationEntry) => {
         setCollectionToBeDeleted(entry);
     }, []);
@@ -89,9 +100,11 @@ export function FireCMSHomePage() {
                             flexDirection: "column",
                             alignItems: "flex-start"
                         }}
-                        component={ReactLink}
-                        to={navigationContext.buildUrlEditCollectionPath({ group })}
-                        state={{ group: group }}>
+                        onClick={() => setNewSchemaDialogOpen({
+                            open: true,
+                            group
+                        })}
+                    >
 
                         <CardContent
                             sx={{
@@ -133,7 +146,10 @@ export function FireCMSHomePage() {
                                           md={4}
                                           key={`nav_${entry.group}_${entry.name}`}>
                                         <NavigationCard entry={entry}
-                                                        onDelete={configurationPersistenceEnabled && entry.type === "stored_collection"
+                                                        onEdit={configurationPersistenceEnabled && entry.editable
+                                                            ? onEditCollectionClicked
+                                                            : undefined}
+                                                        onDelete={configurationPersistenceEnabled && entry.deletable
                                                             ? onDeleteCollectionClicked
                                                             : undefined}/>
                                     </Grid>)
@@ -153,13 +169,30 @@ export function FireCMSHomePage() {
                     delete any data</b>, only
                     the collection in the CMS</>}/>
 
+            <SchemaEditorDialog open={Boolean(editSelectedPath)}
+                                handleClose={(schema) => {
+                                    setEditSelectedPath(undefined);
+                                }}
+                                path={editSelectedPath as string}/>
+
+            <NewSchemaEditorDialog
+                open={false}
+                {...newSchemaDialogOpen}
+                handleClose={(schema) => {
+                    setNewSchemaDialogOpen({ open: false });
+                }}/>
+
         </Container>
     );
 }
 
-type NavigationCardProps = { entry: TopNavigationEntry, onDelete: ((entry: TopNavigationEntry) => void) | undefined };
+type NavigationCardProps = {
+    entry: TopNavigationEntry,
+    onDelete: ((entry: TopNavigationEntry) => void) | undefined,
+    onEdit: ((entry: TopNavigationEntry) => void) | undefined
+};
 
-function NavigationCard({ entry, onDelete }: NavigationCardProps) {
+function NavigationCard({ entry, onDelete, onEdit }: NavigationCardProps) {
 
     const [menuAnchorEl, setMenuAnchorEl] = useState<any | null>(null);
 
@@ -209,11 +242,15 @@ function NavigationCard({ entry, onDelete }: NavigationCardProps) {
                                 </IconButton>
                             }
 
-                            {entry.editUrl &&
+                            {onEdit &&
                                 <IconButton
-                                    component={ReactLink}
-                                    to={entry.editUrl}>
-                                    <EditIcon color="primary"/>
+                                    onClick={(event) => {
+                                        event.stopPropagation();
+                                        event.preventDefault();
+                                        if (onEdit)
+                                            onEdit(entry);
+                                    }}>
+                                    <EditIcon/>
                                 </IconButton>}
                         </div>
                     </Box>

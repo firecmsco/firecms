@@ -16,7 +16,7 @@ import {
 import {
     Entity,
     FireCMSContext,
-    ResolvedEntitySchema,
+    ResolvedEntityCollection,
     ResolvedProperties
 } from "../../models";
 import { PropertyPreview } from "../../preview/PropertyPreview";
@@ -65,14 +65,14 @@ const StyledTableContainer = styled(TableContainer)((
  */
 export interface EntityPreviewProps<M> {
     entity: Entity<M>;
-    schema: ResolvedEntitySchema<M>;
+    collection: ResolvedEntityCollection<M>;
     path: string;
 }
 
 /**
  * Use this component to render a preview of a property values
  * @param entity
- * @param schema
+ * @param collection
  * @param path
  * @constructor
  * @category Components
@@ -80,7 +80,7 @@ export interface EntityPreviewProps<M> {
 export function EntityPreview<M>(
     {
         entity,
-        schema,
+        collection,
         path
     }: EntityPreviewProps<M>) {
 
@@ -88,7 +88,7 @@ export function EntityPreview<M>(
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 
-    const properties: ResolvedProperties = schema.properties;
+    const properties: ResolvedProperties = collection.properties;
 
     return (
         <StyledTableContainer>
@@ -126,7 +126,7 @@ export function EntityPreview<M>(
                         </TableCell>
                     </TableRow>
 
-                    {schema && Object.entries(properties)
+                    {collection && Object.entries(properties)
                         .map(([key, property]) => {
                             const value = (entity.values as any)[key];
                             return (

@@ -122,7 +122,7 @@ export function PropertyForm({
             }}
             validate={(values) => {
                 const errors: any = {};
-                if (!getWidget(values)) {
+                if (!values.dataType || !getWidget(values)) {
                     errors.selectedWidget = "Required";
                 }
                 if (existingPropertyIds && values.id && existingPropertyIds.includes(values.id)) {
@@ -415,7 +415,7 @@ function PropertyEditView({
 } & FormikProps<PropertyWithId>) {
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-    const [selectedWidgetId, setSelectedWidgetId] = useState<WidgetId | undefined>(values ? getWidgetId(values) : undefined);
+    const [selectedWidgetId, setSelectedWidgetId] = useState<WidgetId | undefined>(values?.dataType ? getWidgetId(values) : undefined);
 
     const displayedWidgets = inArray
         ? Object.entries(WIDGETS).filter(([_, widget]) => widget.dataType !== "array")
@@ -626,7 +626,7 @@ function PropertyEditView({
                                           body={
                                               <> This will <b>not delete any
                                                   data</b>, only modify the
-                                                  schema.</>
+                                                  collection.</>
                                           }/>}
 
         </>

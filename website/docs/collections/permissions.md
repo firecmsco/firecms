@@ -18,7 +18,7 @@ import { buildCollection } from "@camberi/firecms";
 
 buildCollection({
     path: "products",
-    schema: productSchema,
+    collection: productSchema,
     name: "Products",
     permissions: {
         edit: true,
@@ -44,7 +44,7 @@ import { buildCollection } from "@camberi/firecms";
 
 buildCollection({
     path: "products",
-    schema: productSchema,
+    collection: productSchema,
     name: "Products",
     permissions: ({
                       entity,

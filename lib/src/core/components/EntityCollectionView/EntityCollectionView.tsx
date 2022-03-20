@@ -1,7 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Box,
+    Button,
     Popover,
+    Tooltip,
     Typography,
     useMediaQuery,
     useTheme
@@ -12,7 +14,6 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
-    EntitySchema,
     LocalEntityCollection,
     LocalEntitySchema,
     SelectionController
@@ -26,12 +27,16 @@ import {
     DeleteEntityDialog
 } from "../CollectionTable/internal/DeleteEntityDialog";
 
-import { canCreateEntity, canDeleteEntity, canEditEntity } from "../../util/permissions";
+import {
+    canCreateEntity,
+    canDeleteEntity,
+    canEditEntity
+} from "../../util/permissions";
 import { Markdown } from "../../../preview";
 import {
     useAuthController,
     useFireCMSContext,
-    useNavigation,
+    useNavigationContext,
     useSideEntityController
 } from "../../../hooks";
 import { mergeDeep } from "../../util/objects";
@@ -39,15 +44,10 @@ import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
 import { SchemaEditorDialog } from "../../../schema_editor/SchemaEditorDialog";
-import { ErrorView } from "../ErrorView";
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
-import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { removeInitialAndTrailingSlashes } from "../../util/navigation_utils";
-import { ConfigEditButtons } from "./ConfigEditButtons";
-import {
-    CollectionEditorDialog
-} from "../../../collection_editor/CollectionEditorDialog";
+import { Settings } from "@mui/icons-material";
 
 /**
  * @category Components
@@ -126,25 +126,18 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
                                                                                editable
                                                                            }: EntityCollectionViewProps<M>) {
 
-    const navigationContext = useNavigation();
-    const schemaRegistry = useSchemaRegistry();
+    const navigationContext = useNavigationContext();
     const collectionFromPath = navigationContext.getCollection<M>(path);
     if (!collectionFromPath) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
 
     const collection: EntityCollection<M> = collectionFromPath ?? baseCollection;
-    const schema = schemaRegistry.findSchema(collection.schemaId);
-    if (!schema) {
-        return <ErrorView
-            error={"Unable to find schema with id " + collection.schemaId}/>;
-    }
 
     return (
         <ErrorBoundary>
             <EntityCollectionViewInternal path={path}
                                           collection={collection}
-                                          schema={schema}
                                           editable={editable}/>
         </ErrorBoundary>
     );
@@ -155,14 +148,13 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                                                                                        path,
                                                                                        collection,
                                                                                        editable: collectionEditable = false,
-                                                                                       schema
-                                                                                   }: EntityCollectionViewProps<M> & { schema: EntitySchema<M> }
+                                                                                   }: EntityCollectionViewProps<M>
 ) {
 
     const sideEntityController = useSideEntityController();
     const context = useFireCMSContext();
     const authController = useAuthController();
-    const navigationContext = useNavigation();
+    const navigationContext = useNavigationContext();
     const userConfigPersistence = useUserConfigurationPersistence();
 
     const theme = useTheme();
@@ -170,16 +162,15 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
-    const schemaEditable = schema.editable ?? true;
+    const schemaEditable = collection.editable ?? true;
 
     const exportable = collection.exportable === undefined || collection.exportable;
 
     const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
-    const hoverRow = schema.inlineEditing !== undefined && !schema.inlineEditing;
+    const hoverRow = collection.inlineEditing !== undefined && !collection.inlineEditing;
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
     const [schemaDialogOpen, setSchemaDialogOpen] = useState<boolean>(false);
-    const [collectionDialogOpen, setCollectionDialogOpen] = useState<boolean>(false);
 
     const selectionController = useSelectionController<M>();
     const usedSelectionController = collection.selectionController ?? selectionController;
@@ -199,22 +190,22 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
             entityId: entity.id,
             path,
             permissions: collection.permissions,
-            schema: schema,
+            collection: collection,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
             updateUrl: true
         });
-    }, [path, collection, schema]);
+    }, [path, collection, collection]);
 
     const onNewClick = useCallback(() =>
         sideEntityController.open({
             path,
             permissions: collection.permissions,
-            schema: schema,
+            collection: collection,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
             updateUrl: true
-        }), [path, collection, schema]);
+        }), [path, collection, collection]);
 
     const onMultipleDeleteClick = useCallback(() => {
         setDeleteEntityClicked(selectedEntities);
@@ -233,8 +224,8 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
         if (!canEditEntity(collection.permissions, entity, authController, path, context)) {
             return false;
         }
-        return schema.inlineEditing === undefined || schema.inlineEditing;
-    }, [schema.inlineEditing, collection.permissions, path]);
+        return collection.inlineEditing === undefined || collection.inlineEditing;
+    }, [collection.inlineEditing, collection.permissions, path]);
 
     const onCollectionModifiedForUser = useCallback((path: string, partialCollection: LocalEntityCollection<M>) => {
         if (userConfigPersistence) {
@@ -255,11 +246,11 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                                             key
                                         }: OnColumnResizeParams) => {
         // Only for property columns
-        if (!schema.properties[key]) return;
+        if (!collection.properties[key]) return;
         const property: Partial<AnyProperty> = { columnWidth: width };
         const localSchema = { properties: { [key as keyof M]: property } } as LocalEntitySchema<M>;
         onSchemaModifiedForUser(path, localSchema);
-    }, [schema.properties, onCollectionModifiedForUser]);
+    }, [collection.properties, onCollectionModifiedForUser]);
 
     const onSizeChanged = useCallback((size: CollectionSize) => {
         if (userConfigPersistence)
@@ -365,7 +356,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: collection.schemaId,
+            collection: collection,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
             updateUrl: true
@@ -379,7 +370,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 create: createEnabled,
                 delete: deleteEnabled
             },
-            schema: collection.schemaId,
+            collection: collection,
             subcollections: collection.subcollections,
             callbacks: collection.callbacks,
             updateUrl: true
@@ -398,7 +389,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
             />
         );
 
-    }, [usedSelectionController, collection.permissions, schema, authController, path]);
+    }, [usedSelectionController, collection.permissions, collection, authController, path]);
 
     return (
         <>
@@ -414,15 +405,20 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 tableRowActionsBuilder={tableRowActionsBuilder}
                 Title={Title}
                 ActionsStart={schemaEditable
-                    ? <ConfigEditButtons
-                        onCollectionEditClicked={collectionEditable ? () => setCollectionDialogOpen(true) : undefined}
-                        onSchemaEditClicked={() => setSchemaDialogOpen(true)}/>
-                    : undefined}
+                    ? <Tooltip title={"Edit collection"}>
+                        <Button
+                            onClick={() => setSchemaDialogOpen(true)}>
+                            <Settings/>
+                        </Button>
+                    </Tooltip>
+                    : undefined
+                }
                 Actions={<EntityCollectionViewActions
                     collection={collection}
                     exportable={exportable}
                     onMultipleDeleteClick={onMultipleDeleteClick}
-                    onNewClick={onNewClick} path={path} schema={schema}
+                    onNewClick={onNewClick}
+                    path={path}
                     selectedEntities={selectedEntities}
                     selectionController={usedSelectionController}
                     selectionEnabled={selectionEnabled}/>}
@@ -433,18 +429,14 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                                 handleClose={(_) => {
                                     setSchemaDialogOpen(false);
                                 }}
-                                schemaId={schema.id}/>
+                                path={path}/>
 
-            <CollectionEditorDialog open={collectionDialogOpen}
-                                    onCancel={() => setCollectionDialogOpen(false)}
-                                    onSave={() => setCollectionDialogOpen(false)}
-                                    path={path}/>
 
             {deleteEntityClicked &&
                 <DeleteEntityDialog
                     entityOrEntitiesToDelete={deleteEntityClicked}
                     path={path}
-                    schema={collection.schemaId}
+                    collection={collection}
                     callbacks={collection.callbacks}
                     open={!!deleteEntityClicked}
                     onEntityDelete={internalOnEntityDelete}

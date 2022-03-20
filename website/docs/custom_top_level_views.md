@@ -48,7 +48,7 @@ A quick example for a custom view:
 
 ```tsx
 import {
-    buildSchema,
+    buildCollection,
     CMSView,
     NavigationBuilder,
     NavigationBuilderProps,
@@ -58,7 +58,7 @@ import {
 
 export default function App() {
 
-    const productSchema = buildSchema({
+    const productSchema = buildCollection({
         name: "Product",
         properties: {
             name: {
@@ -81,7 +81,7 @@ export default function App() {
         collections: [
             buildCollection({
                 path: "products",
-                schema: productSchema,
+                collection: productSchema,
                 name: "Products"
             })
         ],
@@ -104,7 +104,7 @@ import React from "react";
 import { Box, Button } from "@mui/material";
 
 import {
-    buildSchema,
+    buildCollection,
     useAuthController,
     useSideEntityController,
     useSnackbarController
@@ -125,7 +125,7 @@ export function ExampleCMSView() {
     // hook to do operations related to authentication
     const authController = useAuthContext();
 
-    const customProductSchema = buildSchema({
+    const customProductSchema = buildCollection({
         name: "Custom product",
         properties: {
             name: {
@@ -173,7 +173,7 @@ export function ExampleCMSView() {
                     onClick={() => sideEntityController.open({
                         entityId: "B003WT1622",
                         path: "/products-test",
-                        schema: customProductSchema
+                        collection: customProductSchema
                     })}
                     color="primary">
                     Open entity with custom schema

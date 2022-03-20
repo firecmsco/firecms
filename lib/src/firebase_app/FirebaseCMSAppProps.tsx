@@ -1,8 +1,6 @@
 import React from "react";
 import {
     Authenticator,
-    EntitySchema,
-    EnumConfig,
     Locale,
     Navigation,
     NavigationBuilder,
@@ -32,23 +30,12 @@ export interface FirebaseCMSAppProps {
     /**
      * Use this prop to specify the views that will be generated in the CMS.
      * You usually will want to create a `Navigation` object that includes
-     * collection views where you specify the path and the schema.
+     * collection views where you specify the path and the collection.
      * Additionally, you can add custom views to the root navigation.
      * In you need to customize the navigation based on the logged user you
      * can use a `NavigationBuilder`
      */
     navigation: Navigation | NavigationBuilder<FirebaseUser>;
-
-    /**
-     * List of entity schemas available to the CMS
-     */
-    schemas?: EntitySchema[];
-
-    /**
-     * List of enumeration configurations for easy reuse in the app through
-     * an alias.
-     */
-    enumConfigs?: EnumConfig[];
 
     /**
      * Do the users need to log in to access the CMS.
@@ -122,11 +109,11 @@ export interface FirebaseCMSAppProps {
     locale?: Locale;
 
     /**
-     * Used to override schemas based on the collection path and entityId.
-     * This resolver allows to override the schema for specific entities, or
-     * specific collections, app wide. This overrides schemas all through the app.
+     * Used to override collections based on the collection path and entityId.
+     * This resolver allows to override the collection for specific entities, or
+     * specific collections, app wide. This overrides collections all through the app.
      *
-     * You can also override schemas in place, when using `useSideEntityController`
+     * You can also override collections in place, when using `useSideEntityController`
      */
     schemaOverrideHandler?: SchemaOverrideHandler;
 

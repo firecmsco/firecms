@@ -1,11 +1,6 @@
-import {
-    EntityCallbacks,
-    EnumValues,
-    InferSchemaType,
-    StringProperty
-} from "../models";
+import { EntityCallbacks, EnumValues, StringProperty } from "../models";
 import { FirebaseCMSAppProps } from "../firebase_app";
-import { buildCollection, buildProperty, buildSchema } from "../core";
+import { buildCollection, buildProperty } from "../core";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -45,8 +40,8 @@ const testProperty3:StringProperty = buildProperty({
 
 console.log(testProperty, testProperty2, testProperty3);
 
-export const productSchema = buildSchema({
-    id: "product",
+export const productsCollection = buildCollection<any>({
+    path: "products",
     name: "Product",
     views: [
         {
@@ -105,7 +100,8 @@ export const productSchema = buildSchema({
             },
             validation: {
                 required: true
-            }
+            },
+            defaultValue: "EUR"
         }),
         public: buildProperty({
             dataType: "boolean",
@@ -162,7 +158,8 @@ export const productSchema = buildSchema({
             properties: {
                 name: {
                     title: "Name",
-                    dataType: "string"
+                    dataType: "string",
+                    defaultValue: "Default publisher"
                 },
                 external_id: {
                     title: "External id",
@@ -195,31 +192,25 @@ export const productSchema = buildSchema({
         })
 
     },
-    defaultValues: {
-        currency: "EUR",
-        publisher: {
-            name: "Default publisher"
-        }
-    }
 });
 
 
-const localeSchema = {
-    id: "locale",
+const localeCollection = buildCollection({
+    path: "locales",
     customId: locales,
     name: "Locale",
     properties: {
-        title: {
+        title: buildProperty({
             title: "Title",
             validation: { required: true },
             dataType: "string"
-        },
-        selectable: {
+        }),
+        selectable: buildProperty({
             title: "Selectable",
             description: "Is this locale selectable",
             dataType: "boolean"
-        },
-        video: {
+        }),
+        video: buildProperty({
             title: "Video",
             dataType: "string",
             validation: { required: false },
@@ -227,20 +218,14 @@ const localeSchema = {
                 storagePath: "videos",
                 acceptedFiles: ["video/*"]
             }
-        }
+        })
     }
-};
-const subcollections = [
-    buildCollection({
-        name: "Locales",
-        path: "locales",
-        schemaId: "locale"
-    })
-];
+});
 
-const productCallbacks: EntityCallbacks<InferSchemaType<typeof productSchema>> = {
+
+const productCallbacks: EntityCallbacks<any> = {
     onPreSave: ({
-                    schema,
+                    collection,
                     path,
                     entityId,
                     values,
@@ -269,53 +254,55 @@ export const siteConfig: FirebaseCMSAppProps = {
     navigation: {
         collections: [
             buildCollection({
+                ...productsCollection,
                 path: "products",
-                schemaId: "product",
                 callbacks: productCallbacks,
                 name: "Products",
-                subcollections: subcollections
+                subcollections: [localeCollection]
             }),
             buildCollection({
+                ...productsCollection,
                 path: "sites/es/products",
-                schemaId: "product",
                 callbacks: productCallbacks,
                 name: "Products",
-                subcollections: subcollections
+                subcollections: [localeCollection]
             }),
             buildCollection({
+                ...productsCollection,
                 path: "products/id/subcollection_inline",
-                schemaId: "product",
                 callbacks: productCallbacks,
                 name: "Products",
-                subcollections: subcollections
+                subcollections: [localeCollection]
             })
         ]
     },
-    schemas: [productSchema]
 };
 
-export const usersSchema = buildSchema({
-    id: "users",
-    name: "User",
+export const usersCollection = buildCollection({
+    path: "users",
+    name: "Users",
+    group: "Main",
+    description: "Registered users",
+    textSearchEnabled: true,
     properties: {
-        first_name: {
+        first_name: buildProperty({
             title: "First name",
             dataType: "string"
-        },
-        last_name: {
+        }),
+        last_name: buildProperty({
             title: "Last name",
             dataType: "string"
-        },
-        email: {
+        }),
+        email: buildProperty({
             title: "Email",
             dataType: "string",
             email: true
-        },
-        phone: {
+        }),
+        phone: buildProperty({
             title: "Phone",
             dataType: "string"
-        },
-        liked_products: {
+        }),
+        liked_products: buildProperty({
             dataType: "array",
             title: "Liked products",
             description: "Products this user has liked",
@@ -323,8 +310,8 @@ export const usersSchema = buildSchema({
                 dataType: "reference",
                 path: "products"
             }
-        },
-        picture: {
+        }),
+        picture: buildProperty({
             title: "Picture",
             dataType: "map",
             properties: {
@@ -340,7 +327,7 @@ export const usersSchema = buildSchema({
                 }
             },
             previewProperties: ["large"]
-        }
+        })
     }
 });
 

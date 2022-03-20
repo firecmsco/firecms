@@ -1,5 +1,5 @@
 import { User } from "./user";
-import { Entity, EntitySchema } from "./entities";
+import { Entity } from "./entities";
 import { AuthController } from "./auth";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCollection } from "./collections";
@@ -76,9 +76,9 @@ export interface ConfigPermissions {
     createSchema?: boolean;
 
     editCollection?: boolean | ((collection: EntityCollection) => boolean);
-    editSchema?: boolean | ((schema: EntitySchema) => boolean);
+    editSchema?: boolean | ((collection: EntityCollection) => boolean);
 
     deleteCollection?: boolean | ((collection: EntityCollection) => boolean);
-    deleteSchema?: boolean | ((schema: EntitySchema) => boolean);
+    deleteSchema?: boolean | ((collection: EntityCollection) => boolean);
 
 }

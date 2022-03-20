@@ -3,9 +3,8 @@ import React from "react";
 import { User as FirebaseUser } from "firebase/auth";
 import {
     Authenticator,
-    buildCollection,
     buildProperty,
-    buildSchema,
+    buildCollection,
     EntityReference,
     FirebaseCMSApp,
     NavigationBuilder,
@@ -14,6 +13,7 @@ import {
 
 import "typeface-rubik";
 import "typeface-space-mono";
+import { localeCollection } from "./SampleApp/schemas/products_schema";
 
 // TODO: Replace with your config
 const firebaseConfig = {
@@ -48,9 +48,19 @@ type Product = {
     expires_on: Date
 }
 
-const productSchema = buildSchema<Product>({
-    id: "product",
+const productSchema = buildCollection<Product>({
     name: "Product",
+    path: "products",
+    permissions: ({ authController }) => ({
+        edit: true,
+        create: true,
+        // we have created the roles object in the navigation builder
+        delete: authController.extra.roles.includes("admin")
+    }),
+    subcollections: [
+localeCollection
+    ],
+
     properties: {
         name: {
             name: "Name",
@@ -162,8 +172,8 @@ const productSchema = buildSchema<Product>({
     }
 });
 
-const localeSchema = buildSchema({
-    id: "locale",
+const localeSchema = buildCollection({
+    path: "locale",
     customId: locales,
     name: "Locale",
     properties: {
@@ -198,24 +208,7 @@ export default function App() {
 
         return ({
             collections: [
-                buildCollection({
-                    path: "products",
-                    schemaId: "product",
-                    name: "Products",
-                    permissions: ({ authController }) => ({
-                        edit: true,
-                        create: true,
-                        // we have created the roles object in the navigation builder
-                        delete: authController.extra.roles.includes("admin")
-                    }),
-                    subcollections: [
-                        buildCollection({
-                            name: "Locales",
-                            path: "locales",
-                            schemaId: "locale"
-                        })
-                    ]
-                })
+                productSchema
             ]
         });
     };
@@ -241,7 +234,6 @@ export default function App() {
 
     return <FirebaseCMSApp
         name={"My Online Shop"}
-        schemas={[productSchema, localeSchema]}
         authentication={myAuthenticator}
         navigation={navigation}
         firebaseConfig={firebaseConfig}

@@ -2,7 +2,6 @@ import React from "react";
 
 import {
     buildEntityCallbacks,
-    buildSchema,
     buildCollection,
     EntityOnDeleteProps,
     EntityOnSaveProps
@@ -13,27 +12,9 @@ type Product = {
     uppercase_name: string;
 }
 
-const productSchema = buildSchema<Product>({
-    id: "product",
-    name: "Product",
-    properties: {
-        name: {
-            name: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        uppercase_name: {
-            name: "Uppercase Name",
-            dataType: "string",
-            disabled: true,
-            description: "This field gets updated with a preSave callback"
-        }
-    }
-});
-
 const productCallbacks = buildEntityCallbacks<Product>({
     onPreSave: ({
-                    schema,
+                    collection,
                     path,
                     entityId,
                     values,
@@ -52,7 +33,7 @@ const productCallbacks = buildEntityCallbacks<Product>({
     },
 
     onPreDelete: ({
-                      schema,
+                      collection,
                       path,
                       entityId,
                       entity,
@@ -71,6 +52,18 @@ const productCallbacks = buildEntityCallbacks<Product>({
 const productsCollection = buildCollection<Product>({
     name: "Products",
     path: "products",
-    schemaId: "product",
+    properties: {
+        name: {
+            name: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        uppercase_name: {
+            name: "Uppercase Name",
+            dataType: "string",
+            disabled: true,
+            description: "This field gets updated with a preSave callback"
+        }
+    },
     callbacks: productCallbacks
 });

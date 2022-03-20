@@ -9,7 +9,6 @@ import { User } from "./user";
 import { SnackbarController } from "../hooks";
 import { ConfigurationPersistence } from "./config_persistence";
 import { UserConfigurationPersistence } from "./local_config_persistence";
-import { SchemaRegistry } from "./schema_registry";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -47,11 +46,6 @@ export interface FireCMSContext<UserType extends User = User> {
      * @see useNavigation
      */
     navigationContext: NavigationContext;
-
-    /**
-     * Use this controller for retrieving the used schemas in the app
-     */
-    schemaRegistry: SchemaRegistry;
 
     /**
      * Controller to open the side dialog displaying entity forms

@@ -10,7 +10,6 @@ import "typeface-space-mono";
 import {
     Authenticator,
     buildCollection,
-    buildSchema,
     CircularProgressCenter,
     createCMSDefaultTheme,
     FirebaseAuthDelegate,
@@ -21,7 +20,6 @@ import {
     NavigationRoutes,
     Scaffold,
     SideEntityDialogs,
-    useBuildSchemaRegistry,
     useFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
@@ -34,8 +32,13 @@ const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
 ];
 
-const productSchema = buildSchema({
-    id: "product",
+const productsCollection = buildCollection({
+    path: "products",
+    permissions: ({ user }) => ({
+        edit: true,
+        create: true,
+        delete: true
+    }),
     name: "Product",
     properties: {
         name: {
@@ -79,16 +82,7 @@ export function CustomCMSApp() {
 
     const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
         collections: [
-            buildCollection({
-                path: "products",
-                schemaId: "product",
-                name: "Products",
-                permissions: ({ user }) => ({
-                    edit: true,
-                    create: true,
-                    delete: true
-                })
-            })
+            productsCollection
         ]
     });
 
@@ -96,8 +90,6 @@ export function CustomCMSApp() {
         console.log("Allowing access to", user?.email);
         return true;
     };
-
-    const schemaRegistry = useBuildSchemaRegistry({ schemas: [productSchema] });
 
     const {
         firebaseApp,
@@ -112,8 +104,7 @@ export function CustomCMSApp() {
     });
 
     const dataSource = useFirestoreDataSource({
-        firebaseApp: firebaseApp,
-        schemaRegistry:schemaRegistry
+        firebaseApp,
         // You can add your `FirestoreTextSearchController` here
     });
 
@@ -141,7 +132,6 @@ export function CustomCMSApp() {
             <FireCMS navigation={navigation}
                      authDelegate={authDelegate}
                      authentication={myAuthenticator}
-                     schemaRegistry={schemaRegistry}
                      dataSource={dataSource}
                      storageSource={storageSource}
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}

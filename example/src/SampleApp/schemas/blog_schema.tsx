@@ -1,7 +1,8 @@
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import {
-    buildProperty, buildPropertyBuilder,
-    buildSchema,
+    buildCollection,
+    buildProperty,
+    buildPropertyBuilder,
     ExportMappingFunction
 } from "@camberi/firecms";
 import { BlogEntryPreview } from "../custom_schema_view/BlogEntryPreview";
@@ -18,9 +19,26 @@ type BlogEntry = {
     tags: string[]
 }
 
-export const blogSchema = buildSchema<BlogEntry>({
-    id: "blog_entry",
-    name: "Blog entry",
+/**
+ * Sample field that will be added to the export
+ */
+const sampleAdditionalExportColumn: ExportMappingFunction = {
+    key: "extra",
+    builder: async ({ entity }) => {
+        await new Promise(resolve => setTimeout(resolve, 100));
+        return "Additional exported value " + entity.id;
+    }
+};
+
+export const blogCollection = buildCollection<BlogEntry>({
+    path: "blog",
+    name: "Blog",
+    group: "Content",
+    exportable: {
+        additionalColumns: [sampleAdditionalExportColumn]
+    },
+    description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
+    textSearchEnabled: true,
     defaultSize: "l",
     views: [{
         path: "preview",
@@ -138,14 +156,3 @@ export const blogSchema = buildSchema<BlogEntry>({
         "status": ["==", "published"]
     }
 });
-
-/**
- * Sample field that will be added to the export
- */
-export const sampleAdditionalExportColumn: ExportMappingFunction = {
-    key: "extra",
-    builder: async ({ entity }) => {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        return "Additional exported value " + entity.id;
-    }
-};

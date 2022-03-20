@@ -11,7 +11,6 @@ import {
     NavigationRoutes,
     Scaffold,
     SideEntityDialogs,
-    useBuildSchemaRegistry
 } from "../core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
@@ -36,7 +35,7 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * This is the default implementation of a FireCMS app using the Firebase services
  * as a backend.
  * You can use this component as a full app, by specifying collections and
- * entity schemas.
+ * entity collections.
  *
  * This component is in charge of initialising Firebase, with the given
  * configuration object.
@@ -56,8 +55,6 @@ export function FirebaseCMSApp({
                                    authentication,
                                    schemaOverrideHandler,
                                    navigation,
-                                   schemas,
-                                   enumConfigs,
                                    textSearchController,
                                    allowSkipLogin,
                                    signInOptions = DEFAULT_SIGN_IN_OPTIONS,
@@ -94,17 +91,9 @@ export function FirebaseCMSApp({
     });
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    const schemaRegistry = useBuildSchemaRegistry({
-        schemas,
-        enumConfigs,
-        configPersistence,
-        userConfigPersistence
-    });
-
     const dataSource = useFirestoreDataSource({
         firebaseApp: firebaseApp,
         textSearchController,
-        schemaRegistry
     });
     const storageSource = useFirebaseStorageSource({
         firebaseApp
@@ -136,7 +125,6 @@ export function FirebaseCMSApp({
                 navigation={navigation}
                 authDelegate={authDelegate}
                 authentication={authentication}
-                schemaRegistry={schemaRegistry}
                 userConfigPersistence={userConfigPersistence}
                 schemaOverrideHandler={schemaOverrideHandler}
                 dateTimeFormat={dateTimeFormat}

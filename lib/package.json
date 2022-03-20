@@ -77,7 +77,10 @@
         ]
     },
     "devDependencies": {
+        "@babel/core": "^7.17.8",
         "@babel/eslint-parser": "^7.16.5",
+        "@babel/preset-env": "^7.16.11",
+        "@babel/preset-typescript": "^7.16.7",
         "@emotion/react": "^11.4.1",
         "@emotion/styled": "^11.3.0",
         "@mui/icons-material": "^5",

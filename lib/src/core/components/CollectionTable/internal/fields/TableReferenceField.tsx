@@ -7,7 +7,7 @@ import { ReferenceDialog } from "../../../ReferenceDialog";
 
 import { getPreviewSizeFrom } from "../../../../../preview/util";
 import { getReferenceFrom } from "../../../../util/entities";
-import { useNavigation } from "../../../../../hooks";
+import { useNavigationContext } from "../../../../../hooks";
 
 export function TableReferenceField(props: {
     name: string;
@@ -38,7 +38,7 @@ export function TableReferenceField(props: {
     const [onHover, setOnHover] = useState(false);
     const [open, setOpen] = useState<boolean>(false);
 
-    const navigationContext = useNavigation();
+    const navigationContext = useNavigationContext();
     const collection = navigationContext.getCollection(path);
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);

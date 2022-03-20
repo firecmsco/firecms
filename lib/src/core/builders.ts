@@ -3,9 +3,9 @@ import {
     ArrayProperty,
     BooleanProperty,
     CMSType,
+    DateProperty,
     EntityCallbacks,
     EntityCollection,
-    EntitySchema,
     EnumValueConfig,
     EnumValues,
     GeopointProperty,
@@ -19,7 +19,6 @@ import {
     PropertyBuilder,
     ReferenceProperty,
     StringProperty,
-    DateProperty,
     User
 } from "../models";
 
@@ -38,26 +37,15 @@ export function buildNavigation<UserType>(
 /**
  * Identity function we use to defeat the type system of Typescript and build
  * collection views with all its properties
- * @param collectionView
+ * @param collection
  * @category Builder
  */
 export function buildCollection<M extends { [Key: string]: any } = any,
-    AdditionalKey extends string = string>(
-    collectionView: EntityCollection<M, AdditionalKey>
-): EntityCollection<M, AdditionalKey> {
-    return collectionView;
-}
-
-/**
- * Identity function we use to defeat the type system of Typescript and preserve
- * the schema keys
- * @param schema
- * @category Builder
- */
-export function buildSchema<M extends { [Key: string]: any } = any>(
-    schema: EntitySchema<M>
-): EntitySchema<M> {
-    return schema;
+    AdditionalKey extends string = string,
+    UserType = User>(
+    collection: EntityCollection<M, AdditionalKey, UserType>
+): EntityCollection<M, AdditionalKey, UserType> {
+    return collection;
 }
 
 /**

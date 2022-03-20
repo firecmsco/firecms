@@ -5,7 +5,7 @@ import {
     EntityCallbacks,
     EntityOnDeleteProps,
     FireCMSContext,
-    ResolvedEntitySchema
+    ResolvedEntityCollection
 } from "../../models";
 
 /**
@@ -23,7 +23,7 @@ export type DeleteEntityWithCallbacksProps<M> =
 
 /**
  * This function is in charge of deleting an entity in the datasource.
- * It will run all the delete callbacks specified in the schema.
+ * It will run all the delete callbacks specified in the collection.
  * It is also possible to attach callbacks on save success or error, and callback
  * errors.
  *
@@ -33,7 +33,7 @@ export type DeleteEntityWithCallbacksProps<M> =
  *
  * @param dataSource
  * @param entity
- * @param schema
+ * @param collection
  * @param callbacks
  * @param onDeleteSuccess
  * @param onDeleteFailure
@@ -45,7 +45,7 @@ export type DeleteEntityWithCallbacksProps<M> =
 export async function deleteEntityWithCallbacks<M, UserType>({
                                                                  dataSource,
                                                                  entity,
-                                                                 schema,
+                                                                 collection,
                                                                  callbacks,
                                                                  onDeleteSuccess,
                                                                  onDeleteFailure,
@@ -53,7 +53,7 @@ export async function deleteEntityWithCallbacks<M, UserType>({
                                                                  onDeleteSuccessHookError,
                                                                  context
                                                              }: DeleteEntityWithCallbacksProps<M> & {
-                                                                 schema: ResolvedEntitySchema<M>,
+                                                                 collection: ResolvedEntityCollection<M>,
                                                                  dataSource: DataSource,
                                                                  context: FireCMSContext<UserType>
                                                              }
@@ -63,7 +63,7 @@ export async function deleteEntityWithCallbacks<M, UserType>({
 
     const entityDeleteProps: EntityOnDeleteProps<M> = {
         entity,
-        schema,
+        collection,
         entityId: entity.id,
         path: entity.path,
         context

@@ -42,7 +42,7 @@ export default function CustomBooleanPreview({
 ...and how it is used:
 
 ```tsx
-export const blogSchema = buildSchema({
+export const blogSchema = buildCollection({
     name: "Blog entry",
     properties: {
         // ...

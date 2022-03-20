@@ -3,7 +3,7 @@ import {
     DeleteEntityProps,
     Entity,
     EntityReference,
-    EntitySchema,
+    EntityCollection,
     EntityValues,
     FetchCollectionProps,
     FetchEntityProps,
@@ -11,16 +11,15 @@ import {
     GeoPoint,
     ListenCollectionProps,
     ListenEntityProps,
-    ResolvedEntitySchema,
+    ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty,
     SaveEntityProps,
-    SchemaRegistry,
     WhereFilterOp
 } from "../../models";
 import { sanitizeData, updateAutoValues } from "../../core/util/entities";
 import {
-    collection,
+    collection as collectionClause,
     CollectionReference,
     deleteDoc,
     doc,
@@ -45,6 +44,7 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../models/text_search";
 import { useEffect, useRef } from "react";
+import { getResolvedCollection } from "../../core";
 
 /**
  * @category Firebase
@@ -52,20 +52,18 @@ import { useEffect, useRef } from "react";
 export interface FirestoreDataSourceProps {
     firebaseApp?: FirebaseApp,
     textSearchController?: FirestoreTextSearchController,
-    schemaRegistry: SchemaRegistry;
 }
 
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
  * @param textSearchController
- * @param schemaRegistry
+ * @param collectionRegistry
  * @category Firebase
  */
 export function useFirestoreDataSource({
                                            firebaseApp,
-                                           textSearchController,
-                                           schemaRegistry
+                                           textSearchController
                                        }: FirestoreDataSourceProps): DataSource {
 
     const firestoreRef = useRef<Firestore>();
@@ -80,20 +78,20 @@ export function useFirestoreDataSource({
      *
      * @param doc
      * @param path
-     * @param resolvedSchema
+     * @param resolvedCollection
      * @category Firestore
      */
     function createEntityFromSchema<M extends { [Key: string]: any }>
     (
         doc: DocumentSnapshot,
         path: string,
-        resolvedSchema: ResolvedEntitySchema<M>
+        resolvedCollection: ResolvedEntityCollection<M>
     ): Entity<M> {
 
         const values = firestoreToCMSModel(doc.data());
         const data = doc.data()
-            ? resolvedSchema.properties
-                ? sanitizeData(values as EntityValues<M>, resolvedSchema.properties)
+            ? resolvedCollection.properties
+                ? sanitizeData(values as EntityValues<M>, resolvedCollection.properties)
                 : doc.data()
             : undefined;
         return {
@@ -107,7 +105,7 @@ export function useFirestoreDataSource({
 
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
 
-        const collectionReference: Query = collection(firestore, path);
+        const collectionReference: Query = collectionClause(firestore, path);
 
         const queryParams = [];
         if (filter) {
@@ -144,7 +142,7 @@ export function useFirestoreDataSource({
 
     function getAndBuildEntity<M>(path: string,
                                   entityId: string,
-                                  schema: string | EntitySchema<M> | ResolvedEntitySchema<M>): Promise<Entity<M> | undefined> {
+                                  collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M> | undefined> {
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
 
         return getDoc(doc(firestore, path, entityId))
@@ -152,19 +150,19 @@ export function useFirestoreDataSource({
                 if (!docSnapshot.exists()) {
                     return undefined;
                 }
-                const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
-                    schema,
+                const resolvedCollection = getResolvedCollection<M>({
+                    collection,
                     path,
                     entityId: docSnapshot.id,
                     values: firestoreToCMSModel(docSnapshot.data())
                 });
-                return createEntityFromSchema(docSnapshot, path, resolvedSchema);
+                return createEntityFromSchema(docSnapshot, path, resolvedCollection);
             });
     }
 
     async function performTextSearch<M>(path: string,
                                         searchString: string,
-                                        schema: string | EntitySchema<M> | ResolvedEntitySchema<M>): Promise<Entity<M>[]> {
+                                        collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M>[]> {
         if (!textSearchController)
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
         const ids = await textSearchController({ path, searchString });
@@ -173,7 +171,7 @@ export function useFirestoreDataSource({
         const promises: Promise<Entity<M> | undefined>[] = ids
             .map(async (entityId) => {
                     try {
-                        return await getAndBuildEntity(path, entityId, schema);
+                        return await getAndBuildEntity(path, entityId, collection);
                     } catch (e) {
                         console.error(e);
                         return undefined;
@@ -189,7 +187,7 @@ export function useFirestoreDataSource({
         /**
          * Fetch entities in a Firestore path
          * @param path
-         * @param schema
+         * @param collection
          * @param filter
          * @param limit
          * @param startAfter
@@ -202,7 +200,7 @@ export function useFirestoreDataSource({
          */
         fetchCollection<M extends { [Key: string]: any }>({
                                                               path,
-                                                              schema,
+                                                              collection,
                                                               filter,
                                                               limit,
                                                               startAfter,
@@ -213,7 +211,7 @@ export function useFirestoreDataSource({
         ): Promise<Entity<M>[]> {
 
             if (searchString) {
-                return performTextSearch(path, searchString, schema);
+                return performTextSearch(path, searchString, collection);
             }
 
             console.debug("Fetching collection", path, limit, filter, startAfter, orderBy, order);
@@ -222,19 +220,19 @@ export function useFirestoreDataSource({
             return getDocs(query)
                 .then((snapshot) =>
                     snapshot.docs.map((doc) => {
-                        const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
-                            schema,
+                        const resolvedCollection = getResolvedCollection<M>({
+                            collection,
                             path,
                             values: firestoreToCMSModel(doc.data())
                         });
-                        return createEntityFromSchema(doc, path, resolvedSchema);
+                        return createEntityFromSchema(doc, path, resolvedCollection);
                     }));
         },
 
         /**
          * Listen to a entities in a given path
          * @param path
-         * @param schema
+         * @param collection
          * @param onError
          * @param filter
          * @param limit
@@ -248,7 +246,7 @@ export function useFirestoreDataSource({
         listenCollection<M extends { [Key: string]: any }>(
             {
                 path,
-                schema,
+                collection,
                 filter,
                 limit,
                 startAfter,
@@ -265,7 +263,7 @@ export function useFirestoreDataSource({
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
 
             if (searchString) {
-                performTextSearch<M>(path, searchString, schema)
+                performTextSearch<M>(path, searchString, collection)
                     .then(onUpdate)
                     .catch((e) => {
                         if (onError) onError(e);
@@ -275,15 +273,15 @@ export function useFirestoreDataSource({
                 };
             }
 
-            const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
-                schema,
+            const resolvedCollection = getResolvedCollection<M>({
+                collection,
                 path
             });
 
             return onSnapshot(query,
                 {
                     next: (snapshot) => {
-                        onUpdate(snapshot.docs.map((doc) => createEntityFromSchema(doc, path, resolvedSchema)));
+                        onUpdate(snapshot.docs.map((doc) => createEntityFromSchema(doc, path, resolvedCollection)));
                     },
                     error: onError
                 }
@@ -291,26 +289,26 @@ export function useFirestoreDataSource({
         },
 
         /**
-         * Retrieve an entity given a path and a schema
+         * Retrieve an entity given a path and a collection
          * @param path
          * @param entityId
-         * @param schema
+         * @param collection
          * @category Firestore
          */
         fetchEntity<M extends { [Key: string]: any }>({
                                                           path,
                                                           entityId,
-                                                          schema,
+                                                          collection,
                                                       }: FetchEntityProps<M>
         ): Promise<Entity<M> | undefined> {
-            return getAndBuildEntity(path, entityId, schema);
+            return getAndBuildEntity(path, entityId, collection);
         },
 
         /**
          *
          * @param path
          * @param entityId
-         * @param schema
+         * @param collection
          * @param onUpdate
          * @param onError
          * @return Function to cancel subscription
@@ -320,7 +318,7 @@ export function useFirestoreDataSource({
             {
                 path,
                 entityId,
-                schema,
+                collection,
                 onUpdate,
                 onError
             }: ListenEntityProps<M>): () => void {
@@ -330,12 +328,12 @@ export function useFirestoreDataSource({
                 doc(firestore, path, entityId),
                 {
                     next: (docSnapshot) => {
-                        const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
-                            schema,
+                        const resolvedCollection = getResolvedCollection<M>({
+                            collection,
                             path,
                             entityId: docSnapshot.id
                         });
-                        onUpdate(createEntityFromSchema(docSnapshot, path, resolvedSchema));
+                        onUpdate(createEntityFromSchema(docSnapshot, path, resolvedCollection));
                     },
                     error: onError
                 }
@@ -350,7 +348,7 @@ export function useFirestoreDataSource({
          * @param entityId
          * @param values
          * @param schemaId
-         * @param schema
+         * @param collection
          * @param status
          * @category Firestore
          */
@@ -359,20 +357,20 @@ export function useFirestoreDataSource({
                 path,
                 entityId,
                 values,
-                schema,
+                collection,
                 status
             }: SaveEntityProps<M>): Promise<Entity<M>> {
 
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
 
-            const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
-                schema,
+            const resolvedCollection = getResolvedCollection<M>({
+                collection,
                 path,
                 entityId
             });
 
-            const properties: ResolvedProperties<M> = resolvedSchema.properties;
-            const collectionReference: CollectionReference = collection(firestore, path);
+            const properties: ResolvedProperties<M> = resolvedCollection.properties;
+            const collectionReference: CollectionReference = collectionClause(firestore, path);
 
             const updatedFirestoreValues: EntityValues<M> = updateAutoValues(
                 {
@@ -400,7 +398,7 @@ export function useFirestoreDataSource({
         /**
          * Delete an entity
          * @param entity
-         * @param schema
+         * @param collection
          * @category Firestore
          */
         async deleteEntity<M extends { [Key: string]: any }>(
@@ -441,7 +439,7 @@ export function useFirestoreDataSource({
             if (value === undefined || value === null) {
                 return Promise.resolve(true);
             }
-            const q = query(collection(firestore, path), whereClause(name, "==", value));
+            const q = query(collectionClause(firestore, path), whereClause(name, "==", value));
             return getDocs(q)
                 .then((snapshots) =>
                     snapshots.docs.filter(doc => doc.id !== entityId).length === 0
@@ -451,7 +449,7 @@ export function useFirestoreDataSource({
 
         generateEntityId(path:string): string {
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
-            return doc(collection(firestore, path)).id;
+            return doc(collectionClause(firestore, path)).id;
         }
 
     };

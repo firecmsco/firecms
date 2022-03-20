@@ -8,7 +8,7 @@ The core of the CMS are **entities**, which are defined by an `EntitySchema`. In
 the schema you define the properties, which are related to the Firestore data
 types.
 
-The `name` and `properties` you define for your entity schema, will be used to
+The `name` and `properties` you define for your entity collection, will be used to
 generate the fields in the spreadsheet like collection tables, and the fields
 in the generated forms.
 
@@ -36,7 +36,7 @@ Check the full API reference in [Entity schema API](../api/interfaces/entitysche
 ### Sample entity schema
 
 ```tsx
-import { buildSchema, EntityReference } from "@camberi/firecms";
+import { buildCollection, EntityReference } from "@camberi/firecms";
 
 type Product = {
     name: string;
@@ -50,7 +50,7 @@ type Product = {
     }
 }
 
-export const productSchema = buildSchema<Product>({
+export const productSchema = buildCollection<Product>({
     name: "Product",
     properties: {
         name: {

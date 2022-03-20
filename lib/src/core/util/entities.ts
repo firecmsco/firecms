@@ -4,7 +4,6 @@ import {
     EntityReference,
     EntityStatus,
     EntityValues,
-    EnumConfig,
     EnumValueConfig,
     EnumValues,
     NumberProperty,
@@ -17,7 +16,6 @@ import {
     ResolvedProperties,
     ResolvedProperty,
     ResolvedStringProperty,
-    SchemaRegistry,
     StringProperty
 } from "../../models";
 import { mergeDeep } from "./objects";
@@ -42,13 +40,13 @@ export function isHidden(property: Property | ResolvedProperty): boolean {
 
 /**
  * Replace enums declared as aliases for their corresponding enumValues,
- * defined in the root of the {@link SchemaRegistry}.
+ * defined in the root of the {@link CollectionRegistry}.
  * @param property
  * @param enumConfigs
  */
-export function computePropertyEnums(property: Property, enumConfigs: EnumConfig[]): ResolvedProperty {
+export function computePropertyEnums(property: Property): Property {
     if (property.dataType === "map" && property.properties) {
-        const properties = computePropertiesEnums(property.properties, enumConfigs);
+        const properties = computePropertiesEnums(property.properties);
         return {
             ...property,
             properties
@@ -57,10 +55,10 @@ export function computePropertyEnums(property: Property, enumConfigs: EnumConfig
         if (property.of) {
             return {
                 ...property,
-                of: computePropertyEnums(property.of, enumConfigs)
+                of: computePropertyEnums(property.of)
             } as ResolvedArrayProperty;
         } else if (property.oneOf) {
-            const properties = computePropertiesEnums(property.oneOf.properties, enumConfigs);
+            const properties = computePropertiesEnums(property.oneOf.properties);
             return {
                 ...property,
                 oneOf: {
@@ -70,21 +68,21 @@ export function computePropertyEnums(property: Property, enumConfigs: EnumConfig
             } as ResolvedArrayProperty;
         }
     } else if ((property.dataType === "string" || property.dataType === "number") && property.enumValues) {
-        return resolvePropertyEnum(property, enumConfigs);
+        return resolvePropertyEnum(property);
     }
     return property as ResolvedProperty;
 }
 
 /**
  * Replace enums declared as aliases for their corresponding enumValues,
- * defined in the root of the {@link SchemaRegistry}.
+ * defined in the root of the {@link CollectionRegistry}.
  * @param properties
  * @param enumConfigs
  */
-export function computePropertiesEnums<M>(properties: Properties<M>, enumConfigs: EnumConfig[]): ResolvedProperties<M> {
+export function computePropertiesEnums<M>(properties: Properties<M>): ResolvedProperties<M> {
     return Object.entries<Property>(properties as Record<string, Property>)
         .map(([key, property]) => {
-            return ({ [key]: computePropertyEnums(property, enumConfigs) });
+            return ({ [key]: computePropertyEnums(property) });
         })
         .filter((a) => a !== null)
         .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
@@ -95,25 +93,18 @@ export function computePropertiesEnums<M>(properties: Properties<M>, enumConfigs
  * @param property
  * @param enumConfigs
  */
-export function resolvePropertyEnum(property: StringProperty | NumberProperty, enumConfigs: EnumConfig[]): ResolvedStringProperty | ResolvedNumberProperty {
-    if (typeof property.enumValues === "string" || typeof property.enumValues === "object") {
+export function resolvePropertyEnum(property: StringProperty | NumberProperty): ResolvedStringProperty | ResolvedNumberProperty {
+    if (typeof property.enumValues === "object") {
         return {
             ...property,
-            enumValues: resolveEnumValues(property.enumValues, enumConfigs)?.filter((value) => value && value.id && value.label) ?? [],
+            enumValues: resolveEnumValues(property.enumValues)?.filter((value) => value && value.id && value.label) ?? [],
         }
     }
     return property as ResolvedStringProperty | ResolvedNumberProperty;
 }
 
-export function resolveEnumValues(input: EnumValues | string, enumConfigs: EnumConfig[]): EnumValueConfig[] | undefined {
-    if (typeof input === "string") {
-        const enumConfig = enumConfigs.find((ec) => ec.id === input);
-        if (!enumConfig) {
-            console.error("Not able to find enumConfig with id: " + input);
-            return undefined;
-        }
-        return enumConfig.enumValues;
-    } else if (typeof input === "object") {
+export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefined {
+    if (typeof input === "object") {
         return Object.entries(input).map(([id, value]) =>
             (typeof value === "string" ? { id, label: value } : value));
     } else if (Array.isArray(input)) {
@@ -181,7 +172,7 @@ export function updateAutoValues<M extends { [Key: string]: any }>({
 }
 
 /**
- * Add missing required fields, expected in the schema, to the values of an entity
+ * Add missing required fields, expected in the collection, to the values of an entity
  * @param values
  * @param properties
  * @category Datasource

@@ -1,4 +1,4 @@
-import { buildSchema, SchemaOverrideHandler } from "@camberi/firecms";
+import { buildCollection, SchemaOverrideHandler } from "@camberi/firecms";
 
 /**
  * You can use a custom schema resolver to override schemas for specific
@@ -15,8 +15,8 @@ export const customSchemaOverrideHandler: SchemaOverrideHandler = ({
 }) => {
 
     if (entityId === "B0017TNJWY" && path === "products") {
-        const customProductSchema = buildSchema({
-            id: "custom_product",
+        const customProductSchema = buildCollection({
+            path: "custom_product",
             name: "Custom product",
             properties: {
                 name: {
@@ -29,7 +29,7 @@ export const customSchemaOverrideHandler: SchemaOverrideHandler = ({
         });
 
         console.log("Used custom schema resolver", path, entityId);
-        return { schema: customProductSchema };
+        return { collection: customProductSchema };
     }
     return undefined;
 };

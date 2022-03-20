@@ -1,5 +1,4 @@
 import { Timestamp } from "firebase/firestore";
-import { EntitySchema, ResolvedEntitySchema } from "../models";
 import {
     firestoreToCMSModel
 } from "../firebase_app/hooks/useFirestoreDataSource";

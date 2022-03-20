@@ -4,7 +4,7 @@ title: Conditional fields from properties
 sidebar_label: Conditional fields
 ---
 
-When defining the properties of a schema, you can choose to use a builder
+When defining the properties of a collection, you can choose to use a builder
 [`PropertyBuilder`](../api/types/propertybuilder), instead of assigning the
 property configuration directly. In the builder you
 receive [`PropertyBuilderProps`](../api/types/propertybuilderprops)
@@ -18,7 +18,7 @@ fly, based on other values.
 Example of field that gets enabled or disabled based on other values:
 
 ```tsx
-import { buildSchema, EntityReference, EntitySchema } from "@camberi/firecms";
+import { buildCollection, EntityReference, EntitySchema } from "@camberi/firecms";
 
 type Product = {
     name: string;
@@ -32,7 +32,7 @@ type Product = {
     }
 }
 
-export const productSchema: EntitySchema = buildSchema<Partial<Product>>({
+export const productSchema: EntitySchema = buildCollection<Partial<Product>>({
     name: "Product",
     properties: {
         available: {
@@ -64,7 +64,7 @@ or `apple`, and its fields change accordingly
 
 ```tsx
 import {
-    buildSchema,
+    buildCollection,
     EntitySchema,
     buildProperty,
     buildProperties
@@ -80,7 +80,7 @@ type User = {
     }
 }
 
-export const userSchema: EntitySchema = buildSchema<User>({
+export const userSchema: EntitySchema = buildCollection<User>({
     name: "User",
     properties: {
         source: ({ values }) => {

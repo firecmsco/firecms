@@ -10,13 +10,12 @@ import {
     Authenticator,
     DataSource,
     EntityLinkBuilder,
-    EntitySchema,
+    EntityCollection,
     FireCMSContext,
     Locale,
     Navigation,
     NavigationBuilder,
     SchemaOverrideHandler,
-    SchemaRegistry,
     StorageSource,
     UserConfigurationPersistence
 } from "../models";
@@ -65,7 +64,7 @@ export interface FireCMSProps<UserType> {
     /**
      * Use this prop to specify the views that will be generated in the CMS.
      * You usually will want to create a `Navigation` object that includes
-     * collection views where you specify the path and the schema.
+     * collection views where you specify the path and the collection.
      * Additionally, you can add custom views to the root navigation.
      * In you need to customize the navigation based on the logged user you
      * can use a `NavigationBuilder`
@@ -82,13 +81,13 @@ export interface FireCMSProps<UserType> {
     authentication?: boolean | Authenticator<UserType>;
 
     /**
-     * Used to override schemas based on the collection path and entityId.
-     * This resolver allows to override the schema for specific entities, or
+     * Used to override collections based on the collection path and entityId.
+     * This resolver allows to override the collection for specific entities, or
      * specific collections, app wide.
      *
-     * This overrides schemas **all through the app.**
+     * This overrides collections **all through the app.**
      *
-     * You can also override schemas in place, when using {@link useSideEntityController}
+     * You can also override collections in place, when using {@link useSideEntityController}
      */
     schemaOverrideHandler?: SchemaOverrideHandler;
 
@@ -146,12 +145,6 @@ export interface FireCMSProps<UserType> {
      * and not defined in code
      */
     userConfigPersistence?: UserConfigurationPersistence;
-
-    /**
-     * This component is in charge of handling the {@link EntitySchema} entries
-     * in the CMS.
-     */
-    schemaRegistry: SchemaRegistry;
 }
 
 /**
@@ -168,7 +161,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         navigation: navigationOrBuilder,
         entityLinkBuilder,
         authentication,
-        schemaRegistry,
         userConfigPersistence,
         dateTimeFormat,
         locale,
@@ -184,6 +176,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
     const usedBasePath = basePath ?? "/";
     const usedBasedCollectionPath = baseCollectionPath ?? DEFAULT_COLLECTION_PATH;
 
+
     const dateUtilsLocale = locale ? locales[locale] : undefined;
     const authController = useBuildAuthController({
         authDelegate,
@@ -197,7 +190,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
     const navigationContext = useBuildNavigationContext({
         basePath: usedBasePath,
         baseCollectionPath: usedBasedCollectionPath,
-        schemaRegistry,
         authController,
         navigationOrBuilder,
         dateTimeFormat,
@@ -209,7 +201,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         userConfigPersistence
     });
 
-    const sideEntityController = useBuildSideEntityController(navigationContext, schemaRegistry);
+    const sideEntityController = useBuildSideEntityController(navigationContext);
 
     const loading = authController.authLoading || authController.initialLoading || navigationContext.loading;
 
@@ -235,7 +227,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                             dateTimeFormat,
                             locale,
                             navigationContext,
-                            schemaRegistry,
                             dataSource,
                             storageSource,
                             snackbarController,

@@ -4,6 +4,7 @@ import { User } from "./user";
 import { Locale } from "./locales";
 import { DataSource } from "./datasource";
 import { StorageSource } from "./storage";
+import { ResolvedEntityCollection } from "./resolved_entities";
 
 /**
  * You can use this builder to customize the navigation, based on the logged in
@@ -72,10 +73,6 @@ export interface Navigation {
 
 }
 
-export type ResolvedEntityCollection = EntityCollection & {
-    editable?: boolean;
-}
-
 /**
  * @category Models
  */
@@ -86,7 +83,7 @@ export type ResolvedNavigation = {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections?: ResolvedEntityCollection[];
+    collections?: ResolvedEntityCollection<any>[];
 
     /**
      * Custom additional views created by the developer, added to the main
@@ -103,7 +100,7 @@ export type ResolvedNavigation = {
  */
 export type NavigationContext = {
 
-    navigation?: ResolvedNavigation;
+    navigation?: Navigation;
 
     /**
      * Configuration for the views that should be displayed at the top
@@ -122,7 +119,7 @@ export type NavigationContext = {
     initialised: boolean;
 
     /**
-     * Get the schema configuration for a given path.
+     * Get the collection configuration for a given path.
      * If you use this method you can use a baseCollection that will be used
      * to resolve the initial properties of the collection, before applying
      * the collection configuration changes that are persisted.
@@ -155,7 +152,6 @@ export type NavigationContext = {
      */
     buildCMSUrlPath: (path: string) => string;
 
-    buildUrlEditSchemaPath: (props: { id?: string}) => string;
 
     buildUrlEditCollectionPath: (props: { path?: string, group?: string }) => string;
 
@@ -229,8 +225,9 @@ export interface TopNavigationEntry {
     url: string;
     name: string;
     path?: string;
-    type: "collection" | "stored_collection" | "view";
-    editUrl?: string;
+    type: "collection" | "view";
+    deletable?: boolean;
+    editable?: boolean;
     description?: string;
     group?: string;
 }

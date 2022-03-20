@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button } from "@mui/material";
 
 import {
-    buildSchema,
+    buildCollection,
     EntityCollection,
     EntityCollectionView,
     useAuthController,
@@ -33,8 +33,8 @@ export function ExampleCMSView({
     // hook to do operations related to authentication
     const authController = useAuthController();
 
-    const customProductSchema = buildSchema({
-        id: "custom_product",
+    const customProductSchema = buildCollection({
+        path: "custom_product",
         name: "Custom product",
         properties: {
             name: {
@@ -82,7 +82,7 @@ export function ExampleCMSView({
                     onClick={() => sideEntityController.open({
                         entityId: "B003WT1622",
                         path: "/products-test",
-                        schema: customProductSchema,
+                        collection: customProductSchema,
                         width: 800
                     })}
                     color="primary">

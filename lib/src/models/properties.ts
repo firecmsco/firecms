@@ -173,22 +173,6 @@ export interface PropertyDisabledConfig {
  */
 export type EnumType = number | string;
 
-export type EnumConfig = {
-
-    /**
-     * ID used to identify this enumeration.
-     * You can use this ID as an alias when configuring properties that use
-     * `enumValues`
-     */
-    id: string;
-
-    /**
-     * Values of this enumeration
-     * @see EnumValues
-     */
-    enumValues: EnumValueConfig[];
-}
-
 /**
  * We use this type to define mapping between string or number values in
  * the data source to a label (such in a select dropdown).
@@ -322,10 +306,8 @@ export interface StringProperty extends BaseProperty<string> {
      * colors). If you need to ensure the order of the elements, you can pass
      * a `Map` instead of a plain object.
      *
-     * You can also assign an alias ID to a {@link EnumConfig} specified in
-     * `enumConfigs` at the FireCMS level
      */
-    enumValues?: EnumValues | string;
+    enumValues?: EnumValues;
 
     /**
      * You can specify a `Storage` configuration. It is used to
@@ -394,7 +376,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
 
         /**
          * Order in which the properties are displayed.
-         * If you are specifying your schema as code, the order is the same as the
+         * If you are specifying your collection as code, the order is the same as the
          * one you define in `properties`, and you don't need to specify this prop.
          */
         propertiesOrder?: (Extract<keyof T, string>)[];
@@ -433,7 +415,7 @@ export interface MapProperty<T extends { [Key: string]: any } = any> extends Bas
 
     /**
      * Order in which the properties are displayed.
-     * If you are specifying your schema as code, the order is the same as the
+     * If you are specifying your collection as code, the order is the same as the
      * one you define in `properties`, and you don't need to specify this prop.
      */
     propertiesOrder?: (Extract<keyof T, string>)[];
@@ -504,7 +486,7 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
 
     /**
      * Absolute collection path of the collection this reference points to.
-     * The schema of the entity is inferred based on the root navigation, so
+     * The collection of the entity is inferred based on the root navigation, so
      * the filters and search delegate existing there are applied to this view
      * as well.
      * You can set this prop to `false` if the path is not yet know, e.g.

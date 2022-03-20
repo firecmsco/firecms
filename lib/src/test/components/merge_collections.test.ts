@@ -1,5 +1,5 @@
-import { EntitySchema, PropertyBuilder } from "../../models";
-import { mergeSchemas } from "../../core/util/schemas";
+import { EntityCollection, PropertyBuilder } from "../../models";
+import { mergeCollections } from "../../core/util/collections";
 
 const priceBuilder:PropertyBuilder = ({ values }: any) => ({
     dataType: "number",
@@ -16,8 +16,8 @@ const priceBuilder:PropertyBuilder = ({ values }: any) => ({
     description: "Price with range validation"
 });
 
-export const baseProductSchema: EntitySchema = {
-    id: "product",
+export const baseProductSchema: EntityCollection = {
+    path: "product",
     name: "Product",
     properties: {
         name: {
@@ -34,8 +34,8 @@ export const baseProductSchema: EntitySchema = {
         price: priceBuilder
     }
 };
-export const persistedProductSchema: EntitySchema = {
-    id: "product",
+export const persistedProductSchema: EntityCollection = {
+    path: "product",
     name: "Product persisted",
     properties: {
         name: {
@@ -73,39 +73,40 @@ export const persistedProductSchema: EntitySchema = {
 };
 
 
-it("Merge schemas", () => {
-    const mergedSchema = mergeSchemas(baseProductSchema, persistedProductSchema);
+it("Merge collections", () => {
+    const mergedCollection = mergeCollections(baseProductSchema, persistedProductSchema);
 
-    expect(mergedSchema).toEqual<EntitySchema>(
+    console.log(mergedCollection)
+    expect(mergedCollection).toEqual<EntityCollection>(
         {
-            id: "product",
+            path: "product",
             name: "Product persisted",
             properties: {
                 name: {
                     dataType: "string",
-                    title: "Name updated",
+                    name: "Name updated",
                     multiline: true,
                     validation: { required: true }
                 },
                 currency: {
                     dataType: "string",
-                    title: "Currency",
+                    name: "Currency",
                     enumValues: [
                         { id: "EUR", label: "Euros" },
                         { id: "DOL", label: "Dollars" },
                     ]
                 },
                 publisher: {
-                    title: "Publisher",
+                    name: "Publisher",
                     description: "This is an example of a map property",
                     dataType: "map",
                     properties: {
                         name: {
-                            title: "Name",
+                            name: "Name",
                             dataType: "string"
                         },
                         external_id: {
-                            title: "External id",
+                            name: "External id",
                             dataType: "string"
                         }
                     },
@@ -113,6 +114,7 @@ it("Merge schemas", () => {
                 },
                 price: priceBuilder,
             },
-            propertiesOrder: ["name", "publisher", "price"]
+            propertiesOrder: ["name", "publisher", "price"],
+            subcollections: undefined
         });
 });

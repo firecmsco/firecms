@@ -30,7 +30,6 @@ import {
     useFireCMSContext,
     useSnackbarController
 } from "../../hooks";
-import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 import { resolveEnumValues } from "../../core/util/entities";
 
 const PREFIX = "CustomIdField";
@@ -63,7 +62,7 @@ export function CustomIdField<M, UserType>({
                                                error,
                                                entity
                                            }: {
-    customId?: boolean | EnumValues | string
+    customId?: boolean | EnumValues | "optional"
     entityId?: string
     status: EntityStatus,
     onChange: (id?: string) => void,
@@ -71,16 +70,14 @@ export function CustomIdField<M, UserType>({
     entity: Entity<M> | undefined
 }) {
 
-    const schemaRegistry = useSchemaRegistry();
-
     const disabled = status === "existing" || !customId;
     const idSetAutomatically = status !== "existing" && !customId;
 
     const enumValues: EnumValueConfig[] | undefined = useMemo(() => {
-        if (!customId || typeof customId === "boolean")
+        if (!customId || typeof customId === "boolean" || customId === "optional")
             return undefined;
-        return resolveEnumValues(customId, schemaRegistry.enumConfigs);
-    }, [schemaRegistry.enumConfigs, customId]);
+        return resolveEnumValues(customId);
+    }, [customId]);
 
     const snackbarController = useSnackbarController();
     const { copy } = useClipboard({

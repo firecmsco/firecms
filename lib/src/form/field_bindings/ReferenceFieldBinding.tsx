@@ -22,7 +22,7 @@ import {
     EntityCollection,
     EntityReference,
     FieldProps,
-    ResolvedEntitySchema,
+    ResolvedEntityCollection,
     ResolvedProperty
 } from "../../models";
 import { FieldDescription } from "../index";
@@ -33,11 +33,10 @@ import { LabelWithIcon } from "../components";
 import {
     useClearRestoreValue,
     useEntityFetch,
-    useNavigation,
+    useNavigationContext,
     useSideEntityController
 } from "../../hooks";
 import { getReferenceFrom } from "../../core/util/entities";
-import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 
 const PREFIX = 'ReferenceField';
 
@@ -139,13 +138,11 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
         setValue
     });
 
-    const schemaRegistry = useSchemaRegistry();
-
     const [open, setOpen] = React.useState(autoFocus);
     const sideEntityController = useSideEntityController();
 
-    const navigationContext = useNavigation();
-    const collection: EntityCollection | undefined = useMemo(() => {
+    const navigationContext = useNavigationContext();
+    const collection: EntityCollection<M> | undefined = useMemo(() => {
         return navigationContext.getCollection(property.path as string);
     }, [property.path, navigationContext]);
 
@@ -154,10 +151,6 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
     }
 
     const path = property.path;
-    const schema = schemaRegistry.getResolvedSchema({
-        schema: collection.schemaId,
-        path
-    });
 
     const validValue = value && value instanceof EntityReference;
 
@@ -168,7 +161,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
     } = useEntityFetch({
         path: validValue ? value.path : undefined,
         entityId: validValue ? value.id : undefined,
-        schema: collection.schemaId,
+        collection: collection,
         useCache: true
     });
 
@@ -203,12 +196,12 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
         setOpen(false);
     };
 
-    function buildEntityView(schema?: ResolvedEntitySchema<any>) {
+    function buildEntityView(collection?: EntityCollection<any>) {
 
         const missingEntity = entity && !entity.values;
 
         let body: JSX.Element;
-        if (!schema) {
+        if (!collection) {
             body = (
                 <ErrorView
                     error={"The specified collection does not exist. Check console"}/>
@@ -230,7 +223,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
         } else {
             if (validValue) {
 
-                const allProperties = Object.keys(schema.properties);
+                const allProperties = Object.keys(collection.properties);
                 let listProperties = property.previewProperties?.filter(p => allProperties.includes(p as string));
                 if (!listProperties || !listProperties.length) {
                     listProperties = allProperties;
@@ -245,7 +238,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                          mr={1}>
 
                         {listProperties && listProperties.map((key, index) => {
-                            const property = schema.properties[key as string];
+                            const property = collection.properties[key as string];
                             if (!property) return null;
                             return (
                                 <Box
@@ -360,7 +353,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
             <div
                 className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
 
-                {schema && buildEntityView(schema)}
+                {collection && buildEntityView(collection)}
 
                 {collection && <ReferenceDialog open={open}
                                                 collection={collection}

@@ -2,7 +2,6 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import {
     EntityCollection,
     NavigationContext,
-    SchemaRegistry,
     SideEntityController,
     SideEntityPanelProps
 } from "../../models";
@@ -16,7 +15,7 @@ import { getSidePanelKey } from "./useBuildNavigationContext";
 
 const NEW_URL_HASH = "new";
 
-export const useBuildSideEntityController = (navigationContext: NavigationContext, schemaRegistry: SchemaRegistry): SideEntityController => {
+export const useBuildSideEntityController = (navigationContext: NavigationContext): SideEntityController => {
 
     const location = useLocation();
     const navigate = useNavigate();
@@ -34,7 +33,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             if (navigationContext.isUrlCollectionPath(location.pathname)) {
                 const newFlag = location.hash === `#${NEW_URL_HASH}`;
                 const entityOrCollectionPath = navigationContext.urlPathToDataPath(location.pathname);
-                setSidePanels(buildSidePanelsFromUrl(entityOrCollectionPath, collections, schemaRegistry, newFlag));
+                setSidePanels(buildSidePanelsFromUrl(entityOrCollectionPath, collections, newFlag));
             }
             initialised.current = true;
         }
@@ -75,7 +74,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
         }
 
         const updateUrl = (schemaProps.updateUrl === undefined ? false : schemaProps.updateUrl)
-            // && typeof schemaProps.schema === "string"
+            // && typeof schemaProps.collection === "string"
         ;
 
         const cleanPath = removeInitialAndTrailingSlashes(path);
@@ -144,13 +143,11 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
     };
 };
 
-function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], schemaRegistry: SchemaRegistry, newFlag: boolean): SideEntityPanelProps[] {
+function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): SideEntityPanelProps[] {
 
     const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPathInternal({
         path,
-        collections,
-        schemas: schemaRegistry.schemas,
-        findSchema: schemaRegistry.findSchema
+        collections
     });
 
     const sidePanels: SideEntityPanelProps[] = [];

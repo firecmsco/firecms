@@ -1,8 +1,11 @@
-import { buildSchema } from "@camberi/firecms";
+import { buildCollection } from "@camberi/firecms";
 
-export const usersSchema = buildSchema({
-    id: "user",
+export const usersCollection = buildCollection({
+    path: "users",
     name: "User",
+    group: "Main",
+    description: "Registered users",
+    textSearchEnabled: true,
     properties: {
         first_name: {
             name: "First name",

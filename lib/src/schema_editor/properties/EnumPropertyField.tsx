@@ -3,7 +3,6 @@ import { getIn, useFormikContext } from "formik";
 import { Grid, Paper, Typography } from "@mui/material";
 import { EnumValueConfig, NumberProperty, StringProperty } from "../../models";
 import { resolveEnumValues } from "../../core/util/entities";
-import { useSchemaRegistry } from "../../hooks/useSchemaRegistry";
 import { EnumForm } from "../EnumForm";
 
 export function EnumPropertyField({
@@ -22,15 +21,14 @@ export function EnumPropertyField({
         setFieldValue
     } = useFormikContext<StringProperty | NumberProperty>();
 
-    const schemaRegistry = useSchemaRegistry();
     const enumValuesPath = multiselect ? "of.enumValues" : "enumValues";
 
     const valuesEnumValues = getIn(values, enumValuesPath);
     const enumValues: EnumValueConfig[] = useMemo(() => {
         if (!valuesEnumValues || typeof valuesEnumValues === "boolean")
             return [] as EnumValueConfig[];
-        return resolveEnumValues(valuesEnumValues, schemaRegistry.enumConfigs) ?? [] as EnumValueConfig[];
-    }, [schemaRegistry.enumConfigs, valuesEnumValues]);
+        return resolveEnumValues(valuesEnumValues) ?? [] as EnumValueConfig[];
+    }, [valuesEnumValues]);
 
     return (
         <>

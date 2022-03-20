@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import {
+    Autocomplete,
     Box,
     Container,
     FormControl,
@@ -9,13 +10,17 @@ import {
     MenuItem,
     OutlinedInput,
     Select,
+    TextField,
     Typography
 } from "@mui/material";
 import { getIn, useFormikContext } from "formik";
-import { EntitySchema } from "../models";
+import { EntityCollection, TopNavigationResult } from "../models";
 import { toSnakeCase } from "../core/util/strings";
+import { useNavigationContext } from "../hooks";
 
-export function SchemaDetailsForm({ isNewSchema }: { isNewSchema: boolean }) {
+export function SchemaDetailsForm({ isNewCollection }: { isNewCollection: boolean }) {
+
+    const navigationContext = useNavigationContext();
 
     const {
         values,
@@ -26,73 +31,129 @@ export function SchemaDetailsForm({ isNewSchema }: { isNewSchema: boolean }) {
         dirty,
         isSubmitting,
         handleSubmit
-    } = useFormikContext<EntitySchema>();
+    } = useFormikContext<EntityCollection>();
+
+    const topLevelNavigation = navigationContext.topLevelNavigation;
+    if (!topLevelNavigation)
+        throw Error("Navigation not ready in collection editor");
+
+    const {
+        groups
+    }: TopNavigationResult = topLevelNavigation;
 
     useEffect(() => {
-        const idTouched = getIn(touched, "id");
-        if (!idTouched && isNewSchema && values.name) {
-            setFieldValue("id", toSnakeCase(values.name))
+        const pathTouched = getIn(touched, "path");
+        if (!pathTouched && isNewCollection && values.name) {
+            setFieldValue("path", toSnakeCase(values.name))
         }
-    }, [isNewSchema, touched, values.name]);
+
+    }, [isNewCollection, touched, values.name]);
 
     return (
-        <>
-            <Container maxWidth={"md"}
-                       sx={{
-                           p: 3,
-                           height: "100%",
-                           overflow: "scroll"
-                       }}>
-                <Grid container spacing={2}
-                      sx={{
-                          my: 2
-                      }}>
-                    <Grid item>
-                        {isNewSchema && <Typography variant={"h4"}>
-                            {"New schema"}
-                        </Typography>}
-                        {!isNewSchema && <Typography variant={"h6"}>
-                            {"Schema details"}
-                        </Typography>}
-                    </Grid>
+        <Container maxWidth={"md"}
+                   sx={{
 
-                    <Grid item xs={12}>
-                        <FormControl fullWidth
-                                     required
-                                     error={touched.name && Boolean(errors.name)}>
-                            <InputLabel
-                                htmlFor="name">Name</InputLabel>
-                            <OutlinedInput
-                                id="name"
-                                value={values.name}
-                                onChange={handleChange}
-                                aria-describedby="name-helper-text"
-                                label="Name"
-                            />
-                            <FormHelperText
-                                id="name-helper-text">
-                                {touched.name && Boolean(errors.name) ? errors.name : "Singular name of this schema (e.g. Product)"}
-                            </FormHelperText>
-                        </FormControl>
-                    </Grid>
+                       p: 3,
+                       height: "100%",
+                       overflow: "scroll"
+                   }}>
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    pt: 3,
+                    pb: 2
+                }}>
+                <Typography variant={!isNewCollection ? "h5" : "h4"}>
+                    {isNewCollection ? "New collection" : `${values.name} collection`}
+                </Typography>
+                {/*{includeCollectionLink && <Box>*/}
+                {/*    {path && <Button*/}
+                {/*        component={ReactLink}*/}
+                {/*        to={navigationContext.buildUrlCollectionPath(path)}*/}
+                {/*        sx={{*/}
+                {/*            mx: 1*/}
+                {/*        }}>*/}
+                {/*        Go to collection*/}
+                {/*    </Button>}*/}
+                {/*</Box>}*/}
+            </Box>
 
-                    <Grid item xs={12}>
+            <Grid container spacing={2}>
+
+                <Grid item xs={12}>
                     <FormControl fullWidth
                                  required
-                                 disabled={!isNewSchema}
-                                 error={touched.id && Boolean(errors.id)}>
+                                 error={touched.name && Boolean(errors.name)}>
                         <InputLabel
-                            htmlFor="id">Id</InputLabel>
+                            htmlFor="name">Name</InputLabel>
                         <OutlinedInput
-                            id="id"
-                            value={values.id}
+                            id="name"
+                            value={values.name}
                             onChange={handleChange}
-                            aria-describedby="id-helper-text"
-                            label="ID"
+                            aria-describedby="name-helper-text"
+                            label="Name"
                         />
                         <FormHelperText
-                            id="id-helper-text">
-                            {touched.id && Boolean(errors.id) ? errors.id : "Id of this schema (e.g 'product')"}
+                            id="name-helper-text">
+                            {touched.name && Boolean(errors.name) ? errors.name : "Singular name of this collection (e.g. Product)"}
+                        </FormHelperText>
+                    </FormControl>
+                </Grid>
+
+                <Grid item xs={12} sm={8}>
+                    <FormControl fullWidth
+                                 required
+                                 disabled={isSubmitting}
+                                 error={touched.path && Boolean(errors.path)}>
+                        <InputLabel
+                            htmlFor="path">{"Path"}</InputLabel>
+                        <OutlinedInput
+                            id={"path"}
+                            aria-describedby={`${"path"}-helper`}
+                            onChange={handleChange}
+                            value={values.path}
+                            label={"Path"}
+                            disabled={!isNewCollection}/>
+                        <FormHelperText
+                            id="path-helper">
+                            {touched.path && Boolean(errors.path) ? errors.path : "Path that this collection is stored in"}
+                        </FormHelperText>
+                    </FormControl>
+                </Grid>
+
+                <Grid item xs={12} sm={4}>
+                    <FormControl fullWidth
+                                 error={touched.group && Boolean(errors.group)}
+                    >
+                        <Autocomplete
+                            id={"group"}
+                            value={values.group}
+                            fullWidth
+                            freeSolo
+                            options={groups}
+                            onChange={(event, group) => {
+                                setFieldValue("group", group);
+                            }}
+                            getOptionLabel={(option) => option}
+                            renderOption={(props, group, { selected }) => (
+                                <li {...props}>
+                                    {group}
+                                </li>
+                            )}
+                            renderInput={(params) => (
+                                <TextField {...params}
+                                           disabled={isSubmitting}
+                                           name={"group"}
+                                           aria-describedby={"group-helper"}
+                                           variant={"outlined"}
+                                           label="Group"/>
+                            )}
+                        />
+                        <FormHelperText
+                            id="group-helper">
+                            {touched.group && Boolean(errors.group) ? errors.group : "Group of the collection"}
                         </FormHelperText>
                     </FormControl>
                 </Grid>
@@ -113,7 +174,7 @@ export function SchemaDetailsForm({ isNewSchema }: { isNewSchema: boolean }) {
                         />
                         <FormHelperText
                             id="description-helper-text">
-                            {touched.description && Boolean(errors.description) ? errors.description : "Description of the schema"}
+                            {touched.description && Boolean(errors.description) ? errors.description : "Description of the collection, you can use markdown"}
                         </FormHelperText>
                     </FormControl>
                 </Grid>
@@ -142,7 +203,24 @@ export function SchemaDetailsForm({ isNewSchema }: { isNewSchema: boolean }) {
                     </FormControl>
                 </Grid>
 
-                </Grid>
+
+            </Grid>
+
+        </Container>
+    );
+
+    return (
+        <>
+            <Container maxWidth={"md"}
+                       sx={{
+                           p: 3,
+                           height: "100%",
+                           overflow: "scroll"
+                       }}>
+                <Grid container spacing={2}
+                      sx={{
+                          my: 2
+                      }}></Grid>
                 <Box height={52}/>
             </Container>
 

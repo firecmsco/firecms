@@ -8,10 +8,7 @@ import {
     Navigation,
     NavigationBuilder,
     NavigationContext,
-    ResolvedEntityCollection,
-    ResolvedNavigation,
     SchemaOverrideHandler,
-    SchemaRegistry,
     StorageSource,
     TopNavigationEntry,
     TopNavigationResult,
@@ -23,12 +20,12 @@ import {
 } from "../util/navigation_utils";
 import { mergeDeep } from "../util/objects";
 import { ConfigurationPersistence } from "../../models/config_persistence";
+import { mergeCollections } from "../util/collections";
 
 type BuildNavigationContextProps<UserType> = {
     basePath: string,
     baseCollectionPath: string,
     authController: AuthController<UserType>;
-    schemaRegistry: SchemaRegistry;
     navigationOrBuilder?: Navigation | NavigationBuilder<UserType>;
     schemaOverrideHandler: SchemaOverrideHandler | undefined;
     dateTimeFormat?: string;
@@ -44,7 +41,6 @@ export function useBuildNavigationContext<UserType>({
                                                         baseCollectionPath,
                                                         authController,
                                                         navigationOrBuilder,
-                                                        schemaRegistry,
                                                         schemaOverrideHandler,
                                                         dateTimeFormat,
                                                         locale,
@@ -54,7 +50,7 @@ export function useBuildNavigationContext<UserType>({
                                                         userConfigPersistence
                                                     }: BuildNavigationContextProps<UserType>): NavigationContext {
 
-    const [navigation, setNavigation] = useState<ResolvedNavigation | undefined>(undefined);
+    const [navigation, setNavigation] = useState<Navigation | undefined>(undefined);
     const [topLevelNavigation, setTopLevelNavigation] = useState<TopNavigationResult | undefined>(undefined);
     const [navigationLoading, setNavigationLoading] = useState<boolean>(true);
     const [persistenceLoading, setPersistenceLoading] = useState<boolean>(true);
@@ -69,7 +65,7 @@ export function useBuildNavigationContext<UserType>({
 
     const initialised = navigation?.collections !== undefined;
 
-    const [resolvedUserNavigation, setResolvedUserNavigation] = useState<ResolvedNavigation | undefined>();
+    const [resolvedUserNavigation, setResolvedUserNavigation] = useState<Navigation | undefined>();
 
     useEffect(() => {
         if (!authController.canAccessMainView) {
@@ -103,7 +99,7 @@ export function useBuildNavigationContext<UserType>({
         }
 
         try {
-            const result: ResolvedNavigation = resolveNavigation({
+            const result: Navigation = resolveNavigation({
                 navigation: resolvedUserNavigation,
                 configPersistence
             })
@@ -116,6 +112,7 @@ export function useBuildNavigationContext<UserType>({
         }
     }, [
         resolvedUserNavigation,
+        configPersistence?.loading,
         configPersistence?.collections
     ]);
 
@@ -131,8 +128,6 @@ export function useBuildNavigationContext<UserType>({
         const collectionOverride = getCollectionOverride(path);
 
         const resolvedCollection = baseCollection ? mergeDeep(baseCollection, collectionOverride) : undefined;
-
-        const sidePanelKey = getSidePanelKey(path, entityId);
 
         let result: Partial<EntityCollection> = {};
 
@@ -150,15 +145,10 @@ export function useBuildNavigationContext<UserType>({
             const permissions = resolvedCollection.permissions;
             result = {
                 ...result,
-                schemaId: result.schemaId ?? resolvedCollection.schemaId,
                 subcollections: result.subcollections ?? subcollections,
                 callbacks: result.callbacks ?? callbacks,
                 permissions: result.permissions ?? permissions
             };
-        }
-
-        if (!result.schemaId) {
-            console.error(`Not able to resolve schema for path ${sidePanelKey}`)
         }
 
         return { ...resolvedCollection, ...(result as EntityCollection<M>) };
@@ -166,7 +156,6 @@ export function useBuildNavigationContext<UserType>({
     }, [
         navigation,
         basePath,
-        schemaRegistry,
         baseCollectionPath,
         schemaOverrideHandler
     ]);
@@ -191,16 +180,6 @@ export function useBuildNavigationContext<UserType>({
         }, //
         [baseCollectionPath]);
 
-    const buildUrlEditSchemaPath = useCallback(({
-                                                    id
-                                                }: { id?: string }): string => {
-            if (id)
-                return `s/edit/${encodePath(id)}`;
-            else
-                return "newschema";
-        }, //
-        [baseCollectionPath]);
-
     const buildUrlCollectionPath = useCallback((path: string): string => `${baseCollectionPath}/${encodePath(path)}`,
         [baseCollectionPath]);
 
@@ -213,7 +192,7 @@ export function useBuildNavigationContext<UserType>({
         return userConfigPersistence.getCollectionConfig<M>(path);
     }, [userConfigPersistence]);
 
-    const computeTopNavigation = (resolvedNavigation:ResolvedNavigation): TopNavigationResult => {
+    const computeTopNavigation = (resolvedNavigation: Navigation): TopNavigationResult => {
 
         if (!resolvedNavigation)
             throw Error("You can only use `computeTopNavigation` with an initialised navigationContext");
@@ -224,6 +203,8 @@ export function useBuildNavigationContext<UserType>({
                 name: collection.name,
                 path: collection.path,
                 type: "collection",
+                deletable: collection.deletable,
+                editable: collection.editable,
                 editUrl: collection.editable ? buildUrlEditCollectionPath({ path: collection.path }) : undefined,
                 description: collection.description?.trim(),
                 group: collection.group?.trim()
@@ -261,7 +242,6 @@ export function useBuildNavigationContext<UserType>({
         urlPathToDataPath,
         buildUrlCollectionPath,
         buildUrlEditCollectionPath,
-        buildUrlEditSchemaPath,
         buildCMSUrlPath,
         topLevelNavigation
     };
@@ -305,7 +285,7 @@ const resolveNavigation = ({
                                    navigation?: Navigation,
                                    configPersistence?: ConfigurationPersistence
                                }
-): ResolvedNavigation => {
+): Navigation => {
 
     if (!navigation && !configPersistence) {
         throw Error("You need to specify a navigation configuration or a `ConfigurationPersistence`");
@@ -313,19 +293,28 @@ const resolveNavigation = ({
 
     const fetchedCollections = configPersistence?.collections;
     if (fetchedCollections) {
-        const resolvedFetchedCollections: ResolvedEntityCollection[] = fetchedCollections.map(c => ({
+        const resolvedFetchedCollections: EntityCollection[] = fetchedCollections.map(c => ({
             ...c,
-            editable: true
+            editable: true,
+            deletable: true
         }));
         if (navigation) {
+            const updatedCollections = (navigation?.collections ?? [])
+                .map((navigationCollection) => {
+                    const storedCollection = resolvedFetchedCollections?.find((schema) => schema.path === navigationCollection.path);
+                    if (!storedCollection) {
+                        return navigationCollection;
+                    } else {
+                        return mergeCollections(navigationCollection, storedCollection);
+                    }
+                });
             const storedCollections = resolvedFetchedCollections
-                .filter((col) => !navigation?.collections?.map(c => c.path).includes(col.path));
-            navigation.collections = navigation.collections
-                ? [...navigation.collections, ...storedCollections]
-                : storedCollections;
+                .filter((col) => !updatedCollections.map(c => c.path).includes(col.path));
+            navigation.collections = [...updatedCollections, ...storedCollections];
         } else {
             navigation = { collections: fetchedCollections };
         }
+
     }
 
     if (!navigation) {

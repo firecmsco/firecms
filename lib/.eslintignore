@@ -1,8 +1,6 @@
 build/
-example/
-example_backend/
-website/
 dist/
 node_modules/
 .snapshots/
 *.min.js
+babel.config.js

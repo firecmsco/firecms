@@ -13,7 +13,7 @@ However, there is a lot of room to customization, including [custom top level vi
 for your entity properties, in case the basic use cases we include don't suit your needs.
 
 In the simplest case, you will want to create some properties, include them
-in an entity schema, include it in a collection and include that in a CMS
+in an entity collection, include it in a collection and include that in a CMS
 instance.
 
 ## FirebaseCMSApp
@@ -66,7 +66,7 @@ import algoliasearch, { SearchClient } from "algoliasearch";
 import {
     performAlgoliaTextSearch,
     FirestoreTextSearchController,
-    buildSchema,
+    buildCollection,
     buildCollection,
     FirebaseCMSApp,
     NavigationBuilder,
@@ -92,7 +92,7 @@ const textSearchController: FirestoreTextSearchController =
 
 export default function App() {
 
-    const productSchema = buildSchema({
+    const productSchema = buildCollection({
         name: "Product",
         properties: {
             name: {
@@ -106,7 +106,7 @@ export default function App() {
         collections: [
             buildCollection({
                 path: "products",
-                schema: productSchema,
+                collection: productSchema,
                 name: "Products"
             })
         ]

@@ -22,14 +22,13 @@ import {
     useFireCMSContext,
     useSideEntityController
 } from "../../../hooks";
-import { Table } from "../../index";
+import { getResolvedCollection, Table } from "../../index";
 import {
     checkInlineEditing,
     OnCellValueChange,
     UniqueFieldValidator,
     useBuildColumnsFromSchema
 } from "./column_builder";
-import { useSchemaRegistry } from "../../../hooks/useSchemaRegistry";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -87,22 +86,20 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 
     const context = useFireCMSContext();
     const dataSource = useDataSource();
-    const schemaRegistry = useSchemaRegistry();
     const sideEntityController = useSideEntityController();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const schemaId = collection.schemaId;
-    const resolvedSchema = schemaRegistry.getResolvedSchema<M>({
-        schema: schemaId,
+    const resolvedCollection = getResolvedCollection<M>({
+        collection,
         path
     });
-    const [size, setSize] = React.useState<CollectionSize>(resolvedSchema.defaultSize ?? "m");
+    const [size, setSize] = React.useState<CollectionSize>(resolvedCollection.defaultSize ?? "m");
 
-    const initialFilter = resolvedSchema.initialFilter;
-    const initialSort = resolvedSchema.initialSort;
-    const filterCombinations = resolvedSchema.filterCombinations;
+    const initialFilter = resolvedCollection.initialFilter;
+    const initialSort = resolvedCollection.initialSort;
+    const filterCombinations = resolvedCollection.filterCombinations;
 
     const textSearchEnabled = collection.textSearchEnabled;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
@@ -131,7 +128,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                                     entityId: entity.id,
                                     selectedSubpath: subcollection.path,
                                     permissions: collection.permissions,
-                                    schema: schemaId,
+                                    collection: collection, // TODO
                                     subcollections: collection.subcollections,
                                     callbacks: collection.callbacks,
                                     updateUrl: true
@@ -142,10 +139,10 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                 )
             };
         }) ?? [];
-        return [...(resolvedSchema.additionalColumns ?? []), ...subcollectionColumns];
-    }, [resolvedSchema, collection, path, schemaId]);
+        return [...(resolvedCollection.additionalColumns ?? []), ...subcollectionColumns];
+    }, [resolvedCollection, collection, path]);
 
-    const displayedProperties = useColumnIds<M>(collection, resolvedSchema, true);
+    const displayedProperties = useColumnIds<M>(collection, resolvedCollection, true);
 
     const uniqueFieldValidator: UniqueFieldValidator = useCallback(
         ({
@@ -171,7 +168,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                 [name]: value
             },
             previousValues: entity.values,
-            schema: schemaId,
+            collection,
             status: "existing"
         };
 
@@ -187,10 +184,10 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
             }
         });
 
-    }, [path, collection, resolvedSchema]);
+    }, [path, collection, resolvedCollection]);
 
     const { columns, popupFormField } = useBuildColumnsFromSchema({
-        schema: schemaId,
+        collection,
         additionalColumns,
         displayedProperties,
         path,
@@ -210,7 +207,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
     } = useCollectionFetch<M>({
         entitiesDisplayedFirst,
         path,
-        schema: schemaId,
+        collection,
         filterValues,
         sortBy,
         searchString,

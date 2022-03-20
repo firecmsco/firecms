@@ -14,19 +14,19 @@ to your schema. Like in this example:
 
 ```tsx
 import React from "react";
-import { EntityCustomView, buildSchema } from "@camberi/firecms";
+import { EntityCustomView, buildCollection } from "@camberi/firecms";
 
 const sampleView: EntityCustomView = {
     path: "preview",
     name: "Blog entry preview",
-    builder: ({ schema, entity, modifiedValues }) => (
+    builder: ({ collection, entity, modifiedValues }) => (
         // This is a custom component that you can build as any React component
         <MyBlogPreviewComponent entity={entity}
                                 modifiedValues={modifiedValues}/>
     )
 };
 
-const blogSchema = buildSchema({
+const blogSchema = buildCollection({
     name: "Blog entry",
     views: [
         sampleView

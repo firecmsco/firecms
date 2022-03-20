@@ -59,7 +59,7 @@ import {
     Authenticator,
     buildCollection,
     buildProperty,
-    buildSchema,
+    buildCollection,
     EntityReference,
     FirebaseCMSApp,
     NavigationBuilder,
@@ -102,7 +102,7 @@ type Product = {
     expires_on: Date
 }
 
-const productSchema = buildSchema<Product>({
+const productSchema = buildCollection<Product>({
     name: "Product",
     properties: {
         name: {
@@ -222,7 +222,7 @@ const productSchema = buildSchema<Product>({
     }
 });
 
-const localeSchema = buildSchema({
+const localeSchema = buildCollection({
     customId: locales,
     name: "Locale",
     properties: {
@@ -262,7 +262,7 @@ export default function App() {
             collections: [
                 buildCollection({
                     path: "products",
-                    schema: productSchema,
+                    collection: productSchema,
                     name: "Products",
                     permissions: ({ authController }) => ({
                         edit: true,
@@ -274,7 +274,7 @@ export default function App() {
                         buildCollection({
                             name: "Locales",
                             path: "locales",
-                            schema: localeSchema
+                            collection: localeSchema
                         })
                     ]
                 })

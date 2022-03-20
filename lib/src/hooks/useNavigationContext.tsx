@@ -1,4 +1,4 @@
-import { NavigationContext, SchemaRegistry } from "../models";
+import { NavigationContext } from "../models";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 
@@ -10,7 +10,7 @@ import { useFireCMSContext } from "./useFireCMSContext";
  *
  * @category Hooks and utilities
  */
-export function useSchemaRegistry(): SchemaRegistry {
+export function useNavigationContext(): NavigationContext {
     const context = useFireCMSContext();
-    return context.schemaRegistry;
+    return context.navigationContext;
 }

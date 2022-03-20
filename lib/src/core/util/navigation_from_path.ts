@@ -1,4 +1,4 @@
-import { EntityCollection, EntityCustomView, EntitySchema } from "../../models";
+import { EntityCollection, EntityCustomView } from "../../models";
 import {
     getCollectionPathsCombinations,
     removeInitialAndTrailingSlashes
@@ -30,19 +30,15 @@ interface NavigationViewEntityCustomInternal<M> {
 
 export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: any }>(props: {
     path: string,
-    collections: EntityCollection[],
-    schemas: EntitySchema[] | undefined,
+    collections: EntityCollection[] | undefined,
     customViews?: EntityCustomView<M>[],
     currentFullPath?: string,
-    findSchema: (id: string) => EntitySchema | undefined;
 }): NavigationViewInternal<M> [] {
 
     const {
         path,
-        collections,
-        schemas = [],
+        collections = [],
         currentFullPath,
-        findSchema
     } = props;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -77,11 +73,10 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                 });
                 if (nextSegments.length > 1) {
                     const newPath = nextSegments.slice(1).join("/");
-                    const schema = findSchema(collection.schemaId);
-                    if(!schema) {
-                        throw Error("Schema not found resolving path. Schema: " + collection.schemaId);
+                    if(!collection) {
+                        throw Error("collection not found resolving path: " + collection);
                     }
-                    const customViews = schema.views;
+                    const customViews = collection.views;
                     const customView = customViews && customViews.find((entry) => entry.path === newPath);
                     if (customView) {
                         const path = currentFullPath && currentFullPath.length > 0
@@ -97,9 +92,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                             path: newPath,
                             customViews: customViews,
                             collections: collection.subcollections,
-                            schemas,
                             currentFullPath: fullPath,
-                            findSchema
                         }));
                     }
                 }

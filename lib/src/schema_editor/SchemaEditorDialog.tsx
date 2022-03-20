@@ -1,19 +1,19 @@
 import * as React from "react";
-import { Dialog, useMediaQuery, useTheme } from "@mui/material";
+import { Dialog } from "@mui/material";
 
 import { SchemaEditor } from "./SchemaEditor";
-import { EntitySchema } from "../index";
+import { EntityCollection } from "../index";
 
 export interface SchemaEditorDialogProps {
     open: boolean;
-    handleClose: (schema?: EntitySchema) => void;
-    schemaId: string;
+    handleClose: (collection?: EntityCollection) => void;
+    path: string;
 }
 
 export function SchemaEditorDialog({
                                        open,
                                        handleClose,
-                                       schemaId
+                                       path
                                    }: SchemaEditorDialogProps) {
 
     const [dirty, setDirty] = React.useState(false);
@@ -35,7 +35,7 @@ export function SchemaEditorDialog({
                 })
             }}
         >
-            <SchemaEditor schemaId={schemaId}
+            <SchemaEditor path={path}
                           handleClose={handleClose}
                           setDirty={setDirty}
             />

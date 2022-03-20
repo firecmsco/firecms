@@ -266,7 +266,7 @@ example `InferSchemaType<typeOf productSchema>` is the same type as `Product`.
 
 Related changes:
 
-- Wherever you had defined your own schema, using `buildSchema()`
+- Wherever you had defined your own collection, using `buildSchema()`
   and where using that as a type parameter, it can be changed to the defined
   type or just removed.
 - `buildSchemaFrom` has been deleted since now it's identical to `buildSchema`

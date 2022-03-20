@@ -24,20 +24,18 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 
-import { EntitySchema, Property } from "../models";
+import { EntityCollection, Property } from "../models";
 import {
     getFullId,
     idToPropertiesPath,
     namespaceToPropertiesOrderPath
 } from "./util";
-import { prepareSchemaForPersistence } from "../core/util/schemas";
 import { PropertyForm } from "./PropertyEditView";
-import { useSnackbarController } from "../hooks";
+import { useNavigationContext, useSnackbarController } from "../hooks";
 import {
     useConfigurationPersistence
 } from "../hooks/useConfigurationPersistence";
 import { CircularProgressCenter, ErrorView } from "../core";
-import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
 import { removeUndefined } from "../core/util/objects";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
 import { PropertyTree } from "./PropertyTree";
@@ -47,18 +45,18 @@ import { YupSchema } from "./SchemaYupValidation";
 import { SchemaDetailsForm } from "./SchemaDetailsForm";
 
 export type SchemaEditorProps<M> = {
-    schemaId?: string;
-    handleClose?: (updatedSchema?: EntitySchema<M>) => void;
+    path?: string;
+    handleClose?: (updatedSchema?: EntityCollection<M>) => void;
     setDirty?: (dirty: boolean) => void;
 };
 
 export function SchemaEditor<M>({
-                                    schemaId,
+                                    path,
                                     handleClose,
                                     setDirty
                                 }: SchemaEditorProps<M>) {
 
-    const schemaRegistry = useSchemaRegistry();
+    const navigationContext = useNavigationContext();
     const configurationPersistence = useConfigurationPersistence();
     const snackbarController = useSnackbarController();
 
@@ -66,37 +64,38 @@ export function SchemaEditor<M>({
     const propertyErrorsRef = useRef({});
 
     if (!configurationPersistence)
-        throw Error("Can't use the schema editor without specifying a `ConfigurationPersistence`");
+        throw Error("Can't use the collection editor without specifying a `ConfigurationPersistence`");
 
-    const [schema, setSchema] = React.useState<EntitySchema | undefined>();
+    const [collection, setCollection] = React.useState<EntityCollection | undefined>();
+    const [initialLoading, setInitialLoading] = React.useState(false);
     const [initialError, setInitialError] = React.useState<Error | undefined>();
 
     useEffect(() => {
         try {
-            if (schemaRegistry.initialised) {
-                if (schemaId) {
-                    setSchema(schemaRegistry.findSchema(schemaId));
+            if (navigationContext.initialised) {
+                if (path) {
+                    setCollection(navigationContext.getCollection(path));
                 } else {
-                    setSchema(undefined);
+                    setCollection(undefined);
                 }
+                setInitialLoading(true);
             }
         } catch (e) {
             console.error(e);
             setInitialError(initialError);
         }
-    }, [schemaId, schemaRegistry]);
+    }, [path, navigationContext]);
 
-    const saveSchema = useCallback((schema: EntitySchema<M>): Promise<boolean> => {
-        const newSchema = prepareSchemaForPersistence(schema);
-        return configurationPersistence.saveSchema(newSchema)
+    const saveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
+        return configurationPersistence.saveCollection(collection)
             .then(() => {
                 setInitialError(undefined);
                 snackbarController.open({
                     type: "success",
-                    message: "Schema updated"
+                    message: "Collection updated"
                 });
                 if (handleClose) {
-                    handleClose(schema);
+                    handleClose(collection);
                 }
                 return true;
             })
@@ -104,7 +103,7 @@ export function SchemaEditor<M>({
                 console.error(e);
                 snackbarController.open({
                     type: "error",
-                    title: "Error persisting schema",
+                    title: "Error persisting collection",
                     message: "Details in the console"
                 });
                 return false;
@@ -112,15 +111,15 @@ export function SchemaEditor<M>({
     }, [configurationPersistence, handleClose, snackbarController]);
 
     if (initialError) {
-        return <ErrorView error={`Error fetching schema ${schemaId}`}/>;
+        return <ErrorView error={`Error fetching collection ${path}`}/>;
     }
 
-    if (!schemaRegistry.initialised || !schema) {
+    if (!navigationContext.initialised || !initialLoading) {
         return <CircularProgressCenter/>;
     }
 
-    const initialValues: EntitySchema = {
-        id: "",
+    const initialValues: EntityCollection = {
+        path: "",
         name: "",
         properties: {},
         propertiesOrder: []
@@ -128,12 +127,12 @@ export function SchemaEditor<M>({
 
     return (
         <Formik
-            initialValues={schema ?? initialValues}
+            initialValues={collection ?? initialValues}
             validationSchema={YupSchema}
             validate={() => propertyErrorsRef.current}
-            onSubmit={(newSchema: EntitySchema, formikHelpers: FormikHelpers<EntitySchema>) => {
-                saveSchema(newSchema).then(() => {
-                    formikHelpers.resetForm({ values: newSchema });
+            onSubmit={(newCollection: EntityCollection, formikHelpers: FormikHelpers<EntityCollection>) => {
+                saveCollection(newCollection).then(() => {
+                    formikHelpers.resetForm({ values: newCollection });
                 });
             }}
         >
@@ -185,7 +184,7 @@ export function SchemaEditor<M>({
                                 loadingPosition="start"
                                 startIcon={<SaveIcon/>}
                             >
-                                Save schema
+                                Save collection
                             </LoadingButton>
 
                         </CustomDialogActions>
@@ -215,7 +214,7 @@ export function SchemaEditorForm<M>({
         setFieldTouched,
         errors,
         dirty
-    } = useFormikContext<EntitySchema>();
+    } = useFormikContext<EntityCollection>();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
@@ -244,7 +243,7 @@ export function SchemaEditorForm<M>({
     const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
         const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
         if (!fullId)
-            throw Error("Schema editor miss config");
+            throw Error("collection editor miss config");
 
         setFieldValue(idToPropertiesPath(fullId), undefined, false);
         const propertiesOrderPath = namespaceToPropertiesOrderPath(namespace);
@@ -356,7 +355,7 @@ export function SchemaEditorForm<M>({
                     <Typography variant={"h4"} sx={{
                         flexGrow: 1
                     }}>
-                        {values.name ? `${values.name} schema` : "Schema"}
+                        {values.name ? `${values.name} collection` : "collection"}
                     </Typography>
 
                     <Box sx={{ ml: 1 }}>
@@ -456,7 +455,7 @@ export function SchemaEditorForm<M>({
                         open={schemaDetailsDialogOpen}
                         onClose={() => setSchemaDetailsDialogOpen(false)}
                     >
-                        <SchemaDetailsForm isNewSchema={false}/>
+                        <SchemaDetailsForm isNewCollection={false}/>
                         <CustomDialogActions>
                             <Button
                                 variant="contained"

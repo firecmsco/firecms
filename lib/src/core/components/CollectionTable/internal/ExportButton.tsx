@@ -14,17 +14,17 @@ import {
 import GetAppIcon from "@mui/icons-material/GetApp";
 import {
     Entity,
-    EntitySchema,
+    EntityCollection,
     ExportConfig,
-    ResolvedEntitySchema
+    ResolvedEntityCollection
 } from "../../../../models";
 import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
-import { useSchemaRegistry } from "../../../../hooks/useSchemaRegistry";
+import { getResolvedCollection } from "../../../useBuildCollectionRegistry";
 
 interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
-    schema: EntitySchema<M>;
+    collection: EntityCollection<M>;
     path: string;
     exportConfig?: ExportConfig<UserType>;
 }
@@ -32,20 +32,19 @@ interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
 export function ExportButton<M extends { [Key: string]: any }, UserType>({
-                                                                             schema: inputSchema,
+                                                                             collection: inputCollection,
                                                                              path,
                                                                              exportConfig
                                                                          }: ExportButtonProps<M, UserType>
 ) {
 
     const dataSource = useDataSource();
-    const schemaRegistry = useSchemaRegistry();
     const context = useFireCMSContext();
 
-    const schema = React.useMemo(() => schemaRegistry.getResolvedSchema({
-        schema: inputSchema,
+    const collection:ResolvedEntityCollection<M> = React.useMemo(() => getResolvedCollection({
+        collection: inputCollection,
         path
-    }), [inputSchema, path]);
+    }), [inputCollection, path]);
 
     const dataRef = useRef<Entity<M>[]>();
     const additionalDataRef = useRef<Record<string, any>[]>();
@@ -71,13 +70,13 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
     const doDownload = useCallback((data: Entity<M>[] | undefined,
                                     additionalData: Record<string, any>[] | undefined,
-                                    schema: ResolvedEntitySchema<M>,
+                                    collection: ResolvedEntityCollection<M>,
                                     path: string,
                                     exportConfig: ExportConfig | undefined) => {
         if (!data)
             throw Error("Trying to perform export without loading data first");
 
-        downloadCSV(data, additionalData, schema, path, exportConfig);
+        downloadCSV(data, additionalData, collection, path, exportConfig);
     }, []);
 
     useEffect(() => {
@@ -100,7 +99,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
             setDataLoadingError(undefined);
 
             if (pendingDownload) {
-                doDownload(entities, additionalColumnsData, schema, path, exportConfig);
+                doDownload(entities, additionalColumnsData, collection, path, exportConfig);
                 handleClose();
             }
         };
@@ -134,13 +133,13 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 
         dataSource.fetchCollection<M>({
             path,
-            schema,
+            collection,
             limit: fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT
         })
             .then(updateEntities)
             .catch(onFetchError);
 
-    }, [path, fetchLargeDataAccepted, schema, open, dataSource, doDownload, exportConfig, handleClose, context]);
+    }, [path, fetchLargeDataAccepted, collection, open, dataSource, doDownload, exportConfig, handleClose, context]);
 
     const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
 
@@ -148,10 +147,10 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
         if (needsToAcceptFetchAllData) {
             setFetchLargeDataAccepted(true);
         } else {
-            doDownload(dataRef.current, additionalDataRef.current, schema, path, exportConfig);
+            doDownload(dataRef.current, additionalDataRef.current, collection, path, exportConfig);
             handleClose();
         }
-    }, [needsToAcceptFetchAllData, doDownload, schema, path, exportConfig, handleClose]);
+    }, [needsToAcceptFetchAllData, doDownload, collection, path, exportConfig, handleClose]);
 
     return <>
 

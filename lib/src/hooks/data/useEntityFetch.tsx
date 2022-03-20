@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Entity, EntitySchema } from "../../models";
+import { Entity, EntityCollection } from "../../models";
 import { useDataSource } from "./useDataSource";
 
 /**
@@ -8,7 +8,7 @@ import { useDataSource } from "./useDataSource";
 export interface EntityFetchProps<M extends { [Key: string]: any }> {
     path?: string;
     entityId?: string;
-    schema: string | EntitySchema<M>;
+    collection: EntityCollection<M>;
     useCache?: boolean;
 }
 
@@ -27,7 +27,7 @@ const CACHE:Record<string, Entity<any>| undefined> = {};
  * This hook is used to fetch an entity.
  * It gives real time updates if the datasource supports it.
  * @param path
- * @param schema
+ * @param collection
  * @param entityId
  * @param useCache
  * @category Hooks and utilities
@@ -37,7 +37,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
     {
         path,
         entityId,
-        schema,
+        collection,
         useCache = false
     }: EntityFetchProps<M>): EntityFetchResult<M> {
 
@@ -71,13 +71,13 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
             // eslint-disable-next-line @typescript-eslint/no-empty-function
             return () => {
             };
-        } else if (entityId && path && schema) {
+        } else if (entityId && path && collection) {
             // console.log("fff", entityId);
             if (dataSource.listenEntity) {
                 return dataSource.listenEntity<M>({
                     path,
                     entityId,
-                    schema,
+                    collection,
                     onUpdate: onEntityUpdate,
                     onError
                 });
@@ -85,7 +85,7 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
                 dataSource.fetchEntity<M>({
                     path,
                     entityId,
-                    schema
+                    collection
                 })
                     .then(onEntityUpdate)
                     .catch(onError);

@@ -2,21 +2,16 @@ import {
     ArrayProperty,
     BooleanProperty,
     CMSType,
+    DateProperty,
     EnumValueConfig,
     GeopointProperty,
     MapProperty,
     NumberProperty,
     ReferenceProperty,
-    StringProperty,
-    DateProperty
+    StringProperty
 } from "./properties";
-import {
-    EntityReference,
-    EntitySchema,
-    EntityValues,
-    GeoPoint
-} from "./entities";
-
+import { EntityReference, EntityValues, GeoPoint } from "./entities";
+import { EntityCollection } from "./collections";
 
 /**
  * @category Models
@@ -28,15 +23,16 @@ export type EntitySchemaResolverProps<M = any> = {
 };
 
 /**
- * This is the same entity schema you define, only all the property builders
+ * This is the same entity collection you define, only all the property builders
  * are resolved to regular `Property` objects.
  * @category Models
  */
-export type ResolvedEntitySchema<M> =
-    Omit<EntitySchema<M>, "properties"> &
+export type ResolvedEntityCollection<M extends { [Key: string]: any } = any> =
+    Omit<EntityCollection<M>, "properties"> &
     {
         properties: ResolvedProperties<M>,
-        originalSchema: EntitySchema<M>
+        originalCollection: EntityCollection<M>,
+        editable?: boolean;
     }
 
 /**

@@ -3,13 +3,12 @@ import { EntityCollection, SideEntityPanelProps } from "../models";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { EntityView } from "./internal/EntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
-import { useNavigation, useSideEntityController } from "../hooks";
+import { useNavigationContext, useSideEntityController } from "../hooks";
 import { ErrorBoundary } from "./internal/ErrorBoundary";
 import {
     UnsavedChangesDialog,
     useNavigationUnsavedChangesDialog
 } from "./internal/useUnsavedChangesDialog";
-import { useSchemaRegistry } from "../hooks/useSchemaRegistry";
 
 /**
  * This is the component in charge of rendering the side dialogs used
@@ -71,35 +70,26 @@ function SideEntityDialog({
     };
 
     const sideEntityController = useSideEntityController();
-    const navigationContext = useNavigation();
-    const schemaRegistry = useSchemaRegistry();
+    const navigationContext = useNavigationContext();
 
-    const schema = useMemo(() => {
+    const collection = useMemo(() => {
         if (!props) return undefined;
-        console.log("SideEntityDialog prop", props?.schema);
-        let usedSchema = typeof props.schema === "string"
-            ? schemaRegistry.findSchema(props.schema)
-            : props.schema;
+        const usedSchema = props.collection;
         if (!usedSchema) {
             const collection: EntityCollection | undefined = !props ? undefined : navigationContext.getCollection(props.path, props.entityId);
             if (!collection) {
                 console.error("ERROR: No collection found in path ", props.path, "Entity id: ", props.entityId);
                 throw Error("ERROR: No collection found in path " + props.path);
             }
-            usedSchema = schemaRegistry.findSchema(collection.schemaId);
-            if (!usedSchema) {
-                console.error("ERROR: Schema not found with id:" + collection.schemaId);
-                throw Error("ERROR: You are trying to open an entity with no schema defined.");
-            }
         }
         return usedSchema;
-    }, [props, schemaRegistry]);
+    }, [props]);
 
     useEffect(() => {
         function beforeunload(e: any) {
-            if (modifiedValues && schema) {
+            if (modifiedValues && collection) {
                 e.preventDefault();
-                e.returnValue = `You have unsaved changes in this ${schema.name}. Are you sure you want to leave this page?`;
+                e.returnValue = `You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?`;
             }
         }
 
@@ -111,9 +101,9 @@ function SideEntityDialog({
                 window.removeEventListener("beforeunload", beforeunload);
         };
 
-    }, [modifiedValues, schema, window]);
+    }, [modifiedValues, collection, window]);
 
-    if (!props || !schema) {
+    if (!props || !collection) {
         return <SideDialogDrawer
             open={false}
             offsetPosition={offsetPosition}>
@@ -137,7 +127,7 @@ function SideEntityDialog({
                 <ErrorBoundary>
                     <EntityView
                         {...props}
-                        schema={schema}
+                        collection={collection}
                         onModifiedValues={setModifiedValues}
                     />
                 </ErrorBoundary>
@@ -147,7 +137,7 @@ function SideEntityDialog({
                 open={navigationWasBlocked || drawerCloseRequested}
                 handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
                 handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
-                schemaName={schema.name}/>
+                schemaName={collection.name}/>
 
         </>
     );

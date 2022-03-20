@@ -3,7 +3,7 @@ import {
     EntityCollection,
     Property,
     ResolvedArrayProperty,
-    ResolvedEntitySchema, ResolvedProperties,
+    ResolvedEntityCollection, ResolvedProperties,
     ResolvedProperty
 } from "../../../../models";
 
@@ -87,21 +87,20 @@ export function getPropertyColumnWidth(property: ResolvedProperty): number {
     }
 }
 
-
 export function getSubcollectionColumnId(collection: EntityCollection) {
     return `subcollection:${collection.path}`;
 }
 
-export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:ResolvedEntitySchema<M>, includeSubcollections: boolean): string[] {
+export function useColumnIds<M>(collection: EntityCollection<M>, resolvedCollection:ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
 
     return useMemo(() => {
-        const displayedProperties = Object.entries<Property>(resolvedSchema.properties as Record<keyof M, Property>)
+        const displayedProperties = Object.entries<Property>(resolvedCollection.properties as Record<keyof M, Property>)
             .filter(([_, property]) => !property.hideFromCollection)
             .map(([key, _]) => key);
-        const additionalColumns = resolvedSchema.additionalColumns ?? [];
+        const additionalColumns = resolvedCollection.additionalColumns ?? [];
         const subCollections: EntityCollection[] = collection.subcollections ?? [];
 
-        const properties: ResolvedProperties = resolvedSchema.properties;
+        const properties: ResolvedProperties = resolvedCollection.properties;
 
         const hiddenColumnIds: string[] = Object.entries(properties)
             .filter(([_, property]) => {
@@ -110,7 +109,7 @@ export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:
             .map(([propertyId, _]) => propertyId);
 
         const columnIds: string[] = [
-            ...Object.keys(resolvedSchema.properties) as string[],
+            ...Object.keys(resolvedCollection.properties) as string[],
             ...additionalColumns.map((column) => column.id)
         ];
 
@@ -132,5 +131,5 @@ export function useColumnIds<M>(collection: EntityCollection<M>, resolvedSchema:
 
         return result;
 
-    }, [resolvedSchema.additionalColumns, collection.subcollections, collection.schemaId, resolvedSchema.properties, includeSubcollections]);
+    }, [resolvedCollection.additionalColumns, collection.subcollections, collection.properties, resolvedCollection.properties, includeSubcollections]);
 }

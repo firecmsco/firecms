@@ -1,9 +1,11 @@
 import React from "react";
-import { Entity } from "./entities";
+import { Entity, EntityValues } from "./entities";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { EntityPermissionsBuilder } from "./permissions";
+import { EnumValues, PropertiesOrBuilder } from "./properties";
+import { ResolvedEntityCollection } from "./resolved_entities";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -12,10 +14,12 @@ import { EntityPermissionsBuilder } from "./permissions";
  *
  * @category Models
  */
-export interface EntityCollection<M extends { [Key: string]: any } = any, UserType = User> {
+export interface EntityCollection<M extends { [Key: string]: any } = any,
+    AdditionalKey extends string = string,
+    UserType = User> {
 
     /**
-     * Plural name of the view. E.g. 'products'
+     * Singular name of the entity as displayed in an Add button . E.g. Product
      */
     name: string;
 
@@ -32,16 +36,23 @@ export interface EntityCollection<M extends { [Key: string]: any } = any, UserTy
     path: string;
 
     /**
-     * Schema representing the entities of this view
-     */
-    schemaId: string;
-
-    /**
-     * Optional field used to group top level navigation entries under a
+     * Optional field used to group top level navigation entries under a~
      * navigation view. If you set this value in a subcollection it has no
      * effect.
      */
     group?: string;
+
+    /**
+     * Set of properties that compose an entity
+     */
+    properties: PropertiesOrBuilder<M>;
+
+    /**
+     * Order in which the properties are displayed.
+     * If you are specifying your collection as code, the order is the same as the
+     * one you define in `properties`
+     */
+    propertiesOrder?: (keyof M)[];
 
     /**
      * If enabled, content is loaded in batches. If `false` all entities in the
@@ -102,6 +113,76 @@ export interface EntityCollection<M extends { [Key: string]: any } = any, UserTy
      * @see useSelectionController
      */
     selectionController?: SelectionController<M>;
+
+    /**
+     * If this property is not set, the property will be created by the
+     * datasource.
+     * You can set the value to true to allow the users to choose the ID.
+     * You can also pass a set of values (as an EnumValues object) to allow them
+     * to pick from only those.
+     */
+    customId?: boolean | EnumValues | "optional";
+
+    /**
+     * Can this entity collection be edited with the inline editor.
+     * It has effect only if a {@link ConfigurationPersistence} is provided
+     * to the {@link FireCMS} component.
+     * It defaults to `true`
+     */
+    editable?: boolean;
+
+    /**
+     * Can this entity collection be deleted.
+     * It has effect only if a {@link ConfigurationPersistence} is provided
+     * to the {@link FireCMS} component.
+     * It defaults to `true`.
+     * Collections defined in code cannot be deleted, but can be modified.
+     */
+    deletable?: boolean
+
+    /**
+     * Initial filters applied to the collection this collection is related to.
+     * Defaults to none.
+     */
+    initialFilter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining collections by code
+
+    /**
+     * Default sort applied to this collection
+     */
+    initialSort?: [Extract<keyof M, string>, "asc" | "desc"];
+
+    /**
+     * Array of builders for rendering additional panels in an entity view.
+     * Useful if you need to render custom views
+     */
+    views?: EntityCustomView<M>[];
+
+    /**
+     * You can add additional columns to the collection view by implementing
+     * an additional column delegate.
+     */
+    additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey, UserType>[];
+
+    /**
+     * Default size of the rendered collection
+     */
+    defaultSize?: CollectionSize;
+
+    /**
+     * Can the elements in this collection be edited inline in the collection
+     * view. If this flag is set to false but `permissions.edit` is `true`, entities
+     * can still be edited in the side panel
+     */
+    inlineEditing?: boolean;
+
+    /**
+     * If you need to filter/sort by multiple properties in this
+     * collection, you can define the supported filter combinations here.
+     * In the case of Firestore, you need to create special indexes in the console to
+     * support filtering/sorting by more than one property. You can then
+     * specify here the indexes created.
+     */
+    filterCombinations?: FilterCombination<Extract<keyof M, string>>[];
 
 }
 
@@ -198,3 +279,91 @@ export interface ExportMappingFunction<UserType extends User = User> {
  */
 export type FilterCombination<Key extends string> = Partial<Record<Key, "asc" | "desc">>;
 
+/**
+ * Sizes in which a collection can be rendered
+ * @category Models
+ */
+export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
+
+/**
+ * Use this interface for adding additional columns to entity collection views.
+ * If you need to do some async loading you can use AsyncPreviewComponent
+ * @category Models
+ */
+export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any,
+    AdditionalKey extends string = string,
+    UserType = User> {
+
+    /**
+     * Id of this column. You can use this id in the `properties` field of the
+     * collection in any order you want
+     */
+    id: AdditionalKey;
+
+    /**
+     * Header of this column
+     */
+    name: string;
+
+    /**
+     * Width of the generated column in pixels
+     */
+    width?: number;
+
+    hideFromCollection?: boolean;
+
+    /**
+     * Builder for the content of the cell for this column
+     */
+    builder: ({ entity, context }: {
+        entity: Entity<M>,
+        context: FireCMSContext<UserType>;
+    }) => React.ReactNode;
+
+    /**
+     * If this column needs to update dynamically based on other properties,
+     * you can define an array of keys as strings with the
+     * `dependencies` prop.
+     * e.g. ["name", "surname"]
+     * If you don't specify this prop, the generated column will not rerender
+     * on entity property updates.
+     */
+    dependencies?: Partial<Extract<keyof M, string>>[];
+}
+
+/**
+ * You can use this builder to render a custom panel in the entity detail view.
+ * It gets rendered as a tab.
+ * @category Models
+ */
+export type EntityCustomView<M = any> =
+    {
+        path: string,
+        name: string,
+        builder: (extraActionsParams: EntityCustomViewParams<M>) => React.ReactNode
+    }
+
+/**
+ * Parameters passed to the builder in charge of rendering a custom panel for
+ * an entity view.
+ * @category Models
+ */
+export interface EntityCustomViewParams<M extends { [Key: string]: any } = any> {
+
+    /**
+     * collection used by this entity
+     */
+    collection: ResolvedEntityCollection<M>;
+
+    /**
+     * Entity that this view refers to. It can be undefined if the entity is new
+     */
+    entity?: Entity<M>;
+
+    /**
+     * Modified values in the form that have not been saved yet.
+     * If the entity is not new and the values are not modified, this values
+     * are the same as in `entity`
+     */
+    modifiedValues?: EntityValues<M>;
+}
