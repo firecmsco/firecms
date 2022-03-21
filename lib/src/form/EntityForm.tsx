@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import {
     CMSFormFieldProps,
     Entity,
@@ -7,23 +7,18 @@ import {
     EntityStatus,
     EntityValues,
     FormContext,
-    ResolvedEntityCollection,
-    ResolvedProperty
+    ResolvedEntityCollection
 } from "../models";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { buildPropertyField } from "./form_factory";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
-import { ErrorFocus } from "./components/ErrorFocus";
-import {
-    getDefaultValuesFor,
-    isHidden,
-    isReadOnly
-} from "../core/util/entities";
+import { getDefaultValuesFor, isReadOnly } from "../core/util/entities";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
 import { getResolvedCollection } from "../core";
+import { useVirtual } from "react-virtual";
 
 /**
  * @category Components
@@ -136,8 +131,6 @@ export function EntityForm<M>({
         }
     }, [status, initialResolvedCollection, entity]);
 
-    const formRef = React.useRef<HTMLDivElement>(null);
-
     const [entityId, setEntityId] = React.useState<string | undefined>(inputEntityId);
     const [entityIdError, setEntityIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<Error | undefined>();
@@ -154,8 +147,6 @@ export function EntityForm<M>({
         values: internalValue,
         previousValues: initialValues
     }), [inputCollection, path, entityId, internalValue, initialValues]);
-
-    console.log("getResolvedCollection", collection);
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
         if (initialValues && status === "existing") {
@@ -243,53 +234,21 @@ export function EntityForm<M>({
             onReset={() => onDiscard && onDiscard()}
         >
             {(props) => {
-                return <>
-
-                    <Box
-                        sx={(theme) => ({
-                            width: "100%",
-                            marginTop: theme.spacing(3),
-                            paddingLeft: theme.spacing(4),
-                            paddingRight: theme.spacing(4),
-                            paddingTop: theme.spacing(3),
-                            [theme.breakpoints.down("lg")]: {
-                                marginTop: theme.spacing(2),
-                                paddingLeft: theme.spacing(2),
-                                paddingRight: theme.spacing(2),
-                                paddingTop: theme.spacing(2),
-                            },
-                            [theme.breakpoints.down("md")]: {
-                                marginTop: theme.spacing(1),
-                                paddingLeft: theme.spacing(2),
-                                paddingRight: theme.spacing(2),
-                                paddingTop: theme.spacing(2)
-                            }
-                        })}>
-                        <CustomIdField customId={collection.customId}
-                                       entityId={entityId}
-                                       status={status}
-                                       onChange={setEntityId}
-                                       error={entityIdError}
-                                       entity={entity}/>
-                    </Box>
-
-                    {entityId && <FormInternal
-                        {...props}
-                        baseDataSourceValues={baseDataSourceValues}
-                        onModified={onModified}
-                        setInternalValue={setInternalValue}
-                        onValuesChanged={onValuesChanged}
-                        underlyingChanges={underlyingChanges}
-                        path={path}
-                        entity={entity}
-                        entityId={entityId}
-                        collection={collection}
-                        formRef={formRef}
-                        status={status}
-                        entityIdError={entityIdError}
-                        savingError={savingError}/>}
-
-                </>
+                return <FormInternal
+                    {...props}
+                    onEntityIdModified={setEntityId}
+                    baseDataSourceValues={baseDataSourceValues}
+                    onModified={onModified}
+                    setInternalValue={setInternalValue}
+                    onValuesChanged={onValuesChanged}
+                    underlyingChanges={underlyingChanges}
+                    path={path}
+                    entity={entity}
+                    entityId={entityId}
+                    collection={collection}
+                    status={status}
+                    entityIdError={entityIdError}
+                    savingError={savingError}/>
             }
             }
         </Formik>
@@ -300,23 +259,27 @@ function FormInternal<M>({
                              baseDataSourceValues,
                              values,
                              onModified,
+                             onEntityIdModified,
                              setInternalValue,
                              onValuesChanged,
                              underlyingChanges,
                              entityId,
                              entity,
                              touched,
+                             entityIdError,
                              setFieldValue,
                              collection,
                              path,
                              isSubmitting,
-                             formRef,
                              status,
                              handleSubmit,
-                             savingError
+                             savingError,
+                             errors,
+                             isValidating
                          }: FormikProps<M> & {
     baseDataSourceValues: Partial<M>,
     onModified: ((modified: boolean) => void) | undefined,
+    onEntityIdModified: (id: string | undefined) => void,
     setInternalValue: any,
     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
     underlyingChanges: Partial<M>,
@@ -324,11 +287,14 @@ function FormInternal<M>({
     entityIdError: boolean,
     entity: Entity<M> | undefined,
     collection: ResolvedEntityCollection<M>,
-    entityId: string,
-    formRef: any,
+    entityId?: string,
     status: "new" | "existing" | "copy",
     savingError?: Error,
 }) {
+
+    const parentRef = React.useRef<any>();
+    const scrollingRef = React.useRef<number | undefined>()
+
     const modified = useMemo(() => !equal(baseDataSourceValues, values), [baseDataSourceValues, values]);
     useEffect(() => {
         if (onModified)
@@ -350,18 +316,127 @@ function FormInternal<M>({
         });
     }
 
-    const context: FormContext<M> = {
-        collection,
-        entityId,
-        values,
-        path
-    };
+    const scrollToFn = React.useCallback((offset, defaultScrollTo) => {
+        const duration = 1000;
+        const start = parentRef.current.scrollTop;
+        const startTime = (scrollingRef.current = Date.now());
+
+        const run = () => {
+            if (scrollingRef.current !== startTime) return;
+            const now = Date.now();
+            const elapsed = now - startTime;
+            const progress = easeInOutQuint(Math.min(elapsed / duration, 1));
+            const interpolated = start + (offset - start) * progress;
+
+            if (elapsed < duration) {
+                defaultScrollTo(interpolated);
+                requestAnimationFrame(run);
+            } else {
+                defaultScrollTo(interpolated);
+            }
+        }
+
+        requestAnimationFrame(run);
+    }, []);
+
+    const context: FormContext<M> | undefined = entityId
+        ? {
+            collection,
+            entityId,
+            values,
+            path
+        }
+        : undefined;
+
+    const errorKeys = Object.keys(errors);
+    const rowVirtualizer = useVirtual({
+        paddingStart: 16,
+        paddingEnd: 48,
+        size: context ? Object.keys(collection.properties).length + 1 : 1,
+        parentRef,
+        // estimateSize: React.useCallback(i => 64, [collection.properties]),
+        keyExtractor: React.useCallback((i) => {
+                if (i === 0) return "id_dc4w4rdw345f";
+                const propertyKey = Object.keys(collection.properties)[i - 1];
+                const hasError = Boolean(errorKeys[propertyKey]);
+                return `${propertyKey}_${hasError}`;
+            },
+            [collection.properties, errorKeys]),
+        overscan: 8,
+        scrollToFn,
+    })
+
+    useEffect(() => {
+        const keys = errorKeys;
+        // Whenever there are errors and the form is submitting but finished validating.
+        if (keys.length > 0 && isSubmitting && !isValidating) {
+            rowVirtualizer.scrollToIndex(Object.keys(collection.properties).indexOf(keys[0]) + 1)
+        }
+    }, [isSubmitting, isValidating, errorKeys]);
 
     const formFields = (
-        <Grid container spacing={4}>
-            {Object.entries<ResolvedProperty>(collection.properties)
-                .filter(([key, property]) => !isHidden(property))
-                .map(([key, property]) => {
+        <Box
+            ref={parentRef}
+            sx={(theme) => ({
+                width: "100%",
+                height: "100%",
+                overflow: "auto",
+                paddingLeft: theme.spacing(4),
+                paddingRight: theme.spacing(4),
+                paddingTop: theme.spacing(3),
+                paddingBottom: theme.spacing(4),
+                marginBottom: theme.spacing(2),
+                [theme.breakpoints.down("lg")]: {
+                    paddingLeft: theme.spacing(2),
+                    paddingRight: theme.spacing(2),
+                    paddingTop: theme.spacing(2),
+                    paddingBottom: theme.spacing(3)
+                },
+                [theme.breakpoints.down("md")]: {
+                    padding: theme.spacing(2)
+                }
+            })}
+        >
+
+            <div
+                style={{
+                    height: rowVirtualizer.totalSize,
+                    width: "100%",
+                    position: "relative"
+                }}
+            >
+
+                {rowVirtualizer.virtualItems.map((virtualRow) => {
+
+                    if (virtualRow.index === 0) {
+
+                        return (
+                            <Box
+                                key={virtualRow.index}
+                                ref={virtualRow.measureRef}
+                                style={{
+                                    transform: `translateY(${virtualRow.start}px)`
+                                }}
+                                sx={{
+                                    width: "100%",
+                                    position: "absolute",
+                                    top: 0,
+                                    left: 0,
+                                    pb: 2
+                                }}
+                            >
+                                <CustomIdField customId={collection.customId}
+                                               entityId={entityId}
+                                               status={status}
+                                               onChange={onEntityIdModified}
+                                               error={entityIdError}
+                                               entity={entity}/>
+                            </Box>
+                        );
+                    }
+
+                    const key = Object.keys(collection.properties)[virtualRow.index - 1];
+                    const property = collection.properties[key];
 
                     const underlyingValueHasChanged: boolean =
                         !!underlyingChanges &&
@@ -377,57 +452,48 @@ function FormInternal<M>({
                         property,
                         includeDescription: true,
                         underlyingValueHasChanged,
-                        context,
+                        context: context as FormContext<M>,
                         tableMode: false,
                         partOfArray: false,
                         autoFocus: false,
                         shouldAlwaysRerender
                     };
                     return (
-                        <Grid item
-                              xs={12}
-                              id={`form_field_${key}`}
-                              key={`field_${collection.name}_${key}`}>
+                        <Box
+                            key={virtualRow.index}
+                            ref={virtualRow.measureRef}
+                            style={{
+                                transform: `translateY(${virtualRow.start}px)`
+                            }}
+                            sx={{
+                                width: "100%",
+                                position: "absolute",
+                                top: 0,
+                                left: 0,
+                                pb: 2
+                            }}
+                        >
                             {buildPropertyField(cmsFormFieldProps)}
-                        </Grid>
+                        </Box>
                     );
                 })}
-
-        </Grid>
-    );
+            </div>
+        </Box>
+    )
 
     const disabled = isSubmitting || (!modified && status === "existing");
 
     return (
 
         <Form onSubmit={handleSubmit}
-              noValidate>
-            <Box
-                sx={(theme) => ({
-                    paddingLeft: theme.spacing(4),
-                    paddingRight: theme.spacing(4),
-                    paddingTop: theme.spacing(3),
-                    paddingBottom: theme.spacing(4),
-                    marginBottom: theme.spacing(2),
-                    [theme.breakpoints.down("lg")]: {
-                        paddingLeft: theme.spacing(2),
-                        paddingRight: theme.spacing(2),
-                        paddingTop: theme.spacing(2),
-                        paddingBottom: theme.spacing(3)
-                    },
-                    [theme.breakpoints.down("md")]: {
-                        padding: theme.spacing(2)
-                    }
-                })}
-                ref={formRef}>
+              noValidate
+              style={{
+                  height: "100%",
+              }}>
 
-                {formFields}
+            {formFields}
 
-                <ErrorFocus containerRef={formRef}/>
-
-            </Box>
-
-            <Box sx={{ height: 56 }}/>
+            {/*<Box sx={{ height: 56 }}/>*/}
 
             <CustomDialogActions position={"absolute"}>
 
@@ -462,6 +528,10 @@ function FormInternal<M>({
             </CustomDialogActions>
         </Form>
     );
+}
+
+function easeInOutQuint(t: number) {
+    return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t
 }
 
 export default EntityForm;

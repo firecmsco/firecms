@@ -225,7 +225,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             sideEntityController.close();
     }, [tabsPosition]);
 
-    const body = !readOnly
+    const form = !readOnly
 ? (
             <Suspense fallback={<CircularProgressCenter/>}>
                 <EntityForm
@@ -466,7 +466,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     }}>
 
                         <Box sx={{
-                            position: "relative",
+                            position: "relative"
                         }}>
                             <Box
                                 role="tabpanel"
@@ -483,7 +483,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                 }}>
                                 {dataLoading
                                     ? <CircularProgressCenter/>
-                                    : body}
+                                    : form}
                             </Box>
                         </Box>
 

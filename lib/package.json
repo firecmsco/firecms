@@ -50,6 +50,8 @@
         "react-dropzone": "^11.4.2",
         "react-measure": "^2.5.2",
         "react-transition-group": "^4.4.1",
+        "react-virtual": "^2.10.4",
+        "react-virtualized": "^9.22.3",
         "typeface-roboto": "^1.1.13",
         "typeface-rubik": "^1.1.13",
         "typeface-space-mono": "^1.1.13",
