@@ -8,14 +8,13 @@ import * as locales from "date-fns/locale";
 import {
     AuthDelegate,
     Authenticator,
+    CollectionOverrideHandler,
     DataSource,
     EntityLinkBuilder,
-    EntityCollection,
     FireCMSContext,
     Locale,
     Navigation,
     NavigationBuilder,
-    CollectionOverrideHandler,
     StorageSource,
     UserConfigurationPersistence
 } from "../models";
@@ -31,6 +30,9 @@ import {
 } from "./internal/useBuildNavigationContext";
 import { useBuildAuthController } from "./internal/useBuildAuthController";
 import { ConfigurationPersistence } from "../models/config_persistence";
+import {
+    useBuildCollectionEditorController
+} from "./internal/useBuildCollectionEditorController";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -176,7 +178,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
     const usedBasePath = basePath ?? "/";
     const usedBasedCollectionPath = baseCollectionPath ?? DEFAULT_COLLECTION_PATH;
 
-
     const dateUtilsLocale = locale ? locales[locale] : undefined;
     const authController = useBuildAuthController({
         authDelegate,
@@ -196,12 +197,13 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         locale,
         dataSource,
         storageSource,
-        collectionOverrideHandler: collectionOverrideHandler,
+        collectionOverrideHandler,
         configPersistence,
         userConfigPersistence
     });
 
     const sideEntityController = useBuildSideEntityController(navigationContext);
+    const collectionEditorController = useBuildCollectionEditorController();
 
     const loading = authController.authLoading || authController.initialLoading || navigationContext.loading;
 
@@ -231,7 +233,8 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                             storageSource,
                             snackbarController,
                             configPersistence,
-                            userConfigPersistence
+                            userConfigPersistence,
+                            collectionEditorController
                         };
 
                         return (
@@ -241,15 +244,14 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                                         dateAdapter={AdapterDateFns}
                                         utils={DateFnsUtils}
                                         locale={dateUtilsLocale}>
-                                            <ModeStateContext.Consumer>
-                                                {({ mode }) => {
-                                                    return children({
-                                                        context,
-                                                        mode,
-                                                        loading
-                                                    });
-                                                }}
-                                            </ModeStateContext.Consumer>
+                                        <ModeStateContext.Consumer>
+                                            {({ mode }) =>
+                                                children({
+                                                    context,
+                                                    mode,
+                                                    loading
+                                                })}
+                                        </ModeStateContext.Consumer>
                                     </LocalizationProvider>
                                 </BreadcrumbsProvider>
                             </FireCMSContextProvider>

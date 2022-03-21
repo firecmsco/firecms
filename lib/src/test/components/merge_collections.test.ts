@@ -29,7 +29,9 @@ export const baseProductCollection: EntityCollection = {
         currency: {
             dataType: "string",
             name: "Currency",
-            enumValues: "currency"
+            enumValues: [
+                { id: "DOL", label: "Dollars" },
+            ]
         },
         price: priceBuilder
     }

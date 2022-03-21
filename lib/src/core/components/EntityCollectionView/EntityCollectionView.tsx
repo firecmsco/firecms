@@ -41,13 +41,13 @@ import { mergeDeep } from "../../util/objects";
 import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
-import {
-    CollectionEditorDialog
-} from "../../../collection_editor/CollectionEditorDialog";
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { removeInitialAndTrailingSlashes } from "../../util/navigation_utils";
 import { Settings } from "@mui/icons-material";
+import {
+    useCollectionEditorController
+} from "../../../hooks/useCollectionEditorController";
 
 /**
  * @category Components
@@ -146,6 +146,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
     const context = useFireCMSContext();
     const authController = useAuthController();
     const userConfigPersistence = useUserConfigurationPersistence();
+    const collectionEditorController = useCollectionEditorController();
 
     const theme = useTheme();
 
@@ -159,7 +160,6 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
     const hoverRow = collection.inlineEditing !== undefined && !collection.inlineEditing;
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-    const [collectionDialogOpen, setCollectionDialogOpen] = useState<boolean>(false);
 
     const selectionController = useSelectionController<M>();
     const usedSelectionController = collection.selectionController ?? selectionController;
@@ -386,10 +386,10 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 onColumnResize={onColumnResize}
                 tableRowActionsBuilder={tableRowActionsBuilder}
                 Title={Title}
-                ActionsStart={collectionEditable
+                ActionsStart={collectionEditable && collectionEditorController
                     ? <Tooltip title={"Edit collection"}>
                         <IconButton
-                            onClick={() => setCollectionDialogOpen(true)}>
+                            onClick={() => collectionEditorController?.editCollection(path)}>
                             <Settings/>
                         </IconButton>
                     </Tooltip>
@@ -406,13 +406,6 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                     selectionEnabled={selectionEnabled}/>}
                 hoverRow={hoverRow}
             />
-
-            <CollectionEditorDialog open={collectionDialogOpen}
-                                    handleClose={(_) => {
-                                    setCollectionDialogOpen(false);
-                                }}
-                                    path={path}/>
-
 
             {deleteEntityClicked &&
                 <DeleteEntityDialog

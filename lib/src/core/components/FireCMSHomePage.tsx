@@ -33,11 +33,9 @@ import Delete from "@mui/icons-material/Delete";
 import { MoreVert } from "@mui/icons-material";
 import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
 import { TopNavigationEntry, TopNavigationResult } from "../../models";
-import { CollectionEditorDialog } from "../../collection_editor/CollectionEditorDialog";
 import {
-    NewCollectionEditorDialog,
-    NewCollectionEditorDialogProps
-} from "../../collection_editor/NewCollectionEditorDialog";
+    useCollectionEditorController
+} from "../../hooks/useCollectionEditorController";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -50,10 +48,8 @@ export function FireCMSHomePage() {
 
     const navigationContext = useNavigationContext();
     const configurationPersistence = useConfigurationPersistence();
+    const collectionEditorController = useCollectionEditorController();
     const configurationPersistenceEnabled = Boolean(configurationPersistence);
-
-    const [newCollectionDialogOpen, setNewCollectionDialogOpen] = useState<Partial<NewCollectionEditorDialogProps> | undefined>();
-    const [editSelectedPath, setEditSelectedPath] = useState<string | undefined>();
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
@@ -62,8 +58,9 @@ export function FireCMSHomePage() {
     const [collectionToBeDeleted, setCollectionToBeDeleted] = useState<TopNavigationEntry | undefined>();
 
     const onEditCollectionClicked = useCallback((entry: TopNavigationEntry) => {
-        setEditSelectedPath(entry.path);
-    }, []);
+        collectionEditorController?.editCollection(entry.path);
+    }, [collectionEditorController]);
+
     const onDeleteCollectionClicked = useCallback((entry: TopNavigationEntry) => {
         setCollectionToBeDeleted(entry);
     }, []);
@@ -100,10 +97,11 @@ export function FireCMSHomePage() {
                             flexDirection: "column",
                             alignItems: "flex-start"
                         }}
-                        onClick={() => setNewCollectionDialogOpen({
-                            open: true,
-                            group
-                        })}
+                        onClick={collectionEditorController
+                            ? () => collectionEditorController.openNewCollectionDialog({
+                                group
+                            })
+                            : undefined}
                     >
 
                         <CardContent
@@ -168,19 +166,6 @@ export function FireCMSHomePage() {
                 body={<> This will <b>not
                     delete any data</b>, only
                     the collection in the CMS</>}/>
-
-            <CollectionEditorDialog open={Boolean(editSelectedPath)}
-                                    handleClose={(collection) => {
-                                    setEditSelectedPath(undefined);
-                                }}
-                                    path={editSelectedPath as string}/>
-
-            <NewCollectionEditorDialog
-                open={false}
-                {...newCollectionDialogOpen}
-                handleClose={(collection) => {
-                    setNewCollectionDialogOpen({ open: false });
-                }}/>
 
         </Container>
     );

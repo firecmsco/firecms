@@ -177,7 +177,7 @@ export function useBuildNavigationContext<UserType>({
                 return `${baseCollectionPath}/edit/${encodePath(path)}`;
             else
                 return "newcollection";
-        }, //
+        },
         [baseCollectionPath]);
 
     const buildUrlCollectionPath = useCallback((path: string): string => `${baseCollectionPath}/${encodePath(path)}`,
@@ -200,12 +200,11 @@ export function useBuildNavigationContext<UserType>({
         const navigationEntries: TopNavigationEntry[] = [
             ...(resolvedNavigation.collections ?? []).map(collection => ({
                 url: buildUrlCollectionPath(collection.path),
+                type: "collection",
                 name: collection.name,
                 path: collection.path,
-                type: "collection",
                 deletable: collection.deletable,
                 editable: collection.editable,
-                editUrl: collection.editable ? buildUrlEditCollectionPath({ path: collection.path }) : undefined,
                 description: collection.description?.trim(),
                 group: collection.group?.trim()
             } as TopNavigationEntry)),
@@ -331,6 +330,8 @@ export function getSidePanelKey(path: string, entityId?: string) {
         return removeInitialAndTrailingSlashes(path);
 }
 
-function encodePath(input:string){
-    return encodeURIComponent(removeInitialAndTrailingSlashes(input)).replaceAll("%2F", "/");
+function encodePath(input:string) {
+    return encodeURIComponent(removeInitialAndTrailingSlashes(input))
+        .replaceAll("%2F", "/")
+        .replaceAll("%23", "#");
 }

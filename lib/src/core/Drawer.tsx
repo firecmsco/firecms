@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { Link as ReactLink, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import {
     Box,
     Button,
@@ -17,6 +17,9 @@ import ShowChartIcon from '@mui/icons-material/ShowChart';
 import { useNavigationContext } from "../hooks";
 import { FireCMSLogo } from "./components/FireCMSLogo";
 import { TopNavigationEntry, TopNavigationResult } from "../models";
+import {
+    useCollectionEditorController
+} from "../hooks/useCollectionEditorController";
 
 /**
  * Props used in case you need to override the default drawer
@@ -37,6 +40,7 @@ export function Drawer({
                        }: DrawerProps) {
 
     const navigationContext = useNavigationContext();
+    const collectionEditorController = useCollectionEditorController();
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
@@ -97,10 +101,10 @@ export function Drawer({
                 title={group ? `Create new collection in ${group}` : "Create new collection"}>
                 <Button
                     size={"small"}
-                    onClick={closeDrawer}
-                    component={ReactLink}
-                    to={navigationContext.buildUrlEditCollectionPath({ group })}
-                    state={{ group: group }}>
+                    onClick={() => {
+                        collectionEditorController?.openNewCollectionDialog({ group });
+                        closeDrawer();
+                    }}>
                     <AddIcon fontSize={"small"}/>
                 </Button>
             </Tooltip>

@@ -174,7 +174,6 @@ export type NavigationContext = {
      */
     buildUrlCollectionPath: (path: string) => string;
 
-
 }
 
 /**
