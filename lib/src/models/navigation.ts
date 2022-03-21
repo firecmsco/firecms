@@ -19,6 +19,12 @@ export type NavigationBuilder<UserType extends User = User> =
  * @category Models
  */
 export interface NavigationBuilderProps<UserType extends User = User> {
+
+    /**
+     * List of available collections to the CMS (stored in config persistence)
+     */
+    collections: EntityCollection[];
+
     /**
      * Logged in user or null
      */

@@ -19,14 +19,16 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 import {
     Entity,
-    EntityCallbacks,
     EntityCollection,
-    EntityPermissionsBuilder,
     EntityStatus,
     EntityValues,
     ResolvedEntityCollection
 } from "../../models";
-import { CircularProgressCenter } from "../components";
+import {
+    CircularProgressCenter,
+    EntityCollectionViewProps,
+    EntityPreviewProps
+} from "../components";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
@@ -42,10 +44,7 @@ import {
 } from "../../hooks";
 import { canEditEntity } from "../util/permissions";
 import { getResolvedCollection } from "../collections";
-
-const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as any;
-const EntityForm = lazy(() => import("../../form/EntityForm")) as any;
-const EntityPreview = lazy(() => import("../components/EntityPreview")) as any;
+import { EntityFormProps } from "../../form";
 
 export interface EntityViewProps<M, UserType> {
     path: string;
@@ -53,9 +52,6 @@ export interface EntityViewProps<M, UserType> {
     entityId?: string;
     copy?: boolean;
     selectedSubpath?: string;
-    permissions?: EntityPermissionsBuilder<M, UserType>;
-    callbacks?: EntityCallbacks<M>;
-    subcollections?: EntityCollection[];
     width?: number | string;
     onModifiedValues: (modified: boolean) => void;
 }
@@ -63,15 +59,18 @@ export interface EntityViewProps<M, UserType> {
 export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                            path,
                                                                            entityId,
-                                                                           callbacks,
                                                                            selectedSubpath,
                                                                            copy,
-                                                                           permissions,
                                                                            collection,
-                                                                           subcollections,
                                                                            onModifiedValues,
                                                                            width
                                                                        }: EntityViewProps<M, UserType>) {
+
+
+    const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<M>>;
+    const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<M>>;
+    const EntityPreview = lazy(() => import("../components/EntityPreview")) as React.FunctionComponent<EntityPreviewProps<M>>;
+
 
     const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
 
@@ -101,6 +100,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         useCache: false
     });
 
+    const editEnabled = entity ? canEditEntity(collection.permissions, entity, authController, path, context) : false;
+
     const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => getResolvedCollection<M>({
         collection,
         path,
@@ -109,13 +110,14 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         previousValues: entity?.values
     }), [collection, collection, path, entityId, modifiedValues]);
 
+    const subcollections = resolvedCollection.subcollections;
     const customViews = resolvedCollection.views;
     const customViewsCount = customViews?.length ?? 0;
 
     useEffect(() => {
         if (entity)
-            setReadOnly(!canEditEntity(permissions, entity, authController, path, context));
-    }, [entity, permissions]);
+            setReadOnly(!editEnabled);
+    }, [entity, editEnabled]);
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
@@ -131,8 +133,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             setTabsPosition(index);
         }
 
-        if (subcollections && selectedSubpath) {
-            const index = subcollections
+        if (collection.subcollections && selectedSubpath) {
+            const index = collection.subcollections
                 .map((c) => c.path)
                 .findIndex((p) => p === selectedSubpath);
             setTabsPosition(index + customViewsCount);
@@ -193,7 +195,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                 values,
                                                 previousValues
                                             }: {
-        collection: EntityCollection<M>,
+        collection: ResolvedEntityCollection<M>,
         path: string,
         entityId: string | undefined,
         values: EntityValues<M>,
@@ -206,7 +208,6 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         return saveEntityWithCallbacks({
             path,
             entityId,
-            callbacks,
             values,
             previousValues,
             collection,
@@ -218,7 +219,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             onPreSaveHookError,
             onSaveSuccessHookError
         });
-    }, [status, callbacks, dataSource, context, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError]);
+    }, [status, collection, dataSource, context, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError]);
 
     const onDiscard = useCallback(() => {
         if (tabsPosition === -1)
@@ -226,7 +227,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }, [tabsPosition]);
 
     const form = !readOnly
-? (
+        ? (
             <Suspense fallback={<CircularProgressCenter/>}>
                 <EntityForm
                     key={`form_${path}_${entity?.id ?? "new"}`}
@@ -239,15 +240,15 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     onModified={onModifiedValues}
                     entity={entity}/>
             </Suspense>
-    )
-: (
-        <Suspense fallback={<CircularProgressCenter/>}>
-            <EntityPreview
-                entity={entity}
-                path={path}
-                collection={resolvedCollection}/>
-        </Suspense>
-    );
+        )
+        : (
+            <Suspense fallback={<CircularProgressCenter/>}>
+                <EntityPreview
+                    entity={entity as Entity<M>}
+                    path={path}
+                    collection={resolvedCollection}/>
+            </Suspense>
+        );
 
     const customViewsView: JSX.Element[] | undefined = customViews && customViews.map(
         (customView, colIndex) => {

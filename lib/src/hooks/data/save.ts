@@ -52,7 +52,6 @@ export async function saveEntityWithCallbacks<M, UserType>({
                                                                collection,
                                                                path,
                                                                entityId,
-                                                               callbacks,
                                                                values,
                                                                previousValues,
                                                                status,
@@ -70,6 +69,7 @@ export async function saveEntityWithCallbacks<M, UserType>({
 
     let updatedValues: Partial<EntityValues<M>>;
 
+    const callbacks = collection.callbacks;
     if (callbacks?.onPreSave) {
         try {
             const resolvedCollection = getResolvedCollection<M>({

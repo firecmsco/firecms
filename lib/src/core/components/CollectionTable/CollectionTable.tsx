@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { Button, Paper, useMediaQuery, useTheme } from "@mui/material";
+import equal from "react-fast-compare"
 
 import {
     AdditionalColumnDelegate,
@@ -60,7 +61,7 @@ export const CollectionTable = React.memo<CollectionTableProps<any, any>>(Collec
 
 function areEqual(prevProps: CollectionTableProps<any, any>, nextProps: CollectionTableProps<any, any>) {
     return prevProps.path === nextProps.path &&
-        prevProps.collection === nextProps.collection &&
+        equal(prevProps.collection, nextProps.collection) &&
         prevProps.Title === nextProps.Title &&
         prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder &&
         prevProps.inlineEditing === nextProps.inlineEditing;
@@ -127,10 +128,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
                                     path,
                                     entityId: entity.id,
                                     selectedSubpath: subcollection.path,
-                                    permissions: collection.permissions,
-                                    collection: collection, // TODO
-                                    subcollections: collection.subcollections,
-                                    callbacks: collection.callbacks,
+                                    collection: collection,
                                     updateUrl: true
                                 });
                             }}>

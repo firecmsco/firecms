@@ -15,4 +15,6 @@ export interface CollectionEditorController {
         group?: string
     }) => void;
     closeNewCollectionDialog: () => void;
+
+    collectionEditorViews: React.ReactNode;
 }

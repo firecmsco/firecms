@@ -40,28 +40,10 @@ export interface SideEntityPanelProps<M = any, UserType = User> {
     width?: number | string;
 
     /**
-     * Can the elements in this collection be added and edited.
-     */
-    permissions?: EntityPermissionsBuilder<M, UserType>;
-
-    /**
      * collection representing the entities of this view.
      * If you leave it blank it will be induced by your navigation
      */
     collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
-
-    /**
-     * You can add subcollections to your entity in the same way you define the root
-     * collections.
-     */
-    subcollections?: EntityCollection[];
-
-    /**
-     * This interface defines all the callbacks that can be used when an entity
-     * is being created, updated or deleted.
-     * Useful for adding your own logic or blocking the execution of the operation
-     */
-    callbacks?: EntityCallbacks<M>;
 
     /**
      * Should update the URL when opening the dialog.

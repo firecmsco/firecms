@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 import {
     Box,
@@ -19,13 +19,13 @@ import {
     ResolvedEntityCollection,
     ResolvedProperties
 } from "../../models";
-import { PropertyPreview } from "../../preview/PropertyPreview";
+import { PropertyPreview } from "../../preview";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_utils";
 import { ErrorBoundary } from "../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
 
-const PREFIX = 'EntityPreview';
+const PREFIX = "EntityPreview";
 
 const classes = {
     property: `${PREFIX}-property`,
@@ -58,8 +58,6 @@ const StyledTableContainer = styled(TableContainer)((
     }
 }));
 
-
-
 /**
  * @category Components
  */
@@ -83,8 +81,6 @@ export function EntityPreview<M>(
         collection,
         path
     }: EntityPreviewProps<M>) {
-
-
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 

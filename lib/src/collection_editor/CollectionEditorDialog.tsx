@@ -2,7 +2,10 @@ import * as React from "react";
 import { Dialog } from "@mui/material";
 
 import { CollectionEditor } from "./CollectionEditor";
-import { EntityCollection } from "../index";
+import { EntityCollection } from "../models";
+import {
+    useCollectionEditorController
+} from "../hooks/useCollectionEditorController";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -10,35 +13,41 @@ export interface CollectionEditorDialogProps {
     path: string;
 }
 
-export function CollectionEditorDialog({
-                                       open,
-                                       handleClose,
-                                       path
-                                   }: CollectionEditorDialogProps) {
+export const CollectionEditorDialog = React.memo(
+    function CollectionEditorDialog({
+                                        open,
+                                        handleClose,
+                                        path
+                                    }: CollectionEditorDialogProps) {
 
-    const [dirty, setDirty] = React.useState(false);
+        const collectionEditorController = useCollectionEditorController();
 
-    return (
-        <Dialog
-            open={open}
-            maxWidth={"lg"}
-            fullWidth
-            keepMounted={false}
-            onClose={dirty ? undefined : () => handleClose()}
-            PaperProps={{
-                sx: (theme) => ({
-                    height: "100%",
-                    "@media (min-height:900px)": {
-                        maxHeight: "900px"
-                    },
-                    background: theme.palette.background.default
-                })
-            }}
-        >
-            <CollectionEditor path={path}
-                              handleClose={handleClose}
-                              setDirty={setDirty}
-            />
-        </Dialog>
-    );
-}
+        const [dirty, setDirty] = React.useState(false);
+
+        if (!collectionEditorController) return null;
+
+        return (
+            <Dialog
+                open={open}
+                maxWidth={"lg"}
+                fullWidth
+                keepMounted={false}
+                onClose={handleClose ? (dirty ? undefined : () => handleClose()) : undefined}
+                PaperProps={{
+                    sx: (theme) => ({
+                        height: "100%",
+                        "@media (min-height:964px)": {
+                            maxHeight: "900px"
+                        },
+                        background: theme.palette.background.default
+                    })
+                }}
+            >
+                <CollectionEditor path={path}
+                                  handleClose={handleClose}
+                                  setDirty={setDirty}
+                />
+            </Dialog>
+        );
+    }
+)

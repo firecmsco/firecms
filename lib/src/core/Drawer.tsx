@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
-import ShowChartIcon from '@mui/icons-material/ShowChart';
+import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { useNavigationContext } from "../hooks";
 import { FireCMSLogo } from "./components/FireCMSLogo";
 import { TopNavigationEntry, TopNavigationResult } from "../models";
@@ -161,6 +161,7 @@ export function Drawer({
                 {ungroupedNavigationViews.map((view, index) => buildNavigationListItem(index, "none", view))}
 
             </List>
+            {collectionEditorController.collectionEditorViews}
         </div>
     );
 }

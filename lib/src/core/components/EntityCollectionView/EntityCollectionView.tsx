@@ -7,6 +7,7 @@ import {
     Typography,
     useTheme
 } from "@mui/material";
+import equal from "react-fast-compare"
 
 import {
     AnyProperty,
@@ -136,21 +137,22 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
 
 }
 
-export function EntityCollectionViewInternal<M extends { [Key: string]: unknown }>({
-                                                                                       path,
-                                                                                       collection
-                                                                                   }: EntityCollectionViewProps<M>
-) {
+export const EntityCollectionViewInternal = React.memo(
+    function EntityCollectionViewInternal<M extends { [Key: string]: unknown }>({
+                                                                                    path,
+                                                                                    collection
+                                                                                }: EntityCollectionViewProps<M>
+    ) {
 
-    const sideEntityController = useSideEntityController();
-    const context = useFireCMSContext();
-    const authController = useAuthController();
-    const userConfigPersistence = useUserConfigurationPersistence();
-    const collectionEditorController = useCollectionEditorController();
+        const sideEntityController = useSideEntityController();
+        const context = useFireCMSContext();
+        const authController = useAuthController();
+        const userConfigPersistence = useUserConfigurationPersistence();
+        const collectionEditorController = useCollectionEditorController();
 
-    const theme = useTheme();
+        const theme = useTheme();
 
-    const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
+        const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
     const collectionEditable = collection.editable ?? true;
 
@@ -178,10 +180,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
         return sideEntityController.open({
             entityId: entity.id,
             path,
-            permissions: collection.permissions,
             collection: collection,
-            subcollections: collection.subcollections,
-            callbacks: collection.callbacks,
             updateUrl: true
         });
     }, [path, collection, collection]);
@@ -189,10 +188,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
     const onNewClick = useCallback(() =>
         sideEntityController.open({
             path,
-            permissions: collection.permissions,
             collection: collection,
-            subcollections: collection.subcollections,
-            callbacks: collection.callbacks,
             updateUrl: true
         }), [path, collection, collection]);
 
@@ -333,28 +329,14 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
             entityId: clickedEntity.id,
             path,
             copy: true,
-            permissions: {
-                edit: editEnabled,
-                create: createEnabled,
-                delete: deleteEnabled
-            },
             collection: collection,
-            subcollections: collection.subcollections,
-            callbacks: collection.callbacks,
             updateUrl: true
         });
 
         const onEditClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
             entityId: clickedEntity.id,
             path,
-            permissions: {
-                edit: editEnabled,
-                create: createEnabled,
-                delete: deleteEnabled
-            },
             collection: collection,
-            subcollections: collection.subcollections,
-            callbacks: collection.callbacks,
             updateUrl: true
         });
 
@@ -417,8 +399,14 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                     onEntityDelete={internalOnEntityDelete}
                     onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
                     onClose={() => setDeleteEntityClicked(undefined)}/>}
+
+            {collectionEditorController.collectionEditorViews}
         </>
     );
-}
+    },
+    function areEqual(prevProps: EntityCollectionViewProps<any>, nextProps: EntityCollectionViewProps<any>) {
+        return equal(prevProps, nextProps);
+    }
+) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
 export default EntityCollectionView;

@@ -156,7 +156,7 @@ function ReferencePreviewInternal<M>({
                         return (
                             <Box key={"ref_prev_" + (key as string)}
                                  sx={{
-                                     my: 0.5
+                                     my: listProperties.length > 1 ? 0.5 : 0
                                  }}>
                                 {entity
                                     ? <PropertyPreview

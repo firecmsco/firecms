@@ -145,6 +145,9 @@ export function ArrayContainer<T>({
                                                         </Box>
                                                         <Box display="flex"
                                                              flexDirection={small ? "row" : "column"}
+                                                             sx={{
+                                                                 pl: 1
+                                                             }}
                                                              alignItems="center">
                                                             <IconButton
                                                                 size="small"

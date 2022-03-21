@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import {
     AuthController,
+    CollectionOverrideHandler,
     DataSource,
     EntityCollection,
     Locale,
@@ -8,7 +9,6 @@ import {
     Navigation,
     NavigationBuilder,
     NavigationContext,
-    CollectionOverrideHandler,
     StorageSource,
     TopNavigationEntry,
     TopNavigationResult,
@@ -68,6 +68,9 @@ export function useBuildNavigationContext<UserType>({
     const [resolvedUserNavigation, setResolvedUserNavigation] = useState<Navigation | undefined>();
 
     useEffect(() => {
+        if (configPersistence?.loading) {
+            return;
+        }
         if (!authController.canAccessMainView) {
             setNavigationLoading(false);
             return;
@@ -76,6 +79,7 @@ export function useBuildNavigationContext<UserType>({
         resolveNavigationBuilder({
             navigationOrBuilder,
             authController,
+            collections: configPersistence?.collections ?? [],
             dateTimeFormat,
             locale,
             dataSource,
@@ -87,7 +91,7 @@ export function useBuildNavigationContext<UserType>({
             setNavigationLoading(false);
             setNavigationLoadingError(e);
         });
-    }, [authController.user, authController.canAccessMainView, navigationOrBuilder]);
+    }, [authController.user, authController.canAccessMainView, navigationOrBuilder, configPersistence]);
 
     useEffect(() => {
         if (!configPersistence || (!configPersistence.collections && configPersistence.loading)) {
@@ -248,6 +252,7 @@ export function useBuildNavigationContext<UserType>({
 
 async function resolveNavigationBuilder<UserType = any>({
                                                             navigationOrBuilder,
+                                                            collections,
                                                             authController,
                                                             dateTimeFormat,
                                                             locale,
@@ -256,6 +261,7 @@ async function resolveNavigationBuilder<UserType = any>({
                                                         }:
                                                             {
                                                                 navigationOrBuilder?: Navigation | NavigationBuilder<UserType>,
+                                                                collections: EntityCollection[],
                                                                 authController: AuthController<UserType>,
                                                                 dateTimeFormat?: string,
                                                                 locale?: Locale,
@@ -265,6 +271,7 @@ async function resolveNavigationBuilder<UserType = any>({
     if (typeof navigationOrBuilder === "function") {
         return navigationOrBuilder({
             user: authController.user,
+            collections,
             authController,
             dateTimeFormat,
             locale,
@@ -302,9 +309,10 @@ const resolveNavigation = ({
                 .map((navigationCollection) => {
                     const storedCollection = resolvedFetchedCollections?.find((collection) => collection.path === navigationCollection.path);
                     if (!storedCollection) {
-                        return navigationCollection;
+                        return { ...navigationCollection, deletable: false };
                     } else {
-                        return mergeCollections(navigationCollection, storedCollection);
+                        const mergedCollection = mergeCollections(navigationCollection, storedCollection);
+                        return { ...mergedCollection, deletable: false };
                     }
                 });
             const storedCollections = resolvedFetchedCollections

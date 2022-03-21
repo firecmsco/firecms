@@ -9,7 +9,6 @@ import { User } from "./user";
 import { SnackbarController } from "../hooks";
 import { ConfigurationPersistence } from "./config_persistence";
 import { UserConfigurationPersistence } from "./local_config_persistence";
-import { CollectionEditorController } from "./collection_editor_controller";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -80,10 +79,5 @@ export interface FireCMSContext<UserType extends User = User> {
      * and not defined in code
      */
     userConfigPersistence?: UserConfigurationPersistence;
-
-    /**
-     * Use this controller to edit and create collections
-     */
-    collectionEditorController?: CollectionEditorController;
 
 }

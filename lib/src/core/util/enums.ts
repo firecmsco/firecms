@@ -6,11 +6,9 @@ export function enumToObjectEntries(enumValues: EnumValues): [string | number, s
         : Object.entries<string | EnumValueConfig>(enumValues);
 }
 
-export function getLabelOrConfigFrom(enumValues: EnumValues, key?: string | number): string | EnumValueConfig | undefined {
-    if (!key) return "";
-    return Array.isArray(enumValues)
-        ? enumValues.find((entry) => entry.id === key)
-        : enumValues[key];
+export function getLabelOrConfigFrom(enumValues: EnumValueConfig[], key?: string | number): EnumValueConfig | undefined {
+    if (!key) return undefined;
+    return enumValues.find((entry) => entry.id === key);
 }
 
 export function getColorSchemaKey(enumValues: EnumValueConfig[], key: string | number): ChipColor | undefined {

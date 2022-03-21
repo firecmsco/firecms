@@ -20,7 +20,7 @@ import AddIcon from "@mui/icons-material/Add";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
-import EditIcon from "@mui/icons-material/Edit";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import { Link as ReactLink } from "react-router-dom";
 
@@ -167,6 +167,8 @@ export function FireCMSHomePage() {
                     delete any data</b>, only
                     the collection in the CMS</>}/>
 
+            {collectionEditorController.collectionEditorViews}
+
         </Container>
     );
 }
@@ -223,7 +225,7 @@ function NavigationCard({ entry, onDelete, onEdit }: NavigationCardProps) {
                                         event.stopPropagation();
                                         setMenuAnchorEl(event.currentTarget);
                                     }}>
-                                    <MoreVert/>
+                                    <MoreVert fontSize={"small"}/>
                                 </IconButton>
                             }
 
@@ -235,7 +237,7 @@ function NavigationCard({ entry, onDelete, onEdit }: NavigationCardProps) {
                                         if (onEdit)
                                             onEdit(entry);
                                     }}>
-                                    <EditIcon/>
+                                    <SettingsIcon fontSize={"small"}/>
                                 </IconButton>}
                         </div>
                     </Box>

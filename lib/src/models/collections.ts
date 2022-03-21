@@ -243,8 +243,6 @@ export type WhereFilterOp =
     | "in"
     | "array-contains-any";
 
-
-
 /**
  * Used to define filters applied in collections
  * @category Models

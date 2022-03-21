@@ -26,7 +26,6 @@ import {
 import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
-import { CollectionEditorViews } from "../core/CollectionEditorViews";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -137,7 +136,7 @@ export function FirebaseCMSApp({
                 basePath={basePath}
                 baseCollectionPath={baseCollectionPath}>
                 {({ context, mode, loading }) => {
-
+console.log("ssscdsf", context)
                     const theme = createCMSDefaultTheme({
                         mode,
                         primaryColor,
@@ -166,7 +165,6 @@ export function FirebaseCMSApp({
                                       toolbarExtraWidget={toolbarExtraWidget}>
                                 <NavigationRoutes HomePage={HomePage}/>
                                 <SideEntityDialogs/>
-                                <CollectionEditorViews/>
                             </Scaffold>
                         );
                     }

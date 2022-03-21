@@ -76,7 +76,7 @@ export function NewCollectionEditorDialog<M>({
             PaperProps={{
                 sx: (theme) => ({
                     height: "100%",
-                    "@media (min-height:900px)": {
+                    "@media (min-height:964px)": {
                         maxHeight: "900px"
                     },
                     background: theme.palette.background.default

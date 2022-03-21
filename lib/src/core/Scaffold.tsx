@@ -7,7 +7,6 @@ import { useLocation } from "react-router-dom";
 import { useNavigationContext } from "../hooks";
 import { CircularProgressCenter } from "./components";
 
-
 /**
  * @category Core
  */
@@ -47,74 +46,79 @@ export interface ScaffoldProps {
  * @constructor
  * @category Core
  */
-export function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
 
-    const {
-        children,
-        name,
-        logo,
-        toolbarExtraWidget,
-        Drawer
-    } = props;
+export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
+    function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
 
+        const {
+            children,
+            name,
+            logo,
+            toolbarExtraWidget,
+            Drawer
+        } = props;
 
+        const navigationContext = useNavigationContext();
+        const [drawerOpen, setDrawerOpen] = React.useState(false);
+        const containerRef = useRestoreScroll();
 
-    const navigationContext = useNavigationContext();
-    const [drawerOpen, setDrawerOpen] = React.useState(false);
-    const containerRef = useRestoreScroll();
+        const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
+        const closeDrawer = () => setDrawerOpen(false);
 
-    const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
-    const closeDrawer = () => setDrawerOpen(false);
+        const UsedDrawer = Drawer || FireCMSDrawer;
 
-    const UsedDrawer = Drawer || FireCMSDrawer;
+        return (
+            (<>
+                <nav>
+                    <MuiDrawer
+                        variant="temporary"
+                        anchor={"left"}
+                        open={drawerOpen}
+                        onClose={closeDrawer}
+                        sx={{
+                            width: 280
+                        }}
+                        ModalProps={{
+                            keepMounted: true
+                        }}
+                    >
+                        {!navigationContext.navigation
+                            ? <CircularProgressCenter/>
+                            : <UsedDrawer
+                                logo={logo}
+                                closeDrawer={closeDrawer}/>}
 
-    return (
-        (<>
-            <nav>
-                <MuiDrawer
-                    variant="temporary"
-                    anchor={"left"}
-                    open={drawerOpen}
-                    onClose={closeDrawer}
-                    sx={{
-                        width: 280
-                    }}
-                    ModalProps={{
-                        keepMounted: true
-                    }}
-                >
-                    {!navigationContext.navigation
-                        ? <CircularProgressCenter/>
-                        : <UsedDrawer logo={logo} closeDrawer={closeDrawer}/>}
+                    </MuiDrawer>
+                </nav>
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    width: "100vw",
+                    height: "100vh"
+                }}>
 
-                </MuiDrawer>
-            </nav>
-            <Box sx={{
-                display: "flex",
-                flexDirection: "column",
-                width: "100vw",
-                height: "100vh"
-            }}>
-
-                <FireCMSAppBar title={name}
-                               handleDrawerToggle={handleDrawerToggle}
-                               toolbarExtraWidget={toolbarExtraWidget}/>
-                <Box component={"main"}
-                     sx={{
-                         flexGrow: 1,
-                         width: "100%",
-                         height: "100%",
-                         overflow: "auto"
-                     }}
-                     ref={containerRef}>
-                    {children}
+                    <FireCMSAppBar title={name}
+                                   handleDrawerToggle={handleDrawerToggle}
+                                   toolbarExtraWidget={toolbarExtraWidget}/>
+                    <Box component={"main"}
+                         sx={{
+                             flexGrow: 1,
+                             width: "100%",
+                             height: "100%",
+                             overflow: "auto"
+                         }}
+                         ref={containerRef}>
+                        {children}
+                    </Box>
                 </Box>
-            </Box>
-        </>)
-    );
-
-
-}
+            </>)
+        );
+    },
+    function areEqual(prevProps: PropsWithChildren<ScaffoldProps>, nextProps: PropsWithChildren<ScaffoldProps>) {
+        return prevProps.name === nextProps.name &&
+            prevProps.logo === nextProps.logo;
+    }
+)
 
 function useRestoreScroll() {
 

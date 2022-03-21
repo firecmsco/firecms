@@ -128,7 +128,6 @@ export function PropertyForm({
                 if (existingPropertyIds && values.id && existingPropertyIds.includes(values.id)) {
                     errors.id = "";
                 }
-                console.log("validate prop", values, errors);
                 return {};
             }}
         >
@@ -528,12 +527,12 @@ function PropertyEditView({
             }}>
                 <FormControl fullWidth
                              error={Boolean(selectedWidgetError)}>
-                    <InputLabel id="component-label">Component</InputLabel>
+                    <InputLabel id="component-label">Field</InputLabel>
                     <Select fullWidth
                             defaultOpen={!existing}
                             labelId="component-label"
                             value={selectedWidgetId ?? ""}
-                            label={"Component"}
+                            label={"Field"}
                             disabled={existing}
                             required
                             startAdornment={selectedWidget

@@ -30,9 +30,6 @@ import {
 } from "./internal/useBuildNavigationContext";
 import { useBuildAuthController } from "./internal/useBuildAuthController";
 import { ConfigurationPersistence } from "../models/config_persistence";
-import {
-    useBuildCollectionEditorController
-} from "./internal/useBuildCollectionEditorController";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -203,7 +200,6 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
     });
 
     const sideEntityController = useBuildSideEntityController(navigationContext);
-    const collectionEditorController = useBuildCollectionEditorController();
 
     const loading = authController.authLoading || authController.initialLoading || navigationContext.loading;
 
@@ -233,8 +229,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                             storageSource,
                             snackbarController,
                             configPersistence,
-                            userConfigPersistence,
-                            collectionEditorController
+                            userConfigPersistence
                         };
 
                         return (

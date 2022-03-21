@@ -15,6 +15,7 @@ import {
     Container,
     Dialog,
     Grid,
+    IconButton,
     Paper,
     Typography,
     useMediaQuery,
@@ -46,106 +47,112 @@ import { CollectionDetailsForm } from "./CollectionDetailsForm";
 
 export type CollectionEditorProps<M> = {
     path?: string;
-    handleClose?: (updatedSchema?: EntityCollection<M>) => void;
+    handleClose?: (updatedCollection?: EntityCollection<M>) => void;
     setDirty?: (dirty: boolean) => void;
 };
 
-export function CollectionEditor<M>({
-                                    path,
-                                    handleClose,
-                                    setDirty
-                                }: CollectionEditorProps<M>) {
+export const CollectionEditor = React.memo(
+    function CollectionEditor<M>({
+                                     path,
+                                     handleClose,
+                                     setDirty
+                                 }: CollectionEditorProps<M>) {
 
-    const navigationContext = useNavigationContext();
-    const configurationPersistence = useConfigurationPersistence();
-    const snackbarController = useSnackbarController();
+        const navigationContext = useNavigationContext();
+        const configurationPersistence = useConfigurationPersistence();
+        const snackbarController = useSnackbarController();
 
-    // Use this ref to store which properties have errors
-    const propertyErrorsRef = useRef({});
+        // Use this ref to store which properties have errors
+        const propertyErrorsRef = useRef({});
 
-    if (!configurationPersistence)
-        throw Error("Can't use the collection editor without specifying a `ConfigurationPersistence`");
+        if (!configurationPersistence)
+            throw Error("Can't use the collection editor without specifying a `ConfigurationPersistence`");
 
-    const [collection, setCollection] = React.useState<EntityCollection | undefined>();
-    const [initialLoading, setInitialLoading] = React.useState(false);
-    const [initialError, setInitialError] = React.useState<Error | undefined>();
+        const [collection, setCollection] = React.useState<EntityCollection | undefined>();
+        const [initialLoadingCompleted, setInitialLoadingCompleted] = React.useState(false);
+        const [initialError, setInitialError] = React.useState<Error | undefined>();
 
-    useEffect(() => {
-        try {
-            if (navigationContext.initialised) {
-                if (path) {
-                    setCollection(navigationContext.getCollection(path));
-                } else {
-                    setCollection(undefined);
+        useEffect(() => {
+            try {
+                if (navigationContext.initialised) {
+                    if (path) {
+                        setCollection(navigationContext.getCollection(path));
+                    } else {
+                        setCollection(undefined);
+                    }
+                    setInitialLoadingCompleted(true);
                 }
-                setInitialLoading(true);
-            }
-        } catch (e) {
-            console.error(e);
-            setInitialError(initialError);
-        }
-    }, [path, navigationContext]);
-
-    const saveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
-        return configurationPersistence.saveCollection(collection)
-            .then(() => {
-                setInitialError(undefined);
-                snackbarController.open({
-                    type: "success",
-                    message: "Collection updated"
-                });
-                if (handleClose) {
-                    handleClose(collection);
-                }
-                return true;
-            })
-            .catch((e) => {
+            } catch (e) {
                 console.error(e);
-                snackbarController.open({
-                    type: "error",
-                    title: "Error persisting collection",
-                    message: "Details in the console"
+                setInitialError(initialError);
+            }
+        }, [path, navigationContext.initialised]);
+
+        const saveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
+            // if (handleClose)
+            //     handleClose(collection);
+            // return Promise.resolve(true);
+            return configurationPersistence.saveCollection(collection)
+                .then(() => {
+                    // setInitialError(undefined);
+                    // snackbarController.open({
+                    //     type: "success",
+                    //     message: "Collection updated"
+                    // });
+                    if (handleClose) {
+                        console.log("saveCollection handleClose");
+                        handleClose(collection);
+                    }
+                    return true;
+                })
+                .catch((e) => {
+                    console.error(e);
+                    snackbarController.open({
+                        type: "error",
+                        title: "Error persisting collection",
+                        message: "Details in the console"
+                    });
+                    return false;
                 });
-                return false;
-            });
-    }, [configurationPersistence, handleClose, snackbarController]);
+        }, [handleClose]);
 
-    if (initialError) {
-        return <ErrorView error={`Error fetching collection ${path}`}/>;
-    }
+        if (initialError) {
+            return <ErrorView error={`Error fetching collection ${path}`}/>;
+        }
 
-    if (!navigationContext.initialised || !initialLoading) {
-        return <CircularProgressCenter/>;
-    }
+        if (!navigationContext.initialised || !initialLoadingCompleted) {
+            return <CircularProgressCenter/>;
+        }
 
-    const initialValues: EntityCollection = {
-        path: "",
-        name: "",
-        properties: {},
-        propertiesOrder: []
-    };
+        const initialValues: EntityCollection = {
+            path: "",
+            name: "",
+            properties: {},
+            propertiesOrder: []
+        };
 
-    return (
-        <Formik
-            initialValues={collection ?? initialValues}
-            validationSchema={YupSchema}
-            validate={() => propertyErrorsRef.current}
-            onSubmit={(newCollection: EntityCollection, formikHelpers: FormikHelpers<EntityCollection>) => {
-                saveCollection(newCollection).then(() => {
-                    formikHelpers.resetForm({ values: newCollection });
-                });
-            }}
-        >
-            {({ isSubmitting, dirty, errors, submitCount }) => {
+        return (
+            <Formik
+                initialValues={collection ?? initialValues}
+                validationSchema={YupSchema}
+                validate={() => propertyErrorsRef.current}
+                onSubmit={(newCollection: EntityCollection, formikHelpers: FormikHelpers<EntityCollection>) => {
+                    return saveCollection(newCollection).then(() => {
+                        // formikHelpers.resetForm({ values: newCollection });
+                        return true;
+                    });
+                }}
+            >
+                {({ isSubmitting, dirty, errors, submitCount }) => {
 
-                const showErrors = submitCount > 0;
+                    const showErrors = submitCount > 0;
 
-                const onCancel = handleClose ? () => handleClose(undefined) : undefined;
+                    const onCancel = handleClose ? () => handleClose(undefined) : undefined;
 
-                const onPropertyError = (propertyId: string, namespace?: string, error?: string) => {
-                    propertyErrorsRef.current = setIn(propertyErrorsRef.current, idToPropertiesPath(getFullId(propertyId, namespace)), error);
-                    propertyErrorsRef.current = removeUndefined(propertyErrorsRef.current);
-                };
+                    const onPropertyError = (propertyId: string, namespace?: string, error?: string) => {
+                        propertyErrorsRef.current = setIn(propertyErrorsRef.current, idToPropertiesPath(getFullId(propertyId, namespace)), error);
+                        propertyErrorsRef.current = removeUndefined(propertyErrorsRef.current);
+                    };
 
                 return (
 
@@ -163,7 +170,8 @@ export function CollectionEditor<M>({
                         }}>
                             <CollectionEditorForm showErrors={showErrors}
                                                   onPropertyError={onPropertyError}
-                                                  setDirty={setDirty}/>
+                                                  setDirty={setDirty}
+                            />
                         </Box>
 
                         <CustomDialogActions position={"absolute"}>
@@ -190,70 +198,78 @@ export function CollectionEditor<M>({
                         </CustomDialogActions>
                     </Form>
                 );
-            }}
+                }}
 
-        </Formik>
+            </Formik>
 
-    );
-}
+        );
+    },
+    function areEqual(prevProps: CollectionEditorProps<any>, nextProps: CollectionEditorProps<any>) {
+        return prevProps.path === nextProps.path;
+    }
+)
 
-export function CollectionEditorForm<M>({
-                                        showErrors,
-                                        onPropertyError,
-                                        setDirty
-                                    }: {
+type CollectionEditorFormProps = {
     showErrors: boolean;
     onPropertyError: (propertyKey: string, namespace: string | undefined, error: string | undefined) => void;
     setDirty?: (dirty: boolean) => void;
-}) {
+};
+export const CollectionEditorForm = React.memo(
+    function CollectionEditorForm({
+                                      showErrors,
+                                      onPropertyError,
+                                      setDirty
+                                  }: CollectionEditorFormProps) {
 
-    const {
-        values,
-        setFieldValue,
-        setFieldError,
-        setFieldTouched,
-        errors,
-        dirty
-    } = useFormikContext<EntityCollection>();
+        const {
+            values,
+            setFieldValue,
+            setFieldError,
+            setFieldTouched,
+            errors,
+            dirty
+        } = useFormikContext<EntityCollection>();
 
-    const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
-    const asDialog = !largeLayout
+        const theme = useTheme();
+        const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
+        const asDialog = !largeLayout
 
-    const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
-    const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
-    const selectedPropertyFullId = selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined;
-    const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
+        const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
+        const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
+        const selectedPropertyFullId = selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined;
+        const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
-    const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
-    const [detailsDialogOpen, setDetailsDialogOpen] = useState<boolean>(false);
-    const [height, setHeight] = useState<number>();
+        console.log("selectedPropertyId", selectedPropertyId);
 
-    const onMeasure = useCallback((contentRect: ContentRect) => {
-        if (contentRect?.bounds) {
-            setHeight(contentRect?.bounds.height);
-        }
-    }, []);
+        const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
+        const [detailsDialogOpen, setDetailsDialogOpen] = useState<boolean>(false);
+        const [height, setHeight] = useState<number>();
 
-    useEffect(() => {
-        if (setDirty)
-            setDirty(dirty);
-    }, [dirty])
+        const onMeasure = useCallback((contentRect: ContentRect) => {
+            if (contentRect?.bounds) {
+                setHeight(contentRect?.bounds.height);
+            }
+        }, []);
 
-    const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
-        const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
-        if (!fullId)
-            throw Error("collection editor miss config");
+        useEffect(() => {
+            if (setDirty)
+                setDirty(dirty);
+        }, [dirty])
 
-        setFieldValue(idToPropertiesPath(fullId), undefined, false);
-        const propertiesOrderPath = namespaceToPropertiesOrderPath(namespace);
-        const currentPropertiesOrder: string[] = getIn(values, propertiesOrderPath);
-        setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyId), false);
-        setNewPropertyDialogOpen(false);
+        const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
+            const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
+            if (!fullId)
+                throw Error("collection editor miss config");
 
-        setSelectedPropertyId(undefined);
-        setSelectedPropertyNamespace(undefined);
-    }, [setFieldValue, values]);
+            setFieldValue(idToPropertiesPath(fullId), undefined, false);
+            const propertiesOrderPath = namespaceToPropertiesOrderPath(namespace);
+            const currentPropertiesOrder: string[] = getIn(values, propertiesOrderPath);
+            setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyId), false);
+            setNewPropertyDialogOpen(false);
+
+            setSelectedPropertyId(undefined);
+            setSelectedPropertyNamespace(undefined);
+        }, [setFieldValue, values]);
 
     const onPropertyMove = useCallback((propertiesOrder, namespace) => {
         setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
@@ -320,16 +336,6 @@ export function CollectionEditorForm<M>({
 
     const emptyCollection = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
 
-    const addPropertyButton = <Button
-        color="primary"
-        variant={"outlined"}
-        size={"large"}
-        sx={{ width: "100%" }}
-        onClick={() => setNewPropertyDialogOpen(true)}
-        startIcon={<AddIcon/>}>
-        Add new property
-    </Button>;
-
     const body = (
         <Grid container>
             <Grid item
@@ -359,16 +365,18 @@ export function CollectionEditorForm<M>({
                     </Typography>
 
                     <Box sx={{ ml: 1 }}>
-                        <Button
-                            onClick={() => setDetailsDialogOpen(true)}
-                            size="large">
+                        <IconButton
+                            onClick={() => setDetailsDialogOpen(true)}>
                             <EditIcon/>
+                        </IconButton>
+                    </Box>
+                    <Box sx={{ ml: 1 }}>
+                        <Button
+                            variant={"outlined"}
+                            onClick={() => setNewPropertyDialogOpen(true)}>
+                            <AddIcon/>
                         </Button>
                     </Box>
-                </Box>
-
-                <Box mb={2} mt={3}>
-                    {addPropertyButton}
                 </Box>
 
                 <ErrorBoundary>
@@ -384,9 +392,17 @@ export function CollectionEditorForm<M>({
                         errors={showErrors ? errors : {}}/>
                 </ErrorBoundary>
 
-                {!emptyCollection && <Box my={2}>
-                    {addPropertyButton}
-                </Box>}
+                <Box mt={2}>
+                    <Button
+                        color="primary"
+                        variant={"outlined"}
+                        size={"large"}
+                        sx={{ width: "100%" }}
+                        onClick={() => setNewPropertyDialogOpen(true)}
+                        startIcon={<AddIcon/>}>
+                        Add new property
+                    </Button>
+                </Box>
             </Grid>
 
             {!asDialog && <Grid item xs={12}
@@ -478,4 +494,8 @@ export function CollectionEditorForm<M>({
             )}
         </Measure>
     );
-}
+    },
+    function areEqual(prevProps: CollectionEditorFormProps, nextProps: CollectionEditorFormProps) {
+        return true;
+    }
+)

@@ -31,17 +31,18 @@ interface CMSAppBarProps {
     toolbarExtraWidget?: React.ReactNode;
 }
 
-export function FireCMSAppBar({
-                                  title,
-                                  handleDrawerToggle,
-                                  toolbarExtraWidget
-                              }: CMSAppBarProps) {
+export const FireCMSAppBar = React.memo(
+    function FireCMSAppBar({
+                               title,
+                               handleDrawerToggle,
+                               toolbarExtraWidget
+                           }: CMSAppBarProps) {
 
-    const breadcrumbsContext = useBreadcrumbsContext();
-    const { breadcrumbs } = breadcrumbsContext;
+        const breadcrumbsContext = useBreadcrumbsContext();
+        const { breadcrumbs } = breadcrumbsContext;
 
-    const authController = useAuthController();
-    const { mode, toggleMode } = useModeState();
+        const authController = useAuthController();
+        const { mode, toggleMode } = useModeState();
 
     const initial = authController.user?.displayName
         ? authController.user.displayName[0].toUpperCase()
@@ -155,4 +156,9 @@ export function FireCMSAppBar({
             </AppBar>
         </Slide>
     );
-}
+    },
+    function areEqual(prevProps: CMSAppBarProps, nextProps: CMSAppBarProps) {
+        return prevProps.title === nextProps.title;
+    }
+)
+
