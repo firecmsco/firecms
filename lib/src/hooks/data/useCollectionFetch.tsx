@@ -57,7 +57,7 @@ export interface CollectionFetchResult<M extends { [Key: string]: any }> {
 /**
  * This hook is used to fetch collections using a given collection
  * @param path
- * @param schemaResolver
+ * @param collection
  * @param filterValues
  * @param sortBy
  * @param itemCount

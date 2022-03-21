@@ -154,17 +154,21 @@ function ReferencePreviewInternal<M>({
                         if (!childProperty) return null;
 
                         return (
-                            <div key={"ref_prev_" + (key as string)}>
+                            <Box key={"ref_prev_" + (key as string)}
+                                 sx={{
+                                     my: 0.5
+                                 }}>
                                 {entity
-                                    ? <PropertyPreview propertyKey={key as string}
-                                                       value={entity.values[key as string]}
-                                                       property={childProperty as ResolvedProperty}
-                                                       size={"tiny"}/>
+                                    ? <PropertyPreview
+                                        propertyKey={key as string}
+                                        value={entity.values[key as string]}
+                                        property={childProperty as ResolvedProperty}
+                                        size={"tiny"}/>
                                     : <SkeletonComponent
                                         property={childProperty as ResolvedProperty}
                                         size={"tiny"}/>
                                 }
-                            </div>
+                            </Box>
                         );
                     })}
 

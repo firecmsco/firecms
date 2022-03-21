@@ -16,7 +16,7 @@ const priceBuilder:PropertyBuilder = ({ values }: any) => ({
     description: "Price with range validation"
 });
 
-export const baseProductSchema: EntityCollection = {
+export const baseProductCollection: EntityCollection = {
     path: "product",
     name: "Product",
     properties: {
@@ -34,7 +34,7 @@ export const baseProductSchema: EntityCollection = {
         price: priceBuilder
     }
 };
-export const persistedProductSchema: EntityCollection = {
+export const persistedProductCollection: EntityCollection = {
     path: "product",
     name: "Product persisted",
     properties: {
@@ -74,7 +74,7 @@ export const persistedProductSchema: EntityCollection = {
 
 
 it("Merge collections", () => {
-    const mergedCollection = mergeCollections(baseProductSchema, persistedProductSchema);
+    const mergedCollection = mergeCollections(baseProductCollection, persistedProductCollection);
 
     console.log(mergedCollection)
     expect(mergedCollection).toEqual<EntityCollection>(

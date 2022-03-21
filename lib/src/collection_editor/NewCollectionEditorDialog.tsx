@@ -4,7 +4,7 @@ import { Box, Button, Dialog } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import {
     EntityCollection,
-    SchemaEditorForm,
+    CollectionEditorForm,
     useSnackbarController
 } from "../index";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
@@ -15,19 +15,19 @@ import {
 } from "../hooks/useConfigurationPersistence";
 import { LoadingButton } from "@mui/lab";
 import { removeUndefined } from "../core/util/objects";
-import { SchemaDetailsForm } from "./SchemaDetailsForm";
+import { CollectionDetailsForm } from "./CollectionDetailsForm";
 
-export interface NewSchemaEditorDialogProps {
+export interface NewCollectionEditorDialogProps {
     open: boolean;
     group?: string;
     handleClose: (collection?: EntityCollection) => void;
 }
 
-export function NewSchemaEditorDialog<M>({
+export function NewCollectionEditorDialog<M>({
                                              open,
                                              group,
                                              handleClose
-                                         }: NewSchemaEditorDialogProps) {
+                                         }: NewCollectionEditorDialogProps) {
 
     const configurationPersistence = useConfigurationPersistence();
     const snackbarController = useSnackbarController();
@@ -120,10 +120,10 @@ export function NewSchemaEditorDialog<M>({
                                 flexGrow: 1
                             }}>
                                 {mode === "details" &&
-                                    <SchemaDetailsForm isNewCollection={true}/>}
+                                    <CollectionDetailsForm isNewCollection={true}/>}
 
                                 {mode === "properties" &&
-                                    <SchemaEditorForm
+                                    <CollectionEditorForm
                                         showErrors={submitCount > 0}
                                         onPropertyError={(propertyKey, error) => {
                                             propertyErrorsRef.current = removeUndefined({

@@ -42,19 +42,19 @@ import { PropertyTree } from "./PropertyTree";
 import { ErrorBoundary } from "../core/internal/ErrorBoundary";
 import { LoadingButton } from "@mui/lab";
 import { YupSchema } from "./SchemaYupValidation";
-import { SchemaDetailsForm } from "./SchemaDetailsForm";
+import { CollectionDetailsForm } from "./CollectionDetailsForm";
 
-export type SchemaEditorProps<M> = {
+export type CollectionEditorProps<M> = {
     path?: string;
     handleClose?: (updatedSchema?: EntityCollection<M>) => void;
     setDirty?: (dirty: boolean) => void;
 };
 
-export function SchemaEditor<M>({
+export function CollectionEditor<M>({
                                     path,
                                     handleClose,
                                     setDirty
-                                }: SchemaEditorProps<M>) {
+                                }: CollectionEditorProps<M>) {
 
     const navigationContext = useNavigationContext();
     const configurationPersistence = useConfigurationPersistence();
@@ -161,9 +161,9 @@ export function SchemaEditor<M>({
                             height: "100%",
                             flexGrow: 1
                         }}>
-                            <SchemaEditorForm showErrors={showErrors}
-                                              onPropertyError={onPropertyError}
-                                              setDirty={setDirty}/>
+                            <CollectionEditorForm showErrors={showErrors}
+                                                  onPropertyError={onPropertyError}
+                                                  setDirty={setDirty}/>
                         </Box>
 
                         <CustomDialogActions position={"absolute"}>
@@ -197,7 +197,7 @@ export function SchemaEditor<M>({
     );
 }
 
-export function SchemaEditorForm<M>({
+export function CollectionEditorForm<M>({
                                         showErrors,
                                         onPropertyError,
                                         setDirty
@@ -226,7 +226,7 @@ export function SchemaEditorForm<M>({
     const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
     const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
-    const [schemaDetailsDialogOpen, setSchemaDetailsDialogOpen] = useState<boolean>(false);
+    const [detailsDialogOpen, setDetailsDialogOpen] = useState<boolean>(false);
     const [height, setHeight] = useState<number>();
 
     const onMeasure = useCallback((contentRect: ContentRect) => {
@@ -318,7 +318,7 @@ export function SchemaEditorForm<M>({
                 : undefined
             }/>;
 
-    const emptySchema = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
+    const emptyCollection = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
 
     const addPropertyButton = <Button
         color="primary"
@@ -360,7 +360,7 @@ export function SchemaEditorForm<M>({
 
                     <Box sx={{ ml: 1 }}>
                         <Button
-                            onClick={() => setSchemaDetailsDialogOpen(true)}
+                            onClick={() => setDetailsDialogOpen(true)}
                             size="large">
                             <EditIcon/>
                         </Button>
@@ -384,7 +384,7 @@ export function SchemaEditorForm<M>({
                         errors={showErrors ? errors : {}}/>
                 </ErrorBoundary>
 
-                {!emptySchema && <Box my={2}>
+                {!emptyCollection && <Box my={2}>
                     {addPropertyButton}
                 </Box>}
             </Grid>
@@ -418,7 +418,7 @@ export function SchemaEditorForm<M>({
                                 alignItems: "center",
                                 justifyContent: "center"
                             }}>
-                                {emptySchema
+                                {emptyCollection
                                     ? "Now you can add your first field"
                                     : "Select a field to edit it"}
                             </Box>}
@@ -452,14 +452,14 @@ export function SchemaEditorForm<M>({
                     <Box height={52}/>
 
                     <Dialog
-                        open={schemaDetailsDialogOpen}
-                        onClose={() => setSchemaDetailsDialogOpen(false)}
+                        open={detailsDialogOpen}
+                        onClose={() => setDetailsDialogOpen(false)}
                     >
-                        <SchemaDetailsForm isNewCollection={false}/>
+                        <CollectionDetailsForm isNewCollection={false}/>
                         <CustomDialogActions>
                             <Button
                                 variant="contained"
-                                onClick={() => setSchemaDetailsDialogOpen(false)}> Ok </Button>
+                                onClick={() => setDetailsDialogOpen(false)}> Ok </Button>
                         </CustomDialogActions>
                     </Dialog>
 

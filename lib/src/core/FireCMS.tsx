@@ -15,7 +15,7 @@ import {
     Locale,
     Navigation,
     NavigationBuilder,
-    SchemaOverrideHandler,
+    CollectionOverrideHandler,
     StorageSource,
     UserConfigurationPersistence
 } from "../models";
@@ -89,7 +89,7 @@ export interface FireCMSProps<UserType> {
      *
      * You can also override collections in place, when using {@link useSideEntityController}
      */
-    schemaOverrideHandler?: SchemaOverrideHandler;
+    collectionOverrideHandler?: CollectionOverrideHandler;
 
     /**
      * Format of the dates in the CMS.
@@ -165,7 +165,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         dateTimeFormat,
         locale,
         authDelegate,
-        schemaOverrideHandler,
+        collectionOverrideHandler,
         storageSource,
         dataSource,
         basePath,
@@ -196,7 +196,7 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         locale,
         dataSource,
         storageSource,
-        schemaOverrideHandler,
+        collectionOverrideHandler: collectionOverrideHandler,
         configPersistence,
         userConfigPersistence
     });

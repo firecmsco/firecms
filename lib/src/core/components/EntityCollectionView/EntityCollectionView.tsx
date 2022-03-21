@@ -1,11 +1,10 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Box,
-    Button,
+    IconButton,
     Popover,
     Tooltip,
     Typography,
-    useMediaQuery,
     useTheme
 } from "@mui/material";
 
@@ -15,7 +14,6 @@ import {
     Entity,
     EntityCollection,
     LocalEntityCollection,
-    LocalEntitySchema,
     SelectionController
 } from "../../../models";
 import { CollectionTable, OnColumnResizeParams } from "../CollectionTable";
@@ -43,7 +41,9 @@ import { mergeDeep } from "../../util/objects";
 import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
-import { SchemaEditorDialog } from "../../../schema_editor/SchemaEditorDialog";
+import {
+    CollectionEditorDialog
+} from "../../../collection_editor/CollectionEditorDialog";
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { removeInitialAndTrailingSlashes } from "../../util/navigation_utils";
@@ -63,11 +63,6 @@ export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
      * Entity collection props
      */
     collection: EntityCollection<M>;
-
-    /**
-     * Include an icon to be able to edit this collection
-     */
-    editable?: boolean;
 
 }
 
@@ -116,14 +111,12 @@ export function useSelectionController<M = any>(): SelectionController {
  *
  * @param path
  * @param collection
- * @param editable
  * @constructor
  * @category Components
  */
 export function EntityCollectionView<M extends { [Key: string]: unknown }>({
                                                                                path,
                                                                                collection: baseCollection,
-                                                                               editable
                                                                            }: EntityCollectionViewProps<M>) {
 
     const navigationContext = useNavigationContext();
@@ -137,8 +130,7 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
     return (
         <ErrorBoundary>
             <EntityCollectionViewInternal path={path}
-                                          collection={collection}
-                                          editable={editable}/>
+                                          collection={collection}/>
         </ErrorBoundary>
     );
 
@@ -146,23 +138,20 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
 
 export function EntityCollectionViewInternal<M extends { [Key: string]: unknown }>({
                                                                                        path,
-                                                                                       collection,
-                                                                                       editable: collectionEditable = false,
+                                                                                       collection
                                                                                    }: EntityCollectionViewProps<M>
 ) {
 
     const sideEntityController = useSideEntityController();
     const context = useFireCMSContext();
     const authController = useAuthController();
-    const navigationContext = useNavigationContext();
     const userConfigPersistence = useUserConfigurationPersistence();
 
     const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
-    const schemaEditable = collection.editable ?? true;
+    const collectionEditable = collection.editable ?? true;
 
     const exportable = collection.exportable === undefined || collection.exportable;
 
@@ -170,7 +159,7 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
     const hoverRow = collection.inlineEditing !== undefined && !collection.inlineEditing;
 
     const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
-    const [schemaDialogOpen, setSchemaDialogOpen] = useState<boolean>(false);
+    const [collectionDialogOpen, setCollectionDialogOpen] = useState<boolean>(false);
 
     const selectionController = useSelectionController<M>();
     const usedSelectionController = collection.selectionController ?? selectionController;
@@ -234,13 +223,6 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
         }
     }, [userConfigPersistence]);
 
-    const onSchemaModifiedForUser = useCallback((path: string, partialSchema: LocalEntitySchema<M>) => {
-        if (userConfigPersistence) {
-            const currentStoredConfig = userConfigPersistence.getSchemaConfig(path);
-            userConfigPersistence.onPartialSchemaModified(path, mergeDeep(currentStoredConfig, partialSchema));
-        }
-    }, [userConfigPersistence]);
-
     const onColumnResize = useCallback(({
                                             width,
                                             key
@@ -248,14 +230,14 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
         // Only for property columns
         if (!collection.properties[key]) return;
         const property: Partial<AnyProperty> = { columnWidth: width };
-        const localSchema = { properties: { [key as keyof M]: property } } as LocalEntitySchema<M>;
-        onSchemaModifiedForUser(path, localSchema);
+        const localCollection = { properties: { [key as keyof M]: property } } as LocalEntityCollection<M>;
+        onCollectionModifiedForUser(path, localCollection);
     }, [collection.properties, onCollectionModifiedForUser]);
 
     const onSizeChanged = useCallback((size: CollectionSize) => {
         if (userConfigPersistence)
-            onSchemaModifiedForUser(path, { defaultSize: size })
-    }, [onSchemaModifiedForUser]);
+            onCollectionModifiedForUser(path, { defaultSize: size })
+    }, [onCollectionModifiedForUser]);
 
     const open = anchorEl != null;
 
@@ -404,12 +386,12 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 onColumnResize={onColumnResize}
                 tableRowActionsBuilder={tableRowActionsBuilder}
                 Title={Title}
-                ActionsStart={schemaEditable
+                ActionsStart={collectionEditable
                     ? <Tooltip title={"Edit collection"}>
-                        <Button
-                            onClick={() => setSchemaDialogOpen(true)}>
+                        <IconButton
+                            onClick={() => setCollectionDialogOpen(true)}>
                             <Settings/>
-                        </Button>
+                        </IconButton>
                     </Tooltip>
                     : undefined
                 }
@@ -425,11 +407,11 @@ export function EntityCollectionViewInternal<M extends { [Key: string]: unknown 
                 hoverRow={hoverRow}
             />
 
-            <SchemaEditorDialog open={schemaDialogOpen}
-                                handleClose={(_) => {
-                                    setSchemaDialogOpen(false);
+            <CollectionEditorDialog open={collectionDialogOpen}
+                                    handleClose={(_) => {
+                                    setCollectionDialogOpen(false);
                                 }}
-                                path={path}/>
+                                    path={path}/>
 
 
             {deleteEntityClicked &&

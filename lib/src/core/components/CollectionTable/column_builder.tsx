@@ -29,9 +29,9 @@ import { resolveEnumValues } from "../../util/entities";
 import {
     getResolvedCollection,
     resolveProperty
-} from "../../useBuildCollectionRegistry";
+} from "../../collections";
 
-export type ColumnsFromSchemaProps<M, AdditionalKey extends string, UserType> = {
+export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType> = {
 
     /**
      * Absolute collection path
@@ -123,7 +123,7 @@ type SelectedCellProps<M> =
         entity: Entity<M>
     };
 
-export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserType>({
+export function useBuildColumnsFromCollection<M, AdditionalKey extends string, UserType>({
                                                                                          collection: inputCollection,
                                                                                          additionalColumns,
                                                                                          displayedProperties,
@@ -132,7 +132,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                                                                                          size,
                                                                                          onCellValueChange,
                                                                                          uniqueFieldValidator
-                                                                                     }: ColumnsFromSchemaProps<M, AdditionalKey, UserType>
+                                                                                     }: ColumnsFromCollectionProps<M, AdditionalKey, UserType>
 ): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
 
     const context: FireCMSContext<UserType> = useFireCMSContext();

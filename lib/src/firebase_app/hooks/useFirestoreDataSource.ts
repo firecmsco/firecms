@@ -81,7 +81,7 @@ export function useFirestoreDataSource({
      * @param resolvedCollection
      * @category Firestore
      */
-    function createEntityFromSchema<M extends { [Key: string]: any }>
+    function createEntityFromCollection<M extends { [Key: string]: any }>
     (
         doc: DocumentSnapshot,
         path: string,
@@ -156,7 +156,7 @@ export function useFirestoreDataSource({
                     entityId: docSnapshot.id,
                     values: firestoreToCMSModel(docSnapshot.data())
                 });
-                return createEntityFromSchema(docSnapshot, path, resolvedCollection);
+                return createEntityFromCollection(docSnapshot, path, resolvedCollection);
             });
     }
 
@@ -225,7 +225,7 @@ export function useFirestoreDataSource({
                             path,
                             values: firestoreToCMSModel(doc.data())
                         });
-                        return createEntityFromSchema(doc, path, resolvedCollection);
+                        return createEntityFromCollection(doc, path, resolvedCollection);
                     }));
         },
 
@@ -281,7 +281,7 @@ export function useFirestoreDataSource({
             return onSnapshot(query,
                 {
                     next: (snapshot) => {
-                        onUpdate(snapshot.docs.map((doc) => createEntityFromSchema(doc, path, resolvedCollection)));
+                        onUpdate(snapshot.docs.map((doc) => createEntityFromCollection(doc, path, resolvedCollection)));
                     },
                     error: onError
                 }
@@ -333,7 +333,7 @@ export function useFirestoreDataSource({
                             path,
                             entityId: docSnapshot.id
                         });
-                        onUpdate(createEntityFromSchema(docSnapshot, path, resolvedCollection));
+                        onUpdate(createEntityFromCollection(docSnapshot, path, resolvedCollection));
                     },
                     error: onError
                 }

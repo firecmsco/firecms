@@ -22,11 +22,11 @@ export function prepareCollectionForPersistence<M>(collection: EntityCollection<
 
 export function mergeCollections(target: EntityCollection, source: EntityCollection): EntityCollection {
     const subcollectionsMerged = target.subcollections?.map((targetSubcollection) => {
-        const modifiedSchema = source.subcollections?.find((sourceSubcollection) => sourceSubcollection.path === targetSubcollection.path);
-        if (!modifiedSchema) {
+        const modifiedCollection = source.subcollections?.find((sourceSubcollection) => sourceSubcollection.path === targetSubcollection.path);
+        if (!modifiedCollection) {
             return targetSubcollection;
         } else {
-            return mergeCollections(targetSubcollection, modifiedSchema);
+            return mergeCollections(targetSubcollection, modifiedCollection);
         }
     });
 

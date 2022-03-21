@@ -94,8 +94,8 @@ export interface SideEntityController {
      * At least you need to pass the path of the entity you would like
      * to edit. You can set an entityId if you would like to edit and existing one
      * (or a new one with that id).
-     * If you wish, you can also override the `SchemaConfig` and choose
-     * to override the FireCMS level `SchemaRegistryController`.
+     * If you wish, you can also override the `CollectionOverrideHandler` at
+     * the FireCMS level.
      * @param props
      */
     open: (props: SideEntityPanelProps) => void;

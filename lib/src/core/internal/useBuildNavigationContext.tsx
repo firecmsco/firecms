@@ -8,7 +8,7 @@ import {
     Navigation,
     NavigationBuilder,
     NavigationContext,
-    SchemaOverrideHandler,
+    CollectionOverrideHandler,
     StorageSource,
     TopNavigationEntry,
     TopNavigationResult,
@@ -27,7 +27,7 @@ type BuildNavigationContextProps<UserType> = {
     baseCollectionPath: string,
     authController: AuthController<UserType>;
     navigationOrBuilder?: Navigation | NavigationBuilder<UserType>;
-    schemaOverrideHandler: SchemaOverrideHandler | undefined;
+    collectionOverrideHandler: CollectionOverrideHandler | undefined;
     dateTimeFormat?: string;
     locale?: Locale;
     dataSource: DataSource;
@@ -41,7 +41,7 @@ export function useBuildNavigationContext<UserType>({
                                                         baseCollectionPath,
                                                         authController,
                                                         navigationOrBuilder,
-                                                        schemaOverrideHandler,
+                                                        collectionOverrideHandler,
                                                         dateTimeFormat,
                                                         locale,
                                                         dataSource,
@@ -131,7 +131,7 @@ export function useBuildNavigationContext<UserType>({
 
         let result: Partial<EntityCollection> = {};
 
-        const resolvedProps: Partial<EntityCollection> | undefined = schemaOverrideHandler && schemaOverrideHandler({
+        const resolvedProps: Partial<EntityCollection> | undefined = collectionOverrideHandler && collectionOverrideHandler({
             entityId,
             path: removeInitialAndTrailingSlashes(path)
         });
@@ -157,7 +157,7 @@ export function useBuildNavigationContext<UserType>({
         navigation,
         basePath,
         baseCollectionPath,
-        schemaOverrideHandler
+        collectionOverrideHandler
     ]);
 
     const isUrlCollectionPath = useCallback(
@@ -301,7 +301,7 @@ const resolveNavigation = ({
         if (navigation) {
             const updatedCollections = (navigation?.collections ?? [])
                 .map((navigationCollection) => {
-                    const storedCollection = resolvedFetchedCollections?.find((schema) => schema.path === navigationCollection.path);
+                    const storedCollection = resolvedFetchedCollections?.find((collection) => collection.path === navigationCollection.path);
                     if (!storedCollection) {
                         return navigationCollection;
                     } else {

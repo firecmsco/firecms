@@ -56,8 +56,7 @@ interface ResolvedNavigationEntityCustom<M> {
  * collection, entity or entity custom_view) for the given path. You need to pass the app context
  * that you receive in different callbacks, such as the save hooks.
  *
- * It will take into account the `navigation` provided at the `FireCMS` level, as
- * well as a `schemaResolver` if provided.
+ * It will take into account the `navigation` provided at the `FireCMS` level.
  *
  * @param path
  * @param context
@@ -67,7 +66,6 @@ export function resolveNavigationFrom<M, UserType>({
                                              path,
                                              context
                                          }: { path: string, context: FireCMSContext<UserType> }): Promise<ResolvedNavigationEntry<M>[]> {
-
 
     const dataSource = context.dataSource;
     const navigationContext = context.navigationContext;

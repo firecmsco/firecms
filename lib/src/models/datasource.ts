@@ -175,7 +175,6 @@ export interface DataSource {
     /**
      * Delete an entity
      * @param entity
-     * @param schemaResolver
      * @return was the whole deletion flow successful
      */
     deleteEntity<M>(

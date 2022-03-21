@@ -33,11 +33,11 @@ import Delete from "@mui/icons-material/Delete";
 import { MoreVert } from "@mui/icons-material";
 import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
 import { TopNavigationEntry, TopNavigationResult } from "../../models";
-import { SchemaEditorDialog } from "../../schema_editor/SchemaEditorDialog";
+import { CollectionEditorDialog } from "../../collection_editor/CollectionEditorDialog";
 import {
-    NewSchemaEditorDialog,
-    NewSchemaEditorDialogProps
-} from "../../schema_editor/NewSchemaEditorDialog";
+    NewCollectionEditorDialog,
+    NewCollectionEditorDialogProps
+} from "../../collection_editor/NewCollectionEditorDialog";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -52,7 +52,7 @@ export function FireCMSHomePage() {
     const configurationPersistence = useConfigurationPersistence();
     const configurationPersistenceEnabled = Boolean(configurationPersistence);
 
-    const [newSchemaDialogOpen, setNewSchemaDialogOpen] = useState<Partial<NewSchemaEditorDialogProps> | undefined>();
+    const [newCollectionDialogOpen, setNewCollectionDialogOpen] = useState<Partial<NewCollectionEditorDialogProps> | undefined>();
     const [editSelectedPath, setEditSelectedPath] = useState<string | undefined>();
 
     if (!navigationContext.topLevelNavigation)
@@ -100,7 +100,7 @@ export function FireCMSHomePage() {
                             flexDirection: "column",
                             alignItems: "flex-start"
                         }}
-                        onClick={() => setNewSchemaDialogOpen({
+                        onClick={() => setNewCollectionDialogOpen({
                             open: true,
                             group
                         })}
@@ -169,17 +169,17 @@ export function FireCMSHomePage() {
                     delete any data</b>, only
                     the collection in the CMS</>}/>
 
-            <SchemaEditorDialog open={Boolean(editSelectedPath)}
-                                handleClose={(schema) => {
+            <CollectionEditorDialog open={Boolean(editSelectedPath)}
+                                    handleClose={(collection) => {
                                     setEditSelectedPath(undefined);
                                 }}
-                                path={editSelectedPath as string}/>
+                                    path={editSelectedPath as string}/>
 
-            <NewSchemaEditorDialog
+            <NewCollectionEditorDialog
                 open={false}
-                {...newSchemaDialogOpen}
-                handleClose={(schema) => {
-                    setNewSchemaDialogOpen({ open: false });
+                {...newCollectionDialogOpen}
+                handleClose={(collection) => {
+                    setNewCollectionDialogOpen({ open: false });
                 }}/>
 
         </Container>

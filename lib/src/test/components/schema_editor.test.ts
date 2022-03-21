@@ -1,7 +1,7 @@
 import { EntityCollection } from "../../models";
 import util from "util";
 
-export const productSchema: EntityCollection = {
+export const productCollection: EntityCollection = {
     path: "product",
     name: "Product",
     views: [

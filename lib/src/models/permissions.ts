@@ -71,14 +71,8 @@ export type EntityPermissionsBuilder<M extends { [Key: string]: any }, UserType 
  * @category Models
  */
 export interface ConfigPermissions {
-
     createCollection?: boolean;
-    createSchema?: boolean;
-
     editCollection?: boolean | ((collection: EntityCollection) => boolean);
-    editSchema?: boolean | ((collection: EntityCollection) => boolean);
-
     deleteCollection?: boolean | ((collection: EntityCollection) => boolean);
-    deleteSchema?: boolean | ((collection: EntityCollection) => boolean);
 
 }

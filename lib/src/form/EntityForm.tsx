@@ -362,7 +362,7 @@ function FormInternal<M>({
                 return `${propertyKey}_${hasError}`;
             },
             [collection.properties, errorKeys]),
-        overscan: 8,
+        overscan: 5,
         scrollToFn,
     })
 
@@ -417,13 +417,16 @@ function FormInternal<M>({
                                 style={{
                                     transform: `translateY(${virtualRow.start}px)`
                                 }}
-                                sx={{
+                                sx={theme => ({
                                     width: "100%",
                                     position: "absolute",
                                     top: 0,
                                     left: 0,
-                                    pb: 2
-                                }}
+                                    [theme.breakpoints.down("md")]: {
+                                        pb: 3
+                                    },
+                                    pb: 4
+                                })}
                             >
                                 <CustomIdField customId={collection.customId}
                                                entityId={entityId}
@@ -465,13 +468,16 @@ function FormInternal<M>({
                             style={{
                                 transform: `translateY(${virtualRow.start}px)`
                             }}
-                            sx={{
+                            sx={theme => ({
                                 width: "100%",
                                 position: "absolute",
                                 top: 0,
                                 left: 0,
-                                pb: 2
-                            }}
+                                [theme.breakpoints.down("md")]: {
+                                    pb: 2
+                                },
+                                pb: 3
+                            })}
                         >
                             {buildPropertyField(cmsFormFieldProps)}
                         </Box>

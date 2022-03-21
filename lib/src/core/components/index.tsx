@@ -17,6 +17,6 @@ export * from "./CollectionTable";
 
 export * from "./Table";
 
-export * from "../../schema_editor/SchemaEditor";
+export * from "../../collection_editor/CollectionEditor";
 
 

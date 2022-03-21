@@ -14,15 +14,6 @@ import { EntityReference, EntityValues, GeoPoint } from "./entities";
 import { EntityCollection } from "./collections";
 
 /**
- * @category Models
- */
-export type EntitySchemaResolverProps<M = any> = {
-    entityId?: string,
-    values?: Partial<EntityValues<M>>,
-    previousValues?: Partial<EntityValues<M>>,
-};
-
-/**
  * This is the same entity collection you define, only all the property builders
  * are resolved to regular `Property` objects.
  * @category Models

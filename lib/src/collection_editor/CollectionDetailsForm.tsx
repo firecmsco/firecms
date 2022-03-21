@@ -18,7 +18,7 @@ import { EntityCollection, TopNavigationResult } from "../models";
 import { toSnakeCase } from "../core/util/strings";
 import { useNavigationContext } from "../hooks";
 
-export function SchemaDetailsForm({ isNewCollection }: { isNewCollection: boolean }) {
+export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: boolean }) {
 
     const navigationContext = useNavigationContext();
 

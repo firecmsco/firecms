@@ -5,12 +5,6 @@ import { ResolvedEntityCollection } from "./resolved_entities";
  * Use to resolve the collection properties for specific path, entity id or values.
  * @category Models
  */
-export type LocalEntitySchema<M> = Partial<ResolvedEntityCollection<M>>;
-
-/**
- * Use to resolve the collection properties for specific path, entity id or values.
- * @category Models
- */
 export type LocalEntityCollection<M> = Partial<EntityCollection<M>>;
 
 /**
@@ -21,6 +15,4 @@ export type LocalEntityCollection<M> = Partial<EntityCollection<M>>;
 export interface UserConfigurationPersistence {
     onCollectionModified: <M>(path: string, partialCollection: LocalEntityCollection<M>) => void;
     getCollectionConfig: <M>(path: string) => LocalEntityCollection<M>;
-    onPartialSchemaModified: <M>(id: string, partialCollection: LocalEntitySchema<M>) => void;
-    getSchemaConfig: <M>(id: string) => LocalEntitySchema<M>;
 }

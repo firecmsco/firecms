@@ -5,7 +5,7 @@ import { CMSView } from "../models";
 import {
     EntityCollectionView,
     FireCMSHomePage,
-    SchemaEditor
+    CollectionEditor
 } from "./components";
 import { useNavigationContext } from "../hooks";
 import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
@@ -34,7 +34,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
     const location = useLocation();
     const navigationContext = useNavigationContext();
-    
+
     const navigation = navigationContext.navigation;
 
     if (!navigation)
@@ -87,8 +87,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                       title={collection.name}>
                                       <EntityCollectionView
                                           path={collection.path}
-                                          collection={collection}
-                                          editable={collection.editable}/>
+                                          collection={collection}/>
                                   </BreadcrumbUpdater>
                               }/>;
             }
@@ -105,7 +104,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                   <BreadcrumbUpdater
                                       path={urlPath}
                                       title={collection.name}>
-                                      <SchemaEditor path={collection.path}/>
+                                      <CollectionEditor path={collection.path}/>
                                   </BreadcrumbUpdater>
                               }/>;
             }
@@ -119,7 +118,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                    <BreadcrumbUpdater
                        path={newCollectionPath}
                        title={"New collection"}>
-                       <SchemaEditor/>
+                       <CollectionEditor/>
                    </BreadcrumbUpdater>
                }/>
     );

@@ -27,7 +27,7 @@ import {
     checkInlineEditing,
     OnCellValueChange,
     UniqueFieldValidator,
-    useBuildColumnsFromSchema
+    useBuildColumnsFromCollection
 } from "./column_builder";
 
 const DEFAULT_PAGE_SIZE = 50;
@@ -186,7 +186,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 
     }, [path, collection, resolvedCollection]);
 
-    const { columns, popupFormField } = useBuildColumnsFromSchema({
+    const { columns, popupFormField } = useBuildColumnsFromCollection({
         collection,
         additionalColumns,
         displayedProperties,

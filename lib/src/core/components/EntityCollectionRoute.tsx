@@ -41,12 +41,10 @@ export function EntityCollectionRoute<M extends { [Key: string]: any }>({
 
     if (collection)
         return <EntityCollectionView path={path}
-                                     collection={collection}
-                                     editable={false}/>;
+                                     collection={collection}/>;
 
     else if (storedCollection) {
             return <EntityCollectionView
-                editable={true}
                 path={path}
                 collection={storedCollection}/>;
     } else if (loading)

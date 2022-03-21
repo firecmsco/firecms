@@ -41,7 +41,7 @@ import {
     useSnackbarController
 } from "../../hooks";
 import { canEditEntity } from "../util/permissions";
-import { getResolvedCollection } from "../useBuildCollectionRegistry";
+import { getResolvedCollection } from "../collections";
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as any;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as any;

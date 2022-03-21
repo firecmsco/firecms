@@ -1,6 +1,5 @@
 import {
     LocalEntityCollection,
-    LocalEntitySchema,
     UserConfigurationPersistence
 } from "../../models";
 
@@ -29,21 +28,8 @@ export function useBuildLocalConfigurationPersistence(): UserConfigurationPersis
         return item ? JSON.parse(item) : {};
     }
 
-    function saveStorageSchemaConfig<M>(path: string, data: LocalEntitySchema<M>) {
-        const storageKey = `schema_config_${stripCollectionPath(path)}`;
-        localStorage.setItem(storageKey, JSON.stringify(data));
-    }
-
-    function getSchema<M>(schemaId: string): LocalEntitySchema<M> {
-        const storageKey = `schema_config_${schemaId}`;
-        const item = localStorage.getItem(storageKey);
-        return item ? JSON.parse(item) : {};
-    }
-
     return {
         onCollectionModified: saveStorageCollectionConfig,
         getCollectionConfig: getStorageCollectionConfig,
-        onPartialSchemaModified: saveStorageSchemaConfig,
-        getSchemaConfig: getSchema
     }
 }

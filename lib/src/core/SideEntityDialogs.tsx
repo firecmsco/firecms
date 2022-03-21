@@ -138,7 +138,7 @@ function SideEntityDialog({
                 open={navigationWasBlocked || drawerCloseRequested}
                 handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
                 handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
-                schemaName={collection.name}/>
+                name={collection.name}/>
 
         </>
     );

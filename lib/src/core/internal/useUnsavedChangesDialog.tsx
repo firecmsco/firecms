@@ -65,7 +65,7 @@ export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () =
 
 export interface UnsavedChangesDialogProps {
     open: boolean;
-    schemaName: string;
+    name: string;
     handleOk: () => void;
     handleCancel: () => void;
 }
@@ -74,7 +74,7 @@ export function UnsavedChangesDialog({
                                          open,
                                          handleOk,
                                          handleCancel,
-                                         schemaName
+                                         name
                                      }: UnsavedChangesDialogProps) {
 
     return (
@@ -90,7 +90,7 @@ export function UnsavedChangesDialog({
             </DialogTitle>
             <DialogContent>
                 <DialogContentText >
-                    You have unsaved changes in this <b>{schemaName}</b>.
+                    You have unsaved changes in this <b>{name}</b>.
                 </DialogContentText>
                 <DialogContentText >
                     Are you sure you want to leave this page?

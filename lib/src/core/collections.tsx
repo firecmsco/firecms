@@ -34,8 +34,8 @@ export const getResolvedCollection = <M extends { [Key: string]: any } = any, >
     userConfigPersistence?: UserConfigurationPersistence
 }): ResolvedEntityCollection<M> => {
 
-    const schemaOverride = userConfigPersistence?.getSchemaConfig<M>(path);
-    const storedProperties = getValueInPath(schemaOverride, "properties");
+    const collectionOverride = userConfigPersistence?.getCollectionConfig<M>(path);
+    const storedProperties = getValueInPath(collectionOverride, "properties");
 
     const defaultValues = getDefaultValuesFor(collection.properties);
     const resolvedProperties = resolveProperties<M>({

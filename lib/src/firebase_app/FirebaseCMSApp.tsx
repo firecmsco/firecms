@@ -53,7 +53,7 @@ export function FirebaseCMSApp({
                                    logo,
                                    toolbarExtraWidget,
                                    authentication,
-                                   schemaOverrideHandler,
+                                   collectionOverrideHandler,
                                    navigation,
                                    textSearchController,
                                    allowSkipLogin,
@@ -126,7 +126,7 @@ export function FirebaseCMSApp({
                 authDelegate={authDelegate}
                 authentication={authentication}
                 userConfigPersistence={userConfigPersistence}
-                schemaOverrideHandler={schemaOverrideHandler}
+                collectionOverrideHandler={collectionOverrideHandler}
                 dateTimeFormat={dateTimeFormat}
                 dataSource={dataSource}
                 storageSource={storageSource}

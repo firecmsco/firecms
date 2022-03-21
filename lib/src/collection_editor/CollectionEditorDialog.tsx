@@ -1,20 +1,20 @@
 import * as React from "react";
 import { Dialog } from "@mui/material";
 
-import { SchemaEditor } from "./SchemaEditor";
+import { CollectionEditor } from "./CollectionEditor";
 import { EntityCollection } from "../index";
 
-export interface SchemaEditorDialogProps {
+export interface CollectionEditorDialogProps {
     open: boolean;
     handleClose: (collection?: EntityCollection) => void;
     path: string;
 }
 
-export function SchemaEditorDialog({
+export function CollectionEditorDialog({
                                        open,
                                        handleClose,
                                        path
-                                   }: SchemaEditorDialogProps) {
+                                   }: CollectionEditorDialogProps) {
 
     const [dirty, setDirty] = React.useState(false);
 
@@ -35,9 +35,9 @@ export function SchemaEditorDialog({
                 })
             }}
         >
-            <SchemaEditor path={path}
-                          handleClose={handleClose}
-                          setDirty={setDirty}
+            <CollectionEditor path={path}
+                              handleClose={handleClose}
+                              setDirty={setDirty}
             />
         </Dialog>
     );

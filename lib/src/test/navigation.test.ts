@@ -6,14 +6,6 @@ import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_fr
 
 const collections = (siteConfig.navigation as Navigation).collections as EntityCollection[];
 
-const findSchema = (path: string): EntityCollection => {
-    if(!collections) throw Error();
-    const collection = collections.find((s) => s.path === path);
-    if (!collection)
-        throw Error("Not able to find collection with id: " + path);
-    return collection;
-};
-
 it("collection view matches ok", () => {
 
     const collectionViewFromPath = getCollectionByPath("products", collections);

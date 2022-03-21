@@ -66,14 +66,14 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                       selectedSubpath,
                       copy,
                       width,
-                      ...schemaProps
+                      ...otherProps
                   }: SideEntityPanelProps) => {
 
         if (copy && !entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
-        const updateUrl = schemaProps.updateUrl === undefined ? false : schemaProps.updateUrl;
+        const updateUrl = otherProps.updateUrl === undefined ? false : otherProps.updateUrl;
 
         const cleanPath = removeInitialAndTrailingSlashes(path);
         const newPath = entityId
@@ -115,7 +115,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 copy: copy !== undefined && copy,
                 width,
                 selectedSubpath,
-                ...schemaProps
+                ...otherProps
             };
             const updatedPanels = [...sidePanels, newPanel];
             setSidePanels(updatedPanels);

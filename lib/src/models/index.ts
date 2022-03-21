@@ -9,7 +9,7 @@ export * from "./locales";
 export * from "./user";
 export * from "./colors";
 export * from "./storage";
-export * from "./schema_override";
+export * from "./collection_override";
 export * from "./fields";
 export * from "./datasource";
 export * from "./entity_link_builder";
