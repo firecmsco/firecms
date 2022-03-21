@@ -74,15 +74,15 @@ function SideEntityDialog({
 
     const collection = useMemo(() => {
         if (!props) return undefined;
-        const usedSchema = props.collection;
-        if (!usedSchema) {
-            const collection: EntityCollection | undefined = !props ? undefined : navigationContext.getCollection(props.path, props.entityId);
-            if (!collection) {
+        let usedCollection = props.collection;
+        if (!usedCollection) {
+            usedCollection = !props ? undefined : navigationContext.getCollection(props.path, props.entityId);
+            if (!usedCollection) {
                 console.error("ERROR: No collection found in path ", props.path, "Entity id: ", props.entityId);
                 throw Error("ERROR: No collection found in path " + props.path);
             }
         }
-        return usedSchema;
+        return usedCollection;
     }, [props]);
 
     useEffect(() => {
@@ -110,6 +110,7 @@ function SideEntityDialog({
             <div style={{ width: CONTAINER_WIDTH }}/>
         </SideDialogDrawer>;
     }
+
     return (
         <>
 
