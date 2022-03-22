@@ -169,7 +169,7 @@ module.exports = {
                     ]
                 },
                 gtag: {
-                    trackingID: 'G-NL75PPNYXD'
+                    trackingID: 'G-D4DQQCW88S'
                 }
             }
         ]
