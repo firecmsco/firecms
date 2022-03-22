@@ -58,12 +58,13 @@ export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
     /**
      * Absolute path this collection view points to
      */
-    path: string;
+    fullPath: string;
 
     /**
-     * Entity collection props
+     * Entity collection.
+     * If not specified it will try to be inferred by the path
      */
-    collection: EntityCollection<M>;
+    collection?: EntityCollection<M>;
 
 }
 
@@ -116,21 +117,22 @@ export function useSelectionController<M = any>(): SelectionController {
  * @category Components
  */
 export function EntityCollectionView<M extends { [Key: string]: unknown }>({
-                                                                               path,
+                                                                               fullPath,
                                                                                collection: baseCollection,
                                                                            }: EntityCollectionViewProps<M>) {
 
-    const navigationContext = useNavigationContext();
-    const collectionFromPath = navigationContext.getCollection<M>(path);
-    if (!collectionFromPath) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
-    }
 
-    const collection: EntityCollection<M> = collectionFromPath ?? baseCollection;
+    const navigationContext = useNavigationContext();
+    const collectionFromPath = navigationContext.getCollection<M>(fullPath);
+
+    const collection: EntityCollection<M> | undefined = collectionFromPath ?? baseCollection;
+    if (!collection) {
+        throw Error(`Couldn't find the corresponding collection view for the path: ${fullPath}`);
+    }
 
     return (
         <ErrorBoundary>
-            <EntityCollectionViewInternal path={path}
+            <EntityCollectionViewInternal fullPath={fullPath}
                                           collection={collection}/>
         </ErrorBoundary>
     );
@@ -139,11 +141,15 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
 
 export const EntityCollectionViewInternal = React.memo(
     function EntityCollectionViewInternal<M extends { [Key: string]: unknown }>({
-                                                                                    path,
+                                                                                    fullPath,
                                                                                     collection
-                                                                                }: EntityCollectionViewProps<M>
+                                                                                }: {
+                                                                                    fullPath: string;
+                                                                                    collection: EntityCollection<M>;
+                                                                                }
     ) {
 
+        console.log("EntityCollectionViewInternal", fullPath, collection);
         const sideEntityController = useSideEntityController();
         const context = useFireCMSContext();
         const authController = useAuthController();
@@ -154,255 +160,254 @@ export const EntityCollectionViewInternal = React.memo(
 
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
-    const collectionEditable = collection.editable ?? true;
+        const collectionEditable = collection.editable ?? true;
 
-    const exportable = collection.exportable === undefined || collection.exportable;
+        const exportable = collection.exportable === undefined || collection.exportable;
 
-    const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
-    const hoverRow = collection.inlineEditing !== undefined && !collection.inlineEditing;
+        const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
+        const hoverRow = collection.inlineEditing !== undefined && !collection.inlineEditing;
 
-    const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+        const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
-    const selectionController = useSelectionController<M>();
-    const usedSelectionController = collection.selectionController ?? selectionController;
-    const {
-        selectedEntities,
-        toggleEntitySelection,
-        isEntitySelected,
-        setSelectedEntities
-    } = usedSelectionController;
+        const selectionController = useSelectionController<M>();
+        const usedSelectionController = collection.selectionController ?? selectionController;
+        const {
+            selectedEntities,
+            toggleEntitySelection,
+            isEntitySelected,
+            setSelectedEntities
+        } = usedSelectionController;
 
-    useEffect(() => {
-        setDeleteEntityClicked(undefined);
-    }, [selectedEntities]);
+        useEffect(() => {
+            setDeleteEntityClicked(undefined);
+        }, [selectedEntities]);
 
-    const onEntityClick = useCallback((entity: Entity<M>) => {
-        return sideEntityController.open({
-            entityId: entity.id,
-            path,
-            collection: collection,
-            updateUrl: true
-        });
-    }, [path, collection, collection]);
+        const onEntityClick = useCallback((entity: Entity<M>) => {
+            return sideEntityController.open({
+                entityId: entity.id,
+                path: fullPath,
+                collection: collection,
+                updateUrl: true
+            });
+        }, [fullPath, collection, collection]);
 
-    const onNewClick = useCallback(() =>
-        sideEntityController.open({
-            path,
-            collection: collection,
-            updateUrl: true
-        }), [path, collection, collection]);
+        const onNewClick = useCallback(() =>
+            sideEntityController.open({
+                path: fullPath,
+                collection: collection,
+                updateUrl: true
+            }), [fullPath, collection, collection]);
 
-    const onMultipleDeleteClick = useCallback(() => {
-        setDeleteEntityClicked(selectedEntities);
-    }, []);
+        const onMultipleDeleteClick = useCallback(() => {
+            setDeleteEntityClicked(selectedEntities);
+        }, []);
 
-    const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {
-        setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
-    }, [selectedEntities, setSelectedEntities]);
+        const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {
+            setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
+        }, [selectedEntities, setSelectedEntities]);
 
-    const internalOnMultipleEntitiesDelete = useCallback((_path: string, entities: Entity<M>[]) => {
-        setSelectedEntities([]);
-        setDeleteEntityClicked(undefined);
-    }, [setSelectedEntities]);
+        const internalOnMultipleEntitiesDelete = useCallback((_path: string, entities: Entity<M>[]) => {
+            setSelectedEntities([]);
+            setDeleteEntityClicked(undefined);
+        }, [setSelectedEntities]);
 
-    const checkInlineEditing = useCallback((entity: Entity<any>) => {
-        if (!canEditEntity(collection.permissions, entity, authController, path, context)) {
-            return false;
-        }
-        return collection.inlineEditing === undefined || collection.inlineEditing;
-    }, [collection.inlineEditing, collection.permissions, path]);
-
-    const onCollectionModifiedForUser = useCallback((path: string, partialCollection: LocalEntityCollection<M>) => {
-        if (userConfigPersistence) {
-            const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
-            userConfigPersistence.onCollectionModified(path, mergeDeep(currentStoredConfig, partialCollection));
-        }
-    }, [userConfigPersistence]);
-
-    const onColumnResize = useCallback(({
-                                            width,
-                                            key
-                                        }: OnColumnResizeParams) => {
-        // Only for property columns
-        if (!collection.properties[key]) return;
-        const property: Partial<AnyProperty> = { columnWidth: width };
-        const localCollection = { properties: { [key as keyof M]: property } } as LocalEntityCollection<M>;
-        onCollectionModifiedForUser(path, localCollection);
-    }, [collection.properties, onCollectionModifiedForUser]);
-
-    const onSizeChanged = useCallback((size: CollectionSize) => {
-        if (userConfigPersistence)
-            onCollectionModifiedForUser(path, { defaultSize: size })
-    }, [onCollectionModifiedForUser]);
-
-    const open = anchorEl != null;
-
-    const Title = useMemo(() => (
-        <Box sx={{
-            display: "flex",
-            flexDirection: "row",
-            "& > *:not(:last-child)": {
-                [theme.breakpoints.down("md")]: {
-                    mr: theme.spacing(1)
-                },
-                mr: theme.spacing(2)
+        const checkInlineEditing = useCallback((entity: Entity<any>) => {
+            if (!canEditEntity(collection.permissions, entity, authController, fullPath, context)) {
+                return false;
             }
-        }}>
-            <Box>
-                <Typography
-                    variant="h6"
-                    sx={{
-                        lineHeight: "1.0",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        maxWidth: "160px",
-                        cursor: collection.description ? "pointer" : "inherit"
-                    }}
-                    onClick={collection.description
-                        ? (e) => {
-                            setAnchorEl(e.currentTarget);
-                            e.stopPropagation();
-                        }
-                        : undefined}
-                >
-                    {`${collection.name}`}
-                </Typography>
-                <Typography
-                    sx={{
-                        display: "block",
-                        textOverflow: "ellipsis",
-                        whiteSpace: "nowrap",
-                        overflow: "hidden",
-                        maxWidth: "160px",
-                        direction: "rtl",
-                        textAlign: "left"
-                    }}
-                    variant={"caption"}
-                    color={"textSecondary"}>
-                    {`/${removeInitialAndTrailingSlashes(path)}/`}
-                </Typography>
+            return collection.inlineEditing === undefined || collection.inlineEditing;
+        }, [collection.inlineEditing, collection.permissions, fullPath]);
 
-                {collection.description &&
-                    <Popover
-                        id={"info-dialog"}
-                        open={open}
-                        anchorEl={anchorEl}
-                        elevation={1}
-                        onClose={() => {
-                            setAnchorEl(null);
-                        }}
-                        anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "center"
-                        }}
-                        transformOrigin={{
-                            vertical: "top",
-                            horizontal: "center"
-                        }}
-                    >
+        const onCollectionModifiedForUser = useCallback((path: string, partialCollection: LocalEntityCollection<M>) => {
+            if (userConfigPersistence) {
+                const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
+                userConfigPersistence.onCollectionModified(path, mergeDeep(currentStoredConfig, partialCollection));
+            }
+        }, [userConfigPersistence]);
 
-                        <Box m={2}>
-                            <Markdown source={collection.description}/>
-                        </Box>
+        const onColumnResize = useCallback(({
+                                                width,
+                                                key
+                                            }: OnColumnResizeParams) => {
+            // Only for property columns
+            if (!collection.properties[key]) return;
+            const property: Partial<AnyProperty> = { columnWidth: width };
+            const localCollection = { properties: { [key as keyof M]: property } } as LocalEntityCollection<M>;
+            onCollectionModifiedForUser(fullPath, localCollection);
+        }, [collection.properties, onCollectionModifiedForUser, fullPath]);
 
-                    </Popover>
+        const onSizeChanged = useCallback((size: CollectionSize) => {
+            if (userConfigPersistence)
+                onCollectionModifiedForUser(fullPath, { defaultSize: size })
+        }, [onCollectionModifiedForUser, fullPath, userConfigPersistence]);
+
+        const open = anchorEl != null;
+
+        const Title = useMemo(() => (
+            <Box sx={{
+                display: "flex",
+                flexDirection: "row",
+                "& > *:not(:last-child)": {
+                    [theme.breakpoints.down("md")]: {
+                        mr: theme.spacing(1)
+                    },
+                    mr: theme.spacing(2)
                 }
+            }}>
+                <Box>
+                    <Typography
+                        variant="h6"
+                        sx={{
+                            lineHeight: "1.0",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            maxWidth: "160px",
+                            cursor: collection.description ? "pointer" : "inherit"
+                        }}
+                        onClick={collection.description
+                            ? (e) => {
+                                setAnchorEl(e.currentTarget);
+                                e.stopPropagation();
+                            }
+                            : undefined}
+                    >
+                        {`${collection.name}`}
+                    </Typography>
+                    <Typography
+                        sx={{
+                            display: "block",
+                            textOverflow: "ellipsis",
+                            whiteSpace: "nowrap",
+                            overflow: "hidden",
+                            maxWidth: "160px",
+                            direction: "rtl",
+                            textAlign: "left"
+                        }}
+                        variant={"caption"}
+                        color={"textSecondary"}>
+                        {`/${removeInitialAndTrailingSlashes(fullPath)}/`}
+                    </Typography>
+
+                    {collection.description &&
+                        <Popover
+                            id={"info-dialog"}
+                            open={open}
+                            anchorEl={anchorEl}
+                            elevation={1}
+                            onClose={() => {
+                                setAnchorEl(null);
+                            }}
+                            anchorOrigin={{
+                                vertical: "bottom",
+                                horizontal: "center"
+                            }}
+                            transformOrigin={{
+                                vertical: "top",
+                                horizontal: "center"
+                            }}
+                        >
+
+                            <Box m={2}>
+                                <Markdown source={collection.description}/>
+                            </Box>
+
+                        </Popover>
+                    }
+
+                </Box>
 
             </Box>
+        ), [collection.description, collection.name, fullPath, open, anchorEl]);
 
-        </Box>
-    ), [collection.description, collection.name, path, open, anchorEl]);
+        const tableRowActionsBuilder = useCallback(({
+                                                        entity,
+                                                        size
+                                                    }: { entity: Entity<any>, size: CollectionSize }) => {
 
-    const tableRowActionsBuilder = useCallback(({
-                                                    entity,
-                                                    size
-                                                }: { entity: Entity<any>, size: CollectionSize }) => {
+            const isSelected = isEntitySelected(entity);
 
-        const isSelected = isEntitySelected(entity);
+            const createEnabled = canCreateEntity(collection.permissions, authController, fullPath, context);
+            const deleteEnabled = canDeleteEntity(collection.permissions, entity, authController, fullPath, context);
 
-        const createEnabled = canCreateEntity(collection.permissions, authController, path, context);
-        const editEnabled = canEditEntity(collection.permissions, entity, authController, path, context);
-        const deleteEnabled = canDeleteEntity(collection.permissions, entity, authController, path, context);
+            const onCopyClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
+                entityId: clickedEntity.id,
+                path: fullPath,
+                copy: true,
+                collection: collection,
+                updateUrl: true
+            });
 
-        const onCopyClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
-            entityId: clickedEntity.id,
-            path,
-            copy: true,
-            collection: collection,
-            updateUrl: true
-        });
+            const onEditClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
+                entityId: clickedEntity.id,
+                path: fullPath,
+                collection: collection,
+                updateUrl: true
+            });
 
-        const onEditClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
-            entityId: clickedEntity.id,
-            path,
-            collection: collection,
-            updateUrl: true
-        });
+            return (
+                <CollectionRowActions
+                    entity={entity}
+                    isSelected={isSelected}
+                    selectionEnabled={selectionEnabled}
+                    size={size}
+                    toggleEntitySelection={toggleEntitySelection}
+                    onEditClicked={onEditClicked}
+                    onCopyClicked={createEnabled ? onCopyClicked : undefined}
+                    onDeleteClicked={deleteEnabled ? setDeleteEntityClicked : undefined}
+                />
+            );
+
+        }, [usedSelectionController, collection.permissions, collection, authController, fullPath]);
 
         return (
-            <CollectionRowActions
-                entity={entity}
-                isSelected={isSelected}
-                selectionEnabled={selectionEnabled}
-                size={size}
-                toggleEntitySelection={toggleEntitySelection}
-                onEditClicked={onEditClicked}
-                onCopyClicked={createEnabled ? onCopyClicked : undefined}
-                onDeleteClicked={deleteEnabled ? setDeleteEntityClicked : undefined}
-            />
+            <>
+
+                <CollectionTable
+                    key={`collection_table_${fullPath}`}
+                    path={fullPath}
+                    collection={collection}
+                    onSizeChanged={onSizeChanged}
+                    inlineEditing={checkInlineEditing}
+                    onEntityClick={onEntityClick}
+                    onColumnResize={onColumnResize}
+                    tableRowActionsBuilder={tableRowActionsBuilder}
+                    Title={Title}
+                    ActionsStart={collectionEditable && collectionEditorController
+                        ? <Tooltip title={"Edit collection"}>
+                            <IconButton
+                                onClick={() => collectionEditorController?.editCollection(fullPath)}>
+                                <Settings/>
+                            </IconButton>
+                        </Tooltip>
+                        : undefined
+                    }
+                    Actions={<EntityCollectionViewActions
+                        collection={collection}
+                        exportable={exportable}
+                        onMultipleDeleteClick={onMultipleDeleteClick}
+                        onNewClick={onNewClick}
+                        path={fullPath}
+                        selectedEntities={selectedEntities}
+                        selectionController={usedSelectionController}
+                        selectionEnabled={selectionEnabled}/>}
+                    hoverRow={hoverRow}
+                />
+
+                {deleteEntityClicked &&
+                    <DeleteEntityDialog
+                        entityOrEntitiesToDelete={deleteEntityClicked}
+                        path={fullPath}
+                        collection={collection}
+                        callbacks={collection.callbacks}
+                        open={!!deleteEntityClicked}
+                        onEntityDelete={internalOnEntityDelete}
+                        onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
+                        onClose={() => setDeleteEntityClicked(undefined)}/>}
+
+                {collectionEditorController.collectionEditorViews}
+            </>
         );
-
-    }, [usedSelectionController, collection.permissions, collection, authController, path]);
-
-    return (
-        <>
-
-            <CollectionTable
-                key={`collection_table_${path}`}
-                path={path}
-                collection={collection}
-                onSizeChanged={onSizeChanged}
-                inlineEditing={checkInlineEditing}
-                onEntityClick={onEntityClick}
-                onColumnResize={onColumnResize}
-                tableRowActionsBuilder={tableRowActionsBuilder}
-                Title={Title}
-                ActionsStart={collectionEditable && collectionEditorController
-                    ? <Tooltip title={"Edit collection"}>
-                        <IconButton
-                            onClick={() => collectionEditorController?.editCollection(path)}>
-                            <Settings/>
-                        </IconButton>
-                    </Tooltip>
-                    : undefined
-                }
-                Actions={<EntityCollectionViewActions
-                    collection={collection}
-                    exportable={exportable}
-                    onMultipleDeleteClick={onMultipleDeleteClick}
-                    onNewClick={onNewClick}
-                    path={path}
-                    selectedEntities={selectedEntities}
-                    selectionController={usedSelectionController}
-                    selectionEnabled={selectionEnabled}/>}
-                hoverRow={hoverRow}
-            />
-
-            {deleteEntityClicked &&
-                <DeleteEntityDialog
-                    entityOrEntitiesToDelete={deleteEntityClicked}
-                    path={path}
-                    collection={collection}
-                    callbacks={collection.callbacks}
-                    open={!!deleteEntityClicked}
-                    onEntityDelete={internalOnEntityDelete}
-                    onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
-                    onClose={() => setDeleteEntityClicked(undefined)}/>}
-
-            {collectionEditorController.collectionEditorViews}
-        </>
-    );
     },
     function areEqual(prevProps: EntityCollectionViewProps<any>, nextProps: EntityCollectionViewProps<any>) {
         return equal(prevProps, nextProps);

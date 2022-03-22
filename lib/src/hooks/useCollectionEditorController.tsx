@@ -20,7 +20,7 @@ export const useCollectionEditorController = (): CollectionEditorController => {
         open: boolean,
         group?: string
     }>();
-    const [editedCollectionPath, setEditCollectionPath] = React.useState<string | undefined>();
+    const [editedCollectionPath, setEditedCollectionPath] = React.useState< string  | undefined>();
 
     const openNewCollectionDialog = React.useCallback(({ group }) => {
         setNewCollectionDialog({ open: true, group });
@@ -31,8 +31,7 @@ export const useCollectionEditorController = (): CollectionEditorController => {
     }, []);
 
     return {
-        editedCollectionPath,
-        editCollection: setEditCollectionPath,
+        editCollection: setEditedCollectionPath,
         newCollectionDialog,
         openNewCollectionDialog,
         closeNewCollectionDialog,
@@ -41,9 +40,9 @@ export const useCollectionEditorController = (): CollectionEditorController => {
                 <CollectionEditorDialog
                     open={Boolean(editedCollectionPath)}
                     handleClose={(collection) => {
-                        setEditCollectionPath(undefined);
+                        setEditedCollectionPath(undefined);
                     }}
-                    path={editedCollectionPath as string}/>
+                    path={editedCollectionPath}/>
 
                 <NewCollectionEditorDialog
                     open={false}

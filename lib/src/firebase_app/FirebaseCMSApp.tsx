@@ -54,7 +54,8 @@ export function FirebaseCMSApp({
                                    toolbarExtraWidget,
                                    authentication,
                                    collectionOverrideHandler,
-                                   navigation,
+                                   collections,
+                                   views,
                                    textSearchController,
                                    allowSkipLogin,
                                    signInOptions = DEFAULT_SIGN_IN_OPTIONS,
@@ -122,7 +123,8 @@ export function FirebaseCMSApp({
     return (
         <BrowserRouter basename={basePath}>
             <FireCMS
-                navigation={navigation}
+                collections={collections}
+                views={views}
                 authDelegate={authDelegate}
                 authentication={authentication}
                 userConfigPersistence={userConfigPersistence}
@@ -136,7 +138,7 @@ export function FirebaseCMSApp({
                 basePath={basePath}
                 baseCollectionPath={baseCollectionPath}>
                 {({ context, mode, loading }) => {
-console.log("ssscdsf", context)
+
                     const theme = createCMSDefaultTheme({
                         mode,
                         primaryColor,
@@ -160,9 +162,10 @@ console.log("ssscdsf", context)
                         );
                     } else {
                         component = (
-                            <Scaffold name={name}
-                                      logo={logo}
-                                      toolbarExtraWidget={toolbarExtraWidget}>
+                            <Scaffold
+                                name={name}
+                                logo={logo}
+                                toolbarExtraWidget={toolbarExtraWidget}>
                                 <NavigationRoutes HomePage={HomePage}/>
                                 <SideEntityDialogs/>
                             </Scaffold>

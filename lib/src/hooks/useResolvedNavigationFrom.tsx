@@ -68,8 +68,7 @@ export function resolveNavigationFrom<M, UserType>({
                                          }: { path: string, context: FireCMSContext<UserType> }): Promise<ResolvedNavigationEntry<M>[]> {
 
     const dataSource = context.dataSource;
-    const navigationContext = context.navigationContext;
-    const navigation = context.navigationContext.navigation;
+    const navigation = context.navigationContext;
 
     if (!navigation) {
         throw Error("Calling getNavigationFrom, but main navigation has not yet been initialised");
@@ -85,7 +84,7 @@ export function resolveNavigationFrom<M, UserType>({
             if (entry.type === "collection") {
                 return Promise.resolve(entry);
             } else if (entry.type === "entity") {
-                const collection = navigationContext.getCollection(entry.path, entry.entityId);
+                const collection = navigation.getCollection(entry.path, entry.entityId);
                 if (!collection) {
                     throw Error(`No collection defined in the navigation for the entity with path ${entry.path}`);
                 }
@@ -143,8 +142,7 @@ export function useResolvedNavigationFrom<M, UserType>(
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
 
     useEffect(() => {
-
-        const navigation = context.navigationContext.navigation;
+        const navigation = context.navigationContext;
         if (navigation) {
             setDataLoading(true);
             setDataLoadingError(undefined);
@@ -158,7 +156,7 @@ export function useResolvedNavigationFrom<M, UserType>(
 
     }, [path, context]);
 
-    if (!context.navigationContext.navigation) {
+    if (!context.navigationContext) {
         return { dataLoading: true };
     }
 

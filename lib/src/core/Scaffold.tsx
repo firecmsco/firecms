@@ -82,7 +82,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                             keepMounted: true
                         }}
                     >
-                        {!navigationContext.navigation
+                        {navigationContext.loading
                             ? <CircularProgressCenter/>
                             : <UsedDrawer
                                 logo={logo}
@@ -134,12 +134,13 @@ function useRestoreScroll() {
     };
 
     useEffect(() => {
-        if (!containerRef.current) return;
-        containerRef.current.addEventListener('scroll', handleScroll, { passive: true });
+        const container = containerRef.current;
+        if (!container) return;
+        container.addEventListener("scroll", handleScroll, { passive: true });
 
         return () => {
-            if (containerRef.current)
-                containerRef.current.removeEventListener('scroll', handleScroll);
+            if (container)
+                container.removeEventListener("scroll", handleScroll);
         };
     }, [containerRef, location]);
 
@@ -154,4 +155,3 @@ function useRestoreScroll() {
 
     return containerRef;
 }
-

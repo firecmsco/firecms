@@ -9,7 +9,7 @@ export type OnColumnResizeParams = { width: number, key: string };
 /**
  * @category Collection components
  */
-export interface CollectionTableProps<M extends { [Key: string]: any }, AdditionalKey extends string = string> {
+export interface CollectionTableProps<M extends { [Key: string]: any }> {
 
     /**
      * Absolute collection path
@@ -24,7 +24,7 @@ export interface CollectionTableProps<M extends { [Key: string]: any }, Addition
     /**
      * Can the table be edited inline
      */
-    inlineEditing: ((entity: Entity<any>) => boolean) | boolean;
+    inlineEditing: ((entity: Entity<M>) => boolean) | boolean;
 
     /**
      * List of entities that will be displayed on top, no matter the ordering.

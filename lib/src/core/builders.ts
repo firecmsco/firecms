@@ -10,8 +10,6 @@ import {
     EnumValues,
     GeopointProperty,
     MapProperty,
-    Navigation,
-    NavigationBuilder,
     NumberProperty,
     Properties,
     PropertiesOrBuilder,
@@ -21,18 +19,6 @@ import {
     StringProperty,
     User
 } from "../models";
-
-/**
- * Identity function we use to defeat the type system of Typescript and build
- * navigation objects with all its properties
- * @param navigation
- * @category Builder
- */
-export function buildNavigation<UserType>(
-    navigation: Navigation | NavigationBuilder<UserType>
-): Navigation | NavigationBuilder<UserType> {
-    return navigation;
-}
 
 /**
  * Identity function we use to defeat the type system of Typescript and build

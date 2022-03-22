@@ -12,7 +12,7 @@ export interface ConfigurationPersistence {
 
     getCollection: <M>(path: string) => Promise<EntityCollection<M>>;
 
-    saveCollection: <M>(collection: EntityCollection<M>) => Promise<void>;
+    saveCollection: <M>(path: string, collection: EntityCollection<M>) => Promise<void>;
 
     deleteCollection: <M>(path: string) => Promise<void>;
 

@@ -18,6 +18,7 @@ import {
     prepareCollectionForPersistence,
     sortProperties
 } from "../../core/util/collections";
+import { stripCollectionPath } from "../../core/util/paths";
 
 /**
  * @category Firebase
@@ -81,7 +82,8 @@ export function useBuildFirestoreConfigurationPersistence({
 
     const getCollection = useCallback(<M extends { [Key: string]: any }>(path: string): Promise<EntityCollection<M>> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const ref = doc(firestore, configPath, "config", "collections", path);
+        const strippedPath = stripCollectionPath(path).split("/").join("/collections/");
+        const ref = doc(firestore, configPath, "config", "collections", strippedPath);
         return getDoc(ref).then((doc) => doc.data() as EntityCollection<M>);
     }, [firestore]);
 
@@ -91,11 +93,11 @@ export function useBuildFirestoreConfigurationPersistence({
         return deleteDoc(ref);
     }, [firestore]);
 
-    const saveCollection = useCallback(<M extends { [Key: string]: any }>(collectionData: EntityCollection<M>): Promise<void> => {
+    const saveCollection = useCallback(<M extends { [Key: string]: any }>(path: string, collectionData: EntityCollection<M>): Promise<void> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const cleanedCollection = prepareCollectionForPersistence(collectionData);
-        console.log("saveCollection", cleanedCollection);
-        const ref = doc(firestore, configPath, "config", "collections", collectionData.path);
+        const strippedPath = stripCollectionPath(path).split("/").join("/collections/");
+        const ref = doc(firestore, configPath, "config", "collections", strippedPath);
         return setDoc(ref, cleanedCollection, { merge: true });
     }, [firestore]);
 

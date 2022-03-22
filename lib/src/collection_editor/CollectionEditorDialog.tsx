@@ -10,14 +10,14 @@ import {
 export interface CollectionEditorDialogProps {
     open: boolean;
     handleClose: (collection?: EntityCollection) => void;
-    path: string;
+    path?: string;
 }
 
 export const CollectionEditorDialog = React.memo(
     function CollectionEditorDialog({
                                         open,
                                         handleClose,
-                                        path
+                                        path,
                                     }: CollectionEditorDialogProps) {
 
         const collectionEditorController = useCollectionEditorController();
@@ -43,10 +43,10 @@ export const CollectionEditorDialog = React.memo(
                     })
                 }}
             >
-                <CollectionEditor path={path}
-                                  handleClose={handleClose}
-                                  setDirty={setDirty}
-                />
+                {path && <CollectionEditor path={path}
+                                   handleClose={handleClose}
+                                   setDirty={setDirty}
+                />}
             </Dialog>
         );
     }

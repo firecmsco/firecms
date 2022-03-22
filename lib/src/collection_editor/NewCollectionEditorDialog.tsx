@@ -3,8 +3,8 @@ import { useCallback, useRef, useState } from "react";
 import { Box, Button, Dialog } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import {
-    EntityCollection,
     CollectionEditorForm,
+    EntityCollection,
     useSnackbarController
 } from "../index";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
@@ -16,18 +16,21 @@ import {
 import { LoadingButton } from "@mui/lab";
 import { removeUndefined } from "../core/util/objects";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
+import { removeInitialAndTrailingSlashes } from "../core/util/navigation_utils";
 
 export interface NewCollectionEditorDialogProps {
     open: boolean;
     group?: string;
+    parentPath?: string;
     handleClose: (collection?: EntityCollection) => void;
 }
 
 export function NewCollectionEditorDialog<M>({
-                                             open,
-                                             group,
-                                             handleClose
-                                         }: NewCollectionEditorDialogProps) {
+                                                 open,
+                                                 group,
+                                                 parentPath,
+                                                 handleClose
+                                             }: NewCollectionEditorDialogProps) {
 
     const configurationPersistence = useConfigurationPersistence();
     const snackbarController = useSnackbarController();
@@ -43,7 +46,8 @@ export function NewCollectionEditorDialog<M>({
     const [error, setError] = React.useState<Error | undefined>();
 
     const saveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
-        return configurationPersistence.saveCollection(collection)
+        const fullPath = parentPath ? removeInitialAndTrailingSlashes(parentPath) + "/" + collection.path : collection.path;
+        return configurationPersistence.saveCollection(fullPath, collection)
             .then(() => {
                 setError(undefined);
                 return true;
@@ -58,7 +62,7 @@ export function NewCollectionEditorDialog<M>({
                 });
                 return false;
             });
-    }, [configurationPersistence, snackbarController]);
+    }, [configurationPersistence, snackbarController, parentPath]);
 
     const initialValues: EntityCollection = {
         path: "",

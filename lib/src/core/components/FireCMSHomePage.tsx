@@ -58,7 +58,7 @@ export function FireCMSHomePage() {
     const [collectionToBeDeleted, setCollectionToBeDeleted] = useState<TopNavigationEntry | undefined>();
 
     const onEditCollectionClicked = useCallback((entry: TopNavigationEntry) => {
-        collectionEditorController?.editCollection(entry.path);
+        collectionEditorController?.editCollection(entry.path as string);
     }, [collectionEditorController]);
 
     const onDeleteCollectionClicked = useCallback((entry: TopNavigationEntry) => {

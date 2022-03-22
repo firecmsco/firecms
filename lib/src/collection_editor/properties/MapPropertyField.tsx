@@ -23,6 +23,7 @@ export function MapPropertyField({}: {}) {
     const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
 
+    const propertiesOrder = values.propertiesOrder ?? Object.keys(values.properties ?? {});
     const onPropertyCreated = useCallback(({
                                                id,
                                                property
@@ -33,9 +34,9 @@ export function MapPropertyField({}: {}) {
             ...(values.properties ?? {}),
             [id]: property
         }, false);
-        setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? Object.keys(values.properties ?? {})), id], false);
+        setFieldValue("propertiesOrder", [...propertiesOrder, id], false);
         setPropertyDialogOpen(false);
-    }, [values.properties, values.propertiesOrder]);
+    }, [values.properties, propertiesOrder]);
 
     const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
         const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
@@ -67,6 +68,8 @@ export function MapPropertyField({}: {}) {
         Add property to {values.name ?? "this group"}
     </Button>;
 
+    const empty = !propertiesOrder || propertiesOrder.length < 1;
+    console.log("eee", empty, propertiesOrder)
     return (
         <>
             <Grid item>
@@ -85,7 +88,7 @@ export function MapPropertyField({}: {}) {
 
                     <PropertyTree
                         properties={values.properties ?? {}}
-                        propertiesOrder={values.propertiesOrder}
+                        propertiesOrder={propertiesOrder}
                         errors={{}}
                         onPropertyClick={(propertyKey, namespace) => {
                             setSelectedPropertyId(propertyKey);
@@ -96,14 +99,16 @@ export function MapPropertyField({}: {}) {
                             setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
                         }}/>
 
-                    {!values.propertiesOrder?.length && <Box sx={{
-                        height: "100%",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center"
-                    }}>
-                        Add the first property to this group
-                    </Box>}
+                    {empty &&
+                        <Box sx={{
+                            height: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            p: 2
+                        }}>
+                            Add the first property to this group
+                        </Box>}
                 </Paper>
             </Grid>
 
@@ -127,7 +132,7 @@ export function MapPropertyField({}: {}) {
                           property={selectedProperty}
                           existing={Boolean(selectedPropertyId)}
                           onPropertyChanged={onPropertyCreated}
-                          existingPropertyIds={selectedPropertyId ? undefined : values.propertiesOrder}/>
+                          existingPropertyIds={selectedPropertyId ? undefined : propertiesOrder}/>
 
         </>);
 }

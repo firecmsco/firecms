@@ -7,9 +7,6 @@ import {
     buildCollection,
     CMSView,
     FirebaseCMSApp,
-    Navigation,
-    NavigationBuilder,
-    NavigationBuilderProps
 } from "@camberi/firecms";
 
 import { IconButton, Tooltip } from "@mui/material";
@@ -21,7 +18,7 @@ import logo from "./images/demo_logo.png";
 import { textSearchController } from "./text_search";
 import { productsCollection } from "./schemas/products_schema";
 import { blogCollection } from "./schemas/blog_schema";
-import { customSchemaOverrideHandler } from "./schemas/custom_schema_resolver";
+import { customCollectionOverrideHandler } from "./schemas/custom_schema_resolver";
 
 import "typeface-rubik";
 import "typeface-space-mono";
@@ -78,28 +75,15 @@ function SampleApp() {
         return true;
     };
 
-    const navigation: NavigationBuilder<FirebaseUser> = async ({
-                                                                   user,
-                                                                   authController
-                                                               }: NavigationBuilderProps) => {
-        if (authController.extra)
-            console.log("Custom data stored in the authController", authController.extra);
+    const collections = [
+        productsCollection,
+        usersCollection,
+        blogCollection
+    ];
 
-        const navigation: Navigation = {
-            collections: [
-                productsCollection,
-                usersCollection,
-                blogCollection
-            ],
-            views: customViews
-        };
-
-        if (process.env.NODE_ENV !== "production") {
-            navigation.collections!.push(buildCollection(testCollection));
-        }
-
-        return navigation;
-    };
+    if (process.env.NODE_ENV !== "production") {
+        collections.push(buildCollection(testCollection));
+    }
 
     return <FirebaseCMSApp
         name={"My Online Shop"}
@@ -117,8 +101,9 @@ function SampleApp() {
         textSearchController={textSearchController}
         allowSkipLogin={true}
         logo={logo}
-        navigation={navigation}
-        schemaOverrideHandler={customSchemaOverrideHandler}
+        collections={collections}
+        views={customViews}
+        collectionOverrideHandler={customCollectionOverrideHandler}
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}

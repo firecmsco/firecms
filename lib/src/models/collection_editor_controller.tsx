@@ -4,8 +4,7 @@
  */
 export interface CollectionEditorController {
 
-    editedCollectionPath?: string;
-    editCollection: (path?: string) => void;
+    editCollection: (path: string) => void;
 
     newCollectionDialog?: {
         open: boolean,

@@ -2,13 +2,12 @@ import { User } from "./user";
 import { Entity } from "./entities";
 import { AuthController } from "./auth";
 import { FireCMSContext } from "./firecms_context";
-import { EntityCollection } from "./collections";
 
 /**
  * Define the operations that can be performed in an entity.
  * @category Models
  */
-export interface EntityPermissions {
+export interface Permissions {
     /**
      * Can the user add new entities. Defaults to `true`
      */
@@ -22,6 +21,9 @@ export interface EntityPermissions {
      */
     delete?: boolean;
 
+    editCollection?: boolean;
+
+    deleteCollection?: boolean;
 }
 
 /**
@@ -57,22 +59,11 @@ export interface EntityPermissionsBuilderProps<M extends { [Key: string]: any },
  * @category Models
  */
 export type EntityPermissionsBuilder<M extends { [Key: string]: any }, UserType = User> =
-    EntityPermissions
+    Permissions
     | (({
             entity,
             path,
             user,
             authController,
             context
-        }: EntityPermissionsBuilderProps<M, UserType>) => EntityPermissions);
-
-/**
- * Define the operations that can be performed in an entity.
- * @category Models
- */
-export interface ConfigPermissions {
-    createCollection?: boolean;
-    editCollection?: boolean | ((collection: EntityCollection) => boolean);
-    deleteCollection?: boolean | ((collection: EntityCollection) => boolean);
-
-}
+        }: EntityPermissionsBuilderProps<M, UserType>) => Permissions);

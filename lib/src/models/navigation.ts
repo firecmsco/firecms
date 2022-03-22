@@ -1,67 +1,11 @@
-import { AuthController } from "./auth";
 import { EntityCollection } from "./collections";
-import { User } from "./user";
-import { Locale } from "./locales";
-import { DataSource } from "./datasource";
-import { StorageSource } from "./storage";
-import { ResolvedEntityCollection } from "./resolved_entities";
 
 /**
- * You can use this builder to customize the navigation, based on the logged in
- * user
+ * Context that includes the resolved navigation and utility methods and
+ * attributes.
  * @category Models
  */
-export type NavigationBuilder<UserType extends User = User> =
-    ((props: NavigationBuilderProps<UserType>) => Promise<Navigation>)
-    | ((props: NavigationBuilderProps<UserType>) => Navigation);
-
-/**
- * @category Models
- */
-export interface NavigationBuilderProps<UserType extends User = User> {
-
-    /**
-     * List of available collections to the CMS (stored in config persistence)
-     */
-    collections: EntityCollection[];
-
-    /**
-     * Logged in user or null
-     */
-    user: UserType | null;
-
-    /**
-     * AuthController
-     */
-    authController: AuthController<UserType>;
-
-    /**
-     * Format of the dates in the CMS.
-     * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
-     */
-    dateTimeFormat?: string;
-
-    /**
-     * Locale of the CMS, currently only affecting dates
-     */
-    locale?: Locale;
-
-    /**
-     * Connector to your database, e.g. your Firestore database
-     */
-    dataSource: DataSource;
-
-    /**
-     * Used storage implementation
-     */
-    storageSource: StorageSource;
-}
-
-/**
- * In this interface you define the main navigation entries of the CMS
- * @category Models
- */
-export interface Navigation {
+export type NavigationContext = {
 
     /**
      * List of the mapped collections in the CMS.
@@ -77,37 +21,6 @@ export interface Navigation {
      */
     views?: CMSView[];
 
-}
-
-/**
- * @category Models
- */
-export type ResolvedNavigation = {
-    /**
-     * List of the mapped collections in the CMS.
-     * Each entry relates to a collection in the root database.
-     * Each of the navigation entries in this field
-     * generates an entry in the main menu.
-     */
-    collections?: ResolvedEntityCollection<any>[];
-
-    /**
-     * Custom additional views created by the developer, added to the main
-     * navigation
-     */
-    views?: CMSView[];
-
-}
-
-/**
- * Context that includes the resolved navigation and utility methods and
- * attributes.
- * @category Models
- */
-export type NavigationContext = {
-
-    navigation?: Navigation;
-
     /**
      * Configuration for the views that should be displayed at the top
      * level of the navigation (e.g. in the home page or the navigation
@@ -115,6 +28,10 @@ export type NavigationContext = {
      */
     topLevelNavigation?: TopNavigationResult;
 
+    /**
+     * Is the navigation loading (the configuration persistence has not
+     * loaded yet, or a specified navigation builder has not completed)
+     */
     loading: boolean;
 
     navigationLoadingError?: any;
@@ -159,7 +76,7 @@ export type NavigationContext = {
     buildCMSUrlPath: (path: string) => string;
 
 
-    buildUrlEditCollectionPath: (props: { path?: string, group?: string }) => string;
+    buildUrlEditCollectionPath: (props: { path: string}) => string;
 
     /**
      * Base url path for the home screen

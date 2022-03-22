@@ -94,7 +94,7 @@ export function ExampleCMSView({
                     height: 400,
                     padding: 32
                 }}>
-                    <EntityCollectionView path={path}
+                    <EntityCollectionView fullPath={path}
                                           collection={{
                                               ...collection,
                                               selectionController

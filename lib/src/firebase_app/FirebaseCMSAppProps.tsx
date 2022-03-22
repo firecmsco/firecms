@@ -2,9 +2,7 @@ import React from "react";
 import {
     Authenticator,
     Locale,
-    Navigation,
-    NavigationBuilder,
-    CollectionOverrideHandler
+    CollectionOverrideHandler, EntityCollection, CMSView
 } from "../models";
 import { FirestoreTextSearchController } from "./models/text_search";
 import { User as FirebaseUser } from "firebase/auth";
@@ -28,14 +26,18 @@ export interface FirebaseCMSAppProps {
     logo?: string;
 
     /**
-     * Use this prop to specify the views that will be generated in the CMS.
-     * You usually will want to create a `Navigation` object that includes
-     * collection views where you specify the path and the collection.
-     * Additionally, you can add custom views to the root navigation.
-     * In you need to customize the navigation based on the logged user you
-     * can use a `NavigationBuilder`
+     * List of the mapped collections in the CMS.
+     * Each entry relates to a collection in the root database.
+     * Each of the navigation entries in this field
+     * generates an entry in the main menu.
      */
-    navigation: Navigation | NavigationBuilder<FirebaseUser>;
+    collections?: EntityCollection[];
+
+    /**
+     * Custom additional views created by the developer, added to the main
+     * navigation
+     */
+    views?: CMSView[];
 
     /**
      * Do the users need to log in to access the CMS.

@@ -46,6 +46,10 @@ import { canEditEntity } from "../util/permissions";
 import { getResolvedCollection } from "../collections";
 import { EntityFormProps } from "../../form";
 
+const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<any>>;
+const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<any>>;
+const EntityPreview = lazy(() => import("../components/EntityPreview")) as React.FunctionComponent<EntityPreviewProps<any>>;
+
 export interface EntityViewProps<M, UserType> {
     path: string;
     collection: EntityCollection<M>
@@ -65,12 +69,6 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                            onModifiedValues,
                                                                            width
                                                                        }: EntityViewProps<M, UserType>) {
-
-
-    const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<M>>;
-    const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<M>>;
-    const EntityPreview = lazy(() => import("../components/EntityPreview")) as React.FunctionComponent<EntityPreviewProps<M>>;
-
 
     const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
 
@@ -282,7 +280,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     const subCollectionsViews = subcollections && subcollections.map(
         (subcollection, colIndex) => {
-            const absolutePath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
+            const fullPath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
 
             return (
                 <Box
@@ -300,10 +298,10 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     role="tabpanel"
                     flexGrow={1}
                     hidden={tabsPosition !== colIndex + customViewsCount}>
-                    {entity && absolutePath
+                    {entity && fullPath
                         ? <Suspense fallback={<CircularProgressCenter/>}>
                             <EntityCollectionView
-                                path={absolutePath}
+                                fullPath={fullPath}
                                 collection={subcollection}/>
                         </Suspense>
                         : <Box m={3}

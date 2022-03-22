@@ -9,7 +9,6 @@ import {
     FilterCombination,
     FilterValues,
     SaveEntityProps,
-    User,
     WhereFilterOp
 } from "../../../models";
 import { getSubcollectionColumnId, useColumnIds } from "./internal/common";
@@ -57,245 +56,246 @@ const DEFAULT_PAGE_SIZE = 50;
  * @see Table
  * @category Components
  */
-export const CollectionTable = React.memo<CollectionTableProps<any, any>>(CollectionTableInternal, areEqual) as React.FunctionComponent<CollectionTableProps<any, any>>;
+export const CollectionTable = React.memo<CollectionTableProps<any>>(
+    function CollectionTable<M extends { [Key: string]: any }>
+    ({
+         path,
+         collection,
+         inlineEditing,
+         ActionsStart,
+         Actions,
+         Title,
+         tableRowActionsBuilder,
+         entitiesDisplayedFirst,
+         onEntityClick,
+         onColumnResize,
+         onSizeChanged,
+         hoverRow = true
+     }: CollectionTableProps<M>) {
 
-function areEqual(prevProps: CollectionTableProps<any, any>, nextProps: CollectionTableProps<any, any>) {
-    return prevProps.path === nextProps.path &&
-        equal(prevProps.collection, nextProps.collection) &&
-        prevProps.Title === nextProps.Title &&
-        prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder &&
-        prevProps.inlineEditing === nextProps.inlineEditing;
-}
+        console.log("CollectionTable", path, collection);
 
-export function CollectionTableInternal<M extends { [Key: string]: any },
-    AdditionalKey extends string = string,
-    UserType = User>
-({
-     path,
-     collection,
-     inlineEditing,
-     ActionsStart,
-     Actions,
-     Title,
-     tableRowActionsBuilder,
-     entitiesDisplayedFirst,
-     onEntityClick,
-     onColumnResize,
-     onSizeChanged,
-     hoverRow = true
- }: CollectionTableProps<M, AdditionalKey>) {
+        const context = useFireCMSContext();
+        const dataSource = useDataSource();
+        const sideEntityController = useSideEntityController();
 
-    const context = useFireCMSContext();
-    const dataSource = useDataSource();
-    const sideEntityController = useSideEntityController();
+        const theme = useTheme();
+        const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
-
-    const resolvedCollection = getResolvedCollection<M>({
-        collection,
-        path
-    });
-    const [size, setSize] = React.useState<CollectionSize>(resolvedCollection.defaultSize ?? "m");
-
-    const initialFilter = resolvedCollection.initialFilter;
-    const initialSort = resolvedCollection.initialSort;
-    const filterCombinations = resolvedCollection.filterCombinations;
-
-    const textSearchEnabled = collection.textSearchEnabled;
-    const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
-    const pageSize = typeof collection.pagination === "number" ? collection.pagination : DEFAULT_PAGE_SIZE;
-
-    const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
-
-    const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(initialFilter || undefined);
-    const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSort);
-
-    const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
-
-    const additionalColumns = useMemo(() => {
-        const subcollectionColumns: AdditionalColumnDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
-            return {
-                id: getSubcollectionColumnId(subcollection),
-                name: subcollection.name,
-                width: 200,
-                dependencies: [],
-                builder: ({ entity }) => (
-                    <Button color={"primary"}
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                sideEntityController.open({
-                                    path,
-                                    entityId: entity.id,
-                                    selectedSubpath: subcollection.path,
-                                    collection: collection,
-                                    updateUrl: true
-                                });
-                            }}>
-                        {subcollection.name}
-                    </Button>
-                )
-            };
-        }) ?? [];
-        return [...(resolvedCollection.additionalColumns ?? []), ...subcollectionColumns];
-    }, [resolvedCollection, collection, path]);
-
-    const displayedProperties = useColumnIds<M>(collection, resolvedCollection, true);
-
-    const uniqueFieldValidator: UniqueFieldValidator = useCallback(
-        ({
-             name,
-             value,
-             property,
-             entityId
-         }) => dataSource.checkUniqueField(path, name, value, property, entityId),
-        [path, dataSource]);
-
-    const onCellChanged: OnCellValueChange<any, M> = useCallback(({
-                                                                      value,
-                                                                      name,
-                                                                      setSaved,
-                                                                      setError,
-                                                                      entity
-                                                                  }) => {
-        const saveProps: SaveEntityProps<M> = {
-            path,
-            entityId: entity.id,
-            values: {
-                ...entity.values,
-                [name]: value
-            },
-            previousValues: entity.values,
+        const resolvedCollection = getResolvedCollection<M>({
             collection,
-            status: "existing"
-        };
-
-        return saveEntityWithCallbacks({
-            ...saveProps,
-            callbacks: collection.callbacks,
-            dataSource,
-            context,
-            onSaveSuccess: () => setSaved(true),
-            onSaveFailure: (e: Error) => {
-                console.error(e);
-                setError(e);
-            }
+            path
         });
 
-    }, [path, collection, resolvedCollection]);
+        const [size, setSize] = React.useState<CollectionSize>(resolvedCollection.defaultSize ?? "m");
 
-    const { columns, popupFormField } = useBuildColumnsFromCollection({
-        collection,
-        additionalColumns,
-        displayedProperties,
-        path,
-        inlineEditing,
-        size,
-        onCellValueChange: onCellChanged,
-        uniqueFieldValidator
-    });
+        const initialFilter = resolvedCollection.initialFilter;
+        const initialSort = resolvedCollection.initialSort;
+        const filterCombinations = resolvedCollection.filterCombinations;
 
-    const [searchString, setSearchString] = React.useState<string | undefined>();
+        const textSearchEnabled = collection.textSearchEnabled;
+        const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
+        const pageSize = typeof collection.pagination === "number" ? collection.pagination : DEFAULT_PAGE_SIZE;
 
-    const {
-        data,
-        dataLoading,
-        noMoreToLoad,
-        dataLoadingError
-    } = useCollectionFetch<M>({
-        entitiesDisplayedFirst,
-        path,
-        collection,
-        filterValues,
-        sortBy,
-        searchString,
-        itemCount
-    });
+        const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
 
-    const loadNextPage = useCallback(() => {
-        if (!paginationEnabled || dataLoading || noMoreToLoad)
-            return;
-        if (itemCount !== undefined)
-            setItemCount(itemCount + pageSize);
-    }, [dataLoading, itemCount, noMoreToLoad, pageSize, paginationEnabled]);
+        const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(initialFilter || undefined);
+        const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSort);
 
-    const resetPagination = useCallback(() => {
-        setItemCount(pageSize);
-    }, [pageSize]);
+        const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
 
-    const clearFilter = useCallback(() => setFilterValues(undefined), []);
+        const additionalColumns = useMemo(() => {
+            const subcollectionColumns: AdditionalColumnDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
+                return {
+                    id: getSubcollectionColumnId(subcollection),
+                    name: subcollection.name,
+                    width: 200,
+                    dependencies: [],
+                    builder: ({ entity }) => (
+                        <Button color={"primary"}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    sideEntityController.open({
+                                        path,
+                                        entityId: entity.id,
+                                        selectedSubpath: subcollection.path,
+                                        collection: collection,
+                                        updateUrl: true
+                                    });
+                                }}>
+                            {subcollection.name}
+                        </Button>
+                    )
+                };
+            }) ?? [];
+            return [...(resolvedCollection.additionalColumns ?? []), ...subcollectionColumns];
+        }, [resolvedCollection, collection, path]);
 
-    const buildIdColumn = useCallback(({ entry, size }: {
-        entry: Entity<M>,
-        size: CollectionSize,
-    }) => {
-        if (tableRowActionsBuilder)
-            return tableRowActionsBuilder({ entity: entry, size });
-        else
-            return <CollectionRowActions entity={entry} size={size}/>;
+        const displayedProperties = useColumnIds<M>(collection, resolvedCollection, true);
 
-    }, [tableRowActionsBuilder]);
+        const uniqueFieldValidator: UniqueFieldValidator = useCallback(
+            ({
+                 name,
+                 value,
+                 property,
+                 entityId
+             }) => dataSource.checkUniqueField(path, name, value, property, entityId),
+            [path, dataSource]);
 
-    const onRowClick = useCallback(({ rowData }: { rowData: Entity<M> }) => {
-        if (checkInlineEditing(inlineEditing, rowData))
-            return;
-        return onEntityClick && onEntityClick(rowData);
-    }, [onEntityClick]);
+        const onCellChanged: OnCellValueChange<any, M> = useCallback(({
+                                                                          value,
+                                                                          name,
+                                                                          setSaved,
+                                                                          setError,
+                                                                          entity
+                                                                      }) => {
+            const saveProps: SaveEntityProps<M> = {
+                path,
+                entityId: entity.id,
+                values: {
+                    ...entity.values,
+                    [name]: value
+                },
+                previousValues: entity.values,
+                collection,
+                status: "existing"
+            };
 
-    const updateSize = useCallback((size: CollectionSize) => {
-        if (onSizeChanged)
-            onSizeChanged(size);
-        setSize(size);
-    }, []);
+            return saveEntityWithCallbacks({
+                ...saveProps,
+                callbacks: collection.callbacks,
+                dataSource,
+                context,
+                onSaveSuccess: () => setSaved(true),
+                onSaveFailure: (e: Error) => {
+                    console.error(e);
+                    setError(e);
+                }
+            });
 
-    const onTextSearch = useCallback((newSearchString) => setSearchString(newSearchString), []);
+        }, [path, collection, resolvedCollection]);
 
-    return (
+        const { columns, popupFormField } = useBuildColumnsFromCollection({
+            collection,
+            additionalColumns,
+            displayedProperties,
+            path,
+            inlineEditing,
+            size,
+            onCellValueChange: onCellChanged,
+            uniqueFieldValidator
+        });
 
-        <Paper sx={{
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column"
-        }}>
+        const [searchString, setSearchString] = React.useState<string | undefined>();
 
-            <CollectionTableToolbar filterIsSet={filterIsSet}
-                                    onTextSearch={textSearchEnabled ? onTextSearch : undefined}
-                                    clearFilter={clearFilter}
-                                    size={size}
-                                    onSizeChanged={updateSize}
-                                    Title={Title}
-                                    ActionsStart={ActionsStart}
-                                    Actions={Actions}
-                                    loading={dataLoading}/>
+        const {
+            data,
+            dataLoading,
+            noMoreToLoad,
+            dataLoadingError
+        } = useCollectionFetch<M>({
+            entitiesDisplayedFirst,
+            path,
+            collection,
+            filterValues,
+            sortBy,
+            searchString,
+            itemCount
+        });
 
-            <Table
-                data={data}
-                columns={columns}
-                onRowClick={onRowClick}
-                onEndReached={loadNextPage}
-                onResetPagination={resetPagination}
-                idColumnBuilder={buildIdColumn}
-                error={dataLoadingError}
-                paginationEnabled={paginationEnabled}
-                onColumnResize={onColumnResize}
-                frozenIdColumn={largeLayout}
-                size={size}
-                loading={dataLoading}
-                filter={filterValues}
-                onFilterUpdate={setFilterValues}
-                sortBy={sortBy}
-                onSortByUpdate={setSortBy as any}
-                hoverRow={hoverRow}
-                checkFilterCombination={(filterValues, sortBy) => isFilterCombinationValid(filterValues, filterCombinations, sortBy)}
-            />
+        const loadNextPage = useCallback(() => {
+            if (!paginationEnabled || dataLoading || noMoreToLoad)
+                return;
+            if (itemCount !== undefined)
+                setItemCount(itemCount + pageSize);
+        }, [dataLoading, itemCount, noMoreToLoad, pageSize, paginationEnabled]);
 
-            {popupFormField}
+        const resetPagination = useCallback(() => {
+            setItemCount(pageSize);
+        }, [pageSize]);
 
-        </Paper>
-    );
+        const clearFilter = useCallback(() => setFilterValues(undefined), []);
 
-}
+        const buildIdColumn = useCallback(({ entry, size }: {
+            entry: Entity<M>,
+            size: CollectionSize,
+        }) => {
+            if (tableRowActionsBuilder)
+                return tableRowActionsBuilder({ entity: entry, size });
+            else
+                return <CollectionRowActions entity={entry} size={size}/>;
+
+        }, [tableRowActionsBuilder]);
+
+        const onRowClick = useCallback(({ rowData }: { rowData: Entity<M> }) => {
+            if (checkInlineEditing(inlineEditing, rowData))
+                return;
+            return onEntityClick && onEntityClick(rowData);
+        }, [onEntityClick]);
+
+        const updateSize = useCallback((size: CollectionSize) => {
+            if (onSizeChanged)
+                onSizeChanged(size);
+            setSize(size);
+        }, []);
+
+        const onTextSearch = useCallback((newSearchString) => setSearchString(newSearchString), []);
+
+        return (
+
+            <Paper sx={{
+                height: "100%",
+                width: "100%",
+                display: "flex",
+                flexDirection: "column"
+            }}>
+
+                <CollectionTableToolbar filterIsSet={filterIsSet}
+                                        onTextSearch={textSearchEnabled ? onTextSearch : undefined}
+                                        clearFilter={clearFilter}
+                                        size={size}
+                                        onSizeChanged={updateSize}
+                                        Title={Title}
+                                        ActionsStart={ActionsStart}
+                                        Actions={Actions}
+                                        loading={dataLoading}/>
+
+                <Table
+                    data={data}
+                    columns={columns}
+                    onRowClick={onRowClick}
+                    onEndReached={loadNextPage}
+                    onResetPagination={resetPagination}
+                    idColumnBuilder={buildIdColumn}
+                    error={dataLoadingError}
+                    paginationEnabled={paginationEnabled}
+                    onColumnResize={onColumnResize}
+                    frozenIdColumn={largeLayout}
+                    size={size}
+                    loading={dataLoading}
+                    filter={filterValues}
+                    onFilterUpdate={setFilterValues}
+                    sortBy={sortBy}
+                    onSortByUpdate={setSortBy as any}
+                    hoverRow={hoverRow}
+                    checkFilterCombination={(filterValues, sortBy) => isFilterCombinationValid(filterValues, filterCombinations, sortBy)}
+                />
+
+                {popupFormField}
+
+            </Paper>
+        );
+
+    },
+    function areEqual(prevProps: CollectionTableProps<any>, nextProps: CollectionTableProps<any>) {
+        return prevProps.path === nextProps.path &&
+            equal(prevProps.collection, nextProps.collection) &&
+            prevProps.Title === nextProps.Title &&
+            prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder &&
+            prevProps.inlineEditing === nextProps.inlineEditing;
+    }
+) as React.FunctionComponent<CollectionTableProps<any>>;
+
 
 function isFilterCombinationValid<M>(
     filterValues: FilterValues<Extract<keyof M, string>>,

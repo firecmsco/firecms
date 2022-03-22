@@ -2,7 +2,7 @@ import {
     AuthController,
     Entity,
     FireCMSContext,
-    EntityPermissions,
+    Permissions,
     EntityPermissionsBuilder
 } from "../../models";
 
@@ -13,16 +13,16 @@ const DEFAULT_PERMISSIONS = {
 };
 
 function checkHasPermissionOnEntity<M extends { [Key: string]: any }, UserType>
-(permission: EntityPermissionsBuilder<M, UserType> | EntityPermissions | undefined,
+(permission: EntityPermissionsBuilder<M, UserType> | Permissions | undefined,
  entity: Entity<M> | null,
  authController: AuthController<UserType>,
  path: string,
- context: FireCMSContext<UserType>): EntityPermissions {
+ context: FireCMSContext<UserType>): Permissions {
 
     if (permission === undefined) {
         return DEFAULT_PERMISSIONS;
     } else if (typeof permission === "object") {
-        return permission as EntityPermissions;
+        return permission as Permissions;
     } else if (typeof permission === "function") {
         return permission({
             user: authController.user,
@@ -37,7 +37,7 @@ function checkHasPermissionOnEntity<M extends { [Key: string]: any }, UserType>
 }
 
 export function canEditEntity<M extends { [Key: string]: any }, UserType>
-(permission: EntityPermissionsBuilder<M, UserType> | EntityPermissions | undefined,
+(permission: EntityPermissionsBuilder<M, UserType> | Permissions | undefined,
  entity: Entity<M>,
  authController: AuthController<UserType>,
  path: string,
@@ -46,7 +46,7 @@ export function canEditEntity<M extends { [Key: string]: any }, UserType>
 }
 
 export function canCreateEntity<M extends { [Key: string]: any }, UserType>
-(permission: EntityPermissionsBuilder<M, UserType> | EntityPermissions | undefined,
+(permission: EntityPermissionsBuilder<M, UserType> | Permissions | undefined,
  authController: AuthController<UserType>,
  path: string,
  context: FireCMSContext<UserType>): boolean {
@@ -54,7 +54,7 @@ export function canCreateEntity<M extends { [Key: string]: any }, UserType>
 }
 
 export function canDeleteEntity<M extends { [Key: string]: any }, UserType>
-(permission: EntityPermissionsBuilder<M, UserType> | EntityPermissions | undefined,
+(permission: EntityPermissionsBuilder<M, UserType> | Permissions | undefined,
  entity: Entity<M>,
  authController: AuthController<UserType>,
  path: string,

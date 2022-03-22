@@ -44,9 +44,10 @@ import { ErrorBoundary } from "../core/internal/ErrorBoundary";
 import { LoadingButton } from "@mui/lab";
 import { YupSchema } from "./SchemaYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
+import { removeInitialAndTrailingSlashes } from "../core/util/navigation_utils";
 
 export type CollectionEditorProps<M> = {
-    path?: string;
+    path: string;
     handleClose?: (updatedCollection?: EntityCollection<M>) => void;
     setDirty?: (dirty: boolean) => void;
 };
@@ -89,18 +90,14 @@ export const CollectionEditor = React.memo(
         }, [path, navigationContext.initialised]);
 
         const saveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
-            // if (handleClose)
-            //     handleClose(collection);
-            // return Promise.resolve(true);
-            return configurationPersistence.saveCollection(collection)
+            return configurationPersistence.saveCollection(path, collection)
                 .then(() => {
-                    // setInitialError(undefined);
-                    // snackbarController.open({
-                    //     type: "success",
-                    //     message: "Collection updated"
-                    // });
+                    setInitialError(undefined);
+                    snackbarController.open({
+                        type: "success",
+                        message: "Collection updated"
+                    });
                     if (handleClose) {
-                        console.log("saveCollection handleClose");
                         handleClose(collection);
                     }
                     return true;
@@ -114,7 +111,7 @@ export const CollectionEditor = React.memo(
                     });
                     return false;
                 });
-        }, [handleClose]);
+        }, [handleClose, path]);
 
         if (initialError) {
             return <ErrorView error={`Error fetching collection ${path}`}/>;
@@ -238,8 +235,6 @@ export const CollectionEditorForm = React.memo(
         const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
         const selectedPropertyFullId = selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined;
         const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
-
-        console.log("selectedPropertyId", selectedPropertyId);
 
         const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
         const [detailsDialogOpen, setDetailsDialogOpen] = useState<boolean>(false);

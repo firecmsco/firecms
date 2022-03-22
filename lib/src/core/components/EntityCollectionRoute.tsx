@@ -40,12 +40,12 @@ export function EntityCollectionRoute<M extends { [Key: string]: any }>({
     }, [path, configPersistence])
 
     if (collection)
-        return <EntityCollectionView path={path}
+        return <EntityCollectionView fullPath={path}
                                      collection={collection}/>;
 
     else if (storedCollection) {
             return <EntityCollectionView
-                path={path}
+                fullPath={path}
                 collection={storedCollection}/>;
     } else if (loading)
         return <CircularProgressCenter/>;

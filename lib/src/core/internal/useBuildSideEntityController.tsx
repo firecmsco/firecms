@@ -22,7 +22,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
     const initialised = useRef<boolean>(false);
     const [sidePanels, setSidePanels] = useState<SideEntityPanelProps[]>([]);
 
-    const collections = navigationContext.navigation?.collections;
+    const collections = navigationContext.collections;
 
     const state = location.state as any;
     const baseLocation = state && state.base_location ? state.base_location : location;

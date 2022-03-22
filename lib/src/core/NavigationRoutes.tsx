@@ -33,9 +33,7 @@ export type NavigationRoutesProps = {
 export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
     const location = useLocation();
-    const navigationContext = useNavigationContext();
-
-    const navigation = navigationContext.navigation;
+    const navigation = useNavigationContext();
 
     if (!navigation)
         return <></>;
@@ -78,7 +76,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
     const collectionRoutes = sortedCollections
         .map((collection) => {
-                const urlPath = navigationContext.buildUrlCollectionPath(collection.path);
+                const urlPath = navigation.buildUrlCollectionPath(collection.path);
                 return <Route path={urlPath + "/*"}
                               key={`navigation_${collection.path}`}
                               element={
@@ -86,7 +84,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                       path={urlPath}
                                       title={collection.name}>
                                       <EntityCollectionView
-                                          path={collection.path}
+                                          fullPath={collection.path}
                                           collection={collection}/>
                                   </BreadcrumbUpdater>
                               }/>;
@@ -95,7 +93,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
     const collectionEditRoutes = (navigation.collections?.filter((c) => c.editable) ?? [])
         .map((collection) => {
-                const urlPath = navigationContext.buildUrlEditCollectionPath({
+                const urlPath = navigation.buildUrlEditCollectionPath({
                     path: collection.path
                 });
                 return <Route path={urlPath + "/*"}
@@ -110,24 +108,11 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
             }
         );
 
-    const newCollectionPath = navigationContext.buildUrlEditCollectionPath({});
-    const addNewCollectionRoute = (
-        <Route path={newCollectionPath + "/*"}
-               key={"navigation_new"}
-               element={
-                   <BreadcrumbUpdater
-                       path={newCollectionPath}
-                       title={"New collection"}>
-                       <CollectionEditor/>
-                   </BreadcrumbUpdater>
-               }/>
-    );
-
     const homeRoute = (
-        <Route path={navigationContext.homeUrl}
+        <Route path={navigation.homeUrl}
                element={
                    <BreadcrumbUpdater
-                       path={navigationContext.homeUrl}
+                       path={navigation.homeUrl}
                        key={"navigation_home"}
                        title={"Home"}>
                        {HomePage ? <HomePage/> : <FireCMSHomePage/>}
@@ -146,8 +131,6 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
             {collectionEditRoutes}
 
             {collectionRoutes}
-
-            {addNewCollectionRoute}
 
             {customRoutes}
 

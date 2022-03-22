@@ -6,7 +6,7 @@ import { buildCollection, CollectionOverrideHandler } from "@camberi/firecms";
  * @param entityId
  * @param path
  */
-export const customSchemaOverrideHandler: CollectionOverrideHandler = ({
+export const customCollectionOverrideHandler: CollectionOverrideHandler = ({
                                                   entityId,
                                                   path
                                               }: {
