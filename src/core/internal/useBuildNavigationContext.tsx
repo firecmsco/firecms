@@ -256,8 +256,8 @@ export function useBuildNavigationContext<UserType>({
     const buildUrlCollectionPath = useCallback((path: string): string => `${baseCollectionPath}/${removeInitialAndTrailingSlashes(path)}`,
         [baseCollectionPath]);
 
-    const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${removeInitialAndTrailingSlashes(path)}` : `/${path}`,
-        [cleanBasePath]);
+    const buildCMSUrlPath = useCallback((path: string): string => `/${removeInitialAndTrailingSlashes(path)}`,
+        []);
 
     const onCollectionModifiedForUser = useCallback(<M extends any>(path: string, partialCollection: PartialEntityCollection<M>) => {
         if (userConfigPersistence) {
