@@ -1,6 +1,7 @@
 import React, { CSSProperties, useMemo, useState } from "react";
 import clsx from "clsx";
-import { IconButton, Theme } from "@mui/material";
+import { IconButton, Theme, Tooltip } from "@mui/material";
+import ContentPasteIcon from "@mui/icons-material/ContentPaste";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { PreviewSize } from "../../preview";
@@ -33,6 +34,13 @@ const useStyles = makeStyles<Theme, { imageSize: number }>(theme => createStyles
             height: ({ imageSize }) => imageSize,
             borderRadius: "4px",
             maxHeight: "100%"
+        },
+        copyIcon: {
+            borderRadius: "9999px",
+            position: "absolute",
+            bottom: -4,
+            right: 32,
+            backgroundColor: theme.palette.common.white
         },
         previewIcon: {
             borderRadius: "9999px",
@@ -90,17 +98,33 @@ export function ImagePreview({ size, url }: ImagePreviewProps) {
                  style={imageStyle}/>
 
             {onHover && (
-                <a
-                    className={classes.previewIcon}
-                    href={url}
-                    rel="noopener noreferrer"
-                    target="_blank">
-                    <IconButton
-                        size={"small"}
-                        onClick={(e) => e.stopPropagation()}>
-                        <OpenInNewIcon htmlColor={"#666"} fontSize={"small"}/>
-                    </IconButton>
-                </a>
+                <>
+                    <Tooltip title="Copy url to clipboard">
+                        <div className={classes.copyIcon}>
+                            <IconButton
+                                size={"small"}
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    navigator.clipboard.writeText(url);
+                                }}>
+                                <ContentPasteIcon htmlColor={"#666"} fontSize={"small"} />
+                            </IconButton>
+                        </div>
+                    </Tooltip>
+                    <Tooltip title="Open image in new tab">
+                        <a
+                            className={classes.previewIcon}
+                            href={url}
+                            rel="noopener noreferrer"
+                            target="_blank">
+                            <IconButton
+                                size={"small"}
+                                onClick={(e) => e.stopPropagation()}>
+                                <OpenInNewIcon htmlColor={"#666"} fontSize={"small"} />
+                            </IconButton>
+                        </a>
+                    </Tooltip>
+                </>
             )}
         </div>
 
