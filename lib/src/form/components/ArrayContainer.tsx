@@ -7,7 +7,12 @@ import AddIcon from "@mui/icons-material/Add";
 import ClearIcon from "@mui/icons-material/Clear";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import {
+    DragDropContext,
+    Draggable,
+    DraggableProvided,
+    Droppable
+} from "react-beautiful-dnd";
 
 import { getHashValue } from "../../core/util/objects";
 
@@ -110,7 +115,24 @@ export function ArrayContainer<T>({
 
             return (
                 <DragDropContext onDragEnd={onDragEnd}>
-                    <Droppable droppableId={`droppable_${name}`}>
+                    <Droppable droppableId={`droppable_${name}`}
+                               renderClone={(provided, snapshot, rubric) => {
+                                   const index = rubric.source.index;
+                                   const internalId = internalIds[index];
+                                   return (
+                                       <ArrayContainerItem
+                                           provided={provided}
+                                           internalId={internalId}
+                                           index={index}
+                                           name={name}
+                                           small={small}
+                                           disabled={disabled}
+                                           buildEntry={buildEntry}
+                                           remove={remove}
+                                       />
+                                   );
+                               }}
+                    >
                         {(droppableProvided, droppableSnapshot) => (
                             <div
                                 {...droppableProvided.droppableProps}
@@ -123,55 +145,16 @@ export function ArrayContainer<T>({
                                             isDragDisabled={disabled}
                                             index={index}>
                                             {(provided, snapshot) => (
-
-                                                <Box
-                                                    ref={provided.innerRef}
-                                                    {...provided.draggableProps}
-                                                    style={
-                                                        provided.draggableProps.style
-                                                    }
-                                                    sx={{
-                                                        marginBottom: 1,
-                                                        borderRadius: "4px",
-                                                        opacity: 1
-                                                    }}
-                                                >
-                                                    <Box key={`field_${internalId}`}
-                                                         display="flex">
-                                                        <Box flexGrow={1}
-                                                             width={"100%"}
-                                                             key={`field_${name}_entryValue`}>
-                                                            {buildEntry(index, internalId)}
-                                                        </Box>
-                                                        <Box display="flex"
-                                                             flexDirection={small ? "row" : "column"}
-                                                             sx={{
-                                                                 pl: 1
-                                                             }}
-                                                             alignItems="center">
-                                                            <IconButton
-                                                                size="small"
-                                                                aria-label="remove"
-                                                                disabled={disabled}
-                                                                onClick={() => remove(index)}>
-                                                                <ClearIcon
-                                                                    fontSize={"small"}/>
-                                                            </IconButton>
-
-                                                            <div
-                                                                {...provided.dragHandleProps}>
-                                                                <IconButton
-                                                                    size="small"
-                                                                    disabled={disabled}
-                                                                    sx={{ cursor: disabled ? "inherit" : "move" }}>
-                                                                    <DragHandleIcon
-                                                                        fontSize={"small"}
-                                                                        color={disabled ? "disabled" : "inherit"}/>
-                                                                </IconButton>
-                                                            </div>
-                                                        </Box>
-                                                    </Box>
-                                                </Box>
+                                                <ArrayContainerItem
+                                                    provided={provided}
+                                                    internalId={internalId}
+                                                    index={index}
+                                                    name={name}
+                                                    small={small}
+                                                    disabled={disabled}
+                                                    buildEntry={buildEntry}
+                                                    remove={remove}
+                                                />
                                             )}
                                         </Draggable>);
                                 })}
@@ -196,6 +179,77 @@ export function ArrayContainer<T>({
             );
         }}
     />;
+}
+
+type ArrayContainerItemProps = {
+    provided: DraggableProvided,
+    index: number,
+    name: string,
+    internalId: number,
+    small?: boolean,
+    disabled: boolean,
+    buildEntry: (index: number, internalId: number) => React.ReactNode,
+    remove: (index: number) => void
+};
+
+function ArrayContainerItem({
+                                provided,
+                                index,
+                                name,
+                                internalId,
+                                small,
+                                disabled,
+                                buildEntry,
+                                remove
+                            }: ArrayContainerItemProps) {
+    return <Box
+        ref={provided.innerRef}
+        {...provided.draggableProps}
+        style={
+            provided.draggableProps.style
+        }
+        sx={{
+            marginBottom: 1,
+            borderRadius: "4px",
+            opacity: 1
+        }}
+    >
+        <Box key={`field_${internalId}`}
+             display="flex">
+            <Box flexGrow={1}
+                 width={"100%"}
+                 key={`field_${name}_entryValue`}>
+                {buildEntry(index, internalId)}
+            </Box>
+            <Box display="flex"
+                 flexDirection={small ? "row" : "column"}
+                 sx={{
+                     pl: 1
+                 }}
+                 alignItems="center">
+                <IconButton
+                    size="small"
+                    aria-label="remove"
+                    disabled={disabled}
+                    onClick={() => remove(index)}>
+                    <ClearIcon
+                        fontSize={"small"}/>
+                </IconButton>
+
+                <div
+                    {...provided.dragHandleProps}>
+                    <IconButton
+                        size="small"
+                        disabled={disabled}
+                        sx={{ cursor: disabled ? "inherit" : "move" }}>
+                        <DragHandleIcon
+                            fontSize={"small"}
+                            color={disabled ? "disabled" : "inherit"}/>
+                    </IconButton>
+                </div>
+            </Box>
+        </Box>
+    </Box>;
 }
 
 function getRandomId() {

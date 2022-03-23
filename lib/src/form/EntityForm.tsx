@@ -104,6 +104,7 @@ export function EntityForm<M>({
 
     const dataSource = useDataSource();
 
+
     const initialResolvedCollection = useMemo(() => getResolvedCollection({
         collection: inputCollection,
         path,
@@ -139,6 +140,12 @@ export function EntityForm<M>({
     const initialValues = initialValuesRef.current;
 
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
+
+    const doOnValuesChanges = (values?: EntityValues<M>) => {
+        setInternalValue(values);
+        if (onValuesChanged)
+            onValuesChanged(values);
+    }
 
     const collection = useMemo(() => getResolvedCollection<M>({
         collection: inputCollection,
@@ -225,10 +232,12 @@ export function EntityForm<M>({
         collection.properties,
         uniqueFieldValidator), [collection.properties]);
 
+    console.log("initialValues", initialValues)
     return (
         <Formik
             initialValues={initialValues}
             onSubmit={saveValues}
+            validateOnMount={false}
             validationSchema={validationSchema}
             validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}
@@ -239,8 +248,7 @@ export function EntityForm<M>({
                     onEntityIdModified={setEntityId}
                     baseDataSourceValues={baseDataSourceValues}
                     onModified={onModified}
-                    setInternalValue={setInternalValue}
-                    onValuesChanged={onValuesChanged}
+                    onValuesChanged={doOnValuesChanges}
                     underlyingChanges={underlyingChanges}
                     path={path}
                     entity={entity}
@@ -260,7 +268,6 @@ function FormInternal<M>({
                              values,
                              onModified,
                              onEntityIdModified,
-                             setInternalValue,
                              onValuesChanged,
                              underlyingChanges,
                              entityId,
@@ -280,7 +287,6 @@ function FormInternal<M>({
     baseDataSourceValues: Partial<M>,
     onModified: ((modified: boolean) => void) | undefined,
     onEntityIdModified: (id: string | undefined) => void,
-    setInternalValue: any,
     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
     underlyingChanges: Partial<M>,
     path: string
@@ -295,26 +301,27 @@ function FormInternal<M>({
     const parentRef = React.useRef<any>();
     const scrollingRef = React.useRef<number | undefined>()
 
-    const modified = useMemo(() => !equal(baseDataSourceValues, values), [baseDataSourceValues, values]);
+    const modified = !equal(baseDataSourceValues, values);
     useEffect(() => {
         if (onModified)
             onModified(modified);
-        setInternalValue(values);
         if (onValuesChanged)
             onValuesChanged(values);
     }, [modified, values]);
 
-    if (underlyingChanges && entity) {
-        // we update the form fields from the Firestore data
-        // if they were not touched
-        Object.entries(underlyingChanges).forEach(([key, value]) => {
-            const formValue = (values as any)[key];
-            if (!equal(value, formValue) && !(touched as any)[key]) {
-                console.debug("Updated value from the datasource:", key, value);
-                setFieldValue(key, value !== undefined ? value : null);
-            }
-        });
-    }
+    useEffect(() => {
+        if (underlyingChanges && entity) {
+            // we update the form fields from the Firestore data
+            // if they were not touched
+            Object.entries(underlyingChanges).forEach(([key, value]) => {
+                const formValue = (values as any)[key];
+                if (!equal(value, formValue) && !(touched as any)[key]) {
+                    console.debug("Updated value from the datasource:", key, value);
+                    setFieldValue(key, value !== undefined ? value : null);
+                }
+            });
+        }
+    }, [underlyingChanges, entity, values, touched, setFieldValue]);
 
     const scrollToFn = React.useCallback((offset, defaultScrollTo) => {
         const duration = 1000;
@@ -462,12 +469,14 @@ function FormInternal<M>({
                         shouldAlwaysRerender
                     };
                     return (
-                        <Box
+                        <ItemMeasurer
+                            component={Box}
                             key={virtualRow.index}
-                            ref={virtualRow.measureRef}
+                            measure={virtualRow.measureRef}
                             style={{
                                 transform: `translateY(${virtualRow.start}px)`
                             }}
+                            // @ts-ignore
                             sx={theme => ({
                                 width: "100%",
                                 position: "absolute",
@@ -480,7 +489,7 @@ function FormInternal<M>({
                             })}
                         >
                             {buildPropertyField(cmsFormFieldProps)}
-                        </Box>
+                        </ItemMeasurer>
                     );
                 })}
             </div>
@@ -539,5 +548,56 @@ function FormInternal<M>({
 function easeInOutQuint(t: number) {
     return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t
 }
+
+const ItemMeasurer = ({ children, measure, component, ...restProps }: any) => {
+    const roRef = React.useRef<ResizeObserver | null>(null);
+    const elRef = React.useRef(null);
+
+    const measureRef = React.useRef(measure);
+    measureRef.current = measure;
+
+    const refSetter = React.useCallback((el) => {
+        const ro = roRef.current;
+
+        if (ro !== null && elRef.current !== null) {
+            ro.unobserve(elRef.current);
+        }
+
+        elRef.current = el;
+
+        if (ro !== null && elRef.current !== null) {
+            ro.observe(elRef.current);
+        }
+    }, []);
+
+    React.useLayoutEffect(() => {
+        const update = () => {
+            measureRef.current(elRef.current);
+        };
+
+        // sync measure for initial render ?
+        update();
+
+        const ro = roRef.current ? roRef.current : new ResizeObserver(update);
+
+        const el = elRef.current;
+        if (el !== null) {
+            ro.observe(el);
+        }
+        roRef.current = ro;
+
+        return () => {
+            ro.disconnect();
+        };
+    }, []);
+
+    const Component = component;
+
+    return (
+        <Component ref={refSetter} {...restProps}>
+            {children}
+        </Component>
+    );
+};
 
 export default EntityForm;

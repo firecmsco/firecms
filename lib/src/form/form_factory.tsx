@@ -207,30 +207,13 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
 
     const isSubmitting = fieldProps.form.isSubmitting;
 
-    const [internalValue, setInternalValue] = useState<T | null>(value);
-
-    const doUpdate = React.useCallback(() => {
-        fieldProps.form.setFieldValue(propertyKey, internalValue);
-    }, [internalValue]);
-
-    useDebounce(internalValue, doUpdate, 34);
-
-    useEffect(
-        () => {
-            if (!equal(value, internalValue)) {
-                setInternalValue(value);
-            }
-        },
-        [value]
-    );
-
     const cmsFieldProps: FieldProps<T> = {
         propertyKey: propertyKey,
-        value: internalValue as T,
+        value: value as T,
         initialValue,
         setValue: (value: T | null) => {
             fieldProps.form.setFieldTouched(propertyKey, true, false);
-            setInternalValue(value);
+            fieldProps.form.setFieldValue(propertyKey, value);
         },
         error,
         touched,
@@ -261,4 +244,3 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
         </>);
 
 }
-
