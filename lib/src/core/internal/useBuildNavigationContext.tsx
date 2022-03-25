@@ -3,12 +3,9 @@ import {
     AuthController,
     CMSView,
     CollectionOverrideHandler,
-    DataSource,
     EntityCollection,
-    Locale,
     LocalEntityCollection,
     NavigationContext,
-    StorageSource,
     TopNavigationEntry,
     TopNavigationResult,
     UserConfigurationPersistence
@@ -20,6 +17,7 @@ import {
 import { mergeDeep } from "../util/objects";
 import { ConfigurationPersistence } from "../../models/config_persistence";
 import { mergeCollections } from "../util/collections";
+import { resolvePermissions } from "../util/permissions";
 
 type BuildNavigationContextProps<UserType> = {
     basePath: string,
@@ -94,7 +92,8 @@ export function useBuildNavigationContext<UserType>({
         let collectionsResult = baseCollections;
         const viewsResult = baseViews;
         if (configPersistence?.collections) {
-            collectionsResult = joinCollections(configPersistence.collections, baseCollections);
+            const allCollections = joinCollections(configPersistence.collections, baseCollections);
+            collectionsResult = resolveCollectionsPermissions(allCollections, authController);
         }
         setCollections(collectionsResult);
         setViews(viewsResult);
@@ -102,6 +101,7 @@ export function useBuildNavigationContext<UserType>({
         setTopLevelNavigation(computeTopNavigation(collectionsResult ?? [], viewsResult ?? []));
         setNavigationLoading(false);
         setInitialised(true);
+
         // resolveNavigationBuilder({
         //     navigationOrBuilder,
         //     authController,
@@ -249,8 +249,23 @@ export function getSidePanelKey(path: string, entityId?: string) {
         return removeInitialAndTrailingSlashes(path);
 }
 
-function encodePath(input:string) {
+function encodePath(input: string) {
     return encodeURIComponent(removeInitialAndTrailingSlashes(input))
         .replaceAll("%2F", "/")
         .replaceAll("%23", "#");
+}
+
+function resolveCollectionsPermissions<M>(collections: EntityCollection<M>[],
+                                          authController: AuthController,
+                                          paths: string[] = []): EntityCollection<M>[] {
+    return collections.map((collection) => ({
+        ...collection,
+        subcollections: collection.subcollections
+            ? resolveCollectionsPermissions(collection.subcollections, authController, [...paths, collection.path])
+            : undefined,
+        permissions: resolvePermissions(
+            collection.permissions, collection, authController, [...paths, collection.path]
+        )
+    }))
+        .filter(collection => collection.permissions.read === undefined || collection.permissions.read);
 }

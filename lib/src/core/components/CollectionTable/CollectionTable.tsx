@@ -73,7 +73,6 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
          hoverRow = true
      }: CollectionTableProps<M>) {
 
-        console.log("CollectionTable", path, collection);
 
         const context = useFireCMSContext();
         const dataSource = useDataSource();
@@ -131,7 +130,7 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
             return [...(resolvedCollection.additionalColumns ?? []), ...subcollectionColumns];
         }, [resolvedCollection, collection, path]);
 
-        const displayedProperties = useColumnIds<M>(collection, resolvedCollection, true);
+        const displayedProperties = useColumnIds<M>(resolvedCollection, true);
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
             ({

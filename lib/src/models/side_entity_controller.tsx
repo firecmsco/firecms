@@ -1,6 +1,4 @@
 import { EntityCollection } from "./collections";
-import { EntityCallbacks } from "./entity_callbacks";
-import { EntityPermissionsBuilder } from "./permissions";
 import { User } from "./user";
 import {
     ResolvedEntityCollection
@@ -10,7 +8,7 @@ import {
  * Props used to open a side dialog
  * @category Hooks and utilities
  */
-export interface SideEntityPanelProps<M = any, UserType = User> {
+export interface SideEntityPanelProps<M = any, UserType extends User = User> {
 
     /**
      * Absolute path of the entity

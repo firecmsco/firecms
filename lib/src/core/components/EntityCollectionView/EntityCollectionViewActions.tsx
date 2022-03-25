@@ -1,22 +1,13 @@
 import React from "react";
 import {
-    Box,
     Button,
     IconButton,
     Tooltip,
     useMediaQuery,
     useTheme
 } from "@mui/material";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import ClickAwayListener from "@mui/material/ClickAwayListener";
-import Grow from "@mui/material/Grow";
-import Paper from "@mui/material/Paper";
-import Popper from "@mui/material/Popper";
-import MenuItem from "@mui/material/MenuItem";
-import MenuList from "@mui/material/MenuList";
 
-import { Add, Delete, Settings } from "@mui/icons-material";
+import { Add, Delete } from "@mui/icons-material";
 import { ExportButton } from "../CollectionTable/internal/ExportButton";
 
 import { canCreateEntity, canDeleteEntity } from "../../util/permissions";
@@ -27,6 +18,7 @@ import {
     ExportConfig,
     SelectionController
 } from "../../../models";
+import { fullPathToCollectionSegments } from "../../util/paths";
 
 export type EntityCollectionViewActionsProps<M> = {
     collection: EntityCollection<M>;
@@ -56,17 +48,18 @@ export function EntityCollectionViewActions<M>({
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const addButton = canCreateEntity(collection.permissions, authController, path, context) && onNewClick && (largeLayout
-        ? <Button
-            onClick={onNewClick}
-            startIcon={<Add/>}
-            size="large"
-            variant="contained"
-            color="primary">
-            Add {collection.name}
-        </Button>
-        : <Button
-            onClick={onNewClick}
+    const addButton = canCreateEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(path)) &&
+        onNewClick && (largeLayout
+            ? <Button
+                onClick={onNewClick}
+                startIcon={<Add/>}
+                size="large"
+                variant="contained"
+                color="primary">
+                Add {collection.name}
+            </Button>
+            : <Button
+                onClick={onNewClick}
             size="medium"
             variant="contained"
             color="primary"
@@ -74,7 +67,7 @@ export function EntityCollectionViewActions<M>({
             <Add/>
         </Button>);
 
-    const multipleDeleteEnabled = selectedEntities.every((entity) => canDeleteEntity(collection.permissions, entity, authController, path, context));
+    const multipleDeleteEnabled = canDeleteEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(path));
 
     let multipleDeleteButton: JSX.Element | undefined;
     if (selectionEnabled) {

@@ -3,12 +3,10 @@ import React from "react";
 import { User as FirebaseUser } from "firebase/auth";
 import {
     Authenticator,
-    buildProperty,
     buildCollection,
+    buildProperty,
     EntityReference,
     FirebaseCMSApp,
-    NavigationBuilder,
-    NavigationBuilderProps
 } from "@camberi/firecms";
 
 import "typeface-rubik";
@@ -48,7 +46,7 @@ type Product = {
     expires_on: Date
 }
 
-const productSchema = buildCollection<Product>({
+const productsCollection = buildCollection<Product>({
     name: "Product",
     path: "products",
     permissions: ({ authController }) => ({
@@ -58,7 +56,7 @@ const productSchema = buildCollection<Product>({
         delete: authController.extra.roles.includes("admin")
     }),
     subcollections: [
-localeCollection
+        localeCollection
     ],
 
     properties: {
@@ -201,18 +199,6 @@ const localeSchema = buildCollection({
 
 export default function App() {
 
-    const navigation: NavigationBuilder = async ({
-                                                     user,
-                                                     authController
-                                                 }: NavigationBuilderProps) => {
-
-        return ({
-            collections: [
-                productSchema
-            ]
-        });
-    };
-
     const myAuthenticator: Authenticator<FirebaseUser> = async ({
                                                                     user,
                                                                     authController
@@ -235,7 +221,7 @@ export default function App() {
     return <FirebaseCMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
-        navigation={navigation}
+        collections={[productsCollection]}
         firebaseConfig={firebaseConfig}
     />;
 }

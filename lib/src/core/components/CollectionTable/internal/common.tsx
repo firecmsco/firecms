@@ -91,16 +91,16 @@ export function getSubcollectionColumnId(collection: EntityCollection) {
     return `subcollection:${collection.path}`;
 }
 
-export function useColumnIds<M>(collection: EntityCollection<M>, resolvedCollection:ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
+export function useColumnIds<M>(collection:ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
 
     return useMemo(() => {
-        const displayedProperties = Object.entries<Property>(resolvedCollection.properties as Record<keyof M, Property>)
+        const displayedProperties = Object.entries<Property>(collection.properties as Record<keyof M, Property>)
             .filter(([_, property]) => !property.hideFromCollection)
             .map(([key, _]) => key);
-        const additionalColumns = resolvedCollection.additionalColumns ?? [];
+        const additionalColumns = collection.additionalColumns ?? [];
         const subCollections: EntityCollection[] = collection.subcollections ?? [];
 
-        const properties: ResolvedProperties = resolvedCollection.properties;
+        const properties: ResolvedProperties = collection.properties;
 
         const hiddenColumnIds: string[] = Object.entries(properties)
             .filter(([_, property]) => {
@@ -109,7 +109,7 @@ export function useColumnIds<M>(collection: EntityCollection<M>, resolvedCollect
             .map(([propertyId, _]) => propertyId);
 
         const columnIds: string[] = [
-            ...Object.keys(resolvedCollection.properties) as string[],
+            ...Object.keys(collection.properties) as string[],
             ...additionalColumns.map((column) => column.id)
         ];
 
@@ -131,5 +131,5 @@ export function useColumnIds<M>(collection: EntityCollection<M>, resolvedCollect
 
         return result;
 
-    }, [resolvedCollection.additionalColumns, collection.subcollections, collection.properties, resolvedCollection.properties, includeSubcollections]);
+    }, [collection, includeSubcollections]);
 }

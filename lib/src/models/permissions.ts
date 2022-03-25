@@ -1,13 +1,19 @@
 import { User } from "./user";
-import { Entity } from "./entities";
 import { AuthController } from "./auth";
 import { FireCMSContext } from "./firecms_context";
+import { EntityCollection } from "./collections";
 
 /**
  * Define the operations that can be performed in an entity.
  * @category Models
  */
 export interface Permissions {
+    /**
+     * Can the user see this collection.
+     * If `false` it will not show in the user's navigation
+     * Defaults to `true`
+     */
+    read?: boolean;
     /**
      * Can the user add new entities. Defaults to `true`
      */
@@ -27,30 +33,30 @@ export interface Permissions {
 }
 
 /**
- * Props passed to a {@link EntityPermissionsBuilder}
+ * Props passed to a {@link PermissionsBuilder}
  * @category Models
  */
-export interface EntityPermissionsBuilderProps<M extends { [Key: string]: any }, UserType = User> {
+export interface EntityPermissionsBuilderProps<M extends { [Key: string]: any }, UserType extends User = User> {
+
     /**
-     * Entity being edited, might be null if it is new
+     * Path segments of the collection e.g. ['products', 'locales']
      */
-    entity: Entity<M> | null;
-    /**
-     * Collection path of this entity
-     */
-    path: string;
+    paths: string[];
+
     /**
      * Logged in user
      */
     user: UserType | null;
+
+    /**
+     * Collection these permissions apply to
+     */
+    collection: EntityCollection<M>;
+
     /**
      * Auth controller
      */
     authController: AuthController<UserType>;
-    /**
-     * Context of the app status
-     */
-    context: FireCMSContext<UserType>;
 }
 
 /**
@@ -58,12 +64,10 @@ export interface EntityPermissionsBuilderProps<M extends { [Key: string]: any },
  * based on the logged user, entity or collection path
  * @category Models
  */
-export type EntityPermissionsBuilder<M extends { [Key: string]: any }, UserType = User> =
-    Permissions
-    | (({
-            entity,
-            path,
-            user,
-            authController,
-            context
-        }: EntityPermissionsBuilderProps<M, UserType>) => Permissions);
+export type PermissionsBuilder<M extends { [Key: string]: any }, UserType extends User = User> =
+    (({
+          paths,
+          user,
+          collection,
+          authController
+      }: EntityPermissionsBuilderProps<M, UserType>) => Permissions);

@@ -49,6 +49,7 @@ import { Settings } from "@mui/icons-material";
 import {
     useCollectionEditorController
 } from "../../../hooks/useCollectionEditorController";
+import { fullPathToCollectionSegments } from "../../util/paths";
 
 /**
  * @category Components
@@ -121,7 +122,6 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
                                                                                collection: baseCollection,
                                                                            }: EntityCollectionViewProps<M>) {
 
-
     const navigationContext = useNavigationContext();
     const collectionFromPath = navigationContext.getCollection<M>(fullPath);
 
@@ -149,7 +149,6 @@ export const EntityCollectionViewInternal = React.memo(
                                                                                 }
     ) {
 
-        console.log("EntityCollectionViewInternal", fullPath, collection);
         const sideEntityController = useSideEntityController();
         const context = useFireCMSContext();
         const authController = useAuthController();
@@ -212,7 +211,7 @@ export const EntityCollectionViewInternal = React.memo(
         }, [setSelectedEntities]);
 
         const checkInlineEditing = useCallback((entity: Entity<any>) => {
-            if (!canEditEntity(collection.permissions, entity, authController, fullPath, context)) {
+            if (!canEditEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(fullPath))) {
                 return false;
             }
             return collection.inlineEditing === undefined || collection.inlineEditing;
@@ -327,8 +326,8 @@ export const EntityCollectionViewInternal = React.memo(
 
             const isSelected = isEntitySelected(entity);
 
-            const createEnabled = canCreateEntity(collection.permissions, authController, fullPath, context);
-            const deleteEnabled = canDeleteEntity(collection.permissions, entity, authController, fullPath, context);
+            const createEnabled = canCreateEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(fullPath));
+            const deleteEnabled = canDeleteEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(fullPath));
 
             const onCopyClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
                 entityId: clickedEntity.id,

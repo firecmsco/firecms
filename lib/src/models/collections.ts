@@ -3,7 +3,7 @@ import { Entity, EntityValues } from "./entities";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
-import { EntityPermissionsBuilder } from "./permissions";
+import { Permissions, PermissionsBuilder } from "./permissions";
 import { EnumValues, PropertiesOrBuilder } from "./properties";
 import { ResolvedEntityCollection } from "./resolved_entities";
 
@@ -16,7 +16,7 @@ import { ResolvedEntityCollection } from "./resolved_entities";
  */
 export interface EntityCollection<M extends { [Key: string]: any } = any,
     AdditionalKey extends string = string,
-    UserType = User> {
+    UserType extends User = User> {
 
     /**
      * Singular name of the entity as displayed in an Add button . E.g. Product
@@ -72,7 +72,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`
      */
-    permissions?: EntityPermissionsBuilder<M, UserType>;
+    permissions?: Permissions | PermissionsBuilder<M, UserType>;
 
     /**
      * Are the entities in this collection selectable. Defaults to true
@@ -191,7 +191,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
  *
  * @category Models
  */
-export interface ExtraActionsParams<M extends { [Key: string]: any } = any, UserType = User> {
+export interface ExtraActionsParams<M extends { [Key: string]: any } = any, UserType extends User = User> {
     /**
      * Collection path of this entity
      */
@@ -290,7 +290,7 @@ export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
  */
 export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any,
     AdditionalKey extends string = string,
-    UserType = User> {
+    UserType extends User = User> {
 
     /**
      * Id of this column. You can use this id in the `properties` field of the

@@ -15,8 +15,6 @@ import {
     FirebaseAuthDelegate,
     FirebaseLoginView,
     FireCMS,
-    NavigationBuilder,
-    NavigationBuilderProps,
     NavigationRoutes,
     Scaffold,
     SideEntityDialogs,
@@ -80,12 +78,6 @@ export function CustomCMSApp() {
 
     const signInOptions = DEFAULT_SIGN_IN_OPTIONS;
 
-    const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
-        collections: [
-            productsCollection
-        ]
-    });
-
     const myAuthenticator: Authenticator = ({ user }) => {
         console.log("Allowing access to", user?.email);
         return true;
@@ -129,7 +121,7 @@ export function CustomCMSApp() {
 
     return (
         <Router>
-            <FireCMS navigation={navigation}
+            <FireCMS collections={[productsCollection]}
                      authDelegate={authDelegate}
                      authentication={myAuthenticator}
                      dataSource={dataSource}

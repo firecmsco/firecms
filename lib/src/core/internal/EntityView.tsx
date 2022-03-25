@@ -45,6 +45,7 @@ import {
 import { canEditEntity } from "../util/permissions";
 import { getResolvedCollection } from "../collections";
 import { EntityFormProps } from "../../form";
+import { fullPathToCollectionSegments } from "../util/paths";
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<any>>;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<any>>;
@@ -94,11 +95,11 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     } = useEntityFetch<M>({
         path,
         entityId: currentEntityId,
-        collection: collection,
+        collection,
         useCache: false
     });
 
-    const editEnabled = entity ? canEditEntity(collection.permissions, entity, authController, path, context) : false;
+    const editEnabled = entity ? canEditEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(path)) : false;
 
     const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => getResolvedCollection<M>({
         collection,

@@ -3,9 +3,9 @@ import React, { PropsWithChildren } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../models";
 import {
+    CollectionEditor,
     EntityCollectionView,
-    FireCMSHomePage,
-    CollectionEditor
+    FireCMSHomePage
 } from "./components";
 import { useNavigationContext } from "../hooks";
 import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";

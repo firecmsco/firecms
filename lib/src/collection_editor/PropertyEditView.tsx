@@ -520,6 +520,9 @@ function PropertyEditView({
 
     return (
         <>
+            {!existing && <Typography variant={"h5"} sx={{
+                my: 3
+            }}>New property</Typography>}
             <Box sx={{
                 display: "flex",
                 mt: 2,

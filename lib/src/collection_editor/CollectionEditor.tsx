@@ -44,7 +44,6 @@ import { ErrorBoundary } from "../core/internal/ErrorBoundary";
 import { LoadingButton } from "@mui/lab";
 import { YupSchema } from "./SchemaYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
-import { removeInitialAndTrailingSlashes } from "../core/util/navigation_utils";
 
 export type CollectionEditorProps<M> = {
     path: string;
@@ -429,7 +428,7 @@ export const CollectionEditorForm = React.memo(
                                 alignItems: "center",
                                 justifyContent: "center"
                             }}>
-                                {emptyCollection
+                                {!emptyCollection
                                     ? "Now you can add your first field"
                                     : "Select a field to edit it"}
                             </Box>}

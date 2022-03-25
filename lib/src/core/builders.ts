@@ -28,7 +28,7 @@ import {
  */
 export function buildCollection<M extends { [Key: string]: any } = any,
     AdditionalKey extends string = string,
-    UserType = User>(
+    UserType extends User = User>(
     collection: EntityCollection<M, AdditionalKey, UserType>
 ): EntityCollection<M, AdditionalKey, UserType> {
     return collection;
@@ -131,7 +131,7 @@ export function buildEntityCallbacks<M = any>(
  * @param additionalColumnDelegate
  * @category Builder
  */
-export function buildAdditionalColumnDelegate<M extends { [Key: string]: any } = any, AdditionalKey extends string = string, UserType = User>(
+export function buildAdditionalColumnDelegate<M extends { [Key: string]: any } = any, AdditionalKey extends string = string, UserType extends User = User>(
     additionalColumnDelegate: AdditionalColumnDelegate<M, AdditionalKey, UserType>
 ): AdditionalColumnDelegate<M, AdditionalKey, UserType> {
     return additionalColumnDelegate;
