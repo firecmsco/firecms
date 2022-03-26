@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useCallback } from "react";
+import { useCallback, useEffect } from "react";
 import { styled, Theme } from "@mui/material/styles";
 
 import equal from "react-fast-compare"
@@ -23,7 +23,7 @@ import {
 } from "../../models";
 import { useDropzone } from "react-dropzone";
 import ClearIcon from "@mui/icons-material/Clear";
-import { PropertyPreview, PreviewSize } from "../../preview";
+import { PreviewSize, PropertyPreview } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
@@ -47,8 +47,6 @@ const classes = {
     activeDrop: `${PREFIX}-activeDrop`,
     acceptDrop: `${PREFIX}-acceptDrop`,
     rejectDrop: `${PREFIX}-rejectDrop`,
-    uploadItem: `${PREFIX}-uploadItem`,
-    uploadItemSmall: `${PREFIX}-uploadItemSmall`,
     thumbnailCloseIcon: `${PREFIX}-thumbnailCloseIcon`
 };
 
@@ -71,7 +69,8 @@ const StyledBox = styled(Box)(({ theme }:
         transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
         "&:focus": {
             borderBottom: `2px solid ${theme.palette.primary.main}`
-        }
+        },
+        zIndex: 2000
     },
 
     [`&.${classes.disabled}`]: {
@@ -102,19 +101,6 @@ const StyledBox = styled(Box)(({ theme }:
     [`&.${classes.rejectDrop}`]: {
         border: "2px solid",
         borderColor: theme.palette.error.light
-    },
-
-    [`& .${classes.uploadItem}`]: {
-        padding: theme.spacing(1),
-        minWidth: 220,
-        minHeight: 220
-    },
-
-    [`& .${classes.uploadItemSmall}`]: {
-        padding: theme.spacing(1),
-        minWidth: 118,
-        minHeight: 118,
-        boxSizing: "border-box"
     },
 
     [`& .${classes.thumbnailCloseIcon}`]: {
@@ -286,7 +272,7 @@ function FileDropComponent({
     multipleFilesSupported: boolean,
     autoFocus: boolean,
     internalValue: StorageFieldItem[],
-    property: StringProperty | ArrayProperty<string[]>,
+    property: ResolvedStringProperty,
     onClear: (clearedStoragePathOrDownloadUrl: string) => void,
     metadata: any,
     storagePathBuilder: (file: File) => string,
@@ -295,7 +281,6 @@ function FileDropComponent({
     name: string,
     helpText: string
 }) {
-
 
     const {
         getRootProps,
@@ -348,13 +333,10 @@ function FileDropComponent({
                 {internalValue.map((entry, index) => {
                     let child: any;
                     if (entry.storagePathOrDownloadUrl) {
-                        const renderProperty = multipleFilesSupported
-                            ? (property as ArrayProperty<string[]>).of as ResolvedStringProperty
-                            : property as ResolvedStringProperty;
                         child = (
                             <StorageItemPreview
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
-                                property={renderProperty}
+                                property={property}
                                 disabled={disabled}
                                 value={entry.storagePathOrDownloadUrl}
                                 onClear={onClear}
@@ -398,7 +380,6 @@ function FileDropComponent({
                 }
 
                 {droppableProvided.placeholder}
-
 
             </Box>
 
@@ -466,12 +447,13 @@ export function StorageUpload({
 
     const [initialValue, setInitialValue] = React.useState<string | string[]>(value);
     const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
-    const [hoveredIndex, setHoveredIndex] = React.useState<number | undefined>(undefined);
 
-    if (!equal(initialValue, value)) {
-        setInitialValue(value);
-        setInternalValue(internalInitialValue);
-    }
+    useEffect(() => {
+        if (!equal(initialValue, value)) {
+            setInitialValue(value);
+            setInternalValue(internalInitialValue);
+        }
+    }, [internalInitialValue, value, initialValue]);
 
     function getRandomId() {
         return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
@@ -587,9 +569,40 @@ export function StorageUpload({
         ? "Drag 'n' drop some files here, or click to select files"
         : "Drag 'n' drop a file here, or click to select one";
 
+    const renderProperty:ResolvedStringProperty = multipleFilesSupported
+        ? (property as ArrayProperty<string[]>).of as ResolvedStringProperty
+        : property as ResolvedStringProperty;
+
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId={`droppable_${name}`} direction="horizontal">
+            <Droppable
+                droppableId={`droppable_${name}`}
+                direction="horizontal"
+                renderClone={(provided, snapshot, rubric) => {
+                    const entry = internalValue[rubric.source.index];
+                    return (
+                        <Box
+                            ref={provided.innerRef}
+                            {...provided.draggableProps}
+                            {...provided.dragHandleProps}
+                            style={
+                                provided.draggableProps.style
+                            }
+                            sx={{
+                                borderRadius: "4px"
+                            }}
+                        >
+                            <StorageItemPreview
+                                name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
+                                property={renderProperty}
+                                disabled={true}
+                                value={entry.storagePathOrDownloadUrl as string}
+                                onClear={onClear}
+                                size={entry.size}/>
+                        </Box>
+                    );
+                }}
+            >
                 {(provided, snapshot) => {
                     return <FileDropComponent storage={storage}
                                               disabled={disabled}
@@ -599,7 +612,7 @@ export function StorageUpload({
                                               multipleFilesSupported={multipleFilesSupported}
                                               autoFocus={autoFocus}
                                               internalValue={internalValue}
-                                              property={property}
+                                              property={renderProperty}
                                               onClear={onClear}
                                               metadata={metadata}
                                               storagePathBuilder={storagePathBuilder}
@@ -681,7 +694,12 @@ export function StorageUploadProgress({
 
         <Box m={1}>
             <Paper elevation={0}
-                   className={size === "regular" ? classes.uploadItem : classes.uploadItemSmall}
+                   sx={{
+                       padding: 1,
+                       boxSizing: "border-box",
+                       minWidth: size === "regular" ? 220 : 118,
+                       minHeight: size === "regular" ? 220 : 118
+                   }}
                    variant={"outlined"}>
 
                 {loading && <Skeleton variant="rectangular" sx={{
@@ -716,28 +734,31 @@ export function StorageItemPreview({
                                        size
                                    }: StorageItemPreviewProps) {
 
-
     return (
         <Box m={1} position={"relative"}>
 
             <Paper
                 elevation={0}
-                className={size === "regular" ? classes.uploadItem : classes.uploadItemSmall}
+                sx={{
+                    padding: 1,
+                    boxSizing: "border-box",
+                    minWidth: size === "regular" ? 220 : 118,
+                    minHeight: size === "regular" ? 220 : 118
+                }}
                 variant={"outlined"}>
 
                 {!disabled &&
-
-                <a
-                    className={classes.thumbnailCloseIcon}>
-                    <IconButton
-                        size={"small"}
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            onClear(value);
-                        }}>
-                        <ClearIcon fontSize={"small"}/>
-                    </IconButton>
-                </a>
+                    <a
+                        className={classes.thumbnailCloseIcon}>
+                        <IconButton
+                            size={"small"}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                                onClear(value);
+                            }}>
+                            <ClearIcon fontSize={"small"}/>
+                        </IconButton>
+                    </a>
                 }
 
                 {value &&
