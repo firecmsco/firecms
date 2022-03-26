@@ -8,7 +8,7 @@ import {
  * Props used to open a side dialog
  * @category Hooks and utilities
  */
-export interface SideEntityPanelProps<M = any, UserType extends User = User> {
+export interface EntityPanelProps<M = any, UserType extends User = User> {
 
     /**
      * Absolute path of the entity
@@ -16,7 +16,7 @@ export interface SideEntityPanelProps<M = any, UserType extends User = User> {
     path: string;
 
     /**
-     * Id of the entity, if not set, it means we are creating a new entity
+     * ID of the entity, if not set, it means we are creating a new entity
      */
     entityId?: string;
 
@@ -29,7 +29,7 @@ export interface SideEntityPanelProps<M = any, UserType extends User = User> {
      * Open the entity with a selected sub-collection view. If the panel for this
      * entity was already open, it is replaced.
      */
-    selectedSubpath?: string;
+    selectedSubPath?: string;
 
     /**
      * Use this prop to override the width of the side dialog.
@@ -38,7 +38,7 @@ export interface SideEntityPanelProps<M = any, UserType extends User = User> {
     width?: number | string;
 
     /**
-     * collection representing the entities of this view.
+     * Collection representing the entities of this view.
      * If you leave it blank it will be induced by your navigation
      */
     collection?: EntityCollection<M> | ResolvedEntityCollection<M>;
@@ -63,11 +63,6 @@ export interface SideEntityController {
     close: () => void;
 
     /**
-     * List of side entity panels currently open
-     */
-    sidePanels: SideEntityPanelProps[];
-
-    /**
      * Open a new entity sideDialog. By default, the collection and configuration
      * of the view is fetched from the collections you have specified in the
      * navigation.
@@ -78,5 +73,6 @@ export interface SideEntityController {
      * the FireCMS level.
      * @param props
      */
-    open: (props: SideEntityPanelProps) => void;
+    open: (props: EntityPanelProps) => void;
+    replace: (props: EntityPanelProps) => void;
 }

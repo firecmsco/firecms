@@ -46,6 +46,7 @@ import { canEditEntity } from "../util/permissions";
 import { getResolvedCollection } from "../collections";
 import { EntityFormProps } from "../../form";
 import { fullPathToCollectionSegments } from "../util/paths";
+import { useSideDialogContext } from "../SideDialogs";
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<any>>;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<any>>;
@@ -56,7 +57,7 @@ export interface EntityViewProps<M, UserType> {
     collection: EntityCollection<M>
     entityId?: string;
     copy?: boolean;
-    selectedSubpath?: string;
+    selectedSubPath?: string;
     width?: number | string;
     onModifiedValues: (modified: boolean) => void;
 }
@@ -64,7 +65,7 @@ export interface EntityViewProps<M, UserType> {
 export function EntityView<M extends { [Key: string]: any }, UserType>({
                                                                            path,
                                                                            entityId,
-                                                                           selectedSubpath,
+                                                                           selectedSubPath,
                                                                            copy,
                                                                            collection,
                                                                            onModifiedValues,
@@ -74,6 +75,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
 
     const dataSource = useDataSource();
+    const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
     const snackbarController = useSnackbarController();
     const context = useFireCMSContext();
@@ -122,23 +124,23 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
 
     useEffect(() => {
-        if (!selectedSubpath)
+        if (!selectedSubPath)
             setTabsPosition(-1);
 
         if (customViews) {
             const index = customViews
                 .map((c) => c.path)
-                .findIndex((p) => p === selectedSubpath);
+                .findIndex((p) => p === selectedSubPath);
             setTabsPosition(index);
         }
 
-        if (collection.subcollections && selectedSubpath) {
+        if (collection.subcollections && selectedSubPath) {
             const index = collection.subcollections
                 .map((c) => c.path)
-                .findIndex((p) => p === selectedSubpath);
+                .findIndex((p) => p === selectedSubPath);
             setTabsPosition(index + customViewsCount);
         }
-    }, [selectedSubpath]);
+    }, [selectedSubPath]);
 
     const onPreSaveHookError = useCallback((e: Error) => {
         snackbarController.open({
@@ -171,7 +173,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         onModifiedValues(false);
 
         if (tabsPosition === -1)
-            sideEntityController.close();
+            sideDialogContext.close();
 
     }, []);
 
@@ -222,7 +224,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     const onDiscard = useCallback(() => {
         if (tabsPosition === -1)
-            sideEntityController.close();
+            sideDialogContext.close();
     }, [tabsPosition]);
 
     const form = !readOnly
@@ -320,7 +322,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         }
     );
 
-    const getSelectedSubpath = useCallback((value: number) => {
+    const getSelectedSubPath = useCallback((value: number) => {
         if (value === -1) return undefined;
 
         if (customViews && value < customViewsCount) {
@@ -331,20 +333,20 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             return subcollections[value - customViewsCount].path;
         }
 
-        throw Error("Something is wrong in getSelectedSubpath");
-    }, [customViews]);
+        throw Error("Something is wrong in getSelectedSubPath");
+    }, [customViews, customViewsCount, subcollections]);
 
     const onSideTabClick = useCallback((value: number) => {
         setTabsPosition(value);
         if (entityId) {
-            sideEntityController.open({
+            sideEntityController.replace({
                 path,
                 entityId,
-                selectedSubpath: getSelectedSubpath(value),
+                selectedSubPath: getSelectedSubPath(value),
                 updateUrl: true
             });
         }
-    }, []);
+    }, [sideEntityController, entityId]);
 
     const header = (
         <Box sx={{
@@ -357,7 +359,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         }}
         >
 
-            <IconButton onClick={(e) => sideEntityController.close()}
+            <IconButton onClick={() => sideDialogContext.close()}
                         size="large">
                 <CloseIcon/>
             </IconButton>
@@ -439,6 +441,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 height: "100%",
                 transition: "width 250ms ease-in-out",
                 width: !mainViewSelected ? `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})` : resolvedWidth ?? CONTAINER_WIDTH,
+                maxWidth: CONTAINER_FULL_WIDTH,
                 [theme.breakpoints.down("lg")]: {
                     width: !mainViewSelected ? CONTAINER_FULL_WIDTH : undefined
                 },

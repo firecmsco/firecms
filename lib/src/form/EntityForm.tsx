@@ -232,7 +232,6 @@ export function EntityForm<M>({
         collection.properties,
         uniqueFieldValidator), [collection.properties]);
 
-    console.log("initialValues", initialValues)
     return (
         <Formik
             initialValues={initialValues}

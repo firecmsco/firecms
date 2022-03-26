@@ -9,6 +9,7 @@ import { User } from "./user";
 import { SnackbarController } from "../hooks";
 import { ConfigurationPersistence } from "./config_persistence";
 import { UserConfigurationPersistence } from "./local_config_persistence";
+import { SideDialogsController } from "../core/SideDialogs";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -52,6 +53,8 @@ export interface FireCMSContext<UserType extends User = User> {
      * @see useSideEntityController
      */
     sideEntityController: SideEntityController;
+
+    sideDialogsController: SideDialogsController;
 
     /**
      * Used auth controller

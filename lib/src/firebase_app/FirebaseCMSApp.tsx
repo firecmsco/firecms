@@ -10,7 +10,6 @@ import {
     FireCMS,
     NavigationRoutes,
     Scaffold,
-    SideEntityDialogs,
 } from "../core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
@@ -26,6 +25,7 @@ import {
 import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
+import { SideDialogs } from "../core/SideDialogs";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -167,7 +167,7 @@ export function FirebaseCMSApp({
                                 logo={logo}
                                 toolbarExtraWidget={toolbarExtraWidget}>
                                 <NavigationRoutes HomePage={HomePage}/>
-                                <SideEntityDialogs/>
+                                <SideDialogs/>
                             </Scaffold>
                         );
                     }

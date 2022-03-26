@@ -430,7 +430,7 @@ export function StorageUpload({
         }
     }
 
-    const metadata: any | undefined = storage?.metadata;
+    const metadata: Record<string, unknown> | undefined = storage?.metadata;
     const size = multipleFilesSupported ? "small" : "regular";
 
     const internalInitialValue: StorageFieldItem[] =

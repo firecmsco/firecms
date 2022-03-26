@@ -49,7 +49,6 @@ function joinCollections(fetchedCollections: EntityCollection[], baseCollections
     const storedCollections = resolvedFetchedCollections
         .filter((col) => !updatedCollections.map(c => c.path).includes(col.path));
 
-    console.log("updatedCollections", fetchedCollections, baseCollections);
     return [...updatedCollections, ...storedCollections];
 }
 

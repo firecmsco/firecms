@@ -393,6 +393,7 @@ export const CollectionEditorForm = React.memo(
                         size={"large"}
                         sx={{ width: "100%" }}
                         onClick={() => setNewPropertyDialogOpen(true)}
+                        // autoFocus={true}
                         startIcon={<AddIcon/>}>
                         Add new property
                     </Button>

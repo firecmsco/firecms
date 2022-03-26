@@ -117,7 +117,7 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
                                     sideEntityController.open({
                                         path,
                                         entityId: entity.id,
-                                        selectedSubpath: subcollection.path,
+                                        selectedSubPath: subcollection.path,
                                         collection: collection,
                                         updateUrl: true
                                     });
