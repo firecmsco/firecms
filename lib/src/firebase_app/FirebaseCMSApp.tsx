@@ -153,7 +153,7 @@ export function FirebaseCMSApp({
                         component = (
                             <FirebaseLoginView
                                 logo={logo}
-                                skipLoginButtonEnabled={allowSkipLogin}
+                                allowSkipLogin={allowSkipLogin}
                                 signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
                                 firebaseApp={firebaseApp}
                                 authDelegate={authDelegate}

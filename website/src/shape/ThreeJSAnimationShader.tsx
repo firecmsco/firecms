@@ -672,7 +672,6 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
                 width: "100vw",
                 position: "fixed",
                 top: `0px`,
-                transform: `translateY(60px)`,
                 zIndex: -10
             }}
             ref={canvasRef}

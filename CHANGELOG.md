@@ -58,6 +58,18 @@ buildProperty<string>({
   you pass a React Component directly: `Actions`
 - `Permissions` is now called `EntityPermissions`, and same for the related types.
 
+## [1.0.0-rc.4] - 2022-03-14
+
+### Changed
+
+- Added `LoginViewProps` to `FirebaseCMSApp`. You can use it to customise
+  the login flow, using the `disableSignupScreen` prop to prevent users from
+  creating accounts in `password` mode. And to display a `NoUserComponent`
+- when the user logging in `password` mode is not found
+- Fix for hidden CMS views bug.
+- Fix for array select filters
+- Fixed inline date popups
+- Fix for not editable tables not updating on data changes
 
 ## [1.0.0-rc.3] - 2022-02-28
 

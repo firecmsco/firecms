@@ -123,7 +123,7 @@ export function ExampleCMSView() {
     const sideEntityController = useSideEntityController();
 
     // hook to do operations related to authentication
-    const authController = useAuthContext();
+    const authController = useAuthController();
 
     const customProductSchema = buildCollection({
         name: "Custom product",

@@ -14,7 +14,6 @@ function HeroHome({}) {
         width: "100vh",
         maxHeight: "1000px",
         position: "fixed",
-        transform: `translateY(60px)`,
         top: 0,
         zIndex: -10
     }}/>;
@@ -31,7 +30,7 @@ function HeroHome({}) {
     </div>;
 
     const titleDiv = <div
-        className="sm:px-6 px-16 my-4 xl:my-16">
+        className="sm:px-6 px-16 my-4 xl:my-8">
 
         <div className="text-center xl:text-right">
             <h1
@@ -82,11 +81,15 @@ function HeroHome({}) {
             </BrowserOnly>
 
 
-            <div className="xl:grid xl:grid-cols-2 xl:my-24 md:my-16 my-8 ">
+            <div className="xl:grid xl:grid-cols-12 xl:my-24 md:my-16 my-8 ">
 
+                <div className={"col-span-7"}>
                 {titleDiv}
+                </div>
 
+                <div className={"col-span-5"}>
                 {video}
+                </div>
 
             </div>
 

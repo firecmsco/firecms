@@ -1,6 +1,7 @@
 import React, { CSSProperties, useMemo, useState } from "react";
-import { Box, IconButton, useTheme } from "@mui/material";
+import { Box, IconButton, Tooltip, useTheme } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import { PreviewSize } from "../index";
 import { getThumbnailMeasure } from "../util";
@@ -66,25 +67,50 @@ export function ImagePreview({ size, url }: ImagePreviewProps) {
             <img src={url}
                  style={imageStyle}/>
 
-            {onHover && (
-                <a
-                    style={{
+            {onHover && <>
+
+                {navigator && <Tooltip title="Copy url to clipboard">
+                    <Box sx={{
                         borderRadius: "9999px",
                         position: "absolute",
                         bottom: -4,
-                        right: -4,
-                        backgroundColor: theme.palette.common.white
-                    }}
-                    href={url}
-                    rel="noopener noreferrer"
-                    target="_blank">
-                    <IconButton
-                        size={"small"}
-                        onClick={(e) => e.stopPropagation()}>
-                        <OpenInNewIcon htmlColor={"#888"} fontSize={"small"}/>
-                    </IconButton>
-                </a>
-            )}
+                        right: 32,
+                        backgroundColor: theme.palette.background.default
+                    }}>
+                        <IconButton
+                            size={"small"}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                return navigator.clipboard.writeText(url);
+                            }}>
+                            <ContentCopyIcon htmlColor={"#666"}
+                                             fontSize={"small"}/>
+                        </IconButton>
+                    </Box>
+                </Tooltip>}
+
+                <Tooltip title="Open image in new tab">
+                    <a
+                        style={{
+                            borderRadius: "9999px",
+                            position: "absolute",
+                            bottom: -4,
+                            right: -4,
+                            backgroundColor: theme.palette.background.default
+                        }}
+                        href={url}
+                        rel="noopener noreferrer"
+                        target="_blank">
+                        <IconButton
+                            size={"small"}
+                            onClick={(e) => e.stopPropagation()}>
+                            <OpenInNewIcon htmlColor={"#666"}
+                                           fontSize={"small"}/>
+                        </IconButton>
+                    </a>
+                </Tooltip>
+            </>
+            }
         </Box>
     );
 }
