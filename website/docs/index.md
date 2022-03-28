@@ -46,7 +46,7 @@ stops you from implementing your own `DataSource`, `AuthController` and
 
 ### Core technologies
 
-FireCMS is based on this great technologies:
+FireCMS is based on these great technologies:
 
 - Typescript
 - Firebase
