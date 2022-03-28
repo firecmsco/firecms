@@ -101,21 +101,6 @@ export function useBuildNavigationContext<UserType>({
         setNavigationLoading(false);
         setInitialised(true);
 
-        // resolveNavigationBuilder({
-        //     navigationOrBuilder,
-        //     authController,
-        //     collections: configPersistence?.collections ?? [],
-        //     dateTimeFormat,
-        //     locale,
-        //     dataSource,
-        //     storageSource
-        // }).then((res) => {
-        //     setNavigationLoading(false);
-        //     setResolvedUserNavigation(res);
-        // }).catch(e => {
-        //     setNavigationLoading(false);
-        //     setNavigationLoadingError(e);
-        // });
     }, [authController.user, authController.canAccessMainView, configPersistence]);
 
     const getCollection = useCallback(<M extends { [Key: string]: any }>(
@@ -127,7 +112,7 @@ export function useBuildNavigationContext<UserType>({
 
         const collectionOverride = getCollectionOverride(path);
 
-        const resolvedCollection = baseCollection ? mergeDeep(baseCollection, collectionOverride) : undefined;
+        const overriddenCollection = baseCollection ? mergeDeep(baseCollection, collectionOverride) : undefined;
 
         let result: Partial<EntityCollection> = {};
 
@@ -139,10 +124,10 @@ export function useBuildNavigationContext<UserType>({
         if (resolvedProps)
             result = resolvedProps;
 
-        if (resolvedCollection) {
-            const subcollections = resolvedCollection.subcollections;
-            const callbacks = resolvedCollection.callbacks;
-            const permissions = resolvedCollection.permissions;
+        if (overriddenCollection) {
+            const subcollections = overriddenCollection.subcollections;
+            const callbacks = overriddenCollection.callbacks;
+            const permissions = overriddenCollection.permissions;
             result = {
                 ...result,
                 subcollections: result.subcollections ?? subcollections,
@@ -151,7 +136,7 @@ export function useBuildNavigationContext<UserType>({
             };
         }
 
-        return { ...resolvedCollection, ...(result as EntityCollection<M>) };
+        return { ...overriddenCollection, ...(result as EntityCollection<M>) };
 
     }, [
         basePath,

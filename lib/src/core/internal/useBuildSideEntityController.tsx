@@ -13,13 +13,25 @@ import { useLocation } from "react-router-dom";
 import { SideDialogPanelProps, SideDialogsController } from "../SideDialogs";
 import { SideEntityDialog } from "../SideEntityDialog";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
+import { useMediaQuery, useTheme } from "@mui/material";
+import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
 
 const NEW_URL_HASH = "new";
+
+export function getEntityViewWidth(props: EntityPanelProps<any, any>, small: boolean): string {
+    if (small) return CONTAINER_FULL_WIDTH;
+    const mainViewSelected = !props.selectedSubPath;
+    const resolvedWidth: string | undefined = typeof props.width === "number" ? `${props.width}px` : props.width;
+    return !mainViewSelected ? `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})` : resolvedWidth ?? CONTAINER_WIDTH
+}
 
 export const useBuildSideEntityController = (navigationContext: NavigationContext, sideDialogsController: SideDialogsController): SideEntityController => {
 
     const location = useLocation();
     const initialised = useRef<boolean>(false);
+
+    const theme = useTheme();
+    const smallLayout: boolean = useMediaQuery(theme.breakpoints.down("sm"));
 
     const collections = navigationContext.collections;
 
@@ -46,7 +58,8 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
             Component: SideEntityDialog,
             props: props,
             urlPath: newPath,
-            parentUrlPath: navigationContext.buildUrlCollectionPath(collectionPath)
+            parentUrlPath: navigationContext.buildUrlCollectionPath(collectionPath),
+            width: getEntityViewWidth(props, smallLayout)
         });
     }, [navigationContext]);
 

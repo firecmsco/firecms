@@ -104,7 +104,6 @@ export function EntityForm<M>({
 
     const dataSource = useDataSource();
 
-
     const initialResolvedCollection = useMemo(() => getResolvedCollection({
         collection: inputCollection,
         path,
@@ -313,8 +312,8 @@ function FormInternal<M>({
             // we update the form fields from the Firestore data
             // if they were not touched
             Object.entries(underlyingChanges).forEach(([key, value]) => {
-                const formValue = (values as any)[key];
-                if (!equal(value, formValue) && !(touched as any)[key]) {
+                const formValue = values[key];
+                if (!equal(value, formValue) && !touched[key]) {
                     console.debug("Updated value from the datasource:", key, value);
                     setFieldValue(key, value !== undefined ? value : null);
                 }
@@ -502,7 +501,7 @@ function FormInternal<M>({
         <Form onSubmit={handleSubmit}
               noValidate
               style={{
-                  height: "100%",
+                  height: "100%"
               }}>
 
             {formFields}

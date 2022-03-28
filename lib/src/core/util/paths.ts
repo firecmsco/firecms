@@ -1,10 +1,10 @@
 /**
  * Remove the entity ids from a given path
- * `products/B44RG6APH/locales` => `products/locales`
+ * `products/B44RG6APH/locales` => `products::locales`
  * @param path
  */
 export function stripCollectionPath(path: string): string {
-    return fullPathToCollectionSegments(path).reduce((a, b) => `${a}/${b}`);
+    return fullPathToCollectionSegments(path).reduce((a, b) => `${a}::${b}`);
 }
 
 /**

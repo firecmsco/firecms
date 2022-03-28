@@ -467,7 +467,7 @@ export const CollectionEditorForm = React.memo(
                         onClose={() => setDetailsDialogOpen(false)}
                     >
                         <CollectionDetailsForm isNewCollection={false}/>
-                        <CustomDialogActions>
+                        <CustomDialogActions position={"absolute"}>
                             <Button
                                 variant="contained"
                                 onClick={() => setDetailsDialogOpen(false)}> Ok </Button>

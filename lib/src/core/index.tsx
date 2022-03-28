@@ -10,6 +10,8 @@ export { Scaffold } from "./Scaffold";
 export type { DrawerProps } from "./Drawer";
 export { Drawer } from "./Drawer";
 
+export * from "./SideDialogs";
+
 export * from "./components";
 
 export { createCMSDefaultTheme } from "./theme";

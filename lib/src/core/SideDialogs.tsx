@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks/useSideDialogsController";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { ErrorBoundary } from "./internal/ErrorBoundary";
@@ -7,6 +7,7 @@ import {
     useNavigationUnsavedChangesDialog
 } from "./internal/useUnsavedChangesDialog";
 import { CONTAINER_WIDTH } from "./internal/common";
+import { Box } from "@mui/material";
 
 /**
  * Controller to open the side dialog
@@ -29,6 +30,10 @@ export interface SideDialogsController {
      */
     open: <P>(props: SideDialogPanelProps<P>) => void;
 
+    /**
+     * Replace the last open panel with the given one
+     * @param props
+     */
     replace: <P>(props: SideDialogPanelProps<P>) => void;
 }
 
@@ -44,6 +49,8 @@ export interface SideDialogPanelProps<P = any> {
 
     props: P;
 
+    width?: string;
+
     urlPath?: string;
 
     parentUrlPath?: string;
@@ -51,13 +58,19 @@ export interface SideDialogPanelProps<P = any> {
 }
 
 export type SideDialogContextProps = {
-    modified: boolean,
-    setModified: (modified: boolean) => void,
+    blocked: boolean,
+    setBlocked: (blocked: boolean) => void,
+    width: string,
+    setWidth: (width: string) => void,
     close: () => void
 }
+
 const SideDialogContext = React.createContext<SideDialogContextProps>({
-    modified: false,
-    setModified: (modified: boolean) => {
+    width: "",
+    setWidth: (width: string) => {
+    },
+    blocked: false,
+    setBlocked: (blocked: boolean) => {
     },
     close: () => {
     }
@@ -86,7 +99,6 @@ export function SideDialogs() {
             allPanels.map((panel, index) => {
                 return <SideDialogView
                     key={`side_dialog_${index}`}
-                    index={index}
                     panel={panel}
                     offsetPosition={sidePanels.length - index - 1}/>;
             })
@@ -95,43 +107,45 @@ export function SideDialogs() {
 }
 
 function SideDialogView({
-                            index,
                             offsetPosition,
                             panel
                         }: {
-    index: number,
     offsetPosition: number,
     panel?: SideDialogPanelProps<{}>
 }) {
 
     // was the closing of the dialog requested by the drawer
     const [drawerCloseRequested, setDrawerCloseRequested] = useState(false);
-    const [modified, setModified] = useState(false);
+    const [blocked, setBlocked] = useState(false);
+
+    const [width, setWidth] = useState(panel?.width ?? CONTAINER_WIDTH);
     const sideDialogsController = useSideDialogsController();
 
-
-    console.log("offsetPosition", index, offsetPosition);
     const {
         navigationWasBlocked,
         handleOk: handleNavigationOk,
         handleCancel: handleNavigationCancel
     } = useNavigationUnsavedChangesDialog(
-        modified && !drawerCloseRequested,
-        () => setModified(false)
+        blocked && !drawerCloseRequested,
+        () => setBlocked(false)
     );
 
+    useEffect(() => {
+        setWidth(panel?.width ?? CONTAINER_WIDTH);
+    }, [panel?.width])
+
     const handleDrawerCloseOk = () => {
-        setModified(false);
+        setBlocked(false);
         setDrawerCloseRequested(false);
         sideDialogsController.close();
     };
 
     const handleDrawerCloseCancel = () => {
-        setModified(false);
+        setDrawerCloseRequested(false);
     };
 
     const onCloseRequest = () => {
-        if (modified) {
+        if (blocked) {
             setDrawerCloseRequested(true);
         } else {
             sideDialogsController.close();
@@ -139,37 +153,44 @@ function SideDialogView({
     }
 
     return (
-        <SideDialogContext.Provider value={{
-            modified,
-            setModified,
-            close: onCloseRequest
-        }}>
+        <SideDialogContext.Provider
+            value={{
+                blocked,
+                setBlocked,
+                width,
+                setWidth,
+                close: onCloseRequest
+            }}>
 
-            {panel && <>
-                <SideDialogDrawer
-                    key={`side_dialog_${index}`}
-                    open={Boolean(panel)}
-                    onClose={onCloseRequest}
-                    offsetPosition={offsetPosition}
-                >
+            <SideDialogDrawer
+                open={Boolean(panel)}
+                onClose={onCloseRequest}
+                offsetPosition={offsetPosition}
+            >
+                {panel &&
                     <ErrorBoundary>
-                        <panel.Component {...panel.props}/>
-                    </ErrorBoundary>
-                </SideDialogDrawer>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                height: "100%",
+                                transition: "width 250ms ease-in-out",
+                                width: width,
+                                maxWidth: "100vw"
+                            }}>
+                            <panel.Component {...panel.props}/>
+                        </Box>
+                    </ErrorBoundary>}
 
-                <UnsavedChangesDialog
-                    open={navigationWasBlocked || drawerCloseRequested}
-                    handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
-                    handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
-                    name={"TODO"}/>
-            </>}
+                {!panel && <div style={{ width: width }}/>}
 
-            {!panel && <SideDialogDrawer
-                key={`side_dialog_${index}`}
-                open={false}
-                offsetPosition={offsetPosition}>
-                <div style={{ width: CONTAINER_WIDTH }}/>
-            </SideDialogDrawer>}
+            </SideDialogDrawer>
+
+            <UnsavedChangesDialog
+                open={navigationWasBlocked || drawerCloseRequested}
+                handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
+                handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
+                name={"TODO"}/>
 
         </SideDialogContext.Provider>
 

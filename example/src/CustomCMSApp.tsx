@@ -17,7 +17,7 @@ import {
     FireCMS,
     NavigationRoutes,
     Scaffold,
-    SideEntityDialogs,
+    SideDialogs,
     useFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
@@ -147,7 +147,7 @@ export function CustomCMSApp() {
                         component = (
                             <Scaffold name={"My Online Shop"}>
                                 <NavigationRoutes/>
-                                <SideEntityDialogs/>
+                                <SideDialogs/>
                             </Scaffold>
                         );
                     }

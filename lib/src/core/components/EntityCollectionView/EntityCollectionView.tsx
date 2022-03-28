@@ -34,7 +34,6 @@ import {
 import { Markdown } from "../../../preview";
 import {
     useAuthController,
-    useFireCMSContext,
     useNavigationContext,
     useSideEntityController
 } from "../../../hooks";
@@ -96,7 +95,7 @@ export function useSelectionController<M = any>(): SelectionController {
 /**
  * This component is in charge of binding a datasource path with an {@link EntityCollection}
  * where it's configuration is defined. It includes an infinite scrolling table
- * and a'Add' new entities button,
+ * and a 'Add' new entities button,
  *
  * This component is the default one used for displaying entity collections
  * and is in charge of generating all the specific actions and customization
@@ -112,7 +111,7 @@ export function useSelectionController<M = any>(): SelectionController {
  * If you need a table that is not bound to the datasource or entities and
  * properties at all, you can check {@link Table}
  *
- * @param path
+ * @param fullPath
  * @param collection
  * @constructor
  * @category Components
@@ -150,7 +149,6 @@ export const EntityCollectionViewInternal = React.memo(
     ) {
 
         const sideEntityController = useSideEntityController();
-        const context = useFireCMSContext();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
         const collectionEditorController = useCollectionEditorController();

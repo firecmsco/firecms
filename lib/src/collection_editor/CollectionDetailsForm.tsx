@@ -52,7 +52,6 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
     return (
         <Container maxWidth={"md"}
                    sx={{
-
                        p: 3,
                        height: "100%",
                        overflow: "scroll"
@@ -68,16 +67,6 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
                 <Typography variant={!isNewCollection ? "h5" : "h4"}>
                     {isNewCollection ? "New collection" : `${values.name} collection`}
                 </Typography>
-                {/*{includeCollectionLink && <Box>*/}
-                {/*    {path && <Button*/}
-                {/*        component={ReactLink}*/}
-                {/*        to={navigationContext.buildUrlCollectionPath(path)}*/}
-                {/*        sx={{*/}
-                {/*            mx: 1*/}
-                {/*        }}>*/}
-                {/*        Go to collection*/}
-                {/*    </Button>}*/}
-                {/*</Box>}*/}
             </Box>
 
             <Grid container spacing={2}>
@@ -206,24 +195,8 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
 
             </Grid>
 
+            <Box height={52}/>
+
         </Container>
     );
-
-    return (
-        <>
-            <Container maxWidth={"md"}
-                       sx={{
-                           p: 3,
-                           height: "100%",
-                           overflow: "scroll"
-                       }}>
-                <Grid container spacing={2}
-                      sx={{
-                          my: 2
-                      }}></Grid>
-                <Box height={52}/>
-            </Container>
-
-        </>
-    )
 }

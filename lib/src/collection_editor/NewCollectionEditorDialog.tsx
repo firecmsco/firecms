@@ -139,7 +139,7 @@ export function NewCollectionEditorDialog<M>({
                             </Box>
 
                             <CustomDialogActions
-                                position={ "sticky" }>
+                                position={ "absolute" }>
                                 <Button variant={"text"}
                                         onClick={() => {
                                             handleClose();

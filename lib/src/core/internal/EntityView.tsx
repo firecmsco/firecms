@@ -48,97 +48,100 @@ import { EntityFormProps } from "../../form";
 import { fullPathToCollectionSegments } from "../util/paths";
 import { useSideDialogContext } from "../SideDialogs";
 
+import equal from "react-fast-compare"
+
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<any>>;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<any>>;
 const EntityPreview = lazy(() => import("../components/EntityPreview")) as React.FunctionComponent<EntityPreviewProps<any>>;
 
 export interface EntityViewProps<M, UserType> {
     path: string;
-    collection: EntityCollection<M>
+    collection: EntityCollection<M>;
     entityId?: string;
     copy?: boolean;
     selectedSubPath?: string;
-    width?: number | string;
+    formWidth?: number | string;
     onModifiedValues: (modified: boolean) => void;
 }
 
-export function EntityView<M extends { [Key: string]: any }, UserType>({
-                                                                           path,
-                                                                           entityId,
-                                                                           selectedSubPath,
-                                                                           copy,
-                                                                           collection,
-                                                                           onModifiedValues,
-                                                                           width
-                                                                       }: EntityViewProps<M, UserType>) {
+export const EntityView = React.memo<EntityViewProps<any, any>>(
+    function EntityView<M extends { [Key: string]: any }, UserType>({
+                                                                        path,
+                                                                        entityId,
+                                                                        selectedSubPath,
+                                                                        copy,
+                                                                        collection,
+                                                                        onModifiedValues,
+                                                                        formWidth
+                                                                    }: EntityViewProps<M, UserType>) {
 
-    const resolvedWidth: string | undefined = typeof width === "number" ? `${width}px` : width;
+        const resolvedWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? CONTAINER_WIDTH;
 
-    const dataSource = useDataSource();
-    const sideDialogContext = useSideDialogContext();
-    const sideEntityController = useSideEntityController();
-    const snackbarController = useSnackbarController();
-    const context = useFireCMSContext();
+        const dataSource = useDataSource();
+        const sideDialogContext = useSideDialogContext();
+        const sideEntityController = useSideEntityController();
+        const snackbarController = useSnackbarController();
+        const context = useFireCMSContext();
 
-    const authController = useAuthController<UserType>();
+        const authController = useAuthController<UserType>();
 
-    const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
-    const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
-    const [readOnly, setReadOnly] = useState<boolean>(false);
-    const [tabsPosition, setTabsPosition] = React.useState(-1);
+        const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
+        const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
+        const [readOnly, setReadOnly] = useState<boolean>(false);
+        const [tabsPosition, setTabsPosition] = React.useState(-1);
 
-    const [modifiedValues, setModifiedValues] = useState<EntityValues<M> | undefined>();
+        const [modifiedValues, setModifiedValues] = useState<EntityValues<M> | undefined>();
 
-    const {
-        entity,
-        dataLoading,
-        // eslint-disable-next-line no-unused-vars
-        dataLoadingError
-    } = useEntityFetch<M>({
-        path,
-        entityId: currentEntityId,
-        collection,
-        useCache: false
-    });
+        const {
+            entity,
+            dataLoading,
+            // eslint-disable-next-line no-unused-vars
+            dataLoadingError
+        } = useEntityFetch<M>({
+            path,
+            entityId: currentEntityId,
+            collection,
+            useCache: false
+        });
 
-    const editEnabled = entity ? canEditEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(path)) : false;
+        const editEnabled = entity ? canEditEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(path)) : false;
 
-    const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => getResolvedCollection<M>({
-        collection,
-        path,
-        entityId,
-        values: modifiedValues,
-        previousValues: entity?.values
-    }), [collection, collection, path, entityId, modifiedValues]);
+        const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => getResolvedCollection<M>({
+            collection,
+            path,
+            entityId,
+            values: modifiedValues,
+            previousValues: entity?.values
+        }), [collection, collection, path, entityId, modifiedValues]);
 
-    const subcollections = resolvedCollection.subcollections;
-    const customViews = resolvedCollection.views;
-    const customViewsCount = customViews?.length ?? 0;
+        const subcollections = resolvedCollection.subcollections;
+        const customViews = resolvedCollection.views;
+        const customViewsCount = customViews?.length ?? 0;
 
-    useEffect(() => {
-        if (entity)
-            setReadOnly(!editEnabled);
-    }, [entity, editEnabled]);
+        useEffect(() => {
+            if (entity)
+                setReadOnly(!editEnabled);
+        }, [entity, editEnabled]);
 
-    const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
+        const theme = useTheme();
+        const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
 
-    useEffect(() => {
-        if (!selectedSubPath)
-            setTabsPosition(-1);
+        useEffect(() => {
+            if (!selectedSubPath)
+                setTabsPosition(-1);
 
-        if (customViews) {
-            const index = customViews
-                .map((c) => c.path)
-                .findIndex((p) => p === selectedSubPath);
-            setTabsPosition(index);
-        }
+            if (customViews) {
+                const index = customViews
+                    .map((c) => c.path)
+                    .findIndex((p) => p === selectedSubPath);
+                setTabsPosition(index);
+            }
 
-        if (collection.subcollections && selectedSubPath) {
-            const index = collection.subcollections
-                .map((c) => c.path)
-                .findIndex((p) => p === selectedSubPath);
-            setTabsPosition(index + customViewsCount);
+            if (collection.subcollections && selectedSubPath) {
+                const index = collection.subcollections
+                    .map((c) => c.path)
+                    .findIndex((p) => p === selectedSubPath);
+                setTabsPosition(index + customViewsCount);
         }
     }, [selectedSubPath]);
 
@@ -439,15 +442,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                 display: "flex",
                 flexDirection: "column",
                 height: "100%",
+                width: "100%",
                 transition: "width 250ms ease-in-out",
-                width: !mainViewSelected ? `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})` : resolvedWidth ?? CONTAINER_WIDTH,
-                maxWidth: CONTAINER_FULL_WIDTH,
-                [theme.breakpoints.down("lg")]: {
-                    width: !mainViewSelected ? CONTAINER_FULL_WIDTH : undefined
-                },
-                [theme.breakpoints.down("sm")]: {
-                    width: CONTAINER_FULL_WIDTH
-                }
             }}>
             {
                 <>
@@ -459,7 +455,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     <Box sx={{
                         flexGrow: 1,
                         height: "100%",
-                        width: `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})`,
+                        width: `calc(${TAB_WIDTH} + ${resolvedWidth})`,
+                        maxWidth: "100%",
                         [theme.breakpoints.down("sm")]: {
                             width: CONTAINER_FULL_WIDTH
                         },
@@ -475,7 +472,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                                 role="tabpanel"
                                 hidden={!largeLayout && !mainViewSelected}
                                 sx={{
-                                    width: resolvedWidth ?? CONTAINER_WIDTH,
+                                    width: resolvedWidth,
                                     maxWidth: "100%",
                                     height: "100%",
                                     overflow: "auto",
@@ -501,4 +498,6 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
         </Box>
     );
-}
+    },
+    equal
+)

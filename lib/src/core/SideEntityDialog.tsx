@@ -1,9 +1,11 @@
 import React, { useEffect, useMemo } from "react";
+
 import { EntityPanelProps } from "../models";
-import { EntityView } from "./internal/EntityView";
 import { CONTAINER_WIDTH } from "./internal/common";
 import { useNavigationContext, useSideEntityController } from "../hooks";
+
 import { ErrorBoundary } from "./internal/ErrorBoundary";
+import { EntityView } from "./internal/EntityView";
 import { useSideDialogContext } from "./SideDialogs";
 
 /**
@@ -16,7 +18,7 @@ import { useSideDialogContext } from "./SideDialogs";
  */
 export function SideEntityDialog(props: EntityPanelProps) {
 
-    const { modified, setModified } = useSideDialogContext();
+    const { blocked, setBlocked } = useSideDialogContext();
 
     const navigationContext = useNavigationContext();
 
@@ -35,7 +37,7 @@ export function SideEntityDialog(props: EntityPanelProps) {
 
     useEffect(() => {
         function beforeunload(e: any) {
-            if (modified && collection) {
+            if (blocked && collection) {
                 e.preventDefault();
                 e.returnValue = `You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?`;
             }
@@ -49,7 +51,7 @@ export function SideEntityDialog(props: EntityPanelProps) {
                 window.removeEventListener("beforeunload", beforeunload);
         };
 
-    }, [modified, collection, window]);
+    }, [blocked, collection, window]);
 
     if (!props || !collection) {
         return <div style={{ width: CONTAINER_WIDTH }}/>;
@@ -61,8 +63,9 @@ export function SideEntityDialog(props: EntityPanelProps) {
             <ErrorBoundary>
                 <EntityView
                     {...props}
+                    formWidth={props.width}
                     collection={collection}
-                    onModifiedValues={setModified}
+                    onModifiedValues={setBlocked}
                 />
             </ErrorBoundary>
 
