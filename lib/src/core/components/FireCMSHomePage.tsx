@@ -36,6 +36,8 @@ import { TopNavigationEntry, TopNavigationResult } from "../../models";
 import {
     useCollectionEditorController
 } from "../../hooks/useCollectionEditorController";
+import { canEditEntity } from "../util/permissions";
+import { fullPathToCollectionSegments } from "../util/paths";
 
 /**
  * Default entry view for the CMS under the path "/"

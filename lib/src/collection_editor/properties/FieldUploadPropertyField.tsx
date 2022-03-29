@@ -51,8 +51,9 @@ export function FieldUploadPropertyField({
             <Grid item xs={12}>
                 <FormControl fullWidth>
                     {!allFileTypesSelected &&
-                        <InputLabel id="file-types-label">File
-                            types</InputLabel>}
+                        <InputLabel id="file-types-label">
+                            File types
+                        </InputLabel>}
 
                     <Select
                         labelId="file-types-label"
@@ -96,4 +97,3 @@ export function FieldUploadPropertyField({
         </>
     );
 }
-

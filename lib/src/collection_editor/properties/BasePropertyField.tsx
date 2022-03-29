@@ -47,19 +47,16 @@ export function BasePropertyField({
             </Grid>
 
             <Grid item>
-                <Box sx={{ display: "flex", flexDirection: "row" }}>
-                    <Field name={id}
-                           as={TextField}
-                           label={"ID"}
-                           validate={(value:string) => validateId(value, existingPropertyIds)}
-                           disabled={disabledId}
-                           required
-                           fullWidth
-                           helperText={idError}
-                           size="small"
-                           error={Boolean(idError)}/>
-
-                </Box>
+                <Field name={id}
+                       as={TextField}
+                       label={"ID"}
+                       validate={(value:string) => validateId(value, existingPropertyIds)}
+                       disabled={disabledId}
+                       required
+                       fullWidth
+                       helperText={idError}
+                       size="small"
+                       error={Boolean(idError)}/>
             </Grid>
 
         </>

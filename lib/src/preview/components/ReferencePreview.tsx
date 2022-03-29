@@ -90,7 +90,6 @@ function ReferencePreviewInternal<M>({
         values: entity?.values
     }), [collection]);
 
-
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const listProperties = useMemo(() => {
         if (!resolvedCollection) return [];
@@ -130,7 +129,7 @@ function ReferencePreviewInternal<M>({
                     display: "flex",
                     flexDirection: "column",
                     flexGrow: 1,
-                    maxWidth: "calc(100% - 60px)",
+                    maxWidth: "calc(100% - 52px)",
                     margin: 1
                 }}>
 
@@ -174,12 +173,13 @@ function ReferencePreviewInternal<M>({
 
                 </Box>
                 <Box sx={{
-                    margin: "auto"
+                    // margin: size === "tiny" ? "auto" : undefined,
+                    my: size === "tiny" ? 0.5 : 1
                 }}>
                     {entity &&
                         <Tooltip title={`See details for ${entity.id}`}>
                             <IconButton
-                                size={size === "tiny" ? "small" : "medium"}
+                                size={"small"}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     sideEntityController.open({

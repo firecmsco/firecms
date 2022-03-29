@@ -8,7 +8,9 @@ import {
 const DEFAULT_PERMISSIONS = {
     edit: true,
     create: true,
-    delete: true
+    delete: true,
+    editCollection: true,
+    deleteCollection: true
 };
 
 export function resolvePermissions<M extends { [Key: string]: any }, UserType>
@@ -55,4 +57,20 @@ export function canDeleteEntity<M extends { [Key: string]: any }, UserType>
  authController: AuthController<UserType>,
  paths: string[]): boolean {
     return resolvePermissions(permission, collection, authController, paths).delete ?? DEFAULT_PERMISSIONS.delete;
+}
+
+export function canEditCollection<M extends { [Key: string]: any }, UserType>
+(permission: PermissionsBuilder<M, UserType> | Permissions | undefined,
+ collection: EntityCollection<M>,
+ authController: AuthController<UserType>,
+ paths: string[]): boolean {
+    return resolvePermissions(permission, collection, authController, paths).editCollection ?? DEFAULT_PERMISSIONS.editCollection;
+}
+
+export function canDeleteCollection<M extends { [Key: string]: any }, UserType>
+(permission: PermissionsBuilder<M, UserType> | Permissions | undefined,
+ collection: EntityCollection<M>,
+ authController: AuthController<UserType>,
+ paths: string[]): boolean {
+    return resolvePermissions(permission, collection, authController, paths).deleteCollection ?? DEFAULT_PERMISSIONS.deleteCollection;
 }

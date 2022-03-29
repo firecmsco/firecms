@@ -17,7 +17,12 @@ import {
 import { mergeDeep } from "../util/objects";
 import { ConfigurationPersistence } from "../../models/config_persistence";
 import { mergeCollections } from "../util/collections";
-import { resolvePermissions } from "../util/permissions";
+import {
+    canDeleteCollection,
+    canEditCollection,
+    resolvePermissions
+} from "../util/permissions";
+import { fullPathToCollectionSegments } from "../util/paths";
 
 type BuildNavigationContextProps<UserType> = {
     basePath: string,
@@ -182,8 +187,8 @@ export function useBuildNavigationContext<UserType>({
                 type: "collection",
                 name: collection.name,
                 path: collection.path,
-                deletable: collection.deletable,
-                editable: collection.editable,
+                deletable: collection.deletable && canDeleteCollection(collection.permissions, collection, authController, fullPathToCollectionSegments(collection.path)),
+                editable: collection.editable && canEditCollection(collection.permissions, collection, authController, fullPathToCollectionSegments(collection.path)),
                 description: collection.description?.trim(),
                 group: collection.group?.trim()
             } as TopNavigationEntry)),

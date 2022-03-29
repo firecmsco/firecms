@@ -298,7 +298,6 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
     }
 ) as React.FunctionComponent<CollectionTableProps<any>>;
 
-
 function isFilterCombinationValid<M>(
     filterValues: FilterValues<Extract<keyof M, string>>,
     indexes?: FilterCombination<string>[],

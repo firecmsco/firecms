@@ -62,6 +62,7 @@ import {
 import {
     NumberPropertyFieldAdvanced
 } from "./properties_advanced/NumberPropertyFieldAdvanced";
+import { ReferencePropertyField } from "./properties/ReferencePropertyField";
 
 export type PropertyWithId = Property & { id?: string };
 
@@ -492,6 +493,12 @@ function PropertyEditView({
         childComponent = existing && <MapPropertyField/>;
     } else if (selectedWidgetId === "block") {
         childComponent = existing && <BlockPropertyField/>;
+    } else if (selectedWidgetId === "reference") {
+        childComponent =
+            <ReferencePropertyField existing={existing} multiple={false}/>;
+    } else if (selectedWidgetId === "multi_references") {
+        childComponent =
+            <ReferencePropertyField existing={existing} multiple={true}/>;
     } else if (selectedWidgetId === "repeat") {
         childComponent =
             <RepeatPropertyField showErrors={showErrors} existing={existing}/>;

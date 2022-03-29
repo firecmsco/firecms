@@ -28,7 +28,7 @@ import {
 
 import {
     canCreateEntity,
-    canDeleteEntity,
+    canDeleteEntity, canEditCollection,
     canEditEntity
 } from "../../util/permissions";
 import { Markdown } from "../../../preview";
@@ -370,7 +370,7 @@ export const EntityCollectionViewInternal = React.memo(
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     Title={Title}
-                    ActionsStart={collectionEditable && collectionEditorController
+                    ActionsStart={collectionEditable && collectionEditorController && canEditCollection(collection.permissions, collection, authController, fullPathToCollectionSegments(fullPath))
                         ? <Tooltip title={"Edit collection"}>
                             <IconButton
                                 onClick={() => collectionEditorController?.editCollection(fullPath)}>
