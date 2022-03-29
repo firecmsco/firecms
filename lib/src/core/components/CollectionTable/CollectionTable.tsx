@@ -1,5 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import { Button, Paper, useMediaQuery, useTheme } from "@mui/material";
+import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import equal from "react-fast-compare"
 
 import {
@@ -112,6 +113,8 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
                     dependencies: [],
                     builder: ({ entity }) => (
                         <Button color={"primary"}
+                                variant={"outlined"}
+                                startIcon={<KeyboardTabIcon fontSize={"small"}/>}
                                 onClick={(event) => {
                                     event.stopPropagation();
                                     sideEntityController.open({

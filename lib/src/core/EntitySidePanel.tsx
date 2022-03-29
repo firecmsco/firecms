@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 
-import { EntityPanelProps } from "../models";
+import { EntitySidePanelProps } from "../models";
 import { CONTAINER_WIDTH } from "./internal/common";
 import { useNavigationContext, useSideEntityController } from "../hooks";
 
@@ -9,16 +9,20 @@ import { EntityView } from "./internal/EntityView";
 import { useSideDialogContext } from "./SideDialogs";
 
 /**
- * This is the component in charge of rendering the side dialogs used
+ * This is the component in charge of rendering the side dialog used
  * for editing entities. Use the {@link useSideEntityController} to open
  * and control the dialogs.
  * This component needs a parent {@link FireCMS}
  * {@see useSideEntityController}
  * @category Components
  */
-export function SideEntityDialog(props: EntityPanelProps) {
+export function EntitySidePanel(props: EntitySidePanelProps) {
 
-    const { blocked, setBlocked } = useSideDialogContext();
+    const {
+        blocked,
+        setBlocked,
+        setBlockedNavigationMessage
+    } = useSideDialogContext();
 
     const navigationContext = useNavigationContext();
 
@@ -57,6 +61,13 @@ export function SideEntityDialog(props: EntityPanelProps) {
         return <div style={{ width: CONTAINER_WIDTH }}/>;
     }
 
+    const onValuesAreModified = (modified: boolean) => {
+        setBlocked(modified);
+        setBlockedNavigationMessage(modified
+            ? <> You have unsaved changes in this <b>{collection.name}</b>.</>
+            : undefined)
+    };
+
     return (
         <>
 
@@ -65,7 +76,7 @@ export function SideEntityDialog(props: EntityPanelProps) {
                     {...props}
                     formWidth={props.width}
                     collection={collection}
-                    onModifiedValues={setBlocked}
+                    onValuesAreModified={onValuesAreModified}
                 />
             </ErrorBoundary>
 

@@ -2,6 +2,7 @@ import React from "react";
 
 import { getIn, useFormikContext } from "formik";
 import {
+    Button,
     Checkbox,
     FormControl,
     Grid,
@@ -67,18 +68,27 @@ export function FieldUploadPropertyField({
                                 .filter((v: string) => Boolean(v))
                                 .join(", ");
                         }}>
+
                         <MenuItem key={"all"} value={"all"}>
                             <Checkbox
                                 checked={!fileTypesValue}/>
                             <ListItemText primary={"All"}/>
                         </MenuItem>
+
                         {Object.entries(fileTypes).map(([value, label]) => (
                             <MenuItem key={value} value={value}>
                                 <Checkbox
                                     checked={allFileTypesSelected || fileTypesValue.indexOf(value) > -1}/>
                                 <ListItemText primary={label}/>
+                                <Button size={"small"} onClick={(e) => {
+                                    e.stopPropagation();
+                                    return setFieldValue(acceptedFiles, [value]);
+                                }}>
+                                    Only
+                                </Button>
                             </MenuItem>
                         ))}
+
                     </Select>
                 </FormControl>
             </Grid>

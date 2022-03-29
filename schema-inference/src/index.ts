@@ -1,1 +1,1 @@
-export { getEntitySchema } from "./schema_builder";
+export { getEntityCollection } from "./schema_builder";

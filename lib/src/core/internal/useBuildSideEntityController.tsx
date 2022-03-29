@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef } from "react";
 import {
     EntityCollection,
-    EntityPanelProps,
+    EntitySidePanelProps,
     NavigationContext,
     SideEntityController
 } from "../../models";
@@ -11,14 +11,14 @@ import {
 } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
 import { SideDialogPanelProps, SideDialogsController } from "../SideDialogs";
-import { SideEntityDialog } from "../SideEntityDialog";
+import { EntitySidePanel } from "../EntitySidePanel";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
 
 const NEW_URL_HASH = "new";
 
-export function getEntityViewWidth(props: EntityPanelProps<any, any>, small: boolean): string {
+export function getEntityViewWidth(props: EntitySidePanelProps<any, any>, small: boolean): string {
     if (small) return CONTAINER_FULL_WIDTH;
     const mainViewSelected = !props.selectedSubPath;
     const resolvedWidth: string | undefined = typeof props.width === "number" ? `${props.width}px` : props.width;
@@ -48,14 +48,14 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
         }
     }, [location, collections, sideDialogsController]);
 
-    const propsToSidePanel = useCallback((props: EntityPanelProps<any, any>): SideDialogPanelProps<EntityPanelProps> => {
+    const propsToSidePanel = useCallback((props: EntitySidePanelProps<any, any>): SideDialogPanelProps<EntitySidePanelProps> => {
         const collectionPath = removeInitialAndTrailingSlashes(props.path);
         const newPath = props.entityId
             ? navigationContext.buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`)
             : navigationContext.buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
         return ({
             key: `${props.path}/${props.entityId}`,
-            Component: SideEntityDialog,
+            Component: EntitySidePanel,
             props: props,
             urlPath: newPath,
             parentUrlPath: navigationContext.buildUrlCollectionPath(collectionPath),
@@ -67,7 +67,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
         sideDialogsController.close();
     }, [sideDialogsController]);
 
-    const open = useCallback((props: EntityPanelProps) => {
+    const open = useCallback((props: EntitySidePanelProps) => {
 
         if (props.copy && !props.entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
@@ -77,7 +77,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
 
     }, [sideDialogsController]);
 
-    const replace = useCallback((props: EntityPanelProps) => {
+    const replace = useCallback((props: EntitySidePanelProps) => {
 
         if (props.copy && !props.entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
@@ -94,14 +94,14 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
     };
 };
 
-function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): EntityPanelProps[] {
+function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): EntitySidePanelProps[] {
 
     const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPathInternal({
         path,
         collections
     });
 
-    const sidePanels: EntityPanelProps[] = [];
+    const sidePanels: EntitySidePanelProps[] = [];
     let lastCollectionPath = "";
     for (let i = 0; i < navigationViewsForPath.length; i++) {
         const navigationEntry = navigationViewsForPath[i];
@@ -123,13 +123,13 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
                 }
             } else if (navigationEntry.type === "custom_view") {
                 if (previousEntry.type === "entity") {
-                    const lastSidePanel: EntityPanelProps = sidePanels[sidePanels.length - 1];
+                    const lastSidePanel: EntitySidePanelProps = sidePanels[sidePanels.length - 1];
                     if (lastSidePanel)
                         lastSidePanel.selectedSubPath = navigationEntry.view.path;
                 }
             } else if (navigationEntry.type === "collection") {
                 if (previousEntry.type === "entity") {
-                    const lastSidePanel: EntityPanelProps = sidePanels[sidePanels.length - 1];
+                    const lastSidePanel: EntitySidePanelProps = sidePanels[sidePanels.length - 1];
                     if (lastSidePanel)
                         lastSidePanel.selectedSubPath = navigationEntry.collection.path;
                 }

@@ -18,7 +18,10 @@ import {
     prepareCollectionForPersistence,
     sortProperties
 } from "../../core/util/collections";
-import { stripCollectionPath } from "../../core/util/paths";
+import {
+    COLLECTION_PATH_SEPARATOR,
+    stripCollectionPath
+} from "../../core/util/paths";
 
 /**
  * @category Firebase
@@ -33,15 +36,6 @@ export interface FirestoreConfigurationPersistenceProps {
 
 const DEFAULT_CONFIG_PATH = "__FIRECMS";
 
-const docToCollection = (doc: DocumentSnapshot) => {
-    const data = doc.data();
-    if (!data)
-        throw Error("Entity collection has not been persisted correctly");
-    const propertiesOrder = data.propertiesOrder;
-    const properties = data.properties as Properties ?? {};
-    const sortedProperties = sortProperties(properties, propertiesOrder);
-    return { ...data, properties: sortedProperties } as EntityCollection;
-}
 
 export function useBuildFirestoreConfigurationPersistence({
                                                          firebaseApp,
@@ -68,9 +62,14 @@ export function useBuildFirestoreConfigurationPersistence({
             {
                 next: (snapshot) => {
                     setError(undefined);
-                    const newCollections = snapshot.docs.map((doc) => docToCollection(doc));
-                    setCollections(newCollections);
                     setLoading(false);
+                    try {
+                        const newCollections = docsToCollectionTree(snapshot.docs);
+                        setCollections(newCollections);
+                    } catch (e) {
+                        console.error(e);
+                        setError(e as Error);
+                    }
                 },
                 error: (e) => {
                     setLoading(false);
@@ -129,4 +128,36 @@ export function setUndefinedToDelete(data: Record<string, unknown>): Record<stri
             .reduce((a, b) => ({ ...a, ...b }), {});
     }
     return data;
+}
+
+const docsToCollectionTree = (docs: DocumentSnapshot[]): EntityCollection[] => {
+
+    const collectionsMap = docs.map((doc) => {
+        const id: string = doc.id;
+        const collection = docToCollection(doc);
+        return { [id]: collection };
+    }).reduce((a, b) => ({ ...a, ...b }), {});
+
+    Object.entries(collectionsMap).forEach(([id, collection]) => {
+        if (id.includes(COLLECTION_PATH_SEPARATOR)) {
+            const parentId = id.split(COLLECTION_PATH_SEPARATOR).slice(0, -1).join(COLLECTION_PATH_SEPARATOR);
+            const parentCollection = collectionsMap[parentId];
+            console.log("zzz", id, parentId);
+            if (parentCollection)
+                parentCollection.subcollections = [...(parentCollection.subcollections ?? []), collection];
+            delete collectionsMap[id];
+        }
+    });
+
+    return Object.values(collectionsMap);
+}
+
+const docToCollection = (doc: DocumentSnapshot): EntityCollection => {
+    const data = doc.data();
+    if (!data)
+        throw Error("Entity collection has not been persisted correctly");
+    const propertiesOrder = data.propertiesOrder;
+    const properties = data.properties as Properties ?? {};
+    const sortedProperties = sortProperties(properties, propertiesOrder);
+    return { ...data, properties: sortedProperties } as EntityCollection;
 }

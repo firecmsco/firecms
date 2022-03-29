@@ -33,7 +33,7 @@ export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
 
 export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                                                                          entityOrEntitiesToDelete,
-                                                                         collection: inputCollection,
+                                                                         collection,
                                                                          onClose,
                                                                          open,
                                                                          callbacks,
@@ -63,7 +63,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
     }, [entityOrEntitiesToDelete]);
 
     const resolvedCollection = useMemo(() => getResolvedCollection<M>({
-        collection: inputCollection,
+        collection,
         path
     }), []);
 
@@ -172,8 +172,8 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
         content = <div>Multiple entities</div>;
     } else {
         const entity = entityOrEntities as Entity<M> | undefined;
-        const collection = getResolvedCollection({
-            collection: inputCollection,
+        const resolvedCollection = getResolvedCollection({
+            collection,
             path,
             entityId: entity?.id,
             values: entity?.values
@@ -181,7 +181,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
         content = entity
             ? <EntityPreview
                 entity={entity}
-                collection={collection}
+                collection={resolvedCollection}
                 path={path}/>
             : <></>;
     }

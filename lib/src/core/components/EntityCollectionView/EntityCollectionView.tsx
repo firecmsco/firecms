@@ -397,7 +397,7 @@ export const EntityCollectionViewInternal = React.memo(
                         path={fullPath}
                         collection={collection}
                         callbacks={collection.callbacks}
-                        open={!!deleteEntityClicked}
+                        open={Boolean(deleteEntityClicked)}
                         onEntityDelete={internalOnEntityDelete}
                         onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
                         onClose={() => setDeleteEntityClicked(undefined)}/>}

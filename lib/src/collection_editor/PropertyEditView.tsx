@@ -59,6 +59,9 @@ import { BlockPropertyField } from "./properties/BlockPropertyField";
 import {
     DeleteConfirmationDialog
 } from "../core/components/DeleteConfirmationDialog";
+import {
+    NumberPropertyFieldAdvanced
+} from "./properties_advanced/NumberPropertyFieldAdvanced";
 
 export type PropertyWithId = Property & { id?: string };
 
@@ -483,6 +486,8 @@ function PropertyEditView({
             <FieldUploadPropertyFieldAdvanced multiple={true} existing={existing}/>;
     } else if (selectedWidgetId === "switch") {
         childComponentAdvanced = <BooleanPropertyFieldAdvanced/>;
+    } else if (selectedWidgetId === "number_input") {
+        childComponentAdvanced = <NumberPropertyFieldAdvanced/>;
     } else if (selectedWidgetId === "group") {
         childComponent = existing && <MapPropertyField/>;
     } else if (selectedWidgetId === "block") {

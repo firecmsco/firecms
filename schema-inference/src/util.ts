@@ -41,3 +41,19 @@ export function findCommonInitialStringInPath(valuesCount?: ValuesCountEntry) {
     return yep ? searchedPath : undefined;
 
 }
+
+export function removeInitialAndTrailingSlashes(s: string): string {
+    return removeInitialSlash(removeTrailingSlash(s));
+}
+
+export function removeInitialSlash(s: string) {
+    if (s.startsWith("/"))
+        return s.slice(1);
+    else return s;
+}
+
+export function removeTrailingSlash(s: string) {
+    if (s.endsWith("/"))
+        return s.slice(0, -1);
+    else return s;
+}

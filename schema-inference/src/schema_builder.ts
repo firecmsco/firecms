@@ -1,5 +1,5 @@
 import * as admin from "firebase-admin";
-import {DataType, EntitySchema, Properties, Property} from "@camberi/firecms";
+import {DataType, EntityCollection, Properties, Property} from "@camberi/firecms";
 import {
     PropertyBuilderProps,
     TypesCount,
@@ -9,22 +9,23 @@ import {
 } from "./models";
 import {buildStringProperty} from "./builders/string_property_builder";
 import {buildValidation} from "./builders/validation_builder";
-import {unslugify} from "./util";
+import { removeInitialAndTrailingSlashes, unslugify } from "./util";
 import {buildReferenceProperty} from "./builders/reference_property_builder";
 import {getDocuments} from "./firestore";
 
 /**
- * Build the guesses entity schema from a collection
+ * Build the guessed schema from a data collection
  * @param collectionPath
  */
-export async function getEntitySchema(collectionPath: string): Promise<EntitySchema> {
-    const docs = await getDocuments(collectionPath);
+export async function getEntityCollection(collectionPath: string): Promise<EntityCollection> {
+    const cleanPath = removeInitialAndTrailingSlashes(collectionPath);
+    const docs = await getDocuments(cleanPath);
     console.log("Building schema from documents:", docs.map(d => d.ref.path))
     const entityProperties = await buildEntityProperties(docs);
-    const collectionName = collectionPath.includes("/") ? collectionPath.split("/").slice(-1)[0] : collectionPath;
+    const lastPathSegment = cleanPath.includes("/") ? cleanPath.split("/").slice(-1)[0] : cleanPath;
     return {
-        id: collectionPath,
-        name: unslugify(collectionName),
+        path: cleanPath,
+        name: unslugify(lastPathSegment),
         properties: entityProperties
     };
 }

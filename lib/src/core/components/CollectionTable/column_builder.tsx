@@ -187,7 +187,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
 
         if (property.dataType === "number" || property.dataType === "string") {
             const name = property.name;
-            const enumValues = property.enumValues ? resolveEnumValues(property.enumValues) : [];
+            const enumValues = property.enumValues ? resolveEnumValues(property.enumValues) : undefined;
             return {
                 dataType: property.dataType,
                 isArray,

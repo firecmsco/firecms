@@ -36,7 +36,7 @@ export interface Permissions {
  * Props passed to a {@link PermissionsBuilder}
  * @category Models
  */
-export interface EntityPermissionsBuilderProps<M extends { [Key: string]: any }, UserType extends User = User> {
+export interface PermissionsBuilderProps<M extends { [Key: string]: any }, UserType extends User = User> {
 
     /**
      * Path segments of the collection e.g. ['products', 'locales']
@@ -70,4 +70,4 @@ export type PermissionsBuilder<M extends { [Key: string]: any }, UserType extend
           user,
           collection,
           authController
-      }: EntityPermissionsBuilderProps<M, UserType>) => Permissions);
+      }: PermissionsBuilderProps<M, UserType>) => Permissions);

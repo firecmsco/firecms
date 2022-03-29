@@ -1,4 +1,4 @@
-import { EntityCollection, NavigationContext } from "../../models";
+import { EntityCollection } from "../../models";
 
 export function removeInitialAndTrailingSlashes(s: string): string {
     return removeInitialSlash(removeTrailingSlash(s));

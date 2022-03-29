@@ -8,7 +8,7 @@ import {
  * Props used to open a side dialog
  * @category Hooks and utilities
  */
-export interface EntityPanelProps<M = any, UserType extends User = User> {
+export interface EntitySidePanelProps<M = any, UserType extends User = User> {
 
     /**
      * Absolute path of the entity
@@ -73,6 +73,11 @@ export interface SideEntityController {
      * the FireCMS level.
      * @param props
      */
-    open: (props: EntityPanelProps) => void;
-    replace: (props: EntityPanelProps) => void;
+    open: (props: EntitySidePanelProps) => void;
+
+    /**
+     * Replace the last open entity panel with the given one.
+     * @param props
+     */
+    replace: (props: EntitySidePanelProps) => void;
 }

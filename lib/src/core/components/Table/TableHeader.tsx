@@ -24,7 +24,6 @@ import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../../internal/ErrorBoundary";
 
-
 export const TableHeader = React.memo<TableHeaderProps<any>>(TableHeaderInternal) as React.FunctionComponent<TableHeaderProps<any>>;
 
 type TableHeaderProps<M extends { [Key: string]: any }> = {
@@ -277,5 +276,3 @@ function createFilterField(id: string,
         <div>{`Currently the field ${filterConfig.dataType} is not supported`}</div>
     );
 }
-
-

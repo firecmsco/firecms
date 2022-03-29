@@ -61,7 +61,7 @@ export interface EntityViewProps<M, UserType> {
     copy?: boolean;
     selectedSubPath?: string;
     formWidth?: number | string;
-    onModifiedValues: (modified: boolean) => void;
+    onValuesAreModified: (modified: boolean) => void;
 }
 
 export const EntityView = React.memo<EntityViewProps<any, any>>(
@@ -71,7 +71,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
                                                                         selectedSubPath,
                                                                         copy,
                                                                         collection,
-                                                                        onModifiedValues,
+                                                                        onValuesAreModified,
                                                                         formWidth
                                                                     }: EntityViewProps<M, UserType>) {
 
@@ -173,7 +173,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
         });
 
         setStatus("existing");
-        onModifiedValues(false);
+        onValuesAreModified(false);
 
         if (tabsPosition === -1)
             sideDialogContext.close();
@@ -226,6 +226,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
     }, [status, collection, dataSource, context, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError]);
 
     const onDiscard = useCallback(() => {
+        onValuesAreModified(false);
         if (tabsPosition === -1)
             sideDialogContext.close();
     }, [tabsPosition]);
@@ -241,7 +242,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
                     onEntitySave={onEntitySave}
                     onDiscard={onDiscard}
                     onValuesChanged={setModifiedValues}
-                    onModified={onModifiedValues}
+                    onModified={onValuesAreModified}
                     entity={entity}/>
             </Suspense>
         )
@@ -304,22 +305,27 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
                     role="tabpanel"
                     flexGrow={1}
                     hidden={tabsPosition !== colIndex + customViewsCount}>
-                    {entity && fullPath
-                        ? <Suspense fallback={<CircularProgressCenter/>}>
-                            <EntityCollectionView
-                                fullPath={fullPath}
-                                collection={subcollection}/>
-                        </Suspense>
-                        : <Box m={3}
-                             display={"flex"}
-                             alignItems={"center"}
-                             justifyContent={"center"}>
-                            <Box>
-                                You need to save your entity before
-                                adding additional collections
-                            </Box>
-                        </Box>
+
+                    {dataLoading && <CircularProgressCenter/>}
+
+                    {!dataLoading &&
+                        (entity && fullPath
+                            ? <Suspense fallback={<CircularProgressCenter/>}>
+                                <EntityCollectionView
+                                    fullPath={fullPath}
+                                    collection={subcollection}/>
+                            </Suspense>
+                            : <Box m={3}
+                                   display={"flex"}
+                                   alignItems={"center"}
+                                   justifyContent={"center"}>
+                                <Box>
+                                    You need to save your entity before
+                                    adding additional collections
+                                </Box>
+                            </Box>)
                     }
+
                 </Box>
             );
         }

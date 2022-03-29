@@ -65,7 +65,8 @@ export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () =
 
 export interface UnsavedChangesDialogProps {
     open: boolean;
-    name: string;
+    body?: React.ReactNode;
+    title?: string;
     handleOk: () => void;
     handleCancel: () => void;
 }
@@ -74,7 +75,8 @@ export function UnsavedChangesDialog({
                                          open,
                                          handleOk,
                                          handleCancel,
-                                         name
+                                         body,
+                                         title
                                      }: UnsavedChangesDialogProps) {
 
     return (
@@ -86,12 +88,12 @@ export function UnsavedChangesDialog({
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle >
-                {"Unsaved changes"}
+                {title ?? "Unsaved changes"}
             </DialogTitle>
             <DialogContent>
-                <DialogContentText >
-                    You have unsaved changes in this <b>{name}</b>.
-                </DialogContentText>
+                {body && <DialogContentText>
+                    {body}
+                </DialogContentText>}
                 <DialogContentText >
                     Are you sure you want to leave this page?
                 </DialogContentText>

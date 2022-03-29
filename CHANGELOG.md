@@ -1,10 +1,12 @@
 ## [2.0.0-alpha1] - 2021-12-13
 
-- Collections now use `schemaId` instead of pointing to a schema.
-Schemas are specified as prop at the CMS level.
-- Removed `properties` from collection. The same functionality is achieved
-  with the prop `hideFromCollection` at the property level
-- `AdditionalColumnDelegate` has been moved to the `EntitySchema`
+### Collections
+- Collections and entity schemas have been merged into one single concept.
+All the fields related to entity schemas have been moved to the collection level.
+We felt it was redundant and the distribution of logic between those 2 concepts 
+was a bit arbitrary.
+
+### Properties
 - All the configuration options that were located under the `config` prop of
   `properties` have been moved to the property level:
 ```typescript jsx
@@ -48,7 +50,7 @@ buildProperty<string>({
 - `name` in `CMSFormFieldProps` which refers to a property key, is now
   called `propertyKey`
 - Removed `mediaType` in the storage configuration of string properties. It is
-  not inferred automatically.
+  now inferred automatically.
 - `TimestampProperty` is now renamed to `DateProperty` in order to reflect
   better the alignment with JS types instead of Firebase ones. The discriminator
   when declaring date properties now is `date` instead of `timestamp` 

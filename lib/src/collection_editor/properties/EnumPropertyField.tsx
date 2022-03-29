@@ -42,14 +42,7 @@ export function EnumPropertyField({
                     sx={{ p: 2, mt: 1 }}>
                     <EnumForm enumValues={enumValues}
                               updateIds={updateIds}
-                              onValuesChanged={(value) => {
-                                  setFieldValue(enumValuesPath, value);
-                              }}/>
-                    {/*<EnumFormFields enumValuesPath={enumValuesPath}*/}
-                    {/*    // @ts-ignore*/}
-                    {/*                values={values}*/}
-                    {/*                errors={errors}*/}
-                    {/*                shouldUpdateId={updateIds}/>*/}
+                              onValuesChanged={(value) => setFieldValue(enumValuesPath, value)}/>
                 </Paper>
             </Grid>
 

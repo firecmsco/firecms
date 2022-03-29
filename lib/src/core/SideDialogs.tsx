@@ -60,6 +60,7 @@ export interface SideDialogPanelProps<P = any> {
 export type SideDialogContextProps = {
     blocked: boolean,
     setBlocked: (blocked: boolean) => void,
+    setBlockedNavigationMessage: (message?: React.ReactNode) => void,
     width: string,
     setWidth: (width: string) => void,
     close: () => void
@@ -71,6 +72,8 @@ const SideDialogContext = React.createContext<SideDialogContextProps>({
     },
     blocked: false,
     setBlocked: (blocked: boolean) => {
+    },
+    setBlockedNavigationMessage: (message?: React.ReactNode) => {
     },
     close: () => {
     }
@@ -115,8 +118,9 @@ function SideDialogView({
 }) {
 
     // was the closing of the dialog requested by the drawer
-    const [drawerCloseRequested, setDrawerCloseRequested] = useState(false);
+    const [drawerCloseRequested, setDrawerCloseRequested] = useState<boolean>(false);
     const [blocked, setBlocked] = useState(false);
+    const [blockedNavigationMessage, setBlockedNavigationMessage] = useState<React.ReactNode | undefined>();
 
     const [width, setWidth] = useState(panel?.width ?? CONTAINER_WIDTH);
     const sideDialogsController = useSideDialogsController();
@@ -157,6 +161,7 @@ function SideDialogView({
             value={{
                 blocked,
                 setBlocked,
+                setBlockedNavigationMessage,
                 width,
                 setWidth,
                 close: onCloseRequest
@@ -190,7 +195,7 @@ function SideDialogView({
                 open={navigationWasBlocked || drawerCloseRequested}
                 handleOk={drawerCloseRequested ? handleDrawerCloseOk : handleNavigationOk}
                 handleCancel={drawerCloseRequested ? handleDrawerCloseCancel : handleNavigationCancel}
-                name={"TODO"}/>
+                body={blockedNavigationMessage}/>
 
         </SideDialogContext.Provider>
 
