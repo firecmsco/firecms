@@ -187,8 +187,8 @@ export function useBuildNavigationContext<UserType>({
                 type: "collection",
                 name: collection.name,
                 path: collection.path,
-                deletable: collection.deletable && canDeleteCollection(collection.permissions, collection, authController, fullPathToCollectionSegments(collection.path)),
-                editable: collection.editable && canEditCollection(collection.permissions, collection, authController, fullPathToCollectionSegments(collection.path)),
+                deletable: canDeleteCollection(collection, authController, fullPathToCollectionSegments(collection.path)),
+                editable: canEditCollection(collection, authController, fullPathToCollectionSegments(collection.path)),
                 description: collection.description?.trim(),
                 group: collection.group?.trim()
             } as TopNavigationEntry)),
@@ -252,8 +252,7 @@ function resolveCollectionsPermissions<M>(collections: EntityCollection<M>[],
         subcollections: collection.subcollections
             ? resolveCollectionsPermissions(collection.subcollections, authController, [...paths, collection.path])
             : undefined,
-        permissions: resolvePermissions(
-            collection.permissions, collection, authController, [...paths, collection.path]
+        permissions: resolvePermissions(collection, authController, [...paths, collection.path]
         )
     }))
         .filter(collection => collection.permissions.read === undefined || collection.permissions.read);

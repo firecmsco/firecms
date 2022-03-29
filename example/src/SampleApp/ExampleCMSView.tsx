@@ -33,7 +33,7 @@ export function ExampleCMSView({
     // hook to do operations related to authentication
     const authController = useAuthController();
 
-    const customProductSchema = buildCollection({
+    const customProductCollection = buildCollection({
         path: "custom_product",
         name: "Custom product",
         properties: {
@@ -82,7 +82,7 @@ export function ExampleCMSView({
                     onClick={() => sideEntityController.open({
                         entityId: "B003WT1622",
                         path: "/products-test",
-                        collection: customProductSchema,
+                        collection: customProductCollection,
                         width: 800
                     })}
                     color="primary">

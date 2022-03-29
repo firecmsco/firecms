@@ -1,7 +1,7 @@
 import { buildCollection, CollectionOverrideHandler } from "@camberi/firecms";
 
 /**
- * You can use a custom schema resolver to override schemas for specific
+ * You can use a custom collection resolver to override configs for specific
  * entities
  * @param entityId
  * @param path
@@ -21,7 +21,7 @@ export const customCollectionOverrideHandler: CollectionOverrideHandler = ({
             properties: {
                 name: {
                     name: "Name",
-                    description: "This entity is using a schema overridden by a schema resolver",
+                    description: "This entity is using configuration overridden by a collection resolver",
                     validation: { required: true },
                     dataType: "string"
                 }

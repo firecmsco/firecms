@@ -11,7 +11,6 @@ import {
 
 import "typeface-rubik";
 import "typeface-space-mono";
-import { localeCollection } from "./SampleApp/schemas/products_schema";
 
 // TODO: Replace with your config
 const firebaseConfig = {
@@ -45,6 +44,33 @@ type Product = {
     },
     expires_on: Date
 }
+
+const localeCollection = buildCollection({
+    path: "locale",
+    customId: locales,
+    name: "Locale",
+    properties: {
+        name:  {
+            name:  "Title",
+            validation: { required: true },
+            dataType: "string"
+        },
+        selectable: {
+            name:  "Selectable",
+            description: "Is this locale selectable",
+            dataType: "boolean"
+        },
+        video: {
+            name:  "Video",
+            dataType: "string",
+            validation: { required: false },
+            storage: {
+                storagePath: "videos",
+                acceptedFiles: ["video/*"]
+            }
+        }
+    }
+});
 
 const productsCollection = buildCollection<Product>({
     name: "Product",
@@ -166,33 +192,6 @@ const productsCollection = buildCollection<Product>({
         expires_on: {
             name: "Expires on",
             dataType: "date"
-        }
-    }
-});
-
-const localeSchema = buildCollection({
-    path: "locale",
-    customId: locales,
-    name: "Locale",
-    properties: {
-        name:  {
-            name:  "Title",
-            validation: { required: true },
-            dataType: "string"
-        },
-        selectable: {
-            name:  "Selectable",
-            description: "Is this locale selectable",
-            dataType: "boolean"
-        },
-        video: {
-            name:  "Video",
-            dataType: "string",
-            validation: { required: false },
-            storage: {
-                storagePath: "videos",
-                acceptedFiles: ["video/*"]
-            }
         }
     }
 });

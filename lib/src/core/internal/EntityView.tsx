@@ -104,7 +104,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
             useCache: false
         });
 
-        const editEnabled = entity ? canEditEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(path)) : false;
+        const editEnabled = entity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path)) : false;
 
         const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => getResolvedCollection<M>({
             collection,

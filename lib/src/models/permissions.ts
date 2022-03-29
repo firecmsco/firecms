@@ -1,6 +1,5 @@
 import { User } from "./user";
 import { AuthController } from "./auth";
-import { FireCMSContext } from "./firecms_context";
 import { EntityCollection } from "./collections";
 
 /**

@@ -9,7 +9,7 @@ import {
 
 import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
 import { SampleExtraActions } from "../collection_actions/SampleExtraActions";
-import { SampleProductsView } from "../custom_schema_view/SampleProductsView";
+import { SampleProductsView } from "../custom_entity_view/SampleProductsView";
 import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";
 
@@ -124,7 +124,7 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         // we use some custom logic by storing user data in the `extra`
         // field of the user
-        delete: authController.extra?.roles.includes("admin")
+        delete: authController.extra?.roles.includes("admin"),
     }),
     extraActions: productExtraActionBuilder,
     subcollections: [localeCollection],

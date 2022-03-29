@@ -48,7 +48,7 @@ export function EntityCollectionViewActions<M>({
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const addButton = canCreateEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(path)) &&
+    const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path)) &&
         onNewClick && (largeLayout
             ? <Button
                 onClick={onNewClick}
@@ -67,7 +67,7 @@ export function EntityCollectionViewActions<M>({
             <Add/>
         </Button>);
 
-    const multipleDeleteEnabled = canDeleteEntity(collection.permissions, collection, authController, fullPathToCollectionSegments(path));
+    const multipleDeleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(path));
 
     let multipleDeleteButton: JSX.Element | undefined;
     if (selectionEnabled) {

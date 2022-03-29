@@ -34,7 +34,7 @@ export function SampleProductsView({ entity, modifiedValues }: {
                 <Box p={4}>
                     <p>
                         This is an example of a custom view added
-                        as a panel to an entity schema.
+                        as a panel to an entity collection.
                     </p>
                     <p>
                         Values in the form:
@@ -50,7 +50,6 @@ export function SampleProductsView({ entity, modifiedValues }: {
                     }}>
                         {JSON.stringify(values, null, 2)}
                     </p>}
-
 
                 </Box>
 

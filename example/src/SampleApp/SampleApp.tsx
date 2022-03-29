@@ -16,14 +16,14 @@ import { firebaseConfig } from "../firebase_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
 import { textSearchController } from "./text_search";
-import { productsCollection } from "./schemas/products_schema";
-import { blogCollection } from "./schemas/blog_schema";
-import { customCollectionOverrideHandler } from "./schemas/custom_schema_resolver";
+import { productsCollection } from "./collections/products_collection";
+import { blogCollection } from "./collections/blog_collection";
+import { customCollectionOverrideHandler } from "./collections/custom_collection_resolver";
 
 import "typeface-rubik";
 import "typeface-space-mono";
-import { testCollection } from "./schemas/test_schema";
-import { usersCollection } from "./schemas/users_schema";
+import { testCollection } from "./collections/test_collection";
+import { usersCollection } from "./collections/users_collection";
 
 function SampleApp() {
 

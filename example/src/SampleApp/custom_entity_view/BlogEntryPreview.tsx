@@ -18,7 +18,7 @@ import {
     useStorageSource
 } from "@camberi/firecms";
 import { Product } from "../types";
-import { productsCollection } from "../schemas/products_schema";
+import { productsCollection } from "../collections/products_collection";
 
 /**
  * This is a sample view used to render the content of a blog entry.
@@ -149,7 +149,7 @@ function ProductGroupPreview({ references }: { references: EntityReference[] }) 
 
     /**
      * Fetch the products determined by the references, using the datasource
-     * and the products schema
+     * and the products collection
      */
     useEffect(() => {
         if (references) {

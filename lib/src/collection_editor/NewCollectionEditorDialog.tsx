@@ -129,6 +129,7 @@ export function NewCollectionEditorDialog<M>({
                                 {mode === "properties" &&
                                     <CollectionEditorForm
                                         showErrors={submitCount > 0}
+                                        isNewCollection={true}
                                         onPropertyError={(propertyKey, error) => {
                                             propertyErrorsRef.current = removeUndefined({
                                                 ...propertyErrorsRef.current,

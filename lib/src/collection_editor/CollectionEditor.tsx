@@ -167,6 +167,7 @@ export const CollectionEditor = React.memo(
                             <CollectionEditorForm showErrors={showErrors}
                                                   onPropertyError={onPropertyError}
                                                   setDirty={setDirty}
+                                                  isNewCollection={false}
                             />
                         </Box>
 
@@ -207,12 +208,14 @@ export const CollectionEditor = React.memo(
 
 type CollectionEditorFormProps = {
     showErrors: boolean;
+    isNewCollection: boolean;
     onPropertyError: (propertyKey: string, namespace: string | undefined, error: string | undefined) => void;
     setDirty?: (dirty: boolean) => void;
 };
 export const CollectionEditorForm = React.memo(
     function CollectionEditorForm({
                                       showErrors,
+                                      isNewCollection,
                                       onPropertyError,
                                       setDirty
                                   }: CollectionEditorFormProps) {
@@ -352,14 +355,24 @@ export const CollectionEditorForm = React.memo(
                          my: 2
                      }}>
 
-                    <Typography variant={"h4"} sx={{
+                    <Box sx={{
                         flexGrow: 1
                     }}>
-                        {values.name ? `${values.name} collection` : "collection"}
-                    </Typography>
+                        {values.name && <Typography variant={"h4"}>
+                            {values.name}
+                        </Typography>
+                        }
+
+                        <Typography variant={"subtitle2"} sx={{
+                            color: "text.secondary"
+                        }}>
+                            {"Collection".toUpperCase()}
+                        </Typography>
+                    </Box>
 
                     <Box sx={{ ml: 1 }}>
                         <IconButton
+                            color={"primary"}
                             onClick={() => setDetailsDialogOpen(true)}>
                             <EditIcon/>
                         </IconButton>

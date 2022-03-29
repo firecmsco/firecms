@@ -5,7 +5,7 @@ import {
     buildPropertyBuilder,
     ExportMappingFunction
 } from "@camberi/firecms";
-import { BlogEntryPreview } from "../custom_schema_view/BlogEntryPreview";
+import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
 
 type BlogEntry = {
     name: string,
