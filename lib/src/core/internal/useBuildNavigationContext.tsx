@@ -110,14 +110,15 @@ export function useBuildNavigationContext<UserType>({
 
     const getCollection = useCallback(<M extends { [Key: string]: any }>(
         path: string,
-        entityId?: string
+        entityId?: string,
+        includeUserOverride = false
     ): EntityCollection<M> => {
 
         const baseCollection = getCollectionByPath<M>(removeInitialAndTrailingSlashes(path), collections);
 
-        const collectionOverride = getCollectionOverride(path);
+        const userOverride = includeUserOverride ? getCollectionUserOverride(path) : undefined;
 
-        const overriddenCollection = baseCollection ? mergeDeep(baseCollection, collectionOverride) : undefined;
+        const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride) : undefined;
 
         let result: Partial<EntityCollection> = {};
 
@@ -173,7 +174,7 @@ export function useBuildNavigationContext<UserType>({
     const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${encodePath(path)}` : `/${encodePath(path)}`,
         [cleanBasePath]);
 
-    const getCollectionOverride = useCallback(<M, >(path: string): LocalEntityCollection<M> | undefined => {
+    const getCollectionUserOverride = useCallback(<M, >(path: string): LocalEntityCollection<M> | undefined => {
         if (!userConfigPersistence)
             return undefined
         return userConfigPersistence.getCollectionConfig<M>(path);

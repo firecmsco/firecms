@@ -262,7 +262,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                       setPreventOutsideClick={setPreventOutsideClick}
                 />;
             }
-            allowScroll = true;
+            allowScroll = false;
         } else if (property.dataType === "array") {
             const arrayProperty = (property as ResolvedArrayProperty);
             if (arrayProperty.of) {

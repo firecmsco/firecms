@@ -32,9 +32,7 @@ export const useCollectionEditorController = (): CollectionEditorController => {
 
     return {
         editCollection: setEditedCollectionPath,
-        newCollectionDialog,
         openNewCollectionDialog,
-        closeNewCollectionDialog,
         collectionEditorViews: (
             <>
                 <CollectionEditorDialog

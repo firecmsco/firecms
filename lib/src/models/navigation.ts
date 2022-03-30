@@ -48,7 +48,9 @@ export type NavigationContext = {
      * the collection configuration changes that are persisted.
      * If you don't specify it, the collection is fetched from the local navigation.
      */
-    getCollection: <M>(path: string, entityId?: string) => EntityCollection<M> | undefined;
+    getCollection: <M>(path: string,
+                       entityId?: string,
+                       includeUserOverride?: boolean) => EntityCollection<M> | undefined;
 
     /**
      * Default path under the navigation routes of the CMS will be created

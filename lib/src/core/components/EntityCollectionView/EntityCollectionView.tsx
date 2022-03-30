@@ -28,7 +28,8 @@ import {
 
 import {
     canCreateEntity,
-    canDeleteEntity, canEditCollection,
+    canDeleteEntity,
+    canEditCollection,
     canEditEntity
 } from "../../util/permissions";
 import { Markdown } from "../../../preview";
@@ -122,7 +123,7 @@ export function EntityCollectionView<M extends { [Key: string]: unknown }>({
                                                                            }: EntityCollectionViewProps<M>) {
 
     const navigationContext = useNavigationContext();
-    const collectionFromPath = navigationContext.getCollection<M>(fullPath);
+    const collectionFromPath = navigationContext.getCollection<M>(fullPath, undefined, true);
 
     const collection: EntityCollection<M> | undefined = collectionFromPath ?? baseCollection;
     if (!collection) {
@@ -209,7 +210,7 @@ export const EntityCollectionViewInternal = React.memo(
         }, [setSelectedEntities]);
 
         const checkInlineEditing = useCallback((entity: Entity<any>) => {
-            if (!canEditEntity( collection, authController, fullPathToCollectionSegments(fullPath))) {
+            if (!canEditEntity(collection, authController, fullPathToCollectionSegments(fullPath))) {
                 return false;
             }
             return collection.inlineEditing === undefined || collection.inlineEditing;
@@ -324,8 +325,8 @@ export const EntityCollectionViewInternal = React.memo(
 
             const isSelected = isEntitySelected(entity);
 
-            const createEnabled = canCreateEntity( collection, authController, fullPathToCollectionSegments(fullPath));
-            const deleteEnabled = canDeleteEntity( collection, authController, fullPathToCollectionSegments(fullPath));
+            const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath));
+            const deleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath));
 
             const onCopyClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
                 entityId: clickedEntity.id,
@@ -370,7 +371,7 @@ export const EntityCollectionViewInternal = React.memo(
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     Title={Title}
-                    ActionsStart={collectionEditable && collectionEditorController && canEditCollection( collection, authController, fullPathToCollectionSegments(fullPath))
+                    ActionsStart={collectionEditable && collectionEditorController && canEditCollection(collection, authController, fullPathToCollectionSegments(fullPath))
                         ? <Tooltip title={"Edit collection"}>
                             <IconButton
                                 color={"primary"}

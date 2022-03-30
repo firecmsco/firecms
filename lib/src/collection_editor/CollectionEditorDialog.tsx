@@ -17,7 +17,7 @@ export const CollectionEditorDialog = React.memo(
     function CollectionEditorDialog({
                                         open,
                                         handleClose,
-                                        path,
+                                        path
                                     }: CollectionEditorDialogProps) {
 
         const collectionEditorController = useCollectionEditorController();

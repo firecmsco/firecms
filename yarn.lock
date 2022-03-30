@@ -13477,7 +13477,7 @@ vite-plugin-fonts@^0.2.2:
   resolved "https://registry.yarnpkg.com/vite-plugin-fonts/-/vite-plugin-fonts-0.2.2.tgz#48cda78f5ad36907f3de497fa418ffd2b8f2ca83"
   integrity sha512-fhzhsrTiuzlDjSO6g5sV5EVIIvbb8lmsaIY6eUTBM4lcF55x40UBpHrcyvNwIhQG211g0lu83XC7oZlkmvdkMA==
 
-vite@^2.7.13, vite@^2.7.2:
+vite@^2.8.6:
   version "2.8.6"
   resolved "https://registry.yarnpkg.com/vite/-/vite-2.8.6.tgz#32d50e23c99ca31b26b8ccdc78b1d72d4d7323d3"
   integrity sha512-e4H0QpludOVKkmOsRyqQ7LTcMUDF3mcgyNU4lmi0B5JUbe0ZxeBBl8VoZ8Y6Rfn9eFKYtdXNPcYK97ZwH+K2ug==

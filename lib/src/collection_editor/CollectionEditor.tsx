@@ -44,6 +44,7 @@ import { ErrorBoundary } from "../core/internal/ErrorBoundary";
 import { LoadingButton } from "@mui/lab";
 import { YupSchema } from "./SchemaYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
+import { editableProperty } from "../core/util/collections";
 
 export type CollectionEditorProps<M> = {
     path: string;
@@ -76,7 +77,7 @@ export const CollectionEditor = React.memo(
             try {
                 if (navigationContext.initialised) {
                     if (path) {
-                        setCollection(navigationContext.getCollection(path));
+                        setCollection(navigationContext.getCollection(path, undefined, false));
                     } else {
                         setCollection(undefined);
                     }
@@ -289,71 +290,72 @@ export const CollectionEditorForm = React.memo(
         setSelectedPropertyNamespace(undefined);
     }, [values.properties, values.propertiesOrder]);
 
-    const onPropertyChanged = useCallback(({ id, property, namespace }) => {
-        const fullId = getFullId(id, namespace);
-        const propertyPath = fullId ? idToPropertiesPath(fullId) : undefined;
-        if (propertyPath) {
-            setFieldValue(propertyPath, property, false);
-            setFieldTouched(propertyPath, true, false);
-        }
-    }, [setFieldTouched, setFieldValue]);
+        const onPropertyChanged = useCallback(({ id, property, namespace }) => {
+            const fullId = getFullId(id, namespace);
+            const propertyPath = fullId ? idToPropertiesPath(fullId) : undefined;
+            if (propertyPath) {
+                setFieldValue(propertyPath, property, false);
+                setFieldTouched(propertyPath, true, false);
+            }
+        }, [setFieldTouched, setFieldValue]);
 
-    const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: boolean) => {
-        const propertyPath = id ? getFullId(id, namespace) : undefined;
-        if (propertyPath) {
-            onPropertyError(id, namespace, error ? "Field error" : undefined);
-            setFieldError(idToPropertiesPath(propertyPath), error ? "Field error" : undefined);
-        }
-    }, [setFieldError]);
+        const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: boolean) => {
+            const propertyPath = id ? getFullId(id, namespace) : undefined;
+            if (propertyPath) {
+                onPropertyError(id, namespace, error ? "Field error" : undefined);
+                setFieldError(idToPropertiesPath(propertyPath), error ? "Field error" : undefined);
+            }
+        }, [setFieldError]);
 
-    const closePropertyDialog = () => {
-        setSelectedPropertyId(undefined);
-    };
+        const closePropertyDialog = () => {
+            setSelectedPropertyId(undefined);
+        };
 
-    const propertyEditForm = selectedPropertyFullId &&
-        selectedProperty &&
-        typeof selectedProperty === "object" &&
-        <PropertyForm
-            inArray={false}
-            asDialog={asDialog}
-            open={Boolean(selectedPropertyId)}
-            key={`edit_view_${selectedPropertyId}`}
-            existing={true}
-            propertyId={selectedPropertyId}
-            propertyNamespace={selectedPropertyNamespace}
-            property={selectedProperty}
-            onPropertyChanged={onPropertyChanged}
-            onDelete={deleteProperty}
-            onError={onPropertyErrorInternal}
-            forceShowErrors={showErrors}
-            onOkClicked={asDialog
-                ? closePropertyDialog
-                : undefined
-            }/>;
+        const propertyEditForm = selectedPropertyFullId &&
+            selectedProperty &&
+            typeof selectedProperty === "object" &&
+            editableProperty(selectedProperty) &&
+            <PropertyForm
+                inArray={false}
+                asDialog={asDialog}
+                open={Boolean(selectedPropertyId)}
+                key={`edit_view_${selectedPropertyId}`}
+                existing={true}
+                propertyId={selectedPropertyId}
+                propertyNamespace={selectedPropertyNamespace}
+                property={selectedProperty}
+                onPropertyChanged={onPropertyChanged}
+                onDelete={deleteProperty}
+                onError={onPropertyErrorInternal}
+                forceShowErrors={showErrors}
+                onOkClicked={asDialog
+                    ? closePropertyDialog
+                    : undefined
+                }/>;
 
-    const emptyCollection = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
+        const emptyCollection = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
 
-    const body = (
-        <Grid container>
-            <Grid item
-                  xs={12}
-                  lg={5}
-                  sx={(theme) => ({
-                      p: 3,
-                      [theme.breakpoints.down("md")]: {
-                          p: 2
-                      },
-                      [theme.breakpoints.down("sm")]: {
-                          p: 1
-                      }
-                  })}>
+        const body = (
+            <Grid container>
+                <Grid item
+                      xs={12}
+                      lg={5}
+                      sx={(theme) => ({
+                          p: 3,
+                          [theme.breakpoints.down("md")]: {
+                              p: 2
+                          },
+                          [theme.breakpoints.down("sm")]: {
+                              p: 1
+                          }
+                      })}>
 
-                <Box display={"flex"}
-                     sx={{
-                         display: "flex",
-                         alignItems: "center",
-                         my: 2
-                     }}>
+                    <Box display={"flex"}
+                         sx={{
+                             display: "flex",
+                             alignItems: "center",
+                             my: 2
+                         }}>
 
                     <Box sx={{
                         flexGrow: 1
@@ -421,8 +423,7 @@ export const CollectionEditorForm = React.memo(
                 <Box sx={(theme) => ({
                     height: "100%",
                     p: 2,
-                    borderLeft: `1px solid ${theme.palette.divider}`,
-                    // pl: 2
+                    borderLeft: `1px solid ${theme.palette.divider}`
                 })}>
                     <Paper variant={"outlined"}
                            sx={theme => ({
@@ -445,6 +446,16 @@ export const CollectionEditorForm = React.memo(
                                 {!emptyCollection
                                     ? "Now you can add your first field"
                                     : "Select a field to edit it"}
+                            </Box>}
+
+                        {selectedProperty && !editableProperty(selectedProperty) &&
+                            <Box sx={{
+                                height: "100%",
+                                display: "flex",
+                                alignItems: "center",
+                                justifyContent: "center"
+                            }}>
+                                {"This field cannot be edited"}
                             </Box>}
                     </Paper>
                 </Box>

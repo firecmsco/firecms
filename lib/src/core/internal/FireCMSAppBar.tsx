@@ -38,7 +38,7 @@ export const FireCMSAppBar = React.memo(
                                toolbarExtraWidget
                            }: CMSAppBarProps) {
 
-        const breadcrumbsContext = useBreadcrumbsContext();
+    const breadcrumbsContext = useBreadcrumbsContext();
         const { breadcrumbs } = breadcrumbsContext;
 
         const authController = useAuthController();

@@ -173,12 +173,12 @@ function ReferencePreviewInternal<M>({
 
                 </Box>
                 <Box sx={{
-                    // margin: size === "tiny" ? "auto" : undefined,
                     my: size === "tiny" ? 0.5 : 1
                 }}>
                     {entity &&
                         <Tooltip title={`See details for ${entity.id}`}>
                             <IconButton
+                                color={"inherit"}
                                 size={"small"}
                                 onClick={(e) => {
                                     e.stopPropagation();
@@ -197,11 +197,13 @@ function ReferencePreviewInternal<M>({
         );
     }
 
-    return <ReferencePreviewWrap onClick={onClick}
-                                 onHover={onHover}
-                                 size={size}>
-        {body}
-    </ReferencePreviewWrap>
+    return (
+        <ReferencePreviewWrap onClick={onClick}
+                              onHover={onHover}
+                              size={size}>
+            {body}
+        </ReferencePreviewWrap>
+    );
 }
 
 function ReferencePreviewWrap({ children, onHover, size, onClick }: {

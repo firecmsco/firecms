@@ -227,7 +227,7 @@ const TableCellInternal = ({
                 </Box>
 
                 {disabled && onHover && disabledTooltip &&
-                    <div style={{
+                    <Box sx={{
                         position: "absolute",
                         top: 4,
                         right: 4,
@@ -237,7 +237,7 @@ const TableCellInternal = ({
                             <RemoveCircleIcon color={"disabled"}
                                               fontSize={"inherit"}/>
                         </Tooltip>
-                    </div>}
+                    </Box>}
 
                 {(error || showExpandIcon) &&
                     <Box sx={{

@@ -108,7 +108,7 @@ export function ReferenceDialog(
         return () => {
             unmounted = true;
         };
-    }, [dataSource, path, selectedEntityIds]);
+    }, [dataSource, path, selectedEntityIds, collection]);
 
     const onEntityClick = (entity: Entity<any>) => {
         if (!multiselect && onSingleEntitySelected) {

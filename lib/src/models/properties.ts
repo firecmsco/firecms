@@ -140,6 +140,12 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * This value will be set by default in new entities
      */
     defaultValue?: T;
+
+    /**
+     * Should this property be editable in the collection editor.
+     * Defaults to true if the collection is editable
+     */
+    editable?: boolean;
 }
 
 /**

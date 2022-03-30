@@ -142,7 +142,6 @@ const docsToCollectionTree = (docs: DocumentSnapshot[]): EntityCollection[] => {
         if (id.includes(COLLECTION_PATH_SEPARATOR)) {
             const parentId = id.split(COLLECTION_PATH_SEPARATOR).slice(0, -1).join(COLLECTION_PATH_SEPARATOR);
             const parentCollection = collectionsMap[parentId];
-            console.log("zzz", id, parentId);
             if (parentCollection)
                 parentCollection.subcollections = [...(parentCollection.subcollections ?? []), collection];
             delete collectionsMap[id];

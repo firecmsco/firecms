@@ -1,6 +1,6 @@
 import React from "react";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
 import { Box, IconButton } from "@mui/material";
+import DragHandleIcon from "@mui/icons-material/DragHandle";
 
 import { PropertiesOrBuilder, PropertyOrBuilder } from "../models";
 import {

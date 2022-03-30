@@ -1,5 +1,4 @@
 import { EntityCollection } from "../../models";
-import util from "util";
 
 export const productCollection: EntityCollection = {
     path: "product",
