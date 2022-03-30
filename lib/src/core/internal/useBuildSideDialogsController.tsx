@@ -8,6 +8,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
     const navigate = useNavigate();
 
     const [sidePanels, setSidePanels] = useState<SideDialogPanelProps[]>([]);
+
     const routesStore = useRef<Record<string, SideDialogPanelProps>>({});
     const routesCount = useRef<number>(0);
 
@@ -47,41 +48,48 @@ export function useBuildSideDialogsController(): SideDialogsController {
         }
     }, [sidePanels, location, routesCount]);
 
-    const open = (props: SideDialogPanelProps) => {
+    const open = (panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
-        routesStore.current[props.key] = props;
-        routesCount.current++;
+        const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
+
+        newPanels.forEach((panel) => {
+            routesStore.current[panel.key] = panel;
+        });
+        routesCount.current = routesCount.current + newPanels.length;
 
         const baseLocation = (location.state as any)?.base_location ?? location;
 
-        const updatedPanels = [...sidePanels, props];
+        const updatedPanels = [...sidePanels, ...newPanels];
         setSidePanels(updatedPanels);
 
-        if (props.urlPath) {
-            navigate(
-                props.urlPath,
-                {
-                    state: {
-                        base_location: baseLocation,
-                        panels: updatedPanels.map(p => p.key)
+        newPanels.forEach((panel) => {
+            if (panel.urlPath) {
+                navigate(
+                    panel.urlPath,
+                    {
+                        state: {
+                            base_location: baseLocation,
+                            panels: updatedPanels.map(p => p.key)
+                        }
                     }
-                }
-            );
-        }
+                );
+            }
+        });
+
     };
 
-    const replace = (props: SideDialogPanelProps) => {
+    const replace = (panelProps: SideDialogPanelProps) => {
 
-        routesStore.current[props.key] = props;
+        routesStore.current[panelProps.key] = panelProps;
 
         const baseLocation = (location.state as any)?.base_location ?? location;
 
-        const updatedPanels = [...sidePanels.slice(0, -1), props];
+        const updatedPanels = [...sidePanels.slice(0, -1), panelProps];
         setSidePanels(updatedPanels);
 
-        if (props.urlPath) {
+        if (panelProps.urlPath) {
             navigate(
-                props.urlPath,
+                panelProps.urlPath,
                 {
                     replace: true,
                     state: {
