@@ -198,7 +198,7 @@ export const EntityCollectionViewInternal = React.memo(
 
         const onMultipleDeleteClick = useCallback(() => {
             setDeleteEntityClicked(selectedEntities);
-        }, []);
+        }, [selectedEntities]);
 
         const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {
             setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));

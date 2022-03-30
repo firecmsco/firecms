@@ -17,7 +17,6 @@ import {
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { getResolvedCollection } from "../../../collections";
 
-
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
     path: string,
@@ -41,14 +40,14 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                                                                          onMultipleEntitiesDelete,
                                                                          path,
                                                                          ...other
-                                                                     }
-                                                                         : DeleteEntityDialogProps<M>) {
+                                                                     }: DeleteEntityDialogProps<M>) {
 
     const dataSource = useDataSource();
     const snackbarController = useSnackbarController();
     const [loading, setLoading] = useState(false);
 
     const [entityOrEntities, setUsedEntityOrEntities] = React.useState<Entity<M> | Entity<M>[]>();
+
     const [multipleEntities, setMultipleEntities] = React.useState<boolean>();
     const context = useFireCMSContext();
 
