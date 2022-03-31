@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { TextField as MuiTextField } from "@mui/material";
+import { Box, TextField as MuiTextField } from "@mui/material";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 import DatePicker from "@mui/lab/DatePicker";
 
@@ -46,6 +46,7 @@ export function TableDateField(props: {
             }}
             renderInput={(params) =>
                 <MuiTextField {...params}
+                              fullWidth
                               variant={"standard"}
                               error={Boolean(error)}
                                   style={{
@@ -54,7 +55,10 @@ export function TableDateField(props: {
                                   InputProps={{
                                       ...params.InputProps,
                                       style: { fontSize: 14 },
-                                      disableUnderline: true
+                                      disableUnderline: true,
+                                      endAdornment: <Box sx={{ pr: 1 }}>
+                                          {params.InputProps?.endAdornment}
+                                      </Box>
                                   }}
                     />}
                 InputAdornmentProps={{

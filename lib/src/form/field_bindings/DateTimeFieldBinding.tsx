@@ -1,6 +1,6 @@
 import React from "react";
 
-import { TextField as MuiTextField } from "@mui/material";
+import { Box, TextField as MuiTextField } from "@mui/material";
 import DatePicker from "@mui/lab/DatePicker";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 
@@ -55,29 +55,28 @@ export function DateTimeFieldBinding({
                 label={
                     <LabelWithIcon property={property}/>
                 }
-                renderInput={(props) => (
-                    <MuiTextField {...props}
-                                  fullWidth
-                                  sx={{
-                                      minHeight: "64px"
-                                  }}
-                                  InputProps={{
-                                      ...props.InputProps,
-                                      sx: {
+                renderInput={(params) =>
+                    (
+                        <MuiTextField {...params}
+                                      fullWidth
+                                      sx={{
                                           minHeight: "64px"
-                                      }
-                                  }}
-                                  error={showError}
-                        // format={dateFormat}
-                                  variant={"filled"}
-                                  helperText={showError ? error : null}/>
-                )}
+                                      }}
+                                      InputProps={{
+                                          ...params.InputProps,
+                                          sx: {
+                                              minHeight: "64px"
+                                          },
+                                          endAdornment: <Box sx={{ pr: 2 }}>
+                                              {params.InputProps?.endAdornment}
+                                          </Box>
+                                      }}
+                                      error={showError}
+                                      variant={"filled"}
+                                      helperText={showError ? error : null}/>
+                    )}
                 disabled={disabled}
-                onChange={(dateValue) => {
-                    return setValue(
-                        dateValue
-                    );
-                }}
+                onChange={(dateValue) => setValue(dateValue)}
             />
 
             {includeDescription &&

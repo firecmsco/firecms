@@ -57,6 +57,10 @@ export const SnackbarProvider: React.FC = ({ children }) => {
             <Portal>
                 <Snackbar open={isOpen}
                           autoHideDuration={3000}
+                          anchorOrigin={{
+                              vertical: "bottom",
+                              horizontal: "right"
+                          }}
                           onClose={(_) => close()}>
                     <Alert elevation={1}
                            variant="filled"
