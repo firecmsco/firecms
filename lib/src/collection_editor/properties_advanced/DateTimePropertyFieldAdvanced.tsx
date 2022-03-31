@@ -4,7 +4,7 @@ import {
     GeneralPropertyValidation
 } from "./validation/GeneralPropertyValidation";
 
-export function BooleanPropertyFieldAdvanced() {
+export function DateTimePropertyFieldAdvanced() {
 
     return (
         <>

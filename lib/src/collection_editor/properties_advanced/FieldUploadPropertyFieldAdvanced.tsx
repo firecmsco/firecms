@@ -7,7 +7,7 @@ import {
 import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
 import { EnumValues } from "../../models";
 import DebouncedTextField from "../../form/components/DebouncedTextField";
-import { SmallSwitch } from "../../form/components/SmallSwitch";
+import { SwitchControl } from "../../form/components/SwitchControl";
 
 import { Field, getIn, useFormikContext } from "formik";
 
@@ -78,7 +78,7 @@ export function FieldUploadPropertyFieldAdvanced({
                            name={storeUrl}
                            label={"Save URL instead of storage path"}
                            disabled={existing}
-                           component={SmallSwitch}/>
+                           component={SwitchControl}/>
                     <br/>
                     <Typography variant={"caption"}>
                         Turn this setting on, if you prefer to save the download

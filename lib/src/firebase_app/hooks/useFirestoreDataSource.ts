@@ -17,7 +17,7 @@ import {
     SaveEntityProps,
     WhereFilterOp
 } from "../../models";
-import { sanitizeData, updateAutoValues } from "../../core/util/entities";
+import { sanitizeData, updateDateAutoValues } from "../../core/util/entities";
 import {
     collection as collectionClause,
     CollectionReference,
@@ -372,7 +372,7 @@ export function useFirestoreDataSource({
             const properties: ResolvedProperties<M> = resolvedCollection.properties;
             const collectionReference: CollectionReference = collectionClause(firestore, path);
 
-            const updatedFirestoreValues: EntityValues<M> = updateAutoValues(
+            const updatedFirestoreValues: EntityValues<M> = updateDateAutoValues(
                 {
                     inputValues: cmsToFirestoreModel(values, firestore),
                     properties,

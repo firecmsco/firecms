@@ -268,6 +268,7 @@ function createFilterField(id: string,
         return <DateTimeFilterField value={filterValue}
                                     setValue={setFilterValue}
                                     name={id as string}
+                                    mode={filterConfig.dateMode}
                                     isArray={filterConfig.isArray}
                                     title={title}/>;
     }

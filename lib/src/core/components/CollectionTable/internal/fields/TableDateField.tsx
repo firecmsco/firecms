@@ -1,11 +1,12 @@
 import React, { useCallback } from "react";
 import { TextField as MuiTextField } from "@mui/material";
 import DateTimePicker from "@mui/lab/DateTimePicker";
-
+import DatePicker from "@mui/lab/DatePicker";
 
 export function TableDateField(props: {
     name: string;
     error: Error | undefined;
+    mode?: "date" | "date_time";
     internalValue: Date | undefined | null;
     updateValue: (newValue: (Date | null)) => void;
     focused: boolean;
@@ -17,6 +18,7 @@ export function TableDateField(props: {
     const {
         disabled,
         error,
+        mode,
         internalValue,
         setPreventOutsideClick,
         updateValue
@@ -30,18 +32,22 @@ export function TableDateField(props: {
         setPreventOutsideClick(false);
     }, []);
 
+    const PickerComponent = mode === undefined || mode === "date_time"
+        ? DateTimePicker
+        : DatePicker;
+
     return (
-            <DateTimePicker
-                value={internalValue ?? null}
-                clearable
-                disabled={disabled}
-                onChange={(dateValue: Date | null) => {
-                    updateValue(dateValue);
-                }}
-                renderInput={(params) =>
-                    <MuiTextField {...params}
-                                  variant={"standard"}
-                                  error={Boolean(error)}
+        <PickerComponent
+            value={internalValue ?? null}
+            clearable
+            disabled={disabled}
+            onChange={(dateValue: Date | null) => {
+                updateValue(dateValue);
+            }}
+            renderInput={(params) =>
+                <MuiTextField {...params}
+                              variant={"standard"}
+                              error={Boolean(error)}
                                   style={{
                                       height: "100%"
                                   }}

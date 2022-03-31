@@ -3,7 +3,7 @@ import { AuthController } from "./auth";
 import { EntityCollection } from "./collections";
 
 /**
- * Define the operations that can be performed in an entity.
+ * Define the operations that can be performed in a collection.
  * @category Models
  */
 export interface Permissions {
@@ -26,8 +26,14 @@ export interface Permissions {
      */
     delete?: boolean;
 
+    /**
+     * Is the logged-in user allowed to modify this collection
+     */
     editCollection?: boolean;
 
+    /**
+     * Is the logged-in user allowed to delete this collection
+     */
     deleteCollection?: boolean;
 }
 
@@ -59,8 +65,8 @@ export interface PermissionsBuilderProps<M extends { [Key: string]: any }, UserT
 }
 
 /**
- * Builder used to assign `create`, `edit` and `delete` permissions to entities,
- * based on the logged user, entity or collection path
+ * Builder used to assign permissions to entities,
+ * based on the logged user or collection
  * @category Models
  */
 export type PermissionsBuilder<M extends { [Key: string]: any }, UserType extends User = User> =

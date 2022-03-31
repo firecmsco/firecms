@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { SideDialogPanelProps, SideDialogsController } from "../SideDialogs";
+import { SideDialogPanelProps, SideDialogsController } from "../../models";
 
 export function useBuildSideDialogsController(): SideDialogsController {
 
@@ -11,6 +11,9 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
     const routesStore = useRef<Record<string, SideDialogPanelProps>>({});
     const routesCount = useRef<number>(0);
+
+    // console.log("location", location);
+    // console.log("sidePanels", sidePanels);
 
     useEffect(() => {
         const state = location.state as any;

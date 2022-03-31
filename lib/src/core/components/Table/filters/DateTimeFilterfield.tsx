@@ -10,17 +10,18 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 import DateTimePicker from "@mui/lab/DateTimePicker";
+import DatePicker from "@mui/lab/DatePicker";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { TableWhereFilterOp } from "../TableProps";
 
 interface DateTimeFilterFieldProps {
     name: string,
+    mode?: "date" | "date_time",
     value?: [op: TableWhereFilterOp, fieldValue: any];
     setValue: (value?: [op: TableWhereFilterOp, newValue: any]) => void;
     isArray?: boolean;
     title?: string;
 }
-
 
 const operationLabels = {
     "==": "==",
@@ -36,10 +37,10 @@ const operationLabels = {
 
 const multipleSelectOperations = ["array-contains-any", "in"];
 
-
 export function DateTimeFilterField({
                                         name,
                                         isArray,
+                                        mode,
                                         value,
                                         setValue,
                                         title
@@ -79,6 +80,10 @@ export function DateTimeFilterField({
         }
     }
 
+    const PickerComponent = mode === undefined || mode === "date_time"
+        ? DateTimePicker
+        : DatePicker;
+
     return (
 
         <Box display={"flex"} width={340} alignItems={"center"}>
@@ -101,7 +106,7 @@ export function DateTimeFilterField({
 
             <Box flexGrow={1} ml={1}>
 
-                <DateTimePicker
+                <PickerComponent
                     clearable
                     InputProps={{
                         // disableUnderline: true,

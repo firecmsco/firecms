@@ -3,7 +3,7 @@ import React from "react";
 import { FastField, getIn, useFormikContext } from "formik";
 import { Grid } from "@mui/material";
 import DebouncedTextField from "../../../form/components/DebouncedTextField";
-import { SmallSwitch } from "../../../form/components/SmallSwitch";
+import { SwitchControl } from "../../../form/components/SwitchControl";
 
 export function GeneralPropertyValidation({}: {
     required?: boolean;
@@ -24,7 +24,7 @@ export function GeneralPropertyValidation({}: {
                            name={validationRequired}
                            label={"Required"}
                            tooltip={"You won't be able to save this entity if this value is not set"}
-                           component={SmallSwitch}/>
+                           component={SwitchControl}/>
             </Grid>
 
             <Grid item xs={4}>
@@ -32,7 +32,7 @@ export function GeneralPropertyValidation({}: {
                            name={validationUnique}
                            label={"Unique"}
                            tooltip={"There cannot be multiple entities with the same value"}
-                           component={SmallSwitch}/>
+                           component={SwitchControl}/>
             </Grid>
 
             {getIn(values, validationRequired) && <Grid item xs={12}>

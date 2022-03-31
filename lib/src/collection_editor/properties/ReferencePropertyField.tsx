@@ -39,7 +39,6 @@ export function ReferencePropertyField({
     const pathValue: string | undefined = getIn(values, pathPath);
     const pathError: string | undefined = getIn(touched, pathPath) && getIn(errors, pathPath);
 
-    console.log("touched", touched, errors);
     return (
         <>
             <Grid item>
@@ -68,11 +67,10 @@ export function ReferencePropertyField({
 function validatePath(value: string) {
     let error;
     if (!value) {
-        error = "You must specify a targe collection for the field";
+        error = "You must specify a target collection for the field";
     }
     return error;
 }
-
 
 export function CollectionsSelect({
                                       disabled,

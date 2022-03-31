@@ -19,6 +19,7 @@ import {
     StringProperty
 } from "../../models";
 import { mergeDeep } from "./objects";
+import { setDateToMidnight } from "./dates";
 
 export function isReadOnly(property: Property | ResolvedProperty): boolean {
     if (property.readOnly)
@@ -138,32 +139,35 @@ function getDefaultValueFor(property: PropertyOrBuilder) {
  * Update the automatic values in an entity before save
  * @category Datasource
  */
-
-export function updateAutoValues<M extends { [Key: string]: any }>({
-                                                                       inputValues,
-                                                                       properties,
-                                                                       status,
-                                                                       timestampNowValue,
-                                                                   }:
-                                                                       {
-                                                                           inputValues: Partial<EntityValues<M>>,
-                                                                           properties: ResolvedProperties<M>,
-                                                                           status: EntityStatus,
-                                                                           timestampNowValue: any,
-                                                                       }): EntityValues<M> {
+export function updateDateAutoValues<M extends { [Key: string]: any }>({
+                                                                           inputValues,
+                                                                           properties,
+                                                                           status,
+                                                                           timestampNowValue,
+                                                                       }:
+                                                                           {
+                                                                               inputValues: Partial<EntityValues<M>>,
+                                                                               properties: ResolvedProperties<M>,
+                                                                               status: EntityStatus,
+                                                                               timestampNowValue: any,
+                                                                           }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
         properties,
         (inputValue, property) => {
             if (property.dataType === "date") {
+                let resultDate;
                 if (status === "existing" && property.autoValue === "on_update") {
-                    return timestampNowValue;
+                    resultDate = timestampNowValue;
                 } else if ((status === "new" || status === "copy") &&
                     (property.autoValue === "on_update" || property.autoValue === "on_create")) {
-                    return timestampNowValue;
+                    resultDate = timestampNowValue;
                 } else {
-                    return inputValue;
+                    resultDate = inputValue;
                 }
+                if (property.mode === "date")
+                    resultDate = setDateToMidnight(resultDate);
+                return resultDate;
             } else {
                 return inputValue;
             }

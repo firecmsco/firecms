@@ -8,55 +8,7 @@ import {
 } from "./internal/useUnsavedChangesDialog";
 import { CONTAINER_WIDTH } from "./internal/common";
 import { Box } from "@mui/material";
-
-/**
- * Controller to open the side dialog
- * @category Hooks and utilities
- */
-export interface SideDialogsController {
-
-    /**
-     * Close the last panel
-     */
-    close: () => void;
-
-    /**
-     * List of side panels currently open
-     */
-    sidePanels: SideDialogPanelProps[];
-
-    /**
-     * Open one or multiple side panels
-     * @param props
-     */
-    open: <P>(panelProps: SideDialogPanelProps<P> | SideDialogPanelProps<P>[]) => void;
-
-    /**
-     * Replace the last open panel with the given one
-     * @param props
-     */
-    replace: <P>(panelProps: SideDialogPanelProps<P>) => void;
-}
-
-/**
- * Props used to open a side dialog
- * @category Hooks and utilities
- */
-export interface SideDialogPanelProps<P = any> {
-
-    key: string;
-
-    Component: React.ComponentType<P>;
-
-    props: P;
-
-    width?: string;
-
-    urlPath?: string;
-
-    parentUrlPath?: string;
-
-}
+import { SideDialogPanelProps } from "../models";
 
 export type SideDialogContextProps = {
     blocked: boolean,

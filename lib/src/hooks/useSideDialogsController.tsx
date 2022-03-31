@@ -1,6 +1,5 @@
-import { AuthController, SideEntityController } from "../models";
+import { AuthController, SideDialogsController } from "../models";
 import { useFireCMSContext } from "./useFireCMSContext";
-import { SideDialogsController } from "../core/SideDialogs";
 
 /**
  * Hook to retrieve the side dialogs controller.

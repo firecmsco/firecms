@@ -242,6 +242,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
             innerComponent = <TableDateField name={name as string}
                                              error={error}
                                              disabled={disabled}
+                                             mode={property.mode}
                                              focused={focused}
                                              internalValue={internalValue as Date}
                                              updateValue={updateValue}

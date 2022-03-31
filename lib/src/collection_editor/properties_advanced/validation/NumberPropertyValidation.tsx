@@ -3,7 +3,7 @@ import React from "react";
 import { FastField, getIn, useFormikContext } from "formik";
 import { Box, Grid } from "@mui/material";
 import DebouncedTextField from "../../../form/components/DebouncedTextField";
-import { SmallSwitch } from "../../../form/components/SmallSwitch";
+import { SwitchControl } from "../../../form/components/SwitchControl";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 
 export function NumberPropertyValidation() {
@@ -78,19 +78,19 @@ export function NumberPropertyValidation() {
                         <FastField type="checkbox"
                                    name={validationPositive}
                                    label={"Positive value"}
-                                   component={SmallSwitch}/>
+                                   component={SwitchControl}/>
                     </Grid>
                     <Grid item xs={4}>
                         <FastField type="checkbox"
                                    name={validationNegative}
                                    label={"Negative value"}
-                                   component={SmallSwitch}/>
+                                   component={SwitchControl}/>
                     </Grid>
                     <Grid item xs={4}>
                         <FastField type="checkbox"
                                    name={validationInteger}
                                    label={"Integer value"}
-                                   component={SmallSwitch}/>
+                                   component={SwitchControl}/>
                     </Grid>
                 </Grid>
             </Grid>

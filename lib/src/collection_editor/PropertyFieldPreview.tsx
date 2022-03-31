@@ -182,7 +182,6 @@ export function PropertyBuilderPreview({
                         </Typography>
                     </Box>
 
-
                 </Paper>
             </Box>
         </Box>)

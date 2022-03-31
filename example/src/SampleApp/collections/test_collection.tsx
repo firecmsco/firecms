@@ -90,6 +90,11 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entity",
     properties: {
+        test_date: {
+            name: "Test date",
+            dataType: "date",
+            mode: "date"
+        },
         map_array_ref: {
             name: 'Map',
             dataType: 'map',
@@ -110,10 +115,6 @@ export const testCollection = buildCollection({
             dataType: "reference",
             path: "products",
             previewProperties: ["name", "main_image"]
-        },
-        test_date: {
-            name: "Test date",
-            dataType: "date"
         },
         movement: buildPropertyBuilder(({values}) => {
             return {

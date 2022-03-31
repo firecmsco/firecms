@@ -1,6 +1,7 @@
 import React from "react";
 
 import { TextField as MuiTextField } from "@mui/material";
+import DatePicker from "@mui/lab/DatePicker";
 import DateTimePicker from "@mui/lab/DateTimePicker";
 
 import { FieldProps } from "../../models";
@@ -32,7 +33,6 @@ export function DateTimeFieldBinding({
                                   shouldAlwaysRerender
                               }: DateTimeFieldProps) {
 
-
     const internalValue = value || null;
 
     useClearRestoreValue({
@@ -41,10 +41,14 @@ export function DateTimeFieldBinding({
         setValue
     });
 
+    const PickerComponent = property.mode === undefined || property.mode === "date_time"
+        ? DateTimePicker
+        : DatePicker;
+
     return (
         <>
 
-            <DateTimePicker
+            <PickerComponent
                 clearable
                 autoFocus={autoFocus}
                 value={internalValue}

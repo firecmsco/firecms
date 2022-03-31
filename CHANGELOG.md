@@ -1,7 +1,7 @@
 ## [2.0.0-alpha1] - 2021-12-13
 
 ### Collections
-- Collections and entity schemas have been merged into one single concept.
+Collections and entity schemas have been merged into one single concept.
 All the fields related to entity schemas have been moved to the collection level.
 We felt it was redundant and the distribution of logic between those 2 concepts 
 was a bit arbitrary.
@@ -58,7 +58,7 @@ buildProperty<string>({
   you pass a React Component directly: `Actions`
 - `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where 
   you pass a React Component directly: `Actions`
-- `Permissions` is now called `EntityPermissions`, and same for the related types.
+- `Permissions`: added `editCollection` and `deleteCollection` props
 
 ## [1.0.0-rc.4] - 2022-03-14
 

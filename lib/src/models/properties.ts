@@ -454,6 +454,13 @@ export interface DateProperty extends BaseProperty<Date> {
     dataType: "date";
 
     /**
+     * Set the granularity of the field to a date or date + time.
+     * Defaults to `date_time`.
+     *
+     */
+    mode?: "date" | "date_time";
+
+    /**
      * Rules for validating this property
      */
     validation?: TimestampPropertyValidationSchema;

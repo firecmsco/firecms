@@ -201,14 +201,15 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
             return {
                 dataType: property.dataType,
                 isArray,
-                title: name
+                title: name,
             };
         } else if (property.dataType === "date") {
             const title = property.name;
             return {
                 dataType: property.dataType,
                 isArray,
-                title
+                title,
+                dateMode: property.mode
             };
         }
 

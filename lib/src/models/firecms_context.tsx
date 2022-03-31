@@ -9,7 +9,7 @@ import { User } from "./user";
 import { SnackbarController } from "../hooks";
 import { ConfigurationPersistence } from "./config_persistence";
 import { UserConfigurationPersistence } from "./local_config_persistence";
-import { SideDialogsController } from "../core/SideDialogs";
+import { SideDialogsController } from "./side_dialogs_controller";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.

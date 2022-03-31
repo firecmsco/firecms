@@ -63,6 +63,10 @@ import {
     NumberPropertyFieldAdvanced
 } from "./properties_advanced/NumberPropertyFieldAdvanced";
 import { ReferencePropertyField } from "./properties/ReferencePropertyField";
+import { DateTimePropertyField } from "./properties/DateTimePropertyField";
+import {
+    DateTimePropertyFieldAdvanced
+} from "./properties_advanced/DateTimePropertyFieldAdvanced";
 
 export type PropertyWithId = Property & { id?: string };
 
@@ -363,7 +367,8 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
         updatedProperty = mergeDeep(
             propertyData,
             buildProperty({
-                dataType: "date"
+                dataType: "date",
+                mode: "date_time"
             })
         );
     } else if (selectedWidgetId === "repeat") {
@@ -496,6 +501,9 @@ function PropertyEditView({
     } else if (selectedWidgetId === "reference") {
         childComponent =
             <ReferencePropertyField existing={existing} multiple={false}/>;
+    } else if (selectedWidgetId === "date_time") {
+        childComponent = <DateTimePropertyField/>;
+        childComponentAdvanced = <DateTimePropertyFieldAdvanced/>
     } else if (selectedWidgetId === "multi_references") {
         childComponent =
             <ReferencePropertyField existing={existing} multiple={true}/>;

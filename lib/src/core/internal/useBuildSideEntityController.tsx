@@ -3,14 +3,15 @@ import {
     EntityCollection,
     EntitySidePanelProps,
     NavigationContext,
-    SideEntityController
+    SideEntityController,
+    SideDialogPanelProps,
+    SideDialogsController
 } from "../../models";
 import {
     getNavigationEntriesFromPathInternal,
     NavigationViewInternal
 } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
-import { SideDialogPanelProps, SideDialogsController } from "../SideDialogs";
 import { EntitySidePanel } from "../EntitySidePanel";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 import { useMediaQuery, useTheme } from "@mui/material";

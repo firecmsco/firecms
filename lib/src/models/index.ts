@@ -14,6 +14,7 @@ export * from "./fields";
 export * from "./datasource";
 export * from "./entity_link_builder";
 export * from "./side_entity_controller";
+export * from "./side_dialogs_controller";
 export * from "./firecms_context";
 export * from "./entity_callbacks";
 export * from "./local_config_persistence";

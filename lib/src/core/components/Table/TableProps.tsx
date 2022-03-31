@@ -124,6 +124,7 @@ export type TableColumnFilter = {
     dataType: "number" | "string" | "boolean" | "date"
     isArray?: boolean;
     title?: string;
+    dateMode?: "date" | "date_time";
     enumValues?: TableEnumValues;
 };
 
