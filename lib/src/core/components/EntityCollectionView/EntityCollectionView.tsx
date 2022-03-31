@@ -194,7 +194,7 @@ export const EntityCollectionViewInternal = React.memo(
                 path: fullPath,
                 collection: collection,
                 updateUrl: true
-            }), [fullPath, collection, collection]);
+            }), [fullPath, collection, collection, sideEntityController]);
 
         const onMultipleDeleteClick = useCallback(() => {
             setDeleteEntityClicked(selectedEntities);

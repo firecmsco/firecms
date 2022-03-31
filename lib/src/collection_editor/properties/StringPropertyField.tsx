@@ -1,18 +1,25 @@
 import React from "react";
-import { Grid } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 import {
     StringPropertyValidation
 } from "./validation/StringPropertyValidation";
+import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 
-export function StringPropertyFieldAdvanced({
-                                                widgetId
-                                            }: {
+export function StringPropertyField({
+                                        widgetId
+                                    }: {
     widgetId: "text_field" | "multiline" | "markdown" | "url" | "email";
 }) {
 
     return (
         <>
-            <Grid item>
+            <Grid item xs={12}>
+
+                <ExpandablePanel title={
+                    <Typography variant={"button"}>
+                        Validation
+                    </Typography>}>
+
                     {widgetId === "text_field" &&
                         <StringPropertyValidation length={true}
                                                   lowercase={true}
@@ -46,6 +53,9 @@ export function StringPropertyFieldAdvanced({
                             max={true}
                             min={true}
                             trim={true}/>}
+
+                </ExpandablePanel>
+
             </Grid>
         </>
     );

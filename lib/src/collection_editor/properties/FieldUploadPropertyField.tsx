@@ -1,6 +1,6 @@
 import React from "react";
 
-import { getIn, useFormikContext } from "formik";
+import { Field, getIn, useFormikContext } from "formik";
 import {
     Button,
     Checkbox,
@@ -10,8 +10,18 @@ import {
     ListItemText,
     MenuItem,
     Select,
-    SelectChangeEvent
+    SelectChangeEvent,
+    Typography
 } from "@mui/material";
+import DebouncedTextField from "../../form/components/DebouncedTextField";
+import { SwitchControl } from "../../form/components/SwitchControl";
+import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import {
+    GeneralPropertyValidation
+} from "./validation/GeneralPropertyValidation";
+import {
+    ArrayPropertyValidation
+} from "./validation/ArrayPropertyValidation";
 
 const fileTypes = {
     "image/*": "Images",
@@ -22,15 +32,25 @@ const fileTypes = {
 }
 
 export function FieldUploadPropertyField({
-                                             multiple
+                                             multiple,
+                                             existing
                                          }: {
-    multiple: boolean
+    multiple: boolean;
+    existing: boolean;
 }) {
 
     const { values, setFieldValue } = useFormikContext();
 
     const baseStoragePath = multiple ? "of.storage" : "storage";
     const acceptedFiles = `${baseStoragePath}.acceptedFiles`;
+
+    const metadata = `${baseStoragePath}.metadata`;
+    const fileName = `${baseStoragePath}.fileName`;
+    const storagePath = `${baseStoragePath}.storagePath`;
+    const storeUrl = `${baseStoragePath}.storeUrl`;
+
+    const fileNameValue = getIn(values, fileName) ?? "{file}";
+    const storagePathValue = getIn(values, storagePath) ?? "/";
 
     const storedValue = getIn(values, acceptedFiles);
     const fileTypesValue: string[] | undefined = Array.isArray(storedValue) ? storedValue : undefined;
@@ -94,6 +114,77 @@ export function FieldUploadPropertyField({
                 </FormControl>
             </Grid>
 
+            <Grid item xs={12}>
+
+                <ExpandablePanel title={
+                    <Typography variant={"button"}>
+                        Advanced
+                    </Typography>}>
+                    <Grid container spacing={2}>
+                        <Grid item xs={12}>
+                            <Field name={fileName}
+                                   as={DebouncedTextField}
+                                   label={"File name"}
+                                   size={"small"}
+                                   value={fileNameValue}
+                                   fullWidth/>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Field name={storagePath}
+                                   as={DebouncedTextField}
+                                   label={"Storage path"}
+                                   size={"small"}
+                                   value={storagePathValue}
+                                   fullWidth/>
+                            <Typography variant={"caption"}>
+                                <p>You can use the following placeholders in
+                                    the file name
+                                    and storage path values:</p>
+                                <ul>
+                                    <li>{"{file} - Full name of the uploaded file"}</li>
+                                    <li>{"{file.name} - Name of the uploaded file without extension"}</li>
+                                    <li>{"{file.ext} - Extension of the uploaded file"}</li>
+                                    <li>{"{entityId} - ID of the entity"}</li>
+                                    <li>{"{propertyId} - ID of this field"}</li>
+                                    <li>{"{path} - Path of this entity"}</li>
+                                </ul>
+                            </Typography>
+                            <Field type="checkbox"
+                                   name={storeUrl}
+                                   label={"Save URL instead of storage path"}
+                                   disabled={existing}
+                                   component={SwitchControl}/>
+                            <br/>
+                            <Typography variant={"caption"}>
+                                Turn this setting on, if you prefer to save
+                                the download
+                                URL of the uploaded file instead of the
+                                storage path.
+                                You can only change this prop upon creation.
+                            </Typography>
+                        </Grid>
+                    </Grid>
+                </ExpandablePanel>
+
+            </Grid>
+
+            <Grid item xs={12}>
+
+                <ExpandablePanel title={
+                    <Typography variant={"button"}>
+                        Validation
+                    </Typography>}>
+                    <Grid container spacing={2}>
+                        {!multiple && <Grid item>
+                            <GeneralPropertyValidation/>
+                        </Grid>}
+                        {multiple && <Grid item>
+                            <ArrayPropertyValidation/>
+                        </Grid>}
+                    </Grid>
+                </ExpandablePanel>
+
+            </Grid>
         </>
     );
 }

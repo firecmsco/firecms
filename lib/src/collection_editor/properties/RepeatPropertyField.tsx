@@ -3,14 +3,15 @@ import { Button, Grid, Paper, Typography } from "@mui/material";
 import { ArrayProperty, Property } from "../../models";
 import { Field, getIn, useFormikContext } from "formik";
 import { PropertyForm } from "../PropertyEditView";
-import { getBadgeForWidget } from "../../core/util/property_utils";
 import { getWidget } from "../../core/util/widgets";
 import { PropertyFieldPreview } from "../PropertyFieldPreview";
+import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
 
 export function RepeatPropertyField({
-                                       showErrors,
-                                       existing
-                                   }: { showErrors: boolean, existing: boolean }) {
+                                        showErrors,
+                                        existing
+                                    }: { showErrors: boolean, existing: boolean }) {
 
     const {
         values,
@@ -74,6 +75,17 @@ export function RepeatPropertyField({
                         </Paper>
                     )}
                 </Field>
+
+            </Grid>
+
+            <Grid item xs={12}>
+
+                <ExpandablePanel title={
+                    <Typography variant={"button"}>
+                        Validation
+                    </Typography>}>
+                    <ArrayPropertyValidation/>
+                </ExpandablePanel>
 
             </Grid>
         </>

@@ -6,10 +6,15 @@ import {
     Grid,
     InputLabel,
     MenuItem,
-    Select
+    Select,
+    Typography
 } from "@mui/material";
 
 import { NumberProperty, StringProperty } from "../../models";
+import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import {
+    GeneralPropertyValidation
+} from "./validation/GeneralPropertyValidation";
 
 export function DateTimePropertyField() {
 
@@ -63,10 +68,22 @@ export function DateTimePropertyField() {
                         <MenuItem value={"on_create"}> On create </MenuItem>
                         <MenuItem value={"on_update"}> On any update </MenuItem>
                     </Field>
-                     <FormHelperText>{autoValueError ?? "Update this field automatically when creating or updating the entity"}</FormHelperText>
+                    <FormHelperText>{autoValueError ?? "Update this field automatically when creating or updating the entity"}</FormHelperText>
                 </FormControl>
             </Grid>
 
+            <Grid item xs={12}>
+
+                <ExpandablePanel title={
+                    <Typography variant={"button"}>
+                        Validation
+                    </Typography>}>
+                    <Grid container spacing={2}>
+                        <GeneralPropertyValidation/>
+                    </Grid>
+                </ExpandablePanel>
+
+            </Grid>
         </>
     );
 }

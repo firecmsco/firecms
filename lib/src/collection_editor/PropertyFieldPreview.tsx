@@ -166,20 +166,23 @@ export function PropertyBuilderPreview({
                         <Typography variant="body2"
                                     component="span"
                                     color="text.disabled">
-                            <Box sx={{
-                                fontSize: "14px"
-                            }}>
-                                <RemoveCircleIcon color={"disabled"}
-                                                  fontSize={"inherit"}/>
-                            </Box>
+
                             {name}
                         </Typography>
-                        <Typography sx={{ flexGrow: 1, pr: 2 }}
-                                    variant="body2"
-                                    component="span"
-                                    color="text.secondary">
-                            This property can only be edited in code
-                        </Typography>
+                        <Box sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            fontSize: "14px"
+                        }}>
+                            <Typography sx={{ flexGrow: 1, pr: 2 }}
+                                        variant="body2"
+                                        component="span"
+                                        color="text.secondary">
+                                This field can only be edited in code
+                            </Typography>
+                            <RemoveCircleIcon color={"disabled"}
+                                              fontSize={"inherit"}/>
+                        </Box>
                     </Box>
 
                 </Paper>

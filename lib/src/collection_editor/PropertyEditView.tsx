@@ -7,15 +7,12 @@ import {
     Button,
     Dialog,
     DialogContent,
-    Divider,
     FormControl,
     FormHelperText,
     Grid,
     InputLabel,
     MenuItem,
     Select,
-    Tab,
-    Tabs,
     Typography
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -40,33 +37,15 @@ import { MapPropertyField } from "./properties/MapPropertyField";
 import { RepeatPropertyField } from "./properties/RepeatPropertyField";
 import { getBadgeForWidget } from "../core/util/property_utils";
 import { BasePropertyField } from "./properties/BasePropertyField";
-import {
-    StringPropertyFieldAdvanced
-} from "./properties_advanced/StringPropertyFieldAdvanced";
-import {
-    EnumPropertyFieldAdvanced
-} from "./properties_advanced/EnumPropertyFieldAdvanced";
-import {
-    FieldUploadPropertyFieldAdvanced
-} from "./properties_advanced/FieldUploadPropertyFieldAdvanced";
-import {
-    BooleanPropertyFieldAdvanced
-} from "./properties_advanced/BooleanPropertyFieldAdvanced";
-import {
-    ArrayPropertyFieldAdvanced
-} from "./properties_advanced/ArrayPropertyFieldAdvanced";
+import { StringPropertyField } from "./properties/StringPropertyField";
+import { BooleanPropertyField } from "./properties/BooleanPropertyField";
 import { BlockPropertyField } from "./properties/BlockPropertyField";
 import {
     DeleteConfirmationDialog
 } from "../core/components/DeleteConfirmationDialog";
-import {
-    NumberPropertyFieldAdvanced
-} from "./properties_advanced/NumberPropertyFieldAdvanced";
+import { NumberPropertyField } from "./properties/NumberPropertyField";
 import { ReferencePropertyField } from "./properties/ReferencePropertyField";
 import { DateTimePropertyField } from "./properties/DateTimePropertyField";
-import {
-    DateTimePropertyFieldAdvanced
-} from "./properties_advanced/DateTimePropertyFieldAdvanced";
 
 export type PropertyWithId = Property & { id?: string };
 
@@ -458,20 +437,16 @@ function PropertyEditView({
     }, [selectedWidgetId]);
 
     let childComponent;
-    let childComponentAdvanced;
     if (selectedWidgetId === "text_field" ||
         selectedWidgetId === "multiline" ||
         selectedWidgetId === "markdown" ||
         selectedWidgetId === "url" ||
         selectedWidgetId === "email") {
-        childComponentAdvanced =
-            <StringPropertyFieldAdvanced widgetId={selectedWidgetId}/>;
+        childComponent =
+            <StringPropertyField widgetId={selectedWidgetId}/>;
     } else if (selectedWidgetId === "select" ||
         selectedWidgetId === "number_select") {
         childComponent = <EnumPropertyField
-            multiselect={false}
-            updateIds={!existing}/>;
-        childComponentAdvanced = <EnumPropertyFieldAdvanced
             multiselect={false}
             updateIds={!existing}/>;
     } else if (selectedWidgetId === "multi_select" ||
@@ -479,21 +454,16 @@ function PropertyEditView({
         childComponent = <EnumPropertyField
             multiselect={true}
             updateIds={!existing}/>;
-        childComponentAdvanced = <EnumPropertyFieldAdvanced
-            multiselect={true}
-            updateIds={!existing}/>;
     } else if (selectedWidgetId === "file_upload") {
-        childComponent = <FieldUploadPropertyField multiple={false}/>;
-        childComponentAdvanced =
-            <FieldUploadPropertyFieldAdvanced multiple={false} existing={existing}/>;
+        childComponent =
+            <FieldUploadPropertyField existing={existing} multiple={false}/>;
     } else if (selectedWidgetId === "multi_file_upload") {
-        childComponent = <FieldUploadPropertyField multiple={true}/>;
-        childComponentAdvanced =
-            <FieldUploadPropertyFieldAdvanced multiple={true} existing={existing}/>;
+        childComponent =
+            <FieldUploadPropertyField existing={existing} multiple={true}/>;
     } else if (selectedWidgetId === "switch") {
-        childComponentAdvanced = <BooleanPropertyFieldAdvanced/>;
+        childComponent = <BooleanPropertyField/>;
     } else if (selectedWidgetId === "number_input") {
-        childComponentAdvanced = <NumberPropertyFieldAdvanced/>;
+        childComponent = <NumberPropertyField/>;
     } else if (selectedWidgetId === "group") {
         childComponent = existing && <MapPropertyField/>;
     } else if (selectedWidgetId === "block") {
@@ -503,16 +473,12 @@ function PropertyEditView({
             <ReferencePropertyField existing={existing} multiple={false}/>;
     } else if (selectedWidgetId === "date_time") {
         childComponent = <DateTimePropertyField/>;
-        childComponentAdvanced = <DateTimePropertyFieldAdvanced/>
     } else if (selectedWidgetId === "multi_references") {
         childComponent =
             <ReferencePropertyField existing={existing} multiple={true}/>;
     } else if (selectedWidgetId === "repeat") {
         childComponent =
             <RepeatPropertyField showErrors={showErrors} existing={existing}/>;
-        childComponentAdvanced =
-            <ArrayPropertyFieldAdvanced showErrors={showErrors}
-                                        existing={existing}/>;
     } else {
         childComponent = null;
     }
@@ -528,15 +494,6 @@ function PropertyEditView({
         }
 
     }, [existing, touched, values.name]);
-
-    const [tabPosition, setTabPosition] = React.useState(0);
-
-    const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
-        setTabPosition(newValue);
-    };
-
-    const hasBasicTab = Boolean(childComponent) || includeIdAndTitle;
-    const hasAdvancedTab = Boolean(childComponentAdvanced);
 
     return (
         <>
@@ -604,40 +561,14 @@ function PropertyEditView({
                     </Button>}
             </Box>
 
-            <Tabs
-                value={!hasBasicTab || !hasAdvancedTab ? false : tabPosition}
-                onChange={handleTabChange}
-                variant="scrollable"
-                scrollButtons="auto"
-                sx={{
-                    mt: 1
-                }}
-            >
-                {hasBasicTab && <Tab label="Configuration"
-                                     disabled={!hasAdvancedTab}/>}
-                {hasAdvancedTab && <Tab label="Advanced"
-                                        disabled={!hasBasicTab}/>}
-            </Tabs>
-
-            <Divider/>
-
             <Box mt={3} mb={2}>
-                <Box
-                    hidden={tabPosition !== 0 && hasAdvancedTab}>
-                    <Grid container spacing={2} direction={"column"}>
-                        {includeIdAndTitle &&
-                            <BasePropertyField showErrors={showErrors}
-                                               disabledId={existing}
-                                               existingPropertyIds={existingPropertyIds}/>}
-                        {childComponent}
-                    </Grid>
-                </Box>
-
-                <Box hidden={tabPosition !== 1 && hasBasicTab}>
-                    <Grid container spacing={2} direction={"column"}>
-                        {childComponentAdvanced}
-                    </Grid>
-                </Box>
+                <Grid container spacing={2} direction={"column"}>
+                    {includeIdAndTitle &&
+                        <BasePropertyField showErrors={showErrors}
+                                           disabledId={existing}
+                                           existingPropertyIds={existingPropertyIds}/>}
+                    {childComponent}
+                </Grid>
             </Box>
 
             {onDelete &&
