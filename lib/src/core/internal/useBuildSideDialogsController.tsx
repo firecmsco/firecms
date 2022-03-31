@@ -12,13 +12,10 @@ export function useBuildSideDialogsController(): SideDialogsController {
     const routesStore = useRef<Record<string, SideDialogPanelProps>>({});
     const routesCount = useRef<number>(0);
 
-    // console.log("location", location);
-    // console.log("sidePanels", sidePanels);
-
     useEffect(() => {
         const state = location.state as any;
-        const panelKeys: string[] | undefined = state?.panels;
-        setSidePanels((panelKeys ?? [])
+        const panelKeys: string[] = state?.panels ?? [];
+        setSidePanels(panelKeys
             .map(key => routesStore.current[key])
             .filter(p => Boolean(p)) as SideDialogPanelProps[]
         );
@@ -81,27 +78,32 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
     };
 
-    const replace = (panelProps: SideDialogPanelProps) => {
+    const replace = (panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
-        routesStore.current[panelProps.key] = panelProps;
+        const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
+        newPanels.forEach((panel) => {
+            routesStore.current[panel.key] = panel;
+        });
 
         const baseLocation = (location.state as any)?.base_location ?? location;
 
-        const updatedPanels = [...sidePanels.slice(0, -1), panelProps];
+        const updatedPanels = [...sidePanels.slice(0, -newPanels.length), ...newPanels];
         setSidePanels(updatedPanels);
 
-        if (panelProps.urlPath) {
-            navigate(
-                panelProps.urlPath,
-                {
-                    replace: true,
-                    state: {
-                        base_location: baseLocation,
-                        panels: updatedPanels.map(p => p.key)
+        newPanels.forEach((panel) => {
+            if (panel.urlPath) {
+                navigate(
+                    panel.urlPath,
+                    {
+                        replace: true,
+                        state: {
+                            base_location: baseLocation,
+                            panels: updatedPanels.map(p => p.key)
+                        }
                     }
-                }
-            );
-        }
+                );
+            }
+        });
 
     };
 

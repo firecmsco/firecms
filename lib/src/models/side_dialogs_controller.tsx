@@ -25,7 +25,7 @@ export interface SideDialogsController {
      * Replace the last open panel with the given one
      * @param props
      */
-    replace: <P>(panelProps: SideDialogPanelProps<P>) => void;
+    replace: <P>(panelProps: SideDialogPanelProps<P>| SideDialogPanelProps<P>[]) => void;
 }
 
 /**

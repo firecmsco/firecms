@@ -43,8 +43,7 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
                 const newFlag = location.hash === `#${NEW_URL_HASH}`;
                 const entityOrCollectionPath = navigationContext.urlPathToDataPath(location.pathname);
                 const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, collections, newFlag);
-                console.log("panelsFromUrl", panelsFromUrl);
-                sideDialogsController.open(panelsFromUrl.map((props) => propsToSidePanel(props)));
+                sideDialogsController.replace(panelsFromUrl.map((props) => propsToSidePanel(props)));
             }
             initialised.current = true;
         }
