@@ -11,7 +11,7 @@ import {
 
 import { CollectionSize } from "../../../../models";
 import { SearchBar } from "./SearchBar";
-import ClearIcon from "@mui/icons-material/Clear";
+import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import {
     FilledMenuItem,
     FilledSelect
@@ -35,20 +35,15 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const filterView = props.filterIsSet &&
-        <Box display={"flex"}
-             alignItems="center">
-
-            <Tooltip title="Clear filter">
-                <IconButton
-                    sx={{ height: "fit-content" }}
-                    aria-label="filter clear"
-                    onClick={props.clearFilter}
-                    size="large">
-                    <ClearIcon/>
-                </IconButton>
-            </Tooltip>
-
-        </Box>;
+        <Tooltip title="Clear filter">
+            <IconButton
+                sx={{ height: "fit-content" }}
+                aria-label="filter clear"
+                onClick={props.clearFilter}
+                size="medium">
+                <FilterListOffIcon/>
+            </IconButton>
+        </Tooltip>;
 
     const sizeSelect = (
         <FilledSelect
@@ -93,7 +88,7 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
                          [theme.breakpoints.down("md")]: {
                              marginRight: `${theme.spacing(1)} !important`
                          },
-                         marginRight: `${theme.spacing(2)} !important`
+                         marginRight: `${theme.spacing(1)} !important`
                      }
                  }}>
 

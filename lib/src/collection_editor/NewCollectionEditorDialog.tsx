@@ -58,7 +58,7 @@ export function NewCollectionEditorDialog<M>({
                 snackbarController.open({
                     type: "error",
                     title: "Error persisting collection",
-                    message: "Details in the console"
+                    message: e.message ?? "Details in the console"
                 });
                 return false;
             });

@@ -4,6 +4,7 @@ import {
     Box,
     CircularProgress,
     FormControl,
+    FormHelperText,
     Grid,
     InputLabel,
     MenuItem,
@@ -54,11 +55,6 @@ export function ReferencePropertyField({
                        error={pathError}
                        handleChange={handleChange}
                        component={CollectionsSelect}/>
-
-                <Typography variant={"caption"}>
-                    You can only edit the reference collection upon field
-                    creation
-                </Typography>
 
             </Grid>
 
@@ -190,6 +186,10 @@ export function CollectionsSelect({
                     </MenuItem>)}
 
             </Select>
+            <FormHelperText>
+                You can only edit the reference collection upon field
+                creation.
+            </FormHelperText>
         </FormControl>
     );
 }

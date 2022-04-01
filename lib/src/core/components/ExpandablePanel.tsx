@@ -3,6 +3,7 @@ import { PropsWithChildren } from "react";
 import {
     Accordion,
     AccordionDetails,
+    AccordionDetailsProps,
     AccordionProps,
     AccordionSummary,
     AccordionSummaryProps
@@ -10,19 +11,7 @@ import {
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { darken, styled } from "@mui/material/styles";
 
-const FireAccordion = styled((props: AccordionProps) => (
-    <Accordion disableGutters elevation={0} square {...props} />
-))(({ theme }) => ({
-    border: `1px solid ${theme.palette.divider}`,
-    "&:not(:last-child)": {
-        borderBottom: 0
-    },
-    "&:before": {
-        display: "none"
-    }
-}));
-
-const FireAccordionSummary = styled((props: AccordionSummaryProps) => (
+const ExpandablePanelSummary = styled((props: AccordionSummaryProps) => (
     <AccordionSummary
         expandIcon={<ExpandMoreIcon/>}
         {...props}
@@ -37,8 +26,16 @@ const FireAccordionSummary = styled((props: AccordionSummaryProps) => (
     },
     // flexDirection: "row-reverse",
     "& .MuiAccordionSummary-content": {
-        marginLeft: theme.spacing(1)
+        // marginLeft: theme.spacing(1)
     }
+}));
+
+const ExpandablePanelDetails = styled((props: AccordionDetailsProps) => (
+    <AccordionDetails
+        {...props}
+    />
+))(({ theme }) => ({
+    padding: theme.spacing(2),
 }));
 
 export function ExpandablePanel({
@@ -47,13 +44,13 @@ export function ExpandablePanel({
                                 }: PropsWithChildren<{ title: React.ReactNode }>) {
 
     return (
-        <Accordion variant={"outlined"}>
-            <FireAccordionSummary expandIcon={<ExpandMoreIcon/>}>
+        <Accordion variant={"outlined"} disableGutters>
+            <ExpandablePanelSummary expandIcon={<ExpandMoreIcon/>}>
                 {title}
-            </FireAccordionSummary>
-            <AccordionDetails>
+            </ExpandablePanelSummary>
+            <ExpandablePanelDetails>
                 {children}
-            </AccordionDetails>
+            </ExpandablePanelDetails>
         </Accordion>
     )
 }

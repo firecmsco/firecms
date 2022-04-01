@@ -143,7 +143,7 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
 
     /**
      * Should this property be editable in the collection editor.
-     * Defaults to true if the collection is editable
+     * Defaults to `true`.
      */
     editable?: boolean;
 }
