@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Field, getIn, useFormikContext } from "formik";
-import { Box, Grid, TextField } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import { PropertyWithId } from "../PropertyEditView";
 import DebouncedTextField from "../../form/components/DebouncedTextField";
 
@@ -27,10 +27,13 @@ export function BasePropertyField({
     } = useFormikContext<PropertyWithId>();
 
     const name = "name";
-    const titleError = showErrors && getIn(errors, name);
+    const nameError = showErrors && getIn(errors, name);
 
     const id = "id";
     const idError = showErrors && getIn(errors, id);
+
+    const description = "description";
+    const descriptionError = showErrors && getIn(errors, description);
 
     return (
         <>
@@ -42,8 +45,8 @@ export function BasePropertyField({
                        label={"Field name"}
                        required
                        fullWidth
-                       helperText={titleError}
-                       error={Boolean(titleError)}/>
+                       helperText={nameError}
+                       error={Boolean(nameError)}/>
             </Grid>
 
             <Grid item>
@@ -57,6 +60,15 @@ export function BasePropertyField({
                        helperText={idError}
                        size="small"
                        error={Boolean(idError)}/>
+            </Grid>
+
+            <Grid item>
+                <Field name={description}
+                       as={DebouncedTextField}
+                       label={"Description"}
+                       fullWidth
+                       helperText={descriptionError}
+                       error={Boolean(descriptionError)}/>
             </Grid>
 
         </>

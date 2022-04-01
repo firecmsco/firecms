@@ -1,9 +1,9 @@
 import React from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import {
     StringPropertyValidation
 } from "./validation/StringPropertyValidation";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import { ValidationPanel } from "./ValidationPanel";
 
 export function StringPropertyField({
                                         widgetId
@@ -15,10 +15,7 @@ export function StringPropertyField({
         <>
             <Grid item xs={12}>
 
-                <ExpandablePanel title={
-                    <Typography variant={"button"}>
-                        Validation
-                    </Typography>}>
+                <ValidationPanel>
 
                     {widgetId === "text_field" &&
                         <StringPropertyValidation length={true}
@@ -54,7 +51,7 @@ export function StringPropertyField({
                             min={true}
                             trim={true}/>}
 
-                </ExpandablePanel>
+                </ValidationPanel>
 
             </Grid>
         </>

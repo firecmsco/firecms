@@ -2,6 +2,7 @@ import React from "react";
 
 import { Field, getIn, useFormikContext } from "formik";
 import {
+    Box,
     Button,
     Checkbox,
     FormControl,
@@ -19,9 +20,9 @@ import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 import {
     GeneralPropertyValidation
 } from "./validation/GeneralPropertyValidation";
-import {
-    ArrayPropertyValidation
-} from "./validation/ArrayPropertyValidation";
+import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
+import { ValidationPanel } from "./ValidationPanel";
+import { Settings } from "@mui/icons-material";
 
 const fileTypes = {
     "image/*": "Images",
@@ -69,58 +70,71 @@ export function FieldUploadPropertyField({
         <>
 
             <Grid item xs={12}>
-                <FormControl fullWidth>
-                    {!allFileTypesSelected &&
-                        <InputLabel id="file-types-label">
-                            File types
-                        </InputLabel>}
-
-                    <Select
-                        labelId="file-types-label"
-                        multiple
-                        name={acceptedFiles}
-                        value={fileTypesValue ?? []}
-                        onChange={handleTypesChange}
-                        label={allFileTypesSelected ? undefined : "Allowed file types"}
-                        displayEmpty
-                        renderValue={(selected) => {
-                            if (!selected || selected.length === 0) return "All file types allowed";
-                            return selected.map((v: string) => fileTypes[v])
-                                .filter((v: string) => Boolean(v))
-                                .join(", ");
-                        }}>
-
-                        <MenuItem key={"all"} value={"all"}>
-                            <Checkbox
-                                checked={!fileTypesValue}/>
-                            <ListItemText primary={"All"}/>
-                        </MenuItem>
-
-                        {Object.entries(fileTypes).map(([value, label]) => (
-                            <MenuItem key={value} value={value}>
-                                <Checkbox
-                                    checked={allFileTypesSelected || fileTypesValue.indexOf(value) > -1}/>
-                                <ListItemText primary={label}/>
-                                <Button size={"small"} onClick={(e) => {
-                                    e.stopPropagation();
-                                    return setFieldValue(acceptedFiles, [value]);
-                                }}>
-                                    Only
-                                </Button>
-                            </MenuItem>
-                        ))}
-
-                    </Select>
-                </FormControl>
-            </Grid>
-
-            <Grid item xs={12}>
 
                 <ExpandablePanel title={
-                    <Typography variant={"button"}>
-                        Advanced
-                    </Typography>}>
+                    <Box sx={(theme) => ({
+                        display: "flex",
+                        flexDirection: "row",
+                        color: theme.palette.text.secondary
+                    })}>
+                        <Settings/>
+                        <Typography variant={"subtitle2"}
+                                    sx={{
+                                        ml: 2
+                                    }}>
+                            Advanced
+                        </Typography>
+                    </Box>
+                }>
                     <Grid container spacing={2}>
+
+                        <Grid item xs={12}>
+                            <FormControl fullWidth>
+                                {!allFileTypesSelected &&
+                                    <InputLabel id="file-types-label">
+                                        File types
+                                    </InputLabel>}
+
+                                <Select
+                                    labelId="file-types-label"
+                                    multiple
+                                    name={acceptedFiles}
+                                    value={fileTypesValue ?? []}
+                                    onChange={handleTypesChange}
+                                    label={allFileTypesSelected ? undefined : "Allowed file types"}
+                                    displayEmpty
+                                    renderValue={(selected) => {
+                                        if (!selected || selected.length === 0) return "All file types allowed";
+                                        return selected.map((v: string) => fileTypes[v])
+                                            .filter((v: string) => Boolean(v))
+                                            .join(", ");
+                                    }}>
+
+                                    <MenuItem key={"all"} value={"all"}>
+                                        <Checkbox
+                                            checked={!fileTypesValue}/>
+                                        <ListItemText primary={"All"}/>
+                                    </MenuItem>
+
+                                    {Object.entries(fileTypes).map(([value, label]) => (
+                                        <MenuItem key={value} value={value}>
+                                            <Checkbox
+                                                checked={allFileTypesSelected || fileTypesValue.indexOf(value) > -1}/>
+                                            <ListItemText primary={label}/>
+                                            <Button size={"small"}
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        return setFieldValue(acceptedFiles, [value]);
+                                                    }}>
+                                                Only
+                                            </Button>
+                                        </MenuItem>
+                                    ))}
+
+                                </Select>
+                            </FormControl>
+                        </Grid>
+
                         <Grid item xs={12}>
                             <Field name={fileName}
                                    as={DebouncedTextField}
@@ -170,19 +184,14 @@ export function FieldUploadPropertyField({
 
             <Grid item xs={12}>
 
-                <ExpandablePanel title={
-                    <Typography variant={"button"}>
-                        Validation
-                    </Typography>}>
-                    <Grid container spacing={2}>
-                        {!multiple && <Grid item>
-                            <GeneralPropertyValidation/>
-                        </Grid>}
-                        {multiple && <Grid item>
-                            <ArrayPropertyValidation/>
-                        </Grid>}
-                    </Grid>
-                </ExpandablePanel>
+                <ValidationPanel>
+                    {!multiple && <Grid item>
+                        <GeneralPropertyValidation/>
+                    </Grid>}
+                    {multiple && <Grid item>
+                        <ArrayPropertyValidation/>
+                    </Grid>}
+                </ValidationPanel>
 
             </Grid>
         </>

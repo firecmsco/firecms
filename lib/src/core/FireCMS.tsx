@@ -263,9 +263,3 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
     );
 
 }
-
-
-
-
-
-

@@ -5,8 +5,8 @@ import { Field, getIn, useFormikContext } from "formik";
 import { PropertyForm } from "../PropertyEditView";
 import { getWidget } from "../../core/util/widgets";
 import { PropertyFieldPreview } from "../PropertyFieldPreview";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
+import { ValidationPanel } from "./ValidationPanel";
 
 export function RepeatPropertyField({
                                         showErrors,
@@ -80,12 +80,9 @@ export function RepeatPropertyField({
 
             <Grid item xs={12}>
 
-                <ExpandablePanel title={
-                    <Typography variant={"button"}>
-                        Validation
-                    </Typography>}>
+                <ValidationPanel>
                     <ArrayPropertyValidation/>
-                </ExpandablePanel>
+                </ValidationPanel>
 
             </Grid>
         </>

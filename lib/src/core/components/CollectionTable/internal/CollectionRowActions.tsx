@@ -134,7 +134,7 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
                     anchorEl={anchorEl}
                     open={Boolean(anchorEl)}
                     onClose={closeMenu}
-                    elevation={2}
+                    elevation={1}
                 >
                     {deleteEnabled && <MenuItem onClick={onDeleteClick}>
                         <ListItemIcon>

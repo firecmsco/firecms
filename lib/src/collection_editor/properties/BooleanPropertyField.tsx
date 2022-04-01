@@ -1,9 +1,9 @@
 import React from "react";
-import { Grid, Typography } from "@mui/material";
+import { Grid } from "@mui/material";
 import {
     GeneralPropertyValidation
 } from "./validation/GeneralPropertyValidation";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import { ValidationPanel } from "./ValidationPanel";
 
 export function BooleanPropertyField() {
 
@@ -11,12 +11,9 @@ export function BooleanPropertyField() {
         <>
             <Grid item xs={12}>
 
-                <ExpandablePanel title={
-                    <Typography variant={"button"}>
-                        Validation
-                    </Typography>}>
+                <ValidationPanel>
                     <GeneralPropertyValidation/>
-                </ExpandablePanel>
+                </ValidationPanel>
 
             </Grid>
         </>

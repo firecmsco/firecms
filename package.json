@@ -11,6 +11,7 @@
     ],
     "scripts": {
         "dev": "cd example && yarn dev",
+        "preview": "cd example && yarn preview",
         "build": "cd lib && yarn build"
     }
 }

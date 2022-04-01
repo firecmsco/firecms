@@ -36,8 +36,6 @@ import { TopNavigationEntry, TopNavigationResult } from "../../models";
 import {
     useCollectionEditorController
 } from "../../hooks/useCollectionEditorController";
-import { canEditEntity } from "../util/permissions";
-import { fullPathToCollectionSegments } from "../util/paths";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -217,7 +215,7 @@ function NavigationCard({ entry, onDelete, onEdit }: NavigationCardProps) {
 
                         {entry.type === "view" &&
                             <ShowChartIcon color={"disabled"}/>}
-                        {entry.type !== "view" &&
+                        {entry.type === "collection" &&
                             <PlaylistPlayIcon color={"disabled"}/>}
                         <div>
                             {onDelete &&
@@ -269,7 +267,7 @@ function NavigationCard({ entry, onDelete, onEdit }: NavigationCardProps) {
                 anchorEl={menuAnchorEl}
                 open={menuOpen}
                 onClose={() => setMenuAnchorEl(null)}
-                elevation={2}
+                elevation={1}
             >
                 {onDelete && <MenuItem onClick={(event) => {
                     event.preventDefault();

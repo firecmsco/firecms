@@ -1,10 +1,15 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 
 import SampleApp from "./SampleApp/SampleApp";
 // import { CustomCMSApp } from "./CustomCMSApp";
 
-ReactDOM.render(
-    <SampleApp/>,
-    document.getElementById("root")
-);
+const container = document.getElementById('root');
+const root = createRoot(container as any);
+root.render(<SampleApp/>);
+
+// ReactDOM.render(
+//     <SampleApp/>,
+//     document.getElementById("root")
+// );
+

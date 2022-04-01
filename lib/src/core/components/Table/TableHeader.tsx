@@ -7,6 +7,7 @@ import {
     Divider,
     Grid,
     IconButton,
+    Paper,
     Popover
 } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
@@ -156,7 +157,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
             {column.sortable && <Popover
                 id={open ? `popover_${column.key}` : undefined}
                 open={open}
-                elevation={2}
+                elevation={1}
                 anchorEl={ref.current}
                 onClose={handleClose}
                 anchorOrigin={{
@@ -185,7 +186,6 @@ interface FilterFormProps<M> {
     onHover: boolean
 }
 
-
 function FilterForm<M>({
                            column,
                            onFilterUpdate,
@@ -207,7 +207,8 @@ function FilterForm<M>({
 
     const filterIsSet = !!filter;
 
-    return (<>
+    return (
+        <>
             <Box p={2} sx={{
                 fontSize: "0.750rem",
                 fontWeight: 600,

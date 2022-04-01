@@ -6,15 +6,14 @@ import {
     Grid,
     InputLabel,
     MenuItem,
-    Select,
-    Typography
+    Select
 } from "@mui/material";
 
 import { NumberProperty, StringProperty } from "../../models";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 import {
     GeneralPropertyValidation
 } from "./validation/GeneralPropertyValidation";
+import { ValidationPanel } from "./ValidationPanel";
 
 export function DateTimePropertyField() {
 
@@ -42,7 +41,7 @@ export function DateTimePropertyField() {
                     <InputLabel id="mode-label">Mode</InputLabel>
                     <Field name={modePath}
                            type="select"
-                           value={modeValue}
+                           value={modeValue ?? "date"}
                            error={modeError}
                            labelId="mode-label"
                            label={"Mode"}
@@ -74,24 +73,11 @@ export function DateTimePropertyField() {
 
             <Grid item xs={12}>
 
-                <ExpandablePanel title={
-                    <Typography variant={"button"}>
-                        Validation
-                    </Typography>}>
-                    <Grid container spacing={2}>
-                        <GeneralPropertyValidation/>
-                    </Grid>
-                </ExpandablePanel>
+                <ValidationPanel>
+                    <GeneralPropertyValidation/>
+                </ValidationPanel>
 
             </Grid>
         </>
     );
-}
-
-function validatePath(value: string) {
-    let error;
-    if (!value) {
-        error = "You must specify a target collection for the field";
-    }
-    return error;
 }

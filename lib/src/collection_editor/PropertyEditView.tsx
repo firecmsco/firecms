@@ -562,11 +562,17 @@ function PropertyEditView({
             </Box>
 
             <Box mt={3} mb={2}>
-                <Grid container spacing={2} direction={"column"}>
-                    {includeIdAndTitle &&
+                {includeIdAndTitle &&
+                    <Grid container spacing={2} direction={"column"} sx={{
+                        pb: 4,
+                        pt: 2
+                    }}>
                         <BasePropertyField showErrors={showErrors}
                                            disabledId={existing}
-                                           existingPropertyIds={existingPropertyIds}/>}
+                                           existingPropertyIds={existingPropertyIds}/>
+
+                    </Grid>}
+                <Grid container spacing={2} direction={"column"}>
                     {childComponent}
                 </Grid>
             </Box>

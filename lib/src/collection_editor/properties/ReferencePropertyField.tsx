@@ -1,7 +1,7 @@
 import React from "react";
 import { Field, getIn, useFormikContext } from "formik";
 import {
-    Checkbox,
+    Box,
     CircularProgress,
     FormControl,
     Grid,
@@ -13,6 +13,8 @@ import {
 
 import { NumberProperty, StringProperty } from "../../models";
 import { useNavigationContext } from "../../hooks";
+
+import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 
 export function ReferencePropertyField({
                                            existing,
@@ -121,13 +123,18 @@ export function CollectionsSelect({
                 displayEmpty
                 required
                 renderValue={(selected) => {
-                    return <Typography
-                        variant={"subtitle2"}
-                        sx={{
-                            fontWeight: "500"
-                        }}>
-                        {collections.find(collection => collection.path === selected)?.name.toUpperCase()}
-                    </Typography>
+                    return (
+                        <Box sx={{ display: "flex", flexDirection: "row" }}>
+                            <PlaylistPlayIcon/>
+                            <Typography
+                                variant={"subtitle2"}
+                                sx={{
+                                    fontWeight: "500",
+                                    ml: 2
+                                }}>
+                                {collections.find(collection => collection.path === selected)?.name.toUpperCase()}
+                            </Typography>
+                        </Box>)
                 }}>
 
                 {groups.flatMap((group) => (
@@ -142,12 +149,13 @@ export function CollectionsSelect({
                             .map((collection) =>
                                 <MenuItem key={collection.path}
                                           value={collection.path}>
-                                    <Checkbox
-                                        checked={Boolean(value) && (value as string).indexOf(collection.path) > -1}/>
+                                    <PlaylistPlayIcon/>
                                     <Typography
                                         variant={"subtitle2"}
                                         sx={{
-                                            fontWeight: "500"
+                                            fontWeight: "500",
+                                            mx: 2,
+                                            my: 1
                                         }}>
                                         {collection.name.toUpperCase()}
                                     </Typography>
@@ -169,12 +177,13 @@ export function CollectionsSelect({
                 {ungroupedCollections.map((collection) =>
                     <MenuItem key={collection.path}
                               value={collection.path}>
-                        <Checkbox
-                            checked={Boolean(value) && (value as string).indexOf(collection.path) > -1}/>
+                        <PlaylistPlayIcon/>
                         <Typography
                             variant={"subtitle2"}
                             sx={{
-                                fontWeight: "500"
+                                fontWeight: "500",
+                                mx: 2,
+                                my: 1
                             }}>
                             {collection.name.toUpperCase()}
                         </Typography>

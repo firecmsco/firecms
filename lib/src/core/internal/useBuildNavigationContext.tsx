@@ -87,10 +87,7 @@ export function useBuildNavigationContext<UserType>({
         if (configPersistence?.loading) {
             return;
         }
-        if (!authController.canAccessMainView) {
-            setNavigationLoading(false);
-            return;
-        }
+
         setNavigationLoading(true);
 
         let collectionsResult = baseCollections;
@@ -106,7 +103,7 @@ export function useBuildNavigationContext<UserType>({
         setNavigationLoading(false);
         setInitialised(true);
 
-    }, [authController.user, authController.canAccessMainView, configPersistence]);
+    }, [authController, configPersistence]);
 
     const getCollection = useCallback(<M extends { [Key: string]: any }>(
         path: string,
