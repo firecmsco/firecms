@@ -4,8 +4,12 @@ import Box from "@mui/material/Box";
 
 
 export default function PriceTextPreview({
-                                                 value, property, size, customProps
-                                             }: PropertyPreviewProps<number>)
+                                             value,
+                                             property,
+                                             size,
+                                             customProps,
+                                             context
+                                         }: PropertyPreviewProps<number>)
     : ReactElement {
 
     return (
@@ -18,4 +22,4 @@ export default function PriceTextPreview({
         </Box>
     );
 
-}
+};

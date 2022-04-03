@@ -9,11 +9,12 @@ import { PropertyPreview, PropertyPreviewProps } from "../internal";
  * @category Preview components
  */
 export function ArrayOfMapsPreview({
-                                          propertyKey,
-                                          value,
-                                          property,
-                                          size
-                                      }: PropertyPreviewProps<object[]>) {
+                                       propertyKey,
+                                       value,
+                                       property,
+                                       size,
+                                       entity
+                                   }: PropertyPreviewProps<object[]>) {
 
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");
@@ -27,7 +28,6 @@ export function ArrayOfMapsPreview({
     const previewProperties = mapProperty.previewProperties;
 
     if (!values) return null;
-
 
     let mapProperties = previewProperties;
     if (!mapProperties || !mapProperties.length) {
@@ -59,6 +59,7 @@ export function ArrayOfMapsPreview({
                                                 propertyKey={key as string}
                                                 value={(v as any)[key]}
                                                 property={properties[key as string]}
+                                                entity={entity}
                                                 size={"small"}/>
                                         </ErrorBoundary>
                                     </TableCell>

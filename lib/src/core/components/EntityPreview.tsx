@@ -151,6 +151,7 @@ export function EntityPreview<M>(
                                         <PropertyPreview
                                             propertyKey={key}
                                             value={value}
+                                            entity={entity}
                                             property={property}
                                             size={"regular"}/>
                                     </ErrorBoundary>

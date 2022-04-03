@@ -162,6 +162,7 @@ function ReferencePreviewInternal<M>({
                                         propertyKey={key as string}
                                         value={entity.values[key as string]}
                                         property={childProperty as ResolvedProperty}
+                                        entity={entity}
                                         size={"tiny"}/>
                                     : <SkeletonComponent
                                         property={childProperty as ResolvedProperty}

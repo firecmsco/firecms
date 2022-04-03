@@ -51,4 +51,8 @@ export interface PropertyPreviewProps<T extends CMSType = CMSType, CustomProps =
      */
     customProps?: CustomProps;
 
+    /**
+     * Entity this property refers to
+     */
+    entity: Entity<any>
 }

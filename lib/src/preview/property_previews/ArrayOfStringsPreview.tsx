@@ -42,6 +42,7 @@ export function ArrayOfStringsPreview({
                                           propertyKey,
                                           value,
                                           property,
+                                          entity,
                                           size
                                       }: PropertyPreviewProps<string[]>) {
 
@@ -63,6 +64,7 @@ export function ArrayOfStringsPreview({
                         <StringPropertyPreview propertyKey={propertyKey}
                                                property={stringProperty}
                                                value={v}
+                                               entity={entity}
                                                size={size}/>
                     </ErrorBoundary>
                 </div>

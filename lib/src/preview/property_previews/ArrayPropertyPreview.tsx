@@ -3,9 +3,9 @@ import React from "react";
 import { Box, Divider } from "@mui/material";
 
 import {
+    PreviewSize,
     PropertyPreview,
-    PropertyPreviewProps,
-    PreviewSize
+    PropertyPreviewProps
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { ResolvedProperty } from "../../models";
@@ -14,11 +14,12 @@ import { ResolvedProperty } from "../../models";
  * @category Preview components
  */
 export function ArrayPropertyPreview({
-                                 propertyKey,
-                                 value,
-                                 property,
-                                 size
-                             }: PropertyPreviewProps<any[]>) {
+                                         propertyKey,
+                                         value,
+                                         property,
+                                         entity,
+                                         size
+                                     }: PropertyPreviewProps<any[]>) {
 
     if (!property.of) {
         throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${propertyKey}`);
@@ -48,6 +49,7 @@ export function ArrayPropertyPreview({
                             <ErrorBoundary>
                                 <PropertyPreview
                                     propertyKey={propertyKey}
+                                    entity={entity}
                                     value={value}
                                     property={property.of as ResolvedProperty<any>}
                                     size={childSize}/>

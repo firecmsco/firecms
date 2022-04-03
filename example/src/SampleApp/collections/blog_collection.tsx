@@ -126,7 +126,7 @@ export const blogCollection = buildCollection<BlogEntry>({
         }),
         gold_text: buildProperty({
             name: "Gold text",
-            description: "This field is using a custom component defined by the developer",
+            description: "This field is a sample that uses a custom component defined by the developer",
             dataType: "string",
             Field: CustomColorTextField,
             customProps: {

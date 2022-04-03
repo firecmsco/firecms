@@ -8,6 +8,7 @@ import EditIcon from "@mui/icons-material/Edit";
 
 import {
     ArrayProperty,
+    Entity,
     EntityValues,
     Property,
     ResolvedArrayProperty,
@@ -16,7 +17,7 @@ import {
     StringProperty
 } from "../../../../../models";
 import { useDropzone } from "react-dropzone";
-import { PropertyPreview, PreviewSize } from "../../../../../preview";
+import { PreviewSize, PropertyPreview } from "../../../../../preview";
 import equal from "react-fast-compare"
 import { ErrorBoundary } from "../../../../internal/ErrorBoundary";
 
@@ -107,10 +108,9 @@ export function TableStorageUpload(props: {
     updateValue: (newValue: (string | string[] | null)) => void;
     focused: boolean;
     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
-    entityId: string;
+    entity: Entity<any>;
     path: string;
     previewSize: PreviewSize;
-    entityValues: EntityValues<any>;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
     setPreventOutsideClick: (value: any) => void;
 }) {
@@ -121,9 +121,8 @@ export function TableStorageUpload(props: {
         internalValue,
         disabled,
         property,
-        entityId,
+        entity,
         path,
-        entityValues,
         previewSize,
         updateValue,
         setPreventOutsideClick
@@ -144,7 +143,7 @@ export function TableStorageUpload(props: {
     const fileNameBuilder = (file: File) => {
         if (storage.fileName) {
 
-            const fileName = resolveStorageString(storage.fileName, storage, entityValues, entityId, path, property, file, propertyId);
+            const fileName = resolveStorageString(storage.fileName, storage, entity.values, entity.id,  path, property, file, propertyId);
             if (!fileName || fileName.length === 0) {
                 throw Error("You need to return a valid filename");
             }
@@ -154,7 +153,7 @@ export function TableStorageUpload(props: {
     };
 
     const storagePathBuilder = (file: File) => {
-        return resolveStorageString(storage.storagePath, storage, entityValues, entityId, path, property, file, propertyId) ?? "/";
+        return resolveStorageString(storage.storagePath, storage, entity.values, entity.id, path, property, file, propertyId) ?? "/";
     };
 
     return (
@@ -170,6 +169,7 @@ export function TableStorageUpload(props: {
                     newValue
                 );
             }}
+            entity={entity}
             fileNameBuilder={fileNameBuilder}
             storagePathBuilder={storagePathBuilder}
             storage={storage}
@@ -202,6 +202,7 @@ interface StorageUploadProps {
     multipleFilesSupported: boolean;
     autoFocus: boolean;
     disabled: boolean;
+    entity: Entity<any>;
     previewSize: PreviewSize;
     storage: StorageConfig;
     fileNameBuilder: (file: File) => string;
@@ -212,6 +213,7 @@ function StorageUpload({
                            property,
                            name,
                            value,
+                           entity,
                            onChange,
                            multipleFilesSupported,
                            previewSize: previewSizeInput,
@@ -398,6 +400,7 @@ function StorageUpload({
                             disabled={disabled}
                             value={entry.storagePathOrDownloadUrl}
                             onClear={onClear}
+                            entity={entity}
                             size={previewSize}/>
                     );
                 } else if (entry.file) {
@@ -547,12 +550,14 @@ interface StorageItemPreviewProps {
     onClear: (value: string) => void;
     size: PreviewSize;
     disabled: boolean;
+    entity: Entity<any>;
 }
 
 export function StorageItemPreview({
                                        property,
                                        value,
-                                       size
+                                       size,
+                                       entity
                                    }: StorageItemPreviewProps) {
 
     return (
@@ -565,6 +570,7 @@ export function StorageItemPreview({
             <ErrorBoundary>
                 <PropertyPreview value={value}
                                  property={property}
+                                 entity={entity}
                                  size={size}/>
             </ErrorBoundary>
             }

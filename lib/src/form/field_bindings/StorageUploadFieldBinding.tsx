@@ -15,6 +15,7 @@ import {
 
 import {
     ArrayProperty,
+    Entity,
     FieldProps,
     Property,
     ResolvedStringProperty,
@@ -182,31 +183,38 @@ export function StorageUploadFieldBinding({
         return resolveStorageString(storage.storagePath, storage, context.values, context.entityId, context.path, property, file, propertyKey) ?? "/";
     };
 
+    const entity: Entity<any> = {
+        id: context.entityId,
+        values: context.values,
+        path: context.path
+    };
+
     return (
 
-            <FormControl fullWidth
-                         required={property.validation?.required}
-                         error={showError}>
+        <FormControl fullWidth
+                     required={property.validation?.required}
+                     error={showError}>
 
-                {!tableMode &&
+            {!tableMode &&
                 <FormHelperText filled
                                 required={property.validation?.required}>
                     <LabelWithIcon property={property}/>
                 </FormHelperText>}
 
-                <StorageUpload
-                    value={internalValue}
-                    name={propertyKey}
-                    disabled={disabled}
-                    autoFocus={autoFocus}
-                    property={property}
-                    onChange={(newValue) => {
-                        setValue(newValue);
-                    }}
-                    fileNameBuilder={fileNameBuilder}
-                    storagePathBuilder={storagePathBuilder}
-                    storage={storage}
-                    multipleFilesSupported={multipleFilesSupported}/>
+            <StorageUpload
+                value={internalValue}
+                name={propertyKey}
+                disabled={disabled}
+                autoFocus={autoFocus}
+                property={property}
+                onChange={(newValue) => {
+                    setValue(newValue);
+                }}
+                entity={entity}
+                fileNameBuilder={fileNameBuilder}
+                storagePathBuilder={storagePathBuilder}
+                storage={storage}
+                multipleFilesSupported={multipleFilesSupported}/>
 
                 {includeDescription &&
                 <FieldDescription property={property as any}/>}
@@ -241,6 +249,7 @@ interface StorageUploadProps {
     multipleFilesSupported: boolean;
     autoFocus: boolean;
     disabled: boolean;
+    entity: Entity<any>;
     storage: StorageConfig;
     fileNameBuilder: (file: File) => string;
     storagePathBuilder: (file: File) => string;
@@ -256,6 +265,7 @@ function FileDropComponent({
                                autoFocus,
                                internalValue,
                                property,
+                               entity,
                                onClear,
                                metadata,
                                storagePathBuilder,
@@ -275,6 +285,7 @@ function FileDropComponent({
     property: ResolvedStringProperty,
     onClear: (clearedStoragePathOrDownloadUrl: string) => void,
     metadata: any,
+    entity: Entity<any>;
     storagePathBuilder: (file: File) => string,
     onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, fileMetadata?: any) => Promise<void>,
     size: PreviewSize,
@@ -338,6 +349,7 @@ function FileDropComponent({
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                 property={property}
                                 disabled={disabled}
+                                entity={entity}
                                 value={entry.storagePathOrDownloadUrl}
                                 onClear={onClear}
                                 size={entry.size}/>
@@ -413,6 +425,7 @@ export function StorageUpload({
                                   disabled,
                                   autoFocus,
                                   storage,
+                                  entity,
                                   fileNameBuilder,
                                   storagePathBuilder
                               }: StorageUploadProps) {
@@ -596,6 +609,7 @@ export function StorageUpload({
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
                                 property={renderProperty}
                                 disabled={true}
+                                entity={entity}
                                 value={entry.storagePathOrDownloadUrl as string}
                                 onClear={onClear}
                                 size={entry.size}/>
@@ -613,6 +627,7 @@ export function StorageUpload({
                                               autoFocus={autoFocus}
                                               internalValue={internalValue}
                                               property={renderProperty}
+                                              entity={entity}
                                               onClear={onClear}
                                               metadata={metadata}
                                               storagePathBuilder={storagePathBuilder}
@@ -720,6 +735,7 @@ interface StorageItemPreviewProps {
     name: string;
     property: ResolvedStringProperty;
     value: string,
+    entity: Entity<any>,
     onClear: (value: string) => void;
     size: PreviewSize;
     disabled: boolean;
@@ -729,6 +745,7 @@ export function StorageItemPreview({
                                        name,
                                        property,
                                        value,
+                                       entity,
                                        onClear,
                                        disabled,
                                        size
@@ -766,6 +783,7 @@ export function StorageItemPreview({
                     <PropertyPreview propertyKey={name}
                                      value={value}
                                      property={property}
+                                     entity={entity}
                                      size={size}/>
                 </ErrorBoundary>
                 }

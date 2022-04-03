@@ -1,7 +1,7 @@
 import React from "react";
 import { FormControl, FormHelperText, Paper } from "@mui/material";
 
-import { FieldProps } from "../../models";
+import { Entity, FieldProps } from "../../models";
 
 import { PropertyPreview } from "../../preview";
 import { FieldDescription } from "../index";
@@ -17,18 +17,24 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
  * @category Form fields
  */
 export function ReadOnlyFieldBinding({
-                                  propertyKey,
-                                                                    value,
-                                                                    setValue,
-                                                                    error,
-                                                                    showError,
-                                                                    isSubmitting,
-                                                                    touched,
-                                                                    tableMode,
-                                                                    property,
-                                                                    includeDescription,
-                                                                    context
-                                                                }: FieldProps<any>) {
+                                         propertyKey,
+                                         value,
+                                         setValue,
+                                         error,
+                                         showError,
+                                         isSubmitting,
+                                         touched,
+                                         tableMode,
+                                         property,
+                                         includeDescription,
+                                         context
+                                     }: FieldProps<any>) {
+
+    const entity: Entity<any> = {
+        id: context.entityId,
+        values: context.values,
+        path: context.path
+    };
 
     return (
 
@@ -54,6 +60,7 @@ export function ReadOnlyFieldBinding({
                     <PropertyPreview propertyKey={propertyKey}
                                      value={value}
                                      property={property}
+                                     entity={entity}
                                      size={"regular"}/>
                 </ErrorBoundary>
 

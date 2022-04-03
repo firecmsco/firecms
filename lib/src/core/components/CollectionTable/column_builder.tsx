@@ -260,6 +260,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                         height={column.height}
                         propertyKey={`preview_${propertyId}_${rowIndex}_${columnIndex}`}
                         property={property as any}
+                        entity={entity}
                         value={entity.values[propertyId]}
                         size={getPreviewSizeFrom(size)}
                     />
@@ -343,9 +344,8 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                         onSelect={onSelect}
                         width={column.width}
                         height={column.height}
-                        entityId={entity.id}
-                        path={entity.path}
-                        entityValues={entity.values}/>
+                        entity={entity}
+                        path={entity.path}/>
                     : <SkeletonComponent property={property}
                                          size={getPreviewSizeFrom(size)}/>
                 }

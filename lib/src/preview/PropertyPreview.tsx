@@ -38,7 +38,7 @@ import { PropertyPreviewProps } from "./PropertyPreviewProps";
 export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
     let content: JSX.Element | any;
     const {
-        property, propertyKey, value, size, height, width
+        property, propertyKey, value, size, height, width, entity
     } = props;
 
     const fieldProps = { ...props };
@@ -54,6 +54,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
                 size,
                 height,
                 width,
+                entity,
                 customProps: property.customProps
             });
     } else if (value === null) {
@@ -92,6 +93,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
                         <ArrayOfMapsPreview propertyKey={propertyKey}
                                             property={property as ResolvedArrayProperty}
                                             value={value as object[]}
+                                            entity={entity}
                                             size={size}
                         />;
                 } else if (arrayProperty.of.dataType === "reference") {

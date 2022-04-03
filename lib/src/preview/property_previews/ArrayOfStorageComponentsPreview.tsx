@@ -39,6 +39,7 @@ const Root = styled("div")((
  */
 export function ArrayOfStorageComponentsPreview({
                                                     propertyKey,
+                                                    entity,
                                                     value,
                                                     property,
                                                     size
@@ -59,6 +60,7 @@ export function ArrayOfStorageComponentsPreview({
                         <PropertyPreview
                             propertyKey={propertyKey}
                             value={v}
+                            entity={entity}
                             property={property.of as ResolvedProperty<string>}
                             size={childSize}/>
                     </ErrorBoundary>

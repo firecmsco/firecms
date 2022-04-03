@@ -17,7 +17,7 @@ export type EntityStatus = "new" | "existing" | "copy";
 export interface Entity<M extends { [Key: string]: any }> {
 
     /**
-     * Id of the entity
+     * ID of the entity
      */
     id: string;
 

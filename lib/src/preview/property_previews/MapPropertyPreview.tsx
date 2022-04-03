@@ -1,5 +1,4 @@
 import React from "react";
-import { styled } from '@mui/material/styles';
 import {
     Table,
     TableBody,
@@ -16,11 +15,12 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
  * @category Preview components
  */
 export function MapPropertyPreview<T extends Record<string, unknown>>({
-                                             propertyKey,
-                                             value,
-                                             property,
-                                             size
-                                         }: PropertyPreviewProps<T>) {
+                                                                          propertyKey,
+                                                                          value,
+                                                                          property,
+                                                                          entity,
+                                                                          size
+                                                                      }: PropertyPreviewProps<T>) {
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPreview");
@@ -54,6 +54,7 @@ export function MapPropertyPreview<T extends Record<string, unknown>>({
                             <PropertyPreview propertyKey={key}
                                              value={(value as any)[key]}
                                              property={mapProperty.properties![key]}
+                                             entity={entity}
                                              size={size}/>
                         </ErrorBoundary>
                     </div>
@@ -93,6 +94,7 @@ export function MapPropertyPreview<T extends Record<string, unknown>>({
                                         propertyKey={key}
                                         value={(value as any)[key]}
                                         property={mapProperty.properties![key]}
+                                        entity={entity}
                                         size={"small"}/>
                                 </ErrorBoundary>
                             </TableCell>

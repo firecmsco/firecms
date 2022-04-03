@@ -1,4 +1,4 @@
-import { EntityValues } from "./entities";
+import { Entity, EntityValues } from "./entities";
 import { CMSType, Property } from "./properties";
 import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 
@@ -117,7 +117,7 @@ export interface FieldProps<T extends CMSType, CustomProps = any, M extends { [K
 export interface FormContext<M extends { [Key: string]: any }> {
 
     /**
-     * collection of the entity being modified
+     * Collection of the entity being modified
      */
     collection: ResolvedEntityCollection<M>;
 

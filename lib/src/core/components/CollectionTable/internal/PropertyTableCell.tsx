@@ -1,6 +1,7 @@
 import {
     ArrayProperty,
     CMSType,
+    Entity,
     EntityReference,
     EntityValues,
     ResolvedArrayProperty,
@@ -39,9 +40,8 @@ export interface PropertyTableCellProps<T extends CMSType> {
     property: ResolvedProperty<T>;
     height: number;
     width: number;
-    entityId: string;
+    entity: Entity<any>;
     path: string;
-    entityValues: EntityValues<any>;
     validation: AnySchema;
     onValueChange?: (params: OnCellChangeParams<T>) => void
 }
@@ -72,9 +72,8 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                           align,
                                                           width,
                                                           height,
-                                                          entityId,
-                                                          path,
-                                                          entityValues
+                                                          entity,
+                                                          path
                                                       }: PropertyTableCellProps<T> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
@@ -161,9 +160,8 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                  disabled={disabled}
                                                  focused={focused}
                                                  property={property as ResolvedStringProperty | ResolvedArrayProperty<string[]>}
-                                                 entityId={entityId}
+                                                 entity={entity}
                                                  path={path}
-                                                 entityValues={entityValues}
                                                  internalValue={internalValue}
                                                  previewSize={getPreviewSizeFrom(size)}
                                                  updateValue={updateValue}
@@ -317,6 +315,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
             <PropertyPreview
                 width={width}
                 height={height}
+                entity={entity}
                 propertyKey={name as string}
                 value={internalValue}
                 property={property}

@@ -251,6 +251,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                                                 propertyKey={key as string}
                                                 value={(entity.values as any)[key]}
                                                 property={property as ResolvedProperty}
+                                                entity={entity}
                                                 size={"tiny"}/>
                                             : <SkeletonComponent
                                                 property={property as ResolvedProperty}
