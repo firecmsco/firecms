@@ -1,5 +1,4 @@
-import { MouseEventHandler } from "react";
-import { CMSType, Property, ResolvedProperty } from "../models";
+import { CMSType, Entity, Property, ResolvedProperty } from "../models";
 
 /**
  * @category Preview components
@@ -51,4 +50,5 @@ export interface PropertyPreviewProps<T extends CMSType = CMSType, CustomProps =
      * Additional properties set by the developer
      */
     customProps?: CustomProps;
+
 }

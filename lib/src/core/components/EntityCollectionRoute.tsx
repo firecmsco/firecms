@@ -39,20 +39,18 @@ export function EntityCollectionRoute<M extends { [Key: string]: any }>({
             setStoredCollection(baseCollection);
     }, [path, configPersistence])
 
-    if (collection)
+    if (collection) {
         return <EntityCollectionView fullPath={path}
                                      collection={collection}/>;
-
-    else if (storedCollection) {
-            return <EntityCollectionView
-                fullPath={path}
-                collection={storedCollection}/>;
-    } else if (loading)
+    } else if (storedCollection) {
+        return <EntityCollectionView
+            fullPath={path}
+            collection={storedCollection}/>;
+    } else if (loading) {
         return <CircularProgressCenter/>;
-
-    else return <ErrorView
-            error={"Internal error: EntityCollectionRoute misconfigured"}/>;
+    } else {
+        return <ErrorView
+            error={"Internal error: EntityCollectionRoute misconfiguration"}/>;
+    }
 
 }
-
-

@@ -13,6 +13,7 @@ import {
     CircularProgressCenter,
     createCMSDefaultTheme,
     FirebaseAuthDelegate,
+    useBuildFirestoreConfigurationPersistence,
     FirebaseLoginView,
     FireCMS,
     NavigationRoutes,
@@ -100,6 +101,10 @@ export function CustomCMSApp() {
         // You can add your `FirestoreTextSearchController` here
     });
 
+    const configPersistence = useBuildFirestoreConfigurationPersistence({
+        firebaseApp
+    });
+
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
     if (configError) {
@@ -123,6 +128,7 @@ export function CustomCMSApp() {
         <Router>
             <FireCMS collections={[productsCollection]}
                      authDelegate={authDelegate}
+                     configPersistence={configPersistence}
                      authentication={myAuthenticator}
                      dataSource={dataSource}
                      storageSource={storageSource}

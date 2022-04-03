@@ -77,7 +77,6 @@ export type NavigationContext = {
      */
     buildCMSUrlPath: (path: string) => string;
 
-
     buildUrlEditCollectionPath: (props: { path: string}) => string;
 
     /**

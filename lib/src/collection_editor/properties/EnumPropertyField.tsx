@@ -42,7 +42,8 @@ export function EnumPropertyField({
                 <Box sx={(theme) => ({
                     display: "flex",
                     flexDirection: "row",
-                    color: theme.palette.text.secondary
+                    color: theme.palette.text.secondary,
+                    alignItems: "center"
                 })}>
                     <ListIcon/>
                     <Typography variant={"subtitle2"}

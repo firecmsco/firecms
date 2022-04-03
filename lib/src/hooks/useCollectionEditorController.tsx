@@ -10,17 +10,19 @@ import {
 } from "../collection_editor/NewCollectionEditorDialog";
 import { useNavigationContext } from "./index";
 import { useNavigate } from "react-router-dom";
+import { useConfigurationPersistence } from "./useConfigurationPersistence";
 
 export const useCollectionEditorController = (): CollectionEditorController => {
 
     const navigationContext = useNavigationContext();
+    const configPersistence = useConfigurationPersistence();
     const navigate = useNavigate();
 
     const [newCollectionDialog, setNewCollectionDialog] = React.useState<{
         open: boolean,
         group?: string
     }>();
-    const [editedCollectionPath, setEditedCollectionPath] = React.useState< string  | undefined>();
+    const [editedCollectionPath, setEditedCollectionPath] = React.useState<string | undefined>();
 
     const openNewCollectionDialog = React.useCallback(({ group }) => {
         setNewCollectionDialog({ open: true, group });
@@ -33,25 +35,27 @@ export const useCollectionEditorController = (): CollectionEditorController => {
     return {
         editCollection: setEditedCollectionPath,
         openNewCollectionDialog,
-        collectionEditorViews: (
-            <>
-                <CollectionEditorDialog
-                    open={Boolean(editedCollectionPath)}
-                    handleClose={(collection) => {
-                        setEditedCollectionPath(undefined);
-                    }}
-                    path={editedCollectionPath}/>
+        collectionEditorViews: configPersistence
+            ? (
+                <>
+                    <CollectionEditorDialog
+                        open={Boolean(editedCollectionPath)}
+                        handleClose={(collection) => {
+                            setEditedCollectionPath(undefined);
+                        }}
+                        path={editedCollectionPath}/>
 
-                <NewCollectionEditorDialog
-                    open={false}
-                    {...newCollectionDialog}
-                    handleClose={(collection) => {
-                        if (collection) {
-                            navigate(navigationContext.buildUrlCollectionPath(collection.path));
-                        }
-                        closeNewCollectionDialog();
-                    }}/>
-            </>
-        )
+                    <NewCollectionEditorDialog
+                        open={false}
+                        {...newCollectionDialog}
+                        handleClose={(collection) => {
+                            if (collection) {
+                                navigate(navigationContext.buildUrlCollectionPath(collection.path));
+                            }
+                            closeNewCollectionDialog();
+                        }}/>
+                </>
+            )
+            : null
     }
 };
