@@ -15,7 +15,7 @@ module.exports = {
             'docusaurus-plugin-typedoc',
             {
                 entryPoints: [
-                    '../src/index.ts',
+                    '../lib/src/index.ts',
                     // '../src/core/index.tsx',
                     // '../src/models/index.ts',
                     // '../src/collection/index.tsx',
