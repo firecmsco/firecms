@@ -300,7 +300,8 @@ function FileDropComponent({
             accept: storageMeta.acceptedFiles,
             disabled: disabled || isDraggingOver,
             noDragEventsBubbling: true,
-            onDrop: onExternalDrop
+            onDrop: onExternalDrop,
+            ...storageMeta.dropzoneCustomProps
         }
     );
 

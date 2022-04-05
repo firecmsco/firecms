@@ -2,6 +2,7 @@ import { FieldProps } from "./fields";
 import { PreviewComponentProps } from "../preview";
 import { ChipColor } from "./colors";
 import { EntityReference, EntityValues, GeoPoint } from "./entities";
+import { DropzoneOptions } from "react-dropzone";
 
 /**
  * @category Entity properties
@@ -642,6 +643,13 @@ export interface StorageMeta {
      * Post process the path
      */
     postProcess?: (pathOrUrl: string) => Promise<string>
+
+    /**
+     * 
+     * Allowing access to underlying DropZone custom properties
+     */
+
+    dropzoneCustomProps: Omit<DropzoneOptions, 'accept' | 'disabled' | 'noDragEventsBubbling' | 'onDrop'>
 }
 
 /**
