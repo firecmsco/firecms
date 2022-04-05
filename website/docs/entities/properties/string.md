@@ -39,6 +39,9 @@ indicate that this string refers to a path in Google Cloud Storage.
   disabled, may make the URL unusable and lose the original reference to
   Cloud Storage, so it is not encouraged to use this flag. Defaults to
   false.
+* `postProcess` Async callback to post process resulting file path urls. useful for adding blurhash / metadata.
+* `dropzoneCustomProps` Specific dropzone props that can be used to extend dropzone functionality. [Properties documented here](https://react-dropzone.js.org/#src)
+
 ```tsx
 import { buildProperty } from "./builders";
 
