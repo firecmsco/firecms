@@ -649,7 +649,7 @@ export interface StorageMeta {
      * Allowing access to underlying DropZone custom properties
      */
 
-    dropzoneCustomProps: Omit<DropzoneOptions, 'accept' | 'disabled' | 'noDragEventsBubbling' | 'onDrop'>
+    dropzoneCustomProps: Omit<DropzoneOptions, 'accept' | 'disabled' | 'noDragEventsBubbling' | 'onDrop' | 'maxFiles'>
 }
 
 /**
