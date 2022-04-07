@@ -22,7 +22,6 @@ import {
     EntityCollection,
     EntityReference,
     FieldProps,
-    ResolvedEntityCollection,
     ResolvedProperty
 } from "../../models";
 import { FieldDescription } from "../index";
@@ -103,8 +102,6 @@ const StyledFormControl = styled(FormControl)((
         }
     }
 }));
-
-
 
 /**
  * Field that opens a reference selection dialog.

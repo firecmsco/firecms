@@ -1,4 +1,4 @@
-import React, { ComponentType, ReactElement, useEffect, useState } from "react";
+import React, { ComponentType, ReactElement } from "react";
 import { FormHelperText } from "@mui/material";
 
 import {
@@ -17,22 +17,30 @@ import {
 } from "../models";
 
 import { SelectBinding } from "./field_bindings/SelectBinding";
-import { ArrayEnumSelectBinding } from "./field_bindings/ArrayEnumSelectBinding";
-import { StorageUploadFieldBinding } from "./field_bindings/StorageUploadFieldBinding";
+import {
+    ArrayEnumSelectBinding
+} from "./field_bindings/ArrayEnumSelectBinding";
+import {
+    StorageUploadFieldBinding
+} from "./field_bindings/StorageUploadFieldBinding";
 import { TextFieldBinding } from "./field_bindings/TextFieldBinding";
 import { SwitchFieldBinding } from "./field_bindings/SwitchFieldBinding";
 import { DateTimeFieldBinding } from "./field_bindings/DateTimeFieldBinding";
 import { ReferenceFieldBinding } from "./field_bindings/ReferenceFieldBinding";
 import { MapFieldBinding } from "./field_bindings/MapFieldBinding";
-import { ArrayDefaultFieldBinding } from "./field_bindings/ArrayDefaultFieldBinding";
-import { ArrayOneOfFieldBinding } from "./field_bindings/ArrayOneOfFieldBinding";
+import {
+    ArrayDefaultFieldBinding
+} from "./field_bindings/ArrayDefaultFieldBinding";
+import {
+    ArrayOneOfFieldBinding
+} from "./field_bindings/ArrayOneOfFieldBinding";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 import { MarkdownFieldBinding } from "./field_bindings/MarkdownFieldBinding";
-import { ArrayOfReferencesFieldBinding } from "./field_bindings/ArrayOfReferencesFieldBinding";
+import {
+    ArrayOfReferencesFieldBinding
+} from "./field_bindings/ArrayOfReferencesFieldBinding";
 
 import { isReadOnly } from "../core/util/entities";
-import equal from "react-fast-compare"
-import { useDebounce } from "../core/internal/useDebounce";
 
 /**
  * This factory method renders a form field creating the corresponding configuration

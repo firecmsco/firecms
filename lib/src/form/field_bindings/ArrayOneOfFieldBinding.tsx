@@ -20,6 +20,7 @@ import {
     FormContext,
     ResolvedProperty
 } from "../../models";
+import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -48,6 +49,7 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
     if (!property.oneOf)
         throw Error("ArrayOneOfField misconfiguration. Property `oneOf` not set");
 
+    const expanded = property.expanded === undefined ? true : property.expanded;
     useClearRestoreValue({
         property,
         value,
@@ -73,26 +75,20 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
 
         <FormControl fullWidth error={showError}>
 
-            {!tableMode && <FormHelperText filled
-                                           required={property.validation?.required}>
-                <LabelWithIcon property={property}/>
-            </FormHelperText>}
-
-            <Paper variant={"outlined"}
-                   sx={(theme) => ({
-                       elevation: 0,
-                       padding: theme.spacing(2),
-                       [theme.breakpoints.up("md")]: {
-                           padding: theme.spacing(2)
-                       }
-                   })}>
+            <ExpandablePanel
+                expanded={expanded}
+                title={
+                <FormHelperText filled
+                                required={property.validation?.required}>
+                    <LabelWithIcon property={property}/>
+                </FormHelperText>}>
                 <ArrayContainer value={value}
                                 name={propertyKey}
                                 buildEntry={buildEntry}
                                 onInternalIdAdded={setLastAddedId}
                                 disabled={isSubmitting || Boolean(property.disabled)}
                                 includeAddButton={!property.disabled}/>
-            </Paper>
+            </ExpandablePanel>
 
             {includeDescription &&
             <FieldDescription property={property}/>}

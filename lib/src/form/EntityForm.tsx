@@ -10,6 +10,7 @@ import {
     ResolvedEntityCollection
 } from "../models";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
+import { useVirtual } from "react-virtual";
 import { buildPropertyField } from "./form_factory";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
@@ -18,7 +19,6 @@ import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
 import { getResolvedCollection } from "../core";
-import { useVirtual } from "react-virtual";
 
 /**
  * @category Components

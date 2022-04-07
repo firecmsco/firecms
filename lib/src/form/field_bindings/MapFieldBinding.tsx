@@ -12,7 +12,6 @@ import {
     Grid,
     InputLabel,
     MenuItem,
-    Paper,
     Select
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
@@ -22,6 +21,7 @@ import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { buildPropertyField } from "../form_factory";
 import { isHidden } from "../../core/util/entities";
+import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 
 /**
  * Field that renders the children property fields
@@ -43,8 +43,8 @@ export function MapFieldBinding<T extends object>({
                                                context
                                            }: FieldProps<T>) {
 
-
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
+    const expanded = property.expanded === undefined ? true : property.expanded;
 
     if (!property.properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
@@ -100,56 +100,53 @@ export function MapFieldBinding<T extends object>({
         </Box>;
     }
 
+    const mapFormView = <>
+        <Grid container spacing={2}>
+            {Object.entries(mapProperties)
+                .filter(([_, property]) => !isHidden(property))
+                .map(([entryKey, childProperty], index) => {
+                        return (
+                            <Grid item
+                                  sm={12}
+                                  xs={12}
+                                  key={`map-${propertyKey}-${index}`}>
+                                {
+                                    buildPropertyField<any, T>({
+                                        propertyKey: `${propertyKey}[${entryKey}]`,
+                                        disabled,
+                                        property: childProperty,
+                                        includeDescription,
+                                        underlyingValueHasChanged,
+                                        context,
+                                        tableMode,
+                                        partOfArray: false,
+                                        autoFocus: false,
+                                        shouldAlwaysRerender: false
+                                    })
+                                }
+                            </Grid>
+                        );
+                    }
+                )}
+        </Grid>
+
+        {pickOnlySomeKeys && buildPickKeysSelect()}
+
+    </>;
+
+    const title =
+        <FormHelperText filled
+                        required={property.validation?.required}>
+            <LabelWithIcon property={property}/>
+        </FormHelperText>;
+
     return (
         <FormControl fullWidth error={showError}>
 
-            {!tableMode && <FormHelperText filled
-                                           required={property.validation?.required}>
-                <LabelWithIcon property={property}/>
-            </FormHelperText>}
+            <ExpandablePanel expanded={expanded}
+                             title={title}>{mapFormView}</ExpandablePanel>
 
-            <Paper elevation={0} variant={"outlined"} sx={(theme) => ({
-                elevation: 0,
-                padding: theme.spacing(2),
-                [theme.breakpoints.up("md")]: {
-                    padding: theme.spacing(2)
-                }
-            })}>
-                <Grid container spacing={2}>
-                    {Object.entries(mapProperties)
-                        .filter(([_, property]) => !isHidden(property))
-                        .map(([entryKey, childProperty], index) => {
-                            return (
-                                <Grid item
-                                      sm={12}
-                                      xs={12}
-                                      key={`map-${propertyKey}-${index}`}>
-                                    {
-                                        buildPropertyField<any, T>({
-                                            propertyKey: `${propertyKey}[${entryKey}]`,
-                                            disabled,
-                                            property: childProperty,
-                                            includeDescription,
-                                            underlyingValueHasChanged,
-                                            context,
-                                            tableMode,
-                                            partOfArray: false,
-                                            autoFocus: false,
-                                                shouldAlwaysRerender: false
-                                            })
-                                        }
-                                    </Grid>
-                                );
-                            }
-                        )}
-                </Grid>
-
-                {pickOnlySomeKeys && buildPickKeysSelect()}
-
-            </Paper>
-
-            {includeDescription &&
-            <FieldDescription property={property}/>}
+            {includeDescription && <FieldDescription property={property}/>}
 
         </FormControl>
     );

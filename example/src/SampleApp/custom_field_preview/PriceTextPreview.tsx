@@ -8,7 +8,7 @@ export default function PriceTextPreview({
                                              property,
                                              size,
                                              customProps,
-                                             context
+                                             entity
                                          }: PropertyPreviewProps<number>)
     : ReactElement {
 

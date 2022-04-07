@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Box, Button, FormControl, FormHelperText, Paper } from "@mui/material";
+import { Box, Button, FormControl, FormHelperText } from "@mui/material";
 import {
     Entity,
     EntityCollection,
@@ -13,6 +13,7 @@ import { ErrorView, ReferenceDialog } from "../../core";
 
 import { useClearRestoreValue, useNavigationContext } from "../../hooks";
 import { getReferenceFrom } from "../../core/util/entities";
+import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -41,6 +42,7 @@ export function ArrayOfReferencesFieldBinding({
         throw Error("ArrayOfReferencesField expected a property containing references");
     }
 
+    const expanded = property.expanded === undefined ? true : property.expanded;
     const [open, setOpen] = React.useState(false);
     const [onHover, setOnHover] = React.useState(false);
     const selectedIds = value && Array.isArray(value) ? value.map((ref) => ref.id) : [];
@@ -97,19 +99,14 @@ export function ArrayOfReferencesFieldBinding({
         <>
             <FormControl fullWidth error={showError}>
 
-                {!tableMode && <FormHelperText filled
-                                               required={property.validation?.required}>
-                    <LabelWithIcon property={property}/>
-                </FormHelperText>}
 
-                <Paper variant={"outlined"}
-                       sx={(theme) => ({
-                           elevation: 0,
-                           padding: theme.spacing(2),
-                           [theme.breakpoints.up("md")]: {
-                               padding: theme.spacing(2)
-                           }
-                       })}>
+                <ExpandablePanel
+                    expanded={expanded}
+                    title={
+                        <FormHelperText filled
+                                        required={property.validation?.required}>
+                            <LabelWithIcon property={property}/>
+                        </FormHelperText>}>
 
                     {!collectionResolver && <ErrorView
                         error={"The specified collection does not exist. Check console"}/>}
@@ -133,14 +130,14 @@ export function ArrayOfReferencesFieldBinding({
                         </Box>
                     </>}
 
-                </Paper>
+                </ExpandablePanel>
 
                 {includeDescription &&
-                <FieldDescription property={property}/>}
+                    <FieldDescription property={property}/>}
 
                 {showError &&
-                typeof error === "string" &&
-                <FormHelperText>{error}</FormHelperText>}
+                    typeof error === "string" &&
+                    <FormHelperText>{error}</FormHelperText>}
 
             </FormControl>
 
@@ -155,5 +152,3 @@ export function ArrayOfReferencesFieldBinding({
         </>
     );
 }
-
-

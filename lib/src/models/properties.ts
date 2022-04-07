@@ -403,7 +403,12 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
     /**
      * Rules for validating this property
      */
-    validation?: ArrayPropertyValidationSchema,
+    validation?: ArrayPropertyValidationSchema;
+
+    /**
+     * Should the field be initially expanded. Defaults to `true`
+     */
+    expanded?: boolean;
 
 }
 
@@ -437,13 +442,18 @@ export interface MapProperty<T extends { [Key: string]: any } = any> extends Bas
     previewProperties?: Partial<Extract<keyof T, string>>[];
 
     /**
-     * Allow the user to add only some of the keys in this map.
-     * By default all properties of the map have the corresponding field in
+     * Allow the user to add only some keys in this map.
+     * By default, all properties of the map have the corresponding field in
      * the form view. Setting this flag to true allows to pick only some.
-     * Useful for map that can have a lot of subproperties that may not be
+     * Useful for map that can have a lot of sub-properties that may not be
      * needed
      */
     pickOnlySomeKeys?: boolean;
+
+    /**
+     * Should the field be initially expanded. Defaults to `true`
+     */
+    expanded?: boolean;
 }
 
 /**

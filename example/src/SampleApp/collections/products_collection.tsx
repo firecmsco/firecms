@@ -251,7 +251,8 @@ export const productsCollection = buildCollection<Product>({
                     name: "External id",
                     dataType: "string"
                 }
-            }
+            },
+            expandable: true
         },
         available_locales: {
             name: "Available locales",

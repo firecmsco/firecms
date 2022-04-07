@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../models";
-import { FormControl, FormHelperText, Paper, Theme } from "@mui/material";
+import { FormControl, FormHelperText } from "@mui/material";
 import { FieldDescription } from "../index";
 import { ArrayContainer, LabelWithIcon } from "../components";
 import { buildPropertyField } from "../form_factory";
 import { useClearRestoreValue } from "../../hooks";
-
+import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 
 /**
  * Generic array field that allows reordering and renders the child property
@@ -34,6 +34,7 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
     if (!property.of)
         throw Error("ArrayDefaultField misconfiguration. Property `of` not set");
 
+    const expanded = property.expanded === undefined ? true : property.expanded;
     const ofProperty: ResolvedProperty<CMSType[]> = property.of as ResolvedProperty<CMSType[]>;
 
     const [lastAddedId, setLastAddedId] = useState<number | undefined>();
@@ -64,27 +65,20 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
 
         <FormControl fullWidth error={showError}>
 
-            {!tableMode && <FormHelperText filled
-                                           required={property.validation?.required}>
-                <LabelWithIcon property={property}/>
-            </FormHelperText>}
+            <ExpandablePanel title={
+                <FormHelperText filled
+                                required={property.validation?.required}>
+                    <LabelWithIcon property={property}/>
+                </FormHelperText>}
+                             expanded={expanded}>
 
-            <Paper variant={"outlined"}
-                   sx={(theme) => ({
-                       elevation: 0,
-                       padding: theme.spacing(2),
-                       [theme.breakpoints.up("md")]: {
-                           padding: theme.spacing(2)
-                       }
-                   })}>
                 <ArrayContainer value={value}
                                 name={propertyKey}
                                 buildEntry={buildEntry}
                                 onInternalIdAdded={setLastAddedId}
                                 disabled={isSubmitting || Boolean(property.disabled)}
                                 includeAddButton={!property.disabled}/>
-
-            </Paper>
+            </ExpandablePanel>
 
             {includeDescription &&
             <FieldDescription property={property}/>}
@@ -95,5 +89,3 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
         </FormControl>
     );
 }
-
-

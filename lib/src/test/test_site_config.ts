@@ -251,31 +251,29 @@ const productCallbacks: EntityCallbacks<any> = {
 
 export const siteConfig: FirebaseCMSAppProps = {
     name: "Test site",
-    navigation: {
-        collections: [
-            buildCollection({
-                ...productsCollection,
-                path: "products",
-                callbacks: productCallbacks,
-                name: "Products",
-                subcollections: [localeCollection]
-            }),
-            buildCollection({
-                ...productsCollection,
-                path: "sites/es/products",
-                callbacks: productCallbacks,
-                name: "Products",
-                subcollections: [localeCollection]
-            }),
-            buildCollection({
-                ...productsCollection,
-                path: "products/id/subcollection_inline",
-                callbacks: productCallbacks,
-                name: "Products",
-                subcollections: [localeCollection]
-            })
-        ]
-    },
+    collections: [
+        buildCollection({
+            ...productsCollection,
+            path: "products",
+            callbacks: productCallbacks,
+            name: "Products",
+            subcollections: [localeCollection]
+        }),
+        buildCollection({
+            ...productsCollection,
+            path: "sites/es/products",
+            callbacks: productCallbacks,
+            name: "Products",
+            subcollections: [localeCollection]
+        }),
+        buildCollection({
+            ...productsCollection,
+            path: "products/id/subcollection_inline",
+            callbacks: productCallbacks,
+            name: "Products",
+            subcollections: [localeCollection]
+        })
+    ],
 };
 
 export const usersCollection = buildCollection({

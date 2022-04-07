@@ -1,10 +1,9 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useCallback, useState } from "react";
 
 import {
     Accordion,
     AccordionDetails,
     AccordionDetailsProps,
-    AccordionProps,
     AccordionSummary,
     AccordionSummaryProps
 } from "@mui/material";
@@ -35,16 +34,24 @@ const ExpandablePanelDetails = styled((props: AccordionDetailsProps) => (
         {...props}
     />
 ))(({ theme }) => ({
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
+    [theme.breakpoints.up("md")]: {
+        padding: theme.spacing(2)
+    }
 }));
 
 export function ExpandablePanel({
                                     title,
-                                    children
-                                }: PropsWithChildren<{ title: React.ReactNode }>) {
+                                    children,
+                                    expanded = true
+                                }: PropsWithChildren<{ title: React.ReactNode, expanded?: boolean }>) {
 
+    const [expandedInternal, setExpandedInternal] = useState(expanded);
     return (
-        <Accordion variant={"outlined"} disableGutters>
+        <Accordion variant={"outlined"}
+                   disableGutters
+                   expanded={expandedInternal}
+                   onChange={useCallback((event, expanded) => setExpandedInternal(expanded), [])}>
             <ExpandablePanelSummary expandIcon={<ExpandMoreIcon/>}>
                 {title}
             </ExpandablePanelSummary>

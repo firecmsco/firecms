@@ -90,14 +90,10 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entity",
     properties: {
-        test_date: {
-            name: "Test date",
-            dataType: "date",
-            mode: "date"
-        },
         map_array_ref: {
             name: 'Map',
             dataType: 'map',
+            expanded: false,
             properties: {
                 child: {
                     name: "Products",
@@ -109,6 +105,11 @@ export const testCollection = buildCollection({
                     },
                 }
             },
+        },
+        test_date: {
+            name: "Test date",
+            dataType: "date",
+            mode: "date"
         },
         product: {
             name: "Product",
