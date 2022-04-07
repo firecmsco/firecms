@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TextareaAutosize } from "@mui/material";
 
 import { useDebounce } from "../../../../internal/useDebounce";
@@ -14,6 +14,7 @@ export function TableInput(props: {
 
     const { disabled, value, multiline, updateValue, focused } = props;
     const [internalValue, setInternalValue] = useState<typeof value>(value);
+    const focusedState = useRef<boolean>(false);
 
     const doUpdate = React.useCallback(() => {
         const emptyInitialValue = !value;
@@ -35,10 +36,13 @@ export function TableInput(props: {
 
     const ref = React.createRef<HTMLTextAreaElement>();
     useEffect(() => {
-        if (ref.current && focused) {
+        if (ref.current && focused && !focusedState.current) {
+            focusedState.current = true;
             ref.current.focus({ preventScroll: true });
             ref.current.selectionStart = ref.current.value.length;
             ref.current.selectionEnd = ref.current.value.length;
+        } else {
+            focusedState.current = focused;
         }
     }, [focused, ref]);
 
