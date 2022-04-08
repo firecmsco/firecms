@@ -16,6 +16,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "../css/tailwind.css";
 import Pricing from "../partials/Pricing";
+import Head from "@docusaurus/Head";
 
 function Home() {
     const context = useDocusaurusContext();
@@ -62,7 +63,9 @@ function Home() {
         <Layout
             title={"FireCMS"}
             description="Awesome headless CMS based Firestore/Firebase and React, and completely open-source">
-
+            <Head>
+                <title>FireCMS - Firestore/Firebase headless CMS</title>
+            </Head>
             <div className="flex flex-col min-h-screen overflow-hidden ">
 
                 <main className="flex-grow">

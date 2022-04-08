@@ -8,7 +8,7 @@ author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
 ---
 
 
-![Dark mode](../static/img/dark_mode.png)
+![Dark mode](/img/dark_mode.png)
 
 > Exciting times for our project!
 
