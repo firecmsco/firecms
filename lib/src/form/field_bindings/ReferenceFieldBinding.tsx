@@ -156,7 +156,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
         dataLoading,
         dataLoadingError
     } = useEntityFetch({
-        path: validValue ? value.path : undefined,
+        path: validValue ? value.path : property.path,
         entityId: validValue ? value.id : undefined,
         collection: collection,
         useCache: true
