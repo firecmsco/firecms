@@ -115,7 +115,8 @@ export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefi
     }
 }
 
-export function getDefaultValuesFor<M extends { [Key: string]: any }>(properties: PropertiesOrBuilder<M> | ResolvedProperties<M>): EntityValues<M> {
+export function getDefaultValuesFor<M extends { [Key: string]: any }>(properties: PropertiesOrBuilder<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
+    if (!properties) return {};
     return Object.entries(properties)
         .map(([key, property]) => {
             const value = getDefaultValueFor(property as Property);

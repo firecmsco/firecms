@@ -112,6 +112,7 @@ export const productCallbacks: EntityCallbacks = {
 
 export const productsCollection = buildCollection<Product>({
     path: "products",
+    alias: "ppp",
     // inlineEditing: false,
     callbacks: productCallbacks,
     name: "Product",
@@ -235,7 +236,7 @@ export const productsCollection = buildCollection<Product>({
             description: "Reference to self",
             of: {
                 dataType: "reference",
-                path: "products"
+                path: "ppp"
             }
         },
         publisher: {
@@ -252,7 +253,7 @@ export const productsCollection = buildCollection<Product>({
                     dataType: "string"
                 }
             },
-            expandable: true
+            expanded: true
         },
         available_locales: {
             name: "Available locales",

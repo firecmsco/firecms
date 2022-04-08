@@ -36,6 +36,13 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     path: string;
 
     /**
+     * You can set an alias that will be used internally instead of the `path`.
+     * The `alias` value will be used to determine the URL of the collection,
+     * while `path` will still be used in the datasource.
+     */
+    alias?: string;
+
+    /**
      * Optional field used to group top level navigation entries under a~
      * navigation view. If you set this value in a subcollection it has no
      * effect.

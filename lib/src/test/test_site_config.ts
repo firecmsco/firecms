@@ -1,6 +1,7 @@
-import { EntityCallbacks, EnumValues, StringProperty } from "../models";
-import { FirebaseCMSAppProps } from "../firebase_app";
-import { buildCollection, buildProperty } from "../core";
+import { FirebaseCMSAppProps } from "../firebase_app/FirebaseCMSAppProps";
+import { buildCollection, buildProperty } from "../core/builders";
+import { EnumValues, StringProperty } from "../models/properties";
+import { EntityCallbacks } from "../models/entity_callbacks";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -37,8 +38,6 @@ const testProperty3:StringProperty = buildProperty({
         }
     }
 });
-
-console.log(testProperty, testProperty2, testProperty3);
 
 export const productsCollection = buildCollection<any>({
     path: "products",
@@ -249,33 +248,6 @@ const productCallbacks: EntityCallbacks<any> = {
     }
 };
 
-export const siteConfig: FirebaseCMSAppProps = {
-    name: "Test site",
-    collections: [
-        buildCollection({
-            ...productsCollection,
-            path: "products",
-            callbacks: productCallbacks,
-            name: "Products",
-            subcollections: [localeCollection]
-        }),
-        buildCollection({
-            ...productsCollection,
-            path: "sites/es/products",
-            callbacks: productCallbacks,
-            name: "Products",
-            subcollections: [localeCollection]
-        }),
-        buildCollection({
-            ...productsCollection,
-            path: "products/id/subcollection_inline",
-            callbacks: productCallbacks,
-            name: "Products",
-            subcollections: [localeCollection]
-        })
-    ],
-};
-
 export const usersCollection = buildCollection({
     path: "users",
     name: "Users",
@@ -328,6 +300,43 @@ export const usersCollection = buildCollection({
         })
     }
 });
+
+export const siteConfig: FirebaseCMSAppProps = {
+    name: "Test site",
+    collections: [
+        buildCollection({
+            ...productsCollection,
+            path: "products",
+            callbacks: productCallbacks,
+            name: "Products",
+            subcollections: [localeCollection]
+        }),
+        buildCollection({
+            ...productsCollection,
+            path: "sites/es/products",
+            callbacks: productCallbacks,
+            name: "Products",
+            subcollections: [localeCollection]
+        }),
+        buildCollection({
+            ...productsCollection,
+            path: "products/id/subcollection_inline",
+            callbacks: productCallbacks,
+            name: "Products",
+            subcollections: [localeCollection]
+        }),
+        buildCollection({
+            ...usersCollection,
+            path: "users",
+            alias: "u",
+            name: "Users",
+            subcollections: [        buildCollection({
+                ...productsCollection,
+                alias: "p"
+            })]
+        })
+    ],
+};
 
 
 

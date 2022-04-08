@@ -24,7 +24,7 @@ import {
 } from "../../hooks";
 
 export type ReferencePreviewProps = {
-    path: string | false;
+    disabled: boolean;
     reference: EntityReference,
     size: PreviewSize;
     previewProperties?: string[];
@@ -38,7 +38,7 @@ export type ReferencePreviewProps = {
 export const ReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewInternal, areEqual) as React.FunctionComponent<ReferencePreviewProps>;
 
 function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewProps) {
-    return prevProps.path === nextProps.path &&
+    return prevProps.disabled === nextProps.disabled &&
         prevProps.size === nextProps.size &&
         prevProps.onHover === nextProps.onHover &&
         prevProps.reference?.id === nextProps.reference?.id &&
@@ -47,7 +47,7 @@ function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewP
 }
 
 function ReferencePreviewInternal<M>({
-                                         path,
+                                         disabled,
                                          reference,
                                          previewProperties,
                                          size,
@@ -58,7 +58,7 @@ function ReferencePreviewInternal<M>({
     const navigationContext = useNavigationContext();
     const sideEntityController = useSideEntityController();
 
-    if (!path) {
+    if (disabled) {
         return <ReferencePreviewWrap onClick={onClick}
                                      onHover={onHover}
                                      size={size}>
@@ -66,9 +66,9 @@ function ReferencePreviewInternal<M>({
         </ReferencePreviewWrap>
     }
 
-    const collection = navigationContext.getCollection<M>(path);
+    const collection = navigationContext.getCollection<M>(reference.path);
     if (!collection) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
+        throw Error(`Couldn't find the corresponding collection view for the path: ${reference.path}`);
     }
 
     const {
@@ -86,7 +86,7 @@ function ReferencePreviewInternal<M>({
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const resolvedCollection = useMemo(() => getResolvedCollection({
         collection,
-        path: path,
+        path: reference.path,
         values: entity?.values
     }), [collection]);
 

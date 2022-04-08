@@ -157,7 +157,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
         if (typeof property.path === "string") {
             if (value instanceof EntityReference) {
                 content = <ReferencePreview
-                    path={property.path}
+                    disabled={!property.path}
                     previewProperties={property.previewProperties}
                     size={fieldProps.size}
                     onClick={fieldProps.onClick}

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Entity, EntityCollection } from "../../models";
 import { useDataSource } from "./useDataSource";
+import { useNavigationContext } from "../useNavigationContext";
 
 /**
  * @category Hooks and utilities
  */
 export interface EntityFetchProps<M extends { [Key: string]: any }> {
-    path?: string;
+    path: string;
     entityId?: string;
     collection: EntityCollection<M>;
     useCache?: boolean;
@@ -35,13 +36,17 @@ const CACHE:Record<string, Entity<any>| undefined> = {};
 
 export function useEntityFetch<M extends { [Key: string]: any }>(
     {
-        path,
+        path: inputPath,
         entityId,
         collection,
         useCache = false
     }: EntityFetchProps<M>): EntityFetchResult<M> {
 
     const dataSource = useDataSource();
+    const navigationContext = useNavigationContext();
+
+    const path = navigationContext.resolveAliasesFrom(inputPath);
+
     const [entity, setEntity] = useState<Entity<M> | undefined>();
     const [dataLoading, setDataLoading] = useState<boolean>(true);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();

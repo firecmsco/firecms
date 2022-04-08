@@ -60,7 +60,6 @@ export const getResolvedCollection = <M extends { [Key: string]: any } = any, >
 
 };
 
-
 export function resolveProperty<M>({
                                        propertyOrBuilder,
                                        values,

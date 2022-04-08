@@ -98,6 +98,11 @@ export type NavigationContext = {
      */
     buildUrlCollectionPath: (path: string) => string;
 
+    /**
+     * Turn a path with aliases into a resolved path
+     * @param pathWithAliases
+     */
+    resolveAliasesFrom: (pathWithAliases: string) => string;
 }
 
 /**

@@ -515,6 +515,7 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      * You can set this prop to `false` if the path is not yet know, e.g.
      * you are using a property builder and the path depends on a different
      * property.
+     * Note that you can also use a collection alias.
      */
     path: string | false;
 

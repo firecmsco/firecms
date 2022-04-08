@@ -32,7 +32,7 @@ export function ArrayOfReferencesPreview({
                         }}
                                     key={`preview_array_ref_${propertyKey}_${index}`}>
                             <ReferencePreview
-                                path={ofProperty.path}
+                                disabled={!ofProperty.path}
                                 previewProperties={ofProperty.previewProperties}
                                 size={childSize}
                                 reference={reference}

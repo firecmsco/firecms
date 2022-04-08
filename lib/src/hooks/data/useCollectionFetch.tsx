@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { Entity, EntityCollection, FilterValues } from "../../models";
 import { useDataSource } from "./useDataSource";
+import { useNavigationContext } from "../useNavigationContext";
 
 /**
  * @category Hooks and utilities
@@ -67,7 +68,7 @@ export interface CollectionFetchResult<M extends { [Key: string]: any }> {
  */
 export function useCollectionFetch<M>(
     {
-        path,
+        path: inputPath,
         collection,
         filterValues,
         sortBy,
@@ -76,10 +77,14 @@ export function useCollectionFetch<M>(
         entitiesDisplayedFirst
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
 
+    const dataSource = useDataSource();
+    const navigationContext = useNavigationContext();
+
+    const path = navigationContext.resolveAliasesFrom(inputPath);
+
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
 
-    const dataSource = useDataSource();
     const initialEntities = useMemo(() => entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [], [entitiesDisplayedFirst]);
     const [data, setData] = useState<Entity<M>[]>(initialEntities);
 

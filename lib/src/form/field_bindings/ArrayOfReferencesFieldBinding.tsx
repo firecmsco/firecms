@@ -84,7 +84,7 @@ export function ArrayOfReferencesFieldBinding({
                 onMouseMove={() => setOnHover(true)}
                 onMouseLeave={() => setOnHover(false)}>
                 <ReferencePreview
-                    path={ofProperty.path}
+                    disabled={!ofProperty.path}
                     previewProperties={ofProperty.previewProperties}
                     size={"regular"}
                     onClick={onEntryClick}

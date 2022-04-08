@@ -50,7 +50,7 @@ export const useCollectionEditorController = (): CollectionEditorController => {
                         {...newCollectionDialog}
                         handleClose={(collection) => {
                             if (collection) {
-                                navigate(navigationContext.buildUrlCollectionPath(collection.path));
+                                navigate(navigationContext.buildUrlCollectionPath(collection.alias ?? collection.path));
                             }
                             closeNewCollectionDialog();
                         }}/>

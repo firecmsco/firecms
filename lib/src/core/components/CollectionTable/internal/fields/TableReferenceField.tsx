@@ -79,7 +79,7 @@ export function TableReferenceField(props: {
                 size={getPreviewSizeFrom(size)}
                 reference={internalValue as EntityReference}
                 onHover={onHover}
-                path={path}
+                disabled={!path}
                 previewProperties={previewProperties}
             />;
         else
@@ -98,7 +98,7 @@ export function TableReferenceField(props: {
                                 size={"tiny"}
                                 reference={reference}
                                 onHover={onHover}
-                                path={path}
+                                disabled={!path}
                                 previewProperties={previewProperties}
                             />
                         </Box>;

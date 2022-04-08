@@ -76,9 +76,9 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
     const collectionRoutes = sortedCollections
         .map((collection) => {
-                const urlPath = navigation.buildUrlCollectionPath(collection.path);
+                const urlPath = navigation.buildUrlCollectionPath(collection.alias ?? collection.path);
                 return <Route path={urlPath + "/*"}
-                              key={`navigation_${collection.path}`}
+                              key={`navigation_${collection.alias ?? collection.path}`}
                               element={
                                   <BreadcrumbUpdater
                                       path={urlPath}

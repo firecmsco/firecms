@@ -12,7 +12,8 @@ import {
 } from "../../models";
 import {
     getCollectionByPath,
-    removeInitialAndTrailingSlashes
+    removeInitialAndTrailingSlashes,
+    resolveCollectionAliases
 } from "../util/navigation_utils";
 import { mergeDeep } from "../util/objects";
 import { ConfigurationPersistence } from "../../models/config_persistence";
@@ -109,7 +110,10 @@ export function useBuildNavigationContext<UserType>({
         path: string,
         entityId?: string,
         includeUserOverride = false
-    ): EntityCollection<M> => {
+    ): EntityCollection<M> | undefined => {
+
+        if (!collections)
+            return undefined;
 
         const baseCollection = getCollectionByPath<M>(removeInitialAndTrailingSlashes(path), collections);
 
@@ -117,7 +121,7 @@ export function useBuildNavigationContext<UserType>({
 
         const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride) : undefined;
 
-        let result: Partial<EntityCollection> = {};
+        let result: Partial<EntityCollection> | undefined;
 
         const resolvedProps: Partial<EntityCollection> | undefined = collectionOverrideHandler && collectionOverrideHandler({
             entityId,
@@ -133,13 +137,13 @@ export function useBuildNavigationContext<UserType>({
             const permissions = overriddenCollection.permissions;
             result = {
                 ...result,
-                subcollections: result.subcollections ?? subcollections,
-                callbacks: result.callbacks ?? callbacks,
-                permissions: result.permissions ?? permissions
+                subcollections: result?.subcollections ?? subcollections,
+                callbacks: result?.callbacks ?? callbacks,
+                permissions: result?.permissions ?? permissions
             };
         }
 
-        return { ...overriddenCollection, ...(result as EntityCollection<M>) };
+        return { ...overriddenCollection, ...result } as EntityCollection<M>;
 
     }, [
         basePath,
@@ -177,14 +181,20 @@ export function useBuildNavigationContext<UserType>({
         return userConfigPersistence.getCollectionConfig<M>(path);
     }, [userConfigPersistence]);
 
-    const computeTopNavigation = (collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {
+    const resolveAliasesFrom = useCallback((path: string): string => {
+        if (!collections)
+            throw Error("Collections have not been initialised yet");
+        return resolveCollectionAliases(path, collections);
+    }, [baseCollectionPath, collections]);
+
+    const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {
 
         const navigationEntries: TopNavigationEntry[] = [
             ...(collections ?? []).map(collection => ({
-                url: buildUrlCollectionPath(collection.path),
+                url: buildUrlCollectionPath(collection.alias ?? collection.path),
                 type: "collection",
                 name: collection.name,
-                path: collection.path,
+                path: collection.alias ?? collection.path,
                 deletable: canDeleteCollection(collection, authController, fullPathToCollectionSegments(collection.path)),
                 editable: canEditCollection(collection, authController, fullPathToCollectionSegments(collection.path)),
                 description: collection.description?.trim(),
@@ -208,7 +218,7 @@ export function useBuildNavigationContext<UserType>({
         ).values());
 
         return { navigationEntries, groups };
-    };
+    }, [authController, buildCMSUrlPath, buildUrlCollectionPath]);
 
     return {
         collections,
@@ -225,6 +235,7 @@ export function useBuildNavigationContext<UserType>({
         buildUrlCollectionPath,
         buildUrlEditCollectionPath,
         buildCMSUrlPath,
+        resolveAliasesFrom,
         topLevelNavigation
     };
 }

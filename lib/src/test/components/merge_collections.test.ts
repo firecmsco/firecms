@@ -36,6 +36,7 @@ export const baseProductCollection: EntityCollection = {
         price: priceBuilder
     }
 };
+
 export const persistedProductCollection: EntityCollection = {
     path: "product",
     name: "Product persisted",

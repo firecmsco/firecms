@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
 import { CollectionSize, Entity, EntityCollection } from "../../models";
 import { Box, Button, Dialog, Typography } from "@mui/material";
 
@@ -7,7 +6,7 @@ import { CollectionTable } from "./CollectionTable";
 import {
     CollectionRowActions
 } from "./CollectionTable/internal/CollectionRowActions";
-import { useDataSource } from "../../hooks";
+import { useDataSource, useNavigationContext } from "../../hooks";
 import { ErrorView } from "./ErrorView";
 import { CustomDialogActions } from "./CustomDialogActions";
 
@@ -79,9 +78,15 @@ export function ReferenceDialog(
         open,
         multiselect,
         collection,
-        path,
+        path: pathInput,
         selectedEntityIds
     }: ReferenceDialogProps) {
+
+
+    const navigationContext = useNavigationContext();
+
+    const path = navigationContext.resolveAliasesFrom(pathInput);
+    console.log("ReferenceDialog", path, pathInput, collection);
 
     const dataSource = useDataSource();
 

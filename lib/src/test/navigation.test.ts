@@ -1,10 +1,15 @@
-import { getCollectionByPath } from "../core/util/navigation_utils";
+import {
+    getCollectionByPath,
+    resolveCollectionAliases
+} from "../core/util/navigation_utils";
 import { siteConfig } from "./test_site_config";
-import { EntityCollection, Navigation } from "../models";
-import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";
+import {
+    getNavigationEntriesFromPathInternal
+} from "../core/util/navigation_from_path";
+import { EntityCollection } from "../models";
 
 
-const collections = (siteConfig.navigation as Navigation).collections as EntityCollection[];
+const collections = siteConfig.collections as EntityCollection[];
 
 it("collection view matches ok", () => {
 
@@ -76,4 +81,19 @@ it("build entity collection array 2", () => {
     });
     console.log(navigationEntries);
     expect(navigationEntries.length).toEqual(4);
+});
+
+it("Test aliases", () => {
+
+    const resolvedPath = resolveCollectionAliases("u", collections);
+    expect(resolvedPath).toEqual("users");
+
+    const resolvedPath2 = resolveCollectionAliases("u/123/products", collections);
+    expect(resolvedPath2).toEqual("users/123/products");
+
+    const resolvedPath3 = resolveCollectionAliases("u/123/p", collections);
+    expect(resolvedPath3).toEqual("users/123/products");
+
+    const resolvedPath4 = resolveCollectionAliases("users/123/p", collections);
+    expect(resolvedPath4).toEqual("users/123/products");
 });
