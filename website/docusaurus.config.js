@@ -156,7 +156,7 @@ module.exports = {
                     lastVersion: "1.0.0",
                     versions: {
                         current: {
-                            label: '2.0.0',
+                            label: '2.0.0-alpha',
                             path: '2.0.0',
                             banner: "unreleased"
                         },
