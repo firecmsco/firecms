@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import * as THREE from "three";
 // import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer.js";
 // import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
-import { DepthOfFieldEffect, EffectComposer, RenderPass } from "postprocessing";
+import { EffectComposer, RenderPass } from "postprocessing";
 
 
 // @ts-ignore
@@ -14,6 +14,7 @@ const CAMERA_FACTOR = 180;
 const TIME_DILATION = 1 / 3;
 const BRIGHT = true;
 const DISPLACEMENT_RADIO = 1.0 / 9.0;
+const DISPLACEMENT_AREA = 1.0;
 const SPHERE_RADIUS = 15;
 
 type SceneState = {
@@ -328,7 +329,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
     function buildSmallLayers(cyan: THREE.Color, yellow: THREE.Color, blue: THREE.Color, magenta: THREE.Color, red: THREE.Color) {
         const layers: any[] = [];
         layers.push({
-            is_active: 1,
+            is_active: 0,
             color: cyan,
             sin: new THREE.Vector3(1, 0, 0),
             cos: new THREE.Vector3(0, 0, 0),
@@ -386,7 +387,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         });
 
         layers.push({
-            is_active: 1,
+            is_active: 0,
             color: cyan,
             sin: new THREE.Vector3(1, 0, 0),
             cos: new THREE.Vector3(0, 0, 0),
@@ -416,7 +417,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         });
 
         layers.push({
-            is_active: 1,
+            is_active: 0,
             color: cyan,
             sin: new THREE.Vector3(0, 1, 0),
             cos: new THREE.Vector3(0, 0, 0),
@@ -448,7 +449,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         });
 
         layers.push({
-            is_active: 1,
+            is_active: 0,
             color: cyan,
             sin: new THREE.Vector3(0, 0, 1),
             cos: new THREE.Vector3(0, 0, 0),
@@ -478,7 +479,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         });
 
         layers.push({
-            is_active: 1,
+            is_active: 0,
             color: cyan,
             sin: new THREE.Vector3(0, 1, 0),
             cos: new THREE.Vector3(1, 0, 0),
@@ -489,18 +490,19 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         return layers;
     }
 
-    function buildMaterial(width: number, height: number, radius: number, displacement: number, layers:any[], spread:number) {
+    function buildMaterial(width: number, height: number, radius: number, displacementRatio: number,displacementArea: number, layers:any[], spread:number) {
 
         const uniforms = {
             u_time: { value: 0 },
             u_resolution: { value: new THREE.Vector2(width, height) },
             bright: { value: BRIGHT },
             u_sphere_radius: { value: radius },
-            u_displacement_ratio: { value: displacement },
+            u_displacement_ratio: { value: displacementRatio },
+            u_displacement_area: { value: displacementArea },
             u_base_color: { value: red },
             u_layers: { value: layers },
             u_layers_count: { value: layers.length },
-            u_spread: { value: spread }
+            u_color_spread: { value: spread }
         };
 
         const material = new THREE.ShaderMaterial({
@@ -513,9 +515,9 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         return material;
     }
 
-    function createShape(width: number, height: number, radius:number, displacement: number, positionX, positionY, spread) {
+    function createShape(width: number, height: number, radius:number, displacementRatio: number,displacementArea: number, positionX, positionY, spread) {
         const layers = buildSmallLayers(cyan, yellow, blue, magenta, red);
-        const material = buildMaterial(width, height, radius, displacement, layers, spread);
+        const material = buildMaterial(width, height, radius, displacementRatio, displacementArea, layers, spread);
         const geometry = buildNightGeometry(radius, radius * 2);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.initialPositionY = positionY;
@@ -544,7 +546,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
 
         const layers = buildMainLayers(cyan, yellow, blue, magenta, red);
-        const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, layers, 6.0);
+        const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, DISPLACEMENT_AREA, layers, 6.0);
 
         const geometry = buildNightGeometry(SPHERE_RADIUS, 18);
         const mesh = new THREE.Mesh(geometry, material);
@@ -553,23 +555,23 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         scene.add(mesh);
         meshes.push(mesh);
 
-        const mesh2 = createShape(width, height, 2, 1/2, 3, -10, 1.0);
+        const mesh2 = createShape(width, height, 2, 1/1.5, 1/3, 3, -10, 1.0);
         scene.add(mesh2);
         meshes.push(mesh2);
 
-        const mesh3 = createShape(width, height, 1, 1/2.5, -2, -15, 1.0);
+        const mesh3 = createShape(width, height, 1, 1/2,1/2.5, -2, -15, 1.0);
         scene.add(mesh3);
         meshes.push(mesh3);
 
-        const mesh4 = createShape(width, height, 1.5, 1/2, -1, -25, 1.0);
+        const mesh4 = createShape(width, height, 1.5, 1/1.5,1/2, -1, -25, 1.0);
         scene.add(mesh4);
         meshes.push(mesh4);
 
-        const mesh5 = createShape(width, height, 1, 1/2.5, -6.5, -35, 1.0);
+        const mesh5 = createShape(width, height, 1, 1/1.5, 1/2.5, -6.5, -35, 1.0);
         scene.add(mesh5);
         meshes.push(mesh5);
 
-        const mesh6 = createShape(width, height, 2.5, 1/2.5, 6.5, -45, 1.0);
+        const mesh6 = createShape(width, height, 2.5, 1/1.5, 1 / 2.5, 6.5, -45, 1.0);
         scene.add(mesh6);
         meshes.push(mesh6);
 
@@ -585,11 +587,13 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         const composer = new EffectComposer(renderer);
         const renderPass = new RenderPass(scene, camera);
         composer.addPass(renderPass);
-        const depthOfFieldEffect = new DepthOfFieldEffect(camera, {
-            focusDistance: .0,
-            focalLength: 1,
-            bokehScale: 6
-        });
+        // @ts-ignore
+        // const depthOfFieldEffect = new DepthOfFieldEffect(camera, {
+        //     focusDistance: 0.00,
+        //     focalLength: 0.558,
+        //     bokehScale: 3.0,
+        //     // height: 1080,
+        // });
         // composer.addPass(new EffectPass(camera, depthOfFieldEffect));
 
         return {
@@ -702,7 +706,8 @@ function buildVertexShader() {
     uniform vec3 u_base_color;
     uniform float u_sphere_radius;
     uniform float u_displacement_ratio;
-    uniform float u_spread;
+    uniform float u_displacement_area;
+    uniform float u_color_spread;
 
     varying vec2 vUv;
     varying vec3 vNormal;
@@ -914,7 +919,7 @@ function buildVertexShader() {
 
 
         for (int i = 0; i < u_layers_count; i++) {
-            // if(u_layers[i].is_active == 1.0){
+            if(u_layers[i].is_active == 1.0){
                 vec3 nColor = u_layers[i].color;
                 vec3 constant = u_layers[i].constant;
 
@@ -953,9 +958,9 @@ function buildVertexShader() {
                         smoothstep( 0.0, .9,
                             1.05 -
                             distance(st, normalize(vec3(x, y, z) ) ) )
-                    , u_spread);
+                    , u_color_spread);
                 color = blendNormal(color, nColor, amount);
-            // }
+            }
         }
         return color;
     }
@@ -969,7 +974,7 @@ function buildVertexShader() {
 
         vNormal = normal;
         v_position = position;
-        v_displacement_amount = cnoise(s * normal + r) * u_displacement_ratio + 1.0;
+        v_displacement_amount = cnoise(s * normal * u_displacement_area + r) * u_displacement_ratio+ 1.0;
 
         // float s2 = 1.35;
         // float r2 = u_time * 0.15;
@@ -1004,7 +1009,7 @@ vec3 czm_saturation(vec3 rgb, float adjustment) {
 
 void main(){
     vec3 color = v_color;
-    color.gb -=  (sin(v_position.z + v_displacement_amount) + sin(u_time)) * 0.05;
+    color.gb -=  (sin(v_position.z + v_displacement_amount) + sin(u_time)) * 0.1;
     color = czm_saturation(color, 1.2);
     gl_FragColor = vec4(color,1.0);
 }
