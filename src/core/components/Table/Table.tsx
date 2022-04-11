@@ -221,7 +221,7 @@ export function Table<T>({
                              justifyContent: "center",
                              alignItems: "center"
                          }}>
-                        Id
+                        ID
                     </div>
                     : <TableHeader
                         onFilterUpdate={onInternalFilterUpdate}

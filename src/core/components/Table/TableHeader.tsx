@@ -148,9 +148,9 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                             }}
                         >
                             {!sort && <ArrowDownwardIcon fontSize={"small"}/>}
-                            {sort === "desc" &&
-                            <ArrowUpwardIcon fontSize={"small"}/>}
                             {sort === "asc" &&
+                            <ArrowUpwardIcon fontSize={"small"}/>}
+                            {sort === "desc" &&
                             <ArrowDownwardIcon fontSize={"small"}/>}
                         </IconButton>
                     </Badge>
