@@ -120,8 +120,8 @@ export function Table<T>({
 
         const isDesc = sortByProperty === key && currentSort === "desc";
         const isAsc = sortByProperty === key && currentSort === "asc";
-        const newSort = isDesc ? "asc" : (isAsc ? undefined : "desc");
-        const newSortProperty: string | undefined = isAsc ? undefined : key;
+        const newSort = isAsc ? "desc" : (isDesc ? undefined : "asc");
+        const newSortProperty: string | undefined = isDesc ? undefined : key;
 
         const newSortBy: [string, "asc" | "desc"] | undefined = newSort && newSortProperty ? [newSortProperty, newSort] : undefined;
         if (filter) {

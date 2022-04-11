@@ -147,7 +147,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                                 onColumnSort(column.key as Extract<keyof M, string>);
                             }}
                         >
-                            {!sort && <ArrowDownwardIcon fontSize={"small"}/>}
+                            {!sort && <ArrowUpwardIcon fontSize={"small"}/>}
                             {sort === "asc" &&
                             <ArrowUpwardIcon fontSize={"small"}/>}
                             {sort === "desc" &&
