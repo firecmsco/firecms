@@ -33,9 +33,9 @@ module.exports = {
     themeConfig: {
         image: 'img/firecms_logo.svg',
         announcementBar: {
-            id: 'new_version_rc.4',
+            id: 'new_version_rc.5',
             content:
-                'Version 1.0.0-rc.4 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/quickstart">quickstart</a> to get started!',
+                'Version 1.0.0-rc.5 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/quickstart">quickstart</a> to get started!',
             backgroundColor: '#FF5B79',
             textColor: 'black',
             isCloseable: true,
