@@ -34,10 +34,10 @@ export function ArrayContainer<T>({
 
     const internalIdsMap: Record<string, number> = useMemo(() =>
             hasValue
-                ? value.map(v => {
+                ? value.map((v, index) => {
                     if (!v) return {};
                     return ({
-                        [getHashValue(v)]: getRandomId()
+                        [getHashValue(v) + index]: getRandomId()
                     });
                 }).reduce((a, b) => ({ ...a, ...b }), {})
                 : {},
@@ -51,8 +51,8 @@ export function ArrayContainer<T>({
 
     useEffect(() => {
         if (hasValue && value && value.length !== internalIds.length) {
-            const newInternalIds = value.map(v => {
-                const hashValue = getHashValue(v);
+            const newInternalIds = value.map((v, index) => {
+                const hashValue = getHashValue(v) + index;
                 if (hashValue in internalIdsRef.current) {
                     return internalIdsRef.current[hashValue];
                 } else {
@@ -63,7 +63,7 @@ export function ArrayContainer<T>({
             });
             setInternalIds(newInternalIds);
         }
-    }, [hasValue, value]);
+    }, [hasValue, internalIds.length, value]);
 
 
     return <FieldArray
