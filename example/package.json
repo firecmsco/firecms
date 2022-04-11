@@ -21,7 +21,7 @@
     "scripts": {
         "dev": "vite",
         "build:vite": "vite build && tsc",
-        "preview": "vite preview",
+        "preview": "vite build && vite preview",
         "start": "react-scripts start",
         "build": "react-scripts build",
         "test": "react-scripts test",
