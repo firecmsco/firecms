@@ -16,14 +16,14 @@ import {
     Entity,
     EntityCollection,
     ExportConfig,
-    ResolvedEntityCollection
+    ResolvedEntityCollection, User
 } from "../../../../models";
 import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { getResolvedCollection } from "../../../collections";
 
-interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
+interface ExportButtonProps<M extends { [Key: string]: any }, UserType extends User> {
     collection: EntityCollection<M>;
     path: string;
     exportConfig?: ExportConfig<UserType>;
@@ -31,7 +31,7 @@ interface ExportButtonProps<M extends { [Key: string]: any }, UserType> {
 
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
-export function ExportButton<M extends { [Key: string]: any }, UserType>({
+export function ExportButton<M extends { [Key: string]: any }, UserType extends User>({
                                                                              collection: inputCollection,
                                                                              path,
                                                                              exportConfig
@@ -39,7 +39,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
 ) {
 
     const dataSource = useDataSource();
-    const context = useFireCMSContext();
+    const context = useFireCMSContext<UserType>();
 
     const collection:ResolvedEntityCollection<M> = React.useMemo(() => getResolvedCollection({
         collection: inputCollection,
@@ -72,7 +72,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType>({
                                     additionalData: Record<string, any>[] | undefined,
                                     collection: ResolvedEntityCollection<M>,
                                     path: string,
-                                    exportConfig: ExportConfig | undefined) => {
+                                    exportConfig: ExportConfig<any> | undefined) => {
         if (!data)
             throw Error("Trying to perform export without loading data first");
 

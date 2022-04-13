@@ -18,7 +18,12 @@ fly, based on other values.
 Example of field that gets enabled or disabled based on other values:
 
 ```tsx
-import { buildCollection, EntityReference, EntitySchema } from "@camberi/firecms";
+import {
+    buildCollection,
+    EntityCollection,
+    EntityReference,
+    EntitySchema
+} from "@camberi/firecms";
 
 type Product = {
     name: string;
@@ -32,7 +37,7 @@ type Product = {
     }
 }
 
-export const productSchema: EntitySchema = buildCollection<Partial<Product>>({
+export const productCollection: EntityCollection = buildCollection<Partial<Product>>({
     name: "Product",
     properties: {
         available: {

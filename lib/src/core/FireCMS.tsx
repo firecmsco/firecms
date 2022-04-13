@@ -7,13 +7,16 @@ import * as locales from "date-fns/locale";
 
 import {
     AuthDelegate,
-    Authenticator, CMSView,
+    Authenticator,
+    CMSView,
     CollectionOverrideHandler,
-    DataSource, EntityCollection,
+    DataSource,
+    EntityCollection,
     EntityLinkBuilder,
     FireCMSContext,
     Locale,
     StorageSource,
+    User,
     UserConfigurationPersistence
 } from "../models";
 import { SnackbarContext, SnackbarProvider } from "./contexts/SnackbarContext";
@@ -37,7 +40,7 @@ const DEFAULT_COLLECTION_PATH = "/c";
 /**
  * @category Core
  */
-export interface FireCMSProps<UserType> {
+export interface FireCMSProps<UserType extends User> {
 
     /**
      * Use this function to return the components you want to render under
@@ -74,6 +77,12 @@ export interface FireCMSProps<UserType> {
      * navigation
      */
     views?: CMSView[];
+
+    /**
+     * Should the logged user be able to create new collections
+     * @param props
+     */
+    canCreateCollections?: (props: { user: User | null, group?: string }) => boolean;
 
     /**
      * Do the users need to log in to access the CMS.
@@ -120,7 +129,7 @@ export interface FireCMSProps<UserType> {
      * Delegate for implementing your auth operations.
      * @see useFirebaseAuthDelegate
      */
-    authDelegate: AuthDelegate;
+    authDelegate: AuthDelegate<UserType>;
 
     /**
      * Optional link builder you can add to generate a button in your entity forms.
@@ -158,7 +167,7 @@ export interface FireCMSProps<UserType> {
  * @constructor
  * @category Core
  */
-export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
+export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     const {
         children,
@@ -175,7 +184,8 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         dataSource,
         basePath,
         baseCollectionPath,
-        configPersistence
+        configPersistence,
+        canCreateCollections
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -199,7 +209,8 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
         views,
         collectionOverrideHandler,
         configPersistence,
-        userConfigPersistence
+        userConfigPersistence,
+        canCreateCollections
     });
 
     const sideDialogsController = useBuildSideDialogsController();
@@ -234,7 +245,8 @@ export function FireCMS<UserType>(props: FireCMSProps<UserType>) {
                             storageSource,
                             snackbarController,
                             configPersistence,
-                            userConfigPersistence
+                            userConfigPersistence,
+
                         };
 
                         return (

@@ -85,8 +85,9 @@ export function Drawer({
             </Typography>
         </ListItem>, [closeDrawer]);
 
-    const buildGroupHeader = useCallback((group?: string) =>
-        <Box pt={2} pl={2} pr={2} pb={0.5} sx={{
+    const buildGroupHeader = useCallback((group?: string) => {
+        const canCreateCollections = navigationContext.canCreateCollections({ group });
+        return <Box pt={2} pl={2} pr={2} pb={0.5} sx={{
             display: "flex",
             flexDirection: "row",
             alignItems: "center"
@@ -97,7 +98,7 @@ export function Drawer({
                         sx={{ flexGrow: 1 }}>
                 {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
             </Typography>
-            <Tooltip
+            {canCreateCollections && <Tooltip
                 title={group ? `Create new collection in ${group}` : "Create new collection"}>
                 <Button
                     size={"small"}
@@ -107,8 +108,9 @@ export function Drawer({
                     }}>
                     <AddIcon fontSize={"small"}/>
                 </Button>
-            </Tooltip>
-        </Box>, [closeDrawer, navigationContext]);
+            </Tooltip>}
+        </Box>;
+    }, [closeDrawer, navigationContext]);
 
     let logoComponent;
     if (logo) {

@@ -4,7 +4,7 @@ import {
     ExportConfig,
     ResolvedEntityCollection,
     ResolvedProperties,
-    ResolvedProperty
+    ResolvedProperty, User
 } from "../../models";
 import { getValueInPath } from "./objects";
 
@@ -44,7 +44,7 @@ export function getExportableData(data: any[],
 }
 
 
-function getExportHeaders<M extends { [Key: string]: any }, UserType>(properties: ResolvedProperties<M>,
+function getExportHeaders<M extends { [Key: string]: any }, UserType extends User>(properties: ResolvedProperties<M>,
                                                                       path: string,
                                                                       exportConfig?: ExportConfig<UserType>): Header[] {
     const headers = [

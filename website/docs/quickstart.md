@@ -102,7 +102,7 @@ type Product = {
     expires_on: Date
 }
 
-const productSchema = buildCollection<Product>({
+const productCollection = buildCollection<Product>({
     name: "Product",
     properties: {
         name: {
@@ -262,7 +262,7 @@ export default function App() {
             collections: [
                 buildCollection({
                     path: "products",
-                    collection: productSchema,
+                    collection: productCollection,
                     name: "Products",
                     permissions: ({ authController }) => ({
                         edit: true,

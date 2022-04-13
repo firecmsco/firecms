@@ -1,6 +1,7 @@
 import { Entity, EntityStatus, EntityValues, } from "./entities";
 import { FireCMSContext } from "./firecms_context";
 import { ResolvedEntityCollection } from "./resolved_entities";
+import { User } from "./user";
 
 /**
  * This interface defines all the callbacks that can be used when an entity
@@ -8,20 +9,20 @@ import { ResolvedEntityCollection } from "./resolved_entities";
  * Useful for adding your own logic or blocking the execution of the operation.
  * @category Models
  */
-export interface EntityCallbacks<M extends { [Key: string]: any } = any> {
+export interface EntityCallbacks<M extends { [Key: string]: any } = any, UserType extends User = User> {
 
     /**
      * Callback used when save is successful
      * @param entitySaveProps
      */
-    onSaveSuccess?(entitySaveProps: EntityOnSaveProps<M>)
+    onSaveSuccess?(entitySaveProps: EntityOnSaveProps<M, UserType>)
         : Promise<void> | void;
 
     /**
      * Callback used when saving fails
      * @param entitySaveProps
      */
-    onSaveFailure?(entitySaveProps: EntityOnSaveProps<M>)
+    onSaveFailure?(entitySaveProps: EntityOnSaveProps<M, UserType>)
         : Promise<void> | void;
 
     /**
@@ -30,7 +31,7 @@ export interface EntityCallbacks<M extends { [Key: string]: any } = any> {
      * error snackbar gets displayed.
      * @param entitySaveProps
      */
-    onPreSave?(entitySaveProps: EntityOnSaveProps<M>)
+    onPreSave?(entitySaveProps: EntityOnSaveProps<M, UserType>)
         : Promise<Partial<EntityValues<M>>> | Partial<EntityValues<M>>;
 
     /**
@@ -40,22 +41,21 @@ export interface EntityCallbacks<M extends { [Key: string]: any } = any> {
      *
      * @param entityDeleteProps
      */
-    onPreDelete?(entityDeleteProps: EntityOnDeleteProps<M>): void;
+    onPreDelete?(entityDeleteProps: EntityOnDeleteProps<M, UserType>): void;
 
     /**
      * Callback used after the entity is deleted.
      *
      * @param entityDeleteProps
      */
-    onDelete?(entityDeleteProps: EntityOnDeleteProps<M>): void;
+    onDelete?(entityDeleteProps: EntityOnDeleteProps<M, UserType>): void;
 }
-
 
 /**
  * Parameters passed to hooks when an entity is saved
  * @category Models
  */
-export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
+export interface EntityOnSaveProps<M extends { [Key: string]: any }, UserType extends User> {
 
     /**
      * Resolved collection of the entity
@@ -90,14 +90,14 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any }> {
     /**
      * Context of the app status
      */
-    context: FireCMSContext;
+    context: FireCMSContext<UserType>;
 }
 
 /**
  * Parameters passed to hooks when an entity is deleted
  * @category Models
  */
-export interface EntityOnDeleteProps<M extends { [Key: string]: any }> {
+export interface EntityOnDeleteProps<M extends { [Key: string]: any }, UserType extends User> {
 
     /**
      * collection of the entity being deleted

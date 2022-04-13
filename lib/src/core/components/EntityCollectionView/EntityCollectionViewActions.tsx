@@ -24,7 +24,7 @@ export type EntityCollectionViewActionsProps<M> = {
     collection: EntityCollection<M>;
     path: string;
     selectionEnabled: boolean;
-    exportable: boolean | ExportConfig<M>;
+    exportable: boolean | ExportConfig;
     onNewClick: () => void;
     onMultipleDeleteClick: () => void;
     selectedEntities: Entity<M>[];

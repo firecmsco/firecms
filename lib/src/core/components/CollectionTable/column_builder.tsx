@@ -6,7 +6,8 @@ import {
     EntityCollection,
     FireCMSContext,
     ResolvedEntityCollection,
-    ResolvedProperty
+    ResolvedProperty,
+    User
 } from "../../../models";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { TableCell } from "../Table/TableCell";
@@ -26,12 +27,9 @@ import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../Table";
 import { getIconForProperty } from "../../util/property_utils";
 import { resolveEnumValues } from "../../util/entities";
-import {
-    getResolvedCollection,
-    resolveProperty
-} from "../../collections";
+import { getResolvedCollection, resolveProperty } from "../../collections";
 
-export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType> = {
+export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType extends User> = {
 
     /**
      * Absolute collection path
@@ -123,16 +121,16 @@ type SelectedCellProps<M> =
         entity: Entity<M>
     };
 
-export function useBuildColumnsFromCollection<M, AdditionalKey extends string, UserType>({
-                                                                                         collection: inputCollection,
-                                                                                         additionalColumns,
-                                                                                         displayedProperties,
-                                                                                         path,
-                                                                                         inlineEditing,
-                                                                                         size,
-                                                                                         onCellValueChange,
-                                                                                         uniqueFieldValidator
-                                                                                     }: ColumnsFromCollectionProps<M, AdditionalKey, UserType>
+export function useBuildColumnsFromCollection<M, AdditionalKey extends string, UserType extends User>({
+                                                                                                          collection: inputCollection,
+                                                                                                          additionalColumns,
+                                                                                                          displayedProperties,
+                                                                                                          path,
+                                                                                                          inlineEditing,
+                                                                                                          size,
+                                                                                                          onCellValueChange,
+                                                                                                          uniqueFieldValidator
+                                                                                                      }: ColumnsFromCollectionProps<M, AdditionalKey, UserType>
 ): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
 
     const context: FireCMSContext<UserType> = useFireCMSContext();

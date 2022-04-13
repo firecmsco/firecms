@@ -5,7 +5,7 @@ import {
     EntityCallbacks,
     EntityOnDeleteProps,
     FireCMSContext,
-    ResolvedEntityCollection
+    ResolvedEntityCollection, User
 } from "../../models";
 
 /**
@@ -42,7 +42,7 @@ export type DeleteEntityWithCallbacksProps<M> =
  * @param context
  * @category Hooks and utilities
  */
-export async function deleteEntityWithCallbacks<M, UserType>({
+export async function deleteEntityWithCallbacks<M, UserType extends User>({
                                                                  dataSource,
                                                                  entity,
                                                                  collection,
@@ -61,7 +61,7 @@ export async function deleteEntityWithCallbacks<M, UserType>({
 
     console.debug("Deleting entity", entity.path, entity.id);
 
-    const entityDeleteProps: EntityOnDeleteProps<M> = {
+    const entityDeleteProps: EntityOnDeleteProps<M, UserType> = {
         entity,
         collection,
         entityId: entity.id,

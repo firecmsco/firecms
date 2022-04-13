@@ -42,9 +42,12 @@ export type User = {
      * Additional metadata around user creation and sign-in times.
      */
     readonly metadata: any;
+    /**
+     *
+     */
+    readonly roles?: string[];
 
-} & any; // we allow for any other property so Users can be extended to user needs
-
+};
 
 /**
  * Implement this function to allow access to specific users.

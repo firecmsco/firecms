@@ -1,4 +1,5 @@
 import { EntityCollection } from "./collections";
+import { User } from "./user";
 
 /**
  * Context that includes the resolved navigation and utility methods and
@@ -20,6 +21,12 @@ export type NavigationContext = {
      * navigation
      */
     views?: CMSView[];
+
+    /**
+     * Should the logged user be able to create new collections
+     * @param props
+     */
+    canCreateCollections: (props: { group?: string }) => boolean;
 
     /**
      * Configuration for the views that should be displayed at the top

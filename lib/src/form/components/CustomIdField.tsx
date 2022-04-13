@@ -87,7 +87,7 @@ export function CustomIdField<M, UserType>({
         })
     });
 
-    const appConfig: FireCMSContext<UserType> | undefined = useFireCMSContext();
+    const appConfig: FireCMSContext | undefined = useFireCMSContext();
     const inputProps = {
         sx: {
             minHeight: "64px"

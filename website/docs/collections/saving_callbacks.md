@@ -33,7 +33,7 @@ type Product = {
     uppercase_name: string;
 }
 
-const productSchema = buildCollection<Product>({
+const productCollection = buildCollection<Product>({
 
     name: "Product",
     properties: {
@@ -91,7 +91,7 @@ const productCallbacks = buildEntityCallbacks({
 
 #### EntityOnSaveProps
 
-* `schema`: EntitySchema Resolved schema of the entity
+* `collection`: EntityCollection Resolved collection of the entity
 
 * `path`: string Full path where this entity is being saved
 
@@ -105,7 +105,7 @@ const productCallbacks = buildEntityCallbacks({
 
 #### EntityOnDeleteProps
 
-* `schema`: EntitySchema Resolved schema of the entity
+* `collection`: EntityCollection Resolved collection of the entity
 
 * `path`: string Full path where this entity is being saved
 

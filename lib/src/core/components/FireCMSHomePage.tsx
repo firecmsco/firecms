@@ -124,39 +124,43 @@ export function FireCMSHomePage() {
 
     return (
         <Container>
-            {allGroups.map((group, index) => (
-                <Box mt={6} mb={6} key={`group_${index}`}>
+            {allGroups.map((group, index) => {
+                const canCreateCollections = navigationContext.canCreateCollections({ group });
 
-                    <Typography color={"textSecondary"}
-                                className={"weight-500"}>
-                        {group?.toUpperCase() ?? "Ungrouped views".toUpperCase()}
-                    </Typography>
+                return (
+                    <Box mt={6} mb={6} key={`group_${index}`}>
 
-                    <Divider/>
+                        <Typography color={"textSecondary"}
+                                    className={"weight-500"}>
+                            {group?.toUpperCase() ?? "Ungrouped views".toUpperCase()}
+                        </Typography>
 
-                    <Box mt={2}>
-                        <Grid container spacing={2}>
-                            {navigationEntries
-                                .filter((entry) => entry.group === group || (!entry.group && group === undefined)) // so we don't miss empty groups
-                                .map((entry) =>
-                                    <Grid item xs={12}
-                                          sm={6}
-                                          md={4}
-                                          key={`nav_${entry.group}_${entry.name}`}>
-                                        <NavigationCard entry={entry}
-                                                        onEdit={configurationPersistenceEnabled && entry.editable
-                                                            ? onEditCollectionClicked
-                                                            : undefined}
-                                                        onDelete={configurationPersistenceEnabled && entry.deletable
-                                                            ? onDeleteCollectionClicked
-                                                            : undefined}/>
-                                    </Grid>)
-                            }
-                            {buildAddCollectionNavigationCard(group)}
-                        </Grid>
+                        <Divider/>
+
+                        <Box mt={2}>
+                            <Grid container spacing={2}>
+                                {navigationEntries
+                                    .filter((entry) => entry.group === group || (!entry.group && group === undefined)) // so we don't miss empty groups
+                                    .map((entry) =>
+                                        <Grid item xs={12}
+                                              sm={6}
+                                              md={4}
+                                              key={`nav_${entry.group}_${entry.name}`}>
+                                            <NavigationCard entry={entry}
+                                                            onEdit={configurationPersistenceEnabled && entry.editable
+                                                                ? onEditCollectionClicked
+                                                                : undefined}
+                                                            onDelete={configurationPersistenceEnabled && entry.deletable
+                                                                ? onDeleteCollectionClicked
+                                                                : undefined}/>
+                                        </Grid>)
+                                }
+                                {canCreateCollections && buildAddCollectionNavigationCard(group)}
+                            </Grid>
+                        </Box>
                     </Box>
-                </Box>
-            ))}
+                );
+            })}
 
             <DeleteConfirmationDialog
                 open={Boolean(collectionToBeDeleted)}

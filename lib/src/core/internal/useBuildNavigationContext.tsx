@@ -8,6 +8,7 @@ import {
     NavigationContext,
     TopNavigationEntry,
     TopNavigationResult,
+    User,
     UserConfigurationPersistence
 } from "../../models";
 import {
@@ -25,7 +26,7 @@ import {
 } from "../util/permissions";
 import { fullPathToCollectionSegments } from "../util/paths";
 
-type BuildNavigationContextProps<UserType> = {
+type BuildNavigationContextProps<UserType extends User> = {
     basePath: string,
     baseCollectionPath: string,
     authController: AuthController<UserType>;
@@ -34,40 +35,20 @@ type BuildNavigationContextProps<UserType> = {
     collectionOverrideHandler: CollectionOverrideHandler | undefined;
     configPersistence?: ConfigurationPersistence;
     userConfigPersistence?: UserConfigurationPersistence;
+    canCreateCollections?: (props: { user: UserType | null, group?: string }) => boolean;
 };
 
-function joinCollections(fetchedCollections: EntityCollection[], baseCollections: EntityCollection[] | undefined) {
-    const resolvedFetchedCollections: EntityCollection[] = fetchedCollections.map(c => ({
-        ...c,
-        editable: true,
-        deletable: true
-    }));
-    const updatedCollections = (baseCollections ?? [])
-        .map((navigationCollection) => {
-            const storedCollection = resolvedFetchedCollections?.find((collection) => collection.path === navigationCollection.path);
-            if (!storedCollection) {
-                return { ...navigationCollection, deletable: false };
-            } else {
-                const mergedCollection = mergeCollections(navigationCollection, storedCollection);
-                return { ...mergedCollection, deletable: false };
-            }
-        });
-    const storedCollections = resolvedFetchedCollections
-        .filter((col) => !updatedCollections.map(c => c.path).includes(col.path));
-
-    return [...updatedCollections, ...storedCollections];
-}
-
-export function useBuildNavigationContext<UserType>({
-                                                        basePath,
-                                                        baseCollectionPath,
-                                                        authController,
-                                                        collections: baseCollections,
-                                                        views: baseViews,
-                                                        collectionOverrideHandler,
-                                                        configPersistence,
-                                                        userConfigPersistence
-                                                    }: BuildNavigationContextProps<UserType>): NavigationContext {
+export function useBuildNavigationContext<UserType extends User>({
+                                                                     basePath,
+                                                                     baseCollectionPath,
+                                                                     authController,
+                                                                     collections: baseCollections,
+                                                                     views: baseViews,
+                                                                     collectionOverrideHandler,
+                                                                     configPersistence,
+                                                                     userConfigPersistence,
+                                                                     canCreateCollections
+                                                                 }: BuildNavigationContextProps<UserType>): NavigationContext {
 
     const [collections, setCollections] = useState<EntityCollection[] | undefined>();
     const [views, setViews] = useState<CMSView[] | undefined>();
@@ -220,6 +201,14 @@ export function useBuildNavigationContext<UserType>({
         return { navigationEntries, groups };
     }, [authController, buildCMSUrlPath, buildUrlCollectionPath]);
 
+    const canCreateCollectionsInternal = useCallback(({ group }: { group?: string }) => {
+        if (!canCreateCollections) return true;
+        else return canCreateCollections({
+            user: authController.user,
+            group
+        });
+    }, [authController.user, canCreateCollections]);
+
     return {
         collections,
         views,
@@ -236,8 +225,31 @@ export function useBuildNavigationContext<UserType>({
         buildUrlEditCollectionPath,
         buildCMSUrlPath,
         resolveAliasesFrom,
-        topLevelNavigation
+        topLevelNavigation,
+        canCreateCollections: canCreateCollectionsInternal
     };
+}
+
+function joinCollections(fetchedCollections: EntityCollection[], baseCollections: EntityCollection[] | undefined) {
+    const resolvedFetchedCollections: EntityCollection[] = fetchedCollections.map(c => ({
+        ...c,
+        editable: true,
+        deletable: true
+    }));
+    const updatedCollections = (baseCollections ?? [])
+        .map((navigationCollection) => {
+            const storedCollection = resolvedFetchedCollections?.find((collection) => collection.path === navigationCollection.path);
+            if (!storedCollection) {
+                return { ...navigationCollection, deletable: false };
+            } else {
+                const mergedCollection = mergeCollections(navigationCollection, storedCollection);
+                return { ...mergedCollection, deletable: false };
+            }
+        });
+    const storedCollections = resolvedFetchedCollections
+        .filter((col) => !updatedCollections.map(c => c.path).includes(col.path));
+
+    return [...updatedCollections, ...storedCollections];
 }
 
 export function getSidePanelKey(path: string, entityId?: string) {

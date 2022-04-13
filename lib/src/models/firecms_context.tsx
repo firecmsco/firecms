@@ -54,6 +54,9 @@ export interface FireCMSContext<UserType extends User = User> {
      */
     sideEntityController: SideEntityController;
 
+    /**
+     * Controller used to open side dialogs
+     */
     sideDialogsController: SideDialogsController;
 
     /**
@@ -78,7 +81,7 @@ export interface FireCMSContext<UserType extends User = User> {
     configPersistence?: ConfigurationPersistence;
 
     /**
-     * Use this controller to access the configuration that is stored extenally,
+     * Use this controller to access the configuration that is stored externally,
      * and not defined in code
      */
     userConfigPersistence?: UserConfigurationPersistence;

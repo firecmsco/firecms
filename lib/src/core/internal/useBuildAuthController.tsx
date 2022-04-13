@@ -9,7 +9,7 @@ import {
     User
 } from "../../models";
 
-export function useBuildAuthController<UserType>({
+export function useBuildAuthController<UserType extends User>({
                                            authDelegate,
                                            authentication,
                                            dateTimeFormat,
@@ -17,7 +17,7 @@ export function useBuildAuthController<UserType>({
                                            dataSource,
                                            storageSource
                                        }: {
-    authDelegate: AuthDelegate,
+    authDelegate: AuthDelegate<UserType>,
     authentication?: boolean | Authenticator<UserType>,
     dateTimeFormat?: string;
     locale?: Locale;
@@ -25,7 +25,7 @@ export function useBuildAuthController<UserType>({
     storageSource: StorageSource;
 }): AuthController<UserType> {
 
-    const [user, setUser] = useState<User | null>(null);
+    const [user, setUser] = useState<UserType | null>(null);
     const [authLoading, setAuthLoading] = useState<boolean>(false);
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
     const [extra, setExtra] = useState<any>();

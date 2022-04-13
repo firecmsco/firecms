@@ -22,7 +22,7 @@ import {
     EntityCollection,
     EntityStatus,
     EntityValues,
-    ResolvedEntityCollection
+    ResolvedEntityCollection, User
 } from "../../models";
 import {
     CircularProgressCenter,
@@ -65,7 +65,7 @@ export interface EntityViewProps<M, UserType> {
 }
 
 export const EntityView = React.memo<EntityViewProps<any, any>>(
-    function EntityView<M extends { [Key: string]: any }, UserType>({
+    function EntityView<M extends { [Key: string]: any }, UserType extends User>({
                                                                         path,
                                                                         entityId,
                                                                         selectedSubPath,

@@ -4,7 +4,7 @@ import {
     EntityCallbacks,
     EntityValues,
     FireCMSContext,
-    SaveEntityProps
+    SaveEntityProps, User
 } from "../../models";
 import { useDataSource } from "./useDataSource";
 import { getResolvedCollection } from "../../core";
@@ -48,7 +48,7 @@ export type SaveEntityWithCallbacksProps<M> =
  * @see useDataSource
  * @category Hooks and utilities
  */
-export async function saveEntityWithCallbacks<M, UserType>({
+export async function saveEntityWithCallbacks<M, UserType extends User>({
                                                                collection,
                                                                path,
                                                                entityId,

@@ -1,4 +1,9 @@
-import { AuthController, EntityCollection, Permissions } from "../../models";
+import {
+    AuthController,
+    EntityCollection,
+    Permissions,
+    User
+} from "../../models";
 
 const DEFAULT_PERMISSIONS = {
     read: true,
@@ -9,7 +14,7 @@ const DEFAULT_PERMISSIONS = {
     deleteCollection: true
 };
 
-export function resolvePermissions<M extends { [Key: string]: any }, UserType>
+export function resolvePermissions<M extends { [Key: string]: any }, UserType extends User>
 (collection: EntityCollection<M>,
  authController: AuthController<UserType>,
  paths: string[]): Permissions {
@@ -31,38 +36,38 @@ export function resolvePermissions<M extends { [Key: string]: any }, UserType>
     throw Error("New type of permission added and not mapped");
 }
 
-export function canEditEntity<M extends { [Key: string]: any }, UserType>
+export function canEditEntity<M extends { [Key: string]: any }, UserType extends User>
 (
- collection: EntityCollection<M>,
- authController: AuthController<UserType>,
- paths: string[]): boolean {
+    collection: EntityCollection<M>,
+    authController: AuthController<UserType>,
+    paths: string[]): boolean {
     return resolvePermissions(collection, authController, paths).edit ?? DEFAULT_PERMISSIONS.edit;
 }
 
-export function canCreateEntity<M extends { [Key: string]: any }, UserType>
+export function canCreateEntity<M extends { [Key: string]: any }, UserType extends User>
 (
- collection: EntityCollection<M>,
- authController: AuthController<UserType>,
- paths: string[]): boolean {
+    collection: EntityCollection<M>,
+    authController: AuthController<UserType>,
+    paths: string[]): boolean {
     return resolvePermissions(collection, authController, paths).create ?? DEFAULT_PERMISSIONS.create;
 }
 
-export function canDeleteEntity<M extends { [Key: string]: any }, UserType>
+export function canDeleteEntity<M extends { [Key: string]: any }, UserType extends User>
 (
- collection: EntityCollection<M>,
- authController: AuthController<UserType>,
- paths: string[]): boolean {
+    collection: EntityCollection<M>,
+    authController: AuthController<UserType>,
+    paths: string[]): boolean {
     return resolvePermissions(collection, authController, paths).delete ?? DEFAULT_PERMISSIONS.delete;
 }
 
-export function canEditCollection<M extends { [Key: string]: any }, UserType>
+export function canEditCollection<M extends { [Key: string]: any }, UserType extends User>
 (collection: EntityCollection<M>,
  authController: AuthController<UserType>,
  paths: string[]): boolean {
     return (collection.editable && resolvePermissions(collection, authController, paths).editCollection) ?? DEFAULT_PERMISSIONS.editCollection;
 }
 
-export function canDeleteCollection<M extends { [Key: string]: any }, UserType>
+export function canDeleteCollection<M extends { [Key: string]: any }, UserType extends User>
 (collection: EntityCollection<M>,
  authController: AuthController<UserType>,
  paths: string[]): boolean {

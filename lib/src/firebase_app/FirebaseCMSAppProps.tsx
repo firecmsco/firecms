@@ -1,8 +1,11 @@
 import React from "react";
 import {
     Authenticator,
+    CMSView,
+    CollectionOverrideHandler,
+    EntityCollection,
     Locale,
-    CollectionOverrideHandler, EntityCollection, CMSView
+    User
 } from "../models";
 import { FirestoreTextSearchController } from "./models/text_search";
 import { User as FirebaseUser } from "firebase/auth";
@@ -47,6 +50,12 @@ export interface FirebaseCMSAppProps {
      * apply
      */
     authentication?: boolean | Authenticator<FirebaseUser>;
+
+    /**
+     * Should the logged user be able to create new collections
+     * @param props
+     */
+    canCreateCollections?: (props: { user: User | null, group?: string }) => boolean;
 
     /**
      * List of sign in options that will be displayed in the login

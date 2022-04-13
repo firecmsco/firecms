@@ -8,42 +8,40 @@ module.exports = {
         'quickstart',
         {
             type: 'category',
-            label: 'Entities',
-            items: [
-                'entities/entity_schemas',
-                {
-                    type: 'category',
-                    label: 'Properties',
-                    items: [
-                        'entities/properties/properties_intro',
-                        'entities/properties/string',
-                        'entities/properties/number',
-                        'entities/properties/boolean',
-                        'entities/properties/reference',
-                        'entities/properties/timestamp',
-                        'entities/properties/array',
-                        'entities/properties/map',
-                        'entities/properties/geopoint'
-                    ]
-                },
-                'entities/conditional_fields',
-                'entities/custom_fields',
-                'entities/custom_previews',
-                'entities/custom_schema_views',
-            ]
-        },
-        {
-            type: 'category',
             label: 'Collections',
             items: [
                 'collections/collections',
                 'collections/saving_callbacks',
                 'collections/permissions',
                 'collections/exporting_data',
+                {
+                    type: 'category',
+                    label: 'Entities',
+                    items: [
+                        {
+                            type: 'category',
+                            label: 'Properties',
+                            items: [
+                                'collections/config/properties/properties_intro',
+                                'collections/config/properties/string',
+                                'collections/config/properties/number',
+                                'collections/config/properties/boolean',
+                                'collections/config/properties/reference',
+                                'collections/config/properties/timestamp',
+                                'collections/config/properties/array',
+                                'collections/config/properties/map',
+                                'collections/config/properties/geopoint'
+                            ]
+                        },
+                        'collections/config/conditional_fields',
+                        'collections/config/custom_fields',
+                        'collections/config/custom_previews',
+                        'collections/config/custom_schema_views',
+                    ]
+                }
             ]
         },
         'navigation',
-        'custom_top_level_views',
         {
             type: 'category',
             label: 'Provided hooks',

@@ -4,28 +4,46 @@ title: Collections
 sidebar_label: Collections
 ---
 
-In FireCMS, **collections** represent groups of entities. Collections need to be
-associated with an entity schema. You can find collections
-at the **top level** of the navigation tree (the entries displayed in the home
-page and the navigation drawer), or as **subcollections**
+In FireCMS, **collections** represent groups of entities.
+
+You can find collections at the **top level** of the navigation tree (the
+entries displayed in the home page and the navigation drawer), or as **
+subcollections**
 
 Once you have defined at least one entity collection, you can include it in a
-**collection**. 
+**collection**.
 
-You can find collection views as the first level of navigation in
-the main menu, or as subcollections inside other collections, following the
-Firestore data schema.
+The `name` and `properties` you define for your entity collection, will be used
+to generate the fields in the spreadsheet like collection tables, and the fields
+in the generated forms.
+
+:::note FireCMS provides around 15 different fields (such as text fields,
+selects, and complex ones like reference or sortable array fields). If your use
+case is not covered by one of the provided fields, you can create your own
+[custom field](custom_fields.md).
+:::
+
+You can find collection views as the first level of navigation in the main menu,
+or as subcollections inside other collections.
 
 Check the full API reference
 in [Entity collections](../api/interfaces/entitycollection)
 
 * `name` The plural name of the view. E.g. 'products'.
 
-* `path` Relative Firestore path of this view to its parent. If this
-  view is in the root the path, it is equal to the absolute one. This path also
-  determines the URL in FireCMS.
+* `path` Relative Firestore path of this view to its parent. If this view is in
+  the root the path, it is equal to the absolute one. This path also determines
+  the URL in FireCMS.
 
-* `subcollections` Following the Firestore document and collection collection, you
+* `properties` Object defining the properties for the entity schema.
+
+* `customId` If this prop is not set, the ID of the document will be created by
+  the datasource. You can set the value to 'true' to force the users to choose
+  the ID. You can set the value to 'optional' to allow the users to choose the
+  ID. If the ID is empty, an automatic ID will be set. You can also pass a set
+  of values (as an `EnumValues` object) to allow users to pick from only those.
+
+* `subcollections` Following the Firestore document and collection schema, you
   can add subcollections to your entity in the same way you define the root
   collections.
 
@@ -67,8 +85,8 @@ in [Entity collections](../api/interfaces/entitycollection)
 * `additionalColumns` You can add additional columns to the collection view by
   implementing an additional column delegate.
 
-* `textSearchEnabled` Flag to indicate if a search bar should be displayed on top of
-  the collection table.
+* `textSearchEnabled` Flag to indicate if a search bar should be displayed on
+  top of the collection table. Please note that you need to add
 
 * `permissions` You can specify an object with boolean permissions with the
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions
@@ -84,32 +102,109 @@ in [Entity collections](../api/interfaces/entitycollection)
   configuration object to customize the export and add additional values.
   Defaults to `true`
 
-:::note
-In the examples you might see references to the type `Product`
-(which defines the model) or the schema `productSchema`, as declared in
-the [entity schemas section](../entities/entity_schemas.md)
-:::
 
 ### Sample collection
 
 ```tsx
-import { buildCollection } from "@camberi/firecms";
+import { buildCollection, EntityReference } from "@camberi/firecms";
+
+type Product = {
+  name: string;
+  main_image: string;
+  available: boolean;
+  price: number;
+  related_products: EntityReference[];
+  publisher: {
+    name: string;
+    external_id: string;
+  }
+}
 
 const productsCollection = buildCollection<Product>({
-    path: "products",
-    collection: productSchema,
-    name: "Products",
-    group: "Main",
-    description: "List of the products currently sold in our shop",
-    textSearchEnabled: true,
-    // additionalColumns: [productAdditionalColumn], // Example below
-    filterCombinations: [{ price: "desc", available: "desc" }],
-    permissions: ({ user, authController }) => ({
-        edit: true,
-        create: true,
-        delete: false
+  path: "products",
+  name: "Products",
+  group: "Main",
+  description: "List of the products currently sold in our shop",
+  textSearchEnabled: true,
+  properties: {
+    name: {
+      dataType: "string",
+      title: "Name",
+      config: {
+        multiline: true
+      },
+      validation: { required: true }
+    },
+    main_image: {
+      dataType: "string",
+      title: "Image",
+      config: {
+        storage: {
+          mediaType: "image",
+          storagePath: "images",
+          acceptedFiles: ["image/*"],
+          metadata: {
+            cacheControl: "max-age=1000000"
+          }
+        }
+      },
+      description: "Upload field for images",
+      validation: {
+        required: true
+      }
+    },
+    available: {
+      dataType: "boolean",
+      title: "Available",
+      columnWidth: 100
+    },
+    price: ({ values }) => ({
+      dataType: "number",
+      title: "Price",
+      validation: {
+        requiredMessage: "You must set a price between 0 and 1000",
+        min: 0,
+        max: 1000
+      },
+      disabled: !values.available && {
+        clearOnDisabled: true,
+        disabledMessage: "You can only set the price on available items"
+      },
+      description: "Price with range validation"
     }),
-    excludedProperties: ["related_products"]
+    related_products: {
+      dataType: "array",
+      title: "Related products",
+      description: "Reference to self",
+      of: {
+        dataType: "reference",
+        path: "products"
+      }
+    },
+    publisher: {
+      title: "Publisher",
+      description: "This is an example of a map property",
+      dataType: "map",
+      properties: {
+        name: {
+          title: "Name",
+          dataType: "string"
+        },
+        external_id: {
+          title: "External id",
+          dataType: "string"
+        }
+      }
+    }
+  },
+  // additionalColumns: [productAdditionalColumn], // Example below
+  filterCombinations: [{ price: "desc", available: "desc" }],
+  permissions: ({ user, authController }) => ({
+    edit: true,
+    create: true,
+    delete: false
+  }),
+  excludedProperties: ["related_products"]
 });
 
 ```
@@ -224,14 +319,14 @@ In order to do so, just pass the indexes configuration to your collection:
 import { buildCollection } from "@camberi/firecms";
 
 const productsCollection = buildCollection<Product>({
-    path: "products",
-    collection: productSchema,
-    name: "Products",
-    indexes: [
-        {
-            price: "asc",
-            available: "desc"
-        }
-    ]
+  path: "products",
+  collection: productCollection,
+  name: "Products",
+  indexes: [
+    {
+      price: "asc",
+      available: "desc"
+    }
+  ]
 });
 ```

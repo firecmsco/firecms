@@ -2,7 +2,7 @@ import {
     Entity,
     EntityCollection,
     EntityCustomView,
-    FireCMSContext
+    FireCMSContext, User
 } from "../models";
 import { useEffect, useState } from "react";
 import {
@@ -62,7 +62,7 @@ interface ResolvedNavigationEntityCustom<M> {
  * @param context
  * @category Hooks and utilities
  */
-export function resolveNavigationFrom<M, UserType>({
+export function resolveNavigationFrom<M, UserType extends User>({
                                              path,
                                              context
                                          }: { path: string, context: FireCMSContext<UserType> }): Promise<ResolvedNavigationEntry<M>[]> {
@@ -130,7 +130,7 @@ export interface NavigationFrom<M> {
  * in any React component that lives under `FireCMS`
  * @category Hooks and utilities
  */
-export function useResolvedNavigationFrom<M, UserType>(
+export function useResolvedNavigationFrom<M, UserType extends User>(
     {
         path
     }: NavigationFromProps): NavigationFrom<M> {

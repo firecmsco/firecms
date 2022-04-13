@@ -1,5 +1,6 @@
 import { useContext } from "react";
 import { FireCMSContextInstance } from "../core/contexts/FireCMSContext";
+import { FireCMSContext, User } from "../models";
 
 /**
  * Hook to retrieve the {@link FireCMSContext}.
@@ -10,4 +11,4 @@ import { FireCMSContextInstance } from "../core/contexts/FireCMSContext";
  * @see FireCMSContext
  * @category Hooks and utilities
  */
-export const useFireCMSContext = () => useContext(FireCMSContextInstance);
+export const useFireCMSContext = <UserType extends User = User>(): FireCMSContext<UserType> => useContext(FireCMSContextInstance) as FireCMSContext<UserType>;
