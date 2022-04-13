@@ -91,6 +91,7 @@ export const productSchema = buildSchema<Product>({
                     mediaType: "image",
                     storagePath: "images",
                     acceptedFiles: ["image/*"],
+                    maxSize: 1 * 1024 * 1024,
                     metadata: {
                         cacheControl: "max-age=1000000"
                     }
