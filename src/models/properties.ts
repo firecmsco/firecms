@@ -639,6 +639,11 @@ export interface StorageMeta {
     storeUrl?: boolean,
 
     /**
+     * Define maximal file size in bytes
+     */
+    maxSize?: number,
+
+    /**
      * Post process the path
      */
     postProcess?: (pathOrUrl: string) => Promise<string>
