@@ -15,7 +15,7 @@ import {
 import createStyles from "@mui/styles/createStyles";
 import makeStyles from "@mui/styles/makeStyles";
 
-import { FirebaseApp } from "firebase/app";
+import { FirebaseApp, FirebaseError } from "firebase/app";
 import { FireCMSLogo } from "../../core/components/FireCMSLogo";
 import { useAuthController, useModeState } from "../../hooks";
 import {
@@ -35,6 +35,8 @@ import { ErrorView } from "../../core";
 import EmailIcon from "@mui/icons-material/Email";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
+import { Phone } from "@mui/icons-material";
+import { RECAPTCHA_CONTAINER_ID, useRecaptcha } from "../../hooks/useRecaptcha";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -87,6 +89,8 @@ export function FirebaseLoginView({
     const modeState = useModeState();
 
     const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
+
+    const [phoneLoginSelected, setPhoneLoginSelected] = useState(false);
 
     const resolvedSignInOptions: FirebaseSignInProvider[] = signInOptions.map((o) => {
         if (typeof o === "object") {
@@ -186,7 +190,7 @@ export function FirebaseLoginView({
 
                     {buildErrorView()}
 
-                    {!passwordLoginSelected && <>
+                    {(!passwordLoginSelected && !phoneLoginSelected) && <>
 
                         {buildOauthLoginButtons(authDelegate, resolvedSignInOptions, modeState.mode)}
 
@@ -196,6 +200,11 @@ export function FirebaseLoginView({
                             icon={<EmailIcon fontSize={"large"}/>}
                             onClick={() => setPasswordLoginSelected(true)}/>}
 
+                        {resolvedSignInOptions.includes("phone") &&
+                        <LoginButton
+                            text={"Phone number"}
+                            icon={<Phone fontSize={"large"}/>}
+                            onClick={() => setPhoneLoginSelected(true) }/>}
 
                         {resolvedSignInOptions.includes("anonymous") &&
                         <LoginButton
@@ -219,6 +228,11 @@ export function FirebaseLoginView({
                         mode={modeState.mode}
                         NoUserComponent={NoUserComponent}
                         disableSignupScreen={disableSignupScreen}
+                    />}
+
+                    {phoneLoginSelected && <PhoneLoginForm
+                        authDelegate={authDelegate}
+                        onClose={() => setPhoneLoginSelected(false)}
                     />}
 
                 </Box>
@@ -265,6 +279,113 @@ function LoginButton({
     )
 }
 
+function PhoneLoginForm({
+                       onClose,
+                       authDelegate
+                   }: {
+    onClose: () => void,
+    authDelegate: FirebaseAuthDelegate,
+}) {
+    useRecaptcha();
+
+    const [phone, setPhone] = useState<string>();
+    const [code, setCode] = useState<string>();
+    const [isInvalidCode, setIsInvalidCode] = useState(false);
+
+    const handleSubmit = async (event: any) => {
+        event.preventDefault();
+
+        if (code && authDelegate.confirmationResult) {
+            setIsInvalidCode(false);
+
+            authDelegate.confirmationResult.confirm(code).catch((e: FirebaseError) => {
+                if (e.code === "auth/invalid-verification-code") {
+                    setIsInvalidCode(true)
+                }
+            });
+        } else {
+            if (phone) {
+                authDelegate.phoneLogin(phone, window.recaptchaVerifier);
+            }
+        }
+    }
+
+    return (
+        <form onSubmit={handleSubmit}>
+            {isInvalidCode &&
+            <Box p={2}>
+                <ErrorView
+                    error={"Invalid confirmation code"}/>
+            </Box>}
+
+
+            <div id={RECAPTCHA_CONTAINER_ID} />
+            <Grid container spacing={1}>
+                <Grid item xs={12}>
+                    <IconButton
+                        onClick={onClose}>
+                        <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
+                    </IconButton>
+                </Grid>
+                <Grid item xs={12} sx={{
+                    p: 1,
+                    display: "flex"
+                }}>
+                    <Typography align={"center"}
+                                variant={"subtitle2"}>{"Please enter your phone number"}</Typography>
+                </Grid>
+                <Grid item xs={12}>
+                    <TextField placeholder="" fullWidth
+                                value={phone}
+                                disabled={Boolean(phone && (authDelegate.authLoading || authDelegate.confirmationResult))}
+                                type="phone"
+                                required
+                                onChange={(event) => setPhone(event.target.value)}/>
+                </Grid>
+                {Boolean(phone && authDelegate.confirmationResult) &&
+                    <>
+                        <Grid item xs={12} sx={{
+                            mt: 2,
+                            p: 1,
+                            display: "flex"
+                        }}>
+                        <Typography align={"center"}
+                                    variant={"subtitle2"}>{"Please enter the confirmation code"}</Typography>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField placeholder="" fullWidth
+                                value={code}
+                                type="text"
+                                required
+                                onChange={(event) => setCode(event.target.value)}/>
+                        </Grid>
+                    </>
+                }
+
+                <Grid item xs={12}>
+                    <Box sx={{
+                        display: "flex",
+                        justifyContent: "end",
+                        alignItems: "center",
+                        width: "100%"
+                    }}>
+
+                        {authDelegate.authLoading &&
+                        <CircularProgress sx={{ p: 1 }} size={16}
+                                        thickness={8}/>
+                        }
+
+                        <Button type="submit">
+                            {"Ok"}
+                        </Button>
+                    </Box>
+                </Grid>
+
+            </Grid>
+        </form>
+    );
+}
+
 function LoginForm({
                        onClose,
                        authDelegate,
@@ -308,7 +429,7 @@ function LoginForm({
         return () => {
             document.removeEventListener("keydown", escFunction, false);
         };
-    }, [document]);
+    }, [onClose]);
 
     function handleEnterEmail() {
         if (email) {
