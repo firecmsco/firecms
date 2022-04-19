@@ -25,16 +25,6 @@ export interface Permissions {
      * Can the user delete entities. Defaults to `true`
      */
     delete?: boolean;
-
-    /**
-     * Is the logged-in user allowed to modify this collection
-     */
-    editCollection?: boolean;
-
-    /**
-     * Is the logged-in user allowed to delete this collection
-     */
-    deleteCollection?: boolean;
 }
 
 /**
@@ -46,7 +36,7 @@ export interface PermissionsBuilderProps<M extends { [Key: string]: any }, UserT
     /**
      * Path segments of the collection e.g. ['products', 'locales']
      */
-    paths: string[];
+    pathSegments: string[];
 
     /**
      * Logged in user
@@ -66,13 +56,52 @@ export interface PermissionsBuilderProps<M extends { [Key: string]: any }, UserT
 
 /**
  * Builder used to assign permissions to entities,
- * based on the logged user or collection
+ * based on the logged user or collection.
  * @category Models
  */
 export type PermissionsBuilder<M extends { [Key: string]: any }, UserType extends User = User> =
     (({
-          paths,
+          pathSegments,
           user,
           collection,
           authController
       }: PermissionsBuilderProps<M, UserType>) => Permissions);
+
+export type Role = {
+
+    /**
+     * If this flag is true, the user can perform any action
+     */
+    isAdmin: boolean;
+
+    /**
+     * Record of stripped collection paths
+     * `products/B44RG6APH/locales` => `products::locales`
+     * to their permissions.
+     * @see stripCollectionPath
+     */
+    collections: Record<string, Permissions>;
+
+    /**
+     * Is the user allowed to create new collections.
+     */
+    createCollections?: (params: {
+        group?: string
+    }) => boolean;
+
+    /**
+     * Is the user allowed to modify this collection
+     */
+    editCollections?: (params: {
+        collection: EntityCollection,
+        paths: string[]
+    }) => boolean;
+
+    /**
+     * Is the user allowed to delete this collection
+     */
+    deleteCollections?: (params: {
+        collection: EntityCollection,
+        paths: string[]
+    }) => boolean;
+}

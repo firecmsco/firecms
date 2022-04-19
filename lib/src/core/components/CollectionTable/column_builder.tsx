@@ -27,7 +27,7 @@ import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../Table";
 import { getIconForProperty } from "../../util/property_utils";
 import { resolveEnumValues } from "../../util/entities";
-import { getResolvedCollection, resolveProperty } from "../../collections";
+import { getResolvedCollection, resolveProperty } from "../../util/collections";
 
 export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType extends User> = {
 

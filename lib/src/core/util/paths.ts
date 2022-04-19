@@ -6,7 +6,11 @@ export const COLLECTION_PATH_SEPARATOR = "::";
  * @param path
  */
 export function stripCollectionPath(path: string): string {
-    return fullPathToCollectionSegments(path).reduce((a, b) => `${a}${COLLECTION_PATH_SEPARATOR}${b}`);
+    return segmentsToStrippedPath(fullPathToCollectionSegments(path));
+}
+
+export function segmentsToStrippedPath(paths:string[]){
+    return paths.reduce((a, b) => `${a}${COLLECTION_PATH_SEPARATOR}${b}`);
 }
 
 /**

@@ -15,13 +15,14 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { ConfigurationPersistence } from "../../models/config_persistence";
 import { EntityCollection, Properties } from "../../models";
 import {
-    prepareCollectionForPersistence,
+    removeNonEditableProperties,
     sortProperties
 } from "../../core/util/collections";
 import {
     COLLECTION_PATH_SEPARATOR,
     stripCollectionPath
 } from "../../core/util/paths";
+import { removeFunctions } from "../../core/util/objects";
 
 /**
  * @category Firebase
@@ -159,4 +160,20 @@ const docToCollection = (doc: DocumentSnapshot): EntityCollection => {
     const properties = data.properties as Properties ?? {};
     const sortedProperties = sortProperties(properties, propertiesOrder);
     return { ...data, properties: sortedProperties } as EntityCollection;
+}
+
+function prepareCollectionForPersistence<M>(collection: EntityCollection<M>) {
+    const properties = setUndefinedToDelete(removeFunctions(removeNonEditableProperties(collection.properties)));
+    const newCollection = {
+        ...collection,
+        properties
+    };
+    delete newCollection.permissions;
+    delete newCollection.views;
+    delete newCollection.additionalColumns;
+    delete newCollection.callbacks;
+    delete newCollection.extraActions;
+    delete newCollection.selectionController;
+    delete newCollection.subcollections;
+    return newCollection;
 }

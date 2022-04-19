@@ -43,7 +43,7 @@ export type User = {
      */
     readonly metadata: any;
     /**
-     *
+     * IDs of the roles associated with this user.
      */
     readonly roles?: string[];
 

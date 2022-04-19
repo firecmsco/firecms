@@ -57,7 +57,6 @@ export function FirebaseCMSApp({
                                    collections,
                                    views,
                                    textSearchController,
-                                   canCreateCollections,
                                    allowSkipLogin,
                                    signInOptions = DEFAULT_SIGN_IN_OPTIONS,
                                    firebaseConfig,
@@ -131,7 +130,6 @@ export function FirebaseCMSApp({
                 userConfigPersistence={userConfigPersistence}
                 collectionOverrideHandler={collectionOverrideHandler}
                 dateTimeFormat={dateTimeFormat}
-                canCreateCollections={canCreateCollections}
                 dataSource={dataSource}
                 storageSource={storageSource}
                 configPersistence={configPersistence}

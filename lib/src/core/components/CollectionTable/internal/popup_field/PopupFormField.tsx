@@ -32,8 +32,7 @@ import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
 import { isReadOnly } from "../../../../util/entities";
 import { CustomDialogActions } from "../../../CustomDialogActions";
-import { getResolvedCollection } from "../../../../collections";
-
+import { getResolvedCollection } from "../../../../util/collections";
 
 interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     entity?: Entity<M>;

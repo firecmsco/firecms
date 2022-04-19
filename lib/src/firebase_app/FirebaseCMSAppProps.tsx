@@ -4,7 +4,7 @@ import {
     CMSView,
     CollectionOverrideHandler,
     EntityCollection,
-    Locale,
+    Locale, Role,
     User
 } from "../models";
 import { FirestoreTextSearchController } from "./models/text_search";
@@ -50,12 +50,6 @@ export interface FirebaseCMSAppProps {
      * apply
      */
     authentication?: boolean | Authenticator<FirebaseUser>;
-
-    /**
-     * Should the logged user be able to create new collections
-     * @param props
-     */
-    canCreateCollections?: (props: { user: User | null, group?: string }) => boolean;
 
     /**
      * List of sign in options that will be displayed in the login
@@ -151,6 +145,13 @@ export interface FirebaseCMSAppProps {
      * Default path under the collection routes of the CMS will be created
      */
     baseCollectionPath?: string;
+
+    /**
+     * Set of roles defined in the CMS.
+     * The keys of the record are the IDs of the roles.
+     * If not specified the default values will be used.
+     */
+    roles?: Record<string, Role>;
 
     /**
      * Additional props passed to the login view. You can use this props

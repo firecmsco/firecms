@@ -23,12 +23,6 @@ export type NavigationContext = {
     views?: CMSView[];
 
     /**
-     * Should the logged user be able to create new collections
-     * @param props
-     */
-    canCreateCollections: (props: { group?: string }) => boolean;
-
-    /**
      * Configuration for the views that should be displayed at the top
      * level of the navigation (e.g. in the home page or the navigation
      * drawer)

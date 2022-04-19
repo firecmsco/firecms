@@ -18,4 +18,4 @@ export { createCMSDefaultTheme } from "./theme";
 
 export * from "./builders";
 
-export * from "./collections";
+export * from "./util/collections";

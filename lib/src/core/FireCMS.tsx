@@ -14,7 +14,7 @@ import {
     EntityCollection,
     EntityLinkBuilder,
     FireCMSContext,
-    Locale,
+    Locale, Role,
     StorageSource,
     User,
     UserConfigurationPersistence
@@ -77,12 +77,6 @@ export interface FireCMSProps<UserType extends User> {
      * navigation
      */
     views?: CMSView[];
-
-    /**
-     * Should the logged user be able to create new collections
-     * @param props
-     */
-    canCreateCollections?: (props: { user: User | null, group?: string }) => boolean;
 
     /**
      * Do the users need to log in to access the CMS.
@@ -158,6 +152,13 @@ export interface FireCMSProps<UserType extends User> {
      * and not defined in code
      */
     userConfigPersistence?: UserConfigurationPersistence;
+
+    /**
+     * Set of roles defined in the CMS.
+     * The keys of the record are the IDs of the roles.
+     * If not specified the default values will be used.
+     */
+    roles?: Record<string, Role>;
 }
 
 /**
@@ -184,8 +185,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         dataSource,
         basePath,
         baseCollectionPath,
-        configPersistence,
-        canCreateCollections
+        configPersistence
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -209,8 +209,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         views,
         collectionOverrideHandler,
         configPersistence,
-        userConfigPersistence,
-        canCreateCollections
+        userConfigPersistence
     });
 
     const sideDialogsController = useBuildSideDialogsController();

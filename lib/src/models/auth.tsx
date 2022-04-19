@@ -1,5 +1,7 @@
 import React from "react";
 import { User } from "./user";
+import { Role } from "./permissions";
+import { EntityCollection } from "./collections";
 
 
 /**
@@ -68,6 +70,34 @@ export interface AuthController<UserType extends User = User> {
      * operations.
      */
     authDelegate: AuthDelegate<UserType>;
+
+    /**
+     * Set of roles applied to the logged user
+     */
+    roles?: Role[];
+
+    /**
+     * Is the user allowed to create new collections.
+     */
+    canCreateCollections: (params: {
+        group?: string
+    }) => boolean;
+
+    /**
+     * Is the user allowed to modify this collection
+     */
+    canEditCollection: (params: {
+        collection: EntityCollection,
+        paths: string[]
+    }) => boolean;
+
+    /**
+     * Is the user allowed to delete this collection
+     */
+    canDeleteCollection: (params: {
+        collection: EntityCollection,
+        paths: string[]
+    }) => boolean;
 
 }
 

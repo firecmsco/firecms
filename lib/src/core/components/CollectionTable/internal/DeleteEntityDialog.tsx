@@ -15,7 +15,7 @@ import {
     useSnackbarController
 } from "../../../../hooks";
 import { CustomDialogActions } from "../../CustomDialogActions";
-import { getResolvedCollection } from "../../../collections";
+import { getResolvedCollection } from "../../../util/collections";
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],

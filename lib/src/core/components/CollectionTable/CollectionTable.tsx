@@ -23,13 +23,14 @@ import {
     useFireCMSContext,
     useSideEntityController
 } from "../../../hooks";
-import { getResolvedCollection, Table } from "../../index";
+import {  Table } from "../../index";
 import {
     checkInlineEditing,
     OnCellValueChange,
     UniqueFieldValidator,
     useBuildColumnsFromCollection
 } from "./column_builder";
+import { getResolvedCollection } from "../../util/collections";
 
 const DEFAULT_PAGE_SIZE = 50;
 

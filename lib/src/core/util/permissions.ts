@@ -2,16 +2,16 @@ import {
     AuthController,
     EntityCollection,
     Permissions,
+    Role,
     User
 } from "../../models";
+import { segmentsToStrippedPath } from "./paths";
 
 const DEFAULT_PERMISSIONS = {
     read: true,
     edit: true,
     create: true,
-    delete: true,
-    editCollection: true,
-    deleteCollection: true
+    delete: true
 };
 
 export function resolvePermissions<M extends { [Key: string]: any }, UserType extends User>
@@ -21,7 +21,12 @@ export function resolvePermissions<M extends { [Key: string]: any }, UserType ex
 
     const permission = collection.permissions;
     if (permission === undefined) {
-        return DEFAULT_PERMISSIONS;
+        if (!authController.roles) {
+            return DEFAULT_PERMISSIONS;
+        } else {
+            const strippedCollectionPath = segmentsToStrippedPath(paths);
+            return resolveCollectionPermissions(authController.roles, strippedCollectionPath);
+        }
     } else if (typeof permission === "object") {
         return permission as Permissions;
     } else if (typeof permission === "function") {
@@ -29,7 +34,7 @@ export function resolvePermissions<M extends { [Key: string]: any }, UserType ex
             user: authController.user,
             authController,
             collection,
-            paths
+            pathSegments: paths
         });
     }
 
@@ -60,16 +65,37 @@ export function canDeleteEntity<M extends { [Key: string]: any }, UserType exten
     return resolvePermissions(collection, authController, paths).delete ?? DEFAULT_PERMISSIONS.delete;
 }
 
-export function canEditCollection<M extends { [Key: string]: any }, UserType extends User>
-(collection: EntityCollection<M>,
- authController: AuthController<UserType>,
- paths: string[]): boolean {
-    return (collection.editable && resolvePermissions(collection, authController, paths).editCollection) ?? DEFAULT_PERMISSIONS.editCollection;
+export function resolveCollectionPermissions(roles: Role[], path: string): Permissions {
+    const rolesWithCollection = roles.filter((role) => path in Object.keys(role.collections));
+    return rolesWithCollection
+        .map(role => role.collections[path])
+        .reduce((permA, permB) => {
+            return {
+                read: permA.read ?? permB.read ?? false,
+                create: permA.create ?? permB.create ?? false,
+                edit: permA.edit ?? permB.edit ?? false,
+                delete: permA.delete ?? permB.delete ?? false
+            };
+        });
 }
 
-export function canDeleteCollection<M extends { [Key: string]: any }, UserType extends User>
-(collection: EntityCollection<M>,
- authController: AuthController<UserType>,
- paths: string[]): boolean {
-    return (collection.deletable && resolvePermissions(collection, authController, paths).deleteCollection) ?? DEFAULT_PERMISSIONS.deleteCollection;
+export function resolveCollectionsPermissions(roles: Role[]): Record<string, Permissions> {
+    const collectionIds = Array.from(new Set(roles.flatMap(role => Object.keys(role.collections))));
+    return collectionIds
+        .map((colId) => {
+            const rolesWithCollection = roles.filter((role) => colId in Object.keys(role.collections));
+            return {
+                [colId]: rolesWithCollection
+                    .map(role => role.collections[colId])
+                    .reduce((permA, permB) => {
+                        return {
+                            read: permA.read ?? permB.read ?? false,
+                            create: permA.create ?? permB.create ?? false,
+                            edit: permA.edit ?? permB.edit ?? false,
+                            delete: permA.delete ?? permB.delete ?? false
+                        };
+                    })
+            };
+        })
+        .reduce((a, b) => ({ ...a, ...b }), {});
 }

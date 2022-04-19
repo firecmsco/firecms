@@ -14,7 +14,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
-import { useNavigationContext } from "../hooks";
+import { useAuthController, useNavigationContext } from "../hooks";
 import { FireCMSLogo } from "./components/FireCMSLogo";
 import { TopNavigationEntry, TopNavigationResult } from "../models";
 import {
@@ -39,6 +39,7 @@ export function Drawer({
                            closeDrawer
                        }: DrawerProps) {
 
+    const authController = useAuthController();
     const navigationContext = useNavigationContext();
     const collectionEditorController = useCollectionEditorController();
 
@@ -86,7 +87,7 @@ export function Drawer({
         </ListItem>, [closeDrawer]);
 
     const buildGroupHeader = useCallback((group?: string) => {
-        const canCreateCollections = navigationContext.canCreateCollections({ group });
+        const canCreateCollections = authController.canCreateCollections({ group });
         return <Box pt={2} pl={2} pr={2} pb={0.5} sx={{
             display: "flex",
             flexDirection: "row",

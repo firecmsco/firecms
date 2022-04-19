@@ -19,11 +19,7 @@ import {
 import { mergeDeep } from "../util/objects";
 import { ConfigurationPersistence } from "../../models/config_persistence";
 import { mergeCollections } from "../util/collections";
-import {
-    canDeleteCollection,
-    canEditCollection,
-    resolvePermissions
-} from "../util/permissions";
+import { resolvePermissions } from "../util/permissions";
 import { fullPathToCollectionSegments } from "../util/paths";
 
 type BuildNavigationContextProps<UserType extends User> = {
@@ -35,7 +31,6 @@ type BuildNavigationContextProps<UserType extends User> = {
     collectionOverrideHandler: CollectionOverrideHandler | undefined;
     configPersistence?: ConfigurationPersistence;
     userConfigPersistence?: UserConfigurationPersistence;
-    canCreateCollections?: (props: { user: UserType | null, group?: string }) => boolean;
 };
 
 export function useBuildNavigationContext<UserType extends User>({
@@ -47,7 +42,6 @@ export function useBuildNavigationContext<UserType extends User>({
                                                                      collectionOverrideHandler,
                                                                      configPersistence,
                                                                      userConfigPersistence,
-                                                                     canCreateCollections
                                                                  }: BuildNavigationContextProps<UserType>): NavigationContext {
 
     const [collections, setCollections] = useState<EntityCollection[] | undefined>();
@@ -169,15 +163,21 @@ export function useBuildNavigationContext<UserType extends User>({
     }, [baseCollectionPath, collections]);
 
     const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {
-
+        // return (collection.editable && resolvePermissions(collection, authController, paths).editCollection) ?? DEFAULT_PERMISSIONS.editCollection;
         const navigationEntries: TopNavigationEntry[] = [
             ...(collections ?? []).map(collection => ({
                 url: buildUrlCollectionPath(collection.alias ?? collection.path),
                 type: "collection",
                 name: collection.name,
                 path: collection.alias ?? collection.path,
-                deletable: canDeleteCollection(collection, authController, fullPathToCollectionSegments(collection.path)),
-                editable: canEditCollection(collection, authController, fullPathToCollectionSegments(collection.path)),
+                deletable: collection.deletable && authController.canDeleteCollection({
+                    collection,
+                    paths: fullPathToCollectionSegments(collection.path)
+                }),
+                editable: collection.editable && authController.canEditCollection({
+                    collection,
+                    paths: fullPathToCollectionSegments(collection.path)
+                }),
                 description: collection.description?.trim(),
                 group: collection.group?.trim()
             } as TopNavigationEntry)),
@@ -201,14 +201,6 @@ export function useBuildNavigationContext<UserType extends User>({
         return { navigationEntries, groups };
     }, [authController, buildCMSUrlPath, buildUrlCollectionPath]);
 
-    const canCreateCollectionsInternal = useCallback(({ group }: { group?: string }) => {
-        if (!canCreateCollections) return true;
-        else return canCreateCollections({
-            user: authController.user,
-            group
-        });
-    }, [authController.user, canCreateCollections]);
-
     return {
         collections,
         views,
@@ -225,8 +217,7 @@ export function useBuildNavigationContext<UserType extends User>({
         buildUrlEditCollectionPath,
         buildCMSUrlPath,
         resolveAliasesFrom,
-        topLevelNavigation,
-        canCreateCollections: canCreateCollectionsInternal
+        topLevelNavigation
     };
 }
 

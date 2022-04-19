@@ -21,7 +21,7 @@ import {
 import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
-import { getResolvedCollection } from "../../../collections";
+import { getResolvedCollection } from "../../../util/collections";
 
 interface ExportButtonProps<M extends { [Key: string]: any }, UserType extends User> {
     collection: EntityCollection<M>;

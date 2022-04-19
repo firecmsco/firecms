@@ -25,7 +25,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import { Link as ReactLink } from "react-router-dom";
 
 import { Markdown } from "../../preview";
-import { useNavigationContext } from "../../hooks";
+import { useAuthController, useNavigationContext } from "../../hooks";
 import {
     useConfigurationPersistence
 } from "../../hooks/useConfigurationPersistence";
@@ -46,6 +46,7 @@ import {
  */
 export function FireCMSHomePage() {
 
+    const authController = useAuthController();
     const navigationContext = useNavigationContext();
     const configurationPersistence = useConfigurationPersistence();
     const collectionEditorController = useCollectionEditorController();
@@ -125,7 +126,7 @@ export function FireCMSHomePage() {
     return (
         <Container>
             {allGroups.map((group, index) => {
-                const canCreateCollections = navigationContext.canCreateCollections({ group });
+                const canCreateCollections = authController.canCreateCollections({group});
 
                 return (
                     <Box mt={6} mb={6} key={`group_${index}`}>
