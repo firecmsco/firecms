@@ -36,7 +36,7 @@ import EmailIcon from "@mui/icons-material/Email";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { Phone } from "@mui/icons-material";
-import { RECAPTCHA_CONTAINER_ID, useRecaptcha } from "../../hooks/useRecaptcha";
+import { RECAPTCHA_CONTAINER_ID, useRecaptcha } from "../hooks/useRecaptcha";
 
 const useStyles = makeStyles((theme: Theme) =>
     createStyles({

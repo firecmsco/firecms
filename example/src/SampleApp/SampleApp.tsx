@@ -207,8 +207,9 @@ function SampleApp() {
         authentication={myAuthenticator}
         signInOptions={[
             'password',
-            // 'anonymous',
             'google.com',
+            // 'phone',
+            // 'anonymous',
             // 'facebook.com',
             // 'github.com',
             // 'twitter.com',
