@@ -55,7 +55,7 @@ export interface EntityCallbacks<M extends { [Key: string]: any } = any, UserTyp
  * Parameters passed to hooks when an entity is saved
  * @category Models
  */
-export interface EntityOnSaveProps<M extends { [Key: string]: any }, UserType extends User> {
+export interface EntityOnSaveProps<M extends { [Key: string]: any } = any, UserType extends User = User> {
 
     /**
      * Resolved collection of the entity
@@ -97,7 +97,7 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any }, UserType ex
  * Parameters passed to hooks when an entity is deleted
  * @category Models
  */
-export interface EntityOnDeleteProps<M extends { [Key: string]: any }, UserType extends User> {
+export interface EntityOnDeleteProps<M extends { [Key: string]: any } = any, UserType extends User = User> {
 
     /**
      * collection of the entity being deleted

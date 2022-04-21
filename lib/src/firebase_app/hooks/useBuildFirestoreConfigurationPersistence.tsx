@@ -14,10 +14,7 @@ import {
 import React, { useCallback, useEffect, useRef } from "react";
 import { ConfigurationPersistence } from "../../models/config_persistence";
 import { EntityCollection, Properties } from "../../models";
-import {
-    removeNonEditableProperties,
-    sortProperties
-} from "../../core/util/collections";
+import { removeNonEditableProperties, sortProperties } from "../../core";
 import {
     COLLECTION_PATH_SEPARATOR,
     stripCollectionPath
@@ -36,7 +33,6 @@ export interface FirestoreConfigurationPersistenceProps {
 }
 
 const DEFAULT_CONFIG_PATH = "__FIRECMS";
-
 
 export function useBuildFirestoreConfigurationPersistence({
                                                          firebaseApp,

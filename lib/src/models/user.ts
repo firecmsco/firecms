@@ -38,21 +38,15 @@ export type User = {
      *
      */
     readonly isAnonymous: boolean;
-    /**
-     * Additional metadata around user creation and sign-in times.
-     */
-    readonly metadata: any;
-    /**
-     * IDs of the roles associated with this user.
-     */
-    readonly roles?: string[];
 
 };
 
 /**
  * Implement this function to allow access to specific users.
- * You might want to load additional properties for a user asynchronously
- * and store it using the `setExtra` method in the `authController`
+ * You can also define the roles for the logged-in user using the `setRoles`
+ * method in the `authController`.
+ * You might also want to load additional data for a user asynchronously
+ * and store it using the `setExtra` method in the `authController`.
  * @category Models
  */
 export type Authenticator<UserType extends User = User> = ({ user }: {

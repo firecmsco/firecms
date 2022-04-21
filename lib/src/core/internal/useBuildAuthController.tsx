@@ -6,24 +6,22 @@ import {
     DataSource,
     EntityCollection,
     Locale,
-    Permissions,
-    Role,
+    Role, Roles,
     StorageSource,
     User
 } from "../../models";
-import { resolveCollectionPermissions } from "../util/permissions";
 
 export function useBuildAuthController<UserType extends User>({
                                                                   authDelegate,
                                                                   authentication,
                                                                   dateTimeFormat,
-                                                                  roles,
+                                                                  roles: cmsRoles,
                                                                   locale,
                                                                   dataSource,
                                                                   storageSource
                                                               }: {
     authDelegate: AuthDelegate<UserType>,
-    roles?: Record<string, Role>;
+    roles?: Roles;
     authentication?: boolean | Authenticator<UserType>,
     dateTimeFormat?: string;
     locale?: Locale;
@@ -32,6 +30,7 @@ export function useBuildAuthController<UserType extends User>({
 }): AuthController<UserType> {
 
     const [user, setUser] = useState<UserType | null>(null);
+    const [roles, setRoles] = useState<string[] | null>(null);
     const [authLoading, setAuthLoading] = useState<boolean>(false);
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
     const [extra, setExtra] = useState<any>();
@@ -41,14 +40,14 @@ export function useBuildAuthController<UserType extends User>({
     const authenticationEnabled = authentication === undefined || !!authentication;
     const canAccessMainView = (!authenticationEnabled || Boolean(user) || Boolean(loginSkipped)) && !notAllowedError;
 
-    const userRoles = useMemo(() => !roles
+    const userRoles = useMemo(() => !cmsRoles
             ? undefined
-            : (user?.roles
-                ? user.roles
-                    .map(roleId => roles[roleId])
+            : (roles
+                ? roles
+                    .map(roleId => cmsRoles[roleId])
                     .filter(Boolean) as Role[]
                 : []),
-        [roles, user?.roles]);
+        [cmsRoles, roles]);
 
     const canCreateCollections = useCallback((params: {
         group?: string
@@ -87,11 +86,12 @@ export function useBuildAuthController<UserType extends User>({
             setExtra,
             authDelegate,
             roles: userRoles,
+            setRoles,
             canCreateCollections,
             canEditCollection,
             canDeleteCollection
         });
-    }, [authDelegate, authLoading, canAccessMainView, extra, loginSkipped, notAllowedError, user, userRoles, canCreateCollections]);
+    }, [authDelegate, authLoading, canAccessMainView, extra, loginSkipped, notAllowedError, user, userRoles, canCreateCollections, setRoles]);
 
     const checkAuthentication = useCallback(async () => {
         const delegateUser = authDelegate.user;

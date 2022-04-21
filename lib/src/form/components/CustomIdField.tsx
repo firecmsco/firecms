@@ -166,7 +166,7 @@ export function CustomIdField<M, UserType>({
                 <MuiTextField {...fieldProps}
                               error={error}
                               InputProps={inputProps}
-                              helperText={customId === "optional" ? "Leave this blank to autogenerate an ID" : "ID of the new document"}
+                              helperText={customId === "optional" ? "Leave this blank to autogenerate an ID" : (status === "new" || status === "copy" ? "ID of the new document" : "ID of the document")}
                               onChange={(event) => {
                                   let value = event.target.value;
                                   if (value) value = value.trim();

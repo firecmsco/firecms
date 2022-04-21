@@ -14,7 +14,7 @@ import {
     EntityCollection,
     EntityLinkBuilder,
     FireCMSContext,
-    Locale, Role,
+    Locale, Role, Roles,
     StorageSource,
     User,
     UserConfigurationPersistence
@@ -158,7 +158,7 @@ export interface FireCMSProps<UserType extends User> {
      * The keys of the record are the IDs of the roles.
      * If not specified the default values will be used.
      */
-    roles?: Record<string, Role>;
+    roles?: Roles;
 }
 
 /**

@@ -8,6 +8,15 @@ module.exports = {
         'quickstart',
         {
             type: 'category',
+            label: 'Firebase CMS app',
+            items: [
+                'firebase_cms_app',
+                'firebase_setup',
+                'deployment',
+            ]
+        },
+        {
+            type: 'category',
             label: 'Collections',
             items: [
                 'collections/collections',
@@ -16,32 +25,33 @@ module.exports = {
                 'collections/exporting_data',
                 {
                     type: 'category',
-                    label: 'Entities',
+                    label: 'Properties',
                     items: [
+                        'collections/properties/intro',
                         {
                             type: 'category',
-                            label: 'Properties',
+                            label: 'Config',
                             items: [
-                                'collections/config/properties/properties_intro',
-                                'collections/config/properties/string',
-                                'collections/config/properties/number',
-                                'collections/config/properties/boolean',
-                                'collections/config/properties/reference',
-                                'collections/config/properties/timestamp',
-                                'collections/config/properties/array',
-                                'collections/config/properties/map',
-                                'collections/config/properties/geopoint'
+                                'collections/properties/config/string',
+                                'collections/properties/config/number',
+                                'collections/properties/config/boolean',
+                                'collections/properties/config/reference',
+                                'collections/properties/config/timestamp',
+                                'collections/properties/config/array',
+                                'collections/properties/config/map',
+                                'collections/properties/config/geopoint'
                             ]
                         },
-                        'collections/config/conditional_fields',
-                        'collections/config/custom_fields',
-                        'collections/config/custom_previews',
-                        'collections/config/custom_schema_views',
+                        'collections/properties/conditional_fields',
+                        'collections/properties/custom_fields',
+                        'collections/properties/custom_previews',
+                        'collections/properties/custom_schema_views',
                     ]
                 }
             ]
         },
         'navigation',
+        'roles',
         {
             type: 'category',
             label: 'Provided hooks',
@@ -56,15 +66,6 @@ module.exports = {
         },
         {
             type: 'category',
-            label: 'Firebase CMS app',
-            items: [
-                'firebase_cms_app',
-                'firebase_setup',
-                'deployment',
-            ]
-        },
-        {
-            type: 'category',
             label: 'Recipes',
             items: [
                 // 'recipes/recipes_index',
@@ -72,7 +73,7 @@ module.exports = {
             ]
         },
         'custom_cms_app',
-        'migrating_from_alpha_versions',
+        'migrating_from_v1',
         'changelog'
     ],
 

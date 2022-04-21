@@ -3485,10 +3485,10 @@ docusaurus-plugin-sass@^0.2.2:
   dependencies:
     sass-loader "^10.1.1"
 
-docusaurus-plugin-typedoc@^0.16.6:
-  version "0.16.9"
-  resolved "https://registry.yarnpkg.com/docusaurus-plugin-typedoc/-/docusaurus-plugin-typedoc-0.16.9.tgz#6a5ae4157693257f73cd284fe2ec59f7afb60dc6"
-  integrity sha512-G3pNPgU4mu6n7rXuIG/6DnmbT2FaipisxAHZum+7DlwBHkpFxO/UO+dC/YHyHopvAfqR3f9KgfgizmNaVIAYFQ==
+docusaurus-plugin-typedoc@^0.17.3:
+  version "0.17.3"
+  resolved "https://registry.yarnpkg.com/docusaurus-plugin-typedoc/-/docusaurus-plugin-typedoc-0.17.3.tgz#e3c354ac4d195099c36fb327852d885f6dcc48ea"
+  integrity sha512-5SojLeWu9P/Cv4zdMHJ97R1Wa/5b0kqeAD/IdZTaPiYw+pCK2l9d60kJ/hNjNoxuBJvkTfjFlpNJyEJHGT2Wwg==
 
 "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader":
   version "0.0.0"
@@ -7832,14 +7832,14 @@ typedarray-to-buffer@^3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typedoc-plugin-markdown@^3.11.7:
+typedoc-plugin-markdown@^3.12.0:
   version "3.12.0"
   resolved "https://registry.yarnpkg.com/typedoc-plugin-markdown/-/typedoc-plugin-markdown-3.12.0.tgz#d801c88b437435041f09e88f3bb300c76f46d7ed"
   integrity sha512-yKl7/KWD8nP6Ot6OzMLLc8wBzN3CmkBoI/YQzxT62a9xmDgxyeTxGbHbkUoSzhKFqMI3SR0AqV6prAhVKbYnxw==
   dependencies:
     handlebars "^4.7.7"
 
-typedoc@^0.22.10:
+typedoc@^0.22.15:
   version "0.22.15"
   resolved "https://registry.yarnpkg.com/typedoc/-/typedoc-0.22.15.tgz#c6ad7ed9d017dc2c3a06c9189cb392bd8e2d8c3f"
   integrity sha512-CMd1lrqQbFvbx6S9G6fL4HKp3GoIuhujJReWqlIvSb2T26vGai+8Os3Mde7Pn832pXYemd9BMuuYWhFpL5st0Q==

@@ -65,37 +65,61 @@ export function canDeleteEntity<M extends { [Key: string]: any }, UserType exten
     return resolvePermissions(collection, authController, paths).delete ?? DEFAULT_PERMISSIONS.delete;
 }
 
-export function resolveCollectionPermissions(roles: Role[], path: string): Permissions {
-    const rolesWithCollection = roles.filter((role) => path in Object.keys(role.collections));
-    return rolesWithCollection
-        .map(role => role.collections[path])
-        .reduce((permA, permB) => {
-            return {
-                read: permA.read ?? permB.read ?? false,
-                create: permA.create ?? permB.create ?? false,
-                edit: permA.edit ?? permB.edit ?? false,
-                delete: permA.delete ?? permB.delete ?? false
-            };
-        });
+const mergePermissions = (permA: Permissions, permB: Permissions) => {
+    return {
+        read: permA.read ?? permB.read,
+        create: permA.create ?? permB.create,
+        edit: permA.edit ?? permB.edit,
+        delete: permA.delete ?? permB.delete
+    };
 }
 
-export function resolveCollectionsPermissions(roles: Role[]): Record<string, Permissions> {
-    const collectionIds = Array.from(new Set(roles.flatMap(role => Object.keys(role.collections))));
-    return collectionIds
-        .map((colId) => {
-            const rolesWithCollection = roles.filter((role) => colId in Object.keys(role.collections));
-            return {
-                [colId]: rolesWithCollection
-                    .map(role => role.collections[colId])
-                    .reduce((permA, permB) => {
-                        return {
-                            read: permA.read ?? permB.read ?? false,
-                            create: permA.create ?? permB.create ?? false,
-                            edit: permA.edit ?? permB.edit ?? false,
-                            delete: permA.delete ?? permB.delete ?? false
-                        };
-                    })
-            };
-        })
-        .reduce((a, b) => ({ ...a, ...b }), {});
+export function resolveCollectionPermissions(roles: Role[], path: string): Permissions {
+    const basePermissions = {
+        read: false,
+        create: false,
+        edit: false,
+        delete: false
+    };
+    return roles
+        .map(role => resolveCollectionRole(role, path))
+        .reduce(mergePermissions, basePermissions);
 }
+
+function resolveCollectionRole(role: Role, path: string): Permissions {
+
+    const basePermissions = {
+        read: role.isAdmin,
+        create: role.isAdmin,
+        edit: role.isAdmin,
+        delete: role.isAdmin
+    };
+    if (role.collectionPermissions && role.collectionPermissions[path]) {
+        return mergePermissions(role.collectionPermissions[path], basePermissions);
+    } else if (role.defaultPermissions) {
+        return mergePermissions(role.defaultPermissions, basePermissions);
+    } else {
+        return basePermissions;
+    }
+}
+
+// export function resolveCollectionsPermissions(roles: Role[]): Record<string, Permissions> {
+//     const collectionIds = Array.from(new Set(roles.flatMap(role => Object.keys(role.collections))));
+//     return collectionIds
+//         .map((colId) => {
+//             const rolesWithCollection = roles.filter((role) => colId in Object.keys(role.collections));
+//             return {
+//                 [colId]: rolesWithCollection
+//                     .map(role => role.collections[colId])
+//                     .reduce((permA, permB) => {
+//                         return {
+//                             read: permA.read ?? permB.read ?? false,
+//                             create: permA.create ?? permB.create ?? false,
+//                             edit: permA.edit ?? permB.edit ?? false,
+//                             delete: permA.delete ?? permB.delete ?? false
+//                         };
+//                     })
+//             };
+//         })
+//         .reduce((a, b) => ({ ...a, ...b }), {});
+// }

@@ -100,7 +100,6 @@ function SampleApp() {
             // 'apple.com'
         ]}
         textSearchController={textSearchController}
-        canCreateCollections={({ group, user }) => false}
         allowSkipLogin={true}
         logo={logo}
         collections={collections}

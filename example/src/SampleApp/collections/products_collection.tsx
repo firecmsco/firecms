@@ -104,7 +104,7 @@ export const productCallbacks: EntityCallbacks = {
     },
 
     onPreDelete: (props) => {
-        const email: string | undefined = props.context.authController.user?.email;
+        const email = props.context.authController.user?.email;
         if (!email || !email.endsWith("@camberi.com"))
             throw Error("Product deletion not allowed in this demo");
     }

@@ -1,5 +1,5 @@
 ---
-id: properties_intro
+id: intro
 title: Properties
 sidebar_label: Properties
 ---
@@ -11,7 +11,7 @@ the Typescript type system to validate the input).
 
 You may also want to update properties dynamically, based on the entityId, the
 path or the current values. Check
-the [conditional fields section](../conditional_fields.md)
+the [conditional fields section](conditional_fields.md)
 
 ## Common API for every property
 
@@ -19,7 +19,7 @@ Each property in the CMS has its own API, but they all share some common props:
 
 * `dataType` Datatype of the property.
 
-* `title` Property title (e.g. Product).
+* `name` Property name (e.g. Price).
 
 * `description` Property description.
 
@@ -33,23 +33,23 @@ Each property in the CMS has its own API, but they all share some common props:
   disabled or hide the field completely)
   [PropertyDisabledConfig](../../api/interfaces/propertydisabledconfig)
 
-* `config`
+* `Field`
+  If you need to render a custom field, you can create a component that
+  takes `FieldProps` as props. You receive the value, a function to update
+  the value and additional utility props such as if there is an error. You
+  can customize it by passing custom props that are received in the
+  component. More details about how to
+  implement [custom fields](custom_fields.md)
 
-    * `Field`
-      If you need to render a custom field, you can create a component that
-      takes `FieldProps` as props. You receive the value, a function to update
-      the value and additional utility props such as if there is an error. You
-      can customize it by passing custom props that are received in the
-      component. More details about how to
-      implement [custom fields](../custom_fields.md)
+* `Preview`
+  Configure how a property is displayed as a preview, e.g. in the collection
+  view. You can customize it by passing custom props that are received in
+  the component. More details about how to
+  implement [custom previews](custom_previews.md)
 
-    * `Preview`
-      Configure how a property is displayed as a preview, e.g. in the collection
-      view. You can customize it by passing custom props that are received in
-      the component. More details about how to
-      implement [custom previews](../custom_previews.md)
+* `customProps`
+  Additional props that are passed to the components defined in `Field` or
+  in `Preview`.
 
-    * `customProps`
-      Additional props that are passed to the components defined in `Field` or
-      in `Preview`.
+
 

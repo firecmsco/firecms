@@ -1,5 +1,6 @@
 {
     "allReflectionsHaveOwnDocument": true,
+    "cleanOutputDir": true,
     "readme": "docs/api_index.md",
     "name": "API",
     "categorizeByGroup": true,

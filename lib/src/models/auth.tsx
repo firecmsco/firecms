@@ -55,7 +55,7 @@ export interface AuthController<UserType extends User = User> {
      * e.g: Additional user data fetched from a Firestore document, or custom
      * claims
      */
-    extra?: any;
+    readonly extra?: any;
 
     /**
      * You can use this method to store any extra data you would like to
@@ -66,15 +66,24 @@ export interface AuthController<UserType extends User = User> {
     setExtra: (extra: any) => void;
 
     /**
+     * Roles associated with the logged user.
+     */
+    readonly roles?: Role[];
+
+    /**
+     * Use this method to assign role ids to the logged-in user.
+     * It has no effect if no user is logged id.
+     * When the user logs out the `roles` values is reset.
+     * You will usually want to populate this field during the authentication
+     * process, by using an `Authenticator`
+     */
+    setRoles: (roles: string[]) => void;
+
+    /**
      * Delegate in charge of connecting to a backend and performing the auth
      * operations.
      */
     authDelegate: AuthDelegate<UserType>;
-
-    /**
-     * Set of roles applied to the logged user
-     */
-    roles?: Role[];
 
     /**
      * Is the user allowed to create new collections.

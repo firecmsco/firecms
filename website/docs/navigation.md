@@ -11,7 +11,7 @@ You have two main ways of creating the top level views in FireCMS, either creati
 collections that get mapped to CMS views, or create your own top level React views.
 
 You can check all the possible configurations for defining [collections](collections/collections.md)
-and [entity schemas](collections/config/entity_schemas.md) in their respective documents.
+in the corresponding document.
 
 Otherwise, you can define your own [custom top level views](custom_top_level_views.md).
 
@@ -104,7 +104,7 @@ export default function App() {
         name: "Product",
         properties: {
             name: {
-                title: "Name",
+                name: "Name",
                 validation: { required: true },
                 dataType: "string"
             }
@@ -171,12 +171,12 @@ export function ExampleCMSView() {
         name: "Custom product",
         properties: {
             name: {
-                title: "Name",
+                name: "Name",
                 validation: { required: true },
                 dataType: "string"
             },
             very_custom_field: {
-                title: "Very custom field",
+                name: "Very custom field",
                 dataType: "string"
             }
         }

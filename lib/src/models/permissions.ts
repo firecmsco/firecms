@@ -67,12 +67,24 @@ export type PermissionsBuilder<M extends { [Key: string]: any }, UserType extend
           authController
       }: PermissionsBuilderProps<M, UserType>) => Permissions);
 
+/**
+ * Map of role ID => role
+ */
+export type Roles = Record<string, Role>;
+
 export type Role = {
 
     /**
      * If this flag is true, the user can perform any action
      */
-    isAdmin: boolean;
+    isAdmin?: boolean;
+
+    /**
+     * Default permissions for all collections for this role.
+     * You can override this values at the collection level using
+     * {@link collectionPermissions}
+     */
+    defaultPermissions?: Permissions;
 
     /**
      * Record of stripped collection paths
@@ -80,7 +92,7 @@ export type Role = {
      * to their permissions.
      * @see stripCollectionPath
      */
-    collections: Record<string, Permissions>;
+    collectionPermissions?: Record<string, Permissions>;
 
     /**
      * Is the user allowed to create new collections.

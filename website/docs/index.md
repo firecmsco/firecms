@@ -29,8 +29,8 @@ There are two ways to build top level views in FireCMS:
   collections, such as Firestore collections)
   and **schemas** (to datasource entities, such as Firestore documents).
   The best way to get a grasp of how
-  this works is checking the [Quickstart](quickstart.md),
-  [Collections](collections/collections.md) and [Entity schema](collections/config/entity_schemas.md)
+  this works is checking the [Quickstart](quickstart.md) and
+  [Collections](collections/collections.md)
   documentation.
 - Create **custom views** that sit in the main level of your navigation tree. In
   this case you can build your custom React component and make use of the

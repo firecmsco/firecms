@@ -7,6 +7,7 @@ import {
     buildProperty,
     EntityReference,
     FirebaseCMSApp,
+    Roles
 } from "@camberi/firecms";
 
 import "typeface-rubik";
@@ -50,18 +51,18 @@ const localeCollection = buildCollection({
     customId: locales,
     name: "Locale",
     properties: {
-        name:  {
-            name:  "Title",
+        name: {
+            name: "Title",
             validation: { required: true },
             dataType: "string"
         },
         selectable: {
-            name:  "Selectable",
+            name: "Selectable",
             description: "Is this locale selectable",
             dataType: "boolean"
         },
         video: {
-            name:  "Video",
+            name: "Video",
             dataType: "string",
             validation: { required: false },
             storage: {
@@ -79,12 +80,11 @@ const productsCollection = buildCollection<Product>({
         edit: true,
         create: true,
         // we have created the roles object in the navigation builder
-        delete: authController.extra.roles.includes("admin")
+        delete: Object.keys(authController.roles ?? []).includes("admin")
     }),
     subcollections: [
         localeCollection
     ],
-
     properties: {
         name: {
             name: "Name",
@@ -135,7 +135,7 @@ const productsCollection = buildCollection<Product>({
                 path: "products"
             }
         },
-        main_image: buildProperty({ // The `buildProperty` method is an utility function used for type checking
+        main_image: buildProperty({ // The `buildProperty` method is a utility function used for type checking
             name: "Image",
             dataType: "string",
             storage: {
@@ -203,18 +203,40 @@ export default function App() {
                                                                     authController
                                                                 }) => {
 
-        if(user?.email?.includes("flanders")){
+        if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");
         }
 
         console.log("Allowing access to", user?.email);
         // This is an example of retrieving async data related to the user
         // and storing it in the user extra field.
-        const sampleUserData = await Promise.resolve({
-            roles: ["admin"]
-        });
-        authController.setExtra(sampleUserData);
+        const sampleUserRoles = await Promise.resolve(["admin"]);
+        authController.setRoles(sampleUserRoles);
+
         return true;
+    };
+
+    const roles: Roles = {
+        "admin": {
+            isAdmin: true
+        },
+        "editor": {
+            isAdmin: false,
+            defaultPermissions: {
+                read: true,
+                create: true,
+                edit: true,
+                delete: false
+            },
+            collectionPermissions: {
+                "products": {
+                    read: true,
+                    create: true,
+                    edit: true,
+                    delete: true
+                }
+            }
+        }
     };
 
     return <FirebaseCMSApp
@@ -222,5 +244,6 @@ export default function App() {
         authentication={myAuthenticator}
         collections={[productsCollection]}
         firebaseConfig={firebaseConfig}
+        roles={roles}
     />;
 }

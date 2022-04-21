@@ -4,8 +4,8 @@ import {
     CMSView,
     CollectionOverrideHandler,
     EntityCollection,
-    Locale, Role,
-    User
+    Locale,
+    Roles
 } from "../models";
 import { FirestoreTextSearchController } from "./models/text_search";
 import { User as FirebaseUser } from "firebase/auth";
@@ -151,7 +151,7 @@ export interface FirebaseCMSAppProps {
      * The keys of the record are the IDs of the roles.
      * If not specified the default values will be used.
      */
-    roles?: Record<string, Role>;
+    roles?: Roles;
 
     /**
      * Additional props passed to the login view. You can use this props

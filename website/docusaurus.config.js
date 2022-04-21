@@ -17,7 +17,7 @@ module.exports = {
                 entryPoints: [
                     '../lib/src/index.ts',
                 ],
-                tsconfig: '../tsconfig.json',
+                tsconfig: '../lib/tsconfig.json',
                 watch: process.env.TYPEDOC_WATCH,
             }
         ]
@@ -27,7 +27,7 @@ module.exports = {
         announcementBar: {
             id: 'new_version_rc.4',
             content:
-                'Version 1.0.0-rc.4 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/quickstart">quickstart</a> to get started!',
+                'Version 1.0.0-rc.4 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/1.0.0/quickstart">quickstart</a> to get started!',
             backgroundColor: '#FF5B79',
             textColor: 'black',
             isCloseable: true,
@@ -154,6 +154,7 @@ module.exports = {
                 docs: {
                     sidebarPath: require.resolve('./sidebars.js'),
                     lastVersion: "1.0.0",
+                    editUrl: "https://github.com/Camberi/firecms/tree/master/website",
                     versions: {
                         current: {
                             label: '2.0.0-alpha',
@@ -167,9 +168,7 @@ module.exports = {
                     },
                 },
                 blog: {
-                    showReadingTime: true,
-                    // editUrl:
-                    //     'https://github.com/facebook/docusaurus/edit/master/website/blog/'
+                    showReadingTime: true
                 },
                 theme: {
                     customCss: [

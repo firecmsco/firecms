@@ -1,7 +1,8 @@
 import { FirebaseCMSAppProps } from "../firebase_app/FirebaseCMSAppProps";
 import { buildCollection, buildProperty } from "../core/builders";
-import { EnumValues, StringProperty } from "../models/properties";
-import { EntityCallbacks } from "../models/entity_callbacks";
+import { EnumValues, Property, StringProperty } from "../models/properties";
+import { EntityCallbacks, EntityOnSaveProps } from "../models/entity_callbacks";
+import { EntityCollection } from "../models";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -337,7 +338,5 @@ export const siteConfig: FirebaseCMSAppProps = {
         })
     ],
 };
-
-
 
 

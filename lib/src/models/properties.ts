@@ -242,7 +242,7 @@ export type PropertyOrBuilder<T extends CMSType = CMSType, M = any> =
 /**
  * @category Entity properties
  */
-export type PropertiesOrBuilder<M extends { [Key: string]: any }> =
+export type PropertiesOrBuilder<M extends { [Key: string]: any } = any> =
     {
         [k in keyof M]: PropertyOrBuilder<M[k], M>;
     };
@@ -415,7 +415,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
 /**
  * @category Entity properties
  */
-export interface MapProperty<T extends { [Key: string]: any } = any> extends BaseProperty<T> {
+export interface MapProperty<T  extends { [Key: string]: any } = any> extends BaseProperty<T> {
 
     dataType: "map";
 

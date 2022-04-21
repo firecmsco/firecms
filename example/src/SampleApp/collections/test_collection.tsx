@@ -4,6 +4,7 @@ import {
     buildProperty,
     buildPropertyBuilder,
     EntityCallbacks,
+    EntityOnSaveProps,
     EnumValues,
     resolveNavigationFrom
 } from "@camberi/firecms";
