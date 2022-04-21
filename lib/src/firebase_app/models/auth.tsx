@@ -1,4 +1,4 @@
-import { User as FirebaseUser } from "firebase/auth";
+import { ApplicationVerifier, ConfirmationResult, User as FirebaseUser } from "firebase/auth";
 
 import { AuthDelegate } from "../../models";
 
@@ -8,7 +8,7 @@ import { AuthDelegate } from "../../models";
 export type FirebaseSignInProvider =
 // | 'email'
     | "password"
-    // | 'phone'
+    | "phone"
     | "anonymous"
     | "google.com"
     | "facebook.com"
@@ -34,6 +34,8 @@ export type FirebaseAuthDelegate =
 
     authLoading: boolean;
 
+    confirmationResult: void | ConfirmationResult,
+
     googleLogin: () => void;
 
     anonymousLogin: () => void;
@@ -53,6 +55,8 @@ export type FirebaseAuthDelegate =
     fetchSignInMethodsForEmail: (email: string) => Promise<string[]>;
 
     createUserWithEmailAndPassword: (email: string, password: string) => void;
+
+    phoneLogin: (phone: string, applicationVerifier: ApplicationVerifier) => void;
 
     /**
      * Has the user skipped the login process

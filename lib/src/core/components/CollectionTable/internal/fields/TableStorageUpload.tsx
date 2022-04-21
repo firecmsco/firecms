@@ -242,6 +242,8 @@ function StorageUpload({
     const metadata: any | undefined = storage?.metadata;
     const hasValue = Boolean(value);
 
+    const snackbarContext = useSnackbarController();
+
     const internalInitialValue: StorageFieldItem[] =
         value == null
             ? []
@@ -358,9 +360,21 @@ function StorageUpload({
     } = useDropzone({
             accept: storage.acceptedFiles,
             disabled: disabled,
+            maxSize: storage.maxSize,
             noClick: true,
             noKeyboard: true,
-            onDrop: onExternalDrop
+            onDrop: onExternalDrop,
+            onDropRejected: (fileRejections, event) => {
+                for (const fileRejection of fileRejections) {
+                    for (const error of fileRejection.errors) {
+                        snackbarContext.open({
+                            type: "error",
+                            title: "Error uploading file",
+                            message: `File is larger than ${storage.maxSize} bytes`
+                        });
+                    }
+                }
+            }
         }
     );
 

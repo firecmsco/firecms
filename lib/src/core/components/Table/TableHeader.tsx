@@ -125,11 +125,11 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                                 onColumnSort(column.key as Extract<keyof M, string>);
                             }}
                         >
-                            {!sort && <ArrowDownwardIcon fontSize={"small"}/>}
-                            {sort === "desc" &&
-                                <ArrowUpwardIcon fontSize={"small"}/>}
+                            {!sort && <ArrowUpwardIcon fontSize={"small"}/>}
                             {sort === "asc" &&
-                                <ArrowDownwardIcon fontSize={"small"}/>}
+                                <ArrowUpwardIcon fontSize={"small"}/>}
+                            {sort === "desc" &&
+                            <ArrowDownwardIcon fontSize={"small"}/>}
                         </IconButton>
                     </Badge>
                 </Grid>

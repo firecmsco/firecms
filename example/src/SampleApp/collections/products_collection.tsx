@@ -148,7 +148,7 @@ export const productsCollection = buildCollection<Product>({
             storage: {
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
-                metadata: {
+                maxSize: 1 * 1024 * 1024,metadata: {
                     cacheControl: "max-age=1000000"
                 }
             },

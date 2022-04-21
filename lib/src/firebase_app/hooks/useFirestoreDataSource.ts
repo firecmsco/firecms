@@ -166,7 +166,7 @@ export function useFirestoreDataSource({
         if (!textSearchController)
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
         const ids = await textSearchController({ path, searchString });
-        if (!ids)
+        if (ids === undefined)
             throw Error("The current path is not supported by the specified FirestoreTextSearchController");
         const promises: Promise<Entity<M> | undefined>[] = ids
             .map(async (entityId) => {

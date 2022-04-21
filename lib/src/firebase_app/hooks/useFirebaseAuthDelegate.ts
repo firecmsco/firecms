@@ -10,8 +10,10 @@ import {
     OAuthProvider,
     onAuthStateChanged,
     signInWithEmailAndPassword,
+    signInWithPhoneNumber,
     signInWithPopup,
     signOut,
+    ApplicationVerifier,
     TwitterAuthProvider,
     User as FirebaseUser
 } from "firebase/auth";
@@ -23,6 +25,7 @@ import {
     FirebaseSignInProvider
 } from "../models/auth";
 import {
+    ConfirmationResult,
     createUserWithEmailAndPassword,
     signInAnonymously
 } from "@firebase/auth";
@@ -47,6 +50,7 @@ export const useFirebaseAuthDelegate = (
     const [initialLoading, setInitialLoading] = useState(true);
     const [authLoading, setAuthLoading] = useState(true);
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
+    const [confirmationResult, setConfirmationResult] = useState<void | ConfirmationResult>();
 
     function skipLogin() {
         setLoginSkipped(true);
@@ -113,6 +117,17 @@ export const useFirebaseAuthDelegate = (
         signInAnonymously(auth)
             .catch(setAuthProviderError)
             .then(() => setAuthLoading(false));
+    }
+
+    const phoneLogin = (phone: string, applicationVerifier: ApplicationVerifier) => {
+        const auth = getAuth();
+        setAuthLoading(true);
+        return signInWithPhoneNumber(auth, phone, applicationVerifier)
+            .catch(setAuthProviderError)
+            .then((res) => {
+                setAuthLoading(false)
+                setConfirmationResult(res)
+            });
     }
 
     const appleLogin = () => {
@@ -199,6 +214,7 @@ export const useFirebaseAuthDelegate = (
         authError: authProviderError,
         authLoading,
         initialLoading,
+        confirmationResult,
         signOut: onSignOut,
         loginSkipped,
         skipLogin,
@@ -210,6 +226,7 @@ export const useFirebaseAuthDelegate = (
         microsoftLogin,
         twitterLogin,
         emailPasswordLogin,
+        phoneLogin,
         fetchSignInMethodsForEmail: getSignInMethodsForEmail,
         createUserWithEmailAndPassword: registerWithPasswordEmail
     };

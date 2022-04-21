@@ -14,7 +14,7 @@ if (typeof process !== "undefined") {
 }
 // import.meta is defined for vite builds
 else if (typeof import.meta !== "undefined") {
-    if (import.meta?.env?.VITE_ALGOLIA_APP_ID && import.meta?.env?.VITE_ALGOLIA_SEARCH_KEY) {
+    if (import.meta.env.VITE_ALGOLIA_APP_ID && import.meta.env.VITE_ALGOLIA_SEARCH_KEY) {
         client = algoliasearch(import.meta.env.VITE_ALGOLIA_APP_ID as string, import.meta.env.VITE_ALGOLIA_SEARCH_KEY as string);
     }
 } else {

@@ -293,6 +293,8 @@ function FileDropComponent({
     helpText: string
 }) {
 
+    const snackbarContext = useSnackbarController();
+
     const {
         getRootProps,
         getInputProps,
@@ -303,7 +305,19 @@ function FileDropComponent({
             accept: storage.acceptedFiles,
             disabled: disabled || isDraggingOver,
             noDragEventsBubbling: true,
-            onDrop: onExternalDrop
+            maxSize: storage.maxSize,
+            onDrop: onExternalDrop,
+            onDropRejected: (fileRejections, event) => {
+                for (const fileRejection of fileRejections) {
+                    for (const error of fileRejection.errors) {
+                        snackbarContext.open({
+                            type: "error",
+                            title: "Error uploading file",
+                            message: `File is larger than ${storage.maxSize} bytes`
+                        });
+                    }
+                }
+            }
         }
     );
 

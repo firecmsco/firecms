@@ -670,6 +670,11 @@ export interface StorageConfig {
     storeUrl?: boolean,
 
     /**
+     * Define maximal file size in bytes
+     */
+    maxSize?: number,
+
+    /**
      * Postprocess the saved value (storage path or URL)
      * after it has been resolved.
      You
