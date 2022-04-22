@@ -95,42 +95,45 @@ export function ArrayOfReferencesFieldBinding({
         );
     };
 
+    const title = <FormHelperText filled
+                                  required={property.validation?.required}>
+        <LabelWithIcon property={property}/>
+    </FormHelperText>;
+
+    const body = <>
+        {!collectionResolver && <ErrorView
+            error={"The specified collection does not exist. Check console"}/>}
+
+        {collectionResolver && <>
+
+            <ArrayContainer value={value}
+                            name={propertyKey}
+                            buildEntry={buildEntry}
+                            disabled={isSubmitting}/>
+
+            <Box p={1}
+                 justifyContent="center"
+                 textAlign={"left"}>
+                <Button variant="outlined"
+                        color="primary"
+                        disabled={isSubmitting}
+                        onClick={onEntryClick}>
+                    Edit {property.name}
+                </Button>
+            </Box>
+        </>}
+    </>;
+
     return (
         <>
             <FormControl fullWidth error={showError}>
 
+                {!tableMode &&
+                    <ExpandablePanel expanded={expanded} title={title}>
+                        {body}
+                    </ExpandablePanel>}
 
-                <ExpandablePanel
-                    expanded={expanded}
-                    title={
-                        <FormHelperText filled
-                                        required={property.validation?.required}>
-                            <LabelWithIcon property={property}/>
-                        </FormHelperText>}>
-
-                    {!collectionResolver && <ErrorView
-                        error={"The specified collection does not exist. Check console"}/>}
-
-                    {collectionResolver && <>
-
-                        <ArrayContainer value={value}
-                                        name={propertyKey}
-                                        buildEntry={buildEntry}
-                                        disabled={isSubmitting}/>
-
-                        <Box p={1}
-                             justifyContent="center"
-                             textAlign={"left"}>
-                            <Button variant="outlined"
-                                    color="primary"
-                                    disabled={isSubmitting}
-                                    onClick={onEntryClick}>
-                                Edit {property.name}
-                            </Button>
-                        </Box>
-                    </>}
-
-                </ExpandablePanel>
+                {tableMode && body}
 
                 {includeDescription &&
                     <FieldDescription property={property}/>}
@@ -141,14 +144,15 @@ export function ArrayOfReferencesFieldBinding({
 
             </FormControl>
 
-            {collectionResolver && ofProperty.path && <ReferenceDialog open={open}
-                                                    multiselect={true}
-                                                    collection={collectionResolver}
-                                                    path={ofProperty.path}
-                                                    onClose={onClose}
-                                                    onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                                                    selectedEntityIds={selectedIds}
-            />}
+            {collectionResolver && ofProperty.path &&
+                <ReferenceDialog open={open}
+                                 multiselect={true}
+                                 collection={collectionResolver}
+                                 path={ofProperty.path}
+                                 onClose={onClose}
+                                 onMultipleEntitiesSelected={onMultipleEntitiesSelected}
+                                 selectedEntityIds={selectedIds}
+                />}
         </>
     );
 }

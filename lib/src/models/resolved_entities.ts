@@ -10,7 +10,7 @@ import {
     ReferenceProperty,
     StringProperty
 } from "./properties";
-import { EntityReference, EntityValues, GeoPoint } from "./entities";
+import { EntityReference, GeoPoint } from "./entities";
 import { EntityCollection } from "./collections";
 
 /**
@@ -39,56 +39,88 @@ export type ResolvedProperty<T extends CMSType = CMSType> =
                             T extends Array<CMSType> ? ResolvedArrayProperty<T> :
                                 T extends { [Key: string]: any } ? ResolvedMapProperty<T> : never;
 
+/**
+ * @category Entity properties
+ */
 export type ResolvedProperties<M extends { [Key: string]: any } = any> = {
     [k in keyof M]: ResolvedProperty<M[keyof M]>;
 };
 
+/**
+ * @category Entity properties
+ */
 export type ResolvedStringProperty =
     Omit<StringProperty, "enumValues" | "dataType"> &
     {
         dataType: "string";
-        enumValues: EnumValueConfig[] | undefined,
+        enumValues?: EnumValueConfig[],
     }
 
+/**
+ * @category Entity properties
+ */
 export type ResolvedNumberProperty =
     Omit<NumberProperty, "enumValues" | "dataType"> &
     {
         dataType: "number";
-        enumValues: EnumValueConfig[],
+        enumValues?: EnumValueConfig[],
     }
+
+/**
+ * @category Entity properties
+ */
 export type ResolvedBooleanProperty =
     Omit<BooleanProperty, "dataType"> &
     {
         dataType: "boolean",
     }
+
+/**
+ * @category Entity properties
+ */
 export type ResolvedTimestampProperty =
     Omit<DateProperty, "dataType"> &
     {
         dataType: "date",
     }
+
+/**
+ * @category Entity properties
+ */
 export type ResolvedGeopointProperty =
     Omit<GeopointProperty, "dataType"> &
     {
         dataType: "geopoint",
     }
+
+/**
+ * @category Entity properties
+ */
 export type ResolvedReferenceProperty =
     Omit<ReferenceProperty, "dataType"> &
     {
         dataType: "reference",
     }
 
+/**
+ * @category Entity properties
+ */
 export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> =
     Omit<ArrayProperty, "of" | "oneOf" | "dataType"> &
     {
         dataType: "array";
-        of?: ResolvedProperty<ArrayT>,
+        of?: ResolvedProperty<ArrayT> | ResolvedProperty[],
         oneOf?: {
             properties: Record<string, ResolvedProperty>
             typeField?: string;
             valueField?: string;
-        }
+        },
+        resolvedProperties: ResolvedProperty[],
     }
 
+/**
+ * @category Entity properties
+ */
 export type ResolvedMapProperty<T extends { [Key: string]: any } = any> =
     Omit<MapProperty, "properties" | "dataType" | "propertiesOrder"> &
     {

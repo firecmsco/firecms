@@ -4,12 +4,16 @@ import { styled } from "@mui/material/styles";
 
 import { Divider, Theme } from "@mui/material";
 import {
+    PreviewSize,
     PropertyPreview,
-    PropertyPreviewProps,
-    PreviewSize
+    PropertyPreviewProps
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { ResolvedProperty } from "../../models";
+import {
+    DEFAULT_ONE_OF_TYPE,
+    DEFAULT_ONE_OF_VALUE
+} from "../../core/util/common";
 
 const PREFIX = "ArrayOneOfPreview";
 
@@ -63,22 +67,23 @@ export function ArrayOneOfPreview({
 
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
-    const typeField = property.oneOf.typeField ?? "type";
-    const valueField = property.oneOf.valueField ?? "value";
+    const typeField = property.oneOf.typeField ?? DEFAULT_ONE_OF_TYPE;
+    const valueField = property.oneOf.valueField ?? DEFAULT_ONE_OF_VALUE;
     const properties = property.oneOf.properties;
 
     return (
         <Root className={classes.array}>
             {values &&
-            values.map((value, index) =>
-                <React.Fragment key={"preview_array_" + value + "_" + index}>
-                    <div className={classes.arrayItemBig}>
-                        <ErrorBoundary>
-                            {value && <PropertyPreview
+                values.map((value, index) =>
+                    <React.Fragment
+                        key={"preview_array_" + value + "_" + index}>
+                        <div className={classes.arrayItemBig}>
+                            <ErrorBoundary>
+                                {value && <PropertyPreview
                                 propertyKey={propertyKey}
                                 value={value[valueField]}
                                 entity={entity}
-                                property={properties[value[typeField]] as ResolvedProperty<any>}
+                                property={property.resolvedProperties[index] ?? properties[value[typeField]] as ResolvedProperty<any>}
                                 size={childSize}/>}
                         </ErrorBoundary>
                     </div>

@@ -153,7 +153,7 @@ export interface CMSFormFieldProps<M extends { [Key: string]: any } = any> {
     /**
      * The CMS property you are binding this field to
      */
-    property: ResolvedProperty;
+    property: Property | ResolvedProperty;
 
     /**
      * The context where this field is being rendered. You get a context as a

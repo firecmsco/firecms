@@ -51,6 +51,10 @@ export function ExpandablePanel({
         <Accordion variant={"outlined"}
                    disableGutters
                    expanded={expandedInternal}
+                   sx={{
+                       m: "0 -8px",
+                       width: "calc(100% + 16px)"
+                   }}
                    onChange={useCallback((event, expanded) => setExpandedInternal(expanded), [])}>
             <ExpandablePanelSummary expandIcon={<ExpandMoreIcon/>}>
                 {title}

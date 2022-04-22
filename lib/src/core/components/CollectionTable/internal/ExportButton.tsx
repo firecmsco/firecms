@@ -21,7 +21,7 @@ import {
 import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
-import { getResolvedCollection } from "../../../util/collections";
+import { resolveCollection } from "../../../util/resolutions";
 
 interface ExportButtonProps<M extends { [Key: string]: any }, UserType extends User> {
     collection: EntityCollection<M>;
@@ -41,7 +41,7 @@ export function ExportButton<M extends { [Key: string]: any }, UserType extends 
     const dataSource = useDataSource();
     const context = useFireCMSContext<UserType>();
 
-    const collection:ResolvedEntityCollection<M> = React.useMemo(() => getResolvedCollection({
+    const collection:ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection({
         collection: inputCollection,
         path
     }), [inputCollection, path]);

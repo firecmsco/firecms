@@ -2,7 +2,7 @@ import React from "react";
 
 import { EnumValuesChip } from "../components/CustomChip";
 import { PropertyPreviewProps } from "../internal";
-import { resolveEnumValues } from "../../core/util/entities";
+import { resolveEnumValues } from "../../core/util/resolutions";
 
 /**
  * @category Preview components
@@ -17,7 +17,7 @@ export function NumberPropertyPreview({
         const enumKey = value;
         const enumValues = resolveEnumValues(property.enumValues);
         return <EnumValuesChip
-            enumId={enumKey}
+            enumKey={enumKey}
             enumValues={enumValues}
             small={size !== "regular"}/>;
     } else {

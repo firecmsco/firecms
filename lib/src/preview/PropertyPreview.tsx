@@ -87,7 +87,11 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
             }
 
             if (arrayProperty.of) {
-                if (arrayProperty.of.dataType === "map") {
+                if (Array.isArray(arrayProperty.of)) {
+                    content = <ArrayPropertyPreview {...fieldProps}
+                                                    value={value}
+                                                    property={property as ResolvedArrayProperty}/>;
+                } else if (arrayProperty.of.dataType === "map") {
                     content =
                         <ArrayOfMapsPreview propertyKey={propertyKey}
                                             property={property as ResolvedArrayProperty}

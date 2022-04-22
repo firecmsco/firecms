@@ -3,7 +3,7 @@ import React from "react";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { CustomChip, EnumValuesChip } from "../components/CustomChip";
 import { PropertyPreviewProps } from "../internal";
-import { resolvePropertyEnum } from "../../core/util/entities";
+import { resolvePropertyEnum } from "../../core/util/resolutions";
 
 /**
  * @category Preview components
@@ -15,12 +15,12 @@ export function StringPropertyPreview({
                                   size
                               }: PropertyPreviewProps<string>): React.ReactElement {
 
-    
+
     if (property.enumValues) {
         const enumKey = value;
         const resolvedProperty = resolvePropertyEnum(property);
         return <EnumValuesChip
-            enumId={enumKey}
+            enumKey={enumKey}
             enumValues={resolvedProperty.enumValues}
             small={size !== "regular"}/>;
     } else if (property.previewAsTag) {

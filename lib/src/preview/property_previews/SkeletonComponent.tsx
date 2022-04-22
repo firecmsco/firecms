@@ -52,18 +52,22 @@ export function SkeletonComponent({
         const arrayProperty = property as ResolvedArrayProperty;
 
         if (arrayProperty.of) {
-            if (arrayProperty.of.dataType === "map" && arrayProperty.of.properties) {
-                content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewProperties);
-            } else if (arrayProperty.of.dataType === "string") {
-                if (arrayProperty.of.enumValues) {
-                    content = renderArrayEnumTableCell();
-                } else if (arrayProperty.of.storage) {
-                    content = renderGenericArrayCell(arrayProperty.of);
-                } else {
-                    content = renderArrayOfStrings();
-                }
+            if (Array.isArray(arrayProperty.of)) {
+                content = <>{arrayProperty.of.map(p => renderGenericArrayCell(p))} </>;
             } else {
-                content = renderGenericArrayCell(arrayProperty.of);
+                if (arrayProperty.of.dataType === "map" && arrayProperty.of.properties) {
+                    content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewProperties);
+                } else if (arrayProperty.of.dataType === "string") {
+                    if (arrayProperty.of.enumValues) {
+                        content = renderArrayEnumTableCell();
+                    } else if (arrayProperty.of.storage) {
+                        content = renderGenericArrayCell(arrayProperty.of);
+                    } else {
+                        content = renderArrayOfStrings();
+                    }
+                } else {
+                    content = renderGenericArrayCell(arrayProperty.of);
+                }
             }
         }
 

@@ -44,7 +44,7 @@ import { ErrorBoundary } from "../core/internal/ErrorBoundary";
 import { LoadingButton } from "@mui/lab";
 import { YupSchema } from "./SchemaYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
-import { editableProperty } from "../core/util/collections";
+import { editableProperty } from "../core/util/entities";
 
 export type CollectionEditorProps<M> = {
     path: string;

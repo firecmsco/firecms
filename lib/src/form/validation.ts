@@ -309,41 +309,60 @@ function hasUniqueInArrayModifier(property: ResolvedProperty): boolean | [string
 }
 
 function getYupArraySchema({
-                                  property,
-                                  parentProperty,
-                                  customFieldValidator,
-                                  name
-                              }: PropertyContext<any[]>): ArraySchema<any> {
+                               property,
+                               parentProperty,
+                               customFieldValidator,
+                               name
+                           }: PropertyContext<any[]>): AnySchema<any> {
 
-    let collection: ArraySchema<any> = yup.array();
+    let arraySchema: ArraySchema<any> = yup.array();
 
     if (property.of) {
-        collection = collection.of(mapPropertyToYup({
-            property: property.of,
-            parentProperty: property
-        }));
-        const arrayUniqueFields = hasUniqueInArrayModifier(property.of);
-        if (arrayUniqueFields) {
-            if (typeof arrayUniqueFields === "boolean") {
-                collection = collection.uniqueInArray(v => v, `${property.name} should have unique values within the array`);
-            } else if (Array.isArray(arrayUniqueFields)) {
-                arrayUniqueFields.forEach(([name, childProperty]) => {
-                        collection = collection.uniqueInArray(v => v && v[name], `${property.name} → ${childProperty.name ?? name}: should have unique values within the array`);
+        if (Array.isArray(property.of)) {
+            const yupProperties = (property.of as ResolvedProperty[]).map((p, index) => ({
+                [`${name}[${index}]`]: mapPropertyToYup({
+                    property: p,
+                    parentProperty: property
+                })
+            })).reduce((a, b) => ({ ...a, ...b }), {});
+            return yup.array().of(
+                yup.mixed().test(
+                    "Dynamic object validation",
+                    "Dynamic object validation error",
+                    (object, context) => {
+                        const yupProperty = yupProperties[context.path];
+                        return yupProperty.validate(object);
                     }
-                );
+                )
+            );
+        } else {
+            arraySchema = arraySchema.of(mapPropertyToYup({
+                property: property.of,
+                parentProperty: property
+            }));
+            const arrayUniqueFields = hasUniqueInArrayModifier(property.of);
+            if (arrayUniqueFields) {
+                if (typeof arrayUniqueFields === "boolean") {
+                    arraySchema = arraySchema.uniqueInArray(v => v, `${property.name} should have unique values within the array`);
+                } else if (Array.isArray(arrayUniqueFields)) {
+                    arrayUniqueFields.forEach(([name, childProperty]) => {
+                            arraySchema = arraySchema.uniqueInArray(v => v && v[name], `${property.name} → ${childProperty.name ?? name}: should have unique values within the array`);
+                        }
+                    );
+                }
             }
         }
     }
     const validation = property.validation;
 
     if (validation) {
-        collection = validation.required
-            ? collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
-            : collection.notRequired().nullable(true);
-        if (validation.min || validation.min === 0) collection = collection.min(validation.min, `${property.name} should be min ${validation.min} entries long`);
-        if (validation.max) collection = collection.max(validation.max, `${property.name} should be max ${validation.max} entries long`);
+        arraySchema = validation.required
+            ? arraySchema.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+            : arraySchema.notRequired().nullable(true);
+        if (validation.min || validation.min === 0) arraySchema = arraySchema.min(validation.min, `${property.name} should be min ${validation.min} entries long`);
+        if (validation.max) arraySchema = arraySchema.max(validation.max, `${property.name} should be max ${validation.max} entries long`);
     } else {
-        collection = collection.notRequired().nullable(true);
+        arraySchema = arraySchema.notRequired().nullable(true);
     }
-    return collection;
+    return arraySchema;
 }

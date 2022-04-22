@@ -2,8 +2,8 @@ import {
     DataSource,
     DeleteEntityProps,
     Entity,
-    EntityReference,
     EntityCollection,
+    EntityReference,
     EntityValues,
     FetchCollectionProps,
     FetchEntityProps,
@@ -44,7 +44,7 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../models/text_search";
 import { useEffect, useRef } from "react";
-import { getResolvedCollection } from "../../core";
+import { resolveCollection } from "../../core/util/resolutions";
 
 /**
  * @category Firebase
@@ -150,7 +150,7 @@ export function useFirestoreDataSource({
                 if (!docSnapshot.exists()) {
                     return undefined;
                 }
-                const resolvedCollection = getResolvedCollection<M>({
+                const resolvedCollection = resolveCollection<M>({
                     collection,
                     path,
                     entityId: docSnapshot.id,
@@ -220,7 +220,7 @@ export function useFirestoreDataSource({
             return getDocs(query)
                 .then((snapshot) =>
                     snapshot.docs.map((doc) => {
-                        const resolvedCollection = getResolvedCollection<M>({
+                        const resolvedCollection = resolveCollection<M>({
                             collection,
                             path,
                             values: firestoreToCMSModel(doc.data())
@@ -273,7 +273,7 @@ export function useFirestoreDataSource({
                 };
             }
 
-            const resolvedCollection = getResolvedCollection<M>({
+            const resolvedCollection = resolveCollection<M>({
                 collection,
                 path
             });
@@ -328,7 +328,7 @@ export function useFirestoreDataSource({
                 doc(firestore, path, entityId),
                 {
                     next: (docSnapshot) => {
-                        const resolvedCollection = getResolvedCollection<M>({
+                        const resolvedCollection = resolveCollection<M>({
                             collection,
                             path,
                             entityId: docSnapshot.id
@@ -363,7 +363,7 @@ export function useFirestoreDataSource({
 
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
 
-            const resolvedCollection = getResolvedCollection<M>({
+            const resolvedCollection = resolveCollection<M>({
                 collection,
                 path,
                 entityId

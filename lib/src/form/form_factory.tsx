@@ -9,10 +9,10 @@ import {
 } from "formik";
 
 import {
-    ArrayProperty,
     CMSFormFieldProps,
     CMSType,
-    FieldProps, ResolvedArrayProperty,
+    FieldProps,
+    ResolvedArrayProperty,
     ResolvedProperty
 } from "../models";
 
@@ -41,6 +41,9 @@ import {
 } from "./field_bindings/ArrayOfReferencesFieldBinding";
 
 import { isReadOnly } from "../core/util/entities";
+import {
+    ArrayCustomShapedFieldBinding
+} from "./field_bindings/ArrayCustomShapedFieldBinding";
 
 /**
  * This factory method renders a form field creating the corresponding configuration
@@ -90,7 +93,9 @@ export function buildPropertyField<T extends CMSType = any, M = any>
     } else if (property.dataType === "array") {
         const of = (property as ResolvedArrayProperty).of;
         if (of) {
-            if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
+            if (Array.isArray(of)) {
+                component = ArrayCustomShapedFieldBinding as ComponentType<FieldProps<T>>;
+            } else if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
                 component = ArrayEnumSelectBinding as ComponentType<FieldProps<T>>;
             } else if (of.dataType === "string" && of.storage) {
                 component = StorageUploadFieldBinding as ComponentType<FieldProps<T>>;

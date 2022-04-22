@@ -8,7 +8,6 @@ import {
     PropertyPreviewProps
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
-import { ResolvedProperty } from "../../models";
 
 /**
  * @category Preview components
@@ -40,23 +39,28 @@ export function ArrayPropertyPreview({
             flexDirection: "column"
         }}>
             {values &&
-                values.map((value, index) =>
-                    <React.Fragment
-                        key={"preview_array_" + value + "_" + index}>
-                        <Box sx={{
-                            margin: 1
-                        }}>
-                            <ErrorBoundary>
-                                <PropertyPreview
-                                    propertyKey={propertyKey}
-                                    entity={entity}
-                                    value={value}
-                                    property={property.of as ResolvedProperty<any>}
-                                    size={childSize}/>
-                            </ErrorBoundary>
-                        </Box>
-                        {index < values.length - 1 && <Divider/>}
-                    </React.Fragment>
+                values.map((value, index) => {
+                    const of = property.resolvedProperties[index] ??
+                        (property.resolvedProperties[index] ?? (Array.isArray(property.of) ? property.of[index] : property.of));
+                    return of
+                        ? <React.Fragment
+                            key={"preview_array_" + value + "_" + index}>
+                            <Box sx={{
+                                margin: 1
+                            }}>
+                                <ErrorBoundary>
+                                    <PropertyPreview
+                                        propertyKey={propertyKey}
+                                        entity={entity}
+                                            value={value}
+                                            property={of}
+                                            size={childSize}/>
+                                    </ErrorBoundary>
+                                </Box>
+                                {index < values.length - 1 && <Divider/>}
+                            </React.Fragment>
+                            : null;
+                    }
                 )}
         </Box>
     );

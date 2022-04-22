@@ -13,7 +13,7 @@ import {
 
 export interface EnumValuesChipProps {
     enumValues: EnumValueConfig[] | undefined;
-    enumId: any;
+    enumKey: any;
     small: boolean;
 }
 
@@ -22,17 +22,17 @@ export interface EnumValuesChipProps {
  */
 export function EnumValuesChip({
                                    enumValues,
-                                   enumId,
+                                   enumKey,
                                    small
                                }: EnumValuesChipProps) {
     if (!enumValues) return null;
-    const enumValue = enumId !== undefined ? getLabelOrConfigFrom(enumValues, enumId?.toString()) : undefined;
+    const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValues, enumKey?.toString()) : undefined;
     const label = buildEnumLabel(enumValue);
-    const colorSchemaKey = getColorSchemaKey(enumValues, enumId.toString());
+    const colorSchemaKey = getColorSchemaKey(enumValues, enumKey.toString());
     return <CustomChip
-        colorSeed={`${enumId}`}
+        colorSeed={`${enumKey}`}
         colorSchemaKey={colorSchemaKey}
-        label={label !== undefined ? label : enumId}
+        label={label !== undefined ? label : enumKey}
         error={!label}
         outlined={false}
         small={small}/>;

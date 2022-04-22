@@ -7,7 +7,7 @@ import {
     SaveEntityProps, User
 } from "../../models";
 import { useDataSource } from "./useDataSource";
-import { getResolvedCollection } from "../../core";
+import { resolveCollection } from "../../core/util/resolutions";
 
 /**
  * @category Hooks and utilities
@@ -72,7 +72,7 @@ export async function saveEntityWithCallbacks<M, UserType extends User>({
     const callbacks = collection.callbacks;
     if (callbacks?.onPreSave) {
         try {
-            const resolvedCollection = getResolvedCollection<M>({
+            const resolvedCollection = resolveCollection<M>({
                 collection,
                 path,
                 values: previousValues as EntityValues<M>,
@@ -107,7 +107,7 @@ export async function saveEntityWithCallbacks<M, UserType extends User>({
     }).then((entity) => {
         try {
             if (callbacks?.onSaveSuccess) {
-                const resolvedCollection = getResolvedCollection<M>({
+                const resolvedCollection = resolveCollection<M>({
                     collection,
                     path,
                     values: updatedValues as EntityValues<M>,
@@ -133,7 +133,7 @@ export async function saveEntityWithCallbacks<M, UserType extends User>({
         .catch((e) => {
             if (callbacks?.onSaveFailure) {
 
-                const resolvedCollection = getResolvedCollection<M>({
+                const resolvedCollection = resolveCollection<M>({
                     collection,
                     path,
                     values: updatedValues as EntityValues<M>,

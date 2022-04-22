@@ -2,7 +2,7 @@ import React from "react";
 import { Box, IconButton } from "@mui/material";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
-import { PropertiesOrBuilder, PropertyOrBuilder } from "../models";
+import { PropertiesOrBuilders, Property, PropertyOrBuilder } from "../models";
 import {
     PropertyBuilderPreview,
     PropertyFieldPreview
@@ -15,6 +15,7 @@ import {
 } from "react-beautiful-dnd";
 import { getFullId, idToPropertiesPath } from "./util";
 import { getIn } from "formik";
+import { editableProperty } from "../core/util/entities";
 
 export function PropertyTree<M>({
                                     namespace,
@@ -28,7 +29,7 @@ export function PropertyTree<M>({
     namespace?: string;
     selectedPropertyKey?: string;
     onPropertyClick?: (propertyKey: string, namespace?: string) => void;
-    properties: PropertiesOrBuilder<M>;
+    properties: PropertiesOrBuilders<M>;
     propertiesOrder?: string[];
     errors: Record<string, any>;
     onPropertyMove: (propertiesOrder: string[], namespace?: string) => void;
@@ -133,6 +134,7 @@ export function PropertyTreeEntry({
 
     const hasError = fullId ? getIn(errors, idToPropertiesPath(fullId)) : false;
     const selected = selectedPropertyKey === fullId;
+    const editable = editableProperty(propertyOrBuilder);
     return (
         <Box
             ref={provided.innerRef}
@@ -141,9 +143,9 @@ export function PropertyTreeEntry({
                 position: "relative",
             }}
         >
-            {typeof propertyOrBuilder === "object"
+            {editable
                 ? <PropertyFieldPreview
-                    property={propertyOrBuilder}
+                    property={propertyOrBuilder as Property}
                     onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
                     includeName={true}
                     selected={selected}

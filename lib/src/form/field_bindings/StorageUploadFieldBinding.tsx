@@ -449,6 +449,9 @@ export function StorageUpload({
     if (multipleFilesSupported) {
         const arrayProperty = property as ResolvedArrayProperty<string[]>;
         if (arrayProperty.of) {
+            if (Array.isArray(arrayProperty.of)) {
+                throw Error("Storage field using array must be of data type string");
+            }
             if (arrayProperty.of.dataType !== "string") {
                 throw Error("Storage field using array must be of data type string");
             }

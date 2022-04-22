@@ -16,6 +16,10 @@ export function ArrayOfMapsPreview({
                                        entity
                                    }: PropertyPreviewProps<object[]>) {
 
+    if (Array.isArray(property.of)) {
+        throw Error("Using array properties instead of single one in `of` in ArrayProperty");
+    }
+
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");
 

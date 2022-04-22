@@ -139,7 +139,7 @@ export function StringNumberFilterField({
                                         {selected.map((enumKey: any) => {
                                             return <EnumValuesChip
                                                 key={`select_value_${name}_${enumKey}`}
-                                                enumId={enumKey}
+                                                enumKey={enumKey}
                                                 enumValues={enumValues}
                                                 small={true}/>;
                                         })}
@@ -152,7 +152,7 @@ export function StringNumberFilterField({
                                     key={`select_${name}_${enumConfig.id}`}
                                     value={enumConfig.id}>
                                     <EnumValuesChip
-                                        enumId={enumConfig.id}
+                                        enumKey={enumConfig.id}
                                         enumValues={enumValues}
                                         small={true}/>
                                 </MenuItem>

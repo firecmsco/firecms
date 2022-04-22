@@ -48,7 +48,7 @@ import { fullPathToCollectionSegments } from "../util/paths";
 import { useSideDialogContext } from "../SideDialogs";
 
 import equal from "react-fast-compare"
-import { getResolvedCollection } from "../util/collections";
+import { resolveCollection } from "../util/resolutions";
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<any>>;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<any>>;
@@ -106,7 +106,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
 
         const editEnabled = entity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path)) : false;
 
-        const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => getResolvedCollection<M>({
+        const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection<M>({
             collection,
             path,
             entityId,

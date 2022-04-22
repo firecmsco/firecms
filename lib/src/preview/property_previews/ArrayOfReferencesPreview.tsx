@@ -17,6 +17,10 @@ export function ArrayOfReferencesPreview({
                                              size
                                          }: PropertyPreviewProps<any[]>) {
 
+    if (Array.isArray(property.of)) {
+        throw Error("Using array properties instead of single one in `of` in ArrayProperty");
+    }
+
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "reference")
         throw Error("Picked wrong preview component ArrayOfReferencesPreview");
 

@@ -218,7 +218,7 @@ export function getWidgetId(property: Property): WidgetId | undefined {
             return "group";
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
-        if (typeof of === "function") {
+        if (Array.isArray(of) || typeof of === "function") {
             return "repeat";
         } else if (of?.dataType === "string" && of.enumValues) {
             return "multi_select";

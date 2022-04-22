@@ -15,7 +15,8 @@ import {
     Entity,
     EntityCollection,
     EntityValues,
-    FormContext, ResolvedEntityCollection,
+    FormContext,
+    ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty
 } from "../../../../../models";
@@ -32,7 +33,7 @@ import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
 import { isReadOnly } from "../../../../util/entities";
 import { CustomDialogActions } from "../../../CustomDialogActions";
-import { getResolvedCollection } from "../../../../util/collections";
+import { resolveCollection } from "../../../../util/resolutions";
 
 interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     entity?: Entity<M>;
@@ -74,7 +75,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     // const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
 
     const collection: ResolvedEntityCollection<M> | undefined = inputCollection
-        ? getResolvedCollection<M>({
+        ? resolveCollection<M>({
             collection: inputCollection,
             path,
             values: entity?.values,
@@ -278,16 +279,19 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                     shouldAlwaysRerender: true
                                 })}
 
-                                <CustomDialogActions>
-                                    <Button
-                                        variant="contained"
-                                        color="primary"
-                                        type="submit"
-                                        disabled={disabled}
-                                    >
-                                        Save
-                                    </Button>
-                                </CustomDialogActions>
+                                <Box sx={{ mt: 1 }}>
+                                    <CustomDialogActions>
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            type="submit"
+                                            disabled={disabled}
+                                        >
+                                            Save
+                                        </Button>
+                                    </CustomDialogActions>
+                                </Box>
+
 
                             </Form>
 

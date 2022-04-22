@@ -45,7 +45,9 @@ export function ArrayOfStringsPreview({
                                           entity,
                                           size
                                       }: PropertyPreviewProps<string[]>) {
-
+    if (Array.isArray(property.of)) {
+        throw Error("Using array properties instead of single one in `of` in ArrayProperty");
+    }
     if (!property.of || property.dataType !== "array" || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStringsPreview");
 

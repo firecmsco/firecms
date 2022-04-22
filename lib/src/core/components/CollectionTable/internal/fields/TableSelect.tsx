@@ -110,33 +110,33 @@ export function TableSelect(props: {
                                              size={small ? "small" : "regular"}/>;
                 } else {
                     return <EnumValuesChip
-                        enumId={enumKey}
+                        enumKey={enumKey}
                         enumValues={enumValues}
                         small={small}/>;
                 }
             }
             }>
 
-            {enumToObjectEntries(enumValues).map(([key, labelOrConfig]) => {
+            {enumToObjectEntries(enumValues).map(([enumKey, labelOrConfig]) => {
 
                 const chip = <EnumValuesChip
-                    enumId={key}
+                    enumKey={enumKey}
                     enumValues={enumValues}
                     small={true}/>;
                 if (multiple) {
                     return (
-                        <MenuItem key={`select-${name}-${key}`}
-                                  value={key}
+                        <MenuItem key={`select-${name}-${enumKey}`}
+                                  value={enumKey}
                                   disabled={isEnumValueDisabled(labelOrConfig)}
                                   dense={true}>
                             <Checkbox
-                                checked={Array.isArray(internalValue) && (internalValue as any[]).map(v => v.toString()).includes(key.toString())}/>
+                                checked={Array.isArray(internalValue) && (internalValue as any[]).map(v => v.toString()).includes(enumKey.toString())}/>
                             <ListItemText primary={chip}/>
                         </MenuItem>
                     );
                 } else {
                     return (
-                        <MenuItem key={`select-${name}-${key}`} value={key}
+                        <MenuItem key={`select-${name}-${enumKey}`} value={enumKey}
                                   disabled={isEnumValueDisabled(labelOrConfig)}
                                   dense={true}>
                             {chip}

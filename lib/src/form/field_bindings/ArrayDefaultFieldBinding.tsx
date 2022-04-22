@@ -31,7 +31,7 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
                                                             shouldAlwaysRerender
                                                         }: FieldProps<T>) {
 
-    if (!property.of)
+    if (!property.of || !property.resolvedProperties)
         throw Error("ArrayDefaultField misconfiguration. Property `of` not set");
 
     const expanded = property.expanded === undefined ? true : property.expanded;
@@ -45,11 +45,11 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
         setValue
     });
 
-    const buildEntry = (index: number, internalId: number) => {
-        return buildPropertyField({
+    const buildEntry = (index: number, internalId: number) =>
+        buildPropertyField({
             propertyKey: `${propertyKey}[${index}]`,
             disabled,
-            property: ofProperty,
+            property: property.resolvedProperties[index] ?? ofProperty,
             includeDescription,
             underlyingValueHasChanged,
             context,
@@ -59,32 +59,32 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
             shouldAlwaysRerender: false
         });
 
-    };
-
+    const arrayContainer = <ArrayContainer value={value}
+                                           name={propertyKey}
+                                           buildEntry={buildEntry}
+                                           onInternalIdAdded={setLastAddedId}
+                                           disabled={isSubmitting || Boolean(property.disabled)}
+                                           includeAddButton={!property.disabled}/>;
+    const title = <FormHelperText filled
+                                  required={property.validation?.required}>
+        <LabelWithIcon property={property}/>
+    </FormHelperText>;
     return (
 
         <FormControl fullWidth error={showError}>
 
-            <ExpandablePanel title={
-                <FormHelperText filled
-                                required={property.validation?.required}>
-                    <LabelWithIcon property={property}/>
-                </FormHelperText>}
-                             expanded={expanded}>
+            {!tableMode && <ExpandablePanel expanded={expanded}
+                                            title={title}>
+                {arrayContainer}
+            </ExpandablePanel>}
 
-                <ArrayContainer value={value}
-                                name={propertyKey}
-                                buildEntry={buildEntry}
-                                onInternalIdAdded={setLastAddedId}
-                                disabled={isSubmitting || Boolean(property.disabled)}
-                                includeAddButton={!property.disabled}/>
-            </ExpandablePanel>
+            {tableMode && arrayContainer}
 
             {includeDescription &&
-            <FieldDescription property={property}/>}
+                <FieldDescription property={property}/>}
 
             {showError && typeof error === "string" &&
-            <FormHelperText>{error}</FormHelperText>}
+                <FormHelperText>{error}</FormHelperText>}
 
         </FormControl>
     );

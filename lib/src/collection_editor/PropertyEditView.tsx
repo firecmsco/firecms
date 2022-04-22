@@ -328,9 +328,8 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "array",
+                // @ts-ignore
                 of: {
-                    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-                    // @ts-ignore
                     dataType: "reference"
                 }
             })

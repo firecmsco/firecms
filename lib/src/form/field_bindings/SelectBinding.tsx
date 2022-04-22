@@ -86,7 +86,7 @@ export function SelectBinding<T extends EnumType>({
                 }}
                 renderValue={(enumKey: any) => {
                     return <EnumValuesChip
-                        enumId={enumKey}
+                        enumKey={enumKey}
                         enumValues={enumValues}
                         small={false}/>;
                 }
@@ -98,7 +98,7 @@ export function SelectBinding<T extends EnumType>({
                                   value={enumConfig.id}
                                   disabled={isEnumValueDisabled(enumConfig)}>
                             <EnumValuesChip
-                                enumId={enumConfig.id}
+                                enumKey={enumConfig.id}
                                 enumValues={enumValues}
                                 small={true}/>
                         </MenuItem>

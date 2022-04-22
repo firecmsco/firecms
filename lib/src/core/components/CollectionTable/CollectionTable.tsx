@@ -23,14 +23,14 @@ import {
     useFireCMSContext,
     useSideEntityController
 } from "../../../hooks";
-import {  Table } from "../../index";
+import { Table } from "../../index";
 import {
     checkInlineEditing,
     OnCellValueChange,
     UniqueFieldValidator,
     useBuildColumnsFromCollection
 } from "./column_builder";
-import { getResolvedCollection } from "../../util/collections";
+import { resolveCollection } from "../../util/resolutions";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -83,7 +83,7 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
         const theme = useTheme();
         const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-        const resolvedCollection = getResolvedCollection<M>({
+        const resolvedCollection = resolveCollection<M>({
             collection,
             path
         });

@@ -138,6 +138,7 @@ export const productsCollection = buildCollection<Product>({
         name: {
             dataType: "string",
             name: "Name",
+            description: "Name of this product",
             validation: {
                 required: true
             }
@@ -148,7 +149,8 @@ export const productsCollection = buildCollection<Product>({
             storage: {
                 storagePath: "images",
                 acceptedFiles: ["image/*"],
-                maxSize: 1 * 1024 * 1024,metadata: {
+                maxSize: 1024 * 1024,
+                metadata: {
                     cacheControl: "max-age=1000000"
                 }
             },

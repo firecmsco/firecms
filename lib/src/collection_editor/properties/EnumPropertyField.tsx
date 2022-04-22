@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { getIn, useFormikContext } from "formik";
 import { Box, Grid, Paper, Typography } from "@mui/material";
 import { EnumValueConfig, NumberProperty, StringProperty } from "../../models";
-import { resolveEnumValues } from "../../core/util/entities";
+import { resolveEnumValues } from "../../core/util/resolutions";
 import ListIcon from "@mui/icons-material/List";
 import { EnumForm } from "../EnumForm";
 import {

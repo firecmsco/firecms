@@ -4,7 +4,7 @@ import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
-import { EnumValues, PropertiesOrBuilder } from "./properties";
+import { EnumValues, PropertiesOrBuilders } from "./properties";
 import { ResolvedEntityCollection } from "./resolved_entities";
 
 /**
@@ -52,7 +52,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     /**
      * Set of properties that compose an entity
      */
-    properties: PropertiesOrBuilder<M>;
+    properties: PropertiesOrBuilders<M>;
 
     /**
      * Order in which the properties are displayed.

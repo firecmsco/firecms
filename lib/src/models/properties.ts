@@ -217,10 +217,29 @@ export type Properties<M extends { [Key: string]: any } = any> = {
  */
 export type PropertyBuilderProps<M extends { [Key: string]: any }> =
     {
+        /**
+         * Current values of the entity
+         */
         values: Partial<M>;
+        /**
+         * Previous values of the entity before being saved
+         */
         previousValues?: Partial<M>;
-        // localValue: any;
+        /**
+         * Current value of this property
+         */
+        propertyValue?: unknown;
+        /**
+         * Index of this property (only for arrays)
+         */
+        index?: number;
+        /**
+         * Path of the entity in the data source
+         */
         path: string;
+        /**
+         * Entity ID
+         */
         entityId?: string;
     };
 /**
@@ -229,6 +248,7 @@ export type PropertyBuilderProps<M extends { [Key: string]: any }> =
 export type PropertyBuilder<T extends CMSType = CMSType, M = any> = ({
                                                                          values,
                                                                          previousValues,
+                                                                         propertyValue,
                                                                          path,
                                                                          entityId
                                                                      }: PropertyBuilderProps<M>) => Property<T> | null;
@@ -243,7 +263,7 @@ export type PropertyOrBuilder<T extends CMSType = CMSType, M = any> =
 /**
  * @category Entity properties
  */
-export type PropertiesOrBuilder<M extends { [Key: string]: any } = any> =
+export type PropertiesOrBuilders<M extends { [Key: string]: any } = any> =
     {
         [k in keyof M]: PropertyOrBuilder<M[k], M>;
     };
@@ -357,7 +377,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      * You can leave this field empty only if you are providing a custom field,
      * otherwise an error will be thrown.
      */
-    of?: Property<ArrayT>;
+    of?: PropertyOrBuilder<ArrayT> | Property[];
 
     /**
      * Use this field if you would like to have an array of properties.
@@ -379,7 +399,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
          * Record of properties, where the key is the `type` and the value
          * is the corresponding property
          */
-        properties: Record<string, AnyProperty>;
+        properties: Properties;
 
         /**
          * Order in which the properties are displayed.
@@ -416,14 +436,14 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
 /**
  * @category Entity properties
  */
-export interface MapProperty<T  extends { [Key: string]: any } = any> extends BaseProperty<T> {
+export interface MapProperty<T extends { [Key: string]: unknown } = any> extends BaseProperty<T> {
 
     dataType: "map";
 
     /**
      * Record of properties included in this map.
      */
-    properties?: Properties<Partial<T>>; // TODO: this should be Properties<T> but it breaks if building properties without `buildProperties`
+    properties?: PropertiesOrBuilders<Partial<T>>; // TODO: this should be Properties<T> but it breaks if building properties without `buildProperties`
 
     /**
      * Order in which the properties are displayed.

@@ -30,7 +30,7 @@ import {
     useFireCMSContext,
     useSnackbarController
 } from "../../hooks";
-import { resolveEnumValues } from "../../core/util/entities";
+import { resolveEnumValues } from "../../core/util/resolutions";
 
 const PREFIX = "CustomIdField";
 

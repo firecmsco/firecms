@@ -18,7 +18,7 @@ import { getDefaultValuesFor, isReadOnly } from "../core/util/entities";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
-import { getResolvedCollection } from "../core";
+import { resolveCollection } from "../core/util/resolutions";
 
 /**
  * @category Components
@@ -104,7 +104,7 @@ export function EntityForm<M>({
 
     const dataSource = useDataSource();
 
-    const initialResolvedCollection = useMemo(() => getResolvedCollection({
+    const initialResolvedCollection = useMemo(() => resolveCollection({
         collection: inputCollection,
         path,
         values: entity?.values
@@ -146,7 +146,7 @@ export function EntityForm<M>({
             onValuesChanged(values);
     }
 
-    const collection = useMemo(() => getResolvedCollection<M>({
+    const collection = useMemo(() => resolveCollection<M>({
         collection: inputCollection,
         path,
         entityId,

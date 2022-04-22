@@ -10,7 +10,7 @@ import {
     Select as MuiSelect,
     Theme
 } from "@mui/material";
-import { EnumType, FieldProps } from "../../models";
+import { EnumType, FieldProps, ResolvedProperty } from "../../models";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
@@ -71,6 +71,10 @@ export function ArrayEnumSelectBinding({
         throw Error("Using wrong component ArrayEnumSelect");
     }
 
+    if (Array.isArray(property.of)) {
+        throw Error("Using array properties instead of single one in `of` in ArrayProperty");
+    }
+
     if (property.of.dataType !== "string" && property.of.dataType !== "number") {
         throw Error("Field misconfiguration: array field of type string or number");
     }
@@ -125,7 +129,7 @@ export function ArrayEnumSelectBinding({
                 disabled={disabled}
                 onChange={(evt: any) => {
                     let newValue;
-                    if (property.of?.dataType === "number")
+                    if ((property.of as ResolvedProperty)?.dataType === "number")
                         newValue = evt.target.value ? evt.target.value.map((e: any) => parseFloat(e)) : [];
                     else
                         newValue = evt.target.value;
@@ -151,7 +155,7 @@ export function ArrayEnumSelectBinding({
                                 <Checkbox checked={checked}/>
                                 <ListItemText primary={
                                     <EnumValuesChip
-                                        enumId={enumKey}
+                                        enumKey={enumKey}
                                         enumValues={enumValues}
                                         small={true}/>
                                 }/>

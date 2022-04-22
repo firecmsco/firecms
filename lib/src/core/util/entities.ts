@@ -1,5 +1,4 @@
 import {
-    CMSType,
     Entity,
     EntityReference,
     EntityStatus,
@@ -8,7 +7,7 @@ import {
     EnumValues,
     NumberProperty,
     Properties,
-    PropertiesOrBuilder,
+    PropertiesOrBuilders,
     Property,
     PropertyOrBuilder,
     ResolvedArrayProperty,
@@ -19,6 +18,7 @@ import {
     StringProperty
 } from "../../models";
 import { setDateToMidnight } from "./dates";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
 
 export function isReadOnly(property: Property | ResolvedProperty): boolean {
     if (property.readOnly)
@@ -37,83 +37,20 @@ export function isHidden(property: Property | ResolvedProperty): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-/**
- * Replace enums declared as aliases for their corresponding enumValues,
- * defined in the root of the {@link CollectionRegistry}.
- * @param property
- * @param enumConfigs
- */
-export function computePropertyEnums(property: Property): ResolvedProperty {
-    if (property.dataType === "map" && property.properties) {
-        const properties = computePropertiesEnums(property.properties);
-        return {
-            ...property,
-            properties
-        };
-    } else if (property.dataType === "array" && property.of) {
-        if (property.of) {
-            return {
-                ...property,
-                of: computePropertyEnums(property.of)
-            } as ResolvedArrayProperty;
-        } else if (property.oneOf) {
-            const properties = computePropertiesEnums(property.oneOf.properties);
-            return {
-                ...property,
-                oneOf: {
-                    ...property.oneOf,
-                    properties
-                }
-            } as ResolvedArrayProperty;
-        }
-    } else if ((property.dataType === "string" || property.dataType === "number") && property.enumValues) {
-        return resolvePropertyEnum(property);
-    }
-    return property as ResolvedProperty;
+export function editableProperty(property: PropertyOrBuilder): boolean {
+    if (typeof property === "function")
+        return false;
+    else if (property.dataType === "array" && typeof property.of === "function")
+        return false;
+    else if (property.dataType === "array" && Array.isArray(property.of))
+        return false;
+    else if (property.editable === undefined)
+        return true;
+    return property.editable;
 }
 
-/**
- * Replace enums declared as aliases for their corresponding enumValues,
- * defined in the root of the {@link CollectionRegistry}.
- * @param properties
- * @param enumConfigs
- */
-export function computePropertiesEnums<M>(properties: Properties<M>): ResolvedProperties<M> {
-    return Object.entries<Property>(properties as Record<string, Property>)
-        .map(([key, property]) => {
-            return ({ [key]: computePropertyEnums(property) });
-        })
-        .filter((a) => a !== null)
-        .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
-}
 
-/**
- * Resolve enum aliases for a string or number propery
- * @param property
- * @param enumConfigs
- */
-export function resolvePropertyEnum(property: StringProperty | NumberProperty): ResolvedStringProperty | ResolvedNumberProperty {
-    if (typeof property.enumValues === "object") {
-        return {
-            ...property,
-            enumValues: resolveEnumValues(property.enumValues)?.filter((value) => value && value.id && value.label) ?? [],
-        }
-    }
-    return property as ResolvedStringProperty | ResolvedNumberProperty;
-}
-
-export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefined {
-    if (typeof input === "object") {
-        return Object.entries(input).map(([id, value]) =>
-            (typeof value === "string" ? { id, label: value } : value));
-    } else if (Array.isArray(input)) {
-        return input as EnumValueConfig[];
-    } else {
-        return undefined;
-    }
-}
-
-export function getDefaultValuesFor<M extends { [Key: string]: any }>(properties: PropertiesOrBuilder<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
+export function getDefaultValuesFor<M extends { [Key: string]: any }>(properties: PropertiesOrBuilders<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
     if (!properties) return {};
     return Object.entries(properties)
         .map(([key, property]) => {
@@ -142,7 +79,7 @@ export function updateDateAutoValues<M extends { [Key: string]: any }>({
                                                                            inputValues,
                                                                            properties,
                                                                            status,
-                                                                           timestampNowValue,
+                                                                           timestampNowValue
                                                                        }:
                                                                            {
                                                                                inputValues: Partial<EntityValues<M>>,
@@ -225,8 +162,8 @@ export function traverseValueProperty(inputValue: any,
         if (property.of && Array.isArray(inputValue)) {
             value = inputValue.map((e) => traverseValueProperty(e, property.of as Property, operation));
         } else if (property.oneOf && Array.isArray(inputValue)) {
-            const typeField = property.oneOf?.typeField ?? "type";
-            const valueField = property.oneOf?.valueField ?? "value";
+            const typeField = property.oneOf?.typeField ?? DEFAULT_ONE_OF_TYPE;
+            const valueField = property.oneOf?.valueField ?? DEFAULT_ONE_OF_VALUE;
             value = inputValue.map((e) => {
                 if (e === null) return null;
                 if (typeof e !== "object") return e;
@@ -246,33 +183,4 @@ export function traverseValueProperty(inputValue: any,
     }
 
     return value;
-}
-
-export function resolvePropertyBuilders<T extends CMSType, M extends { [Key: string]: any }>
-({
-     propertyOrBuilder,
-     values,
-     previousValues,
-     path,
-     entityId
- }: {
-     propertyOrBuilder: PropertyOrBuilder<T, M>,
-     values: Partial<EntityValues<M>>,
-     previousValues?: Partial<EntityValues<M>>,
-     path: string,
-     entityId?: string
- }
-): Property<T> | null {
-    let result: Property<T> | null;
-    if (typeof propertyOrBuilder === "function") {
-        result = propertyOrBuilder({ values, previousValues, entityId, path });
-        if (!result) {
-            console.debug("Property builder not returning `Property` so it is not rendered", path, entityId, propertyOrBuilder);
-            return null;
-        }
-    } else {
-        result = propertyOrBuilder as Property<T>;
-    }
-
-    return result;
 }

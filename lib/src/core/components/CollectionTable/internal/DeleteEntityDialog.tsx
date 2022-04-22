@@ -15,7 +15,7 @@ import {
     useSnackbarController
 } from "../../../../hooks";
 import { CustomDialogActions } from "../../CustomDialogActions";
-import { getResolvedCollection } from "../../../util/collections";
+import { resolveCollection } from "../../../util/resolutions";
 
 export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
@@ -61,7 +61,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
         }
     }, [entityOrEntitiesToDelete]);
 
-    const resolvedCollection = useMemo(() => getResolvedCollection<M>({
+    const resolvedCollection = useMemo(() => resolveCollection<M>({
         collection,
         path
     }), []);
@@ -165,13 +165,12 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
         }
     }, [entityOrEntities, multipleEntities, performDelete, onMultipleEntitiesDelete, path, onClose, snackbarController, resolvedCollection.name, onEntityDelete]);
 
-
     let content: JSX.Element;
     if (entityOrEntities && multipleEntities) {
         content = <div>Multiple entities</div>;
     } else {
         const entity = entityOrEntities as Entity<M> | undefined;
-        const resolvedCollection = getResolvedCollection({
+        const resolvedCollection = resolveCollection({
             collection,
             path,
             entityId: entity?.id,

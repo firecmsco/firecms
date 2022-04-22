@@ -21,6 +21,10 @@ import {
     ResolvedProperty
 } from "../../models";
 import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import {
+    DEFAULT_ONE_OF_TYPE,
+    DEFAULT_ONE_OF_VALUE
+} from "../../core/util/common";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -64,38 +68,39 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
             name={`${propertyKey}[${index}]`}
             index={index}
             value={value[index]}
-            typeField={property.oneOf!.typeField ?? "type"}
-            valueField={property.oneOf!.valueField ?? "value"}
+            typeField={property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE}
+            valueField={property.oneOf!.valueField ?? DEFAULT_ONE_OF_VALUE}
             properties={property.oneOf!.properties}
             autoFocus={internalId === lastAddedId}
             context={context}/>;
     }, [context, lastAddedId, property.oneOf, propertyKey, value]);
 
+    const title = <FormHelperText filled
+                                  required={property.validation?.required}>
+        <LabelWithIcon property={property}/>
+    </FormHelperText>;
+    const body = <ArrayContainer value={value}
+                                 name={propertyKey}
+                                 buildEntry={buildEntry}
+                                 onInternalIdAdded={setLastAddedId}
+                                 disabled={isSubmitting || Boolean(property.disabled)}
+                                 includeAddButton={!property.disabled}/>;
     return (
 
         <FormControl fullWidth error={showError}>
 
-            <ExpandablePanel
-                expanded={expanded}
-                title={
-                <FormHelperText filled
-                                required={property.validation?.required}>
-                    <LabelWithIcon property={property}/>
-                </FormHelperText>}>
-                <ArrayContainer value={value}
-                                name={propertyKey}
-                                buildEntry={buildEntry}
-                                onInternalIdAdded={setLastAddedId}
-                                disabled={isSubmitting || Boolean(property.disabled)}
-                                includeAddButton={!property.disabled}/>
-            </ExpandablePanel>
+            {!tableMode && <ExpandablePanel expanded={expanded} title={title}>
+                {body}
+            </ExpandablePanel>}
+
+            {tableMode && body}
 
             {includeDescription &&
-            <FieldDescription property={property}/>}
+                <FieldDescription property={property}/>}
 
             {showError &&
-            typeof error === "string" &&
-            <FormHelperText>{error}</FormHelperText>}
+                typeof error === "string" &&
+                <FormHelperText>{error}</FormHelperText>}
 
         </FormControl>
     );
@@ -139,7 +144,6 @@ function ArrayOneOfEntry({
                              autoFocus,
                              context
                          }: ArrayOneOfEntryProps) {
-
 
     const type = value && value[typeField];
     const [typeInternal, setTypeInternal] = useState<string | undefined>(type ?? undefined);
@@ -189,7 +193,7 @@ function ArrayOneOfEntry({
                                 }}
                                 renderValue={(enumKey: any) =>
                                     <EnumValuesChip
-                                        enumId={enumKey}
+                                        enumKey={enumKey}
                                         enumValues={enumValues}
                                         small={true}/>
                                 }>
@@ -200,7 +204,7 @@ function ArrayOneOfEntry({
                                                 key={`select_${name}_${index}_${enumKey}`}
                                                 value={enumKey}>
                                                 <EnumValuesChip
-                                                    enumId={enumKey}
+                                                    enumKey={enumKey}
                                                     enumValues={enumValues}
                                                     small={true}/>
                                             </MenuItem>
@@ -219,7 +223,8 @@ function ArrayOneOfEntry({
                         propertyKey: valueFieldName,
                         property: property,
                         context: context,
-                        autoFocus: autoFocus
+                        autoFocus: autoFocus,
+                        tableMode: false
                     })}
                 </FormControl>
             )}

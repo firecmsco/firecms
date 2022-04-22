@@ -12,7 +12,7 @@ import {
     MapProperty,
     NumberProperty,
     Properties,
-    PropertiesOrBuilder,
+    PropertiesOrBuilders,
     Property,
     PropertyBuilder,
     ReferenceProperty,
@@ -84,8 +84,8 @@ export function buildProperties<M = any>(
  * @category Builder
  */
 export function buildPropertiesOrBuilder<M = any>(
-    propertiesOrBuilder: PropertiesOrBuilder<M>
-): PropertiesOrBuilder<M> {
+    propertiesOrBuilder: PropertiesOrBuilders<M>
+): PropertiesOrBuilders<M> {
     return propertiesOrBuilder;
 }
 

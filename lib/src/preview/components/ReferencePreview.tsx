@@ -16,12 +16,13 @@ import { EntityReference, ResolvedProperty } from "../../models";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { PreviewSize, PropertyPreview, SkeletonComponent } from "../internal";
 
-import { ErrorView, getResolvedCollection } from "../../core";
+import { ErrorView } from "../../core";
 import {
     useEntityFetch,
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
+import { resolveCollection } from "../../core/util/resolutions";
 
 export type ReferencePreviewProps = {
     disabled: boolean;
@@ -84,7 +85,7 @@ function ReferencePreviewInternal<M>({
     });
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const resolvedCollection = useMemo(() => getResolvedCollection({
+    const resolvedCollection = useMemo(() => resolveCollection({
         collection,
         path: reference.path,
         values: entity?.values

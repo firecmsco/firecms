@@ -54,6 +54,20 @@ export interface OnCellChangeParams<T> {
     setSaved: (saved: boolean) => void
 }
 
+function isStorageProperty<T>(property: ResolvedProperty) {
+    if (property.dataType === "string" && (property as ResolvedStringProperty).storage)
+        return true;
+    if (property.dataType === "array") {
+        if (Array.isArray(property.of)) {
+            return false;
+        } else {
+            return ((property as ResolvedArrayProperty).of as ResolvedProperty)?.dataType === "string" &&
+                ((property as ResolvedArrayProperty).of as ResolvedStringProperty)?.storage
+        }
+    }
+    return false;
+}
+
 const PropertyTableCellInternal = <T extends CMSType>({
                                                           selected,
                                                           focused,
@@ -151,9 +165,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
     let fullHeight = false;
 
     if (!readOnly && !customField && (!customPreview || selected)) {
-        const isAStorageProperty = (property.dataType === "string" && (property as ResolvedStringProperty).storage) ||
-            (property.dataType === "array" && (property as ResolvedArrayProperty).of?.dataType === "string" &&
-                ((property as ResolvedArrayProperty).of as ResolvedStringProperty)?.storage);
+        const isAStorageProperty = isStorageProperty(property);
         if (isAStorageProperty) {
             innerComponent = <TableStorageUpload error={error}
                                                  disabled={disabled}
@@ -263,7 +275,11 @@ const PropertyTableCellInternal = <T extends CMSType>({
             allowScroll = false;
         } else if (property.dataType === "array") {
             const arrayProperty = (property as ResolvedArrayProperty);
-            if (arrayProperty.of) {
+
+            if (!arrayProperty.of && !arrayProperty.oneOf) {
+                throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
+            }
+            if (arrayProperty.of && !Array.isArray(arrayProperty.of)) {
                 if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
                     if (selected && arrayProperty.of.enumValues) {
                         innerComponent = <TableSelect name={name as string}
@@ -301,9 +317,6 @@ const PropertyTableCellInternal = <T extends CMSType>({
                 }
             }
 
-            if (!arrayProperty.of && !arrayProperty.oneOf) {
-                throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
-            }
         }
     }
 

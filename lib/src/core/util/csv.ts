@@ -4,7 +4,8 @@ import {
     ExportConfig,
     ResolvedEntityCollection,
     ResolvedProperties,
-    ResolvedProperty, User
+    ResolvedProperty,
+    User
 } from "../../models";
 import { getValueInPath } from "./objects";
 
@@ -89,7 +90,9 @@ function processCSVValue(inputValue: any,
         value = processCSVValues(inputValue, property.properties as ResolvedProperties);
     } else if (property.dataType === "array") {
         if (property.of && Array.isArray(inputValue)) {
-            if (property.of.dataType === "map") {
+            if (Array.isArray(property.of)) {
+                value = property.of.map((p, i) => processCSVValue(inputValue[i], p));
+            } else if (property.of.dataType === "map") {
                 value = inputValue.map((e) => JSON.stringify(e));
             } else {
                 value = inputValue.map((e) => processCSVValue(e, property.of as ResolvedProperty));

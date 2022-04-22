@@ -21,7 +21,9 @@ import { productsCollection } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
 
 import { textSearchController } from "./text_search";
-import { customCollectionOverrideHandler } from "./collections/custom_collection_resolver";
+import {
+    customCollectionOverrideHandler
+} from "./collections/custom_collection_resolver";
 
 import "typeface-rubik";
 import "typeface-space-mono";
@@ -91,8 +93,9 @@ function SampleApp() {
         authentication={myAuthenticator}
         signInOptions={[
             'password',
-            // 'anonymous',
             'google.com',
+            // 'anonymous',
+            // 'phone',
             // 'facebook.com',
             // 'github.com',
             // 'twitter.com',

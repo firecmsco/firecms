@@ -77,7 +77,6 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
             return () => {
             };
         } else if (entityId && path && collection) {
-            // console.log("fff", entityId);
             if (dataSource.listenEntity) {
                 return dataSource.listenEntity<M>({
                     path,

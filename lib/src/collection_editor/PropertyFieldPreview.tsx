@@ -5,7 +5,7 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import FunctionsIcon from "@mui/icons-material/Functions";
 import { Property } from "../models";
 import { getWidget } from "../core/util/widgets";
-import { editableProperty } from "../core";
+import { editableProperty } from "../core/util/entities";
 
 export function PropertyFieldPreview({
                                          property,

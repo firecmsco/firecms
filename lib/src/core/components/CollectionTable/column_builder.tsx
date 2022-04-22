@@ -26,8 +26,7 @@ import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../Table";
 import { getIconForProperty } from "../../util/property_utils";
-import { resolveEnumValues } from "../../util/entities";
-import { getResolvedCollection, resolvePropertyBuilder } from "../../util/collections";
+import { resolveEnumValues, resolveProperty, resolveCollection } from "../../util/resolutions";
 
 export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType extends User> = {
 
@@ -193,13 +192,16 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                 enumValues
             };
         } else if (property.dataType === "array" && property.of) {
+            if (Array.isArray(property.of)) {
+                return undefined;
+            }
             return buildFilterableFromProperty(property.of, true);
         } else if (property.dataType === "boolean") {
             const name = property.name;
             return {
                 dataType: property.dataType,
                 isArray,
-                title: name,
+                title: name
             };
         } else if (property.dataType === "date") {
             const title = property.name;
@@ -215,7 +217,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
 
     }, []);
 
-    const resolvedCollection: ResolvedEntityCollection<M> = getResolvedCollection({
+    const resolvedCollection: ResolvedEntityCollection<M> = resolveCollection({
         collection: inputCollection,
         path
     });
@@ -232,10 +234,10 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
         const propertyId = column.dataKey;
 
         const propertyOrBuilder = inputCollection.properties[propertyId];
-        const property = resolvePropertyBuilder({
+        const property = resolveProperty({
             propertyOrBuilder,
-            propertyId,
             path,
+            propertyValue: entity.values ? entity.values[propertyId] : undefined,
             values: entity.values,
             entityId: entity.id
         });

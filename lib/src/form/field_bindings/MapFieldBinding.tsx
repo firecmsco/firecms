@@ -43,6 +43,7 @@ export function MapFieldBinding<T extends object>({
                                                context
                                            }: FieldProps<T>) {
 
+    console.log("mmmm", propertyKey, tableMode);
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
     const expanded = property.expanded === undefined ? true : property.expanded;
 
@@ -118,7 +119,7 @@ export function MapFieldBinding<T extends object>({
                                         includeDescription,
                                         underlyingValueHasChanged,
                                         context,
-                                        tableMode,
+                                        tableMode: false,
                                         partOfArray: false,
                                         autoFocus: false,
                                         shouldAlwaysRerender: false
@@ -143,8 +144,10 @@ export function MapFieldBinding<T extends object>({
     return (
         <FormControl fullWidth error={showError}>
 
-            <ExpandablePanel expanded={expanded}
-                             title={title}>{mapFormView}</ExpandablePanel>
+            {!tableMode && <ExpandablePanel expanded={expanded}
+                                            title={title}>{mapFormView}</ExpandablePanel>}
+
+            {tableMode && mapFormView}
 
             {includeDescription && <FieldDescription property={property}/>}
 

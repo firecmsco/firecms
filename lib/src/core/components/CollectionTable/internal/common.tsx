@@ -3,7 +3,8 @@ import {
     EntityCollection,
     Property,
     ResolvedArrayProperty,
-    ResolvedEntityCollection, ResolvedProperties,
+    ResolvedEntityCollection,
+    ResolvedProperties,
     ResolvedProperty
 } from "../../../../models";
 
@@ -31,6 +32,9 @@ export function isPropertyFilterable(property: ResolvedProperty): boolean {
     } else if (property.dataType === "date") {
         return true;
     } else if (property.dataType === "array") {
+        if (Array.isArray(property.of)) {
+            return false;
+        }
         if (property.of)
             return isPropertyFilterable(property.of);
         else
@@ -65,7 +69,11 @@ export function getPropertyColumnWidth(property: ResolvedProperty): number {
     } else if (property.dataType === "array") {
         const arrayProperty = property as ResolvedArrayProperty;
         if (arrayProperty.of) {
-            return getPropertyColumnWidth(arrayProperty.of);
+            if (Array.isArray(property.of)) {
+                return 300;
+            } else {
+                return getPropertyColumnWidth(arrayProperty.of as ResolvedProperty);
+            }
         } else {
             return 300;
         }

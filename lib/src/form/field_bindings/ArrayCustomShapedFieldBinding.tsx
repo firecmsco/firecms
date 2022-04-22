@@ -1,0 +1,84 @@
+import React from "react";
+import { FieldProps } from "../../models";
+import { Box, FormControl, FormHelperText } from "@mui/material";
+import { FieldDescription } from "../index";
+import { LabelWithIcon } from "../components";
+import { buildPropertyField } from "../form_factory";
+import { useClearRestoreValue } from "../../hooks";
+import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+
+/**
+ * Array field used for custom
+ *
+ * This is one of the internal components that get mapped natively inside forms
+ * and tables to the specified properties.
+ * @category Form fields
+ */
+export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
+                                                                        propertyKey,
+                                                                        value,
+                                                                        error,
+                                                                        showError,
+                                                                        isSubmitting,
+                                                                        setValue,
+                                                                        tableMode,
+                                                                        property,
+                                                                        includeDescription,
+                                                                        underlyingValueHasChanged,
+                                                                        context,
+                                                                        disabled,
+                                                                        shouldAlwaysRerender
+                                                                    }: FieldProps<T>) {
+
+    if (!Array.isArray(property.resolvedProperties))
+        throw Error("ArrayCustomShapedFieldBinding misconfiguration. Property `of` not set");
+
+    const expanded = property.expanded === undefined ? true : property.expanded;
+
+    useClearRestoreValue({
+        property,
+        value,
+        setValue
+    });
+
+    const title = <FormHelperText filled
+                                  required={property.validation?.required}>
+        <LabelWithIcon property={property}/>
+    </FormHelperText>;
+    const body = property.resolvedProperties.map((childProperty, index) =>
+        <Box key={`custom_shaped_array_${index}`}
+             pb={1}>
+            {
+                buildPropertyField({
+                    propertyKey: `${propertyKey}[${index}]`,
+                    disabled,
+                    property: childProperty,
+                    includeDescription,
+                    underlyingValueHasChanged,
+                    context,
+                    tableMode: false,
+                    partOfArray: true,
+                    autoFocus: false,
+                    shouldAlwaysRerender: false
+                })
+            }
+        </Box>);
+    return (
+
+        <FormControl fullWidth error={showError}>
+
+            {!tableMode && <ExpandablePanel expanded={expanded} title={title}>
+                {body}
+            </ExpandablePanel>}
+
+            {tableMode && body}
+
+            {includeDescription &&
+                <FieldDescription property={property}/>}
+
+            {showError && typeof error === "string" &&
+                <FormHelperText>{error}</FormHelperText>}
+
+        </FormControl>
+    );
+}

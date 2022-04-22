@@ -55,7 +55,7 @@ export function ArrayEnumPreview({
                              key={`preview_array_ref_${name}_${index}`}>
                             <ErrorBoundary>
                                 <EnumValuesChip
-                                    enumId={enumKey}
+                                    enumKey={enumKey}
                                     enumValues={enumValues}
                                     small={size !== "regular"}/>
                             </ErrorBoundary>

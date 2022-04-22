@@ -4,7 +4,6 @@ import {
     buildProperty,
     buildPropertyBuilder,
     EntityCallbacks,
-    EntityOnSaveProps,
     EnumValues,
     resolveNavigationFrom
 } from "@camberi/firecms";
@@ -91,6 +90,28 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entity",
     properties: {
+        shaped_array: {
+            dataType: "array",
+            of: [
+                {
+                    dataType: "string",
+                    name: "Name"
+                },
+                {
+                    dataType: "number",
+                    name: "age"
+                },
+            ]
+        },
+        function_array: {
+            dataType: "array",
+            of: ({ propertyValue, index }) => {
+                return ({
+                    dataType: "string",
+                    name: "Name"
+                });
+            }
+        },
         map_array_ref: {
             name: 'Map',
             dataType: 'map',
@@ -122,8 +143,7 @@ export const testCollection = buildCollection({
             return {
                 name: "Locale",
                 dataType: "reference",
-                // @ts-ignore
-                path:  !values.product ? false : values.product.path + "/" + values.product.id + "/locales"
+                path: !values.product ? false : values.product.path + "/" + values.product.id + "/locales"
             };
         }),
         name: {
@@ -300,7 +320,7 @@ export const testCollection = buildCollection({
             dataType: "string",
             markdown: true
         },
-        shaped_array: {
+        custom_shaped_array: {
             name: "My shaped array",
             dataType: "array",
             Field: CustomShapedArrayField,

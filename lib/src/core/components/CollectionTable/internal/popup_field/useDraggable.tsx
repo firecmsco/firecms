@@ -20,7 +20,6 @@ export function useDraggable({
     let relY = 0;
 
     const onMouseDown = (event: any) => {
-        console.log("onMouseDown", containerRef, event);
         if (event.button !== 0 || !containerRef.current || event.defaultPrevented) {
             return;
         }
