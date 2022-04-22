@@ -22,7 +22,7 @@ export interface PropertyPreviewProps<T extends CMSType = CMSType, CustomProps =
     /**
      * Property this display is related to
      */
-    property: Property<T> | ResolvedProperty<T>;
+    property: ResolvedProperty<T>;
 
     /**
      * Click handler
@@ -54,5 +54,5 @@ export interface PropertyPreviewProps<T extends CMSType = CMSType, CustomProps =
     /**
      * Entity this property refers to
      */
-    entity?: Entity<any>
+    entity?: Entity<any>;
 }

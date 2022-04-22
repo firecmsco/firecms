@@ -12,9 +12,9 @@ import {
 } from "../../models";
 import { getValueInPath, mergeDeep } from "./objects";
 import {
-    buildPropertyFrom,
     computePropertyEnums,
-    getDefaultValuesFor
+    getDefaultValuesFor,
+    resolvePropertyBuilders
 } from "./entities";
 
 export const getResolvedCollection = <M extends { [Key: string]: any } = any, >
@@ -60,14 +60,14 @@ export const getResolvedCollection = <M extends { [Key: string]: any } = any, >
 
 };
 
-export function resolveProperty<M>({
-                                       propertyOrBuilder,
-                                       values,
-                                       previousValues,
-                                       path,
-                                       entityId,
-                                       propertyId,
-                                   }: {
+export function resolvePropertyBuilder<M>({
+                                              propertyOrBuilder,
+                                              values,
+                                              previousValues,
+                                              path,
+                                              entityId,
+                                              propertyId
+                                          }: {
     propertyOrBuilder: PropertyOrBuilder,
     values?: Partial<M>,
     previousValues?: Partial<M>,
@@ -76,7 +76,7 @@ export function resolveProperty<M>({
     propertyId: string,
 }): ResolvedProperty | null {
     try {
-        const property = buildPropertyFrom({
+        const property = resolvePropertyBuilders({
             propertyOrBuilder,
             values: values ?? {},
             previousValues: previousValues ?? values ?? {},
@@ -120,7 +120,7 @@ function resolveProperties<M extends { [Key: string]: any }>(
         .map(([key, propertyOrBuilder]) => {
 
             return {
-                [key]: resolveProperty({
+                [key]: resolvePropertyBuilder({
                     propertyOrBuilder: propertyOrBuilder,
                     values: values,
                     previousValues: previousValues,
@@ -205,7 +205,9 @@ export function removeNonEditableProperties(properties: PropertiesOrBuilder<any>
 }
 
 export function editableProperty(property: PropertyOrBuilder): boolean {
-    if (typeof property === "function") return false;
-    else if (property.editable === undefined) return true;
+    if (typeof property === "function")
+        return false;
+    else if (property.editable === undefined)
+        return true;
     return property.editable;
 }

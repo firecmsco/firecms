@@ -1,9 +1,7 @@
 import {
-    ArrayProperty,
     CMSType,
     Entity,
     EntityReference,
-    EntityValues,
     ResolvedArrayProperty,
     ResolvedNumberProperty,
     ResolvedProperty,
@@ -154,7 +152,8 @@ const PropertyTableCellInternal = <T extends CMSType>({
 
     if (!readOnly && !customField && (!customPreview || selected)) {
         const isAStorageProperty = (property.dataType === "string" && (property as ResolvedStringProperty).storage) ||
-            (property.dataType === "array" && (property as ArrayProperty).of?.dataType === "string" && ((property as ArrayProperty).of as ResolvedStringProperty)?.storage);
+            (property.dataType === "array" && (property as ResolvedArrayProperty).of?.dataType === "string" &&
+                ((property as ResolvedArrayProperty).of as ResolvedStringProperty)?.storage);
         if (isAStorageProperty) {
             innerComponent = <TableStorageUpload error={error}
                                                  disabled={disabled}

@@ -229,7 +229,7 @@ function StorageUpload({
 
     const previewSize = multipleFilesSupported && previewSizeInput === "regular" ? "small" : previewSizeInput;
     if (multipleFilesSupported) {
-        const arrayProperty = property as ArrayProperty<string[]>;
+        const arrayProperty = property as ResolvedArrayProperty<string[]>;
         if (arrayProperty.of) {
             if (arrayProperty.of.dataType !== "string") {
                 throw Error("Storage field using array must be of data type string");

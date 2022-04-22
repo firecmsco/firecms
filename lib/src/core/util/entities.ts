@@ -18,7 +18,6 @@ import {
     ResolvedStringProperty,
     StringProperty
 } from "../../models";
-import { mergeDeep } from "./objects";
 import { setDateToMidnight } from "./dates";
 
 export function isReadOnly(property: Property | ResolvedProperty): boolean {
@@ -38,14 +37,13 @@ export function isHidden(property: Property | ResolvedProperty): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-
 /**
  * Replace enums declared as aliases for their corresponding enumValues,
  * defined in the root of the {@link CollectionRegistry}.
  * @param property
  * @param enumConfigs
  */
-export function computePropertyEnums(property: Property): Property {
+export function computePropertyEnums(property: Property): ResolvedProperty {
     if (property.dataType === "map" && property.properties) {
         const properties = computePropertiesEnums(property.properties);
         return {
@@ -250,21 +248,19 @@ export function traverseValueProperty(inputValue: any,
     return value;
 }
 
-export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: any }>
+export function resolvePropertyBuilders<T extends CMSType, M extends { [Key: string]: any }>
 ({
      propertyOrBuilder,
      values,
      previousValues,
      path,
-     entityId,
-     propertyOverride,
+     entityId
  }: {
      propertyOrBuilder: PropertyOrBuilder<T, M>,
      values: Partial<EntityValues<M>>,
      previousValues?: Partial<EntityValues<M>>,
      path: string,
-     entityId?: string,
-     propertyOverride?: Partial<Property<T>>,
+     entityId?: string
  }
 ): Property<T> | null {
     let result: Property<T> | null;
@@ -277,9 +273,6 @@ export function buildPropertyFrom<T extends CMSType, M extends { [Key: string]: 
     } else {
         result = propertyOrBuilder as Property<T>;
     }
-
-    if (propertyOverride)
-        result = mergeDeep(result, propertyOverride);
 
     return result;
 }

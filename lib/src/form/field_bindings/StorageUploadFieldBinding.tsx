@@ -17,7 +17,7 @@ import {
     ArrayProperty,
     Entity,
     FieldProps,
-    Property,
+    Property, ResolvedArrayProperty, ResolvedProperty,
     ResolvedStringProperty,
     StorageConfig,
     StringProperty
@@ -244,7 +244,7 @@ interface StorageFieldItem {
 interface StorageUploadProps {
     value: string | string[];
     name: string;
-    property: StringProperty | ArrayProperty<string[]>;
+    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
     onChange: (value: string | string[] | null) => void;
     multipleFilesSupported: boolean;
     autoFocus: boolean;
@@ -447,7 +447,7 @@ export function StorageUpload({
     const storageSource = useStorageSource();
 
     if (multipleFilesSupported) {
-        const arrayProperty = property as ArrayProperty<string[]>;
+        const arrayProperty = property as ResolvedArrayProperty<string[]>;
         if (arrayProperty.of) {
             if (arrayProperty.of.dataType !== "string") {
                 throw Error("Storage field using array must be of data type string");

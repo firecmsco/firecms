@@ -18,12 +18,7 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import EmailIcon from "@mui/icons-material/Email";
 import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
 
-import {
-    ArrayProperty,
-    DataType,
-    Property,
-    ResolvedProperty
-} from "../../models";
+import { ArrayProperty, DataType, Property } from "../../models";
 import { SvgIconProps } from "@mui/material";
 
 export type Widget = {
@@ -191,12 +186,12 @@ export const WIDGETS: Record<WidgetId, Widget> = {
     }
 };
 
-export function getWidget(property: Property | ResolvedProperty): Widget | undefined {
+export function getWidget(property: Property): Widget | undefined {
     const widgetId = getWidgetId(property);
     return widgetId ? WIDGETS[widgetId] : undefined;
 }
 
-export function getWidgetId(property: Property | ResolvedProperty): WidgetId | undefined {
+export function getWidgetId(property: Property): WidgetId | undefined {
     if (property.dataType === "string") {
         if (property.multiline) {
             return "multiline";
@@ -223,7 +218,9 @@ export function getWidgetId(property: Property | ResolvedProperty): WidgetId | u
             return "group";
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
-        if (of?.dataType === "string" && of.enumValues) {
+        if (typeof of === "function") {
+            return "repeat";
+        } else if (of?.dataType === "string" && of.enumValues) {
             return "multi_select";
         } else if (of?.dataType === "number" && of.enumValues) {
             return "multi_number_select";

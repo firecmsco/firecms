@@ -5,7 +5,7 @@ import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import FunctionsIcon from "@mui/icons-material/Functions";
 import { Property } from "../models";
 import { getWidget } from "../core/util/widgets";
-import { editableProperty } from "../core/util/collections";
+import { editableProperty } from "../core";
 
 export function PropertyFieldPreview({
                                          property,
@@ -13,7 +13,7 @@ export function PropertyFieldPreview({
                                          hasError,
                                          includeName,
                                          includeEditButton,
-                                         selected,
+                                         selected
                                      }: {
     property: Property,
     hasError?: boolean,

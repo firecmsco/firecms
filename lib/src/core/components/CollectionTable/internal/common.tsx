@@ -21,7 +21,7 @@ export function getCellAlignment(property: Property | ResolvedProperty): "right"
     }
 }
 
-export function isPropertyFilterable(property: Property): boolean {
+export function isPropertyFilterable(property: ResolvedProperty): boolean {
     if (property.dataType === "boolean") {
         return true;
     } else if (property.dataType === "number") {

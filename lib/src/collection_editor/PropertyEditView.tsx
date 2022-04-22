@@ -17,7 +17,7 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { Property } from "../models";
+import { Property, ResolvedProperty } from "../models";
 import {
     getWidget,
     getWidgetId,
@@ -47,7 +47,7 @@ import { NumberPropertyField } from "./properties/NumberPropertyField";
 import { ReferencePropertyField } from "./properties/ReferencePropertyField";
 import { DateTimePropertyField } from "./properties/DateTimePropertyField";
 
-export type PropertyWithId = Property & { id?: string };
+export type PropertyWithId = ResolvedProperty & { id?: string };
 
 export function PropertyForm({
                                  asDialog,

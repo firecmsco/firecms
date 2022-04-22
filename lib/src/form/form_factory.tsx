@@ -12,7 +12,7 @@ import {
     ArrayProperty,
     CMSFormFieldProps,
     CMSType,
-    FieldProps,
+    FieldProps, ResolvedArrayProperty,
     ResolvedProperty
 } from "../models";
 
@@ -88,7 +88,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
     } else if (property.Field) {
         component = property.Field as ComponentType<FieldProps<T>>;
     } else if (property.dataType === "array") {
-        const of = (property as ArrayProperty).of;
+        const of = (property as ResolvedArrayProperty).of;
         if (of) {
             if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
                 component = ArrayEnumSelectBinding as ComponentType<FieldProps<T>>;
@@ -100,7 +100,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
                 component = ArrayDefaultFieldBinding as ComponentType<FieldProps<T>>;
             }
         }
-        const oneOf = (property as ArrayProperty).oneOf;
+        const oneOf = (property as ResolvedArrayProperty).oneOf;
         if (oneOf) {
             component = ArrayOneOfFieldBinding as ComponentType<FieldProps<T>>;
         }

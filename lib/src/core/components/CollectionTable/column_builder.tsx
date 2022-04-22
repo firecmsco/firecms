@@ -27,7 +27,7 @@ import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../Table";
 import { getIconForProperty } from "../../util/property_utils";
 import { resolveEnumValues } from "../../util/entities";
-import { getResolvedCollection, resolveProperty } from "../../util/collections";
+import { getResolvedCollection, resolvePropertyBuilder } from "../../util/collections";
 
 export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType extends User> = {
 
@@ -232,7 +232,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
         const propertyId = column.dataKey;
 
         const propertyOrBuilder = inputCollection.properties[propertyId];
-        const property = resolveProperty({
+        const property = resolvePropertyBuilder({
             propertyOrBuilder,
             propertyId,
             path,

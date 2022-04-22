@@ -1,6 +1,5 @@
 import React, { createElement } from "react";
 import {
-    ArrayProperty,
     CMSType,
     EntityReference,
     ResolvedArrayProperty,
@@ -43,7 +42,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
 
     const fieldProps = { ...props };
 
-    if (value === undefined) {
+    if (value === undefined || property === null) {
         content = <EmptyValue/>;
     } else if (property.Preview) {
         content = createElement(property.Preview as React.ComponentType<PropertyPreviewProps>,
@@ -82,7 +81,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
         }
     } else if (property.dataType === "array") {
         if (value instanceof Array) {
-            const arrayProperty = property as ArrayProperty;
+            const arrayProperty = property as ResolvedArrayProperty;
             if (!arrayProperty.of && !arrayProperty.oneOf) {
                 throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
             }

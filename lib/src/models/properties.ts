@@ -219,6 +219,7 @@ export type PropertyBuilderProps<M extends { [Key: string]: any }> =
     {
         values: Partial<M>;
         previousValues?: Partial<M>;
+        // localValue: any;
         path: string;
         entityId?: string;
     };
