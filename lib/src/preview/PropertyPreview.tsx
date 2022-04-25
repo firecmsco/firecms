@@ -30,6 +30,7 @@ import {
 import { ErrorView } from "../core";
 
 import { PropertyPreviewProps } from "./PropertyPreviewProps";
+import { resolveProperty } from "../core/util/resolutions";
 
 /**
  * @category Preview components
@@ -37,8 +38,13 @@ import { PropertyPreviewProps } from "./PropertyPreviewProps";
 export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
     let content: JSX.Element | any;
     const {
-        property, propertyKey, value, size, height, width, entity
+        property: inputProperty, propertyKey, value, size, height, width, entity
     } = props;
+
+    const property = resolveProperty({
+        propertyOrBuilder: inputProperty,
+        propertyValue: value
+    });
 
     const fieldProps = { ...props };
 

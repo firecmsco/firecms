@@ -3,14 +3,15 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 
 import {
+    PreviewSize,
     PropertyPreview,
-    PropertyPreviewProps,
-    PreviewSize
+    PropertyPreviewProps
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
-import { ResolvedProperty } from "../../models";
+import { ResolvedArrayProperty, ResolvedProperty } from "../../models";
 
 import { Theme } from "@mui/material";
+import { resolveProperty } from "../../core/util/resolutions";
 
 const PREFIX = "ArrayOfStorageComponentsPreview";
 
@@ -41,9 +42,15 @@ export function ArrayOfStorageComponentsPreview({
                                                     propertyKey,
                                                     entity,
                                                     value,
-                                                    property,
+                                                    property: inputProperty,
                                                     size
                                                 }: PropertyPreviewProps<any[]>) {
+
+    const property = resolveProperty({
+        propertyOrBuilder: inputProperty,
+        propertyValue: value
+    }) as ResolvedArrayProperty;
+
     if (Array.isArray(property.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
     }

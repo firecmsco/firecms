@@ -1,11 +1,12 @@
 import {
-    PropertyPreviewProps,
     PreviewSize,
+    PropertyPreviewProps,
     ReferencePreview
 } from "../internal";
-import { ResolvedReferenceProperty } from "../../models";
+import { ResolvedArrayProperty, ResolvedReferenceProperty } from "../../models";
 
 import { Box } from "@mui/material";
+import { resolveProperty } from "../../core/util/resolutions";
 
 /**
  * @category Preview components
@@ -13,15 +14,20 @@ import { Box } from "@mui/material";
 export function ArrayOfReferencesPreview({
                                              propertyKey,
                                              value,
-                                             property,
+                                             property: inputProperty,
                                              size
                                          }: PropertyPreviewProps<any[]>) {
 
-    if (Array.isArray(property.of)) {
+    const property = resolveProperty({
+        propertyOrBuilder: inputProperty,
+        propertyValue: value
+    }) as ResolvedArrayProperty;
+
+    if (Array.isArray(property?.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
     }
 
-    if (property.dataType !== "array" || !property.of || property.of.dataType !== "reference")
+    if (property?.dataType !== "array" || !property.of || property.of.dataType !== "reference")
         throw Error("Picked wrong preview component ArrayOfReferencesPreview");
 
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";

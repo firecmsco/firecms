@@ -14,6 +14,7 @@ import {
     DEFAULT_ONE_OF_TYPE,
     DEFAULT_ONE_OF_VALUE
 } from "../../core/util/common";
+import { resolveProperty } from "../../core/util/resolutions";
 
 const PREFIX = "ArrayOneOfPreview";
 
@@ -49,15 +50,20 @@ const Root = styled("div")((
 export function ArrayOneOfPreview({
                                       propertyKey,
                                       value,
-                                      property,
+                                      property: inputProperty,
                                       size,
                                       entity
                                   }: PropertyPreviewProps<any[]>) {
 
-    if (property.dataType !== "array")
+    const property = resolveProperty({
+        propertyOrBuilder: inputProperty,
+        propertyValue: value
+    });
+
+    if (property?.dataType !== "array")
         throw Error("Picked wrong preview component ArrayPreview");
 
-    if (!property.oneOf) {
+    if (!property?.oneOf) {
         throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
     }
 

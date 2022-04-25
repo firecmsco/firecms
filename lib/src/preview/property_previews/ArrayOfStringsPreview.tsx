@@ -1,11 +1,12 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
-import { ResolvedStringProperty } from "../../models";
+import { ResolvedArrayProperty, ResolvedStringProperty } from "../../models";
 import { PropertyPreviewProps } from "../internal";
 
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { StringPropertyPreview } from "./StringPropertyPreview";
 import { Theme } from "@mui/material";
+import { resolveProperty } from "../../core/util/resolutions";
 
 const PREFIX = "ArrayOfStringsPreview";
 
@@ -41,10 +42,16 @@ const Root = styled("div")((
 export function ArrayOfStringsPreview({
                                           propertyKey,
                                           value,
-                                          property,
+                                          property:inputProperty,
                                           entity,
                                           size
                                       }: PropertyPreviewProps<string[]>) {
+
+    const property = resolveProperty({
+        propertyOrBuilder: inputProperty,
+        propertyValue: value
+    }) as ResolvedArrayProperty;
+
     if (Array.isArray(property.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
     }

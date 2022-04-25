@@ -1,9 +1,14 @@
 import React from "react";
-import { ArrayProperty, ResolvedMapProperty } from "../../models";
+import {
+    ArrayProperty,
+    ResolvedArrayProperty,
+    ResolvedMapProperty
+} from "../../models";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { PropertyPreview, PropertyPreviewProps } from "../internal";
+import { resolveProperty } from "../../core/util/resolutions";
 
 /**
  * @category Preview components
@@ -11,16 +16,21 @@ import { PropertyPreview, PropertyPreviewProps } from "../internal";
 export function ArrayOfMapsPreview({
                                        propertyKey,
                                        value,
-                                       property,
+                                       property: inputProperty,
                                        size,
                                        entity
                                    }: PropertyPreviewProps<object[]>) {
 
-    if (Array.isArray(property.of)) {
+    const property = resolveProperty({
+        propertyOrBuilder: inputProperty,
+        propertyValue: value
+    }) as ResolvedArrayProperty;
+
+    if (Array.isArray(property?.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
     }
 
-    if (property.dataType !== "array" || !property.of || property.of.dataType !== "map")
+    if (property?.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");
 
     const mapProperty = (property as ArrayProperty).of as ResolvedMapProperty;

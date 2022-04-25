@@ -8,6 +8,8 @@ import {
     PropertyPreviewProps
 } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { resolveProperty } from "../../core/util/resolutions";
+import { ResolvedArrayProperty } from "../../models";
 
 /**
  * @category Preview components
@@ -15,10 +17,15 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 export function ArrayPropertyPreview({
                                          propertyKey,
                                          value,
-                                         property,
+                                         property: inputProperty,
                                          entity,
                                          size
                                      }: PropertyPreviewProps<any[]>) {
+
+    const property = resolveProperty({
+        propertyOrBuilder: inputProperty,
+        propertyValue: value
+    }) as ResolvedArrayProperty;
 
     if (!property.of) {
         throw Error(`You need to specify an 'of' prop (or specify a custom field) in your array property ${propertyKey}`);

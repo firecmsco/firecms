@@ -85,25 +85,30 @@ export function resolveProperty<T, M>({
                                           propertyValue,
                                           ...props
                                       }: {
-    propertyOrBuilder: PropertyOrBuilder<T>,
+    propertyOrBuilder: PropertyOrBuilder<T> | ResolvedProperty<T>,
     propertyValue?: unknown,
     values?: Partial<M>,
     previousValues?: Partial<M>,
-    path: string,
+    path?: string,
     entityId?: string,
     index?: number
 }): ResolvedProperty | null {
 
     if (typeof propertyOrBuilder === "function") {
+        const path = props.path;
+        if (!path)
+            throw Error("Trying to resolve a property builder without specifying the entity path");
+
         const result: Property<T> | null = propertyOrBuilder({
             ...props,
+            path,
             propertyValue: propertyValue,
             values: props.values ?? {},
             previousValues: props.previousValues ?? props.values ?? {}
         });
 
         if (!result) {
-            console.debug("Property builder not returning `Property` so it is not rendered", props.path, props.entityId, propertyOrBuilder);
+            console.debug("Property builder not returning `Property` so it is not rendered", path, props.entityId, propertyOrBuilder);
             return null;
         }
 
@@ -114,7 +119,7 @@ export function resolveProperty<T, M>({
     } else if (propertyOrBuilder.dataType === "map" && propertyOrBuilder.properties) {
         const properties = resolveProperties({
             ...props,
-            properties: propertyOrBuilder.properties,
+            properties: propertyOrBuilder.properties as PropertiesOrBuilders,
             propertyValue
         });
         return {
@@ -207,7 +212,7 @@ export function resolveProperties<M>({
     propertyValue: unknown,
     values?: Partial<M>,
     previousValues?: Partial<M>,
-    path: string,
+    path?: string,
     entityId?: string,
     index?: number
 }): ResolvedProperties<M> {

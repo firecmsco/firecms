@@ -22,7 +22,7 @@ export interface PropertyPreviewProps<T extends CMSType = CMSType, CustomProps =
     /**
      * Property this display is related to
      */
-    property: ResolvedProperty<T>;
+    property: Property<T> | ResolvedProperty<T>;
 
     /**
      * Click handler
