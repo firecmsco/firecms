@@ -5,6 +5,7 @@ import React, {
     useMemo,
     useState
 } from "react";
+import equal from "react-fast-compare"
 
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import { Portal } from "@mui/base";
@@ -72,13 +73,13 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
-    // const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
+    const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
 
     const collection: ResolvedEntityCollection<M> | undefined = inputCollection
         ? resolveCollection<M>({
             collection: inputCollection,
             path,
-            values: entity?.values,
+            values: internalValue,
             entityId: entity?.id
         })
         : undefined;
@@ -102,6 +103,13 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         },
         [propertyId, entity]
     );
+
+    // useEffect(
+    //     () => {
+    //         setInternalValue(entity?.values);
+    //     },
+    //     [entity?.values]
+    // );
 
     const getInitialLocation = useCallback(() => {
         if (!cellRect) throw Error("getInitialLocation error");
@@ -231,6 +239,10 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                       isSubmitting
                   }: FormikProps<EntityValues<M>>) => {
 
+                    if (!equal(values, internalValue)) {
+                        setInternalValue(values);
+                    }
+
                     if (!entity)
                         return <ErrorView
                             error={"PopupFormField misconfiguration"}/>;
@@ -258,40 +270,41 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                 maxHeight: "85vh"
                             }}>
                             <Form
-                                style={{
-                                    padding: "16px",
-                                    display: "flex",
-                                    flexDirection: "column"
-                                }}
                                 onSubmit={handleSubmit}
                                 noValidate>
 
-                                {propertyId && property && buildPropertyField<any, M>({
-                                    propertyKey: propertyId as string,
-                                    disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
-                                    property,
-                                    includeDescription: false,
-                                    underlyingValueHasChanged: false,
-                                    context,
-                                    tableMode: true,
-                                    partOfArray: false,
-                                    autoFocus: open,
-                                    shouldAlwaysRerender: true
-                                })}
-
-                                <Box sx={{ mt: 1 }}>
-                                    <CustomDialogActions>
-                                        <Button
-                                            variant="contained"
-                                            color="primary"
-                                            type="submit"
-                                            disabled={disabled}
-                                        >
-                                            Save
-                                        </Button>
-                                    </CustomDialogActions>
+                                <Box
+                                    sx={{
+                                        mb: 1,
+                                        padding: 2,
+                                        display: "flex",
+                                        flexDirection: "column",
+                                        position: "relative"
+                                    }}>
+                                    {propertyId && property && buildPropertyField<any, M>({
+                                        propertyKey: propertyId as string,
+                                        disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
+                                        property,
+                                        includeDescription: false,
+                                        underlyingValueHasChanged: false,
+                                        context,
+                                        tableMode: true,
+                                        partOfArray: false,
+                                        autoFocus: open,
+                                        shouldAlwaysRerender: true
+                                    })}
                                 </Box>
 
+                                <CustomDialogActions>
+                                    <Button
+                                        variant="contained"
+                                        color="primary"
+                                        type="submit"
+                                        disabled={disabled}
+                                    >
+                                        Save
+                                    </Button>
+                                </CustomDialogActions>
 
                             </Form>
 

@@ -6,7 +6,10 @@ import { PropertyPreviewProps } from "../internal";
 import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { StringPropertyPreview } from "./StringPropertyPreview";
 import { Theme } from "@mui/material";
-import { resolveProperty } from "../../core/util/resolutions";
+import {
+    resolveArrayProperty,
+    resolveProperty
+} from "../../core/util/resolutions";
 
 const PREFIX = "ArrayOfStringsPreview";
 
@@ -47,10 +50,10 @@ export function ArrayOfStringsPreview({
                                           size
                                       }: PropertyPreviewProps<string[]>) {
 
-    const property = resolveProperty({
-        propertyOrBuilder: inputProperty,
+    const property = resolveArrayProperty({
+        property: inputProperty,
         propertyValue: value
-    }) as ResolvedArrayProperty;
+    });
 
     if (Array.isArray(property.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");

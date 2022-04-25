@@ -15,7 +15,6 @@ export function StringPropertyPreview({
                                   size
                               }: PropertyPreviewProps<string>): React.ReactElement {
 
-
     if (property.enumValues) {
         const enumKey = value;
         const resolvedProperty = resolvePropertyEnum(property);

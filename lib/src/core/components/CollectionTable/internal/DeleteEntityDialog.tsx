@@ -170,16 +170,10 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
         content = <div>Multiple entities</div>;
     } else {
         const entity = entityOrEntities as Entity<M> | undefined;
-        const resolvedCollection = resolveCollection({
-            collection,
-            path,
-            entityId: entity?.id,
-            values: entity?.values
-        });
         content = entity
             ? <EntityPreview
                 entity={entity}
-                collection={resolvedCollection}
+                collection={collection}
                 path={path}/>
             : <></>;
     }

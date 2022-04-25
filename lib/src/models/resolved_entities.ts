@@ -53,7 +53,8 @@ export type ResolvedStringProperty =
     Omit<StringProperty, "enumValues" | "dataType"> &
     {
         dataType: "string";
-        enumValues?: EnumValueConfig[],
+        enumValues?: EnumValueConfig[];
+        fromBuilder: boolean;
     }
 
 /**
@@ -63,7 +64,8 @@ export type ResolvedNumberProperty =
     Omit<NumberProperty, "enumValues" | "dataType"> &
     {
         dataType: "number";
-        enumValues?: EnumValueConfig[],
+        enumValues?: EnumValueConfig[];
+        fromBuilder: boolean;
     }
 
 /**
@@ -72,7 +74,8 @@ export type ResolvedNumberProperty =
 export type ResolvedBooleanProperty =
     Omit<BooleanProperty, "dataType"> &
     {
-        dataType: "boolean",
+        dataType: "boolean";
+        fromBuilder: boolean;
     }
 
 /**
@@ -81,7 +84,8 @@ export type ResolvedBooleanProperty =
 export type ResolvedTimestampProperty =
     Omit<DateProperty, "dataType"> &
     {
-        dataType: "date",
+        dataType: "date";
+        fromBuilder: boolean;
     }
 
 /**
@@ -90,7 +94,8 @@ export type ResolvedTimestampProperty =
 export type ResolvedGeopointProperty =
     Omit<GeopointProperty, "dataType"> &
     {
-        dataType: "geopoint",
+        dataType: "geopoint";
+        fromBuilder: boolean;
     }
 
 /**
@@ -99,7 +104,8 @@ export type ResolvedGeopointProperty =
 export type ResolvedReferenceProperty =
     Omit<ReferenceProperty, "dataType"> &
     {
-        dataType: "reference",
+        dataType: "reference";
+        fromBuilder: boolean;
     }
 
 /**
@@ -115,7 +121,8 @@ export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMS
             typeField?: string;
             valueField?: string;
         },
-        resolvedProperties: ResolvedProperty[],
+        resolvedProperties: ResolvedProperty[];
+        fromBuilder: boolean;
     }
 
 /**
@@ -127,4 +134,5 @@ export type ResolvedMapProperty<T extends { [Key: string]: any } = any> =
         dataType: "map";
         properties?: ResolvedProperties<Partial<T>>;
         propertiesOrder?: string[];
+        fromBuilder: boolean;
     }

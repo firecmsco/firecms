@@ -228,7 +228,7 @@ export type PropertyBuilderProps<M extends { [Key: string]: any }> =
         /**
          * Current value of this property
          */
-        propertyValue?: unknown;
+        propertyValue?: any;
         /**
          * Index of this property (only for arrays)
          */

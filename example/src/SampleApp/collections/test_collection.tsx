@@ -2,16 +2,15 @@ import {
     buildCollection,
     buildProperties,
     buildProperty,
-    buildPropertyBuilder,
     EntityCallbacks,
     EnumValues,
+    Properties,
     resolveNavigationFrom
 } from "@camberi/firecms";
-import CustomShapedArrayField
-    from "../custom_shaped_array/CustomShapedArrayField";
+import { CustomField } from "../custom_field/SubPropertyField";
+import CustomShapedArrayField from "../custom_shaped_array/CustomShapedArrayField";
 import CustomShapedArrayPreview
     from "../custom_shaped_array/CustomShapedArrayPreview";
-import { CustomField } from "../custom_field/SubPropertyField";
 import { locales } from "./enums";
 
 const relaxedStatus:EnumValues = [
@@ -84,12 +83,101 @@ const validatedCustom = buildProperty({
     Field: CustomField
 });
 
+
+export const translationProperties: Properties<any> = {
+    en: {
+        dataType: "string",
+        name: "English"
+    },
+    es: {
+        dataType: "string",
+        name: "Español"
+    },
+    eu: {
+        dataType: "string",
+        name: "Vasco"
+    }
+};
+const questionProperties = buildProperties({
+    id: {
+        dataType: "string",
+        name: "ID"
+    },
+    text: {
+        dataType: "map",
+        name: "Text",
+        properties: translationProperties
+    },
+    question_type: {
+        dataType: "string",
+        name: "Question type",
+        enumValues: {
+            multiple_choice: "Multiple choice",
+            single_choice: "Single choice"
+        }
+    }
+});
+
+const answersProperties = buildProperties({
+    answers: {
+        dataType: "array",
+        name: "Answers",
+        of: {
+            dataType: "map",
+            name: "Flow",
+            properties: {
+                id: {
+                    dataType: "string",
+                    name: "ID"
+                },
+                text: {
+                    dataType: "map",
+                    name: "Text",
+                    properties: translationProperties
+                }
+            }
+        }
+    }
+});
+
+export const formPropertyEntry = buildProperty(({ propertyValue }) => {
+
+    const questionMode = propertyValue?.type === "question";
+    const additionalProperties = questionMode ? questionProperties : {};
+    const questionType = propertyValue?.question_type;
+    const questionAdditionalProperties = questionMode && (questionType === "multiple_choice" || questionType === "single_choice") ? answersProperties : {};
+
+    const name = propertyValue?.text?.en ?? "Form entry";
+    return {
+        dataType: "map",
+        name: name,
+        expanded: false,
+        properties: {
+            type: {
+                dataType: "string",
+                enumValues: {
+                    question: "Question",
+                    category: "Category"
+                }
+            },
+            ...additionalProperties,
+            ...questionAdditionalProperties
+        }
+    };
+});
+
+
 export const testCollection = buildCollection({
     callbacks: testCallbacks,
     path: "test_entity",
     customId: false,
     name: "Test entity",
     properties: {
+        form: {
+            dataType: "array",
+            name: "Form",
+            of: formPropertyEntry
+        },
         shaped_array: {
             dataType: "array",
             of: [
@@ -139,7 +227,7 @@ export const testCollection = buildCollection({
             path: "products",
             previewProperties: ["name", "main_image"]
         },
-        movement: buildPropertyBuilder(({values}) => {
+        movement: buildProperty(({values}) => {
             return {
                 name: "Locale",
                 dataType: "reference",

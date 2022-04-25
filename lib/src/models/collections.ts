@@ -358,7 +358,7 @@ export interface EntityCustomViewParams<M extends { [Key: string]: any } = any> 
     /**
      * collection used by this entity
      */
-    collection: ResolvedEntityCollection<M>;
+    collection: EntityCollection<M>;
 
     /**
      * Entity that this view refers to. It can be undefined if the entity is new

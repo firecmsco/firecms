@@ -12,7 +12,7 @@ import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { isEnumValueDisabled } from "../../core/util/enums";
-import { EnumValuesChip } from "../../preview/components/CustomChip";
+import { EnumValuesChip } from "../../preview";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -74,7 +74,7 @@ export function SelectBinding<T extends EnumType>({
                 variant={"filled"}
                 labelId={`${propertyKey}-select-label`}
                 autoFocus={autoFocus}
-                value={value !== undefined ? value : ""}
+                value={value ?? ""}
                 disabled={disabled}
                 onChange={(evt: any) => {
                     const eventValue = evt.target.value;

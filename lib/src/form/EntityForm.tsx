@@ -108,7 +108,7 @@ export function EntityForm<M>({
         collection: inputCollection,
         path,
         values: entity?.values
-    }), [inputCollection, path]);
+    }), [entity?.values, inputCollection, path]);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
         (Boolean(initialResolvedCollection.customId) && initialResolvedCollection.customId !== "optional");
@@ -117,7 +117,7 @@ export function EntityForm<M>({
         if ((status === "new" || status === "copy") && initialResolvedCollection.customId === "optional")
             return dataSource.generateEntityId(path);
         return mustSetCustomId ? undefined : (entity?.id ?? dataSource.generateEntityId(path));
-    }, []);
+    }, [entity?.id]);
 
     const baseDataSourceValues: Partial<EntityValues<M>> = useMemo(() => {
         const properties = initialResolvedCollection.properties;
@@ -136,9 +136,8 @@ export function EntityForm<M>({
     const [savingError, setSavingError] = React.useState<Error | undefined>();
 
     const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
-    const initialValues = initialValuesRef.current;
 
-    const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
+    const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValuesRef.current);
 
     const doOnValuesChanges = (values?: EntityValues<M>) => {
         setInternalValue(values);
@@ -151,14 +150,14 @@ export function EntityForm<M>({
         path,
         entityId,
         values: internalValue,
-        previousValues: initialValues
-    }), [inputCollection, path, entityId, internalValue, initialValues]);
+        previousValues: initialValuesRef.current
+    }), [inputCollection, path, entityId, internalValue]);
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
-        if (initialValues && status === "existing") {
+        if (initialValuesRef.current && status === "existing") {
             return Object.keys(collection.properties)
                 .map((key) => {
-                    const initialValue = (initialValues as any)[key];
+                    const initialValue = (initialValuesRef.current as any)[key];
                     const latestValue = (baseDataSourceValues as any)[key];
                     if (!equal(initialValue, latestValue)) {
                         return { [key]: latestValue };
@@ -169,7 +168,7 @@ export function EntityForm<M>({
         } else {
             return {};
         }
-    }, [initialValues, baseDataSourceValues]);
+    }, [baseDataSourceValues, collection.properties, status]);
 
     const saveValues = useCallback((values: EntityValues<M>, formikActions: FormikHelpers<EntityValues<M>>) => {
 
@@ -233,7 +232,7 @@ export function EntityForm<M>({
 
     return (
         <Formik
-            initialValues={initialValues}
+            initialValues={initialValuesRef.current}
             onSubmit={saveValues}
             validateOnMount={false}
             validationSchema={validationSchema}
@@ -451,8 +450,6 @@ function FormInternal<M>({
                         Object.keys(underlyingChanges).includes(key) &&
                         !!touched[key];
 
-                    const shouldAlwaysRerender = typeof (collection.originalCollection.properties)[key] === "function";
-
                     const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
                     const cmsFormFieldProps: CMSFormFieldProps = {
                         propertyKey: key,
@@ -464,8 +461,9 @@ function FormInternal<M>({
                         tableMode: false,
                         partOfArray: false,
                         autoFocus: false,
-                        shouldAlwaysRerender
+                        shouldAlwaysRerender: property.fromBuilder
                     };
+
                     return (
                         <ItemMeasurer
                             component={Box}

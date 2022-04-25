@@ -72,6 +72,7 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
             valueField={property.oneOf!.valueField ?? DEFAULT_ONE_OF_VALUE}
             properties={property.oneOf!.properties}
             autoFocus={internalId === lastAddedId}
+            shouldAlwaysRerender={shouldAlwaysRerender}
             context={context}/>;
     }, [context, lastAddedId, property.oneOf, propertyKey, value]);
 
@@ -132,6 +133,8 @@ interface ArrayOneOfEntryProps {
      * Additional values related to the state of the form or the entity
      */
     context: FormContext<any>;
+
+    shouldAlwaysRerender: boolean;
 }
 
 function ArrayOneOfEntry({
@@ -142,6 +145,7 @@ function ArrayOneOfEntry({
                              valueField,
                              properties,
                              autoFocus,
+                             shouldAlwaysRerender,
                              context
                          }: ArrayOneOfEntryProps) {
 
@@ -224,7 +228,8 @@ function ArrayOneOfEntry({
                         property: property,
                         context: context,
                         autoFocus: autoFocus,
-                        tableMode: false
+                        tableMode: false,
+                        shouldAlwaysRerender: property.fromBuilder
                     })}
                 </FormControl>
             )}

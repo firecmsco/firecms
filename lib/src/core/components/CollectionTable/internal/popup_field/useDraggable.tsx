@@ -30,7 +30,7 @@ export function useDraggable({
         relY = event.screenY - y;
         document.addEventListener("mousemove", onMouseMove);
         document.addEventListener("mouseup", onMouseUp);
-        event.stopPropagation();
+        // event.stopPropagation();
     };
 
     const onMouseUp = (event: any) => {

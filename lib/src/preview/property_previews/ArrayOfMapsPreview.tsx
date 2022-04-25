@@ -8,7 +8,10 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { PropertyPreview, PropertyPreviewProps } from "../internal";
-import { resolveProperty } from "../../core/util/resolutions";
+import {
+    resolveArrayProperty,
+    resolveProperty
+} from "../../core/util/resolutions";
 
 /**
  * @category Preview components
@@ -21,10 +24,10 @@ export function ArrayOfMapsPreview({
                                        entity
                                    }: PropertyPreviewProps<object[]>) {
 
-    const property = resolveProperty({
-        propertyOrBuilder: inputProperty,
+    const property = resolveArrayProperty({
+        property: inputProperty,
         propertyValue: value
-    }) as ResolvedArrayProperty;
+    });
 
     if (Array.isArray(property?.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");

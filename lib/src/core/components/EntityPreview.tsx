@@ -14,7 +14,7 @@ import {
     Typography
 } from "@mui/material";
 import {
-    Entity,
+    Entity, EntityCollection,
     FireCMSContext,
     ResolvedEntityCollection,
     ResolvedProperties
@@ -24,6 +24,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_utils";
 import { ErrorBoundary } from "../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
+import { resolveCollection } from "../util/resolutions";
 
 const PREFIX = "EntityPreview";
 
@@ -63,7 +64,7 @@ const StyledTableContainer = styled(TableContainer)((
  */
 export interface EntityPreviewProps<M> {
     entity: Entity<M>;
-    collection: ResolvedEntityCollection<M>;
+    collection: EntityCollection<M>;
     path: string;
 }
 
@@ -82,9 +83,17 @@ export function EntityPreview<M>(
         path
     }: EntityPreviewProps<M>) {
 
+
+    const resolvedCollection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection<M>({
+        collection,
+        path,
+        entityId: entity.id,
+        values: entity.values,
+    }), [collection, collection, path, entity]);
+
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 
-    const properties: ResolvedProperties = collection.properties;
+    const properties: ResolvedProperties = resolvedCollection.properties;
 
     return (
         <StyledTableContainer>

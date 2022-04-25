@@ -11,7 +11,10 @@ import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
 import { ResolvedArrayProperty, ResolvedProperty } from "../../models";
 
 import { Theme } from "@mui/material";
-import { resolveProperty } from "../../core/util/resolutions";
+import {
+    resolveArrayProperty,
+    resolveProperty
+} from "../../core/util/resolutions";
 
 const PREFIX = "ArrayOfStorageComponentsPreview";
 
@@ -46,10 +49,10 @@ export function ArrayOfStorageComponentsPreview({
                                                     size
                                                 }: PropertyPreviewProps<any[]>) {
 
-    const property = resolveProperty({
-        propertyOrBuilder: inputProperty,
+    const property = resolveArrayProperty({
+        property: inputProperty,
         propertyValue: value
-    }) as ResolvedArrayProperty;
+    });
 
     if (Array.isArray(property.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");

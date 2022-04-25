@@ -317,9 +317,8 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
     } else if (selectedWidgetId === "reference") {
         updatedProperty = mergeDeep(
             propertyData,
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
             buildProperty({
+                // @ts-ignore
                 dataType: "reference"
             })
         );

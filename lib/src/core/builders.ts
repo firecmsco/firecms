@@ -13,8 +13,8 @@ import {
     NumberProperty,
     Properties,
     PropertiesOrBuilders,
-    Property,
     PropertyBuilder,
+    PropertyOrBuilder,
     ReferenceProperty,
     StringProperty,
     User
@@ -40,29 +40,19 @@ export function buildCollection<M extends { [Key: string]: any } = any,
  * @param property
  * @category Builder
  */
-export function buildProperty<T extends CMSType = CMSType, P extends Property<T> = Property<T>>(
+export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrBuilder<T> = PropertyOrBuilder<T>>(
     property: P
-): P extends StringProperty ? StringProperty :
-    P extends NumberProperty ? NumberProperty :
-        P extends BooleanProperty ? BooleanProperty :
-            P extends DateProperty ? DateProperty :
-                P extends GeopointProperty ? GeopointProperty :
-                    P extends ReferenceProperty ? ReferenceProperty :
-                        P extends ArrayProperty ? ArrayProperty :
-                            P extends MapProperty ? MapProperty : never {
+):
+    P extends StringProperty ? StringProperty :
+        P extends NumberProperty ? NumberProperty :
+            P extends BooleanProperty ? BooleanProperty :
+                P extends DateProperty ? DateProperty :
+                    P extends GeopointProperty ? GeopointProperty :
+                        P extends ReferenceProperty ? ReferenceProperty :
+                            P extends ArrayProperty ? ArrayProperty :
+                                P extends MapProperty ? MapProperty :
+                                    P extends PropertyBuilder<T> ? PropertyBuilder<T> : never {
     return property as any;
-}
-
-/**
- * Identity function we use to defeat the type system of Typescript and preserve
- * the property keys.
- * @param propertyBuilder
- * @category Builder
- */
-export function buildPropertyBuilder<T extends CMSType = CMSType, M = any>(
-    propertyBuilder: PropertyBuilder<T, M>
-): PropertyBuilder<T, M> {
-    return propertyBuilder;
 }
 
 /**

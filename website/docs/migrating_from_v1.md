@@ -172,8 +172,5 @@ buildProperty<string>({
 - `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where
   you pass a React Component directly: `Actions`
 - `Permissions`: added `editCollection` and `deleteCollection` props.
-- `buildProperty` now only accepts properties as an input, unlike in v1, where
-  it could also accept property builders. You can use the new utility function
-  `buildPropertyBuilder` for that.
 
 

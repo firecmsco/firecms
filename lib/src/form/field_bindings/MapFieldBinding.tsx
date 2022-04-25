@@ -31,21 +31,22 @@ import { ExpandablePanel } from "../../core/components/ExpandablePanel";
  * @category Form fields
  */
 export function MapFieldBinding<T extends object>({
-                                               propertyKey,
-                                               value,
-                                               showError,
-                                               disabled,
-                                               property,
-                                               setValue,
-                                               tableMode,
-                                               includeDescription,
-                                               underlyingValueHasChanged,
-                                               context
-                                           }: FieldProps<T>) {
+                                                      propertyKey,
+                                                      value,
+                                                      showError,
+                                                      disabled,
+                                                      property,
+                                                      setValue,
+                                                      tableMode,
+                                                      includeDescription,
+                                                      underlyingValueHasChanged,
+                                                      autoFocus,
+                                                      shouldAlwaysRerender,
+                                                      context
+                                                  }: FieldProps<T>) {
 
-    console.log("mmmm", propertyKey, tableMode);
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
-    const expanded = property.expanded === undefined ? true : property.expanded;
+    const expanded = (property.expanded === undefined ? true : property.expanded) || autoFocus;
 
     if (!property.properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
@@ -113,7 +114,7 @@ export function MapFieldBinding<T extends object>({
                                   key={`map-${propertyKey}-${index}`}>
                                 {
                                     buildPropertyField<any, T>({
-                                        propertyKey: `${propertyKey}[${entryKey}]`,
+                                        propertyKey: `${propertyKey}.${entryKey}`,
                                         disabled,
                                         property: childProperty,
                                         includeDescription,
@@ -121,8 +122,8 @@ export function MapFieldBinding<T extends object>({
                                         context,
                                         tableMode: false,
                                         partOfArray: false,
-                                        autoFocus: false,
-                                        shouldAlwaysRerender: false
+                                        autoFocus: autoFocus && index === 0,
+                                        shouldAlwaysRerender: property.fromBuilder
                                     })
                                 }
                             </Grid>

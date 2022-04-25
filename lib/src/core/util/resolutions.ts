@@ -1,4 +1,5 @@
 import {
+    ArrayProperty,
     EntityCollection,
     EntityValues,
     EnumValueConfig,
@@ -20,6 +21,7 @@ import {
 import { getValueInPath, mergeDeep } from "./objects";
 import { getDefaultValuesFor } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
+import { getIn } from "formik";
 
 export const resolveCollection = <M extends { [Key: string]: any } = any, >
 ({
@@ -52,14 +54,13 @@ export const resolveCollection = <M extends { [Key: string]: any } = any, >
                 values: usedValues,
                 previousValues: usedPreviousValues,
                 path: path,
-                propertyValue: usedValues ? usedValues[key] : undefined,
+                propertyValue: usedValues ? getIn(usedValues, key) : undefined,
                 entityId: entityId
             })
         }))
         .filter((a) => a !== null)
         .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
 
-    console.log("rrr", resolvedProperties);
     const properties: Properties = mergeDeep(resolvedProperties, storedProperties);
     const cleanedProperties = Object.entries(properties)
         .filter(([_, property]) => Boolean(property?.dataType))
@@ -91,7 +92,8 @@ export function resolveProperty<T, M>({
     previousValues?: Partial<M>,
     path?: string,
     entityId?: string,
-    index?: number
+    index?: number,
+    fromBuilder?: boolean
 }): ResolvedProperty | null {
 
     if (typeof propertyOrBuilder === "function") {
@@ -114,7 +116,8 @@ export function resolveProperty<T, M>({
 
         return resolveProperty({
             ...props,
-            propertyOrBuilder: result
+            propertyOrBuilder: result,
+            fromBuilder: true
         });
     } else if (propertyOrBuilder.dataType === "map" && propertyOrBuilder.properties) {
         const properties = resolveProperties({
@@ -127,75 +130,101 @@ export function resolveProperty<T, M>({
             properties
         } as ResolvedProperty;
     } else if (propertyOrBuilder.dataType === "array") {
-        if (propertyOrBuilder.of) {
-            if (Array.isArray(propertyOrBuilder.of)) {
-                return {
-                    ...propertyOrBuilder,
-                    resolvedProperties: propertyOrBuilder.of.map((p, index) => {
-                        return resolveProperty({
-                            propertyOrBuilder: p as Property<any>,
-                            propertyValue: Array.isArray(propertyValue) ? propertyValue[index] : undefined,
-                            ...props
-                        });
-                    })
-                } as ResolvedArrayProperty;
-            } else {
-                const of = propertyOrBuilder.of;
-                const resolvedProperties = Array.isArray(propertyValue)
-                    ? propertyValue.map((v: any, index: number) => resolveProperty({
-                        propertyOrBuilder: of,
-                        propertyValue: v,
-                        index,
-                        ...props
-                    }))
-                    : resolveProperty({
-                        propertyOrBuilder: of,
-                        propertyValue: undefined,
-                        ...props
-                    });
-                return {
-                    ...propertyOrBuilder,
-                    of: resolveProperty({
-                        propertyOrBuilder: of,
-                        propertyValue: undefined,
-                        ...props
-                    }),
-                    resolvedProperties
-                } as ResolvedArrayProperty;
-            }
-        } else if (propertyOrBuilder.oneOf) {
-            const typeField = propertyOrBuilder.oneOf?.typeField ?? DEFAULT_ONE_OF_TYPE;
-            const resolvedProperties = Array.isArray(propertyValue)
-                ? propertyValue.map((v, index) => {
-                    const type = v[typeField];
-                    const childProperty = propertyOrBuilder.oneOf?.properties[type];
-                    if (!type || !childProperty) return null;
-                    return resolveProperty({
-                        propertyOrBuilder: childProperty,
-                        propertyValue,
-                        ...props
-                    });
-                })
-                : [];
-            const properties = resolveProperties({
-                properties: propertyOrBuilder.oneOf.properties as PropertiesOrBuilders,
-                propertyValue: undefined,
-                ...props
-            });
-            return {
-                ...propertyOrBuilder,
-                oneOf: {
-                    ...propertyOrBuilder.oneOf,
-                    properties
-                },
-                resolvedProperties: resolvedProperties
-            } as ResolvedArrayProperty;
-        }
+        return resolveArrayProperty({
+            property: propertyOrBuilder,
+            propertyValue,
+            ...props
+        })
     } else if ((propertyOrBuilder.dataType === "string" || propertyOrBuilder.dataType === "number") && propertyOrBuilder.enumValues) {
-        return resolvePropertyEnum(propertyOrBuilder);
+        return resolvePropertyEnum(propertyOrBuilder, props.fromBuilder);
     }
 
     return propertyOrBuilder as ResolvedProperty;
+}
+
+export function resolveArrayProperty<T extends any[], M>({
+                                                             property,
+                                                             propertyValue,
+                                                             ...props
+                                                         }: {
+    property: ArrayProperty<T> | ResolvedArrayProperty<T>,
+    propertyValue: unknown,
+    values?: Partial<M>,
+    previousValues?: Partial<M>,
+    path?: string,
+    entityId?: string,
+    index?: number,
+    fromBuilder?: boolean
+}) {
+    if (property.of) {
+        if (Array.isArray(property.of)) {
+            return {
+                ...property,
+                resolvedProperties: property.of.map((p, index) => {
+                    return resolveProperty({
+                        propertyOrBuilder: p as Property<any>,
+                        propertyValue: Array.isArray(propertyValue) ? propertyValue[index] : undefined,
+                        ...props
+                    });
+                })
+            } as ResolvedArrayProperty;
+        } else {
+            const of = property.of;
+            const resolvedProperties = Array.isArray(propertyValue)
+                ? propertyValue.map((v: any, index: number) => resolveProperty({
+                    propertyOrBuilder: of,
+                    propertyValue: v,
+                    index,
+                    ...props
+                }))
+                : resolveProperty({
+                    propertyOrBuilder: of,
+                    propertyValue: undefined,
+                    ...props
+                });
+            return {
+                ...property,
+                of: resolveProperty({
+                    propertyOrBuilder: of,
+                    propertyValue: undefined,
+                    ...props
+                }),
+                resolvedProperties
+            } as ResolvedArrayProperty;
+        }
+    } else if (property.oneOf) {
+        const typeField = property.oneOf?.typeField ?? DEFAULT_ONE_OF_TYPE;
+        const resolvedProperties = Array.isArray(propertyValue)
+            ? propertyValue.map((v, index) => {
+                const type = v[typeField];
+                const childProperty = property.oneOf?.properties[type];
+                if (!type || !childProperty) return null;
+                return resolveProperty({
+                    propertyOrBuilder: childProperty,
+                    propertyValue,
+                    ...props
+                });
+            })
+            : [];
+        const properties = resolveProperties({
+            properties: property.oneOf.properties as PropertiesOrBuilders,
+            propertyValue: undefined,
+            ...props
+        });
+        return {
+            ...property,
+            oneOf: {
+                ...property.oneOf,
+                properties
+            },
+            resolvedProperties: resolvedProperties
+        } as ResolvedArrayProperty;
+    } else if (!property.Field) {
+        throw Error("The array property needs to declare an 'of' or a 'oneOf' property, or provide a custom `Field`")
+    } else {
+        return property as ResolvedArrayProperty;
+    }
+
 }
 
 /**
@@ -214,7 +243,8 @@ export function resolveProperties<M>({
     previousValues?: Partial<M>,
     path?: string,
     entityId?: string,
-    index?: number
+    index?: number,
+    fromBuilder?: boolean
 }): ResolvedProperties<M> {
     return Object.entries<PropertyOrBuilder>(properties as Record<string, PropertyOrBuilder>)
         .map(([key, property]) => {
@@ -233,12 +263,14 @@ export function resolveProperties<M>({
 /**
  * Resolve enum aliases for a string or number property
  * @param property
+ * @param fromBuilder
  */
-export function resolvePropertyEnum(property: StringProperty | NumberProperty): ResolvedStringProperty | ResolvedNumberProperty {
+export function resolvePropertyEnum(property: StringProperty | NumberProperty, fromBuilder?: boolean): ResolvedStringProperty | ResolvedNumberProperty {
     if (typeof property.enumValues === "object") {
         return {
             ...property,
-            enumValues: resolveEnumValues(property.enumValues)?.filter((value) => value && value.id && value.label) ?? []
+            enumValues: resolveEnumValues(property.enumValues)?.filter((value) => value && value.id && value.label) ?? [],
+            fromBuilder: fromBuilder ?? false
         }
     }
     return property as ResolvedStringProperty | ResolvedNumberProperty;

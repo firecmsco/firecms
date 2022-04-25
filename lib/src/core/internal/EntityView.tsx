@@ -1,11 +1,4 @@
-import React, {
-    lazy,
-    Suspense,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState
-} from "react";
+import React, { lazy, Suspense, useCallback, useEffect, useState } from "react";
 import {
     Box,
     CircularProgress,
@@ -22,7 +15,8 @@ import {
     EntityCollection,
     EntityStatus,
     EntityValues,
-    ResolvedEntityCollection, User
+    ResolvedEntityCollection,
+    User
 } from "../../models";
 import {
     CircularProgressCenter,
@@ -48,7 +42,6 @@ import { fullPathToCollectionSegments } from "../util/paths";
 import { useSideDialogContext } from "../SideDialogs";
 
 import equal from "react-fast-compare"
-import { resolveCollection } from "../util/resolutions";
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<any>>;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<any>>;
@@ -64,8 +57,8 @@ export interface EntityViewProps<M, UserType> {
     onValuesAreModified: (modified: boolean) => void;
 }
 
-export const EntityView = React.memo<EntityViewProps<any, any>>(
-    function EntityView<M extends { [Key: string]: any }, UserType extends User>({
+// export const EntityView = React.memo<EntityViewProps<any, any>>(
+    export function EntityView<M extends { [Key: string]: any }, UserType extends User>({
                                                                         path,
                                                                         entityId,
                                                                         selectedSubPath,
@@ -106,16 +99,8 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
 
         const editEnabled = entity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path)) : false;
 
-        const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection<M>({
-            collection,
-            path,
-            entityId,
-            values: modifiedValues,
-            previousValues: entity?.values
-        }), [collection, collection, path, entityId, modifiedValues]);
-
-        const subcollections = resolvedCollection.subcollections;
-        const customViews = resolvedCollection.views;
+        const subcollections = collection.subcollections;
+        const customViews = collection.views;
         const customViewsCount = customViews?.length ?? 0;
 
         useEffect(() => {
@@ -157,7 +142,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
     const onSaveSuccessHookError = useCallback((e: Error) => {
         snackbarController.open({
             type: "error",
-            title: `${resolvedCollection.name}: Error after saving (entity is saved)`,
+            title: `${collection.name}: Error after saving (entity is saved)`,
             message: e?.message
         });
         console.error(e);
@@ -169,7 +154,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
 
         snackbarController.open({
             type: "success",
-            message: `${resolvedCollection.name}: Saved correctly`
+            message: `${collection.name}: Saved correctly`
         });
 
         setStatus("existing");
@@ -184,7 +169,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
 
         snackbarController.open({
             type: "error",
-            title: `${resolvedCollection.name}: Error saving`,
+            title: `${collection.name}: Error saving`,
             message: e?.message
         });
 
@@ -251,7 +236,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
                 <EntityPreview
                     entity={entity as Entity<M>}
                     path={path}
-                    collection={resolvedCollection}/>
+                    collection={collection}/>
             </Suspense>
         );
 
@@ -275,7 +260,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
                     hidden={tabsPosition !== colIndex}>
                     <ErrorBoundary>
                         {customView.builder({
-                            collection: resolvedCollection,
+                            collection,
                             entity,
                             modifiedValues: modifiedValues ?? entity?.values
                         })}
@@ -380,7 +365,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
                 scrollButtons="auto"
             >
                 <Tab
-                    label={resolvedCollection.name}
+                    label={collection.name}
                     sx={{
                         fontSize: "0.875rem",
                         minWidth: "140px"
@@ -504,6 +489,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
 
         </Box>
     );
-    },
-    equal
-)
+    }
+    // ,
+//     equal
+// )

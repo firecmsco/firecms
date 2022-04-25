@@ -14,7 +14,10 @@ import {
     DEFAULT_ONE_OF_TYPE,
     DEFAULT_ONE_OF_VALUE
 } from "../../core/util/common";
-import { resolveProperty } from "../../core/util/resolutions";
+import {
+    resolveArrayProperty,
+    resolveProperty
+} from "../../core/util/resolutions";
 
 const PREFIX = "ArrayOneOfPreview";
 
@@ -55,8 +58,8 @@ export function ArrayOneOfPreview({
                                       entity
                                   }: PropertyPreviewProps<any[]>) {
 
-    const property = resolveProperty({
-        propertyOrBuilder: inputProperty,
+    const property = resolveArrayProperty({
+        property: inputProperty,
         propertyValue: value
     });
 

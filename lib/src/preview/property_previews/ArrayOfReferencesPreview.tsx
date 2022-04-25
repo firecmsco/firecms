@@ -6,7 +6,10 @@ import {
 import { ResolvedArrayProperty, ResolvedReferenceProperty } from "../../models";
 
 import { Box } from "@mui/material";
-import { resolveProperty } from "../../core/util/resolutions";
+import {
+    resolveArrayProperty,
+    resolveProperty
+} from "../../core/util/resolutions";
 
 /**
  * @category Preview components
@@ -18,10 +21,10 @@ export function ArrayOfReferencesPreview({
                                              size
                                          }: PropertyPreviewProps<any[]>) {
 
-    const property = resolveProperty({
-        propertyOrBuilder: inputProperty,
+    const property = resolveArrayProperty({
+        property: inputProperty,
         propertyValue: value
-    }) as ResolvedArrayProperty;
+    });
 
     if (Array.isArray(property?.of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");

@@ -56,7 +56,7 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
             tableMode: false,
             partOfArray: true,
             autoFocus: internalId === lastAddedId,
-            shouldAlwaysRerender: false
+            shouldAlwaysRerender: property.fromBuilder
         });
 
     const arrayContainer = <ArrayContainer value={value}

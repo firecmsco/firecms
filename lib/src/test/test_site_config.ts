@@ -1,8 +1,7 @@
 import { FirebaseCMSAppProps } from "../firebase_app/FirebaseCMSAppProps";
 import { buildCollection, buildProperty } from "../core/builders";
-import { EnumValues, Property, StringProperty } from "../models/properties";
-import { EntityCallbacks, EntityOnSaveProps } from "../models/entity_callbacks";
-import { EntityCollection } from "../models";
+import { EnumValues, StringProperty } from "../models/properties";
+import { EntityCallbacks } from "../models/entity_callbacks";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -29,7 +28,7 @@ const testProperty2:StringProperty = buildProperty<string>({
     }
 });
 
-const testProperty3:StringProperty = buildProperty({
+const testProperty3: StringProperty = buildProperty({
     dataType: "string",
     storage: {
         storagePath: "images",

@@ -59,7 +59,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                     tableMode: false,
                     partOfArray: true,
                     autoFocus: false,
-                    shouldAlwaysRerender: false
+                    shouldAlwaysRerender: property.fromBuilder
                 })
             }
         </Box>);

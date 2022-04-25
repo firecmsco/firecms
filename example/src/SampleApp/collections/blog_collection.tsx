@@ -2,7 +2,6 @@ import CustomColorTextField from "../custom_field/CustomColorTextField";
 import {
     buildCollection,
     buildProperty,
-    buildPropertyBuilder,
     ExportMappingFunction
 } from "@camberi/firecms";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
@@ -62,7 +61,7 @@ export const blogCollection = buildCollection<BlogEntry>({
                 }
             }
         }),
-        status: buildPropertyBuilder(({ values }) => ({
+        status: buildProperty(({ values }) => ({
             name: "Status",
             validation: { required: true },
             dataType: "string",
