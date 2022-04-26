@@ -17,6 +17,7 @@ import {
     EntityCollection,
     EntityValues,
     FormContext,
+    PropertyFieldBindingProps,
     ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty
@@ -28,20 +29,20 @@ import {
     getYupEntitySchema
 } from "../../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
-import { buildPropertyField } from "../../../../../form";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
 import { isReadOnly } from "../../../../util/entities";
 import { CustomDialogActions } from "../../../CustomDialogActions";
 import { resolveCollection } from "../../../../util/resolutions";
+import { PropertyFieldBinding } from "../../../../../form";
 
 interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     entity?: Entity<M>;
     customFieldValidator?: CustomFieldValidator;
     path: string;
     tableKey: string;
-    propertyId?: keyof M;
+    propertyKey?: keyof M;
     collection?: EntityCollection<M>;
     cellRect?: DOMRect;
     open: boolean;
@@ -60,7 +61,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                                      tableKey,
                                                                      entity,
                                                                      customFieldValidator,
-                                                                     propertyId,
+                                                                     propertyKey,
                                                                      collection: inputCollection,
                                                                      path,
                                                                      cellRect,
@@ -101,7 +102,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         () => {
             initialPositionSet.current = false;
         },
-        [propertyId, entity]
+        [propertyKey, entity]
     );
 
     // useEffect(
@@ -152,7 +153,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         () => {
             initialPositionSet.current = false;
         },
-        [propertyId]
+        [propertyKey]
     );
 
     useLayoutEffect(
@@ -182,11 +183,11 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     const validationSchema = useMemo(() => {
         if (!collection) return;
         return getYupEntitySchema(
-            propertyId && collection.properties[propertyId as string]
-                ? { [propertyId]: collection.properties[propertyId as string] } as ResolvedProperties<any>
+            propertyKey && collection.properties[propertyKey as string]
+                ? { [propertyKey]: collection.properties[propertyKey as string] } as ResolvedProperties<any>
                 : {} as ResolvedProperties<any>,
             customFieldValidator);
-    }, [path, propertyId, collection]);
+    }, [path, propertyKey, collection]);
 
     const adaptResize = () => {
         return updatePopupLocation(popupLocation);
@@ -198,10 +199,10 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const saveValue = async (values: M) => {
         setSavingError(null);
-        if (entity && onCellValueChange && propertyId) {
+        if (entity && onCellValueChange && propertyKey) {
             return onCellValueChange({
-                value: values[propertyId as string],
-                name: propertyId as string,
+                value: values[propertyKey as string],
+                name: propertyKey as string,
                 entity,
                 setError: setSavingError,
                 setSaved: () => {
@@ -217,7 +218,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     const form = entity && (
         <>
             <Formik
-                // key={`popup_form_${propertyId}_${entity?.id}`}
+                // key={`popup_form_${propertyKey}_${entity?.id}`}
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
                 validationSchema={validationSchema}
                 validate={(values) => console.debug("Validating", values)}
@@ -259,7 +260,22 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                         path
                     };
 
-                    const property: ResolvedProperty<any> | undefined = collection.properties[propertyId];
+                    const property: ResolvedProperty<any> | undefined = collection.properties[propertyKey];
+
+                    const fieldProps: PropertyFieldBindingProps | undefined = propertyKey && property
+                        ? {
+                            propertyKey: propertyKey as string,
+                            disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
+                            property,
+                            includeDescription: false,
+                            underlyingValueHasChanged: false,
+                            context,
+                            tableMode: true,
+                            partOfArray: false,
+                            autoFocus: open,
+                            shouldAlwaysRerender: true
+                        }
+                        : undefined;
 
                     return (
                         <Box
@@ -281,18 +297,8 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                         flexDirection: "column",
                                         position: "relative"
                                     }}>
-                                    {propertyId && property && buildPropertyField<any, M>({
-                                        propertyKey: propertyId as string,
-                                        disabled: isSubmitting || isReadOnly(property) || !!property.disabled,
-                                        property,
-                                        includeDescription: false,
-                                        underlyingValueHasChanged: false,
-                                        context,
-                                        tableMode: true,
-                                        partOfArray: false,
-                                        autoFocus: open,
-                                        shouldAlwaysRerender: true
-                                    })}
+                                    {fieldProps &&
+                                        <PropertyFieldBinding {...fieldProps}/>}
                                 </Box>
 
                                 <CustomDialogActions>
@@ -322,7 +328,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const draggable = (
         <Box
-            key={`draggable_${propertyId}_${entity.id}_${open}`}
+            key={`draggable_${propertyKey}_${entity.id}_${open}`}
             sx={theme => ({
                 display: "inline-block",
                 userSelect: "none",

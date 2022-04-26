@@ -1,6 +1,5 @@
 import React from "react";
-import clsx from "clsx";
-import { Backdrop, Modal, Paper, Theme } from "@mui/material";
+import { Backdrop, Modal, Paper } from "@mui/material";
 import { SlideFade } from "./SlideFadeTransition";
 
 export interface EntityDrawerProps {

@@ -1,10 +1,6 @@
 import React, { ReactElement } from "react";
 import { Box, FormControl, FormHelperText, Paper } from "@mui/material";
-import {
-    buildPropertyField,
-    FieldDescription,
-    FieldProps
-} from "@camberi/firecms";
+import { FieldDescription, FieldProps, PropertyFieldBinding } from "@camberi/firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 
@@ -33,14 +29,18 @@ export default function CustomShapedArrayField({
 
             <Paper variant={"outlined"}>
                 <Box m={2}>
-                    {properties.map((property, index) =>
-                        <div key={`array_${index}`}>
-                            {buildPropertyField({
+                    {properties.map((property, index) => {
+                            const fieldProps = {
                                 propertyKey: `${propertyKey}[${index}]`,
                                 property,
                                 context
-                            })}
-                        </div>
+                            };
+                            return (
+                                <div key={`array_${index}`}>
+                                    <PropertyFieldBinding {...fieldProps}/>
+                                </div>
+                            );
+                        }
                     )}
                 </Box>
             </Paper>

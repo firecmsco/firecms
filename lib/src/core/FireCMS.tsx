@@ -14,7 +14,8 @@ import {
     EntityCollection,
     EntityLinkBuilder,
     FireCMSContext,
-    Locale, Role, Roles,
+    Locale,
+    Roles,
     StorageSource,
     User,
     UserConfigurationPersistence

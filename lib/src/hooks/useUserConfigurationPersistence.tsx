@@ -1,5 +1,4 @@
 import { useFireCMSContext } from "./useFireCMSContext";
-import { ConfigurationPersistence } from "../models/config_persistence";
 import { UserConfigurationPersistence } from "../models";
 
 

@@ -1,5 +1,4 @@
 import { EntityCollection } from "./collections";
-import { User } from "./user";
 
 /**
  * Context that includes the resolved navigation and utility methods and

@@ -2,7 +2,8 @@ import {
     Entity,
     EntityCollection,
     EntityCustomView,
-    FireCMSContext, User
+    FireCMSContext,
+    User
 } from "../models";
 import { useEffect, useState } from "react";
 import {

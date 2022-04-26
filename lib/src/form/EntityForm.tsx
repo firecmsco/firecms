@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Box, Button, Typography } from "@mui/material";
 import {
-    CMSFormFieldProps,
     Entity,
     EntityCollection,
     EntityStatus,
     EntityValues,
     FormContext,
-    ResolvedEntityCollection
+    PropertyFieldBindingProps,
+    ResolvedEntityCollection,
+    ResolvedProperty
 } from "../models";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { useVirtual } from "react-virtual";
-import { buildPropertyField } from "./form_factory";
+import { PropertyFieldBinding } from "./PropertyFieldBinding";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
 import { getDefaultValuesFor, isReadOnly } from "../core/util/entities";
@@ -451,7 +452,7 @@ function FormInternal<M>({
                         !!touched[key];
 
                     const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
-                    const cmsFormFieldProps: CMSFormFieldProps = {
+                    const cmsFormFieldProps: PropertyFieldBindingProps = {
                         propertyKey: key,
                         disabled,
                         property,
@@ -461,7 +462,7 @@ function FormInternal<M>({
                         tableMode: false,
                         partOfArray: false,
                         autoFocus: false,
-                        shouldAlwaysRerender: property.fromBuilder
+                        shouldAlwaysRerender: shouldPropertyReRender(property)
                     };
 
                     return (
@@ -484,7 +485,7 @@ function FormInternal<M>({
                                 pb: 3
                             })}
                         >
-                            {buildPropertyField(cmsFormFieldProps)}
+                            <PropertyFieldBinding {...cmsFormFieldProps}/>
                         </ItemMeasurer>
                     );
                 })}
@@ -597,3 +598,13 @@ const ItemMeasurer = ({ children, measure, component, ...restProps }: any) => {
 };
 
 export default EntityForm;
+
+const shouldPropertyReRender = (property: ResolvedProperty): boolean => {
+    if (property.dataType === "map" && property.properties) {
+        return Object.values(property.properties).some((childProperty) => shouldPropertyReRender(childProperty));
+    } else if (property.dataType === "array" && Array.isArray(property.resolvedProperties)) {
+        return property.resolvedProperties.some((childProperty) => shouldPropertyReRender(childProperty));
+    } else {
+        return Boolean(property.Field) || property.fromBuilder;
+    }
+}

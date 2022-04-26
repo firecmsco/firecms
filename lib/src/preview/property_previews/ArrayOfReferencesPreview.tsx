@@ -3,13 +3,10 @@ import {
     PropertyPreviewProps,
     ReferencePreview
 } from "../internal";
-import { ResolvedArrayProperty, ResolvedReferenceProperty } from "../../models";
+import { ResolvedReferenceProperty } from "../../models";
 
 import { Box } from "@mui/material";
-import {
-    resolveArrayProperty,
-    resolveProperty
-} from "../../core/util/resolutions";
+import { resolveArrayProperty } from "../../core/util/resolutions";
 
 /**
  * @category Preview components

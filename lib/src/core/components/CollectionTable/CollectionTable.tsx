@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 import { Button, Paper, useMediaQuery, useTheme } from "@mui/material";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import equal from "react-fast-compare"
+import equal from "react-fast-compare";
 
 import {
     AdditionalColumnDelegate,

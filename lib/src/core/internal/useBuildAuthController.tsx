@@ -6,7 +6,8 @@ import {
     DataSource,
     EntityCollection,
     Locale,
-    Role, Roles,
+    Role,
+    Roles,
     StorageSource,
     User
 } from "../../models";

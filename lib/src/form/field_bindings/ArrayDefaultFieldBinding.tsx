@@ -3,9 +3,9 @@ import { CMSType, FieldProps, ResolvedProperty } from "../../models";
 import { FormControl, FormHelperText } from "@mui/material";
 import { FieldDescription } from "../index";
 import { ArrayContainer, LabelWithIcon } from "../components";
-import { buildPropertyField } from "../form_factory";
 import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import { PropertyFieldBinding } from "../PropertyFieldBinding";
 
 /**
  * Generic array field that allows reordering and renders the child property
@@ -45,19 +45,22 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
         setValue
     });
 
-    const buildEntry = (index: number, internalId: number) =>
-        buildPropertyField({
+    const buildEntry = (index: number, internalId: number) => {
+        const childProperty = property.resolvedProperties[index] ?? ofProperty;
+        const fieldProps = {
             propertyKey: `${propertyKey}[${index}]`,
             disabled,
-            property: property.resolvedProperties[index] ?? ofProperty,
+            property: childProperty,
             includeDescription,
             underlyingValueHasChanged,
             context,
             tableMode: false,
             partOfArray: true,
             autoFocus: internalId === lastAddedId,
-            shouldAlwaysRerender: property.fromBuilder
-        });
+            shouldAlwaysRerender: childProperty.fromBuilder
+        };
+        return <PropertyFieldBinding {...fieldProps}/>;
+    };
 
     const arrayContainer = <ArrayContainer value={value}
                                            name={propertyKey}
@@ -65,10 +68,13 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
                                            onInternalIdAdded={setLastAddedId}
                                            disabled={isSubmitting || Boolean(property.disabled)}
                                            includeAddButton={!property.disabled}/>;
-    const title = <FormHelperText filled
-                                  required={property.validation?.required}>
-        <LabelWithIcon property={property}/>
-    </FormHelperText>;
+    const title = (
+        <FormHelperText filled
+                        required={property.validation?.required}>
+            <LabelWithIcon property={property}/>
+        </FormHelperText>
+    );
+
     return (
 
         <FormControl fullWidth error={showError}>

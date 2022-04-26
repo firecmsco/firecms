@@ -5,7 +5,8 @@ import {
     EntityCallbacks,
     EntityOnDeleteProps,
     FireCMSContext,
-    ResolvedEntityCollection, User
+    ResolvedEntityCollection,
+    User
 } from "../../models";
 
 /**

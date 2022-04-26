@@ -4,7 +4,8 @@ import {
     EntityCallbacks,
     EntityValues,
     FireCMSContext,
-    SaveEntityProps, User
+    SaveEntityProps,
+    User
 } from "../../models";
 import { useDataSource } from "./useDataSource";
 import { resolveCollection } from "../../core/util/resolutions";

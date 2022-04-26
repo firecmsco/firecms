@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
 import {
+    ApplicationVerifier,
     Auth,
     FacebookAuthProvider,
     fetchSignInMethodsForEmail,
@@ -13,7 +14,6 @@ import {
     signInWithPhoneNumber,
     signInWithPopup,
     signOut,
-    ApplicationVerifier,
     TwitterAuthProvider,
     User as FirebaseUser
 } from "firebase/auth";

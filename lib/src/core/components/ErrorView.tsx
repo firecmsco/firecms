@@ -1,6 +1,6 @@
 import React from "react";
 import ErrorIcon from "@mui/icons-material/Error";
-import { Box, Tooltip } from "@mui/material";
+import { Box } from "@mui/material";
 import { ErrorTooltip } from "./ErrorTooltip";
 
 /**

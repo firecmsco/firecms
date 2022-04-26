@@ -41,8 +41,6 @@ import { EntityFormProps } from "../../form";
 import { fullPathToCollectionSegments } from "../util/paths";
 import { useSideDialogContext } from "../SideDialogs";
 
-import equal from "react-fast-compare"
-
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<any>>;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<any>>;
 const EntityPreview = lazy(() => import("../components/EntityPreview")) as React.FunctionComponent<EntityPreviewProps<any>>;

@@ -1,5 +1,4 @@
 import { EntityCollection } from "./collections";
-import { ResolvedEntityCollection } from "./resolved_entities";
 
 /**
  * Use to resolve the collection properties for specific path, entity id or values.

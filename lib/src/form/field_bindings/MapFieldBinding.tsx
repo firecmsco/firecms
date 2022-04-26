@@ -19,7 +19,7 @@ import { SelectChangeEvent } from "@mui/material/Select";
 import { pick } from "../../core/util/objects";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { buildPropertyField } from "../form_factory";
+import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { isHidden } from "../../core/util/entities";
 import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 
@@ -107,25 +107,24 @@ export function MapFieldBinding<T extends object>({
             {Object.entries(mapProperties)
                 .filter(([_, property]) => !isHidden(property))
                 .map(([entryKey, childProperty], index) => {
+                        const fieldProps = {
+                            propertyKey: `${propertyKey}.${entryKey}`,
+                            disabled,
+                            property: childProperty,
+                            includeDescription,
+                            underlyingValueHasChanged,
+                            context,
+                            tableMode: false,
+                            partOfArray: false,
+                            autoFocus: autoFocus && index === 0,
+                            shouldAlwaysRerender: childProperty.fromBuilder
+                        };
                         return (
                             <Grid item
                                   sm={12}
                                   xs={12}
                                   key={`map-${propertyKey}-${index}`}>
-                                {
-                                    buildPropertyField<any, T>({
-                                        propertyKey: `${propertyKey}.${entryKey}`,
-                                        disabled,
-                                        property: childProperty,
-                                        includeDescription,
-                                        underlyingValueHasChanged,
-                                        context,
-                                        tableMode: false,
-                                        partOfArray: false,
-                                        autoFocus: autoFocus && index === 0,
-                                        shouldAlwaysRerender: property.fromBuilder
-                                    })
-                                }
+                                <PropertyFieldBinding {...fieldProps}/>
                             </Grid>
                         );
                     }

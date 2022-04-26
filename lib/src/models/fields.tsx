@@ -1,6 +1,9 @@
-import { Entity, EntityValues } from "./entities";
+import { EntityValues } from "./entities";
 import { CMSType, Property } from "./properties";
-import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
+import {
+    ResolvedEntityCollection,
+    ResolvedProperty
+} from "./resolved_entities";
 
 /**
  * When building a custom field you need to create a React component that takes
@@ -139,10 +142,10 @@ export interface FormContext<M extends { [Key: string]: any }> {
 
 /**
  * In case you need to render a field bound to a Property inside your
- * custom field you can call {@link buildPropertyField} with these props.
+ * custom field you can use {@link PropertyFieldBinding} with these props.
  * @category Form custom fields
  */
-export interface CMSFormFieldProps<M extends { [Key: string]: any } = any> {
+export interface PropertyFieldBindingProps<M extends { [Key: string]: any } = any> {
 
     /**
      * The name of the property, such as `age`. You can use nested and array

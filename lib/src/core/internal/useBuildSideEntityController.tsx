@@ -3,9 +3,9 @@ import {
     EntityCollection,
     EntitySidePanelProps,
     NavigationContext,
-    SideEntityController,
     SideDialogPanelProps,
-    SideDialogsController
+    SideDialogsController,
+    SideEntityController
 } from "../../models";
 import {
     getNavigationEntriesFromPathInternal,

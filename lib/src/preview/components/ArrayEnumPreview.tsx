@@ -1,4 +1,4 @@
-import { EnumValueConfig, EnumValues } from "../../models";
+import { EnumValueConfig } from "../../models";
 
 import { styled } from "@mui/material/styles";
 

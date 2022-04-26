@@ -16,7 +16,8 @@ import {
     Entity,
     EntityCollection,
     ExportConfig,
-    ResolvedEntityCollection, User
+    ResolvedEntityCollection,
+    User
 } from "../../../../models";
 import { useDataSource, useFireCMSContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";

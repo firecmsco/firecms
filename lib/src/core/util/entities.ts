@@ -3,19 +3,12 @@ import {
     EntityReference,
     EntityStatus,
     EntityValues,
-    EnumValueConfig,
-    EnumValues,
-    NumberProperty,
     Properties,
     PropertiesOrBuilders,
     Property,
     PropertyOrBuilder,
-    ResolvedArrayProperty,
-    ResolvedNumberProperty,
     ResolvedProperties,
-    ResolvedProperty,
-    ResolvedStringProperty,
-    StringProperty
+    ResolvedProperty
 } from "../../models";
 import { setDateToMidnight } from "./dates";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";

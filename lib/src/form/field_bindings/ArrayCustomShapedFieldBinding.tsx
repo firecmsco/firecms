@@ -3,7 +3,7 @@ import { FieldProps } from "../../models";
 import { Box, FormControl, FormHelperText } from "@mui/material";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
-import { buildPropertyField } from "../form_factory";
+import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 
@@ -45,24 +45,23 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                   required={property.validation?.required}>
         <LabelWithIcon property={property}/>
     </FormHelperText>;
-    const body = property.resolvedProperties.map((childProperty, index) =>
-        <Box key={`custom_shaped_array_${index}`}
-             pb={1}>
-            {
-                buildPropertyField({
-                    propertyKey: `${propertyKey}[${index}]`,
-                    disabled,
-                    property: childProperty,
-                    includeDescription,
-                    underlyingValueHasChanged,
-                    context,
-                    tableMode: false,
-                    partOfArray: true,
-                    autoFocus: false,
-                    shouldAlwaysRerender: property.fromBuilder
-                })
-            }
-        </Box>);
+    const body = property.resolvedProperties.map((childProperty, index) => {
+        const fieldProps = {
+            propertyKey: `${propertyKey}[${index}]`,
+            disabled,
+            property: childProperty,
+            includeDescription,
+            underlyingValueHasChanged,
+            context,
+            tableMode: false,
+            partOfArray: true,
+            autoFocus: false,
+            shouldAlwaysRerender: childProperty.fromBuilder
+        };
+        return <Box key={`custom_shaped_array_${index}`} pb={1}>
+            <PropertyFieldBinding {...fieldProps}/>
+        </Box>;
+    });
     return (
 
         <FormControl fullWidth error={showError}>

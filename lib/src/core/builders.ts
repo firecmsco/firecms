@@ -11,7 +11,6 @@ import {
     GeopointProperty,
     MapProperty,
     NumberProperty,
-    Properties,
     PropertiesOrBuilders,
     PropertyBuilder,
     PropertyOrBuilder,

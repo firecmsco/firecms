@@ -17,7 +17,8 @@ import {
     ArrayProperty,
     Entity,
     FieldProps,
-    Property, ResolvedArrayProperty, ResolvedProperty,
+    Property,
+    ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig,
     StringProperty

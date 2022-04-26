@@ -39,7 +39,6 @@ export const resolveCollection = <M extends { [Key: string]: any } = any, >
     previousValues?: Partial<EntityValues<M>>,
     userConfigPersistence?: UserConfigurationPersistence
 }): ResolvedEntityCollection<M> => {
-    console.trace("resolveCollection", path, collection);
 
     const collectionOverride = userConfigPersistence?.getCollectionConfig<M>(path);
     const storedProperties = getValueInPath(collectionOverride, "properties");
@@ -68,6 +67,7 @@ export const resolveCollection = <M extends { [Key: string]: any } = any, >
         .map(([id, property]) => ({ [id]: property }))
         .reduce((a, b) => ({ ...a, ...b }), {});
 
+    console.log("res", cleanedProperties);
     return {
         ...collection,
         properties: cleanedProperties,
@@ -130,19 +130,24 @@ export function resolveProperty<T, M>({
         });
         return {
             ...propertyOrBuilder,
+            fromBuilder: props.fromBuilder,
             properties
         } as ResolvedProperty;
     } else if (propertyOrBuilder.dataType === "array") {
         return resolveArrayProperty({
             property: propertyOrBuilder,
             propertyValue,
+            fromBuilder: props.fromBuilder,
             ...props
         })
     } else if ((propertyOrBuilder.dataType === "string" || propertyOrBuilder.dataType === "number") && propertyOrBuilder.enumValues) {
         return resolvePropertyEnum(propertyOrBuilder, props.fromBuilder);
     }
 
-    return propertyOrBuilder as ResolvedProperty;
+    return {
+        ...propertyOrBuilder,
+        fromBuilder: props.fromBuilder,
+    } as ResolvedProperty;
 }
 
 export function resolveArrayProperty<T extends any[], M>({
@@ -163,6 +168,7 @@ export function resolveArrayProperty<T extends any[], M>({
         if (Array.isArray(property.of)) {
             return {
                 ...property,
+                fromBuilder: props.fromBuilder,
                 resolvedProperties: property.of.map((p, index) => {
                     return resolveProperty({
                         propertyOrBuilder: p as Property<any>,
@@ -187,6 +193,7 @@ export function resolveArrayProperty<T extends any[], M>({
                 });
             return {
                 ...property,
+                fromBuilder: props.fromBuilder,
                 of: resolveProperty({
                     propertyOrBuilder: of,
                     propertyValue: undefined,
@@ -220,12 +227,16 @@ export function resolveArrayProperty<T extends any[], M>({
                 ...property.oneOf,
                 properties
             },
+            fromBuilder: props.fromBuilder,
             resolvedProperties: resolvedProperties
         } as ResolvedArrayProperty;
     } else if (!property.Field) {
         throw Error("The array property needs to declare an 'of' or a 'oneOf' property, or provide a custom `Field`")
     } else {
-        return property as ResolvedArrayProperty;
+        return {
+            ...property,
+            fromBuilder: props.fromBuilder,
+        } as ResolvedArrayProperty;
     }
 
 }

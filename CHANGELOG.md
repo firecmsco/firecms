@@ -58,7 +58,11 @@ buildProperty<string>({
   you pass a React Component directly: `Actions`
 - `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where 
   you pass a React Component directly: `Actions`
-- `Permissions`: added `editCollection` and `deleteCollection` props
+
+### Custom properties and fields
+- The `buildPropertyField` utility function has been replaced by a component
+called `PropertyFieldBinding`. The props have not changed. 
+- `CMSFormFieldProps` have been renamed to `PropertyFieldBindingProps`
 
 ## [1.0.0-rc.4] - 2022-03-14
 

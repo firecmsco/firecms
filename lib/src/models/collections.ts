@@ -5,7 +5,6 @@ import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
 import { EnumValues, PropertiesOrBuilders } from "./properties";
-import { ResolvedEntityCollection } from "./resolved_entities";
 
 /**
  * This interface represents a view that includes a collection of entities.

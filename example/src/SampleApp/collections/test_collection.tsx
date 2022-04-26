@@ -178,6 +178,14 @@ export const testCollection = buildCollection({
             name: "Form",
             of: formPropertyEntry
         },
+        name: {
+            name: "Name starts with number",
+            dataType: "string",
+            validation:{
+                matches: /\d.*/,
+                matchesMessage: "Must start with a number"
+            }
+        },
         shaped_array: {
             dataType: "array",
             of: [
@@ -234,14 +242,6 @@ export const testCollection = buildCollection({
                 path: !values.product ? false : values.product.path + "/" + values.product.id + "/locales"
             };
         }),
-        name: {
-            name: "Name starts with number",
-            dataType: "string",
-            validation:{
-                matches: /\d.*/,
-                matchesMessage: "Must start with a number"
-            }
-        },
         source: ({ values, previousValues }) => {
             const properties = buildProperties<any>({
                 type: {

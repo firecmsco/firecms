@@ -234,9 +234,9 @@ export const CollectionEditorForm = React.memo(
         const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
         const asDialog = !largeLayout
 
-        const [selectedpropertyKey, setSelectedpropertyKey] = useState<string | undefined>();
+        const [selectedPropertyKey, setSelectedPropertyKey] = useState<string | undefined>();
         const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
-        const selectedPropertyFullId = selectedpropertyKey ? getFullId(selectedpropertyKey, selectedPropertyNamespace) : undefined;
+        const selectedPropertyFullId = selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined;
         const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
         const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
@@ -265,7 +265,7 @@ export const CollectionEditorForm = React.memo(
             setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyKey), false);
             setNewPropertyDialogOpen(false);
 
-            setSelectedpropertyKey(undefined);
+            setSelectedPropertyKey(undefined);
             setSelectedPropertyNamespace(undefined);
         }, [setFieldValue, values]);
 
@@ -286,7 +286,7 @@ export const CollectionEditorForm = React.memo(
         }, false);
         setFieldValue("propertiesOrder", [...(values.propertiesOrder ?? Object.keys(values.properties)), id], false);
         setNewPropertyDialogOpen(false);
-        setSelectedpropertyKey(id);
+        setSelectedPropertyKey(id);
         setSelectedPropertyNamespace(undefined);
     }, [values.properties, values.propertiesOrder]);
 
@@ -308,7 +308,7 @@ export const CollectionEditorForm = React.memo(
         }, [setFieldError]);
 
         const closePropertyDialog = () => {
-            setSelectedpropertyKey(undefined);
+            setSelectedPropertyKey(undefined);
         };
 
         const propertyEditForm = selectedPropertyFullId &&
@@ -318,10 +318,10 @@ export const CollectionEditorForm = React.memo(
             <PropertyForm
                 inArray={false}
                 asDialog={asDialog}
-                open={Boolean(selectedpropertyKey)}
-                key={`edit_view_${selectedpropertyKey}`}
+                open={Boolean(selectedPropertyKey)}
+                key={`edit_view_${selectedPropertyKey}`}
                 existing={true}
-                propertyKey={selectedpropertyKey}
+                propertyKey={selectedPropertyKey}
                 propertyNamespace={selectedPropertyNamespace}
                 property={selectedProperty}
                 onPropertyChanged={onPropertyChanged}
@@ -391,10 +391,10 @@ export const CollectionEditorForm = React.memo(
                 <ErrorBoundary>
                     <PropertyTree
                         onPropertyClick={(propertyKey, namespace) => {
-                            setSelectedpropertyKey(propertyKey);
+                            setSelectedPropertyKey(propertyKey);
                             setSelectedPropertyNamespace(namespace);
                         }}
-                        selectedPropertyKey={selectedpropertyKey ? getFullId(selectedpropertyKey, selectedPropertyNamespace) : undefined}
+                        selectedPropertyKey={selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined}
                         properties={values.properties}
                         propertiesOrder={(values.propertiesOrder ?? Object.keys(values.properties)) as string[]}
                         onPropertyMove={onPropertyMove}

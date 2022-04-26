@@ -7,7 +7,6 @@ import {
     Divider,
     Grid,
     IconButton,
-    Paper,
     Popover
 } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";

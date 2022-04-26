@@ -11,7 +11,7 @@ import { FastField, FieldProps as FormikFieldProps } from "formik";
 
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { buildPropertyField } from "../form_factory";
+import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries } from "../../core/util/enums";
 import {
@@ -166,6 +166,14 @@ function ArrayOneOfEntry({
     const typeFieldName = `${name}[${typeField}]`;
     const valueFieldName = `${name}[${valueField}]`;
 
+    const fieldProps = property ? {
+        propertyKey: valueFieldName,
+        property: property,
+        context: context,
+        autoFocus: autoFocus,
+        tableMode: false,
+        shouldAlwaysRerender: property.fromBuilder
+    } : undefined;
     return (
         <Paper sx={(theme) => ({
             padding: theme.spacing(1)
@@ -220,22 +228,13 @@ function ArrayOneOfEntry({
                 }
             </FastField>
 
-            {property && (
+            {fieldProps && (
                 <FormControl fullWidth
                              key={`form_control_${name}_${typeInternal}`}>
-                    {buildPropertyField({
-                        propertyKey: valueFieldName,
-                        property: property,
-                        context: context,
-                        autoFocus: autoFocus,
-                        tableMode: false,
-                        shouldAlwaysRerender: property.fromBuilder
-                    })}
+                    <PropertyFieldBinding {...fieldProps}/>
                 </FormControl>
             )}
 
         </Paper>
     );
 }
-
-

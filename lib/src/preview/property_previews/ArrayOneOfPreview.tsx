@@ -14,10 +14,7 @@ import {
     DEFAULT_ONE_OF_TYPE,
     DEFAULT_ONE_OF_VALUE
 } from "../../core/util/common";
-import {
-    resolveArrayProperty,
-    resolveProperty
-} from "../../core/util/resolutions";
+import { resolveArrayProperty } from "../../core/util/resolutions";
 
 const PREFIX = "ArrayOneOfPreview";
 

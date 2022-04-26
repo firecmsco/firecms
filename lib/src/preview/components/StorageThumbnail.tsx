@@ -1,6 +1,8 @@
 import React, { useEffect } from "react";
 
-import { renderSkeletonImageThumbnail } from "../property_previews/SkeletonComponent";
+import {
+    renderSkeletonImageThumbnail
+} from "../property_previews/SkeletonComponent";
 import { UrlComponentPreview } from "./UrlComponentPreview";
 import { PreviewSize } from "../internal";
 import { useStorageSource } from "../../hooks";
