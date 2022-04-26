@@ -82,7 +82,7 @@ export function buildPropertyField<T extends CMSType = any, M = any>
      tableMode,
      partOfArray,
      autoFocus,
-     shouldAlwaysRerender = true
+     shouldAlwaysRerender
  }: CMSFormFieldProps<M>): ReactElement<CMSFormFieldProps<M>> {
 
     let component: ComponentType<FieldProps<T, any, M>> | undefined;

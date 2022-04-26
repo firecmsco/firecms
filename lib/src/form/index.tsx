@@ -37,6 +37,3 @@ export {
 } from "./EntityForm";
 
 export { buildPropertyField } from "./form_factory";
-
-
-

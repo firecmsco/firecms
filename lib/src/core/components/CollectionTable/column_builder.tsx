@@ -26,7 +26,11 @@ import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../Table";
 import { getIconForProperty } from "../../util/property_utils";
-import { resolveEnumValues, resolveProperty, resolveCollection } from "../../util/resolutions";
+import {
+    resolveCollection,
+    resolveEnumValues,
+    resolveProperty
+} from "../../util/resolutions";
 
 export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType extends User> = {
 
@@ -217,10 +221,10 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
 
     }, []);
 
-    const resolvedCollection: ResolvedEntityCollection<M> = resolveCollection({
+    const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection({
         collection: inputCollection,
         path
-    });
+    }), [inputCollection, path]);
 
     const propertyCellRenderer = useCallback(({
                                       column,

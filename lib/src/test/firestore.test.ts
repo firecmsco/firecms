@@ -6,8 +6,8 @@ import {
 it("timestamp conversion", () => {
     const timestamp = Timestamp.now();
     const date = timestamp.toDate();
-    expect(firestoreToCMSModel({ created_at: timestamp })
-    ).toEqual({ created_at: date });
+    expect(firestoreToCMSModel({ created_on: timestamp })
+    ).toEqual({ created_on: date });
 });
 
 it("timestamp array conversion", () => {

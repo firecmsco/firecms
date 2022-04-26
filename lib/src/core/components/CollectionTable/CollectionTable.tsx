@@ -83,10 +83,10 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
         const theme = useTheme();
         const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-        const resolvedCollection = resolveCollection<M>({
+        const resolvedCollection = useMemo(() => resolveCollection<M>({
             collection,
             path
-        });
+        }), [collection, path]);
 
         const [size, setSize] = React.useState<CollectionSize>(resolvedCollection.defaultSize ?? "m");
 

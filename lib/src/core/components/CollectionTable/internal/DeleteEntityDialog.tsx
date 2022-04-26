@@ -64,7 +64,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
     const resolvedCollection = useMemo(() => resolveCollection<M>({
         collection,
         path
-    }), []);
+    }), [collection, path]);
 
     const handleCancel = useCallback(() => {
         onClose();

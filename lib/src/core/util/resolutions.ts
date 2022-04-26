@@ -39,6 +39,7 @@ export const resolveCollection = <M extends { [Key: string]: any } = any, >
     previousValues?: Partial<EntityValues<M>>,
     userConfigPersistence?: UserConfigurationPersistence
 }): ResolvedEntityCollection<M> => {
+    console.trace("resolveCollection", path, collection);
 
     const collectionOverride = userConfigPersistence?.getCollectionConfig<M>(path);
     const storedProperties = getValueInPath(collectionOverride, "properties");

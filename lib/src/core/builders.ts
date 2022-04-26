@@ -62,8 +62,8 @@ export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrB
  * @category Builder
  */
 export function buildProperties<M = any>(
-    properties: Properties<M>
-): Properties<M> {
+    properties: PropertiesOrBuilders<M>
+): PropertiesOrBuilders<M> {
     return properties;
 }
 

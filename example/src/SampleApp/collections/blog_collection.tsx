@@ -11,7 +11,7 @@ type BlogEntry = {
     header_image: string,
     content: any[],
     gold_text: string,
-    created_at: Date,
+    created_on: Date,
     publish_date: Date,
     reviewed: boolean,
     status: string,
@@ -76,8 +76,8 @@ export const blogCollection = buildCollection<BlogEntry>({
             },
             defaultValue: "draft"
         })),
-        created_at: {
-            name: "Created at",
+        created_on: {
+            name: "Created on",
             dataType: "date",
             autoValue: "on_create"
         },

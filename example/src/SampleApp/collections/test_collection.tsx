@@ -517,8 +517,8 @@ export const testCollection = buildCollection({
                 acceptedFiles: ["image/*"]
             }
         },
-        created_at: {
-            name: "Created at",
+        created_on: {
+            name: "Created on",
             dataType: "date",
             autoValue: "on_create"
         },
