@@ -97,7 +97,9 @@ export function resolveProperty<T, M>({
     fromBuilder?: boolean
 }): ResolvedProperty | null {
 
-    if (typeof propertyOrBuilder === "function") {
+    if (!propertyOrBuilder) {
+        return null;
+    } else if (typeof propertyOrBuilder === "function") {
         const path = props.path;
         if (!path)
             throw Error("Trying to resolve a property builder without specifying the entity path");

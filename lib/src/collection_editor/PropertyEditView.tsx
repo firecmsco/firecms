@@ -55,7 +55,7 @@ export function PropertyForm({
                                  includeIdAndName = true,
                                  existing,
                                  inArray,
-                                 propertyId,
+                                 propertyKey,
                                  propertyNamespace,
                                  property,
                                  onOkClicked,
@@ -64,14 +64,14 @@ export function PropertyForm({
                                  onDelete,
                                  onError,
                                  forceShowErrors,
-                                 existingPropertyIds
+                                 existingpropertyKeys
                              }: {
     asDialog: boolean;
     open?: boolean;
     includeIdAndName?: boolean;
     existing: boolean;
     inArray: boolean;
-    propertyId?: string;
+    propertyKey?: string;
     propertyNamespace?: string;
     property?: Property;
     onPropertyChanged: (params: { id?: string, property: Property, namespace?: string }) => void;
@@ -80,7 +80,7 @@ export function PropertyForm({
     onOkClicked?: () => void;
     onCancel?: () => void;
     forceShowErrors: boolean;
-    existingPropertyIds?: string[];
+    existingpropertyKeys?: string[];
 }) {
 
     const initialValue: PropertyWithId = {
@@ -90,9 +90,9 @@ export function PropertyForm({
 
     return (
         <Formik
-            key={`property_view_${propertyId}`}
+            key={`property_view_${propertyKey}`}
             initialValues={property
-                ? { id: propertyId, ...property } as PropertyWithId
+                ? { id: propertyKey, ...property } as PropertyWithId
                 : initialValue}
             onSubmit={(newPropertyWithId: PropertyWithId, formikHelpers) => {
                 const { id, ...property } = newPropertyWithId;
@@ -112,7 +112,7 @@ export function PropertyForm({
                 if (!values.dataType || !getWidget(values)) {
                     errors.selectedWidget = "Required";
                 }
-                if (existingPropertyIds && values.id && existingPropertyIds.includes(values.id)) {
+                if (existingpropertyKeys && values.id && existingpropertyKeys.includes(values.id)) {
                     errors.id = "";
                 }
                 return {};
@@ -128,7 +128,7 @@ export function PropertyForm({
                     showErrors={forceShowErrors || props.submitCount > 0}
                     existing={existing}
                     inArray={inArray}
-                    existingPropertyIds={existingPropertyIds}
+                    existingpropertyKeys={existingpropertyKeys}
                     {...props}/>;
 
                 let body: JSX.Element;
@@ -386,7 +386,7 @@ function PropertyEditView({
                               onError,
                               showErrors,
                               inArray,
-                              existingPropertyIds
+                              existingpropertyKeys
                           }: {
     includeIdAndTitle?: boolean;
     existing: boolean;
@@ -396,7 +396,7 @@ function PropertyEditView({
     onError?: (id: string, namespace?: string, error?: boolean) => void;
     showErrors: boolean;
     inArray: boolean;
-    existingPropertyIds?: string[];
+    existingpropertyKeys?: string[];
 } & FormikProps<PropertyWithId>) {
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -567,7 +567,7 @@ function PropertyEditView({
                     }}>
                         <BasePropertyField showErrors={showErrors}
                                            disabledId={existing}
-                                           existingPropertyIds={existingPropertyIds}/>
+                                           existingpropertyKeys={existingpropertyKeys}/>
 
                     </Grid>}
                 <Grid container spacing={2} direction={"column"}>

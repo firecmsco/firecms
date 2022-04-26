@@ -99,7 +99,7 @@ const StyledBox = styled(Box)((
  * @category Form fields
  */
 export function TableStorageUpload(props: {
-    propertyId: string;
+    propertyKey: string;
     error: Error | undefined;
     disabled: boolean;
     internalValue: string | string[] | null;
@@ -114,7 +114,7 @@ export function TableStorageUpload(props: {
 }) {
 
     const {
-        propertyId,
+        propertyKey,
         error,
         internalValue,
         disabled,
@@ -141,7 +141,7 @@ export function TableStorageUpload(props: {
     const fileNameBuilder = (file: File) => {
         if (storage.fileName) {
 
-            const fileName = resolveStorageString(storage.fileName, storage, entity.values, entity.id,  path, property, file, propertyId);
+            const fileName = resolveStorageString(storage.fileName, storage, entity.values, entity.id,  path, property, file, propertyKey);
             if (!fileName || fileName.length === 0) {
                 throw Error("You need to return a valid filename");
             }
@@ -151,14 +151,14 @@ export function TableStorageUpload(props: {
     };
 
     const storagePathBuilder = (file: File) => {
-        return resolveStorageString(storage.storagePath, storage, entity.values, entity.id, path, property, file, propertyId) ?? "/";
+        return resolveStorageString(storage.storagePath, storage, entity.values, entity.id, path, property, file, propertyKey) ?? "/";
     };
 
     return (
 
         <StorageUpload
             value={internalValue}
-            name={propertyId}
+            name={propertyKey}
             disabled={disabled}
             autoFocus={false}
             property={property}

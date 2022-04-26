@@ -176,7 +176,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                  internalValue={internalValue}
                                                  previewSize={getPreviewSizeFrom(size)}
                                                  updateValue={updateValue}
-                                                 propertyId={name as string}
+                                                 propertyKey={name as string}
                                                  onBlur={onBlur}
                                                  setPreventOutsideClick={setPreventOutsideClick}
             />;

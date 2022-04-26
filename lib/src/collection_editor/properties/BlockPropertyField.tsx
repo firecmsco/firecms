@@ -19,7 +19,7 @@ export function BlockPropertyField({}: {}) {
     } = useFormikContext<ArrayProperty>();
 
     const [propertyDialogOpen, setPropertyDialogOpen] = useState<boolean>(false);
-    const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
+    const [selectedpropertyKey, setSelectedpropertyKey] = useState<string | undefined>();
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
 
     const onPropertyCreated = useCallback(({
@@ -36,21 +36,21 @@ export function BlockPropertyField({}: {}) {
         setPropertyDialogOpen(false);
     }, [values.oneOf?.properties, values.oneOf?.propertiesOrder]);
 
-    const selectedPropertyFullId = selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined;
+    const selectedPropertyFullId = selectedpropertyKey ? getFullId(selectedpropertyKey, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.oneOf?.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
-    const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
-        const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
+    const deleteProperty = useCallback((propertyKey?: string, namespace?: string) => {
+        const fullId = propertyKey ? getFullId(propertyKey, namespace) : undefined;
         if (!fullId)
             throw Error("collection editor miss config");
 
         setFieldValue(`oneOf.${idToPropertiesPath(fullId)}`, undefined, false);
         const propertiesOrderPath = `oneOf.${namespaceToPropertiesOrderPath(namespace)}`;
         const currentPropertiesOrder: string[] = getIn(values, propertiesOrderPath);
-        setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyId), false);
+        setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyKey), false);
 
         setPropertyDialogOpen(false);
-        setSelectedPropertyId(undefined);
+        setSelectedpropertyKey(undefined);
         setSelectedPropertyNamespace(undefined);
     }, [setFieldValue, values]);
 
@@ -84,7 +84,7 @@ export function BlockPropertyField({}: {}) {
                         propertiesOrder={values.oneOf?.propertiesOrder}
                         errors={{}}
                         onPropertyClick={(propertyKey, namespace) => {
-                            setSelectedPropertyId(propertyKey);
+                            setSelectedpropertyKey(propertyKey);
                             setSelectedPropertyNamespace(namespace);
                             setPropertyDialogOpen(true);
                         }}
@@ -110,21 +110,21 @@ export function BlockPropertyField({}: {}) {
                           open={propertyDialogOpen}
                           onCancel={() => {
                               setPropertyDialogOpen(false);
-                              setSelectedPropertyId(undefined);
+                              setSelectedpropertyKey(undefined);
                               setSelectedPropertyNamespace(undefined);
                           }}
                           onOkClicked={() => {
                               setPropertyDialogOpen(false);
-                              setSelectedPropertyId(undefined);
+                              setSelectedpropertyKey(undefined);
                               setSelectedPropertyNamespace(undefined);
                           }}
                           onDelete={deleteProperty}
-                          propertyId={selectedPropertyId}
+                          propertyKey={selectedpropertyKey}
                           propertyNamespace={selectedPropertyNamespace}
                           property={selectedProperty}
-                          existing={Boolean(selectedPropertyId)}
+                          existing={Boolean(selectedpropertyKey)}
                           onPropertyChanged={onPropertyCreated}
-                          existingPropertyIds={selectedPropertyId ? undefined : values.oneOf?.propertiesOrder}/>
+                          existingpropertyKeys={selectedpropertyKey ? undefined : values.oneOf?.propertiesOrder}/>
 
         </>);
 }

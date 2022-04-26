@@ -14,8 +14,8 @@ export function namespaceToPropertiesOrderPath(namespace?: string): string {
         : "propertiesOrder";
 }
 
-export function getFullId(propertyId: string, propertyNamespace?: string): string {
+export function getFullId(propertyKey: string, propertyNamespace?: string): string {
     return propertyNamespace
-        ? `${propertyNamespace}.${propertyId}`
-        : propertyId;
+        ? `${propertyNamespace}.${propertyKey}`
+        : propertyKey;
 }

@@ -115,7 +115,7 @@ export function checkInlineEditing<M>(inlineEditing: ((entity: Entity<any>) => b
 
 type SelectedCellProps<M> =
     {
-        propertyId: keyof M,
+        propertyKey: keyof M,
         columnIndex: number,
         cellRect: DOMRect;
         width: number,
@@ -235,13 +235,13 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
 
         const entity: Entity<M> = rowData;
 
-        const propertyId = column.dataKey;
+        const propertyKey = column.dataKey;
 
-        const propertyOrBuilder = inputCollection.properties[propertyId];
+        const propertyOrBuilder = inputCollection.properties[propertyKey];
         const property = resolveProperty({
             propertyOrBuilder,
             path,
-            propertyValue: entity.values ? entity.values[propertyId] : undefined,
+            propertyValue: entity.values ? entity.values[propertyKey] : undefined,
             values: entity.values,
             entityId: entity.id
         });
@@ -254,18 +254,18 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
         if (!inlineEditingEnabled) {
             return (
                 <TableCell
-                    key={`preview_cell_${propertyId}_${rowIndex}_${columnIndex}`}
+                    key={`preview_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
                     size={size}
-                    value={entity.values[propertyId]}
+                    value={entity.values[propertyKey]}
                     align={column.align}
                     disabled={true}>
                     <PropertyPreview
                         width={column.width}
                         height={column.height}
-                        propertyKey={`preview_${propertyId}_${rowIndex}_${columnIndex}`}
+                        propertyKey={`preview_${propertyKey}_${rowIndex}_${columnIndex}`}
                         property={property as any}
                         entity={entity}
-                        value={entity.values[propertyId]}
+                        value={entity.values[propertyKey]}
                         size={getPreviewSizeFrom(size)}
                     />
                 </TableCell>
@@ -282,7 +282,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                         height: column.height,
                         entity,
                         cellRect,
-                        propertyId,
+                        propertyKey,
                         collection: inputCollection
                     });
                 }
@@ -299,7 +299,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                         height: column.height,
                         entity,
                         cellRect,
-                        propertyId,
+                        propertyKey,
                         collection: inputCollection
                     });
                 }
@@ -319,7 +319,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
             const validation = mapPropertyToYup({
                 property,
                 customFieldValidator,
-                name: propertyId
+                name: propertyKey
             });
 
             const onValueChange = onCellValueChange
@@ -332,17 +332,17 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
             return <ErrorBoundary>
                 {entity
                     ? <PropertyTableCell
-                        key={`table_cell_${propertyId}_${rowIndex}_${columnIndex}`}
+                        key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
                         size={size}
                         align={column.align}
-                        name={propertyId as string}
+                        name={propertyKey as string}
                         validation={validation}
                         onValueChange={onValueChange}
                         selected={selected}
                         focused={isFocused}
                         setPreventOutsideClick={setPreventOutsideClick}
                         setFocused={setFocused}
-                        value={entity?.values ? entity.values[propertyId] : undefined}
+                        value={entity?.values ? entity.values[propertyKey] : undefined}
                         property={property}
                         openPopup={openPopup}
                         onSelect={onSelect}
@@ -448,7 +448,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
             onClose={onPopupClose}
             cellRect={popupCell?.cellRect}
             columnIndex={popupCell?.columnIndex}
-            propertyId={popupCell?.propertyId}
+            propertyKey={popupCell?.propertyKey}
             collection={popupCell?.collection}
             entity={popupCell?.entity}
             tableKey={tableKey.current}

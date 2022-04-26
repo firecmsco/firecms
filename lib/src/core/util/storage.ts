@@ -13,7 +13,7 @@ export function resolveStorageString<M>(input: string | ((context: UploadedFileC
                                         path: string,
                                         property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
                                         file: File,
-                                        propertyId: string): string {
+                                        propertyKey: string): string {
     if (typeof input === "function") {
         return input({
             entityId,
@@ -21,12 +21,12 @@ export function resolveStorageString<M>(input: string | ((context: UploadedFileC
             property,
             file,
             storage,
-            propertyId
+            propertyKey
         });
     } else {
         const ext = file.name.split(".").pop();
         let res = input.replace("{entityId}", entityId)
-            .replace("{propertyId}", propertyId)
+            .replace("{propertyKey}", propertyKey)
             .replace("{file}", file.name)
             .replace("{file.type}", file.type)
             .replace("{path}", path);

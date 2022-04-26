@@ -20,7 +20,7 @@ export function MapPropertyField({}: {}) {
     } = useFormikContext<MapProperty>();
 
     const [propertyDialogOpen, setPropertyDialogOpen] = useState<boolean>(false);
-    const [selectedPropertyId, setSelectedPropertyId] = useState<string | undefined>();
+    const [selectedpropertyKey, setSelectedpropertyKey] = useState<string | undefined>();
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
 
     const propertiesOrder = values.propertiesOrder ?? Object.keys(values.properties ?? {});
@@ -38,8 +38,8 @@ export function MapPropertyField({}: {}) {
         setPropertyDialogOpen(false);
     }, [values.properties, propertiesOrder]);
 
-    const deleteProperty = useCallback((propertyId?: string, namespace?: string) => {
-        const fullId = propertyId ? getFullId(propertyId, namespace) : undefined;
+    const deleteProperty = useCallback((propertyKey?: string, namespace?: string) => {
+        const fullId = propertyKey ? getFullId(propertyKey, namespace) : undefined;
         if (!fullId)
             throw Error("collection editor miss config");
 
@@ -49,14 +49,14 @@ export function MapPropertyField({}: {}) {
         const currentPropertiesOrder: string[] = getIn(values, propertiesOrderPath) ?? Object.keys(getIn(values, namespaceToPropertiesPath(namespace)));
 
         setFieldValue(propertiesPath, undefined, false);
-        setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyId), false);
+        setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyKey), false);
 
         setPropertyDialogOpen(false);
-        setSelectedPropertyId(undefined);
+        setSelectedpropertyKey(undefined);
         setSelectedPropertyNamespace(undefined);
     }, [setFieldValue, values]);
 
-    const selectedPropertyFullId = selectedPropertyId ? getFullId(selectedPropertyId, selectedPropertyNamespace) : undefined;
+    const selectedPropertyFullId = selectedpropertyKey ? getFullId(selectedpropertyKey, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
     const addChildButton = <Button
@@ -91,7 +91,7 @@ export function MapPropertyField({}: {}) {
                         propertiesOrder={propertiesOrder}
                         errors={{}}
                         onPropertyClick={(propertyKey, namespace) => {
-                            setSelectedPropertyId(propertyKey);
+                            setSelectedpropertyKey(propertyKey);
                             setSelectedPropertyNamespace(namespace);
                             setPropertyDialogOpen(true);
                         }}
@@ -118,21 +118,21 @@ export function MapPropertyField({}: {}) {
                           open={propertyDialogOpen}
                           onCancel={() => {
                               setPropertyDialogOpen(false);
-                              setSelectedPropertyId(undefined);
+                              setSelectedpropertyKey(undefined);
                               setSelectedPropertyNamespace(undefined);
                           }}
                           onOkClicked={() => {
                               setPropertyDialogOpen(false);
-                              setSelectedPropertyId(undefined);
+                              setSelectedpropertyKey(undefined);
                               setSelectedPropertyNamespace(undefined);
                           }}
                           onDelete={deleteProperty}
-                          propertyId={selectedPropertyId}
+                          propertyKey={selectedpropertyKey}
                           propertyNamespace={selectedPropertyNamespace}
                           property={selectedProperty}
-                          existing={Boolean(selectedPropertyId)}
+                          existing={Boolean(selectedpropertyKey)}
                           onPropertyChanged={onPropertyCreated}
-                          existingPropertyIds={selectedPropertyId ? undefined : propertiesOrder}/>
+                          existingpropertyKeys={selectedpropertyKey ? undefined : propertiesOrder}/>
 
         </>);
 }

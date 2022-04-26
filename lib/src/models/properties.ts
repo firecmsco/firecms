@@ -657,7 +657,7 @@ export interface StorageConfig {
      * - {file.name} - Name of the file without extension
      * - {file.ext} - Extension of the file
      * - {entityId} - ID of the entity
-     * - {propertyId} - ID of this property
+     * - {propertyKey} - ID of this property
      * - {path} - Path of this entity
      *
      * @param context
@@ -673,7 +673,7 @@ export interface StorageConfig {
      * - {file.name} - Name of the file without extension
      * - {file.ext} - Extension of the file
      * - {entityId} - ID of the entity
-     * - {propertyId} - ID of this property
+     * - {propertyKey} - ID of this property
      * - {path} - Path of this entity
      */
     storagePath: string | ((context: UploadedFileContext) => string);
@@ -715,7 +715,7 @@ export interface UploadedFileContext {
     /**
      * Property field name
      */
-    propertyId: string;
+    propertyKey: string;
 
     /**
      * Property related to this upload

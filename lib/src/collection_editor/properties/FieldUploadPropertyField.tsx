@@ -159,7 +159,7 @@ export function FieldUploadPropertyField({
                                     <li>{"{file.name} - Name of the uploaded file without extension"}</li>
                                     <li>{"{file.ext} - Extension of the uploaded file"}</li>
                                     <li>{"{entityId} - ID of the entity"}</li>
-                                    <li>{"{propertyId} - ID of this field"}</li>
+                                    <li>{"{propertyKey} - ID of this field"}</li>
                                     <li>{"{path} - Path of this entity"}</li>
                                 </ul>
                             </Typography>

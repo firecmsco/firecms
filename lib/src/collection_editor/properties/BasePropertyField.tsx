@@ -8,11 +8,11 @@ import DebouncedTextField from "../../form/components/DebouncedTextField";
 export function BasePropertyField({
                                       showErrors,
                                       disabledId,
-                                      existingPropertyIds
+                                      existingpropertyKeys
                                   }: {
     showErrors: boolean,
     disabledId: boolean,
-    existingPropertyIds?: string[];
+    existingpropertyKeys?: string[];
 }) {
 
     const {
@@ -53,7 +53,7 @@ export function BasePropertyField({
                 <Field name={id}
                        as={TextField}
                        label={"ID"}
-                       validate={(value:string) => validateId(value, existingPropertyIds)}
+                       validate={(value:string) => validateId(value, existingpropertyKeys)}
                        disabled={disabledId}
                        required
                        fullWidth
@@ -78,7 +78,7 @@ export function BasePropertyField({
 
 const idRegEx = /^(?:[a-zA-Z]+_)*[a-zA-Z0-9]+$/;
 
-function validateId(value: string, existingPropertyIds?: string[]) {
+function validateId(value: string, existingpropertyKeys?: string[]) {
 
     let error;
     if (!value) {
@@ -87,7 +87,7 @@ function validateId(value: string, existingPropertyIds?: string[]) {
     if (!value.match(idRegEx)) {
         error = "The id can only contain letters, numbers and underscores (_), and not start with a number";
     }
-    if (existingPropertyIds && existingPropertyIds.includes(value)) {
+    if (existingpropertyKeys && existingpropertyKeys.includes(value)) {
         error = "There is another field with this ID already";
     }
     return error;

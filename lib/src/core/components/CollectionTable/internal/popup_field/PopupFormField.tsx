@@ -75,15 +75,14 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
 
-    const collection: ResolvedEntityCollection<M> | undefined = useMemo(() => inputCollection
-            ? resolveCollection<M>({
-                collection: inputCollection,
-                path,
-                values: internalValue,
-                entityId: entity?.id
-            })
-            : undefined,
-        [entity?.id, inputCollection, internalValue, path]);
+    const collection: ResolvedEntityCollection<M> | undefined = inputCollection
+        ? resolveCollection<M>({
+            collection: inputCollection,
+            path,
+            values: internalValue,
+            entityId: entity?.id
+        })
+        : undefined;
 
     const windowSize = useWindowSize();
 
