@@ -269,6 +269,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
     }, []);
 
     const onTextSearch = useCallback((newSearchString) => setSearchString(newSearchString), []);
+
     return (
 
         <Paper className={classes.root}>
@@ -322,14 +323,25 @@ function isFilterCombinationValid<M>(
 
     // Order by clause cannot contain a field with an equality filter available
     const values: [WhereFilterOp, any][] = Object.values(filterValues) as [WhereFilterOp, any][];
-    if (sortKey && values.map((v) => v[0]).includes("==")) {
+    const equalityFiltersCount = values
+        .map((v) => (v[0] === "==" ? 1 : 0) as number)
+        .reduce((a, b) => a + b, 0);
+    const inequalityFiltersCount = values
+        .map((v) => (["<", "<=", "!=", ">=", ">"].includes(v[0]) ? 1 : 0) as number)
+        .reduce((a, b) => a + b, 0);
+
+    if (sortKey && equalityFiltersCount > 0) {
+        return false;
+    }
+
+    if (equalityFiltersCount > 1 || inequalityFiltersCount > 1) {
         return false;
     }
 
     const filterKeys = Object.keys(filterValues);
     const filtersCount = filterKeys.length;
 
-    if (filtersCount === 1 && (!sortKey || sortKey === filterKeys[0])) {
+    if (filtersCount === 1 && (!sortKey || filterKeys.includes(sortKey))) {
         return true;
     }
 

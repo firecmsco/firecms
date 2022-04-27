@@ -86,7 +86,7 @@ export function Table<T>({
                              frozenIdColumn,
                              onRowClick,
                              onColumnResize,
-                             filter,
+                             filter: filterInput,
                              checkFilterCombination,
                              onFilterUpdate,
                              sortBy,
@@ -104,6 +104,9 @@ export function Table<T>({
 
     const tableRef = useRef<BaseTable>(null);
 
+    // saving the current filter as a ref as a workaround for header closure
+    const filterRef = useRef<TableFilterValues<any> | undefined>();
+
     // these refs are a workaround to prevent the scroll jump caused by Firestore
     // firing listeners with incomplete data
     const scrollRef = useRef<number>(0);
@@ -116,12 +119,18 @@ export function Table<T>({
         }
     }, [data?.length]);
 
+    useEffect(() => {
+        filterRef.current = filterInput;
+    }, [filterInput]);
+
     const onColumnSort = (key: string) => {
 
         const isDesc = sortByProperty === key && currentSort === "desc";
         const isAsc = sortByProperty === key && currentSort === "asc";
         const newSort = isAsc ? "desc" : (isDesc ? undefined : "asc");
         const newSortProperty: string | undefined = isDesc ? undefined : key;
+
+        const filter = filterRef.current;
 
         const newSortBy: [string, "asc" | "desc"] | undefined = newSort && newSortProperty ? [newSortProperty, newSort] : undefined;
         if (filter) {
@@ -179,7 +188,32 @@ export function Table<T>({
         onRowClick(props);
     };
 
+
+    const onInternalFilterUpdate = useCallback((column: TableColumn<any>, filterForProperty?: [TableWhereFilterOp, any]) => {
+
+        const filter = filterRef.current;
+        let newFilterValue: TableFilterValues<any> = filter ? { ...filter } : {};
+
+        if (!filterForProperty) {
+            delete newFilterValue[column.key];
+        } else {
+            newFilterValue[column.key] = filterForProperty;
+        }
+        const newSortBy: [string, "asc" | "desc"] | undefined = sortByProperty && currentSort ? [sortByProperty, currentSort] : undefined;
+        const isNewFilterCombinationValid = !checkFilterCombination || checkFilterCombination(newFilterValue, newSortBy);
+        if (!isNewFilterCombinationValid) {
+            newFilterValue = filterForProperty ? { [column.key]: filterForProperty } as TableFilterValues<T> : {};
+        }
+
+        if (onFilterUpdate) onFilterUpdate(newFilterValue);
+
+        if (column.key !== sortByProperty) {
+            resetSort();
+        }
+    }, [checkFilterCombination, currentSort, onFilterUpdate, resetSort, sortByProperty]);
+
     const headerRenderer = ({ columnIndex }: any) => {
+        const filter = filterRef.current;
 
         const column = columns[columnIndex - 1];
 
@@ -188,31 +222,7 @@ export function Table<T>({
                 ? filter[column.key]
                 : undefined;
 
-        const onInternalFilterUpdate = (filterForProperty?: [TableWhereFilterOp, any]) => {
-
-            let newFilterValue: TableFilterValues<any> = filter ? { ...filter } : {};
-
-            if (!filterForProperty) {
-                delete newFilterValue[column.key];
-            } else {
-                newFilterValue[column.key] = filterForProperty;
-            }
-
-            const newSortBy: [string, "asc" | "desc"] | undefined = sortByProperty && currentSort ? [sortByProperty, currentSort] : undefined;
-            const isNewFilterCombinationValid = !checkFilterCombination || checkFilterCombination(newFilterValue, newSortBy);
-            if (!isNewFilterCombinationValid) {
-                newFilterValue = filterForProperty ? { [column.key]: filterForProperty } as TableFilterValues<T> : {};
-            }
-
-            if (onFilterUpdate) onFilterUpdate(newFilterValue);
-
-            if (column.key !== sortByProperty) {
-                resetSort();
-            }
-        };
-
         return (
-
             <ErrorBoundary>
                 {columnIndex === 0
                     ? <div className={classes.header}
@@ -224,7 +234,7 @@ export function Table<T>({
                         ID
                     </div>
                     : <TableHeader
-                        onFilterUpdate={onInternalFilterUpdate}
+                        onFilterUpdate={(value) => onInternalFilterUpdate(column, value)}
                         filter={filterForThisProperty}
                         sort={sortByProperty === column.key ? currentSort : undefined}
                         onColumnSort={onColumnSort}

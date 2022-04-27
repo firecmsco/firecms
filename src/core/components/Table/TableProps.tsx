@@ -33,7 +33,7 @@ export interface TableProps<T> {
 
     /**
      * Set this callback if you want to support some combinations
-     * of
+     * of filter combinations only.
      * @param filterValues
      * @param sortBy
      */

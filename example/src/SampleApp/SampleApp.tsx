@@ -60,7 +60,12 @@ function SampleApp() {
         description: "List of the products currently sold in our shop",
         textSearchEnabled: true,
         additionalColumns: [productAdditionalColumn],
-        filterCombinations: [{ category: "desc", available: "desc" }],
+        filterCombinations: [
+            { category: "desc", currency: "asc" },
+            { category: "desc", currency: "desc" },
+            { category: "asc", currency: "asc" },
+            { category: "asc", currency: "desc" }
+        ],
         permissions: ({ authController }) => ({
             edit: true,
             create: true,
