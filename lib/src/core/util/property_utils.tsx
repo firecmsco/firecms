@@ -6,6 +6,7 @@ import Crop75Icon from "@mui/icons-material/Crop75";
 import { PropertyOrBuilder, ResolvedProperty } from "../../models";
 import { getWidget, Widget } from "./widgets";
 import { Box } from "@mui/material";
+import { isPropertyBuilder } from "./entities";
 
 export function getIdIcon(
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
@@ -25,7 +26,7 @@ export function getIconForProperty(
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
     fontSize: "inherit" | "medium" | "large" | "small" | undefined = "inherit"): React.ReactNode {
 
-    if (typeof property === "function") {
+    if (isPropertyBuilder(property)) {
         return <FunctionsIcon color={color} fontSize={fontSize}/>;
     } else {
         const widget = getWidget(property);
@@ -51,11 +52,10 @@ export function getBadgeForWidget(
 }
 
 export function getColorForProperty(property: PropertyOrBuilder): string {
-    if (typeof property === "function") {
+    if (isPropertyBuilder(property)) {
         return "#888";
     } else {
         const widget = getWidget(property);
         return widget?.color ?? "#666";
     }
 }
-

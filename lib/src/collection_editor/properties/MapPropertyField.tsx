@@ -132,7 +132,7 @@ export function MapPropertyField({}: {}) {
                           property={selectedProperty}
                           existing={Boolean(selectedpropertyKey)}
                           onPropertyChanged={onPropertyCreated}
-                          existingpropertyKeys={selectedpropertyKey ? undefined : propertiesOrder}/>
+                          existingPropertyKeys={selectedpropertyKey ? undefined : propertiesOrder}/>
 
         </>);
 }

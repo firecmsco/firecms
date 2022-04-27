@@ -314,7 +314,6 @@ export const CollectionEditorForm = React.memo(
         const propertyEditForm = selectedPropertyFullId &&
             selectedProperty &&
             typeof selectedProperty === "object" &&
-            editableProperty(selectedProperty) &&
             <PropertyForm
                 inArray={false}
                 asDialog={asDialog}
@@ -506,7 +505,7 @@ export const CollectionEditorForm = React.memo(
                         open={newPropertyDialogOpen}
                         onCancel={() => setNewPropertyDialogOpen(false)}
                         onPropertyChanged={onPropertyCreated}
-                        existingpropertyKeys={values.propertiesOrder as string[]}/>
+                        existingPropertyKeys={values.propertiesOrder as string[]}/>
 
                 </Box>
 

@@ -19,7 +19,7 @@ import {
     UserConfigurationPersistence
 } from "../../models";
 import { getValueInPath, mergeDeep } from "./objects";
-import { getDefaultValuesFor } from "./entities";
+import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
 import { getIn } from "formik";
 
@@ -99,7 +99,7 @@ export function resolveProperty<T, M>({
 
     if (!propertyOrBuilder) {
         return null;
-    } else if (typeof propertyOrBuilder === "function") {
+    } else if (isPropertyBuilder(propertyOrBuilder)) {
         const path = props.path;
         if (!path)
             throw Error("Trying to resolve a property builder without specifying the entity path");

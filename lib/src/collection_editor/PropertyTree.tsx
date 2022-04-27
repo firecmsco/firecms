@@ -142,7 +142,7 @@ export function PropertyTreeEntry({
                 position: "relative",
             }}
         >
-            {editable
+            {typeof propertyOrBuilder !== "function"
                 ? <PropertyFieldPreview
                     property={propertyOrBuilder as Property}
                     onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}

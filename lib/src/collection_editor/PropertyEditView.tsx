@@ -64,7 +64,7 @@ export function PropertyForm({
                                  onDelete,
                                  onError,
                                  forceShowErrors,
-                                 existingpropertyKeys
+                                 existingPropertyKeys
                              }: {
     asDialog: boolean;
     open?: boolean;
@@ -80,7 +80,7 @@ export function PropertyForm({
     onOkClicked?: () => void;
     onCancel?: () => void;
     forceShowErrors: boolean;
-    existingpropertyKeys?: string[];
+    existingPropertyKeys?: string[];
 }) {
 
     const initialValue: PropertyWithId = {
@@ -112,7 +112,7 @@ export function PropertyForm({
                 if (!values.dataType || !getWidget(values)) {
                     errors.selectedWidget = "Required";
                 }
-                if (existingpropertyKeys && values.id && existingpropertyKeys.includes(values.id)) {
+                if (existingPropertyKeys && values.id && existingPropertyKeys.includes(values.id)) {
                     errors.id = "";
                 }
                 return {};
@@ -128,7 +128,7 @@ export function PropertyForm({
                     showErrors={forceShowErrors || props.submitCount > 0}
                     existing={existing}
                     inArray={inArray}
-                    existingpropertyKeys={existingpropertyKeys}
+                    existingPropertyKeys={existingPropertyKeys}
                     {...props}/>;
 
                 let body: JSX.Element;
@@ -179,6 +179,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "string",
+                editable: true,
                 multiline: undefined,
                 markdown: undefined,
                 email: undefined,
@@ -191,6 +192,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "string",
+                editable: true,
                 multiline: true,
                 markdown: undefined,
                 email: undefined,
@@ -203,6 +205,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "string",
+                editable: true,
                 multiline: undefined,
                 markdown: true,
                 email: undefined,
@@ -214,6 +217,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "string",
+                editable: true,
                 multiline: undefined,
                 markdown: undefined,
                 email: undefined,
@@ -226,6 +230,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "string",
+                editable: true,
                 multiline: undefined,
                 markdown: undefined,
                 email: true,
@@ -238,6 +243,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "string",
+                editable: true,
                 multiline: undefined,
                 markdown: undefined,
                 email: undefined,
@@ -250,6 +256,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "array",
+                editable: true,
                 of: {
                     dataType: "string",
                     enumValues: propertyData.of?.enumValues ?? []
@@ -261,6 +268,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "number",
+                editable: true,
                 enumValues: undefined
             })
         );
@@ -269,6 +277,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "number",
+                editable: true,
                 enumValues: propertyData.enumValues ?? []
             })
         );
@@ -277,6 +286,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "array",
+                editable: true,
                 of: {
                     dataType: "number",
                     enumValues: propertyData.of?.enumValues ?? []
@@ -288,6 +298,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "string",
+                editable: true,
                 storage: {
                     storagePath: "/"
                 }
@@ -298,6 +309,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "array",
+                editable: true,
                 of: {
                     dataType: "string",
                     storage: propertyData.of?.storage ?? {
@@ -311,6 +323,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "map",
+                editable: true,
                 properties: propertyData.properties ?? {}
             })
         );
@@ -319,7 +332,8 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 // @ts-ignore
-                dataType: "reference"
+                dataType: "reference",
+                editable: true
             })
         );
     } else if (selectedWidgetId === "multi_references") {
@@ -327,6 +341,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "array",
+                editable: true,
                 // @ts-ignore
                 of: {
                     dataType: "reference"
@@ -337,7 +352,8 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
         updatedProperty = mergeDeep(
             propertyData,
             buildProperty({
-                dataType: "boolean"
+                dataType: "boolean",
+                editable: true
             })
         );
     } else if (selectedWidgetId === "date_time") {
@@ -345,6 +361,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "date",
+                editable: true,
                 mode: "date_time"
             })
         );
@@ -352,7 +369,8 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
         updatedProperty = mergeDeep(
             propertyData,
             buildProperty({
-                dataType: "array"
+                dataType: "array",
+                editable: true
             })
         );
     } else if (selectedWidgetId === "block") {
@@ -360,6 +378,7 @@ function updateSelectedWidget(propertyData: any, selectedWidgetId: WidgetId | un
             propertyData,
             buildProperty({
                 dataType: "array",
+                editable: true,
                 oneOf: {
                     properties: {}
                 }
@@ -386,7 +405,7 @@ function PropertyEditView({
                               onError,
                               showErrors,
                               inArray,
-                              existingpropertyKeys
+                              existingPropertyKeys
                           }: {
     includeIdAndTitle?: boolean;
     existing: boolean;
@@ -396,7 +415,7 @@ function PropertyEditView({
     onError?: (id: string, namespace?: string, error?: boolean) => void;
     showErrors: boolean;
     inArray: boolean;
-    existingpropertyKeys?: string[];
+    existingPropertyKeys?: string[];
 } & FormikProps<PropertyWithId>) {
 
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -567,7 +586,7 @@ function PropertyEditView({
                     }}>
                         <BasePropertyField showErrors={showErrors}
                                            disabledId={existing}
-                                           existingPropertyKeys={existingpropertyKeys}/>
+                                           existingPropertyKeys={existingPropertyKeys}/>
 
                     </Grid>}
                 <Grid container spacing={2} direction={"column"}>

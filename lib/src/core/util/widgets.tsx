@@ -20,6 +20,7 @@ import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
 
 import { ArrayProperty, DataType, Property } from "../../models";
 import { SvgIconProps } from "@mui/material";
+import { isPropertyBuilder } from "./entities";
 
 export type Widget = {
     name: string;
@@ -218,7 +219,7 @@ export function getWidgetId(property: Property): WidgetId | undefined {
             return "group";
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
-        if (Array.isArray(of) || typeof of === "function") {
+        if (Array.isArray(of) || isPropertyBuilder(of)) {
             return "repeat";
         } else if (of?.dataType === "string" && of.enumValues) {
             return "multi_select";

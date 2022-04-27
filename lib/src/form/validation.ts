@@ -17,6 +17,7 @@ import {
     StringSchema
 } from "yup";
 import { enumToObjectEntries } from "../core/util/enums";
+import { isPropertyBuilder } from "../core/util/entities";
 
 // Add custom unique function for array values
 declare module "yup" {
@@ -65,9 +66,9 @@ export function getYupEntitySchema<M>(properties: ResolvedProperties<M>,
 export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySchema<unknown> {
 
     const property = propertyContext.property;
-    if (typeof property === "function") {
+    if (isPropertyBuilder(property)) {
         console.log("Error in property", propertyContext);
-        throw Error("PropertyBuilders can only be defined as the root properties in entity collections, not in child properties");
+        throw Error("Trying to create a yup mapping from a property builder. Please use resolved properties only");
     }
 
     if (property.dataType === "string") {

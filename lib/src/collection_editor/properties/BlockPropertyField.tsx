@@ -124,7 +124,7 @@ export function BlockPropertyField({}: {}) {
                           property={selectedProperty}
                           existing={Boolean(selectedpropertyKey)}
                           onPropertyChanged={onPropertyCreated}
-                          existingpropertyKeys={selectedpropertyKey ? undefined : values.oneOf?.propertiesOrder}/>
+                          existingPropertyKeys={selectedpropertyKey ? undefined : values.oneOf?.propertiesOrder}/>
 
         </>);
 }

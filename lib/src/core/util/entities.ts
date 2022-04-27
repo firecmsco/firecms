@@ -6,6 +6,7 @@ import {
     Properties,
     PropertiesOrBuilders,
     Property,
+    PropertyBuilder,
     PropertyOrBuilder,
     ResolvedProperties,
     ResolvedProperty
@@ -30,18 +31,19 @@ export function isHidden(property: Property | ResolvedProperty): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
+export function isPropertyBuilder<T>(propertyOrBuilder?: PropertyOrBuilder<T> | ResolvedProperty<T>): propertyOrBuilder is PropertyBuilder<T> {
+    return typeof propertyOrBuilder === "function";
+}
+
 export function editableProperty(property: PropertyOrBuilder): boolean {
-    if (typeof property === "function")
+    if (isPropertyBuilder(property))
         return false;
     else if (property.dataType === "array" && typeof property.of === "function")
         return false;
     else if (property.dataType === "array" && Array.isArray(property.of))
         return false;
-    else if (property.editable === undefined)
-        return true;
-    return property.editable;
+    return property.editable ?? false;
 }
-
 
 export function getDefaultValuesFor<M extends { [Key: string]: any }>(properties: PropertiesOrBuilders<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
     if (!properties) return {};
@@ -54,7 +56,7 @@ export function getDefaultValuesFor<M extends { [Key: string]: any }>(properties
 }
 
 function getDefaultValueFor(property: PropertyOrBuilder) {
-    if (typeof property === "function") return undefined;
+    if (isPropertyBuilder(property)) return undefined;
     if (property.dataType === "map" && property.properties) {
         const defaultValuesFor = getDefaultValuesFor(property.properties as Properties);
         if (Object.keys(defaultValuesFor).length === 0) return undefined;
