@@ -76,7 +76,9 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
 
     /**
      * Permissions the logged-in user can perform on this collection.
-     * If not specified everything defaults to `true`
+     * If not specified everything defaults to `true`.
+     * Note that defining permissions at the collection level will override any
+     * configuration defined by {@link FireCMSProps#roles}
      */
     permissions?: Permissions | PermissionsBuilder<M, UserType>;
 

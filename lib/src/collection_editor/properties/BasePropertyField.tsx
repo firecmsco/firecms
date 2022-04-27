@@ -1,5 +1,3 @@
-import React from "react";
-
 import { Field, getIn, useFormikContext } from "formik";
 import { Grid, TextField } from "@mui/material";
 import { PropertyWithId } from "../PropertyEditView";
@@ -8,11 +6,11 @@ import DebouncedTextField from "../../form/components/DebouncedTextField";
 export function BasePropertyField({
                                       showErrors,
                                       disabledId,
-                                      existingpropertyKeys
+                                      existingPropertyKeys
                                   }: {
     showErrors: boolean,
     disabledId: boolean,
-    existingpropertyKeys?: string[];
+    existingPropertyKeys?: string[];
 }) {
 
     const {
@@ -53,7 +51,7 @@ export function BasePropertyField({
                 <Field name={id}
                        as={TextField}
                        label={"ID"}
-                       validate={(value:string) => validateId(value, existingpropertyKeys)}
+                       validate={(value:string) => validateId(value, existingPropertyKeys)}
                        disabled={disabledId}
                        required
                        fullWidth

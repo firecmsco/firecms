@@ -1,8 +1,6 @@
-import React from "react";
 import { User } from "./user";
 import { Role } from "./permissions";
 import { EntityCollection } from "./collections";
-
 
 /**
  * Controller for retrieving the logged user or performing auth related operations
@@ -29,7 +27,7 @@ export interface AuthController<UserType extends User = User> {
 
     /**
      * Initial loading flag. It is used not to display the login screen
-     * when the app first loads and it has not been checked whether the user
+     * when the app first loads, and it has not been checked whether the user
      * is logged in or not.
      */
     initialLoading: boolean;
@@ -75,7 +73,7 @@ export interface AuthController<UserType extends User = User> {
      * It has no effect if no user is logged id.
      * When the user logs out the `roles` values is reset.
      * You will usually want to populate this field during the authentication
-     * process, by using an `Authenticator`
+     * process, by using an {@link Authenticator}
      */
     setRoles: (roles: string[]) => void;
 

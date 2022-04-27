@@ -6,7 +6,7 @@ title: Roles and permissions
 FireCMS provides a role and permissions system used to determine which users can
 perform which actions.
 
-#### Permissions
+### Permissions
 
 Permissions define the CRUD operations that can be performed over entities in
 collections. They are defined by an object like:
@@ -22,13 +22,13 @@ const samplePermissions: Permissions = {
 }
 ```
 
-#### Roles config
+### Roles config
 
 Users can be assigned multiple roles or none at all.
 
-::: note 
+:::note 
 FireCMS can be used without specifying any roles. In that case all
-users can read and modify every collection.
+users can read and modify every collection. 
 :::
 
 Roles are identified by an ID, such as `admin` or `editor`.
@@ -54,10 +54,10 @@ const roles: Roles = {
 };
 ```
 
-If not specified, `defaultPermissions` will take all CRUD permissions to `false`
-as default.
+If not specified, the default permissions for a specific role
+will take all CRUD permissions to `false` as default.
 
-#### Collections config
+### Collections config
 
 You can also override specific collection permissions per role. Collection
 specific permissions will override the rest of the available configurations,
@@ -105,7 +105,7 @@ const roles: Roles = {
 The `roles` configuration is passed as a prop to your `FirebaseCMSApp` or
 `FireCMS`.
 
-#### Assigning roles to users
+### Assigning roles to users
 
 You are responsible for implementing the logic of assigning roles to
 users. You can do it at any moment using an `AuthController` which you
@@ -114,13 +114,52 @@ receive as a prop in most callbacks (either directly or under a `context` prop).
 If you are building a custom component, you can also use the hook 
 `useAuthController`.
 
-The `AuthController` has a method `setRoles` that allows you to 
+A good time to assign user roles is right after the authentication process is 
+completed. FireCMS provides an `Authenticator` component that allows the 
+developer to allow or deny access to users, as well as defining roles.
+
+The `AuthController` has a method `setRoles` that allows you to define roles for
+a user. 
+
+```tsx
+import {
+    Authenticator,
+    FirebaseCMSApp,
+} from "@camberi/firecms";
+
+function App() {
+    // ...
+    const myAuthenticator: Authenticator<FirebaseUser> = async ({
+                                                                    user,
+                                                                    authController
+                                                                }) => {
+    
+        if(user?.email?.includes("flanders")){
+            throw Error("Stupid Flanders!");
+        }
+    
+        // This is an example of retrieving async data related to the user
+        // and storing it in the user extra field
+        const sampleRoles = await Promise.resolve(["admin"]);
+        authController.setRoles(sampleRoles);
+        
+        console.log("Allowing access to", user);
+        return true;
+    };
+
+    return <FirebaseCMSApp
+        name={"My Online Shop"}
+        authentication={myAuthenticator}
+        // ...
+    />;
+}
+```
 
 
-
-
-::: note
+:::note
 If a user has multiple roles, with different permissions, they will
-be merged on a collection basis into the least restrictive combination
+be merged on a collection basis into the least restrictive combination.
+If a user has one role that defines read permission for a collection, but also
+has a different role that denies it, he will be allowed to see it.
 :::
 

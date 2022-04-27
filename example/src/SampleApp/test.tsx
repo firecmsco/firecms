@@ -1,8 +1,6 @@
-import React from "react";
-
 import {
-    buildEntityCallbacks,
     buildCollection,
+    buildEntityCallbacks,
     EntityOnDeleteProps,
     EntityOnSaveProps
 } from "@camberi/firecms";
@@ -12,7 +10,7 @@ type Product = {
     uppercase_name: string;
 }
 
-const productCallbacks = buildEntityCallbacks<Product>({
+const productCallbacks = buildEntityCallbacks({
     onPreSave: ({
                     collection,
                     path,
@@ -46,11 +44,12 @@ const productCallbacks = buildEntityCallbacks<Product>({
 
     onDelete: (props: EntityOnDeleteProps<Product>) => {
         console.log("onDelete", props);
-    }
+    },
 });
 
-const productsCollection = buildCollection<Product>({
-    name: "Products",
+
+const productCollection = buildCollection<Product>({
+    name: "Product",
     path: "products",
     properties: {
         name: {

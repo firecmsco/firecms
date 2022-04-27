@@ -20,10 +20,9 @@ containing a `string` and an error snackbar will be displayed.
 :::
 
 ```tsx
-import React from "react";
-
 import {
     buildCollection,
+    buildEntityCallbacks,
     EntityOnDeleteProps,
     EntityOnSaveProps
 } from "@camberi/firecms";
@@ -32,24 +31,6 @@ type Product = {
     name: string;
     uppercase_name: string;
 }
-
-const productCollection = buildCollection<Product>({
-
-    name: "Product",
-    properties: {
-        name: {
-            title: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        uppercase_name: {
-            title: "Uppercase Name",
-            dataType: "string",
-            disabled: true,
-            description: "This field gets updated with a preSave callback"
-        }
-    }
-});
 
 const productCallbacks = buildEntityCallbacks({
     onPreSave: ({
@@ -86,6 +67,26 @@ const productCallbacks = buildEntityCallbacks({
     onDelete: (props: EntityOnDeleteProps<Product>) => {
         console.log("onDelete", props);
     },
+});
+
+
+const productCollection = buildCollection<Product>({
+    name: "Product",
+    path: "products",
+    properties: {
+        name: {
+            name: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        uppercase_name: {
+            name: "Uppercase Name",
+            dataType: "string",
+            disabled: true,
+            description: "This field gets updated with a preSave callback"
+        }
+    },
+    callbacks: productCallbacks
 });
 ```
 

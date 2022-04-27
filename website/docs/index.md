@@ -44,6 +44,36 @@ stops you from implementing your own `DataSource`, `AuthController` and
 `StorageSource` and override the default implementations.
 :::
 
+FireCMS works as a complete app that is in charge of creating the views that
+you define based on your collections and entity schemas. It handles
+navigation for you as well as authentication and login.
+
+However, there is a lot of room to customization, including [custom top level views](custom_top_level_views.md),
+[custom schema views](collections/properties/custom_schema_views.md), and [custom fields](collections/properties/custom_fields.md)
+for your entity properties, in case the basic use cases we include don't suit your needs.
+
+In the simplest case, you will want to create some properties, include them
+in an entity collection, include it in a collection and include that in a CMS
+instance.
+
+## FirebaseCMSApp
+
+The entry point for setting up a FireCMS app based on Firebase is the `FirebaseCMSApp`.
+This component is in charge of building a full FireCMS instance, using Firebase Auth,
+Firestore, and Firebase Storage as backend services.
+
+Internally it will create a `FireCMS` which holds the main state and
+logic of the app, and create the app scaffold and routes.
+
+:::note
+It is also possible to use FireCMS by using lower level components and including
+`FireCMS` in your code, even without using Firebase.
+More details in the [Custom CMSApp](custom_cms_app.md) section
+:::
+
+You can find an example of a basic `FirebaseCMSApp` implementation in the
+[quickstart section](quickstart.md)
+
 ### Core technologies
 
 FireCMS is based on these great technologies:

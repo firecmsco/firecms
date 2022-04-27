@@ -567,7 +567,7 @@ function PropertyEditView({
                     }}>
                         <BasePropertyField showErrors={showErrors}
                                            disabledId={existing}
-                                           existingpropertyKeys={existingpropertyKeys}/>
+                                           existingPropertyKeys={existingpropertyKeys}/>
 
                     </Grid>}
                 <Grid container spacing={2} direction={"column"}>

@@ -54,13 +54,6 @@ in [Entity collections](../api/interfaces/entitycollection)
 
 * `description` Optional description of this view. You can use Markdown.
 
-* `properties` Properties displayed in this collection. If this prop is not
-  set, every property is displayed.
-
-* `excludedProperties` Properties that should **not** get displayed in the
-  collection view. All the other properties from the entity are displayed. It
-  has no effect if the `properties` value is set.
-
 * `filterCombinations` If you need to filter/sort by multiple properties in this
   collection, you can define the supported filter combinations here.
   In the case of Firestore, you need to create special indexes in the console to
@@ -92,6 +85,8 @@ in [Entity collections](../api/interfaces/entitycollection)
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions
   the user can perform. You can also pass a [`PermissionsBuilder`](../api/types/permissionsbuilder)
   to customize the permissions based on user or entity.
+  Note that defining permissions at the collection level will override any
+  configuration defined by [roles](../roles.md)
 
 * `inlineEditing` Can the elements in this collection be edited inline in the
   collection view. If this flag is set to false but `permissions.edit` is `true`
@@ -104,9 +99,14 @@ in [Entity collections](../api/interfaces/entitycollection)
 
 
 ### Sample collection
+:::tip
+You don't need to use `buildCollection` or `buildProperty` for building 
+the configuration. They are identity functions that will help you detect
+type and configuration errors
+:::
 
 ```tsx
-import { buildCollection, EntityReference } from "@camberi/firecms";
+import { buildCollection, buildProperty, EntityReference } from "@camberi/firecms";
 
 type Product = {
   name: string;
@@ -127,15 +127,15 @@ const productsCollection = buildCollection<Product>({
   description: "List of the products currently sold in our shop",
   textSearchEnabled: true,
   properties: {
-    name: {
+    name: buildProperty({
       dataType: "string",
       title: "Name",
       config: {
         multiline: true
       },
       validation: { required: true }
-    },
-    main_image: {
+    }),
+    main_image: buildProperty({
       dataType: "string",
       title: "Image",
       config: {
@@ -152,13 +152,13 @@ const productsCollection = buildCollection<Product>({
       validation: {
         required: true
       }
-    },
-    available: {
+    }),
+    available: buildProperty({
       dataType: "boolean",
       title: "Available",
       columnWidth: 100
-    },
-    price: ({ values }) => ({
+    }),
+    price: buildProperty(({ values }) => ({
       dataType: "number",
       title: "Price",
       validation: {
@@ -171,8 +171,8 @@ const productsCollection = buildCollection<Product>({
         disabledMessage: "You can only set the price on available items"
       },
       description: "Price with range validation"
-    }),
-    related_products: {
+    })),
+    related_products: buildProperty({
       dataType: "array",
       title: "Related products",
       description: "Reference to self",
@@ -180,8 +180,8 @@ const productsCollection = buildCollection<Product>({
         dataType: "reference",
         path: "products"
       }
-    },
-    publisher: {
+    }),
+    publisher: buildProperty({
       title: "Publisher",
       description: "This is an example of a map property",
       dataType: "map",
@@ -195,7 +195,7 @@ const productsCollection = buildCollection<Product>({
           dataType: "string"
         }
       }
-    }
+    })
   },
   // additionalColumns: [productAdditionalColumn], // Example below
   filterCombinations: [{ price: "desc", available: "desc" }],
@@ -203,8 +203,7 @@ const productsCollection = buildCollection<Product>({
     edit: true,
     create: true,
     delete: false
-  }),
-  excludedProperties: ["related_products"]
+  })
 });
 
 ```

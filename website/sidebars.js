@@ -8,24 +8,18 @@ module.exports = {
         'quickstart',
         {
             type: 'category',
-            label: 'Firebase CMS app',
-            items: [
-                'firebase_cms_app',
-                'firebase_setup',
-                'deployment',
-            ]
-        },
-        {
-            type: 'category',
             label: 'Collections',
+            collapsed: false,
             items: [
                 'collections/collections',
                 'collections/saving_callbacks',
                 'collections/permissions',
                 'collections/exporting_data',
+                'collections/text_search',
                 {
                     type: 'category',
                     label: 'Properties',
+                    collapsed: false,
                     items: [
                         'collections/properties/intro',
                         {
@@ -52,6 +46,8 @@ module.exports = {
         },
         'navigation',
         'roles',
+        'firebase_setup',
+        'deployment',
         {
             type: 'category',
             label: 'Provided hooks',
@@ -67,6 +63,7 @@ module.exports = {
         {
             type: 'category',
             label: 'Recipes',
+            collapsed: false,
             items: [
                 // 'recipes/recipes_index',
                 'recipes/building_a_blog',

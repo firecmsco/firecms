@@ -1,4 +1,3 @@
-import React from "react";
 import { alpha, Box, Paper, Typography } from "@mui/material";
 import { getBadgeForWidget } from "../core/util/property_utils";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
