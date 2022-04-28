@@ -15,7 +15,9 @@ import {
 } from "./validation/GeneralPropertyValidation";
 import { ValidationPanel } from "./ValidationPanel";
 
-export function DateTimePropertyField() {
+export function DateTimePropertyField({ disabled }: {
+    disabled: boolean;
+}) {
 
     const {
         values,
@@ -37,7 +39,8 @@ export function DateTimePropertyField() {
     return (
         <>
             <Grid item>
-                <FormControl fullWidth>
+                <FormControl fullWidth
+                             disabled={disabled}>
                     <InputLabel id="mode-label">Mode</InputLabel>
                     <Field name={modePath}
                            type="select"
@@ -53,7 +56,8 @@ export function DateTimePropertyField() {
                 </FormControl>
             </Grid>
             <Grid item>
-                <FormControl fullWidth>
+                <FormControl fullWidth
+                             disabled={disabled}>
                     <InputLabel id="auto-value-label">Automatic
                         value</InputLabel>
                     <Field name={autoValuePath}
@@ -72,11 +76,9 @@ export function DateTimePropertyField() {
             </Grid>
 
             <Grid item xs={12}>
-
                 <ValidationPanel>
-                    <GeneralPropertyValidation/>
+                    <GeneralPropertyValidation disabled={disabled}/>
                 </ValidationPanel>
-
             </Grid>
         </>
     );

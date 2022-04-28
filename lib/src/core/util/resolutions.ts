@@ -67,7 +67,6 @@ export const resolveCollection = <M extends { [Key: string]: any } = any, >
         .map(([id, property]) => ({ [id]: property }))
         .reduce((a, b) => ({ ...a, ...b }), {});
 
-    console.log("res", cleanedProperties);
     return {
         ...collection,
         properties: cleanedProperties,

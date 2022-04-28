@@ -11,7 +11,9 @@ import {
 import { PropertyTree } from "../PropertyTree";
 import AddIcon from "@mui/icons-material/Add";
 
-export function BlockPropertyField({}: {}) {
+export function BlockPropertyField({ disabled }: {
+    disabled: boolean;
+}) {
 
     const {
         values,
@@ -19,7 +21,7 @@ export function BlockPropertyField({}: {}) {
     } = useFormikContext<ArrayProperty>();
 
     const [propertyDialogOpen, setPropertyDialogOpen] = useState<boolean>(false);
-    const [selectedpropertyKey, setSelectedpropertyKey] = useState<string | undefined>();
+    const [selectedPropertyKey, setSelectedPropertyKey] = useState<string | undefined>();
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
 
     const onPropertyCreated = useCallback(({
@@ -36,7 +38,7 @@ export function BlockPropertyField({}: {}) {
         setPropertyDialogOpen(false);
     }, [values.oneOf?.properties, values.oneOf?.propertiesOrder]);
 
-    const selectedPropertyFullId = selectedpropertyKey ? getFullId(selectedpropertyKey, selectedPropertyNamespace) : undefined;
+    const selectedPropertyFullId = selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.oneOf?.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
     const deleteProperty = useCallback((propertyKey?: string, namespace?: string) => {
@@ -50,7 +52,7 @@ export function BlockPropertyField({}: {}) {
         setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyKey), false);
 
         setPropertyDialogOpen(false);
-        setSelectedpropertyKey(undefined);
+        setSelectedPropertyKey(undefined);
         setSelectedPropertyNamespace(undefined);
     }, [setFieldValue, values]);
 
@@ -83,16 +85,16 @@ export function BlockPropertyField({}: {}) {
                         properties={values.oneOf?.properties ?? {}}
                         propertiesOrder={values.oneOf?.propertiesOrder}
                         errors={{}}
-                        onPropertyClick={(propertyKey, namespace) => {
-                            setSelectedpropertyKey(propertyKey);
+                        onPropertyClick={disabled ? undefined : (propertyKey, namespace) => {
+                            setSelectedPropertyKey(propertyKey);
                             setSelectedPropertyNamespace(namespace);
                             setPropertyDialogOpen(true);
                         }}
-                        onPropertyMove={(propertiesOrder: string[], namespace?: string) => {
+                        onPropertyMove={disabled ? undefined : (propertiesOrder: string[], namespace?: string) => {
                             setFieldValue(`oneOf.${namespaceToPropertiesOrderPath(namespace)}`, propertiesOrder, false);
                         }}/>
 
-                    {!values.oneOf?.propertiesOrder?.length && <Box sx={{
+                    {!disabled && !values.oneOf?.propertiesOrder?.length && <Box sx={{
                         height: "100%",
                         display: "flex",
                         alignItems: "center",
@@ -104,27 +106,27 @@ export function BlockPropertyField({}: {}) {
                 </Paper>
             </Grid>
 
-            <PropertyForm asDialog={true}
-                          inArray={false}
-                          forceShowErrors={false}
-                          open={propertyDialogOpen}
-                          onCancel={() => {
-                              setPropertyDialogOpen(false);
-                              setSelectedpropertyKey(undefined);
-                              setSelectedPropertyNamespace(undefined);
-                          }}
-                          onOkClicked={() => {
-                              setPropertyDialogOpen(false);
-                              setSelectedpropertyKey(undefined);
-                              setSelectedPropertyNamespace(undefined);
-                          }}
-                          onDelete={deleteProperty}
-                          propertyKey={selectedpropertyKey}
-                          propertyNamespace={selectedPropertyNamespace}
-                          property={selectedProperty}
-                          existing={Boolean(selectedpropertyKey)}
-                          onPropertyChanged={onPropertyCreated}
-                          existingPropertyKeys={selectedpropertyKey ? undefined : values.oneOf?.propertiesOrder}/>
+            {!disabled && <PropertyForm asDialog={true}
+                                        inArray={false}
+                                        forceShowErrors={false}
+                                        open={propertyDialogOpen}
+                                        onCancel={() => {
+                                            setPropertyDialogOpen(false);
+                                            setSelectedPropertyKey(undefined);
+                                            setSelectedPropertyNamespace(undefined);
+                                        }}
+                                        onOkClicked={() => {
+                                            setPropertyDialogOpen(false);
+                                            setSelectedPropertyKey(undefined);
+                                            setSelectedPropertyNamespace(undefined);
+                                        }}
+                                        onDelete={deleteProperty}
+                                        propertyKey={selectedPropertyKey}
+                                        propertyNamespace={selectedPropertyNamespace}
+                                        property={selectedProperty}
+                                        existing={Boolean(selectedPropertyKey)}
+                                        onPropertyChanged={onPropertyCreated}
+                                        existingPropertyKeys={selectedPropertyKey ? undefined : values.oneOf?.propertiesOrder}/>}
 
         </>);
 }

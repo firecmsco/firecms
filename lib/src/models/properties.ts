@@ -603,7 +603,7 @@ export interface StringPropertyValidationSchema extends PropertyValidationSchema
     length?: number;
     min?: number;
     max?: number;
-    matches?: RegExp;
+    matches?: string | RegExp;
     /**
      * Message displayed when the input does not satisfy the regex in `matches`
      */

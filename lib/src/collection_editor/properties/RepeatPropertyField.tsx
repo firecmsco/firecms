@@ -10,8 +10,9 @@ import { ValidationPanel } from "./ValidationPanel";
 
 export function RepeatPropertyField({
                                         showErrors,
-                                        existing
-                                    }: { showErrors: boolean, existing: boolean }) {
+                                        existing,
+                                        disabled
+                                    }: { showErrors: boolean, existing: boolean, disabled: boolean }) {
 
     const {
         values,
@@ -49,13 +50,13 @@ export function RepeatPropertyField({
 
                             {ofProperty && <PropertyFieldPreview
                                 property={ofProperty}
-                                onClick={() => setPropertyDialogOpen(true)}
+                                onClick={disabled ? undefined : () => setPropertyDialogOpen(true)}
                                 includeName={false}
                                 includeEditButton={true}
                                 selected={false}
                                 hasError={false}/>}
 
-                            {!ofProperty && <Button variant={"text"}
+                            {!disabled && !ofProperty && <Button variant={"text"}
                                      size={"large"}
                                      color={ofPropertyError ? "error" : "primary"}
                                      onClick={() => setPropertyDialogOpen(true)}>
@@ -81,7 +82,7 @@ export function RepeatPropertyField({
             <Grid item xs={12}>
 
                 <ValidationPanel>
-                    <ArrayPropertyValidation/>
+                    <ArrayPropertyValidation disabled={disabled}/>
                 </ValidationPanel>
 
             </Grid>

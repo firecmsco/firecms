@@ -24,7 +24,7 @@ type SelectProps<T extends EnumType> = FieldProps<T>;
  * and tables to the specified properties.
  * @category Form fields
  */
-export function SelectBinding<T extends EnumType>({
+export function SelectFieldBinding<T extends EnumType>({
                                                propertyKey,
                                                value,
                                                setValue,

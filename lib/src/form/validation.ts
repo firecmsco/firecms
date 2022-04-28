@@ -18,6 +18,7 @@ import {
 } from "yup";
 import { enumToObjectEntries } from "../core/util/enums";
 import { isPropertyBuilder } from "../core/util/entities";
+import { hydrateRegExp } from "../core/util/regexp";
 
 // Add custom unique function for array values
 declare module "yup" {
@@ -142,7 +143,12 @@ function getYupStringSchema({
                     }));
         if (validation.min || validation.min === 0) collection = collection.min(validation.min, `${property.name} must be min ${validation.min} characters long`);
         if (validation.max || validation.max === 0) collection = collection.max(validation.max, `${property.name} must be max ${validation.max} characters long`);
-        if (validation.matches) collection = collection.matches(validation.matches, validation.matchesMessage ? { message: validation.matchesMessage } : undefined);
+        if (validation.matches) {
+            const regExp = typeof validation.matches === "string" ? hydrateRegExp(validation.matches) : validation.matches;
+            if (regExp) {
+                collection = collection.matches(regExp, validation.matchesMessage ? { message: validation.matchesMessage } : undefined)
+            }
+        }
         if (validation.trim) collection = collection.trim();
         if (validation.lowercase) collection = collection.lowercase();
         if (validation.uppercase) collection = collection.uppercase();

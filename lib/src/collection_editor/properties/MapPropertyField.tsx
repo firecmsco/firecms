@@ -12,7 +12,9 @@ import {
     namespaceToPropertiesPath
 } from "../util";
 
-export function MapPropertyField({}: {}) {
+export function MapPropertyField({ disabled }: {
+    disabled: boolean;
+}) {
 
     const {
         values,
@@ -20,7 +22,7 @@ export function MapPropertyField({}: {}) {
     } = useFormikContext<MapProperty>();
 
     const [propertyDialogOpen, setPropertyDialogOpen] = useState<boolean>(false);
-    const [selectedpropertyKey, setSelectedpropertyKey] = useState<string | undefined>();
+    const [selectedPropertyKey, setSelectedPropertyKey] = useState<string | undefined>();
     const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
 
     const propertiesOrder = values.propertiesOrder ?? Object.keys(values.properties ?? {});
@@ -52,11 +54,11 @@ export function MapPropertyField({}: {}) {
         setFieldValue(propertiesOrderPath, currentPropertiesOrder.filter((p) => p !== propertyKey), false);
 
         setPropertyDialogOpen(false);
-        setSelectedpropertyKey(undefined);
+        setSelectedPropertyKey(undefined);
         setSelectedPropertyNamespace(undefined);
     }, [setFieldValue, values]);
 
-    const selectedPropertyFullId = selectedpropertyKey ? getFullId(selectedpropertyKey, selectedPropertyNamespace) : undefined;
+    const selectedPropertyFullId = selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
     const addChildButton = <Button
@@ -91,7 +93,7 @@ export function MapPropertyField({}: {}) {
                         propertiesOrder={propertiesOrder}
                         errors={{}}
                         onPropertyClick={(propertyKey, namespace) => {
-                            setSelectedpropertyKey(propertyKey);
+                            setSelectedPropertyKey(propertyKey);
                             setSelectedPropertyNamespace(namespace);
                             setPropertyDialogOpen(true);
                         }}
@@ -118,21 +120,21 @@ export function MapPropertyField({}: {}) {
                           open={propertyDialogOpen}
                           onCancel={() => {
                               setPropertyDialogOpen(false);
-                              setSelectedpropertyKey(undefined);
+                              setSelectedPropertyKey(undefined);
                               setSelectedPropertyNamespace(undefined);
                           }}
                           onOkClicked={() => {
                               setPropertyDialogOpen(false);
-                              setSelectedpropertyKey(undefined);
+                              setSelectedPropertyKey(undefined);
                               setSelectedPropertyNamespace(undefined);
                           }}
                           onDelete={deleteProperty}
-                          propertyKey={selectedpropertyKey}
+                          propertyKey={selectedPropertyKey}
                           propertyNamespace={selectedPropertyNamespace}
                           property={selectedProperty}
-                          existing={Boolean(selectedpropertyKey)}
+                          existing={Boolean(selectedPropertyKey)}
                           onPropertyChanged={onPropertyCreated}
-                          existingPropertyKeys={selectedpropertyKey ? undefined : propertiesOrder}/>
+                          existingPropertyKeys={selectedPropertyKey ? undefined : propertiesOrder}/>
 
         </>);
 }

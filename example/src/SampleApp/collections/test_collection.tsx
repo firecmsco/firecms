@@ -201,6 +201,7 @@ export const testCollection = buildCollection({
         },
         function_array: {
             dataType: "array",
+            name: "Function array",
             of: ({ propertyValue, index }) => {
                 return ({
                     dataType: "string",

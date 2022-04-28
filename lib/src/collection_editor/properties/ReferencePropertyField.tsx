@@ -19,8 +19,9 @@ import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 
 export function ReferencePropertyField({
                                            existing,
-                                           multiple
-                                       }: { existing: boolean, multiple: boolean }) {
+                                           multiple,
+                                           disabled
+                                       }: { existing: boolean, multiple: boolean, disabled: boolean }) {
 
     const {
         values,
@@ -49,7 +50,7 @@ export function ReferencePropertyField({
                        name={pathPath}
                        type="select"
                        validate={validatePath}
-                       disabled={existing}
+                       disabled={existing || disabled}
                        pathPath={pathPath}
                        value={pathValue}
                        error={pathError}

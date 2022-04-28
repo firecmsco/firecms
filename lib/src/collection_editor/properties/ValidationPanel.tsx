@@ -9,22 +9,26 @@ export function ValidationPanel({
                                 }: PropsWithChildren<{}>) {
 
     return (
-        <ExpandablePanel title={
-            <Box sx={(theme) => ({
-                display: "flex",
-                flexDirection: "row",
-                color: theme.palette.text.secondary
-            })}>
-                <RuleIcon/>
-                <Typography variant={"subtitle2"}
-                            sx={(theme) => ({
-                                ml: 2
-                            })}>
-                    Validation
-                </Typography>
-            </Box>
-        }>
+        <ExpandablePanel
+            expanded={false}
+            padding={2}
+            title={
+                <Box sx={(theme) => ({
+                    display: "flex",
+                    flexDirection: "row",
+                    color: theme.palette.text.secondary
+                })}>
+                    <RuleIcon/>
+                    <Typography variant={"subtitle2"}
+                                sx={(theme) => ({
+                                    ml: 2
+                                })}>
+                        Validation
+                    </Typography>
+                </Box>
+            }>
             {children}
+
         </ExpandablePanel>
     )
 }

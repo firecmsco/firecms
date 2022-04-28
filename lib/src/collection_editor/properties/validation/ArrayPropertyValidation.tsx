@@ -8,9 +8,11 @@ import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 export function ArrayPropertyValidation({
                                             max = true,
                                             min = true,
+                                            disabled
                                         }: {
     min?: boolean;
     max?: boolean;
+    disabled: boolean;
 }) {
 
     const { values, handleChange } = useFormikContext();
@@ -21,11 +23,12 @@ export function ArrayPropertyValidation({
     return (
         <>
             <Box mb={3}>
-                <GeneralPropertyValidation/>
+                <GeneralPropertyValidation disabled={disabled}/>
             </Box>
             <Grid container spacing={2}>
                 {min && <Grid item xs={4}>
                     <DebouncedTextField value={getIn(values, validationMin)}
+                                        disabled={disabled}
                                         label={"Min length"}
                                         name={validationMin}
                                         type="number"
@@ -35,6 +38,7 @@ export function ArrayPropertyValidation({
                 </Grid>}
                 {max && <Grid item xs={4}>
                     <DebouncedTextField value={getIn(values, validationMax)}
+                                        disabled={disabled}
                                         label={"Max length"}
                                         name={validationMax}
                                         type="number"

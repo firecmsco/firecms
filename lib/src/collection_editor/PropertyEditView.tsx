@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { Form, Formik, FormikProps, getIn } from "formik";
 import equal from "react-fast-compare"
@@ -31,8 +31,8 @@ import { useDebounce } from "../core/internal/useDebounce";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
 import { mergeDeep, removeUndefined } from "../core/util/objects";
 import {
-    FieldUploadPropertyField
-} from "./properties/FieldUploadPropertyField";
+    StoragePropertyField
+} from "./properties/StoragePropertyField";
 import { MapPropertyField } from "./properties/MapPropertyField";
 import { RepeatPropertyField } from "./properties/RepeatPropertyField";
 import { getBadgeForWidget } from "../core/util/property_utils";
@@ -88,6 +88,8 @@ export function PropertyForm({
         name: ""
     } as PropertyWithId;
 
+    const disabled = Boolean(property) && !property?.editable;
+
     return (
         <Formik
             key={`property_view_${propertyKey}`}
@@ -129,6 +131,7 @@ export function PropertyForm({
                     existing={existing}
                     inArray={inArray}
                     existingPropertyKeys={existingPropertyKeys}
+                    disabled={disabled}
                     {...props}/>;
 
                 let body: JSX.Element;
@@ -404,6 +407,7 @@ function PropertyEditView({
                               propertyNamespace,
                               onError,
                               showErrors,
+                              disabled,
                               inArray,
                               existingPropertyKeys
                           }: {
@@ -415,6 +419,7 @@ function PropertyEditView({
     onError?: (id: string, namespace?: string, error?: boolean) => void;
     showErrors: boolean;
     inArray: boolean;
+    disabled: boolean;
     existingPropertyKeys?: string[];
 } & FormikProps<PropertyWithId>) {
 
@@ -449,9 +454,10 @@ function PropertyEditView({
         }
     }, [errors]);
 
-    useEffect(() => {
-        updateSelectedWidget(values, selectedWidgetId, setValues);
-    }, [selectedWidgetId]);
+    const onWidgetSelectChanged = useCallback((newSelectedWidgetId: WidgetId) => {
+        setSelectedWidgetId(newSelectedWidgetId);
+        updateSelectedWidget(values, newSelectedWidgetId, setValues);
+    }, [setValues, values]);
 
     let childComponent;
     if (selectedWidgetId === "text_field" ||
@@ -460,42 +466,58 @@ function PropertyEditView({
         selectedWidgetId === "url" ||
         selectedWidgetId === "email") {
         childComponent =
-            <StringPropertyField widgetId={selectedWidgetId}/>;
+            <StringPropertyField widgetId={selectedWidgetId}
+                                 disabled={disabled}
+                                 showErrors={showErrors}/>;
     } else if (selectedWidgetId === "select" ||
         selectedWidgetId === "number_select") {
         childComponent = <EnumPropertyField
             multiselect={false}
-            updateIds={!existing}/>;
+            updateIds={!existing}
+            disabled={disabled}
+            showErrors={showErrors}/>;
     } else if (selectedWidgetId === "multi_select" ||
         selectedWidgetId === "multi_number_select") {
         childComponent = <EnumPropertyField
             multiselect={true}
-            updateIds={!existing}/>;
+            updateIds={!existing}
+            disabled={disabled}
+            showErrors={showErrors}/>;
     } else if (selectedWidgetId === "file_upload") {
         childComponent =
-            <FieldUploadPropertyField existing={existing} multiple={false}/>;
+            <StoragePropertyField existing={existing}
+                                  multiple={false}
+                                  disabled={disabled}/>;
     } else if (selectedWidgetId === "multi_file_upload") {
         childComponent =
-            <FieldUploadPropertyField existing={existing} multiple={true}/>;
+            <StoragePropertyField existing={existing}
+                                  multiple={true}
+                                  disabled={disabled}/>;
     } else if (selectedWidgetId === "switch") {
-        childComponent = <BooleanPropertyField/>;
+        childComponent = <BooleanPropertyField disabled={disabled}/>;
     } else if (selectedWidgetId === "number_input") {
-        childComponent = <NumberPropertyField/>;
+        childComponent = <NumberPropertyField disabled={disabled}/>;
     } else if (selectedWidgetId === "group") {
-        childComponent = existing && <MapPropertyField/>;
+        childComponent = existing && <MapPropertyField disabled={disabled}/>;
     } else if (selectedWidgetId === "block") {
-        childComponent = existing && <BlockPropertyField/>;
+        childComponent = existing && <BlockPropertyField disabled={disabled}/>;
     } else if (selectedWidgetId === "reference") {
         childComponent =
-            <ReferencePropertyField existing={existing} multiple={false}/>;
+            <ReferencePropertyField existing={existing}
+                                    multiple={false}
+                                    disabled={disabled}/>;
     } else if (selectedWidgetId === "date_time") {
-        childComponent = <DateTimePropertyField/>;
+        childComponent = <DateTimePropertyField disabled={disabled}/>;
     } else if (selectedWidgetId === "multi_references") {
         childComponent =
-            <ReferencePropertyField existing={existing} multiple={true}/>;
+            <ReferencePropertyField existing={existing}
+                                    multiple={true}
+                                    disabled={disabled}/>;
     } else if (selectedWidgetId === "repeat") {
         childComponent =
-            <RepeatPropertyField showErrors={showErrors} existing={existing}/>;
+            <RepeatPropertyField showErrors={showErrors}
+                                 existing={existing}
+                                 disabled={disabled}/>;
     } else {
         childComponent = null;
     }
@@ -543,10 +565,10 @@ function PropertyEditView({
                                 }
                                 return WIDGETS[value].name;
                             }}
-                            onChange={(e) => setSelectedWidgetId(e.target.value as WidgetId)}>
+                            onChange={(e) => onWidgetSelectChanged(e.target.value as WidgetId)}>
 
-                        {displayedWidgets.map(([key, widget]) => {
-                            return (
+                        {displayedWidgets.map(([key, widget]) =>
+                            (
                                 <MenuItem value={key} key={key}>
                                     <Box mr={3}>
                                         <p>{getBadgeForWidget(widget)}</p>
@@ -559,8 +581,7 @@ function PropertyEditView({
                                         </Typography>
                                     </Box>
                                 </MenuItem>
-                            );
-                        })}
+                            ))}
                     </Select>
                     {selectedWidgetError &&
                         <FormHelperText>Required</FormHelperText>}
@@ -572,6 +593,7 @@ function PropertyEditView({
                             color: "#888",
                             ml: 2
                         }}
+                        disabled={disabled}
                         startIcon={<DeleteIcon/>}
                         onClick={() => setDeleteDialogOpen(true)}>
                         Remove
@@ -586,7 +608,8 @@ function PropertyEditView({
                     }}>
                         <BasePropertyField showErrors={showErrors}
                                            disabledId={existing}
-                                           existingPropertyKeys={existingPropertyKeys}/>
+                                           existingPropertyKeys={existingPropertyKeys}
+                                           disabled={disabled}/>
 
                     </Grid>}
                 <Grid container spacing={2} direction={"column"}>

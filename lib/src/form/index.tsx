@@ -1,4 +1,4 @@
-import { SelectBinding } from "./field_bindings/SelectBinding";
+import { SelectFieldBinding } from "./field_bindings/SelectFieldBinding";
 import {
     ArrayEnumSelectBinding
 } from "./field_bindings/ArrayEnumSelectBinding";
@@ -31,7 +31,7 @@ export {
     ReadOnlyFieldBinding,
     MapFieldBinding,
     ReferenceFieldBinding,
-    SelectBinding,
+    SelectFieldBinding,
     StorageUploadFieldBinding,
     SwitchFieldBinding,
     MarkdownFieldBinding,

@@ -31,7 +31,7 @@ export function PropertyTree<M>({
     properties: PropertiesOrBuilders<M>;
     propertiesOrder?: string[];
     errors: Record<string, any>;
-    onPropertyMove: (propertiesOrder: string[], namespace?: string) => void;
+    onPropertyMove?: (propertiesOrder: string[], namespace?: string) => void;
 }) {
 
     const propertiesOrder = propertiesOrderProp ?? Object.keys(properties);
@@ -47,8 +47,8 @@ export function PropertyTree<M>({
         const newPropertiesOrder = Array.from(propertiesOrder);
         const [removed] = newPropertiesOrder.splice(startIndex, 1);
         newPropertiesOrder.splice(endIndex, 0, removed);
-
-        onPropertyMove(newPropertiesOrder, namespace);
+        if (onPropertyMove)
+            onPropertyMove(newPropertiesOrder, namespace);
     }
 
     return (
@@ -112,7 +112,7 @@ export function PropertyTreeEntry({
     provided: DraggableProvided;
     errors: Record<string, any>;
     onPropertyClick?: (propertyKey: string, namespace?: string) => void;
-    onPropertyMove: (propertiesOrder: string[], namespace?: string) => void;
+    onPropertyMove?: (propertiesOrder: string[], namespace?: string) => void;
 }) {
 
     const fullId = getFullId(propertyKey, namespace);
@@ -153,15 +153,15 @@ export function PropertyTreeEntry({
                                           onClick={onPropertyClick ? () => onPropertyClick(propertyKey, namespace) : undefined}
                                           selected={selected}/>}
 
-            <IconButton {...provided.dragHandleProps}
-                        size="small"
-                        sx={{
-                            position: "absolute",
-                            top: 8,
-                            right: 8
-                        }}>
+            {onPropertyMove && <IconButton {...provided.dragHandleProps}
+                         size="small"
+                         sx={{
+                             position: "absolute",
+                             top: 8,
+                             right: 8
+                         }}>
                 <DragHandleIcon fontSize={"small"}/>
-            </IconButton>
+            </IconButton>}
 
             {subtree && <Box ml={3}>{subtree}</Box>}
         </Box>

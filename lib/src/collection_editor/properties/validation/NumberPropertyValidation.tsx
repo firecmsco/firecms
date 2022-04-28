@@ -6,7 +6,9 @@ import DebouncedTextField from "../../../form/components/DebouncedTextField";
 import { SwitchControl } from "../../../form/components/SwitchControl";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 
-export function NumberPropertyValidation() {
+export function NumberPropertyValidation({ disabled }: {
+    disabled: boolean;
+}) {
 
     const { values, handleChange } = useFormikContext();
 
@@ -21,7 +23,7 @@ export function NumberPropertyValidation() {
     return (
         <>
             <Box mb={3}>
-                <GeneralPropertyValidation/>
+                <GeneralPropertyValidation disabled={disabled}/>
             </Box>
             <Grid container spacing={2}>
 
@@ -34,6 +36,7 @@ export function NumberPropertyValidation() {
                                             type="number"
                                             size="small"
                                             fullWidth
+                                            disabled={disabled}
                                             onChange={handleChange}/>
                     </Grid>
 
@@ -44,6 +47,7 @@ export function NumberPropertyValidation() {
                                             type="number"
                                             size="small"
                                             fullWidth
+                                            disabled={disabled}
                                             onChange={handleChange}/>
                     </Grid>
 
@@ -58,6 +62,7 @@ export function NumberPropertyValidation() {
                             type="number"
                             size="small"
                             fullWidth
+                            disabled={disabled}
                             onChange={handleChange}/>
                     </Grid>
 
@@ -69,6 +74,7 @@ export function NumberPropertyValidation() {
                             type="number"
                             size="small"
                             fullWidth
+                            disabled={disabled}
                             onChange={handleChange}/>
                     </Grid>
 
@@ -78,18 +84,21 @@ export function NumberPropertyValidation() {
                         <FastField type="checkbox"
                                    name={validationPositive}
                                    label={"Positive value"}
+                                   disabled={disabled}
                                    component={SwitchControl}/>
                     </Grid>
                     <Grid item xs={4}>
                         <FastField type="checkbox"
                                    name={validationNegative}
                                    label={"Negative value"}
+                                   disabled={disabled}
                                    component={SwitchControl}/>
                     </Grid>
                     <Grid item xs={4}>
                         <FastField type="checkbox"
                                    name={validationInteger}
                                    label={"Integer value"}
+                                   disabled={disabled}
                                    component={SwitchControl}/>
                     </Grid>
                 </Grid>

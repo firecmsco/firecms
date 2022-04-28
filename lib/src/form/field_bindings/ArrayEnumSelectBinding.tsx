@@ -1,5 +1,4 @@
 import React from "react";
-import { styled } from '@mui/material/styles';
 import {
     Checkbox,
     FormControl,
@@ -7,8 +6,7 @@ import {
     InputLabel,
     ListItemText,
     MenuItem,
-    Select as MuiSelect,
-    Theme
+    Select as MuiSelect
 } from "@mui/material";
 import { EnumType, FieldProps, ResolvedProperty } from "../../models";
 import { FieldDescription } from "../index";
@@ -22,31 +20,6 @@ import { EnumValuesChip } from "../../preview/components/CustomChip";
 
 import { ArrayEnumPreview } from "../../preview";
 import { ErrorView } from "../../core";
-
-
-const PREFIX = 'ArrayEnumSelect';
-
-const classes = {
-    inputLabel: `${PREFIX}-inputLabel`,
-    shrinkInputLabel: `${PREFIX}-shrinkInputLabel`
-};
-
-const StyledFormControl = styled(FormControl)((
-   { theme } : {
-        theme: Theme
-    }
-) => ({
-    [`& .${classes.inputLabel}`]: {
-        marginTop: theme.spacing(1 / 2),
-        marginLeft: theme.spacing(1 / 2)
-    },
-
-    [`& .${classes.shrinkInputLabel}`]: {
-        marginTop: "-2px",
-        marginLeft: theme.spacing(1 / 2)
-    }
-}));
-
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -97,19 +70,18 @@ export function ArrayEnumSelectBinding({
 
     const validValue = !!value && Array.isArray(value);
     return (
-        <StyledFormControl
-            variant="filled"
+        <FormControl
             fullWidth
             required={property.validation?.required}
             error={showError}
             sx={{
-                '& .MuiInputLabel-root': {
+                "& .MuiInputLabel-root": {
                     mt: 1 / 2,
-                    ml: 1 / 2,
+                    ml: 1 / 2
                 },
-                '& .MuiInputLabel-shrink': {
+                "& .MuiInputLabel-shrink": {
                     mt: 2
-                },
+                }
             }}
         >
 
@@ -165,10 +137,10 @@ export function ArrayEnumSelectBinding({
             </MuiSelect>
 
             {includeDescription &&
-            <FieldDescription property={property}/>}
+                <FieldDescription property={property}/>}
 
             {showError && <FormHelperText>{error}</FormHelperText>}
 
-        </StyledFormControl>
+        </FormControl>
     );
 }

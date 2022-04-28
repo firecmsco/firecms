@@ -57,7 +57,7 @@ export function sortProperties<T>(properties: PropertiesOrBuilders<T>, propertie
 
 export function removeNonEditableProperties(properties: PropertiesOrBuilders<any>): Properties {
     return Object.entries(properties)
-        .filter(([key, property]) => typeof property !== "function")
+        .filter(([_, property]) => editableProperty(property))
         .map(([key, propertyOrBuilder]) => {
             const property = propertyOrBuilder as Property;
             if (!editableProperty(property)) {

@@ -44,7 +44,7 @@ import { ErrorBoundary } from "../core/internal/ErrorBoundary";
 import { LoadingButton } from "@mui/lab";
 import { YupSchema } from "./SchemaYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
-import { editableProperty } from "../core/util/entities";
+import { editableProperty, isPropertyBuilder } from "../core/util/entities";
 
 export type CollectionEditorProps<M> = {
     path: string;
@@ -313,7 +313,7 @@ export const CollectionEditorForm = React.memo(
 
         const propertyEditForm = selectedPropertyFullId &&
             selectedProperty &&
-            typeof selectedProperty === "object" &&
+            !isPropertyBuilder(selectedProperty) &&
             <PropertyForm
                 inArray={false}
                 asDialog={asDialog}
@@ -447,7 +447,7 @@ export const CollectionEditorForm = React.memo(
                                     : "Select a field to edit it"}
                             </Box>}
 
-                        {selectedProperty && !editableProperty(selectedProperty) &&
+                        {selectedProperty && isPropertyBuilder(selectedProperty) &&
                             <Box sx={{
                                 height: "100%",
                                 display: "flex",

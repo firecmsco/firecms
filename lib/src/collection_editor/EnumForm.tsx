@@ -14,13 +14,15 @@ type EnumFormProps = {
     onValuesChanged?: (enumValues: EnumValueConfig[]) => void;
     onError?: (error: boolean) => void;
     updateIds: boolean;
+    disabled:boolean;
 };
 export const EnumForm = React.memo(
     function EnumFormInternal({
                                   enumValues,
                                   onValuesChanged,
                                   onError,
-                                  updateIds
+                                  updateIds,
+                                  disabled
                               }: EnumFormProps) {
 
         return (
@@ -48,7 +50,8 @@ export const EnumForm = React.memo(
                         return <EnumFormFields enumValuesPath={"enumValues"}
                                                values={values}
                                                errors={errors}
-                                               shouldUpdateId={updateIds}/>
+                                               shouldUpdateId={updateIds}
+                                               disabled={disabled}/>
                     }
                 }
             </Formik>
@@ -62,16 +65,18 @@ export const EnumForm = React.memo(
 );
 
 type EnumFormFieldsProps = {
-    values: { enumValues: EnumValueConfig[] },
-    errors: any,
-    enumValuesPath: string,
-    shouldUpdateId: boolean,
+    values: { enumValues: EnumValueConfig[] };
+    errors: any;
+    enumValuesPath: string;
+    shouldUpdateId: boolean;
+    disabled:boolean;
 };
 
 const EnumFormFields = React.memo(
     function EnumFormFieldsInternal({
                                         values,
                                         errors,
+                                        disabled,
                                         enumValuesPath,
                                         shouldUpdateId
                                     }: EnumFormFieldsProps) {
@@ -82,6 +87,7 @@ const EnumFormFields = React.memo(
         const buildEntry = useCallback((index: number, internalId: number) => {
             const justAdded = lastInternalIdAdded === internalId;
             return <EnumEntry index={index}
+                              disabled={disabled}
                               enumValuesPath={enumValuesPath}
                               autoFocus={justAdded}
                               shouldUpdateId={shouldUpdateId || justAdded}
@@ -94,7 +100,7 @@ const EnumFormFields = React.memo(
                     value={values.enumValues}
                     name={enumValuesPath}
                     buildEntry={buildEntry}
-                    disabled={false}
+                    disabled={disabled}
                     onInternalIdAdded={setLastInternalIdAdded}
                     small={true}
                     includeAddButton={true}/>
@@ -117,6 +123,7 @@ type EnumEntryProps = {
     shouldUpdateId: boolean,
     autoFocus: boolean,
     onDialogOpen: () => void;
+    disabled:boolean;
 };
 const EnumEntry = React.memo(
     function EnumEntryInternal({
@@ -124,7 +131,8 @@ const EnumEntry = React.memo(
                                    shouldUpdateId: updateId,
                                    enumValuesPath,
                                    autoFocus,
-                                   onDialogOpen
+                                   onDialogOpen,
+                                   disabled
                                }: EnumEntryProps) {
 
         const {
@@ -159,20 +167,21 @@ const EnumEntry = React.memo(
                                as={DebouncedTextField}
                                required
                                fullWidth
+                               disabled={disabled}
                                size="small"
                                validate={validateLabel}
                                autoFocus={autoFocus}
                                autoComplete="off"
                                error={Boolean(labelError)}/>
                 </Box>
-                <Box>
+                {!disabled && <Box>
                     <IconButton
                         size="small"
                         aria-label="edit"
                         onClick={() => onDialogOpen()}>
                         <SettingsOutlinedIcon fontSize={"small"}/>
                     </IconButton>
-                </Box>
+                </Box>}
             </Box>);
     },
     function areEqual(prevProps: EnumEntryProps, nextProps: EnumEntryProps) {

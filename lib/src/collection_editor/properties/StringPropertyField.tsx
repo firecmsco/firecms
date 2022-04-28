@@ -6,9 +6,13 @@ import {
 import { ValidationPanel } from "./ValidationPanel";
 
 export function StringPropertyField({
-                                        widgetId
+                                        widgetId,
+                                        disabled,
+                                        showErrors
                                     }: {
     widgetId: "text_field" | "multiline" | "markdown" | "url" | "email";
+    disabled: boolean;
+    showErrors: boolean;
 }) {
 
     return (
@@ -18,38 +22,46 @@ export function StringPropertyField({
                 <ValidationPanel>
 
                     {widgetId === "text_field" &&
-                        <StringPropertyValidation length={true}
+                        <StringPropertyValidation disabled={disabled}
+                                                  length={true}
                                                   lowercase={true}
                                                   matches={true}
                                                   max={true}
                                                   min={true}
                                                   trim={true}
-                                                  uppercase={true}/>}
+                                                  uppercase={true}
+                                                  showErrors={showErrors}/>}
                     {widgetId === "multiline" &&
-                        <StringPropertyValidation length={true}
+                        <StringPropertyValidation disabled={disabled}
+                                                  length={true}
                                                   lowercase={true}
                                                   max={true}
                                                   min={true}
                                                   trim={true}
-                                                  uppercase={true}/>}
+                                                  uppercase={true}
+                                                  showErrors={showErrors}/>}
                     {widgetId === "markdown" &&
-                        <StringPropertyValidation length={true}
+                        <StringPropertyValidation disabled={disabled}
+                                                  length={true}
                                                   lowercase={true}
                                                   max={true}
                                                   min={true}
                                                   trim={true}
-                                                  uppercase={true}/>}
+                                                  uppercase={true}
+                                                  showErrors={showErrors}/>}
                     {widgetId === "url" &&
-                        <StringPropertyValidation
-                            max={true}
-                            min={true}
-                            trim={true}/>}
+                        <StringPropertyValidation disabled={disabled}
+                                                  max={true}
+                                                  min={true}
+                                                  trim={true}
+                                                  showErrors={showErrors}/>}
 
                     {widgetId === "email" &&
-                        <StringPropertyValidation
-                            max={true}
-                            min={true}
-                            trim={true}/>}
+                        <StringPropertyValidation disabled={disabled}
+                                                  max={true}
+                                                  min={true}
+                                                  trim={true}
+                                                  showErrors={showErrors}/>}
 
                 </ValidationPanel>
 

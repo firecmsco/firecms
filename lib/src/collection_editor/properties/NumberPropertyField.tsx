@@ -5,12 +5,14 @@ import {
 } from "./validation/NumberPropertyValidation";
 import { ValidationPanel } from "./ValidationPanel";
 
-export function NumberPropertyField() {
+export function NumberPropertyField({ disabled }: {
+    disabled: boolean;
+}) {
     return (
         <Grid item xs={12}>
 
             <ValidationPanel>
-                <NumberPropertyValidation/>
+                <NumberPropertyValidation disabled={disabled}/>
             </ValidationPanel>
 
         </Grid>

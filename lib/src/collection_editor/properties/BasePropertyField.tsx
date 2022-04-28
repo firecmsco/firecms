@@ -6,11 +6,13 @@ import DebouncedTextField from "../../form/components/DebouncedTextField";
 export function BasePropertyField({
                                       showErrors,
                                       disabledId,
-                                      existingPropertyKeys
+                                      existingPropertyKeys,
+                                      disabled
                                   }: {
     showErrors: boolean,
     disabledId: boolean,
     existingPropertyKeys?: string[];
+    disabled: boolean;
 }) {
 
     const {
@@ -42,6 +44,7 @@ export function BasePropertyField({
                        validate={validateName}
                        label={"Field name"}
                        required
+                       disabled={disabled}
                        fullWidth
                        helperText={nameError}
                        error={Boolean(nameError)}/>
@@ -52,7 +55,7 @@ export function BasePropertyField({
                        as={TextField}
                        label={"ID"}
                        validate={(value:string) => validateId(value, existingPropertyKeys)}
-                       disabled={disabledId}
+                       disabled={disabledId || disabled}
                        required
                        fullWidth
                        helperText={idError}
@@ -65,6 +68,7 @@ export function BasePropertyField({
                        as={DebouncedTextField}
                        label={"Description"}
                        fullWidth
+                       disabled={disabled}
                        helperText={descriptionError}
                        error={Boolean(descriptionError)}/>
             </Grid>

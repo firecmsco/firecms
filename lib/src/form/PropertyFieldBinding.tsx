@@ -17,7 +17,7 @@ import {
     ResolvedProperty
 } from "../models";
 
-import { SelectBinding } from "./field_bindings/SelectBinding";
+import { SelectFieldBinding } from "./field_bindings/SelectFieldBinding";
 import {
     ArrayEnumSelectBinding
 } from "./field_bindings/ArrayEnumSelectBinding";
@@ -128,7 +128,7 @@ export const PropertyFieldBinding = React.memo(
             component = SwitchFieldBinding as ComponentType<FieldProps<T>>;
         } else if (property.dataType === "number") {
             if (property.enumValues) {
-                component = SelectBinding as ComponentType<FieldProps<T>>;
+                component = SelectFieldBinding as ComponentType<FieldProps<T>>;
             } else {
                 component = TextFieldBinding as ComponentType<FieldProps<T>>;
             }
@@ -140,7 +140,7 @@ export const PropertyFieldBinding = React.memo(
             } else if (property.email || property.url || property.multiline) {
                 component = TextFieldBinding as ComponentType<FieldProps<T>>;
             } else if (property.enumValues) {
-                component = SelectBinding as ComponentType<FieldProps<T>>;
+                component = SelectFieldBinding as ComponentType<FieldProps<T>>;
             } else {
                 component = TextFieldBinding as ComponentType<FieldProps<T>>;
             }

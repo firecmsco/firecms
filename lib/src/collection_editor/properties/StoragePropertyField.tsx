@@ -32,12 +32,14 @@ const fileTypes = {
     "text/*": "Text files"
 }
 
-export function FieldUploadPropertyField({
-                                             multiple,
-                                             existing
-                                         }: {
+export function StoragePropertyField({
+                                         multiple,
+                                         existing,
+                                         disabled
+                                     }: {
     multiple: boolean;
     existing: boolean;
+    disabled: boolean;
 }) {
 
     const { values, setFieldValue } = useFormikContext();
@@ -66,30 +68,36 @@ export function FieldUploadPropertyField({
         else setFieldValue(acceptedFiles, value);
     };
 
+    const hasFilenameCallback = typeof fileNameValue === "function";
+    const hasStoragePathCallback = typeof storagePathValue === "function";
+
     return (
         <>
 
             <Grid item xs={12}>
 
-                <ExpandablePanel title={
-                    <Box sx={(theme) => ({
-                        display: "flex",
-                        flexDirection: "row",
-                        color: theme.palette.text.secondary
-                    })}>
-                        <Settings/>
-                        <Typography variant={"subtitle2"}
-                                    sx={{
-                                        ml: 2
-                                    }}>
+                <ExpandablePanel
+                    padding={2}
+                    title={
+                        <Box sx={(theme) => ({
+                            display: "flex",
+                            flexDirection: "row",
+                            color: theme.palette.text.secondary
+                        })}>
+                            <Settings/>
+                            <Typography variant={"subtitle2"}
+                                        sx={{
+                                            ml: 2
+                                        }}>
                             Advanced
                         </Typography>
                     </Box>
                 }>
+
                     <Grid container spacing={2}>
 
                         <Grid item xs={12}>
-                            <FormControl fullWidth>
+                            <FormControl fullWidth disabled={disabled}>
                                 {!allFileTypesSelected &&
                                     <InputLabel id="file-types-label">
                                         File types
@@ -140,15 +148,17 @@ export function FieldUploadPropertyField({
                                    as={DebouncedTextField}
                                    label={"File name"}
                                    size={"small"}
-                                   value={fileNameValue}
+                                   disabled={hasFilenameCallback || disabled}
+                                   value={hasFilenameCallback ? "-" : fileNameValue}
                                    fullWidth/>
                         </Grid>
                         <Grid item xs={12}>
                             <Field name={storagePath}
                                    as={DebouncedTextField}
                                    label={"Storage path"}
+                                   disabled={hasStoragePathCallback || disabled}
                                    size={"small"}
-                                   value={storagePathValue}
+                                   value={hasStoragePathCallback ? "-" : storagePathValue}
                                    fullWidth/>
                             <Typography variant={"caption"}>
                                 <p>You can use the following placeholders in
@@ -166,7 +176,7 @@ export function FieldUploadPropertyField({
                             <Field type="checkbox"
                                    name={storeUrl}
                                    label={"Save URL instead of storage path"}
-                                   disabled={existing}
+                                   disabled={existing || disabled}
                                    component={SwitchControl}/>
                             <br/>
                             <Typography variant={"caption"}>
@@ -186,10 +196,10 @@ export function FieldUploadPropertyField({
 
                 <ValidationPanel>
                     {!multiple && <Grid item>
-                        <GeneralPropertyValidation/>
+                        <GeneralPropertyValidation disabled={disabled}/>
                     </Grid>}
                     {multiple && <Grid item>
-                        <ArrayPropertyValidation/>
+                        <ArrayPropertyValidation disabled={disabled}/>
                     </Grid>}
                 </ValidationPanel>
 
