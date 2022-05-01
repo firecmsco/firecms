@@ -1,5 +1,5 @@
 import { useFireCMSContext } from "./useFireCMSContext";
-import { ConfigurationPersistence } from "../models/config_persistence";
+import { CollectionsController } from "../models/collections_controller";
 
 /**
  * Use this controller to access the configuration that is stored extenally,
@@ -7,7 +7,7 @@ import { ConfigurationPersistence } from "../models/config_persistence";
  *
  * @category Hooks and utilities
  */
-export function useConfigurationPersistence(): ConfigurationPersistence | undefined {
+export function useConfigurationPersistence(): CollectionsController | undefined {
     const context = useFireCMSContext();
-    return context.configPersistence;
+    return context.collectionsController;
 }

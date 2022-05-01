@@ -28,16 +28,16 @@ export function EntityCollectionRoute<M extends { [Key: string]: any }>({
     const [storedCollection, setStoredCollection] = useState<EntityCollection<M> | undefined>(baseCollection);
     const [loading, setLoading] = useState(false);
 
-    const configPersistence = useConfigurationPersistence();
+    const collectionsController = useConfigurationPersistence();
 
-    if (!configPersistence) {
+    if (!collectionsController) {
         throw Error("Trying to edit a stored collection without configuration persistence");
     }
 
     useEffect(() => {
         if (!baseCollection) return;
             setStoredCollection(baseCollection);
-    }, [path, configPersistence])
+    }, [path, collectionsController])
 
     if (collection) {
         return <EntityCollectionView fullPath={path}

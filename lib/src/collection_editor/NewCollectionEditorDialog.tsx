@@ -36,7 +36,7 @@ export function NewCollectionEditorDialog<M>({
     const snackbarController = useSnackbarController();
 
     if (!configurationPersistence)
-        throw Error("Can't use the collection editor without specifying a `ConfigurationPersistence`");
+        throw Error("Can't use the collection editor without specifying a `CollectionsController`");
 
     // Use this ref to store which properties have errors
     const propertyErrorsRef = useRef({});

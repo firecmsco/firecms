@@ -12,14 +12,21 @@ import {
     setDoc
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef } from "react";
-import { ConfigurationPersistence } from "../../models/config_persistence";
-import { EntityCollection, Properties } from "../../models";
-import { removeNonEditableProperties, sortProperties } from "../../core";
+import { CollectionsController } from "../../models/collections_controller";
+import { AuthController, EntityCollection, Properties } from "../../models";
+import {
+    mergeCollections,
+    removeNonEditableProperties,
+    sortProperties
+} from "../../core";
 import {
     COLLECTION_PATH_SEPARATOR,
     stripCollectionPath
 } from "../../core/util/paths";
 import { removeFunctions } from "../../core/util/objects";
+import {
+    resolveNavigationCollections
+} from "../../core/internal/useBuildNavigationContext";
 
 /**
  * @category Firebase
@@ -30,20 +37,30 @@ export interface FirestoreConfigurationPersistenceProps {
      * Firestore collection where the configuration is saved.
      */
     configPath?: string;
+
+    /**
+     * List of the mapped collections in the CMS.
+     * Each entry relates to a collection in the root database.
+     * Each of the navigation entries in this field
+     * generates an entry in the main menu.
+     */
+    collections?: EntityCollection[] | ((params: { authController: AuthController }) => EntityCollection[] | Promise<EntityCollection[]>);
+
 }
 
 const DEFAULT_CONFIG_PATH = "__FIRECMS";
 
-export function useBuildFirestoreConfigurationPersistence({
-                                                         firebaseApp,
-                                                         configPath = DEFAULT_CONFIG_PATH
-                                                     }: FirestoreConfigurationPersistenceProps): ConfigurationPersistence {
+export function useBuildFirestoreCollectionsController({
+                                                              firebaseApp,
+                                                              collections: baseCollections,
+                                                              configPath = DEFAULT_CONFIG_PATH,
+                                                          }: FirestoreConfigurationPersistenceProps): CollectionsController {
 
     const firestoreRef = useRef<Firestore>();
     const firestore = firestoreRef.current;
 
     const [loading, setLoading] = React.useState<boolean>(true);
-    const [collections, setCollections] = React.useState<EntityCollection[] | undefined>();
+    const [persistedCollections, setPersistedCollections] = React.useState<EntityCollection[] | undefined>();
 
     const [error, setError] = React.useState<Error | undefined>();
 
@@ -62,7 +79,7 @@ export function useBuildFirestoreConfigurationPersistence({
                     setLoading(false);
                     try {
                         const newCollections = docsToCollectionTree(snapshot.docs);
-                        setCollections(newCollections);
+                        setPersistedCollections(newCollections);
                     } catch (e) {
                         console.error(e);
                         setError(e as Error);
@@ -97,9 +114,14 @@ export function useBuildFirestoreConfigurationPersistence({
         return setDoc(ref, cleanedCollection, { merge: true });
     }, [firestore]);
 
+    const getCollections = useCallback(async ({ authController }: { authController: AuthController }) => {
+        const baseCollectionsResolved = baseCollections ? await resolveNavigationCollections(baseCollections, authController) : [];
+        return joinCollections(persistedCollections ?? [], baseCollectionsResolved);
+    }, [baseCollections, persistedCollections]);
+
     return {
         loading,
-        collections,
+        getCollections: getCollections,
         getCollection,
         saveCollection,
         deleteCollection
@@ -172,4 +194,26 @@ function prepareCollectionForPersistence<M>(collection: EntityCollection<M>) {
     delete newCollection.selectionController;
     delete newCollection.subcollections;
     return newCollection;
+}
+
+function joinCollections(fetchedCollections: EntityCollection[], baseCollections: EntityCollection[] | undefined):EntityCollection[] {
+    const resolvedFetchedCollections: EntityCollection[] = fetchedCollections.map(c => ({
+        ...c,
+        editable: true,
+        deletable: true
+    }));
+    const updatedCollections = (baseCollections ?? [])
+        .map((navigationCollection) => {
+            const storedCollection = resolvedFetchedCollections?.find((collection) => collection.path === navigationCollection.path);
+            if (!storedCollection) {
+                return { ...navigationCollection, deletable: false };
+            } else {
+                const mergedCollection = mergeCollections(navigationCollection, storedCollection);
+                return { ...mergedCollection, deletable: false };
+            }
+        });
+    const storedCollections = resolvedFetchedCollections
+        .filter((col) => !updatedCollections.map(c => c.path).includes(col.path));
+
+    return [...updatedCollections, ...storedCollections];
 }

@@ -103,6 +103,8 @@ function resolveCollectionRole(role: Role, path: string): Permissions {
     }
 }
 
+
+
 // export function resolveCollectionsPermissions(roles: Role[]): Record<string, Permissions> {
 //     const collectionIds = Array.from(new Set(roles.flatMap(role => Object.keys(role.collections))));
 //     return collectionIds

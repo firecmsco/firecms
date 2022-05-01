@@ -133,7 +133,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
 
     /**
      * Can this entity collection be edited with the inline editor.
-     * It has effect only if a {@link ConfigurationPersistence} is provided
+     * It has effect only if a {@link CollectionsController} is provided
      * to the {@link FireCMS} component.
      * It defaults to `true`
      */
@@ -141,7 +141,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
 
     /**
      * Can this entity collection be deleted.
-     * It has effect only if a {@link ConfigurationPersistence} is provided
+     * It has effect only if a {@link CollectionsController} is provided
      * to the {@link FireCMS} component.
      * It defaults to `true`.
      * Collections defined in code cannot be deleted, but can be modified.

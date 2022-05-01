@@ -21,11 +21,12 @@ import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthDelegate } from "./models/auth";
 import {
-    useBuildFirestoreConfigurationPersistence
-} from "./hooks/useBuildFirestoreConfigurationPersistence";
+    useBuildFirestoreCollectionsController
+} from "./hooks/useBuildFirestoreCollectionsController";
 import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
+import { AuthController } from "../models";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -87,8 +88,9 @@ export function FirebaseCMSApp({
         signInOptions
     });
 
-    const configPersistence = useBuildFirestoreConfigurationPersistence({
-        firebaseApp
+    const collectionsController = useBuildFirestoreCollectionsController({
+        collections,
+        firebaseApp,
     });
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
@@ -123,7 +125,6 @@ export function FirebaseCMSApp({
     return (
         <BrowserRouter basename={basePath}>
             <FireCMS
-                collections={collections}
                 views={views}
                 authDelegate={authDelegate}
                 authentication={authentication}
@@ -132,7 +133,7 @@ export function FirebaseCMSApp({
                 dateTimeFormat={dateTimeFormat}
                 dataSource={dataSource}
                 storageSource={storageSource}
-                configPersistence={configPersistence}
+                collectionsController={collectionsController}
                 entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                 locale={locale}
                 basePath={basePath}

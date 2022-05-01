@@ -15,7 +15,7 @@ import { useConfigurationPersistence } from "./useConfigurationPersistence";
 export const useCollectionEditorController = (): CollectionEditorController => {
 
     const navigationContext = useNavigationContext();
-    const configPersistence = useConfigurationPersistence();
+    const collectionsController = useConfigurationPersistence();
     const navigate = useNavigate();
 
     const [newCollectionDialog, setNewCollectionDialog] = React.useState<{
@@ -35,7 +35,7 @@ export const useCollectionEditorController = (): CollectionEditorController => {
     return {
         editCollection: setEditedCollectionPath,
         openNewCollectionDialog,
-        collectionEditorViews: configPersistence
+        collectionEditorViews: collectionsController
             ? (
                 <>
                     <CollectionEditorDialog

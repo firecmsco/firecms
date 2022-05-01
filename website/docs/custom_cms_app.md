@@ -144,7 +144,7 @@ export function CustomCMSApp() {
         // You can add your `FirestoreTextSearchController` here
     });
 
-    const configPersistence = useBuildFirestoreConfigurationPersistence({
+    const collectionsController = useBuildFirestoreConfigurationPersistence({
         firebaseApp
     });
 
@@ -171,7 +171,7 @@ export function CustomCMSApp() {
         <Router>
             <FireCMS collections={[productsCollection]}
                      authDelegate={authDelegate}
-                     configPersistence={configPersistence}
+                     collectionsController={collectionsController}
                      authentication={myAuthenticator}
                      dataSource={dataSource}
                      storageSource={storageSource}

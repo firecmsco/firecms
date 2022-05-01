@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    AuthController,
     Authenticator,
     CMSView,
     CollectionOverrideHandler,
@@ -34,13 +35,13 @@ export interface FirebaseCMSAppProps {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections?: EntityCollection[];
+    collections?: EntityCollection[] | ((params: { authController: AuthController }) => EntityCollection[] | Promise<EntityCollection[]>);
 
     /**
      * Custom additional views created by the developer, added to the main
      * navigation
      */
-    views?: CMSView[];
+    views?: CMSView[] | ((params: { authController: AuthController }) => CMSView[] | Promise<CMSView[]>);
 
     /**
      * Do the users need to log in to access the CMS.

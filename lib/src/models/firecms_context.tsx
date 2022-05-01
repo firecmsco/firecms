@@ -7,7 +7,7 @@ import { AuthController } from "./auth";
 import { EntityLinkBuilder } from "./entity_link_builder";
 import { User } from "./user";
 import { SnackbarController } from "../hooks";
-import { ConfigurationPersistence } from "./config_persistence";
+import { CollectionsController } from "./collections_controller";
 import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SideDialogsController } from "./side_dialogs_controller";
 
@@ -78,7 +78,7 @@ export interface FireCMSContext<UserType extends User = User> {
      * Use this controller to access the configuration that is stored extenally,
      * and not defined in code
      */
-    configPersistence?: ConfigurationPersistence;
+    collectionsController?: CollectionsController;
 
     /**
      * Use this controller to access the configuration that is stored externally,

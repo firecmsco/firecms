@@ -67,7 +67,7 @@ export const CollectionEditor = React.memo(
         const propertyErrorsRef = useRef({});
 
         if (!configurationPersistence)
-            throw Error("Can't use the collection editor without specifying a `ConfigurationPersistence`");
+            throw Error("Can't use the collection editor without specifying a `CollectionsController`");
 
         const [collection, setCollection] = React.useState<EntityCollection | undefined>();
         const [initialLoadingCompleted, setInitialLoadingCompleted] = React.useState(false);

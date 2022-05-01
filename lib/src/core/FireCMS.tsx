@@ -6,6 +6,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 
 import {
+    AuthController,
     AuthDelegate,
     Authenticator,
     CMSView,
@@ -31,7 +32,7 @@ import {
     useBuildNavigationContext
 } from "./internal/useBuildNavigationContext";
 import { useBuildAuthController } from "./internal/useBuildAuthController";
-import { ConfigurationPersistence } from "../models/config_persistence";
+import { CollectionsController } from "../models/collections_controller";
 import {
     useBuildSideDialogsController
 } from "./internal/useBuildSideDialogsController";
@@ -66,18 +67,10 @@ export interface FireCMSProps<UserType extends User> {
     }) => React.ReactNode;
 
     /**
-     * List of the mapped collections in the CMS.
-     * Each entry relates to a collection in the root database.
-     * Each of the navigation entries in this field
-     * generates an entry in the main menu.
-     */
-    collections?: EntityCollection[];
-
-    /**
      * Custom additional views created by the developer, added to the main
      * navigation
      */
-    views?: CMSView[];
+    views?: CMSView[] | ((params: { authController: AuthController }) => CMSView[] | Promise<CMSView[]>);
 
     /**
      * Do the users need to log in to access the CMS.
@@ -146,7 +139,7 @@ export interface FireCMSProps<UserType extends User> {
      * Use this controller to access the configuration that is stored externally,
      * and not defined in code
      */
-    configPersistence?: ConfigurationPersistence;
+    collectionsController: CollectionsController;
 
     /**
      * Use this controller to access the configuration that is stored locally,
@@ -173,7 +166,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     const {
         children,
-        collections,
         views,
         entityLinkBuilder,
         authentication,
@@ -186,7 +178,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         dataSource,
         basePath,
         baseCollectionPath,
-        configPersistence
+        collectionsController
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -206,10 +198,9 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         basePath: usedBasePath,
         baseCollectionPath: usedBasedCollectionPath,
         authController,
-        collections,
         views,
         collectionOverrideHandler,
-        configPersistence,
+        collectionsController,
         userConfigPersistence
     });
 
@@ -244,7 +235,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                             dataSource,
                             storageSource,
                             snackbarController,
-                            configPersistence,
+                            collectionsController,
                             userConfigPersistence,
 
                         };

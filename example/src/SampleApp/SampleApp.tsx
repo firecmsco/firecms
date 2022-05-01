@@ -103,7 +103,7 @@ function SampleApp() {
         textSearchController={textSearchController}
         allowSkipLogin={true}
         logo={logo}
-        collections={collections}
+        collections={({}) => collections}
         views={customViews}
         collectionOverrideHandler={customCollectionOverrideHandler}
         firebaseConfig={firebaseConfig}

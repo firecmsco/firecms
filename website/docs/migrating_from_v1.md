@@ -17,7 +17,7 @@ editor that allows end users to create, edit or delete collections and their
 properties.
 
 Users are now able to persist new collection configurations, by default
-using the Firestore `ConfigurationPersistence` implementation. This implementation
+using the Firestore `CollectionsController` implementation. This implementation
 saves the modified collection schemas in a path in the user's Firestore 
 instance, under `__FIRECMS`, so make sure you have the appropriate permissions
 assigned in your security rules if you would like to enable this function.
