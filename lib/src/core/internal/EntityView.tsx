@@ -1,4 +1,5 @@
 import React, { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import equal from "react-fast-compare";
 import {
     Box,
     CircularProgress,
@@ -55,16 +56,16 @@ export interface EntityViewProps<M, UserType> {
     onValuesAreModified: (modified: boolean) => void;
 }
 
-// export const EntityView = React.memo<EntityViewProps<any, any>>(
-    export function EntityView<M extends { [Key: string]: any }, UserType extends User>({
-                                                                        path,
-                                                                        entityId,
-                                                                        selectedSubPath,
-                                                                        copy,
-                                                                        collection,
-                                                                        onValuesAreModified,
-                                                                        formWidth
-                                                                    }: EntityViewProps<M, UserType>) {
+export const EntityView = React.memo<EntityViewProps<any, any>>(
+    function EntityView<M extends { [Key: string]: any }, UserType extends User>({
+                                                                                     path,
+                                                                                     entityId,
+                                                                                     selectedSubPath,
+                                                                                     copy,
+                                                                                     collection,
+                                                                                     onValuesAreModified,
+                                                                                     formWidth
+                                                                                 }: EntityViewProps<M, UserType>) {
 
         const resolvedWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? CONTAINER_WIDTH;
 
@@ -344,17 +345,23 @@ export interface EntityViewProps<M, UserType> {
         <Box sx={{
             paddingLeft: 2,
             paddingRight: 2,
-            paddingTop: 2,
+            paddingTop: 1,
             display: "flex",
-            alignItems: "center",
+            alignItems: "end",
             backgroundColor: theme.palette.mode === "light" ? theme.palette.background.default : theme.palette.background.paper
-        }}
-        >
+        }}>
 
-            <IconButton onClick={() => sideDialogContext.close()}
-                        size="large">
-                <CloseIcon/>
-            </IconButton>
+            <Box
+                sx={{
+                    pb: 1,
+                    alignSelf: "center"
+                }}
+            >
+                <IconButton onClick={() => sideDialogContext.close()}
+                            size="large">
+                    <CloseIcon/>
+                </IconButton>
+            </Box>
 
             <Tabs
                 value={tabsPosition === -1 ? 0 : false}
@@ -487,7 +494,6 @@ export interface EntityViewProps<M, UserType> {
 
         </Box>
     );
-    }
-    // ,
-//     equal
-// )
+    },
+    equal
+)

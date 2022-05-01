@@ -216,7 +216,13 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         return <></>;
 
     const form = entity && (
-        <>
+        <Box sx={theme => ({
+            overflow: "auto",
+            borderRadius: `${theme.shape.borderRadius}px`,
+            backgroundColor: theme.palette.background.paper,
+            visibility: !open ? "hidden" : undefined,
+            cursor: "grab"
+        })}>
             <Formik
                 // key={`popup_form_${propertyKey}_${entity?.id}`}
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
@@ -319,11 +325,11 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             </Formik>
 
             {savingError &&
-            <Typography color={"error"}>
-                {savingError.message}
-            </Typography>
+                <Typography color={"error"}>
+                    {savingError.message}
+                </Typography>
             }
-        </>
+        </Box>
     );
 
     const draggable = (
@@ -335,12 +341,10 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 position: "fixed",
                 zIndex: 1300,
                 boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
-                borderRadius: "4px",
                 backgroundColor: theme.palette.background.paper,
+                borderRadius: `${theme.shape.borderRadius}px`,
                 visibility: !open ? "hidden" : undefined,
                 cursor: "grab"
-                // transition: "transform 250ms ease-out",
-                // transform: "scale(1.0)"
             })}
             ref={containerRef}>
 
@@ -348,7 +352,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
             <Box
                 sx={{
-                    overflow: "auto"
+                    overflow: "hidden"
                 }}>
 
                 {form}

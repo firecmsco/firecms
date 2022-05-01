@@ -10,6 +10,7 @@ import { SnackbarController } from "../hooks";
 import { CollectionsController } from "./collections_controller";
 import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SideDialogsController } from "./side_dialogs_controller";
+import { CollectionEditorController } from "./collection_editor_controller";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -78,12 +79,17 @@ export interface FireCMSContext<UserType extends User = User> {
      * Use this controller to access the configuration that is stored extenally,
      * and not defined in code
      */
-    collectionsController?: CollectionsController;
+    collectionsController: CollectionsController;
 
     /**
      * Use this controller to access the configuration that is stored externally,
      * and not defined in code
      */
     userConfigPersistence?: UserConfigurationPersistence;
+
+    /**
+     * Use this controller to use the collection editor
+     */
+    collectionEditorController?: CollectionEditorController;
 
 }

@@ -4,11 +4,17 @@
  */
 export interface CollectionEditorController {
 
-    editCollection: (path: string) => void;
+    editCollection: (path?: string) => void;
 
     openNewCollectionDialog: (props: {
         group?: string
     }) => void;
 
-    collectionEditorViews: React.ReactNode;
+    newCollectionDialog?: {
+        open: boolean,
+        group?: string
+    };
+    editedCollectionPath?: string;
+    closeNewCollectionDialog: () => void;
+
 }

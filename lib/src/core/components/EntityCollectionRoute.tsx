@@ -3,8 +3,8 @@ import { EntityCollection } from "../../models";
 import EntityCollectionView from "./EntityCollectionView/EntityCollectionView";
 import { CircularProgressCenter } from "./CircularProgressCenter";
 import {
-    useConfigurationPersistence
-} from "../../hooks/useConfigurationPersistence";
+    useCollectionsController
+} from "../../hooks/useCollectionsController";
 import { ErrorView } from "./ErrorView";
 
 /**
@@ -28,7 +28,7 @@ export function EntityCollectionRoute<M extends { [Key: string]: any }>({
     const [storedCollection, setStoredCollection] = useState<EntityCollection<M> | undefined>(baseCollection);
     const [loading, setLoading] = useState(false);
 
-    const collectionsController = useConfigurationPersistence();
+    const collectionsController = useCollectionsController();
 
     if (!collectionsController) {
         throw Error("Trying to edit a stored collection without configuration persistence");

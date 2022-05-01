@@ -54,7 +54,7 @@ const StyledBox = styled(Box)((
     },
 
     [`&.${classes.activeDrop}`]: {
-        borderRadius: "2px",
+        borderRadius: theme.shape.borderRadius,
         border: "2px solid",
         borderColor: "transparent"
     },
@@ -72,7 +72,7 @@ const StyledBox = styled(Box)((
 
     [`& .${classes.arrayEntry}`]: {
         border: "1px dashed transparent",
-        borderRadius: "4px"
+        borderRadius: theme.shape.borderRadius
     },
 
     [`& .${classes.arrayEntryHovered}`]: {

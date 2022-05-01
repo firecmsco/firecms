@@ -34,8 +34,8 @@ import {
 import { PropertyForm } from "./PropertyEditView";
 import { useNavigationContext, useSnackbarController } from "../hooks";
 import {
-    useConfigurationPersistence
-} from "../hooks/useConfigurationPersistence";
+    useCollectionsController
+} from "../hooks/useCollectionsController";
 import { CircularProgressCenter, ErrorView } from "../core";
 import { removeUndefined } from "../core/util/objects";
 import { CustomDialogActions } from "../core/components/CustomDialogActions";
@@ -60,13 +60,13 @@ export const CollectionEditor = React.memo(
                                  }: CollectionEditorProps<M>) {
 
         const navigationContext = useNavigationContext();
-        const configurationPersistence = useConfigurationPersistence();
+        const collectionsController = useCollectionsController();
         const snackbarController = useSnackbarController();
 
         // Use this ref to store which properties have errors
         const propertyErrorsRef = useRef({});
 
-        if (!configurationPersistence)
+        if (!collectionsController)
             throw Error("Can't use the collection editor without specifying a `CollectionsController`");
 
         const [collection, setCollection] = React.useState<EntityCollection | undefined>();
@@ -90,7 +90,7 @@ export const CollectionEditor = React.memo(
         }, [path, navigationContext.initialised]);
 
         const saveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
-            return configurationPersistence.saveCollection(path, collection)
+            return collectionsController.saveCollection(path, collection)
                 .then(() => {
                     setInitialError(undefined);
                     snackbarController.open({

@@ -444,7 +444,6 @@ function FormInternal<M>({
                     }
 
                     const key = Object.keys(collection.properties)[virtualRow.index - 1];
-                    console.log("ppp", collection);
                     const property = collection.properties[key];
 
                     const underlyingValueHasChanged: boolean =

@@ -36,6 +36,9 @@ import { CollectionsController } from "../models/collections_controller";
 import {
     useBuildSideDialogsController
 } from "./internal/useBuildSideDialogsController";
+import {
+    CollectionEditorController
+} from "../models/collection_editor_controller";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -153,6 +156,11 @@ export interface FireCMSProps<UserType extends User> {
      * If not specified the default values will be used.
      */
     roles?: Roles;
+
+    /**
+     * Use this controller to use the collection editor
+     */
+    collectionEditorController?: CollectionEditorController;
 }
 
 /**
@@ -178,7 +186,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         dataSource,
         basePath,
         baseCollectionPath,
-        collectionsController
+        collectionsController,
+        collectionEditorController
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -237,7 +246,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                             snackbarController,
                             collectionsController,
                             userConfigPersistence,
-
+                            collectionEditorController
                         };
 
                         return (

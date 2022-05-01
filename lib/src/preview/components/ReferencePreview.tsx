@@ -229,7 +229,7 @@ function ReferencePreviewWrap({ children, onHover, size, onClick }: {
             display: "flex",
             color: "#838383",
             backgroundColor: darken(theme.palette.background.default, 0.1),
-            borderRadius: "2px",
+            borderRadius: `${theme.shape.borderRadius}px`,
             overflow: "hidden",
             padding: size === "regular" ? 1 : 0,
             itemsAlign: size === "tiny" ? "center" : undefined,

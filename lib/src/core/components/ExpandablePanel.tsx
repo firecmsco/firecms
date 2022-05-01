@@ -25,6 +25,8 @@ export function ExpandablePanel({
                               sx={(theme) => ({
                                   minHeight: "56px",
                                   alignItems: "center",
+                                  borderTopLeftRadius: `${theme.shape.borderRadius}px`,
+                                  borderTopRightRadius: `${theme.shape.borderRadius}px`,
                                   backgroundColor: theme.palette.mode === "dark"
                                       ? darken(theme.palette.background.paper, 0.1)
                                       : darken(theme.palette.background.paper, 0.05),

@@ -11,8 +11,8 @@ import { CustomDialogActions } from "../core/components/CustomDialogActions";
 import { Form, Formik } from "formik";
 import { YupSchema } from "./SchemaYupValidation";
 import {
-    useConfigurationPersistence
-} from "../hooks/useConfigurationPersistence";
+    useCollectionsController
+} from "../hooks/useCollectionsController";
 import { LoadingButton } from "@mui/lab";
 import { removeUndefined } from "../core/util/objects";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
@@ -32,10 +32,10 @@ export function NewCollectionEditorDialog<M>({
                                                  handleClose
                                              }: NewCollectionEditorDialogProps) {
 
-    const configurationPersistence = useConfigurationPersistence();
+    const collectionsController = useCollectionsController();
     const snackbarController = useSnackbarController();
 
-    if (!configurationPersistence)
+    if (!collectionsController)
         throw Error("Can't use the collection editor without specifying a `CollectionsController`");
 
     // Use this ref to store which properties have errors
@@ -47,7 +47,7 @@ export function NewCollectionEditorDialog<M>({
 
     const saveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
         const fullPath = parentPath ? removeInitialAndTrailingSlashes(parentPath) + "/" + collection.path : collection.path;
-        return configurationPersistence.saveCollection(fullPath, collection)
+        return collectionsController.saveCollection(fullPath, collection)
             .then(() => {
                 setError(undefined);
                 return true;
@@ -62,7 +62,7 @@ export function NewCollectionEditorDialog<M>({
                 });
                 return false;
             });
-    }, [configurationPersistence, snackbarController, parentPath]);
+    }, [collectionsController, snackbarController, parentPath]);
 
     const initialValues: EntityCollection = {
         path: "",

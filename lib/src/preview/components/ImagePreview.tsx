@@ -34,7 +34,7 @@ export function ImagePreview({ size, url }: ImagePreviewProps) {
                      objectFit: "cover",
                      width: imageSize,
                      height: imageSize,
-                     borderRadius: "4px",
+                     borderRadius: theme.shape.borderRadius,
                      maxHeight: "100%"
                  }}/>
         );
@@ -44,7 +44,7 @@ export function ImagePreview({ size, url }: ImagePreviewProps) {
         {
             maxWidth: "100%",
             maxHeight: "100%",
-            borderRadius: "4px"
+            borderRadius: theme.shape.borderRadius
         };
 
     return (

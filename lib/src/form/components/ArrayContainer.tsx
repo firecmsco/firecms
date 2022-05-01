@@ -1,10 +1,10 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
 import { FieldArray } from "formik";
 
-import { Box, Button, IconButton } from "@mui/material";
+import { Box, Button, IconButton, Tooltip } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
-import ClearIcon from "@mui/icons-material/Clear";
+import RemoveIcon from "@mui/icons-material/Remove";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
 import {
@@ -208,11 +208,11 @@ function ArrayContainerItem({
         style={
             provided.draggableProps.style
         }
-        sx={{
+        sx={theme => ({
             marginBottom: 1,
-            borderRadius: "4px",
+            borderRadius: theme.shape.borderRadius,
             opacity: 1
-        }}
+        })}
     >
         <Box key={`field_${internalId}`}
              display="flex">
@@ -227,25 +227,31 @@ function ArrayContainerItem({
                      pl: 1
                  }}
                  alignItems="center">
-                <IconButton
-                    size="small"
-                    aria-label="remove"
-                    disabled={disabled}
-                    onClick={() => remove(index)}>
-                    <ClearIcon
-                        fontSize={"small"}/>
-                </IconButton>
+                <Tooltip
+                    title="Remove">
+                    <IconButton
+                        size="small"
+                        aria-label="remove"
+                        disabled={disabled}
+                        onClick={() => remove(index)}>
+                        <RemoveIcon
+                            fontSize={"small"}/>
+                    </IconButton>
+                </Tooltip>
 
                 <div
                     {...provided.dragHandleProps}>
-                    <IconButton
-                        size="small"
-                        disabled={disabled}
-                        sx={{ cursor: disabled ? "inherit" : "move" }}>
-                        <DragHandleIcon
-                            fontSize={"small"}
-                            color={disabled ? "disabled" : "inherit"}/>
-                    </IconButton>
+                    <Tooltip
+                        title="Move">
+                        <IconButton
+                            size="small"
+                            disabled={disabled}
+                            sx={{ cursor: disabled ? "inherit" : "move" }}>
+                            <DragHandleIcon
+                                fontSize={"small"}
+                                color={disabled ? "disabled" : "inherit"}/>
+                        </IconButton>
+                    </Tooltip>
                 </div>
             </Box>
         </Box>

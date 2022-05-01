@@ -27,8 +27,8 @@ import { Link as ReactLink } from "react-router-dom";
 import { Markdown } from "../../preview";
 import { useAuthController, useNavigationContext } from "../../hooks";
 import {
-    useConfigurationPersistence
-} from "../../hooks/useConfigurationPersistence";
+    useCollectionsController
+} from "../../hooks/useCollectionsController";
 import Delete from "@mui/icons-material/Delete";
 import { MoreVert } from "@mui/icons-material";
 import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
@@ -48,9 +48,9 @@ export function FireCMSHomePage() {
 
     const authController = useAuthController();
     const navigationContext = useNavigationContext();
-    const configurationPersistence = useConfigurationPersistence();
+    const collectionsController = useCollectionsController();
     const collectionEditorController = useCollectionEditorController();
-    const configurationPersistenceEnabled = Boolean(configurationPersistence);
+    const configurationPersistenceEnabled = Boolean(collectionsController?.saveCollection) && Boolean(collectionEditorController);
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
@@ -68,7 +68,7 @@ export function FireCMSHomePage() {
 
     const deleteCollection = useCallback(() => {
         if (collectionToBeDeleted?.path) {
-            configurationPersistence?.deleteCollection(collectionToBeDeleted.path);
+            collectionsController?.deleteCollection(collectionToBeDeleted.path);
         }
         setCollectionToBeDeleted(undefined);
     }, [collectionToBeDeleted]);
@@ -171,8 +171,6 @@ export function FireCMSHomePage() {
                 body={<> This will <b>not
                     delete any data</b>, only
                     the collection in the CMS</>}/>
-
-            {collectionEditorController.collectionEditorViews}
 
         </Container>
     );

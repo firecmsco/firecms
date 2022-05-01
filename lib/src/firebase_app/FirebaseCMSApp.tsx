@@ -2,7 +2,7 @@ import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, useNavigate } from "react-router-dom";
 
 import {
     CircularProgressCenter,
@@ -26,7 +26,12 @@ import {
 import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
-import { AuthController } from "../models";
+import {
+    useBuildCollectionEditorController
+} from "../collection_editor/useBuildCollectionEditorController";
+import {
+    CollectionEditorViews
+} from "../collection_editor/CollectionEditorViews";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -83,24 +88,45 @@ export function FirebaseCMSApp({
         firebaseConfig
     });
 
+    /**
+     * Controller for managing authentication
+     */
     const authDelegate: FirebaseAuthDelegate = useFirebaseAuthDelegate({
         firebaseApp,
         signInOptions
     });
 
+    /**
+     * Controller for managing the collections and schemas used in the CMS
+     */
     const collectionsController = useBuildFirestoreCollectionsController({
         collections,
-        firebaseApp,
+        firebaseApp
     });
+    /**
+     * Controller for saving some user preferences locally.
+     */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
+    /**
+     * Controller in charge of fetching and persisting data
+     */
     const dataSource = useFirestoreDataSource({
-        firebaseApp: firebaseApp,
-        textSearchController,
+        firebaseApp,
+        textSearchController
     });
+
+    /**
+     * Controller used for saving and fetching files in storage
+     */
     const storageSource = useFirebaseStorageSource({
         firebaseApp
     });
+
+    /**
+     * Controller used to open the collection editor views.
+     */
+    const collectionEditorController = useBuildCollectionEditorController();
 
     if (configError) {
         return <div> {configError} </div>;
@@ -130,6 +156,7 @@ export function FirebaseCMSApp({
                 authentication={authentication}
                 userConfigPersistence={userConfigPersistence}
                 collectionOverrideHandler={collectionOverrideHandler}
+                collectionEditorController={collectionEditorController}
                 dateTimeFormat={dateTimeFormat}
                 dataSource={dataSource}
                 storageSource={storageSource}
@@ -169,6 +196,7 @@ export function FirebaseCMSApp({
                                 toolbarExtraWidget={toolbarExtraWidget}>
                                 <NavigationRoutes HomePage={HomePage}/>
                                 <SideDialogs/>
+                                <CollectionEditorViews/>
                             </Scaffold>
                         );
                     }

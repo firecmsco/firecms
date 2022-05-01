@@ -69,8 +69,8 @@ const SwitchFieldComponent = React.forwardRef(function({
                         display: "inline-flex",
                         alignItems: "center",
                         backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
-                        borderTopLeftRadius: "4px",
-                        borderTopRightRadius: "4px",
+                        borderTopLeftRadius: `${theme.shape.borderRadius}px`,
+                        borderTopRightRadius: `${theme.shape.borderRadius}px`,
                         transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
                         "&::before": {
                             borderBottom: focus

@@ -157,7 +157,7 @@ export const EntityCollectionViewInternal = React.memo(
 
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
-        const collectionEditable = collection.editable ?? true;
+        const collectionEditable = Boolean(collectionEditorController) && collection.editable;
 
         const exportable = collection.exportable === undefined || collection.exportable;
 
@@ -370,7 +370,7 @@ export const EntityCollectionViewInternal = React.memo(
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     Title={Title}
-                    ActionsStart={collectionEditable && collectionEditorController && authController.canEditCollection({
+                    ActionsStart={collectionEditable && authController.canEditCollection({
                         collection,
                         paths: fullPathToCollectionSegments(fullPath)
                     })
@@ -406,7 +406,6 @@ export const EntityCollectionViewInternal = React.memo(
                         onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
                         onClose={() => setDeleteEntityClicked(undefined)}/>}
 
-                {collectionEditorController.collectionEditorViews}
             </>
         );
     },

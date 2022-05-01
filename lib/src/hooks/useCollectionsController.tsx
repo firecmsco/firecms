@@ -7,7 +7,7 @@ import { CollectionsController } from "../models/collections_controller";
  *
  * @category Hooks and utilities
  */
-export function useConfigurationPersistence(): CollectionsController | undefined {
+export function useCollectionsController(): CollectionsController | undefined {
     const context = useFireCMSContext();
     return context.collectionsController;
 }

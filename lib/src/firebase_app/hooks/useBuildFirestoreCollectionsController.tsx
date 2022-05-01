@@ -50,6 +50,13 @@ export interface FirestoreConfigurationPersistenceProps {
 
 const DEFAULT_CONFIG_PATH = "__FIRECMS";
 
+/**
+ * Build a {@link CollectionsController} that persists collection in
+ * Firestore, but also allows including collections added in code.
+ * @param firebaseApp
+ * @param baseCollections
+ * @param configPath
+ */
 export function useBuildFirestoreCollectionsController({
                                                               firebaseApp,
                                                               collections: baseCollections,

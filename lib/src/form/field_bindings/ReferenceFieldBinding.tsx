@@ -274,8 +274,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
     }
 
     return (
-        <FormControl error={showError} fullWidth
-        >
+        <FormControl error={showError} fullWidth>
 
             <Box sx={(theme) => ({
 
@@ -284,8 +283,8 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                 padding: theme.spacing(1),
                 position: "relative",
                 transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-                borderTopLeftRadius: "2px",
-                borderTopRightRadius: "2px",
+                borderTopLeftRadius: `${theme.shape.borderRadius}px`,
+                borderTopRightRadius: `${theme.shape.borderRadius}px`,
                 backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : (theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)"),
                 // borderBottom: `1px solid ${darken(theme.palette.background.default, 0.1)}`,
                 "&::before": {

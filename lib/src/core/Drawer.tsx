@@ -87,7 +87,7 @@ export function Drawer({
         </ListItem>, [closeDrawer]);
 
     const buildGroupHeader = useCallback((group?: string) => {
-        const canCreateCollections = authController.canCreateCollections({ group });
+        const canCreateCollections = Boolean(collectionEditorController) && authController.canCreateCollections({ group });
         return <Box pt={2} pl={2} pr={2} pb={0.5} sx={{
             display: "flex",
             flexDirection: "row",
@@ -164,7 +164,6 @@ export function Drawer({
                 {ungroupedNavigationViews.map((view, index) => buildNavigationListItem(index, "none", view))}
 
             </List>
-            {collectionEditorController.collectionEditorViews}
         </div>
     );
 }

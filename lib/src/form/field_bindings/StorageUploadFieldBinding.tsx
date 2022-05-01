@@ -10,6 +10,7 @@ import {
     IconButton,
     Paper,
     Skeleton,
+    Tooltip,
     Typography
 } from "@mui/material";
 
@@ -24,7 +25,7 @@ import {
     StringProperty
 } from "../../models";
 import { useDropzone } from "react-dropzone";
-import ClearIcon from "@mui/icons-material/Clear";
+import RemoveIcon from "@mui/icons-material/Remove";
 import { PreviewSize, PropertyPreview } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
@@ -63,8 +64,8 @@ const StyledBox = styled(Box)(({ theme }:
         border: "2px solid transparent",
         minHeight: "254px",
         outline: 0,
-        borderTopLeftRadius: "2px",
-        borderTopRightRadius: "2px",
+        borderTopLeftRadius: `${theme.shape.borderRadius}px`,
+        borderTopRightRadius: `${theme.shape.borderRadius}px`,
         backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
         borderBottom: theme.palette.mode === "light" ? "1px solid rgba(0, 0, 0, 0.42)" : "1px solid rgba(255, 255, 255, 0.7)",
         boxSizing: "border-box",
@@ -365,7 +366,7 @@ function FileDropComponent({
                                 disabled={disabled}
                                 entity={entity}
                                 value={entry.storagePathOrDownloadUrl}
-                                onClear={onClear}
+                                onRemove={onClear}
                                 size={entry.size}/>
                         );
                     } else if (entry.file) {
@@ -393,9 +394,9 @@ function FileDropComponent({
                                     style={
                                         provided.draggableProps.style
                                     }
-                                    sx={{
-                                        borderRadius: "4px"
-                                    }}
+                                    sx={theme => ({
+                                        borderRadius: `${theme.shape.borderRadius}px`
+                                    })}
                                 >
                                     {child}
                                 </Box>
@@ -618,9 +619,9 @@ export function StorageUpload({
                             style={
                                 provided.draggableProps.style
                             }
-                            sx={{
-                                borderRadius: "4px"
-                            }}
+                            sx={theme => ({
+                                borderRadius: theme.shape.borderRadius
+                            })}
                         >
                             <StorageItemPreview
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}
@@ -628,7 +629,7 @@ export function StorageUpload({
                                 disabled={true}
                                 entity={entity}
                                 value={entry.storagePathOrDownloadUrl as string}
-                                onClear={onClear}
+                                onRemove={onClear}
                                 size={entry.size}/>
                         </Box>
                     );
@@ -677,9 +678,7 @@ export function StorageUploadProgress({
                                           size
                                       }: StorageUploadItemProps) {
 
-
     const storage = useStorageSource();
-
 
     const snackbarController = useSnackbarController();
 
@@ -753,7 +752,7 @@ interface StorageItemPreviewProps {
     property: ResolvedStringProperty;
     value: string,
     entity: Entity<any>,
-    onClear: (value: string) => void;
+    onRemove: (value: string) => void;
     size: PreviewSize;
     disabled: boolean;
 }
@@ -763,7 +762,7 @@ export function StorageItemPreview({
                                        property,
                                        value,
                                        entity,
-                                       onClear,
+                                       onRemove,
                                        disabled,
                                        size
                                    }: StorageItemPreviewProps) {
@@ -784,14 +783,18 @@ export function StorageItemPreview({
                 {!disabled &&
                     <a
                         className={classes.thumbnailCloseIcon}>
-                        <IconButton
-                            size={"small"}
-                            onClick={(event) => {
-                                event.stopPropagation();
-                                onClear(value);
-                            }}>
-                            <ClearIcon fontSize={"small"}/>
-                        </IconButton>
+
+                        <Tooltip
+                            title="Remove">
+                            <IconButton
+                                size={"small"}
+                                onClick={(event) => {
+                                    event.stopPropagation();
+                                    onRemove(value);
+                                }}>
+                                <RemoveIcon fontSize={"small"}/>
+                            </IconButton>
+                        </Tooltip>
                     </a>
                 }
 

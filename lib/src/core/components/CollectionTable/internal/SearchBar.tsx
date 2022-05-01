@@ -43,7 +43,7 @@ export function SearchBar({ onTextSearch }: SearchBarProps) {
                 alignItems: "center",
                 height: 40,
                 minWidth: "200px",
-                borderRadius: theme.shape.borderRadius,
+                borderRadius: `${theme.shape.borderRadius}px`,
                 backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.05) : darken(theme.palette.background.default, 0.2),
                 "&:hover": {
                     backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.10) : darken(theme.palette.background.default, 0.3)

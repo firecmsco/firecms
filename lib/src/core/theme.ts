@@ -14,6 +14,8 @@ export const createCMSDefaultTheme = (
         fontFamily?: string;
     }): Theme => {
 
+    const radius = 6;
+
     const original = createTheme({
         palette: {
             mode: mode,
@@ -31,6 +33,9 @@ export const createCMSDefaultTheme = (
                 main: red.A400
             }
         },
+        shape: {
+            borderRadius: radius
+        },
         typography: {
             fontFamily: fontFamily || "\"Rubik\", \"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
             fontWeightMedium: 500,
@@ -43,7 +48,7 @@ export const createCMSDefaultTheme = (
             MuiButton: {
                 styleOverrides: {
                     root: {
-                        borderRadius: 8
+                        borderRadius: radius
                     }
                 }
             },
@@ -80,7 +85,7 @@ export const createCMSDefaultTheme = (
             MuiDialog: {
                 styleOverrides: {
                     paper: {
-                        borderRadius: 8
+                        borderRadius: radius
                     }
                 }
             }
