@@ -40,8 +40,7 @@ export function ReadOnlyFieldBinding({
 
         <FormControl fullWidth error={showError}>
 
-            {!tableMode && <FormHelperText filled
-                                           required={property.validation?.required}>
+            {!tableMode && <FormHelperText filled>
                 <LabelWithIcon property={property}/>
             </FormHelperText>}
 

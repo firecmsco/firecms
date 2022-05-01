@@ -197,8 +197,7 @@ export function StorageUploadFieldBinding({
                      error={showError}>
 
             {!tableMode &&
-                <FormHelperText filled
-                                required={property.validation?.required}>
+                <FormHelperText filled>
                     <LabelWithIcon property={property}/>
                 </FormHelperText>}
 

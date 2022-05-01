@@ -82,11 +82,9 @@ export function ReferenceDialog(
         selectedEntityIds
     }: ReferenceDialogProps) {
 
-
     const navigationContext = useNavigationContext();
 
     const path = navigationContext.resolveAliasesFrom(pathInput);
-    console.log("ReferenceDialog", path, pathInput, collection);
 
     const dataSource = useDataSource();
 

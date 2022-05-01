@@ -95,10 +95,9 @@ export function ArrayOfReferencesFieldBinding({
         );
     };
 
-    const title = <FormHelperText filled
-                                  required={property.validation?.required}>
+    const title = (
         <LabelWithIcon property={property}/>
-    </FormHelperText>;
+    );
 
     const body = <>
         {!collectionResolver && <ErrorView

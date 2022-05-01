@@ -97,8 +97,7 @@ export function MarkdownFieldBinding({
             error={showError}
             fullWidth>
 
-            {!tableMode && <FormHelperText filled
-                                           required={property.validation?.required}>
+            {!tableMode && <FormHelperText filled>
                 <LabelWithIcon property={property}/>
             </FormHelperText>}
 

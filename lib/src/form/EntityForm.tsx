@@ -444,6 +444,7 @@ function FormInternal<M>({
                     }
 
                     const key = Object.keys(collection.properties)[virtualRow.index - 1];
+                    console.log("ppp", collection);
                     const property = collection.properties[key];
 
                     const underlyingValueHasChanged: boolean =
@@ -603,7 +604,7 @@ const shouldPropertyReRender = (property: ResolvedProperty): boolean => {
     if (property.dataType === "map" && property.properties) {
         return Object.values(property.properties).some((childProperty) => shouldPropertyReRender(childProperty));
     } else if (property.dataType === "array" && Array.isArray(property.resolvedProperties)) {
-        return property.resolvedProperties.some((childProperty) => shouldPropertyReRender(childProperty));
+        return property.resolvedProperties.some((childProperty) => childProperty && shouldPropertyReRender(childProperty));
     } else {
         return Boolean(property.Field) || property.fromBuilder;
     }

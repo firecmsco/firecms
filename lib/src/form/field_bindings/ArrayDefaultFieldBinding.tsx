@@ -69,10 +69,9 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
                                            disabled={isSubmitting || Boolean(property.disabled)}
                                            includeAddButton={!property.disabled}/>;
     const title = (
-        <FormHelperText filled
-                        required={property.validation?.required}>
-            <LabelWithIcon property={property}/>
-        </FormHelperText>
+        <LabelWithIcon property={property}
+                      />
+
     );
 
     return (

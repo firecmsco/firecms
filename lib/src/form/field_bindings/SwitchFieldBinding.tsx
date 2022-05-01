@@ -124,11 +124,9 @@ const SwitchFieldComponent = React.forwardRef(function({
                     }
                     disabled={disabled}
                     label={
-                        <Typography color={"textSecondary"}>
                             <LabelWithIcon
-
                                 property={property}/>
-                        </Typography>}
+                }
                 />
 
                 {includeDescription &&

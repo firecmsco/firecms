@@ -41,10 +41,8 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
         setValue
     });
 
-    const title = <FormHelperText filled
-                                  required={property.validation?.required}>
-        <LabelWithIcon property={property}/>
-    </FormHelperText>;
+    const title = <LabelWithIcon property={property}/>;
+
     const body = property.resolvedProperties.map((childProperty, index) => {
         const fieldProps = {
             propertyKey: `${propertyKey}[${index}]`,

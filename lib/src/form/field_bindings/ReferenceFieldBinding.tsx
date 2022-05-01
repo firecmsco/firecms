@@ -1,14 +1,11 @@
 import React, { useMemo } from "react";
 
-import { styled } from '@mui/material/styles';
-
 import {
     Box,
     Button,
     FormControl,
     FormHelperText,
     IconButton,
-    Theme,
     Tooltip,
     Typography
 } from "@mui/material";
@@ -37,71 +34,6 @@ import {
 } from "../../hooks";
 import { getReferenceFrom } from "../../core/util/entities";
 
-const PREFIX = 'ReferenceField';
-
-const classes = {
-    root: `${PREFIX}-root`,
-    disabled: `${PREFIX}-disabled`
-};
-
-const StyledFormControl = styled(FormControl)((
-   { theme } : {
-        theme: Theme
-    }
-) => ({
-    "&": {
-        elevation: 0,
-        width: "100%",
-        padding: theme.spacing(1),
-        position: "relative",
-        transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-        borderTopLeftRadius: "2px",
-        borderTopRightRadius: "2px",
-        backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
-        // borderBottom: `1px solid ${darken(theme.palette.background.default, 0.1)}`,
-        "&::before": {
-            borderBottom: theme.palette.mode === "light" ? "1px solid rgba(0, 0, 0, 0.42)" : "1px solid rgba(255, 255, 255, 0.7)",
-            left: 0,
-            bottom: 0,
-            content: "\"\\00a0\"",
-            position: "absolute",
-            right: 0,
-            transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-            pointerEvents: "none"
-        },
-        "&::after": {
-            content: "\"\"",
-            transition: "transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-            left: 0,
-            bottom: 0,
-            position: "absolute",
-            right: 0,
-            transform: "scaleX(0)",
-            borderBottom: `2px solid ${theme.palette.primary.main}`
-        },
-        "&:hover": {
-            cursor: "pointer",
-            backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
-        },
-        color: "#838383",
-        fontWeight: theme.typography.fontWeightMedium
-    },
-
-    [`& .${classes.disabled}`]: {
-        backgroundColor: "rgba(0, 0, 0, 0.12)",
-        color: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)",
-        "&::before": {
-            borderBottom: theme.palette.mode === "light" ? "1px dotted rgba(0, 0, 0, 0.42)" : "1px dotted rgba(255, 255, 255, 0.7)"
-        },
-        "&::after": {
-            borderBottom: `2px dotted ${theme.palette.primary.main}`
-        },
-        "&:hover": {
-            cursor: "inherit",
-            backgroundColor: "rgba(0, 0, 0, 0.12)"
-        }
-    }
-}));
 
 /**
  * Field that opens a reference selection dialog.
@@ -292,11 +224,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                          flexGrow={1}>
 
                         <Box flexGrow={1}>
-                            <FormHelperText filled
-                                            required={property.validation?.required}>
-                                <LabelWithIcon
-                                    property={property}/>
-                            </FormHelperText>
+                            <LabelWithIcon property={property} small={true}/>
                         </Box>
 
                         {entity &&
@@ -346,10 +274,50 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
     }
 
     return (
-        <StyledFormControl error={showError} fullWidth>
+        <FormControl error={showError} fullWidth
+        >
 
-            <div
-                className={`${classes.root} ${disabled ? classes.disabled : ""}`}>
+            <Box sx={(theme) => ({
+
+                elevation: 0,
+                width: "100%",
+                padding: theme.spacing(1),
+                position: "relative",
+                transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+                borderTopLeftRadius: "2px",
+                borderTopRightRadius: "2px",
+                backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : (theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)"),
+                // borderBottom: `1px solid ${darken(theme.palette.background.default, 0.1)}`,
+                "&::before": {
+                    borderBottom: disabled
+                        ? theme.palette.mode === "light" ? "1px dotted rgba(0, 0, 0, 0.42)" : "1px dotted rgba(255, 255, 255, 0.7)"
+                        : theme.palette.mode === "light" ? "1px solid rgba(0, 0, 0, 0.42)" : "1px solid rgba(255, 255, 255, 0.7)",
+                    left: 0,
+                    bottom: 0,
+                    content: "\"\\00a0\"",
+                    position: "absolute",
+                    right: 0,
+                    transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+                    pointerEvents: "none"
+                },
+                "&::after": {
+                    content: "\"\"",
+                    transition: "transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+                    left: 0,
+                    bottom: 0,
+                    position: "absolute",
+                    right: 0,
+                    transform: "scaleX(0)",
+                    borderBottom: disabled ? `2px dotted ${theme.palette.primary.main}` : `2px solid ${theme.palette.primary.main}`
+                },
+                "&:hover": {
+                    cursor: disabled ? undefined : "pointer",
+                    backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
+                },
+                color: disabled ? (theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)") : "#838383",
+                fontWeight: theme.typography.fontWeightMedium
+
+            })}>
 
                 {collection && buildEntityView(collection)}
 
@@ -361,14 +329,13 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                                                 onSingleEntitySelected={handleEntityClick}
                 />}
 
-            </div>
+            </Box>
 
             {includeDescription &&
-            <FieldDescription property={property}/>}
+                <FieldDescription property={property}/>}
 
             {showError && <FormHelperText>{error}</FormHelperText>}
 
-        </StyledFormControl>
+        </FormControl>
     );
 }
-

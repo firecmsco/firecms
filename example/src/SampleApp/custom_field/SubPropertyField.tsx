@@ -40,12 +40,6 @@ export const CustomField = ({
 
     return (
         <FormControl fullWidth error={showError}>
-            {!tableMode && (
-                <FormHelperText filled required={property.validation?.required}>
-                    <LabelWithIcon property={property}/>
-                </FormHelperText>
-            )}
-
             <Paper elevation={0}>
                 <PropertyFieldBinding {...fieldProps}/>
             </Paper>

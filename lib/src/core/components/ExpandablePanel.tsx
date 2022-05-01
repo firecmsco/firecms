@@ -20,14 +20,11 @@ export function ExpandablePanel({
         <Accordion variant={"outlined"}
                    disableGutters
                    expanded={expandedInternal}
-                   sx={{
-                       // m: "0 -8px",
-                       // width: "calc(100% + 16px)"
-                   }}
                    onChange={useCallback((event, expanded) => setExpandedInternal(expanded), [])}>
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                               sx={(theme) => ({
                                   minHeight: "56px",
+                                  alignItems: "center",
                                   backgroundColor: theme.palette.mode === "dark"
                                       ? darken(theme.palette.background.paper, 0.1)
                                       : darken(theme.palette.background.paper, 0.05),

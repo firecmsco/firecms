@@ -8,7 +8,6 @@ import {
 import {
     Box,
     FormControl,
-    FormHelperText,
     Grid,
     InputLabel,
     MenuItem,
@@ -135,11 +134,7 @@ export function MapFieldBinding<T extends object>({
 
     </>;
 
-    const title =
-        <FormHelperText filled
-                        required={property.validation?.required}>
-            <LabelWithIcon property={property}/>
-        </FormHelperText>;
+    const title = <LabelWithIcon property={property}/>;
 
     return (
         <FormControl fullWidth error={showError}>

@@ -76,10 +76,10 @@ export function ArrayOneOfFieldBinding<T extends Array<any>>({
             context={context}/>;
     }, [context, lastAddedId, property.oneOf, propertyKey, value]);
 
-    const title = <FormHelperText filled
-                                  required={property.validation?.required}>
+    const title = (
         <LabelWithIcon property={property}/>
-    </FormHelperText>;
+    );
+
     const body = <ArrayContainer value={value}
                                  name={propertyKey}
                                  buildEntry={buildEntry}

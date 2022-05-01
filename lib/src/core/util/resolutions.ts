@@ -205,7 +205,7 @@ export function resolveArrayProperty<T extends any[], M>({
         const typeField = property.oneOf?.typeField ?? DEFAULT_ONE_OF_TYPE;
         const resolvedProperties = Array.isArray(propertyValue)
             ? propertyValue.map((v, index) => {
-                const type = v[typeField];
+                const type = v && v[typeField];
                 const childProperty = property.oneOf?.properties[type];
                 if (!type || !childProperty) return null;
                 return resolveProperty({
