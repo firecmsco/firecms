@@ -22,7 +22,7 @@ import {
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
-import { ErrorBoundary } from "../../internal/ErrorBoundary";
+import { ErrorBoundary } from "../ErrorBoundary";
 
 export const TableHeader = React.memo<TableHeaderProps<any>>(TableHeaderInternal) as React.FunctionComponent<TableHeaderProps<any>>;
 

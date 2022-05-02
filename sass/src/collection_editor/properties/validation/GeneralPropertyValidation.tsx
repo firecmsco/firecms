@@ -2,8 +2,7 @@ import React from "react";
 
 import { FastField, getIn, useFormikContext } from "formik";
 import { Grid } from "@mui/material";
-import DebouncedTextField from "../../../form/components/DebouncedTextField";
-import { SwitchControl } from "../../../form/components/SwitchControl";
+import { DebouncedTextField, SwitchControl } from "@camberi/firecms";
 
 export function GeneralPropertyValidation({disabled}: {
     required?: boolean;

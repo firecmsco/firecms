@@ -3,7 +3,7 @@ import { styled } from "@mui/material/styles";
 import { ResolvedStringProperty } from "../../models";
 import { PropertyPreviewProps } from "../internal";
 
-import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 import { StringPropertyPreview } from "./StringPropertyPreview";
 import { Theme } from "@mui/material";
 import { resolveArrayProperty } from "../../core/util/resolutions";

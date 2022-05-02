@@ -1,7 +1,7 @@
 import { Field, getIn, useFormikContext } from "formik";
 import { Grid, TextField } from "@mui/material";
 import { PropertyWithId } from "../PropertyEditView";
-import DebouncedTextField from "../../form/components/DebouncedTextField";
+import { DebouncedTextField } from "@camberi/firecms";
 
 export function BasePropertyField({
                                       showErrors,

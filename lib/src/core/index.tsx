@@ -19,3 +19,14 @@ export { createCMSDefaultTheme } from "./theme";
 export * from "./builders";
 
 export * from "./util/collections";
+export * from "./util/entities";
+export * from "./util/strings";
+export * from "./util/objects";
+export * from "./util/paths";
+export * from "./util/regexp";
+export * from "./util/navigation_utils";
+export * from "./util/useDebounce";
+export * from "./util/property_utils";
+export * from "./util/resolutions";
+
+export * from "./widgets";

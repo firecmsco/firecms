@@ -14,9 +14,12 @@ export { CircularProgressCenter } from "./CircularProgressCenter";
 export { FireCMSHomePage } from "./FireCMSHomePage";
 
 export * from "./CollectionTable";
+export * from "./CustomDialogActions";
 
 export * from "./Table";
+export * from "./ErrorBoundary";
+export * from "./ExpandablePanel";
+export * from "./DeleteConfirmationDialog";
 
-export * from "../../collection_editor/CollectionEditor";
-
+export * from "./FireCMSLogo";
 

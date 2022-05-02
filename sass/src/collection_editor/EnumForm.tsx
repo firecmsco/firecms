@@ -4,10 +4,13 @@ import { FastField, Formik, getIn, useFormikContext } from "formik";
 import { Box, Button, Dialog, DialogContent, IconButton } from "@mui/material";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 
-import DebouncedTextField from "../form/components/DebouncedTextField";
-import { EnumValueConfig, EnumValues } from "../models";
-import { ArrayContainer } from "../form";
-import { CustomDialogActions } from "../core/components/CustomDialogActions";
+import {
+    ArrayContainer,
+    CustomDialogActions,
+    DebouncedTextField,
+    EnumValueConfig,
+    EnumValues
+} from "@camberi/firecms";
 
 type EnumFormProps = {
     enumValues: EnumValueConfig[];

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Input } from "@mui/material";
-import { useDebounce } from "../../../../internal/useDebounce";
+import { useDebounce } from "../../../../util/useDebounce";
 
 
 export function NumberTableInput(props: {

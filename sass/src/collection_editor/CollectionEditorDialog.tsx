@@ -2,10 +2,8 @@ import * as React from "react";
 import { Dialog } from "@mui/material";
 
 import { CollectionEditor } from "./CollectionEditor";
-import { EntityCollection } from "../models";
-import {
-    useCollectionEditorController
-} from "../hooks/useCollectionEditorController";
+import { EntityCollection } from "@camberi/firecms";
+import { useCollectionEditorController } from "../useCollectionEditorController";
 
 export interface CollectionEditorDialogProps {
     open: boolean;

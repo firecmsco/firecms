@@ -1,6 +1,6 @@
 import React from "react";
 import { ArrayProperty, ResolvedMapProperty } from "../../models";
-import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { PropertyPreview, PropertyPreviewProps } from "../internal";

@@ -12,8 +12,8 @@ import {
     Typography
 } from "@mui/material";
 
-import { NumberProperty, StringProperty } from "../../models";
-import { useNavigationContext } from "../../hooks";
+import { NumberProperty, StringProperty } from "@camberi/firecms";
+import { useNavigationContext } from "@camberi/firecms";
 
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 

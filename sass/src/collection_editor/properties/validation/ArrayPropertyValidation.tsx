@@ -2,7 +2,7 @@ import React from "react";
 
 import { getIn, useFormikContext } from "formik";
 import { Box, Grid } from "@mui/material";
-import DebouncedTextField from "../../../form/components/DebouncedTextField";
+import { DebouncedTextField } from "@camberi/firecms";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
 
 export function ArrayPropertyValidation({

@@ -6,7 +6,7 @@ import { alpha, Box, Typography, useTheme } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import clsx from "clsx";
 
-import { ErrorBoundary } from "../../internal/ErrorBoundary";
+import { ErrorBoundary } from "../ErrorBoundary";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { baseTableCss } from "./styles";
 import { TableHeader } from "./TableHeader";

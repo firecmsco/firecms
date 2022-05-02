@@ -5,7 +5,7 @@ import { Box, FormControl, IconButton } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
-import { useDebounce } from "../../../internal/useDebounce";
+import { useDebounce } from "../../../util/useDebounce";
 
 interface SearchBarProps {
     onTextSearch: (searchString?: string) => void;

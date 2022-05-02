@@ -4,7 +4,7 @@ import FunctionsIcon from "@mui/icons-material/Functions";
 import Crop75Icon from "@mui/icons-material/Crop75";
 
 import { PropertyOrBuilder, ResolvedProperty } from "../../models";
-import { getWidget, Widget } from "./widgets";
+import { getWidget, Widget } from "../widgets";
 import { Box } from "@mui/material";
 import { isPropertyBuilder } from "./entities";
 

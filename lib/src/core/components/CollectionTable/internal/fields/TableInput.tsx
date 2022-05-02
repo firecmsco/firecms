@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { TextareaAutosize } from "@mui/material";
 
-import { useDebounce } from "../../../../internal/useDebounce";
+import { useDebounce } from "../../../../util/useDebounce";
 
 export function TableInput(props: {
     error: Error | undefined;

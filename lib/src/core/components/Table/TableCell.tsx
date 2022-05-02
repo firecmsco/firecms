@@ -8,7 +8,7 @@ import { CellStyleProps } from "./styles";
 import { getRowHeight } from "./common";
 import isEqual from "react-fast-compare";
 import { ErrorTooltip } from "../ErrorTooltip";
-import { ErrorBoundary } from "../../internal/ErrorBoundary";
+import { ErrorBoundary } from "../ErrorBoundary";
 
 interface TableCellProps {
     children: React.ReactNode;

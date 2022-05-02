@@ -13,7 +13,7 @@ import { TableSelect } from "./fields/TableSelect";
 import { NumberTableInput } from "./fields/TableNumberInput";
 import { TableSwitch } from "./fields/TableSwitch";
 import { TableDateField } from "./fields/TableDateField";
-import { ErrorBoundary } from "../../../internal/ErrorBoundary";
+import { ErrorBoundary } from "../../ErrorBoundary";
 import { PropertyPreview } from "../../../../preview";
 import { CellStyleProps } from "../../Table/styles";
 import { TableReferenceField } from "./fields/TableReferenceField";

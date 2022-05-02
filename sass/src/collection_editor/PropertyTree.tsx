@@ -1,7 +1,12 @@
 import { Box, IconButton } from "@mui/material";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
-import { PropertiesOrBuilders, Property, PropertyOrBuilder } from "../models";
+import {
+    editableProperty,
+    PropertiesOrBuilders,
+    Property,
+    PropertyOrBuilder
+} from "@camberi/firecms";
 import {
     PropertyBuilderPreview,
     PropertyFieldPreview
@@ -14,7 +19,6 @@ import {
 } from "react-beautiful-dnd";
 import { getFullId, idToPropertiesPath } from "./util";
 import { getIn } from "formik";
-import { editableProperty } from "../core/util/entities";
 
 export function PropertyTree<M>({
                                     namespace,
@@ -55,12 +59,14 @@ export function PropertyTree<M>({
         <>
 
             <DragDropContext onDragEnd={onDragEnd}>
-                <Droppable droppableId={`droppable_${name}`}>
+                <Droppable droppableId={`droppable_${namespace}`}>
                     {(droppableProvided, droppableSnapshot) => (
                         <div
                             {...droppableProvided.droppableProps}
                             ref={droppableProvided.innerRef}>
-                            {propertiesOrder && propertiesOrder.map((propertyKey: string, index: number) => {
+                            {propertiesOrder && propertiesOrder
+                                .filter((propertyKey) => Boolean(properties[propertyKey]))
+                                .map((propertyKey: string, index: number) => {
                                 return (
                                     <Draggable
                                         key={`array_field_${namespace}_${propertyKey}}`}

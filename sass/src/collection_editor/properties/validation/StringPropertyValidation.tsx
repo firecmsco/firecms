@@ -2,10 +2,13 @@ import React from "react";
 
 import { FastField, getIn, useFormikContext } from "formik";
 import { Box, Grid } from "@mui/material";
-import DebouncedTextField from "../../../form/components/DebouncedTextField";
-import { SwitchControl } from "../../../form/components/SwitchControl";
+import {
+    DebouncedTextField,
+    isValidRegExp,
+    serializeRegExp,
+    SwitchControl
+} from "@camberi/firecms";
 import { GeneralPropertyValidation } from "./GeneralPropertyValidation";
-import { isValidRegExp, serializeRegExp } from "../../../core/util/regexp";
 
 export function StringPropertyValidation({
                                              length,
@@ -113,13 +116,13 @@ export function StringPropertyValidation({
                 {matches && <Grid item xs={12}>
                     <FastField name={validationMatches}
                                as={DebouncedTextField}
-                               validate={(value:string) => !isValidRegExp(value)}
+                               validate={(value:string) => value && !isValidRegExp(value)}
                                label={"Matches regex"}
                                size="small"
                                disabled={disabled}
                                fullWidth
                                value={matchesStringValue}
-                               helperText={matchesError ?? "e.g. /^\\d+$/ for digits only"}
+                               helperText={matchesError ? "Not a valid regexp" : "e.g. /^\\d+$/ for digits only"}
                                error={Boolean(matchesError)}/>
                 </Grid>}
 

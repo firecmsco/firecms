@@ -12,6 +12,7 @@
     ],
     "scripts": {
         "dev": "cd example && yarn dev",
+        "sass": "cd sass && yarn dev",
         "preview": "cd example && yarn preview",
         "deploy": "cd example && yarn deploy",
         "build": "cd lib && yarn build"

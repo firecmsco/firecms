@@ -6,7 +6,7 @@ import { Entity, FieldProps } from "../../models";
 import { PropertyPreview } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
-import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 
 /**
  *

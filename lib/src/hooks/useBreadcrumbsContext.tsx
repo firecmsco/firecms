@@ -1,7 +1,6 @@
 import { useContext } from "react";
 import { BreadcrumbContext } from "../core/contexts/BreacrumbsContext";
 
-
 /**
  * @category Hooks and utilities
  */

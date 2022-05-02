@@ -3,20 +3,18 @@ import { useCallback, useRef, useState } from "react";
 import { Box, Button, Dialog } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 import {
-    CollectionEditorForm,
+    CustomDialogActions,
     EntityCollection,
+    removeInitialAndTrailingSlashes,
+    removeUndefined,
+    useCollectionsController,
     useSnackbarController
-} from "../index";
-import { CustomDialogActions } from "../core/components/CustomDialogActions";
+} from "@camberi/firecms";
 import { Form, Formik } from "formik";
 import { YupSchema } from "./SchemaYupValidation";
-import {
-    useCollectionsController
-} from "../hooks/useCollectionsController";
 import { LoadingButton } from "@mui/lab";
-import { removeUndefined } from "../core/util/objects";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
-import { removeInitialAndTrailingSlashes } from "../core/util/navigation_utils";
+import { CollectionEditorForm } from "./CollectionEditor";
 
 export interface NewCollectionEditorDialogProps {
     open: boolean;

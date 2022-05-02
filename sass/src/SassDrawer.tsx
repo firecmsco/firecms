@@ -1,12 +1,21 @@
 import React, { useCallback } from "react";
 
 import { NavLink } from "react-router-dom";
-import { Box, Divider, Link, List, ListItem, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Divider,
+    Link,
+    List,
+    ListItem,
+    Tooltip,
+    Typography
+} from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
-import { useAuthController, useNavigationContext } from "../hooks";
-import { FireCMSLogo } from "./components/FireCMSLogo";
-import { TopNavigationEntry, TopNavigationResult } from "../models";
+import { FireCMSLogo,  useAuthController, useNavigationContext, TopNavigationEntry, TopNavigationResult } from "@camberi/firecms";
+import { useCollectionEditorController } from "./useCollectionEditorController";
 
 /**
  * Props used in case you need to override the default drawer
@@ -21,13 +30,14 @@ export interface DrawerProps {
  * Default drawer used in the CMS
  * @category Core
  */
-export function Drawer({
+export function SassDrawer({
                            logo,
                            closeDrawer
                        }: DrawerProps) {
 
     const authController = useAuthController();
     const navigationContext = useNavigationContext();
+    const collectionEditorController = useCollectionEditorController();
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
@@ -73,6 +83,7 @@ export function Drawer({
         </ListItem>, [closeDrawer]);
 
     const buildGroupHeader = useCallback((group?: string) => {
+        const canCreateCollections = Boolean(collectionEditorController) && authController.canCreateCollections({ group });
         return <Box pt={2} pl={2} pr={2} pb={0.5} sx={{
             display: "flex",
             flexDirection: "row",
@@ -84,7 +95,17 @@ export function Drawer({
                         sx={{ flexGrow: 1 }}>
                 {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
             </Typography>
-
+            {canCreateCollections && <Tooltip
+                title={group ? `Create new collection in ${group}` : "Create new collection"}>
+                <Button
+                    size={"small"}
+                    onClick={() => {
+                        collectionEditorController?.openNewCollectionDialog({ group });
+                        closeDrawer();
+                    }}>
+                    <AddIcon fontSize={"small"}/>
+                </Button>
+            </Tooltip>}
         </Box>;
     }, [closeDrawer, navigationContext]);
 

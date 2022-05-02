@@ -1,19 +1,23 @@
 import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
-import { CMSView } from "../models";
 import {
+    CMSView,
     EntityCollectionView,
-    FireCMSHomePage
-} from "./components";
-import { useNavigationContext } from "../hooks";
-import { useBreadcrumbsContext } from "../hooks/useBreadcrumbsContext";
-import { NotFoundPage } from "./components/NotFoundPage";
+    fullPathToCollectionSegments,
+    useAuthController,
+    useBreadcrumbsContext,
+    useNavigationContext
+} from "@camberi/firecms";
+import { Settings } from "@mui/icons-material";
+import { IconButton, Tooltip } from "@mui/material";
+import { useCollectionEditorController } from "./useCollectionEditorController";
+import { SassHomePage } from "./SassHomePage";
 
 /**
  * @category Components
  */
-export type NavigationRoutesProps = {
+export type SassNavigationRoutesProps = {
     /**
      * In case you need to override the home page
      */
@@ -29,8 +33,10 @@ export type NavigationRoutesProps = {
  * @constructor
  * @category Components
  */
-export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
+export function SassNavigationRoutes({ HomePage }: SassNavigationRoutesProps) {
 
+    const authController = useAuthController();
+    const collectionEditorController = useCollectionEditorController();
     const location = useLocation();
     const navigation = useNavigationContext();
 
@@ -76,6 +82,20 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
     const collectionRoutes = sortedCollections
         .map((collection) => {
                 const urlPath = navigation.buildUrlCollectionPath(collection.alias ?? collection.path);
+
+                if (collection.editable && authController.canEditCollection({
+                    collection,
+                    paths: fullPathToCollectionSegments(collection.path)
+                })) {
+                    collection.extraActions = (props) =>
+                        <Tooltip title={"Edit collection"}>
+                            <IconButton
+                                color={"primary"}
+                                onClick={() => collectionEditorController?.editCollection(collection.path)}>
+                                <Settings/>
+                            </IconButton>
+                        </Tooltip>;
+                }
                 return <Route path={urlPath + "/*"}
                               key={`navigation_${collection.alias ?? collection.path}`}
                               element={
@@ -96,15 +116,15 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                        path={navigation.homeUrl}
                        key={"navigation_home"}
                        title={"Home"}>
-                       {HomePage ? <HomePage/> : <FireCMSHomePage/>}
+                       {HomePage ? <HomePage/> : <SassHomePage/>}
                    </BreadcrumbUpdater>
                }/>
     );
 
-    const notFoundRoute = <Route path={"*"}
-                                 element={
-                                     <NotFoundPage/>
-                                 }/>;
+    // const notFoundRoute = <Route path={"*"}
+    //                              element={
+    //                                  <NotFoundPage/>
+    //                              }/>;
 
     return (
         <Routes location={baseLocation}>
@@ -115,15 +135,10 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
             {homeRoute}
 
-            {notFoundRoute}
+            {/*{notFoundRoute}*/}
 
         </Routes>
     );
-}
-
-interface BreadcrumbUpdaterProps {
-    title: string;
-    path: string;
 }
 
 /**
@@ -138,8 +153,10 @@ function BreadcrumbUpdater({
                                children,
                                title,
                                path
-                           }
-                               : PropsWithChildren<BreadcrumbUpdaterProps>) {
+                           }: PropsWithChildren<{
+    title: string;
+    path: string;
+}>) {
 
     const breadcrumbsContext = useBreadcrumbsContext();
     React.useEffect(() => {

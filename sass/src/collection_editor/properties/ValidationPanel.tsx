@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 
 import { Box, Typography } from "@mui/material";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import { ExpandablePanel } from "@camberi/firecms";
 import RuleIcon from "@mui/icons-material/Rule";
 
 export function ValidationPanel({

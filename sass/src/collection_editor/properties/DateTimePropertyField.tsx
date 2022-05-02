@@ -9,7 +9,7 @@ import {
     Select
 } from "@mui/material";
 
-import { NumberProperty, StringProperty } from "../../models";
+import { NumberProperty, StringProperty } from "@camberi/firecms";
 import {
     GeneralPropertyValidation
 } from "./validation/GeneralPropertyValidation";

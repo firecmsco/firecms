@@ -23,7 +23,7 @@ import {
 } from "../../models";
 import { FieldDescription } from "../index";
 import { ErrorView, ReferenceDialog } from "../../core";
-import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 import { PropertyPreview, SkeletonComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {

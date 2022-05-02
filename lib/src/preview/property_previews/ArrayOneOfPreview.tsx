@@ -8,7 +8,7 @@ import {
     PropertyPreview,
     PropertyPreviewProps
 } from "../internal";
-import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 import { ResolvedProperty } from "../../models";
 import {
     DEFAULT_ONE_OF_TYPE,

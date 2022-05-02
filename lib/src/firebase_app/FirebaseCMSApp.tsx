@@ -2,7 +2,7 @@ import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { BrowserRouter, useNavigate } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import {
     CircularProgressCenter,
@@ -26,12 +26,6 @@ import {
 import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
-import {
-    useBuildCollectionEditorController
-} from "../collection_editor/useBuildCollectionEditorController";
-import {
-    CollectionEditorViews
-} from "../collection_editor/CollectionEditorViews";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -47,7 +41,7 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * configuration object.
  *
  * If you are building a larger app and need finer control, you can use
- * {@link FireCMS}, {@link Scaffold}, {@link SideEntityDialogs}
+ * {@link FireCMS}, {@link Scaffold}, {@link SideDialogs}
  * and {@link NavigationRoutes} instead.
  *
  * @param props
@@ -123,11 +117,6 @@ export function FirebaseCMSApp({
         firebaseApp
     });
 
-    /**
-     * Controller used to open the collection editor views.
-     */
-    const collectionEditorController = useBuildCollectionEditorController();
-
     if (configError) {
         return <div> {configError} </div>;
     }
@@ -156,7 +145,6 @@ export function FirebaseCMSApp({
                 authentication={authentication}
                 userConfigPersistence={userConfigPersistence}
                 collectionOverrideHandler={collectionOverrideHandler}
-                collectionEditorController={collectionEditorController}
                 dateTimeFormat={dateTimeFormat}
                 dataSource={dataSource}
                 storageSource={storageSource}
@@ -196,7 +184,6 @@ export function FirebaseCMSApp({
                                 toolbarExtraWidget={toolbarExtraWidget}>
                                 <NavigationRoutes HomePage={HomePage}/>
                                 <SideDialogs/>
-                                <CollectionEditorViews/>
                             </Scaffold>
                         );
                     }

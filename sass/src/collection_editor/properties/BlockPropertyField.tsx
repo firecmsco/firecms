@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
-import { ArrayProperty, Property } from "../../models";
+import { ArrayProperty, Property } from "@camberi/firecms";
 import { getIn, useFormikContext } from "formik";
 import { PropertyForm } from "../PropertyEditView";
 import {

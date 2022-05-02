@@ -17,7 +17,7 @@ import {
 import { useDropzone } from "react-dropzone";
 import { PreviewSize, PropertyPreview } from "../../../../../preview";
 import equal from "react-fast-compare"
-import { ErrorBoundary } from "../../../../internal/ErrorBoundary";
+import { ErrorBoundary } from "../../../ErrorBoundary";
 
 import clsx from "clsx";
 import { useSnackbarController, useStorageSource } from "../../../../../hooks";

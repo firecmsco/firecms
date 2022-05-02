@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { Button, Grid, Paper, Typography } from "@mui/material";
-import { ArrayProperty, Property } from "../../models";
+import { ArrayProperty, Property } from "@camberi/firecms";
 import { Field, getIn, useFormikContext } from "formik";
 import { PropertyForm } from "../PropertyEditView";
-import { getWidget } from "../../core/util/widgets";
+import { getWidget } from "@camberi/firecms";
 import { PropertyFieldPreview } from "../PropertyFieldPreview";
 import { ArrayPropertyValidation } from "./validation/ArrayPropertyValidation";
 import { ValidationPanel } from "./ValidationPanel";

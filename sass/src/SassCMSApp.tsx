@@ -15,7 +15,6 @@ import {
     FirebaseAuthDelegate,
     FirebaseLoginView,
     FireCMS,
-    NavigationRoutes,
     Scaffold,
     SideDialogs,
     useBuildFirestoreCollectionsController,
@@ -26,6 +25,8 @@ import {
 } from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
+import { SassNavigationRoutes } from "./SassNavigationRoutes";
+import { CollectionEditorsProvider } from "./CollectionEditorProvider";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -39,6 +40,7 @@ const productsCollection = buildCollection({
         delete: true
     }),
     name: "Product",
+    editable: true,
     properties: {
         name: {
             name: "Name",
@@ -152,7 +154,7 @@ export function SassCMSApp() {
                     } else {
                         component = (
                             <Scaffold name={"My Online Shop"}>
-                                <NavigationRoutes/>
+                                <SassNavigationRoutes/>
                                 <SideDialogs/>
                             </Scaffold>
                         );
@@ -160,8 +162,10 @@ export function SassCMSApp() {
 
                     return (
                         <ThemeProvider theme={theme}>
-                            <CssBaseline/>
-                            {component}
+                            <CollectionEditorsProvider>
+                                <CssBaseline/>
+                                {component}
+                            </CollectionEditorsProvider>
                         </ThemeProvider>
                     );
                 }}

@@ -27,7 +27,7 @@ import {
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
-import { ErrorBoundary } from "./ErrorBoundary";
+import { ErrorBoundary } from "../components/ErrorBoundary";
 import {
     saveEntityWithCallbacks,
     useAuthController,

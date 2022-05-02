@@ -14,9 +14,12 @@ import {
     Typography
 } from "@mui/material";
 import { getIn, useFormikContext } from "formik";
-import { EntityCollection, TopNavigationResult } from "../models";
-import { toSnakeCase } from "../core/util/strings";
-import { useNavigationContext } from "../hooks";
+import {
+    EntityCollection,
+    TopNavigationResult,
+    toSnakeCase,
+    useNavigationContext
+} from "@camberi/firecms";
 
 export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: boolean }) {
 

@@ -25,26 +25,29 @@ import EditIcon from "@mui/icons-material/Edit";
 import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 
-import { EntityCollection, Property } from "../models";
+import {
+    CircularProgressCenter,
+    CustomDialogActions,
+    EntityCollection,
+    ErrorBoundary,
+    ErrorView,
+    isPropertyBuilder,
+    Property,
+    removeUndefined,
+    useCollectionsController,
+    useNavigationContext,
+    useSnackbarController
+} from "@camberi/firecms";
 import {
     getFullId,
     idToPropertiesPath,
     namespaceToPropertiesOrderPath
 } from "./util";
 import { PropertyForm } from "./PropertyEditView";
-import { useNavigationContext, useSnackbarController } from "../hooks";
-import {
-    useCollectionsController
-} from "../hooks/useCollectionsController";
-import { CircularProgressCenter, ErrorView } from "../core";
-import { removeUndefined } from "../core/util/objects";
-import { CustomDialogActions } from "../core/components/CustomDialogActions";
 import { PropertyTree } from "./PropertyTree";
-import { ErrorBoundary } from "../core/internal/ErrorBoundary";
 import { LoadingButton } from "@mui/lab";
 import { YupSchema } from "./SchemaYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
-import { editableProperty, isPropertyBuilder } from "../core/util/entities";
 
 export type CollectionEditorProps<M> = {
     path: string;
@@ -270,6 +273,7 @@ export const CollectionEditorForm = React.memo(
         }, [setFieldValue, values]);
 
     const onPropertyMove = useCallback((propertiesOrder, namespace) => {
+        console.log("onPropertyMove", propertiesOrder)
         setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
     }, [setFieldValue]);
 
@@ -334,6 +338,10 @@ export const CollectionEditorForm = React.memo(
 
         const emptyCollection = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
 
+        const usedPropertiesOrder = (values.propertiesOrder ?
+            values.propertiesOrder.filter(propertyKey => values.properties[propertyKey as string])
+            : Object.keys(values.properties)) as string[];
+
         const body = (
             <Grid container>
                 <Grid item
@@ -395,7 +403,7 @@ export const CollectionEditorForm = React.memo(
                         }}
                         selectedPropertyKey={selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined}
                         properties={values.properties}
-                        propertiesOrder={(values.propertiesOrder ?? Object.keys(values.properties)) as string[]}
+                        propertiesOrder={usedPropertiesOrder}
                         onPropertyMove={onPropertyMove}
                         errors={showErrors ? errors : {}}/>
                 </ErrorBoundary>

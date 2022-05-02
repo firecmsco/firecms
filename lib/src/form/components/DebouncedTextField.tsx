@@ -1,8 +1,8 @@
 import React, { ChangeEvent } from "react";
 import { TextField, TextFieldProps } from "@mui/material";
-import { useDebounce } from "../../core/internal/useDebounce";
+import { useDebounce } from "../../core";
 
-export default function DebouncedTextField(props: TextFieldProps) {
+export function DebouncedTextField(props: TextFieldProps) {
 
     const previousEventRef = React.useRef<ChangeEvent<any>>();
     const [internalValue, setInternalValue] = React.useState(props.value);

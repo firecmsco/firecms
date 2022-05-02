@@ -1,8 +1,12 @@
 import React, { useMemo } from "react";
 import { getIn, useFormikContext } from "formik";
 import { Box, Grid, Paper, Typography } from "@mui/material";
-import { EnumValueConfig, NumberProperty, StringProperty } from "../../models";
-import { resolveEnumValues } from "../../core/util/resolutions";
+import {
+    EnumValueConfig,
+    NumberProperty,
+    resolveEnumValues,
+    StringProperty
+} from "@camberi/firecms";
 import ListIcon from "@mui/icons-material/List";
 import { EnumForm } from "../EnumForm";
 import {

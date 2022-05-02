@@ -118,6 +118,7 @@ export function useBuildFirestoreCollectionsController({
         const cleanedCollection = prepareCollectionForPersistence(collectionData);
         const strippedPath = stripCollectionPath(path);
         const ref = doc(firestore, configPath, "config", "collections", strippedPath);
+        console.debug("Persisting", cleanedCollection);
         return setDoc(ref, cleanedCollection, { merge: true });
     }, [firestore]);
 
@@ -128,7 +129,7 @@ export function useBuildFirestoreCollectionsController({
 
     return {
         loading,
-        getCollections: getCollections,
+        getCollections,
         getCollection,
         saveCollection,
         deleteCollection

@@ -1,10 +1,12 @@
 import { alpha, Box, Paper, Typography } from "@mui/material";
-import { getBadgeForWidget } from "../core/util/property_utils";
+import {
+    editableProperty,
+    getBadgeForWidget,
+    getWidget,
+    Property
+} from "@camberi/firecms";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import FunctionsIcon from "@mui/icons-material/Functions";
-import { Property } from "../models";
-import { getWidget } from "../core/util/widgets";
-import { editableProperty } from "../core/util/entities";
 
 export function PropertyFieldPreview({
                                          property,

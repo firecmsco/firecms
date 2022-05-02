@@ -17,32 +17,30 @@ import {
 } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
-import { Property, ResolvedProperty } from "../models";
 import {
+    buildProperty,
+    CustomDialogActions,
+    DeleteConfirmationDialog,
+    getBadgeForWidget,
     getWidget,
     getWidgetId,
+    mergeDeep,
+    Property,
+    removeUndefined,
+    ResolvedProperty,
+    toSnakeCase,
+    useDebounce,
     WidgetId,
     WIDGETS
-} from "../core/util/widgets";
-import { buildProperty } from "../core";
+} from "@camberi/firecms";
 import { EnumPropertyField } from "./properties/EnumPropertyField";
-import { toSnakeCase } from "../core/util/strings";
-import { useDebounce } from "../core/internal/useDebounce";
-import { CustomDialogActions } from "../core/components/CustomDialogActions";
-import { mergeDeep, removeUndefined } from "../core/util/objects";
-import {
-    StoragePropertyField
-} from "./properties/StoragePropertyField";
+import { StoragePropertyField } from "./properties/StoragePropertyField";
 import { MapPropertyField } from "./properties/MapPropertyField";
 import { RepeatPropertyField } from "./properties/RepeatPropertyField";
-import { getBadgeForWidget } from "../core/util/property_utils";
 import { BasePropertyField } from "./properties/BasePropertyField";
 import { StringPropertyField } from "./properties/StringPropertyField";
 import { BooleanPropertyField } from "./properties/BooleanPropertyField";
 import { BlockPropertyField } from "./properties/BlockPropertyField";
-import {
-    DeleteConfirmationDialog
-} from "../core/components/DeleteConfirmationDialog";
 import { NumberPropertyField } from "./properties/NumberPropertyField";
 import { ReferencePropertyField } from "./properties/ReferencePropertyField";
 import { DateTimePropertyField } from "./properties/DateTimePropertyField";

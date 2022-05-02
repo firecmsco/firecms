@@ -41,13 +41,9 @@ import { mergeDeep } from "../../util/objects";
 import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
-import { ErrorBoundary } from "../../internal/ErrorBoundary";
+import { ErrorBoundary } from "../ErrorBoundary";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { removeInitialAndTrailingSlashes } from "../../util/navigation_utils";
-import { Settings } from "@mui/icons-material";
-import {
-    useCollectionEditorController
-} from "../../../hooks/useCollectionEditorController";
 import { fullPathToCollectionSegments } from "../../util/paths";
 
 /**
@@ -66,30 +62,6 @@ export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
      */
     collection?: EntityCollection<M>;
 
-}
-
-export function useSelectionController<M = any>(): SelectionController {
-
-    const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
-
-    const toggleEntitySelection = useCallback((entity: Entity<M>) => {
-        let newValue;
-        if (selectedEntities.map(e => e.id).includes(entity.id)) {
-            newValue = selectedEntities.filter((item: Entity<M>) => item.id !== entity.id);
-        } else {
-            newValue = [...selectedEntities, entity];
-        }
-        setSelectedEntities(newValue);
-    }, [selectedEntities]);
-
-    const isEntitySelected = useCallback((entity: Entity<M>) => selectedEntities.map(e => e.id).includes(entity.id), [selectedEntities]);
-
-    return {
-        selectedEntities,
-        setSelectedEntities,
-        isEntitySelected,
-        toggleEntitySelection
-    };
 }
 
 /**
@@ -151,13 +123,10 @@ export const EntityCollectionViewInternal = React.memo(
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
-        const collectionEditorController = useCollectionEditorController();
 
         const theme = useTheme();
 
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
-
-        const collectionEditable = Boolean(collectionEditorController) && collection.editable;
 
         const exportable = collection.exportable === undefined || collection.exportable;
 
@@ -370,19 +339,6 @@ export const EntityCollectionViewInternal = React.memo(
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     Title={Title}
-                    ActionsStart={collectionEditable && authController.canEditCollection({
-                        collection,
-                        paths: fullPathToCollectionSegments(fullPath)
-                    })
-                        ? <Tooltip title={"Edit collection"}>
-                            <IconButton
-                                color={"primary"}
-                                onClick={() => collectionEditorController?.editCollection(fullPath)}>
-                                <Settings/>
-                            </IconButton>
-                        </Tooltip>
-                        : undefined
-                    }
                     Actions={<EntityCollectionViewActions
                         collection={collection}
                         exportable={exportable}
@@ -413,5 +369,29 @@ export const EntityCollectionViewInternal = React.memo(
         return equal(prevProps, nextProps);
     }
 ) as React.FunctionComponent<EntityCollectionViewProps<any>>
+
+export function useSelectionController<M = any>(): SelectionController {
+
+    const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
+
+    const toggleEntitySelection = useCallback((entity: Entity<M>) => {
+        let newValue;
+        if (selectedEntities.map(e => e.id).includes(entity.id)) {
+            newValue = selectedEntities.filter((item: Entity<M>) => item.id !== entity.id);
+        } else {
+            newValue = [...selectedEntities, entity];
+        }
+        setSelectedEntities(newValue);
+    }, [selectedEntities]);
+
+    const isEntitySelected = useCallback((entity: Entity<M>) => selectedEntities.map(e => e.id).includes(entity.id), [selectedEntities]);
+
+    return {
+        selectedEntities,
+        setSelectedEntities,
+        isEntitySelected,
+        toggleEntitySelection
+    };
+}
 
 export default EntityCollectionView;

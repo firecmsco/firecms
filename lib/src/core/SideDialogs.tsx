@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks/useSideDialogsController";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
-import { ErrorBoundary } from "./internal/ErrorBoundary";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 import {
     UnsavedChangesDialog,
     useNavigationUnsavedChangesDialog

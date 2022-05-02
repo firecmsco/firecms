@@ -2,7 +2,7 @@
  * Controller to open the side dialog displaying entity forms
  * @category Hooks and utilities
  */
-export interface CollectionEditorController {
+export interface CollectionEditorViewsController {
 
     editCollection: (path?: string) => void;
 

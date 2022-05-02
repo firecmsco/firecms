@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 import { Box, Button, Grid, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { PropertyForm } from "../PropertyEditView";
-import { MapProperty, Property } from "../../models";
+import { MapProperty, Property } from "@camberi/firecms";
 import { getIn, useFormikContext } from "formik";
 import { PropertyTree } from "../PropertyTree";
 import {

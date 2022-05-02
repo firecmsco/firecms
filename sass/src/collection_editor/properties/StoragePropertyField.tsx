@@ -14,9 +14,11 @@ import {
     SelectChangeEvent,
     Typography
 } from "@mui/material";
-import DebouncedTextField from "../../form/components/DebouncedTextField";
-import { SwitchControl } from "../../form/components/SwitchControl";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import {
+    DebouncedTextField,
+    ExpandablePanel,
+    SwitchControl
+} from "@camberi/firecms";
 import {
     GeneralPropertyValidation
 } from "./validation/GeneralPropertyValidation";

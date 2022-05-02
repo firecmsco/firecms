@@ -9,7 +9,7 @@ import {
 
 import { PropertyPreview, PropertyPreviewProps } from "../internal";
 import { ResolvedMapProperty } from "../../models";
-import { ErrorBoundary } from "../../core/internal/ErrorBoundary";
+import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 
 /**
  * @category Preview components

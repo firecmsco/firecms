@@ -21,7 +21,7 @@ import {
     OnCellChangeParams,
     PropertyTableCell
 } from "./internal/PropertyTableCell";
-import { ErrorBoundary } from "../../internal/ErrorBoundary";
+import { ErrorBoundary } from "../ErrorBoundary";
 import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../Table";
