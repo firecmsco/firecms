@@ -27,6 +27,8 @@ export function ExpandablePanel({
                                   alignItems: "center",
                                   borderTopLeftRadius: `${theme.shape.borderRadius}px`,
                                   borderTopRightRadius: `${theme.shape.borderRadius}px`,
+                                  borderBottomLeftRadius: !expandedInternal ? `${theme.shape.borderRadius}px` : undefined,
+                                  borderBottomRightRadius: !expandedInternal ? `${theme.shape.borderRadius}px` : undefined,
                                   backgroundColor: theme.palette.mode === "dark"
                                       ? darken(theme.palette.background.paper, 0.1)
                                       : darken(theme.palette.background.paper, 0.05),

@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import {
     Form,
     Formik,
+    FormikErrors,
     FormikHelpers,
     getIn,
     setIn,
@@ -149,7 +150,7 @@ export const CollectionEditor = React.memo(
 
                     const onCancel = handleClose ? () => handleClose(undefined) : undefined;
 
-                    const onPropertyError = (propertyKey: string, namespace?: string, error?: string) => {
+                    const onPropertyError = (propertyKey: string, namespace?: string, error?: FormikErrors<any>) => {
                         propertyErrorsRef.current = setIn(propertyErrorsRef.current, idToPropertiesPath(getFullId(propertyKey, namespace)), error);
                         propertyErrorsRef.current = removeUndefined(propertyErrorsRef.current);
                     };
@@ -171,6 +172,7 @@ export const CollectionEditor = React.memo(
                             <CollectionEditorForm showErrors={showErrors}
                                                   onPropertyError={onPropertyError}
                                                   setDirty={setDirty}
+                                                  propertyErrorsRef={propertyErrorsRef}
                                                   isNewCollection={false}
                             />
                         </Box>
@@ -213,54 +215,57 @@ export const CollectionEditor = React.memo(
 type CollectionEditorFormProps = {
     showErrors: boolean;
     isNewCollection: boolean;
-    onPropertyError: (propertyKey: string, namespace: string | undefined, error: string | undefined) => void;
+    propertyErrorsRef?: React.MutableRefObject<any>;
+    onPropertyError: (propertyKey: string, namespace: string | undefined, error?: FormikErrors<any>) => void;
     setDirty?: (dirty: boolean) => void;
 };
-export const CollectionEditorForm = React.memo(
-    function CollectionEditorForm({
-                                      showErrors,
-                                      isNewCollection,
-                                      onPropertyError,
-                                      setDirty
-                                  }: CollectionEditorFormProps) {
 
-        const {
-            values,
-            setFieldValue,
-            setFieldError,
-            setFieldTouched,
-            errors,
-            dirty
-        } = useFormikContext<EntityCollection>();
+export // const CollectionEditorForm = React.memo(
+function CollectionEditorForm({
+                                  showErrors,
+                                  isNewCollection,
+                                  propertyErrorsRef,
+                                  onPropertyError,
+                                  setDirty
+                              }: CollectionEditorFormProps) {
 
-        const theme = useTheme();
-        const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
-        const asDialog = !largeLayout
+    const {
+        values,
+        setFieldValue,
+        setFieldError,
+        setFieldTouched,
+        errors,
+        dirty
+    } = useFormikContext<EntityCollection>();
 
-        const [selectedPropertyKey, setSelectedPropertyKey] = useState<string | undefined>();
-        const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
-        const selectedPropertyFullId = selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined;
-        const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
+    const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
+    const asDialog = !largeLayout
 
-        const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
-        const [detailsDialogOpen, setDetailsDialogOpen] = useState<boolean>(false);
-        const [height, setHeight] = useState<number>();
+    const [selectedPropertyKey, setSelectedPropertyKey] = useState<string | undefined>();
+    const [selectedPropertyNamespace, setSelectedPropertyNamespace] = useState<string | undefined>();
+    const selectedPropertyFullId = selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined;
+    const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
 
-        const onMeasure = useCallback((contentRect: ContentRect) => {
-            if (contentRect?.bounds) {
-                setHeight(contentRect?.bounds.height);
-            }
-        }, []);
+    const [newPropertyDialogOpen, setNewPropertyDialogOpen] = useState<boolean>(false);
+    const [detailsDialogOpen, setDetailsDialogOpen] = useState<boolean>(false);
+    const [height, setHeight] = useState<number>();
 
-        useEffect(() => {
-            if (setDirty)
-                setDirty(dirty);
-        }, [dirty])
+    const onMeasure = useCallback((contentRect: ContentRect) => {
+        if (contentRect?.bounds) {
+            setHeight(contentRect?.bounds.height);
+        }
+    }, []);
 
-        const deleteProperty = useCallback((propertyKey?: string, namespace?: string) => {
-            const fullId = propertyKey ? getFullId(propertyKey, namespace) : undefined;
-            if (!fullId)
-                throw Error("collection editor miss config");
+    useEffect(() => {
+        if (setDirty)
+            setDirty(dirty);
+    }, [dirty])
+
+    const deleteProperty = useCallback((propertyKey?: string, namespace?: string) => {
+        const fullId = propertyKey ? getFullId(propertyKey, namespace) : undefined;
+        if (!fullId)
+            throw Error("collection editor miss config");
 
             setFieldValue(idToPropertiesPath(fullId), undefined, false);
             const propertiesOrderPath = namespaceToPropertiesOrderPath(namespace);
@@ -273,7 +278,6 @@ export const CollectionEditorForm = React.memo(
         }, [setFieldValue, values]);
 
     const onPropertyMove = useCallback((propertiesOrder, namespace) => {
-        console.log("onPropertyMove", propertiesOrder)
         setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
     }, [setFieldValue]);
 
@@ -294,57 +298,60 @@ export const CollectionEditorForm = React.memo(
         setSelectedPropertyNamespace(undefined);
     }, [values.properties, values.propertiesOrder]);
 
-        const onPropertyChanged = useCallback(({ id, property, namespace }) => {
-            const fullId = getFullId(id, namespace);
-            const propertyPath = fullId ? idToPropertiesPath(fullId) : undefined;
-            if (propertyPath) {
-                setFieldValue(propertyPath, property, false);
-                setFieldTouched(propertyPath, true, false);
-            }
-        }, [setFieldTouched, setFieldValue]);
+    const onPropertyChanged = useCallback(({ id, property, namespace }) => {
+        const fullId = getFullId(id, namespace);
+        const propertyPath = fullId ? idToPropertiesPath(fullId) : undefined;
+        if (propertyPath) {
+            setFieldValue(propertyPath, property, false);
+            setFieldTouched(propertyPath, true, false);
+        }
+    }, [setFieldTouched, setFieldValue]);
 
-        const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: boolean) => {
-            const propertyPath = id ? getFullId(id, namespace) : undefined;
-            if (propertyPath) {
-                onPropertyError(id, namespace, error ? "Field error" : undefined);
-                setFieldError(idToPropertiesPath(propertyPath), error ? "Field error" : undefined);
-            }
-        }, [setFieldError]);
+    const onPropertyErrorInternal = useCallback((id: string, namespace?: string, error?: FormikErrors<any>) => {
+        const propertyPath = id ? getFullId(id, namespace) : undefined;
+        if (propertyPath) {
+            const hasError = error && Object.keys(error).length > 0;
+            onPropertyError(id, namespace, hasError ? error : undefined);
+            setFieldError(idToPropertiesPath(propertyPath), hasError ? "Field error" : undefined);
+        }
+    }, [onPropertyError, setFieldError]);
 
-        const closePropertyDialog = () => {
-            setSelectedPropertyKey(undefined);
-        };
+    const closePropertyDialog = () => {
+        setSelectedPropertyKey(undefined);
+    };
 
-        const propertyEditForm = selectedPropertyFullId &&
-            selectedProperty &&
-            !isPropertyBuilder(selectedProperty) &&
-            <PropertyForm
-                inArray={false}
-                asDialog={asDialog}
-                open={Boolean(selectedPropertyKey)}
-                key={`edit_view_${selectedPropertyKey}`}
-                existing={true}
-                propertyKey={selectedPropertyKey}
-                propertyNamespace={selectedPropertyNamespace}
-                property={selectedProperty}
-                onPropertyChanged={onPropertyChanged}
-                onDelete={deleteProperty}
-                onError={onPropertyErrorInternal}
-                forceShowErrors={showErrors}
-                onOkClicked={asDialog
-                    ? closePropertyDialog
-                    : undefined
-                }/>;
+    const initialErrors = selectedPropertyKey && propertyErrorsRef?.current?.properties ? propertyErrorsRef.current.properties[selectedPropertyKey] : undefined;
+    const propertyEditForm = selectedPropertyFullId &&
+        selectedProperty &&
+        !isPropertyBuilder(selectedProperty) &&
+        <PropertyForm
+            inArray={false}
+            asDialog={asDialog}
+            open={Boolean(selectedPropertyKey)}
+            key={`edit_view_${selectedPropertyKey}`}
+            existing={true}
+            propertyKey={selectedPropertyKey}
+            propertyNamespace={selectedPropertyNamespace}
+            property={selectedProperty}
+            onPropertyChanged={onPropertyChanged}
+            onDelete={deleteProperty}
+            onError={onPropertyErrorInternal}
+            forceShowErrors={showErrors}
+            initialErrors={initialErrors}
+            onOkClicked={asDialog
+                ? closePropertyDialog
+                : undefined
+            }/>;
 
-        const emptyCollection = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
+    const emptyCollection = values?.propertiesOrder === undefined || values.propertiesOrder.length === 0;
 
-        const usedPropertiesOrder = (values.propertiesOrder ?
-            values.propertiesOrder.filter(propertyKey => values.properties[propertyKey as string])
-            : Object.keys(values.properties)) as string[];
+    const usedPropertiesOrder = (values.propertiesOrder ?
+        values.propertiesOrder.filter(propertyKey => values.properties[propertyKey as string])
+        : Object.keys(values.properties)) as string[];
 
-        const body = (
-            <Grid container>
-                <Grid item
+    const body = (
+        <Grid container>
+            <Grid item
                       xs={12}
                       lg={5}
                       sx={(theme) => ({
@@ -520,8 +527,8 @@ export const CollectionEditorForm = React.memo(
             )}
         </Measure>
     );
-    },
-    function areEqual(prevProps: CollectionEditorFormProps, nextProps: CollectionEditorFormProps) {
-        return true;
-    }
-)
+}
+
+//     ,
+//     equal
+// )

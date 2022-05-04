@@ -19,8 +19,9 @@ type EnumFormProps = {
     updateIds: boolean;
     disabled:boolean;
 };
-export const EnumForm = React.memo(
-    function EnumFormInternal({
+export
+const EnumForm = React.memo(
+    function EnumForm({
                                   enumValues,
                                   onValuesChanged,
                                   onError,
@@ -30,9 +31,8 @@ export const EnumForm = React.memo(
 
         return (
             <Formik initialValues={{ enumValues }}
-                    enableReinitialize={true}
+                    // enableReinitialize={true}
                     validateOnMount={true}
-                    // validate={() => console.log("enum validate")}
                     onSubmit={(data: { enumValues: EnumValueConfig[] }, formikHelpers) => {
                     }}
             >
@@ -61,7 +61,8 @@ export const EnumForm = React.memo(
 
         );
 
-    },
+    }
+,
     function areEqual(prevProps: EnumFormProps, nextProps: EnumFormProps) {
         return prevProps.enumValues.length === nextProps.enumValues.length;
     }
@@ -75,8 +76,8 @@ type EnumFormFieldsProps = {
     disabled:boolean;
 };
 
-const EnumFormFields = React.memo(
-    function EnumFormFieldsInternal({
+// const EnumFormFields = React.memo(
+    function EnumFormFields({
                                         values,
                                         errors,
                                         disabled,
@@ -114,11 +115,12 @@ const EnumFormFields = React.memo(
                                  onClose={() => setEditDialogIndex(undefined)}/>
             </>
         );
-    },
-    function areEqual(prevProps: EnumFormFieldsProps, nextProps: EnumFormFieldsProps) {
-        return prevProps.enumValuesPath === nextProps.enumValuesPath &&
-            prevProps.shouldUpdateId === nextProps.shouldUpdateId;
-    });
+    }
+    // ,
+    // function areEqual(prevProps: EnumFormFieldsProps, nextProps: EnumFormFieldsProps) {
+    //     return prevProps.enumValuesPath === nextProps.enumValuesPath &&
+    //         prevProps.shouldUpdateId === nextProps.shouldUpdateId;
+    // });
 
 type EnumEntryProps = {
     index: number,

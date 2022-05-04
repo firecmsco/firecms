@@ -33,7 +33,7 @@ export function EnumPropertyField({
         errors,
         touched,
         setFieldError,
-        setFieldValue
+        setFieldValue,
     } = useFormikContext<StringProperty | NumberProperty>();
 
     const enumValuesPath = multiselect ? "of.enumValues" : "enumValues";
@@ -70,7 +70,14 @@ export function EnumPropertyField({
                     <EnumForm enumValues={enumValues}
                               updateIds={updateIds}
                               disabled={disabled}
-                              onValuesChanged={(value) => setFieldValue(enumValuesPath, value)}/>
+                              onError={(hasError) => {
+                                  console.log("onError", hasError);
+                                  setFieldError(enumValuesPath, hasError ? "" : undefined);
+                              }}
+                              onValuesChanged={(value) => {
+                                  console.log("onValuesChanged", value);
+                                  setFieldValue(enumValuesPath, value);
+                              }}/>
                 </Paper>
             </Grid>
 

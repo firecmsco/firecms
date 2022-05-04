@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { Form, Formik, FormikProps, getIn } from "formik";
+import { Form, Formik, FormikErrors, FormikProps, getIn } from "formik";
 import equal from "react-fast-compare"
 import {
     Box,
@@ -61,6 +61,7 @@ export function PropertyForm({
                                  onPropertyChanged,
                                  onDelete,
                                  onError,
+                                 initialErrors,
                                  forceShowErrors,
                                  existingPropertyKeys
                              }: {
@@ -74,9 +75,10 @@ export function PropertyForm({
     property?: Property;
     onPropertyChanged: (params: { id?: string, property: Property, namespace?: string }) => void;
     onDelete?: (id?: string, namespace?: string) => void;
-    onError?: (id: string, namespace?: string, error?: boolean) => void;
+    onError?: (id: string, namespace?: string, error?: FormikErrors<any>) => void;
     onOkClicked?: () => void;
     onCancel?: () => void;
+    initialErrors?: FormikErrors<any>;
     forceShowErrors: boolean;
     existingPropertyKeys?: string[];
 }) {
@@ -91,6 +93,7 @@ export function PropertyForm({
     return (
         <Formik
             key={`property_view_${propertyKey}`}
+            initialErrors={initialErrors}
             initialValues={property
                 ? { id: propertyKey, ...property } as PropertyWithId
                 : initialValue}
@@ -414,7 +417,7 @@ function PropertyEditView({
     propertyNamespace?: string;
     onPropertyChanged?: (params: { id?: string, property: Property, namespace?: string }) => void;
     onDelete?: (id?: string, namespace?: string) => void;
-    onError?: (id: string, namespace?: string, error?: boolean) => void;
+    onError?: (id: string, namespace?: string, error?: FormikErrors<any>) => void;
     showErrors: boolean;
     inArray: boolean;
     disabled: boolean;
@@ -448,7 +451,7 @@ function PropertyEditView({
 
     useEffect(() => {
         if (values.id && onError) {
-            onError(values.id, propertyNamespace, Boolean(Object.keys(errors).length ?? false));
+            onError(values.id, propertyNamespace, errors);
         }
     }, [errors]);
 
