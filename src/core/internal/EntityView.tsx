@@ -155,7 +155,6 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
     const [readOnly, setReadOnly] = useState<boolean>(false);
     const [tabsPosition, setTabsPosition] = React.useState(-1);
-
     const [modifiedValues, setModifiedValues] = useState<EntityValues<any> | undefined>();
 
     const {
@@ -333,7 +332,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             <EntityPreview
                 entity={entity}
                 path={path}
-                schema={resolvedSchema}/>
+                schema={schemaOrResolver}/>
         </Suspense>
     );
 

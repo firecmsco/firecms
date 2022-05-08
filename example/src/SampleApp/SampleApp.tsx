@@ -118,6 +118,10 @@ function SampleApp() {
         schema: testEntitySchema,
         callbacks: testCallbacks,
         name: "Test entity",
+        permissions: ({ authController }) => ({
+            edit: false,
+            create: false,
+        }),
         additionalColumns: [
             {
                 id: "full_name",
@@ -128,12 +132,7 @@ function SampleApp() {
                 },
                 dependencies: ["name"]
             }
-            ],
-        subcollections: [{
-            path: "test_subcollection",
-            schema: testEntitySchema,
-            name: "Test entity"
-        }]
+            ]
     });
 
     const githubLink = (

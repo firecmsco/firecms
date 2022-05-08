@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useMemo } from "react";
 
 import {
     Box,
@@ -16,6 +17,8 @@ import makeStyles from "@mui/styles/makeStyles";
 import {
     AnyProperty,
     Entity,
+    EntitySchema,
+    EntitySchemaResolver,
     FireCMSContext,
     Properties,
     ResolvedEntitySchema
@@ -25,6 +28,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_icons";
 import { ErrorBoundary } from "../internal/ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
+import { computeSchema } from "../utils";
 
 export const useStyles = makeStyles((theme: Theme) =>
     createStyles({
@@ -50,7 +54,7 @@ export const useStyles = makeStyles((theme: Theme) =>
  */
 export interface EntityPreviewProps<M> {
     entity: Entity<M>;
-    schema: ResolvedEntitySchema<M>;
+    schema: EntitySchema<M> | EntitySchemaResolver<M>;
     path: string;
 }
 
@@ -65,7 +69,7 @@ export interface EntityPreviewProps<M> {
 export function EntityPreview<M>(
     {
         entity,
-        schema,
+        schema: inputSchema,
         path
     }: EntityPreviewProps<M>) {
 
@@ -73,7 +77,15 @@ export function EntityPreview<M>(
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 
-    const properties:Properties = schema.properties;
+    const schema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
+        schemaOrResolver: inputSchema,
+        path,
+        entityId: entity.id,
+        values: entity?.values,
+        previousValues: entity?.values
+    }), [inputSchema, path, entity]);
+
+    const properties: Properties = schema.properties;
 
     return (
         <TableContainer>

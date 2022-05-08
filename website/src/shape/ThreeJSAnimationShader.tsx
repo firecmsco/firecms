@@ -107,8 +107,6 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         const merged = BufferGeometryUtils.mergeVertices(geometry);
         merged.computeVertexNormals();
-        console.log("vertices count", merged.attributes.position.array.length);
-
         return merged;
     }
 
@@ -585,11 +583,11 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         const composer = new EffectComposer(renderer);
         const renderPass = new RenderPass(scene, camera);
         composer.addPass(renderPass);
-        const depthOfFieldEffect = new DepthOfFieldEffect(camera, {
-            focusDistance: .0,
-            focalLength: 1,
-            bokehScale: 6
-        });
+        // const depthOfFieldEffect = new DepthOfFieldEffect(camera, {
+        //     focusDistance: .0,
+        //     focalLength: 1,
+        //     bokehScale: 6
+        // });
         // composer.addPass(new EffectPass(camera, depthOfFieldEffect));
 
         return {
