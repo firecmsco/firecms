@@ -358,7 +358,7 @@ function StorageUpload({
         isDragAccept,
         isDragReject
     } = useDropzone({
-            accept: storageMeta.acceptedFiles,
+        accept: storageMeta.acceptedFiles ? storageMeta.acceptedFiles.map(e => ({ [e]: [] })).reduce((a, b) => ({ ...a, ...b }), {}) : undefined,
             disabled: disabled,
             maxSize: storageMeta.maxSize,
             noClick: true,

@@ -199,7 +199,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
 
     }, [path, collection, schemaResolver]);
 
-    const { columns, popupFormField } = useBuildColumnsFromSchema({
+    const { columns, popupFormField } = useBuildColumnsFromSchema<M, any, any>({
         schemaResolver,
         additionalColumns,
         displayedProperties,
@@ -268,7 +268,7 @@ export function CollectionTableInternal<M extends { [Key: string]: any },
         setSize(size);
     }, []);
 
-    const onTextSearch = useCallback((newSearchString) => setSearchString(newSearchString), []);
+    const onTextSearch = useCallback((newSearchString?:string) => setSearchString(newSearchString), []);
 
     return (
 

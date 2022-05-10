@@ -138,7 +138,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                                                                                       onCellValueChange,
                                                                                       uniqueFieldValidator
                                                                                   }: ColumnsFromSchemaProps<M, AdditionalKey, UserType>
-): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
+): { columns: TableColumn<Entity<M>>[], popupFormField: React.ReactElement } {
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
 
@@ -396,7 +396,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
     };
 
-    const allColumns: TableColumn<M>[] = (Object.keys(resolvedSchema.properties) as (keyof M)[])
+    const allColumns: TableColumn<Entity<M>>[] = (Object.keys(resolvedSchema.properties) as (keyof M)[])
         .map((key) => {
             const property: Property<any>|undefined = resolvedSchema.properties[key];
 
@@ -414,7 +414,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
         });
 
     if (additionalColumns) {
-        const items: TableColumn<M>[] = additionalColumns.map((additionalColumn) =>
+        const items: TableColumn<Entity<M>>[] = additionalColumns.map((additionalColumn) =>
             ({
                 key: additionalColumn.id,
                 type: "additional",
@@ -430,7 +430,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
     const columns = displayedProperties
         .map((p) => {
             return allColumns.find(c => c.key === p);
-        }).filter(c => !!c) as TableColumn<M>[];
+        }).filter(c => !!c) as TableColumn<Entity<M>>[];
 
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
         ? ({ name, value, property }) => uniqueFieldValidator({

@@ -1,8 +1,17 @@
 import * as React from "react";
-import {useCallback} from "react";
+import { useCallback } from "react";
 
 import isEqual from "react-fast-compare";
-import {Box, FormControl, FormHelperText, IconButton, Paper, Skeleton, Theme, Typography} from "@mui/material";
+import {
+    Box,
+    FormControl,
+    FormHelperText,
+    IconButton,
+    Paper,
+    Skeleton,
+    Theme,
+    Typography
+} from "@mui/material";
 
 import makeStyles from "@mui/styles/makeStyles";
 
@@ -290,17 +299,17 @@ function FileDropComponent({
         isDragAccept,
         isDragReject
     } = useDropzone({
-            accept: storageMeta.acceptedFiles,
-            disabled: disabled || isDraggingOver,
-            noDragEventsBubbling: true,
-            maxSize: storageMeta.maxSize,
-            onDrop: onExternalDrop,
-            onDropRejected: (fileRejections, event) => {
-                for (let fileRejection of fileRejections) {
-                    for (let error of fileRejection.errors) {
-                        snackbarContext.open({
-                            type: "error",
-                            title: "Error uploading file",
+        accept: storageMeta.acceptedFiles ? storageMeta.acceptedFiles.map(e => ({ [e]: [] })).reduce((a, b) => ({ ...a, ...b }), {}) : undefined,
+        disabled: disabled || isDraggingOver,
+        noDragEventsBubbling: true,
+        maxSize: storageMeta.maxSize,
+        onDrop: onExternalDrop,
+        onDropRejected: (fileRejections, event) => {
+            for (let fileRejection of fileRejections) {
+                for (let error of fileRejection.errors) {
+                    snackbarContext.open({
+                        type: "error",
+                        title: "Error uploading file",
                             message: `File is larger than ${storageMeta.maxSize} bytes`
                         });
                     }

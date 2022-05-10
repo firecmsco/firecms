@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { PropsWithChildren, useState } from "react";
 import { Alert, Snackbar } from "@mui/material";
 import { SnackbarController, SnackbarMessageType } from "../../hooks";
 
@@ -15,7 +15,7 @@ const DEFAULT_STATE = {
 
 export const SnackbarContext = React.createContext<SnackbarController>(DEFAULT_STATE);
 
-export const SnackbarProvider: React.FC = ({ children }) => {
+export const SnackbarProvider: React.FC<PropsWithChildren<{}>> = ({ children }: PropsWithChildren<{}>) => {
 
     const [isOpen, setIsOpen] = useState(false);
     const [title, setTitle] = useState<string | undefined>(undefined);

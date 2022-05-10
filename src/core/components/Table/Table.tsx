@@ -298,7 +298,7 @@ export function Table<T>({
             onColumnResize({
                 width,
                 key: column.key as string,
-                column: column as TableColumn<any>
+                column: column as any
             });
         }
     }, [onColumnResize]);
