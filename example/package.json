@@ -53,6 +53,6 @@
         "eslint-config-react-app": "link:../node_modules/eslint-config-react-app",
         "typescript": "link:../node_modules/typescript",
         "vite": "link:../node_modules/vite",
-        "vite-plugin-fonts": "^0.2.2"
+        "vite-plugin-fonts": "^0.4.0"
     }
 }
