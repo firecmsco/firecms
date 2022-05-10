@@ -1,3 +1,10 @@
+## [1.0.0-rc.5] - 2022-05-10
+
+### Changed
+
+- Fix for entity collections in read-only mode showing incorrect resolved 
+properties
+ 
 ## [1.0.0-rc.5] - 2022-04-11
 
 ### Changed
