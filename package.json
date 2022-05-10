@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "1.0.0-rc.5",
+    "version": "1.0.0",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
     "homepage": "https://firecms.co",
