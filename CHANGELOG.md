@@ -1,3 +1,4 @@
+
 ## [2.0.0-alpha1] - 2021-12-13
 
 ### Collections
@@ -64,6 +65,19 @@ buildProperty<string>({
 called `PropertyFieldBinding`. The props have not changed. 
 - `CMSFormFieldProps` have been renamed to `PropertyFieldBindingProps`
 
+## [1.0.0-rc.5] - 2022-05-10
+
+### Changed
+
+- Fix for entity collections in read-only mode showing incorrect resolved
+  properties
+- Fix for filter combinations bug
+
+### Added
+- Enabled phone authentication
+- Added max size validation for file uploads
+
+## [1.0.0-rc.5] - 2022-04-11
 ## [1.0.0-rc.4] - 2022-03-14
 
 ### Changed

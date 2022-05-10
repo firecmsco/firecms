@@ -1,14 +1,12 @@
 ---
 slug: exciting_times_1_0_0
-title: Release of version 1.0.0
+title: FireCMS enters the beta period
 author: Francesco Gatti
 image: /img/francesco_avatar.jpg
 author_url: https://www.linkedin.com/in/fgatti675
 author_image_url: https://avatars.githubusercontent.com/u/5120271?v=4
 ---
 
-
-![Dark mode](/img/dark_mode.png)
 
 > Exciting times for our project!
 

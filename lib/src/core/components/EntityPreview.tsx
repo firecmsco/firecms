@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useMemo } from "react";
 
 import { styled } from "@mui/material/styles";
 
@@ -25,9 +26,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_utils";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
-import { resolveCollection } from "../util/resolutions";
-
-const PREFIX = "EntityPreview";
+import { computeSchema } from "../utils";
 
 const classes = {
     property: `${PREFIX}-property`,
@@ -94,7 +93,13 @@ export function EntityPreview<M>(
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 
-    const properties: ResolvedProperties = resolvedCollection.properties;
+    const schema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
+        schemaOrResolver: inputSchema,
+        path,
+        entityId: entity.id,
+        values: entity?.values,
+        previousValues: entity?.values
+    }), [inputSchema, path, entity]);const properties: ResolvedProperties = resolvedCollection.properties;
 
     return (
         <StyledTableContainer>

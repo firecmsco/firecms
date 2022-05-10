@@ -5,6 +5,7 @@ import {
     performAlgoliaTextSearch
 } from "@camberi/firecms";
 
+console.log("import.meta", import.meta)
 let client: SearchClient | undefined = undefined;
 // process is defined for react-scripts builds
 if (typeof process !== "undefined") {
@@ -13,7 +14,7 @@ if (typeof process !== "undefined") {
     }
 }
 // import.meta is defined for vite builds
-else if (typeof import.meta !== "undefined") {
+else if (import.meta.env) {
     if (import.meta.env.VITE_ALGOLIA_APP_ID && import.meta.env.VITE_ALGOLIA_SEARCH_KEY) {
         client = algoliasearch(import.meta.env.VITE_ALGOLIA_APP_ID as string, import.meta.env.VITE_ALGOLIA_SEARCH_KEY as string);
     }
