@@ -45,7 +45,7 @@ function SampleApp() {
     );
 
     const customViews: CMSView[] = [{
-        path: ["additional", "additional/:id"],
+        path: "additional",
         name: "Additional",
         group: "Content",
         description: "This is an example of an additional view that is defined by the user",

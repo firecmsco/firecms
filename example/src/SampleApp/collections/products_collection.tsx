@@ -116,7 +116,6 @@ export const productsCollection = buildCollection<Product>({
     // inlineEditing: false,
     callbacks: productCallbacks,
     name: "Product",
-    editable: true,
     group: "Main",
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
