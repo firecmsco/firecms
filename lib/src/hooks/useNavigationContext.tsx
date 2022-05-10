@@ -3,13 +3,12 @@ import { useFireCMSContext } from "./useFireCMSContext";
 
 /**
  * Use this hook to get the navigation of the app.
- * Note that `navigation` can be undefined if the navigation has not yet been
- * resolved (you used a {@link NavigationBuilder} and the user is not
- * authenticated).
+ * This controller provides the resolved collections for the CMS as well
+ * as utility methods.
  *
  * @category Hooks and utilities
  */
 export function useNavigationContext(): NavigationContext {
     const context = useFireCMSContext();
-    return context.navigationContext;
+    return context.navigation;
 }

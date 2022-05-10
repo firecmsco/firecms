@@ -12,21 +12,18 @@ import {
     setDoc
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef } from "react";
-import { CollectionsController } from "../../models/collections_controller";
-import { AuthController, EntityCollection, Properties } from "../../models";
-import {
+import { CollectionsController } from "./collections_controller";
+import { AuthController, EntityCollection, Properties,
     mergeCollections,
     removeNonEditableProperties,
-    sortProperties
-} from "../../core";
-import {
+    sortProperties,
     COLLECTION_PATH_SEPARATOR,
-    stripCollectionPath
-} from "../../core/util/paths";
-import { removeFunctions } from "../../core/util/objects";
+    stripCollectionPath,
+    removeFunctions,
+    resolvePermissions
+} from "@camberi/firecms";
 import {
-    resolveNavigationCollections
-} from "../../core/internal/useBuildNavigationContext";
+} from "../../lib/src/core";
 
 /**
  * @category Firebase
@@ -44,7 +41,7 @@ export interface FirestoreConfigurationPersistenceProps {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections?: EntityCollection[] | ((params: { authController: AuthController }) => EntityCollection[] | Promise<EntityCollection[]>);
+    collections?: EntityCollection[];
 
 }
 
@@ -54,7 +51,7 @@ const DEFAULT_CONFIG_PATH = "__FIRECMS";
  * Build a {@link CollectionsController} that persists collection in
  * Firestore, but also allows including collections added in code.
  * @param firebaseApp
- * @param baseCollections
+ * @param collections
  * @param configPath
  */
 export function useBuildFirestoreCollectionsController({
@@ -122,14 +119,11 @@ export function useBuildFirestoreCollectionsController({
         return setDoc(ref, cleanedCollection, { merge: true });
     }, [firestore]);
 
-    const getCollections = useCallback(async ({ authController }: { authController: AuthController }) => {
-        const baseCollectionsResolved = baseCollections ? await resolveNavigationCollections(baseCollections, authController) : [];
-        return joinCollections(persistedCollections ?? [], baseCollectionsResolved);
-    }, [baseCollections, persistedCollections]);
 
+    const collections =  joinCollections(persistedCollections ?? [], baseCollections);
     return {
         loading,
-        getCollections,
+        collections,
         getCollection,
         saveCollection,
         deleteCollection
@@ -224,4 +218,19 @@ function joinCollections(fetchedCollections: EntityCollection[], baseCollections
         .filter((col) => !updatedCollections.map(c => c.path).includes(col.path));
 
     return [...updatedCollections, ...storedCollections];
+}
+
+export function filterAllowedCollections<M>(collections: EntityCollection<M>[],
+                                            authController: AuthController,
+                                            paths: string[] = []): EntityCollection<M>[] {
+    return collections
+        .map((collection) => ({
+            ...collection,
+            subcollections: collection.subcollections
+                ? filterAllowedCollections(collection.subcollections, authController, [...paths, collection.path])
+                : undefined,
+            permissions: resolvePermissions(collection, authController, [...paths, collection.path]
+            )
+        }))
+        .filter(collection => collection.permissions.read === undefined || collection.permissions.read);
 }

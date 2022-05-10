@@ -1,5 +1,4 @@
-import { EntityCollection } from "./collections";
-import { AuthController } from "./auth";
+import { EntityCollection, AuthController } from "@camberi/firecms";
 
 /**
  * Use this controller to access the configuration that is stored externally,
@@ -9,7 +8,7 @@ export interface CollectionsController {
 
     loading: boolean;
 
-    getCollections: ((params: { authController: AuthController }) => Promise<EntityCollection[]>);
+    collections: EntityCollection[];
 
     getCollection: <M>(path: string) => Promise<EntityCollection<M>>;
 

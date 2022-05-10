@@ -7,7 +7,6 @@ import { AuthController } from "./auth";
 import { EntityLinkBuilder } from "./entity_link_builder";
 import { User } from "./user";
 import { SnackbarController } from "../hooks";
-import { CollectionsController } from "./collections_controller";
 import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SideDialogsController } from "./side_dialogs_controller";
 
@@ -46,7 +45,7 @@ export interface FireCMSContext<UserType extends User = User> {
      * attributes.
      * @see useNavigation
      */
-    navigationContext: NavigationContext;
+    navigation: NavigationContext;
 
     /**
      * Controller to open the side dialog displaying entity forms
@@ -75,16 +74,9 @@ export interface FireCMSContext<UserType extends User = User> {
     snackbarController: SnackbarController;
 
     /**
-     * Use this controller to access the configuration that is stored extenally,
-     * and not defined in code
-     */
-    collectionsController: CollectionsController;
-
-    /**
      * Use this controller to access the configuration that is stored externally,
      * and not defined in code
      */
     userConfigPersistence?: UserConfigurationPersistence;
-
 
 }

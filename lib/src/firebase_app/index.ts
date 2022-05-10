@@ -1,7 +1,6 @@
 export * from "./hooks/useFirebaseAuthDelegate";
 export * from "./hooks/useFirestoreDataSource";
 export * from "./hooks/useFirebaseStorageSource";
-export * from "./hooks/useBuildFirestoreCollectionsController";
 
 export { FirebaseCMSApp } from "./FirebaseCMSApp";
 export type { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";

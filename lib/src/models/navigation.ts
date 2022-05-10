@@ -13,13 +13,13 @@ export type NavigationContext = {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections?: EntityCollection[];
+    collections: EntityCollection[];
 
     /**
      * Custom additional views created by the developer, added to the main
      * navigation
      */
-    views?: CMSView[];
+    views: CMSView[];
 
     /**
      * Configuration for the views that should be displayed at the top
@@ -103,6 +103,13 @@ export type NavigationContext = {
      * @param pathWithAliases
      */
     resolveAliasesFrom: (pathWithAliases: string) => string;
+
+    /**
+     * Location used as the base for routes.
+     * This is the location that will be used underneath, when the url changes while
+     * opening a side dialog
+     */
+    baseLocation: string;
 }
 
 /**
@@ -113,11 +120,9 @@ export type NavigationContext = {
 export interface CMSView {
 
     /**
-     * CMS Path (or paths) you can reach this view from.
-     * If you include multiple paths, only the first one will be included in the
-     * main menu
+     * CMS Path you can reach this view from.
      */
-    path: string | string[];
+    path: string;
 
     /**
      * Name of this view
@@ -154,8 +159,7 @@ export interface TopNavigationEntry {
     name: string;
     path?: string;
     type: "collection" | "view";
-    deletable?: boolean;
-    editable?: boolean;
+    collection?: EntityCollection;
     description?: string;
     group?: string;
 }

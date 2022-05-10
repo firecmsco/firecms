@@ -4,14 +4,15 @@ import { Route, Routes, useLocation } from "react-router-dom";
 import {
     CMSView,
     EntityCollectionView,
-    fullPathToCollectionSegments,
     useAuthController,
     useBreadcrumbsContext,
     useNavigationContext
 } from "@camberi/firecms";
 import { Settings } from "@mui/icons-material";
 import { IconButton, Tooltip } from "@mui/material";
-import { useCollectionEditorController } from "./useCollectionEditorController";
+import {
+    useCollectionEditorController
+} from "../useCollectionEditorController";
 import { SassHomePage } from "./SassHomePage";
 
 /**
@@ -79,33 +80,31 @@ export function SassNavigationRoutes({ HomePage }: SassNavigationRoutesProps) {
     const sortedCollections = [...(navigation.collections ?? [])]
         .sort((a, b) => b.path.length - a.path.length);
 
+    const canEditCollection = collectionEditorController.configPermissions.editCollections;
     const collectionRoutes = sortedCollections
         .map((collection) => {
-                const urlPath = navigation.buildUrlCollectionPath(collection.alias ?? collection.path);
+            const urlPath = navigation.buildUrlCollectionPath(collection.alias ?? collection.path);
 
-                if (collection.editable && authController.canEditCollection({
-                    collection,
-                    paths: fullPathToCollectionSegments(collection.path)
-                })) {
-                    collection.extraActions = (props) =>
-                        <Tooltip title={"Edit collection"}>
-                            <IconButton
-                                color={"primary"}
-                                onClick={() => collectionEditorController?.editCollection(collection.path)}>
-                                <Settings/>
-                            </IconButton>
-                        </Tooltip>;
-                }
-                return <Route path={urlPath + "/*"}
-                              key={`navigation_${collection.alias ?? collection.path}`}
-                              element={
-                                  <BreadcrumbUpdater
-                                      path={urlPath}
-                                      title={collection.name}>
-                                      <EntityCollectionView
-                                          fullPath={collection.path}
-                                          collection={collection}/>
-                                  </BreadcrumbUpdater>
+            if (canEditCollection) {
+                collection.extraActions = (props) =>
+                    <Tooltip title={"Edit collection"}>
+                        <IconButton
+                            color={"primary"}
+                            onClick={() => collectionEditorController?.editCollection(collection.path)}>
+                            <Settings/>
+                        </IconButton>
+                    </Tooltip>;
+            }
+            return <Route path={urlPath + "/*"}
+                          key={`navigation_${collection.alias ?? collection.path}`}
+                          element={
+                              <BreadcrumbUpdater
+                                  path={urlPath}
+                                  title={collection.name}>
+                                  <EntityCollectionView
+                                      fullPath={collection.path}
+                                      collection={collection}/>
+                              </BreadcrumbUpdater>
                               }/>;
             }
         );

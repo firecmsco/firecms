@@ -17,7 +17,6 @@ import {
     FireCMS,
     Scaffold,
     SideDialogs,
-    useBuildFirestoreCollectionsController,
     useFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
@@ -25,8 +24,14 @@ import {
 } from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
-import { SassNavigationRoutes } from "./SassNavigationRoutes";
+import { SassNavigationRoutes } from "./components/SassNavigationRoutes";
 import { CollectionEditorsProvider } from "./CollectionEditorProvider";
+import { ConfigPermissions } from "./config_permissions";
+import { SassDrawer } from "./components/SassDrawer";
+import {
+    useBuildFirestoreCollectionsController
+} from "./useBuildFirestoreCollectionsController";
+import { CollectionControllerProvider } from "./CollectionControllerProvider";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -40,7 +45,6 @@ const productsCollection = buildCollection({
         delete: true
     }),
     name: "Product",
-    editable: true,
     properties: {
         name: {
             name: "Name",
@@ -103,12 +107,13 @@ export function SassCMSApp() {
         // You can add your `FirestoreTextSearchController` here
     });
 
+    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
+
     const collectionsController = useBuildFirestoreCollectionsController({
         firebaseApp,
+        // configPath,
         collections: [productsCollection]
     });
-
-    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
     if (configError) {
         return <div> {configError} </div>;
@@ -127,15 +132,21 @@ export function SassCMSApp() {
         return <CircularProgressCenter/>;
     }
 
+    const configPermissions: ConfigPermissions = {
+        createCollections: true,
+        editCollections: true,
+        deleteCollections: true
+    }
+
+    console.log("collectionsController.collections", collectionsController.collections);
     return (
         <Router>
             <FireCMS authDelegate={authDelegate}
-                     collectionsController={collectionsController}
+                     collections={collectionsController.collections}
                      authentication={myAuthenticator}
                      dataSource={dataSource}
                      storageSource={storageSource}
-                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-            >
+                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}>
                 {({ context, mode, loading }) => {
 
                     const theme = createCMSDefaultTheme({ mode });
@@ -153,7 +164,8 @@ export function SassCMSApp() {
                         );
                     } else {
                         component = (
-                            <Scaffold name={"My Online Shop"}>
+                            <Scaffold name={"My Online Shop"}
+                                      Drawer={SassDrawer}>
                                 <SassNavigationRoutes/>
                                 <SideDialogs/>
                             </Scaffold>
@@ -162,10 +174,14 @@ export function SassCMSApp() {
 
                     return (
                         <ThemeProvider theme={theme}>
-                            <CollectionEditorsProvider>
-                                <CssBaseline/>
-                                {component}
-                            </CollectionEditorsProvider>
+                            <CollectionControllerProvider
+                                collectionsController={collectionsController}>
+                                <CollectionEditorsProvider
+                                    configPermissions={configPermissions}>
+                                    <CssBaseline/>
+                                    {component}
+                                </CollectionEditorsProvider>
+                            </CollectionControllerProvider>
                         </ThemeProvider>
                     );
                 }}

@@ -1,7 +1,7 @@
 import React from "react";
 import {
     CollectionEditorViewsController
-} from "./collection_editor_controller";
+} from "./models/collection_editor_controller";
 import {
     CollectionEditorDialog
 } from "./collection_editor/CollectionEditorDialog";
@@ -10,6 +10,7 @@ import {
 } from "./collection_editor/NewCollectionEditorDialog";
 import { useNavigate } from "react-router-dom";
 import { useNavigationContext } from "@camberi/firecms";
+import { ConfigPermissions } from "./config_permissions";
 
 const DEFAULT_COLLECTIONS_CONTROLLER = {
     editCollection: {} as any,
@@ -17,6 +18,7 @@ const DEFAULT_COLLECTIONS_CONTROLLER = {
     newCollectionDialog: {} as any,
     editedCollectionPath: {} as any,
     closeNewCollectionDialog: {} as any,
+    configPermissions: {} as any
 };
 
 
@@ -25,9 +27,13 @@ export const CollectionEditorContext = React.createContext<CollectionEditorViews
 
 interface CollectionEditorsProviderProps {
     children: React.ReactNode;
+    configPermissions: ConfigPermissions;
 }
 
-export const CollectionEditorsProvider: React.FC<CollectionEditorsProviderProps> = ({ children }) => {
+export const CollectionEditorsProvider: React.FC<CollectionEditorsProviderProps> = ({
+                                                                                        children,
+                                                                                        configPermissions
+                                                                                    }) => {
 
     const navigationContext = useNavigationContext();
     const navigate = useNavigate();
@@ -53,7 +59,8 @@ export const CollectionEditorsProvider: React.FC<CollectionEditorsProviderProps>
                 openNewCollectionDialog,
                 newCollectionDialog,
                 editedCollectionPath,
-                closeNewCollectionDialog
+                closeNewCollectionDialog,
+                configPermissions
             }}
         >
             {children}

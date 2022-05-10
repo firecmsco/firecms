@@ -10,7 +10,7 @@ import { CircularProgressCenter } from "./components";
 /**
  * @category Core
  */
-export interface ScaffoldProps {
+export interface ScaffoldProps<ExtraDrawerProps = {}> {
 
     /**
      * Name of the app, displayed as the main title and in the tab title
@@ -31,7 +31,12 @@ export interface ScaffoldProps {
      * In case you need to override the view that gets rendered as a drawer
      * @see FireCMSDrawer
      */
-    Drawer?: React.ComponentType<DrawerProps>;
+    Drawer?: React.ComponentType<DrawerProps<ExtraDrawerProps>>;
+
+    /**
+     * Additional props passed to the custom Drawer
+     */
+    drawerProps?: ExtraDrawerProps;
 
 }
 

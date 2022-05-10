@@ -94,26 +94,4 @@ export type Role = {
      */
     collectionPermissions?: Record<string, Permissions>;
 
-    /**
-     * Is the user allowed to create new collections.
-     */
-    createCollections?: (params: {
-        group?: string
-    }) => boolean;
-
-    /**
-     * Is the user allowed to modify this collection
-     */
-    editCollections?: (params: {
-        collection: EntityCollection,
-        paths: string[]
-    }) => boolean;
-
-    /**
-     * Is the user allowed to delete this collection
-     */
-    deleteCollections?: (params: {
-        collection: EntityCollection,
-        paths: string[]
-    }) => boolean;
 }

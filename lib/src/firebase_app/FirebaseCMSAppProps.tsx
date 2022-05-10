@@ -13,6 +13,10 @@ import { User as FirebaseUser } from "firebase/auth";
 import { FirebaseSignInOption, FirebaseSignInProvider } from "./models/auth";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 
+export type EntityCollectionsBuilder = (params: { authController: AuthController }) => EntityCollection[] | Promise<EntityCollection[]>;
+
+export type CMSViewsBuilder = (params: { authController: AuthController }) => CMSView[] | Promise<CMSView[]>;
+
 /**
  * Main entry point that defines the CMS configuration
  * @category Firebase
@@ -35,13 +39,13 @@ export interface FirebaseCMSAppProps {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections?: EntityCollection[] | ((params: { authController: AuthController }) => EntityCollection[] | Promise<EntityCollection[]>);
+    collections?: EntityCollection[] | EntityCollectionsBuilder;
 
     /**
      * Custom additional views created by the developer, added to the main
      * navigation
      */
-    views?: CMSView[] | ((params: { authController: AuthController }) => CMSView[] | Promise<CMSView[]>);
+    views?: CMSView[] | CMSViewsBuilder;
 
     /**
      * Do the users need to log in to access the CMS.

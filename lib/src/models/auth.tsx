@@ -83,29 +83,6 @@ export interface AuthController<UserType extends User = User> {
      */
     authDelegate: AuthDelegate<UserType>;
 
-    /**
-     * Is the user allowed to create new collections.
-     */
-    canCreateCollections: (params: {
-        group?: string
-    }) => boolean;
-
-    /**
-     * Is the user allowed to modify this collection
-     */
-    canEditCollection: (params: {
-        collection: EntityCollection,
-        paths: string[]
-    }) => boolean;
-
-    /**
-     * Is the user allowed to delete this collection
-     */
-    canDeleteCollection: (params: {
-        collection: EntityCollection,
-        paths: string[]
-    }) => boolean;
-
 }
 
 /**

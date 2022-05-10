@@ -31,11 +31,10 @@ import {
     Markdown,
     TopNavigationEntry,
     TopNavigationResult,
-    useAuthController,
-    useCollectionsController,
     useNavigationContext
 } from "@camberi/firecms";
-import { useCollectionEditorController } from "./useCollectionEditorController";
+import { useCollectionEditorController } from "../useCollectionEditorController";
+import { useCollectionsController } from "../useCollectionsController";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -46,11 +45,9 @@ import { useCollectionEditorController } from "./useCollectionEditorController";
  */
 export function SassHomePage() {
 
-    const authController = useAuthController();
     const navigationContext = useNavigationContext();
-    const collectionsController = useCollectionsController();
     const collectionEditorController = useCollectionEditorController();
-    const configurationPersistenceEnabled = Boolean(collectionsController?.saveCollection) && Boolean(collectionEditorController);
+    const collectionsController = useCollectionsController();
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
@@ -78,10 +75,7 @@ export function SassHomePage() {
         groups
     } = navigationResult;
 
-    const allGroups: Array<string | undefined> = [...groups];
-    if (configurationPersistenceEnabled || navigationEntries.filter(e => !e.group).length > 0) {
-        allGroups.push(undefined);
-    }
+    const allGroups: Array<string | undefined> = [...groups, undefined];
 
     function buildAddCollectionNavigationCard(group?: string) {
         return (
@@ -123,10 +117,14 @@ export function SassHomePage() {
         );
     }
 
+
+    const canCreateCollections = collectionEditorController.configPermissions.createCollections;
+    const canEditCollections = collectionEditorController.configPermissions.editCollections;
+    const canDeleteCollections = collectionEditorController.configPermissions.deleteCollections;
+
     return (
         <Container>
             {allGroups.map((group, index) => {
-                const canCreateCollections = authController.canCreateCollections({ group });
 
                 return (
                     <Box mt={6} mb={6} key={`group_${index}`}>
@@ -142,19 +140,22 @@ export function SassHomePage() {
                             <Grid container spacing={2}>
                                 {navigationEntries
                                     .filter((entry) => entry.group === group || (!entry.group && group === undefined)) // so we don't miss empty groups
-                                    .map((entry) =>
-                                        <Grid item xs={12}
-                                              sm={6}
-                                              md={4}
-                                              key={`nav_${entry.group}_${entry.name}`}>
+                                    .map((entry) => {
+                                        // const editable = canEditCollections && (entry.collection?.editable === undefined || entry.collection?.editable);
+                                        // const deletable = canDeleteCollections && (entry.collection?.deletable === undefined || entry.collection?.deletable);
+                                        return <Grid item xs={12}
+                                                     sm={6}
+                                                     md={4}
+                                                     key={`nav_${entry.group}_${entry.name}`}>
                                             <NavigationCard entry={entry}
-                                                            onEdit={configurationPersistenceEnabled && entry.editable
+                                                            onEdit={canEditCollections
                                                                 ? onEditCollectionClicked
                                                                 : undefined}
-                                                            onDelete={configurationPersistenceEnabled && entry.deletable
+                                                            onDelete={canDeleteCollections
                                                                 ? onDeleteCollectionClicked
                                                                 : undefined}/>
-                                        </Grid>)
+                                        </Grid>;
+                                    })
                                 }
                                 {canCreateCollections && buildAddCollectionNavigationCard(group)}
                             </Grid>

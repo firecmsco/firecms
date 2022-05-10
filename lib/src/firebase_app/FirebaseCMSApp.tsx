@@ -2,13 +2,12 @@ import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import {
     CircularProgressCenter,
     createCMSDefaultTheme,
     FireCMS,
-    NavigationRoutes,
     Scaffold,
     SideDialogs,
 } from "../core";
@@ -21,11 +20,12 @@ import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthDelegate } from "./models/auth";
 import {
-    useBuildFirestoreCollectionsController
-} from "./hooks/useBuildFirestoreCollectionsController";
-import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
+import { CollectionRoute } from "../core/routes/CollectionRoute";
+import { CMSRoute } from "../core/routes/CMSViewRoute";
+import { HomeRoute } from "../core/routes/HomeRoute";
+import { NotFoundPage } from "../core/components/NotFoundPage";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -91,13 +91,6 @@ export function FirebaseCMSApp({
     });
 
     /**
-     * Controller for managing the collections and schemas used in the CMS
-     */
-    const collectionsController = useBuildFirestoreCollectionsController({
-        collections,
-        firebaseApp
-    });
-    /**
      * Controller for saving some user preferences locally.
      */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
@@ -140,6 +133,7 @@ export function FirebaseCMSApp({
     return (
         <BrowserRouter basename={basePath}>
             <FireCMS
+                collections={collections}
                 views={views}
                 authDelegate={authDelegate}
                 authentication={authentication}
@@ -148,13 +142,13 @@ export function FirebaseCMSApp({
                 dateTimeFormat={dateTimeFormat}
                 dataSource={dataSource}
                 storageSource={storageSource}
-                collectionsController={collectionsController}
                 entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                 locale={locale}
                 basePath={basePath}
                 baseCollectionPath={baseCollectionPath}>
                 {({ context, mode, loading }) => {
 
+                    const { navigation } = context;
                     const theme = createCMSDefaultTheme({
                         mode,
                         primaryColor,
@@ -182,8 +176,29 @@ export function FirebaseCMSApp({
                                 name={name}
                                 logo={logo}
                                 toolbarExtraWidget={toolbarExtraWidget}>
-                                <NavigationRoutes HomePage={HomePage}/>
+
+                                <Routes location={navigation.baseLocation}>
+
+                                    {navigation.collections.map((collection) =>
+                                        <CollectionRoute
+                                            key={`navigation_${collection.alias ?? collection.path}`}
+                                            collection={collection}/>
+                                    )}
+
+                                    {navigation.views.map(cmsView =>
+                                        <CMSRoute
+                                            key={`navigation_${cmsView.path}`}
+                                            cmsView={cmsView}/>)}
+
+                                    <HomeRoute HomePage={HomePage}/>
+
+                                    <Route path={"*"}
+                                           element={<NotFoundPage/>}/>
+
+                                </Routes>
+
                                 <SideDialogs/>
+
                             </Scaffold>
                         );
                     }

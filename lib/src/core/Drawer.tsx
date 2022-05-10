@@ -12,7 +12,7 @@ import { TopNavigationEntry, TopNavigationResult } from "../models";
  * Props used in case you need to override the default drawer
  * @category Core
  */
-export interface DrawerProps {
+export type DrawerProps<T = {}> = T & {
     logo: string | undefined,
     closeDrawer: () => any,
 }
@@ -26,7 +26,6 @@ export function Drawer({
                            closeDrawer
                        }: DrawerProps) {
 
-    const authController = useAuthController();
     const navigationContext = useNavigationContext();
 
     if (!navigationContext.topLevelNavigation)

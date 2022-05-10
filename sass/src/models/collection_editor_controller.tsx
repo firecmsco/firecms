@@ -1,3 +1,5 @@
+import { ConfigPermissions } from "../config_permissions";
+
 /**
  * Controller to open the side dialog displaying entity forms
  * @category Hooks and utilities
@@ -15,6 +17,9 @@ export interface CollectionEditorViewsController {
         group?: string
     };
     editedCollectionPath?: string;
+
     closeNewCollectionDialog: () => void;
+
+    configPermissions: ConfigPermissions;
 
 }

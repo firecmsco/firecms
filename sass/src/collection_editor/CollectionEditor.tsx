@@ -35,7 +35,6 @@ import {
     isPropertyBuilder,
     Property,
     removeUndefined,
-    useCollectionsController,
     useNavigationContext,
     useSnackbarController
 } from "@camberi/firecms";
@@ -49,6 +48,7 @@ import { PropertyTree } from "./PropertyTree";
 import { LoadingButton } from "@mui/lab";
 import { YupSchema } from "./SchemaYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
+import { useCollectionsController } from "../useCollectionsController";
 
 export type CollectionEditorProps<M> = {
     path: string;

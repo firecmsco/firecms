@@ -50,29 +50,6 @@ export function useBuildAuthController<UserType extends User>({
                 : []),
         [cmsRoles, roles]);
 
-    const canCreateCollections = useCallback((params: {
-        group?: string
-    }) => {
-        if (userRoles === undefined) return true;
-        return userRoles.some((role) => role.createCollections ? role.createCollections(params) : false);
-    }, [userRoles]);
-
-    const canEditCollection = useCallback((params: {
-        collection: EntityCollection,
-        paths: string[]
-    }) => {
-        if (userRoles === undefined) return true;
-        return userRoles.some((role) => role.editCollections ? role.editCollections(params) : false);
-    }, [userRoles]);
-
-    const canDeleteCollection = useCallback((params: {
-        collection: EntityCollection,
-        paths: string[]
-    }) => {
-        if (userRoles === undefined) return true;
-        return userRoles.some((role) => role.deleteCollections ? role.deleteCollections(params) : false);
-    }, [userRoles]);
-
     const authController: AuthController<UserType> = useMemo(() => {
 
         return ({
@@ -88,11 +65,8 @@ export function useBuildAuthController<UserType extends User>({
             authDelegate,
             roles: userRoles,
             setRoles,
-            canCreateCollections,
-            canEditCollection,
-            canDeleteCollection
         });
-    }, [authDelegate, authLoading, canAccessMainView, extra, loginSkipped, notAllowedError, user, userRoles, canCreateCollections, setRoles]);
+    }, [authDelegate, authLoading, canAccessMainView, extra, loginSkipped, notAllowedError, user, userRoles, setRoles]);
 
     const checkAuthentication = useCallback(async () => {
         const delegateUser = authDelegate.user;

@@ -2,7 +2,7 @@ import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { BrowserRouter as Router } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import "typeface-rubik";
 import "typeface-space-mono";
@@ -10,15 +10,14 @@ import "typeface-space-mono";
 import {
     Authenticator,
     buildCollection,
-    CircularProgressCenter,
+    CircularProgressCenter, CMSRoute,
+    CollectionRoute,
     createCMSDefaultTheme,
     FirebaseAuthDelegate,
     FirebaseLoginView,
-    FireCMS,
-    NavigationRoutes,
+    FireCMS, FireCMSHomePage, HomeRoute,
     Scaffold,
     SideDialogs,
-    useBuildFirestoreCollectionsController,
     useFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
@@ -26,6 +25,9 @@ import {
 } from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
+import {
+    NotFoundPage
+} from "@camberi/firecms/dist/core/components/NotFoundPage";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -101,11 +103,6 @@ export function CustomCMSApp() {
         // You can add your `FirestoreTextSearchController` here
     });
 
-    const collectionsController = useBuildFirestoreCollectionsController({
-        firebaseApp,
-        collections: [productsCollection]
-    });
-
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
     if (configError) {
@@ -128,7 +125,7 @@ export function CustomCMSApp() {
     return (
         <Router>
             <FireCMS authDelegate={authDelegate}
-                     collectionsController={collectionsController}
+                     collections={[productsCollection]}
                      authentication={myAuthenticator}
                      dataSource={dataSource}
                      storageSource={storageSource}
@@ -137,6 +134,7 @@ export function CustomCMSApp() {
                 {({ context, mode, loading }) => {
 
                     const theme = createCMSDefaultTheme({ mode });
+                    const { navigation } = context;
 
                     let component;
                     if (loading) {
@@ -152,7 +150,25 @@ export function CustomCMSApp() {
                     } else {
                         component = (
                             <Scaffold name={"My Online Shop"}>
-                                <NavigationRoutes/>
+                                <Routes location={navigation.baseLocation}>
+
+                                    {navigation.collections.map((collection) =>
+                                        <CollectionRoute
+                                            key={`navigation_${collection.alias ?? collection.path}`}
+                                            collection={collection}/>
+                                    )}
+
+                                    {navigation.views.map(cmsView =>
+                                        <CMSRoute
+                                            key={`navigation_${cmsView.path}`}
+                                            cmsView={cmsView}/>)}
+
+                                    <HomeRoute HomePage={FireCMSHomePage}/>
+
+                                    <Route path={"*"}
+                                           element={<NotFoundPage/>}/>
+
+                                </Routes>
                                 <SideDialogs/>
                             </Scaffold>
                         );

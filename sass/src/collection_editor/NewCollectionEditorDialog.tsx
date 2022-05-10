@@ -7,7 +7,6 @@ import {
     EntityCollection,
     removeInitialAndTrailingSlashes,
     removeUndefined,
-    useCollectionsController,
     useSnackbarController
 } from "@camberi/firecms";
 import { Form, Formik } from "formik";
@@ -15,6 +14,7 @@ import { YupSchema } from "./SchemaYupValidation";
 import { LoadingButton } from "@mui/lab";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
 import { CollectionEditorForm } from "./CollectionEditor";
+import { useCollectionsController } from "../useCollectionsController";
 
 export interface NewCollectionEditorDialogProps {
     open: boolean;

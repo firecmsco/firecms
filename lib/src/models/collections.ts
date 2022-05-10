@@ -131,22 +131,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      */
     customId?: boolean | EnumValues | "optional";
 
-    /**
-     * Can this entity collection be edited with the inline editor.
-     * It has effect only if a {@link CollectionsController} is provided
-     * to the {@link FireCMS} component.
-     * It defaults to `true`
-     */
-    editable?: boolean;
 
-    /**
-     * Can this entity collection be deleted.
-     * It has effect only if a {@link CollectionsController} is provided
-     * to the {@link FireCMS} component.
-     * It defaults to `true`.
-     * Collections defined in code cannot be deleted, but can be modified.
-     */
-    deletable?: boolean
 
     /**
      * Initial filters applied to the collection this collection is related to.

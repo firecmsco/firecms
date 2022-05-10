@@ -65,7 +65,7 @@ buildCollection({
 
 Note that you can set the `extra` parameter in the `AuthController` to any data
 that makes sense to you. Suggested places where you may want to set that
-parameter are `Authenticator` or `NavigationBuilder` since they are initialised
+parameter are `Authenticator` since it is initialised
 before the rest of the app.
 
 Quick example of how the `extra.roles` field in the previous example is

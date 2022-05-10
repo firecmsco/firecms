@@ -16,5 +16,4 @@ export * from "./useFireCMSContext";
 export * from "./useSnackbarController";
 export * from "./useModeState";
 export * from "./useClipboard";
-export * from "./useCollectionsController";
 export * from "./useBreadcrumbsContext";

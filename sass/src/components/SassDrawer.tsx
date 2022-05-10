@@ -14,17 +14,20 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
-import { FireCMSLogo,  useAuthController, useNavigationContext, TopNavigationEntry, TopNavigationResult } from "@camberi/firecms";
-import { useCollectionEditorController } from "./useCollectionEditorController";
+import {
+    FireCMSLogo,
+    useNavigationContext,
+    TopNavigationEntry,
+    TopNavigationResult,
+    DrawerProps
+} from "@camberi/firecms";
+import { useCollectionEditorController } from "../useCollectionEditorController";
 
 /**
  * Props used in case you need to override the default drawer
  * @category Core
  */
-export interface DrawerProps {
-    logo: string | undefined,
-    closeDrawer: () => any,
-}
+export type SassDrawerProps = DrawerProps<{}>;
 
 /**
  * Default drawer used in the CMS
@@ -33,9 +36,8 @@ export interface DrawerProps {
 export function SassDrawer({
                            logo,
                            closeDrawer
-                       }: DrawerProps) {
+                       }: SassDrawerProps) {
 
-    const authController = useAuthController();
     const navigationContext = useNavigationContext();
     const collectionEditorController = useCollectionEditorController();
 
@@ -83,7 +85,7 @@ export function SassDrawer({
         </ListItem>, [closeDrawer]);
 
     const buildGroupHeader = useCallback((group?: string) => {
-        const canCreateCollections = Boolean(collectionEditorController) && authController.canCreateCollections({ group });
+        const canCreateCollections = collectionEditorController.configPermissions.createCollections;
         return <Box pt={2} pl={2} pr={2} pb={0.5} sx={{
             display: "flex",
             flexDirection: "row",

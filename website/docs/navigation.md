@@ -15,8 +15,8 @@ in the corresponding document.
 
 Otherwise, you can define your own [custom top level views](custom_top_level_views.md).
 
-You can change the navigation based on the logged-in user, by using a `NavigationBuilder`
-function which can be asynchronous.
+You can change the collections based on the logged-in user, by using an
+asynchronous callback.
 
 By using an async `NavigationBuilder` you can also fetch some data in order to
 build your schemas. Let's say you have a collection called `subscriptions` and would
@@ -32,7 +32,7 @@ import {
 
 // ...
 
-const navigation: NavigationBuilder = async ({ user }: NavigationBuilderProps) => ({
+const collectionsBuilder = async ({ user }: NavigationBuilderProps) => ({
     collections: [
         buildCollection({
             path: "products",

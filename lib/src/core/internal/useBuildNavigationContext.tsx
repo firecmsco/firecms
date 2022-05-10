@@ -17,31 +17,33 @@ import {
     resolveCollectionAliases
 } from "../util/navigation_utils";
 import { mergeDeep } from "../util/objects";
-import { CollectionsController } from "../../models/collections_controller";
-import { fullPathToCollectionSegments } from "../util/paths";
-import { resolvePermissions } from "../util/permissions";
+import {
+    CMSViewsBuilder,
+    EntityCollectionsBuilder
+} from "../../firebase_app/FirebaseCMSAppProps";
+import { useLocation } from "react-router-dom";
 
 type BuildNavigationContextProps<UserType extends User> = {
     basePath: string,
     baseCollectionPath: string,
     authController: AuthController<UserType>;
-    collections?: EntityCollection[];
-    views?: CMSView[] | ((params: { authController: AuthController }) => CMSView[] | Promise<CMSView[]>);
+    collections?: EntityCollection[] | EntityCollectionsBuilder;
+    views?: CMSView[] | CMSViewsBuilder;
     collectionOverrideHandler: CollectionOverrideHandler | undefined;
-    collectionsController: CollectionsController;
     userConfigPersistence?: UserConfigurationPersistence;
 };
-
 
 export function useBuildNavigationContext<UserType extends User>({
                                                                      basePath,
                                                                      baseCollectionPath,
                                                                      authController,
+                                                                     collections: baseCollections,
                                                                      views: baseViews,
                                                                      collectionOverrideHandler,
-                                                                     collectionsController,
                                                                      userConfigPersistence,
                                                                  }: BuildNavigationContextProps<UserType>): NavigationContext {
+
+    const location = useLocation();
 
     const [collections, setCollections] = useState<EntityCollection[] | undefined>();
     const [views, setViews] = useState<CMSView[] | undefined>();
@@ -61,25 +63,27 @@ export function useBuildNavigationContext<UserType extends User>({
     const processCollections = useCallback(async () => {
         setNavigationLoading(true);
 
-        const [userCollections = [], resolvedViews = []] = await Promise.all([
-                collectionsController?.getCollections({ authController }),
+        const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
+                resolveCollections(baseCollections, authController),
                 resolveCMSViews(baseViews, authController)
             ]
         );
-        setCollections(userCollections);
+
+        // we reorder collections so that nested paths are included first
+        const sortedCollections = [...(resolvedCollections ?? [])]
+            .sort((a, b) => b.path.length - a.path.length);
+
+        setCollections(sortedCollections);
         setViews(resolvedViews);
-        setTopLevelNavigation(computeTopNavigation(userCollections, resolvedViews));
+        setTopLevelNavigation(computeTopNavigation(sortedCollections, resolvedViews));
 
         setNavigationLoading(false);
         setInitialised(true);
-    }, [authController, baseViews, collectionsController]);
+    }, [authController, baseViews, baseCollections]);
 
     useEffect(() => {
-        if (collectionsController?.loading) {
-            return;
-        }
         processCollections();
-    }, [authController, collectionsController]);
+    }, [authController, baseCollections]);
 
     const getCollection = useCallback(<M extends { [Key: string]: any }>(
         path: string,
@@ -170,14 +174,7 @@ export function useBuildNavigationContext<UserType extends User>({
                 type: "collection",
                 name: collection.name,
                 path: collection.alias ?? collection.path,
-                deletable: collection.deletable && authController.canDeleteCollection({
-                    collection,
-                    paths: fullPathToCollectionSegments(collection.path)
-                }),
-                editable: collection.editable && authController.canEditCollection({
-                    collection,
-                    paths: fullPathToCollectionSegments(collection.path)
-                }),
+                collection,
                 description: collection.description?.trim(),
                 group: collection.group?.trim()
             } as TopNavigationEntry)),
@@ -201,9 +198,17 @@ export function useBuildNavigationContext<UserType extends User>({
         return { navigationEntries, groups };
     }, [authController, buildCMSUrlPath, buildUrlCollectionPath]);
 
+    const state = location.state as any;
+    /**
+     * The location can be overridden if `base_location` is set in the
+     * state field of the current location. This can happen if you open
+     * a side entity, like `products`, from a different one, like `users`
+     */
+    const baseLocation = state && state.base_location ? state.base_location : location;
+
     return {
-        collections,
-        views,
+        collections: collections ?? [],
+        views: views ?? [],
         loading: !initialised || navigationLoading,
         navigationLoadingError,
         homeUrl,
@@ -217,7 +222,8 @@ export function useBuildNavigationContext<UserType extends User>({
         buildUrlEditCollectionPath,
         buildCMSUrlPath,
         resolveAliasesFrom,
-        topLevelNavigation
+        topLevelNavigation,
+        baseLocation
     };
 }
 
@@ -234,6 +240,16 @@ function encodePath(input: string) {
         .replaceAll("%23", "#");
 }
 
+async function resolveCollections(collections: undefined | EntityCollection[] | (EntityCollectionsBuilder), authController: AuthController) {
+    let resolvedCollections: EntityCollection[] = [];
+    if (typeof collections === "function") {
+        resolvedCollections = await collections({ authController });
+    } else if (Array.isArray(collections)) {
+        resolvedCollections = collections;
+    }
+    return resolvedCollections;
+}
+
 async function resolveCMSViews(baseViews: CMSView[] | ((params: { authController: AuthController }) => (CMSView[] | Promise<CMSView[]>)) | undefined, authController: AuthController) {
     let resolvedViews: CMSView[] = [];
     if (typeof baseViews === "function") {
@@ -242,31 +258,4 @@ async function resolveCMSViews(baseViews: CMSView[] | ((params: { authController
         resolvedViews = baseViews;
     }
     return resolvedViews;
-}
-
-export async function resolveNavigationCollections(collections: EntityCollection[] | ((params: { authController: AuthController }) => EntityCollection[] | Promise<EntityCollection[]>) | undefined,
-                                                   authController: AuthController,) {
-
-    let resolvedCollections: EntityCollection[] = [];
-    if (typeof collections === "function") {
-        resolvedCollections = await collections({ authController });
-    } else if (Array.isArray(collections)) {
-        resolvedCollections = collections;
-    }
-    return filterAllowedCollections(resolvedCollections, authController);
-}
-
-export function filterAllowedCollections<M>(collections: EntityCollection<M>[],
-                                            authController: AuthController,
-                                            paths: string[] = []): EntityCollection<M>[] {
-    return collections
-        .map((collection) => ({
-            ...collection,
-            subcollections: collection.subcollections
-                ? filterAllowedCollections(collection.subcollections, authController, [...paths, collection.path])
-                : undefined,
-            permissions: resolvePermissions(collection, authController, [...paths, collection.path]
-            )
-        }))
-        .filter(collection => collection.permissions.read === undefined || collection.permissions.read);
 }

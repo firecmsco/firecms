@@ -69,7 +69,7 @@ export function resolveNavigationFrom<M, UserType extends User>({
                                          }: { path: string, context: FireCMSContext<UserType> }): Promise<ResolvedNavigationEntry<M>[]> {
 
     const dataSource = context.dataSource;
-    const navigation = context.navigationContext;
+    const navigation = context.navigation;
 
     if (!navigation) {
         throw Error("Calling getNavigationFrom, but main navigation has not yet been initialised");
@@ -143,7 +143,7 @@ export function useResolvedNavigationFrom<M, UserType extends User>(
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
 
     useEffect(() => {
-        const navigation = context.navigationContext;
+        const navigation = context.navigation;
         if (navigation) {
             setDataLoading(true);
             setDataLoadingError(undefined);
@@ -157,7 +157,7 @@ export function useResolvedNavigationFrom<M, UserType extends User>(
 
     }, [path, context]);
 
-    if (!context.navigationContext) {
+    if (!context.navigation) {
         return { dataLoading: true };
     }
 

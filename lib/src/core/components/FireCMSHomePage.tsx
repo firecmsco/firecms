@@ -1,4 +1,3 @@
-import { useCallback, useState } from "react";
 import {
     Box,
     CardActionArea,
@@ -7,32 +6,17 @@ import {
     Container,
     Divider,
     Grid,
-    IconButton,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
     Paper,
     Typography
 } from "@mui/material";
-
-import AddIcon from "@mui/icons-material/Add";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
-import SettingsIcon from "@mui/icons-material/Settings";
 
 import { Link as ReactLink } from "react-router-dom";
 
 import { Markdown } from "../../preview";
-import {
-    useAuthController,
-    useCollectionsController,
-    useNavigationContext
-} from "../../hooks";
-import Delete from "@mui/icons-material/Delete";
-import { MoreVert } from "@mui/icons-material";
-import { DeleteConfirmationDialog } from "./DeleteConfirmationDialog";
+import { useAuthController, useNavigationContext } from "../../hooks";
 import { TopNavigationEntry, TopNavigationResult } from "../../models";
 
 /**
@@ -62,8 +46,6 @@ export function FireCMSHomePage() {
     return (
         <Container>
             {allGroups.map((group, index) => {
-                const canCreateCollections = authController.canCreateCollections({group});
-
                 return (
                     <Box mt={6} mb={6} key={`group_${index}`}>
 

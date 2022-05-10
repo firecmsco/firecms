@@ -171,6 +171,5 @@ buildProperty<string>({
   you pass a React Component directly: `Actions`
 - `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where
   you pass a React Component directly: `Actions`
-- `Permissions`: added `editCollection` and `deleteCollection` props.
 
 
