@@ -106,7 +106,7 @@
     --ifm-color-primary-lightest: #3e97ff;
     --ifm-code-font-size: 95%;
     --ifm-font-weight-bold: 500;
-    --ifm-navbar-background-color: rgba(255, 255, 255, 0.33);
+    --ifm-custom-navbar-background-color: rgba(255, 255, 255, 0.33);
     --ifm-heading-font-family: 'Rubik', "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     /*--ifm-font-family-base: 'IBM Plex Sans', 'Noto Sans', sans-serif,  Helvetica, Arial, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI",  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
 
@@ -116,7 +116,14 @@
 }
 
 [data-theme='dark']  {
-    --ifm-navbar-background-color: rgba(38, 38, 38, 0.33);
+    --ifm-custom-navbar-background-color: rgba(38, 38, 38, 0.33);
+}
+.navbar.navbar--fixed-top {
+    background-color: var(--ifm-custom-navbar-background-color);
+}
+
+.navbar.navbar--fixed-top:not(.navbar-sidebar--show) {
+    backdrop-filter: blur(4px);
 }
 
 [role='banner']  {
@@ -163,10 +170,6 @@ h1, h2, h3 {
 
 .footer {
     z-index: 0;
-}
-
-.navbar.navbar--fixed-top {
-    backdrop-filter: blur(4px);
 }
 
 html[data-theme=dark] .header-github-link:before {
