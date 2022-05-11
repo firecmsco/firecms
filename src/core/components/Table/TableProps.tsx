@@ -1,9 +1,4 @@
 import React from "react";
-import BaseTable, {
-    Alignment,
-    CallOrReturn,
-    ColumnShape, FrozenDirection
-} from "react-base-table";
 
 /**
  * @see Table
@@ -137,24 +132,9 @@ export type TableColumnFilter = {
  * @category Components
  */
 export interface TableColumn<T> {
-    // key: string;
     label?: string;
     icon?: (hoverOrOpen: boolean) => React.ReactNode;
-    // align: "right" | "left" | "center";
-    // sortable: boolean;
-    // width: number;
     filter?: TableColumnFilter;
-    // cellRenderer: (props: {
-    //     columns: ColumnShape<T>[];
-    //     column: TableColumn<T>;
-    //     columnIndex: number;
-    //     rowData: any;
-    //     rowIndex: number;
-    //     isScrolling?: boolean;
-    //     cellData: any;
-    //     container: BaseTable<T>;
-    // }) => React.ReactNode;
-
 
     key: string;
     /**
@@ -164,7 +144,7 @@ export interface TableColumn<T> {
     /**
      * Alignment of the column cell
      */
-    align?: Alignment;
+    align?: "left" | "right" | "center";
     /**
      * The width of the column, gutter width is not included
      */
@@ -177,19 +157,16 @@ export interface TableColumn<T> {
      * Custom column cell renderer
      * The renderer receives props `{ cellData, columns, column, columnIndex, rowData, rowIndex, container, isScrolling }`
      */
-    cellRenderer?: CallOrReturn<
-        React.ReactNode,
-        {
-            cellData: any;
-            columns: ColumnShape<T>[];
-            column: ColumnShape<T>;
-            columnIndex: number;
-            rowData: T;
-            rowIndex: number;
-            container: BaseTable<T>;
-            isScrolling?: boolean;
-        }
-        >;
+    cellRenderer?: (params: {
+        cellData: any;
+        columns: TableProps<T>[];
+        column: TableProps<T>;
+        columnIndex: number;
+        rowData: T;
+        rowIndex: number;
+        container: any;
+        isScrolling?: boolean;
+    }) => React.ReactNode;
     [key: string]: any;
 }
 

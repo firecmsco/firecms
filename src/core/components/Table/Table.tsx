@@ -363,7 +363,7 @@ export function Table<T>({
                                         title={column.label}
                                         className={classes.column}
                                         headerRenderer={headerRenderer}
-                                        cellRenderer={column.cellRenderer}
+                                        cellRenderer={column.cellRenderer as any}
                                         height={getRowHeight(size)}
                                         align={column.align}
                                         flexGrow={1}
