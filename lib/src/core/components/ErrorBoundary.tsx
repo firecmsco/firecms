@@ -1,21 +1,21 @@
 import { Box, Typography } from "@mui/material";
-import React, { ErrorInfo } from "react";
+import React, { ErrorInfo , PropsWithChildren } from "react";
 
 import ErrorIcon from "@mui/icons-material/Error";
 
-export class ErrorBoundary extends React.Component<Record<string, unknown>, { hasError: boolean }> {
+export class ErrorBoundary extends React.Component<PropsWithChildren<Record<string, unknown>>, { hasError: boolean }> {
     constructor(props: any) {
         super(props);
         this.state = { hasError: false };
     }
 
-    // eslint-disable-next-line node/handle-callback-err
+    // eslint-disable-next-line n/handle-callback-err
     static getDerivedStateFromError(error: Error) {
         return { hasError: true };
     }
 
-    // eslint-disable-next-line node/handle-callback-err
     componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+        console.error(error);
         // logErrorToMyService(error, errorInfo);
     }
 

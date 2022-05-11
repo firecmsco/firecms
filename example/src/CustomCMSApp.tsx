@@ -10,24 +10,21 @@ import "typeface-space-mono";
 import {
     Authenticator,
     buildCollection,
-    CircularProgressCenter, CMSRoute,
-    CollectionRoute,
+    CircularProgressCenter,
     createCMSDefaultTheme,
     FirebaseAuthDelegate,
     FirebaseLoginView,
-    FireCMS, FireCMSHomePage, HomeRoute,
+    FireCMS,
+    NavigationRoutes,
     Scaffold,
     SideDialogs,
     useFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
-    useInitialiseFirebase
+    useInitialiseFirebase,
 } from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
-import {
-    NotFoundPage
-} from "@camberi/firecms/dist/core/components/NotFoundPage";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -150,25 +147,7 @@ export function CustomCMSApp() {
                     } else {
                         component = (
                             <Scaffold name={"My Online Shop"}>
-                                <Routes location={navigation.baseLocation}>
-
-                                    {navigation.collections.map((collection) =>
-                                        <CollectionRoute
-                                            key={`navigation_${collection.alias ?? collection.path}`}
-                                            collection={collection}/>
-                                    )}
-
-                                    {navigation.views.map(cmsView =>
-                                        <CMSRoute
-                                            key={`navigation_${cmsView.path}`}
-                                            cmsView={cmsView}/>)}
-
-                                    <HomeRoute HomePage={FireCMSHomePage}/>
-
-                                    <Route path={"*"}
-                                           element={<NotFoundPage/>}/>
-
-                                </Routes>
+                                <NavigationRoutes/>
                                 <SideDialogs/>
                             </Scaffold>
                         );

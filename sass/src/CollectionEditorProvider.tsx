@@ -44,22 +44,19 @@ export const CollectionEditorsProvider: React.FC<CollectionEditorsProviderProps>
     }>();
     const [editedCollectionPath, setEditedCollectionPath] = React.useState<string | undefined>();
 
-    const openNewCollectionDialog = React.useCallback(({ group }) => {
-        setNewCollectionDialog({ open: true, group });
-    }, []);
-
-    const closeNewCollectionDialog = React.useCallback(() => {
-        setNewCollectionDialog({ open: false });
-    }, []);
 
     return (
         <CollectionEditorContext.Provider
             value={{
                 editCollection: setEditedCollectionPath,
-                openNewCollectionDialog,
+                openNewCollectionDialog: React.useCallback(({ group }) => {
+                    setNewCollectionDialog({ open: true, group });
+                }, []),
                 newCollectionDialog,
                 editedCollectionPath,
-                closeNewCollectionDialog,
+                closeNewCollectionDialog:React.useCallback(() => {
+                    setNewCollectionDialog({ open: false });
+                }, []),
                 configPermissions
             }}
         >
@@ -79,7 +76,7 @@ export const CollectionEditorsProvider: React.FC<CollectionEditorsProviderProps>
                     if (collection) {
                         navigate(navigationContext.buildUrlCollectionPath(collection.alias ?? collection.path));
                     }
-                    closeNewCollectionDialog();
+                    setNewCollectionDialog({ open: false });
                 }}/>
 
         </CollectionEditorContext.Provider>

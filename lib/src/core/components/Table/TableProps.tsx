@@ -1,5 +1,6 @@
 import React from "react";
-import { EnumValueConfig, WhereFilterOp } from "../../../models";
+import { ColumnShape } from "react-base-table";
+import {EnumValueConfig, WhereFilterOp} from "../../../models";
 
 /**
  * @see Table
@@ -133,23 +134,44 @@ export type TableColumnFilter = {
  * @category Components
  */
 export interface TableColumn<T> {
-    key: string;
-    label: string;
+
+    label?: string;
     icon?: (hoverOrOpen: boolean) => React.ReactNode;
-    align: "right" | "left" | "center";
-    sortable: boolean;
-    width: number;
     filter?: TableColumnFilter;
-    cellRenderer: (props: {
-        columns: TableColumn<T>[];
-        column: TableColumn<T>;
+
+    key: string;
+    /**
+     * Data key for the cell value, could be "a.b.c"
+     */
+    dataKey?: string;
+    /**
+     * Alignment of the column cell
+     */
+    align?: "left" | "right" | "center";
+    /**
+     * The width of the column, gutter width is not included
+     */
+    width: number;
+    /**
+     * Whether the column is sortable, defaults to false
+     */
+    sortable?: boolean;
+    /**
+     * Custom column cell renderer
+     * The renderer receives props `{ cellData, columns, column, columnIndex, rowData, rowIndex, container, isScrolling }`
+     */
+    cellRenderer: (params: {
+        cellData: any;
+        columns: ColumnShape<T>[];
+        column: ColumnShape<T>;
         columnIndex: number;
-        rowData: any;
+        rowData: T;
         rowIndex: number;
+        container: any;
         isScrolling?: boolean;
     }) => React.ReactNode;
+    [key: string]: any;
 }
-
 /**
  * @see Table
  * @category Collection components

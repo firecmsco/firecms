@@ -321,7 +321,9 @@ function FormInternal<M>({
         }
     }, [underlyingChanges, entity, values, touched, setFieldValue]);
 
-    const scrollToFn = React.useCallback((offset, defaultScrollTo) => {
+    const scrollToFn = React.useCallback((
+        offset: number,
+        defaultScrollToFn?: (offset: number) => void) => {
         const duration = 1000;
         const start = parentRef.current.scrollTop;
         const startTime = (scrollingRef.current = Date.now());
@@ -333,11 +335,13 @@ function FormInternal<M>({
             const progress = easeInOutQuint(Math.min(elapsed / duration, 1));
             const interpolated = start + (offset - start) * progress;
 
-            if (elapsed < duration) {
-                defaultScrollTo(interpolated);
-                requestAnimationFrame(run);
-            } else {
-                defaultScrollTo(interpolated);
+            if(defaultScrollToFn) {
+                if (elapsed < duration) {
+                    defaultScrollToFn(interpolated);
+                    requestAnimationFrame(run);
+                } else {
+                    defaultScrollToFn(interpolated);
+                }
             }
         }
 
@@ -360,7 +364,7 @@ function FormInternal<M>({
         size: context ? Object.keys(collection.properties).length + 1 : 1,
         parentRef,
         // estimateSize: React.useCallback(i => 64, [collection.properties]),
-        keyExtractor: React.useCallback((i) => {
+        keyExtractor: React.useCallback((i:number) => {
                 if (i === 0) return "id_dc4w4rdw345f";
                 const propertyKey = Object.keys(collection.properties)[i - 1];
                 const hasError = Boolean(errorKeys[propertyKey]);
@@ -553,7 +557,7 @@ const ItemMeasurer = ({ children, measure, component, ...restProps }: any) => {
     const measureRef = React.useRef(measure);
     measureRef.current = measure;
 
-    const refSetter = React.useCallback((el) => {
+    const refSetter = React.useCallback((el:any) => {
         const ro = roRef.current;
 
         if (ro !== null && elRef.current !== null) {

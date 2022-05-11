@@ -1,5 +1,4 @@
 import * as React from "react";
-import { useMemo } from "react";
 
 import { styled } from "@mui/material/styles";
 
@@ -26,7 +25,9 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon } from "../util/property_utils";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
-import { computeSchema } from "../utils";
+import { resolveCollection } from "../util/resolutions";
+
+const PREFIX = "EntityPreview";
 
 const classes = {
     property: `${PREFIX}-property`,
@@ -36,7 +37,7 @@ const classes = {
 };
 
 const StyledTableContainer = styled(TableContainer)((
-   { theme } : {
+    { theme } : {
         theme: Theme
     }
 ) => ({
@@ -93,13 +94,7 @@ export function EntityPreview<M>(
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 
-    const schema: ResolvedEntitySchema<M> = useMemo(() => computeSchema({
-        schemaOrResolver: inputSchema,
-        path,
-        entityId: entity.id,
-        values: entity?.values,
-        previousValues: entity?.values
-    }), [inputSchema, path, entity]);const properties: ResolvedProperties = resolvedCollection.properties;
+    const properties: ResolvedProperties = resolvedCollection.properties;
 
     return (
         <StyledTableContainer>
@@ -123,16 +118,16 @@ export function EntityPreview<M>(
                             <Box display="flex" alignItems="center">
                                 {entity.id}
                                 {appConfig?.entityLinkBuilder &&
-                                <a href={appConfig.entityLinkBuilder({ entity })}
-                                   rel="noopener noreferrer"
-                                   target="_blank">
-                                    <IconButton
-                                        aria-label="go-to-entity-datasource"
-                                        size="large">
-                                        <OpenInNewIcon
-                                            fontSize={"small"}/>
-                                    </IconButton>
-                                </a>}
+                                    <a href={appConfig.entityLinkBuilder({ entity })}
+                                       rel="noopener noreferrer"
+                                       target="_blank">
+                                        <IconButton
+                                            aria-label="go-to-entity-datasource"
+                                            size="large">
+                                            <OpenInNewIcon
+                                                fontSize={"small"}/>
+                                        </IconButton>
+                                    </a>}
                             </Box>
                         </TableCell>
                     </TableRow>
@@ -160,21 +155,21 @@ export function EntityPreview<M>(
                                         {getIconForProperty(property, "disabled", "small")}
                                     </TableCell>
 
-                                <TableCell
-                                    className={classes.valuePreview}>
-                                    <ErrorBoundary>
-                                        <PropertyPreview
-                                            propertyKey={key}
-                                            value={value}
-                                            entity={entity}
-                                            property={property}
-                                            size={"regular"}/>
-                                    </ErrorBoundary>
-                                </TableCell>
+                                    <TableCell
+                                        className={classes.valuePreview}>
+                                        <ErrorBoundary>
+                                            <PropertyPreview
+                                                propertyKey={key}
+                                                value={value}
+                                                entity={entity}
+                                                property={property}
+                                                size={"regular"}/>
+                                        </ErrorBoundary>
+                                    </TableCell>
 
-                            </TableRow>
-                        );
-                    })}
+                                </TableRow>
+                            );
+                        })}
                 </TableBody>
             </Table>
         </StyledTableContainer>

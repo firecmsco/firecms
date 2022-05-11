@@ -13,7 +13,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 interface TableCellProps {
     children: React.ReactNode;
     /**
-     * The value is used only to check changes and force rerenders
+     * The value is used only to check changes and force re-renders
      */
     value?: any;
     disabled: boolean;

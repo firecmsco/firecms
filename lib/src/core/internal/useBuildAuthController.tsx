@@ -4,7 +4,6 @@ import {
     AuthDelegate,
     Authenticator,
     DataSource,
-    EntityCollection,
     Locale,
     Role,
     Roles,
@@ -50,9 +49,9 @@ export function useBuildAuthController<UserType extends User>({
                 : []),
         [cmsRoles, roles]);
 
-    const authController: AuthController<UserType> = useMemo(() => {
-
-        return ({
+    console.log("authDelegate.initialLoading", authDelegate.initialLoading);
+    const authController: AuthController<UserType> = useMemo(() =>
+        ({
             user,
             loginSkipped,
             canAccessMainView,
@@ -64,9 +63,8 @@ export function useBuildAuthController<UserType extends User>({
             setExtra,
             authDelegate,
             roles: userRoles,
-            setRoles,
-        });
-    }, [authDelegate, authLoading, canAccessMainView, extra, loginSkipped, notAllowedError, user, userRoles, setRoles]);
+            setRoles
+        }), [authDelegate, authLoading, canAccessMainView, extra, loginSkipped, notAllowedError, user, userRoles, setRoles]);
 
     const checkAuthentication = useCallback(async () => {
         const delegateUser = authDelegate.user;

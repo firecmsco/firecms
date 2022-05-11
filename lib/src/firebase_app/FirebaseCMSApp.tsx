@@ -2,7 +2,7 @@ import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter } from "react-router-dom";
 
 import {
     CircularProgressCenter,
@@ -22,10 +22,7 @@ import { FirebaseAuthDelegate } from "./models/auth";
 import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
-import { CollectionRoute } from "../core/routes/CollectionRoute";
-import { CMSRoute } from "../core/routes/CMSViewRoute";
-import { HomeRoute } from "../core/routes/HomeRoute";
-import { NotFoundPage } from "../core/components/NotFoundPage";
+import { NavigationRoutes } from "../core/NavigationRoutes";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -148,7 +145,6 @@ export function FirebaseCMSApp({
                 baseCollectionPath={baseCollectionPath}>
                 {({ context, mode, loading }) => {
 
-                    const { navigation } = context;
                     const theme = createCMSDefaultTheme({
                         mode,
                         primaryColor,
@@ -156,6 +152,7 @@ export function FirebaseCMSApp({
                         fontFamily
                     });
 
+                    console.log("context.authController.canAccessMainView", context.authController.canAccessMainView);
                     let component;
                     if (loading) {
                         component = <CircularProgressCenter/>;
@@ -176,29 +173,8 @@ export function FirebaseCMSApp({
                                 name={name}
                                 logo={logo}
                                 toolbarExtraWidget={toolbarExtraWidget}>
-
-                                <Routes location={navigation.baseLocation}>
-
-                                    {navigation.collections.map((collection) =>
-                                        <CollectionRoute
-                                            key={`navigation_${collection.alias ?? collection.path}`}
-                                            collection={collection}/>
-                                    )}
-
-                                    {navigation.views.map(cmsView =>
-                                        <CMSRoute
-                                            key={`navigation_${cmsView.path}`}
-                                            cmsView={cmsView}/>)}
-
-                                    <HomeRoute HomePage={HomePage}/>
-
-                                    <Route path={"*"}
-                                           element={<NotFoundPage/>}/>
-
-                                </Routes>
-
+                                <NavigationRoutes HomePage={HomePage}/>
                                 <SideDialogs/>
-
                             </Scaffold>
                         );
                     }

@@ -4,18 +4,19 @@
     "private": true,
     "dependencies": {
         "@camberi/firecms": "2.0.0-alpha.1",
-        "@emotion/react": "^11.4.1",
-        "@emotion/styled": "^11.3.0",
+        "@emotion/react": "^11.9.0",
+        "@emotion/styled": "^11.8.1",
+        "@mui/styles": "^5.0.0",
         "@mui/icons-material": "^5",
-        "@mui/lab": "^5.0.0-alpha.48",
-        "@mui/material": "^5.0.0",
-        "algoliasearch": "^4.9.1",
-        "firebase": "^9.0.0",
-        "react": "^18.0.0",
-        "react-dom": "^18.0.0",
-        "react-router": "^6.2.0",
-        "react-router-dom": "^6.2.0",
-        "react-scripts": "^5.0.0"
+        "@mui/lab": "^5.0.0-alpha.81",
+        "@mui/material": "^5.5.0",
+        "algoliasearch": "^4.13.0",
+        "firebase": "^9.8.1",
+        "react": "^18.1.0",
+        "react-dom": "^18.1.0",
+        "react-router": "^6.3.0",
+        "react-router-dom": "^6.3.0",
+        "react-scripts": "^5.0.1"
     },
     "scripts": {
         "dev": "vite",
@@ -46,11 +47,11 @@
         ]
     },
     "devDependencies": {
-        "@types/react": "^17.0.2",
-        "@types/react-dom": "^17.0.2",
-        "@vitejs/plugin-react": "^1.0.7",
-        "typescript": "^4.5.4",
-        "vite": "^2.8.6",
-        "vite-plugin-fonts": "^0.2.2"
+        "@types/react": "^18.0.9",
+        "@types/react-dom": "^18.0.3",
+        "@vitejs/plugin-react": "^1.3.2",
+        "typescript": "^4.6.4",
+        "vite": "^2.9.8",
+        "vite-plugin-fonts": "^0.4.0"
     }
 }

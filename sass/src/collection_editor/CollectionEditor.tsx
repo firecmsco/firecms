@@ -277,7 +277,7 @@ function CollectionEditorForm({
             setSelectedPropertyNamespace(undefined);
         }, [setFieldValue, values]);
 
-    const onPropertyMove = useCallback((propertiesOrder, namespace) => {
+    const onPropertyMove = useCallback((propertiesOrder: string[], namespace?: string) => {
         setFieldValue(namespaceToPropertiesOrderPath(namespace), propertiesOrder, false);
     }, [setFieldValue]);
 
@@ -298,8 +298,8 @@ function CollectionEditorForm({
         setSelectedPropertyNamespace(undefined);
     }, [values.properties, values.propertiesOrder]);
 
-    const onPropertyChanged = useCallback(({ id, property, namespace }) => {
-        const fullId = getFullId(id, namespace);
+    const onPropertyChanged = useCallback(({ id, property, namespace }: { id?: string, property: Property, namespace?: string }) => {
+        const fullId = id ? getFullId(id, namespace) : undefined;
         const propertyPath = fullId ? idToPropertiesPath(fullId) : undefined;
         if (propertyPath) {
             setFieldValue(propertyPath, property, false);

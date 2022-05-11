@@ -17,7 +17,6 @@ export function hydrateRegExp(input?: string): RegExp | undefined {
     } else {
         return new RegExp(input, '');
     }
-    return undefined;
 }
 
 export function isValidRegExp(input: string): boolean {

@@ -20,7 +20,7 @@ export function ExpandablePanel({
         <Accordion variant={"outlined"}
                    disableGutters
                    expanded={expandedInternal}
-                   onChange={useCallback((event, expanded) => setExpandedInternal(expanded), [])}>
+                   onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => setExpandedInternal(expanded), [])}>
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                               sx={(theme) => ({
                                   minHeight: "56px",

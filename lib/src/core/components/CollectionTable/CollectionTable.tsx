@@ -242,7 +242,7 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
             setSize(size);
         }, []);
 
-        const onTextSearch = useCallback((newSearchString) => setSearchString(newSearchString), []);
+        const onTextSearch = useCallback((newSearchString?: string) => setSearchString(newSearchString), []);
 
         return (
 

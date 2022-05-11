@@ -98,11 +98,11 @@ export const PropertyFieldBinding = React.memo(
                 if (Array.isArray(of)) {
                     component = ArrayCustomShapedFieldBinding as ComponentType<FieldProps<T>>;
                 } else if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
-                    component = ArrayEnumSelectBinding as ComponentType<FieldProps<T>>;
+                    component = ArrayEnumSelectBinding as ComponentType<FieldProps<any>>;
                 } else if (of.dataType === "string" && of.storage) {
-                    component = StorageUploadFieldBinding as ComponentType<FieldProps<T>>;
+                    component = StorageUploadFieldBinding as ComponentType<FieldProps<any>>;
                 } else if (of.dataType === "reference") {
-                    component = ArrayOfReferencesFieldBinding as ComponentType<FieldProps<T>>;
+                    component = ArrayOfReferencesFieldBinding as ComponentType<FieldProps<any>>;
                 } else {
                     component = ArrayDefaultFieldBinding as ComponentType<FieldProps<T>>;
                 }
@@ -115,28 +115,28 @@ export const PropertyFieldBinding = React.memo(
                 throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
             }
         } else if (property.dataType === "map") {
-            component = MapFieldBinding as ComponentType<FieldProps<T>>;
+            component = MapFieldBinding as ComponentType<FieldProps<any>>;
         } else if (property.dataType === "reference") {
             if (!property.path)
-                component = ReadOnlyFieldBinding as ComponentType<FieldProps<T>>;
+                component = ReadOnlyFieldBinding as ComponentType<FieldProps<any>>;
             else {
-                component = ReferenceFieldBinding as ComponentType<FieldProps<T>>;
+                component = ReferenceFieldBinding as ComponentType<FieldProps<any>>;
             }
         } else if (property.dataType === "date") {
-            component = DateTimeFieldBinding as ComponentType<FieldProps<T>>;
+            component = DateTimeFieldBinding as ComponentType<FieldProps<any>>;
         } else if (property.dataType === "boolean") {
-            component = SwitchFieldBinding as ComponentType<FieldProps<T>>;
+            component = SwitchFieldBinding as ComponentType<FieldProps<any>>;
         } else if (property.dataType === "number") {
             if (property.enumValues) {
-                component = SelectFieldBinding as ComponentType<FieldProps<T>>;
+                component = SelectFieldBinding as ComponentType<FieldProps<any>>;
             } else {
-                component = TextFieldBinding as ComponentType<FieldProps<T>>;
+                component = TextFieldBinding as ComponentType<FieldProps<any>>;
             }
         } else if (property.dataType === "string") {
             if (property.storage) {
-                component = StorageUploadFieldBinding as ComponentType<FieldProps<T>>;
+                component = StorageUploadFieldBinding as ComponentType<FieldProps<any>>;
             } else if (property.markdown) {
-                component = MarkdownFieldBinding as ComponentType<FieldProps<T>>;
+                component = MarkdownFieldBinding as ComponentType<FieldProps<any>>;
             } else if (property.email || property.url || property.multiline) {
                 component = TextFieldBinding as ComponentType<FieldProps<T>>;
             } else if (property.enumValues) {

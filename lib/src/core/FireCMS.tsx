@@ -200,7 +200,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         storageSource
     });
 
-    const navigationContext = useBuildNavigationContext({
+    const navigation = useBuildNavigationContext({
         basePath: usedBasePath,
         baseCollectionPath: usedBasedCollectionPath,
         authController,
@@ -211,15 +211,19 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     });
 
     const sideDialogsController = useBuildSideDialogsController();
-    const sideEntityController = useBuildSideEntityController(navigationContext, sideDialogsController);
+    const sideEntityController = useBuildSideEntityController(navigation, sideDialogsController);
 
-    const loading = authController.authLoading || authController.initialLoading || navigationContext.loading;
+    console.log("authController.authLoading", authController.authLoading);
+    console.log("authController.initialLoading", authController.initialLoading);
+    console.log("navigation.loading", navigation.loading);
 
-    if (navigationContext.navigationLoadingError) {
+    const loading = authController.authLoading || authController.initialLoading || navigation.loading;
+
+    if (navigation.navigationLoadingError) {
         return (
             <div>
                 <p>There was an error while loading your navigation config</p>
-                <p>{navigationContext.navigationLoadingError}</p>
+                <p>{navigation.navigationLoadingError}</p>
             </div>
         );
     }
@@ -237,7 +241,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                             entityLinkBuilder,
                             dateTimeFormat,
                             locale,
-                            navigation: navigationContext,
+                            navigation: navigation,
                             dataSource,
                             storageSource,
                             snackbarController,

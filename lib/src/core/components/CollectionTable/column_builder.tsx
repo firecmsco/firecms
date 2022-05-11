@@ -134,7 +134,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                                                                                                           onCellValueChange,
                                                                                                           uniqueFieldValidator
                                                                                                       }: ColumnsFromCollectionProps<M, AdditionalKey, UserType>
-): { columns: TableColumn<M>[], popupFormField: React.ReactElement } {
+): { columns: TableColumn<Entity<M>>[], popupFormField: React.ReactElement } {
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
 
@@ -397,7 +397,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
 
     }, [additionalColumnsMap, size]);
 
-    const allColumns: TableColumn<M>[] = (Object.keys(resolvedCollection.properties) as (keyof M)[])
+    const allColumns: TableColumn<Entity<M>>[] = (Object.keys(resolvedCollection.properties) as (keyof M)[])
         .map((key) => {
             const property = resolvedCollection.properties[key];
             return ({
@@ -414,7 +414,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
         });
 
     if (additionalColumns) {
-        const items: TableColumn<M>[] = additionalColumns.map((additionalColumn) =>
+        const items: TableColumn<Entity<M>>[] = additionalColumns.map((additionalColumn) =>
             ({
                 key: additionalColumn.id,
                 type: "additional",
@@ -430,7 +430,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
     const columns = displayedProperties
         .map((p) => {
             return allColumns.find(c => c.key === p);
-        }).filter(c => !!c) as TableColumn<M>[];
+        }).filter(c => !!c) as TableColumn<Entity<M>>[];
 
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
         ? ({ name, value, property }) => uniqueFieldValidator({

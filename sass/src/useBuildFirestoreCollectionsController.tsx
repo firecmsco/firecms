@@ -22,8 +22,6 @@ import { AuthController, EntityCollection, Properties,
     removeFunctions,
     resolvePermissions
 } from "@camberi/firecms";
-import {
-} from "../../lib/src/core";
 
 /**
  * @category Firebase

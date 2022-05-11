@@ -169,7 +169,7 @@ export const SlideFade = React.forwardRef(function SlideFade(props: SlideProps, 
             timeout={timeout}
             {...other}
         >
-            {(state: any, childProps: any) => {
+            {((state: any, childProps: any) => {
                 return React.cloneElement(children, {
                     ref: handleRef,
                     style: {
@@ -178,7 +178,7 @@ export const SlideFade = React.forwardRef(function SlideFade(props: SlideProps, 
                     },
                     ...childProps
                 });
-            }}
+            }) as any}
         </Transition>
     );
 });

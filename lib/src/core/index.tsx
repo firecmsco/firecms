@@ -10,11 +10,11 @@ export { Drawer } from "./Drawer";
 export { createCMSDefaultTheme } from "./theme";
 
 export * from "./SideDialogs";
+export * from "./NavigationRoutes";
 
 export * from "./components";
 
 export * from "./builders";
-export * from "./routes";
 export * from "./util";
 
 export * from "./widgets";

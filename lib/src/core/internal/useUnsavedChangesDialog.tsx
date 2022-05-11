@@ -6,7 +6,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { CustomDialogActions } from "../components/CustomDialogActions";
+import { CustomDialogActions } from "../components";
 
 export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () => void):
     {

@@ -1,8 +1,8 @@
-import * as React from "react";
-import { useCallback, useEffect } from "react";
-import { styled, Theme } from "@mui/material/styles";
+import React, { useCallback, useEffect } from "react";
 
+import { styled, Theme } from "@mui/material/styles";
 import equal from "react-fast-compare"
+
 import {
     Box,
     FormControl,
@@ -13,7 +13,6 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-
 import {
     ArrayProperty,
     Entity,
@@ -29,8 +28,8 @@ import RemoveIcon from "@mui/icons-material/Remove";
 import { PreviewSize, PropertyPreview } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 
+import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 import clsx from "clsx";
 import {
     useClearRestoreValue,
@@ -303,7 +302,7 @@ function FileDropComponent({
         isDragAccept,
         isDragReject
     } = useDropzone({
-            accept: storage.acceptedFiles,
+            accept: storage.acceptedFiles ? storage.acceptedFiles.map(e => ({ [e]: [] })).reduce((a, b) => ({ ...a, ...b }), {}) : undefined,
             disabled: disabled || isDraggingOver,
             noDragEventsBubbling: true,
             maxSize: storage.maxSize,
