@@ -176,7 +176,8 @@ function ArrayOneOfEntry({
     } : undefined;
     return (
         <Paper sx={(theme) => ({
-            padding: theme.spacing(1)
+            padding: theme.spacing(1),
+            mb: 1
         })} elevation={0}>
 
             <FastField

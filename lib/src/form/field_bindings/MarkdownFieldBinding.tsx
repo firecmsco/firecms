@@ -37,6 +37,8 @@ const StyledFormControl = styled(FormControl)((
         },
         "& .w-md-editor": {
             color: "inherit",
+            boxShadow: "inherit",
+            borderRadius: 6,
             backgroundColor: theme.palette.mode === "light" ? "rgb(240, 240, 240)" : "#323232"
         },
         "& .w-md-editor-toolbar": {

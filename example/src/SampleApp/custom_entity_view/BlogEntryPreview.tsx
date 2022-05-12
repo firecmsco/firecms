@@ -5,6 +5,7 @@ import {
     CardContent,
     CircularProgress,
     Container,
+    Paper,
     Typography
 } from "@mui/material";
 import {
@@ -181,36 +182,40 @@ export function ProductPreview({ productValues }: { productValues: EntityValues<
     if (!productValues)
         return <></>;
 
-    return <CardActionArea sx={{
-        width: "400px",
-        height: "400px",
-        margin: "16px",
-        boxShadow: "rgb(0 0 0 / 8%) 0px 8px 12px -4px"
-    }}>
-        <CardContent sx={{
-            height: "100%",
-            display: "flex",
-            flexDirection: "column"
-        }}>
-            <Box flexGrow={1} flexShrink={1} flexBasis={296} p={2}
-                 maxHeight={296}>
-                <StorageImage storagePath={productValues.main_image}/>
-            </Box>
-            <Typography gutterBottom
-                        variant="h6"
-                        noWrap
-                        style={{
-                            marginTop: "16px"
-                        }}>
-                {productValues.name}
-            </Typography>
+    return (
+        <Paper sx={{
+            width: "400px",
+            height: "400px",
+            margin: "16px",
+            boxShadow: "rgb(0 0 0 / 8%) 0px 8px 12px -4px"
+        }}
+               variant={"outlined"}>
+            <CardActionArea>
+                <CardContent sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column"
+                }}>
+                    <Box flexGrow={1} flexShrink={1} flexBasis={296} p={2}
+                         maxHeight={296}>
+                        <StorageImage storagePath={productValues.main_image}/>
+                    </Box>
+                    <Typography gutterBottom
+                                variant="h6"
+                                noWrap
+                                style={{
+                                    marginTop: "16px"
+                                }}>
+                        {productValues.name}
+                    </Typography>
 
-            <Typography variant="body2"
-                        color="textSecondary"
-                        component="div">
-                {productValues.price} {productValues.currency}
-            </Typography>
-        </CardContent>
-    </CardActionArea>;
+                    <Typography variant="body2"
+                                color="textSecondary"
+                                component="div">
+                        {productValues.price} {productValues.currency}
+                    </Typography>
+                </CardContent>
+            </CardActionArea>
+        </Paper>);
 
 }
