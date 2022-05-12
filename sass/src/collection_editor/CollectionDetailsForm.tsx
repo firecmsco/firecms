@@ -23,7 +23,7 @@ import {
 
 export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: boolean }) {
 
-    const navigationContext = useNavigationContext();
+    const navigation = useNavigationContext();
 
     const {
         values,
@@ -36,7 +36,7 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
         handleSubmit
     } = useFormikContext<EntityCollection>();
 
-    const topLevelNavigation = navigationContext.topLevelNavigation;
+    const topLevelNavigation = navigation.topLevelNavigation;
     if (!topLevelNavigation)
         throw Error("Navigation not ready in collection editor");
 

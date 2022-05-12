@@ -38,16 +38,16 @@ export function SassDrawer({
                            closeDrawer
                        }: SassDrawerProps) {
 
-    const navigationContext = useNavigationContext();
+    const navigation = useNavigationContext();
     const collectionEditorController = useCollectionEditorController();
 
-    if (!navigationContext.topLevelNavigation)
+    if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
 
     const {
         navigationEntries,
         groups
-    }: TopNavigationResult = navigationContext.topLevelNavigation;
+    }: TopNavigationResult = navigation.topLevelNavigation;
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
@@ -109,7 +109,7 @@ export function SassDrawer({
                 </Button>
             </Tooltip>}
         </Box>;
-    }, [closeDrawer, navigationContext]);
+    }, [closeDrawer, navigation]);
 
     let logoComponent;
     if (logo) {
@@ -132,7 +132,7 @@ export function SassDrawer({
                 onClick={closeDrawer}
                 component={NavLink}
 
-                to={navigationContext.homeUrl}>
+                to={navigation.homeUrl}>
                 <Box sx={{
                     padding: 4,
                     maxWidth: 280

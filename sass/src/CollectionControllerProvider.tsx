@@ -1,12 +1,12 @@
 import React from "react";
-import { CollectionsController } from "./collections_controller";
+import { ConfigController } from "./config_controller";
 
-export const CollectionControllerContext = React.createContext<CollectionsController>({} as any);
+export const CollectionControllerContext = React.createContext<ConfigController>({} as any);
 
 
 interface CollectionControllerProviderProps {
     children: React.ReactNode;
-    collectionsController: CollectionsController;
+    collectionsController: ConfigController;
 }
 
 export const CollectionControllerProvider: React.FC<CollectionControllerProviderProps> = ({

@@ -6,21 +6,24 @@ import {
     doc,
     DocumentSnapshot,
     Firestore,
-    getDoc,
     getFirestore,
     onSnapshot,
     setDoc
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef } from "react";
-import { CollectionsController } from "./collections_controller";
-import { AuthController, EntityCollection, Properties,
-    mergeCollections,
-    removeNonEditableProperties,
-    sortProperties,
+import { ConfigController } from "./config_controller";
+import {
+    AuthController,
     COLLECTION_PATH_SEPARATOR,
-    stripCollectionPath,
+    EntityCollection,
+    mergeCollections,
+    Properties,
     removeFunctions,
-    resolvePermissions
+    removeNonEditableProperties,
+    resolvePermissions,
+    Role,
+    sortProperties,
+    stripCollectionPath
 } from "@camberi/firecms";
 
 /**
@@ -46,25 +49,27 @@ export interface FirestoreConfigurationPersistenceProps {
 const DEFAULT_CONFIG_PATH = "__FIRECMS";
 
 /**
- * Build a {@link CollectionsController} that persists collection in
+ * Build a {@link ConfigController} that persists collection in
  * Firestore, but also allows including collections added in code.
  * @param firebaseApp
  * @param collections
  * @param configPath
  */
-export function useBuildFirestoreCollectionsController({
-                                                              firebaseApp,
-                                                              collections: baseCollections,
-                                                              configPath = DEFAULT_CONFIG_PATH,
-                                                          }: FirestoreConfigurationPersistenceProps): CollectionsController {
+export function useBuildFirestoreConfigController({
+                                                      firebaseApp,
+                                                      collections: baseCollections,
+                                                      configPath = DEFAULT_CONFIG_PATH,
+                                                  }: FirestoreConfigurationPersistenceProps): ConfigController {
 
     const firestoreRef = useRef<Firestore>();
     const firestore = firestoreRef.current;
 
     const [loading, setLoading] = React.useState<boolean>(true);
     const [persistedCollections, setPersistedCollections] = React.useState<EntityCollection[] | undefined>();
+    const [roles, setRoles] = React.useState<Role[]>([]);
 
-    const [error, setError] = React.useState<Error | undefined>();
+    const [collectionsError, setCollectionsError] = React.useState<Error | undefined>();
+    const [rolesError, setRolesError] = React.useState<Error | undefined>();
 
     useEffect(() => {
         if (!firebaseApp) return;
@@ -77,29 +82,44 @@ export function useBuildFirestoreCollectionsController({
         return onSnapshot(collection(firestore, configPath, "config", "collections"),
             {
                 next: (snapshot) => {
-                    setError(undefined);
+                    setCollectionsError(undefined);
                     setLoading(false);
                     try {
                         const newCollections = docsToCollectionTree(snapshot.docs);
                         setPersistedCollections(newCollections);
                     } catch (e) {
                         console.error(e);
-                        setError(e as Error);
+                        setCollectionsError(e as Error);
                     }
                 },
                 error: (e) => {
                     setLoading(false);
-                    setError(e);
+                    setCollectionsError(e);
                 }
             }
         );
     }, [firestore]);
 
-    const getCollection = useCallback(<M extends { [Key: string]: any }>(path: string): Promise<EntityCollection<M>> => {
-        if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const strippedPath = stripCollectionPath(path);
-        const ref = doc(firestore, configPath, "config", "collections", strippedPath);
-        return getDoc(ref).then((doc) => doc.data() as EntityCollection<M>);
+    useEffect(() => {
+        if (!firestore) return;
+
+        return onSnapshot(collection(firestore, configPath, "config", "roles"),
+            {
+                next: (snapshot) => {
+                    setRolesError(undefined);
+                    try {
+                        const newRoles = docsToRoles(snapshot.docs);
+                        setRoles(newRoles);
+                    } catch (e) {
+                        console.error(e);
+                        setRolesError(e as Error);
+                    }
+                },
+                error: (e) => {
+                    setRolesError(e);
+                }
+            }
+        );
     }, [firestore]);
 
     const deleteCollection = useCallback(<M extends { [Key: string]: any }>(path: string): Promise<void> => {
@@ -118,13 +138,13 @@ export function useBuildFirestoreCollectionsController({
     }, [firestore]);
 
 
-    const collections =  joinCollections(persistedCollections ?? [], baseCollections);
+    const collections = persistedCollections !== undefined ?  joinCollections(persistedCollections , baseCollections) : undefined;
     return {
         loading,
         collections,
-        getCollection,
         saveCollection,
-        deleteCollection
+        deleteCollection,
+        roles
     }
 }
 
@@ -168,6 +188,10 @@ const docsToCollectionTree = (docs: DocumentSnapshot[]): EntityCollection[] => {
     });
 
     return Object.values(collectionsMap);
+}
+
+const docsToRoles = (docs: DocumentSnapshot[]): Role[] => {
+    return docs.map((doc) => doc.data() as Role);
 }
 
 const docToCollection = (doc: DocumentSnapshot): EntityCollection => {

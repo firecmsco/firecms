@@ -1,19 +1,19 @@
-import { EntityCollection, AuthController } from "@camberi/firecms";
+import { EntityCollection, Role } from "@camberi/firecms";
 
 /**
  * Use this controller to access the configuration that is stored externally,
  * and not defined in code
  */
-export interface CollectionsController {
+export interface ConfigController {
 
     loading: boolean;
 
-    collections: EntityCollection[];
-
-    getCollection: <M>(path: string) => Promise<EntityCollection<M>>;
+    collections?: EntityCollection[];
 
     saveCollection: <M>(path: string, collection: EntityCollection<M>) => Promise<void>;
 
     deleteCollection: (path: string) => Promise<void>;
+
+    roles: Role[];
 
 }

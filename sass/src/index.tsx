@@ -4,7 +4,7 @@ import { createRoot } from "react-dom/client";
 import { SassCMSApp } from "./SassCMSApp";
 
 const container = document.getElementById('root');
-const root = createRoot(container as any);
-root.render(<SassCMSApp/>);
-
-
+if (container) {
+    const root = createRoot(container);
+    root.render(<SassCMSApp/>);
+}

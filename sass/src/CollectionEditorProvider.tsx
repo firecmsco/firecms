@@ -9,7 +9,7 @@ import {
     NewCollectionEditorDialog
 } from "./collection_editor/NewCollectionEditorDialog";
 import { useNavigate } from "react-router-dom";
-import { useNavigationContext } from "@camberi/firecms";
+import { EntityCollection, useNavigationContext } from "@camberi/firecms";
 import { ConfigPermissions } from "./config_permissions";
 
 const DEFAULT_COLLECTIONS_CONTROLLER = {
@@ -28,14 +28,16 @@ export const CollectionEditorContext = React.createContext<CollectionEditorViews
 interface CollectionEditorsProviderProps {
     children: React.ReactNode;
     configPermissions: ConfigPermissions;
+    saveCollection: <M>(path: string, collection: EntityCollection<M>) => Promise<void>;
 }
 
 export const CollectionEditorsProvider: React.FC<CollectionEditorsProviderProps> = ({
                                                                                         children,
-                                                                                        configPermissions
+                                                                                        configPermissions,
+                                                                                        saveCollection
                                                                                     }) => {
 
-    const navigationContext = useNavigationContext();
+    const navigation = useNavigationContext();
     const navigate = useNavigate();
 
     const [newCollectionDialog, setNewCollectionDialog] = React.useState<{
@@ -43,7 +45,6 @@ export const CollectionEditorsProvider: React.FC<CollectionEditorsProviderProps>
         group?: string
     }>();
     const [editedCollectionPath, setEditedCollectionPath] = React.useState<string | undefined>();
-
 
     return (
         <CollectionEditorContext.Provider
@@ -63,6 +64,7 @@ export const CollectionEditorsProvider: React.FC<CollectionEditorsProviderProps>
             {children}
 
             <CollectionEditorDialog
+                saveCollection={saveCollection}
                 open={Boolean(editedCollectionPath)}
                 handleClose={(collection) => {
                     setEditedCollectionPath(undefined);
@@ -71,10 +73,11 @@ export const CollectionEditorsProvider: React.FC<CollectionEditorsProviderProps>
 
             <NewCollectionEditorDialog
                 open={false}
+                saveCollection={saveCollection}
                 {...newCollectionDialog}
                 handleClose={(collection) => {
                     if (collection) {
-                        navigate(navigationContext.buildUrlCollectionPath(collection.alias ?? collection.path));
+                        navigate(navigation.buildUrlCollectionPath(collection.alias ?? collection.path));
                     }
                     setNewCollectionDialog({ open: false });
                 }}/>

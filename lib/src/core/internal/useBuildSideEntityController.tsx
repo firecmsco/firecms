@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef } from "react";
+import { useMediaQuery, useTheme } from "@mui/material";
 import {
     EntityCollection,
     EntitySidePanelProps,
@@ -13,8 +14,7 @@ import {
 } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
 import { EntitySidePanel } from "../EntitySidePanel";
-import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
-import { useMediaQuery, useTheme } from "@mui/material";
+import { removeInitialAndTrailingSlashes } from "../util";
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
 
 const NEW_URL_HASH = "new";
@@ -26,7 +26,7 @@ export function getEntityViewWidth(props: EntitySidePanelProps<any, any>, small:
     return !mainViewSelected ? `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})` : resolvedWidth ?? CONTAINER_WIDTH
 }
 
-export const useBuildSideEntityController = (navigationContext: NavigationContext, sideDialogsController: SideDialogsController): SideEntityController => {
+export const useBuildSideEntityController = (navigation: NavigationContext, sideDialogsController: SideDialogsController): SideEntityController => {
 
     const location = useLocation();
     const initialised = useRef<boolean>(false);
@@ -34,35 +34,33 @@ export const useBuildSideEntityController = (navigationContext: NavigationContex
     const theme = useTheme();
     const smallLayout: boolean = useMediaQuery(theme.breakpoints.down("sm"));
 
-    const collections = navigationContext.collections;
-
     // only on initialisation
     useEffect(() => {
-        if (collections && !initialised.current) {
-            if (navigationContext.isUrlCollectionPath(location.pathname)) {
+        if (!navigation.loading && !initialised.current) {
+            if (navigation.isUrlCollectionPath(location.pathname)) {
                 const newFlag = location.hash === `#${NEW_URL_HASH}`;
-                const entityOrCollectionPath = navigationContext.urlPathToDataPath(location.pathname);
-                const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, collections, newFlag);
+                const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
+                const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections, newFlag);
                 sideDialogsController.replace(panelsFromUrl.map((props) => propsToSidePanel(props)));
             }
             initialised.current = true;
         }
-    }, [location, collections, sideDialogsController]);
+    }, [location, navigation, sideDialogsController]);
 
     const propsToSidePanel = useCallback((props: EntitySidePanelProps<any, any>): SideDialogPanelProps<EntitySidePanelProps> => {
         const collectionPath = removeInitialAndTrailingSlashes(props.path);
         const newPath = props.entityId
-            ? navigationContext.buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`)
-            : navigationContext.buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
+            ? navigation.buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`)
+            : navigation.buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
         return ({
             key: `${props.path}/${props.entityId}`,
             Component: EntitySidePanel,
             props: props,
             urlPath: newPath,
-            parentUrlPath: navigationContext.buildUrlCollectionPath(collectionPath),
+            parentUrlPath: navigation.buildUrlCollectionPath(collectionPath),
             width: getEntityViewWidth(props, smallLayout)
         });
-    }, [navigationContext]);
+    }, [navigation]);
 
     const close = useCallback(() => {
         sideDialogsController.close();

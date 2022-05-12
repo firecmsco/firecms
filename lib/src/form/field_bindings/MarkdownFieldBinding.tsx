@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useCallback } from "react";
 
-import { styled } from '@mui/material/styles';
+import { styled } from "@mui/material/styles";
 
 import { Box, FormControl, FormHelperText, Theme } from "@mui/material";
 import MDEditor from "@uiw/react-md-editor";
@@ -11,7 +11,7 @@ import { FieldProps } from "../../models";
 
 import { useClearRestoreValue } from "../../hooks";
 
-const PREFIX = 'MarkdownField';
+const PREFIX = "MarkdownField";
 
 const classes = {
     root: `${PREFIX}-root`
@@ -46,8 +46,6 @@ const StyledFormControl = styled(FormControl)((
     }
 }));
 
-
-
 /**
  * Render a markdown field that allows edition and seeing the preview.
  *
@@ -71,15 +69,13 @@ export function MarkdownFieldBinding({
                                   shouldAlwaysRerender
                               }: FieldProps<string>) {
 
-
-
     useClearRestoreValue({
         property,
         value,
         setValue
     });
 
-    const updateValue = (newValue: string | undefined) => {
+    const updateValue = useCallback((newValue: string | undefined) => {
         if (!newValue) {
             setValue(
                 null
@@ -89,7 +85,7 @@ export function MarkdownFieldBinding({
                 newValue
             );
         }
-    };
+    }, [setValue]);
 
     return (
         <StyledFormControl
@@ -105,7 +101,10 @@ export function MarkdownFieldBinding({
                 <MDEditor
                     value={typeof value === "string" ? value : ""}
                     preview={"edit"}
-                    onChange={(value) => updateValue(value)}
+                    height={300}
+                    fullscreen={false}
+                    commandsFilter={(cmd) => cmd.keyCommand === "fullscreen" ? false : cmd}
+                    onChange={updateValue}
                 />
             </div>
 

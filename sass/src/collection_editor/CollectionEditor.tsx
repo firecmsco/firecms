@@ -53,6 +53,7 @@ import { useCollectionsController } from "../useCollectionsController";
 export type CollectionEditorProps<M> = {
     path: string;
     handleClose?: (updatedCollection?: EntityCollection<M>) => void;
+    saveCollection: <M>(path: string, collection: EntityCollection<M>) => Promise<void>;
     setDirty?: (dirty: boolean) => void;
 };
 
@@ -60,18 +61,15 @@ export const CollectionEditor = React.memo(
     function CollectionEditor<M>({
                                      path,
                                      handleClose,
+                                     saveCollection,
                                      setDirty
                                  }: CollectionEditorProps<M>) {
 
-        const navigationContext = useNavigationContext();
-        const collectionsController = useCollectionsController();
+        const navigation = useNavigationContext();
         const snackbarController = useSnackbarController();
 
         // Use this ref to store which properties have errors
         const propertyErrorsRef = useRef({});
-
-        if (!collectionsController)
-            throw Error("Can't use the collection editor without specifying a `CollectionsController`");
 
         const [collection, setCollection] = React.useState<EntityCollection | undefined>();
         const [initialLoadingCompleted, setInitialLoadingCompleted] = React.useState(false);
@@ -79,9 +77,9 @@ export const CollectionEditor = React.memo(
 
         useEffect(() => {
             try {
-                if (navigationContext.initialised) {
+                if (navigation.initialised) {
                     if (path) {
-                        setCollection(navigationContext.getCollection(path, undefined, false));
+                        setCollection(navigation.getCollection(path, undefined, false));
                     } else {
                         setCollection(undefined);
                     }
@@ -91,10 +89,10 @@ export const CollectionEditor = React.memo(
                 console.error(e);
                 setInitialError(initialError);
             }
-        }, [path, navigationContext.initialised]);
+        }, [path, navigation.initialised]);
 
-        const saveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
-            return collectionsController.saveCollection(path, collection)
+        const doSaveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
+            return saveCollection(path, collection)
                 .then(() => {
                     setInitialError(undefined);
                     snackbarController.open({
@@ -121,7 +119,7 @@ export const CollectionEditor = React.memo(
             return <ErrorView error={`Error fetching collection ${path}`}/>;
         }
 
-        if (!navigationContext.initialised || !initialLoadingCompleted) {
+        if (!navigation.initialised || !initialLoadingCompleted) {
             return <CircularProgressCenter/>;
         }
 
@@ -138,7 +136,7 @@ export const CollectionEditor = React.memo(
                 validationSchema={YupSchema}
                 validate={() => propertyErrorsRef.current}
                 onSubmit={(newCollection: EntityCollection, formikHelpers: FormikHelpers<EntityCollection>) => {
-                    return saveCollection(newCollection).then(() => {
+                    return doSaveCollection(newCollection).then(() => {
                         // formikHelpers.resetForm({ values: newCollection });
                         return true;
                     });

@@ -29,8 +29,8 @@ import { CollectionEditorsProvider } from "./CollectionEditorProvider";
 import { ConfigPermissions } from "./config_permissions";
 import { SassDrawer } from "./components/SassDrawer";
 import {
-    useBuildFirestoreCollectionsController
-} from "./useBuildFirestoreCollectionsController";
+    useBuildFirestoreConfigController
+} from "./useBuildFirestoreConfigController";
 import { CollectionControllerProvider } from "./CollectionControllerProvider";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
@@ -103,13 +103,12 @@ export function SassCMSApp() {
     });
 
     const dataSource = useFirestoreDataSource({
-        firebaseApp,
-        // You can add your `FirestoreTextSearchController` here
+        firebaseApp
     });
 
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
-    const collectionsController = useBuildFirestoreCollectionsController({
+    const collectionsController = useBuildFirestoreConfigController({
         firebaseApp,
         // configPath,
         collections: [productsCollection]
@@ -138,7 +137,6 @@ export function SassCMSApp() {
         deleteCollections: true
     }
 
-    console.log("collectionsController.collections", collectionsController.collections);
     return (
         <Router>
             <FireCMS authDelegate={authDelegate}
@@ -152,7 +150,7 @@ export function SassCMSApp() {
                     const theme = createCMSDefaultTheme({ mode });
 
                     let component;
-                    if (loading) {
+                    if (loading || collectionsController.loading) {
                         component = <CircularProgressCenter/>;
                     } else if (!context.authController.canAccessMainView) {
                         component = (
@@ -177,6 +175,7 @@ export function SassCMSApp() {
                             <CollectionControllerProvider
                                 collectionsController={collectionsController}>
                                 <CollectionEditorsProvider
+                                    saveCollection={collectionsController.saveCollection}
                                     configPermissions={configPermissions}>
                                     <CssBaseline/>
                                     {component}

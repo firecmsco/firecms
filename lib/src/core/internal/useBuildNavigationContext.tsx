@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+
 import {
     AuthController,
     CMSView,
@@ -13,15 +15,14 @@ import {
 } from "../../models";
 import {
     getCollectionByPath,
+    mergeDeep,
     removeInitialAndTrailingSlashes,
     resolveCollectionAliases
-} from "../util/navigation_utils";
-import { mergeDeep } from "../util/objects";
+} from "../util";
 import {
     CMSViewsBuilder,
     EntityCollectionsBuilder
 } from "../../firebase_app/FirebaseCMSAppProps";
-import { useLocation } from "react-router-dom";
 
 type BuildNavigationContextProps<UserType extends User> = {
     basePath: string,
@@ -62,6 +63,7 @@ export function useBuildNavigationContext<UserType extends User>({
 
     const processCollections = useCallback(async () => {
         setNavigationLoading(true);
+        if (baseCollections === undefined) return;
 
         const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
                 resolveCollections(baseCollections, authController),

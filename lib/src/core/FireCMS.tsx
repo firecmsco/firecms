@@ -6,7 +6,6 @@ import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 
 import {
-    AuthController,
     AuthDelegate,
     Authenticator,
     CMSView,
@@ -213,10 +212,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     const sideDialogsController = useBuildSideDialogsController();
     const sideEntityController = useBuildSideEntityController(navigation, sideDialogsController);
 
-    console.log("authController.authLoading", authController.authLoading);
-    console.log("authController.initialLoading", authController.initialLoading);
-    console.log("navigation.loading", navigation.loading);
-
     const loading = authController.authLoading || authController.initialLoading || navigation.loading;
 
     if (navigation.navigationLoadingError) {
@@ -241,7 +236,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                             entityLinkBuilder,
                             dateTimeFormat,
                             locale,
-                            navigation: navigation,
+                            navigation,
                             dataSource,
                             storageSource,
                             snackbarController,

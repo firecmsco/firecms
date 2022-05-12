@@ -14,27 +14,24 @@ import { YupSchema } from "./SchemaYupValidation";
 import { LoadingButton } from "@mui/lab";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
 import { CollectionEditorForm } from "./CollectionEditor";
-import { useCollectionsController } from "../useCollectionsController";
 
 export interface NewCollectionEditorDialogProps {
     open: boolean;
     group?: string;
     parentPath?: string;
     handleClose: (collection?: EntityCollection) => void;
+    saveCollection: <M>(path: string, collection: EntityCollection<M>) => Promise<void>;
 }
 
 export function NewCollectionEditorDialog<M>({
                                                  open,
                                                  group,
+                                                 saveCollection,
                                                  parentPath,
                                                  handleClose
                                              }: NewCollectionEditorDialogProps) {
 
-    const collectionsController = useCollectionsController();
     const snackbarController = useSnackbarController();
-
-    if (!collectionsController)
-        throw Error("Can't use the collection editor without specifying a `CollectionsController`");
 
     // Use this ref to store which properties have errors
     const propertyErrorsRef = useRef({});
@@ -43,9 +40,9 @@ export function NewCollectionEditorDialog<M>({
 
     const [error, setError] = React.useState<Error | undefined>();
 
-    const saveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
+    const onSaveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
         const fullPath = parentPath ? removeInitialAndTrailingSlashes(parentPath) + "/" + collection.path : collection.path;
-        return collectionsController.saveCollection(fullPath, collection)
+        return saveCollection(fullPath, collection)
             .then(() => {
                 setError(undefined);
                 return true;
@@ -60,7 +57,7 @@ export function NewCollectionEditorDialog<M>({
                 });
                 return false;
             });
-    }, [collectionsController, snackbarController, parentPath]);
+    }, [saveCollection, snackbarController, parentPath]);
 
     const initialValues: EntityCollection = {
         path: "",
@@ -100,7 +97,7 @@ export function NewCollectionEditorDialog<M>({
                             touched: { path: true, name: true }
                         });
                     } else {
-                        saveCollection(newCollection).then(() => {
+                        onSaveCollection(newCollection).then(() => {
                             formikHelpers.resetForm({ values: initialValues });
                             setMode("details");
                             handleClose(newCollection);

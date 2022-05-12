@@ -36,7 +36,6 @@ export type SassNavigationRoutesProps = {
  */
 export function SassNavigationRoutes({ HomePage }: SassNavigationRoutesProps) {
 
-    const authController = useAuthController();
     const collectionEditorController = useCollectionEditorController();
     const location = useLocation();
     const navigation = useNavigationContext();

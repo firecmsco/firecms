@@ -49,14 +49,13 @@ export function useBuildAuthController<UserType extends User>({
                 : []),
         [cmsRoles, roles]);
 
-    console.log("authDelegate.initialLoading", authDelegate.initialLoading);
     const authController: AuthController<UserType> = useMemo(() =>
         ({
             user,
             loginSkipped,
             canAccessMainView,
             initialLoading: authDelegate.initialLoading ?? false,
-            authLoading: authLoading,
+            authLoading,
             notAllowedError,
             signOut: authDelegate.signOut,
             extra,

@@ -45,14 +45,14 @@ import { useCollectionsController } from "../useCollectionsController";
  */
 export function SassHomePage() {
 
-    const navigationContext = useNavigationContext();
+    const navigation = useNavigationContext();
     const collectionEditorController = useCollectionEditorController();
     const collectionsController = useCollectionsController();
 
-    if (!navigationContext.topLevelNavigation)
+    if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
 
-    const navigationResult: TopNavigationResult = navigationContext.topLevelNavigation;
+    const navigationResult: TopNavigationResult = navigation.topLevelNavigation;
     const [collectionToBeDeleted, setCollectionToBeDeleted] = useState<TopNavigationEntry | undefined>();
 
     const onEditCollectionClicked = useCallback((entry: TopNavigationEntry) => {
