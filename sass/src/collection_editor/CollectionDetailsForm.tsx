@@ -125,8 +125,11 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
                             fullWidth
                             freeSolo
                             options={groups}
+                            onInputChange={(event, group) => {
+                                setFieldValue("group", group ?? null);
+                            }}
                             onChange={(event, group) => {
-                                setFieldValue("group", group);
+                                setFieldValue("group", group ?? null);
                             }}
                             getOptionLabel={(option) => option}
                             renderOption={(props, group, { selected }) => (

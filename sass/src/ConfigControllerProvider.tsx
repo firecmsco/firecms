@@ -1,25 +1,25 @@
 import React from "react";
 import { ConfigController } from "./config_controller";
 
-export const CollectionControllerContext = React.createContext<ConfigController>({} as any);
+export const ConfigControllerContext = React.createContext<ConfigController>({} as any);
 
 
-interface CollectionControllerProviderProps {
+interface ConfigControllerProviderProps {
     children: React.ReactNode;
     collectionsController: ConfigController;
 }
 
-export const CollectionControllerProvider: React.FC<CollectionControllerProviderProps> = ({
+export const ConfigControllerProvider: React.FC<ConfigControllerProviderProps> = ({
                                                                                               children,
                                                                                               collectionsController
                                                                                           }) => {
 
     return (
-        <CollectionControllerContext.Provider
+        <ConfigControllerContext.Provider
             value={collectionsController}
         >
             {children}
 
-        </CollectionControllerContext.Provider>
+        </ConfigControllerContext.Provider>
     );
 };

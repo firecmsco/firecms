@@ -62,10 +62,10 @@ export function NewCollectionEditorDialog<M>({
     const initialValues: EntityCollection = {
         path: "",
         name: "",
-        group: group,
         properties: {},
         propertiesOrder: []
     };
+    if (group) initialValues.group = group;
     return (
         <Dialog
             open={open}

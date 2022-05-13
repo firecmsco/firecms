@@ -31,7 +31,7 @@ import { SassDrawer } from "./components/SassDrawer";
 import {
     useBuildFirestoreConfigController
 } from "./useBuildFirestoreConfigController";
-import { CollectionControllerProvider } from "./CollectionControllerProvider";
+import { ConfigControllerProvider } from "./ConfigControllerProvider";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -172,7 +172,7 @@ export function SassCMSApp() {
 
                     return (
                         <ThemeProvider theme={theme}>
-                            <CollectionControllerProvider
+                            <ConfigControllerProvider
                                 collectionsController={collectionsController}>
                                 <CollectionEditorsProvider
                                     saveCollection={collectionsController.saveCollection}
@@ -180,7 +180,7 @@ export function SassCMSApp() {
                                     <CssBaseline/>
                                     {component}
                                 </CollectionEditorsProvider>
-                            </CollectionControllerProvider>
+                            </ConfigControllerProvider>
                         </ThemeProvider>
                     );
                 }}

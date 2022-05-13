@@ -30,7 +30,9 @@ import {
  * @category Firebase
  */
 export interface FirestoreConfigurationPersistenceProps {
+
     firebaseApp?: FirebaseApp;
+
     /**
      * Firestore collection where the configuration is saved.
      */
@@ -120,13 +122,13 @@ export function useBuildFirestoreConfigController({
                 }
             }
         );
-    }, [firestore]);
+    }, [configPath, firestore]);
 
     const deleteCollection = useCallback(<M extends { [Key: string]: any }>(path: string): Promise<void> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const ref = doc(firestore, configPath, "config", "collections", path);
         return deleteDoc(ref);
-    }, [firestore]);
+    }, [configPath, firestore]);
 
     const saveCollection = useCallback(<M extends { [Key: string]: any }>(path: string, collectionData: EntityCollection<M>): Promise<void> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
@@ -135,7 +137,7 @@ export function useBuildFirestoreConfigController({
         const ref = doc(firestore, configPath, "config", "collections", strippedPath);
         console.debug("Persisting", cleanedCollection);
         return setDoc(ref, cleanedCollection, { merge: true });
-    }, [firestore]);
+    }, [configPath, firestore]);
 
 
     const collections = persistedCollections !== undefined ?  joinCollections(persistedCollections , baseCollections) : undefined;

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
 import { ConfigController } from "./config_controller";
-import { CollectionControllerContext } from "./CollectionControllerProvider";
+import { ConfigControllerContext } from "./ConfigControllerProvider";
 
-export const useCollectionsController = (): ConfigController => useContext(CollectionControllerContext);
+export const useCollectionsController = (): ConfigController => useContext(ConfigControllerContext);
