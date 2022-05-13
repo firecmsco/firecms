@@ -1,6 +1,5 @@
 import { User } from "./user";
 import { Role } from "./permissions";
-import { EntityCollection } from "./collections";
 
 /**
  * Controller for retrieving the logged user or performing auth related operations

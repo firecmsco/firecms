@@ -16,9 +16,7 @@ import {
     enumToObjectEntries,
     isEnumValueDisabled
 } from "../../core/util/enums";
-import { EnumValuesChip } from "../../preview/components/CustomChip";
-
-import { ArrayEnumPreview } from "../../preview";
+import { ArrayEnumPreview, EnumValuesChip } from "../../preview";
 import { ErrorView } from "../../core";
 
 /**

@@ -18,12 +18,7 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import EmailIcon from "@mui/icons-material/Email";
 import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
 
-import {
-    ArrayProperty,
-    DataType,
-    isPropertyBuilder,
-    Property
-} from "../index";
+import { ArrayProperty, DataType, isPropertyBuilder, Property } from "../index";
 import { SvgIconProps } from "@mui/material";
 
 export type Widget = {

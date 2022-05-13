@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
     Box,
     FilledInput,
@@ -57,7 +57,7 @@ export function TextFieldBinding<T extends string | number>({
     const valueIsInfinity = internalValue === Infinity;
     const inputType = !valueIsInfinity && property.dataType === "number" ? "number" : undefined;
 
-    const updateValue = (newValue: typeof internalValue | undefined) => {
+    const updateValue = useCallback((newValue: typeof internalValue | undefined) => {
 
         if (!newValue) {
             setValue(
@@ -73,7 +73,7 @@ export function TextFieldBinding<T extends string | number>({
                 newValue
             );
         }
-    };
+    }, [inputType, setValue]);
 
     return (
         <>

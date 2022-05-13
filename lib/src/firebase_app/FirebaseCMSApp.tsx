@@ -8,6 +8,7 @@ import {
     CircularProgressCenter,
     createCMSDefaultTheme,
     FireCMS,
+    NavigationRoutes,
     Scaffold,
     SideDialogs,
 } from "../core";
@@ -22,7 +23,6 @@ import { FirebaseAuthDelegate } from "./models/auth";
 import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
-import { NavigationRoutes } from "../core/NavigationRoutes";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID

@@ -34,7 +34,6 @@ export function StorageThumbnailInternal({
                                          }: StorageThumbnailProps) {
     const storage = useStorageSource();
 
-
     const [downloadConfig, setDownloadConfig] = React.useState<DownloadConfig>(URL_CACHE[storagePathOrDownloadUrl]);
 
     useEffect(() => {

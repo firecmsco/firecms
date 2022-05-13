@@ -8,13 +8,12 @@ import {
     PropertyPreview,
     PropertyPreviewProps
 } from "../internal";
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
+import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../models";
 import {
     DEFAULT_ONE_OF_TYPE,
     DEFAULT_ONE_OF_VALUE
 } from "../../core/util/common";
-import { resolveArrayProperty } from "../../core/util/resolutions";
 
 const PREFIX = "ArrayOneOfPreview";
 

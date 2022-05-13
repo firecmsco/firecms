@@ -4,7 +4,7 @@ import { styled } from "@mui/material/styles";
 
 import React from "react";
 
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
+import { ErrorBoundary } from "../../core";
 import { EnumValuesChip } from "./CustomChip";
 import { Theme } from "@mui/material";
 import { PreviewSize } from "../PropertyPreviewProps";

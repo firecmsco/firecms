@@ -48,7 +48,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
         }
     }, [sidePanels, location, routesCount]);
 
-    const open = (panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
+    const open = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
         const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
 
@@ -76,9 +76,9 @@ export function useBuildSideDialogsController(): SideDialogsController {
             }
         });
 
-    };
+    }, [location, navigate, sidePanels]);
 
-    const replace = (panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
+    const replace = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
         const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
         newPanels.forEach((panel) => {
@@ -105,7 +105,7 @@ export function useBuildSideDialogsController(): SideDialogsController {
             }
         });
 
-    };
+    }, [location, navigate, sidePanels]);
 
     return {
         sidePanels,

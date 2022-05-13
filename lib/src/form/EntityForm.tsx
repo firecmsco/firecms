@@ -15,11 +15,14 @@ import { useVirtual } from "react-virtual";
 import { PropertyFieldBinding } from "./PropertyFieldBinding";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
-import { getDefaultValuesFor, isReadOnly } from "../core/util/entities";
+import {
+    CustomDialogActions,
+    getDefaultValuesFor,
+    isReadOnly,
+    resolveCollection
+} from "../core";
 import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
-import { CustomDialogActions } from "../core/components/CustomDialogActions";
-import { resolveCollection } from "../core/util/resolutions";
 
 /**
  * @category Components

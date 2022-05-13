@@ -60,6 +60,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             <PropertyFieldBinding {...fieldProps}/>
         </Box>;
     });
+
     return (
 
         <FormControl fullWidth error={showError}>

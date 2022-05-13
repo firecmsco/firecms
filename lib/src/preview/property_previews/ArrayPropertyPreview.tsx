@@ -7,8 +7,7 @@ import {
     PropertyPreview,
     PropertyPreviewProps
 } from "../internal";
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
-import { resolveArrayProperty } from "../../core/util/resolutions";
+import { ErrorBoundary, resolveArrayProperty } from "../../core";
 
 /**
  * @category Preview components

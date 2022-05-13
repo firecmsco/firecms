@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 
 import {
     Box,
@@ -22,8 +22,12 @@ import {
     ResolvedProperty
 } from "../../models";
 import { FieldDescription } from "../index";
-import { ErrorView, ReferenceDialog } from "../../core";
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
+import {
+    ErrorBoundary,
+    ErrorView,
+    getReferenceFrom,
+    ReferenceDialog
+} from "../../core";
 import { PropertyPreview, SkeletonComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
@@ -32,8 +36,6 @@ import {
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
-import { getReferenceFrom } from "../../core/util/entities";
-
 
 /**
  * Field that opens a reference selection dialog.
@@ -94,24 +96,24 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
         useCache: true
     });
 
-    const handleEntityClick = (entity: Entity<M>) => {
+    const handleEntityClick = useCallback((entity: Entity<M>) => {
         if (disabled)
             return;
         setValue(entity ? getReferenceFrom(entity) : null);
         setOpen(false);
-    };
+    }, [disabled, setValue]);
 
-    const handleClickOpen = () => {
+    const handleClickOpen = useCallback(() => {
         setOpen(true);
-    };
+    }, []);
 
-    const clearValue = (e: React.MouseEvent) => {
+    const clearValue = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         setValue(null);
         setOpen(false);
-    };
+    }, [setValue]);
 
-    const seeEntityDetails = (e: React.MouseEvent) => {
+    const seeEntityDetails = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         if (entity)
             sideEntityController.open({
@@ -119,13 +121,13 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                 path,
                 updateUrl: true
             });
-    };
+    }, [entity, path, sideEntityController]);
 
-    const onClose = () => {
+    const onClose = useCallback(() => {
         setOpen(false);
-    };
+    }, []);
 
-    function buildEntityView(collection?: EntityCollection<any>) {
+    const buildEntityView = useCallback((collection?: EntityCollection<any>) => {
 
         const missingEntity = entity && !entity.values;
 
@@ -271,7 +273,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                 </Box>
             </Box>
         );
-    }
+    }, [clearValue, disabled, entity, handleClickOpen, property, seeEntityDetails, validValue, value]);
 
     return (
         <FormControl error={showError} fullWidth>

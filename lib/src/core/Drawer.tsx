@@ -4,7 +4,7 @@ import { NavLink } from "react-router-dom";
 import { Box, Divider, Link, List, ListItem, Typography } from "@mui/material";
 import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
-import { useAuthController, useNavigationContext } from "../hooks";
+import { useNavigationContext } from "../hooks";
 import { FireCMSLogo } from "./components/FireCMSLogo";
 import { TopNavigationEntry, TopNavigationResult } from "../models";
 

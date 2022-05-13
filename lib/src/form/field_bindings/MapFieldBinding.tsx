@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
     FieldProps,
     Properties,
@@ -15,12 +15,10 @@ import {
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
-import { pick } from "../../core/util/objects";
+import { ExpandablePanel, isHidden, pick } from "../../core";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { isHidden } from "../../core/util/entities";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 
 /**
  * Field that renders the children property fields
@@ -69,7 +67,7 @@ export function MapFieldBinding<T extends object>({
         setValue
     });
 
-    function buildPickKeysSelect() {
+    const buildPickKeysSelect = useCallback(() => {
 
         const keys = Object.keys(property.properties!)
             .filter((key) => !value || !(key in value));
@@ -99,7 +97,7 @@ export function MapFieldBinding<T extends object>({
                 </Select>
             </FormControl>
         </Box>;
-    }
+    }, [disabled, property.properties, setValue, value]);
 
     const mapFormView = <>
         <Grid container spacing={2}>

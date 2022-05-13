@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../models";
 import { FormControl, FormHelperText } from "@mui/material";
 import { FieldDescription } from "../index";
@@ -45,7 +45,7 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
         setValue
     });
 
-    const buildEntry = (index: number, internalId: number) => {
+    const buildEntry = useCallback((index: number, internalId: number) => {
         const childProperty = property.resolvedProperties[index] ?? ofProperty;
         const fieldProps = {
             propertyKey: `${propertyKey}[${index}]`,
@@ -60,7 +60,7 @@ export function ArrayDefaultFieldBinding<T extends Array<any>>({
             shouldAlwaysRerender: childProperty.fromBuilder
         };
         return <PropertyFieldBinding {...fieldProps}/>;
-    };
+    }, [context, disabled, includeDescription, lastAddedId, ofProperty, property.resolvedProperties, propertyKey, underlyingValueHasChanged]);
 
     const arrayContainer = <ArrayContainer value={value}
                                            name={propertyKey}

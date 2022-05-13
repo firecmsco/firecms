@@ -1,9 +1,8 @@
 import React from "react";
 
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
+import { ErrorBoundary, resolvePropertyEnum } from "../../core";
 import { CustomChip, EnumValuesChip } from "../components/CustomChip";
 import { PropertyPreviewProps } from "../internal";
-import { resolvePropertyEnum } from "../../core/util/resolutions";
 
 /**
  * @category Preview components

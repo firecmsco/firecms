@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import {
     ApplicationVerifier,
@@ -68,13 +68,13 @@ export const useFirebaseAuthDelegate = (
         );
     }, [firebaseApp]);
 
-    const updateFirebaseUser = async (firebaseUser: FirebaseUser | null) => {
+    const updateFirebaseUser = useCallback(async (firebaseUser: FirebaseUser | null) => {
         setLoggedUser(firebaseUser);
         setInitialLoading(false);
         setAuthLoading(false);
-    };
+    }, []);
 
-    function onSignOut() {
+    const onSignOut = useCallback(() => {
         const auth = getAuth(firebaseApp);
         signOut(auth)
             .then(_ => {
@@ -82,18 +82,18 @@ export const useFirebaseAuthDelegate = (
                 setAuthProviderError(null);
             });
         setLoginSkipped(false);
-    }
+    }, [firebaseApp]);
 
-    const getProviderOptions = (providerId: FirebaseSignInProvider): FirebaseSignInOption | undefined => {
+    const getProviderOptions = useCallback((providerId: FirebaseSignInProvider): FirebaseSignInOption | undefined => {
         return signInOptions.find((option) => {
             if (option === null) throw Error("useFirebaseAuthDelegate");
             if (typeof option === "object" && option.provider === providerId)
                 return option as FirebaseSignInOption;
             return undefined;
         }) as FirebaseSignInOption | undefined;
-    }
+    }, [signInOptions]);
 
-    const googleLogin = () => {
+    const googleLogin = useCallback(() => {
         const provider = new GoogleAuthProvider();
         const options = getProviderOptions("google.com");
         if (options?.scopes)
@@ -102,24 +102,23 @@ export const useFirebaseAuthDelegate = (
             provider.setCustomParameters(options.customParameters);
         const auth = getAuth();
         signInWithPopup(auth, provider).catch(setAuthProviderError);
-    }
+    }, [getProviderOptions]);
 
-    function doOauthLogin(auth: Auth, provider: OAuthProvider | FacebookAuthProvider | GithubAuthProvider | TwitterAuthProvider) {
+    const doOauthLogin = useCallback((auth: Auth, provider: OAuthProvider | FacebookAuthProvider | GithubAuthProvider | TwitterAuthProvider) => {
         setAuthLoading(true);
         signInWithPopup(auth, provider)
-            .catch(setAuthProviderError)
-            .then(() => setAuthLoading(false));
-    }
+            .catch(setAuthProviderError).then(() => setAuthLoading(false));
+    }, []);
 
-    const anonymousLogin = () => {
+    const anonymousLogin = useCallback(() => {
         const auth = getAuth();
         setAuthLoading(true);
         signInAnonymously(auth)
             .catch(setAuthProviderError)
             .then(() => setAuthLoading(false));
-    }
+    }, []);
 
-    const phoneLogin = (phone: string, applicationVerifier: ApplicationVerifier) => {
+    const phoneLogin = useCallback((phone: string, applicationVerifier: ApplicationVerifier) => {
         const auth = getAuth();
         setAuthLoading(true);
         return signInWithPhoneNumber(auth, phone, applicationVerifier)
@@ -128,9 +127,9 @@ export const useFirebaseAuthDelegate = (
                 setAuthLoading(false)
                 setConfirmationResult(res)
             });
-    }
+    }, []);
 
-    const appleLogin = () => {
+    const appleLogin = useCallback(() => {
         const provider = new OAuthProvider("apple.com");
         const options = getProviderOptions("apple.com");
         if (options?.scopes)
@@ -139,9 +138,9 @@ export const useFirebaseAuthDelegate = (
             provider.setCustomParameters(options.customParameters);
         const auth = getAuth();
         doOauthLogin(auth, provider);
-    }
+    }, [doOauthLogin, getProviderOptions]);
 
-    const facebookLogin = () => {
+    const facebookLogin = useCallback(() => {
         const provider = new FacebookAuthProvider();
         const options = getProviderOptions("facebook.com");
         if (options?.scopes)
@@ -150,9 +149,9 @@ export const useFirebaseAuthDelegate = (
             provider.setCustomParameters(options.customParameters);
         const auth = getAuth();
         doOauthLogin(auth, provider);
-    }
+    }, [doOauthLogin, getProviderOptions]);
 
-    const githubLogin = () => {
+    const githubLogin = useCallback(() => {
         const provider = new GithubAuthProvider();
         const options = getProviderOptions("github.com");
         if (options?.scopes)
@@ -161,9 +160,9 @@ export const useFirebaseAuthDelegate = (
             provider.setCustomParameters(options.customParameters);
         const auth = getAuth();
         doOauthLogin(auth, provider);
-    }
+    }, [doOauthLogin, getProviderOptions]);
 
-    const microsoftLogin = () => {
+    const microsoftLogin = useCallback(() => {
         const provider = new OAuthProvider("microsoft.com");
         const options = getProviderOptions("microsoft.com");
         if (options?.scopes)
@@ -172,34 +171,34 @@ export const useFirebaseAuthDelegate = (
             provider.setCustomParameters(options.customParameters);
         const auth = getAuth();
         doOauthLogin(auth, provider);
-    }
+    }, [doOauthLogin, getProviderOptions]);
 
-    const twitterLogin = () => {
+    const twitterLogin = useCallback(() => {
         const provider = new TwitterAuthProvider();
         const options = getProviderOptions("twitter.com");
         if (options?.customParameters)
             provider.setCustomParameters(options.customParameters);
         const auth = getAuth();
         doOauthLogin(auth, provider);
-    }
+    }, [doOauthLogin, getProviderOptions]);
 
-    const emailPasswordLogin = (email: string, password: string) => {
+    const emailPasswordLogin = useCallback((email: string, password: string) => {
         const auth = getAuth();
         setAuthLoading(true);
         signInWithEmailAndPassword(auth, email, password)
             .catch(setAuthProviderError)
             .then(() => setAuthLoading(false));
-    }
+    }, []);
 
-    const registerWithPasswordEmail = (email: string, password: string) => {
+    const registerWithPasswordEmail = useCallback((email: string, password: string) => {
         const auth = getAuth();
         setAuthLoading(true);
         createUserWithEmailAndPassword(auth, email, password)
             .catch(setAuthProviderError)
             .then(() => setAuthLoading(false));
-    }
+    }, []);
 
-    const getSignInMethodsForEmail = (email: string): Promise<string[]> => {
+    const getSignInMethodsForEmail = useCallback((email: string): Promise<string[]> => {
         const auth = getAuth();
         setAuthLoading(true);
         return fetchSignInMethodsForEmail(auth, email)
@@ -207,7 +206,7 @@ export const useFirebaseAuthDelegate = (
                 setAuthLoading(false);
                 return res;
             });
-    }
+    }, []);
 
     return {
         user: loggedUser ?? null,

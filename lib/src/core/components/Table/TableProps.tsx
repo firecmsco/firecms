@@ -1,6 +1,6 @@
 import React from "react";
 import { ColumnShape } from "react-base-table";
-import {EnumValueConfig, WhereFilterOp} from "../../../models";
+import { EnumValueConfig, WhereFilterOp } from "../../../models";
 
 /**
  * @see Table

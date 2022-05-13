@@ -41,7 +41,7 @@ import {
     ArrayOfReferencesFieldBinding
 } from "./field_bindings/ArrayOfReferencesFieldBinding";
 
-import { isReadOnly } from "../core/util/entities";
+import { isReadOnly } from "../core";
 import {
     ArrayCustomShapedFieldBinding
 } from "./field_bindings/ArrayCustomShapedFieldBinding";

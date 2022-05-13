@@ -166,14 +166,16 @@ function ArrayOneOfEntry({
     const typeFieldName = `${name}[${typeField}]`;
     const valueFieldName = `${name}[${valueField}]`;
 
-    const fieldProps = property ? {
-        propertyKey: valueFieldName,
-        property: property,
-        context: context,
-        autoFocus: autoFocus,
-        tableMode: false,
-        shouldAlwaysRerender: property.fromBuilder
-    } : undefined;
+    const fieldProps = property
+        ? {
+            propertyKey: valueFieldName,
+            property,
+            context,
+            autoFocus,
+            tableMode: false,
+            shouldAlwaysRerender: property.fromBuilder
+        }
+        : undefined;
     return (
         <Paper sx={(theme) => ({
             padding: theme.spacing(1),

@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useCallback, useMemo } from "react";
 import { Box, Button, FormControl, FormHelperText } from "@mui/material";
 import {
     Entity,
@@ -9,11 +9,14 @@ import {
 } from "../../models";
 import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
-import { ErrorView, ReferenceDialog } from "../../core";
+import {
+    ErrorView,
+    ExpandablePanel,
+    getReferenceFrom,
+    ReferenceDialog
+} from "../../core";
 
 import { useClearRestoreValue, useNavigationContext } from "../../hooks";
-import { getReferenceFrom } from "../../core/util/entities";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -54,11 +57,11 @@ export function ArrayOfReferencesFieldBinding({
     });
 
     const navigationContext = useNavigationContext();
-    const collectionResolver: EntityCollection | undefined = useMemo(() => {
+    const collection: EntityCollection | undefined = useMemo(() => {
         return ofProperty.path ? navigationContext.getCollection(ofProperty.path) : undefined;
     }, [ofProperty.path]);
 
-    if (!collectionResolver) {
+    if (!collection) {
         throw Error(`Couldn't find the corresponding collection for the path: ${ofProperty.path}`);
     }
 
@@ -74,7 +77,7 @@ export function ArrayOfReferencesFieldBinding({
         setValue(entities.map(e => getReferenceFrom(e)));
     };
 
-    const buildEntry = (index: number, internalId: number) => {
+    const buildEntry = useCallback((index: number, internalId: number) => {
         const entryValue = value && value.length > index ? value[index] : undefined;
         if (!entryValue)
             return <div>Internal ERROR</div>;
@@ -93,17 +96,17 @@ export function ArrayOfReferencesFieldBinding({
                 />
             </div>
         );
-    };
+    }, [ofProperty.path, ofProperty.previewProperties, onHover, value]);
 
     const title = (
         <LabelWithIcon property={property}/>
     );
 
     const body = <>
-        {!collectionResolver && <ErrorView
+        {!collection && <ErrorView
             error={"The specified collection does not exist. Check console"}/>}
 
-        {collectionResolver && <>
+        {collection && <>
 
             <ArrayContainer value={value}
                             name={propertyKey}
@@ -143,10 +146,10 @@ export function ArrayOfReferencesFieldBinding({
 
             </FormControl>
 
-            {collectionResolver && ofProperty.path &&
+            {collection && ofProperty.path &&
                 <ReferenceDialog open={open}
                                  multiselect={true}
-                                 collection={collectionResolver}
+                                 collection={collection}
                                  path={ofProperty.path}
                                  onClose={onClose}
                                  onMultipleEntitiesSelected={onMultipleEntitiesSelected}

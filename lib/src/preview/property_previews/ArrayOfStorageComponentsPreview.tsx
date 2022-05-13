@@ -7,11 +7,10 @@ import {
     PropertyPreview,
     PropertyPreviewProps
 } from "../internal";
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
+import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../models";
 
 import { Theme } from "@mui/material";
-import { resolveArrayProperty } from "../../core/util/resolutions";
 
 const PREFIX = "ArrayOfStorageComponentsPreview";
 

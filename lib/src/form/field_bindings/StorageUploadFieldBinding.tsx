@@ -501,7 +501,7 @@ export function StorageUpload({
         onChange(fieldValue);
     };
 
-    const onDragEnd = (result: any) => {
+    const onDragEnd = useCallback((result: any) => {
         // dropped outside the list
         if (!result.destination) {
             return;
@@ -509,18 +509,9 @@ export function StorageUpload({
 
         moveItem(result.source.index, result.destination.index);
 
-    }
+    }, [moveItem])
 
-    function removeDuplicates(items: StorageFieldItem[]) {
-        return items.filter(
-            (item, i) => {
-                return ((items.map((v) => v.storagePathOrDownloadUrl).indexOf(item.storagePathOrDownloadUrl) === i) || !item.storagePathOrDownloadUrl) &&
-                    ((items.map((v) => v.file).indexOf(item.file) === i) || !item.file);
-            }
-        );
-    }
-
-    const onExternalDrop = (acceptedFiles: File[]) => {
+    const onExternalDrop = useCallback((acceptedFiles: File[]) => {
 
         if (!acceptedFiles.length || disabled)
             return;
@@ -548,11 +539,11 @@ export function StorageUpload({
         // Remove either storage path or file duplicates
         newInternalValue = removeDuplicates(newInternalValue);
         setInternalValue(newInternalValue);
-    };
+    }, [disabled, fileNameBuilder, internalValue, metadata, multipleFilesSupported, size]);
 
-    const onFileUploadComplete = async (uploadedPath: string,
-                                        entry: StorageFieldItem,
-                                        metadata?: any) => {
+    const onFileUploadComplete = useCallback(async (uploadedPath: string,
+                                                    entry: StorageFieldItem,
+                                                    metadata?: any) => {
 
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
@@ -582,9 +573,9 @@ export function StorageUpload({
         } else {
             onChange(fieldValue ? fieldValue[0] : null);
         }
-    };
+    }, [internalValue, multipleFilesSupported, onChange, storage, storageSource]);
 
-    const onClear = (clearedStoragePathOrDownloadUrl: string) => {
+    const onClear = useCallback((clearedStoragePathOrDownloadUrl: string) => {
         if (multipleFilesSupported) {
             const newValue: StorageFieldItem[] = internalValue.filter(v => v.storagePathOrDownloadUrl !== clearedStoragePathOrDownloadUrl);
             onChange(newValue.filter(v => !!v.storagePathOrDownloadUrl).map(v => v.storagePathOrDownloadUrl as string));
@@ -593,7 +584,7 @@ export function StorageUpload({
             onChange(null);
             setInternalValue([]);
         }
-    };
+    }, [internalValue, multipleFilesSupported, onChange]);
 
     const helpText = multipleFilesSupported
         ? "Drag 'n' drop some files here, or click to select files"
@@ -812,4 +803,13 @@ export function StorageItemPreview({
         </Box>
     );
 
+}
+
+function removeDuplicates(items: StorageFieldItem[]) {
+    return items.filter(
+        (item, i) => {
+            return ((items.map((v) => v.storagePathOrDownloadUrl).indexOf(item.storagePathOrDownloadUrl) === i) || !item.storagePathOrDownloadUrl) &&
+                ((items.map((v) => v.file).indexOf(item.file) === i) || !item.file);
+        }
+    );
 }
