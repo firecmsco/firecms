@@ -38,7 +38,7 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     const {
         path,
         collections = [],
-        currentFullPath,
+        currentFullPath
     } = props;
 
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
@@ -67,13 +67,13 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                 const fullPath = collectionPath + "/" + entityId;
                 result.push({
                     type: "entity",
-                    entityId: entityId,
+                    entityId,
                     path: collectionPath,
                     parentCollection: collection
                 });
                 if (nextSegments.length > 1) {
                     const newPath = nextSegments.slice(1).join("/");
-                    if(!collection) {
+                    if (!collection) {
                         throw Error("collection not found resolving path: " + collection);
                     }
                     const customViews = collection.views;
@@ -84,15 +84,15 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
                             : customView.path;
                         result.push({
                             type: "custom_view",
-                            path: path,
+                            path,
                             view: customView
                         });
                     } else if (collection.subcollections) {
                         result.push(...getNavigationEntriesFromPathInternal({
                             path: newPath,
-                            customViews: customViews,
+                            customViews,
                             collections: collection.subcollections,
-                            currentFullPath: fullPath,
+                            currentFullPath: fullPath
                         }));
                     }
                 }
@@ -103,4 +103,3 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     }
     return result;
 }
-

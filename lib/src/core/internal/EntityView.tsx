@@ -1,4 +1,11 @@
-import React, { lazy, Suspense, useCallback, useEffect, useState } from "react";
+import React, {
+    lazy,
+    Suspense,
+    useCallback,
+    useEffect,
+    useRef,
+    useState
+} from "react";
 import equal from "react-fast-compare";
 import {
     Box,
@@ -22,12 +29,16 @@ import {
 import {
     CircularProgressCenter,
     EntityCollectionViewProps,
-    EntityPreviewProps
+    EntityPreviewProps,
+    ErrorBoundary
 } from "../components";
-import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
+import {
+    canEditEntity,
+    fullPathToCollectionSegments,
+    removeInitialAndTrailingSlashes
+} from "../util";
 
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
-import { ErrorBoundary } from "../components/ErrorBoundary";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -37,9 +48,7 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "../../hooks";
-import { canEditEntity } from "../util/permissions";
 import { EntityFormProps } from "../../form";
-import { fullPathToCollectionSegments } from "../util/paths";
 import { useSideDialogContext } from "../SideDialogs";
 
 const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<any>>;
@@ -67,6 +76,10 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
                                                                                      formWidth
                                                                                  }: EntityViewProps<M, UserType>) {
 
+        const theme = useTheme();
+        const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
+        const largeLayoutTabSelected = useRef(!largeLayout);
+
         const resolvedWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? CONTAINER_WIDTH;
 
         const dataSource = useDataSource();
@@ -74,15 +87,26 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
         const sideEntityController = useSideEntityController();
         const snackbarController = useSnackbarController();
         const context = useFireCMSContext();
-
         const authController = useAuthController<UserType>();
 
         const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
         const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
         const [readOnly, setReadOnly] = useState<boolean>(false);
-        const [tabsPosition, setTabsPosition] = React.useState(-1);
 
         const [modifiedValues, setModifiedValues] = useState<EntityValues<M> | undefined>();
+
+        const subcollections = collection.subcollections;
+        const subcollectionsCount = subcollections?.length ?? 0;
+        const customViews = collection.views;
+        const customViewsCount = customViews?.length ?? 0;
+
+        const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
+        const fistAdditionalView = !hasAdditionalViews ? undefined : (customViews && customViews?.length > 0 ? customViews[0] : (subcollections && subcollections?.length > 0 ? subcollections[0] : undefined));
+
+        const selectFirstTab = !selectedSubPath && largeLayout && fistAdditionalView;
+        const [tabsPosition, setTabsPosition] = React.useState(selectFirstTab ? 0 : -1);
+
+        const mainViewVisible = tabsPosition === -1 || largeLayout;
 
         const {
             entity,
@@ -98,17 +122,10 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
 
         const editEnabled = entity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path)) : false;
 
-        const subcollections = collection.subcollections;
-        const customViews = collection.views;
-        const customViewsCount = customViews?.length ?? 0;
-
         useEffect(() => {
             if (entity)
                 setReadOnly(!editEnabled);
         }, [entity, editEnabled]);
-
-        const theme = useTheme();
-        const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
 
         useEffect(() => {
             if (!selectedSubPath)
@@ -126,374 +143,390 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
                     .map((c) => c.path)
                     .findIndex((p) => p === selectedSubPath);
                 setTabsPosition(index + customViewsCount);
-        }
-    }, [selectedSubPath]);
+            }
+        }, [selectedSubPath]);
 
-    const onPreSaveHookError = useCallback((e: Error) => {
-        snackbarController.open({
-            type: "error",
-            title: "Error before saving",
-            message: e?.message
-        });
-        console.error(e);
-    }, []);
+        useEffect(() => {
+            if (largeLayoutTabSelected.current === largeLayout)
+                return;
 
-    const onSaveSuccessHookError = useCallback((e: Error) => {
-        snackbarController.open({
-            type: "error",
-            title: `${collection.name}: Error after saving (entity is saved)`,
-            message: e?.message
-        });
-        console.error(e);
-    }, []);
+            // open first tab by default in  large layouts
+            if (!selectedSubPath && largeLayout && fistAdditionalView)
+                sideEntityController.replace({
+                    path,
+                    entityId,
+                    selectedSubPath: fistAdditionalView.path,
+                    updateUrl: true
+                });
+            // set form view by default in small layouts
+            else if (tabsPosition === 0 && !largeLayout && fistAdditionalView)
+                sideEntityController.replace({
+                    path,
+                    entityId,
+                    selectedSubPath: undefined,
+                    updateUrl: true
+                });
+            largeLayoutTabSelected.current = largeLayout;
+        }, [largeLayout, tabsPosition, fistAdditionalView, largeLayoutTabSelected.current, selectedSubPath]);
 
-    const onSaveSuccess = useCallback((updatedEntity: Entity<M>) => {
+        const onPreSaveHookError = useCallback((e: Error) => {
+            snackbarController.open({
+                type: "error",
+                title: "Error before saving",
+                message: e?.message
+            });
+            console.error(e);
+        }, []);
 
-        setCurrentEntityId(updatedEntity.id);
+        const onSaveSuccessHookError = useCallback((e: Error) => {
+            snackbarController.open({
+                type: "error",
+                title: `${collection.name}: Error after saving (entity is saved)`,
+                message: e?.message
+            });
+            console.error(e);
+        }, []);
 
-        snackbarController.open({
-            type: "success",
-            message: `${collection.name}: Saved correctly`
-        });
+        const onSaveSuccess = useCallback((updatedEntity: Entity<M>) => {
 
-        setStatus("existing");
-        onValuesAreModified(false);
+            setCurrentEntityId(updatedEntity.id);
 
-        if (tabsPosition === -1)
-            sideDialogContext.close();
+            snackbarController.open({
+                type: "success",
+                message: `${collection.name}: Saved correctly`
+            });
 
-    }, []);
+            setStatus("existing");
+            onValuesAreModified(false);
 
-    const onSaveFailure = useCallback((e: Error) => {
+            if (tabsPosition === -1)
+                sideDialogContext.close();
 
-        snackbarController.open({
-            type: "error",
-            title: `${collection.name}: Error saving`,
-            message: e?.message
-        });
+        }, [tabsPosition]);
 
-        console.error("Error saving entity", path, entityId);
-        console.error(e);
-    }, []);
+        const onSaveFailure = useCallback((e: Error) => {
 
-    const onEntitySave = useCallback(async ({
-                                                collection,
-                                                path,
-                                                entityId,
-                                                values,
-                                                previousValues
-                                            }: {
-        collection: ResolvedEntityCollection<M>,
-        path: string,
-        entityId: string | undefined,
-        values: EntityValues<M>,
-        previousValues?: EntityValues<M>,
-    }): Promise<void> => {
+            snackbarController.open({
+                type: "error",
+                title: `${collection.name}: Error saving`,
+                message: e?.message
+            });
 
-        if (!status)
-            return;
+            console.error("Error saving entity", path, entityId);
+            console.error(e);
+        }, []);
 
-        return saveEntityWithCallbacks({
-            path,
-            entityId,
-            values,
-            previousValues,
-            collection,
-            status,
-            dataSource,
-            context,
-            onSaveSuccess,
-            onSaveFailure,
-            onPreSaveHookError,
-            onSaveSuccessHookError
-        });
-    }, [status, collection, dataSource, context, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError]);
+        const onEntitySave = useCallback(async ({
+                                                    collection,
+                                                    path,
+                                                    entityId,
+                                                    values,
+                                                    previousValues
+                                                }: {
+            collection: ResolvedEntityCollection<M>,
+            path: string,
+            entityId: string | undefined,
+            values: EntityValues<M>,
+            previousValues?: EntityValues<M>,
+        }): Promise<void> => {
 
-    const onDiscard = useCallback(() => {
-        onValuesAreModified(false);
-        if (tabsPosition === -1)
-            sideDialogContext.close();
-    }, [tabsPosition]);
+            if (!status)
+                return;
 
-    const form = !readOnly
-        ? (
-            <Suspense fallback={<CircularProgressCenter/>}>
-                <EntityForm
-                    key={`form_${path}_${entity?.id ?? "new"}`}
-                    status={status}
-                    path={path}
-                    collection={collection}
-                    onEntitySave={onEntitySave}
-                    onDiscard={onDiscard}
-                    onValuesChanged={setModifiedValues}
-                    onModified={onValuesAreModified}
-                    entity={entity}/>
-            </Suspense>
-        )
-        : (
-            <Suspense fallback={<CircularProgressCenter/>}>
-                <EntityPreview
-                    entity={entity as Entity<M>}
-                    path={path}
-                    collection={collection}/>
-            </Suspense>
-        );
-
-    const customViewsView: JSX.Element[] | undefined = customViews && customViews.map(
-        (customView, colIndex) => {
-            return (
-                <Box
-                    sx={{
-                        width: TAB_WIDTH,
-                        height: "100%",
-                        overflow: "auto",
-                        borderLeft: `1px solid ${theme.palette.divider}`,
-                        [theme.breakpoints.down("lg")]: {
-                            borderLeft: "inherit",
-                            width: CONTAINER_FULL_WIDTH
-                        }
-                    }}
-                    key={`custom_view_${customView.path}_${colIndex}`}
-                    role="tabpanel"
-                    flexGrow={1}
-                    hidden={tabsPosition !== colIndex}>
-                    <ErrorBoundary>
-                        {customView.builder({
-                            collection,
-                            entity,
-                            modifiedValues: modifiedValues ?? entity?.values
-                        })}
-                    </ErrorBoundary>
-                </Box>
-            );
-        }
-    );
-
-    const subCollectionsViews = subcollections && subcollections.map(
-        (subcollection, colIndex) => {
-            const fullPath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
-
-            return (
-                <Box
-                    sx={{
-                        width: TAB_WIDTH,
-                        height: "100%",
-                        overflow: "auto",
-                        borderLeft: `1px solid ${theme.palette.divider}`,
-                        [theme.breakpoints.down("lg")]: {
-                            borderLeft: "inherit",
-                            width: CONTAINER_FULL_WIDTH
-                        }
-                    }}
-                    key={`subcol_${subcollection.name}_${colIndex}`}
-                    role="tabpanel"
-                    flexGrow={1}
-                    hidden={tabsPosition !== colIndex + customViewsCount}>
-
-                    {dataLoading && <CircularProgressCenter/>}
-
-                    {!dataLoading &&
-                        (entity && fullPath
-                            ? <Suspense fallback={<CircularProgressCenter/>}>
-                                <EntityCollectionView
-                                    fullPath={fullPath}
-                                    collection={subcollection}/>
-                            </Suspense>
-                            : <Box m={3}
-                                   display={"flex"}
-                                   alignItems={"center"}
-                                   justifyContent={"center"}>
-                                <Box>
-                                    You need to save your entity before
-                                    adding additional collections
-                                </Box>
-                            </Box>)
-                    }
-
-                </Box>
-            );
-        }
-    );
-
-    const getSelectedSubPath = useCallback((value: number) => {
-        if (value === -1) return undefined;
-
-        if (customViews && value < customViewsCount) {
-            return customViews[value].path;
-        }
-
-        if (subcollections) {
-            return subcollections[value - customViewsCount].path;
-        }
-
-        throw Error("Something is wrong in getSelectedSubPath");
-    }, [customViews, customViewsCount, subcollections]);
-
-    const onSideTabClick = useCallback((value: number) => {
-        setTabsPosition(value);
-        if (entityId) {
-            sideEntityController.replace({
+            return saveEntityWithCallbacks({
                 path,
                 entityId,
-                selectedSubPath: getSelectedSubPath(value),
-                updateUrl: true
+                values,
+                previousValues,
+                collection,
+                status,
+                dataSource,
+                context,
+                onSaveSuccess,
+                onSaveFailure,
+                onPreSaveHookError,
+                onSaveSuccessHookError
             });
-        }
-    }, [sideEntityController, entityId]);
+        }, [status, collection, dataSource, context, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError]);
 
-    const header = (
-        <Box sx={{
-            paddingLeft: 2,
-            paddingRight: 2,
-            paddingTop: 1,
-            display: "flex",
-            alignItems: "end",
-            backgroundColor: theme.palette.mode === "light" ? theme.palette.background.default : theme.palette.background.paper
-        }}>
+        const customViewsView: JSX.Element[] | undefined = customViews && customViews.map(
+            (customView, colIndex) => {
+                return (
+                    <Box
+                        sx={{
+                            width: TAB_WIDTH,
+                            height: "100%",
+                            overflow: "auto",
+                            borderLeft: `1px solid ${theme.palette.divider}`,
+                            [theme.breakpoints.down("lg")]: {
+                                borderLeft: "inherit",
+                                width: CONTAINER_FULL_WIDTH
+                            }
+                        }}
+                        key={`custom_view_${customView.path}_${colIndex}`}
+                        role="tabpanel"
+                        flexGrow={1}
+                        hidden={tabsPosition !== colIndex}>
+                        <ErrorBoundary>
+                            {customView.builder({
+                                collection,
+                                entity,
+                                modifiedValues: modifiedValues ?? entity?.values
+                            })}
+                        </ErrorBoundary>
+                    </Box>
+                );
+            }
+        );
 
-            <Box
-                sx={{
-                    pb: 1,
-                    alignSelf: "center"
-                }}
-            >
-                <IconButton onClick={() => sideDialogContext.close()}
-                            size="large">
-                    <CloseIcon/>
-                </IconButton>
-            </Box>
+        const subCollectionsViews = subcollections && subcollections.map(
+            (subcollection, colIndex) => {
+                const fullPath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
 
-            <Tabs
-                value={tabsPosition === -1 ? 0 : false}
-                indicatorColor="secondary"
-                textColor="inherit"
-                scrollButtons="auto"
-            >
-                <Tab
-                    label={collection.name}
-                    sx={{
-                        fontSize: "0.875rem",
-                        minWidth: "140px"
-                    }}
-                    wrapped={true}
-                    onClick={() => {
-                        onSideTabClick(-1);
-                    }}/>
-            </Tabs>
+                return (
+                    <Box
+                        sx={{
+                            width: TAB_WIDTH,
+                            height: "100%",
+                            overflow: "auto",
+                            borderLeft: `1px solid ${theme.palette.divider}`,
+                            [theme.breakpoints.down("lg")]: {
+                                borderLeft: "inherit",
+                                width: CONTAINER_FULL_WIDTH
+                            }
+                        }}
+                        key={`subcol_${subcollection.name}_${colIndex}`}
+                        role="tabpanel"
+                        flexGrow={1}
+                        hidden={tabsPosition !== colIndex + customViewsCount}>
 
-            <Box flexGrow={1}/>
+                        {dataLoading && <CircularProgressCenter/>}
 
-            {dataLoading &&
-            <CircularProgress size={16} thickness={8}/>}
-
-            <Tabs
-                value={tabsPosition >= 0 ? tabsPosition : false}
-                indicatorColor="secondary"
-                textColor="inherit"
-                onChange={(ev, value) => {
-                    onSideTabClick(value);
-                }}
-                sx={{
-                    paddingLeft: theme.spacing(1),
-                    paddingRight: theme.spacing(1),
-                    paddingTop: theme.spacing(0)
-                }}
-                variant="scrollable"
-                scrollButtons="auto"
-            >
-
-                {customViews && customViews.map(
-                    (view) =>
-                        <Tab
-                            sx={{
-                                fontSize: "0.875rem",
-                                minWidth: "140px"
-                            }}
-                            wrapped={true}
-                            key={`entity_detail_custom_tab_${view.name}`}
-                            label={view.name}/>
-                )}
-
-                {subcollections && subcollections.map(
-                    (subcollection) =>
-                        <Tab
-                            sx={{
-                                fontSize: "0.875rem",
-                                minWidth: "140px"
-                            }}
-                            wrapped={true}
-                            key={`entity_detail_collection_tab_${subcollection.name}`}
-                            label={subcollection.name}/>
-                )}
-
-            </Tabs>
-        </Box>
-
-    );
-
-    const mainViewSelected = tabsPosition === -1;
-    return (
-        <Box
-            sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                width: "100%",
-                transition: "width 250ms ease-in-out",
-            }}>
-            {
-                <>
-
-                    {header}
-
-                    <Divider/>
-
-                    <Box sx={{
-                        flexGrow: 1,
-                        height: "100%",
-                        width: `calc(${TAB_WIDTH} + ${resolvedWidth})`,
-                        maxWidth: "100%",
-                        [theme.breakpoints.down("sm")]: {
-                            width: CONTAINER_FULL_WIDTH
-                        },
-                        display: "flex",
-                        overflow: "auto",
-                        flexDirection: "row"
-                    }}>
-
-                        <Box sx={{
-                            position: "relative"
-                        }}>
-                            <Box
-                                role="tabpanel"
-                                hidden={!largeLayout && !mainViewSelected}
-                                sx={{
-                                    width: resolvedWidth,
-                                    maxWidth: "100%",
-                                    height: "100%",
-                                    overflow: "auto",
-                                    [theme.breakpoints.down("sm")]: {
-                                        maxWidth: CONTAINER_FULL_WIDTH,
-                                        width: CONTAINER_FULL_WIDTH
-                                    }
-                                }}>
-                                {dataLoading
-                                    ? <CircularProgressCenter/>
-                                    : form}
-                            </Box>
-                        </Box>
-
-                        {customViewsView}
-
-                        {subCollectionsViews}
+                        {!dataLoading &&
+                            (entity && fullPath
+                                ? <Suspense
+                                    fallback={<CircularProgressCenter/>}>
+                                    <EntityCollectionView
+                                        fullPath={fullPath}
+                                        collection={subcollection}/>
+                                </Suspense>
+                                : <Box m={3}
+                                       display={"flex"}
+                                       alignItems={"center"}
+                                       justifyContent={"center"}>
+                                    <Box>
+                                        You need to save your entity before
+                                        adding additional collections
+                                    </Box>
+                                </Box>)
+                        }
 
                     </Box>
+                );
+            }
+        );
 
-                </>
+        const getSelectedSubPath = useCallback((value: number) => {
+            if (value === -1) return undefined;
+
+            if (customViews && value < customViewsCount) {
+                return customViews[value].path;
             }
 
-        </Box>
-    );
+            if (subcollections) {
+                return subcollections[value - customViewsCount].path;
+            }
+
+            throw Error("Something is wrong in getSelectedSubPath");
+        }, [customViews, customViewsCount, subcollections]);
+
+        const onDiscard = useCallback(() => {
+            onValuesAreModified(false);
+            if (tabsPosition === -1)
+                sideDialogContext.close();
+        }, [tabsPosition]);
+
+        const onSideTabClick = useCallback((value: number) => {
+            setTabsPosition(value);
+            if (entityId) {
+                sideEntityController.replace({
+                    path,
+                    entityId,
+                    selectedSubPath: getSelectedSubPath(value),
+                    updateUrl: true
+                });
+            }
+        }, [sideEntityController, entityId]);
+
+        const form = !readOnly
+            ? (
+                <Suspense fallback={<CircularProgressCenter/>}>
+                    <EntityForm
+                        key={`form_${path}_${entity?.id ?? "new"}`}
+                        status={status}
+                        path={path}
+                        collection={collection}
+                        onEntitySave={onEntitySave}
+                        onDiscard={onDiscard}
+                        onValuesChanged={setModifiedValues}
+                        onModified={onValuesAreModified}
+                        entity={entity}/>
+                </Suspense>
+            )
+            : (
+                <Suspense fallback={<CircularProgressCenter/>}>
+                    <EntityPreview
+                        entity={entity as Entity<M>}
+                        path={path}
+                        collection={collection}/>
+                </Suspense>
+            );
+
+        const header = (
+            <Box sx={{
+                paddingLeft: 2,
+                paddingRight: 2,
+                paddingTop: 1,
+                display: "flex",
+                alignItems: "end",
+                backgroundColor: theme.palette.mode === "light" ? theme.palette.background.default : theme.palette.background.paper
+            }}>
+
+                <Box
+                    sx={{
+                        pb: 1,
+                        alignSelf: "center"
+                    }}
+                >
+                    <IconButton onClick={() => sideDialogContext.close()}
+                                size="large">
+                        <CloseIcon/>
+                    </IconButton>
+                </Box>
+
+                <Box flexGrow={1}/>
+
+                {dataLoading &&
+                    <CircularProgress size={16} thickness={8}/>}
+
+                <Tabs
+                    value={tabsPosition + 1}
+                    indicatorColor="secondary"
+                    textColor="inherit"
+                    onChange={(ev, value) => {
+                        if (largeLayout && value === 0) return;
+                        onSideTabClick(value - 1);
+                    }}
+                    sx={{
+                        paddingLeft: theme.spacing(1),
+                        paddingRight: theme.spacing(1),
+                        paddingTop: theme.spacing(0)
+                    }}
+                    variant="scrollable"
+                    scrollButtons="auto"
+                >
+
+                    <Tab
+                        label={collection.name}
+                        disabled={largeLayout || !hasAdditionalViews}
+                        sx={{
+                            fontSize: "0.875rem",
+                            minWidth: "140px"
+                        }}
+                        wrapped={true}
+                    />
+
+                    {customViews && customViews.map(
+                        (view) =>
+                            <Tab
+                                sx={{
+                                    fontSize: "0.875rem",
+                                    minWidth: "140px"
+                                }}
+                                wrapped={true}
+                                key={`entity_detail_custom_tab_${view.name}`}
+                                label={view.name}/>
+                    )}
+
+                    {subcollections && subcollections.map(
+                        (subcollection) =>
+                            <Tab
+                                sx={{
+                                    fontSize: "0.875rem",
+                                    minWidth: "140px"
+                                }}
+                                wrapped={true}
+                                key={`entity_detail_collection_tab_${subcollection.name}`}
+                                label={subcollection.name}/>
+                    )}
+
+                </Tabs>
+            </Box>
+
+        );
+
+        return (
+            <Box
+                sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: "100%",
+                    width: "100%",
+                    transition: "width 250ms ease-in-out"
+                }}>
+                {
+                    <>
+
+                        {header}
+
+                        <Divider/>
+
+                        <Box sx={{
+                            flexGrow: 1,
+                            height: "100%",
+                            width: `calc(${TAB_WIDTH} + ${resolvedWidth})`,
+                            maxWidth: "100%",
+                            [theme.breakpoints.down("sm")]: {
+                                width: CONTAINER_FULL_WIDTH
+                            },
+                            display: "flex",
+                            overflow: "auto",
+                            flexDirection: "row"
+                        }}>
+
+                            <Box sx={{
+                                position: "relative"
+                            }}>
+                                <Box
+                                    role="tabpanel"
+                                    hidden={!mainViewVisible}
+                                    sx={{
+                                        width: resolvedWidth,
+                                        maxWidth: "100%",
+                                        height: "100%",
+                                        overflow: "auto",
+                                        [theme.breakpoints.down("sm")]: {
+                                            maxWidth: CONTAINER_FULL_WIDTH,
+                                            width: CONTAINER_FULL_WIDTH
+                                        }
+                                    }}>
+                                    {dataLoading
+                                        ? <CircularProgressCenter/>
+                                        : form}
+                                </Box>
+                            </Box>
+
+                            {customViewsView}
+
+                            {subCollectionsViews}
+
+                        </Box>
+
+                    </>
+                }
+
+            </Box>
+        );
     },
     equal
 )

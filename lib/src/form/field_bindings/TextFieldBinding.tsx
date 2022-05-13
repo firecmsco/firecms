@@ -80,7 +80,6 @@ export function TextFieldBinding<T extends string | number>({
 
             <FormControl
                 variant="filled"
-                required={property.validation?.required}
                 error={showError}
                 disabled={valueIsInfinity}
                 sx={{

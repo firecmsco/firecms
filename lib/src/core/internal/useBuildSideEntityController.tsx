@@ -112,14 +112,12 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
         if (i > 0) { // the first collection is handled by the main navigation
             const previousEntry = navigationViewsForPath[i - 1];
             if (navigationEntry.type === "entity") {
-                if (previousEntry.type === "collection") {
-                    sidePanels.push({
-                            path: navigationEntry.path,
-                            entityId: navigationEntry.entityId,
-                            copy: false
-                        }
-                    );
-                }
+                sidePanels.push({
+                        path: navigationEntry.path,
+                        entityId: navigationEntry.entityId,
+                        copy: false
+                    }
+                );
             } else if (navigationEntry.type === "custom_view") {
                 if (previousEntry.type === "entity") {
                     const lastSidePanel: EntitySidePanelProps = sidePanels[sidePanels.length - 1];

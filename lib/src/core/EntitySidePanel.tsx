@@ -4,7 +4,7 @@ import { EntitySidePanelProps } from "../models";
 import { CONTAINER_WIDTH } from "./internal/common";
 import { useNavigationContext, useSideEntityController } from "../hooks";
 
-import { ErrorBoundary } from "./components/ErrorBoundary";
+import { ErrorBoundary } from "./components";
 import { EntityView } from "./internal/EntityView";
 import { useSideDialogContext } from "./SideDialogs";
 
