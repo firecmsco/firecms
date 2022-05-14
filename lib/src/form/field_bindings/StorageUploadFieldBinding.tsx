@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 
 import { styled, Theme } from "@mui/material/styles";
-import equal from "react-fast-compare"
 
 import {
     Box,
@@ -17,11 +16,9 @@ import {
     ArrayProperty,
     Entity,
     FieldProps,
-    Property,
     ResolvedArrayProperty,
     ResolvedStringProperty,
-    StorageConfig,
-    StringProperty
+    StorageConfig
 } from "../../models";
 import { useDropzone } from "react-dropzone";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -29,16 +26,20 @@ import { PreviewSize, PropertyPreview } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
+import { ErrorBoundary, isReadOnly } from "../../core";
 import clsx from "clsx";
 import {
     useClearRestoreValue,
     useSnackbarController,
     useStorageSource
 } from "../../hooks";
-import { isReadOnly } from "../../core/util/entities";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { resolveStorageString } from "../../core/util/storage";
+import {
+    StorageFieldItem,
+    useStorageUploadController
+} from "../../core/util/useStorageUploadController";
+import { StorageUploadProgress } from "../components/StorageUploadProgress";
+import { StorageItemPreview } from "../components/StorageItemPreview";
 
 const PREFIX = "StorageUploadField";
 
@@ -48,8 +49,7 @@ const classes = {
     nonActiveDrop: `${PREFIX}-nonActiveDrop`,
     activeDrop: `${PREFIX}-activeDrop`,
     acceptDrop: `${PREFIX}-acceptDrop`,
-    rejectDrop: `${PREFIX}-rejectDrop`,
-    thumbnailCloseIcon: `${PREFIX}-thumbnailCloseIcon`
+    rejectDrop: `${PREFIX}-rejectDrop`
 };
 
 const StyledBox = styled(Box)(({ theme }:
@@ -105,14 +105,6 @@ const StyledBox = styled(Box)(({ theme }:
         borderColor: theme.palette.error.light
     },
 
-    [`& .${classes.thumbnailCloseIcon}`]: {
-        position: "absolute",
-        borderRadius: "9999px",
-        top: -8,
-        right: -8,
-        zIndex: 100,
-        backgroundColor: theme.palette.background.paper
-    }
 }));
 
 type StorageUploadFieldProps = FieldProps<string | string[]>;
@@ -135,54 +127,37 @@ export function StorageUploadFieldBinding({
                                               property,
                                               includeDescription,
                                               context,
-                                              isSubmitting
+                                              isSubmitting,
                                           }: StorageUploadFieldProps) {
 
-    const multipleFilesSupported = property.dataType === "array";
+    const storageSource = useStorageSource();
     const disabled = isReadOnly(property) || !!property.disabled || isSubmitting;
 
-    const internalValue = multipleFilesSupported
-        ? (Array.isArray(value) ? value : [])
-        : value;
+    const {
+        internalValue,
+        setInternalValue,
+        onFilesAdded,
+        storage,
+        onFileUploadComplete,
+        storagePathBuilder,
+        multipleFilesSupported
+    } = useStorageUploadController({
+        entityValues: context.values,
+        entityId: context.entityId,
+        path: context.path,
+        property,
+        propertyKey,
+        value,
+        storageSource,
+        disabled,
+        onChange: setValue
+    });
 
     useClearRestoreValue<string | string[]>({
         property,
         value,
         setValue
     });
-
-    const storage: StorageConfig | undefined = property.dataType === "string"
-        ? property.storage
-        : property.dataType === "array" &&
-        (property.of as Property).dataType === "string"
-            ? (property.of as StringProperty).storage
-            : undefined;
-
-    if (!storage)
-        throw Error("Storage meta must be specified");
-
-    const fileNameBuilder = (file: File) => {
-        if (storage.fileName) {
-            const fileName = resolveStorageString(storage.fileName,
-                storage,
-                context.values,
-                context.entityId,
-                context.path,
-                property,
-                file,
-                propertyKey);
-
-            if (!fileName || fileName.length === 0) {
-                throw Error("You need to return a valid filename");
-            }
-            return fileName;
-        }
-        return file.name;
-    };
-
-    const storagePathBuilder = (file: File) => {
-        return resolveStorageString(storage.storagePath, storage, context.values, context.entityId, context.path, property, file, propertyKey) ?? "/";
-    };
 
     const entity: Entity<any> = {
         id: context.entityId,
@@ -207,11 +182,11 @@ export function StorageUploadFieldBinding({
                 disabled={disabled}
                 autoFocus={autoFocus}
                 property={property}
-                onChange={(newValue) => {
-                    setValue(newValue);
-                }}
+                onChange={setValue}
+                setInternalValue={setInternalValue}
+                onFilesAdded={onFilesAdded}
                 entity={entity}
-                fileNameBuilder={fileNameBuilder}
+                onFileUploadComplete={onFileUploadComplete}
                 storagePathBuilder={storagePathBuilder}
                 storage={storage}
                 multipleFilesSupported={multipleFilesSupported}/>
@@ -225,41 +200,11 @@ export function StorageUploadFieldBinding({
     );
 }
 
-/**
- * Internal representation of an item in the storage
- * It can have two states, having a storagePathOrDownloadUrl set,
- * which means the file has
- * been uploaded and it is rendered as a preview
- * Or have a pending file being uploaded.
- */
-interface StorageFieldItem {
-    id: number; // generated on the fly for internal use only
-    storagePathOrDownloadUrl?: string;
-    file?: File;
-    fileName?: string;
-    metadata?: any,
-    size: PreviewSize
-}
-
-interface StorageUploadProps {
-    value: string | string[];
-    name: string;
-    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
-    onChange: (value: string | string[] | null) => void;
-    multipleFilesSupported: boolean;
-    autoFocus: boolean;
-    disabled: boolean;
-    entity: Entity<any>;
-    storage: StorageConfig;
-    fileNameBuilder: (file: File) => string;
-    storagePathBuilder: (file: File) => string;
-}
-
 function FileDropComponent({
                                storage,
                                disabled,
                                isDraggingOver,
-                               onExternalDrop,
+                               onFilesAdded,
                                multipleFilesSupported,
                                droppableProvided,
                                autoFocus,
@@ -278,7 +223,7 @@ function FileDropComponent({
     disabled: boolean,
     isDraggingOver: boolean,
     droppableProvided: any,
-    onExternalDrop: (acceptedFiles: File[]) => void,
+    onFilesAdded: (acceptedFiles: File[]) => void,
     multipleFilesSupported: boolean,
     autoFocus: boolean,
     internalValue: StorageFieldItem[],
@@ -306,7 +251,7 @@ function FileDropComponent({
             disabled: disabled || isDraggingOver,
             noDragEventsBubbling: true,
             maxSize: storage.maxSize,
-            onDrop: onExternalDrop,
+            onDrop: onFilesAdded,
             onDropRejected: (fileRejections, event) => {
                 for (const fileRejection of fileRejections) {
                     for (const error of fileRejection.errors) {
@@ -375,7 +320,8 @@ function FileDropComponent({
                                 metadata={metadata}
                                 storagePath={storagePathBuilder(entry.file)}
                                 onFileUploadComplete={onFileUploadComplete}
-                                size={size}
+                                imageSize={size === "regular" ? 220 : 118}
+                                simple={false}
                             />
                         );
                     }
@@ -430,21 +376,37 @@ function FileDropComponent({
     );
 }
 
+export interface StorageUploadProps {
+    value: StorageFieldItem[];
+    setInternalValue: (v:StorageFieldItem[]) => void;
+    name: string;
+    property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
+    onChange: (value: string | string[] | null) => void;
+    multipleFilesSupported: boolean;
+    autoFocus: boolean;
+    disabled: boolean;
+    entity: Entity<any>;
+    storage: StorageConfig;
+    onFilesAdded: (acceptedFiles: File[]) => void;
+    storagePathBuilder: (file: File) => string;
+    onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, fileMetadata?: any) => Promise<void>;
+}
+
 export function StorageUpload({
                                   property,
                                   name,
                                   value,
+                                  setInternalValue,
                                   onChange,
                                   multipleFilesSupported,
+                                  onFileUploadComplete,
                                   disabled,
+                                  onFilesAdded,
                                   autoFocus,
                                   storage,
                                   entity,
-                                  fileNameBuilder,
                                   storagePathBuilder
                               }: StorageUploadProps) {
-
-    const storageSource = useStorageSource();
 
     if (multipleFilesSupported) {
         const arrayProperty = property as ResolvedArrayProperty<string[]>;
@@ -463,34 +425,8 @@ export function StorageUpload({
     const metadata: Record<string, unknown> | undefined = storage?.metadata;
     const size = multipleFilesSupported ? "small" : "regular";
 
-    const internalInitialValue: StorageFieldItem[] =
-        (multipleFilesSupported
-            ? value as string[]
-            : [value as string]).map(entry => (
-            {
-                id: getRandomId(),
-                storagePathOrDownloadUrl: entry,
-                metadata: metadata,
-                size: size
-            }
-        ));
-
-    const [initialValue, setInitialValue] = React.useState<string | string[]>(value);
-    const [internalValue, setInternalValue] = React.useState<StorageFieldItem[]>(internalInitialValue);
-
-    useEffect(() => {
-        if (!equal(initialValue, value)) {
-            setInitialValue(value);
-            setInternalValue(internalInitialValue);
-        }
-    }, [internalInitialValue, value, initialValue]);
-
-    function getRandomId() {
-        return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
-    }
-
     const moveItem = (fromIndex: number, toIndex: number) => {
-        const newValue = [...internalValue];
+        const newValue = [...value];
         const item = newValue[fromIndex];
         newValue.splice(fromIndex, 1);
         newValue.splice(toIndex, 0, item);
@@ -511,80 +447,16 @@ export function StorageUpload({
 
     }, [moveItem])
 
-    const onExternalDrop = useCallback((acceptedFiles: File[]) => {
-
-        if (!acceptedFiles.length || disabled)
-            return;
-
-        let newInternalValue: StorageFieldItem[];
-        if (multipleFilesSupported) {
-            newInternalValue = [...internalValue,
-                ...(acceptedFiles.map(file => ({
-                    id: getRandomId(),
-                    file,
-                    fileName: fileNameBuilder(file),
-                    metadata,
-                    size: size
-                } as StorageFieldItem)))];
-        } else {
-            newInternalValue = [{
-                id: getRandomId(),
-                file: acceptedFiles[0],
-                fileName: fileNameBuilder(acceptedFiles[0]),
-                metadata,
-                size: size
-            }];
-        }
-
-        // Remove either storage path or file duplicates
-        newInternalValue = removeDuplicates(newInternalValue);
-        setInternalValue(newInternalValue);
-    }, [disabled, fileNameBuilder, internalValue, metadata, multipleFilesSupported, size]);
-
-    const onFileUploadComplete = useCallback(async (uploadedPath: string,
-                                                    entry: StorageFieldItem,
-                                                    metadata?: any) => {
-
-        console.debug("onFileUploadComplete", uploadedPath, entry);
-
-        let uploadPathOrDownloadUrl = uploadedPath;
-        if (storage.storeUrl) {
-            uploadPathOrDownloadUrl = (await storageSource.getDownloadURL(uploadedPath)).url;
-        }
-        if (storage.postProcess) {
-            uploadPathOrDownloadUrl = await storage.postProcess(uploadPathOrDownloadUrl);
-        }
-
-        let newValue: StorageFieldItem[];
-
-        entry.storagePathOrDownloadUrl = uploadPathOrDownloadUrl;
-        entry.metadata = metadata;
-        newValue = [...internalValue];
-
-        newValue = removeDuplicates(newValue);
-        setInternalValue(newValue);
-
-        const fieldValue = newValue
-            .filter(e => !!e.storagePathOrDownloadUrl)
-            .map(e => e.storagePathOrDownloadUrl as string);
-
-        if (multipleFilesSupported) {
-            onChange(fieldValue);
-        } else {
-            onChange(fieldValue ? fieldValue[0] : null);
-        }
-    }, [internalValue, multipleFilesSupported, onChange, storage, storageSource]);
-
     const onClear = useCallback((clearedStoragePathOrDownloadUrl: string) => {
         if (multipleFilesSupported) {
-            const newValue: StorageFieldItem[] = internalValue.filter(v => v.storagePathOrDownloadUrl !== clearedStoragePathOrDownloadUrl);
+            const newValue: StorageFieldItem[] = value.filter(v => v.storagePathOrDownloadUrl !== clearedStoragePathOrDownloadUrl);
             onChange(newValue.filter(v => !!v.storagePathOrDownloadUrl).map(v => v.storagePathOrDownloadUrl as string));
             setInternalValue(newValue);
         } else {
             onChange(null);
             setInternalValue([]);
         }
-    }, [internalValue, multipleFilesSupported, onChange]);
+    }, [value, multipleFilesSupported, onChange]);
 
     const helpText = multipleFilesSupported
         ? "Drag 'n' drop some files here, or click to select files"
@@ -600,7 +472,7 @@ export function StorageUpload({
                 droppableId={`droppable_${name}`}
                 direction="horizontal"
                 renderClone={(provided, snapshot, rubric) => {
-                    const entry = internalValue[rubric.source.index];
+                    const entry = value[rubric.source.index];
                     return (
                         <Box
                             ref={provided.innerRef}
@@ -630,10 +502,10 @@ export function StorageUpload({
                                               disabled={disabled}
                                               isDraggingOver={snapshot.isDraggingOver}
                                               droppableProvided={provided}
-                                              onExternalDrop={onExternalDrop}
+                                              onFilesAdded={onFilesAdded}
                                               multipleFilesSupported={multipleFilesSupported}
                                               autoFocus={autoFocus}
-                                              internalValue={internalValue}
+                                              internalValue={value}
                                               property={renderProperty}
                                               entity={entity}
                                               onClear={onClear}
@@ -650,166 +522,3 @@ export function StorageUpload({
 
 }
 
-interface StorageUploadItemProps {
-    storagePath: string;
-    metadata?: any,
-    entry: StorageFieldItem,
-    onFileUploadComplete: (value: string,
-                           entry: StorageFieldItem,
-                           metadata?: any) => Promise<void>;
-    size: PreviewSize;
-}
-
-export function StorageUploadProgress({
-                                          storagePath,
-                                          entry,
-                                          metadata,
-                                          onFileUploadComplete,
-                                          size
-                                      }: StorageUploadItemProps) {
-
-    const storage = useStorageSource();
-
-    const snackbarController = useSnackbarController();
-
-    const [error, setError] = React.useState<string>();
-    const [loading, setLoading] = React.useState<boolean>(false);
-    const mounted = React.useRef(false);
-
-    const upload = useCallback((file: File, fileName?: string) => {
-
-        setError(undefined);
-        setLoading(true);
-
-        storage.uploadFile({ file, fileName, path: storagePath, metadata })
-            .then(async ({ path }) => {
-                console.debug("Upload successful");
-                await onFileUploadComplete(path, entry, metadata);
-                if (mounted.current)
-                    setLoading(false);
-            })
-            .catch((e) => {
-                console.error("Upload error", e);
-                if (mounted.current) {
-                    setError(e.message);
-                    setLoading(false);
-                }
-                snackbarController.open({
-                    type: "error",
-                    title: "Error uploading file",
-                    message: e.message
-                });
-            });
-    }, [entry, metadata, onFileUploadComplete, snackbarController, storage, storagePath]);
-
-    React.useEffect(() => {
-        mounted.current = true;
-        if (entry.file)
-            upload(entry.file, entry.fileName);
-        return () => {
-            mounted.current = false;
-        };
-    }, [entry.file, entry.fileName, upload]);
-
-    return (
-
-        <Box m={1}>
-            <Paper elevation={0}
-                   sx={{
-                       padding: 1,
-                       boxSizing: "border-box",
-                       minWidth: size === "regular" ? 220 : 118,
-                       minHeight: size === "regular" ? 220 : 118
-                   }}
-                   variant={"outlined"}>
-
-                {loading && <Skeleton variant="rectangular" sx={{
-                    width: "100%",
-                    height: "100%"
-                }}/>}
-
-                {error && <p>Error uploading file: {error}</p>}
-
-            </Paper>
-        </Box>
-
-    );
-
-}
-
-interface StorageItemPreviewProps {
-    name: string;
-    property: ResolvedStringProperty;
-    value: string,
-    entity: Entity<any>,
-    onRemove: (value: string) => void;
-    size: PreviewSize;
-    disabled: boolean;
-}
-
-export function StorageItemPreview({
-                                       name,
-                                       property,
-                                       value,
-                                       entity,
-                                       onRemove,
-                                       disabled,
-                                       size
-                                   }: StorageItemPreviewProps) {
-
-    return (
-        <Box m={1} position={"relative"}>
-
-            <Paper
-                elevation={0}
-                sx={{
-                    padding: 1,
-                    boxSizing: "border-box",
-                    minWidth: size === "regular" ? 220 : 118,
-                    minHeight: size === "regular" ? 220 : 118
-                }}
-                variant={"outlined"}>
-
-                {!disabled &&
-                    <a
-                        className={classes.thumbnailCloseIcon}>
-
-                        <Tooltip
-                            title="Remove">
-                            <IconButton
-                                size={"small"}
-                                onClick={(event) => {
-                                    event.stopPropagation();
-                                    onRemove(value);
-                                }}>
-                                <RemoveIcon fontSize={"small"}/>
-                            </IconButton>
-                        </Tooltip>
-                    </a>
-                }
-
-                {value &&
-                <ErrorBoundary>
-                    <PropertyPreview propertyKey={name}
-                                     value={value}
-                                     property={property}
-                                     entity={entity}
-                                     size={size}/>
-                </ErrorBoundary>
-                }
-
-            </Paper>
-
-        </Box>
-    );
-
-}
-
-function removeDuplicates(items: StorageFieldItem[]) {
-    return items.filter(
-        (item, i) => {
-            return ((items.map((v) => v.storagePathOrDownloadUrl).indexOf(item.storagePathOrDownloadUrl) === i) || !item.storagePathOrDownloadUrl) &&
-                ((items.map((v) => v.file).indexOf(item.file) === i) || !item.file);
-        }
-    );
-}
