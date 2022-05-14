@@ -30,7 +30,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     /**
      * Relative path of this view to its parent.
      * If this view is in the root the path is equal to the absolute one.
-     * This path also determines the URL in FireCMS
+     * This path also determines the URL in FireCMS, unless an alias is specified
      */
     path: string;
 
@@ -38,6 +38,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * You can set an alias that will be used internally instead of the `path`.
      * The `alias` value will be used to determine the URL of the collection,
      * while `path` will still be used in the datasource.
+     * Note that you can use this value in reference properties too.
      */
     alias?: string;
 

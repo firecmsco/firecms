@@ -34,7 +34,7 @@ import {
     useNavigationContext
 } from "@camberi/firecms";
 import { useCollectionEditorController } from "../useCollectionEditorController";
-import { useCollectionsController } from "../useCollectionsController";
+import { useConfigController } from "../useConfigController";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -47,7 +47,7 @@ export function SassHomePage() {
 
     const navigation = useNavigationContext();
     const collectionEditorController = useCollectionEditorController();
-    const collectionsController = useCollectionsController();
+    const collectionsController = useConfigController();
 
     if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");

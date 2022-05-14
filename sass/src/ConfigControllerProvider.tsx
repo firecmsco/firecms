@@ -1,5 +1,5 @@
 import React from "react";
-import { ConfigController } from "./config_controller";
+import { ConfigController } from "./models/config_controller";
 
 export const ConfigControllerContext = React.createContext<ConfigController>({} as any);
 

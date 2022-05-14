@@ -3,11 +3,14 @@ import React, { PropsWithChildren } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../models";
 import {
-    EntityCollectionView,
     FireCMSHomePage,
     NotFoundPage
 } from "./components";
-import { useBreadcrumbsContext, useNavigationContext } from "../hooks";
+import {
+    useBreadcrumbsContext,
+    useFireCMSContext,
+    useNavigationContext
+} from "../hooks";
 
 /**
  * @category Components
@@ -17,12 +20,13 @@ export type NavigationRoutesProps = {
      * In case you need to override the home page
      */
     HomePage?: React.ComponentType;
+
 };
 
 /**
- * This component is in charge of taking a {@link Navigation} and rendering
+ * This component is in charge of rendering
  * all the related routes (entity collection root views, custom views
- * or the home route).
+ * or the home route) related to a {@link NavigationContext}.
  * This component needs a parent {@link FireCMS}
  *
  * @constructor
@@ -32,6 +36,9 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
 
     const location = useLocation();
     const navigation = useNavigationContext();
+
+    const context = useFireCMSContext();
+    const EntityCollectionViewComponent = context.EntityCollectionViewComponent;
 
     if (!navigation)
         return <></>;
@@ -81,9 +88,9 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                                   <BreadcrumbUpdater
                                       path={urlPath}
                                       title={collection.name}>
-                                      <EntityCollectionView
+                                      <EntityCollectionViewComponent
                                           fullPath={collection.path}
-                                          collection={collection}/>
+                                          {...collection}/>
                                   </BreadcrumbUpdater>
                               }/>;
             }

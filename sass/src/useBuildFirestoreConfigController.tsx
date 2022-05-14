@@ -11,7 +11,7 @@ import {
     setDoc
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef } from "react";
-import { ConfigController } from "./config_controller";
+import { ConfigController } from "./models/config_controller";
 import {
     AuthController,
     COLLECTION_PATH_SEPARATOR,
@@ -25,6 +25,7 @@ import {
     sortProperties,
     stripCollectionPath
 } from "@camberi/firecms";
+import { SassUser } from "./models/sass_user";
 
 /**
  * @category Firebase
@@ -66,12 +67,16 @@ export function useBuildFirestoreConfigController({
     const firestoreRef = useRef<Firestore>();
     const firestore = firestoreRef.current;
 
-    const [loading, setLoading] = React.useState<boolean>(true);
+    const [collectionsLoading, setCollectionsLoading] = React.useState<boolean>(true);
+    const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
+    const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
     const [persistedCollections, setPersistedCollections] = React.useState<EntityCollection[] | undefined>();
     const [roles, setRoles] = React.useState<Role[]>([]);
+    const [users, setUsers] = React.useState<SassUser[]>([]);
 
     const [collectionsError, setCollectionsError] = React.useState<Error | undefined>();
     const [rolesError, setRolesError] = React.useState<Error | undefined>();
+    const [usersError, setUsersError] = React.useState<Error | undefined>();
 
     useEffect(() => {
         if (!firebaseApp) return;
@@ -85,7 +90,6 @@ export function useBuildFirestoreConfigController({
             {
                 next: (snapshot) => {
                     setCollectionsError(undefined);
-                    setLoading(false);
                     try {
                         const newCollections = docsToCollectionTree(snapshot.docs);
                         setPersistedCollections(newCollections);
@@ -93,9 +97,10 @@ export function useBuildFirestoreConfigController({
                         console.error(e);
                         setCollectionsError(e as Error);
                     }
+                    setCollectionsLoading(false);
                 },
                 error: (e) => {
-                    setLoading(false);
+                    setCollectionsLoading(false);
                     setCollectionsError(e);
                 }
             }
@@ -116,9 +121,35 @@ export function useBuildFirestoreConfigController({
                         console.error(e);
                         setRolesError(e as Error);
                     }
+                    setRolesLoading(false);
                 },
                 error: (e) => {
                     setRolesError(e);
+                    setRolesLoading(false);
+                }
+            }
+        );
+    }, [configPath, firestore]);
+
+    useEffect(() => {
+        if (!firestore) return;
+
+        return onSnapshot(collection(firestore, configPath, "config", "users"),
+            {
+                next: (snapshot) => {
+                    setUsersError(undefined);
+                    try {
+                        const newUsers = docsToUsers(snapshot.docs);
+                        setUsers(newUsers);
+                    } catch (e) {
+                        console.error(e);
+                        setUsersError(e as Error);
+                    }
+                    setUsersLoading(false);
+                },
+                error: (e) => {
+                    setUsersError(e);
+                    setUsersLoading(false);
                 }
             }
         );
@@ -142,11 +173,12 @@ export function useBuildFirestoreConfigController({
 
     const collections = persistedCollections !== undefined ?  joinCollections(persistedCollections , baseCollections) : undefined;
     return {
-        loading,
+        loading: collectionsLoading || rolesLoading || usersLoading,
         collections,
         saveCollection,
         deleteCollection,
-        roles
+        roles,
+        users
     }
 }
 
@@ -192,6 +224,9 @@ const docsToCollectionTree = (docs: DocumentSnapshot[]): EntityCollection[] => {
     return Object.values(collectionsMap);
 }
 
+const docsToUsers = (docs: DocumentSnapshot[]): SassUser[] => {
+    return docs.map((doc) => doc.data() as SassUser);
+}
 const docsToRoles = (docs: DocumentSnapshot[]): Role[] => {
     return docs.map((doc) => doc.data() as Role);
 }

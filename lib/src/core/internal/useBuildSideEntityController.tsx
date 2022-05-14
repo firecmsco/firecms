@@ -26,7 +26,8 @@ export function getEntityViewWidth(props: EntitySidePanelProps<any, any>, small:
     return !mainViewSelected ? `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})` : resolvedWidth ?? CONTAINER_WIDTH
 }
 
-export const useBuildSideEntityController = (navigation: NavigationContext, sideDialogsController: SideDialogsController): SideEntityController => {
+export const useBuildSideEntityController = (navigation: NavigationContext,
+                                             sideDialogsController: SideDialogsController): SideEntityController => {
 
     const location = useLocation();
     const initialised = useRef<boolean>(false);

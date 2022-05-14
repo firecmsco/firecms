@@ -22,40 +22,28 @@ import {
 import {
     canCreateEntity,
     canDeleteEntity,
-    canEditEntity
-} from "../../util/permissions";
+    canEditEntity,
+    fullPathToCollectionSegments,
+    mergeDeep,
+    removeInitialAndTrailingSlashes
+} from "../../util";
 import { Markdown } from "../../../preview";
 import {
     useAuthController,
     useNavigationContext,
     useSideEntityController
 } from "../../../hooks";
-import { mergeDeep } from "../../util/objects";
 import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
-import { ErrorBoundary } from "../ErrorBoundary";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
-import { removeInitialAndTrailingSlashes } from "../../util/navigation_utils";
-import { fullPathToCollectionSegments } from "../../util/paths";
 
 /**
  * @category Components
  */
-export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
-
-    /**
-     * Absolute path this collection view points to
-     */
+export type EntityCollectionViewProps<M extends { [Key: string]: unknown }> = {
     fullPath: string;
-
-    /**
-     * Entity collection.
-     * If not specified it will try to be inferred by the path
-     */
-    collection?: EntityCollection<M>;
-
-}
+} & EntityCollection<M>;
 
 /**
  * This component is in charge of binding a datasource path with an {@link EntityCollection}
@@ -81,38 +69,14 @@ export interface EntityCollectionViewProps<M extends { [Key: string]: any }> {
  * @constructor
  * @category Components
  */
-export function EntityCollectionView<M extends { [Key: string]: unknown }>({
-                                                                               fullPath,
-                                                                               collection: baseCollection,
-                                                                           }: EntityCollectionViewProps<M>) {
-
-    const navigationContext = useNavigationContext();
-    const collectionFromPath = navigationContext.getCollection<M>(fullPath, undefined, true);
-
-    const collection: EntityCollection<M> | undefined = collectionFromPath ?? baseCollection;
-    if (!collection) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${fullPath}`);
-    }
-
-    return (
-        <ErrorBoundary>
-            <EntityCollectionViewInternal fullPath={fullPath}
-                                          collection={collection}/>
-        </ErrorBoundary>
-    );
-
-}
-
-export const EntityCollectionViewInternal = React.memo(
+export const EntityCollectionView = React.memo(
     function EntityCollectionViewInternal<M extends { [Key: string]: unknown }>({
                                                                                     fullPath,
-                                                                                    collection
-                                                                                }: {
-                                                                                    fullPath: string;
-                                                                                    collection: EntityCollection<M>;
-                                                                                }
+                                                                                    ...collection
+                                                                                }: EntityCollectionViewProps<M>
     ) {
 
+        console.log("EntityCollectionView", collection)
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
@@ -145,7 +109,7 @@ export const EntityCollectionViewInternal = React.memo(
             return sideEntityController.open({
                 entityId: entity.id,
                 path: fullPath,
-                collection: collection,
+                collection,
                 updateUrl: true
             });
         }, [fullPath, collection, collection]);
@@ -153,7 +117,7 @@ export const EntityCollectionViewInternal = React.memo(
         const onNewClick = useCallback(() =>
             sideEntityController.open({
                 path: fullPath,
-                collection: collection,
+                collection,
                 updateUrl: true
             }), [fullPath, collection, collection, sideEntityController]);
 
@@ -293,14 +257,14 @@ export const EntityCollectionViewInternal = React.memo(
                 entityId: clickedEntity.id,
                 path: fullPath,
                 copy: true,
-                collection: collection,
+                collection,
                 updateUrl: true
             });
 
             const onEditClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
                 entityId: clickedEntity.id,
                 path: fullPath,
-                collection: collection,
+                collection,
                 updateUrl: true
             });
 
@@ -357,11 +321,7 @@ export const EntityCollectionViewInternal = React.memo(
 
             </>
         );
-    },
-    function areEqual(prevProps: EntityCollectionViewProps<any>, nextProps: EntityCollectionViewProps<any>) {
-        return equal(prevProps, nextProps);
-    }
-) as React.FunctionComponent<EntityCollectionViewProps<any>>
+    }, equal) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
 export function useSelectionController<M = any>(): SelectionController {
 
@@ -386,5 +346,3 @@ export function useSelectionController<M = any>(): SelectionController {
         toggleEntitySelection
     };
 }
-
-export default EntityCollectionView;

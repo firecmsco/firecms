@@ -148,7 +148,7 @@ export function useBuildNavigationContext<UserType extends User>({
                                                     }: { path: string }): string => {
             return `s/edit/${encodePath(path)}`;
         },
-        [baseCollectionPath]);
+        []);
 
     const buildUrlCollectionPath = useCallback((path: string): string => `${baseCollectionPath}/${encodePath(path)}`,
         [baseCollectionPath]);

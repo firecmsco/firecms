@@ -38,6 +38,7 @@ import {
     CMSViewsBuilder,
     EntityCollectionsBuilder
 } from "../firebase_app/FirebaseCMSAppProps";
+import { EntityCollectionView, EntityCollectionViewProps } from "./components";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -158,6 +159,12 @@ export interface FireCMSProps<UserType extends User> {
      */
     roles?: Roles;
 
+    /**
+     * Component used to render a collection view.
+     * Defaults to {@link NavigationEntityCollectionView}
+     */
+    EntityCollectionViewComponent?: React.ComponentType<EntityCollectionViewProps<any>>;
+
 }
 
 /**
@@ -184,6 +191,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         dataSource,
         basePath,
         baseCollectionPath,
+        EntityCollectionViewComponent = EntityCollectionView
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -240,7 +248,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                             dataSource,
                             storageSource,
                             snackbarController,
-                            userConfigPersistence
+                            userConfigPersistence,
+                            EntityCollectionViewComponent
                         };
 
                         return (

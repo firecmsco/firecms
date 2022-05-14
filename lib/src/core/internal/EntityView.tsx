@@ -28,7 +28,6 @@ import {
 } from "../../models";
 import {
     CircularProgressCenter,
-    EntityCollectionViewProps,
     EntityPreviewProps,
     ErrorBoundary
 } from "../components";
@@ -51,7 +50,6 @@ import {
 import { EntityFormProps } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 
-const EntityCollectionView = lazy(() => import("../components/EntityCollectionView/EntityCollectionView")) as React.FunctionComponent<EntityCollectionViewProps<any>>;
 const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<any>>;
 const EntityPreview = lazy(() => import("../components/EntityPreview")) as React.FunctionComponent<EntityPreviewProps<any>>;
 
@@ -73,7 +71,7 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
                                                                                      copy,
                                                                                      collection,
                                                                                      onValuesAreModified,
-                                                                                     formWidth
+                                                                                     formWidth,
                                                                                  }: EntityViewProps<M, UserType>) {
 
         const theme = useTheme();
@@ -88,6 +86,8 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
         const snackbarController = useSnackbarController();
         const context = useFireCMSContext();
         const authController = useAuthController<UserType>();
+
+        const EntityCollectionViewComponent = context.EntityCollectionViewComponent;
 
         const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
         const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
@@ -304,12 +304,9 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
 
                         {!dataLoading &&
                             (entity && fullPath
-                                ? <Suspense
-                                    fallback={<CircularProgressCenter/>}>
-                                    <EntityCollectionView
-                                        fullPath={fullPath}
-                                        collection={subcollection}/>
-                                </Suspense>
+                                ? <EntityCollectionViewComponent
+                                    fullPath={fullPath}
+                                    {...subcollection}/>
                                 : <Box m={3}
                                        display={"flex"}
                                        alignItems={"center"}

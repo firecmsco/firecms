@@ -9,6 +9,7 @@ import { User } from "./user";
 import { SnackbarController } from "../hooks";
 import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SideDialogsController } from "./side_dialogs_controller";
+import { EntityCollectionViewProps } from "../core";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -78,5 +79,11 @@ export interface FireCMSContext<UserType extends User = User> {
      * and not defined in code
      */
     userConfigPersistence?: UserConfigurationPersistence;
+
+    /**
+     * Component used to render a collection view.
+     * Defaults to {@link EntityCollectionView}
+     */
+    EntityCollectionViewComponent: React.ComponentType<EntityCollectionViewProps<any>>;
 
 }

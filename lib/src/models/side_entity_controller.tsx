@@ -48,6 +48,7 @@ export interface EntitySidePanelProps<M = any, UserType extends User = User> {
      * the state if copying the URL to a different window.
      */
     updateUrl?: boolean;
+
 }
 
 /**

@@ -23,14 +23,14 @@ import {
     useFireCMSContext,
     useSideEntityController
 } from "../../../hooks";
-import { Table } from "../../index";
+import { Table } from "../Table";
 import {
     checkInlineEditing,
     OnCellValueChange,
     UniqueFieldValidator,
     useBuildColumnsFromCollection
 } from "./column_builder";
-import { resolveCollection } from "../../util/resolutions";
+import { resolveCollection } from "../../util";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -74,7 +74,6 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
          onSizeChanged,
          hoverRow = true
      }: CollectionTableProps<M>) {
-
 
         const context = useFireCMSContext();
         const dataSource = useDataSource();
