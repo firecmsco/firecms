@@ -53,7 +53,7 @@ import { useSideDialogContext } from "../SideDialogs";
 const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<any>>;
 const EntityPreview = lazy(() => import("../components/EntityPreview")) as React.FunctionComponent<EntityPreviewProps<any>>;
 
-export interface EntityViewProps<M, UserType> {
+export interface EntityViewProps<M> {
     path: string;
     collection: EntityCollection<M>;
     entityId?: string;
@@ -63,7 +63,7 @@ export interface EntityViewProps<M, UserType> {
     onValuesAreModified: (modified: boolean) => void;
 }
 
-export const EntityView = React.memo<EntityViewProps<any, any>>(
+export const EntityView = React.memo<EntityViewProps<any>>(
     function EntityView<M extends { [Key: string]: any }, UserType extends User>({
                                                                                      path,
                                                                                      entityId,
@@ -71,8 +71,8 @@ export const EntityView = React.memo<EntityViewProps<any, any>>(
                                                                                      copy,
                                                                                      collection,
                                                                                      onValuesAreModified,
-                                                                                     formWidth,
-                                                                                 }: EntityViewProps<M, UserType>) {
+                                                                                     formWidth
+                                                                                 }: EntityViewProps<M>) {
 
         const theme = useTheme();
         const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));

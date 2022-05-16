@@ -10674,6 +10674,18 @@ react-base-table@^1.13.0:
     react-virtualized-auto-sizer "^1.0.2"
     react-window "^1.8.2"
 
+react-base-table@^1.13.1:
+  version "1.13.1"
+  resolved "https://registry.yarnpkg.com/react-base-table/-/react-base-table-1.13.1.tgz#b3039fba83c752f9457996d7fc95adbbb7a68d14"
+  integrity sha512-1L4cqveDPLZi1P8c0Oo8Sy0a3OKCkPlbYcZkhV9fdxeRjIGZbhVAhQGOXvToZYaDyCqKgGKHMFhL9IfHxdiKOg==
+  dependencies:
+    "@babel/runtime" "^7.0.0"
+    classnames "^2.2.5"
+    memoize-one "^5.0.0"
+    prop-types "^15.7.0"
+    react-virtualized-auto-sizer "^1.0.2"
+    react-window "^1.8.2"
+
 react-beautiful-dnd@^13.1.0:
   version "13.1.0"
   resolved "https://registry.yarnpkg.com/react-beautiful-dnd/-/react-beautiful-dnd-13.1.0.tgz#ec97c81093593526454b0de69852ae433783844d"

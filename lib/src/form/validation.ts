@@ -40,25 +40,30 @@ export type CustomFieldValidator = (props: {
     name: string,
     value: any,
     property: ResolvedProperty,
+    entityId?: string,
     parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
 }) => Promise<boolean>;
 
 interface PropertyContext<M> {
     property: ResolvedProperty<M>,
     parentProperty?: ResolvedMapProperty<any> | ResolvedArrayProperty<any>,
+    entityId: string,
     customFieldValidator?: CustomFieldValidator,
     name?: any
 }
 
-export function getYupEntitySchema<M>(properties: ResolvedProperties<M>,
-                                      customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
+export function getYupEntitySchema<M>(
+    entityId: string ,
+    properties: ResolvedProperties<M>,
+    customFieldValidator?: CustomFieldValidator,): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties as Record<string, ResolvedProperty>)
         .forEach(([name, property]) => {
             objectSchema[name] = mapPropertyToYup({
                 property,
                 customFieldValidator,
-                name
+                name,
+                entityId
             });
         });
     return yup.object().shape(objectSchema);
@@ -95,7 +100,7 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
 
 export function getYupMapObjectSchema({
                                                                             property,
-                                                                            parentProperty,
+                                                                            entityId,
                                                                             customFieldValidator,
                                                                             name
                                                                         }: PropertyContext<object>): ObjectSchema<any> {
@@ -106,7 +111,8 @@ export function getYupMapObjectSchema({
                 property: childProperty,
                 parentProperty: property as ResolvedMapProperty,
                 customFieldValidator,
-                name: `${name}[${childName}]`
+                name: `${name}[${childName}]`,
+                entityId
             });
         });
     return yup.object().shape(objectSchema);
@@ -116,7 +122,8 @@ function getYupStringSchema({
                                 property,
                                 parentProperty,
                                 customFieldValidator,
-                                name
+                                name,
+                                entityId
                             }: PropertyContext<string>): StringSchema {
     let collection: StringSchema<any> = yup.string();
     const validation = property.validation;
@@ -139,7 +146,8 @@ function getYupStringSchema({
                         name,
                         property,
                         parentProperty,
-                        value
+                        value,
+                        entityId
                     }));
         if (validation.min || validation.min === 0) collection = collection.min(validation.min, `${property.name} must be min ${validation.min} characters long`);
         if (validation.max || validation.max === 0) collection = collection.max(validation.max, `${property.name} must be max ${validation.max} characters long`);
@@ -164,7 +172,8 @@ function getYupNumberSchema({
                                 property,
                                 parentProperty,
                                 customFieldValidator,
-                                name
+                                name,
+                                entityId
                             }: PropertyContext<number>): NumberSchema {
     const validation = property.validation;
     let collection: NumberSchema<any> = yup.number().typeError("Must be a number");
@@ -179,7 +188,8 @@ function getYupNumberSchema({
                     name,
                     property,
                     parentProperty,
-                    value
+                    value,
+                    entityId
                 }));
         if (validation.min || validation.min === 0) collection = collection.min(validation.min, `${property.name} must be higher or equal to ${validation.min}`);
         if (validation.max || validation.max === 0) collection = collection.max(validation.max, `${property.name} must be lower or equal to ${validation.max}`);
@@ -198,7 +208,8 @@ function getYupGeoPointSchema({
                                   property,
                                   parentProperty,
                                   customFieldValidator,
-                                  name
+                                  name,
+                                  entityId
                               }: PropertyContext<GeoPoint>): AnySchema {
     let collection: ObjectSchema<any> = yup.object();
     const validation = property.validation;
@@ -209,7 +220,8 @@ function getYupGeoPointSchema({
                 name,
                 property,
                 parentProperty,
-                value
+                value,
+                entityId
             }));
     if (validation?.required) {
         collection = collection.required(validation.requiredMessage).nullable(true);
@@ -223,7 +235,8 @@ function getYupDateSchema({
                               property,
                               parentProperty,
                               customFieldValidator,
-                              name
+                              name,
+                              entityId
                           }: PropertyContext<Date>): AnySchema | DateSchema {
     if (property.autoValue) {
         return yup.object().nullable(true);
@@ -241,7 +254,8 @@ function getYupDateSchema({
                     name,
                     property,
                     parentProperty,
-                    value
+                    value,
+                    entityId
                 }));
         if (validation.min) collection = collection.min(validation.min, `${property.name} must be after ${validation.min}`);
         if (validation.max) collection = collection.max(validation.max, `${property.name} must be before ${validation.min}`);
@@ -255,7 +269,8 @@ function getYupReferenceSchema({
                                                                      property,
                                                                      parentProperty,
                                                                      customFieldValidator,
-                                                                     name
+                                                                     name,
+                                   entityId
                                                                  }: PropertyContext<EntityReference>): AnySchema {
     let collection: ObjectSchema<any> = yup.object();
     const validation = property.validation;
@@ -270,7 +285,8 @@ function getYupReferenceSchema({
                     name,
                     property,
                     parentProperty,
-                    value
+                    value,
+                    entityId
                 }));
     } else {
         collection = collection.notRequired().nullable(true);
@@ -282,7 +298,8 @@ function getYupBooleanSchema({
                                  property,
                                  parentProperty,
                                  customFieldValidator,
-                                 name
+                                 name,
+                                 entityId
                              }: PropertyContext<boolean>): BooleanSchema {
     let collection: BooleanSchema<any> = yup.boolean();
     const validation = property.validation;
@@ -297,7 +314,8 @@ function getYupBooleanSchema({
                     name,
                     property,
                     parentProperty,
-                    value
+                    value,
+                    entityId
                 }));
     } else {
         collection = collection.notRequired().nullable(true);
@@ -319,7 +337,8 @@ function getYupArraySchema({
                                property,
                                parentProperty,
                                customFieldValidator,
-                               name
+                               name,
+                               entityId
                            }: PropertyContext<any[]>): AnySchema<any> {
 
     let arraySchema: ArraySchema<any> = yup.array();
@@ -329,7 +348,8 @@ function getYupArraySchema({
             const yupProperties = (property.of as ResolvedProperty[]).map((p, index) => ({
                 [`${name}[${index}]`]: mapPropertyToYup({
                     property: p,
-                    parentProperty: property
+                    parentProperty: property,
+                    entityId
                 })
             })).reduce((a, b) => ({ ...a, ...b }), {});
             return yup.array().of(
@@ -345,7 +365,8 @@ function getYupArraySchema({
         } else {
             arraySchema = arraySchema.of(mapPropertyToYup({
                 property: property.of,
-                parentProperty: property
+                parentProperty: property,
+                entityId
             }));
             const arrayUniqueFields = hasUniqueInArrayModifier(property.of);
             if (arrayUniqueFields) {

@@ -15,7 +15,7 @@ export function useBuildAuthController<UserType extends User>({
                                                                   authDelegate,
                                                                   authentication,
                                                                   dateTimeFormat,
-                                                                  roles: cmsRoles,
+                                                                  roles: allRoles,
                                                                   locale,
                                                                   dataSource,
                                                                   storageSource
@@ -40,21 +40,26 @@ export function useBuildAuthController<UserType extends User>({
     const authenticationEnabled = authentication === undefined || !!authentication;
     const canAccessMainView = (!authenticationEnabled || Boolean(user) || Boolean(loginSkipped)) && !notAllowedError;
 
-    const userRoles = useMemo(() => !cmsRoles
+    /**
+     * Has the provided authenticator been verified already
+     */
+    const [authVerified, setAuthVerified] = useState<boolean>(!authenticationEnabled);
+
+    const userRoles = useMemo(() => !allRoles
             ? undefined
             : (roles
                 ? roles
-                    .map(roleId => cmsRoles[roleId])
+                    .map(roleId => allRoles[roleId])
                     .filter(Boolean) as Role[]
                 : []),
-        [cmsRoles, roles]);
+        [allRoles, roles]);
 
     const authController: AuthController<UserType> = useMemo(() =>
         ({
             user,
             loginSkipped,
             canAccessMainView,
-            initialLoading: authDelegate.initialLoading ?? false,
+            initialLoading: (!authVerified || authDelegate.initialLoading) ?? false,
             authLoading,
             notAllowedError,
             signOut: authDelegate.signOut,
@@ -86,6 +91,7 @@ export function useBuildAuthController<UserType extends User>({
                 setNotAllowedError(e);
                 authDelegate.signOut();
             }
+            setAuthVerified(true);
             setAuthLoading(false);
         } else {
             setUser(delegateUser);
@@ -94,7 +100,7 @@ export function useBuildAuthController<UserType extends User>({
 
     useEffect(() => {
         checkAuthentication();
-    }, [authDelegate.user, checkAuthentication]);
+    }, [authDelegate.user]);
 
     return authController;
 }

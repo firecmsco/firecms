@@ -9,7 +9,7 @@ export type OnColumnResizeParams = { width: number, key: string };
 /**
  * @category Collection components
  */
-export interface CollectionTableProps<M extends { [Key: string]: any }> {
+export interface EntityCollectionTableProps<M extends { [Key: string]: any }> {
 
     /**
      * Absolute collection path

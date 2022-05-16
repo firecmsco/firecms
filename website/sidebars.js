@@ -44,7 +44,15 @@ module.exports = {
                 }
             ]
         },
-        'navigation',
+        {
+            type: 'category',
+            label: 'Navigation',
+            collapsed: false,
+            items: [
+                'navigation/navigation',
+                'navigation/custom_top_level_views',
+            ]
+        },
         'roles',
         'firebase_setup',
         'deployment',

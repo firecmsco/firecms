@@ -32,9 +32,8 @@ import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../column_builder";
 import { ErrorView } from "../../../ErrorView";
-import { isReadOnly } from "../../../../util/entities";
+import { isReadOnly, resolveCollection } from "../../../../util";
 import { CustomDialogActions } from "../../../CustomDialogActions";
-import { resolveCollection } from "../../../../util/resolutions";
 import { PropertyFieldBinding } from "../../../../../form";
 
 interface PopupFormFieldProps<M extends { [Key: string]: any }> {
@@ -181,13 +180,14 @@ export function PopupFormField<M extends { [Key: string]: any }>({
     );
 
     const validationSchema = useMemo(() => {
-        if (!collection) return;
+        if (!collection || !entity) return;
         return getYupEntitySchema(
+            entity.id,
             propertyKey && collection.properties[propertyKey as string]
                 ? { [propertyKey]: collection.properties[propertyKey as string] } as ResolvedProperties<any>
                 : {} as ResolvedProperties<any>,
             customFieldValidator);
-    }, [path, propertyKey, collection]);
+    }, [path, propertyKey, collection, entity]);
 
     const adaptResize = () => {
         return updatePopupLocation(popupLocation);
@@ -202,7 +202,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         if (entity && onCellValueChange && propertyKey) {
             return onCellValueChange({
                 value: values[propertyKey as string],
-                name: propertyKey as string,
+                propertyKey: propertyKey as string,
                 entity,
                 setError: setSavingError,
                 setSaved: () => {

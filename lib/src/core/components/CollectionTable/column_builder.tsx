@@ -97,7 +97,7 @@ export type OnCellValueChange<T, M extends { [Key: string]: any }> = (params: On
  */
 export interface OnCellValueChangeParams<T, M extends { [Key: string]: any }> {
     value: T,
-    name: string,
+    propertyKey: string,
     entity: Entity<M>,
     setSaved: (saved: boolean) => void
     setError: (e: Error) => void
@@ -113,7 +113,7 @@ export function checkInlineEditing<M>(inlineEditing: ((entity: Entity<any>) => b
     }
 }
 
-type SelectedCellProps<M> =
+export type SelectedCellProps<M> =
     {
         propertyKey: keyof M,
         columnIndex: number,
@@ -288,46 +288,18 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                 }
             };
 
-            const onSelect = (cellRect: DOMRect | undefined) => {
-                if (!cellRect) {
-                    select(undefined);
-                } else {
-                    select({
-                        columnIndex,
-                        // rowIndex,
-                        width: column.width,
-                        height: column.height,
-                        entity,
-                        cellRect,
-                        propertyKey,
-                        collection: inputCollection
-                    });
-                }
-            };
 
             const selected = selectedCell?.columnIndex === columnIndex &&
                 selectedCell?.entity.id === entity.id;
 
             const isFocused = selected && focused;
 
-            const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
-                ? ({ name, value, property }) => uniqueFieldValidator({
-                    name, value, property, entityId: entity.id
-                })
-                : undefined;
-
             const validation = mapPropertyToYup({
                 property,
-                customFieldValidator,
+                entityId: entity.id,
+                customFieldValidator: uniqueFieldValidator,
                 name: propertyKey
             });
-
-            const onValueChange = onCellValueChange
-                ? (props: OnCellChangeParams<any>) => onCellValueChange({
-                    ...props,
-                    entity
-                })
-                : undefined;
 
             return <ErrorBoundary>
                 {entity
@@ -335,17 +307,19 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                         key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
                         size={size}
                         align={column.align}
-                        name={propertyKey as string}
+                        propertyKey={propertyKey as string}
                         validation={validation}
-                        onValueChange={onValueChange}
+                        onValueChange={onCellValueChange}
                         selected={selected}
                         focused={isFocused}
                         setPreventOutsideClick={setPreventOutsideClick}
                         setFocused={setFocused}
                         value={entity?.values ? entity.values[propertyKey] : undefined}
                         property={property}
+                        collection={inputCollection}
                         openPopup={openPopup}
-                        onSelect={onSelect}
+                        select={select}
+                        columnIndex={columnIndex}
                         width={column.width}
                         height={column.height}
                         entity={entity}

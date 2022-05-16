@@ -41,7 +41,7 @@ export function useBuildNavigationContext<UserType extends User>({
                                                                      collections: baseCollections,
                                                                      views: baseViews,
                                                                      collectionOverrideHandler,
-                                                                     userConfigPersistence,
+                                                                     userConfigPersistence
                                                                  }: BuildNavigationContextProps<UserType>): NavigationContext {
 
     const location = useLocation();

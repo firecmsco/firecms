@@ -6,7 +6,7 @@ import { CollectionSize, Entity, EntityReference } from "../../../../../models";
 import { ReferenceDialog } from "../../../ReferenceDialog";
 
 import { getPreviewSizeFrom } from "../../../../../preview/util";
-import { getReferenceFrom } from "../../../../util/entities";
+import { getReferenceFrom } from "../../../../util";
 import { useNavigationContext } from "../../../../../hooks";
 
 export function TableReferenceField(props: {

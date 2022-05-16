@@ -1,9 +1,9 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { styled } from '@mui/material/styles';
-import BaseTable, { Column, ColumnShape } from "react-base-table";
-import Measure, { ContentRect } from "react-measure";
 import { alpha, Box, Typography, useTheme } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
+import { styled } from "@mui/material/styles";
+import BaseTable, { Column, ColumnShape } from "react-base-table";
+import Measure, { ContentRect } from "react-measure";
 import clsx from "clsx";
 
 import { ErrorBoundary } from "../ErrorBoundary";
@@ -19,7 +19,7 @@ import {
 
 import { getRowHeight } from "./common";
 
-const PREFIX = 'Table';
+const PREFIX = "Table";
 
 const classes = {
     tableContainer: `${PREFIX}-tableContainer`,
@@ -29,7 +29,7 @@ const classes = {
     column: `${PREFIX}-column`
 };
 
-const Root = styled('div')((
+const Root = styled("div")((
     {
         theme
     }
@@ -75,22 +75,22 @@ declare module "react" {
  * @see EntityCollectionView
  * @category Components
  */
-export function Table<T>({
-                             data,
-                             idColumnBuilder,
-                             onResetPagination,
-                             onEndReached,
-                             size,
-                             columns,
-                             frozenIdColumn,
-                             onRowClick,
-                             onColumnResize,
-                             filter: filterInput,
-                             checkFilterCombination,
-                             onFilterUpdate,
-                             sortBy,
-                             error,
-                             emptyMessage,
+export function Table<T extends object>({
+                                            data,
+                                            idColumnBuilder,
+                                            onResetPagination,
+                                            onEndReached,
+                                            size = "m",
+                                            columns,
+                                            frozenIdColumn,
+                                            onRowClick,
+                                            onColumnResize,
+                                            filter: filterInput,
+                                            checkFilterCombination,
+                                            onFilterUpdate,
+                                            sortBy,
+                                            error,
+                                            emptyMessage,
                              onSortByUpdate,
                              loading,
                              hoverRow = true
@@ -187,7 +187,6 @@ export function Table<T>({
             return;
         onRowClick(props);
     };
-
 
     const onInternalFilterUpdate = useCallback((column: TableColumn<any>, filterForProperty?: [TableWhereFilterOp, any]) => {
 

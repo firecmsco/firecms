@@ -106,7 +106,7 @@ export type AuthDelegate<UserType extends User = User> = {
 
     /**
      * Initial loading flag. It is used not to display the login screen
-     * when the app first loads and it has not been checked whether the user
+     * when the app first loads, and it has not been checked whether the user
      * is logged in or not.
      */
     initialLoading?: boolean;

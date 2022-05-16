@@ -1,11 +1,11 @@
 export {
-    CollectionTable
-} from "./CollectionTable";
+    EntityCollectionTable
+} from "./EntityCollectionTable";
 
 export type {
-    CollectionTableProps,
+    EntityCollectionTableProps,
     OnColumnResizeParams
-} from "./CollectionTableProps";
+} from "./EntityCollectionTableProps";
 
 export type {
     UniqueFieldValidator,

@@ -34,6 +34,9 @@ export type NavigationContext = {
      */
     loading: boolean;
 
+    /**
+     * Was there an error while loading the navigation data
+     */
     navigationLoadingError?: any;
 
     /**

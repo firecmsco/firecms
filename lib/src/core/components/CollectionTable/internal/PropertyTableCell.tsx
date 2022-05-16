@@ -1,6 +1,7 @@
 import {
     CMSType,
     Entity,
+    EntityCollection,
     EntityReference,
     ResolvedArrayProperty,
     ResolvedNumberProperty,
@@ -21,16 +22,19 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { useClearRestoreValue } from "../../../../hooks";
 import equal from "react-fast-compare"
-import { isReadOnly } from "../../../util/entities";
+import { isReadOnly } from "../../../util";
 import { TableCell } from "../../Table/TableCell";
 import { AnySchema } from "yup";
 import { TableStorageUpload } from "./fields/TableStorageUpload";
+import { SelectedCellProps } from "../column_builder";
 
-export interface PropertyTableCellProps<T extends CMSType> {
-    name: string;
+export interface PropertyTableCellProps<T extends CMSType, M> {
+    propertyKey: string;
     selected: boolean;
+    columnIndex: number;
+    select: (cell?: SelectedCellProps<M>) => void;
     value: T;
-    onSelect: (cellRect: DOMRect | undefined) => void;
+    collection: EntityCollection<M>;
     openPopup: (cellRect: DOMRect | undefined) => void;
     setPreventOutsideClick: (value: boolean) => void;
     focused: boolean;
@@ -41,15 +45,16 @@ export interface PropertyTableCellProps<T extends CMSType> {
     entity: Entity<any>;
     path: string;
     validation: AnySchema;
-    onValueChange?: (params: OnCellChangeParams<T>) => void
+    onValueChange?: (params: OnCellChangeParams<T, M>) => void
 }
 
 /**
  * Props passed in a callback when the content of a cell in a table has been edited
  */
-export interface OnCellChangeParams<T> {
+export interface OnCellChangeParams<T, M> {
     value: T,
-    name: string,
+    propertyKey: string,
+    entity: Entity<M>;
     setError: (e: Error) => void,
     setSaved: (saved: boolean) => void
 }
@@ -68,25 +73,27 @@ function isStorageProperty<T>(property: ResolvedProperty) {
     return false;
 }
 
-const PropertyTableCellInternal = <T extends CMSType>({
-                                                          selected,
-                                                          focused,
-                                                          name,
-                                                          setPreventOutsideClick,
-                                                          setFocused,
-                                                          onValueChange,
-                                                          onSelect,
-                                                          openPopup,
-                                                          value,
-                                                          property,
-                                                          validation,
-                                                          size,
-                                                          align,
-                                                          width,
-                                                          height,
-                                                          entity,
-                                                          path
-                                                      }: PropertyTableCellProps<T> & CellStyleProps) => {
+const PropertyTableCellInternal = <T extends CMSType, M>({
+                                                             selected,
+                                                             focused,
+                                                             propertyKey,
+                                                             setPreventOutsideClick,
+                                                             setFocused,
+                                                             onValueChange,
+                                                             columnIndex,
+                                                             select,
+    collection,
+                                                             openPopup,
+                                                             value,
+                                                             property,
+                                                             validation,
+                                                             size,
+                                                             align,
+                                                             width,
+                                                             height,
+                                                             entity,
+                                                             path
+                                                         }: PropertyTableCellProps<T, M> & CellStyleProps) => {
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
 
@@ -129,9 +136,10 @@ const PropertyTableCellInternal = <T extends CMSType>({
                         if (onValueChange) {
                             onValueChange({
                                 value: internalValue,
-                                name,
+                                propertyKey,
                                 setError,
-                                setSaved
+                                setSaved,
+                                entity
                             });
                         }
                     })
@@ -141,7 +149,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                     });
             }
         },
-        [internalValue]
+        [entity, internalValue]
     );
 
     const updateValue = useCallback(
@@ -157,6 +165,23 @@ const PropertyTableCellInternal = <T extends CMSType>({
         },
         []
     );
+
+    const onSelect = (cellRect: DOMRect | undefined) => {
+        if (!cellRect) {
+            select(undefined);
+        } else {
+            select({
+                columnIndex,
+                // rowIndex,
+                width,
+                height,
+                entity,
+                cellRect,
+                propertyKey: propertyKey as keyof M,
+                collection
+            });
+        }
+    };
 
     let innerComponent: JSX.Element | undefined;
     let allowScroll = false;
@@ -176,7 +201,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                                  value={internalValue}
                                                  previewSize={getPreviewSizeFrom(size)}
                                                  updateValue={updateValue}
-                                                 propertyKey={name as string}
+                                                 propertyKey={propertyKey as string}
                                                  onBlur={onBlur}
                                                  setPreventOutsideClick={setPreventOutsideClick}
             />;
@@ -186,7 +211,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
         } else if (selected && property.dataType === "number") {
             const numberProperty = property as ResolvedNumberProperty;
             if (numberProperty.enumValues) {
-                innerComponent = <TableSelect name={name as string}
+                innerComponent = <TableSelect name={propertyKey as string}
                                               multiple={false}
                                               disabled={disabled}
                                               focused={focused}
@@ -215,7 +240,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
         } else if (selected && property.dataType === "string") {
             const stringProperty = property as ResolvedStringProperty;
             if (stringProperty.enumValues) {
-                innerComponent = <TableSelect name={name as string}
+                innerComponent = <TableSelect name={propertyKey as string}
                                               multiple={false}
                                               focused={focused}
                                               disabled={disabled}
@@ -248,7 +273,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                                           updateValue={updateValue}
             />;
         } else if (property.dataType === "date") {
-            innerComponent = <TableDateField name={name as string}
+            innerComponent = <TableDateField name={propertyKey as string}
                                              error={error}
                                              disabled={disabled}
                                              mode={property.mode}
@@ -260,7 +285,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
             allowScroll = true;
         } else if (property.dataType === "reference") {
             if (typeof property.path === "string") {
-                innerComponent = <TableReferenceField name={name as string}
+                innerComponent = <TableReferenceField name={propertyKey as string}
                                                       internalValue={internalValue as EntityReference}
                                                       updateValue={updateValue}
                                                       disabled={disabled}
@@ -277,12 +302,12 @@ const PropertyTableCellInternal = <T extends CMSType>({
             const arrayProperty = (property as ResolvedArrayProperty);
 
             if (!arrayProperty.of && !arrayProperty.oneOf) {
-                throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${name}`);
+                throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
             }
             if (arrayProperty.of && !Array.isArray(arrayProperty.of)) {
                 if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
                     if (selected && arrayProperty.of.enumValues) {
-                        innerComponent = <TableSelect name={name as string}
+                        innerComponent = <TableSelect name={propertyKey as string}
                                                       multiple={true}
                                                       disabled={disabled}
                                                       focused={focused}
@@ -301,7 +326,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                 } else if (arrayProperty.of.dataType === "reference") {
                     if (typeof arrayProperty.of.path === "string") {
                         innerComponent =
-                            <TableReferenceField name={name as string}
+                            <TableReferenceField name={propertyKey as string}
                                                  disabled={disabled}
                                                  internalValue={internalValue as EntityReference[]}
                                                  updateValue={updateValue}
@@ -328,7 +353,7 @@ const PropertyTableCellInternal = <T extends CMSType>({
                 width={width}
                 height={height}
                 entity={entity}
-                propertyKey={name as string}
+                propertyKey={propertyKey as string}
                 value={internalValue}
                 property={property}
                 size={getPreviewSizeFrom(size)}
@@ -364,9 +389,9 @@ const PropertyTableCellInternal = <T extends CMSType>({
 
 };
 
-export const PropertyTableCell = React.memo<PropertyTableCellProps<any> & CellStyleProps>(PropertyTableCellInternal, areEqual) as React.FunctionComponent<PropertyTableCellProps<any> & CellStyleProps>;
+export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any> & CellStyleProps>(PropertyTableCellInternal, areEqual) as React.FunctionComponent<PropertyTableCellProps<any, any> & CellStyleProps>;
 
-function areEqual(prevProps: PropertyTableCellProps<any> & CellStyleProps, nextProps: PropertyTableCellProps<any> & CellStyleProps) {
+function areEqual(prevProps: PropertyTableCellProps<any, any> & CellStyleProps, nextProps: PropertyTableCellProps<any, any> & CellStyleProps) {
     return prevProps.selected === nextProps.selected &&
         prevProps.focused === nextProps.focused &&
         prevProps.height === nextProps.height &&

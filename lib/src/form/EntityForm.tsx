@@ -203,7 +203,7 @@ export function EntityForm<M>({
 
         if (onEntitySave)
             onEntitySave({
-                collection: collection,
+                collection,
                 path,
                 entityId: savedEntityId,
                 values,
@@ -230,9 +230,13 @@ export function EntityForm<M>({
                                                                     }) => dataSource.checkUniqueField(path, name, value, property, entityId),
         [dataSource, path, entityId]);
 
-    const validationSchema = useMemo(() => getYupEntitySchema(
-        collection.properties,
-        uniqueFieldValidator), [collection.properties]);
+    const validationSchema = useMemo(() => entity?.id
+            ? getYupEntitySchema(
+                entity.id,
+                collection.properties,
+                uniqueFieldValidator)
+            : undefined,
+        [entity?.id, collection.properties]);
 
     return (
         <Formik
@@ -338,7 +342,7 @@ function FormInternal<M>({
             const progress = easeInOutQuint(Math.min(elapsed / duration, 1));
             const interpolated = start + (offset - start) * progress;
 
-            if(defaultScrollToFn) {
+            if (defaultScrollToFn) {
                 if (elapsed < duration) {
                     defaultScrollToFn(interpolated);
                     requestAnimationFrame(run);
@@ -375,7 +379,7 @@ function FormInternal<M>({
             },
             [collection.properties, errorKeys]),
         overscan: 5,
-        scrollToFn,
+        scrollToFn
     })
 
     useEffect(() => {

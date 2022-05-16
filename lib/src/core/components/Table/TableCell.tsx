@@ -286,18 +286,3 @@ const TableCellInternal = ({
 };
 
 export const TableCell = React.memo<TableCellProps & CellStyleProps>(TableCellInternal, isEqual) as React.FunctionComponent<TableCellProps & CellStyleProps>;
-
-// function areEqual(prevProps: TableCellProps & CellStyleProps, nextProps: TableCellProps & CellStyleProps) {
-//     return prevProps.selected === nextProps.selected &&
-//         prevProps.focused === nextProps.focused &&
-//         prevProps.disabled === nextProps.disabled &&
-//         prevProps.size === nextProps.size &&
-//         prevProps.align === nextProps.align &&
-//         prevProps.saved === nextProps.saved &&
-//         prevProps.showExpandIcon === nextProps.showExpandIcon &&
-//         prevProps.removePadding === nextProps.removePadding &&
-//         prevProps.fullHeight === nextProps.fullHeight &&
-//         prevProps.error === nextProps.error &&
-//         isEqual(prevProps.value, nextProps.value)
-//         ;
-// }

@@ -10,17 +10,15 @@ You can find collections at the **top level** of the navigation tree (the
 entries displayed in the home page and the navigation drawer), or as **
 subcollections**
 
-Once you have defined at least one entity collection, you can include it in a
-**collection**.
-
 The `name` and `properties` you define for your entity collection, will be used
 to generate the fields in the spreadsheet like collection tables, and the fields
 in the generated forms.
 
-:::note FireCMS provides around 15 different fields (such as text fields,
+:::note 
+FireCMS provides around 15 different fields (such as text fields,
 selects, and complex ones like reference or sortable array fields). If your use
 case is not covered by one of the provided fields, you can create your own
-[custom field](custom_fields.md).
+[custom field](properties/custom_fields.md).
 :::
 
 You can find collection views as the first level of navigation in the main menu,
@@ -248,13 +246,10 @@ export const fullNameAdditionalColumn: AdditionalColumnDelegate<User> = {
 
 const usersCollection = buildCollection<User>({
     path: "users",
-    collection: buildCollection<User>({
-        name: "User",
-        properties: {
-            name: { dataType: "string", title: "Name" }
-        }
-    }),
-    name: "Users",
+    name: "User",
+    properties: {
+      name: { dataType: "string", title: "Name" }
+    },
     additionalColumns: [
         fullNameAdditionalColumn
     ]
@@ -319,8 +314,10 @@ import { buildCollection } from "@camberi/firecms";
 
 const productsCollection = buildCollection<Product>({
   path: "products",
-  collection: productCollection,
-  name: "Products",
+  name: "Product",
+  properties: { 
+      // ...
+  },
   indexes: [
     {
       price: "asc",

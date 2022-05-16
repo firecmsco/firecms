@@ -1,50 +1,7 @@
 ---
-id: navigation
-title: Navigation
-sidebar_label: Navigation
+id: custom_top_level_views
+title: Custom top level views
 ---
-
-FireCMS takes care of the navigation for you, it generates routes and menus based
-on the configuration that you set up.
-
-You have two main ways of creating the top level views in FireCMS, either creating entity
-collections that get mapped to CMS views, or create your own top level React views.
-
-You can check all the possible configurations for defining [collections](collections/collections.md)
-in the corresponding document.
-
-Otherwise, you can define your own [custom top level views](custom_top_level_views.md).
-
-You can change the collections based on the logged-in user, by using an
-asynchronous callback.
-
-By using an async `NavigationBuilder` you can also fetch some data in order to
-build your schemas. Let's say you have a collection called `subscriptions` and would
-like to use its ids as the enum values of a `string` property; you can fetch
-them and then build the schema with them.
-
-```tsx
-import {
-    // ...
-    NavigationBuilder,
-    NavigationBuilderProps
-} from "@camberi/firecms";
-
-// ...
-
-const collectionsBuilder = async ({ user }: NavigationBuilderProps) => ({
-    collections: [
-        buildCollection({
-            path: "products",
-            collection: productCollection,
-            name: "Products"
-        })
-    ]
-});
-```
-
-### Custom top level views
-
 
 If you need to develop a custom view that does not map directly to a Firestore
 collection you can implement it as a React component.
@@ -55,9 +12,9 @@ navigation, as the example below.
 By default, it will show in the main navigation view.
 
 For custom views you can define the following props:
-* `path` string | string[]
+* `path` string
 
-  CMS Path (or paths) you can reach this view from.
+  CMS Path you can reach this view from.
   If you include multiple paths, only the first one will be included in the
   main menu
 

@@ -10,7 +10,7 @@ import {
     LocalEntityCollection,
     SelectionController
 } from "../../../models";
-import { CollectionTable, OnColumnResizeParams } from "../CollectionTable";
+import { EntityCollectionTable, OnColumnResizeParams } from "../CollectionTable";
 
 import {
     CollectionRowActions
@@ -52,14 +52,14 @@ export type EntityCollectionViewProps<M extends { [Key: string]: unknown }> = {
  *
  * This component is the default one used for displaying entity collections
  * and is in charge of generating all the specific actions and customization
- * of the lower level {@link CollectionTable}
+ * of the lower level {@link EntityCollectionTable}
  *
  * Please **note** that you only need to use this component if you are building
  * a custom view. If you just need to create a default view you can do it
  * exclusively with config options.
  *
  * If you need a lower level implementation with more granular options, you
- * can use {@link CollectionTable}.
+ * can use {@link EntityCollectionTable}.
  *
  * If you need a table that is not bound to the datasource or entities and
  * properties at all, you can check {@link Table}
@@ -76,7 +76,6 @@ export const EntityCollectionView = React.memo(
                                                                                 }: EntityCollectionViewProps<M>
     ) {
 
-        console.log("EntityCollectionView", collection)
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
@@ -286,7 +285,7 @@ export const EntityCollectionView = React.memo(
         return (
             <>
 
-                <CollectionTable
+                <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     path={fullPath}
                     collection={collection}

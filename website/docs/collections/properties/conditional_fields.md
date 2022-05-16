@@ -21,8 +21,7 @@ Example of field that gets enabled or disabled based on other values:
 import {
     buildCollection,
     EntityCollection,
-    EntityReference,
-    EntitySchema
+    EntityReference
 } from "@camberi/firecms";
 
 type Product = {
@@ -70,7 +69,7 @@ or `apple`, and its fields change accordingly
 ```tsx
 import {
     buildCollection,
-    EntitySchema,
+    EntityCollection,
     buildProperty,
     buildProperties
 } from "@camberi/firecms";
@@ -85,7 +84,7 @@ type User = {
     }
 }
 
-export const userSchema: EntitySchema = buildCollection<User>({
+export const userSchema: EntityCollection = buildCollection<User>({
     name: "User",
     properties: {
         source: ({ values }) => {
@@ -121,5 +120,4 @@ export const userSchema: EntitySchema = buildCollection<User>({
         }
     }
 });
-
 ```

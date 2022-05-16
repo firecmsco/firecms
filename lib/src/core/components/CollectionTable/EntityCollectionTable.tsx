@@ -15,7 +15,7 @@ import {
 import { getSubcollectionColumnId, useColumnIds } from "./internal/common";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { CollectionRowActions } from "./internal/CollectionRowActions";
-import { CollectionTableProps } from "./CollectionTableProps";
+import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
 import {
     saveEntityWithCallbacks,
     useCollectionFetch,
@@ -53,13 +53,13 @@ const DEFAULT_PAGE_SIZE = 50;
  * If you need a table that is not bound to the datasource or entities and
  * properties at all, you can check {@link Table}
  *
- * @see CollectionTableProps
+ * @see EntityCollectionTableProps
  * @see EntityCollectionView
  * @see Table
  * @category Components
  */
-export const CollectionTable = React.memo<CollectionTableProps<any>>(
-    function CollectionTable<M extends { [Key: string]: any }>
+export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>(
+    function EntityCollectionTable<M extends { [Key: string]: any }>
     ({
          path,
          collection,
@@ -73,7 +73,7 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
          onColumnResize,
          onSizeChanged,
          hoverRow = true
-     }: CollectionTableProps<M>) {
+     }: EntityCollectionTableProps<M>) {
 
         const context = useFireCMSContext();
         const dataSource = useDataSource();
@@ -146,7 +146,7 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
 
         const onCellChanged: OnCellValueChange<any, M> = useCallback(({
                                                                           value,
-                                                                          name,
+                                                                          propertyKey,
                                                                           setSaved,
                                                                           setError,
                                                                           entity
@@ -156,7 +156,7 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
                 entityId: entity.id,
                 values: {
                     ...entity.values,
-                    [name]: value
+                    [propertyKey]: value
                 },
                 previousValues: entity.values,
                 collection,
@@ -289,14 +289,14 @@ export const CollectionTable = React.memo<CollectionTableProps<any>>(
         );
 
     },
-    function areEqual(prevProps: CollectionTableProps<any>, nextProps: CollectionTableProps<any>) {
+    function areEqual(prevProps: EntityCollectionTableProps<any>, nextProps: EntityCollectionTableProps<any>) {
         return prevProps.path === nextProps.path &&
             equal(prevProps.collection, nextProps.collection) &&
             prevProps.Title === nextProps.Title &&
             prevProps.tableRowActionsBuilder === nextProps.tableRowActionsBuilder &&
             prevProps.inlineEditing === nextProps.inlineEditing;
     }
-) as React.FunctionComponent<CollectionTableProps<any>>;
+) as React.FunctionComponent<EntityCollectionTableProps<any>>;
 
 function isFilterCombinationValid<M>(
     filterValues: FilterValues<Extract<keyof M, string>>,

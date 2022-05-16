@@ -4,10 +4,10 @@ import {
 } from "./models/collection_editor_controller";
 import {
     CollectionEditorDialog
-} from "./collection_editor/CollectionEditorDialog";
+} from "./components/collection_editor/CollectionEditorDialog";
 import {
     NewCollectionEditorDialog
-} from "./collection_editor/NewCollectionEditorDialog";
+} from "./components/collection_editor/NewCollectionEditorDialog";
 import { useNavigate } from "react-router-dom";
 import { EntityCollection, useNavigationContext } from "@camberi/firecms";
 import { ConfigPermissions } from "./config_permissions";

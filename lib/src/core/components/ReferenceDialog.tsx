@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { CollectionSize, Entity, EntityCollection } from "../../models";
 import { Box, Button, Dialog, Typography } from "@mui/material";
 
-import { CollectionTable } from "./CollectionTable";
+import { EntityCollectionTable } from "./CollectionTable";
 import {
     CollectionRowActions
 } from "./CollectionTable/internal/CollectionRowActions";
@@ -185,19 +185,19 @@ export function ReferenceDialog(
             }}>
 
                 {selectedEntities &&
-                    <CollectionTable path={path}
-                                     collection={collection}
-                                     onEntityClick={onEntityClick}
-                                     tableRowActionsBuilder={tableRowActionsBuilder}
-                                     Title={<Typography variant={"h6"}>
+                    <EntityCollectionTable path={path}
+                                           collection={collection}
+                                           onEntityClick={onEntityClick}
+                                           tableRowActionsBuilder={tableRowActionsBuilder}
+                                           Title={<Typography variant={"h6"}>
                                          {`Select ${collection.name}`}
                                      </Typography>}
-                                     inlineEditing={false}
-                                     Actions={<Button onClick={onClear}
+                                           inlineEditing={false}
+                                           Actions={<Button onClick={onClear}
                                                       color="primary">
                                          Clear
                                      </Button>}
-                                     entitiesDisplayedFirst={selectedEntities}
+                                           entitiesDisplayedFirst={selectedEntities}
                     />}
             </Box>
 

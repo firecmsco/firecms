@@ -63,6 +63,7 @@ function SampleApp() {
                                                                     authController
                                                                 }) => {
 
+        console.log("myAuthenticator", user);
         if(user?.email?.includes("flanders")){
             throw Error("Stupid Flanders!");
         }

@@ -5,7 +5,7 @@ import { CollectionEditor } from "./CollectionEditor";
 import { EntityCollection } from "@camberi/firecms";
 import {
     useCollectionEditorController
-} from "../useCollectionEditorController";
+} from "../../useCollectionEditorController";
 
 export interface CollectionEditorDialogProps {
     open: boolean;

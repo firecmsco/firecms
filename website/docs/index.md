@@ -5,8 +5,8 @@ sidebar_label: Introduction
 slug: /
 ---
 
-<video width="600" height="400" autoplay>
-  <source src="https://firecms.co/img/dark_mode.mp4" type="video/mp4"/>
+<video class="intro_video" loop autoPlay muted>
+  <source src="/img/dark_mode.mp4" type="video/mp4"/>
 </video>
 
 FireCMS is an **open source headless CMS and admin panel** built by developers
@@ -35,7 +35,7 @@ There are two ways to build top level views in FireCMS:
 - Create **custom views** that sit in the main level of your navigation tree. In
   this case you can build your custom React component and make use of the
   internal components of the CMS as well as the provided hooks.
-  Check [Custom top level views](custom_top_level_views.md) for more details
+  Check [Custom top level views](navigation/custom_top_level_views.md) for more details
 
 
 :::note Custom backend
@@ -48,7 +48,7 @@ FireCMS works as a complete app that is in charge of creating the views that
 you define based on your collections and entity schemas. It handles
 navigation for you as well as authentication and login.
 
-However, there is a lot of room to customization, including [custom top level views](custom_top_level_views.md),
+However, there is a lot of room to customization, including [custom top level views](navigation/custom_top_level_views.md),
 [custom schema views](collections/properties/custom_schema_views.md), and [custom fields](collections/properties/custom_fields.md)
 for your entity properties, in case the basic use cases we include don't suit your needs.
 

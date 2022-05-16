@@ -6,7 +6,7 @@ import { EnumValueConfig, WhereFilterOp } from "../../../models";
  * @see Table
  * @category Components
  */
-export interface TableProps<T> {
+export interface TableProps<T extends object> {
 
     /**
      * Array of arbitrary data
@@ -31,7 +31,7 @@ export interface TableProps<T> {
     /**
      * If enabled, content is loaded in batch
      */
-    paginationEnabled: boolean;
+    paginationEnabled?: boolean;
 
     /**
      * Set this callback if you want to support some combinations
@@ -71,7 +71,7 @@ export interface TableProps<T> {
     /**
      * Size of the table
      */
-    size: TableSize,
+    size?: TableSize,
 
     /**
      * In case this table should have some filters set by default
@@ -96,7 +96,7 @@ export interface TableProps<T> {
     onSortByUpdate?: (sortBy?: [string, "asc" | "desc"]) => void;
 
     /**
-     * If there is an error loading data you can pass it here so it gets
+     * If there is an error loading data you can pass it here, so it gets
      * displayed instead of the content
      */
     error?: Error;
@@ -133,17 +133,22 @@ export type TableColumnFilter = {
  * @see Table
  * @category Components
  */
-export interface TableColumn<T> {
+export interface TableColumn<T extends any> {
 
     label?: string;
+
     icon?: (hoverOrOpen: boolean) => React.ReactNode;
+
+    /**
+     *
+     */
     filter?: TableColumnFilter;
 
-    key: string;
     /**
      * Data key for the cell value, could be "a.b.c"
      */
-    dataKey?: string;
+    key: string;
+
     /**
      * Alignment of the column cell
      */
@@ -170,14 +175,14 @@ export interface TableColumn<T> {
         container: any;
         isScrolling?: boolean;
     }) => React.ReactNode;
-    [key: string]: any;
+
+    // [key: string]: any;
 }
 /**
  * @see Table
  * @category Collection components
  */
 export type OnTableColumnResizeParams<T> = { width: number, key: string, column: TableColumn<T> };
-
 
 /**
  * @see Table
