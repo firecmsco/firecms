@@ -12,6 +12,7 @@ import {
 } from "../../models";
 import { useCallback, useEffect, useState } from "react";
 import { PreviewSize } from "../../preview";
+import { randomString } from "./strings";
 
 /**
  * Internal representation of an item in the storage
@@ -88,7 +89,7 @@ export function useStorageUploadController<M>({
         }
     }, [internalInitialValue, value, initialValue]);
 
-    const fileNameBuilder = (file: File) => {
+    const fileNameBuilder = useCallback((file: File) => {
         if (storage.fileName) {
 
             const fileName = resolveStorageString(storage.fileName, storage, entityValues, entityId, path, property, file, propertyKey);
@@ -97,12 +98,12 @@ export function useStorageUploadController<M>({
             }
             return fileName;
         }
-        return file.name;
-    };
+        return randomString() + "_" + file.name;
+    }, [entityId, entityValues, path, property, propertyKey, storage]);
 
-    const storagePathBuilder = (file: File) => {
+    const storagePathBuilder = useCallback((file: File) => {
         return resolveStorageString(storage.storagePath, storage, entityValues, entityId, path, property, file, propertyKey) ?? "/";
-    };
+    }, [entityId, entityValues, path, property, propertyKey, storage]);
 
     const onFileUploadComplete = useCallback(async (uploadedPath: string,
                                                     entry: StorageFieldItem,

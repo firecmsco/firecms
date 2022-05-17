@@ -657,6 +657,7 @@ export interface StorageConfig {
      * - {file} - Full file name
      * - {file.name} - Name of the file without extension
      * - {file.ext} - Extension of the file
+     * - {rand} - Random value used to avoid name collisions
      * - {entityId} - ID of the entity
      * - {propertyKey} - ID of this property
      * - {path} - Path of this entity
@@ -673,6 +674,7 @@ export interface StorageConfig {
      * - {file} - Full file name
      * - {file.name} - Name of the file without extension
      * - {file.ext} - Extension of the file
+     * - {rand} - Random value used to avoid name collisions
      * - {entityId} - ID of the entity
      * - {propertyKey} - ID of this property
      * - {path} - Path of this entity

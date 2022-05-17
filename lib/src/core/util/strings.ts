@@ -7,3 +7,7 @@ export const toSnakeCase = (str: string) => {
         .map(x => x.toLowerCase())
         .join("_");
 };
+
+export function randomString(strLength: number = 5) {
+    return Math.random().toString(36).slice(2, 2 + strLength);
+}

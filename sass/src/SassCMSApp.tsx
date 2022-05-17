@@ -35,6 +35,7 @@ import { productsCollection } from "./products_collection";
 import {
     SassEntityCollectionView
 } from "./components/SassEntityCollectionView";
+import { SassHomePage } from "./components/SassHomePage";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -129,7 +130,7 @@ export function SassCMSApp() {
                         component = (
                             <Scaffold name={"My Online Shop"}
                                       Drawer={SassDrawer}>
-                                <NavigationRoutes/>
+                                <NavigationRoutes HomePage={SassHomePage}/>
                                 <SideDialogs/>
                             </Scaffold>
                         );

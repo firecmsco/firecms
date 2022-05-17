@@ -54,7 +54,7 @@ export function StoragePropertyField({
     const storagePath = `${baseStoragePath}.storagePath`;
     const storeUrl = `${baseStoragePath}.storeUrl`;
 
-    const fileNameValue = getIn(values, fileName) ?? "{file}";
+    const fileNameValue = getIn(values, fileName) ?? "{rand}_{file}";
     const storagePathValue = getIn(values, storagePath) ?? "/";
 
     const storedValue = getIn(values, acceptedFiles);
@@ -100,6 +100,7 @@ export function StoragePropertyField({
 
                         <Grid item xs={12}>
                             <FormControl fullWidth disabled={disabled}>
+
                                 {!allFileTypesSelected &&
                                     <InputLabel id="file-types-label">
                                         File types
@@ -173,6 +174,7 @@ export function StoragePropertyField({
                                     <li>{"{entityId} - ID of the entity"}</li>
                                     <li>{"{propertyKey} - ID of this field"}</li>
                                     <li>{"{path} - Path of this entity"}</li>
+                                    <li>{"{rand} - Random value used to avoid name collisions"}</li>
                                 </ul>
                             </Typography>
                             <Field type="checkbox"

@@ -5,6 +5,7 @@ import {
     StorageConfig,
     UploadedFileContext
 } from "../../models";
+import { randomString } from "./strings";
 
 export function resolveStorageString<M>(input: string | ((context: UploadedFileContext) => string),
                                         storage: StorageConfig,
@@ -14,8 +15,9 @@ export function resolveStorageString<M>(input: string | ((context: UploadedFileC
                                         property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
                                         file: File,
                                         propertyKey: string): string {
+    let result;
     if (typeof input === "function") {
-        return input({
+        result = input({
             entityId,
             values,
             property,
@@ -23,18 +25,25 @@ export function resolveStorageString<M>(input: string | ((context: UploadedFileC
             storage,
             propertyKey
         });
+        if (!result)
+            console.warn("Storage callback returned empty result. Using default name value")
     } else {
         const ext = file.name.split(".").pop();
-        let res = input.replace("{entityId}", entityId)
+        result = input.replace("{entityId}", entityId)
             .replace("{propertyKey}", propertyKey)
+            .replace("{rand}", randomString())
             .replace("{file}", file.name)
             .replace("{file.type}", file.type)
             .replace("{path}", path);
         if (ext) {
-            res = res.replace("{file.ext}", ext);
+            result = result.replace("{file.ext}", ext);
             const name = file.name.replace(`.${ext}`, "");
-            res = res.replace("{file.name}", name)
+            result = result.replace("{file.name}", name)
         }
-        return res;
     }
+
+    if (!result)
+        result = randomString() + "_" + file.name;
+
+    return result;
 }
