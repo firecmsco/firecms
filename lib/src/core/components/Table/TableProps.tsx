@@ -1,5 +1,4 @@
 import React from "react";
-import { ColumnShape } from "react-base-table";
 import { EnumValueConfig, WhereFilterOp } from "../../../models";
 
 /**
@@ -135,8 +134,39 @@ export type TableColumnFilter = {
  */
 export interface TableColumn<T extends any> {
 
-    label?: string;
+    /**
+     * Data key for the cell value, could be "a.b.c"
+     */
+    key: string;
 
+    /**
+     * The width of the column, gutter width is not included
+     */
+    width: number;
+
+    /**
+     * Custom column cell renderer
+     * The renderer receives props `{ cellData, columns, column, columnIndex, rowData, rowIndex, container, isScrolling }`
+     */
+    cellRenderer: (params: {
+        cellData: any;
+        columns: TableColumn<T>[];
+        column: TableColumn<T>;
+        columnIndex: number;
+        rowData: T;
+        rowIndex: number;
+        container: any;
+        isScrolling?: boolean;
+    }) => React.ReactNode;
+
+    /**
+     * Label displayed in the header
+     */
+    title?: string;
+
+    /**
+     * Ico displayed in the header
+     */
     icon?: (hoverOrOpen: boolean) => React.ReactNode;
 
     /**
@@ -145,38 +175,18 @@ export interface TableColumn<T extends any> {
     filter?: TableColumnFilter;
 
     /**
-     * Data key for the cell value, could be "a.b.c"
-     */
-    key: string;
-
-    /**
      * Alignment of the column cell
      */
+
     align?: "left" | "right" | "center";
-    /**
-     * The width of the column, gutter width is not included
-     */
-    width: number;
+
     /**
      * Whether the column is sortable, defaults to false
      */
     sortable?: boolean;
-    /**
-     * Custom column cell renderer
-     * The renderer receives props `{ cellData, columns, column, columnIndex, rowData, rowIndex, container, isScrolling }`
-     */
-    cellRenderer: (params: {
-        cellData: any;
-        columns: ColumnShape<T>[];
-        column: ColumnShape<T>;
-        columnIndex: number;
-        rowData: T;
-        rowIndex: number;
-        container: any;
-        isScrolling?: boolean;
-    }) => React.ReactNode;
 
-    // [key: string]: any;
+    [key: string]: any;
+
 }
 /**
  * @see Table

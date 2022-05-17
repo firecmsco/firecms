@@ -11,16 +11,10 @@ import {
 } from "../../../models";
 import React, { useCallback, useEffect, useMemo } from "react";
 import { TableCell } from "../Table/TableCell";
-import { PropertyPreview, SkeletonComponent } from "../../../preview";
+import { PropertyPreview, renderSkeletonText } from "../../../preview";
 import { getPreviewSizeFrom } from "../../../preview/util";
-import {
-    CustomFieldValidator,
-    mapPropertyToYup
-} from "../../../form/validation";
-import {
-    OnCellChangeParams,
-    PropertyTableCell
-} from "./internal/PropertyTableCell";
+import { CustomFieldValidator } from "../../../form/validation";
+import { PropertyTableCell } from "./internal/PropertyTableCell";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
@@ -125,7 +119,7 @@ export type SelectedCellProps<M> =
     };
 
 export function useBuildColumnsFromCollection<M, AdditionalKey extends string, UserType extends User>({
-                                                                                                          collection: inputCollection,
+                                                                                                          collection,
                                                                                                           additionalColumns,
                                                                                                           displayedProperties,
                                                                                                           path,
@@ -222,9 +216,9 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
     }, []);
 
     const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection({
-        collection: inputCollection,
+        collection: collection,
         path
-    }), [inputCollection, path]);
+    }), [collection, path]);
 
     const propertyCellRenderer = useCallback(({
                                       column,
@@ -237,7 +231,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
 
         const propertyKey = column.dataKey;
 
-        const propertyOrBuilder = inputCollection.properties[propertyKey];
+        const propertyOrBuilder = collection.properties[propertyKey];
         const property = resolveProperty({
             propertyOrBuilder,
             path,
@@ -246,9 +240,9 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
             entityId: entity.id
         });
 
-        if (!property)
+        if (!property) {
             return null;
-
+        }
         const inlineEditingEnabled = checkInlineEditing(inlineEditing, entity);
 
         if (!inlineEditingEnabled) {
@@ -272,65 +266,41 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
             );
         } else {
 
-            const openPopup = (cellRect: DOMRect | undefined) => {
-                if (!cellRect) {
-                    setPopupCell(undefined);
-                } else {
-                    setPopupCell({
-                        columnIndex,
-                        width: column.width,
-                        height: column.height,
-                        entity,
-                        cellRect,
-                        propertyKey,
-                        collection: inputCollection
-                    });
-                }
-            };
-
-
             const selected = selectedCell?.columnIndex === columnIndex &&
                 selectedCell?.entity.id === entity.id;
 
             const isFocused = selected && focused;
 
-            const validation = mapPropertyToYup({
-                property,
-                entityId: entity.id,
-                customFieldValidator: uniqueFieldValidator,
-                name: propertyKey
-            });
-
-            return <ErrorBoundary>
-                {entity
-                    ? <PropertyTableCell
-                        key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
-                        size={size}
-                        align={column.align}
-                        propertyKey={propertyKey as string}
-                        validation={validation}
-                        onValueChange={onCellValueChange}
-                        selected={selected}
-                        focused={isFocused}
-                        setPreventOutsideClick={setPreventOutsideClick}
-                        setFocused={setFocused}
-                        value={entity?.values ? entity.values[propertyKey] : undefined}
-                        property={property}
-                        collection={inputCollection}
-                        openPopup={openPopup}
-                        select={select}
-                        columnIndex={columnIndex}
-                        width={column.width}
-                        height={column.height}
-                        entity={entity}
-                        path={entity.path}/>
-                    : <SkeletonComponent property={property}
-                                         size={getPreviewSizeFrom(size)}/>
-                }
-            </ErrorBoundary>;
+            return (
+                <ErrorBoundary>
+                    {entity
+                        ? <PropertyTableCell
+                            key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
+                            size={size}
+                            align={column.align}
+                            propertyKey={propertyKey as string}
+                            onValueChange={onCellValueChange}
+                            selected={selected}
+                            property={property}
+                            focused={isFocused}
+                            setPreventOutsideClick={setPreventOutsideClick}
+                            setFocused={setFocused}
+                            value={entity?.values ? entity.values[propertyKey] : undefined}
+                            collection={collection}
+                            setPopupCell={setPopupCell}
+                            select={select}
+                            customFieldValidator={customFieldValidator}
+                            columnIndex={columnIndex}
+                            width={column.width}
+                            height={column.height}
+                            entity={entity}
+                            path={entity.path}/>
+                        : renderSkeletonText()
+                    }
+                </ErrorBoundary>);
         }
 
-    }, [focused, inlineEditing, onCellValueChange, path, inputCollection, select, selectedCell?.columnIndex, selectedCell?.entity.id, size]);
+    }, [focused, inlineEditing, onCellValueChange, path, collection, select, selectedCell?.columnIndex, selectedCell?.entity.id, size]);
 
     const additionalCellRenderer = useCallback(({
                                         column,
@@ -379,7 +349,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                 property,
                 align: getCellAlignment(property),
                 icon: (hoverOrOpen) => getIconForProperty(property, hoverOrOpen ? undefined : "disabled", "small"),
-                label: property.name || key as string,
+                title: property.name || key as string,
                 sortable: true,
                 filter: buildFilterableFromProperty(property),
                 width: getPropertyColumnWidth(property),
@@ -394,7 +364,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                 type: "additional",
                 align: "left",
                 sortable: false,
-                label: additionalColumn.name,
+                title: additionalColumn.name,
                 width: additionalColumn.width ?? 200,
                 cellRenderer: additionalCellRenderer
             }));
@@ -406,14 +376,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
             return allColumns.find(c => c.key === p);
         }).filter(c => !!c) as TableColumn<Entity<M>>[];
 
-    const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator
-        ? ({ name, value, property }) => uniqueFieldValidator({
-            name,
-            value,
-            property,
-            entityId: selectedCell?.entity.id
-        })
-        : undefined;
+    const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator;
 
     const popupFormField = (
         <PopupFormField

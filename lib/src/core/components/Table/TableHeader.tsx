@@ -104,7 +104,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                             justifyContent: column.align,
                             flexShrink: 1
                         }}>
-                            {column.label}
+                            {column.title}
                         </Box>
                     </Box>
                 </Grid>
@@ -213,7 +213,7 @@ function FilterForm<M>({
                 fontWeight: 600,
                 textTransform: "uppercase"
             }}>
-                {column.label ?? id}
+                {column.title ?? id}
             </Box>
             <Divider/>
             {column.filter && <Box p={2}>
@@ -240,7 +240,7 @@ function FilterForm<M>({
 
 }
 
-function createFilterField(id: string,
+function createFilterField(id: React.Key,
                            filterConfig: TableColumnFilter,
                            filterValue: [TableWhereFilterOp, any] | undefined,
                            setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void

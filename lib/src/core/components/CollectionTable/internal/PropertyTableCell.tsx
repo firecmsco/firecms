@@ -1,3 +1,4 @@
+import equal from "react-fast-compare"
 import {
     CMSType,
     Entity,
@@ -21,21 +22,24 @@ import { TableReferenceField } from "./fields/TableReferenceField";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { useClearRestoreValue } from "../../../../hooks";
-import equal from "react-fast-compare"
 import { isReadOnly } from "../../../util";
 import { TableCell } from "../../Table/TableCell";
-import { AnySchema } from "yup";
 import { TableStorageUpload } from "./fields/TableStorageUpload";
 import { SelectedCellProps } from "../column_builder";
+import {
+    CustomFieldValidator,
+    mapPropertyToYup
+} from "../../../../form/validation";
 
 export interface PropertyTableCellProps<T extends CMSType, M> {
     propertyKey: string;
     selected: boolean;
     columnIndex: number;
     select: (cell?: SelectedCellProps<M>) => void;
+    setPopupCell: (cell?: SelectedCellProps<M>) => void;
+    customFieldValidator?: CustomFieldValidator;
     value: T;
     collection: EntityCollection<M>;
-    openPopup: (cellRect: DOMRect | undefined) => void;
     setPreventOutsideClick: (value: boolean) => void;
     focused: boolean;
     setFocused: (value: boolean) => void;
@@ -44,7 +48,6 @@ export interface PropertyTableCellProps<T extends CMSType, M> {
     width: number;
     entity: Entity<any>;
     path: string;
-    validation: AnySchema;
     onValueChange?: (params: OnCellChangeParams<T, M>) => void
 }
 
@@ -82,11 +85,11 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
                                                              onValueChange,
                                                              columnIndex,
                                                              select,
-    collection,
-                                                             openPopup,
+                                                             collection,
+                                                             customFieldValidator,
+                                                             setPopupCell,
                                                              value,
                                                              property,
-                                                             validation,
                                                              size,
                                                              align,
                                                              width,
@@ -97,7 +100,7 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
 
-    useClearRestoreValue<T>({
+    useClearRestoreValue<any>({
         property,
         value: internalValue,
         setValue: setInternalValue
@@ -111,6 +114,13 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
     const readOnly = isReadOnly(property);
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     const disabled = Boolean(property.disabled);
+
+    const validation = mapPropertyToYup({
+        property,
+        entityId: entity.id,
+        customFieldValidator,
+        name: propertyKey
+    });
 
     const onBlur = useCallback(() => {
         setFocused(false);
@@ -166,7 +176,7 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
         []
     );
 
-    const onSelect = (cellRect: DOMRect | undefined) => {
+    const onSelect = useCallback((cellRect: DOMRect | undefined) => {
         if (!cellRect) {
             select(undefined);
         } else {
@@ -181,7 +191,23 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
                 collection
             });
         }
-    };
+    }, [collection, columnIndex, entity, height, propertyKey, width]);
+
+    const openPopup = useCallback((cellRect: DOMRect | undefined) => {
+        if (!cellRect) {
+            setPopupCell(undefined);
+        } else {
+            setPopupCell({
+                columnIndex,
+                width,
+                height,
+                entity,
+                cellRect,
+                propertyKey: propertyKey as keyof M,
+                collection
+            });
+        }
+    }, [collection, columnIndex, entity, height, propertyKey, width]);
 
     let innerComponent: JSX.Element | undefined;
     let allowScroll = false;

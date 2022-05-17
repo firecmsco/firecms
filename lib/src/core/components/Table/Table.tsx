@@ -370,10 +370,10 @@ export function Table<T extends object>({
                                 {columns.map((column) =>
                                     <Column
                                         key={column.key}
-                                        title={column.label}
+                                        title={column.title}
                                         className={classes.column}
                                         headerRenderer={headerRenderer}
-                                        cellRenderer={column.cellRenderer}
+                                        cellRenderer={column.cellRenderer as any}
                                         height={getRowHeight(size)}
                                         align={column.align}
                                         flexGrow={1}

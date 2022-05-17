@@ -276,7 +276,7 @@ function renderUrlFile(size: PreviewSize) {
     );
 }
 
-function renderSkeletonText(index?: number) {
+export function renderSkeletonText(index?: number) {
     return <Skeleton variant="text" key={`skeleton_${index}`}/>;
 }
 
@@ -289,4 +289,3 @@ export function renderSkeletonCaptionText(index?: number) {
 export function renderSkeletonIcon() {
     return <Skeleton variant="rectangular" width={24} height={24}/>;
 }
-

@@ -2,7 +2,7 @@ import { Table, TableColumn, TableSize } from "@camberi/firecms";
 import { SassUser } from "../models/sass_user";
 
 
-export function UserEditTable({users}: {
+export function UsersEditTable({users}: {
     users: SassUser[],
     onUserEdit: (user: SassUser) => Promise<void>;
 }) {
