@@ -138,6 +138,14 @@ export interface CMSView {
     description?: string;
 
     /**
+     * Icon key to use in this view.
+     * You can use any of the icons in the MUI specs:
+     * https://mui.com/material-ui/material-icons/
+     * e.g. 'AccountTree' or 'Person'
+     */
+    icon?:string;
+
+    /**
      * Should this view be hidden from the main navigation panel.
      * It will still be accessible if you reach the specified path
      */
@@ -163,6 +171,7 @@ export interface TopNavigationEntry {
     path?: string;
     type: "collection" | "view";
     collection?: EntityCollection;
+    view: CMSView;
     description?: string;
     group?: string;
 }

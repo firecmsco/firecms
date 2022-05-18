@@ -9,3 +9,4 @@ export * from "./useDebounce";
 export * from "./property_utils";
 export * from "./resolutions";
 export * from "./permissions";
+export * from "./icons";

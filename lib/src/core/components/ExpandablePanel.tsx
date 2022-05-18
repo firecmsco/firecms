@@ -20,6 +20,7 @@ export function ExpandablePanel({
         <Accordion variant={"outlined"}
                    disableGutters
                    expanded={expandedInternal}
+                   TransitionProps={{ unmountOnExit: true }}
                    onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => setExpandedInternal(expanded), [])}>
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                               sx={(theme) => ({

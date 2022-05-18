@@ -2,11 +2,10 @@ import React, { useCallback } from "react";
 
 import { NavLink } from "react-router-dom";
 import { Box, Divider, Link, List, ListItem, Typography } from "@mui/material";
-import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
 import { useNavigationContext } from "../hooks";
-import { FireCMSLogo } from "./components/FireCMSLogo";
+import { FireCMSLogo } from "./components";
 import { TopNavigationEntry, TopNavigationResult } from "../models";
+import { getIconForView } from "./util";
 
 /**
  * Props used in case you need to override the default drawer
@@ -38,8 +37,10 @@ export function Drawer({
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
-    const buildNavigationListItem = useCallback((index: number, group: string, entry: TopNavigationEntry) =>
-        <ListItem
+    const buildNavigationListItem = useCallback((index: number, group: string, entry: TopNavigationEntry) => {
+
+        const CollectionIcon = getIconForView(entry.collection ?? entry.view);
+        return <ListItem
             // @ts-ignore
             button
             key={`navigation_${index}`}
@@ -55,10 +56,7 @@ export function Drawer({
             }}
             to={entry.url}
         >
-            {entry.type === "view" &&
-                <ShowChartIcon fontSize={"small"} color={"disabled"}/>}
-            {entry.type !== "view" &&
-                <PlaylistPlayIcon fontSize={"small"} color={"disabled"}/>}
+            <CollectionIcon fontSize={"small"} color={"disabled"}/>
 
             <Typography
                 variant={"subtitle2"}
@@ -69,7 +67,8 @@ export function Drawer({
                 }}>
                 {entry.name.toUpperCase()}
             </Typography>
-        </ListItem>, [closeDrawer]);
+        </ListItem>;
+    }, [closeDrawer]);
 
     const buildGroupHeader = useCallback((group?: string) => {
         return <Box pt={2} pl={2} pr={2} pb={0.5} sx={{
@@ -85,7 +84,7 @@ export function Drawer({
             </Typography>
 
         </Box>;
-    }, [closeDrawer, navigationContext]);
+    }, []);
 
     let logoComponent;
     if (logo) {

@@ -186,6 +186,7 @@ export function useBuildNavigationContext<UserType extends User>({
                         url: buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
                         name: view.name,
                         type: "view",
+                        view,
                         description: view.description,
                         group: view.group
                     })

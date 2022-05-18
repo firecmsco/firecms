@@ -12,10 +12,13 @@ import {
     Typography
 } from "@mui/material";
 
-import { NumberProperty, StringProperty } from "@camberi/firecms";
+import {
+    getIconForView,
+    NumberProperty,
+    StringProperty
+} from "@camberi/firecms";
 import { useNavigationContext } from "@camberi/firecms";
 
-import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 
 export function ReferencePropertyField({
                                            existing,
@@ -120,16 +123,19 @@ export function CollectionsSelect({
                 displayEmpty
                 required
                 renderValue={(selected) => {
+
+                    const selectedCollection = collections.find(collection => collection.path === selected);
+                    const CollectionIcon = getIconForView(selectedCollection);
                     return (
                         <Box sx={{ display: "flex", flexDirection: "row" }}>
-                            <PlaylistPlayIcon/>
+                            <CollectionIcon/>
                             <Typography
                                 variant={"subtitle2"}
                                 sx={{
                                     fontWeight: "500",
                                     ml: 2
                                 }}>
-                                {collections.find(collection => collection.path === selected)?.name.toUpperCase()}
+                                {selectedCollection?.name.toUpperCase()}
                             </Typography>
                         </Box>)
                 }}>
@@ -143,10 +149,11 @@ export function CollectionsSelect({
                             {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
                         </Typography>,
                         collections.filter(collection => collection.group === group)
-                            .map((collection) =>
-                                <MenuItem key={collection.path}
-                                          value={collection.path}>
-                                    <PlaylistPlayIcon/>
+                            .map((collection) => {
+                                const CollectionIcon = getIconForView(collection);
+                                return <MenuItem key={collection.path}
+                                                 value={collection.path}>
+                                    <CollectionIcon/>
                                     <Typography
                                         variant={"subtitle2"}
                                         sx={{
@@ -156,7 +163,8 @@ export function CollectionsSelect({
                                         }}>
                                         {collection.name.toUpperCase()}
                                     </Typography>
-                                </MenuItem>)
+                                </MenuItem>;
+                            })
                     ]
 
                 ))}
@@ -171,10 +179,11 @@ export function CollectionsSelect({
                     {"Ungrouped views".toUpperCase()}
                 </Typography>}
 
-                {ungroupedCollections.map((collection) =>
-                    <MenuItem key={collection.path}
-                              value={collection.path}>
-                        <PlaylistPlayIcon/>
+                {ungroupedCollections.map((collection) => {
+                    const CollectionIcon = getIconForView(collection);
+                    return <MenuItem key={collection.path}
+                                     value={collection.path}>
+                        <CollectionIcon/>
                         <Typography
                             variant={"subtitle2"}
                             sx={{
@@ -184,7 +193,8 @@ export function CollectionsSelect({
                             }}>
                             {collection.name.toUpperCase()}
                         </Typography>
-                    </MenuItem>)}
+                    </MenuItem>;
+                })}
 
             </Select>
             <FormHelperText>

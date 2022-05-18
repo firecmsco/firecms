@@ -378,7 +378,7 @@ function FormInternal<M>({
                 return `${propertyKey}_${hasError}`;
             },
             [collection.properties, errorKeys]),
-        overscan: 5,
+        overscan: 4,
         scrollToFn
     })
 

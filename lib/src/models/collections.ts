@@ -43,6 +43,14 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     alias?: string;
 
     /**
+     * Icon key to use in this collection.
+     * You can use any of the icons in the MUI specs:
+     * https://mui.com/material-ui/material-icons/
+     * e.g. 'AccountTree' or 'Person'
+     */
+    icon?:string;
+
+    /**
      * Optional field used to group top level navigation entries under a~
      * navigation view. If you set this value in a subcollection it has no
      * effect.

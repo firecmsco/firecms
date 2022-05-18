@@ -108,6 +108,7 @@ export function SassCMSApp() {
             path: "users",
             name: "Users",
             group: "Admin",
+            icon: "People",
             view: <UsersEditView />
         }
     ]

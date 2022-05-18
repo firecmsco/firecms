@@ -20,7 +20,6 @@ import { MoreVert } from "@mui/icons-material";
 
 import AddIcon from "@mui/icons-material/Add";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 
@@ -28,12 +27,15 @@ import { Link as ReactLink } from "react-router-dom";
 
 import {
     DeleteConfirmationDialog,
+    getIconForView,
     Markdown,
     TopNavigationEntry,
     TopNavigationResult,
     useNavigationContext
 } from "@camberi/firecms";
-import { useCollectionEditorController } from "../useCollectionEditorController";
+import {
+    useCollectionEditorController
+} from "../useCollectionEditorController";
 import { useConfigController } from "../useConfigController";
 
 /**
@@ -188,6 +190,7 @@ function NavigationCard({ entry, onDelete, onEdit }: NavigationCardProps) {
     const [menuAnchorEl, setMenuAnchorEl] = useState<any | null>(null);
 
     const menuOpen = Boolean(menuAnchorEl);
+    const CollectionIcon = getIconForView(entry.collection ?? entry.view);
 
     return (
         <Paper variant={"outlined"}>
@@ -217,10 +220,7 @@ function NavigationCard({ entry, onDelete, onEdit }: NavigationCardProps) {
                         justifyContent: "space-between"
                     }}>
 
-                        {entry.type === "view" &&
-                            <ShowChartIcon color={"disabled"}/>}
-                        {entry.type === "collection" &&
-                            <PlaylistPlayIcon color={"disabled"}/>}
+                        <CollectionIcon color={"disabled"}/>
                         <div>
                             {onDelete &&
                                 <IconButton

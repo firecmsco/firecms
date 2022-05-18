@@ -10,7 +10,6 @@ import {
     Typography
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 
 import { Link as ReactLink } from "react-router-dom";
@@ -18,6 +17,7 @@ import { Link as ReactLink } from "react-router-dom";
 import { Markdown } from "../../preview";
 import { useAuthController, useNavigationContext } from "../../hooks";
 import { TopNavigationEntry, TopNavigationResult } from "../../models";
+import { getIconForView } from "../util";
 
 /**
  * Default entry view for the CMS under the path "/"
@@ -83,7 +83,7 @@ type NavigationCardProps = {
 };
 
 function NavigationCard({ entry }: NavigationCardProps) {
-
+    const CollectionIcon = getIconForView(entry.collection ?? entry.view);
     return (
         <Paper variant={"outlined"}>
 
@@ -111,10 +111,7 @@ function NavigationCard({ entry }: NavigationCardProps) {
                         justifyContent: "space-between"
                     }}>
 
-                        {entry.type === "view" &&
-                            <ShowChartIcon color={"disabled"}/>}
-                        {entry.type === "collection" &&
-                            <PlaylistPlayIcon color={"disabled"}/>}
+                        <CollectionIcon color={"disabled"}/>
                     </Box>
 
                     <Typography gutterBottom variant="h5"

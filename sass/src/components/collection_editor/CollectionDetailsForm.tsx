@@ -1,25 +1,32 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Autocomplete,
     Box,
     Container,
+    Dialog,
     FormControl,
     FormHelperText,
     Grid,
+    IconButton,
     InputLabel,
     MenuItem,
     OutlinedInput,
     Select,
     TextField,
+    Tooltip,
     Typography
 } from "@mui/material";
 import { getIn, useFormikContext } from "formik";
 import {
     EntityCollection,
+    getIconForView,
     TopNavigationResult,
     toSnakeCase,
     useNavigationContext
 } from "@camberi/firecms";
+
+// @ts-ignore
+import { SearchIcons } from "./SelectIcons";
 
 export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: boolean }) {
 
@@ -35,6 +42,8 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
         isSubmitting,
         handleSubmit
     } = useFormikContext<EntityCollection>();
+
+    const [iconDialogOpen, setIconDialogOpen] = useState(false);
 
     const topLevelNavigation = navigation.topLevelNavigation;
     if (!topLevelNavigation)
@@ -52,6 +61,8 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
 
     }, [isNewCollection, touched, values.name]);
 
+    const CollectionIcon = getIconForView(values);
+
     return (
         <Container maxWidth={"md"}
                    sx={{
@@ -59,17 +70,23 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
                        height: "100%",
                        overflow: "scroll"
                    }}>
+
             <Box
                 sx={{
                     display: "flex",
                     flexDirection: "row",
-                    justifyContent: "space-between",
                     pt: 3,
                     pb: 2
                 }}>
-                <Typography variant={!isNewCollection ? "h5" : "h4"}>
+                <Typography variant={!isNewCollection ? "h5" : "h4"}
+                            sx={{ flexGrow: 1 }}>
                     {isNewCollection ? "New collection" : `${values.name} collection`}
                 </Typography>
+                <Tooltip title={"Change icon"}>
+                    <IconButton
+                        onClick={() => setIconDialogOpen(true)}
+                    ><CollectionIcon/></IconButton>
+                </Tooltip>
             </Box>
 
             <Grid container spacing={2}>
@@ -202,6 +219,21 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
             </Grid>
 
             <Box height={52}/>
+
+            <Dialog
+                keepMounted={false}
+                open={iconDialogOpen}
+                onClose={() => setIconDialogOpen(false)}
+            >
+                <Box p={1}>
+                    <SearchIcons selectedIcon={values.icon}
+                                 onIconSelected={(icon: string) => {
+                                     setIconDialogOpen(false);
+                                     setFieldValue("icon", icon);
+                                 }}/>
+                </Box>
+
+            </Dialog>
 
         </Container>
     );

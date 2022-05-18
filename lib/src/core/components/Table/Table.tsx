@@ -1,8 +1,10 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import useMeasure from "react-use-measure";
+
 import { alpha, Box, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { styled } from "@mui/material/styles";
-import BaseTable, { AutoResizer, Column, ColumnShape } from "react-base-table";
+import BaseTable, { Column, ColumnShape } from "react-base-table";
 import clsx from "clsx";
 
 import { ErrorBoundary } from "../ErrorBoundary";
@@ -95,6 +97,8 @@ export function Table<T extends object>({
 
     const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
     const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
+
+    const [ref, bounds] = useMeasure();
 
     const tableRef = useRef<BaseTable>(null);
 
@@ -284,59 +288,50 @@ export function Table<T extends object>({
         }
     }, [onColumnResize]);
 
-    return (
-        <Root sx={{
-            width: "100%",
-            height: "100%",
-            flexGrow: 1
-        }}
-              css={baseTableCss}>
+    return <Root sx={{
+        width: "100%",
+        height: "100%",
+        overflow: "hidden"
+    }}
+                 ref={ref}
+                 css={baseTableCss}>
 
-            <AutoResizer>
-                {({ width, height }) => {
+        {bounds && <BaseTable
+            rowClassName={clsx(classes.tableRow, { [classes.tableRowClickable]: hoverRow })}
+            data={data}
+            onColumnResizeEnd={onBaseTableColumnResize}
+            width={bounds.width}
+            height={bounds.height}
+            emptyRenderer={error ? buildErrorView() : buildEmptyView()}
+            fixed
+            ignoreFunctionInColumnCompare={false}
+            rowHeight={getRowHeight(size)}
+            ref={tableRef}
+            onScroll={onScroll}
+            overscanRowCount={2}
+            onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
+            onEndReached={onEndReachedInternal}
+            rowEventHandlers={{ onClick: clickRow as any }}
+        >
 
-                    return <BaseTable
-                        rowClassName={clsx(classes.tableRow, { [classes.tableRowClickable]: hoverRow })}
-                        data={data}
-                        onColumnResizeEnd={onBaseTableColumnResize}
-                        width={width}
-                        height={height}
-                        emptyRenderer={error ? buildErrorView() : buildEmptyView()}
-                        fixed
-                        ignoreFunctionInColumnCompare={false}
-                        rowHeight={getRowHeight(size)}
-                        ref={tableRef}
-                        onScroll={onScroll}
-                        overscanRowCount={2}
-                        onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
-                        onEndReached={onEndReachedInternal}
-                        rowEventHandlers={
-                            { onClick: clickRow as any }
-                        }
-                    >
-
-                        {columns.map((column) =>
-                            <Column
-                                key={column.key}
-                                title={column.title}
-                                className={classes.column}
-                                headerRenderer={headerRenderer}
-                                cellRenderer={column.cellRenderer as any}
-                                height={getRowHeight(size)}
-                                align={column.align}
-                                flexGrow={1}
-                                flexShrink={0}
-                                resizable={true}
-                                size={size}
-                                frozen={column.frozen}
-                                dataKey={column.key}
-                                width={column.width}/>)
-                        }
-                    </BaseTable>;
-                }}
-            </AutoResizer>
-
-        </Root>
-    );
+            {columns.map((column) =>
+                <Column
+                    key={column.key}
+                    title={column.title}
+                    className={classes.column}
+                    headerRenderer={headerRenderer}
+                    cellRenderer={column.cellRenderer as any}
+                    height={getRowHeight(size)}
+                    align={column.align}
+                    flexGrow={1}
+                    flexShrink={0}
+                    resizable={true}
+                    size={size}
+                    frozen={column.frozen}
+                    dataKey={column.key}
+                    width={column.width}/>)
+            }
+        </BaseTable>}
+    </Root>;
 
 }

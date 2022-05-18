@@ -12,16 +12,18 @@ import {
     Typography
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import PlaylistPlayIcon from "@mui/icons-material/PlaylistPlay";
 import ShowChartIcon from "@mui/icons-material/ShowChart";
 import {
+    DrawerProps,
     FireCMSLogo,
-    useNavigationContext,
+    getIconForView,
     TopNavigationEntry,
     TopNavigationResult,
-    DrawerProps
+    useNavigationContext
 } from "@camberi/firecms";
-import { useCollectionEditorController } from "../useCollectionEditorController";
+import {
+    useCollectionEditorController
+} from "../useCollectionEditorController";
 
 /**
  * Props used in case you need to override the default drawer
@@ -51,8 +53,10 @@ export function SassDrawer({
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
-    const buildNavigationListItem = useCallback((index: number, group: string, entry: TopNavigationEntry) =>
-        <ListItem
+    const buildNavigationListItem = useCallback((index: number, group: string, entry: TopNavigationEntry) => {
+
+        const CollectionIcon = getIconForView(entry.collection ?? entry.view);
+        return <ListItem
             // @ts-ignore
             button
             key={`navigation_${index}`}
@@ -68,10 +72,8 @@ export function SassDrawer({
             }}
             to={entry.url}
         >
-            {entry.type === "view" &&
-                <ShowChartIcon fontSize={"small"} color={"disabled"}/>}
-            {entry.type !== "view" &&
-                <PlaylistPlayIcon fontSize={"small"} color={"disabled"}/>}
+
+            <CollectionIcon fontSize={"small"} color={"disabled"}/>
 
             <Typography
                 variant={"subtitle2"}
@@ -82,7 +84,8 @@ export function SassDrawer({
                 }}>
                 {entry.name.toUpperCase()}
             </Typography>
-        </ListItem>, [closeDrawer]);
+        </ListItem>;
+    }, [closeDrawer]);
 
     const buildGroupHeader = useCallback((group?: string) => {
         const canCreateCollections = collectionEditorController.configPermissions.createCollections;

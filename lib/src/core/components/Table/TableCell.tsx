@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import useMeasure from "react-use-measure";
+
 import { Box, IconButton, Tooltip, useTheme } from "@mui/material";
 
-import Measure, { ContentRect } from "react-measure";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { CellStyleProps } from "./styles";
@@ -48,6 +49,7 @@ const TableCellInternal = ({
                                showExpandIcon = true
                            }: TableCellProps & CellStyleProps) => {
 
+    const [measureRef, bounds] = useMeasure();
     const theme = useTheme();
     const ref = React.createRef<HTMLDivElement>();
 
@@ -142,28 +144,21 @@ const TableCellInternal = ({
         event.stopPropagation();
     }, [onSelectCallback]);
 
-    const onMeasure = useCallback((contentRect: ContentRect) => {
-        if (contentRect?.bounds) {
-            const newOverflowingValue = contentRect.bounds.height > maxHeight;
+    useEffect(() => {
+        if (bounds) {
+            const newOverflowingValue = bounds.height > maxHeight;
             if (isOverflowing !== newOverflowingValue)
                 setIsOverflowing(newOverflowingValue);
         }
-    }, [isOverflowing, maxHeight]);
+    }, [bounds, isOverflowing, maxHeight]);
 
-    const measuredDiv = <Measure
-        bounds
-        onResize={onMeasure}
-    >
-        {({ measureRef }) => (
-            <Box ref={measureRef}
-                 sx={{
-                     width: "100%",
-                     height: fullHeight ? "100%" : undefined
-                 }}>
-                {children}
-            </Box>
-        )}
-    </Measure>;
+    const measuredDiv = <Box ref={measureRef}
+                             sx={{
+                                 width: "100%",
+                                 height: fullHeight ? "100%" : undefined
+                             }}>
+        {children}
+    </Box>;
 
     const isSelected = !error && (selected || focused);
 

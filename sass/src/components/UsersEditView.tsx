@@ -13,15 +13,16 @@ export function UsersEditView() {
             flexDirection: "column",
             py: 2
         }}>
-            <Typography gutterBottom variant="h5"
+            <Typography gutterBottom variant="h4"
                         sx={{
                             my: 2
                         }}
-                        component="h2">
+                        component="h4">
                 Users
             </Typography>
             <Paper variant={"outlined"} sx={{
                 flexGrow: 1,
+                overflow: "hidden"
             }}>
                 <UsersEditTable users={users} onUserEdit={saveUser}/>
             </Paper>

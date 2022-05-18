@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import useMeasure from "react-use-measure";
 
 import {
     Form,
@@ -9,7 +10,6 @@ import {
     setIn,
     useFormikContext
 } from "formik";
-import Measure, { ContentRect } from "react-measure";
 import {
     Box,
     Button,
@@ -235,6 +235,8 @@ function CollectionEditorForm({
         dirty
     } = useFormikContext<EntityCollection>();
 
+
+    const [measureRef, bounds] = useMeasure();
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
     const asDialog = !largeLayout
@@ -248,11 +250,11 @@ function CollectionEditorForm({
     const [detailsDialogOpen, setDetailsDialogOpen] = useState<boolean>(false);
     const [height, setHeight] = useState<number>();
 
-    const onMeasure = useCallback((contentRect: ContentRect) => {
-        if (contentRect?.bounds) {
-            setHeight(contentRect?.bounds.height);
+    useEffect(() => {
+        if (bounds) {
+            setHeight(bounds.height);
         }
-    }, []);
+    }, [bounds]);
 
     useEffect(() => {
         if (setDirty)
@@ -477,52 +479,44 @@ function CollectionEditorForm({
         </Grid>);
 
     return (
-        <Measure
-            bounds
-            onResize={onMeasure}
-        >
-            {({ measureRef }) => (
-                <Box ref={measureRef}
-                     sx={{
-                         height: "100%",
-                         overflow: "scroll"
-                     }}>
+        <Box ref={measureRef}
+             sx={{
+                 height: "100%",
+                 overflow: "scroll"
+             }}>
 
-                    <Container fixed
-                               maxWidth={"lg"}>
+            <Container fixed
+                       maxWidth={"lg"}>
 
-                        {body}
+                {body}
 
-                    </Container>
+            </Container>
 
-                    <Box height={52}/>
+            <Box height={52}/>
 
-                    <Dialog
-                        open={detailsDialogOpen}
-                        onClose={() => setDetailsDialogOpen(false)}
-                    >
-                        <CollectionDetailsForm isNewCollection={false}/>
-                        <CustomDialogActions position={"absolute"}>
-                            <Button
-                                variant="contained"
-                                onClick={() => setDetailsDialogOpen(false)}> Ok </Button>
-                        </CustomDialogActions>
-                    </Dialog>
+            <Dialog
+                open={detailsDialogOpen}
+                onClose={() => setDetailsDialogOpen(false)}
+            >
+                <CollectionDetailsForm isNewCollection={false}/>
+                <CustomDialogActions position={"absolute"}>
+                    <Button
+                        variant="contained"
+                        onClick={() => setDetailsDialogOpen(false)}> Ok </Button>
+                </CustomDialogActions>
+            </Dialog>
 
-                    <PropertyForm
-                        inArray={false}
-                        asDialog={true}
-                        existing={false}
-                        forceShowErrors={showErrors}
-                        open={newPropertyDialogOpen}
-                        onCancel={() => setNewPropertyDialogOpen(false)}
-                        onPropertyChanged={onPropertyCreated}
-                        existingPropertyKeys={values.propertiesOrder as string[]}/>
+            <PropertyForm
+                inArray={false}
+                asDialog={true}
+                existing={false}
+                forceShowErrors={showErrors}
+                open={newPropertyDialogOpen}
+                onCancel={() => setNewPropertyDialogOpen(false)}
+                onPropertyChanged={onPropertyCreated}
+                existingPropertyKeys={values.propertiesOrder as string[]}/>
 
-                </Box>
-
-            )}
-        </Measure>
+        </Box>
     );
 }
 
