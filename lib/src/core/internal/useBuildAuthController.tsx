@@ -97,8 +97,6 @@ export function useBuildAuthController<UserType extends User>({
             setUser(delegateUser);
         }
 
-        console.log("authDelegate.initialLoading", authDelegate.initialLoading)
-        console.log("delegateUser", delegateUser)
         if (!authDelegate.initialLoading && (!delegateUser || delegateUser === null))
             setAuthVerified(true);
 

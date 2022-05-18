@@ -182,6 +182,7 @@ export const testCollection = buildCollection({
             name: "Name starts with number",
             dataType: "string",
             validation:{
+                required: true,
                 matches: /\d.*/,
                 matchesMessage: "Must start with a number"
             }

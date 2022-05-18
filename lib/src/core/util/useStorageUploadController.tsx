@@ -69,8 +69,8 @@ export function useStorageUploadController<M>({
 
     const internalInitialValue: StorageFieldItem[] =
         (multipleFilesSupported
-            ? value as string[]
-            : [value as string]).map(entry => (
+            ? (value ?? []) as string[]
+            : value ? [value as string] : []).map(entry => (
             {
                 id: getRandomId(),
                 storagePathOrDownloadUrl: entry,

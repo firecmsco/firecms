@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import {
     Entity,
     EntityCollection,
@@ -11,18 +11,19 @@ import {
     ResolvedProperty
 } from "../models";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
-import { useVirtual } from "react-virtual";
 import { PropertyFieldBinding } from "./PropertyFieldBinding";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
 import {
     CustomDialogActions,
     getDefaultValuesFor,
+    isHidden,
     isReadOnly,
     resolveCollection
 } from "../core";
-import { CustomIdField } from "./components/CustomIdField";
 import { useDataSource } from "../hooks";
+import { ErrorFocus } from "./components/ErrorFocus";
+import { CustomIdField } from "./components/CustomIdField";
 
 /**
  * @category Components
@@ -230,13 +231,13 @@ export function EntityForm<M>({
                                                                     }) => dataSource.checkUniqueField(path, name, value, property, entityId),
         [dataSource, path, entityId]);
 
-    const validationSchema = useMemo(() => entity?.id
+    const validationSchema = useMemo(() => entityId
             ? getYupEntitySchema(
-                entity.id,
+                entityId,
                 collection.properties,
                 uniqueFieldValidator)
             : undefined,
-        [entity?.id, collection.properties]);
+        [entityId, collection.properties]);
 
     return (
         <Formik
@@ -248,20 +249,51 @@ export function EntityForm<M>({
             onReset={() => onDiscard && onDiscard()}
         >
             {(props) => {
-                return <FormInternal
-                    {...props}
-                    onEntityIdModified={setEntityId}
-                    baseDataSourceValues={baseDataSourceValues}
-                    onModified={onModified}
-                    onValuesChanged={doOnValuesChanges}
-                    underlyingChanges={underlyingChanges}
-                    path={path}
-                    entity={entity}
-                    entityId={entityId}
-                    collection={collection}
-                    status={status}
-                    entityIdError={entityIdError}
-                    savingError={savingError}/>
+                return <>
+
+
+                    <Box
+                        sx={(theme) => ({
+                            width: "100%",
+                            marginTop: theme.spacing(3),
+                            paddingLeft: theme.spacing(4),
+                            paddingRight: theme.spacing(4),
+                            paddingTop: theme.spacing(3),
+                            [theme.breakpoints.down("lg")]: {
+                                marginTop: theme.spacing(2),
+                                paddingLeft: theme.spacing(2),
+                                paddingRight: theme.spacing(2),
+                                paddingTop: theme.spacing(2),
+                            },
+                            [theme.breakpoints.down("md")]: {
+                                marginTop: theme.spacing(1),
+                                paddingLeft: theme.spacing(2),
+                                paddingRight: theme.spacing(2),
+                                paddingTop: theme.spacing(2)
+                            }
+                        })}>
+                        <CustomIdField customId={collection.customId}
+                                       entityId={entityId}
+                                       status={status}
+                                       onChange={setEntityId}
+                                       error={entityIdError}
+                                       entity={entity}/>
+                    </Box>
+
+                    <FormInternal
+                        {...props}
+                        onEntityIdModified={setEntityId}
+                        baseDataSourceValues={baseDataSourceValues}
+                        onModified={onModified}
+                        onValuesChanged={doOnValuesChanges}
+                        underlyingChanges={underlyingChanges}
+                        path={path}
+                        entity={entity}
+                        entityId={entityId}
+                        collection={collection}
+                        status={status}
+                        entityIdError={entityIdError}
+                        savingError={savingError}/></>
             }
             }
         </Formik>
@@ -328,33 +360,6 @@ function FormInternal<M>({
         }
     }, [underlyingChanges, entity, values, touched, setFieldValue]);
 
-    const scrollToFn = React.useCallback((
-        offset: number,
-        defaultScrollToFn?: (offset: number) => void) => {
-        const duration = 1000;
-        const start = parentRef.current.scrollTop;
-        const startTime = (scrollingRef.current = Date.now());
-
-        const run = () => {
-            if (scrollingRef.current !== startTime) return;
-            const now = Date.now();
-            const elapsed = now - startTime;
-            const progress = easeInOutQuint(Math.min(elapsed / duration, 1));
-            const interpolated = start + (offset - start) * progress;
-
-            if (defaultScrollToFn) {
-                if (elapsed < duration) {
-                    defaultScrollToFn(interpolated);
-                    requestAnimationFrame(run);
-                } else {
-                    defaultScrollToFn(interpolated);
-                }
-            }
-        }
-
-        requestAnimationFrame(run);
-    }, []);
-
     const context: FormContext<M> | undefined = entityId
         ? {
             collection,
@@ -365,97 +370,12 @@ function FormInternal<M>({
         : undefined;
 
     const errorKeys = Object.keys(errors);
-    const rowVirtualizer = useVirtual({
-        paddingStart: 16,
-        paddingEnd: 48,
-        size: context ? Object.keys(collection.properties).length + 1 : 1,
-        parentRef,
-        // estimateSize: React.useCallback(i => 64, [collection.properties]),
-        keyExtractor: React.useCallback((i:number) => {
-                if (i === 0) return "id_dc4w4rdw345f";
-                const propertyKey = Object.keys(collection.properties)[i - 1];
-                const hasError = Boolean(errorKeys[propertyKey]);
-                return `${propertyKey}_${hasError}`;
-            },
-            [collection.properties, errorKeys]),
-        overscan: 4,
-        scrollToFn
-    })
-
-    useEffect(() => {
-        const keys = errorKeys;
-        // Whenever there are errors and the form is submitting but finished validating.
-        if (keys.length > 0 && isSubmitting && !isValidating) {
-            rowVirtualizer.scrollToIndex(Object.keys(collection.properties).indexOf(keys[0]) + 1)
-        }
-    }, [isSubmitting, isValidating, errorKeys]);
 
     const formFields = (
-        <Box
-            ref={parentRef}
-            sx={(theme) => ({
-                width: "100%",
-                height: "100%",
-                overflow: "auto",
-                paddingLeft: theme.spacing(4),
-                paddingRight: theme.spacing(4),
-                paddingTop: theme.spacing(3),
-                paddingBottom: theme.spacing(4),
-                marginBottom: theme.spacing(2),
-                [theme.breakpoints.down("lg")]: {
-                    paddingLeft: theme.spacing(2),
-                    paddingRight: theme.spacing(2),
-                    paddingTop: theme.spacing(2),
-                    paddingBottom: theme.spacing(3)
-                },
-                [theme.breakpoints.down("md")]: {
-                    padding: theme.spacing(2)
-                }
-            })}
-        >
-
-            <div
-                style={{
-                    height: rowVirtualizer.totalSize,
-                    width: "100%",
-                    position: "relative"
-                }}
-            >
-
-                {rowVirtualizer.virtualItems.map((virtualRow) => {
-
-                    if (virtualRow.index === 0) {
-
-                        return (
-                            <Box
-                                key={virtualRow.index}
-                                ref={virtualRow.measureRef}
-                                style={{
-                                    transform: `translateY(${virtualRow.start}px)`
-                                }}
-                                sx={theme => ({
-                                    width: "100%",
-                                    position: "absolute",
-                                    top: 0,
-                                    left: 0,
-                                    [theme.breakpoints.down("md")]: {
-                                        pb: 3
-                                    },
-                                    pb: 4
-                                })}
-                            >
-                                <CustomIdField customId={collection.customId}
-                                               entityId={entityId}
-                                               status={status}
-                                               onChange={onEntityIdModified}
-                                               error={entityIdError}
-                                               entity={entity}/>
-                            </Box>
-                        );
-                    }
-
-                    const key = Object.keys(collection.properties)[virtualRow.index - 1];
-                    const property = collection.properties[key];
+        <Grid container spacing={4}>
+            {Object.entries<ResolvedProperty>(collection.properties)
+                .filter(([key, property]) => !isHidden(property))
+                .map(([key, property]) => {
 
                     const underlyingValueHasChanged: boolean =
                         !!underlyingChanges &&
@@ -477,46 +397,51 @@ function FormInternal<M>({
                     };
 
                     return (
-                        <ItemMeasurer
-                            component={Box}
-                            key={virtualRow.index}
-                            measure={virtualRow.measureRef}
-                            style={{
-                                transform: `translateY(${virtualRow.start}px)`
-                            }}
-                            // @ts-ignore
-                            sx={theme => ({
-                                width: "100%",
-                                position: "absolute",
-                                top: 0,
-                                left: 0,
-                                [theme.breakpoints.down("md")]: {
-                                    pb: 2
-                                },
-                                pb: 3
-                            })}
-                        >
+                        <Grid item
+                              xs={12}
+                              id={`form_field_${key}`}
+                              key={`field_${collection.name}_${key}`}>
                             <PropertyFieldBinding {...cmsFormFieldProps}/>
-                        </ItemMeasurer>
+                        </Grid>
                     );
                 })}
-            </div>
-        </Box>
-    )
+
+        </Grid>
+    );
 
     const disabled = isSubmitting || (!modified && status === "existing");
+    const formRef = React.createRef<HTMLDivElement>();
 
     return (
 
         <Form onSubmit={handleSubmit}
-              noValidate
-              style={{
-                  height: "100%"
-              }}>
+              noValidate>
+            <Box
+                sx={(theme) => ({
+                    paddingLeft: theme.spacing(4),
+                    paddingRight: theme.spacing(4),
+                    paddingTop: theme.spacing(3),
+                    paddingBottom: theme.spacing(4),
+                    marginBottom: theme.spacing(2),
+                    [theme.breakpoints.down("lg")]: {
+                        paddingLeft: theme.spacing(2),
+                        paddingRight: theme.spacing(2),
+                        paddingTop: theme.spacing(2),
+                        paddingBottom: theme.spacing(3)
+                    },
+                    [theme.breakpoints.down("md")]: {
+                        padding: theme.spacing(2)
+                    }
+                })}
+                ref={formRef}>
 
-            {formFields}
+                {formFields}
 
-            {/*<Box sx={{ height: 56 }}/>*/}
+                <ErrorFocus containerRef={formRef}/>
+
+            </Box>
+
+            <Box sx={{ height: 56 }}/>
 
             <CustomDialogActions position={"absolute"}>
 
@@ -552,61 +477,6 @@ function FormInternal<M>({
         </Form>
     );
 }
-
-function easeInOutQuint(t: number) {
-    return t < 0.5 ? 16 * t * t * t * t * t : 1 + 16 * --t * t * t * t * t
-}
-
-const ItemMeasurer = ({ children, measure, component, ...restProps }: any) => {
-    const roRef = React.useRef<ResizeObserver | null>(null);
-    const elRef = React.useRef(null);
-
-    const measureRef = React.useRef(measure);
-    measureRef.current = measure;
-
-    const refSetter = React.useCallback((el:any) => {
-        const ro = roRef.current;
-
-        if (ro !== null && elRef.current !== null) {
-            ro.unobserve(elRef.current);
-        }
-
-        elRef.current = el;
-
-        if (ro !== null && elRef.current !== null) {
-            ro.observe(elRef.current);
-        }
-    }, []);
-
-    React.useLayoutEffect(() => {
-        const update = () => {
-            measureRef.current(elRef.current);
-        };
-
-        // sync measure for initial render ?
-        update();
-
-        const ro = roRef.current ? roRef.current : new ResizeObserver(update);
-
-        const el = elRef.current;
-        if (el !== null) {
-            ro.observe(el);
-        }
-        roRef.current = ro;
-
-        return () => {
-            ro.disconnect();
-        };
-    }, []);
-
-    const Component = component;
-
-    return (
-        <Component ref={refSetter} {...restProps}>
-            {children}
-        </Component>
-    );
-};
 
 export default EntityForm;
 

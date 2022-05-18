@@ -1,6 +1,6 @@
 {
     "name": "@camberi/firecms",
-    "version": "2.0.0-alpha.7",
+    "version": "2.0.0-alpha.8",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "author": "camberi",
     "license": "MIT",
@@ -50,7 +50,6 @@
         "react-dropzone": "^14.2.1",
         "react-transition-group": "^4.4.2",
         "react-use-measure": "^2.1.1",
-        "react-virtual": "^2.10.4",
         "typeface-roboto": "^1.1.13",
         "typeface-rubik": "^1.1.13",
         "typeface-space-mono": "^1.1.13",
