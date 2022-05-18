@@ -10,13 +10,12 @@ import {
     Typography
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
 
 import { Link as ReactLink } from "react-router-dom";
 
 import { Markdown } from "../../preview";
-import { useAuthController, useNavigationContext } from "../../hooks";
-import { TopNavigationEntry, TopNavigationResult } from "../../models";
+import { useNavigationContext } from "../../hooks";
+import { TopNavigationEntry } from "../../models";
 import { getIconForView } from "../util";
 
 /**
@@ -28,20 +27,20 @@ import { getIconForView } from "../util";
  */
 export function FireCMSHomePage() {
 
-    const authController = useAuthController();
     const navigationContext = useNavigationContext();
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
 
-    const navigationResult: TopNavigationResult = navigationContext.topLevelNavigation;
-
     const {
         navigationEntries,
         groups
-    } = navigationResult;
+    } = navigationContext.topLevelNavigation;
 
     const allGroups: Array<string | undefined> = [...groups];
+    if (navigationEntries.filter(e => !e.group).length > 0) {
+        allGroups.push(undefined);
+    }
 
     return (
         <Container>
