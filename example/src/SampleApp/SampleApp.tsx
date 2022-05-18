@@ -63,7 +63,6 @@ function SampleApp() {
                                                                     authController
                                                                 }) => {
 
-        console.log("myAuthenticator", user);
         if(user?.email?.includes("flanders")){
             throw Error("Stupid Flanders!");
         }
@@ -104,7 +103,7 @@ function SampleApp() {
         textSearchController={textSearchController}
         allowSkipLogin={true}
         logo={logo}
-        collections={({}) => collections}
+        collections={(params) => collections}
         views={customViews}
         collectionOverrideHandler={customCollectionOverrideHandler}
         firebaseConfig={firebaseConfig}

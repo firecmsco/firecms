@@ -2,10 +2,7 @@ import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../models";
-import {
-    FireCMSHomePage,
-    NotFoundPage
-} from "./components";
+import { FireCMSHomePage, NotFoundPage } from "./components";
 import {
     useBreadcrumbsContext,
     useFireCMSContext,
@@ -32,7 +29,7 @@ export type NavigationRoutesProps = {
  * @constructor
  * @category Components
  */
-export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
+export function NavigationRoutes({ HomePage = FireCMSHomePage }: NavigationRoutesProps) {
 
     const location = useLocation();
     const navigation = useNavigationContext();
@@ -102,7 +99,7 @@ export function NavigationRoutes({ HomePage }: NavigationRoutesProps) {
                        path={navigation.homeUrl}
                        key={"navigation_home"}
                        title={"Home"}>
-                       {HomePage ? <HomePage/> : <FireCMSHomePage/>}
+                       <HomePage/>
                    </BreadcrumbUpdater>
                }/>
     );

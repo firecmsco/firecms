@@ -1,8 +1,8 @@
 import * as React from "react";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { styled } from "@mui/material/styles";
 
-import { Box, IconButton, Skeleton, Theme, Typography } from "@mui/material";
+import { Box, IconButton, Theme, Typography } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -11,21 +11,21 @@ import {
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig
-} from "../../../../../models";
+} from "../../../../models";
 import { useDropzone } from "react-dropzone";
-import { PreviewSize, PropertyPreview } from "../../../../../preview";
-import { ErrorBoundary } from "../../../ErrorBoundary";
+import { PreviewSize, PropertyPreview } from "../../../../preview";
+import { ErrorBoundary } from "../../ErrorBoundary";
 
 import clsx from "clsx";
-import { useSnackbarController, useStorageSource } from "../../../../../hooks";
-import { getThumbnailMeasure } from "../../../../../preview/util";
+import { useSnackbarController, useStorageSource } from "../../../../hooks";
+import { getThumbnailMeasure } from "../../../../preview/util";
 import {
     StorageFieldItem,
     useStorageUploadController
-} from "../../../../util/useStorageUploadController";
+} from "../../../util/useStorageUploadController";
 import {
     StorageUploadProgress
-} from "../../../../../form/components/StorageUploadProgress";
+} from "../../../../form/components/StorageUploadProgress";
 
 const PREFIX = "TableStorageUpload";
 

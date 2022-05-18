@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { alpha, Box, Typography, useTheme } from "@mui/material";
+import { alpha, Box, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { styled } from "@mui/material/styles";
-import BaseTable, { Column, ColumnShape } from "react-base-table";
-import Measure, { ContentRect } from "react-measure";
+import BaseTable, { AutoResizer, Column, ColumnShape } from "react-base-table";
 import clsx from "clsx";
 
 import { ErrorBoundary } from "../ErrorBoundary";
@@ -77,12 +76,10 @@ declare module "react" {
  */
 export function Table<T extends object>({
                                             data,
-                                            idColumnBuilder,
                                             onResetPagination,
                                             onEndReached,
                                             size = "m",
                                             columns,
-                                            frozenIdColumn,
                                             onRowClick,
                                             onColumnResize,
                                             filter: filterInput,
@@ -91,17 +88,13 @@ export function Table<T extends object>({
                                             sortBy,
                                             error,
                                             emptyMessage,
-                             onSortByUpdate,
-                             loading,
-                             hoverRow = true
-                         }: TableProps<T>) {
-
-    const theme = useTheme();
+                                            onSortByUpdate,
+                                            loading,
+                                            hoverRow = true
+                                        }: TableProps<T>) {
 
     const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
     const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
-
-    const [tableSize, setTableSize] = React.useState<ContentRect | undefined>();
 
     const tableRef = useRef<BaseTable>(null);
 
@@ -123,7 +116,7 @@ export function Table<T extends object>({
         filterRef.current = filterInput;
     }, [filterInput]);
 
-    const onColumnSort = (key: string) => {
+    const onColumnSort = useCallback((key: string) => {
 
         const isDesc = sortByProperty === key && currentSort === "desc";
         const isAsc = sortByProperty === key && currentSort === "asc";
@@ -149,21 +142,21 @@ export function Table<T extends object>({
         }
 
         scrollToTop();
-    };
+    }, [checkFilterCombination, currentSort, onFilterUpdate, onResetPagination, onSortByUpdate, sortByProperty]);
 
-    const resetSort = () => {
+    const resetSort = useCallback(() => {
         if (onSortByUpdate)
             onSortByUpdate(undefined);
-    };
+    }, [onSortByUpdate]);
 
-    const scrollToTop = () => {
+    const scrollToTop = useCallback(() => {
         if (tableRef.current) {
             scrollRef.current = 0;
             tableRef.current.scrollToTop(0);
         }
-    };
+    }, []);
 
-    const onScroll = ({ scrollTop, scrollUpdateWasRequested }: {
+    const onScroll = useCallback(({ scrollTop, scrollUpdateWasRequested }: {
         scrollLeft: number;
         scrollTop: number;
         horizontalScrollDirection: "forward" | "backward";
@@ -174,19 +167,19 @@ export function Table<T extends object>({
         if (!scrollUpdateWasRequested && prudentTime) {
             scrollRef.current = scrollTop;
         }
-    };
+    }, []);
 
-    const onEndReachedInternal = () => {
+    const onEndReachedInternal = useCallback(() => {
         endReachedTimestampRef.current = Date.now();
         if (onEndReached)
             onEndReached();
-    };
+    }, [onEndReached]);
 
-    const clickRow = (props: { rowData: T; rowIndex: number; rowKey: string; event: React.SyntheticEvent }) => {
+    const clickRow = useCallback((props: { rowData: T; rowIndex: number; rowKey: string; event: React.SyntheticEvent }) => {
         if (!onRowClick)
             return;
         onRowClick(props);
-    };
+    }, [onRowClick]);
 
     const onInternalFilterUpdate = useCallback((column: TableColumn<any>, filterForProperty?: [TableWhereFilterOp, any]) => {
 
@@ -211,10 +204,10 @@ export function Table<T extends object>({
         }
     }, [checkFilterCombination, currentSort, onFilterUpdate, resetSort, sortByProperty]);
 
-    const headerRenderer = ({ columnIndex }: any) => {
+    const headerRenderer = useCallback(({ columnIndex }: any) => {
         const filter = filterRef.current;
 
-        const column = columns[columnIndex - 1];
+        const column = columns[columnIndex];
 
         const filterForThisProperty: [TableWhereFilterOp, any] | undefined =
             column && filter && filter[column.key]
@@ -223,36 +216,15 @@ export function Table<T extends object>({
 
         return (
             <ErrorBoundary>
-                {columnIndex === 0
-                    ? <Box
-                        sx={{
-                            width: "calc(100% + 24px)",
-                            margin: "0px -12px",
-                            padding: "0px 12px",
-                            color: theme.palette.text.secondary,
-                            backgroundColor: theme.palette.background.default,
-                            transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-                            height: "100%",
-                            fontSize: "0.750rem",
-                            textTransform: "uppercase",
-                            fontWeight: 600,
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center"
-                        }}>
-                        ID
-                    </Box>
-                    : <TableHeader
-                        onFilterUpdate={(value) => onInternalFilterUpdate(column, value)}
-                        filter={filterForThisProperty}
-                        sort={sortByProperty === column.key ? currentSort : undefined}
-                        onColumnSort={onColumnSort}
-                        column={column}/>
-
-                }
+                <TableHeader
+                    onFilterUpdate={(value) => onInternalFilterUpdate(column, value)}
+                    filter={filterForThisProperty}
+                    sort={sortByProperty === column.key ? currentSort : undefined}
+                    onColumnSort={onColumnSort}
+                    column={column}/>
             </ErrorBoundary>
         );
-    };
+    }, [columns, currentSort, onColumnSort, onInternalFilterUpdate, sortByProperty]);
 
     function buildErrorView() {
         return (
@@ -313,82 +285,58 @@ export function Table<T extends object>({
     }, [onColumnResize]);
 
     return (
-        <Measure
-            bounds
-            onResize={setTableSize}>
-            {({ measureRef }) => {
+        <Root sx={{
+            width: "100%",
+            height: "100%",
+            flexGrow: 1
+        }}
+              css={baseTableCss}>
 
-                return <Box ref={measureRef}
-                            sx={{
-                                width: "100%",
-                                height: "100%",
-                                flexGrow: 1
-                            }}
-                            css={baseTableCss}>
+            <AutoResizer>
+                {({ width, height }) => {
 
-                    {tableSize?.bounds &&
-                        <Root>
-                            <BaseTable
-                                rowClassName={clsx(classes.tableRow, { [classes.tableRowClickable]: hoverRow })}
-                                data={data}
-                                onColumnResizeEnd={onBaseTableColumnResize}
-                                width={tableSize.bounds.width}
-                                height={tableSize.bounds.height}
-                                emptyRenderer={error ? buildErrorView() : buildEmptyView()}
-                                fixed
-                                ignoreFunctionInColumnCompare={false}
-                                rowHeight={getRowHeight(size)}
-                                ref={tableRef}
-                                onScroll={onScroll}
-                                overscanRowCount={2}
-                                onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
-                                onEndReached={onEndReachedInternal}
-                                rowEventHandlers={
-                                    { onClick: clickRow as any }
-                                }
-                            >
+                    return <BaseTable
+                        rowClassName={clsx(classes.tableRow, { [classes.tableRowClickable]: hoverRow })}
+                        data={data}
+                        onColumnResizeEnd={onBaseTableColumnResize}
+                        width={width}
+                        height={height}
+                        emptyRenderer={error ? buildErrorView() : buildEmptyView()}
+                        fixed
+                        ignoreFunctionInColumnCompare={false}
+                        rowHeight={getRowHeight(size)}
+                        ref={tableRef}
+                        onScroll={onScroll}
+                        overscanRowCount={2}
+                        onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
+                        onEndReached={onEndReachedInternal}
+                        rowEventHandlers={
+                            { onClick: clickRow as any }
+                        }
+                    >
 
-                                <Column
-                                    headerRenderer={headerRenderer}
-                                    cellRenderer={({
-                                                       rowData
-                                                   }: any) =>
-                                        idColumnBuilder
-                                            ? idColumnBuilder({
-                                                size,
-                                                entry: rowData
-                                            })
-                                            : null
-                                    }
-                                    align={"center"}
-                                    key={"header-id"}
-                                    dataKey={"id"}
-                                    flexShrink={0}
-                                    frozen={frozenIdColumn ? "left" : undefined}
-                                    width={160}/>
+                        {columns.map((column) =>
+                            <Column
+                                key={column.key}
+                                title={column.title}
+                                className={classes.column}
+                                headerRenderer={headerRenderer}
+                                cellRenderer={column.cellRenderer as any}
+                                height={getRowHeight(size)}
+                                align={column.align}
+                                flexGrow={1}
+                                flexShrink={0}
+                                resizable={true}
+                                size={size}
+                                frozen={column.frozen}
+                                dataKey={column.key}
+                                width={column.width}/>)
+                        }
+                    </BaseTable>;
+                }}
+            </AutoResizer>
 
-                                {columns.map((column) =>
-                                    <Column
-                                        key={column.key}
-                                        title={column.title}
-                                        className={classes.column}
-                                        headerRenderer={headerRenderer}
-                                        cellRenderer={column.cellRenderer as any}
-                                        height={getRowHeight(size)}
-                                        align={column.align}
-                                        flexGrow={1}
-                                        flexShrink={0}
-                                        resizable={true}
-                                        size={size}
-                                        dataKey={column.key}
-                                        width={column.width}/>)
-                                }
-                            </BaseTable>
-                        </Root>}
-                </Box>;
-            }}
-        </Measure>
-
+        </Root>
     );
 
 }

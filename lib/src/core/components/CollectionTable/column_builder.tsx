@@ -25,6 +25,8 @@ import {
     resolveEnumValues,
     resolveProperty
 } from "../../util/resolutions";
+import { useMediaQuery, useTheme } from "@mui/material";
+import { CollectionRowActions } from "./internal/CollectionRowActions";
 
 export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType extends User> = {
 
@@ -72,6 +74,15 @@ export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType
      */
     onCellValueChange?: OnCellValueChange<unknown, M>;
 
+    /**
+     * Builder for creating the buttons in each row
+     * @param entity
+     * @param size
+     */
+    tableRowActionsBuilder?: ({
+                                  entity,
+                                  size
+                              }: { entity: Entity<M>, size: CollectionSize }) => React.ReactNode;
 };
 
 /**
@@ -126,9 +137,13 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                                                                                                           inlineEditing,
                                                                                                           size,
                                                                                                           onCellValueChange,
-                                                                                                          uniqueFieldValidator
+                                                                                                          uniqueFieldValidator,
+                                                                                                          tableRowActionsBuilder
                                                                                                       }: ColumnsFromCollectionProps<M, AdditionalKey, UserType>
 ): { columns: TableColumn<Entity<M>>[], popupFormField: React.ReactElement } {
+
+    const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
 
@@ -371,10 +386,27 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
         allColumns.push(...items);
     }
 
-    const columns = displayedProperties
-        .map((p) => {
-            return allColumns.find(c => c.key === p);
-        }).filter(c => !!c) as TableColumn<Entity<M>>[];
+    const idColumn: TableColumn<any> = {
+        key: "id",
+        width: 160,
+        title: "ID",
+        frozen: largeLayout,
+        headerAlign: "center",
+        cellRenderer: ({ rowData }) => {
+            if (tableRowActionsBuilder)
+                return tableRowActionsBuilder({ entity: rowData, size });
+            else
+                return <CollectionRowActions entity={rowData} size={size}/>;
+        }
+    }
+
+    const columns = [
+        idColumn,
+        ...displayedProperties
+            .map((p) => {
+                return allColumns.find(c => c.key === p);
+            }).filter(c => !!c) as TableColumn<Entity<M>>[]
+    ];
 
     const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator;
 

@@ -39,7 +39,7 @@ interface FirebaseAuthHandlerProps {
  * Use this hook to build an {@link AuthDelegate} based on Firebase Auth
  * @category Firebase
  */
-export const useFirebaseAuthDelegate = (
+export const useBuildFirebaseAuthDelegate = (
     {
         firebaseApp,
         signInOptions

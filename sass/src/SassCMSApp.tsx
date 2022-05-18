@@ -10,14 +10,14 @@ import "typeface-space-mono";
 import {
     Authenticator,
     buildCollection,
-    CircularProgressCenter,
+    CircularProgressCenter, CMSView,
     createCMSDefaultTheme,
     FirebaseAuthDelegate,
     FirebaseLoginView,
     FireCMS, NavigationRoutes,
     Scaffold,
     SideDialogs,
-    useFirebaseAuthDelegate,
+    useBuildFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase
@@ -36,6 +36,7 @@ import {
     SassEntityCollectionView
 } from "./components/SassEntityCollectionView";
 import { SassHomePage } from "./components/SassHomePage";
+import { UsersEditView } from "./components/UsersEditView";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -62,7 +63,7 @@ export function SassCMSApp() {
         firebaseConfigError
     } = useInitialiseFirebase({ firebaseConfig });
 
-    const authDelegate: FirebaseAuthDelegate = useFirebaseAuthDelegate({
+    const authDelegate: FirebaseAuthDelegate = useBuildFirebaseAuthDelegate({
         firebaseApp,
         signInOptions
     });
@@ -102,12 +103,22 @@ export function SassCMSApp() {
         deleteCollections: true
     }
 
+    const views:CMSView[] = [
+        {
+            path: "users",
+            name: "Users",
+            group: "Admin",
+            view: <UsersEditView />
+        }
+    ]
+
     return (
         <Router>
             <FireCMS authDelegate={authDelegate}
                      collections={collectionsController.collections}
                      authentication={myAuthenticator}
                      dataSource={dataSource}
+                     views={views}
                      storageSource={storageSource}
                      EntityCollectionViewComponent={SassEntityCollectionView}
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}>
@@ -130,7 +141,9 @@ export function SassCMSApp() {
                         component = (
                             <Scaffold name={"My Online Shop"}
                                       Drawer={SassDrawer}>
-                                <NavigationRoutes HomePage={SassHomePage}/>
+                                <NavigationRoutes
+                                    HomePage={SassHomePage}
+                                />
                                 <SideDialogs/>
                             </Scaffold>
                         );

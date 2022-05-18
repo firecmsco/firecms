@@ -10,21 +10,21 @@ import {
     ResolvedStringProperty
 } from "../../../../models";
 import React, { useCallback, useEffect, useState } from "react";
-import { TableInput } from "./fields/TableInput";
-import { TableSelect } from "./fields/TableSelect";
-import { NumberTableInput } from "./fields/TableNumberInput";
-import { TableSwitch } from "./fields/TableSwitch";
-import { TableDateField } from "./fields/TableDateField";
+import { TableInput } from "../../Table/fields/TableInput";
+import { TableSelect } from "../../Table/fields/TableSelect";
+import { NumberTableInput } from "../../Table/fields/TableNumberInput";
+import { TableSwitch } from "../../Table/fields/TableSwitch";
+import { TableDateField } from "../../Table/fields/TableDateField";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { PropertyPreview } from "../../../../preview";
 import { CellStyleProps } from "../../Table/styles";
-import { TableReferenceField } from "./fields/TableReferenceField";
+import { TableReferenceField } from "../fields/TableReferenceField";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { useClearRestoreValue } from "../../../../hooks";
 import { isReadOnly } from "../../../util";
 import { TableCell } from "../../Table/TableCell";
-import { TableStorageUpload } from "./fields/TableStorageUpload";
+import { TableStorageUpload } from "../fields/TableStorageUpload";
 import { SelectedCellProps } from "../column_builder";
 import {
     CustomFieldValidator,

@@ -1,4 +1,4 @@
-export * from "./hooks/useFirebaseAuthDelegate";
+export * from "./hooks/useBuildFirebaseAuthDelegate";
 export * from "./hooks/useFirestoreDataSource";
 export * from "./hooks/useFirebaseStorageSource";
 

@@ -109,7 +109,7 @@ export const baseTableCss = css`
   }
 
   & .BaseTable__header-row {
-    /*background-color: #f8f8f8;*/
+    background-color: rgba(128, 128, 128, 0.05);
     font-weight: 700;
   }
 

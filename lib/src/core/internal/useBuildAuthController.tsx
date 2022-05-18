@@ -68,7 +68,7 @@ export function useBuildAuthController<UserType extends User>({
             authDelegate,
             roles: userRoles,
             setRoles
-        }), [authDelegate, authLoading, canAccessMainView, extra, loginSkipped, notAllowedError, user, userRoles, setRoles]);
+        }), [user, loginSkipped, canAccessMainView, authVerified, authDelegate, authLoading, notAllowedError, extra, userRoles]);
 
     const checkAuthentication = useCallback(async () => {
         const delegateUser = authDelegate.user;
@@ -91,16 +91,22 @@ export function useBuildAuthController<UserType extends User>({
                 setNotAllowedError(e);
                 authDelegate.signOut();
             }
-            setAuthVerified(true);
             setAuthLoading(false);
+            setAuthVerified(true);
         } else {
             setUser(delegateUser);
         }
-    }, [authDelegate.user]);
+
+        console.log("authDelegate.initialLoading", authDelegate.initialLoading)
+        console.log("delegateUser", delegateUser)
+        if (!authDelegate.initialLoading && (!delegateUser || delegateUser === null))
+            setAuthVerified(true);
+
+    }, [authDelegate.initialLoading, authDelegate.user]);
 
     useEffect(() => {
         checkAuthentication();
-    }, [authDelegate.user]);
+    }, [authDelegate.initialLoading, authDelegate.user]);
 
     return authController;
 }

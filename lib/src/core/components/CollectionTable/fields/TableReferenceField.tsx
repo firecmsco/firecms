@@ -1,13 +1,13 @@
 import React, { useCallback, useState } from "react";
 import { Box, Button } from "@mui/material";
-import { ReferencePreview } from "../../../../../preview";
-import { ErrorView } from "../../../index";
-import { CollectionSize, Entity, EntityReference } from "../../../../../models";
-import { ReferenceDialog } from "../../../ReferenceDialog";
+import { ReferencePreview } from "../../../../preview";
+import { ErrorView } from "../../index";
+import { CollectionSize, Entity, EntityReference } from "../../../../models";
+import { ReferenceDialog } from "../../ReferenceDialog";
 
-import { getPreviewSizeFrom } from "../../../../../preview/util";
-import { getReferenceFrom } from "../../../../util";
-import { useNavigationContext } from "../../../../../hooks";
+import { getPreviewSizeFrom } from "../../../../preview/util";
+import { getReferenceFrom } from "../../../util";
+import { useNavigationContext } from "../../../../hooks";
 
 export function TableReferenceField(props: {
     name: string;

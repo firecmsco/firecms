@@ -18,7 +18,7 @@ import {
     NavigationRoutes,
     Scaffold,
     SideDialogs,
-    useFirebaseAuthDelegate,
+    useBuildFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase,
@@ -90,7 +90,7 @@ export function CustomCMSApp() {
         firebaseConfigError
     } = useInitialiseFirebase({ firebaseConfig });
 
-    const authDelegate: FirebaseAuthDelegate = useFirebaseAuthDelegate({
+    const authDelegate: FirebaseAuthDelegate = useBuildFirebaseAuthDelegate({
         firebaseApp,
         signInOptions
     });

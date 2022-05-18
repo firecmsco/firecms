@@ -170,6 +170,19 @@ export function useBuildFirestoreConfigController({
         return setDoc(ref, cleanedCollection, { merge: true });
     }, [configPath, firestore]);
 
+    const saveUser = useCallback(<M extends { [Key: string]: any }>(user:SassUser): Promise<void> => {
+        if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const ref = doc(firestore, configPath, "config", "users", user.id);
+        console.debug("Persisting", user);
+        return setDoc(ref, user, { merge: true });
+    }, [configPath, firestore]);
+
+    const saveRole = useCallback(<M extends { [Key: string]: any }>(id:string, role:Role): Promise<void> => {
+        if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const ref = doc(firestore, configPath, "config", "users", id);
+        console.debug("Persisting", role);
+        return setDoc(ref, role, { merge: true });
+    }, [configPath, firestore]);
 
     const collections = persistedCollections !== undefined ?  joinCollections(persistedCollections , baseCollections) : undefined;
     return {
@@ -178,7 +191,9 @@ export function useBuildFirestoreConfigController({
         saveCollection,
         deleteCollection,
         roles,
-        users
+        users,
+        saveUser,
+        saveRole
     }
 }
 

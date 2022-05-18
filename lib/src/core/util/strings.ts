@@ -8,6 +8,6 @@ export const toSnakeCase = (str: string) => {
         .join("_");
 };
 
-export function randomString(strLength: number = 5) {
+export function randomString(strLength = 5) {
     return Math.random().toString(36).slice(2, 2 + strLength);
 }

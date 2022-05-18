@@ -185,7 +185,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             inlineEditing,
             size,
             onCellValueChange: onCellChanged,
-            uniqueFieldValidator
+            uniqueFieldValidator,
+            tableRowActionsBuilder
         });
 
         const [searchString, setSearchString] = React.useState<string | undefined>();
@@ -222,10 +223,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             entry: Entity<M>,
             size: CollectionSize,
         }) => {
-            if (tableRowActionsBuilder)
-                return tableRowActionsBuilder({ entity: entry, size });
-            else
-                return <CollectionRowActions entity={entry} size={size}/>;
 
         }, [tableRowActionsBuilder]);
 
@@ -268,11 +265,9 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     onRowClick={onRowClick}
                     onEndReached={loadNextPage}
                     onResetPagination={resetPagination}
-                    idColumnBuilder={buildIdColumn}
                     error={dataLoadingError}
                     paginationEnabled={paginationEnabled}
                     onColumnResize={onColumnResize}
-                    frozenIdColumn={largeLayout}
                     size={size}
                     loading={dataLoading}
                     filter={filterValues}

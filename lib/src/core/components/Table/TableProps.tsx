@@ -19,15 +19,6 @@ export interface TableProps<T extends object> {
     columns: TableColumn<T>[];
 
     /**
-     * Builder function for the column id
-     * @param props
-     */
-    idColumnBuilder: (props: {
-        entry: T,
-        size: TableSize,
-    }) => React.ReactNode;
-
-    /**
      * If enabled, content is loaded in batch
      */
     paginationEnabled?: boolean;
@@ -40,11 +31,6 @@ export interface TableProps<T extends object> {
      */
     checkFilterCombination?: (filterValues: TableFilterValues<Extract<keyof T, string>>,
                               sortBy?: [string, "asc" | "desc"]) => boolean;
-
-    /**
-     * Is the id column frozen to the left.
-     */
-    frozenIdColumn?: boolean;
 
     /**
      * A callback function when scrolling the table to near the end
@@ -114,6 +100,8 @@ export interface TableProps<T extends object> {
      * Should apply a different style when hovering
      */
     hoverRow?: boolean;
+
+    frozen?: "left" | "right" | true | false;
 }
 
 /**
@@ -163,6 +151,11 @@ export interface TableColumn<T extends any> {
      * Label displayed in the header
      */
     title?: string;
+
+    /**
+     * How is the
+     */
+    headerAlign?: "left" | "center" | "right";
 
     /**
      * Ico displayed in the header

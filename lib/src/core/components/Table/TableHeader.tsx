@@ -89,9 +89,9 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                 }}>
                     <Box sx={{
                         display: "flex",
-                        flexDirection: "row",
+                        justifyContent: column.headerAlign,
                         alignItems: "center",
-                        justifyContent: column.align === "right" ? "flex-end" : (column.align === "center" ? "center" : "flex-start")
+                        flexDirection: "row"
                     }}>
                         <Box sx={{
                             paddingTop: "4px"

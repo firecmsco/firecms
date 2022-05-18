@@ -14,7 +14,7 @@ import {
 } from "../core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
-import { useFirebaseAuthDelegate } from "./hooks/useFirebaseAuthDelegate";
+import { useBuildFirebaseAuthDelegate } from "./hooks/useBuildFirebaseAuthDelegate";
 import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
@@ -82,7 +82,7 @@ export function FirebaseCMSApp({
     /**
      * Controller for managing authentication
      */
-    const authDelegate: FirebaseAuthDelegate = useFirebaseAuthDelegate({
+    const authDelegate: FirebaseAuthDelegate = useBuildFirebaseAuthDelegate({
         firebaseApp,
         signInOptions
     });
@@ -152,7 +152,6 @@ export function FirebaseCMSApp({
                         fontFamily
                     });
 
-                    console.log("context.authController.canAccessMainView", context.authController.canAccessMainView);
                     let component;
                     if (loading) {
                         component = <CircularProgressCenter/>;
