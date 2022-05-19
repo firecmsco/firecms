@@ -12,7 +12,7 @@ storage key, or the url gets saved).
 import { buildProperty } from "./builders";
 
 const nameProperty = buildProperty({
-    title: "Name",
+    name: "Name",
     description: "Basic string property with validation",
     validation: { required: true },
     dataType: "string"
@@ -44,17 +44,15 @@ import { buildProperty } from "./builders";
 
 const imageProperty = buildProperty({
     dataType: "string",
-    config: {
-        storage: {
-            mediaType: "image",
-            storagePath: (context) => {
-                return "images";
-            },
-            acceptedFiles: ["image/*"],
-            fileName: (context) => {
-                return context.file.name;
-            }
-        }
+    storage: {
+      mediaType: "image",
+      storagePath: (context) => {
+        return "images";
+      },
+      acceptedFiles: ["image/*"],
+      fileName: (context) => {
+        return context.file.name;
+      }
     }
 });
 ```
@@ -68,10 +66,8 @@ import { buildProperty } from "./builders";
 
 const amazonLinkProperty = buildProperty({
     dataType: "string",
-    title: "Amazon link",
-    config: {
-        url: true
-    }
+    name: "Amazon link",
+    url: true
 });
 ```
 
@@ -89,19 +85,18 @@ import { buildProperty } from "./builders";
 
 const amazonLinkProperty = buildProperty({
     dataType: "string",
-    title: "Amazon link",
-    config: {
-        enumValues: {
-            "es": "Spanish",
-            "de": "German",
-            "en": "English",
-            "it": "Italian",
-            "fr": {
-                label: "French",
-                disabled: true
-            }
-        }
-    }
+    name: "Amazon link",
+    enumValues: {
+      "es": "Spanish",
+      "de": "German",
+      "en": "English",
+      "it": "Italian",
+      "fr": {
+          id: "fr",
+          label: "French",
+          disabled: true
+      }
+  }
 });
 ```
 
@@ -114,11 +109,9 @@ of lines adapts to the content.
 import { buildProperty } from "./builders";
 
 const property = buildProperty({
-    title: "Description",
+    name: "Description",
     dataType: "string",
-    config: {
-        multiline: true
-    }
+    multiline: true
 });
 ```
 
@@ -132,10 +125,8 @@ import { buildProperty } from "./builders";
 
 const property = buildProperty({
     dataType: "string",
-    title: "Text",
-    config: {
-        markdown: true
-    }
+    name: "Text",
+    markdown: true
 });
 ```
 
@@ -146,14 +137,12 @@ Should this string be rendered as a tag instead of just text.
 import { buildProperty } from "./builders";
 
 const property = buildProperty({
-    title: "Tags",
+    name: "Tags",
     description: "Example of generic array",
     dataType: "array",
     of: {
         dataType: "string",
-        config: {
-            previewAsTag: true
-        }
+        previewAsTag: true
     }
 });
 ```

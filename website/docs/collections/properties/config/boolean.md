@@ -8,7 +8,7 @@ sidebar_label: Boolean
 import { buildProperty } from "./builders";
 
 const availableProperty = buildProperty({
-    title: "Available",
+    name: "Available",
     dataType: "boolean"
 });
 ```

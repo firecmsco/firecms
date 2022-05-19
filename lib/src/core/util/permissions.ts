@@ -2,10 +2,8 @@ import {
     AuthController,
     EntityCollection,
     Permissions,
-    Role,
     User
 } from "../../models";
-import { segmentsToStrippedPath } from "./paths";
 
 const DEFAULT_PERMISSIONS = {
     read: true,
@@ -20,14 +18,7 @@ export function resolvePermissions<M extends { [Key: string]: any }, UserType ex
  paths: string[]): Permissions {
 
     const permission = collection.permissions;
-    if (permission === undefined) {
-        if (!authController.roles) {
-            return DEFAULT_PERMISSIONS;
-        } else {
-            const strippedCollectionPath = segmentsToStrippedPath(paths);
-            return resolveCollectionPermissions(authController.roles, strippedCollectionPath);
-        }
-    } else if (typeof permission === "object") {
+    if (typeof permission === "object") {
         return permission as Permissions;
     } else if (typeof permission === "function") {
         return permission({
@@ -64,45 +55,6 @@ export function canDeleteEntity<M extends { [Key: string]: any }, UserType exten
     paths: string[]): boolean {
     return resolvePermissions(collection, authController, paths).delete ?? DEFAULT_PERMISSIONS.delete;
 }
-
-const mergePermissions = (permA: Permissions, permB: Permissions) => {
-    return {
-        read: permA.read ?? permB.read,
-        create: permA.create ?? permB.create,
-        edit: permA.edit ?? permB.edit,
-        delete: permA.delete ?? permB.delete
-    };
-}
-
-export function resolveCollectionPermissions(roles: Role[], path: string): Permissions {
-    const basePermissions = {
-        read: false,
-        create: false,
-        edit: false,
-        delete: false
-    };
-    return roles
-        .map(role => resolveCollectionRole(role, path))
-        .reduce(mergePermissions, basePermissions);
-}
-
-function resolveCollectionRole(role: Role, path: string): Permissions {
-
-    const basePermissions = {
-        read: role.isAdmin,
-        create: role.isAdmin,
-        edit: role.isAdmin,
-        delete: role.isAdmin
-    };
-    if (role.collectionPermissions && role.collectionPermissions[path]) {
-        return mergePermissions(role.collectionPermissions[path], basePermissions);
-    } else if (role.defaultPermissions) {
-        return mergePermissions(role.defaultPermissions, basePermissions);
-    } else {
-        return basePermissions;
-    }
-}
-
 
 
 // export function resolveCollectionsPermissions(roles: Role[]): Record<string, Permissions> {

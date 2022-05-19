@@ -1,7 +1,6 @@
 ---
-id: intro
-title: Properties
-sidebar_label: Properties
+id: properties_intro
+title: Properties intro
 ---
 
 Properties define each field in a form or column in a collection included in an
@@ -28,8 +27,12 @@ Each property in the CMS has its own API, but they all share some common props:
 * `columnWidth` Width in pixels of this column in the collection view. If not
   set, the width is inferred based on the other configurations.
 
-* `disabled` Is this a read only property. Note that you can also pass an object
-  with the disabled configuration (including custom messages, clear value on
+* `readOnly`Is this a read only property. When set to true, it gets rendered as a
+  preview.
+
+* `disabled`Is this field disabled. When set to true, it gets rendered as a
+  disabled field. You can also specify a configuration for defining the
+  behaviour of disabled properties (including custom messages, clear value on
   disabled or hide the field completely)
   [PropertyDisabledConfig](../../api/interfaces/propertydisabledconfig)
 
@@ -51,5 +54,8 @@ Each property in the CMS has its own API, but they all share some common props:
   Additional props that are passed to the components defined in `Field` or
   in `Preview`.
 
+* `defaultValue`
+  This value will be set by default for new entities.
 
+  
 

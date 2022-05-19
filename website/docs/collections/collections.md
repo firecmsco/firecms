@@ -37,9 +37,9 @@ in [Entity collections](../api/interfaces/entitycollection)
 
 * `customId` If this prop is not set, the ID of the document will be created by
   the datasource. You can set the value to 'true' to force the users to choose
-  the ID. You can set the value to 'optional' to allow the users to choose the
-  ID. If the ID is empty, an automatic ID will be set. You can also pass a set
-  of values (as an `EnumValues` object) to allow users to pick from only those.
+  the ID. You can set the value to `true` to allow the users to choose the
+  ID. You can also pass a set
+  of values (as an `EnumValues` object) to allow users to pick from those only.
 
 * `subcollections` Following the Firestore document and collection schema, you
   can add subcollections to your entity in the same way you define the root
@@ -128,22 +128,18 @@ const productsCollection = buildCollection<Product>({
     name: buildProperty({
       dataType: "string",
       title: "Name",
-      config: {
-        multiline: true
-      },
+      multiline: true
       validation: { required: true }
     }),
     main_image: buildProperty({
       dataType: "string",
       title: "Image",
-      config: {
-        storage: {
-          mediaType: "image",
-          storagePath: "images",
-          acceptedFiles: ["image/*"],
-          metadata: {
-            cacheControl: "max-age=1000000"
-          }
+      storage: {
+        mediaType: "image",
+        storagePath: "images",
+        acceptedFiles: ["image/*"],
+        metadata: {
+          cacheControl: "max-age=1000000"
         }
       },
       description: "Upload field for images",

@@ -8,7 +8,7 @@ sidebar_label: Reference
 import { buildProperty } from "./builders";
 
 const productsReferenceProperty = buildProperty({
-    title: "Product",
+    name: "Product",
     dataType: "reference",
     path: "products",
     previewProperties: ["name", "main_image"]

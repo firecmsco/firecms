@@ -3,7 +3,8 @@ id: text_search
 title: Text search
 ---
 
-:::note The solution described here is specific for Firestore, if you are
+:::note The solution described here is specific for Firestore
+If you are
 developing your own datasource, you are free to implement text search in
 whatever way it makes sense.
 :::
@@ -16,10 +17,14 @@ You need to define a `FirestoreTextSearchController` and pass it to your
 `FirebaseCMSApp` component (or `useFirestoreDataSource` if you are building a
 custom app). Typically, you will want to index your entities in some external
 solution, such as Algolia. For this to work you need to set up an AlgoliaSearch
-account and manage the indexing of your documents. There is a full backend
-example included in the code, which indexes documents with Cloud Functions.
+account and manage the indexing of your documents. 
 
-:::note Find all the available props
+There is a full backend
+example included in the source code, which indexes documents with Cloud Functions. 
+There is also a Firebase extension for the very same purpose.
+
+:::note 
+Find all the available props
 for `FirebaseCMSApp` [here](./api/functions/firebasecmsapp)
 :::
 

@@ -12,29 +12,11 @@ This is a guide on how to migrate FireCMS apps from version 1.0 to 2.0.
 
 ### Main config
 
-The most significant change in version 2.0 is the inclusion of a collection
-editor that allows end users to create, edit or delete collections and their
-properties.
-
-Users are now able to persist new collection configurations, by default
-using the Firestore `CollectionsController` implementation. This implementation
-saves the modified collection schemas in a path in the user's Firestore 
-instance, under `__FIRECMS`, so make sure you have the appropriate permissions
-assigned in your security rules if you would like to enable this function.
-
-FireCMS in V2 supports using persisted collections as well as collections
-defined in code, like in V1. Not every feature has been implemented using the 
-collection editor. Some are specially hard, e.g. the props in collection config that
-were using some kind of code callback, like the `onPreSave` or `onSaveSuccess` 
-hooks. We are listening for suggestions on this part!
-
-Allowing persisting collections in an external data source makes some
-features existing in V1 hard to replicate.
-
-For this reason navigation has been revamped: 
+The main navigation has been revamped: 
 - The `navigation` prop has been removed and replaced with `collections` and `views`.
-- It is not possible anymore to build a dynamic navigation based on the logged
-user, but the same functionality should be achievable using `Roles`
+- If you need to have dynamic collections or views based on the user or other config,
+you can use a `EntityCollectionsBuilder` or `CMSViewsBuilder` in an analogous way 
+- to v1.
 
 ### Collections
 

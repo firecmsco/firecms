@@ -14,21 +14,19 @@ const ctaProperty = buildProperty({
     dataType: "map",
     properties: {
         name: {
-            title: "Name",
+            name: "Name",
             description: "Text that will be shown on the button",
             validation: { required: true },
             dataType: "string"
         },
         type: {
-            title: "Type",
+            name: "Type",
             description: "Action type that determines the user flow",
             validation: { required: true, uniqueInArray: true },
             dataType: "string",
-            config: {
-                enumValues: {
-                    complete: "Complete",
-                    continue: "Continue"
-                }
+            enumValues: {
+                complete: "Complete",
+                continue: "Continue"
             }
         }
     }

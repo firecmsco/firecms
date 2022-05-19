@@ -164,9 +164,14 @@ function Features() {
                                 </div>
 
                                 <p className="md:text-right text-xl text-gray-600 dark:text-gray-200">
-                                    Define your entity schemas and choose from
+                                    Define your schemas and choose from
                                     multiple form widgets and validation
                                     options.
+                                </p>
+
+                                <p className="md:text-right text-xl text-gray-600 dark:text-gray-200">
+                                    Use advanced features like conditional logic for
+                                    your fields, references to other collections, markdown or file uploads
                                 </p>
                             </div>
                         </div>

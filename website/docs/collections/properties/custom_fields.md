@@ -82,11 +82,9 @@ export const blogSchema = buildCollection({
             title: "Gold text",
             description: "This field is using a custom component defined by the developer",
             dataType: "string",
-            config: {
-                Field: CustomColorTextField,
-                customProps: {
-                    color: "gold"
-                }
+            Field: CustomColorTextField,
+            customProps: {
+                color: "gold"
             }
         }
     }

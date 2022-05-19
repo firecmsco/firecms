@@ -8,7 +8,7 @@ sidebar_label: Timestamp
 import { buildProperty } from "./builders";
 
 const publicationProperty = buildProperty({
-    title: "Publication date",
+    name: "Publication date",
     dataType: "timestamp"
 });
 ```

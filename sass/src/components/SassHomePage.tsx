@@ -49,7 +49,7 @@ export function SassHomePage() {
 
     const navigation = useNavigationContext();
     const collectionEditorController = useCollectionEditorController();
-    const collectionsController = useConfigController();
+    const configController = useConfigController();
 
     if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
@@ -67,7 +67,7 @@ export function SassHomePage() {
 
     const deleteCollection = useCallback(() => {
         if (collectionToBeDeleted?.path) {
-            collectionsController?.deleteCollection(collectionToBeDeleted.path);
+            configController?.deleteCollection(collectionToBeDeleted.path);
         }
         setCollectionToBeDeleted(undefined);
     }, [collectionToBeDeleted]);

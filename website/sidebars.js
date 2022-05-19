@@ -21,7 +21,7 @@ module.exports = {
                     label: 'Properties',
                     collapsed: false,
                     items: [
-                        'collections/properties/intro',
+                        'collections/properties/properties_intro',
                         {
                             type: 'category',
                             label: 'Config',
@@ -53,7 +53,6 @@ module.exports = {
                 'navigation/custom_top_level_views',
             ]
         },
-        'roles',
         'firebase_setup',
         'deployment',
         {

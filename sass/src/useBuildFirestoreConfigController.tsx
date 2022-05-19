@@ -21,11 +21,11 @@ import {
     removeFunctions,
     removeNonEditableProperties,
     resolvePermissions,
-    Role,
     sortProperties,
     stripCollectionPath
 } from "@camberi/firecms";
 import { SassUser } from "./models/sass_user";
+import { Role } from "./models/roles";
 
 /**
  * @category Firebase

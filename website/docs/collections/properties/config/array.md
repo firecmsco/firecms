@@ -18,7 +18,7 @@ Example `of` array property:
 import { buildProperty } from "@camberi/firecms";
 
 const productReferences = buildProperty({
-  title: "Products",
+  name: "Products",
   dataType: "array",
   of: {
     dataType: "reference",
@@ -28,7 +28,22 @@ const productReferences = buildProperty({
 });
 ```
 
-##  `oneOf`
+You can also specify an array of properties to define a tuple:
+```tsx
+import { buildProperty } from "@camberi/firecms";
+
+const productReferences = buildProperty({
+  name: "Products",
+  dataType: "array",
+  of: {
+    dataType: "string",
+    path: "products",
+    previewProperties: ["name", "main_image"]
+  }
+});
+```
+
+## `oneOf`
 
 Use this field if you would like to have an array of properties.
 It is useful if you need to have values of different types in the same
@@ -49,7 +64,7 @@ Example of `oneOf` field:
 import { buildProperty } from "@camberi/firecms";
 
 const contentProperty = buildProperty({
-  title: "Content",
+  name: "Content",
   description: "Example of a complex array with multiple properties as children",
   validation: { required: true },
   dataType: "array",
@@ -57,16 +72,14 @@ const contentProperty = buildProperty({
     typeField: "type",
     valueField: "value",
     properties: {
-      title: {
-        title: "Title",
+      name: {
+        name: "Title",
         dataType: "string"
       },
       text: {
         dataType: "string",
-        title: "Text",
-        config: {
-          markdown: true
-        }
+        name: "Text",
+        markdown: true
       }
     }
   }

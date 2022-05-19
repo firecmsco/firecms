@@ -8,7 +8,7 @@ sidebar_label: Number
 import { buildProperty } from "./builders";
 
 const rangeProperty = buildProperty({
-    title: "Range",
+    name: "Range",
     validation: {
         min: 0,
         max: 3
@@ -30,24 +30,25 @@ You can use the enum values providing a map of possible
 import { buildProperty } from "./builders";
 
 const property = buildProperty({
-    title: "Status",
+    name: "Status",
     dataType: "number",
-    config: {
-        enumValues: new Map([
-            ["-1", buildEnumValueConfig({
-                label: "Lightly tense",
-                color: "redLighter"
-            })],
-            ["0", buildEnumValueConfig({
-                label: "Normal",
-                color: "grayLight"
-            })],
-            ["1", buildEnumValueConfig({
-                label: "Lightly relaxed",
-                color: "blueLighter"
-            })]
-        ])
-    }
+    enumValues: [
+      buildEnumValueConfig({
+        id: "-1",
+        label: "Lightly tense",
+        color: "redLighter"
+      }),
+      buildEnumValueConfig({
+        id: "0",
+        label: "Normal",
+        color: "grayLight"
+      }),
+      buildEnumValueConfig({
+        id: "1",
+        label: "Lightly relaxed",
+        color: "blueLighter"
+      })
+    ]
 });
 ```
 

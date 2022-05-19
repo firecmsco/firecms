@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -9,12 +9,13 @@ import "typeface-space-mono";
 
 import {
     Authenticator,
-    buildCollection,
-    CircularProgressCenter, CMSView,
+    CircularProgressCenter,
+    CMSView,
     createCMSDefaultTheme,
     FirebaseAuthDelegate,
     FirebaseLoginView,
-    FireCMS, NavigationRoutes,
+    FireCMS,
+    NavigationRoutes,
     Scaffold,
     SideDialogs,
     useBuildFirebaseAuthDelegate,
@@ -37,6 +38,7 @@ import {
 } from "./components/SassEntityCollectionView";
 import { SassHomePage } from "./components/SassHomePage";
 import { UsersEditView } from "./components/UsersEditView";
+import { Role } from "./models/roles";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -50,11 +52,6 @@ const DEFAULT_SIGN_IN_OPTIONS = [
 export function SassCMSApp() {
 
     const signInOptions = DEFAULT_SIGN_IN_OPTIONS;
-
-    const myAuthenticator: Authenticator = ({ user }) => {
-        console.log("Allowing access to", user?.email);
-        return true;
-    };
 
     const {
         firebaseApp,
@@ -74,11 +71,27 @@ export function SassCMSApp() {
 
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
-    const collectionsController = useBuildFirestoreConfigController({
+    const configController = useBuildFirestoreConfigController({
         firebaseApp,
         // configPath,
         collections: [productsCollection]
     });
+
+    const sassAuthenticator: Authenticator = useCallback(({ user, authController }) => {
+        if(!user) return false;
+        const sassUser = configController.users.find((sassUser) => sassUser.email === user?.email)
+        if (!sassUser) throw Error("No user was found with email " + user.email);
+        console.log("Allowing access to", user?.email);
+        const userRoles = !configController.roles
+            ? undefined
+            : (sassUser.roles
+                ? sassUser.roles
+                    .map(roleId => configController.roles[roleId])
+                    .filter(Boolean) as Role[]
+                : [])
+        authController.setExtra({roles: userRoles});
+        return true;
+    }, [configController]);
 
     if (configError) {
         return <div> {configError} </div>;
@@ -116,8 +129,8 @@ export function SassCMSApp() {
     return (
         <Router>
             <FireCMS authDelegate={authDelegate}
-                     collections={collectionsController.collections}
-                     authentication={myAuthenticator}
+                     collections={configController.collections}
+                     authentication={sassAuthenticator}
                      dataSource={dataSource}
                      views={views}
                      storageSource={storageSource}
@@ -125,37 +138,40 @@ export function SassCMSApp() {
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}>
                 {({ context, mode, loading }) => {
 
+                    const authController = context.authController;
                     const theme = createCMSDefaultTheme({ mode });
 
                     let component;
-                    if (loading || collectionsController.loading) {
+                    if (loading || configController.loading) {
                         component = <CircularProgressCenter/>;
-                    } else if (!context.authController.canAccessMainView) {
-                        component = (
-                            <FirebaseLoginView
-                                allowSkipLogin={false}
-                                signInOptions={signInOptions}
-                                firebaseApp={firebaseApp}
-                                authDelegate={authDelegate}/>
-                        );
                     } else {
-                        component = (
-                            <Scaffold name={"My Online Shop"}
-                                      Drawer={SassDrawer}>
-                                <NavigationRoutes
-                                    HomePage={SassHomePage}
-                                />
-                                <SideDialogs/>
-                            </Scaffold>
-                        );
+                        if (!authController.canAccessMainView) {
+                            component = (
+                                <FirebaseLoginView
+                                    allowSkipLogin={false}
+                                    signInOptions={signInOptions}
+                                    firebaseApp={firebaseApp}
+                                    authDelegate={authDelegate}/>
+                            );
+                        } else {
+                            component = (
+                                <Scaffold name={"My Online Shop"}
+                                          Drawer={SassDrawer}>
+                                    <NavigationRoutes
+                                        HomePage={SassHomePage}
+                                    />
+                                    <SideDialogs/>
+                                </Scaffold>
+                            );
+                        }
                     }
 
                     return (
                         <ThemeProvider theme={theme}>
                             <ConfigControllerProvider
-                                collectionsController={collectionsController}>
+                                configController={configController}>
                                 <CollectionEditorsProvider
-                                    saveCollection={collectionsController.saveCollection}
+                                    saveCollection={configController.saveCollection}
                                     configPermissions={configPermissions}>
                                     <CssBaseline/>
                                     {component}

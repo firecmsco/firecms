@@ -6,17 +6,16 @@ export const ConfigControllerContext = React.createContext<ConfigController>({} 
 
 interface ConfigControllerProviderProps {
     children: React.ReactNode;
-    collectionsController: ConfigController;
+    configController: ConfigController;
 }
 
 export const ConfigControllerProvider: React.FC<ConfigControllerProviderProps> = ({
-                                                                                              children,
-                                                                                              collectionsController
+                                                                                              children, configController
                                                                                           }) => {
 
     return (
         <ConfigControllerContext.Provider
-            value={collectionsController}
+            value={configController}
         >
             {children}
 

@@ -1,5 +1,6 @@
-import { EntityCollection, Role } from "@camberi/firecms";
+import { EntityCollection } from "@camberi/firecms";
 import { SassUser } from "./sass_user";
+import { Role } from "./roles";
 
 /**
  * Use this controller to access the configuration that is stored externally,

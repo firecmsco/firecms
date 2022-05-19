@@ -5,8 +5,6 @@ import {
     Authenticator,
     DataSource,
     Locale,
-    Role,
-    Roles,
     StorageSource,
     User
 } from "../../models";
@@ -15,13 +13,11 @@ export function useBuildAuthController<UserType extends User>({
                                                                   authDelegate,
                                                                   authentication,
                                                                   dateTimeFormat,
-                                                                  roles: allRoles,
                                                                   locale,
                                                                   dataSource,
                                                                   storageSource
                                                               }: {
     authDelegate: AuthDelegate<UserType>,
-    roles?: Roles;
     authentication?: boolean | Authenticator<UserType>,
     dateTimeFormat?: string;
     locale?: Locale;
@@ -30,7 +26,6 @@ export function useBuildAuthController<UserType extends User>({
 }): AuthController<UserType> {
 
     const [user, setUser] = useState<UserType | null>(null);
-    const [roles, setRoles] = useState<string[] | null>(null);
     const [authLoading, setAuthLoading] = useState<boolean>(false);
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
     const [extra, setExtra] = useState<any>();
@@ -45,15 +40,6 @@ export function useBuildAuthController<UserType extends User>({
      */
     const [authVerified, setAuthVerified] = useState<boolean>(!authenticationEnabled);
 
-    const userRoles = useMemo(() => !allRoles
-            ? undefined
-            : (roles
-                ? roles
-                    .map(roleId => allRoles[roleId])
-                    .filter(Boolean) as Role[]
-                : []),
-        [allRoles, roles]);
-
     const authController: AuthController<UserType> = useMemo(() =>
         ({
             user,
@@ -65,10 +51,8 @@ export function useBuildAuthController<UserType extends User>({
             signOut: authDelegate.signOut,
             extra,
             setExtra,
-            authDelegate,
-            roles: userRoles,
-            setRoles
-        }), [user, loginSkipped, canAccessMainView, authVerified, authDelegate, authLoading, notAllowedError, extra, userRoles]);
+            authDelegate
+        }), [user, loginSkipped, canAccessMainView, authVerified, authDelegate, authLoading, notAllowedError, extra]);
 
     const checkAuthentication = useCallback(async () => {
         const delegateUser = authDelegate.user;
@@ -97,7 +81,7 @@ export function useBuildAuthController<UserType extends User>({
             setUser(delegateUser);
         }
 
-        if (!authDelegate.initialLoading && (!delegateUser || delegateUser === null))
+        if (!authDelegate.initialLoading && !delegateUser)
             setAuthVerified(true);
 
     }, [authDelegate.initialLoading, authDelegate.user]);

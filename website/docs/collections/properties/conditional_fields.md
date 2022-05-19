@@ -91,11 +91,9 @@ export const userSchema: EntityCollection = buildCollection<User>({
             const properties = buildProperties<any>({
                 type: {
                     dataType: "string",
-                    config: {
-                        enumValues: {
-                            "facebook": "FacebookId",
-                            "apple": "Apple"
-                        }
+                    enumValues: {
+                        "facebook": "FacebookId",
+                        "apple": "Apple"
                     }
                 }
             });

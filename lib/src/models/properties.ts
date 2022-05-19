@@ -103,9 +103,11 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
     readOnly?: boolean;
 
     /**
-     * Is this field disabled. When set to true, it gets rendered as a
+     * Is this field disabled.
+     * When set to true, it gets rendered as a
      * disabled field. You can also specify a configuration for defining the
-     * behaviour of disabled properties
+     * behaviour of disabled properties (including custom messages, clear value on
+     * disabled or hide the field completely)
      */
     disabled?: boolean | PropertyDisabledConfig;
 
@@ -137,7 +139,7 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
     customProps?: CustomProps;
 
     /**
-     * This value will be set by default in new entities
+     * This value will be set by default for new entities.
      */
     defaultValue?: T;
 

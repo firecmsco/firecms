@@ -15,7 +15,6 @@ import {
     EntityLinkBuilder,
     FireCMSContext,
     Locale,
-    Roles,
     StorageSource,
     User,
     UserConfigurationPersistence
@@ -151,13 +150,6 @@ export interface FireCMSProps<UserType extends User> {
      * and not defined in code
      */
     userConfigPersistence?: UserConfigurationPersistence;
-
-    /**
-     * Set of roles defined in the CMS.
-     * The keys of the record are the IDs of the roles.
-     * If not specified the default values will be used.
-     */
-    roles?: Roles;
 
     /**
      * Component used to render a collection view.

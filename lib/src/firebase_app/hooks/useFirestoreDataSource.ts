@@ -71,7 +71,7 @@ export function useFirestoreDataSource({
 
     useEffect(() => {
         if (!firebaseApp) return;
-        firestoreRef.current = getFirestore(firebaseApp);
+            firestoreRef.current = getFirestore(firebaseApp);
     }, [firebaseApp]);
 
     /**
@@ -237,8 +237,10 @@ export function useFirestoreDataSource({
          * @param filter
          * @param limit
          * @param startAfter
+         * @param searchString
          * @param orderBy
          * @param order
+         * @param onUpdate
          * @return Function to cancel subscription
          * @see useCollectionFetch if you need this functionality implemented as a hook
          * @category Firestore

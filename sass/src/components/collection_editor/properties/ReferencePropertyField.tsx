@@ -76,13 +76,13 @@ function validatePath(value: string) {
 
 export function CollectionsSelect({
                                       disabled,
-                                      pathPath,
+                                      pathName,
                                       value,
                                       handleChange,
                                       error
                                   }: {
     disabled: boolean,
-    pathPath: string,
+    pathName: string,
     value?: string,
     handleChange: (event: any) => void,
     error?:string
@@ -115,7 +115,7 @@ export function CollectionsSelect({
 
             <Select
                 labelId="reference-label"
-                name={pathPath}
+                name={pathName}
                 value={value ?? ""}
                 onChange={handleChange}
                 label={"Target collection"}
@@ -124,7 +124,7 @@ export function CollectionsSelect({
                 required
                 renderValue={(selected) => {
 
-                    const selectedCollection = collections.find(collection => collection.path === selected);
+                    const selectedCollection = collections.find(collection => collection.alias === selected || collection.path === selected);
                     const CollectionIcon = getIconForView(selectedCollection);
                     return (
                         <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -151,8 +151,8 @@ export function CollectionsSelect({
                         collections.filter(collection => collection.group === group)
                             .map((collection) => {
                                 const CollectionIcon = getIconForView(collection);
-                                return <MenuItem key={collection.path}
-                                                 value={collection.path}>
+                                return <MenuItem key={collection.alias ?? collection.path}
+                                                 value={collection.alias ?? collection.path}>
                                     <CollectionIcon/>
                                     <Typography
                                         variant={"subtitle2"}
@@ -181,8 +181,8 @@ export function CollectionsSelect({
 
                 {ungroupedCollections.map((collection) => {
                     const CollectionIcon = getIconForView(collection);
-                    return <MenuItem key={collection.path}
-                                     value={collection.path}>
+                    return <MenuItem key={collection.alias ??collection.path}
+                                     value={collection.alias ??collection.path}>
                         <CollectionIcon/>
                         <Typography
                             variant={"subtitle2"}
