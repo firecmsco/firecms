@@ -159,7 +159,7 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
                     });
             }
         },
-        [entity, internalValue]
+        [internalValue]
     );
 
     const updateValue = useCallback(

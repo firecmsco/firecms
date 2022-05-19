@@ -29,7 +29,7 @@ export function ReadOnlyFieldBinding({
                                          includeDescription,
                                          context
                                      }: FieldProps<any>) {
-
+console.log("context", context)
     const entity: Entity<any> = {
         id: context.entityId,
         values: context.values,

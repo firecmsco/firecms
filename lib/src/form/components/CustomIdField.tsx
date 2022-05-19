@@ -130,10 +130,10 @@ export function CustomIdField<M, UserType>({
 
     const fieldProps: any = {
         label: idSetAutomatically ? "ID is set automatically" : "ID",
-        disabled: disabled,
+        disabled,
         name: "id",
         type: null,
-        value: entity && status === "existing" ? entity.id : entityId,
+        value: (entity && status === "existing" ? entity.id : entityId) ?? "",
         variant: "filled"
     };
 

@@ -56,6 +56,7 @@ buildProperty<string>({
   called `propertyKey`
 - Removed `mediaType` in the storage configuration of string properties. It is
   now inferred automatically.
+- `CollectionTable` is now renamed to `EntityCollectionTable`.
 - `TimestampProperty` is now renamed to `DateProperty` in order to reflect
   better the alignment with JS types instead of Firebase ones. The discriminator
   when declaring date properties now is `date` instead of `timestamp` 

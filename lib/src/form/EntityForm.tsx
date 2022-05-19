@@ -251,7 +251,6 @@ export function EntityForm<M>({
             {(props) => {
                 return <>
 
-
                     <Box
                         sx={(theme) => ({
                             width: "100%",
@@ -280,7 +279,7 @@ export function EntityForm<M>({
                                        entity={entity}/>
                     </Box>
 
-                    <FormInternal
+                    {entityId && <FormInternal
                         {...props}
                         onEntityIdModified={setEntityId}
                         baseDataSourceValues={baseDataSourceValues}
@@ -293,7 +292,8 @@ export function EntityForm<M>({
                         collection={collection}
                         status={status}
                         entityIdError={entityIdError}
-                        savingError={savingError}/></>
+                        savingError={savingError}/>}
+                </>
             }
             }
         </Formik>
@@ -330,7 +330,7 @@ function FormInternal<M>({
     entityIdError: boolean,
     entity: Entity<M> | undefined,
     collection: ResolvedEntityCollection<M>,
-    entityId?: string,
+    entityId: string,
     status: "new" | "existing" | "copy",
     savingError?: Error,
 }) {
@@ -360,14 +360,12 @@ function FormInternal<M>({
         }
     }, [underlyingChanges, entity, values, touched, setFieldValue]);
 
-    const context: FormContext<M> | undefined = entityId
-        ? {
-            collection,
-            entityId,
-            values,
-            path
-        }
-        : undefined;
+    const context: FormContext<M> | undefined = {
+        collection,
+        entityId,
+        values,
+        path
+    };
 
     const errorKeys = Object.keys(errors);
 

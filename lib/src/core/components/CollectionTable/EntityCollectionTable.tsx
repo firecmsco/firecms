@@ -14,7 +14,6 @@ import {
 } from "../../../models";
 import { getSubcollectionColumnId, useColumnIds } from "./internal/common";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
-import { CollectionRowActions } from "./internal/CollectionRowActions";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
 import {
     saveEntityWithCallbacks,

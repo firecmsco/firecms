@@ -8,7 +8,8 @@ import {
     resolveNavigationFrom
 } from "@camberi/firecms";
 import { CustomField } from "../custom_field/SubPropertyField";
-import CustomShapedArrayField from "../custom_shaped_array/CustomShapedArrayField";
+import CustomShapedArrayField
+    from "../custom_shaped_array/CustomShapedArrayField";
 import CustomShapedArrayPreview
     from "../custom_shaped_array/CustomShapedArrayPreview";
 import { locales } from "./enums";
@@ -550,6 +551,11 @@ export const testCollection = buildCollection({
             },
             dataType: "number"
         },
+        read_only: {
+            dataType: "string",
+            name: "Read only",
+            readOnly: true
+        },
         pdf: buildProperty({
             name: "Pdf",
             dataType: "string",
@@ -557,7 +563,7 @@ export const testCollection = buildCollection({
                 storagePath: "test",
                 acceptedFiles: ['application/pdf'],
             }
-        })
+        }),
     },
     additionalColumns: [
         {
