@@ -265,7 +265,7 @@ export default function App() {
         // This is an example of retrieving async data related to the user
         // and storing it in the user extra field.
         const sampleUserRoles = await Promise.resolve(["admin"]);
-        authController.setRoles(sampleUserRoles);
+        authController.setExtra(sampleUserRoles);
 
         return true;
     };

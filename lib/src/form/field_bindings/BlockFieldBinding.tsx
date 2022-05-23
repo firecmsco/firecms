@@ -20,7 +20,7 @@ import {
     FormContext,
     ResolvedProperty
 } from "../../models";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import { ExpandablePanel } from "../../core";
 import {
     DEFAULT_ONE_OF_TYPE,
     DEFAULT_ONE_OF_VALUE
@@ -34,7 +34,7 @@ import {
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ArrayOneOfFieldBinding<T extends Array<any>>({
+export function BlockFieldBinding<T extends Array<any>>({
                                                           propertyKey,
                                                           value,
                                                           error,

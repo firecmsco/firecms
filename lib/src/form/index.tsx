@@ -14,19 +14,19 @@ import { DateTimeFieldBinding } from "./field_bindings/DateTimeFieldBinding";
 import { ReferenceFieldBinding } from "./field_bindings/ReferenceFieldBinding";
 import { MapFieldBinding } from "./field_bindings/MapFieldBinding";
 import {
-    ArrayDefaultFieldBinding
-} from "./field_bindings/ArrayDefaultFieldBinding";
+    RepeatFieldBinding
+} from "./field_bindings/RepeatFieldBinding";
 import {
-    ArrayOneOfFieldBinding
-} from "./field_bindings/ArrayOneOfFieldBinding";
+    BlockFieldBinding
+} from "./field_bindings/BlockFieldBinding";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 import { MarkdownFieldBinding } from "./field_bindings/MarkdownFieldBinding";
 
 export {
-    ArrayDefaultFieldBinding,
+    RepeatFieldBinding,
     ArrayEnumSelectBinding,
     ArrayOfReferencesFieldBinding,
-    ArrayOneOfFieldBinding,
+    BlockFieldBinding,
     DateTimeFieldBinding,
     ReadOnlyFieldBinding,
     MapFieldBinding,

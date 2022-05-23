@@ -30,11 +30,11 @@ import { DateTimeFieldBinding } from "./field_bindings/DateTimeFieldBinding";
 import { ReferenceFieldBinding } from "./field_bindings/ReferenceFieldBinding";
 import { MapFieldBinding } from "./field_bindings/MapFieldBinding";
 import {
-    ArrayDefaultFieldBinding
-} from "./field_bindings/ArrayDefaultFieldBinding";
+    RepeatFieldBinding
+} from "./field_bindings/RepeatFieldBinding";
 import {
-    ArrayOneOfFieldBinding
-} from "./field_bindings/ArrayOneOfFieldBinding";
+    BlockFieldBinding
+} from "./field_bindings/BlockFieldBinding";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 import { MarkdownFieldBinding } from "./field_bindings/MarkdownFieldBinding";
 import {
@@ -111,12 +111,12 @@ export const PropertyFieldBinding = React.memo(
                 } else if (of.dataType === "reference") {
                     component = ArrayOfReferencesFieldBinding as ComponentType<FieldProps<any>>;
                 } else {
-                    component = ArrayDefaultFieldBinding as ComponentType<FieldProps<T>>;
+                    component = RepeatFieldBinding as ComponentType<FieldProps<T>>;
                 }
             }
             const oneOf = (resolvedProperty as ResolvedArrayProperty).oneOf;
             if (oneOf) {
-                component = ArrayOneOfFieldBinding as ComponentType<FieldProps<T>>;
+                component = BlockFieldBinding as ComponentType<FieldProps<T>>;
             }
             if (!of && !oneOf) {
                 throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
@@ -209,7 +209,6 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
          shouldAlwaysRerender
      },
      fieldProps
-
  }:
      {
          component: ComponentType<FieldProps<T>>,

@@ -8,52 +8,66 @@ module.exports = {
         'quickstart',
         {
             type: 'category',
-            label: 'Collections',
+            label: "Collections",
             collapsed: false,
             items: [
-                'collections/collections',
-                'collections/saving_callbacks',
-                'collections/permissions',
-                'collections/exporting_data',
-                'collections/text_search',
-                {
-                    type: 'category',
-                    label: 'Properties',
-                    collapsed: false,
-                    items: [
-                        'collections/properties/properties_intro',
-                        {
-                            type: 'category',
-                            label: 'Config',
-                            items: [
-                                'collections/properties/config/string',
-                                'collections/properties/config/number',
-                                'collections/properties/config/boolean',
-                                'collections/properties/config/reference',
-                                'collections/properties/config/timestamp',
-                                'collections/properties/config/array',
-                                'collections/properties/config/map',
-                                'collections/properties/config/geopoint'
-                            ]
-                        },
-                        'collections/properties/conditional_fields',
-                        'collections/properties/custom_fields',
-                        'collections/properties/custom_previews',
-                        'collections/properties/custom_schema_views',
-                    ]
-                }
+                "collections/collections",
+                "collections/saving_callbacks",
+                "collections/permissions",
+                "collections/exporting_data",
+                "collections/text_search",
             ]
         },
         {
-            type: 'category',
-            label: 'Navigation',
+            type: "category",
+            label: "Properties",
             collapsed: false,
             items: [
-                'navigation/navigation',
-                'navigation/custom_top_level_views',
+                "properties/properties_intro",
+                {
+                    type: "category",
+                    label: "Fields",
+                    items: [
+                        "properties/fields/text_fields",
+                        "properties/fields/selects",
+                        "properties/fields/file_upload",
+                        "properties/fields/references",
+                        "properties/fields/switch",
+                        "properties/fields/date_time",
+                        "properties/fields/repeat",
+                        "properties/fields/block",
+                    ]
+                },
+                {
+                    type: "category",
+                    label: "Config",
+                    items: [
+                        "properties/config/string",
+                        "properties/config/number",
+                        "properties/config/boolean",
+                        "properties/config/reference",
+                        "properties/config/date",
+                        "properties/config/array",
+                        "properties/config/map",
+                        "properties/config/geopoint"
+                    ]
+                },
+                "properties/conditional_fields",
+                "properties/custom_fields",
+                "properties/custom_previews",
+                "properties/custom_schema_views",
             ]
         },
-        'firebase_setup',
+        {
+            type: "category",
+            label: "Navigation",
+            collapsed: false,
+            items: [
+                "navigation/navigation",
+                "navigation/custom_top_level_views",
+            ]
+        },
+        "firebase_setup",
         'deployment',
         {
             type: 'category',

@@ -15,7 +15,7 @@ import { PropertyFieldBinding } from "../PropertyFieldBinding";
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ArrayDefaultFieldBinding<T extends Array<any>>({
+export function RepeatFieldBinding<T extends Array<any>>({
                                                             propertyKey,
                                                             value,
                                                             error,

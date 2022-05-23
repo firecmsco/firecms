@@ -1,0 +1,131 @@
+---
+id: text_fields
+title: Text fields
+---
+
+
+### Simple text field
+
+The most basic widget is the text field, which allows the user to input simple
+strings.
+
+If you define a string property with no other configuration parameters, you will
+get a text field:
+
+```typescript jsx
+import { buildProperty } from "@camberi/firecms";
+
+buildProperty({
+    dataType: "string",
+    name: "Name",
+    validation: {
+        // ...
+    }
+});
+```
+
+The data type is [`string`](../config/string) or [`number`](../config/number).
+
+Internally the component used
+is [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+
+### Multi line text field
+
+Use a multiline field when you want to enable the user to input strings that may
+contain line breaks.
+
+Set the `multiline` flag to `true` in a string property.
+
+```typescript jsx
+import { buildProperty } from "@camberi/firecms";
+
+buildProperty({
+    dataType: "string",
+    name: "Description",
+    multiline: true,
+    validation: {
+        // ...
+    }
+});
+```
+
+The data type is [`string`](../config/string).
+
+Internally the component used
+is [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+
+### Markdown text field
+
+You can use a markdown field when you would like the end user to use advanced
+editing capabilities of text using the Markdown format.
+
+Set the `markdown` flag to `true` in a string property.
+
+```typescript jsx
+import { buildProperty } from "@camberi/firecms";
+
+buildProperty({
+    dataType: "string",
+    name: "Blog text",
+    markdown: true,
+    validation: {
+        // ...
+    }
+});
+```
+
+The data type is [`string`](../config/string).
+
+
+Internally the component used
+is [`MarkdownFieldBinding`](../../api/functions/MarkdownFieldBinding).
+
+### Url text field
+
+You can use a URL field when you would like to ensure that the input of the end
+user is a valid URL.
+
+Set the `url` flag to `true` in a string property.
+
+```typescript jsx
+import { buildProperty } from "@camberi/firecms";
+
+buildProperty({
+    dataType: "string",
+    name: "Blog text",
+    url: true,
+    validation: {
+        // ...
+    }
+});
+```
+
+The data type is [`string`](../config/string).
+
+Internally the component used
+is [`TextFieldBinding`](../../api/functions/TextFieldBinding).
+
+### Email field
+
+You can use an email field when you would like to ensure that the input of the
+end user is a valid email.
+
+Set the `email` flag to `true` in a string property.
+
+```typescript jsx
+import { buildProperty } from "@camberi/firecms";
+
+buildProperty({
+    dataType: "string",
+    name: "Blog text",
+    email: true,
+    validation: {
+        // ...
+    }
+});
+```
+
+The data type is [`string`](../config/string).
+
+Internally the component used
+is [`TextFieldBinding`](../../api/functions/TextFieldBinding).

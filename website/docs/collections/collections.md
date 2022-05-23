@@ -18,7 +18,7 @@ in the generated forms.
 FireCMS provides around 15 different fields (such as text fields,
 selects, and complex ones like reference or sortable array fields). If your use
 case is not covered by one of the provided fields, you can create your own
-[custom field](properties/custom_fields.md).
+[custom field](../properties/custom_fields.md).
 :::
 
 You can find collection views as the first level of navigation in the main menu,

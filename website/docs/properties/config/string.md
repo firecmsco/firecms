@@ -33,6 +33,8 @@ indicate that this string refers to a path in Google Cloud Storage.
 * `metadata` Specific metadata set in your uploaded file.
 * `fileName` You can specify a fileName callback if you need to
   customize the name of the file
+* `storagePath` You can specify a storage path callback if you need to
+  customize the path where it is stored.
 * `storeUrl` When set to `true`, this flag indicates that the download
   URL of the file will be saved in Firestore instead of the Cloud
   storage path. Note that the generated URL may use a token that, if
@@ -75,7 +77,7 @@ const amazonLinkProperty = buildProperty({
 You can use the enum values providing a map of possible
 exclusive values the property can take, mapped to the label that it is
 displayed in the dropdown. You can use a simple object with the format
-`value` => `label`, or with the format `value` => [`EnumValueConfig`](../../api/interfaces/enumvalueconfig) if you
+`value` => `label`, or with the format `value` => [`EnumValueConfig`](tg../api/interfaces/enumvalueconfig) if you
 need extra customization, (like disabling specific options or assigning
 colors). If you need to ensure the order of the elements, you can pass
 a `Map` instead of a plain object.
@@ -171,13 +173,13 @@ const property = buildProperty({
 ---
 
 Based on your configuration the form field widgets that are created are:
-- [`TextField`](../../api/functions/textfield) generic text field
-- [`StorageUploadField`](../../api/functions/storageuploadfield) the property has a
+- [`TextField`](tg../api/functions/textfield) generic text field
+- [`StorageUploadField`](tg../api/functions/storageuploadfield) the property has a
   storage configuration.
-- [`MarkdownField.`](../../api/functions/markdownfield) the property has a
+- [`MarkdownField.`](tg../api/functions/markdownfield) the property has a
   markdown configuration.
-- [`Select`](../../api/functions/select) if `enumValues` are set in the string config, this field renders a select
+- [`Select`](tg../api/functions/select) if `enumValues` are set in the string config, this field renders a select
   where each option is a colored chip.
 
 Links:
-- [API](../../api/interfaces/stringproperty)
+- [API](tg../api/interfaces/stringproperty)

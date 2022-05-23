@@ -1,6 +1,6 @@
 ---
-id: timestamp
-title: Timestamp
+id: date
+title: Date/Time
 sidebar_label: Timestamp
 ---
 
@@ -9,7 +9,7 @@ import { buildProperty } from "./builders";
 
 const publicationProperty = buildProperty({
     name: "Publication date",
-    dataType: "timestamp"
+    dataType: "date"
 });
 ```
 ## `autoValue` "on_create" | "on_update"
@@ -27,7 +27,7 @@ or update.
 ---
 
 The widget that gets created is
-- [`DateTimeField`](../../api/functions/datetimefield) Field that allows selecting a date
+- [`DateTimeField`](tg../api/functions/datetimefield) Field that allows selecting a date
 
 Links:
-- [API](../../api/interfaces/timestampproperty)
+- [API](tg../api/interfaces/timestampproperty)
