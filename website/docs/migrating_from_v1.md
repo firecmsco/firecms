@@ -153,5 +153,20 @@ buildProperty<string>({
   you pass a React Component directly: `Actions`
 - `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where
   you pass a React Component directly: `Actions`
-
+- Enum values: if you are using enum values with custom configurations, you
+need to include the id in the new object as well
+```tsx
+buildProperty(({ values }) => ({
+    title: "Status",
+    dataType: "string",
+    enumValues: {
+        published: {
+            id: "published", // new compulsory field
+            label: "Published",
+            disabled: !values.header_image,
+        },
+        draft: "Draft"
+    }
+}))
+```
 

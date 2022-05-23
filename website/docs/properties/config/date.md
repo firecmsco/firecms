@@ -14,6 +14,8 @@ const publicationProperty = buildProperty({
 ```
 ## `autoValue` "on_create" | "on_update"
 
+## `mode` "date" | "date_time"
+
 Used this prop to update this timestamp automatically upon entity creation
 or update.
 
@@ -27,7 +29,7 @@ or update.
 ---
 
 The widget that gets created is
-- [`DateTimeField`](tg../api/functions/datetimefield) Field that allows selecting a date
+- [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding) Field that allows selecting a date
 
 Links:
-- [API](tg../api/interfaces/timestampproperty)
+- [API](../../api/interfaces/dateproperty)

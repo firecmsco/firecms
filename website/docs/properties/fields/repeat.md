@@ -3,6 +3,8 @@ id: repeat
 title: Repeat
 ---
 
+![Field](/img/fields/Repeat.png)
+
 You can use a repeat field when you want to save multiple values in a property.
 For example, you may want to save multiple pieces of text, like tags.
 

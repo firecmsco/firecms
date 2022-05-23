@@ -18,7 +18,9 @@ export function resolvePermissions<M extends { [Key: string]: any }, UserType ex
  paths: string[]): Permissions {
 
     const permission = collection.permissions;
-    if (typeof permission === "object") {
+    if (permission === undefined) {
+        return DEFAULT_PERMISSIONS;
+    } else if (typeof permission === "object") {
         return permission as Permissions;
     } else if (typeof permission === "function") {
         return permission({
@@ -28,7 +30,7 @@ export function resolvePermissions<M extends { [Key: string]: any }, UserType ex
             pathSegments: paths
         });
     }
-
+    console.error("Permissions:", permission);
     throw Error("New type of permission added and not mapped");
 }
 

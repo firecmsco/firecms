@@ -13,13 +13,15 @@ properties.
 
 ### Single reference field
 
+![Field](/img/fields/Reference.png)
+
 ```typescript jsx
 import { buildProperty } from "@camberi/firecms";
 
 buildProperty({
     dataType: "reference",
     path: "users",
-    name: "Related products",
+    name: "Related client",
 });
 ```
 
@@ -30,6 +32,8 @@ is [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding).
 
 
 ### Multiple reference field
+
+![Field](/img/fields/Multi_reference.png)
 
 ```typescript jsx
 import { buildProperty } from "@camberi/firecms";
@@ -48,5 +52,5 @@ The data type is [`array`](../config/array) with a reference
 property as the `of` prop. 
 
 Internally the component used
-is [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding).
+is [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding).
 

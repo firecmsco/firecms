@@ -83,12 +83,10 @@ in [Entity collections](../api/interfaces/entitycollection)
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions
   the user can perform. You can also pass a [`PermissionsBuilder`](../api/types/permissionsbuilder)
   to customize the permissions based on user or entity.
-  Note that defining permissions at the collection level will override any
-  configuration defined by [roles](../roles.md)
 
 * `inlineEditing` Can the elements in this collection be edited inline in the
-  collection view. If this flag is set to false but `permissions.edit` is `true`
-  , entities can still be edited in the side panel.
+  collection view. If this flag is set to false but `permissions.edit` is `true`,  
+  entities can still be edited in the side panel.
 
 * `exportable` Should the data in this collection view include an export button.
   You can also set an [`ExportConfig`](../api/interfaces/exportconfig)

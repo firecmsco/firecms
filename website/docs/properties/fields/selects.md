@@ -5,6 +5,8 @@ title: Select fields
 
 ### Simple select field
 
+![Field](/img/fields/Select.png)
+
 You can use a simple select field when you would like allow the selection of a
 single value among a limited set of options. Each entry will have a key and a
 label. You can also customise the color of each entry or disable certain options.
@@ -53,6 +55,8 @@ is [`SelectFieldBinding`](../../api/functions/SelectFieldBinding).
 
 ### Multiple select field
 
+![Field](/img/fields/Multi_select.png)
+
 You can use a multiple select field when you would like allow the selection of a
 zero or more values among a limited set of options. Each entry will have a key
 and a label. You can also customise the color of each entry or disable certain options.
@@ -81,7 +85,7 @@ buildProperty({
         }
     },
     defaultValue: ["es"]
-},);
+});
 ```
 
 The data type is [`array`](../config/array) with either string or number

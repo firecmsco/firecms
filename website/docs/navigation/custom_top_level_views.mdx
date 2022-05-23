@@ -1,0 +1,106 @@
+---
+id: custom_top_level_views
+title: Custom top level views
+---
+
+If you need to develop a custom view that does not map directly to a Firestore
+collection you can implement it as a React component.
+
+You need to define the name, route and the component, and add it to the main
+navigation, as the example below.
+
+By default, it will show in the main navigation view.
+
+For custom views you can define the following props:
+* `path` string
+
+  CMS Path you can reach this view from.
+  If you include multiple paths, only the first one will be included in the
+  main menu
+
+* `name`: string
+
+  Name of this view
+
+* `description`?: string
+
+  Optional description of this view. You can use Markdown
+
+* `hideFromNavigation`?: boolean
+
+  Should this view be hidden from the main navigation panel.
+  It will still be accessible if you reach the specified path
+
+* `view`: React.ReactNode
+
+  Component to be rendered. This can be any React component, and can use any
+  of the provided hooks
+
+* `group`?: string
+
+  Optional field used to group top level navigation entries under a
+  navigation view.
+
+
+### Example:
+A quick example for a custom view:
+
+```tsx
+import {
+    buildCollection,
+    CMSView,
+    NavigationBuilder,
+    NavigationBuilderProps,
+    buildCollection,
+    FirebaseCMSApp
+} from "@camberi/firecms"
+
+export default function App() {
+
+    const productCollection = buildCollection({
+        name: "Product",
+        properties: {
+            name: {
+                name: "Name",
+                validation: { required: true },
+                dataType: "string"
+            }
+        }
+    });
+
+    const customViews: CMSView[] = [{
+        path: "additional",
+        name: "Additional view",
+        description: "This is an example of an additional view that is defined by the user",
+        // This can be any React component
+        view: <ExampleCMSView/>
+    }];
+
+    const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
+        collections: [
+            buildCollection({
+                path: "products",
+                collection: productCollection,
+                name: "Products"
+            })
+        ],
+        views: customViews
+    });
+
+    return <FirebaseCMSApp
+        name={"My Online Shop"}
+        navigation={navigation}
+        firebaseConfig={firebaseConfig}
+    />;
+}
+```
+
+Your custom view is implemented as any regular React component that uses
+some hooks provided by the CMS:
+
+
+import CodeBlock from "@theme/CodeBlock";
+import MyComponentSource from "!!raw-loader!../../../example/src/SampleApp/ExampleCMSView";
+
+<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+

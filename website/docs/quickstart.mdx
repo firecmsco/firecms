@@ -1,0 +1,66 @@
+---
+id: quickstart
+title: Quickstart
+sidebar_label: Quickstart
+---
+
+:::note
+Please note that in order to use FireCMS as described in this quickstart guide,
+you need an existing Firebase project with features enabled, such as Google
+authentication, Firestore and Firebase storage.
+Check the [Firebase setup section](firebase_setup.md) if you need additional
+support
+:::
+
+Let's build a very simple CMS that creates a collection of products, with
+some properties. It includes samples of some advanced features, such as
+dynamic conditional fields or references (to the same products' collection,
+for simplicity).
+
+We are defining our `Product` type for better type checking and code clarity,
+but it is not compulsory.
+
+Authentication and authorization are also enabled, and make use of the `extra`
+field in the `authController` to check for permissions.
+
+#### Create a new React app including Typescript:
+
+```
+yarn create react-app my-cms --template typescript
+```
+
+#### Go into the new directory:
+
+```
+cd my-cms
+```
+
+#### Install FireCMS and it's peer dependencies:
+
+```
+yarn add @camberi/firecms@pre firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
+```
+
+You can replace the content of the file App.tsx with the following sample code.
+
+Remember to **replace** the Firebase config with the one you get after creating
+a webapp in the Firebase console.
+
+If you don't know where to find the Firebase app config, check the
+[Firebase setup](firebase_setup.md) section
+
+import CodeBlock from "@theme/CodeBlock";
+import MyComponentSource from "!!raw-loader!../../example/src/SimpleApp";
+
+<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+
+#### Run
+
+Then simply run:
+
+```
+yarn start
+```
+
+You should be able to see your FireCMS instance in your browser, awesome!
+

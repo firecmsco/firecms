@@ -47,8 +47,8 @@ List of properties rendered as this map preview. Defaults to first 3.
 ---
 
 The widget that gets created is
-- [`MapField`](tg../api/functions/mapfield) Field that renders the children
+- [`MapFieldBinding`](../../api/functions/MapFieldBinding) Field that renders the children
 property fields
 
 Links:
-- [API](tg../api/interfaces/mapproperty)
+- [API](../../api/interfaces/mapproperty)

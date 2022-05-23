@@ -96,13 +96,13 @@ const contentProperty = buildProperty({
 ---
 
 Based on your configuration the form field widgets that are created are:
-- [`ArrayDefaultField`](tg../api/functions/arraydefaultfield) generic array field that allows reordering and renders
+- [`RepeatFieldBinding`](../../api/functions/RepeatFieldBinding) generic array field that allows reordering and renders
   the child property as nodes.
-- [`StorageUploadField`](tg../api/functions/storageuploadfield) if the `of` property is a `string` with storage configuration.
-- [`ArrayEnumSelect`](tg../api/functions/arrayenumselect) if the `of` property is a `string` with an enum configuration.
-- [`ArrayOfReferencesField`](tg../api/functions/arrayofreferencesfield) if the `of` property is a `reference`
-- [`ArrayOneOfField`](tg../api/functions/arrayoneoffield) if the `oneOf` property is specified
+- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) if the `of` property is a `string` with storage configuration.
+- [`ArrayEnumSelectBinding`](../../api/functions/ArrayEnumSelectBinding) if the `of` property is a `string` with an enum configuration.
+- [`ArrayOfReferencesFieldBinding`](../../api/functions/ArrayOfReferencesFieldBinding) if the `of` property is a `reference`
+- [`BlockFieldBinding`](../../api/functions/BlockFieldBinding) if the `oneOf` property is specified
 
 Links:
-- [API](tg../api/interfaces/arrayproperty)
+- [API](../../api/interfaces/arrayproperty)
 

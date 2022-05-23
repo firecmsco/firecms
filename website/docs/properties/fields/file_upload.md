@@ -25,6 +25,8 @@ restrict the file size.
 
 ### Single file upload
 
+![Field](/img/fields/File_upload.png)
+
 ```typescript jsx
 import { buildProperty } from "@camberi/firecms";
 
@@ -52,6 +54,8 @@ is [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
 
 
 ### Multiple file upload
+
+![Field](/img/fields/Multi_file_upload.png)
 
 ```typescript jsx
 import { buildProperty } from "@camberi/firecms";

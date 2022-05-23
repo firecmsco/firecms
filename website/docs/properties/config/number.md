@@ -67,10 +67,10 @@ const property = buildProperty({
 
 ---
 
-The widget that gets created is
-- [`TextField`](tg../api/functions/textfield) generic text field
-- [`Select`](tg../api/functions/select) if `enumValues` are set in the string config, this field renders a select
+The widgets that get created are
+- [`TextFieldBinding`](../../api/functions/TextFieldBinding) generic text field
+- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) if `enumValues` are set in the string config, this field renders a select
   where each option is a colored chip.
 
 Links:
-- [API](tg../api/interfaces/numberproperty)
+- [API](../../api/interfaces/numberproperty)

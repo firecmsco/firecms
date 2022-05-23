@@ -77,7 +77,7 @@ const amazonLinkProperty = buildProperty({
 You can use the enum values providing a map of possible
 exclusive values the property can take, mapped to the label that it is
 displayed in the dropdown. You can use a simple object with the format
-`value` => `label`, or with the format `value` => [`EnumValueConfig`](tg../api/interfaces/enumvalueconfig) if you
+`value` => `label`, or with the format `value` => [`EnumValueConfig`](../../api/interfaces/enumvalueconfig) if you
 need extra customization, (like disabling specific options or assigning
 colors). If you need to ensure the order of the elements, you can pass
 a `Map` instead of a plain object.
@@ -173,13 +173,14 @@ const property = buildProperty({
 ---
 
 Based on your configuration the form field widgets that are created are:
-- [`TextField`](tg../api/functions/textfield) generic text field
-- [`StorageUploadField`](tg../api/functions/storageuploadfield) the property has a
-  storage configuration.
-- [`MarkdownField.`](tg../api/functions/markdownfield) the property has a
-  markdown configuration.
-- [`Select`](tg../api/functions/select) if `enumValues` are set in the string config, this field renders a select
+
+- [`TextFieldBinding`](../../api/functions/TextFieldBinding) generic text field
+- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) if `enumValues` are set in the string config, this field renders a select
   where each option is a colored chip.
+- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) the property has a
+  storage configuration.
+- [`MarkdownFieldBinding.`](../../api/functions/MarkdownFieldBinding) the property has a
+  markdown configuration.
 
 Links:
-- [API](tg../api/interfaces/stringproperty)
+- [API](../../api/interfaces/stringproperty)

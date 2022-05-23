@@ -185,3 +185,13 @@ img[alt=firebase_setup] {
     height: 100%;
     object-fit: cover;
 }
+
+.theme-back-to-top-button::after {
+    content: ' ';
+    display: inline-block;
+    mask: var(--ifm-menu-link-sublist-icon) 50% / 2rem 2rem no-repeat;
+    background-color: var(--ifm-color-emphasis-1000);
+    width: 100%;
+    height: 100%;
+    -webkit-mask: var(--ifm-menu-link-sublist-icon) 50%/2rem 2rem no-repeat;
+}

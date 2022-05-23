@@ -3,6 +3,8 @@ id: switch
 title: Switch
 ---
 
+![Field](/img/fields/Switch.png)
+
 Simple toggle for selecting `true` or `false` values.
 
 ```typescript jsx

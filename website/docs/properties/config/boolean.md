@@ -23,7 +23,7 @@ const availableProperty = buildProperty({
 ---
 
 The widget that gets created is
-- `SwitchField` simple boolean switch
+- [`SwitchFieldBinding`](../../api/functions/SwitchFieldBinding)  simple boolean switch
 
 Links:
-- [API](tg../api/interfaces/booleanproperty)
+- [API](../../api/interfaces/booleanproperty)

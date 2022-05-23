@@ -15,6 +15,9 @@ Internally the component used
 is [`DateTimeFieldBinding`](../../api/functions/DateTimeFieldBinding).
 
 #### Date field
+
+![Field](/img/fields/Date.png)
+
 ```typescript jsx
 import { buildProperty } from "@camberi/firecms";
 
@@ -26,6 +29,9 @@ buildProperty({
 ```
 
 #### Date/time field
+
+![Field](/img/fields/Date_time.png)
+
 ```typescript jsx
 import { buildProperty } from "@camberi/firecms";
 

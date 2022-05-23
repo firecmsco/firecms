@@ -27,6 +27,7 @@ import {
 
 import "typeface-rubik";
 import "typeface-space-mono";
+import { galleryCollection } from "./collections/gallery_collection";
 
 function SampleApp() {
 
@@ -79,7 +80,8 @@ function SampleApp() {
     const collections = [
         productsCollection,
         usersCollection,
-        blogCollection
+        blogCollection,
+        galleryCollection
     ];
 
     if (process.env.NODE_ENV !== "production") {

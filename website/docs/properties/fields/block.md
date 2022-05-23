@@ -3,6 +3,8 @@ id: block
 title: Block
 ---
 
+![Field](/img/fields/Block.png)
+
 Block is a special field that allows you to build repeat fields where the
 entries are dynamic. Each entry has a `type` selector that allows the end user
 to chose among different properties.
@@ -30,6 +32,7 @@ buildProperty({
                 storage: {
                     storagePath: "images",
                     acceptedFiles: ["image/*"]
+                }
             },
             text: {
                 dataType: "string",

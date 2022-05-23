@@ -35,8 +35,8 @@ List of properties rendered as this reference preview.
 ---
 
 The widget that gets created is
-- [`ReferenceField`](tg../api/functions/referencefield) Field that opens a
+- [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding) Field that opens a
 reference selection dialog
 
 Links:
-- [API](tg../api/interfaces/referenceproperty)
+- [API](../../api/interfaces/referenceproperty)

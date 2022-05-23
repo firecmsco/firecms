@@ -83,7 +83,7 @@ is created.
 ```tsx
 buildProperty( {
     title: "Created on",
-    dataType: "timestamp",
+    dataType: "date",
     autoValue: "on_create"
 })
 ```
@@ -94,7 +94,7 @@ with this configuration:
 ```tsx
 buildProperty( {
     title: "Updated on",
-    dataType: "timestamp",
+    dataType: "date",
     autoValue: "on_update"
 })
 ```
@@ -117,6 +117,7 @@ buildProperty(({ values }) => ({
     columnWidth: 140,
     enumValues: {
         published: {
+            id: "published",
             label: "Published",
             disabled: !values.header_image,
         },
@@ -226,7 +227,7 @@ This array configuration will create objects in the datasource with the format:
 
 ### Creating a preview view
 
-Let's make use of another feature of FireCMS: custom views for entities!
+Let's make use of another feature of FireCMS: **custom views for entities**!
 
 FireCMS allows you to add additional views to your entity views, that are
 defined as React components. The props you receive for building this
@@ -334,7 +335,7 @@ export const blogSchema = buildCollection({
         })),
         created_on: buildProperty( {
             title: "Created on",
-            dataType: "timestamp",
+            dataType: "date",
             autoValue: "on_create"
         })
     }
