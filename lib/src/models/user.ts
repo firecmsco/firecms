@@ -43,8 +43,6 @@ export type User = {
 
 /**
  * Implement this function to allow access to specific users.
- * You can also define the roles for the logged-in user using the `setRoles`
- * method in the `authController`.
  * You might also want to load additional data for a user asynchronously
  * and store it using the `setExtra` method in the `authController`.
  * @category Models

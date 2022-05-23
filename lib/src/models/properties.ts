@@ -497,7 +497,7 @@ export interface DateProperty extends BaseProperty<Date> {
     /**
      * Rules for validating this property
      */
-    validation?: TimestampPropertyValidationSchema;
+    validation?: DatePropertyValidationSchema;
 
     /**
      * If this flag is  set to `on_create` or `on_update` this timestamp is
@@ -619,7 +619,7 @@ export interface StringPropertyValidationSchema extends PropertyValidationSchema
  * Validation rules for dates
  * @category Entity properties
  */
-export interface TimestampPropertyValidationSchema extends PropertyValidationSchema {
+export interface DatePropertyValidationSchema extends PropertyValidationSchema {
     min?: Date;
     max?: Date;
 }

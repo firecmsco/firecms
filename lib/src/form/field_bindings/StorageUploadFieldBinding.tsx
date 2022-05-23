@@ -1,17 +1,8 @@
-import React, { useCallback, useEffect } from "react";
+import React, { useCallback } from "react";
 
 import { styled, Theme } from "@mui/material/styles";
 
-import {
-    Box,
-    FormControl,
-    FormHelperText,
-    IconButton,
-    Paper,
-    Skeleton,
-    Tooltip,
-    Typography
-} from "@mui/material";
+import { Box, FormControl, FormHelperText, Typography } from "@mui/material";
 import {
     ArrayProperty,
     Entity,
@@ -21,12 +12,11 @@ import {
     StorageConfig
 } from "../../models";
 import { useDropzone } from "react-dropzone";
-import RemoveIcon from "@mui/icons-material/Remove";
-import { PreviewSize, PropertyPreview } from "../../preview";
+import { PreviewSize } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 
-import { ErrorBoundary, isReadOnly } from "../../core";
+import { isReadOnly } from "../../core";
 import clsx from "clsx";
 import {
     useClearRestoreValue,

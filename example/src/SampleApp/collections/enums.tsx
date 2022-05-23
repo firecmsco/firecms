@@ -12,9 +12,9 @@ export const locales: EnumValues = {
     }
 };
 
-export const currencies = [
-    { id: "EUR", label: "Euros" },
-    { id: "DOL", label: "Dollars" },
+export const currencies:EnumValues = [
+    { id: "EUR", label: "Euros", color: "blueDark" },
+    { id: "DOL", label: "Dollars", color: "greenLight" },
 ];
 
 export const categories: EnumValues = {

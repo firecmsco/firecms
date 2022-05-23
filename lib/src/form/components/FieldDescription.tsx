@@ -38,7 +38,10 @@ export function FieldDescription<T extends CMSType>({ property }: FieldDescripti
                      arrow>
                 <IconButton
                     edge={"start"}
-                    size={"small"}>
+                    size={"small"}
+                    sx={{
+                        alignSelf: "flex-start"
+                    }}>
 
                     <InfoIcon color={"disabled"}
                               fontSize={"small"}/>

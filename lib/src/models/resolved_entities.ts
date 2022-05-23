@@ -53,6 +53,7 @@ export type ResolvedStringProperty =
     Omit<StringProperty, "enumValues" | "dataType"> &
     {
         dataType: "string";
+        resolved: true;
         enumValues?: EnumValueConfig[];
         fromBuilder: boolean;
     }
@@ -64,6 +65,7 @@ export type ResolvedNumberProperty =
     Omit<NumberProperty, "enumValues" | "dataType"> &
     {
         dataType: "number";
+        resolved: true;
         enumValues?: EnumValueConfig[];
         fromBuilder: boolean;
     }
@@ -75,6 +77,7 @@ export type ResolvedBooleanProperty =
     Omit<BooleanProperty, "dataType"> &
     {
         dataType: "boolean";
+        resolved: true;
         fromBuilder: boolean;
     }
 
@@ -85,6 +88,7 @@ export type ResolvedTimestampProperty =
     Omit<DateProperty, "dataType"> &
     {
         dataType: "date";
+        resolved: true;
         fromBuilder: boolean;
     }
 
@@ -95,6 +99,7 @@ export type ResolvedGeopointProperty =
     Omit<GeopointProperty, "dataType"> &
     {
         dataType: "geopoint";
+        resolved: true;
         fromBuilder: boolean;
     }
 
@@ -105,6 +110,7 @@ export type ResolvedReferenceProperty =
     Omit<ReferenceProperty, "dataType"> &
     {
         dataType: "reference";
+        resolved: true;
         fromBuilder: boolean;
     }
 
@@ -115,6 +121,7 @@ export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMS
     Omit<ArrayProperty, "of" | "oneOf" | "dataType"> &
     {
         dataType: "array";
+        resolved: true;
         of?: ResolvedProperty<ArrayT> | ResolvedProperty[],
         oneOf?: {
             properties: Record<string, ResolvedProperty>
@@ -132,6 +139,7 @@ export type ResolvedMapProperty<T extends { [Key: string]: any } = any> =
     Omit<MapProperty, "properties" | "dataType" | "propertiesOrder"> &
     {
         dataType: "map";
+        resolved: true;
         properties?: ResolvedProperties<Partial<T>>;
         propertiesOrder?: string[];
         fromBuilder: boolean;

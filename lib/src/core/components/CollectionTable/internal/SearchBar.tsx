@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useDeferredValue, useState } from "react";
 import { alpha, darken, Theme } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
 import { Box, FormControl, IconButton } from "@mui/material";
@@ -16,19 +16,18 @@ export function SearchBar({ onTextSearch }: SearchBarProps) {
     const [searchText, setSearchText] = useState<string>("");
     const [active, setActive] = useState<boolean>(false);
 
+    const deferredValues = useDeferredValue(searchText);
+
     /**
      * Debounce on Search text update
      */
-
-    const doSearch = React.useCallback(() => {
-        if (searchText) {
-            onTextSearch(searchText);
+    React.useEffect(() => {
+        if (deferredValues) {
+            onTextSearch(deferredValues);
         } else {
             onTextSearch(undefined);
         }
-    }, [searchText]);
-
-    useDebounce(searchText, doSearch);
+    }, [deferredValues]);
 
     const clearText = useCallback(() => {
         setSearchText("");

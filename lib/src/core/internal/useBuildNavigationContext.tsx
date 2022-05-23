@@ -62,7 +62,6 @@ export function useBuildNavigationContext<UserType extends User>({
     const fullCollectionPath = cleanBasePath ? `/${cleanBasePath}/${cleanBaseCollectionPath}` : `/${cleanBaseCollectionPath}`;
 
     const processCollections = useCallback(async () => {
-        setNavigationLoading(true);
         if (baseCollections === undefined) return;
 
         const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
@@ -85,7 +84,7 @@ export function useBuildNavigationContext<UserType extends User>({
 
     useEffect(() => {
         processCollections();
-    }, [authController, baseCollections]);
+    }, [processCollections]);
 
     const getCollection = useCallback(<M extends { [Key: string]: any }>(
         path: string,

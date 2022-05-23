@@ -6,8 +6,7 @@ import {
     buildCollection,
     buildProperty,
     EntityReference,
-    FirebaseCMSApp,
-    Roles
+    FirebaseCMSApp
 } from "@camberi/firecms";
 
 import "typeface-rubik";
@@ -80,7 +79,7 @@ const productsCollection = buildCollection<Product>({
         edit: true,
         create: true,
         // we have created the roles object in the navigation builder
-        delete: Object.keys(authController.roles ?? []).includes("admin")
+        delete: false
     }),
     subcollections: [
         localeCollection
@@ -211,32 +210,9 @@ export default function App() {
         // This is an example of retrieving async data related to the user
         // and storing it in the user extra field.
         const sampleUserRoles = await Promise.resolve(["admin"]);
-        authController.setRoles(sampleUserRoles);
+        authController.setExtra(sampleUserRoles);
 
         return true;
-    };
-
-    const roles: Roles = {
-        "admin": {
-            isAdmin: true
-        },
-        "editor": {
-            isAdmin: false,
-            defaultPermissions: {
-                read: true,
-                create: true,
-                edit: true,
-                delete: false
-            },
-            collectionPermissions: {
-                "products": {
-                    read: true,
-                    create: true,
-                    edit: true,
-                    delete: true
-                }
-            }
-        }
     };
 
     return <FirebaseCMSApp
@@ -244,6 +220,5 @@ export default function App() {
         authentication={myAuthenticator}
         collections={[productsCollection]}
         firebaseConfig={firebaseConfig}
-        roles={roles}
     />;
 }

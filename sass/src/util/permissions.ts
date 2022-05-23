@@ -18,27 +18,12 @@ export function resolvePermissions<M extends { [Key: string]: any }, UserType ex
 (collection: EntityCollection<M>,
  authController: AuthController<UserType>,
  paths: string[]): Permissions {
-
-    const permission = collection.permissions;
-    if (permission === undefined) {
-        if (!authController.extra.roles) {
-            return DEFAULT_PERMISSIONS;
-        } else {
-            const strippedCollectionPath = segmentsToStrippedPath(paths);
-            return resolveCollectionPermissions(authController.extra.roles, strippedCollectionPath);
-        }
-    } else if (typeof permission === "object") {
-        return permission as Permissions;
-    } else if (typeof permission === "function") {
-        return permission({
-            user: authController.user,
-            authController,
-            collection,
-            pathSegments: paths
-        });
+    if (!authController.extra?.roles) {
+        return DEFAULT_PERMISSIONS;
+    } else {
+        const strippedCollectionPath = segmentsToStrippedPath(paths);
+        return resolveCollectionPermissions(authController.extra.roles, strippedCollectionPath);
     }
-
-    throw Error("New type of permission added and not mapped");
 }
 
 export function resolveCollectionPermissions(roles: Role[], path: string): Permissions {

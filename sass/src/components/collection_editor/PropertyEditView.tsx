@@ -1,4 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, {
+    useCallback,
+    useDeferredValue,
+    useEffect,
+    useState
+} from "react";
 
 import { Form, Formik, FormikErrors, FormikProps, getIn } from "formik";
 import equal from "react-fast-compare"
@@ -29,7 +34,6 @@ import {
     removeUndefined,
     ResolvedProperty,
     toSnakeCase,
-    useDebounce,
     WidgetId,
     WIDGETS
 } from "@camberi/firecms";
@@ -432,13 +436,12 @@ function PropertyEditView({
         : Object.entries(WIDGETS);
     const selectedWidget = selectedWidgetId ? WIDGETS[selectedWidgetId] : undefined;
 
-    const initialValuesRef = React.useRef(values);
+    const deferredValues = useDeferredValue(values);
 
-    const doUpdate = React.useCallback(() => {
+    React.useEffect(() => {
         if (onPropertyChanged) {
-            if ((!includeIdAndTitle || values.id) &&
-                !equal(initialValuesRef.current, removeUndefined(values))) {
-                const { id, ...property } = values;
+            if ((!includeIdAndTitle || deferredValues.id)) {
+                const { id, ...property } = deferredValues;
                 onPropertyChanged({
                     id,
                     property,
@@ -446,8 +449,7 @@ function PropertyEditView({
                 });
             }
         }
-    }, [values, propertyNamespace]);
-    useDebounce(values, doUpdate);
+    }, [deferredValues, includeIdAndTitle, onPropertyChanged, propertyNamespace]);
 
     useEffect(() => {
         if (values.id && onError) {

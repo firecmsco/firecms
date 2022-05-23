@@ -124,7 +124,7 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         // we use some custom logic by storing user data in the `extra`
         // field of the user
-        delete: authController.extra?.roles.includes("admin"),
+        delete: authController.extra?.roles?.includes("admin"),
     }),
     extraActions: productExtraActionBuilder,
     subcollections: [localeCollection],

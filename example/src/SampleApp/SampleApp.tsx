@@ -70,7 +70,7 @@ function SampleApp() {
         // This is an example of retrieving async data related to the user
         // and storing it in the user extra field
         const sampleRoles = await Promise.resolve(["admin"]);
-        authController.setRoles(sampleRoles);
+        authController.setExtra(sampleRoles);
 
         console.log("Allowing access to", user);
         return true;

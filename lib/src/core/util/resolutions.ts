@@ -96,6 +96,10 @@ export function resolveProperty<T, M>({
     fromBuilder?: boolean
 }): ResolvedProperty | null {
 
+    if (typeof propertyOrBuilder === "object" && "resolved" in propertyOrBuilder) {
+        return propertyOrBuilder as ResolvedProperty;
+    }
+
     if (!propertyOrBuilder) {
         return null;
     } else if (isPropertyBuilder(propertyOrBuilder)) {
@@ -145,6 +149,7 @@ export function resolveProperty<T, M>({
 
     return {
         ...propertyOrBuilder,
+        resolved: true,
         fromBuilder: props.fromBuilder,
     } as ResolvedProperty;
 }
@@ -282,6 +287,7 @@ export function resolvePropertyEnum(property: StringProperty | NumberProperty, f
     if (typeof property.enumValues === "object") {
         return {
             ...property,
+            resolved: true,
             enumValues: resolveEnumValues(property.enumValues)?.filter((value) => value && value.id && value.label) ?? [],
             fromBuilder: fromBuilder ?? false
         }
