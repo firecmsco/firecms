@@ -27,7 +27,7 @@ by `FirebaseCMSApp`):
 - [`NavigationRoutes`](api/functions/navigationroutes)
 - [`SideDialogs`](api/functions/SideDialogs)
 - [`useInitialiseFirebase`](api/functions/useinitialisefirebase)
-- [`useFirebaseAuthDelegate`](api/functions/usefirebaseauthdelegate)
+- [`useBuildFirebaseAuthDelegate`](api/functions/useBuildFirebaseAuthDelegate)
 - [`useFirebaseStorageSource`](api/functions/usefirebasestoragesource)
 - [`useFirestoreDataSource`](api/functions/usefirestoredatasource)
 
