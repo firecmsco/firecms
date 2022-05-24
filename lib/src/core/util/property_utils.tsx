@@ -3,7 +3,12 @@ import AdjustIcon from "@mui/icons-material/Adjust";
 import FunctionsIcon from "@mui/icons-material/Functions";
 import Crop75Icon from "@mui/icons-material/Crop75";
 
-import { PropertyOrBuilder, ResolvedProperty } from "../../models";
+import {
+    Properties, PropertiesOrBuilders,
+    Property,
+    PropertyOrBuilder,
+    ResolvedProperty
+} from "../../models";
 import { getWidget, Widget } from "../widgets";
 import { Box } from "@mui/material";
 import { isPropertyBuilder } from "./entities";
@@ -58,4 +63,41 @@ export function getColorForProperty(property: PropertyOrBuilder): string {
         const widget = getWidget(property);
         return widget?.color ?? "#666";
     }
+}
+
+/**
+ * Get a property in a property tree from a path like
+ * `address.street`
+ * @param properties
+ * @param path
+ */
+export function getPropertyInPath(properties: PropertiesOrBuilders<any>, path: string): PropertyOrBuilder | undefined {
+    if (typeof properties === "object") {
+        if (path in properties) {
+            return properties[path];
+        }
+        if (path.includes(".")) {
+            const pathSegments = path.split(".");
+            const childProperty = properties[pathSegments[0]];
+            if (typeof childProperty === "object" && childProperty.dataType === "map" && childProperty.properties) {
+                return getPropertyInPath(childProperty.properties, pathSegments.slice(1).join("."))
+            }
+        }
+    }
+    return undefined;
+}
+export function getResolvedPropertyInPath(properties: Record<string, ResolvedProperty>, path: string): ResolvedProperty | undefined {
+    if (typeof properties === "object") {
+        if (path in properties) {
+            return properties[path];
+        }
+        if (path.includes(".")) {
+            const pathSegments = path.split(".");
+            const childProperty = properties[pathSegments[0]];
+            if (childProperty.dataType === "map" && childProperty.properties) {
+                return getResolvedPropertyInPath(childProperty.properties, pathSegments.slice(1).join("."))
+            }
+        }
+    }
+    return undefined;
 }

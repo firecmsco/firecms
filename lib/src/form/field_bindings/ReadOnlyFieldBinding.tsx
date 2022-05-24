@@ -29,7 +29,7 @@ export function ReadOnlyFieldBinding({
                                          includeDescription,
                                          context
                                      }: FieldProps<any>) {
-console.log("context", context)
+
     const entity: Entity<any> = {
         id: context.entityId,
         values: context.values,
@@ -66,11 +66,11 @@ console.log("context", context)
             </Paper>
 
             {showError &&
-            typeof error === "string" &&
-            <FormHelperText>{error}</FormHelperText>}
+                typeof error === "string" &&
+                <FormHelperText>{error}</FormHelperText>}
 
             {includeDescription &&
-            <FieldDescription property={property}/>}
+                <FieldDescription property={property}/>}
 
         </FormControl>
     );

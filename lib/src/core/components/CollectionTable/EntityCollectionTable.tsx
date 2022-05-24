@@ -12,7 +12,7 @@ import {
     SaveEntityProps,
     WhereFilterOp
 } from "../../../models";
-import { getSubcollectionColumnId, useColumnIds } from "./internal/common";
+import { getSubcollectionColumnId } from "./internal/common";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
 import {
@@ -30,6 +30,7 @@ import {
     useBuildColumnsFromCollection
 } from "./column_builder";
 import { resolveCollection } from "../../util";
+import { setIn } from "formik";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -77,9 +78,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const context = useFireCMSContext();
         const dataSource = useDataSource();
         const sideEntityController = useSideEntityController();
-
-        const theme = useTheme();
-        const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
         const resolvedCollection = useMemo(() => resolveCollection<M>({
             collection,
@@ -132,8 +130,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             return [...(resolvedCollection.additionalColumns ?? []), ...subcollectionColumns];
         }, [resolvedCollection, collection, path]);
 
-        const displayedProperties = useColumnIds<M>(resolvedCollection, true);
-
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
             ({
                  name,
@@ -143,20 +139,20 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
              }) => dataSource.checkUniqueField(path, name, value, property, entityId),
             [path, dataSource]);
 
-        const onCellChanged: OnCellValueChange<any, M> = useCallback(({
+        const onCellValueChange: OnCellValueChange<any, M> = useCallback(({
                                                                           value,
                                                                           propertyKey,
                                                                           setSaved,
                                                                           setError,
                                                                           entity
                                                                       }) => {
+
+            const updatedValues = setIn({ ...entity.values }, propertyKey, value);
+
             const saveProps: SaveEntityProps<M> = {
                 path,
                 entityId: entity.id,
-                values: {
-                    ...entity.values,
-                    [propertyKey]: value
-                },
+                values: updatedValues,
                 previousValues: entity.values,
                 collection,
                 status: "existing"
@@ -179,11 +175,10 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const { columns, popupFormField } = useBuildColumnsFromCollection({
             collection,
             additionalColumns,
-            displayedProperties,
             path,
             inlineEditing,
             size,
-            onCellValueChange: onCellChanged,
+            onCellValueChange,
             uniqueFieldValidator,
             tableRowActionsBuilder
         });
@@ -217,13 +212,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         }, [pageSize]);
 
         const clearFilter = useCallback(() => setFilterValues(undefined), []);
-
-        const buildIdColumn = useCallback(({ entry, size }: {
-            entry: Entity<M>,
-            size: CollectionSize,
-        }) => {
-
-        }, [tableRowActionsBuilder]);
 
         const onRowClick = useCallback(({ rowData }: { rowData: Entity<M> }) => {
             if (checkInlineEditing(inlineEditing, rowData))
@@ -329,3 +317,4 @@ function isFilterCombinationValid<M>(
             Object.entries(filterValues).every(([key, value]) => compositeIndex[key] !== undefined && (!sortDirection || compositeIndex[key] === sortDirection))
         ) !== undefined;
 }
+

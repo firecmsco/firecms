@@ -1,10 +1,15 @@
-import { getCellAlignment, getPropertyColumnWidth } from "./internal/common";
+import {
+    getCellAlignment,
+    getPropertyColumnWidth,
+    getSubcollectionColumnId
+} from "./internal/common";
 import {
     AdditionalColumnDelegate,
     CollectionSize,
     Entity,
     EntityCollection,
     FireCMSContext,
+    Property,
     ResolvedEntityCollection,
     ResolvedProperty,
     User
@@ -19,7 +24,11 @@ import { ErrorBoundary } from "../ErrorBoundary";
 import { useFireCMSContext } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { TableColumn, TableColumnFilter } from "../Table";
-import { getIconForProperty } from "../../util/property_utils";
+import {
+    getIconForProperty,
+    getPropertyInPath,
+    getResolvedPropertyInPath
+} from "../../util/property_utils";
 import {
     resolveCollection,
     resolveEnumValues,
@@ -27,6 +36,7 @@ import {
 } from "../../util/resolutions";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { CollectionRowActions } from "./internal/CollectionRowActions";
+import { getValueInPath } from "../../util";
 
 export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType extends User> = {
 
@@ -39,12 +49,6 @@ export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType
      * Use to resolve the collection properties for specific path, entity id or values
      */
     collection: EntityCollection<M>
-
-    /**
-     * Properties displayed in this collection. If this property is not set
-     * every property is displayed, you can filter
-     */
-    displayedProperties: string[];
 
     /**
      * You can add additional columns to the collection view by implementing
@@ -132,7 +136,6 @@ export type SelectedCellProps<M> =
 export function useBuildColumnsFromCollection<M, AdditionalKey extends string, UserType extends User>({
                                                                                                           collection,
                                                                                                           additionalColumns,
-                                                                                                          displayedProperties,
                                                                                                           path,
                                                                                                           inlineEditing,
                                                                                                           size,
@@ -231,22 +234,27 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
     }, []);
 
     const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection({
-        collection: collection,
+        collection,
         path
     }), [collection, path]);
 
+    const displayedProperties = useColumnIds<M>(resolvedCollection, true);
+
     const propertyCellRenderer = useCallback(({
-                                      column,
-                                      columnIndex,
-                                      rowData,
-                                      rowIndex
-                                  }: any) => {
+                                                  column,
+                                                  columnIndex,
+                                                  rowData,
+                                                  rowIndex
+                                              }: any) => {
 
         const entity: Entity<M> = rowData;
 
         const propertyKey = column.dataKey;
 
-        const propertyOrBuilder = collection.properties[propertyKey];
+        const propertyOrBuilder = getPropertyInPath(collection.properties, propertyKey);
+        if (!propertyOrBuilder) {
+            return null;
+        }
         const property = resolveProperty({
             propertyOrBuilder,
             path,
@@ -300,7 +308,7 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
                             focused={isFocused}
                             setPreventOutsideClick={setPreventOutsideClick}
                             setFocused={setFocused}
-                            value={entity?.values ? entity.values[propertyKey] : undefined}
+                            value={entity?.values ? getValueInPath(entity.values as any, propertyKey) : undefined}
                             collection={collection}
                             setPopupCell={setPopupCell}
                             select={select}
@@ -356,9 +364,17 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
 
     }, [additionalColumnsMap, size]);
 
-    const allColumns: TableColumn<Entity<M>>[] = (Object.keys(resolvedCollection.properties) as (keyof M)[])
+    const allColumns: TableColumn<Entity<M>>[] = Object.entries<Property>(resolvedCollection.properties)
+        .flatMap(([key, property]) => {
+            if (property.dataType === "map" && property.spreadChildren && property.properties) {
+                return Object.keys(property.properties).map(childKey => `${key}.${childKey}`);
+            }
+            return [key];
+        })
         .map((key) => {
-            const property = resolvedCollection.properties[key];
+            const property = getResolvedPropertyInPath(resolvedCollection.properties, key);
+            if (!property)
+                throw Error("Internal error: no property found in path " + key);
             return ({
                 key: key as string,
                 property,
@@ -430,4 +446,57 @@ export function useBuildColumnsFromCollection<M, AdditionalKey extends string, U
 
     return { columns, popupFormField };
 
+}
+
+export function useColumnIds<M>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
+
+    return useMemo(() => {
+        const displayedProperties = getCollectionColumnIds(collection);
+
+        const additionalColumns = collection.additionalColumns ?? [];
+        const subCollections: EntityCollection[] = collection.subcollections ?? [];
+
+        // const properties: ResolvedProperties = collection.properties;
+
+        // const hiddenColumnIds: string[] = Object.entries(properties)
+        //     .filter(([_, property]) => {
+        //         return property.disabled && typeof property.disabled === "object" && property.disabled.hidden;
+        //     })
+        //     .map(([propertyKey, _]) => propertyKey);
+
+        const columnIds: string[] = [
+            ...displayedProperties,
+            ...additionalColumns.map((column) => column.id)
+        ];
+
+        // let result: string[];
+        // if (displayedProperties) {
+        //     result = displayedProperties
+        //         .map((p) => {
+        //             return columnIds.find(id => id === p);
+        //         }).filter(c => !!c) as string[];
+        // } else {
+        //     result = columnIds.filter((columnId) => !hiddenColumnIds.includes(columnId));
+        // }
+
+        if (includeSubcollections) {
+            const subCollectionIds = subCollections
+                .map((collection) => getSubcollectionColumnId(collection));
+            columnIds.push(...subCollectionIds.filter((subColId) => !columnIds.includes(subColId)));
+        }
+        return columnIds;
+
+    }, [collection, includeSubcollections]);
+}
+
+function getCollectionColumnIds(collection: ResolvedEntityCollection) {
+    return Object.entries<Property>(collection.properties)
+        .filter(([_, property]) => !property.hideFromCollection)
+        .filter(([_, property]) => !(property.disabled && typeof property.disabled === "object" && property.disabled.hidden))
+        .flatMap(([key, property]) => {
+            if (property.dataType === "map" && property.spreadChildren && property.properties) {
+                return Object.keys(property.properties).map(childKey => `${key}.${childKey}`);
+            }
+            return [key];
+        })
 }

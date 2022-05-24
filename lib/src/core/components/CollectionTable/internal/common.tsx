@@ -1,10 +1,7 @@
-import { useMemo } from "react";
 import {
     EntityCollection,
     Property,
     ResolvedArrayProperty,
-    ResolvedEntityCollection,
-    ResolvedProperties,
     ResolvedProperty
 } from "../../../../models";
 
@@ -97,47 +94,4 @@ export function getPropertyColumnWidth(property: ResolvedProperty): number {
 
 export function getSubcollectionColumnId(collection: EntityCollection) {
     return `subcollection:${collection.path}`;
-}
-
-export function useColumnIds<M>(collection:ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
-
-    return useMemo(() => {
-        const displayedProperties = Object.entries<Property>(collection.properties as Record<keyof M, Property>)
-            .filter(([_, property]) => !property.hideFromCollection)
-            .map(([key, _]) => key);
-        const additionalColumns = collection.additionalColumns ?? [];
-        const subCollections: EntityCollection[] = collection.subcollections ?? [];
-
-        const properties: ResolvedProperties = collection.properties;
-
-        const hiddenColumnIds: string[] = Object.entries(properties)
-            .filter(([_, property]) => {
-                return property.disabled && typeof property.disabled === "object" && property.disabled.hidden;
-            })
-            .map(([propertyKey, _]) => propertyKey);
-
-        const columnIds: string[] = [
-            ...Object.keys(collection.properties) as string[],
-            ...additionalColumns.map((column) => column.id)
-        ];
-
-        let result: string[];
-        if (displayedProperties) {
-            result = displayedProperties
-                .map((p) => {
-                    return columnIds.find(id => id === p);
-                }).filter(c => !!c) as string[];
-        } else {
-            result = columnIds.filter((columnId) => !hiddenColumnIds.includes(columnId));
-        }
-
-        if (includeSubcollections) {
-            const subCollectionIds = subCollections
-                .map((collection) => getSubcollectionColumnId(collection));
-            result.push(...subCollectionIds.filter((subColId) => !result.includes(subColId)));
-        }
-
-        return result;
-
-    }, [collection, includeSubcollections]);
 }

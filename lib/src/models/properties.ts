@@ -475,6 +475,12 @@ export interface MapProperty<T extends { [Key: string]: unknown } = any> extends
     pickOnlySomeKeys?: boolean;
 
     /**
+     * Display the child properties as independent columns in the collection
+     * view
+     */
+    spreadChildren?: boolean;
+
+    /**
      * Should the field be initially expanded. Defaults to `true`
      */
     expanded?: boolean;

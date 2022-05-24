@@ -135,32 +135,29 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
         [value]
     );
 
-    useEffect(
-        () => {
-            if (!equal(value, internalValue)) {
-                setSaved(false);
-                validation
-                    .validate(internalValue)
-                    .then(() => {
-                        setError(undefined);
-                        if (onValueChange) {
-                            onValueChange({
-                                value: internalValue,
-                                propertyKey,
-                                setError,
-                                setSaved,
-                                entity
-                            });
-                        }
-                    })
-                    .catch((e) => {
-                        console.error(e);
-                        setError(e);
-                    });
-            }
-        },
-        [internalValue]
-    );
+    useEffect(() => {
+        if (!equal(value, internalValue)) {
+            setSaved(false);
+            validation
+                .validate(internalValue)
+                .then(() => {
+                    setError(undefined);
+                    if (onValueChange) {
+                        onValueChange({
+                            value: internalValue,
+                            propertyKey,
+                            setError,
+                            setSaved,
+                            entity
+                        });
+                    }
+                })
+                .catch((e) => {
+                    console.error(e);
+                    setError(e);
+                });
+        }
+    }, [internalValue]);
 
     const updateValue = useCallback(
         (newValue: any | null) => {

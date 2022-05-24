@@ -179,6 +179,22 @@ export const testCollection = buildCollection({
             name: "Form",
             of: formPropertyEntry
         },
+        address:buildProperty({
+            name: "Address",
+            dataType: "map",
+            properties: {
+                street: {
+                    name: "Street",
+                    dataType: "string"
+                },
+                postal_code: {
+                    name: "Postal code",
+                    dataType: "number"
+                }
+            },
+            spreadChildren: true,
+            expanded: true
+        }),
         name: {
             name: "Name starts with number",
             dataType: "string",
