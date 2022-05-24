@@ -12,7 +12,7 @@ how the preview of a property is displayed in collection and other read only
 views.
 
 You can build your preview as a React component that takes
-[PreviewComponentProps](../api/interfaces/previewcomponentprops) as props.
+[PropertyPreviewProps](../api/interfaces/PropertyPreviewProps) as props.
 
 `PreviewComponentProps` has two generic types: the first one is the type of the
 property, such as `string` or `boolean` and the second one (optional) is the

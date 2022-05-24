@@ -63,7 +63,7 @@ We have also added a lot of minor performance tweaks as well as design tweaks
 and improvements, including a very awesome new **dark mode**!
 
 If you are using `FirebaseCMSApp` (previously `CMSApp`), so FireCMS as a
-standalone app, you will need to update some APIs (see the [Migrating from alpha versions](../docs/migrating_from_alpha_versions)).
+standalone app, you will need to update some APIs (see the [Migrating from alpha versions](../docs/1.0.0/migrating_from_alpha_versions)).
 
 But, but, but...
 If you need more customisation you can now completely
@@ -85,18 +85,18 @@ behind their respective interfaces. This means you can replace any of those
 parts with your custom implementation!
 
 We have three new types that abstract away the services provided by Firebase:
-- [`AuthDelegate`](../docs/api/interfaces/datasource), in charge of handling
+- [`AuthDelegate`](/docs/1.0.0/api/interfaces/datasource), in charge of handling
   the auth operation such as login or sign out, and build the logged-in user.
-- [`DataSource`](../docs/api/interfaces/datasource), in charge of handling data
+- [`DataSource`](/docs/1.0.0/api/interfaces/datasource), in charge of handling data
   operation (fetch, listen, save, delete).
-- [`StorageSource`](../docs/api/interfaces/storagesource), in charge of dealing
+- [`StorageSource`](/docs/1.0.0/api/interfaces/storagesource), in charge of dealing
   with file storage operations.
 
 We provide implementation for using Firebase Auth, Firestore and Firebase Storage,
 assigned by default if you use `FirebaseCMSApp`.
 
 This means that you are now able to use FireCMS with any backend, auth or storage
-solution. If you want to go this way, you can check an [example implementation](../docs/custom_cms_app)
+solution. If you want to go this way, you can check an [example implementation](../docs/1.0.0/custom_cms_app)
 of FireCMS that uses the internal components instead of `FirebaseCMSApp`
 
 :::note How did it go?

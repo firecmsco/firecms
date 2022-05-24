@@ -98,10 +98,6 @@ module.exports = {
                     title: 'Links',
                     items: [
                         {
-                            label: 'Docs',
-                            to: 'docs/'
-                        },
-                        {
                             label: 'Demo',
                             to: 'https://demo.firecms.co'
                         },

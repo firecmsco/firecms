@@ -49,11 +49,10 @@ A quick example for a custom view:
 import {
     buildCollection,
     CMSView,
-    NavigationBuilder,
-    NavigationBuilderProps,
-    buildCollection,
+    EntityCollectionsBuilder,
     FirebaseCMSApp
-} from "@camberi/firecms"
+} from "@camberi/firecms";
+import { ExampleCMSView } from "./ExampleCMSView";
 
 export default function App() {
 
@@ -76,21 +75,16 @@ export default function App() {
         view: <ExampleCMSView/>
     }];
 
-    const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
-        collections: [
+    return <FirebaseCMSApp
+        name={"My Online Shop"}
+        collections={({ user }: EntityCollectionsBuilder) => [
             buildCollection({
                 path: "products",
                 collection: productCollection,
                 name: "Products"
             })
-        ],
-        views: customViews
-    });
-
-    return <FirebaseCMSApp
-        name={"My Online Shop"}
-        navigation={navigation}
-        firebaseConfig={firebaseConfig}
+        ]}
+        views={customViews}
     />;
 }
 ```
@@ -99,8 +93,10 @@ Your custom view is implemented as any regular React component that uses
 some hooks provided by the CMS:
 
 
+
 import CodeBlock from "@theme/CodeBlock";
-import MyComponentSource from "!!raw-loader!../../../example/src/SampleApp/ExampleCMSView";
+import MyComponentSource
+    from "!!raw-loader!../../../example/src/SampleApp/ExampleCMSView";
 
 <CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
 

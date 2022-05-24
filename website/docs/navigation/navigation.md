@@ -14,7 +14,7 @@ collections that get mapped to CMS views, or create your own top level React vie
 Check all the possible configurations for defining [collections](../collections/collections.md)
 :::
 
-Otherwise, you can define your own [custom top level views](custom_top_level_views.md).
+Otherwise, you can define your own [custom top level views](./custom_top_level_views.mdx).
 
 You can change the collections based on the logged-in user, by using an
 asynchronous callback. Using an async `EntityCollectionsBuilder` you can

@@ -25,7 +25,7 @@ There is also a Firebase extension for the very same purpose.
 
 :::note 
 Find all the available props
-for `FirebaseCMSApp` [here](./api/functions/firebasecmsapp)
+for `FirebaseCMSApp` [here](../api/functions/firebasecmsapp)
 :::
 
 We provide a utility method for performing searches in
@@ -42,8 +42,7 @@ import {
     buildCollection,
     buildCollection,
     FirebaseCMSApp,
-    NavigationBuilder,
-    NavigationBuilderProps
+    EntityCollectionsBuilder
 } from "@camberi/firecms";
 
 const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
