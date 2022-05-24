@@ -106,10 +106,11 @@ export function Drawer({
                 color="inherit"
                 onClick={closeDrawer}
                 component={NavLink}
-
                 to={navigationContext.homeUrl}>
+
                 <Box sx={{
-                    padding: 4,
+                    px: 6,
+                    py: 2,
                     maxWidth: 280
                 }}>
                     {logoComponent}

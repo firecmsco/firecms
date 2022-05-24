@@ -5,7 +5,7 @@ import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { useClearRestoreValue } from "../../hooks";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import { ExpandablePanel } from "../../core";
 
 /**
  * Array field used for custom

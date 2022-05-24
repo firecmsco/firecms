@@ -6,6 +6,7 @@ module.exports = {
             id: 'intro'
         },
         'quickstart',
+        'new_in_v2',
         {
             type: 'category',
             label: "Collections",

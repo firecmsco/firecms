@@ -20,7 +20,6 @@ import { MoreVert } from "@mui/icons-material";
 
 import AddIcon from "@mui/icons-material/Add";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import ShowChartIcon from "@mui/icons-material/ShowChart";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 import { Link as ReactLink } from "react-router-dom";
@@ -222,7 +221,7 @@ function NavigationCard({ entry, onDelete, onEdit }: NavigationCardProps) {
 
                         <CollectionIcon color={"disabled"}/>
                         <div>
-                            {onDelete &&
+                            {entry.type === "collection" && onDelete &&
                                 <IconButton
                                     onClick={(event: React.MouseEvent) => {
                                         event.preventDefault();
@@ -233,7 +232,7 @@ function NavigationCard({ entry, onDelete, onEdit }: NavigationCardProps) {
                                 </IconButton>
                             }
 
-                            {onEdit &&
+                            {entry.type === "collection" && onEdit &&
                                 <IconButton
                                     onClick={(event) => {
                                         event.stopPropagation();

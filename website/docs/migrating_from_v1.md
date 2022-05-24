@@ -16,7 +16,7 @@ The main navigation has been revamped:
 - The `navigation` prop has been removed and replaced with `collections` and `views`.
 - If you need to have dynamic collections or views based on the user or other config,
 you can use a `EntityCollectionsBuilder` or `CMSViewsBuilder` in an analogous way 
-- to v1.
+to v1.
 
 ### Collections
 
@@ -132,6 +132,10 @@ buildProperty<string>({
 });
 ```
 
+- `TimestampProperty` is now renamed to `DateProperty` in order to reflect
+  better the alignment with JS types instead of Firebase ones. The discriminator
+  when declaring date properties now is `date` instead of `timestamp`.
+
 - `PreviewComponent` has been renamed to `PropertyPreview`
 - `PreviewComponentProps` has been renamed to `PropertyPreviewProps`
 - Validation: The `email` and `url` validation prop in string properties are now
@@ -146,15 +150,13 @@ buildProperty<string>({
   called `propertyKey`
 - Removed `mediaType` in the storage configuration of string properties. It is
   now inferred automatically.
-- `TimestampProperty` is now renamed to `DateProperty` in order to reflect
-  better the alignment with JS types instead of Firebase ones. The discriminator
-  when declaring date properties now is `date` instead of `timestamp`
 - `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where
   you pass a React Component directly: `Actions`
 - `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where
   you pass a React Component directly: `Actions`
 - Enum values: if you are using enum values with custom configurations, you
 need to include the id in the new object as well
+- `skipLoginButtonEnabled` renamed to `allowSkipLogin` in `FirebaseLoginViewProps`
 ```tsx
 buildProperty(({ values }) => ({
     title: "Status",

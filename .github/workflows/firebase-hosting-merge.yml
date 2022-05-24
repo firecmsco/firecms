@@ -5,7 +5,7 @@ name: Deploy website to Firebase Hosting on merge
 'on':
   push:
     branches:
-      - master
+      - website
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest

@@ -3,7 +3,7 @@ import React from "react";
 export function FireCMSLogo() {
     return (
         <svg
-            width="232" height="232"
+            width="100%" height="232"
             viewBox="0 0 599 599" version="1.1"
             xmlns="http://www.w3.org/2000/svg">
             <defs>

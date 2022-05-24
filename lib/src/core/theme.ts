@@ -88,6 +88,13 @@ export const createCMSDefaultTheme = (
                         borderRadius: radius
                     }
                 }
+            },
+            MuiCardActionArea: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: radius
+                    }
+                }
             }
         }
     });
