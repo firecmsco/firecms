@@ -33,6 +33,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     path: "blog",
     name: "Blog",
     group: "Content",
+    icon: "Article",
     exportable: {
         additionalColumns: [sampleAdditionalExportColumn]
     },

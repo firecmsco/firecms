@@ -6,6 +6,7 @@ export const usersCollection = buildCollection({
     group: "Main",
     description: "Registered users",
     textSearchEnabled: true,
+    icon: "Person",
     properties: {
         first_name: {
             name: "First name",
