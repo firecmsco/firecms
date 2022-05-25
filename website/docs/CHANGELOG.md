@@ -74,6 +74,18 @@ called `PropertyFieldBinding`. The props have not changed.
 
 ### Changed
 
+- Fix for entity collections in read-only mode showing incorrect resolved 
+properties
+- Fix for filter combinations bug
+
+### Added
+- Enabled phone authentication
+- Added max size validation for file uploads
+ 
+## [1.0.0-rc.5] - 2022-05-10
+
+### Changed
+
 - Fix for entity collections in read-only mode showing incorrect resolved
   properties
 - Fix for filter combinations bug
