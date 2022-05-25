@@ -17,6 +17,7 @@ import "aos/dist/aos.css";
 import "../css/tailwind.css";
 import Pricing from "../partials/Pricing";
 import Head from "@docusaurus/Head";
+import { NewsletterWidget } from "../partials/NewsletterWidget";
 
 function Home() {
     const context = useDocusaurusContext();
@@ -81,6 +82,9 @@ function Home() {
                     <Separator/>
 
                     <Pricing/>
+                    <Separator/>
+
+                    <NewsletterWidget/>
                     <Separator/>
 
                     <Testimonials/>

@@ -27,11 +27,12 @@ type SceneState = {
 
 type AnimationProps = {}
 
-const red = new THREE.Color(1.0, .0, .0);
-const magenta = new THREE.Color(.97, .34, .45);
+const red = new THREE.Color(1.0, .2, .2);
+const magenta = new THREE.Color(0xFF5B79);
 const cyan = new THREE.Color(.53, .96, 1.);
 const blue = new THREE.Color(.46, .32, .87);
 const yellow = new THREE.Color(1., .69, .0);
+const grey = new THREE.Color(.5, .5, .5);
 const black = new THREE.Color(.0, .0, .0);
 const white = new THREE.Color(1.0, 1.0, 1.0);
 
@@ -112,7 +113,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
     }
 
 
-    function buildMainLayers(cyan: THREE.Color, yellow: THREE.Color, blue: THREE.Color, magenta: THREE.Color, red: THREE.Color) {
+    function buildMainLayers(cyan: THREE.Color, yellow: THREE.Color, blue: THREE.Color, magenta: THREE.Color, red: THREE.Color, grey: THREE.Color) {
         const layers: any[] = [];
 
         layers.push({
@@ -138,7 +139,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         layers.push({
             is_active: 1,
-            color: magenta,
+            color: blue,
             sin: new THREE.Vector3(0, 1, 0),
             cos: new THREE.Vector3(1, 0, 1),
             time_dilation: new THREE.Vector3(.4, .6, 1.1),
@@ -177,7 +178,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         layers.push({
             is_active: 1,
-            color: magenta,
+            color: yellow,
             sin: new THREE.Vector3(0, 1, 0),
             cos: new THREE.Vector3(1, 0, 0),
             time_dilation: new THREE.Vector3(.3, .8, 1),
@@ -324,7 +325,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         // });
         return layers;
     }
-    function buildSmallLayers(cyan: THREE.Color, yellow: THREE.Color, blue: THREE.Color, magenta: THREE.Color, red: THREE.Color) {
+    function buildSmallLayers(cyan: THREE.Color, yellow: THREE.Color, blue: THREE.Color, magenta: THREE.Color, red: THREE.Color, grey: THREE.Color) {
         const layers: any[] = [];
         layers.push({
             is_active: 0,
@@ -376,7 +377,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         layers.push({
             is_active: 1,
-            color: magenta,
+            color: cyan,
             sin: new THREE.Vector3(0, 1, 0),
             cos: new THREE.Vector3(1, 0, 0),
             time_dilation: new THREE.Vector3(.3, .8, 1),
@@ -438,7 +439,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         layers.push({
             is_active: 1,
-            color: magenta,
+            color: blue,
             sin: new THREE.Vector3(1, 1, 0),
             cos: new THREE.Vector3(0, 0, 1),
             time_dilation: new THREE.Vector3(.4, .8, 1),
@@ -447,7 +448,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         });
 
         layers.push({
-            is_active: 0,
+            is_active: 1,
             color: cyan,
             sin: new THREE.Vector3(0, 0, 1),
             cos: new THREE.Vector3(0, 0, 0),
@@ -497,7 +498,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
             u_sphere_radius: { value: radius },
             u_displacement_ratio: { value: displacementRatio },
             u_displacement_area: { value: displacementArea },
-            u_base_color: { value: red },
+            u_base_color: { value: magenta },
             u_layers: { value: layers },
             u_layers_count: { value: layers.length },
             u_color_spread: { value: spread }
@@ -514,7 +515,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
     }
 
     function createShape(width: number, height: number, radius:number, displacementRatio: number,displacementArea: number, positionX, positionY, spread) {
-        const layers = buildSmallLayers(cyan, yellow, blue, magenta, red);
+        const layers = buildSmallLayers(cyan, yellow, blue, magenta, red, grey);
         const material = buildMaterial(width, height, radius, displacementRatio, displacementArea, layers, spread);
         const geometry = buildNightGeometry(radius, radius * 2);
         const mesh = new THREE.Mesh(geometry, material);
@@ -543,7 +544,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         const scene = new THREE.Scene();
 
 
-        const layers = buildMainLayers(cyan, yellow, blue, magenta, red);
+        const layers = buildMainLayers(cyan, yellow, blue, magenta, red, grey);
         const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, DISPLACEMENT_AREA, layers, 6.0);
 
         const geometry = buildNightGeometry(SPHERE_RADIUS, 18);
@@ -909,10 +910,8 @@ function buildVertexShader() {
 
         vec3 color;
 
-        vec3 color_0 = u_layers[0].color;
         color = u_base_color;
-        color -= (1.0-st.z) / 3.0;
-
+        // color -= (1.0-st.z) / 3.0;
 
         for (int i = 0; i < u_layers_count; i++) {
             if(u_layers[i].is_active == 1.0){
@@ -952,7 +951,7 @@ function buildVertexShader() {
                 float amount =
                     pow(
                         smoothstep( 0.0, .9,
-                            1.05 -
+                            1.0 -
                             distance(st, normalize(vec3(x, y, z) ) ) )
                     , u_color_spread);
                 color = blendNormal(color, nColor, amount);
