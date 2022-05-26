@@ -17,7 +17,7 @@ import "aos/dist/aos.css";
 import "../css/tailwind.css";
 import Pricing from "../partials/Pricing";
 import Head from "@docusaurus/Head";
-import { NewsletterWidget } from "../partials/NewsletterWidget";
+import { Newsletter } from "../partials/Newsletter";
 
 function Home() {
     const context = useDocusaurusContext();
@@ -28,7 +28,7 @@ function Home() {
             AOS.init();
             updateDarkModeClass();
         }
-    }, [ExecutionEnvironment.canUseDOM]);
+    }, [ExecutionEnvironment.canUseDOM, document]);
 
     function updateDarkModeClass() {
         if (!document) return;
@@ -57,7 +57,7 @@ function Home() {
         return () => {
             observer.disconnect();
         };
-    }, [ExecutionEnvironment.canUseDOM]);
+    }, [ExecutionEnvironment.canUseDOM, document]);
 
 
     return (
@@ -84,7 +84,7 @@ function Home() {
                     <Pricing/>
                     <Separator/>
 
-                    <NewsletterWidget/>
+                    <Newsletter/>
                     <Separator/>
 
                     <Testimonials/>

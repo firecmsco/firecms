@@ -1,13 +1,12 @@
-import * as functions from 'firebase-functions';
 import algoliasearch from "algoliasearch";
 
-const ALGOLIA_ID = functions.config().algolia.app_id;
-const ALGOLIA_ADMIN_KEY = functions.config().algolia.api_key;
-
-const client = algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY);
+const ALGOLIA_ID = process?.env?.ALGOLIA_APP_ID;
+const ALGOLIA_ADMIN_KEY = process?.env?.ALGOLIA_API_KEY;
 
 export function indexInAlgolia(indexName: string, data: any, id: string) {
-    const entry = {...data};
+    const client = ALGOLIA_ID && ALGOLIA_ADMIN_KEY ? algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY) : undefined;
+    if (!client) return;
+    const entry = { ...data };
     entry.objectID = id;
     const index = client.initIndex(indexName);
     return index.saveObject(entry).then((res) => {
@@ -17,6 +16,8 @@ export function indexInAlgolia(indexName: string, data: any, id: string) {
 }
 
 export function deleteInAlgolia(indexName: string, id: string) {
+    const client = ALGOLIA_ID && ALGOLIA_ADMIN_KEY ? algoliasearch(ALGOLIA_ID, ALGOLIA_ADMIN_KEY) : undefined;
+    if (!client) return;
     const index = client.initIndex(indexName);
     return index.deleteObject(id).then((res) => {
         console.debug("Deleted from index", indexName, res);

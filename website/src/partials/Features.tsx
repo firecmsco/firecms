@@ -232,21 +232,19 @@ function Features() {
                                         showLineNumbers={false}
                                         style={isDarkTheme ? vs2015 : atomOneLight}
                                     >
-                                        {`const productSchema: EntityCollection = buildCollection({
+{`const productCollection = buildCollection({
     name: "Product",
     properties: {
         name: {
             dataType: "string",
-            title: "Name"
+            title: "Name",
+            defaultValue: "Default name"
         },
         uppercase: {
             dataType: "string",
             title: "Uppercase Name",
             readOnly: true
         }
-    },
-    defaultValues: {
-        name: "Default name",
     }
 });
 

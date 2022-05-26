@@ -334,7 +334,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const draggable = (
         <Box
-            key={`draggable_${propertyKey}_${entity.id}_${open}`}
+            key={`draggable_${propertyKey as string}_${entity.id}_${open}`}
             sx={theme => ({
                 display: "inline-block",
                 userSelect: "none",

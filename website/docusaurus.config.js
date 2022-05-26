@@ -104,6 +104,18 @@ module.exports = {
                         {
                             label: 'Camberi',
                             to: 'https://camberi.com'
+                        },
+                        {
+                            label: 'Privacy policy',
+                            to: '/privacy_policy'
+                        },
+                        {
+                            label: 'Terms and conditions',
+                            to: '/terms_conditions'
+                        },
+                        {
+                            label: 'Cookies policy',
+                            to: '/cookies_policy'
                         }
                     ]
                 },
