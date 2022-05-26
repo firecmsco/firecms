@@ -18,17 +18,20 @@ import "../css/tailwind.css";
 import Pricing from "../partials/Pricing";
 import Head from "@docusaurus/Head";
 import { Newsletter } from "../partials/Newsletter";
+// import { Newsletter } from "../partials/Newsletter";
 
 function Home() {
     const context = useDocusaurusContext();
     const { siteConfig = {} } = context;
+
+    const documentEnabled = ExecutionEnvironment.canUseDOM ? document : undefined
 
     useEffect(() => {
         if (ExecutionEnvironment.canUseDOM) {
             AOS.init();
             updateDarkModeClass();
         }
-    }, [ExecutionEnvironment.canUseDOM, document]);
+    }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
 
     function updateDarkModeClass() {
         if (!document) return;
@@ -57,7 +60,7 @@ function Home() {
         return () => {
             observer.disconnect();
         };
-    }, [ExecutionEnvironment.canUseDOM, document]);
+    }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
 
 
     return (
