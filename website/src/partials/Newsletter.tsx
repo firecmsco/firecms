@@ -49,15 +49,17 @@ export const Newsletter = () => {
                 data-aos="fade-up"
                 data-aos-delay="100">
                 <div
-                    className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded shadow-2xl">
-                    <h2 className="h2 mb-4">
+                    className="relative flex flex-col items-center px-6 py-12 bg-white dark:bg-gray-900 rounded border-solid dark:border-gray-800 border-gray-200">
+                    <h2 className="h2 mb-8">
                         Stay in the loop
                     </h2>
 
                     <p>
                         We are working on a FireCMS <strong>cloud
                         offering</strong> that will include a state of the art
-                        collection editor. Sign up to be able to try it as soon
+                        collection editor.
+                    </p>
+                    <p> Sign up to be able to try it as soon
                         as it launches in beta!
                     </p>
 
