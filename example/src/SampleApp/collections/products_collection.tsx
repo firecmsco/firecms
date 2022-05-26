@@ -127,7 +127,7 @@ export const productsCollection = buildCollection<Product>({
         // field of the user
         delete: authController.extra?.roles?.includes("admin"),
     }),
-    extraActions: productExtraActionBuilder,
+    // extraActions: productExtraActionBuilder,
     subcollections: [localeCollection],
     views: [
         sampleView

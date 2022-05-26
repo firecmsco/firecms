@@ -27,16 +27,14 @@ import { TableColumn, TableColumnFilter } from "../Table";
 import {
     getIconForProperty,
     getPropertyInPath,
-    getResolvedPropertyInPath
-} from "../../util/property_utils";
-import {
+    getResolvedPropertyInPath,
+    getValueInPath,
     resolveCollection,
     resolveEnumValues,
     resolveProperty
-} from "../../util/resolutions";
+} from "../../util";
 import { useMediaQuery, useTheme } from "@mui/material";
 import { CollectionRowActions } from "./internal/CollectionRowActions";
-import { getValueInPath } from "../../util";
 
 export type ColumnsFromCollectionProps<M, AdditionalKey extends string, UserType extends User> = {
 

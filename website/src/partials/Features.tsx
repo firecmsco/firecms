@@ -14,7 +14,9 @@ import FirebaseLogo from "@site/static/img/firebase.svg";
 // @ts-ignore
 import pricePreview from "@site/static/img/price.png";
 // @ts-ignore
-import cmsPreviewVideo from "@site/static/img/editing.mp4";
+import editingDemoVideo from "@site/static/img/editing_demo.mp4";
+// @ts-ignore
+import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
 // @ts-ignore
 import customFieldVideo from "@site/static/img/custom_fields.mp4";
 
@@ -79,13 +81,15 @@ function Features() {
                         >
                             <div
                                 className="relative flex flex-col">
-
                                 <div className={"p-4"}>
                                     <video
-                                        className={"rounded-xl border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
+                                        key={`demo_video_${isDarkTheme}`}
+                                        style={{minHeight: 589}}
+                                        className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                                         width="100%" loop autoPlay muted>
-                                        <source src={cmsPreviewVideo}
-                                                type="video/mp4"/>
+                                        <source
+                                            src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
+                                            type="video/mp4"/>
                                     </video>
                                 </div>
 
@@ -110,7 +114,7 @@ function Features() {
                                 className="custom-code-block relative flex-col font-mono">
 
                                 <SyntaxHighlighter
-                                    className={"border-solid dark:border-gray-800 border-gray-200"}
+                                    className={"border border-solid dark:border-gray-800 border-gray-200"}
                                     language={"typescript"}
                                     showLineNumbers={false}
                                     style={isDarkTheme ? vs2015 : atomOneLight}
@@ -227,7 +231,7 @@ function Features() {
                                 <div
                                     className="custom-code-block relative flex-col font-mono">
                                     <SyntaxHighlighter
-                                        className={"border-solid dark:border-gray-800 border-gray-200"}
+                                        className={"border border-solid dark:border-gray-800 border-gray-200"}
                                         language={"typescript"}
                                         showLineNumbers={false}
                                         style={isDarkTheme ? vs2015 : atomOneLight}
@@ -276,7 +280,7 @@ const productCallbacks = buildEntityCallbacks({
                         >
                             <div className={"p-4"}>
                                 <video
-                                    className={"rounded-xl border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
+                                    className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                                     width="100%" loop autoPlay muted>
                                     <source src={customFieldVideo}
                                             type="video/mp4"/>

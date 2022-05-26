@@ -8,7 +8,7 @@
         "build": "yarn run copyChangelog && TYPEDOC_WATCH=false docusaurus build",
         "copyChangelog": "echo '---' > ./docs/CHANGELOG.md && echo 'id: changelog' >> ./docs/CHANGELOG.md && echo 'title: Changelog' >> ./docs/CHANGELOG.md && echo '---' >> ./docs/CHANGELOG.md && cat ../CHANGELOG.md >> ./docs/CHANGELOG.md ",
         "swizzle": "docusaurus swizzle --danger",
-        "deploy": "docusaurus deploy",
+        "deploy": "yarn build && firebase deploy --only hosting",
         "serve": "docusaurus serve",
         "clear": "docusaurus clear"
     },

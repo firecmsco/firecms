@@ -23,7 +23,7 @@ function HeroHome({}) {
         data-aos-delay="400"
         className="xl:max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4">
         <video
-            className={"rounded-xl border-solid dark:border-gray-800 border-gray-200"}
+            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
             width="100%" loop autoPlay muted>
             <source src={darkModeVideo} type="video/mp4"/>
         </video>

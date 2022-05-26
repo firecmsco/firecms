@@ -74,7 +74,11 @@ function Home() {
 
                     <Separator/>
 
+                    <Newsletter/>
+                    <Separator/>
+
                     <FirebaseIntro/>
+
                     <FeaturesHome/>
                     <Separator/>
 
@@ -84,8 +88,6 @@ function Home() {
                     <Pricing/>
                     <Separator/>
 
-                    <Newsletter/>
-                    <Separator/>
 
                     <Testimonials/>
 

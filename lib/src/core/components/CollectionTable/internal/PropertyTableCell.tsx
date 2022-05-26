@@ -128,7 +128,7 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
 
     useEffect(
         () => {
-            if (value !== internalValue) {
+            if (!equal(value, internalValue)) {
                 setInternalValue(value);
             }
         },
@@ -152,6 +152,13 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
                         });
                     }
                 })
+                .catch((e) => {
+                    console.error(e);
+                    setError(e);
+                });
+        } else {
+            validation
+                .validate(internalValue)
                 .catch((e) => {
                     console.error(e);
                     setError(e);

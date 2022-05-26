@@ -165,6 +165,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 context,
                 onSaveSuccess: () => setSaved(true),
                 onSaveFailure: (e: Error) => {
+                    console.error("Save failure");
                     console.error(e);
                     setError(e);
                 }
