@@ -161,12 +161,11 @@ module.exports = {
             {
                 docs: {
                     sidebarPath: require.resolve('./sidebars.js'),
-                    lastVersion: "current",
+                    lastVersion: "1.0.0",
                     editUrl: "https://github.com/Camberi/firecms/tree/website/website",
                     versions: {
                         "1.0.0": {
                             label: '1.0.0',
-                            path: '.'
                         },
                         current: {
                             label: '2.0.0-alpha',
