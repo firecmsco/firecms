@@ -1,12 +1,11 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { ResolvedStringProperty } from "../../models";
-import { PropertyPreviewProps } from "../internal";
+import { PropertyPreviewProps } from "../index";
 
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
+import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { StringPropertyPreview } from "./StringPropertyPreview";
 import { Theme } from "@mui/material";
-import { resolveArrayProperty } from "../../core/util/resolutions";
 
 const PREFIX = "ArrayOfStringsPreview";
 

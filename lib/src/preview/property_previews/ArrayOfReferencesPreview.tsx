@@ -2,11 +2,11 @@ import {
     PreviewSize,
     PropertyPreviewProps,
     ReferencePreview
-} from "../internal";
+} from "../index";
 import { ResolvedReferenceProperty } from "../../models";
 
 import { Box } from "@mui/material";
-import { resolveArrayProperty } from "../../core/util/resolutions";
+import { resolveArrayProperty } from "../../core";
 
 /**
  * @category Preview components

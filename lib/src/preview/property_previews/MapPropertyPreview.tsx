@@ -7,7 +7,7 @@ import {
     Typography
 } from "@mui/material";
 
-import { PropertyPreview, PropertyPreviewProps } from "../internal";
+import { PropertyPreview, PropertyPreviewProps } from "../index";
 import { ResolvedMapProperty } from "../../models";
 import { ErrorBoundary } from "../../core";
 

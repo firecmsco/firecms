@@ -2,17 +2,18 @@ import { PropsWithChildren, useCallback, useState } from "react";
 
 import { Accordion, AccordionDetails, AccordionSummary, } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { darken } from "@mui/material/styles";
 
 export function ExpandablePanel({
                                     title,
                                     children,
                                     expanded = true,
-                                    padding = 1
+                                    padding = 1,
+                                    darken = true
                                 }: PropsWithChildren<{
     title: React.ReactNode,
     expanded?: boolean;
     padding?: number | string;
+    darken?: boolean
 }>) {
 
     const [expandedInternal, setExpandedInternal] = useState(expanded);
@@ -20,6 +21,12 @@ export function ExpandablePanel({
         <Accordion variant={"outlined"}
                    disableGutters
                    expanded={expandedInternal}
+                   sx={{
+                       backgroundColor: darken ? undefined : "inherit"
+                       // backgroundColor: theme.palette.mode === "dark"
+                       //     ? darken(theme.palette.background.paper, 0.1)
+                       //     : darken(theme.palette.background.paper, 0.05),
+                   }}
                    TransitionProps={{ unmountOnExit: true }}
                    onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => setExpandedInternal(expanded), [])}>
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}
@@ -30,9 +37,6 @@ export function ExpandablePanel({
                                   borderTopRightRadius: `${theme.shape.borderRadius}px`,
                                   borderBottomLeftRadius: !expandedInternal ? `${theme.shape.borderRadius}px` : undefined,
                                   borderBottomRightRadius: !expandedInternal ? `${theme.shape.borderRadius}px` : undefined,
-                                  backgroundColor: theme.palette.mode === "dark"
-                                      ? darken(theme.palette.background.paper, 0.1)
-                                      : darken(theme.palette.background.paper, 0.05),
                                   "&.Mui-expanded": {
                                       borderBottom: `1px solid ${theme.palette.divider}`
                                   },

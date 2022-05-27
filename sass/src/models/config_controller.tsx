@@ -4,7 +4,7 @@ import { Role } from "./roles";
 
 /**
  * Use this controller to access the configuration that is stored externally,
- * and not defined in code
+ * and not defined in code.
  */
 export interface ConfigController {
 
@@ -18,10 +18,10 @@ export interface ConfigController {
 
     users: SassUser[];
 
-    saveUser: (user: SassUser) => Promise<void>;
+    saveUser: (user: SassUser) => Promise<SassUser>;
 
     roles: Role[];
 
-    saveRole: (id: string, role: Role) => Promise<void>;
+    saveRole: (role: Role) => Promise<void>;
 
 }

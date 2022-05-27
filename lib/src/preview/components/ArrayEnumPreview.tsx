@@ -5,8 +5,8 @@ import { styled } from "@mui/material/styles";
 import React from "react";
 
 import { ErrorBoundary } from "../../core";
-import { EnumValuesChip } from "./CustomChip";
-import { Theme } from "@mui/material";
+import { EnumValuesChip } from "./ColorChip";
+import { Box, Theme } from "@mui/material";
 import { PreviewSize } from "../PropertyPreviewProps";
 
 const PREFIX = "ArrayEnumPreview";
@@ -21,13 +21,7 @@ const Root = styled("div")((
         theme: Theme
     }
 ) => ({
-    [`&.${classes.arrayWrap}`]: {
-        display: "flex",
-        flexWrap: "wrap"
-    },
-
     [`& .${classes.arrayItem}`]: {
-        margin: theme.spacing(0.5)
     }
 }));
 
@@ -47,22 +41,24 @@ export function ArrayEnumPreview({
 }) {
 
     return (
-        <Root className={classes.arrayWrap}>
+        <Box sx={theme => ({
+            display: "flex",
+            flexWrap: "wrap",
+            gap: theme.spacing(0.5)
+        })}>
             {value &&
-            (value as any[]).map((enumKey, index) => {
-                    return (
-                        <div className={classes.arrayItem}
-                             key={`preview_array_ref_${name}_${index}`}>
-                            <ErrorBoundary>
+                (value as any[]).map((enumKey, index) => {
+                        return (
+                            <ErrorBoundary
+                                key={`preview_array_ref_${name}_${index}`}>
                                 <EnumValuesChip
                                     enumKey={enumKey}
                                     enumValues={enumValues}
                                     small={size !== "regular"}/>
                             </ErrorBoundary>
-                        </div>
-                    );
-                }
-            )}
-        </Root>
+                        );
+                    }
+                )}
+        </Box>
     );
 }

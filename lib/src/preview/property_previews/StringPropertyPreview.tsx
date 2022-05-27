@@ -1,8 +1,8 @@
 import React from "react";
 
 import { ErrorBoundary, resolvePropertyEnum } from "../../core";
-import { CustomChip, EnumValuesChip } from "../components/CustomChip";
-import { PropertyPreviewProps } from "../internal";
+import { ColorChip, EnumValuesChip } from "../components/ColorChip";
+import { PropertyPreviewProps } from "../index";
 
 /**
  * @category Preview components
@@ -24,7 +24,7 @@ export function StringPropertyPreview({
     } else if (property.previewAsTag) {
         return (
             <ErrorBoundary>
-                <CustomChip
+                <ColorChip
                     colorSeed={propertyKey ?? ""}
                     label={value}
                     small={size !== "regular"}

@@ -7,7 +7,7 @@ import {
     PreviewSize,
     PropertyPreview,
     PropertyPreviewProps
-} from "../internal";
+} from "../index";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../models";
 import {

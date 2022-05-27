@@ -29,7 +29,7 @@ export function EnumValuesChip({
     const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValues, enumKey?.toString()) : undefined;
     const label = buildEnumLabel(enumValue);
     const colorSchemaKey = getColorSchemaKey(enumValues, enumKey.toString());
-    return <CustomChip
+    return <ColorChip
         colorSeed={`${enumKey}`}
         colorSchemaKey={colorSchemaKey}
         label={label !== undefined ? label : enumKey}
@@ -38,32 +38,32 @@ export function EnumValuesChip({
         small={small}/>;
 }
 
-interface EnumChipProps {
-    colorSeed: string;
-    colorSchemaKey?: ChipColor;
+export interface ColorChipProps {
     label: string;
+    small?: boolean;
+    colorSeed?: string;
+    colorSchemaKey?: ChipColor;
     error?: boolean;
     outlined?: boolean;
-    small: boolean;
 }
 
 /**
  * @category Preview components
  */
-export function CustomChip({
+export function ColorChip({
                                colorSeed,
                                label,
                                colorSchemaKey,
                                error,
                                outlined,
                                small
-                           }: EnumChipProps) {
+                           }: ColorChipProps) {
 
     const theme = useTheme();
     const collection = useMemo(() =>
         colorSchemaKey
             ? getColorSchemeForKey(colorSchemaKey)
-            : getColorSchemeForSeed(colorSeed), [colorSeed, colorSchemaKey]);
+            : getColorSchemeForSeed(colorSeed ?? label), [colorSeed, colorSchemaKey, label]);
 
     return (
         <Chip

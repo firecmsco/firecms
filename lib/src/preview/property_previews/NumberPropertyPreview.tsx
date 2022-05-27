@@ -1,8 +1,8 @@
 import React from "react";
 
-import { EnumValuesChip } from "../components/CustomChip";
-import { PropertyPreviewProps } from "../internal";
-import { resolveEnumValues } from "../../core/util/resolutions";
+import { EnumValuesChip } from "../components/ColorChip";
+import { PropertyPreviewProps } from "../index";
+import { resolveEnumValues } from "../../core";
 
 /**
  * @category Preview components

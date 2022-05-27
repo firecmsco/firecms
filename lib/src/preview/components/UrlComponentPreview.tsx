@@ -4,7 +4,7 @@ import { Box, CardMedia, Link } from "@mui/material";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-import { PreviewSize } from "../internal";
+import { PreviewSize } from "../index";
 import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 import { FileType } from "../../models";

@@ -4,7 +4,7 @@ import {
     renderSkeletonImageThumbnail
 } from "../property_previews/SkeletonComponent";
 import { UrlComponentPreview } from "./UrlComponentPreview";
-import { PreviewSize } from "../internal";
+import { PreviewSize } from "../index";
 import { useStorageSource } from "../../hooks";
 import { DownloadConfig, FileType } from "../../models";
 

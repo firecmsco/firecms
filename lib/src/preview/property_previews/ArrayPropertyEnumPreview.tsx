@@ -1,4 +1,4 @@
-import { PropertyPreviewProps } from "../internal";
+import { PropertyPreviewProps } from "../index";
 import { ResolvedNumberProperty, ResolvedStringProperty } from "../../models";
 import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
 

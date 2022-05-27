@@ -26,11 +26,10 @@ import {
     StorageThumbnail,
     StringPropertyPreview,
     UrlComponentPreview
-} from "./internal";
-import { ErrorView } from "../core";
+} from "./index";
+import { ErrorView, resolveProperty } from "../core";
 
 import { PropertyPreviewProps } from "./PropertyPreviewProps";
-import { resolveProperty } from "../core/util/resolutions";
 
 /**
  * @category Preview components

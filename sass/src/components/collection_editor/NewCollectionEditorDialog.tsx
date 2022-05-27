@@ -10,7 +10,7 @@ import {
     useSnackbarController
 } from "@camberi/firecms";
 import { Form, Formik } from "formik";
-import { YupSchema } from "./SchemaYupValidation";
+import { YupSchema } from "./CollectionYupValidation";
 import { LoadingButton } from "@mui/lab";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
 import { CollectionEditorForm } from "./CollectionEditor";
@@ -41,7 +41,8 @@ export function NewCollectionEditorDialog<M>({
     const [error, setError] = React.useState<Error | undefined>();
 
     const onSaveCollection = useCallback((collection: EntityCollection<M>): Promise<boolean> => {
-        const fullPath = parentPath ? removeInitialAndTrailingSlashes(parentPath) + "/" + collection.path : collection.path;
+        const collectionId = collection.alias ?? collection.path;
+        const fullPath = parentPath ? removeInitialAndTrailingSlashes(parentPath) + "/" + collectionId : collectionId;
         return saveCollection(fullPath, collection)
             .then(() => {
                 setError(undefined);

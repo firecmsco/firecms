@@ -1,10 +1,9 @@
 import React from "react";
 import { ArrayProperty, ResolvedMapProperty } from "../../models";
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
+import { ErrorBoundary, resolveArrayProperty } from "../../core";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
-import { PropertyPreview, PropertyPreviewProps } from "../internal";
-import { resolveArrayProperty } from "../../core/util/resolutions";
+import { PropertyPreview, PropertyPreviewProps } from "../index";
 
 /**
  * @category Preview components

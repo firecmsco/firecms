@@ -8,7 +8,8 @@ import {
     Firestore,
     getFirestore,
     onSnapshot,
-    setDoc
+    setDoc,
+    addDoc
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef } from "react";
 import { ConfigController } from "./models/config_controller";
@@ -26,6 +27,7 @@ import {
 } from "@camberi/firecms";
 import { SassUser } from "./models/sass_user";
 import { Role } from "./models/roles";
+import { DEFAULT_ROLES } from "./util/permissions";
 
 /**
  * @category Firebase
@@ -114,6 +116,8 @@ export function useBuildFirestoreConfigController({
             {
                 next: (snapshot) => {
                     setRolesError(undefined);
+                    // TODO: remove this hack to generate the default roles
+                    if (snapshot.empty) DEFAULT_ROLES.forEach(saveRole);
                     try {
                         const newRoles = docsToRoles(snapshot.docs);
                         setRoles(newRoles);
@@ -170,18 +174,25 @@ export function useBuildFirestoreConfigController({
         return setDoc(ref, cleanedCollection, { merge: true });
     }, [configPath, firestore]);
 
-    const saveUser = useCallback(<M extends { [Key: string]: any }>(user:SassUser): Promise<void> => {
+    const saveUser = useCallback(<M extends { [Key: string]: any }>(user:SassUser): Promise<SassUser> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const ref = doc(firestore, configPath, "config", "users", user.id);
         console.debug("Persisting", user);
-        return setDoc(ref, user, { merge: true });
+        const { id, ...userData } = user;
+        if(id){
+            const ref = doc(firestore, configPath, "config", "users", id);
+            return setDoc(ref, userData, { merge: true }).then(() => user);
+        }else{
+            return addDoc(collection(firestore, configPath, "config", "users"), userData)
+                .then(ref => ({ id: ref.id, ...userData}));
+        }
     }, [configPath, firestore]);
 
-    const saveRole = useCallback(<M extends { [Key: string]: any }>(id:string, role:Role): Promise<void> => {
+    const saveRole = useCallback(<M extends { [Key: string]: any }>(role: Role): Promise<void> => {
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const ref = doc(firestore, configPath, "config", "users", id);
         console.debug("Persisting", role);
-        return setDoc(ref, role, { merge: true });
+        const { id, ...roleData } = role;
+        const ref = doc(firestore, configPath, "config", "roles", id);
+        return setDoc(ref, roleData, { merge: true });
     }, [configPath, firestore]);
 
     const collections = persistedCollections !== undefined ?  joinCollections(persistedCollections , baseCollections) : undefined;
@@ -240,10 +251,17 @@ const docsToCollectionTree = (docs: DocumentSnapshot[]): EntityCollection[] => {
 }
 
 const docsToUsers = (docs: DocumentSnapshot[]): SassUser[] => {
-    return docs.map((doc) => doc.data() as SassUser);
+    return docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+    } as SassUser));
 }
+
 const docsToRoles = (docs: DocumentSnapshot[]): Role[] => {
-    return docs.map((doc) => doc.data() as Role);
+    return docs.map((doc) => ({
+        id: doc.id,
+        ...doc.data()
+    } as Role));
 }
 
 const docToCollection = (doc: DocumentSnapshot): EntityCollection => {

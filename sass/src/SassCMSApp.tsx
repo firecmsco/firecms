@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo } from "react";
+import React, { useCallback } from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -38,26 +38,13 @@ import {
 } from "./components/SassEntityCollectionView";
 import { SassHomePage } from "./components/SassHomePage";
 import { UsersEditView } from "./components/UsersEditView";
-import { Role, Roles } from "./models/roles";
+import { getUserRoles } from "./util/permissions";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
 ];
 
-const DEFAULT_ROLES: Roles = {
-    "admin": {
-        isAdmin: true
-    },
-    "editor": {
-        isAdmin: false,
-        defaultPermissions: {
-            read: true,
-            create: true,
-            edit: true,
-            delete: false
-        }
-    }
-};
+
 
 /**
  * This is an example of how to use the components provided by FireCMS for
@@ -98,13 +85,7 @@ export function SassCMSApp() {
         // const sassUser = configController.users.find((sassUser) => sassUser.email === user?.email)
         // if (!sassUser) throw Error("No user was found with email " + user.email);
         // console.log("Allowing access to", user?.email);
-        // const userRoles = !configController.roles
-        //     ? undefined
-        //     : (sassUser.roles
-        //         ? sassUser.roles
-        //             .map(roleId => configController.roles[roleId])
-        //             .filter(Boolean) as Role[]
-        //         : [])
+        // const userRoles = getUserRoles(configController.roles, sassUser);
         // authController.setExtra({roles: userRoles});
         // return true;
     }, [configController]);

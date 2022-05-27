@@ -14,7 +14,7 @@ import {
 import { EntityReference, ResolvedProperty } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { PreviewSize, PropertyPreview, SkeletonComponent } from "../internal";
+import { PreviewSize, PropertyPreview, SkeletonComponent } from "../index";
 
 import { ErrorView } from "../../core";
 import {
@@ -22,7 +22,7 @@ import {
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
-import { resolveCollection } from "../../core/util/resolutions";
+import { resolveCollection } from "../../core";
 
 export type ReferencePreviewProps = {
     disabled: boolean;

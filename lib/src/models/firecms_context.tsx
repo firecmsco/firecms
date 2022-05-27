@@ -75,8 +75,7 @@ export interface FireCMSContext<UserType extends User = User> {
     snackbarController: SnackbarController;
 
     /**
-     * Use this controller to access the configuration that is stored externally,
-     * and not defined in code
+     * Use this controller to access data stored in the browser for the user
      */
     userConfigPersistence?: UserConfigurationPersistence;
 

@@ -9,7 +9,7 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
-import { EnumValuesChip } from "../../../../preview/components/CustomChip";
+import { EnumValuesChip } from "../../../../preview/components/ColorChip";
 import { TableEnumValues, TableWhereFilterOp } from "../TableProps";
 
 interface StringNumberFilterFieldProps {

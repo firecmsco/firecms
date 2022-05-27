@@ -6,6 +6,26 @@ import {
     User
 } from "@camberi/firecms";
 import { Role } from "../models/roles";
+import { SassUser } from "../models/sass_user";
+
+export const DEFAULT_ROLES: Role[] = [
+    {
+        id: "admin",
+        name: "Admin",
+        isAdmin: true
+    },
+    {
+        id: "editor",
+        name: "Editor",
+        isAdmin: false,
+        defaultPermissions: {
+            read: true,
+            create: true,
+            edit: true,
+            delete: false
+        }
+    }
+];
 
 const DEFAULT_PERMISSIONS = {
     read: true,
@@ -66,3 +86,12 @@ const mergePermissions = (permA: Permissions, permB: Permissions) => {
 }
 
 
+export function getUserRoles(roles: Role[], sassUser: SassUser) {
+    return !roles
+        ? undefined
+        : (sassUser.roles
+            ? sassUser.roles
+                .map(roleId => roles.find((r) => r.id === roleId))
+                .filter(Boolean) as Role[]
+            : []);
+}

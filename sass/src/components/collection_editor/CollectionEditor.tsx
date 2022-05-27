@@ -46,7 +46,7 @@ import {
 import { PropertyForm } from "./PropertyEditView";
 import { PropertyTree } from "./PropertyTree";
 import { LoadingButton } from "@mui/lab";
-import { YupSchema } from "./SchemaYupValidation";
+import { YupSchema } from "./CollectionYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
 
 export type CollectionEditorProps<M> = {
