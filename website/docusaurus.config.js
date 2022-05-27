@@ -27,7 +27,7 @@ module.exports = {
         announcementBar: {
             id: 'new_version_rc.5',
             content:
-                'Version 1.0.0 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/1.0.0/quickstart">quickstart</a> to get started!',
+                'Version 1.0.0 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/quickstart">quickstart</a> to get started!',
             backgroundColor: '#FF5B79',
             textColor: 'black',
             isCloseable: true,
@@ -161,18 +161,18 @@ module.exports = {
             {
                 docs: {
                     sidebarPath: require.resolve('./sidebars.js'),
-                    lastVersion: "1.0.0",
-                    editUrl: "https://github.com/Camberi/firecms/tree/master/website",
+                    lastVersion: "current",
+                    editUrl: "https://github.com/Camberi/firecms/tree/website/website",
                     versions: {
-                        current: {
-                            label: '2.0.0-alpha',
-                            path: '2.0.0',
-                            banner: "unreleased"
-                        },
                         "1.0.0": {
                             label: '1.0.0',
-                            path: '1.0.0'
+                            path: '/'
                         },
+                        current: {
+                            label: '2.0.0-alpha',
+                            path: 'next',
+                            banner: "unreleased"
+                        }
                     },
                 },
                 blog: {
