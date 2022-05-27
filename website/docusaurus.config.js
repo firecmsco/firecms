@@ -166,11 +166,11 @@ module.exports = {
                     versions: {
                         "1.0.0": {
                             label: '1.0.0',
-                            path: '/'
+                            path: '.'
                         },
                         current: {
                             label: '2.0.0-alpha',
-                            path: 'next',
+                            path: '2.0.0',
                             banner: "unreleased"
                         }
                     },
