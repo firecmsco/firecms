@@ -24,7 +24,7 @@ The props provided by this context are:
   CMSApp as well as the `schemaResolver` in case you want to override schemas
   to specific entities.
 
-* `navigationContext`: Context that includes the resolved navigation and utility methods and
+* `navigation`: Context that includes the resolved navigation and utility methods and
   attributes.
 
 * `sideEntityController`: Controller to open the side dialog displaying entity forms
@@ -32,3 +32,7 @@ The props provided by this context are:
 * `authController`: Used auth controller
 
 * `entityLinkBuilder`?: Builder for generating utility links for entities
+
+* `userConfigPersistence`: Use this controller to access data stored in the browser for the user
+
+* `snackbarController`: Use this controller to display snackbars

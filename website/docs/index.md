@@ -26,8 +26,7 @@ easy to create your custom form fields, or your complete views.
 There are two ways to build top level views in FireCMS:
 
 - By creating mapping configurations for **collections** (to datasource
-  collections, such as Firestore collections)
-  and **schemas** (to datasource entities, such as Firestore documents).
+  collections, such as Firestore collections, with your schema).
   The best way to get a grasp of how
   this works is checking the [Quickstart](quickstart.mdx) and
   [Collections](collections/collections.md)

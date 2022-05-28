@@ -192,7 +192,7 @@ function Features() {
                             data-aos="fade-right"
                             data-aos-delay="120"
                         >
-                            <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
+                            <div className="md:pr-4 lg:pr-10 xl:pr-12 mb-8">
                                 <div className={"flex items-center mb-3"}>
 
                                     <div
