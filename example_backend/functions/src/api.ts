@@ -6,13 +6,13 @@ import { addUserToMailchimp } from "./mailchimp";
 export const app = express();
 app.use(express.json());
 
-const whitelist = ['https://firecms.com', 'http://localhost:3000']
+const whitelist = ['https://firecms.co', 'http://localhost:3000']
 app.use(cors({
     origin: function (origin: string | undefined, callback: any) {
         if (origin && whitelist.indexOf(origin) !== -1) {
             callback(null, true)
         } else {
-            callback(new Error('Not allowed by CORS'))
+            callback(new Error('Not allowed by CORS ' + origin))
         }
     }
 }));
