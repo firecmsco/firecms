@@ -10,7 +10,7 @@ import {
 } from "@camberi/firecms";
 
 import "typeface-rubik";
-import "typeface-space-mono";
+import "@fontsource/ibm-plex-mono";
 
 // TODO: Replace with your config
 const firebaseConfig = {

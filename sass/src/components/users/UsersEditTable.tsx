@@ -1,15 +1,27 @@
-import { ColorChip, Table, TableColumn } from "@camberi/firecms";
-import { SassUser } from "../models/sass_user";
-import { Role } from "../models/roles";
-import { getUserRoles } from "../util/permissions";
+import {
+    ColorChip,
+    FireCMSContext,
+    Table,
+    TableColumn, useFireCMSContext
+} from "@camberi/firecms";
+import { SassUser } from "../../models/sass_user";
+import { Role } from "../../models/roles";
+import { getUserRoles } from "../../util/permissions";
 import { Box } from "@mui/material";
 
+import format from "date-fns/format";
+import * as locales from "date-fns/locale";
+import { defaultDateFormat } from "../../../../lib/src/core/util/dates";
 
 export function UsersEditTable({ users, roles, onUserClicked }: {
     users: SassUser[],
     roles: Role[],
     onUserClicked: (user: SassUser) => void;
 }) {
+
+    const appConfig: FireCMSContext<any> | undefined = useFireCMSContext();
+    const dateUtilsLocale = appConfig?.locale ? locales[appConfig?.locale] : undefined;
+    const dateFormat: string = appConfig?.dateTimeFormat ?? defaultDateFormat;
 
     const onRowClick = (props: { rowData: SassUser; rowIndex: number; rowKey: string; event: React.SyntheticEvent }) => {
         const user = props.rowData;
@@ -28,13 +40,13 @@ export function UsersEditTable({ users, roles, onUserClicked }: {
         cellRenderer: ({ cellData }) => <>{cellData}</>,
     }, {
         key: "name",
-        width: 250,
+        width: 220,
         title: "Name",
         headerAlign: "left",
-        cellRenderer: ({ cellData }) => <>{cellData}</>,
+        cellRenderer: ({ cellData }) => <Box sx={{ fontWeight: 500 }}>{cellData}</Box>,
     }, {
         key: "roles",
-        width: 200,
+        width: 220,
         title: "Roles",
         headerAlign: "left",
         cellRenderer: ({ cellData, rowData }) => {
@@ -49,6 +61,15 @@ export function UsersEditTable({ users, roles, onUserClicked }: {
             })}>
                 {userRoles.map(userRole => <ColorChip label={userRole.name}/>)}
             </Box> : null;
+        },
+    }, {
+        key: "created_on",
+        width: 200,
+        title: "Created on",
+        headerAlign: "left",
+        cellRenderer: ({ cellData }) => {
+            const formattedDate = cellData ? format(cellData, dateFormat, { locale: dateUtilsLocale }) : "";
+            return <>{formattedDate}</>;
         },
     }];
 

@@ -40,6 +40,7 @@
     },
     "dependencies": {
         "@date-io/date-fns": "^2.13.2",
+        "@fontsource/ibm-plex-mono": "^4.5.9",
         "@uiw/react-md-editor": "^3.11.0",
         "date-fns": "^2.28.0",
         "formik": "^2.2.9",
@@ -52,7 +53,6 @@
         "react-use-measure": "^2.1.1",
         "typeface-roboto": "^1.1.13",
         "typeface-rubik": "^1.1.13",
-        "typeface-space-mono": "^1.1.13",
         "yup": "^0.32.11"
     },
     "peerDependencies": {

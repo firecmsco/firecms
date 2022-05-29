@@ -48,7 +48,7 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import "typeface-rubik";
-import "typeface-space-mono";
+import "@fontsource/ibm-plex-mono";
 
 import {
     Authenticator,

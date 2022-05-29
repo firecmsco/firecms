@@ -37,7 +37,7 @@
     react-transition-group "^4.4.1"
     typeface-roboto "^1.1.13"
     typeface-rubik "^1.1.13"
-    typeface-space-mono "^1.1.13"
+    @fontsource/ibm-plex-mono "^1.1.13"
     use-clipboard-hook "^1.1.1"
     yup "^0.32.9"
 
@@ -2321,9 +2321,9 @@ typeface-rubik@^1.1.13:
   resolved "https://registry.yarnpkg.com/typeface-rubik/-/typeface-rubik-1.1.13.tgz#c01d40f05718590bc05d08ea404666a8ef56377a"
   integrity sha512-mMWgn3bYfT6V4WWA3yvdEM3AkTA7iK1XwhlOX3+vWfqHc6O9I2RUsi9krEXzNdQ1UE/eoEFBRigMtu30PsdEDg==
 
-typeface-space-mono@^1.1.13:
+@fontsource/ibm-plex-mono@^1.1.13:
   version "1.1.13"
-  resolved "https://registry.yarnpkg.com/typeface-space-mono/-/typeface-space-mono-1.1.13.tgz#b63acc9511d0c28b60a85d4e6805a716d9bdfc7a"
+  resolved "https://registry.yarnpkg.com/@fontsource/ibm-plex-mono/-/@fontsource/ibm-plex-mono-1.1.13.tgz#b63acc9511d0c28b60a85d4e6805a716d9bdfc7a"
   integrity sha512-F5ogC58i6PqmG+Q35gXHIZsaP822Lyd+xNBGYhNDKsffxaloamA9ecDum7OZG0qfQtmsuPbT7fiFOtLR1dPoow==
 
 typescript@^4.1.3:

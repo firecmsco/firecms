@@ -19,15 +19,17 @@ import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
 import { productsCollection } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
+import { galleryCollection } from "./collections/gallery_collection";
 
 import { textSearchController } from "./text_search";
+
 import {
     customCollectionOverrideHandler
 } from "./collections/custom_collection_resolver";
-
 import "typeface-rubik";
-import "typeface-space-mono";
-import { galleryCollection } from "./collections/gallery_collection";
+import "@fontsource/ibm-plex-mono";
+
+import "@fontsource/ibm-plex-mono";
 
 function SampleApp() {
 

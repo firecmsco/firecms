@@ -7,18 +7,19 @@ import { createTheme, Theme } from "@mui/material";
  * @category Hooks and utilities
  */
 export const createCMSDefaultTheme = (
-    { mode, primaryColor, secondaryColor, fontFamily }: {
+    { mode, primaryColor, secondaryColor, fontFamily, headersFontFamily }: {
         mode: "light" | "dark";
         primaryColor?: string;
         secondaryColor?: string;
         fontFamily?: string;
+        headersFontFamily?: string;
     }): Theme => {
 
     const radius = 6;
 
     const original = createTheme({
         palette: {
-            mode: mode,
+            mode,
             background: {
                 default: mode === "dark" ? "#222224" : "#f8f8fa",
                 paper: mode === "dark" ? "#121214" : "#ffffff"
@@ -37,11 +38,32 @@ export const createCMSDefaultTheme = (
             borderRadius: radius
         },
         typography: {
-            fontFamily: fontFamily || "\"Rubik\", \"Roboto\", \"Helvetica\", \"Arial\", sans-serif",
+            fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
             fontWeightMedium: 500,
             h6: {
-                fontWeight: 500,
-                fontSize: "1.15rem"
+                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontWeight: 600
+                // fontSize: "1.15rem"
+            },
+            h5: {
+                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontWeight: 600
+            },
+            h4: {
+                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontWeight: 600
+            },
+            h3: {
+                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontWeight: 600
+            },
+            h2: {
+                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontWeight: 600
+            },
+            h1: {
+                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontWeight: 600
             }
         },
         components: {
@@ -65,7 +87,7 @@ export const createCMSDefaultTheme = (
                 styleOverrides: {
                     root: {
                         "&.mono": {
-                            fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                            fontFamily: "'IBM Plex Mono', 'Space Mono', monospace, 'Lucida Console'"
                         },
                         "&.weight-500": {
                             fontWeight: 500
@@ -100,7 +122,7 @@ export const createCMSDefaultTheme = (
     });
 
     return {
-        ...original,
+        ...original
         // shadows: original.shadows.map((value, index) => {
         //     if (index == 1) return "0 1px 1px 0 rgb(0 0 0 / 16%)";
         //     else return value;
