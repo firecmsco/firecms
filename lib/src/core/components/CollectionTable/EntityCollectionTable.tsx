@@ -118,7 +118,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                                         path,
                                         entityId: entity.id,
                                         selectedSubPath: subcollection.path,
-                                        collection: collection,
+                                        collection,
                                         updateUrl: true
                                     });
                                 }}>

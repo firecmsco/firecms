@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { CollectionSize, Entity, EntityCollection } from "../../models";
-import { Box, Button, Dialog, Typography } from "@mui/material";
+import { Box, Button, Typography, useTheme } from "@mui/material";
 
 import { EntityCollectionTable } from "./CollectionTable";
 import {
@@ -9,16 +9,14 @@ import {
 import { useDataSource, useNavigationContext } from "../../hooks";
 import { ErrorView } from "./ErrorView";
 import { CustomDialogActions } from "./CustomDialogActions";
+import { useSideDialogsController } from "../../hooks/useSideDialogsController";
+import { useSideDialogContext } from "../SideDialogs";
+import { CONTAINER_FULL_WIDTH } from "../internal/common";
 
 /**
  * @category Components
  */
 export interface ReferenceDialogProps {
-
-    /**
-     * Is the dialog currently open
-     */
-    open: boolean;
 
     /**
      * Allow multiple selection of values
@@ -31,7 +29,9 @@ export interface ReferenceDialogProps {
     collection: EntityCollection;
 
     /**
-     * Absolute path of the collection
+     * Absolute path of the collection.
+     * May be not set if this hook is being used in a component and the path is
+     * dynamic. If not set, the dialog won't open.
      */
     path: string;
 
@@ -61,13 +61,41 @@ export interface ReferenceDialogProps {
      * Is the dialog currently open
      * @callback
         */
-    onClose(): void;
+    onClose?(): void;
+
+}
+
+export function useReferenceDialogController(referenceDialogProps: Omit<ReferenceDialogProps, "path"> & {
+    path?: string | false;
+}) {
+
+    const sideDialogsController = useSideDialogsController();
+    const open = useCallback(() => {
+        if (referenceDialogProps.path) {
+            sideDialogsController.open({
+                key: `reference_${referenceDialogProps.path}`,
+                Component: ReferenceDialog,
+                props: referenceDialogProps as ReferenceDialogProps,
+                width: "90vw"
+            });
+        }
+    }, [referenceDialogProps, sideDialogsController]);
+
+    const close = useCallback(() => {
+        sideDialogsController.close();
+    }, [sideDialogsController]);
+
+    return {
+        open,
+        close
+    }
 
 }
 
 /**
  * This component renders an overlay dialog that allows to select entities
- * in a given collection
+ * in a given collection.
+ * You probably want to open this dialog as a side view using {@link useReferenceDialogController}
  * @category Components
  */
 export function ReferenceDialog(
@@ -75,7 +103,6 @@ export function ReferenceDialog(
         onSingleEntitySelected,
         onMultipleEntitiesSelected,
         onClose,
-        open,
         multiselect,
         collection,
         path: pathInput,
@@ -83,6 +110,9 @@ export function ReferenceDialog(
     }: ReferenceDialogProps) {
 
     const navigationContext = useNavigationContext();
+    const sideDialogContext = useSideDialogContext();
+
+    const theme = useTheme();
 
     const path = navigationContext.resolveAliasesFrom(pathInput);
 
@@ -90,6 +120,9 @@ export function ReferenceDialog(
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
 
+    /**
+     * Fetch initially selected ids
+     */
     useEffect(() => {
         let unmounted = false;
         if (selectedEntityIds && collection) {
@@ -113,14 +146,6 @@ export function ReferenceDialog(
         };
     }, [dataSource, path, selectedEntityIds, collection]);
 
-    const onEntityClick = (entity: Entity<any>) => {
-        if (!multiselect && onSingleEntitySelected) {
-            onSingleEntitySelected(entity);
-        } else {
-            toggleEntitySelection(entity);
-        }
-    };
-
     const onClear = useCallback(() => {
         if (!multiselect && onSingleEntitySelected) {
             onSingleEntitySelected(null);
@@ -129,7 +154,7 @@ export function ReferenceDialog(
         }
     }, [multiselect, onMultipleEntitiesSelected, onSingleEntitySelected]);
 
-    const toggleEntitySelection = (entity: Entity<any>) => {
+    const toggleEntitySelection = useCallback((entity: Entity<any>) => {
         let newValue;
         if (selectedEntities) {
             if (selectedEntities.map((e) => e.id).indexOf(entity.id) > -1) {
@@ -142,14 +167,22 @@ export function ReferenceDialog(
             if (onMultipleEntitiesSelected)
                 onMultipleEntitiesSelected(newValue);
         }
-    };
+    }, [onMultipleEntitiesSelected, selectedEntities]);
 
-    const tableRowActionsBuilder = ({
-                                        entity,
-                                        size
-                                    }: { entity: Entity<any>, size: CollectionSize }) => {
+    const onEntityClick = useCallback((entity: Entity<any>) => {
+        if (!multiselect && onSingleEntitySelected) {
+            onSingleEntitySelected(entity);
+        } else {
+            toggleEntitySelection(entity);
+        }
+    }, [multiselect, onSingleEntitySelected, toggleEntitySelection]);
 
-        const isSelected = selectedEntityIds && selectedEntityIds.indexOf(entity.id) > -1;
+    const tableRowActionsBuilder = useCallback(({
+                                                    entity,
+                                                    size
+                                                }: { entity: Entity<any>, size: CollectionSize }) => {
+
+        const isSelected = selectedEntities && selectedEntities.map(e => e.id).indexOf(entity.id) > -1;
         return <CollectionRowActions
             entity={entity}
             size={size}
@@ -158,7 +191,7 @@ export function ReferenceDialog(
             toggleEntitySelection={toggleEntitySelection}
         />;
 
-    };
+    }, [multiselect, selectedEntityIds, toggleEntitySelection]);
 
     if (!collection) {
         return <ErrorView
@@ -166,54 +199,45 @@ export function ReferenceDialog(
     }
 
     return (
-        <Dialog
-            keepMounted={false}
-            onClose={onClose}
-            PaperProps={{
-                sx: (theme) => ({
-                    height: "90vh",
-                    minWidth: "85vw"
-                })
-            }}
-            maxWidth={"xl"}
-            scroll={"paper"}
-            open={open}>
 
             <Box sx={{
-                flexGrow: 1,
-                overflow: "auto"
+                display: "flex",
+                flexDirection: "column",
+                height: "100%"
             }}>
 
+                <Box sx={{ flexGrow: 1}}>
                 {selectedEntities &&
                     <EntityCollectionTable path={path}
                                            collection={collection}
                                            onEntityClick={onEntityClick}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
                                            Title={<Typography variant={"h6"}>
-                                         {`Select ${collection.name}`}
-                                     </Typography>}
+                                               {`Select ${collection.singularName}`}
+                                           </Typography>}
                                            inlineEditing={false}
                                            Actions={<Button onClick={onClear}
-                                                      color="primary">
-                                         Clear
-                                     </Button>}
+                                                            color="primary">
+                                               Clear
+                                           </Button>}
                                            entitiesDisplayedFirst={selectedEntities}
                     />}
+                </Box>
+                <CustomDialogActions translucent={false}>
+                    <Button
+                        onClick={(event) => {
+                            event.stopPropagation();
+                            sideDialogContext.close();
+                            if (onClose)
+                                onClose();
+                        }}
+                        color="primary"
+                        variant="outlined">
+                        Done
+                    </Button>
+                </CustomDialogActions>
             </Box>
 
-            <CustomDialogActions>
-                <Button
-                    onClick={(event) => {
-                        event.stopPropagation();
-                        onClose();
-                    }}
-                    color="primary"
-                    variant="outlined">
-                    Done
-                </Button>
-            </CustomDialogActions>
-
-        </Dialog>
     );
 
 }

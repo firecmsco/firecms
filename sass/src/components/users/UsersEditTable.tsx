@@ -11,7 +11,7 @@ import { Box } from "@mui/material";
 
 import format from "date-fns/format";
 import * as locales from "date-fns/locale";
-import { defaultDateFormat } from "../../../../lib/src/core/util/dates";
+import { defaultDateFormat } from "../utils/dates";
 
 export function UsersEditTable({ users, roles, onUserClicked }: {
     users: SassUser[],

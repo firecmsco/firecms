@@ -18,7 +18,8 @@ const priceBuilder:PropertyBuilder = ({ values }: any) => ({
 
 export const baseProductCollection: EntityCollection = {
     path: "product",
-    name: "Product",
+    name: "Products",
+    singularName: "Product",
     properties: {
         name: {
             dataType: "string",
@@ -39,7 +40,8 @@ export const baseProductCollection: EntityCollection = {
 
 export const persistedProductCollection: EntityCollection = {
     path: "product",
-    name: "Product persisted",
+    name: "Products persisted",
+    singularName: "Product persisted",
     properties: {
         name: {
             dataType: "string",

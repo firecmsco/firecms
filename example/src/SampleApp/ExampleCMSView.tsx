@@ -35,7 +35,7 @@ export function ExampleCMSView({
 
     const customProductCollection = buildCollection({
         path: "custom_product",
-        name: "Custom product",
+        name: "Custom products",
         properties: {
             name: {
                 name: "Name",

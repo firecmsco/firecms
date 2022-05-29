@@ -76,3 +76,12 @@ export function removeNonEditableProperties(properties: PropertiesOrBuilders<any
         .filter((e) => Boolean(e))
         .reduce((a, b) => ({ ...a, ...b }), {}) as Properties;
 }
+
+export function getFistAdditionalView<M>(collection: EntityCollection<M>) {
+    const subcollections = collection.subcollections;
+    const subcollectionsCount = subcollections?.length ?? 0;
+    const customViews = collection.views;
+    const customViewsCount = customViews?.length ?? 0;
+    const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
+    return !hasAdditionalViews ? undefined : (customViews && customViews?.length > 0 ? customViews[0] : (subcollections && subcollections?.length > 0 ? subcollections[0] : undefined));
+}

@@ -10,7 +10,10 @@ import {
     LocalEntityCollection,
     SelectionController
 } from "../../../models";
-import { EntityCollectionTable, OnColumnResizeParams } from "../CollectionTable";
+import {
+    EntityCollectionTable,
+    OnColumnResizeParams
+} from "../CollectionTable";
 
 import {
     CollectionRowActions
@@ -28,11 +31,7 @@ import {
     removeInitialAndTrailingSlashes
 } from "../../util";
 import { Markdown } from "../../../preview";
-import {
-    useAuthController,
-    useNavigationContext,
-    useSideEntityController
-} from "../../../hooks";
+import { useAuthController, useSideEntityController } from "../../../hooks";
 import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
@@ -43,6 +42,7 @@ import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
  */
 export type EntityCollectionViewProps<M extends { [Key: string]: unknown }> = {
     fullPath: string;
+    isSubCollection?: boolean;
 } & EntityCollection<M>;
 
 /**
@@ -72,6 +72,7 @@ export type EntityCollectionViewProps<M extends { [Key: string]: unknown }> = {
 export const EntityCollectionView = React.memo(
     function EntityCollectionViewInternal<M extends { [Key: string]: unknown }>({
                                                                                     fullPath,
+                                                                                    isSubCollection,
                                                                                     ...collection
                                                                                 }: EntityCollectionViewProps<M>
     ) {
@@ -178,9 +179,9 @@ export const EntityCollectionView = React.memo(
             }}>
                 <Box>
                     <Typography
-                        variant="h6"
+                        variant={isSubCollection ? "h6" : "h5"}
                         sx={{
-                            lineHeight: "1.0",
+                            lineHeight: "1.15",
                             textOverflow: "ellipsis",
                             whiteSpace: "nowrap",
                             overflow: "hidden",
@@ -240,7 +241,7 @@ export const EntityCollectionView = React.memo(
                 </Box>
 
             </Box>
-        ), [collection.description, collection.name, fullPath, open, anchorEl]);
+        ), [collection.description, collection.singularName, fullPath, open, anchorEl]);
 
         const tableRowActionsBuilder = useCallback(({
                                                         entity,

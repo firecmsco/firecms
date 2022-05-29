@@ -56,7 +56,7 @@ export function EntityCollectionViewActions<M>({
                 size="large"
                 variant="contained"
                 color="primary">
-                Add {collection.name}
+                Add {collection.singularName ?? collection.name}
             </Button>
             : <Button
                 onClick={onNewClick}

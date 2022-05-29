@@ -32,6 +32,7 @@ const sampleAdditionalExportColumn: ExportMappingFunction = {
 export const blogCollection = buildCollection<BlogEntry>({
     path: "blog",
     name: "Blog",
+    singularName: "Blog entry",
     group: "Content",
     icon: "Article",
     exportable: {

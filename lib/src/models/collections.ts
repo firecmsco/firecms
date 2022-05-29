@@ -18,9 +18,16 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     UserType extends User = User> {
 
     /**
-     * Singular name of the entity as displayed in an Add button . E.g. Product
+     * Name of the collection, typically plural.
+     * E.g. `Products`, `Blog`
      */
     name: string;
+
+    /**
+     * Singular name of an entry in this collection
+     * E.g. `Product`, `Blog entry`
+     */
+    singularName?: string;
 
     /**
      * Optional description of this view. You can use Markdown.

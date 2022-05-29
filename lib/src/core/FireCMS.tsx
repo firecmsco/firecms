@@ -153,7 +153,7 @@ export interface FireCMSProps<UserType extends User> {
 
     /**
      * Component used to render a collection view.
-     * Defaults to {@link NavigationEntityCollectionView}
+     * Defaults to {@link EntityCollectionView}
      */
     EntityCollectionViewComponent?: React.ComponentType<EntityCollectionViewProps<any>>;
 

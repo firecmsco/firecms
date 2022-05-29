@@ -14,13 +14,18 @@ import {
 } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
 import { EntitySidePanel } from "../EntitySidePanel";
-import { removeInitialAndTrailingSlashes } from "../util";
+import {
+    getFistAdditionalView,
+    removeInitialAndTrailingSlashes
+} from "../util";
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
 
 const NEW_URL_HASH = "new";
 
 export function getEntityViewWidth(props: EntitySidePanelProps<any, any>, small: boolean): string {
     if (small) return CONTAINER_FULL_WIDTH;
+    const hasAdditionalViews = ((props.collection?.subcollections ?? []).length > 0) || ((props.collection?.views ?? []).length > 0);
+    console.log("getEntityViewWidth", hasAdditionalViews, props);
     const mainViewSelected = !props.selectedSubPath;
     const resolvedWidth: string | undefined = typeof props.width === "number" ? `${props.width}px` : props.width;
     return !mainViewSelected ? `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})` : resolvedWidth ?? CONTAINER_WIDTH
@@ -53,15 +58,16 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
         const newPath = props.entityId
             ? navigation.buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`)
             : navigation.buildUrlCollectionPath(`${collectionPath}#${NEW_URL_HASH}`);
+
         return ({
             key: `${props.path}/${props.entityId}`,
             Component: EntitySidePanel,
-            props: props,
+            props,
             urlPath: newPath,
             parentUrlPath: navigation.buildUrlCollectionPath(collectionPath),
             width: getEntityViewWidth(props, smallLayout)
         });
-    }, [navigation]);
+    }, [navigation, smallLayout]);
 
     const close = useCallback(() => {
         sideDialogsController.close();
@@ -72,8 +78,8 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
         if (props.copy && !props.entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
-
-        sideDialogsController.open(propsToSidePanel(props));
+        const fistAdditionalView = props.collection ? getFistAdditionalView(props.collection) : undefined;
+        sideDialogsController.open(propsToSidePanel({ selectedSubPath: fistAdditionalView?.path, ...props }));
 
     }, [sideDialogsController]);
 

@@ -86,6 +86,7 @@ export function NavigationRoutes({ HomePage = FireCMSHomePage }: NavigationRoute
                                       path={urlPath}
                                       title={collection.name}>
                                       <EntityCollectionViewComponent
+                                          isSubCollection={false}
                                           fullPath={collection.path}
                                           {...collection}/>
                                   </BreadcrumbUpdater>

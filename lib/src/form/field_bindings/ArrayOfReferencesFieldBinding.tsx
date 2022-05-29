@@ -9,14 +9,12 @@ import {
 } from "../../models";
 import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
-import {
-    ErrorView,
-    ExpandablePanel,
-    getReferenceFrom,
-    ReferenceDialog
-} from "../../core";
+import { ErrorView, ExpandablePanel, getReferenceFrom } from "../../core";
 
 import { useClearRestoreValue, useNavigationContext } from "../../hooks";
+import {
+    useReferenceDialogController
+} from "../../core/components/ReferenceDialog";
 
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -46,9 +44,8 @@ export function ArrayOfReferencesFieldBinding({
     }
 
     const expanded = property.expanded === undefined ? true : property.expanded;
-    const [open, setOpen] = React.useState(false);
     const [onHover, setOnHover] = React.useState(false);
-    const selectedIds = value && Array.isArray(value) ? value.map((ref) => ref.id) : [];
+    const selectedEntityIds = value && Array.isArray(value) ? value.map((ref) => ref.id) : [];
 
     useClearRestoreValue({
         property,
@@ -65,17 +62,22 @@ export function ArrayOfReferencesFieldBinding({
         throw Error(`Couldn't find the corresponding collection for the path: ${ofProperty.path}`);
     }
 
-    const onEntryClick = () => {
-        setOpen(true);
-    };
-
-    const onClose = () => {
-        setOpen(false);
-    };
-
-    const onMultipleEntitiesSelected = (entities: Entity<any>[]) => {
+    const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
         setValue(entities.map(e => getReferenceFrom(e)));
-    };
+    }, [setValue]);
+
+    const referenceDialogController = useReferenceDialogController({
+            multiselect: true,
+            path: ofProperty.path,
+            collection,
+            onMultipleEntitiesSelected,
+            selectedEntityIds
+        }
+    );
+
+    const onEntryClick = useCallback(() => {
+        referenceDialogController.open();
+    }, [referenceDialogController]);
 
     const buildEntry = useCallback((index: number, internalId: number) => {
         const entryValue = value && value.length > index ? value[index] : undefined;
@@ -145,16 +147,6 @@ export function ArrayOfReferencesFieldBinding({
                     <FormHelperText>{error}</FormHelperText>}
 
             </FormControl>
-
-            {collection && ofProperty.path &&
-                <ReferenceDialog open={open}
-                                 multiselect={true}
-                                 collection={collection}
-                                 path={ofProperty.path}
-                                 onClose={onClose}
-                                 onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                                 selectedEntityIds={selectedIds}
-                />}
         </>
     );
 }

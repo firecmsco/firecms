@@ -30,7 +30,7 @@ export interface EntitySidePanelProps<M = any, UserType extends User = User> {
     selectedSubPath?: string;
 
     /**
-     * Use this prop to override the width of the side dialog.
+     * Use this prop to override the width of the form view.
      * e.g. "600px"
      */
     width?: number | string;

@@ -201,10 +201,8 @@ const TableCellInternal = ({
                         backgroundColor: disabled ? undefined : (theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default)
                     },
                     justifyContent: justifyContent,
-
                     border: border,
-                    alpha: disabled ? 0.8 : undefined,
-
+                    // alpha: disabled ? 0.8 : undefined,
                     backgroundColor: isSelected ? theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default : undefined,
                     transition: "border-color 300ms ease-in-out"
                 }}>

@@ -99,7 +99,9 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
 
             {(editEnabled || deleteEnabled || selectionEnabled) &&
             <Box sx={{
-                minWidth: 138
+                minWidth: 138,
+                display: "flex",
+                justifyContent: "center"
             }}
             >
                 {editEnabled &&

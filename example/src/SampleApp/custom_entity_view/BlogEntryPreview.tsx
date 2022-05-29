@@ -58,7 +58,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams) {
                            display: "flex",
                            flexDirection: "column"
                        }}>
-                {modifiedValues?.name && <Typography variant={"h2"} sx={{
+                {modifiedValues?.name && <Typography variant={"h3"} sx={{
                     marginTop: "40px",
                     marginBottom: "20px"
                 }}>

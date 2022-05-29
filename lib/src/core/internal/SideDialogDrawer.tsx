@@ -35,7 +35,6 @@ export interface StyleProps {
     offsetPosition: number;
 }
 
-
 const defaultTransitionDuration = {
     enter: 225,
     exit: 175

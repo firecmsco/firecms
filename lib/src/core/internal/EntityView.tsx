@@ -14,6 +14,7 @@ import {
     IconButton,
     Tab,
     Tabs,
+    Typography,
     useMediaQuery,
     useTheme
 } from "@mui/material";
@@ -34,6 +35,7 @@ import {
 import {
     canEditEntity,
     fullPathToCollectionSegments,
+    getFistAdditionalView,
     removeInitialAndTrailingSlashes
 } from "../util";
 
@@ -101,7 +103,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const customViewsCount = customViews?.length ?? 0;
 
         const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
-        const fistAdditionalView = !hasAdditionalViews ? undefined : (customViews && customViews?.length > 0 ? customViews[0] : (subcollections && subcollections?.length > 0 ? subcollections[0] : undefined));
+        const fistAdditionalView = getFistAdditionalView(collection);
 
         const selectFirstTab = !selectedSubPath && largeLayout && fistAdditionalView;
         const [tabsPosition, setTabsPosition] = React.useState(selectFirstTab ? 0 : -1);
@@ -181,7 +183,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const onSaveSuccessHookError = useCallback((e: Error) => {
             snackbarController.open({
                 type: "error",
-                title: `${collection.name}: Error after saving (entity is saved)`,
+                title: `${collection.singularName ?? collection.name}: Error after saving (entity is saved)`,
                 message: e?.message
             });
             console.error(e);
@@ -193,7 +195,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
             snackbarController.open({
                 type: "success",
-                message: `${collection.name}: Saved correctly`
+                message: `${collection.singularName ?? collection.name}: Saved correctly`
             });
 
             setStatus("existing");
@@ -208,7 +210,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
             snackbarController.open({
                 type: "error",
-                title: `${collection.name}: Error saving`,
+                title: `${collection.singularName ?? collection.name}: Error saving`,
                 message: e?.message
             });
 
@@ -306,6 +308,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                             (entity && fullPath
                                 ? <EntityCollectionViewComponent
                                     fullPath={fullPath}
+                                    isSubCollection={true}
                                     {...subcollection}/>
                                 : <Box m={3}
                                        display={"flex"}
@@ -379,6 +382,28 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 </Suspense>
             );
 
+        const subcollectionTabs = subcollections && subcollections.map(
+            (subcollection) =>
+                <Tab
+                    sx={{
+                        fontSize: "0.875rem",
+                        minWidth: "140px"
+                    }}
+                    wrapped={true}
+                    key={`entity_detail_collection_tab_${subcollection.name}`}
+                    label={subcollection.name}/>
+        );
+        const customViewTabs = customViews && customViews.map(
+            (view) =>
+                <Tab
+                    sx={{
+                        fontSize: "0.875rem",
+                        minWidth: "140px"
+                    }}
+                    wrapped={true}
+                    key={`entity_detail_custom_tab_${view.name}`}
+                    label={view.name}/>
+        );
         const header = (
             <Box sx={{
                 paddingLeft: 2,
@@ -393,18 +418,30 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     sx={{
                         pb: 1,
                         alignSelf: "center"
-                    }}
-                >
+                    }}>
                     <IconButton onClick={() => sideDialogContext.close()}
                                 size="large">
                         <CloseIcon/>
                     </IconButton>
                 </Box>
 
+                {largeLayout && <Typography
+                    sx={{
+                        pl: 2,
+                        pb: 1,
+                        alignSelf: "center"
+                    }}
+                    variant={"h5"}>{collection.singularName ?? collection.name}
+                </Typography>}
+
                 <Box flexGrow={1}/>
 
-                {dataLoading &&
-                    <CircularProgress size={16} thickness={8}/>}
+                {dataLoading && <Box
+                    sx={{
+                        alignSelf: "center"
+                    }}>
+                    <CircularProgress size={16} thickness={8}/>
+                </Box>}
 
                 <Tabs
                     value={tabsPosition + 1}
@@ -422,40 +459,18 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     variant="scrollable"
                     scrollButtons="auto"
                 >
-
                     <Tab
-                        label={collection.name}
+                        label={collection.singularName ?? collection.name}
                         disabled={largeLayout || !hasAdditionalViews}
                         sx={{
+                            display: largeLayout ? "none" : undefined,
                             fontSize: "0.875rem",
                             minWidth: "140px"
                         }}
                         wrapped={true}
                     />
-
-                    {customViews && customViews.map(
-                        (view) =>
-                            <Tab
-                                sx={{
-                                    fontSize: "0.875rem",
-                                    minWidth: "140px"
-                                }}
-                                wrapped={true}
-                                key={`entity_detail_custom_tab_${view.name}`}
-                                label={view.name}/>
-                    )}
-
-                    {subcollections && subcollections.map(
-                        (subcollection) =>
-                            <Tab
-                                sx={{
-                                    fontSize: "0.875rem",
-                                    minWidth: "140px"
-                                }}
-                                wrapped={true}
-                                key={`entity_detail_collection_tab_${subcollection.name}`}
-                                label={subcollection.name}/>
-                    )}
+                    {customViewTabs}
+                    {subcollectionTabs}
 
                 </Tabs>
             </Box>

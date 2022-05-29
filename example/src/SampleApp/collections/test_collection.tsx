@@ -172,7 +172,7 @@ export const testCollection = buildCollection({
     callbacks: testCallbacks,
     path: "test_entity",
     customId: false,
-    name: "Test entity",
+    name: "Test entities",
     properties: {
         form: {
             dataType: "array",

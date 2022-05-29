@@ -41,7 +41,7 @@ const testProperty3: StringProperty = buildProperty({
 
 export const productsCollection = buildCollection<any>({
     path: "products",
-    name: "Product",
+    singularName: "Product",
     views: [
         {
             path: "custom_view",
@@ -197,7 +197,7 @@ export const productsCollection = buildCollection<any>({
 const localeCollection = buildCollection({
     path: "locales",
     customId: locales,
-    name: "Locale",
+    singularName: "Locale",
     properties: {
         title: buildProperty({
             title: "Title",
@@ -250,7 +250,7 @@ const productCallbacks: EntityCallbacks<any> = {
 
 export const usersCollection = buildCollection({
     path: "users",
-    name: "Users",
+    singularName: "Users",
     group: "Main",
     description: "Registered users",
     textSearchEnabled: true,
@@ -308,28 +308,28 @@ export const siteConfig: FirebaseCMSAppProps = {
             ...productsCollection,
             path: "products",
             callbacks: productCallbacks,
-            name: "Products",
+            singularName: "Products",
             subcollections: [localeCollection]
         }),
         buildCollection({
             ...productsCollection,
             path: "sites/es/products",
             callbacks: productCallbacks,
-            name: "Products",
+            singularName: "Products",
             subcollections: [localeCollection]
         }),
         buildCollection({
             ...productsCollection,
             path: "products/id/subcollection_inline",
             callbacks: productCallbacks,
-            name: "Products",
+            singularName: "Products",
             subcollections: [localeCollection]
         }),
         buildCollection({
             ...usersCollection,
             path: "users",
             alias: "u",
-            name: "Users",
+            singularName: "Users",
             subcollections: [        buildCollection({
                 ...productsCollection,
                 alias: "p"

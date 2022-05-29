@@ -22,12 +22,7 @@ import {
     ResolvedProperty
 } from "../../models";
 import { FieldDescription } from "../index";
-import {
-    ErrorBoundary,
-    ErrorView,
-    getReferenceFrom,
-    ReferenceDialog
-} from "../../core";
+import { ErrorBoundary, ErrorView, getReferenceFrom, } from "../../core";
 import { PropertyPreview, SkeletonComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
@@ -36,6 +31,9 @@ import {
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
+import {
+    useReferenceDialogController
+} from "../../core/components/ReferenceDialog";
 
 /**
  * Field that opens a reference selection dialog.
@@ -69,7 +67,6 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
         setValue
     });
 
-    const [open, setOpen] = React.useState(autoFocus);
     const sideEntityController = useSideEntityController();
 
     const navigationContext = useNavigationContext();
@@ -96,22 +93,30 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
         useCache: true
     });
 
-    const handleEntityClick = useCallback((entity: Entity<M>) => {
+    const onSingleEntitySelected = useCallback((entity: Entity<M>) => {
         if (disabled)
             return;
         setValue(entity ? getReferenceFrom(entity) : null);
-        setOpen(false);
+        referenceDialogController.close();
     }, [disabled, setValue]);
 
+    const referenceDialogController = useReferenceDialogController({
+            multiselect: false,
+            path,
+            collection,
+            onSingleEntitySelected
+        }
+    );
+
     const handleClickOpen = useCallback(() => {
-        setOpen(true);
-    }, []);
+        referenceDialogController.open();
+    }, [referenceDialogController]);
 
     const clearValue = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         setValue(null);
-        setOpen(false);
-    }, [setValue]);
+        referenceDialogController.close();
+    }, [referenceDialogController, setValue]);
 
     const seeEntityDetails = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
@@ -122,10 +127,6 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                 updateUrl: true
             });
     }, [entity, path, sideEntityController]);
-
-    const onClose = useCallback(() => {
-        setOpen(false);
-    }, []);
 
     const buildEntityView = useCallback((collection?: EntityCollection<any>) => {
 
@@ -321,14 +322,6 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
             })}>
 
                 {collection && buildEntityView(collection)}
-
-                {collection && <ReferenceDialog open={open}
-                                                collection={collection}
-                                                multiselect={false}
-                                                path={path}
-                                                onClose={onClose}
-                                                onSingleEntitySelected={handleEntityClick}
-                />}
 
             </Box>
 

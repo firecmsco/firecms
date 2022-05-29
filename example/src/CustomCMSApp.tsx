@@ -37,7 +37,7 @@ const productsCollection = buildCollection({
         create: true,
         delete: true
     }),
-    name: "Product",
+    name: "Products",
     properties: {
         name: {
             name: "Name",

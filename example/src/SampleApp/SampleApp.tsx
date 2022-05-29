@@ -30,6 +30,8 @@ import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 
 import "@fontsource/ibm-plex-mono";
+import { Locale } from "./types";
+import { locales } from "./collections/enums";
 
 function SampleApp() {
 
@@ -78,8 +80,23 @@ function SampleApp() {
         console.log("Allowing access to", user);
         return true;
     };
+     const localeNestedCollection = buildCollection<any>({
+        path: "products/B000P0MDMS/locales",
+        customId: locales,
+        name: "Locales",
+        singularName: "Locale",
+        properties: {
+            name: {
+                name: "Name",
+                validation: { required: true },
+                dataType: "string"
+            }
+        }
+    });
+
 
     const collections = [
+        localeNestedCollection,
         productsCollection,
         usersCollection,
         blogCollection,

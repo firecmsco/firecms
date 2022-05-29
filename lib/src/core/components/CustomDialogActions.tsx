@@ -4,8 +4,14 @@ import React from "react";
 export function CustomDialogActions({
                                         children,
                                         position = "sticky",
-                                        maxWidth
-                                    }: { children: React.ReactNode, position?: "sticky" | "absolute", maxWidth?: Breakpoint }) {
+                                        maxWidth,
+                                        translucent
+                                    }: {
+    children: React.ReactNode,
+    position?: "sticky" | "absolute",
+    maxWidth?: Breakpoint,
+    translucent?: boolean
+}) {
     const component = maxWidth
         ? <Container maxWidth={maxWidth}>
             {children}
@@ -13,8 +19,8 @@ export function CustomDialogActions({
         : children;
 
     return <Box sx={(theme) => ({
-        background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : alpha(theme.palette.background.paper, 0.1),
-        backdropFilter: "blur(4px)",
+        background: translucent ? theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : alpha(theme.palette.background.paper, 0.1) : undefined,
+        backdropFilter: translucent ? "blur(4px)" : undefined,
         borderTop: `1px solid ${theme.palette.divider}`,
         py: 1,
         px: 2,
@@ -22,7 +28,7 @@ export function CustomDialogActions({
         flexDirection: "row",
         alignItems: "center",
         justifyContent: "flex-end",
-        position: position,
+        position,
         bottom: 0,
         right: 0,
         left: 0,

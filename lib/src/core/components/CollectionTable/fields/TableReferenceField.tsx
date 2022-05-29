@@ -3,7 +3,7 @@ import { Box, Button } from "@mui/material";
 import { ReferencePreview } from "../../../../preview";
 import { ErrorView } from "../../index";
 import { CollectionSize, Entity, EntityReference } from "../../../../models";
-import { ReferenceDialog } from "../../ReferenceDialog";
+import { useReferenceDialogController } from "../../ReferenceDialog";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { getReferenceFrom } from "../../../util";
@@ -36,9 +36,9 @@ export function TableReferenceField(props: {
     } = props;
 
     const [onHover, setOnHover] = useState(false);
-    const [open, setOpen] = useState<boolean>(false);
 
     const navigationContext = useNavigationContext();
+
     const collection = navigationContext.getCollection(path);
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
@@ -47,29 +47,39 @@ export function TableReferenceField(props: {
         if (disabled)
             return;
         setPreventOutsideClick(true);
-        setOpen(true);
+        referenceDialogController.open();
     }, [disabled, setPreventOutsideClick]);
 
     const handleClose = useCallback(() => {
         setPreventOutsideClick(false);
-        setOpen(false);
-    }, [setPreventOutsideClick, setOpen]);
+    }, [setPreventOutsideClick]);
 
-    const onSingleValueSet = useCallback((entity: Entity<any>) => {
+    const onSingleEntitySelected = useCallback((entity: Entity<any>) => {
         updateValue(entity ? getReferenceFrom(entity) : null);
         setPreventOutsideClick(false);
-        setOpen(false);
-    }, [updateValue, setPreventOutsideClick, setOpen]);
+    }, [updateValue, setPreventOutsideClick]);
 
     const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
         updateValue(entities.map((e) => getReferenceFrom(e)));
     }, [updateValue]);
 
-    const selectedIds = internalValue
+    const selectedEntityIds = internalValue
         ? (Array.isArray(internalValue)
             ? internalValue.map((ref) => ref.id)
             : internalValue.id ? [internalValue.id] : [])
         : [];
+
+    const referenceDialogController = useReferenceDialogController({
+            multiselect,
+            path,
+            collection,
+            onClose: handleClose,
+            onMultipleEntitiesSelected,
+            onSingleEntitySelected,
+            selectedEntityIds
+        }
+    );
+
     const valueNotSet = !internalValue || (Array.isArray(internalValue) && internalValue.length === 0);
 
     function buildSingleReferenceField() {
@@ -135,18 +145,6 @@ export function TableReferenceField(props: {
                     color="primary">
                     Edit {title}
                 </Button>}
-
-            {!disabled &&
-            open &&
-            <ReferenceDialog open={open}
-                             multiselect={multiselect}
-                             path={path}
-                             collection={collection}
-                             onClose={handleClose}
-                             onMultipleEntitiesSelected={onMultipleEntitiesSelected}
-                             onSingleEntitySelected={onSingleValueSet}
-                             selectedEntityIds={selectedIds}
-            />}
 
         </div>
     );

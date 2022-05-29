@@ -6,7 +6,7 @@ import { categories, currencies, locales } from "./enums";
 export const localeCollection = buildCollection<any>({
     path: "locales",
     customId: locales,
-    name: "Locale",
+    name: "Locales",
     properties: {
         name: {
             name: "Name",
@@ -74,7 +74,7 @@ export const productsCollection = buildCollection({
     alias: "ppp",
     // inlineEditing: false,
     callbacks: productCallbacks,
-    name: "Product",
+    name: "Products",
     group: "Main",
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,

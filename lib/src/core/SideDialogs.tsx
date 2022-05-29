@@ -32,6 +32,11 @@ const SideDialogContext = React.createContext<SideDialogContextProps>({
     }
 });
 
+/**
+ * This hook is used to access the properties of a particular side dialog,
+ * in contrast with {@link useSideDialogsController} which handles the
+ * state of all the dialogs.
+ */
 export const useSideDialogContext = () => useContext<SideDialogContextProps>(SideDialogContext);
 
 /**
@@ -48,7 +53,10 @@ export function SideDialogs() {
 
     const sidePanels = sideDialogsController.sidePanels;
     //  we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed
-    const allPanels = [...sidePanels, undefined];
+    const allPanels = [
+        ...sidePanels,
+        // undefined
+    ];
 
     return <>
         {
@@ -133,14 +141,14 @@ function SideDialogView({
                                 flexDirection: "column",
                                 height: "100%",
                                 transition: "width 250ms ease-in-out",
-                                width: width,
+                                width,
                                 maxWidth: "100vw"
                             }}>
                             <panel.Component {...panel.props}/>
                         </Box>
                     </ErrorBoundary>}
 
-                {!panel && <div style={{ width: width }}/>}
+                {!panel && <div style={{ width }}/>}
 
             </SideDialogDrawer>
 

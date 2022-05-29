@@ -31,7 +31,8 @@ export function useBuildSideDialogsController(): SideDialogsController {
         setSidePanels(updatedPanels);
 
         if (routesCount.current > 0) {
-            navigate(-1);
+            if (lastSidePanel.urlPath)
+                navigate(-1);
             routesCount.current--;
         } else if (lastSidePanel.parentUrlPath) {
             const baseLocation = (location.state as any)?.base_location ?? location;

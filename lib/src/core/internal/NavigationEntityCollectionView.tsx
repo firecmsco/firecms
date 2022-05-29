@@ -36,6 +36,7 @@ export function NavigationEntityCollectionView<M extends { [Key: string]: unknow
     return (
         <ErrorBoundary>
             <EntityCollectionView fullPath={fullPath}
+                                  isSubCollection={true}
                                   {...collection}/>
         </ErrorBoundary>
     );

@@ -2,7 +2,8 @@ import { buildCollection } from "@camberi/firecms";
 
 export const usersCollection = buildCollection({
     path: "users",
-    name: "User",
+    name: "Users",
+    singularName: "User",
     group: "Main",
     description: "Registered users",
     textSearchEnabled: true,
