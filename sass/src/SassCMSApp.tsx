@@ -4,8 +4,8 @@ import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 
+import "@fontsource/ibm-plex-mono";
 import "typeface-rubik";
-import "typeface-space-mono";
 
 import {
     Authenticator,
@@ -37,7 +37,7 @@ import {
     SassEntityCollectionView
 } from "./components/SassEntityCollectionView";
 import { SassHomePage } from "./components/SassHomePage";
-import { UsersEditView } from "./components/UsersEditView";
+import { UsersEditView } from "./components/users/UsersEditView";
 import { getUserRoles } from "./util/permissions";
 
 const DEFAULT_SIGN_IN_OPTIONS = [

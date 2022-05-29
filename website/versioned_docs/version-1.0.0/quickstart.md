@@ -40,7 +40,7 @@ cd my-cms
 - Install FireCMS and it's peer dependencies:
 
 ```
-yarn add @camberi/firecms firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
+yarn add @camberi/firecms firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab @mui/styles@^5 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
 ```
 
 You can replace the content of the file App.tsx with the following sample code.
@@ -59,7 +59,7 @@ import {
     Authenticator,
     buildCollection,
     buildProperty,
-    buildCollection,
+    buildSchema,
     EntityReference,
     FirebaseCMSApp,
     NavigationBuilder,
@@ -102,7 +102,7 @@ type Product = {
     expires_on: Date
 }
 
-const productSchema = buildCollection<Product>({
+const productSchema = buildSchema<Product>({
     name: "Product",
     properties: {
         name: {
@@ -160,7 +160,7 @@ const productSchema = buildCollection<Product>({
             title: "Image",
             dataType: "string",
             config: {
-                storage: {
+                storageMeta: {
                     mediaType: "image",
                     storagePath: "images",
                     acceptedFiles: ["image/*"]
@@ -222,7 +222,7 @@ const productSchema = buildCollection<Product>({
     }
 });
 
-const localeSchema = buildCollection({
+const localeSchema = buildSchema({
     customId: locales,
     name: "Locale",
     properties: {
@@ -241,7 +241,7 @@ const localeSchema = buildCollection({
             dataType: "string",
             validation: { required: false },
             config: {
-                storage: {
+                storageMeta: {
                     mediaType: "video",
                     storagePath: "videos",
                     acceptedFiles: ["video/*"]
@@ -262,7 +262,7 @@ export default function App() {
             collections: [
                 buildCollection({
                     path: "products",
-                    collection: productSchema,
+                    schema: productSchema,
                     name: "Products",
                     permissions: ({ authController }) => ({
                         edit: true,
@@ -274,7 +274,7 @@ export default function App() {
                         buildCollection({
                             name: "Locales",
                             path: "locales",
-                            collection: localeSchema
+                            schema: localeSchema
                         })
                     ]
                 })
