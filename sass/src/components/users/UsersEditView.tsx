@@ -2,10 +2,10 @@ import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
 import { UsersEditTable } from "./UsersEditTable";
-import { useConfigController } from "../useConfigController";
-import { UserDetailsForm } from "./users/UserDetailsForm";
+import { useConfigController } from "../../useConfigController";
+import { UserDetailsForm } from "./UserDetailsForm";
 import { useCallback, useState } from "react";
-import { SassUser } from "../models/sass_user";
+import { SassUser } from "../../models/sass_user";
 
 export function UsersEditView() {
 

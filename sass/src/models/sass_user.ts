@@ -4,4 +4,6 @@ export type SassUser = {
     name: string;
     roles: string[];
     active: boolean;
+    updated_on: Date;
+    created_on: Date;
 }

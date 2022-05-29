@@ -1,5 +1,6 @@
 import { FirebaseApp } from "firebase/app";
 import {
+    addDoc,
     collection,
     deleteDoc,
     deleteField,
@@ -8,8 +9,8 @@ import {
     Firestore,
     getFirestore,
     onSnapshot,
-    setDoc,
-    addDoc
+    serverTimestamp,
+    setDoc
 } from "firebase/firestore";
 import React, { useCallback, useEffect, useRef } from "react";
 import { ConfigController } from "./models/config_controller";
@@ -178,12 +179,18 @@ export function useBuildFirestoreConfigController({
         if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Persisting", user);
         const { id, ...userData } = user;
-        if(id){
+        if (id) {
             const ref = doc(firestore, configPath, "config", "users", id);
-            return setDoc(ref, userData, { merge: true }).then(() => user);
-        }else{
-            return addDoc(collection(firestore, configPath, "config", "users"), userData)
-                .then(ref => ({ id: ref.id, ...userData}));
+            return setDoc(ref, {
+                ...userData,
+                updated_on: serverTimestamp()
+            }, { merge: true }).then(() => user);
+        } else {
+            return addDoc(collection(firestore, configPath, "config", "users"), {
+                ...userData,
+                created_on: serverTimestamp()
+            })
+                .then(ref => ({ id: ref.id, ...userData }));
         }
     }, [configPath, firestore]);
 
@@ -253,7 +260,9 @@ const docsToCollectionTree = (docs: DocumentSnapshot[]): EntityCollection[] => {
 const docsToUsers = (docs: DocumentSnapshot[]): SassUser[] => {
     return docs.map((doc) => ({
         id: doc.id,
-        ...doc.data()
+        ...doc.data(),
+        created_on: doc.data()?.created_on?.toDate(),
+        updated_on: doc.data()?.updated_on?.toDate(),
     } as SassUser));
 }
 
