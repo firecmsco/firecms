@@ -93,5 +93,5 @@ export function getPropertyColumnWidth(property: ResolvedProperty): number {
 }
 
 export function getSubcollectionColumnId(collection: EntityCollection) {
-    return `subcollection:${collection.path}`;
+    return `subcollection:${collection.alias ?? collection.path}`;
 }

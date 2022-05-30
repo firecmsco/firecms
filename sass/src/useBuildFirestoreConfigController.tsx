@@ -307,7 +307,8 @@ function joinCollections(fetchedCollections: EntityCollection[], baseCollections
     }));
     const updatedCollections = (baseCollections ?? [])
         .map((navigationCollection) => {
-            const storedCollection = resolvedFetchedCollections?.find((collection) => collection.path === navigationCollection.path);
+            const storedCollection = resolvedFetchedCollections?.find((collection) => collection.path === navigationCollection.path)
+                ?? resolvedFetchedCollections?.find((collection) => collection.alias === navigationCollection.alias);
             if (!storedCollection) {
                 return { ...navigationCollection, deletable: false };
             } else {
@@ -316,7 +317,7 @@ function joinCollections(fetchedCollections: EntityCollection[], baseCollections
             }
         });
     const storedCollections = resolvedFetchedCollections
-        .filter((col) => !updatedCollections.map(c => c.path).includes(col.path));
+        .filter((col) => !updatedCollections.map(c => c.path).includes(col.path) || !updatedCollections.map(c => c.alias).includes(col.alias));
 
     return [...updatedCollections, ...storedCollections];
 }
@@ -328,9 +329,9 @@ export function filterAllowedCollections<M>(collections: EntityCollection<M>[],
         .map((collection) => ({
             ...collection,
             subcollections: collection.subcollections
-                ? filterAllowedCollections(collection.subcollections, authController, [...paths, collection.path])
+                ? filterAllowedCollections(collection.subcollections, authController, [...paths, collection.alias ?? collection.path])
                 : undefined,
-            permissions: resolvePermissions(collection, authController, [...paths, collection.path]
+            permissions: resolvePermissions(collection, authController, [...paths, collection.alias ?? collection.path]
             )
         }))
         .filter(collection => collection.permissions.read === undefined || collection.permissions.read);

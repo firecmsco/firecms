@@ -9,7 +9,10 @@ import { editableProperty } from "./entities";
 
 export function mergeCollections(target: EntityCollection, source: EntityCollection): EntityCollection {
     const subcollectionsMerged = target.subcollections?.map((targetSubcollection) => {
-        const modifiedCollection = source.subcollections?.find((sourceSubcollection) => sourceSubcollection.path === targetSubcollection.path);
+        const modifiedCollection =
+            source.subcollections?.find((sourceSubcollection) => sourceSubcollection.path === targetSubcollection.path) ??
+            source.subcollections?.find((sourceSubcollection) => sourceSubcollection.alias === targetSubcollection.alias);
+
         if (!modifiedCollection) {
             return targetSubcollection;
         } else {

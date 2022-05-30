@@ -283,7 +283,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const subCollectionsViews = subcollections && subcollections.map(
             (subcollection, colIndex) => {
-                const fullPath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
+                const fullPath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.alias ?? subcollection.path)}` : undefined;
 
                 return (
                     <Box
@@ -424,15 +424,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         <CloseIcon/>
                     </IconButton>
                 </Box>
-
-                {largeLayout && <Typography
-                    sx={{
-                        pl: 2,
-                        pb: 1,
-                        alignSelf: "center"
-                    }}
-                    variant={"h5"}>{collection.singularName ?? collection.name}
-                </Typography>}
 
                 <Box flexGrow={1}/>
 

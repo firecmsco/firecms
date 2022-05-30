@@ -271,6 +271,14 @@ export function EntityForm<M>({
                                 paddingTop: theme.spacing(2)
                             }
                         })}>
+
+                        <Typography
+                            sx={{
+                                marginBottom: 3
+                            }}
+                            variant={"h4"}>{collection.singularName ?? collection.name}
+                        </Typography>
+
                         <CustomIdField customId={collection.customId}
                                        entityId={entityId}
                                        status={status}

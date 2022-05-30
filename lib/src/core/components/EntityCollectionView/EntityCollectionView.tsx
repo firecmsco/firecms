@@ -179,13 +179,13 @@ export const EntityCollectionView = React.memo(
             }}>
                 <Box>
                     <Typography
-                        variant={isSubCollection ? "h6" : "h5"}
+                        variant={ "h6" }
                         sx={{
                             lineHeight: "1.15",
                             textOverflow: "ellipsis",
                             whiteSpace: "nowrap",
                             overflow: "hidden",
-                            maxWidth: "160px",
+                            maxWidth: "164px",
                             cursor: collection.description ? "pointer" : "inherit"
                         }}
                         onClick={collection.description

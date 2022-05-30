@@ -28,8 +28,6 @@ import {
 } from "./collections/custom_collection_resolver";
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
-
-import "@fontsource/ibm-plex-mono";
 import { Locale } from "./types";
 import { locales } from "./collections/enums";
 
@@ -81,17 +79,18 @@ function SampleApp() {
         return true;
     };
      const localeNestedCollection = buildCollection<any>({
-        path: "products/B000P0MDMS/locales",
-        customId: locales,
-        name: "Locales",
-        singularName: "Locale",
-        properties: {
-            name: {
-                name: "Name",
-                validation: { required: true },
-                dataType: "string"
-            }
-        }
+         path: "products/B000P0MDMS/locales",
+         alias: "custom-locale",
+         customId: locales,
+         name: "Locales",
+         singularName: "Locale",
+         properties: {
+             name: {
+                 name: "Name",
+                 validation: { required: true },
+                 dataType: "string"
+             }
+         }
     });
 
 

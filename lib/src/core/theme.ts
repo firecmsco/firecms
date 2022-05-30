@@ -41,7 +41,7 @@ export const createCMSDefaultTheme = (
             fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
             fontWeightMedium: 500,
             h6: {
-                // fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
                 fontWeight: 600,
                 fontSize: "1.15rem"
             },
