@@ -88,7 +88,7 @@ export function useBuildAuthController<UserType extends User>({
 
     useEffect(() => {
         checkAuthentication();
-    }, [authDelegate.initialLoading, authDelegate.user]);
+    }, [authDelegate.initialLoading, authDelegate.user, authentication]);
 
     return authController;
 }

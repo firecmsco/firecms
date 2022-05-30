@@ -11,7 +11,6 @@ import { ErrorView } from "./ErrorView";
 import { CustomDialogActions } from "./CustomDialogActions";
 import { useSideDialogsController } from "../../hooks/useSideDialogsController";
 import { useSideDialogContext } from "../SideDialogs";
-import { CONTAINER_FULL_WIDTH } from "../internal/common";
 
 /**
  * @category Components
@@ -213,7 +212,7 @@ export function ReferenceDialog(
                                            onEntityClick={onEntityClick}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
                                            Title={<Typography variant={"h6"}>
-                                               {`Select ${collection.singularName}`}
+                                               {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
                                            </Typography>}
                                            inlineEditing={false}
                                            Actions={<Button onClick={onClear}

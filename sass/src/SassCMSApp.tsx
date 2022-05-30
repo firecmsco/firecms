@@ -80,14 +80,14 @@ export function SassCMSApp() {
     });
 
     const sassAuthenticator: Authenticator = useCallback(({ user, authController }) => {
-        if(!user) return false;
+        if (!user) return false;
+        console.log("configController", configController);
+        const sassUser = configController.users.find((sassUser) => sassUser.email === user?.email)
+        if (!sassUser) throw Error("No user was found with email " + user.email);
+        console.log("Allowing access to", user?.email);
+        const userRoles = getUserRoles(configController.roles, sassUser);
+        authController.setExtra({ roles: userRoles });
         return true;
-        // const sassUser = configController.users.find((sassUser) => sassUser.email === user?.email)
-        // if (!sassUser) throw Error("No user was found with email " + user.email);
-        // console.log("Allowing access to", user?.email);
-        // const userRoles = getUserRoles(configController.roles, sassUser);
-        // authController.setExtra({roles: userRoles});
-        // return true;
     }, [configController]);
 
     if (configError) {
@@ -125,7 +125,7 @@ export function SassCMSApp() {
 
     return (
         <Router>
-            <FireCMS authDelegate={authDelegate}
+            {!configController.loading && <FireCMS authDelegate={authDelegate}
                      collections={configController.collections}
                      authentication={sassAuthenticator}
                      dataSource={dataSource}
@@ -177,7 +177,7 @@ export function SassCMSApp() {
                         </ThemeProvider>
                     );
                 }}
-            </FireCMS>
+            </FireCMS>}
         </Router>
     );
 
