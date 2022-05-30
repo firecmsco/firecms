@@ -48,7 +48,6 @@ export function ThreeJSAnimationShader() {
         renderer.setSize(width, height);
         renderer.setPixelRatio(1);
 
-
         const scene = new THREE.Scene();
 
         const geometry = new THREE.SphereBufferGeometry(15,
@@ -61,11 +60,9 @@ export function ThreeJSAnimationShader() {
         );
 
         // let geometry = new THREE.DodecahedronGeometry(10, 10);
-        console.log("pointsCount", geometry.attributes.position.array.length);
 
         const material = new THREE.MeshStandardMaterial();
 
-        // material.wireframe = true;
         material.userData.delta = { value: 0 };
         material.userData.brightness = { value: BRIGHTNESS };
         // material.side = THREE.DoubleSide;
@@ -109,7 +106,6 @@ export function ThreeJSAnimationShader() {
     }
 
     function setSize(state: SceneState, width: number, height: number) {
-        console.log(state);
         state.renderer.setSize(width, height);
         state.camera.left = width / -CAMERA_FACTOR;
         state.camera.right = width / CAMERA_FACTOR;
@@ -146,7 +142,6 @@ export function ThreeJSAnimationShader() {
             // mesh.rotation.x += delta * 0.05 * (-1) % Math.PI;
             material.userData.delta.value = clock.getElapsedTime() * TIME_DILATION;
             material.userData.brightness.value = BRIGHTNESS;
-            // updateLightsPosition(delta, light, light2, light4, light5, mesh);
             renderer.render(scene, camera);
             requestAnimationFrame(render);
         }
@@ -295,7 +290,6 @@ function buildVertexShader() {
         v_displacement_amount = displacement;
         vec3 newPosition = position  * displacement ;
         gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
-        // gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
     }
 `;
 }
@@ -303,34 +297,29 @@ function buildVertexShader() {
 // https://zz85.github.io/glsl-optimizer/
 function buildFragmentShaderOptimized() {
 
-    return `
-uniform float delta;
-uniform float brightness;
-varying vec3 vNormal;
-varying vec3 vPosition;
-varying float v_displacement_amount;
+    return `uniform highp float delta;
+uniform highp float brightness;
+varying highp vec3 vNormal;
+varying highp vec3 vPosition;
+varying highp float v_displacement_amount;
 void main ()
 {
-  vec3 hsv_1;
-  float tmpvar_2;
-  float tmpvar_3;
+  highp vec3 hsv_1;
+  highp float tmpvar_2;
+  highp float tmpvar_3;
   tmpvar_3 = (v_displacement_amount / 3.0);
   tmpvar_2 = (((
     abs((((
-      ((sin((
-        (vPosition.x / 4.0)
-       + vNormal.x)) + (sin(
-        ((vPosition.y / 3.0) + vNormal.y)
-      ) * 2.0)) + (sin((
-        (vPosition.z / 4.0)
-       + vNormal.z)) * 2.0))
-     +
-      sin(tmpvar_3)
-    ) + (
-      sin((delta / 2.0))
-     * 4.0)) + 10.0))
-   / 20.0) * 0.65) + 0.35);
-  vec3 tmpvar_4;
+      (sin(((vPosition.x / 4.0) + vNormal.x)) + (sin((
+        (vPosition.y / 3.0)
+       + vNormal.y)) * 2.0))
+     + 
+      (sin(((vPosition.z / 4.0) + vNormal.z)) * 2.0)
+    ) + sin(tmpvar_3)) + (sin(
+      (delta / 2.0)
+    ) * 4.0)))
+   / 11.0) * 0.65) + 0.35);
+  highp vec3 tmpvar_4;
   tmpvar_4.x = tmpvar_2;
   tmpvar_4.y = ((abs(
     sin((tmpvar_3 + (delta / 7.0)))
@@ -340,7 +329,7 @@ void main ()
   ) * 0.3) + brightness);
   hsv_1.yz = tmpvar_4.yz;
   hsv_1.x = (tmpvar_2 + 0.05);
-  vec4 tmpvar_5;
+  mediump vec4 tmpvar_5;
   tmpvar_5.w = 1.0;
   tmpvar_5.xyz = (tmpvar_4.z * mix (vec3(1.0, 1.0, 1.0), clamp (
     (abs(((
@@ -349,7 +338,7 @@ void main ()
   , 0.0, 1.0), tmpvar_4.y));
   gl_FragColor = tmpvar_5;
 }
-    `;
+`;
 }
 
 function buildFragmentShader() {

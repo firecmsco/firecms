@@ -30,7 +30,8 @@ import {
 
 function Features() {
 
-    const { isDarkTheme } = useColorMode();
+    const { colorMode } = useColorMode();
+    const isDarkTheme = colorMode === "dark";
 
     return (
         <section className="relative">

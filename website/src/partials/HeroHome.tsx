@@ -34,9 +34,7 @@ function HeroHome({}) {
         className="sm:px-6 px-16 my-4 xl:my-8">
 
         <div className="text-center xl:text-right">
-            <h1
-                className="block text-5xl md:text-6xl font-extrabold tracking-tight leading-none"
-            >
+            <h1 className="block tracking-tight text-5xl md:text-6xl font-extrabold tracking-tight leading-none">
                 <div className={"block"}>
                 <span
                     data-aos="zoom-y-out"
@@ -46,12 +44,12 @@ function HeroHome({}) {
                         data-aos-delay="200"
                         style={{
                             // mixBlendMode: "color-dodge",
-                            fontSize: "9rem",
+                            fontSize: "10rem",
                             WebkitBackgroundClip: "text",
                             backgroundClip: "text",
                             backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
                         }}
-                        className="text-8xl font-extrabold text-8xl md:text-9xl text-transparent bg-clip-text">CMS</span>
+                        className="font-extrabold text-transparent bg-clip-text">CMS</span>
                 </div>
                 <span
                     data-aos="zoom-y-out"
@@ -59,7 +57,8 @@ function HeroHome({}) {
                 <span
                     data-aos="zoom-y-out"
                     data-aos-delay="400"
-                    style={{ color: "#FFA000"}}>Firestore</span>
+                    className={"text-7xl md:text-8xl "}
+                    style={{ color: "#FFA000" }}>Firestore</span>
 
             </h1>
 

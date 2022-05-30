@@ -38,7 +38,6 @@ const white = new THREE.Color(1.0, 1.0, 1.0);
 
 export default function ThreeJSAnimationShader({}: AnimationProps) {
 
-
     const scrollRef = useRef<number>(0);
 
     useEffect(() => {
@@ -135,7 +134,6 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
             coef: new THREE.Vector3(.3, -.5, 1),
             constant: new THREE.Vector3(0, -.4, .5)
         });
-
 
         layers.push({
             is_active: 1,
@@ -507,7 +505,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         const material = new THREE.ShaderMaterial({
             uniforms: uniforms,
             vertexShader: buildVertexShader(),
-            fragmentShader: buildFragmentShader()
+            fragmentShader: buildFragmentShaderOptimized()
         });
 
         material.wireframe = wireframe;
@@ -558,19 +556,19 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         scene.add(mesh2);
         meshes.push(mesh2);
 
-        const mesh3 = createShape(width, height, 1, 1/2,1/2.5, -2, -15, 1.0);
+        const mesh3 = createShape(width, height, 1.5, 1/2,1/2.5, -2, -20, 1.0);
         scene.add(mesh3);
         meshes.push(mesh3);
 
-        const mesh4 = createShape(width, height, 1.5, 1/1.5,1/2, -1, -25, 1.0);
+        const mesh4 = createShape(width, height, 1.5, 1/1.5,1/2, -1, -32, 1.0);
         scene.add(mesh4);
         meshes.push(mesh4);
 
-        const mesh5 = createShape(width, height, 1, 1/1.5, 1/2.5, -6.5, -35, 1.0);
+        const mesh5 = createShape(width, height, 1, 1/1.5, 1/2.5, -4.5, -38, 1.0);
         scene.add(mesh5);
         meshes.push(mesh5);
 
-        const mesh6 = createShape(width, height, 2.5, 1/1.5, 1 / 2.5, 6.5, -45, 1.0);
+        const mesh6 = createShape(width, height, 2.5, 1/1.5, 1 / 2.5, 6.5, -50, 1.0);
         scene.add(mesh6);
         meshes.push(mesh6);
 
@@ -985,6 +983,32 @@ function buildVertexShader() {
 `;
 }
 
+function buildFragmentShaderOptimized() {
+    return `precision highp float;
+uniform float u_time;
+varying float v_displacement_amount;
+varying vec3 v_position;
+varying vec3 v_color;
+void main ()
+{
+  mediump vec3 color_1;
+  color_1.x = v_color.x;
+  color_1.yz = (v_color.yz - ((
+    sin((v_position.z + v_displacement_amount))
+   + 
+    sin(u_time)
+  ) * 0.1));
+  mediump vec3 tmpvar_2;
+  tmpvar_2 = mix (vec3(dot (color_1, vec3(0.2125, 0.7154, 0.0721))), color_1, 1.2);
+  color_1 = tmpvar_2;
+  mediump vec4 tmpvar_3;
+  tmpvar_3.w = 1.0;
+  tmpvar_3.xyz = tmpvar_2;
+  gl_FragColor = tmpvar_3;
+}
+
+`;
+}
 function buildFragmentShader() {
     return `
 

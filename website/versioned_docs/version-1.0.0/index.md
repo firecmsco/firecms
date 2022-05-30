@@ -5,8 +5,8 @@ sidebar_label: Introduction
 slug: /
 ---
 
-<video width="600" height="400" autoplay>
-  <source src="https://firecms.co/img/dark_mode.mp4" type="video/mp4"/>
+<video class="intro_video" loop autoPlay muted>
+  <source src="/img/dark_mode.mp4" type="video/mp4"/>
 </video>
 
 FireCMS is an **open source headless CMS and admin panel** built by developers
