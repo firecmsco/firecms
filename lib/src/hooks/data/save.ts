@@ -9,6 +9,7 @@ import {
 } from "../../models";
 import { useDataSource } from "./useDataSource";
 import { resolveCollection } from "../../core/util/resolutions";
+import { resolveCollectionAliases } from "../../core";
 
 /**
  * @category Hooks and utilities
@@ -51,7 +52,7 @@ export type SaveEntityWithCallbacksProps<M> =
  */
 export async function saveEntityWithCallbacks<M, UserType extends User>({
                                                                collection,
-                                                               path,
+                                                               path:inputPath,
                                                                entityId,
                                                                values,
                                                                previousValues,
@@ -69,6 +70,8 @@ export async function saveEntityWithCallbacks<M, UserType extends User>({
 ): Promise<void> {
 
     let updatedValues: Partial<EntityValues<M>>;
+
+    const path = resolveCollectionAliases(inputPath, context.navigation.collections);
 
     const callbacks = collection.callbacks;
     if (callbacks?.onPreSave) {

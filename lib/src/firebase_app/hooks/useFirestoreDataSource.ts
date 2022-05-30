@@ -342,7 +342,6 @@ export function useFirestoreDataSource({
             );
         },
 
-
         /**
          * Save entity to the specified path. Note that Firestore does not allow
          * undefined values.
@@ -379,7 +378,7 @@ export function useFirestoreDataSource({
                     inputValues: cmsToFirestoreModel(values, firestore),
                     properties,
                     status,
-                    timestampNowValue: serverTimestamp(),
+                    timestampNowValue: serverTimestamp()
                 });
 
             console.debug("Saving entity", path, entityId, updatedFirestoreValues);
