@@ -15,7 +15,7 @@ jobs:
             # Setup .npmrc file to publish to npm
             - uses: actions/setup-node@v1
               with:
-                  node-version: '14.x'
+                  node-version: '16.x'
                   registry-url: 'https://registry.npmjs.org'
             - run: yarn install
             # Publish to npm
@@ -25,7 +25,7 @@ jobs:
             # Setup .npmrc file to publish to GitHub Packages
             - uses: actions/setup-node@v1
               with:
-                  node-version: '14.x'
+                  node-version: '16.x'
                   registry-url: 'https://npm.pkg.github.com'
                   scope: '@Camberi'
             # Publish to GitHub Packages
