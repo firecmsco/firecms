@@ -391,7 +391,7 @@ export function useFirestoreDataSource({
 
             return setDoc(documentReference, updatedFirestoreValues, { merge: true }).then(() => ({
                 id: documentReference.id,
-                path: documentReference.path,
+                path: path,
                 values: firestoreToCMSModel(updatedFirestoreValues) as EntityValues<M>
             }));
         },

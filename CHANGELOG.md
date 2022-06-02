@@ -66,7 +66,14 @@ buildProperty<string>({
 called `PropertyFieldBinding`. The props have not changed. 
 - `CMSFormFieldProps` have been renamed to `PropertyFieldBindingProps`
 
-## [1.0.0-rc.5] - 2022-05-10
+## [1.0.1] - 2022-06-02
+
+### Changed
+
+- Fix for bug when saving new entities with React 18.
+- 
+ 
+## [1.0.0] - 2022-05-10
 
 ### Changed
 
@@ -79,6 +86,14 @@ called `PropertyFieldBinding`. The props have not changed.
 - Added max size validation for file uploads
 
 ## [1.0.0-rc.5] - 2022-04-11
+
+### Changed
+
+- Fix for draggable bug in arrays with duplicated values.
+- Reversed icons in header tables. Also, now the initial sort option is "asc"
+  as it is typical in most apps.
+- Fix for cursor jumping to the end of an inline text field
+
 ## [1.0.0-rc.4] - 2022-03-14
 
 ### Changed
