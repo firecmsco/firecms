@@ -22,6 +22,7 @@ import {
     ExpandablePanel,
     getIconForView,
     TopNavigationResult,
+    singular,
     toSnakeCase,
     useNavigationContext
 } from "@camberi/firecms";
@@ -39,9 +40,8 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
         handleChange,
         touched,
         errors,
-        dirty,
+        setFieldTouched,
         isSubmitting,
-        handleSubmit
     } = useFormikContext<EntityCollection>();
 
     const [iconDialogOpen, setIconDialogOpen] = useState(false);
@@ -58,6 +58,14 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
         const pathTouched = getIn(touched, "path");
         if (!pathTouched && isNewCollection && values.name) {
             setFieldValue("path", toSnakeCase(values.name))
+        }
+
+    }, [isNewCollection, touched, values.name]);
+
+    useEffect(() => {
+        const singularNameTouched = getIn(touched, "singularName");
+        if (!singularNameTouched && isNewCollection && values.name) {
+            setFieldValue("singularName", singular(values.name))
         }
 
     }, [isNewCollection, touched, values.name]);
@@ -107,7 +115,7 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
                         />
                         <FormHelperText
                             id="name-helper-text">
-                            {touched.name && Boolean(errors.name) ? errors.name : "Singular name of the entries in this collection (e.g. Product)"}
+                            {touched.name && Boolean(errors.name) ? errors.name : "Name of in this collection, usually a plural name (e.g. Products)"}
                         </FormHelperText>
                     </FormControl>
                 </Grid>
@@ -122,7 +130,10 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
                         <OutlinedInput
                             id={"path"}
                             aria-describedby={`${"path"}-helper`}
-                            onChange={handleChange}
+                            onChange={(e) => {
+                                setFieldTouched("path", true);
+                                return handleChange(e);
+                            }}
                             value={values.path}
                             label={"Path"}
                             disabled={!isNewCollection}/>
@@ -175,6 +186,28 @@ export function CollectionDetailsForm({ isNewCollection }: { isNewCollection: bo
                 <Grid item xs={12}>
                     <ExpandablePanel title={"Advanced"} expanded={false} padding={2} darken={false}>
                         <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <FormControl fullWidth
+                                             required
+                                             disabled={isSubmitting}
+                                             error={touched.singularName && Boolean(errors.singularName)}>
+                                    <InputLabel
+                                        htmlFor="singularName">{"Singular name"}</InputLabel>
+                                    <OutlinedInput
+                                        id={"singularName"}
+                                        aria-describedby={`singularName-helper`}
+                                        onChange={(e) => {
+                                            setFieldTouched("singularName", true);
+                                            return handleChange(e);
+                                        }}
+                                        value={values.singularName}
+                                        label={"Singular name"}/>
+                                    <FormHelperText
+                                        id="singularName-helper">
+                                        {touched.singularName && Boolean(errors.singularName) ? errors.singularName : "Optionally define a singular name for your entities"}
+                                    </FormHelperText>
+                                </FormControl>
+                            </Grid>
                             <Grid item xs={12}>
                                 <FormControl fullWidth
                                              required

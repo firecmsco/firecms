@@ -1,53 +1,61 @@
 import React, { useCallback, useState } from "react";
-import { Form, Formik } from "formik";
+import { Form, Formik, getIn } from "formik";
 import * as Yup from "yup";
+
 import {
     Box,
     Button,
+    Checkbox,
     Container,
     Dialog,
     FormControl,
+    FormControlLabel,
     FormHelperText,
     Grid,
     InputLabel,
-    MenuItem,
     OutlinedInput,
-    Select,
+    Paper,
+    Table as MuiTable,
+    TableBody,
+    TableCell,
+    TableHead,
+    TableRow,
+    Tooltip,
     Typography
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 
-import { ColorChip, CustomDialogActions } from "@camberi/firecms";
-
-import { SassUser } from "../../models/sass_user";
+import { CustomDialogActions, EntityCollection, } from "@camberi/firecms";
 import { LoadingButton } from "@mui/lab";
 import { useConfigController } from "../../useConfigController";
+import { Role } from "../../models/roles";
 
 export const YupSchema = Yup.object().shape({
     name: Yup.string().required("Required"),
-    email: Yup.string().email().required("Required"),
-    roles: Yup.array().min(1)
 });
 
 export function RolesDetailsForm({
-                                    open,
-                                    user,
-                                    handleClose
-                                }: {
+                                     open,
+                                     role,
+                                     handleClose,
+                                     collections
+                                 }: {
     open: boolean,
-    user?: SassUser,
-    handleClose: () => void
+    role?: Role,
+    handleClose: () => void,
+    collections?: EntityCollection[]
 }) {
 
-    const { users, saveUser, roles } = useConfigController();
-    const isNewUser = !Boolean(user);
+
+    const { saveRole, roles } = useConfigController();
+    const isNewRole = !Boolean(role);
 
     const [savingError, setSavingError] = useState<Error | undefined>();
 
-    const onUserUpdated = useCallback((user: SassUser) => {
+    const onRoleUpdated = useCallback((role: Role) => {
         setSavingError(undefined);
-        return saveUser(user);
-    }, [saveUser]);
+        return saveRole(role);
+    }, [saveRole]);
 
     return (
         <Dialog
@@ -57,16 +65,16 @@ export function RolesDetailsForm({
             keepMounted={false}
         >
             <Formik
-                initialValues={user ?? {
-                    name: "",
-                    email: ""
-                } as SassUser}
+                initialValues={role ?? {
+                    name: ""
+                } as Role}
                 validationSchema={YupSchema}
-                onSubmit={(user: SassUser, formikHelpers) => {
-                    return onUserUpdated(user)
+                onSubmit={(role: Role, formikHelpers) => {
+                    console.log("onSubmit", role);
+                    return onRoleUpdated(role)
                         .then(() => {
                             formikHelpers.resetForm({
-                                values: user
+                                values: role
                             });
                             handleClose();
                         })
@@ -79,9 +87,15 @@ export function RolesDetailsForm({
                       values,
                       errors,
                       handleChange,
+                      setFieldValue,
                       dirty,
                       submitCount
                   }) => {
+                    const isAdmin = values.isAdmin;
+                    const defaultCreate = values.defaultPermissions?.create;
+                    const defaultRead = values.defaultPermissions?.read;
+                    const defaultEdit = values.defaultPermissions?.edit;
+                    const defaultDelete = values.defaultPermissions?.delete;
                     return (
                         <Form noValidate style={{
                             display: "flex",
@@ -108,13 +122,13 @@ export function RolesDetailsForm({
                                         }}>
                                         <Typography variant={"h4"}
                                                     sx={{ flexGrow: 1 }}>
-                                            User
+                                            Role
                                         </Typography>
                                     </Box>
 
                                     <Grid container spacing={2}>
 
-                                        <Grid item xs={12}>
+                                        <Grid item xs={12} md={9}>
                                             <FormControl fullWidth
                                                          required
                                                          error={touched.name && Boolean(errors.name)}>
@@ -129,71 +143,150 @@ export function RolesDetailsForm({
                                                 />
                                                 <FormHelperText
                                                     id="name-helper-text">
-                                                    {touched.name && Boolean(errors.name) ? errors.name : "Name of this user"}
+                                                    {touched.name && Boolean(errors.name) ? errors.name : "Name of this role"}
                                                 </FormHelperText>
                                             </FormControl>
                                         </Grid>
-                                        <Grid item xs={12}>
-                                            <FormControl fullWidth
-                                                         required
-                                                         error={touched.email && Boolean(errors.email)}>
-                                                <InputLabel
-                                                    htmlFor="email">Email</InputLabel>
-                                                <OutlinedInput
-                                                    id="email"
-                                                    value={values.email}
-                                                    onChange={handleChange}
-                                                    aria-describedby="email-helper-text"
-                                                    label="Email"
-                                                />
-                                                <FormHelperText
-                                                    id="email-helper-text">
-                                                    {touched.email && Boolean(errors.email) ? errors.email : "Email of this user"}
-                                                </FormHelperText>
-                                            </FormControl>
-                                        </Grid>
-                                        <Grid item xs={12}>
-                                            <FormControl fullWidth>
-                                                <InputLabel id="roles-label">
-                                                    Roles
-                                                </InputLabel>
-                                                <Select
-                                                    labelId="roles-label"
-                                                    multiple
-                                                    id="roles"
-                                                    name="roles"
-                                                    label="Roles"
-                                                    value={values.roles ?? []}
-                                                    onChange={handleChange}
-                                                    renderValue={(value: string[]) =>
-                                                        <Box sx={theme => ({
-                                                            display: "flex",
-                                                            flexWrap: "wrap",
-                                                            gap: theme.spacing(0.5)
-                                                        })}>
-                                                            {
-                                                                value.map(roleId => roles.find(role => role.id === roleId))
-                                                                    .filter(Boolean)
-                                                                    .map(userRole =>
-                                                                        <ColorChip
-                                                                            label={userRole!.name}/>)}
-                                                        </Box>
 
-                                                    }
-                                                >
-                                                    {roles.map((value) => (
-                                                        <MenuItem
-                                                            key={`role-select-${value.id}`}
-                                                            value={value.id}>
-                                                            <ColorChip
-                                                                label={value.name}/>
-                                                        </MenuItem>
-                                                    ))}
-                                                </Select>
-                                            </FormControl>
+                                        <Grid item xs={12} md={3}>
+                                            <FormControlLabel
+                                                control={
+                                                    <Checkbox
+                                                        checked={isAdmin}
+                                                        onChange={handleChange}
+                                                        name="isAdmin"/>
+                                                }
+                                                label="Is admin role"
+                                            />
                                         </Grid>
 
+                                        <Grid item xs={12}>
+                                            <Paper
+                                                variant={"outlined"}
+                                                sx={{
+                                                    // background: "inherit"
+                                                }}>
+                                                <MuiTable>
+                                                    <TableHead>
+                                                        <TableRow>
+                                                            <TableCell>Collection</TableCell>
+                                                            <TableCell
+                                                                align="center">Create</TableCell>
+                                                            <TableCell
+                                                                align="center">Read</TableCell>
+                                                            <TableCell
+                                                                align="center">Update</TableCell>
+                                                            <TableCell
+                                                                align="center">Delete</TableCell>
+                                                        </TableRow>
+                                                    </TableHead>
+                                                    <TableBody>
 
+                                                        <TableRow
+                                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                        >
+                                                            <TableCell
+                                                                component="th"
+                                                                scope="row">
+                                                                <strong>All
+                                                                    collections</strong>
+                                                            </TableCell>
+                                                            <TableCell
+                                                                align="center">
+                                                                <Tooltip
+                                                                    title="Create entities in collections">
+                                                                    <Checkbox
+                                                                        disabled={isAdmin}
+                                                                        checked={isAdmin || defaultCreate}
+                                                                        onChange={(_, checked) => setFieldValue("defaultPermissions.create", checked)}
+                                                                        name="defaultPermissions.create"/>
+                                                                </Tooltip>
+                                                            </TableCell>
+
+                                                            <TableCell
+                                                                align="center">
+                                                                <Tooltip
+                                                                    title="Access all data in every collection">
+                                                                    <Checkbox
+                                                                        disabled={isAdmin}
+                                                                        checked={isAdmin || defaultRead}
+                                                                        onChange={(_, checked) => setFieldValue("defaultPermissions.read", checked)}
+                                                                        name="defaultPermissions.read"/>
+                                                                </Tooltip>
+                                                            </TableCell>
+                                                            <TableCell
+                                                                align="center">
+                                                                <Tooltip
+                                                                    title="Update data in any collection">
+                                                                    <Checkbox
+                                                                        disabled={isAdmin}
+                                                                        checked={isAdmin || defaultEdit}
+                                                                        onChange={(_, checked) => setFieldValue("defaultPermissions.edit", checked)}
+                                                                        name="defaultPermissions.edit"/>
+                                                                </Tooltip>
+                                                            </TableCell>
+                                                            <TableCell
+                                                                align="center">
+                                                                <Tooltip
+                                                                    title="Delete data in any collection">
+                                                                    <Checkbox
+                                                                        disabled={isAdmin}
+                                                                        checked={isAdmin || defaultDelete}
+                                                                        onChange={(_, checked) => setFieldValue("defaultPermissions.delete", checked)}
+                                                                        name="defaultPermissions.delete"/>
+
+                                                                </Tooltip>
+                                                            </TableCell>
+                                                        </TableRow>
+                                                        {collections && collections.map((col) => (
+                                                            <TableRow
+                                                                key={col.name}
+                                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                                            >
+                                                                <TableCell
+                                                                    component="th"
+                                                                    scope="row">
+                                                                    {col.name}
+                                                                </TableCell>
+                                                                <TableCell
+                                                                    align="center">
+                                                                    <Checkbox
+                                                                        disabled={isAdmin || defaultCreate}
+                                                                        checked={isAdmin || defaultCreate || getIn(values, `collectionPermissions.${col.alias ?? col.path}.create`)}
+                                                                        onChange={(_, checked) => setFieldValue(`collectionPermissions.${col.alias ?? col.path}.create`, checked)}
+                                                                        name={`collectionPermissions.${col.alias ?? col.path}.create`}/>
+                                                                </TableCell>
+                                                                <TableCell
+                                                                    align="center">
+                                                                    <Checkbox
+                                                                        disabled={isAdmin || defaultRead}
+                                                                        checked={isAdmin || defaultRead || getIn(values, `collectionPermissions.${col.alias ?? col.path}.read`)}
+                                                                        onChange={(_, checked) => setFieldValue(`collectionPermissions.${col.alias ?? col.path}.read`, checked)}
+                                                                        name={`collectionPermissions.${col.alias ?? col.path}.read`}/>
+                                                                </TableCell>
+                                                                <TableCell
+                                                                    align="center">
+                                                                    <Checkbox
+                                                                        disabled={isAdmin || defaultEdit}
+                                                                        checked={isAdmin || defaultEdit || getIn(values, `collectionPermissions.${col.alias ?? col.path}.update`)}
+                                                                        onChange={(_, checked) => setFieldValue(`collectionPermissions.${col.alias ?? col.path}.update`, checked)}
+                                                                        name={`collectionPermissions.${col.alias ?? col.path}.update`}/>
+                                                                </TableCell>
+                                                                <TableCell
+                                                                    align="center">
+                                                                    <Checkbox
+                                                                        disabled={isAdmin || defaultDelete}
+                                                                        checked={isAdmin || defaultDelete || getIn(values, `collectionPermissions.${col.alias ?? col.path}.delete`)}
+                                                                        onChange={(_, checked) => setFieldValue(`collectionPermissions.${col.alias ?? col.path}.delete`, checked)}
+                                                                        name={`collectionPermissions.${col.alias ?? col.path}.delete`}/>
+                                                                </TableCell>
+                                                            </TableRow>
+                                                        ))}
+                                                    </TableBody>
+                                                </MuiTable>
+                                            </Paper>
+
+                                        </Grid>
                                     </Grid>
 
                                     <Box height={52}/>
@@ -201,11 +294,11 @@ export function RolesDetailsForm({
                                 </Container>
                             </Box>
                             <CustomDialogActions
-                                position={"absolute"}>
+                                position={"sticky"}>
                                 {savingError && <Typography sx={theme => ({
                                     color: theme.palette.error.light
                                 })}>
-                                    There was an error saving this user
+                                    There was an error saving this role
                                 </Typography>}
                                 <Button variant={"text"}
                                         onClick={() => {
@@ -222,7 +315,7 @@ export function RolesDetailsForm({
                                     loadingPosition="start"
                                     startIcon={<SaveIcon/>}
                                 >
-                                    {isNewUser ? "Create user" : "Update"}
+                                    {isNewRole ? "Create role" : "Update"}
                                 </LoadingButton>
                             </CustomDialogActions>
                         </Form>

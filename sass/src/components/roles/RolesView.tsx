@@ -1,25 +1,30 @@
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-import { UsersEditTable } from "./UsersEditTable";
+import { RolesTable } from "./RolesTable";
 import { useConfigController } from "../../useConfigController";
 import { RolesDetailsForm } from "./RolesDetailsForm";
 import { useCallback, useState } from "react";
-import { SassUser } from "../../models/sass_user";
+import { Role } from "../../models/roles";
+import { EntityCollection } from "@camberi/firecms";
 
-export function UsersEditView() {
+export function RolesView({
+                              collections
+                          }: {
+    collections?: EntityCollection[]
+}) {
 
     const { users, roles } = useConfigController();
     const [dialogOpen, setDialogOpen] = useState(false);
-    const [selectedUser, setSelectedUser] = useState<SassUser | undefined>();
+    const [selectedRole, setSelectedRole] = useState<Role | undefined>();
 
-    const onUserClicked = useCallback((user: SassUser) => {
+    const onUserClicked = useCallback((user: Role) => {
         setDialogOpen(true);
-        setSelectedUser(user);
+        setSelectedRole(user);
     }, []);
 
     const handleClose = () => {
-        setSelectedUser(undefined);
+        setSelectedRole(undefined);
         setDialogOpen(false);
     };
 
@@ -42,13 +47,13 @@ export function UsersEditView() {
                                 flexGrow: 1
                             }}
                             component="h4">
-                    Users
+                    Roles
                 </Typography>
                 <Button variant={"outlined"}
                         size={"large"}
                         startIcon={<AddIcon/>}
                         onClick={() => setDialogOpen(true)}>
-                    Add user
+                    Add role
                 </Button>
             </Box>
 
@@ -56,12 +61,12 @@ export function UsersEditView() {
                 flexGrow: 1,
                 overflow: "hidden"
             }}>
-                <UsersEditTable users={users}
-                                onUserClicked={onUserClicked}
-                                roles={roles}/>
+                <RolesTable onRoleClicked={onUserClicked}
+                            roles={roles}/>
             </Paper>
             <RolesDetailsForm open={dialogOpen}
-                              user={selectedUser}
+                              role={selectedRole}
+                              collections={collections}
                               handleClose={handleClose}/>
 
         </Container>

@@ -15,20 +15,19 @@ import {
 import React, { useCallback, useEffect, useRef } from "react";
 import { ConfigController } from "./models/config_controller";
 import {
-    AuthController,
     COLLECTION_PATH_SEPARATOR,
     EntityCollection,
     mergeCollections,
+    PermissionsBuilderProps,
     Properties,
     removeFunctions,
     removeNonEditableProperties,
-    resolvePermissions,
     sortProperties,
     stripCollectionPath
 } from "@camberi/firecms";
 import { SassUser } from "./models/sass_user";
 import { Role } from "./models/roles";
-import { DEFAULT_ROLES } from "./util/permissions";
+import { DEFAULT_ROLES, resolveSassPermissions } from "./util/permissions";
 
 /**
  * @category Firebase
@@ -118,7 +117,7 @@ export function useBuildFirestoreConfigController({
                 next: (snapshot) => {
                     setRolesError(undefined);
                     // TODO: remove this hack to generate the default roles
-                    if (snapshot.empty) DEFAULT_ROLES.forEach(saveRole);
+                    // if (snapshot.empty) DEFAULT_ROLES.forEach(saveRole);
                     try {
                         const newRoles = docsToRoles(snapshot.docs);
                         setRoles(newRoles);
@@ -202,7 +201,9 @@ export function useBuildFirestoreConfigController({
         return setDoc(ref, roleData, { merge: true });
     }, [configPath, firestore]);
 
-    const collections = persistedCollections !== undefined ?  joinCollections(persistedCollections , baseCollections) : undefined;
+    const allCollections = persistedCollections !== undefined ? joinCollections(persistedCollections, baseCollections) : undefined;
+    const collections = allCollections !== undefined ? applyPermissionsFunction(allCollections) : undefined;
+
     return {
         loading: collectionsLoading || rolesLoading || usersLoading,
         collections,
@@ -322,17 +323,14 @@ function joinCollections(fetchedCollections: EntityCollection[], baseCollections
     return [...updatedCollections, ...storedCollections];
 }
 
-export function filterAllowedCollections<M>(collections: EntityCollection<M>[],
-                                            authController: AuthController,
-                                            paths: string[] = []): EntityCollection<M>[] {
-    return collections
-        .map((collection) => ({
-            ...collection,
-            subcollections: collection.subcollections
-                ? filterAllowedCollections(collection.subcollections, authController, [...paths, collection.alias ?? collection.path])
-                : undefined,
-            permissions: resolvePermissions(collection, authController, [...paths, collection.alias ?? collection.path]
-            )
-        }))
-        .filter(collection => collection.permissions.read === undefined || collection.permissions.read);
+const applyPermissionsFunction = (collections: EntityCollection[]) => {
+    return collections.map(collection => ({
+        ...collection,
+        permissions: ({
+                          pathSegments,
+                          collection,
+                          authController
+                      }: PermissionsBuilderProps<any>) => resolveSassPermissions(collection, authController, pathSegments)
+    }))
+
 }

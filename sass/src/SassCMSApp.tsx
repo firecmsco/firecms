@@ -8,14 +8,17 @@ import "@fontsource/ibm-plex-mono";
 import "typeface-rubik";
 
 import {
+    AuthController,
     Authenticator,
     CircularProgressCenter,
     CMSView,
     createCMSDefaultTheme,
+    EntityCollection,
     FirebaseAuthDelegate,
     FirebaseLoginView,
     FireCMS,
     NavigationRoutes,
+    resolvePermissions,
     Scaffold,
     SideDialogs,
     useBuildFirebaseAuthDelegate,
@@ -37,8 +40,9 @@ import {
     SassEntityCollectionView
 } from "./components/SassEntityCollectionView";
 import { SassHomePage } from "./components/SassHomePage";
-import { UsersEditView } from "./components/users/UsersEditView";
+import { UsersView } from "./components/users/UsersView";
 import { getUserRoles } from "./util/permissions";
+import { RolesView } from "./components/roles/RolesView";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -81,7 +85,6 @@ export function SassCMSApp() {
 
     const sassAuthenticator: Authenticator = useCallback(({ user, authController }) => {
         if (!user) return false;
-        console.log("configController", configController);
         const sassUser = configController.users.find((sassUser) => sassUser.email === user?.email)
         if (!sassUser) throw Error("No user was found with email " + user.email);
         console.log("Allowing access to", user?.email);
@@ -119,20 +122,26 @@ export function SassCMSApp() {
             name: "Users",
             group: "Admin",
             icon: "People",
-            view: <UsersEditView />
+            view: <UsersView/>
+        },
+        {
+            path: "roles",
+            name: "Roles",
+            group: "Admin",
+            icon: "GppGood",
+            view: <RolesView collections={configController.collections}/>
         }
     ]
-
     return (
         <Router>
             {!configController.loading && <FireCMS authDelegate={authDelegate}
-                     collections={configController.collections}
-                     authentication={sassAuthenticator}
-                     dataSource={dataSource}
-                     views={views}
-                     storageSource={storageSource}
-                     EntityCollectionViewComponent={SassEntityCollectionView}
-                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}>
+                                                   collections={configController.collections}
+                                                   authentication={sassAuthenticator}
+                                                   dataSource={dataSource}
+                                                   views={views}
+                                                   storageSource={storageSource}
+                                                   EntityCollectionViewComponent={SassEntityCollectionView}
+                                                   entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}>
                 {({ context, mode, loading }) => {
 
                     const authController = context.authController;
@@ -181,4 +190,23 @@ export function SassCMSApp() {
         </Router>
     );
 
+}
+
+function filterAllowedCollections<M>(collections: EntityCollection<M>[],
+                                     authController: AuthController,
+                                     paths: string[] = []): EntityCollection<M>[] {
+    return collections
+        .map((collection) => {
+            const permissions = resolvePermissions(collection, authController, [...paths, collection.alias ?? collection.path]);
+            return ({
+                ...collection,
+                subcollections: collection.subcollections
+                    ? filterAllowedCollections(collection.subcollections, authController, [...paths, collection.alias ?? collection.path])
+                    : undefined,
+                permissions
+            });
+        })
+        .filter(collection => {
+            return collection.permissions.read === undefined || collection.permissions.read;
+        });
 }

@@ -84,11 +84,11 @@ export function useBuildAuthController<UserType extends User>({
         if (!authDelegate.initialLoading && !delegateUser)
             setAuthVerified(true);
 
-    }, [authDelegate.initialLoading, authDelegate.user]);
+    }, [authDelegate.initialLoading, authDelegate.user, authentication]);
 
     useEffect(() => {
         checkAuthentication();
-    }, [authDelegate.initialLoading, authDelegate.user, authentication]);
+    }, [checkAuthentication]);
 
     return authController;
 }

@@ -7,7 +7,7 @@ import { UserDetailsForm } from "./UserDetailsForm";
 import { useCallback, useState } from "react";
 import { SassUser } from "../../models/sass_user";
 
-export function UsersEditView() {
+export function UsersView() {
 
     const { users, roles } = useConfigController();
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -60,6 +60,7 @@ export function UsersEditView() {
                                 onUserClicked={onUserClicked}
                                 roles={roles}/>
             </Paper>
+
             <UserDetailsForm open={dialogOpen}
                              user={selectedUser}
                              handleClose={handleClose}/>

@@ -3,7 +3,7 @@ export * from "./hooks/useFirestoreDataSource";
 export * from "./hooks/useFirebaseStorageSource";
 
 export { FirebaseCMSApp } from "./FirebaseCMSApp";
-export type { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
+export type { FirebaseCMSAppProps, EntityCollectionsBuilder, CMSViewsBuilder } from "./FirebaseCMSAppProps";
 
 export type { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 export { FirebaseLoginView } from "./components/FirebaseLoginView";
