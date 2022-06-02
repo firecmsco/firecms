@@ -48,12 +48,13 @@ export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: 
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
 
-        const collection = collections && collections.find((entry) => entry.path === subpathCombination);
+        const collection = collections && collections.find((entry) => entry.alias === subpathCombination || entry.path === subpathCombination);
 
         if (collection) {
+            const pathOrAlias = collection.alias ?? collection.path;
             const collectionPath = currentFullPath && currentFullPath.length > 0
-                ? (currentFullPath + "/" + collection.path)
-                : collection.path;
+                ? (currentFullPath + "/" + pathOrAlias)
+                : pathOrAlias;
 
             result.push({
                 type: "collection",

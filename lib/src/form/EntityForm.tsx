@@ -28,7 +28,7 @@ import { CustomIdField } from "./components/CustomIdField";
 /**
  * @category Components
  */
-export interface EntityFormProps<M> {
+export interface EntityFormProps<M extends { [Key: string]: any }> {
 
     /**
      * New or existing status
@@ -96,7 +96,7 @@ export interface EntityFormProps<M> {
  * @constructor
  * @category Components
  */
-export function EntityForm<M>({
+export function EntityForm<M extends { [Key: string]: any }>({
                                   status,
                                   path,
                                   collection: inputCollection,
@@ -343,9 +343,6 @@ function FormInternal<M>({
     savingError?: Error,
 }) {
 
-    const parentRef = React.useRef<any>();
-    const scrollingRef = React.useRef<number | undefined>()
-
     const modified = !equal(baseDataSourceValues, values);
     useEffect(() => {
         if (onModified)
@@ -483,8 +480,6 @@ function FormInternal<M>({
         </Form>
     );
 }
-
-export default EntityForm;
 
 const shouldPropertyReRender = (property: ResolvedProperty): boolean => {
     if (property.dataType === "map" && property.properties) {

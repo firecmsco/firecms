@@ -6,7 +6,7 @@ import {
     UnsavedChangesDialog,
     useNavigationUnsavedChangesDialog
 } from "./internal/useUnsavedChangesDialog";
-import { CONTAINER_WIDTH } from "./internal/common";
+import { FORM_CONTAINER_WIDTH } from "./internal/common";
 import { Box } from "@mui/material";
 import { SideDialogPanelProps } from "../models";
 
@@ -83,7 +83,7 @@ function SideDialogView({
     const [blocked, setBlocked] = useState(false);
     const [blockedNavigationMessage, setBlockedNavigationMessage] = useState<React.ReactNode | undefined>();
 
-    const [width, setWidth] = useState(panel?.width ?? CONTAINER_WIDTH);
+    const [width, setWidth] = useState(panel?.width ?? FORM_CONTAINER_WIDTH);
     const sideDialogsController = useSideDialogsController();
 
     const {
@@ -96,7 +96,7 @@ function SideDialogView({
     );
 
     useEffect(() => {
-        setWidth(panel?.width ?? CONTAINER_WIDTH);
+        setWidth(panel?.width ?? FORM_CONTAINER_WIDTH);
     }, [panel?.width])
 
     const handleDrawerCloseOk = () => {

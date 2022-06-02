@@ -18,26 +18,26 @@ import {
     getFistAdditionalView,
     removeInitialAndTrailingSlashes
 } from "../util";
-import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
+import { CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH, ADDITIONAL_TAB_WIDTH } from "./common";
 
 const NEW_URL_HASH = "new";
 
 export function getEntityViewWidth(props: EntitySidePanelProps<any, any>, small: boolean): string {
     if (small) return CONTAINER_FULL_WIDTH;
-    const hasAdditionalViews = ((props.collection?.subcollections ?? []).length > 0) || ((props.collection?.views ?? []).length > 0);
-    console.log("getEntityViewWidth", hasAdditionalViews, props);
     const mainViewSelected = !props.selectedSubPath;
     const resolvedWidth: string | undefined = typeof props.width === "number" ? `${props.width}px` : props.width;
-    return !mainViewSelected ? `calc(${TAB_WIDTH} + ${resolvedWidth ?? CONTAINER_WIDTH})` : resolvedWidth ?? CONTAINER_WIDTH
+    return !mainViewSelected ? `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedWidth ?? FORM_CONTAINER_WIDTH})` : resolvedWidth ?? FORM_CONTAINER_WIDTH
 }
 
 export const useBuildSideEntityController = (navigation: NavigationContext,
                                              sideDialogsController: SideDialogsController): SideEntityController => {
 
+
     const location = useLocation();
     const initialised = useRef<boolean>(false);
 
     const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
     const smallLayout: boolean = useMediaQuery(theme.breakpoints.down("sm"));
 
     // only on initialisation
@@ -54,6 +54,7 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
     }, [location, navigation, sideDialogsController]);
 
     const propsToSidePanel = useCallback((props: EntitySidePanelProps<any, any>): SideDialogPanelProps<EntitySidePanelProps> => {
+
         const collectionPath = removeInitialAndTrailingSlashes(props.path);
         const newPath = props.entityId
             ? navigation.buildUrlCollectionPath(`${collectionPath}/${props.entityId}/${props.selectedSubPath || ""}`)
@@ -78,10 +79,10 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
         if (props.copy && !props.entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
-        const fistAdditionalView = props.collection ? getFistAdditionalView(props.collection) : undefined;
+        const fistAdditionalView = largeLayout && props.collection ? getFistAdditionalView(props.collection) : undefined;
         sideDialogsController.open(propsToSidePanel({ selectedSubPath: fistAdditionalView?.path, ...props }));
 
-    }, [sideDialogsController]);
+    }, [sideDialogsController, largeLayout]);
 
     const replace = useCallback((props: EntitySidePanelProps) => {
 
@@ -106,6 +107,8 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
         path,
         collections
     });
+
+    console.log("navigationViewsForPath", navigationViewsForPath);
 
     const sidePanels: EntitySidePanelProps[] = [];
     let lastCollectionPath = "";

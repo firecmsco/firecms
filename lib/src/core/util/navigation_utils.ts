@@ -31,7 +31,7 @@ export function getLastSegment(path: string) {
     return cleanPath;
 }
 
-export function resolveCollectionAliases(path: string, collections: EntityCollection[]): string {
+export function resolveCollectionPathAliases(path: string, allCollections: EntityCollection[]): string {
     const cleanPath = removeInitialAndTrailingSlashes(path);
     const subpaths = cleanPath.split("/");
     if (subpaths.length % 2 === 0) {
@@ -39,18 +39,18 @@ export function resolveCollectionAliases(path: string, collections: EntityCollec
     }
 
     let resolvedSegment = subpaths[0];
-    const aliasedCollection = collections.find((col) => col.alias === subpaths[0]);
+    const aliasedCollection = allCollections.find((col) => col.alias === subpaths[0]);
     if (aliasedCollection) {
         resolvedSegment = aliasedCollection.path as string;
     }
 
     if (subpaths.length > 1) {
-        const segmentCollection = getCollectionByPath(resolvedSegment, collections);
+        const segmentCollection = getCollectionByPathOrAlias(resolvedSegment, allCollections);
         const restOfThePath = cleanPath.split("/").slice(2).join("/");
         if (!segmentCollection?.subcollections) {
             throw Error("Unable to resolve collection aliases for " + path);
         }
-        return resolvedSegment + "/" + subpaths[1] + "/" + resolveCollectionAliases(restOfThePath, segmentCollection.subcollections);
+        return resolvedSegment + "/" + subpaths[1] + "/" + resolveCollectionPathAliases(restOfThePath, segmentCollection.subcollections);
     } else {
         return resolvedSegment;
     }
@@ -59,14 +59,14 @@ export function resolveCollectionAliases(path: string, collections: EntityCollec
 /**
  * Find the corresponding view at any depth for a given path.
  * Note that path or segments of the paths can be collection aliases.
- * @param path
+ * @param pathOrAlias
  * @param collections
  */
-export function getCollectionByPath<M extends { [Key: string]: any }>(path: string, collections: EntityCollection[]): EntityCollection | undefined {
+export function getCollectionByPathOrAlias<M extends { [Key: string]: any }>(pathOrAlias: string, collections: EntityCollection[]): EntityCollection | undefined {
 
-    const subpaths = removeInitialAndTrailingSlashes(path).split("/");
+    const subpaths = removeInitialAndTrailingSlashes(pathOrAlias).split("/");
     if (subpaths.length % 2 === 0) {
-        throw Error(`Collection paths must have an odd number of segments: ${path}`);
+        throw Error(`Collection paths must have an odd number of segments: ${pathOrAlias}`);
     }
 
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
@@ -80,12 +80,12 @@ export function getCollectionByPath<M extends { [Key: string]: any }>(path: stri
 
         if (navigationEntry) {
 
-            if (subpathCombination === path) {
+            if (subpathCombination === pathOrAlias) {
                 result = navigationEntry;
             } else if (navigationEntry.subcollections) {
-                const newPath = path.replace(subpathCombination, "").split("/").slice(2).join("/");
+                const newPath = pathOrAlias.replace(subpathCombination, "").split("/").slice(2).join("/");
                 if (newPath.length > 0)
-                    result = getCollectionByPath(newPath, navigationEntry.subcollections);
+                    result = getCollectionByPathOrAlias(newPath, navigationEntry.subcollections);
             }
         }
         if (result) break;

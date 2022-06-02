@@ -1,11 +1,4 @@
-import React, {
-    lazy,
-    Suspense,
-    useCallback,
-    useEffect,
-    useRef,
-    useState
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 import {
     Box,
@@ -14,7 +7,6 @@ import {
     IconButton,
     Tab,
     Tabs,
-    Typography,
     useMediaQuery,
     useTheme
 } from "@mui/material";
@@ -29,7 +21,7 @@ import {
 } from "../../models";
 import {
     CircularProgressCenter,
-    EntityPreviewProps,
+    EntityPreview,
     ErrorBoundary
 } from "../components";
 import {
@@ -39,7 +31,11 @@ import {
     removeInitialAndTrailingSlashes
 } from "../util";
 
-import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
+import {
+    ADDITIONAL_TAB_WIDTH,
+    CONTAINER_FULL_WIDTH,
+    FORM_CONTAINER_WIDTH
+} from "./common";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -49,11 +45,8 @@ import {
     useSideEntityController,
     useSnackbarController
 } from "../../hooks";
-import { EntityFormProps } from "../../form";
+import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
-
-const EntityForm = lazy(() => import("../../form/EntityForm")) as React.FunctionComponent<EntityFormProps<any>>;
-const EntityPreview = lazy(() => import("../components/EntityPreview")) as React.FunctionComponent<EntityPreviewProps<any>>;
 
 export interface EntityViewProps<M> {
     path: string;
@@ -80,7 +73,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
         const largeLayoutTabSelected = useRef(!largeLayout);
 
-        const resolvedWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? CONTAINER_WIDTH;
+        const resolvedFormWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? FORM_CONTAINER_WIDTH;
 
         const dataSource = useDataSource();
         const sideDialogContext = useSideDialogContext();
@@ -133,20 +126,22 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             if (!selectedSubPath)
                 setTabsPosition(-1);
 
-            if (customViews) {
-                const index = customViews
-                    .map((c) => c.path)
-                    .findIndex((p) => p === selectedSubPath);
-                setTabsPosition(index);
-            }
+            if (largeLayout) {
+                if (customViews) {
+                    const index = customViews
+                        .map((c) => c.path)
+                        .findIndex((p) => p === selectedSubPath);
+                    setTabsPosition(index);
+                }
 
-            if (collection.subcollections && selectedSubPath) {
-                const index = collection.subcollections
-                    .map((c) => c.path)
-                    .findIndex((p) => p === selectedSubPath);
-                setTabsPosition(index + customViewsCount);
+                if (collection.subcollections && selectedSubPath) {
+                    const index = collection.subcollections
+                        .map((c) => c.path)
+                        .findIndex((p) => p === selectedSubPath);
+                    setTabsPosition(index + customViewsCount);
+                }
             }
-        }, [selectedSubPath]);
+        }, [selectedSubPath, largeLayout, customViewsCount]);
 
         useEffect(() => {
             if (largeLayoutTabSelected.current === largeLayout)
@@ -204,7 +199,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             if (tabsPosition === -1)
                 sideDialogContext.close();
 
-        }, [tabsPosition]);
+        }, [collection.name, collection.singularName, tabsPosition]);
 
         const onSaveFailure = useCallback((e: Error) => {
 
@@ -229,7 +224,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             path: string,
             entityId: string | undefined,
             values: EntityValues<M>,
-            previousValues?: EntityValues<M>,
+            previousValues?: EntityValues<M>
         }): Promise<void> => {
 
             if (!status)
@@ -256,7 +251,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 return (
                     <Box
                         sx={{
-                            width: TAB_WIDTH,
+                            width: ADDITIONAL_TAB_WIDTH,
                             height: "100%",
                             overflow: "auto",
                             borderLeft: `1px solid ${theme.palette.divider}`,
@@ -288,7 +283,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 return (
                     <Box
                         sx={{
-                            width: TAB_WIDTH,
+                            width: ADDITIONAL_TAB_WIDTH,
                             height: "100%",
                             overflow: "auto",
                             borderLeft: `1px solid ${theme.palette.divider}`,
@@ -360,26 +355,22 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const form = !readOnly
             ? (
-                <Suspense fallback={<CircularProgressCenter/>}>
-                    <EntityForm
-                        key={`form_${path}_${entity?.id ?? "new"}`}
-                        status={status}
-                        path={path}
-                        collection={collection}
-                        onEntitySave={onEntitySave}
-                        onDiscard={onDiscard}
-                        onValuesChanged={setModifiedValues}
-                        onModified={onValuesAreModified}
-                        entity={entity}/>
-                </Suspense>
+                <EntityForm
+                    key={`form_${path}_${entity?.id ?? "new"}`}
+                    status={status}
+                    path={path}
+                    collection={collection as EntityCollection<any>}
+                    onEntitySave={onEntitySave}
+                    onDiscard={onDiscard}
+                    onValuesChanged={setModifiedValues}
+                    onModified={onValuesAreModified}
+                    entity={entity}/>
             )
             : (
-                <Suspense fallback={<CircularProgressCenter/>}>
-                    <EntityPreview
-                        entity={entity as Entity<M>}
-                        path={path}
-                        collection={collection}/>
-                </Suspense>
+                <EntityPreview
+                    entity={entity as Entity<M>}
+                    path={path}
+                    collection={collection}/>
             );
 
         const subcollectionTabs = subcollections && subcollections.map(
@@ -439,7 +430,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     indicatorColor="secondary"
                     textColor="inherit"
                     onChange={(ev, value) => {
-                        if (largeLayout && value === 0) return;
                         onSideTabClick(value - 1);
                     }}
                     sx={{
@@ -487,7 +477,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         <Box sx={{
                             flexGrow: 1,
                             height: "100%",
-                            width: `calc(${TAB_WIDTH} + ${resolvedWidth})`,
+                            width: `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedFormWidth})`,
                             maxWidth: "100%",
                             [theme.breakpoints.down("sm")]: {
                                 width: CONTAINER_FULL_WIDTH
@@ -504,7 +494,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                     role="tabpanel"
                                     hidden={!mainViewVisible}
                                     sx={{
-                                        width: resolvedWidth,
+                                        width: resolvedFormWidth,
                                         maxWidth: "100%",
                                         height: "100%",
                                         overflow: "auto",

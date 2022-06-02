@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from "react";
 
 import { EntitySidePanelProps } from "../models";
-import { CONTAINER_WIDTH } from "./internal/common";
+import { FORM_CONTAINER_WIDTH } from "./internal/common";
 import { useNavigationContext, useSideEntityController } from "../hooks";
 
 import { ErrorBoundary } from "./components";
@@ -29,6 +29,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     const collection = useMemo(() => {
         if (!props) return undefined;
         let usedCollection = props.collection;
+
         if (!usedCollection) {
             usedCollection = !props ? undefined : navigationContext.getCollection(props.path, props.entityId);
             if (!usedCollection) {
@@ -58,7 +59,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }, [blocked, collection, window]);
 
     if (!props || !collection) {
-        return <div style={{ width: CONTAINER_WIDTH }}/>;
+        return <div style={{ width: FORM_CONTAINER_WIDTH }}/>;
     }
 
     const onValuesAreModified = (modified: boolean) => {

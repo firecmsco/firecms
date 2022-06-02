@@ -14,10 +14,10 @@ import {
     UserConfigurationPersistence
 } from "../../models";
 import {
-    getCollectionByPath,
+    getCollectionByPathOrAlias,
     mergeDeep,
     removeInitialAndTrailingSlashes,
-    resolveCollectionAliases
+    resolveCollectionPathAliases
 } from "../util";
 import {
     CMSViewsBuilder,
@@ -95,7 +95,7 @@ export function useBuildNavigationContext<UserType extends User>({
         if (!collections)
             return undefined;
 
-        const baseCollection = getCollectionByPath<M>(removeInitialAndTrailingSlashes(path), collections);
+        const baseCollection = getCollectionByPathOrAlias<M>(removeInitialAndTrailingSlashes(path), collections);
 
         const userOverride = includeUserOverride ? getCollectionUserOverride(path) : undefined;
 
@@ -122,6 +122,8 @@ export function useBuildNavigationContext<UserType extends User>({
                 permissions: result?.permissions ?? permissions
             };
         }
+
+        if(!result) return undefined;
 
         return { ...overriddenCollection, ...result } as EntityCollection<M>;
 
@@ -164,7 +166,7 @@ export function useBuildNavigationContext<UserType extends User>({
     const resolveAliasesFrom = useCallback((path: string): string => {
         if (!collections)
             throw Error("Collections have not been initialised yet");
-        return resolveCollectionAliases(path, collections);
+        return resolveCollectionPathAliases(path, collections);
     }, [baseCollectionPath, collections]);
 
     const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {

@@ -8,8 +8,7 @@ import {
     User
 } from "../../models";
 import { useDataSource } from "./useDataSource";
-import { resolveCollection } from "../../core/util/resolutions";
-import { resolveCollectionAliases } from "../../core";
+import { resolveCollection, resolveCollectionPathAliases } from "../../core";
 
 /**
  * @category Hooks and utilities
@@ -71,7 +70,7 @@ export async function saveEntityWithCallbacks<M, UserType extends User>({
 
     let updatedValues: Partial<EntityValues<M>>;
 
-    const path = resolveCollectionAliases(inputPath, context.navigation.collections);
+    const path = resolveCollectionPathAliases(inputPath, context.navigation.collections);
 
     const callbacks = collection.callbacks;
     if (callbacks?.onPreSave) {
