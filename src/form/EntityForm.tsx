@@ -79,7 +79,7 @@ export interface EntityFormProps<M> {
     /**
      * Use to resolve the schema properties for specific path, entity id or values
      */
-    schemaOrResolver: EntitySchema<M> & EntitySchemaResolver<M>;
+    schemaOrResolver: EntitySchema<M> | EntitySchemaResolver<M>;
 
     /**
      * The updated entity is passed from the parent component when the underlying data

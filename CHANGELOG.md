@@ -1,4 +1,11 @@
-## [1.0.0-rc.5] - 2022-05-10
+## [1.0.1] - 2022-06-02
+
+### Changed
+
+- Fix for bug when saving new entities with React 18.
+- 
+ 
+## [1.0.0] - 2022-05-10
 
 ### Changed
 

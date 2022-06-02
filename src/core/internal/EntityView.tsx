@@ -1,11 +1,4 @@
-import React, {
-    lazy,
-    Suspense,
-    useCallback,
-    useEffect,
-    useMemo,
-    useState
-} from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import {
     Box,
     CircularProgress,
@@ -32,7 +25,11 @@ import {
     PermissionsBuilder,
     ResolvedEntitySchema
 } from "../../models";
-import { CircularProgressCenter } from "../components";
+import {
+    CircularProgressCenter,
+    EntityCollectionView,
+    EntityPreview
+} from "../components";
 import { removeInitialAndTrailingSlashes } from "../util/navigation_utils";
 
 import { CONTAINER_FULL_WIDTH, CONTAINER_WIDTH, TAB_WIDTH } from "./common";
@@ -48,10 +45,7 @@ import {
 } from "../../hooks";
 import { canEdit } from "../util/permissions";
 import { computeSchema } from "../utils";
-
-const EntityCollectionView = lazy(() => import("../components/EntityCollectionView")) as any;
-const EntityForm = lazy(() => import("../../form/EntityForm")) as any;
-const EntityPreview = lazy(() => import("../components/EntityPreview")) as any;
+import { EntityForm } from "../../form";
 
 const useStylesSide = makeStyles<Theme, { containerWidth?: string }>((theme: Theme) =>
     createStyles({
@@ -169,12 +163,14 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         useCache: false
     });
 
+    const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
+
     const resolvedSchema:ResolvedEntitySchema<M> = useMemo(() => computeSchema({
         schemaOrResolver,
         path,
         entityId,
         values: modifiedValues,
-        previousValues: entity?.values
+        previousValues: usedEntity?.values
     }), [schemaOrResolver, path, entityId, modifiedValues]);
 
     useEffect(() => {
@@ -199,6 +195,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     const customViewsCount = customViews?.length ?? 0;
 
     useEffect(() => {
+        setUsedEntity(entity);
         if (entity)
             setReadOnly(!canEdit(permissions, entity, authController, path, context));
     }, [entity, permissions]);
@@ -253,6 +250,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
             message: `${resolvedSchema.name}: Saved correctly`
         });
 
+        setUsedEntity(updatedEntity);
         setStatus("existing");
         onModifiedValues(false);
 
@@ -287,6 +285,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         previousValues?: EntityValues<M>,
     }): Promise<void> => {
 
+        console.log("onEntitySave", path)
         if (!status)
             return;
 
@@ -313,28 +312,26 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     }, [sideEntityController, tabsPosition]);
 
     const body = !readOnly
-? (
-            <Suspense fallback={<CircularProgressCenter/>}>
-                <EntityForm
-                    key={`form_${path}_${entity?.id ?? "new"}`}
-                    status={status}
-                    path={path}
-                    schemaOrResolver={schemaOrResolver}
-                    onEntitySave={onEntitySave as any}
-                    onDiscard={onDiscard}
-                    onValuesChanged={setModifiedValues}
-                    onModified={onModifiedValues}
-                    entity={entity}/>
-            </Suspense>
-    )
-: (
-        <Suspense fallback={<CircularProgressCenter/>}>
+        ? (
+            <EntityForm
+                key={`form_${path}_${usedEntity?.id ?? "new"}`}
+                status={status}
+                path={path}
+                schemaOrResolver={schemaOrResolver}
+                onEntitySave={onEntitySave}
+                onDiscard={onDiscard}
+                onValuesChanged={setModifiedValues}
+                onModified={onModifiedValues}
+                entity={usedEntity}/>
+        )
+        : (usedEntity &&
             <EntityPreview
-                entity={entity}
+                entity={usedEntity}
                 path={path}
                 schema={schemaOrResolver}/>
-        </Suspense>
-    );
+
+        )
+    ;
 
     const customViewsView: JSX.Element[] | undefined = customViews && customViews.map(
         (customView, colIndex) => {
@@ -350,8 +347,8 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     <ErrorBoundary>
                         {customView.builder({
                             schema: resolvedSchema,
-                            entity,
-                            modifiedValues: modifiedValues ?? entity?.values
+                            entity: usedEntity,
+                            modifiedValues: modifiedValues ?? usedEntity?.values
                         })}
                     </ErrorBoundary>
                 </Box>
@@ -361,7 +358,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
     const subCollectionsViews = subcollections && subcollections.map(
         (subcollection, colIndex) => {
-            const absolutePath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
+            const absolutePath = usedEntity ? `${usedEntity?.path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.path)}` : undefined;
 
             return (
                 <Box
@@ -370,16 +367,14 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
                     role="tabpanel"
                     flexGrow={1}
                     hidden={tabsPosition !== colIndex + customViewsCount}>
-                    {entity && absolutePath
-                        ? <Suspense fallback={<CircularProgressCenter/>}>
-                            <EntityCollectionView
-                                path={absolutePath}
-                                collection={subcollection}/>
-                        </Suspense>
+                    {usedEntity && absolutePath
+                        ? <EntityCollectionView
+                            path={absolutePath}
+                            collection={subcollection}/>
                         : <Box m={3}
-                             display={"flex"}
-                             alignItems={"center"}
-                             justifyContent={"center"}>
+                               display={"flex"}
+                               alignItems={"center"}
+                               justifyContent={"center"}>
                             <Box>
                                 You need to save your entity before
                                 adding additional collections
