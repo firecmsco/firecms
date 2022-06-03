@@ -256,7 +256,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
         if (!inlineEditingEnabled) {
             return (
                 <TableCell
-                    key={`preview_cell_${name}_${rowIndex}_${columnIndex}`}
+                    key={`preview_cell_${String(name)}_${rowIndex}_${columnIndex}`}
                     size={size}
                     value={entity.values[name]}
                     align={column.align}
@@ -264,7 +264,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
                     <PreviewComponent
                         width={column.width}
                         height={column.height}
-                        name={`preview_${name}_${rowIndex}_${columnIndex}`}
+                        name={`preview_${String(name)}_${rowIndex}_${columnIndex}`}
                         property={property}
                         value={entity.values[name]}
                         size={getPreviewSizeFrom(size)}
@@ -332,7 +332,7 @@ export function useBuildColumnsFromSchema<M, AdditionalKey extends string, UserT
 
             return entity
                 ? <PropertyTableCell
-                    key={`table_cell_${name}_${rowIndex}_${columnIndex}`}
+                    key={`table_cell_${String(name)}_${rowIndex}_${columnIndex}`}
                     size={size}
                     align={column.align}
                     name={name as string}

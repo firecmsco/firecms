@@ -335,7 +335,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     const draggable = (
         <div
-            key={`draggable_${name}_${entity.id}`}
+            key={`draggable_${String(name)}_${entity.id}`}
             className={clsx(classes.popup,
                 { [classes.hidden]: !open }
             )}
