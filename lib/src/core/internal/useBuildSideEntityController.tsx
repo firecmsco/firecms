@@ -108,8 +108,6 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
         collections
     });
 
-    console.log("navigationViewsForPath", navigationViewsForPath);
-
     const sidePanels: EntitySidePanelProps[] = [];
     let lastCollectionPath = "";
     for (let i = 0; i < navigationViewsForPath.length; i++) {

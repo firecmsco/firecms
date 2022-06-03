@@ -72,8 +72,8 @@ import {
  * @param shouldAlwaysRerender
  * @category Form custom fields
  */
-export const PropertyFieldBinding = React.memo(
-    function PropertyFieldBinding<T extends CMSType = any, M = any>
+// export const PropertyFieldBinding = React.memo(
+    export function PropertyFieldBinding<T extends CMSType = any, M = any>
     ({
          propertyKey,
          property,
@@ -191,7 +191,9 @@ export const PropertyFieldBinding = React.memo(
         return (
             <div>{`Currently the field ${resolvedProperty.dataType} is not supported`}</div>
         );
-    }, equal);
+    }
+    // ,
+    // equal);
 
 function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
 ({

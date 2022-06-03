@@ -31,8 +31,11 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                             shouldAlwaysRerender
                                                         }: FieldProps<T>) {
 
-    if (!property.of || !property.resolvedProperties)
-        throw Error("ArrayDefaultField misconfiguration. Property `of` not set");
+    if (!property.of)
+        throw Error("RepeatFieldBinding misconfiguration. Property `of` not set");
+
+    if (!property.resolvedProperties || !Array.isArray(property.resolvedProperties))
+        throw Error("RepeatFieldBinding - Internal error: Expected array in 'property.resolvedProperties'");
 
     const expanded = property.expanded === undefined ? true : property.expanded;
     const ofProperty: ResolvedProperty<CMSType[]> = property.of as ResolvedProperty<CMSType[]>;
@@ -68,11 +71,8 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                            onInternalIdAdded={setLastAddedId}
                                            disabled={isSubmitting || Boolean(property.disabled)}
                                            includeAddButton={!property.disabled}/>;
-    const title = (
-        <LabelWithIcon property={property}
-                      />
 
-    );
+    const title = (<LabelWithIcon property={property}/>);
 
     return (
 

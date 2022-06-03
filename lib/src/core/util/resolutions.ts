@@ -50,12 +50,12 @@ export const resolveCollection = <M extends { [Key: string]: any } = any, >
     const resolvedProperties = Object.entries(collection.properties)
         .map(([key, propertyOrBuilder]) => ({
             [key]: resolveProperty({
-                propertyOrBuilder: propertyOrBuilder,
+                propertyOrBuilder,
                 values: usedValues,
                 previousValues: usedPreviousValues,
-                path: path,
+                path,
                 propertyValue: usedValues ? getIn(usedValues, key) : undefined,
-                entityId: entityId
+                entityId
             })
         }))
         .filter((a) => a !== null)
@@ -84,6 +84,7 @@ export const resolveCollection = <M extends { [Key: string]: any } = any, >
 export function resolveProperty<T, M>({
                                           propertyOrBuilder,
                                           propertyValue,
+                                          fromBuilder = false,
                                           ...props
                                       }: {
     propertyOrBuilder: PropertyOrBuilder<T> | ResolvedProperty<T>,
@@ -110,7 +111,7 @@ export function resolveProperty<T, M>({
         const result: Property<T> | null = propertyOrBuilder({
             ...props,
             path,
-            propertyValue: propertyValue,
+            propertyValue,
             values: props.values ?? {},
             previousValues: props.previousValues ?? props.values ?? {}
         });
@@ -133,24 +134,24 @@ export function resolveProperty<T, M>({
         });
         return {
             ...propertyOrBuilder,
-            fromBuilder: props.fromBuilder,
+            fromBuilder,
             properties
         } as ResolvedProperty;
     } else if (propertyOrBuilder.dataType === "array") {
         return resolveArrayProperty({
             property: propertyOrBuilder,
             propertyValue,
-            fromBuilder: props.fromBuilder,
+            fromBuilder,
             ...props
         })
     } else if ((propertyOrBuilder.dataType === "string" || propertyOrBuilder.dataType === "number") && propertyOrBuilder.enumValues) {
-        return resolvePropertyEnum(propertyOrBuilder, props.fromBuilder);
+        return resolvePropertyEnum(propertyOrBuilder, fromBuilder);
     }
 
     return {
         ...propertyOrBuilder,
         resolved: true,
-        fromBuilder: props.fromBuilder,
+        fromBuilder
     } as ResolvedProperty;
 }
 
@@ -166,12 +167,14 @@ export function resolveArrayProperty<T extends any[], M>({
     path?: string,
     entityId?: string,
     index?: number,
-    fromBuilder?: boolean
-}) {
+    fromBuilder: boolean
+}): ResolvedArrayProperty {
+
     if (property.of) {
         if (Array.isArray(property.of)) {
             return {
                 ...property,
+                resolved: true,
                 fromBuilder: props.fromBuilder,
                 resolvedProperties: property.of.map((p, index) => {
                     return resolveProperty({
@@ -183,32 +186,32 @@ export function resolveArrayProperty<T extends any[], M>({
             } as ResolvedArrayProperty;
         } else {
             const of = property.of;
-            const resolvedProperties = Array.isArray(propertyValue)
+            const resolvedProperties: ResolvedProperty[] = Array.isArray(propertyValue)
                 ? propertyValue.map((v: any, index: number) => resolveProperty({
                     propertyOrBuilder: of,
                     propertyValue: v,
                     index,
                     ...props
-                }))
-                : resolveProperty({
-                    propertyOrBuilder: of,
-                    propertyValue: undefined,
-                    ...props
-                });
+                })).filter(e => Boolean(e)) as ResolvedProperty[]
+                : [];
+            const ofProperty = resolveProperty({
+                propertyOrBuilder: of,
+                propertyValue: undefined,
+                ...props
+            });
+            if (!ofProperty)
+                throw Error("When using a property builder as the 'of' prop of an ArrayProperty, you must return a valid child property")
             return {
                 ...property,
+                resolved: true,
                 fromBuilder: props.fromBuilder,
-                of: resolveProperty({
-                    propertyOrBuilder: of,
-                    propertyValue: undefined,
-                    ...props
-                }),
+                of: ofProperty,
                 resolvedProperties
             } as ResolvedArrayProperty;
         }
     } else if (property.oneOf) {
         const typeField = property.oneOf?.typeField ?? DEFAULT_ONE_OF_TYPE;
-        const resolvedProperties = Array.isArray(propertyValue)
+        const resolvedProperties: ResolvedProperty[] = Array.isArray(propertyValue)
             ? propertyValue.map((v, index) => {
                 const type = v && v[typeField];
                 const childProperty = property.oneOf?.properties[type];
@@ -218,7 +221,7 @@ export function resolveArrayProperty<T extends any[], M>({
                     propertyValue,
                     ...props
                 });
-            })
+            }).filter(e => Boolean(e)) as ResolvedProperty[]
             : [];
         const properties = resolveProperties({
             properties: property.oneOf.properties as PropertiesOrBuilders,
@@ -227,19 +230,21 @@ export function resolveArrayProperty<T extends any[], M>({
         });
         return {
             ...property,
+            resolved: true,
             oneOf: {
                 ...property.oneOf,
                 properties
             },
             fromBuilder: props.fromBuilder,
-            resolvedProperties: resolvedProperties
+            resolvedProperties
         } as ResolvedArrayProperty;
     } else if (!property.Field) {
         throw Error("The array property needs to declare an 'of' or a 'oneOf' property, or provide a custom `Field`")
     } else {
         return {
             ...property,
-            fromBuilder: props.fromBuilder,
+            resolved: true,
+            fromBuilder: props.fromBuilder
         } as ResolvedArrayProperty;
     }
 

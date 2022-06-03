@@ -274,9 +274,10 @@ export function EntityForm<M extends { [Key: string]: any }>({
 
                         <Typography
                             sx={{
+                                marginTop: 4,
                                 marginBottom: 4
                             }}
-                            variant={"h4"}>{collection.singularName ?? collection.name}
+                            variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
                         </Typography>
 
                         <CustomIdField customId={collection.customId}
@@ -289,7 +290,6 @@ export function EntityForm<M extends { [Key: string]: any }>({
 
                     {entityId && <FormInternal
                         {...props}
-                        onEntityIdModified={setEntityId}
                         baseDataSourceValues={baseDataSourceValues}
                         onModified={onModified}
                         onValuesChanged={doOnValuesChanges}
@@ -299,7 +299,6 @@ export function EntityForm<M extends { [Key: string]: any }>({
                         entityId={entityId}
                         collection={collection}
                         status={status}
-                        entityIdError={entityIdError}
                         savingError={savingError}/>}
                 </>
             }
@@ -312,13 +311,11 @@ function FormInternal<M>({
                              baseDataSourceValues,
                              values,
                              onModified,
-                             onEntityIdModified,
                              onValuesChanged,
                              underlyingChanges,
                              entityId,
                              entity,
                              touched,
-                             entityIdError,
                              setFieldValue,
                              collection,
                              path,
@@ -326,16 +323,13 @@ function FormInternal<M>({
                              status,
                              handleSubmit,
                              savingError,
-                             errors,
-                             isValidating
+                             errors
                          }: FormikProps<M> & {
     baseDataSourceValues: Partial<M>,
     onModified: ((modified: boolean) => void) | undefined,
-    onEntityIdModified: (id: string | undefined) => void,
     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
     underlyingChanges: Partial<M>,
     path: string
-    entityIdError: boolean,
     entity: Entity<M> | undefined,
     collection: ResolvedEntityCollection<M>,
     entityId: string,
@@ -371,8 +365,6 @@ function FormInternal<M>({
         values,
         path
     };
-
-    const errorKeys = Object.keys(errors);
 
     const formFields = (
         <Grid container spacing={4}>
