@@ -412,6 +412,9 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
         }
     }, []);
 
+
+    const loading = dataLoading || (!usedEntity && status === "existing");
+
     const header = (
         <Box sx={{
             paddingLeft: 2,
@@ -447,7 +450,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
 
             <Box flexGrow={1}/>
 
-            {dataLoading &&
+            {loading &&
             <CircularProgress size={16} thickness={8}/>}
 
             <Tabs
@@ -492,7 +495,7 @@ export function EntityView<M extends { [Key: string]: any }, UserType>({
     return <div
         className={clsx(classes.container, { [classes.containerWide]: tabsPosition !== -1 })}>
         {
-            dataLoading
+            loading
                 ? <CircularProgressCenter/>
                 : <>
 
