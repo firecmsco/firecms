@@ -274,7 +274,7 @@ export function EntityForm<M extends { [Key: string]: any }>({
 
                         <Typography
                             sx={{
-                                marginBottom: 3
+                                marginBottom: 4
                             }}
                             variant={"h4"}>{collection.singularName ?? collection.name}
                         </Typography>

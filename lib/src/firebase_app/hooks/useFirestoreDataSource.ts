@@ -300,7 +300,7 @@ export function useFirestoreDataSource({
         fetchEntity<M extends { [Key: string]: any }>({
                                                           path,
                                                           entityId,
-                                                          collection,
+                                                          collection
                                                       }: FetchEntityProps<M>
         ): Promise<Entity<M> | undefined> {
             return getAndBuildEntity(path, entityId, collection);
@@ -391,7 +391,7 @@ export function useFirestoreDataSource({
 
             return setDoc(documentReference, updatedFirestoreValues, { merge: true }).then(() => ({
                 id: documentReference.id,
-                path: path,
+                path,
                 values: firestoreToCMSModel(updatedFirestoreValues) as EntityValues<M>
             }));
         },

@@ -429,6 +429,7 @@ function areEqual(prevProps: PropertyTableCellProps<any, any> & CellStyleProps, 
         prevProps.align === nextProps.align &&
         prevProps.width === nextProps.width &&
         equal(prevProps.property, nextProps.property) &&
-        equal(prevProps.value, nextProps.value)
+        equal(prevProps.value, nextProps.value) &&
+        equal(prevProps.entity, nextProps.entity)
         ;
 }

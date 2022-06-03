@@ -43,12 +43,6 @@ export function TableReferenceField(props: {
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
-    const handleOpen = useCallback(() => {
-        if (disabled)
-            return;
-        setPreventOutsideClick(true);
-        referenceDialogController.open();
-    }, [disabled, setPreventOutsideClick]);
 
     const handleClose = useCallback(() => {
         setPreventOutsideClick(false);
@@ -80,9 +74,16 @@ export function TableReferenceField(props: {
         }
     );
 
+    const handleOpen = useCallback(() => {
+        if (disabled)
+            return;
+        setPreventOutsideClick(true);
+        referenceDialogController.open();
+    }, [disabled, referenceDialogController, setPreventOutsideClick]);
+
     const valueNotSet = !internalValue || (Array.isArray(internalValue) && internalValue.length === 0);
 
-    function buildSingleReferenceField() {
+    const buildSingleReferenceField = () => {
         if (internalValue instanceof EntityReference)
             return <ReferencePreview
                 onClick={disabled ? undefined : handleOpen}
@@ -94,9 +95,9 @@ export function TableReferenceField(props: {
             />;
         else
             return <ErrorView error={"Data is not a reference"}/>;
-    }
+    };
 
-    function buildMultipleReferenceField() {
+    const buildMultipleReferenceField = () => {
         if (Array.isArray(internalValue))
             return <>
                 {internalValue.map((reference, index) => {
@@ -118,7 +119,7 @@ export function TableReferenceField(props: {
             </>;
         else
             return <ErrorView error={"Data is not an array of references"}/>;
-    }
+    };
 
     if (!collection)
         return <ErrorView error={"The specified collection does not exist"}/>;

@@ -115,10 +115,13 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             useCache: false
         });
 
-        const editEnabled = entity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path)) : false;
+        const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
+
+        const editEnabled = usedEntity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path)) : false;
 
         useEffect(() => {
-            if (entity)
+            setUsedEntity(entity);
+            if (usedEntity)
                 setReadOnly(!editEnabled);
         }, [entity, editEnabled]);
 
@@ -186,14 +189,15 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const onSaveSuccess = useCallback((updatedEntity: Entity<M>) => {
 
-            setCurrentEntityId(updatedEntity.id);
-
             snackbarController.open({
                 type: "success",
                 message: `${collection.singularName ?? collection.name}: Saved correctly`
             });
 
+            setCurrentEntityId(updatedEntity.id);
+            setUsedEntity(updatedEntity);
             setStatus("existing");
+
             onValuesAreModified(false);
 
             if (tabsPosition === -1)
@@ -267,8 +271,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         <ErrorBoundary>
                             {customView.builder({
                                 collection,
-                                entity,
-                                modifiedValues: modifiedValues ?? entity?.values
+                                entity: usedEntity,
+                                modifiedValues: modifiedValues ?? usedEntity?.values
                             })}
                         </ErrorBoundary>
                     </Box>
@@ -276,9 +280,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         );
 
+        const loading = dataLoading || (!usedEntity && status === "existing");
         const subCollectionsViews = subcollections && subcollections.map(
             (subcollection, colIndex) => {
-                const fullPath = entity ? `${entity?.path}/${entity?.id}/${removeInitialAndTrailingSlashes(subcollection.alias ?? subcollection.path)}` : undefined;
+                const fullPath = usedEntity ? `${usedEntity?.path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.alias ?? subcollection.path)}` : undefined;
 
                 return (
                     <Box
@@ -297,10 +302,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         flexGrow={1}
                         hidden={tabsPosition !== colIndex + customViewsCount}>
 
-                        {dataLoading && <CircularProgressCenter/>}
+                        {loading && <CircularProgressCenter/>}
 
-                        {!dataLoading &&
-                            (entity && fullPath
+                        {!loading &&
+                            (usedEntity && fullPath
                                 ? <EntityCollectionViewComponent
                                     fullPath={fullPath}
                                     isSubCollection={true}
@@ -356,7 +361,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const form = !readOnly
             ? (
                 <EntityForm
-                    key={`form_${path}_${entity?.id ?? "new"}`}
+                    key={`form_${path}_${usedEntity?.id ?? "new"}`}
                     status={status}
                     path={path}
                     collection={collection as EntityCollection<any>}
@@ -364,11 +369,11 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     onDiscard={onDiscard}
                     onValuesChanged={setModifiedValues}
                     onModified={onValuesAreModified}
-                    entity={entity}/>
+                    entity={usedEntity}/>
             )
             : (
                 <EntityPreview
-                    entity={entity as Entity<M>}
+                    entity={usedEntity as Entity<M>}
                     path={path}
                     collection={collection}/>
             );
@@ -418,7 +423,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
                 <Box flexGrow={1}/>
 
-                {dataLoading && <Box
+                {loading && <Box
                     sx={{
                         alignSelf: "center"
                     }}>
@@ -503,7 +508,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                             width: CONTAINER_FULL_WIDTH
                                         }
                                     }}>
-                                    {dataLoading
+                                    {loading
                                         ? <CircularProgressCenter/>
                                         : form}
                                 </Box>

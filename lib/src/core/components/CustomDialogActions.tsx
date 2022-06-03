@@ -5,7 +5,7 @@ export function CustomDialogActions({
                                         children,
                                         position = "sticky",
                                         maxWidth,
-                                        translucent
+                                        translucent = true
                                     }: {
     children: React.ReactNode,
     position?: "sticky" | "absolute",

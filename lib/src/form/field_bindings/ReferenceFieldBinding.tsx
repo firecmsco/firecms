@@ -97,7 +97,6 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
         if (disabled)
             return;
         setValue(entity ? getReferenceFrom(entity) : null);
-        referenceDialogController.close();
     }, [disabled, setValue]);
 
     const referenceDialogController = useReferenceDialogController({

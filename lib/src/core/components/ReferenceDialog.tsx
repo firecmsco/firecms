@@ -111,8 +111,6 @@ export function ReferenceDialog(
     const navigationContext = useNavigationContext();
     const sideDialogContext = useSideDialogContext();
 
-    const theme = useTheme();
-
     const path = navigationContext.resolveAliasesFrom(pathInput);
 
     const dataSource = useDataSource();
@@ -171,10 +169,11 @@ export function ReferenceDialog(
     const onEntityClick = useCallback((entity: Entity<any>) => {
         if (!multiselect && onSingleEntitySelected) {
             onSingleEntitySelected(entity);
+            sideDialogContext.close();
         } else {
             toggleEntitySelection(entity);
         }
-    }, [multiselect, onSingleEntitySelected, toggleEntitySelection]);
+    }, [sideDialogContext, multiselect, onSingleEntitySelected, toggleEntitySelection]);
 
     const tableRowActionsBuilder = useCallback(({
                                                     entity,

@@ -174,12 +174,29 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entities",
     properties: {
+        product: {
+            name: "Product",
+            dataType: "reference",
+            path: "products",
+        },
+        movement: buildProperty(({values}) => {
+            return {
+                name: "Locale",
+                dataType: "reference",
+                path: !values.product ? false : values.product.path + "/" + values.product.id + "/locales"
+            };
+        }),
         form: {
             dataType: "array",
             name: "Form",
             of: formPropertyEntry
         },
-        address:buildProperty({
+        child_ref: {
+            name: "Child reference",
+            dataType: "reference",
+            path: "ppp/B000P0MDMS/locales"
+        },
+        address: buildProperty({
             name: "Address",
             dataType: "map",
             properties: {
@@ -248,19 +265,6 @@ export const testCollection = buildCollection({
             dataType: "date",
             mode: "date"
         },
-        product: {
-            name: "Product",
-            dataType: "reference",
-            path: "products",
-            previewProperties: ["name", "main_image"]
-        },
-        movement: buildProperty(({values}) => {
-            return {
-                name: "Locale",
-                dataType: "reference",
-                path: !values.product ? false : values.product.path + "/" + values.product.id + "/locales"
-            };
-        }),
         source: ({ values, previousValues }) => {
             const properties = buildProperties<any>({
                 type: {
