@@ -167,7 +167,7 @@ export function resolveArrayProperty<T extends any[], M>({
     path?: string,
     entityId?: string,
     index?: number,
-    fromBuilder: boolean
+    fromBuilder?: boolean
 }): ResolvedArrayProperty {
 
     if (property.of) {

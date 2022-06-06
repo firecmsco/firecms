@@ -46,10 +46,10 @@ export function resolveCollectionPathAliases(path: string, allCollections: Entit
 
     if (subpaths.length > 1) {
         const segmentCollection = getCollectionByPathOrAlias(resolvedSegment, allCollections);
-        const restOfThePath = cleanPath.split("/").slice(2).join("/");
         if (!segmentCollection?.subcollections) {
-            throw Error("Unable to resolve collection aliases for " + path);
+            return resolvedSegment;
         }
+        const restOfThePath = cleanPath.split("/").slice(2).join("/");
         return resolvedSegment + "/" + subpaths[1] + "/" + resolveCollectionPathAliases(restOfThePath, segmentCollection.subcollections);
     } else {
         return resolvedSegment;

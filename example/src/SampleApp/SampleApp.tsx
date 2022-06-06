@@ -31,6 +31,35 @@ import "@fontsource/ibm-plex-mono";
 import { Locale } from "./types";
 import { locales } from "./collections/enums";
 
+export const collectionBroken = buildCollection<any>({
+    name: "Broken Collection",
+    // alias: "randomAliasThatDoesntWorkEither",
+    path: "top_level_3/some_document/sub_collection",
+    permissions: ({ authController }) => ({
+        edit: true,
+        create: true,
+        delete: true,
+    }),
+    properties: {
+        // I left this in because it might be relevant idk.
+        name: {
+            name: "Name",
+            description: "The name of the thing.",
+            dataType: "map",
+            properties: {
+                de: {
+                    name: "Name (de)",
+                    dataType: "string",
+                },
+                en: {
+                    name: "Name (en)",
+                    dataType: "string",
+                },
+            },
+        },
+    },
+});
+
 function SampleApp() {
 
     const githubLink = (
@@ -99,7 +128,8 @@ function SampleApp() {
         productsCollection,
         usersCollection,
         blogCollection,
-        galleryCollection
+        galleryCollection,
+        collectionBroken
     ];
 
     if (process.env.NODE_ENV !== "production") {

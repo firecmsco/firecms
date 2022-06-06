@@ -17,12 +17,9 @@ import {
     getCollectionByPathOrAlias,
     mergeDeep,
     removeInitialAndTrailingSlashes,
-    resolveCollectionPathAliases
+    resolveCollectionPathAliases,
 } from "../util";
-import {
-    CMSViewsBuilder,
-    EntityCollectionsBuilder
-} from "../../firebase_app/FirebaseCMSAppProps";
+import { CMSViewsBuilder, EntityCollectionsBuilder } from "../../firebase_app";
 
 type BuildNavigationContextProps<UserType extends User> = {
     basePath: string,
