@@ -378,6 +378,7 @@ function FormInternal<M>({
                         !!touched[key];
 
                     const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
+                    const shouldAlwaysRerender = shouldPropertyReRender(property);
                     const cmsFormFieldProps: PropertyFieldBindingProps = {
                         propertyKey: key,
                         disabled,
@@ -388,7 +389,7 @@ function FormInternal<M>({
                         tableMode: false,
                         partOfArray: false,
                         autoFocus: false,
-                        shouldAlwaysRerender: shouldPropertyReRender(property)
+                        shouldAlwaysRerender
                     };
 
                     return (
@@ -474,11 +475,12 @@ function FormInternal<M>({
 }
 
 const shouldPropertyReRender = (property: ResolvedProperty): boolean => {
+    const rerenderThisProperty = Boolean(property.Field) || property.fromBuilder;
     if (property.dataType === "map" && property.properties) {
-        return Object.values(property.properties).some((childProperty) => shouldPropertyReRender(childProperty));
+        return rerenderThisProperty || Object.values(property.properties).some((childProperty) => shouldPropertyReRender(childProperty));
     } else if (property.dataType === "array" && Array.isArray(property.resolvedProperties)) {
-        return property.resolvedProperties.some((childProperty) => childProperty && shouldPropertyReRender(childProperty));
+        return rerenderThisProperty || property.resolvedProperties.some((childProperty) => childProperty && shouldPropertyReRender(childProperty));
     } else {
-        return Boolean(property.Field) || property.fromBuilder;
+        return rerenderThisProperty;
     }
 }
