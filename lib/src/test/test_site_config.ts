@@ -1,6 +1,6 @@
 import { FirebaseCMSAppProps } from "../firebase_app/FirebaseCMSAppProps";
 import { buildCollection, buildProperty } from "../core/builders";
-import { EnumValues, StringProperty } from "../models/properties";
+import { EnumValues } from "../models/properties";
 import { EntityCallbacks } from "../models/entity_callbacks";
 
 const locales: EnumValues = {
@@ -10,37 +10,10 @@ const locales: EnumValues = {
     "es-419": "Spanish (South America)"
 };
 
-const testProperty = buildProperty({
-    dataType: "boolean",
-    name: "Available",
-    columnWidth: 100
-});
-
-const testProperty2:StringProperty = buildProperty<string>({
-    dataType: "string",
-    name: "Currency",
-    enumValues: {
-        EUR: "Euros",
-        DOL: "Dollars"
-    },
-    validation: {
-        required: true
-    }
-});
-
-const testProperty3: StringProperty = buildProperty({
-    dataType: "string",
-    storage: {
-        storagePath: "images",
-        acceptedFiles: ["image/*"],
-        metadata: {
-            cacheControl: "max-age=1000000"
-        }
-    }
-});
 
 export const productsCollection = buildCollection<any>({
     path: "products",
+    name: "Products",
     singularName: "Product",
     views: [
         {
@@ -197,6 +170,7 @@ export const productsCollection = buildCollection<any>({
 const localeCollection = buildCollection({
     path: "locales",
     customId: locales,
+    name: "Locales",
     singularName: "Locale",
     properties: {
         title: buildProperty({
@@ -250,7 +224,8 @@ const productCallbacks: EntityCallbacks<any> = {
 
 export const usersCollection = buildCollection({
     path: "users",
-    singularName: "Users",
+    name: "Users",
+    singularName: "User",
     group: "Main",
     description: "Registered users",
     textSearchEnabled: true,
@@ -330,12 +305,10 @@ export const siteConfig: FirebaseCMSAppProps = {
             path: "users",
             alias: "u",
             singularName: "Users",
-            subcollections: [        buildCollection({
+            subcollections: [buildCollection({
                 ...productsCollection,
                 alias: "p"
             })]
         })
     ],
 };
-
-

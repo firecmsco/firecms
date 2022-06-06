@@ -33,7 +33,6 @@ import { locales } from "./collections/enums";
 
 export const collectionBroken = buildCollection<any>({
     name: "Broken Collection",
-    // alias: "randomAliasThatDoesntWorkEither",
     path: "top_level_3/some_document/sub_collection",
     permissions: ({ authController }) => ({
         edit: true,
@@ -41,7 +40,6 @@ export const collectionBroken = buildCollection<any>({
         delete: true,
     }),
     properties: {
-        // I left this in because it might be relevant idk.
         name: {
             name: "Name",
             description: "The name of the thing.",

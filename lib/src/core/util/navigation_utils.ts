@@ -32,27 +32,28 @@ export function getLastSegment(path: string) {
 }
 
 export function resolveCollectionPathAliases(path: string, allCollections: EntityCollection[]): string {
+
     const cleanPath = removeInitialAndTrailingSlashes(path);
     const subpaths = cleanPath.split("/");
     if (subpaths.length % 2 === 0) {
         throw Error(`Collection paths must have an odd number of segments: ${path}`);
     }
 
-    let resolvedSegment = subpaths[0];
     const aliasedCollection = allCollections.find((col) => col.alias === subpaths[0]);
+    let resolvedAliased;
     if (aliasedCollection) {
-        resolvedSegment = aliasedCollection.path as string;
+        resolvedAliased = aliasedCollection.path;
     }
 
     if (subpaths.length > 1) {
-        const segmentCollection = getCollectionByPathOrAlias(resolvedSegment, allCollections);
+        const segmentCollection = getCollectionByPathOrAlias(resolvedAliased ?? subpaths[0], allCollections);
         if (!segmentCollection?.subcollections) {
-            return resolvedSegment;
+            return cleanPath;
         }
         const restOfThePath = cleanPath.split("/").slice(2).join("/");
-        return resolvedSegment + "/" + subpaths[1] + "/" + resolveCollectionPathAliases(restOfThePath, segmentCollection.subcollections);
+        return (resolvedAliased ?? subpaths[0]) + "/" + subpaths[1] + "/" + resolveCollectionPathAliases(restOfThePath, segmentCollection.subcollections);
     } else {
-        return resolvedSegment;
+        return resolvedAliased ?? cleanPath;
     }
 }
 
@@ -70,7 +71,6 @@ export function getCollectionByPathOrAlias<M extends { [Key: string]: any }>(pat
     }
 
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
-
     let result: EntityCollection | undefined;
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];

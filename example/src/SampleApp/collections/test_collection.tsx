@@ -174,6 +174,11 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entities",
     properties: {
+        broken_ref: {
+            name: "Broken ref",
+            dataType: "reference",
+            path: "top_level_3/some_document/sub_collection",
+        },
         product: {
             name: "Product",
             dataType: "reference",

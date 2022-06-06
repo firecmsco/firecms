@@ -70,7 +70,7 @@ export type EntityCollectionViewProps<M extends { [Key: string]: unknown }> = {
  * @category Components
  */
 export const EntityCollectionView = React.memo(
-    function EntityCollectionViewInternal<M extends { [Key: string]: unknown }>({
+    function EntityCollectionView<M extends { [Key: string]: unknown }>({
                                                                                     fullPath,
                                                                                     isSubCollection,
                                                                                     ...collection

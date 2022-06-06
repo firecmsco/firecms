@@ -96,4 +96,7 @@ it("Test aliases", () => {
 
     const resolvedPath4 = resolveCollectionPathAliases("users/123/p", collections);
     expect(resolvedPath4).toEqual("users/123/products");
+
+    const resolvedPath5 = resolveCollectionPathAliases("products/id/subcollection_inline", collections);
+    expect(resolvedPath5).toEqual("products/id/subcollection_inline");
 });
