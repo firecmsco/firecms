@@ -14,11 +14,11 @@ export function RolesView({
     collections?: EntityCollection[]
 }) {
 
-    const { users, roles } = useConfigController();
+    const { roles } = useConfigController();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedRole, setSelectedRole] = useState<Role | undefined>();
 
-    const onUserClicked = useCallback((user: Role) => {
+    const onRoleClicked = useCallback((user: Role) => {
         setDialogOpen(true);
         setSelectedRole(user);
     }, []);
@@ -57,13 +57,8 @@ export function RolesView({
                 </Button>
             </Box>
 
-            <Paper variant={"outlined"} sx={{
-                flexGrow: 1,
-                overflow: "hidden"
-            }}>
-                <RolesTable onRoleClicked={onUserClicked}
-                            roles={roles}/>
-            </Paper>
+            <RolesTable onRoleClicked={onRoleClicked}/>
+
             <RolesDetailsForm open={dialogOpen}
                               role={selectedRole}
                               collections={collections}

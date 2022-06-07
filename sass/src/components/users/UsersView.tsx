@@ -1,7 +1,7 @@
 import { Box, Button, Container, Paper, Typography } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 
-import { UsersEditTable } from "./UsersEditTable";
+import { UsersTable } from "./UsersTable";
 import { useConfigController } from "../../useConfigController";
 import { UserDetailsForm } from "./UserDetailsForm";
 import { useCallback, useState } from "react";
@@ -9,7 +9,6 @@ import { SassUser } from "../../models/sass_user";
 
 export function UsersView() {
 
-    const { users, roles } = useConfigController();
     const [dialogOpen, setDialogOpen] = useState(false);
     const [selectedUser, setSelectedUser] = useState<SassUser | undefined>();
 
@@ -52,14 +51,7 @@ export function UsersView() {
                 </Button>
             </Box>
 
-            <Paper variant={"outlined"} sx={{
-                flexGrow: 1,
-                overflow: "hidden"
-            }}>
-                <UsersEditTable users={users}
-                                onUserClicked={onUserClicked}
-                                roles={roles}/>
-            </Paper>
+            <UsersTable onUserClicked={onUserClicked}/>
 
             <UserDetailsForm open={dialogOpen}
                              user={selectedUser}

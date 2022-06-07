@@ -9,13 +9,12 @@ import {
     Container,
     Dialog,
     FormControl,
-    FormControlLabel,
     FormHelperText,
     Grid,
     InputLabel,
     OutlinedInput,
     Paper,
-    Table as MuiTable,
+    Table,
     TableBody,
     TableCell,
     TableHead,
@@ -25,12 +24,17 @@ import {
 } from "@mui/material";
 import SaveIcon from "@mui/icons-material/Save";
 
-import { CustomDialogActions, EntityCollection, } from "@camberi/firecms";
+import {
+    CustomDialogActions,
+    EntityCollection,
+    toSnakeCase,
+} from "@camberi/firecms";
 import { LoadingButton } from "@mui/lab";
 import { useConfigController } from "../../useConfigController";
 import { Role } from "../../models/roles";
 
 export const YupSchema = Yup.object().shape({
+    id: Yup.string().required("Required"),
     name: Yup.string().required("Required"),
 });
 
@@ -89,13 +93,23 @@ export function RolesDetailsForm({
                       handleChange,
                       setFieldValue,
                       dirty,
-                      submitCount
+                      setFieldTouched
                   }) => {
-                    const isAdmin = values.isAdmin;
-                    const defaultCreate = values.defaultPermissions?.create;
-                    const defaultRead = values.defaultPermissions?.read;
-                    const defaultEdit = values.defaultPermissions?.edit;
-                    const defaultDelete = values.defaultPermissions?.delete;
+                    const isAdmin = values.isAdmin ?? false;
+                    const defaultCreate = values.defaultPermissions?.create ?? false;
+                    const defaultRead = values.defaultPermissions?.read ?? false;
+                    const defaultEdit = values.defaultPermissions?.edit ?? false;
+                    const defaultDelete = values.defaultPermissions?.delete ?? false;
+
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    React.useEffect(() => {
+                        const idTouched = getIn(touched, "id");
+                        if (!idTouched && values.name) {
+                            setFieldValue("id", toSnakeCase(values.name))
+                        }
+
+                    }, [touched, values.name]);
+
                     return (
                         <Form noValidate style={{
                             display: "flex",
@@ -126,9 +140,9 @@ export function RolesDetailsForm({
                                         </Typography>
                                     </Box>
 
-                                    <Grid container spacing={2}>
+                                    <Grid container spacing={3}>
 
-                                        <Grid item xs={12} md={9}>
+                                        <Grid item xs={12} md={8}>
                                             <FormControl fullWidth
                                                          required
                                                          error={touched.name && Boolean(errors.name)}>
@@ -148,36 +162,51 @@ export function RolesDetailsForm({
                                             </FormControl>
                                         </Grid>
 
-                                        <Grid item xs={12} md={3}>
-                                            <FormControlLabel
-                                                control={
-                                                    <Checkbox
-                                                        checked={isAdmin}
-                                                        onChange={handleChange}
-                                                        name="isAdmin"/>
-                                                }
-                                                label="Is admin role"
-                                            />
+                                        <Grid item xs={12} md={4}>
+                                            <FormControl fullWidth
+                                                         required
+                                                         error={touched.id && Boolean(errors.id)}>
+                                                <InputLabel
+                                                    htmlFor="id">ID</InputLabel>
+                                                <OutlinedInput
+                                                    id="id"
+                                                    value={values.id}
+                                                    onChange={(e) => {
+                                                        handleChange(e);
+                                                        setFieldTouched("id", true)
+                                                    }}
+                                                    aria-describedby="id-helper-text"
+                                                    label="ID"
+                                                />
+                                                <FormHelperText
+                                                    id="id-helper-text">
+                                                    {touched.id && Boolean(errors.id) ? errors.id : "ID of this role"}
+                                                </FormHelperText>
+                                            </FormControl>
                                         </Grid>
 
                                         <Grid item xs={12}>
                                             <Paper
                                                 variant={"outlined"}
                                                 sx={{
-                                                    // background: "inherit"
+                                                    background: "inherit"
                                                 }}>
-                                                <MuiTable>
+                                                <Table>
                                                     <TableHead>
                                                         <TableRow>
                                                             <TableCell>Collection</TableCell>
                                                             <TableCell
-                                                                align="center">Create</TableCell>
+                                                                align="center">Create
+                                                                entities</TableCell>
                                                             <TableCell
-                                                                align="center">Read</TableCell>
+                                                                align="center">Read
+                                                                entities</TableCell>
                                                             <TableCell
-                                                                align="center">Update</TableCell>
+                                                                align="center">Update
+                                                                entities</TableCell>
                                                             <TableCell
-                                                                align="center">Delete</TableCell>
+                                                                align="center">Delete
+                                                                entities</TableCell>
                                                         </TableRow>
                                                     </TableHead>
                                                     <TableBody>
@@ -197,7 +226,7 @@ export function RolesDetailsForm({
                                                                     title="Create entities in collections">
                                                                     <Checkbox
                                                                         disabled={isAdmin}
-                                                                        checked={isAdmin || defaultCreate}
+                                                                        checked={(isAdmin || defaultCreate) ?? false}
                                                                         onChange={(_, checked) => setFieldValue("defaultPermissions.create", checked)}
                                                                         name="defaultPermissions.create"/>
                                                                 </Tooltip>
@@ -209,7 +238,7 @@ export function RolesDetailsForm({
                                                                     title="Access all data in every collection">
                                                                     <Checkbox
                                                                         disabled={isAdmin}
-                                                                        checked={isAdmin || defaultRead}
+                                                                        checked={(isAdmin || defaultRead) ?? false}
                                                                         onChange={(_, checked) => setFieldValue("defaultPermissions.read", checked)}
                                                                         name="defaultPermissions.read"/>
                                                                 </Tooltip>
@@ -220,7 +249,7 @@ export function RolesDetailsForm({
                                                                     title="Update data in any collection">
                                                                     <Checkbox
                                                                         disabled={isAdmin}
-                                                                        checked={isAdmin || defaultEdit}
+                                                                        checked={(isAdmin || defaultEdit) ?? false}
                                                                         onChange={(_, checked) => setFieldValue("defaultPermissions.edit", checked)}
                                                                         name="defaultPermissions.edit"/>
                                                                 </Tooltip>
@@ -231,7 +260,7 @@ export function RolesDetailsForm({
                                                                     title="Delete data in any collection">
                                                                     <Checkbox
                                                                         disabled={isAdmin}
-                                                                        checked={isAdmin || defaultDelete}
+                                                                        checked={(isAdmin || defaultDelete) ?? false}
                                                                         onChange={(_, checked) => setFieldValue("defaultPermissions.delete", checked)}
                                                                         name="defaultPermissions.delete"/>
 
@@ -252,7 +281,7 @@ export function RolesDetailsForm({
                                                                     align="center">
                                                                     <Checkbox
                                                                         disabled={isAdmin || defaultCreate}
-                                                                        checked={isAdmin || defaultCreate || getIn(values, `collectionPermissions.${col.alias ?? col.path}.create`)}
+                                                                        checked={(isAdmin || defaultCreate || getIn(values, `collectionPermissions.${col.alias ?? col.path}.create`)) ?? false}
                                                                         onChange={(_, checked) => setFieldValue(`collectionPermissions.${col.alias ?? col.path}.create`, checked)}
                                                                         name={`collectionPermissions.${col.alias ?? col.path}.create`}/>
                                                                 </TableCell>
@@ -260,7 +289,7 @@ export function RolesDetailsForm({
                                                                     align="center">
                                                                     <Checkbox
                                                                         disabled={isAdmin || defaultRead}
-                                                                        checked={isAdmin || defaultRead || getIn(values, `collectionPermissions.${col.alias ?? col.path}.read`)}
+                                                                        checked={(isAdmin || defaultRead || getIn(values, `collectionPermissions.${col.alias ?? col.path}.read`)) ?? false}
                                                                         onChange={(_, checked) => setFieldValue(`collectionPermissions.${col.alias ?? col.path}.read`, checked)}
                                                                         name={`collectionPermissions.${col.alias ?? col.path}.read`}/>
                                                                 </TableCell>
@@ -268,7 +297,7 @@ export function RolesDetailsForm({
                                                                     align="center">
                                                                     <Checkbox
                                                                         disabled={isAdmin || defaultEdit}
-                                                                        checked={isAdmin || defaultEdit || getIn(values, `collectionPermissions.${col.alias ?? col.path}.update`)}
+                                                                        checked={(isAdmin || defaultEdit || getIn(values, `collectionPermissions.${col.alias ?? col.path}.update`)) ?? false}
                                                                         onChange={(_, checked) => setFieldValue(`collectionPermissions.${col.alias ?? col.path}.update`, checked)}
                                                                         name={`collectionPermissions.${col.alias ?? col.path}.update`}/>
                                                                 </TableCell>
@@ -276,16 +305,20 @@ export function RolesDetailsForm({
                                                                     align="center">
                                                                     <Checkbox
                                                                         disabled={isAdmin || defaultDelete}
-                                                                        checked={isAdmin || defaultDelete || getIn(values, `collectionPermissions.${col.alias ?? col.path}.delete`)}
+                                                                        checked={(isAdmin || defaultDelete || getIn(values, `collectionPermissions.${col.alias ?? col.path}.delete`)) ?? false}
                                                                         onChange={(_, checked) => setFieldValue(`collectionPermissions.${col.alias ?? col.path}.delete`, checked)}
                                                                         name={`collectionPermissions.${col.alias ?? col.path}.delete`}/>
                                                                 </TableCell>
                                                             </TableRow>
                                                         ))}
                                                     </TableBody>
-                                                </MuiTable>
+                                                </Table>
                                             </Paper>
-
+                                            <Typography variant={"caption"}>You
+                                                can customise the permissions
+                                                that the users related to this
+                                                role can perform in the entities
+                                                of each collection</Typography>
                                         </Grid>
                                     </Grid>
 

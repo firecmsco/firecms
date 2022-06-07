@@ -8,17 +8,20 @@ import {
 } from "@mui/material";
 
 import { CustomDialogActions } from "./CustomDialogActions";
+import { LoadingButton } from "@mui/lab";
 
 export function DeleteConfirmationDialog({
                                              open,
                                              onAccept,
                                              onCancel,
                                              title,
+                                             loading,
                                              body
                                          }: {
     open: boolean,
     onAccept: () => void,
     onCancel: () => void,
+    loading?:boolean,
     title?: JSX.Element,
     body?: JSX.Element,
 }) {
@@ -39,11 +42,17 @@ export function DeleteConfirmationDialog({
                 <Button
                     onClick={onCancel}
                     autoFocus>Cancel</Button>
-                <Button
+
+                <LoadingButton
                     variant="contained"
-                    onClick={onAccept}>
+                    color="primary"
+                    type="submit"
+                    loading={loading}
+                    onClick={onAccept}
+                    loadingPosition="start"
+                >
                     Ok
-                </Button>
+                </LoadingButton>
             </CustomDialogActions>
         </Dialog>
     );

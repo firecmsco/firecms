@@ -20,8 +20,12 @@ export interface ConfigController {
 
     saveUser: (user: SassUser) => Promise<SassUser>;
 
+    deleteUser: (user: SassUser) => Promise<void>;
+
     roles: Role[];
 
     saveRole: (role: Role) => Promise<void>;
+
+    deleteRole: (role: Role) => Promise<void>;
 
 }

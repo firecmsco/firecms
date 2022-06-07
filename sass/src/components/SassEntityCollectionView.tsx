@@ -11,7 +11,7 @@ import {
     useCollectionEditorController
 } from "../useCollectionEditorController";
 import { useCallback } from "react";
-import { resolvePermissions } from "../util/permissions";
+import { resolveSassPermissions } from "../util/permissions";
 
 export function SassEntityCollectionView<M extends { [Key: string]: unknown }>({
                                                                                    fullPath,
@@ -39,7 +39,7 @@ export function SassEntityCollectionView<M extends { [Key: string]: unknown }>({
                                                                   user,
                                                                   collection,
                                                                   authController
-                                                              }) => resolvePermissions(collection, authController, pathSegments), []);
+                                                              }) => resolveSassPermissions(collection, authController, pathSegments), []);
 
 
     return <EntityCollectionView fullPath={fullPath}

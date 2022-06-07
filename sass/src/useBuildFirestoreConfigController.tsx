@@ -27,7 +27,7 @@ import {
 } from "@camberi/firecms";
 import { SassUser } from "./models/sass_user";
 import { Role } from "./models/roles";
-import { DEFAULT_ROLES, resolveSassPermissions } from "./util/permissions";
+import { resolveSassPermissions } from "./util/permissions";
 
 /**
  * @category Firebase
@@ -201,6 +201,22 @@ export function useBuildFirestoreConfigController({
         return setDoc(ref, roleData, { merge: true });
     }, [configPath, firestore]);
 
+    const deleteUser = useCallback(<M extends { [Key: string]: any }>(user: SassUser): Promise<void> => {
+        if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        console.debug("Deleting", user);
+        const { id } = user;
+        const ref = doc(firestore, configPath, "config", "users", id);
+        return deleteDoc(ref);
+    }, [configPath, firestore]);
+
+    const deleteRole = useCallback(<M extends { [Key: string]: any }>(role: Role): Promise<void> => {
+        if (!firestore) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        console.debug("Deleting", role);
+        const { id } = role;
+        const ref = doc(firestore, configPath, "config", "roles", id);
+        return deleteDoc(ref);
+    }, [configPath, firestore]);
+
     const allCollections = persistedCollections !== undefined ? joinCollections(persistedCollections, baseCollections) : undefined;
     const collections = allCollections !== undefined ? applyPermissionsFunction(allCollections) : undefined;
 
@@ -212,7 +228,9 @@ export function useBuildFirestoreConfigController({
         roles,
         users,
         saveUser,
-        saveRole
+        saveRole,
+        deleteUser,
+        deleteRole
     }
 }
 
