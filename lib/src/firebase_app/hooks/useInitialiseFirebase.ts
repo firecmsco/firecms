@@ -46,7 +46,7 @@ export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
                 onFirebaseInit(config);
             setFirebaseApp(initialisedFirebaseApp);
         } catch (e: any) {
-            console.error(e);
+            console.error("Error initialising Firebase", e);
             setFirebaseConfigError(e);
         }
     }, [onFirebaseInit]);

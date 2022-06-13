@@ -20,7 +20,7 @@
     },
     "scripts": {
         "dev": "vite",
-        "build:vite": "vite build && tsc",
+        "build": "vite build && tsc",
         "build:react": "react-scripts build --profile",
         "preview": "vite build && vite preview",
         "start": "react-scripts start",

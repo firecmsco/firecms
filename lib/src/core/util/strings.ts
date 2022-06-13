@@ -11,3 +11,7 @@ export const toSnakeCase = (str: string) => {
 export function randomString(strLength = 5) {
     return Math.random().toString(36).slice(2, 2 + strLength);
 }
+
+export function randomColor() {
+    return Math.floor(Math.random() * 16777215).toString(16);
+}

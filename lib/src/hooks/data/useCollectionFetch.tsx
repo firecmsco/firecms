@@ -81,7 +81,6 @@ export function useCollectionFetch<M>(
     const navigationContext = useNavigationContext();
 
     const path = navigationContext.resolveAliasesFrom(inputPath);
-    console.log("useCollectionFetch", inputPath, path);
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;

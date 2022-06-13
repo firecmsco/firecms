@@ -27,7 +27,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 export const TableHeader = React.memo<TableHeaderProps<any>>(TableHeaderInternal) as React.FunctionComponent<TableHeaderProps<any>>;
 
 type TableHeaderProps<M extends { [Key: string]: any }> = {
-    column: TableColumn<M>;
+    column: TableColumn<M, any>;
     onColumnSort: (key: Extract<keyof M, string>) => void;
     onFilterUpdate: (filterForProperty?: [TableWhereFilterOp, any]) => void;
     filter?: [TableWhereFilterOp, any];
@@ -121,7 +121,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                                 backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
                             })}
                             onClick={() => {
-                                onColumnSort(column.key as Extract<keyof M, string>);
+                                onColumnSort(column.dataKey as Extract<keyof M, string>);
                             }}
                         >
                             {!sort && <ArrowUpwardIcon fontSize={"small"}/>}
@@ -154,7 +154,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
             </Grid>
 
             {column.sortable && <Popover
-                id={open ? `popover_${column.key}` : undefined}
+                id={open ? `popover_${column.dataKey}` : undefined}
                 open={open}
                 elevation={1}
                 anchorEl={ref.current}
@@ -179,7 +179,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
 }
 
 interface FilterFormProps<M> {
-    column: TableColumn<M>;
+    column: TableColumn<M, any>;
     onFilterUpdate: (filter?: [TableWhereFilterOp, any]) => void;
     filter?: [TableWhereFilterOp, any];
     onHover: boolean
@@ -192,7 +192,7 @@ function FilterForm<M>({
                            onHover
                        }: FilterFormProps<M>) {
 
-    const id = column.key;
+    const id = column.dataKey;
 
     const [filterInternal, setFilterInternal] = useState<[TableWhereFilterOp, any] | undefined>(filter);
 

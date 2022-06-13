@@ -1,7 +1,7 @@
 import { buildCollection, buildProperty } from "@camberi/firecms";
 
 
-export const galleryCollection = buildCollection({
+export const showcaseCollection = buildCollection({
     path: "showcase",
     customId: false,
     name: "Showcase",
@@ -160,10 +160,10 @@ export const galleryCollection = buildCollection({
             },
             expanded: true
         }),
-        selectable: buildProperty({
-            name: "Selectable",
-            dataType: "boolean"
-        }),
+        // selectable: buildProperty({
+        //     name: "Selectable",
+        //     dataType: "boolean"
+        // }),
         content: buildProperty({
             name: "Content",
             dataType: "array",

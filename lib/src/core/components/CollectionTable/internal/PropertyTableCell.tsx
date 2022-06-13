@@ -17,7 +17,6 @@ import { TableSwitch } from "../../Table/fields/TableSwitch";
 import { TableDateField } from "../../Table/fields/TableDateField";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { PropertyPreview } from "../../../../preview";
-import { CellStyleProps } from "../../Table/styles";
 import { TableReferenceField } from "../fields/TableReferenceField";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
@@ -25,30 +24,29 @@ import { useClearRestoreValue } from "../../../../hooks";
 import { isReadOnly } from "../../../util";
 import { TableCell } from "../../Table/TableCell";
 import { TableStorageUpload } from "../fields/TableStorageUpload";
-import { SelectedCellProps } from "../column_builder";
 import {
     CustomFieldValidator,
     mapPropertyToYup
 } from "../../../../form/validation";
+import { SelectedCellProps } from "../types";
+import {
+    useEntityCollectionTableController
+} from "../EntityCollectionTableContext";
 
 export interface PropertyTableCellProps<T extends CMSType, M> {
     propertyKey: string;
-    selected: boolean;
     columnIndex: number;
-    select: (cell?: SelectedCellProps<M>) => void;
-    setPopupCell: (cell?: SelectedCellProps<M>) => void;
+    align: "right" | "left" | "center";
     customFieldValidator?: CustomFieldValidator;
     value: T;
     collection: EntityCollection<M>;
     setPreventOutsideClick: (value: boolean) => void;
-    focused: boolean;
     setFocused: (value: boolean) => void;
     property: ResolvedProperty<T>;
     height: number;
     width: number;
     entity: Entity<any>;
     path: string;
-    onValueChange?: (params: OnCellChangeParams<T, M>) => void
 }
 
 /**
@@ -77,26 +75,32 @@ function isStorageProperty<T>(property: ResolvedProperty) {
 }
 
 const PropertyTableCellInternal = <T extends CMSType, M>({
-                                                             selected,
-                                                             focused,
                                                              propertyKey,
                                                              setPreventOutsideClick,
                                                              setFocused,
-                                                             onValueChange,
                                                              columnIndex,
-                                                             select,
-                                                             collection,
                                                              customFieldValidator,
-                                                             setPopupCell,
                                                              value,
                                                              property,
-                                                             size,
                                                              align,
                                                              width,
                                                              height,
                                                              entity,
-                                                             path
-                                                         }: PropertyTableCellProps<T, M> & CellStyleProps) => {
+                                                         }: PropertyTableCellProps<T, M>) => {
+
+    const {
+        collection,
+        path,
+        onValueChange,
+        size,
+        selectedCell,
+        focused,
+        select,
+        setPopupCell
+    } = useEntityCollectionTableController();
+
+    const selected = selectedCell?.columnIndex === columnIndex &&
+        selectedCell?.entity.id === entity.id;
 
     const [internalValue, setInternalValue] = useState<any | null>(value);
 
@@ -396,12 +400,10 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
             <TableCell
                 onSelect={onSelect}
                 selected={selected}
-                focused={focused}
                 disabled={disabled || readOnly}
                 disabledTooltip={disabledTooltip ?? "Disabled"}
                 removePadding={removePadding}
                 fullHeight={fullHeight}
-                size={size}
                 saved={saved}
                 error={error}
                 align={align}
@@ -419,13 +421,10 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
 
 };
 
-export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any> & CellStyleProps>(PropertyTableCellInternal, areEqual) as React.FunctionComponent<PropertyTableCellProps<any, any> & CellStyleProps>;
+export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(PropertyTableCellInternal, areEqual) as React.FunctionComponent<PropertyTableCellProps<any, any>>;
 
-function areEqual(prevProps: PropertyTableCellProps<any, any> & CellStyleProps, nextProps: PropertyTableCellProps<any, any> & CellStyleProps) {
-    return prevProps.selected === nextProps.selected &&
-        prevProps.focused === nextProps.focused &&
-        prevProps.height === nextProps.height &&
-        prevProps.size === nextProps.size &&
+function areEqual(prevProps: PropertyTableCellProps<any, any>, nextProps: PropertyTableCellProps<any, any>) {
+    return prevProps.height === nextProps.height &&
         prevProps.align === nextProps.align &&
         prevProps.width === nextProps.width &&
         equal(prevProps.property, nextProps.property) &&

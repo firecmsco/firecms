@@ -709,7 +709,6 @@ export interface StorageConfig {
     /**
      * Postprocess the saved value (storage path or URL)
      * after it has been resolved.
-     You
      */
     postProcess?: (pathOrUrl: string) => Promise<string>
 }
@@ -734,7 +733,7 @@ export interface UploadedFileContext {
     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
 
     /**
-     * Entity Id is set if the entity already exists
+     * Entity ID
      */
     entityId?: string;
 
