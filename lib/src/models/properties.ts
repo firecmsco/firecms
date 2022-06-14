@@ -739,6 +739,11 @@ export interface UploadedFileContext {
     entityId?: string;
 
     /**
+     * Entity path. E.g. `products/PID/locales`
+     */
+    path: string;
+
+    /**
      * Values of the current entity
      */
     values: EntityValues<any>;
