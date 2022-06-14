@@ -174,6 +174,10 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entities",
     properties: {
+        test_date: {
+            name: "Test date",
+            dataType: "date"
+        },
         broken_ref: {
             name: "Broken ref",
             dataType: "reference",
@@ -264,11 +268,6 @@ export const testCollection = buildCollection({
                     },
                 }
             },
-        },
-        test_date: {
-            name: "Test date",
-            dataType: "date",
-            mode: "date"
         },
         source: ({ values, previousValues }) => {
             const properties = buildProperties<any>({

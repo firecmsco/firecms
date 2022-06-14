@@ -17,8 +17,7 @@ import {
     StringSchema
 } from "yup";
 import { enumToObjectEntries } from "../core/util/enums";
-import { isPropertyBuilder } from "../core/util/entities";
-import { hydrateRegExp } from "../core/util/regexp";
+import { hydrateRegExp, isPropertyBuilder } from "../core";
 
 // Add custom unique function for array values
 declare module "yup" {
@@ -53,9 +52,9 @@ interface PropertyContext<M> {
 }
 
 export function getYupEntitySchema<M>(
-    entityId: string ,
+    entityId: string,
     properties: ResolvedProperties<M>,
-    customFieldValidator?: CustomFieldValidator,): ObjectSchema<any> {
+    customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
     const objectSchema: any = {};
     Object.entries(properties as Record<string, ResolvedProperty>)
         .forEach(([name, property]) => {
@@ -239,14 +238,14 @@ function getYupDateSchema({
                               entityId
                           }: PropertyContext<Date>): AnySchema | DateSchema {
     if (property.autoValue) {
-        return yup.object().nullable(true);
+        return yup.object().nullable();
     }
     let collection: DateSchema<any> = yup.date();
     const validation = property.validation;
     if (validation) {
         collection = validation.required
-            ? collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
-            : collection.notRequired().nullable(true);
+            ? collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required")
+            : collection.notRequired();
         if (validation.unique && customFieldValidator && name)
             collection = collection.test("unique",
                 "This value already exists and should be unique",
@@ -260,9 +259,11 @@ function getYupDateSchema({
         if (validation.min) collection = collection.min(validation.min, `${property.name} must be after ${validation.min}`);
         if (validation.max) collection = collection.max(validation.max, `${property.name} must be before ${validation.min}`);
     } else {
-        collection = collection.notRequired().nullable(true);
+        collection = collection.notRequired();
     }
-    return collection;
+    return collection
+        .transform((v: any) => (v instanceof Date ? v : null))
+        .nullable();
 }
 
 function getYupReferenceSchema({

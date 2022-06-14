@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo } from "react";
-import { Button, Paper, useMediaQuery, useTheme } from "@mui/material";
+import { Box, Button, Paper } from "@mui/material";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import equal from "react-fast-compare";
 
@@ -230,12 +230,13 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         return (
 
-            <Paper sx={{
-                height: "100%",
-                width: "100%",
-                display: "flex",
-                flexDirection: "column"
-            }}>
+            <Box
+                sx={{
+                    height: "100%",
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column"
+                }}>
 
                 <CollectionTableToolbar filterIsSet={filterIsSet}
                                         onTextSearch={textSearchEnabled ? onTextSearch : undefined}
@@ -268,7 +269,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
                 {popupFormField}
 
-            </Paper>
+            </Box>
         );
 
     },
