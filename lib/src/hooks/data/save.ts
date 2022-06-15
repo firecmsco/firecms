@@ -8,7 +8,7 @@ import {
     User
 } from "../../models";
 import { useDataSource } from "./useDataSource";
-import { resolveCollection } from "../../core";
+import { resolveCollection, resolveCollectionPathAliases } from "../../core";
 
 /**
  * @category Hooks and utilities
@@ -70,6 +70,8 @@ export async function saveEntityWithCallbacks<M, UserType extends User>({
 
     let updatedValues: Partial<EntityValues<M>>;
 
+    const resolvedPath = context.navigation.resolveAliasesFrom(path);
+
     const callbacks = collection.callbacks;
     if (callbacks?.onPreSave) {
         try {
@@ -82,6 +84,7 @@ export async function saveEntityWithCallbacks<M, UserType extends User>({
             updatedValues = await callbacks.onPreSave({
                 collection: resolvedCollection,
                 path,
+                resolvedPath,
                 entityId,
                 values,
                 previousValues,
@@ -100,7 +103,7 @@ export async function saveEntityWithCallbacks<M, UserType extends User>({
 
     return dataSource.saveEntity({
         collection,
-        path,
+        path: resolvedPath,
         entityId,
         values: updatedValues,
         previousValues,
@@ -117,6 +120,7 @@ export async function saveEntityWithCallbacks<M, UserType extends User>({
                 callbacks.onSaveSuccess({
                     collection: resolvedCollection,
                     path,
+                    resolvedPath,
                     entityId: entity.id,
                     values: updatedValues,
                     previousValues,
@@ -143,6 +147,7 @@ export async function saveEntityWithCallbacks<M, UserType extends User>({
                 callbacks.onSaveFailure({
                     collection: resolvedCollection,
                     path,
+                    resolvedPath,
                     entityId,
                     values: updatedValues,
                     previousValues,
