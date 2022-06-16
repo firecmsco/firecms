@@ -12,7 +12,7 @@ import {
     Authenticator,
     CircularProgressCenter,
     CMSView,
-    createCMSDefaultTheme,
+    useCreateCMSDefaultTheme,
     EntityCollection,
     FirebaseAuthDelegate,
     FirebaseLoginView,
@@ -145,7 +145,7 @@ export function SassCMSApp() {
                 {({ context, mode, loading }) => {
 
                     const authController = context.authController;
-                    const theme = createCMSDefaultTheme({ mode });
+                    const theme = useCreateCMSDefaultTheme({ mode });
 
                     let component;
                     if (loading || configController.loading) {

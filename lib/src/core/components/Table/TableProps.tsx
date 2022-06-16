@@ -129,6 +129,7 @@ export type CellRendererParams<T extends any, E extends any> = {
     columnIndex: number;
     rowData?: T;
     rowIndex: number;
+    width: number;
     isScrolling?: boolean;
 };
 

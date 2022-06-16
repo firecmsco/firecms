@@ -56,12 +56,9 @@ export type EntityCollectionTableProviderProps<M, AdditionalKey extends string, 
 };
 
 export type EntityCollectionTableController<M, E> = {
-    collection: EntityCollection<any>;
-    path: string;
-    inlineEditing: ((entity: Entity<any>) => boolean) | boolean;
+
     selectedCell?: SelectedCellProps<any>;
     focused: boolean;
-    additionalColumnsMap: Record<string, AdditionalColumnDelegate<any, string, any>>;
     select: (cell?: SelectedCellProps<M>) => void;
     setPopupCell: (cell?: SelectedCellProps<M>) => void;
     onValueChange?: (params: OnCellChangeParams<any, M>) => void;
@@ -69,49 +66,6 @@ export type EntityCollectionTableController<M, E> = {
      * Size of the elements in the collection
      */
     size: CollectionSize;
-
-    updateSize: (size: CollectionSize) => void;
-
-    /**
-     * Use this callback to validate if an entity field should be unique
-     */
-    uniqueFieldValidator?: UniqueFieldValidator;
-
-    /**
-     * Callback when the value of a cell has been edited
-     * @param params
-     */
-    onCellValueChange?: OnCellValueChange<unknown, M>;
-    columns: TableColumn<Entity<M>, any>[],
-    popupFormField: React.ReactElement,
-    cellRenderer: (params: CellRendererParams<any, E>) => React.ReactNode;
-    filterIsSet: boolean;
-    textSearchEnabled: boolean;
-
-    /**
-     * If you need to filter/sort by multiple properties in this
-     * collection, you can define the supported filter combinations here.
-     * In the case of Firestore, you need to create special indexes in the console to
-     * support filtering/sorting by more than one property. You can then
-     * specify here the indexes created.
-     */
-    filterCombinations?: FilterCombination<Extract<keyof M, string>>[];
-    data: Entity<M>[]
-    dataLoading: boolean,
-    noMoreToLoad: boolean,
-    dataLoadingError?: Error;
-    onTextSearch?: (searchString?: string) => void;
-    onSizeChanged?: (size: CollectionSize) => void;
-    clearFilter: () => void;
-    onRowClick?: (props: { rowData: any; rowIndex: number; rowKey: string; event: React.SyntheticEvent }) => void;
-    loadNextPage: () => void,
-    resetPagination: () => void,
-    paginationEnabled: boolean,
-    setFilterValues: (filter?: TableFilterValues<any> | undefined) => void;
-    filterValues?: FilterValues<Extract<keyof M, string>>,
-    sortBy?: [Extract<keyof M, string>, "asc" | "desc"],
-    setSortBy: (sortBy: [Extract<keyof M, string>, "asc" | "desc"] | undefined) => void,
-
 }
 
 /**

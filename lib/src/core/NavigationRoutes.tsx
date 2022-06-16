@@ -29,18 +29,20 @@ export type NavigationRoutesProps = {
  * @constructor
  * @category Components
  */
-export function NavigationRoutes({ HomePage = FireCMSHomePage }: NavigationRoutesProps) {
 
-    const location = useLocation();
-    const navigation = useNavigationContext();
+export const NavigationRoutes = React.memo<NavigationRoutesProps>(
+    function NavigationRoutes({ HomePage = FireCMSHomePage }: NavigationRoutesProps) {
 
-    const context = useFireCMSContext();
-    const EntityCollectionViewComponent = context.EntityCollectionViewComponent;
+        const location = useLocation();
+        const navigation = useNavigationContext();
 
-    if (!navigation)
-        return <></>;
+        const context = useFireCMSContext();
+        const EntityCollectionViewComponent = context.EntityCollectionViewComponent;
 
-    const state = location.state as any;
+        if (!navigation)
+            return <></>;
+
+        const state = location.state as any;
     /**
      * The location can be overridden if `base_location` is set in the
      * state field of the current location. This can happen if you open
@@ -123,7 +125,7 @@ export function NavigationRoutes({ HomePage = FireCMSHomePage }: NavigationRoute
 
         </Routes>
     );
-}
+    });
 
 interface BreadcrumbUpdaterProps {
     title: string;

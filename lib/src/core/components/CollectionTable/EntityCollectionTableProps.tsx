@@ -54,10 +54,7 @@ export interface EntityCollectionTableProps<M extends { [Key: string]: any }> {
      * @param entity
      * @param size
      */
-    tableRowActionsBuilder?: ({
-                                  entity,
-                                  size
-                              }: { entity: Entity<M>, size: CollectionSize }) => React.ReactNode;
+    tableRowActionsBuilder?: (params: { entity: Entity<M>, size: CollectionSize, width: number, frozen?:boolean  }) => React.ReactNode;
 
     /**
      * Callback when anywhere on the table is clicked

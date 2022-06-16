@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -6,7 +6,6 @@ import { BrowserRouter } from "react-router-dom";
 
 import {
     CircularProgressCenter,
-    createCMSDefaultTheme,
     FireCMS,
     NavigationRoutes,
     Scaffold,
@@ -25,6 +24,8 @@ import { FirebaseAuthDelegate } from "./models/auth";
 import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
+import { createCMSDefaultTheme } from "../core/theme";
+import { useBuildModeController } from "../core/contexts/ModeController";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -109,6 +110,15 @@ export function FirebaseCMSApp({
         firebaseApp
     });
 
+    const modeController = useBuildModeController();
+
+    const theme = useMemo(() => createCMSDefaultTheme({
+        mode: modeController.mode,
+        primaryColor,
+        secondaryColor,
+        fontFamily
+    }), [fontFamily, modeController.mode, primaryColor, secondaryColor]);
+
     if (configError) {
         return <div> {configError} </div>;
     }
@@ -139,6 +149,7 @@ export function FirebaseCMSApp({
                 authentication={authentication}
                 userConfigPersistence={userConfigPersistence}
                 collectionOverrideHandler={collectionOverrideHandler}
+                modeController={modeController}
                 dateTimeFormat={dateTimeFormat}
                 dataSource={dataSource}
                 storageSource={storageSource}
@@ -147,13 +158,6 @@ export function FirebaseCMSApp({
                 basePath={basePath}
                 baseCollectionPath={baseCollectionPath}>
                 {({ context, mode, loading }) => {
-
-                    const theme = createCMSDefaultTheme({
-                        mode,
-                        primaryColor,
-                        secondaryColor,
-                        fontFamily
-                    });
 
                     let component;
                     if (loading) {

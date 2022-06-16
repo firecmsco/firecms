@@ -55,7 +55,7 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * https://mui.com/material-ui/material-icons/
      * e.g. 'AccountTree' or 'Person'
      */
-    icon?:string;
+    icon?: string;
 
     /**
      * Optional field used to group top level navigation entries under a~
@@ -93,8 +93,6 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     /**
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`.
-     * Note that defining permissions at the collection level will override any
-     * configuration defined by {@link FireCMSProps#roles}
      */
     permissions?: Permissions | PermissionsBuilder<M, UserType>;
 
@@ -146,8 +144,6 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
      * to pick from only those.
      */
     customId?: boolean | EnumValues | "optional";
-
-
 
     /**
      * Initial filters applied to the collection this collection is related to.

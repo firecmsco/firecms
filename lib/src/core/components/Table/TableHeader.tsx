@@ -1,4 +1,5 @@
 import React, { useCallback, useRef, useState } from "react";
+import equal from "react-fast-compare";
 import {
     Badge,
     Box,
@@ -24,159 +25,239 @@ import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../ErrorBoundary";
 
-export const TableHeader = React.memo<TableHeaderProps<any>>(TableHeaderInternal) as React.FunctionComponent<TableHeaderProps<any>>;
-
 type TableHeaderProps<M extends { [Key: string]: any }> = {
     column: TableColumn<M, any>;
     onColumnSort: (key: Extract<keyof M, string>) => void;
     onFilterUpdate: (filterForProperty?: [TableWhereFilterOp, any]) => void;
     filter?: [TableWhereFilterOp, any];
     sort: TableSort;
+    onColumnResize: (width: number) => void;
 };
 
-function TableHeaderInternal<M extends { [Key: string]: any }>({
-                                                                   sort,
-                                                                   onColumnSort,
-                                                                   onFilterUpdate,
-                                                                   filter,
-                                                                   column
-                                                               }: TableHeaderProps<M>) {
+export const TableHeader = React.memo<TableHeaderProps<any>>(
+    function TableHeaderInternal<M extends { [Key: string]: any }>({
+                                                                       sort,
+                                                                       onColumnSort,
+                                                                       onFilterUpdate,
+                                                                       filter,
+                                                                       column,
+                                                                       onColumnResize
+                                                                   }: TableHeaderProps<M>) {
 
-    const [onHover, setOnHover] = useState(false);
-    const ref = useRef<HTMLDivElement>(null);
+        const isResizing = useRef(false);
 
-    const [open, setOpen] = React.useState(false);
+        // useEffect(() => {
+        //     if (columnRef.current) {
+        //         document.addEventListener("mousemove", handleOnMouseMove);
+        //         document.addEventListener("mouseup", handleOnMouseUp);
+        //     }
+        //     return () => {
+        //         if (columnRef.current) {
+        //             document.removeEventListener("mousemove", handleOnMouseMove);
+        //             document.removeEventListener("mouseup", handleOnMouseUp);
+        //         }
+        //     };
+        // }, [columnRef])
 
-    const handleSettingsClick = useCallback((event: any) => {
-        setOpen(true);
-    }, []);
+        const adjustWidthColumn = (width: number) => {
+            const minWidth = 100;
+            const maxWidth = 800;
+            const newWidth = width > maxWidth ? maxWidth : width < minWidth ? minWidth : width;
+            onColumnResize(newWidth);
+            console.log("www", newWidth)
+        };
 
-    const handleClose = useCallback(() => {
-        setOpen(false);
-    }, []);
+        const handleOnMouseMove = (e: MouseEvent) => {
+            e.stopPropagation();
+            if (isResizing.current && ref?.current) {
+                console.log("parent", ref.current.getBoundingClientRect().left)
+                console.log("event", e.clientX)
+                const newWidth =
+                    e.clientX -
+                    ref.current.getBoundingClientRect().left;
+                adjustWidthColumn(newWidth);
+            }
+        };
 
-    const update = useCallback((filterForProperty?: [TableWhereFilterOp, any]) => {
-        onFilterUpdate(filterForProperty);
-        setOpen(false);
-    }, []);
+        const setCursorDocument = (isResizing: boolean) => {
+            document.body.style.cursor = isResizing ? "col-resize" : "auto";
+        };
 
-    return (
-        <ErrorBoundary>
-            <Grid
-                sx={theme => ({
-                    width: "calc(100% + 24px)",
-                    margin: "0px -12px",
-                    padding: "0px 12px",
-                    color: onHover ? theme.palette.text.primary : theme.palette.text.secondary,
-                    backgroundColor: onHover ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
-                    transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-                    height: "100%",
-                    fontSize: "0.750rem",
-                    textTransform: "uppercase",
-                    fontWeight: 600
-                })}
-                ref={ref}
-                wrap={"nowrap"}
-                alignItems={"center"}
-                onMouseEnter={() => setOnHover(true)}
-                onMouseMove={() => setOnHover(true)}
-                onMouseLeave={() => setOnHover(false)}
-                container>
+        const handleOnMouseUp = (e: MouseEvent) => {
+            e.stopPropagation();
+            console.log("end resize");
+            isResizing.current = false;
+            setCursorDocument(false);
+            document.removeEventListener("dragover", preventDefault);
+            document.removeEventListener("drop", preventDefault);
+            document.removeEventListener("mousemove", handleOnMouseMove);
+            document.removeEventListener("mouseup", handleOnMouseUp);
+        };
 
-                <Grid item xs={true} sx={{
-                    overflow: "hidden",
-                    flexShrink: 1
-                }}>
-                    <Box sx={{
-                        display: "flex",
-                        justifyContent: column.headerAlign,
-                        alignItems: "center",
-                        flexDirection: "row"
+        const preventDefault = (event:MouseEvent) => event.preventDefault();
+        const onClickResizeColumn = () => {
+            console.log("start resize");
+            isResizing.current = true;
+            setCursorDocument(true);
+            document.addEventListener("dragover", preventDefault);
+            document.addEventListener("drop", preventDefault);
+            document.addEventListener("mousemove", handleOnMouseMove);
+            document.addEventListener("mouseup", handleOnMouseUp);
+        };
+
+        const [onHover, setOnHover] = useState(false);
+        const ref = useRef<HTMLDivElement>(null);
+
+        const [openFilter, setOpenFilter] = React.useState(false);
+
+        const handleSettingsClick = useCallback((event: any) => {
+            setOpenFilter(true);
+        }, []);
+
+        const handleClose = useCallback(() => {
+            setOpenFilter(false);
+        }, []);
+
+        const update = useCallback((filterForProperty?: [TableWhereFilterOp, any]) => {
+            onFilterUpdate(filterForProperty);
+            setOpenFilter(false);
+        }, [onFilterUpdate]);
+
+        return (
+            <ErrorBoundary>
+                <Grid
+                    sx={theme => ({
+                        width: column.width,
+                        position: "relative",
+                        // width: "calc(100% + 24px)",
+                        // margin: "0px -12px",
+                        padding: "0px 12px",
+                        color: onHover ? theme.palette.text.primary : theme.palette.text.secondary,
+                        backgroundColor: onHover ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
+                        transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+                        height: "100%",
+                        fontSize: "0.750rem",
+                        textTransform: "uppercase",
+                        fontWeight: 600
+                    })}
+                    ref={ref}
+                    wrap={"nowrap"}
+                    alignItems={"center"}
+                    onMouseEnter={() => setOnHover(true)}
+                    onMouseMove={() => setOnHover(true)}
+                    onMouseLeave={() => setOnHover(false)}
+                    container>
+
+                    <Grid item xs={true} sx={{
+                        overflow: "hidden",
+                        flexShrink: 1
                     }}>
                         <Box sx={{
-                            paddingTop: "4px"
+                            display: "flex",
+                            justifyContent: column.headerAlign,
+                            alignItems: "center",
+                            flexDirection: "row"
                         }}>
-                            {column.icon && column.icon(onHover || open)}
+                            <Box sx={{
+                                paddingTop: "4px"
+                            }}>
+                                {column.icon && column.icon(onHover || openFilter)}
+                            </Box>
+                            <Box sx={{
+                                margin: "0px 4px",
+                                overflow: "hidden",
+                                justifyContent: column.align,
+                                flexShrink: 1
+                            }}>
+                                {column.title}
+                            </Box>
+
                         </Box>
-                        <Box sx={{
-                            margin: "0px 4px",
-                            overflow: "hidden",
-                            justifyContent: column.align,
-                            flexShrink: 1
-                        }}>
-                            {column.title}
-                        </Box>
-                    </Box>
+                    </Grid>
+
+                    {column.sortable && (sort || onHover || openFilter) &&
+                        <Grid item>
+                            <Badge color="secondary"
+                                   variant="dot"
+                                   overlap="circular"
+                                   invisible={!sort}>
+                                <IconButton
+                                    size={"small"}
+                                    sx={(theme) => ({
+                                        backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
+                                    })}
+                                    onClick={() => {
+                                        onColumnSort(column.key as Extract<keyof M, string>);
+                                    }}
+                                >
+                                    {!sort &&
+                                        <ArrowUpwardIcon fontSize={"small"}/>}
+                                    {sort === "asc" &&
+                                        <ArrowUpwardIcon fontSize={"small"}/>}
+                                    {sort === "desc" &&
+                                        <ArrowDownwardIcon fontSize={"small"}/>}
+                                </IconButton>
+                            </Badge>
+                        </Grid>
+                    }
+
+                    {column.filter && <Grid item>
+                        <Badge color="secondary"
+                               variant="dot"
+                               overlap="circular"
+                               invisible={!filter}>
+                            <IconButton
+                                sx={(theme) => ({
+                                    backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
+                                })}
+                                size={"small"}
+                                onClick={handleSettingsClick}>
+                                <ArrowDropDownCircleIcon fontSize={"small"}
+                                                         color={onHover || openFilter ? undefined : "disabled"}/>
+                            </IconButton>
+
+                        </Badge>
+                    </Grid>}
+
+                    <Box
+                        sx={(theme) => ({
+                            position: "absolute",
+                            height: "100%",
+                            width: "4px",
+                            top: 0,
+                            right: 0,
+                            cursor: "col-resize",
+                            backgroundColor: onHover ? theme.palette.primary.light : undefined
+                        })}
+                        onMouseDown={() => onClickResizeColumn()}
+                    />
                 </Grid>
 
-                {column.sortable && (sort || onHover || open) &&
-                <Grid item>
-                    <Badge color="secondary"
-                           variant="dot"
-                           overlap="circular"
-                           invisible={!sort}>
-                        <IconButton
-                            size={"small"}
-                            sx={(theme) => ({
-                                backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
-                            })}
-                            onClick={() => {
-                                onColumnSort(column.key as Extract<keyof M, string>);
-                            }}
-                        >
-                            {!sort && <ArrowUpwardIcon fontSize={"small"}/>}
-                            {sort === "asc" &&
-                                <ArrowUpwardIcon fontSize={"small"}/>}
-                            {sort === "desc" &&
-                            <ArrowDownwardIcon fontSize={"small"}/>}
-                        </IconButton>
-                    </Badge>
-                </Grid>
-                }
+                {column.sortable && <Popover
+                    id={openFilter ? `popover_${column.key}` : undefined}
+                    open={openFilter}
+                    elevation={1}
+                    anchorEl={ref.current}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: "bottom",
+                        horizontal: "right"
+                    }}
+                    transformOrigin={{
+                        vertical: "top",
+                        horizontal: "right"
+                    }}
+                >
+                    <FilterForm column={column}
+                                filter={filter}
+                                onHover={onHover}
+                                onFilterUpdate={update}/>
+                </Popover>}
 
-                {column.filter && <Grid item>
-                    <Badge color="secondary"
-                           variant="dot"
-                           overlap="circular"
-                           invisible={!filter}>
-                        <IconButton
-                            sx={(theme) => ({
-                                backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
-                            })}
-                            size={"small"}
-                            onClick={handleSettingsClick}>
-                            <ArrowDropDownCircleIcon fontSize={"small"}
-                                                     color={onHover || open ? undefined : "disabled"}/>
-                        </IconButton>
-
-                    </Badge>
-                </Grid>}
-            </Grid>
-
-            {column.sortable && <Popover
-                id={open ? `popover_${column.key}` : undefined}
-                open={open}
-                elevation={1}
-                anchorEl={ref.current}
-                onClose={handleClose}
-                anchorOrigin={{
-                    vertical: "bottom",
-                    horizontal: "right"
-                }}
-                transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right"
-                }}
-            >
-                <FilterForm column={column}
-                            filter={filter}
-                            onHover={onHover}
-                            onFilterUpdate={update}/>
-            </Popover>}
-
-        </ErrorBoundary>
-    );
-}
+            </ErrorBoundary>
+        );
+    }
+    , equal) as React.FunctionComponent<TableHeaderProps<any>>;
 
 interface FilterFormProps<M> {
     column: TableColumn<M, any>;

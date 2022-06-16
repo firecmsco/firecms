@@ -10,6 +10,7 @@ import isEqual from "react-fast-compare";
 import { ErrorTooltip } from "../ErrorTooltip";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { TableSize } from "./TableProps";
+import { randomColor } from "../../util";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -24,6 +25,7 @@ interface TableCellProps {
     align: "right" | "left" | "center";
     size: TableSize;
     disabledTooltip?: string;
+    width: number;
     focused: boolean;
     showExpandIcon?: boolean;
     removePadding?: boolean;
@@ -49,6 +51,7 @@ export const TableCell = React.memo<TableCellProps>(
                            removePadding,
                            fullHeight,
                            onSelect,
+        width,
                            showExpandIcon = true
                        }: TableCellProps) {
 
@@ -191,9 +194,9 @@ export const TableCell = React.memo<TableCellProps>(
                 onMouseMove={() => setOnHover(true)}
                 onMouseLeave={() => setOnHover(false)}
                 sx={{
+                    width,
                     position: "relative",
-                    width: "100%",
-                    // color: "#" + randomColor(),
+                    color: "#" + randomColor(),
                     height: "100%",
                     borderRadius: "4px",
                     overflow: "hidden",
@@ -281,6 +284,3 @@ export const TableCell = React.memo<TableCellProps>(
         </ErrorBoundary>
     );
 }, isEqual) as React.FunctionComponent<TableCellProps>;
-
-
-

@@ -22,7 +22,7 @@ import {
 import { SnackbarContext, SnackbarProvider } from "./contexts/SnackbarContext";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
-import { ModeProvider, ModeStateContext } from "./contexts/ModeState";
+import { ModeStateContext } from "./contexts/ModeController";
 import {
     useBuildSideEntityController
 } from "./internal/useBuildSideEntityController";
@@ -33,11 +33,9 @@ import { useBuildAuthController } from "./internal/useBuildAuthController";
 import {
     useBuildSideDialogsController
 } from "./internal/useBuildSideDialogsController";
-import {
-    CMSViewsBuilder,
-    EntityCollectionsBuilder
-} from "../firebase_app/FirebaseCMSAppProps";
+import { CMSViewsBuilder, EntityCollectionsBuilder } from "../firebase_app";
 import { EntityCollectionView, EntityCollectionViewProps } from "./components";
+import { ModeController } from "../hooks";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -152,6 +150,12 @@ export interface FireCMSProps<UserType extends User> {
     userConfigPersistence?: UserConfigurationPersistence;
 
     /**
+     * Controller in charge of switching dark or light mode in the app.
+     * {@link useBuildModeController}
+     */
+    modeController: ModeController;
+
+    /**
      * Component used to render a collection view.
      * Defaults to {@link EntityCollectionView}
      */
@@ -166,12 +170,14 @@ export interface FireCMSProps<UserType extends User> {
  * @constructor
  * @category Core
  */
+
 export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     const {
         children,
         collections,
         views,
+        modeController,
         entityLinkBuilder,
         authentication,
         userConfigPersistence,
@@ -224,7 +230,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     }
 
     return (
-        <ModeProvider>
+
+        <ModeStateContext.Provider value={modeController}>
             <SnackbarProvider>
                 <SnackbarContext.Consumer>
                     {(snackbarController) => {
@@ -266,7 +273,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                     }}
                 </SnackbarContext.Consumer>
             </SnackbarProvider>
-        </ModeProvider>
+        </ModeStateContext.Provider>
     );
-
 }

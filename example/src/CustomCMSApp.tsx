@@ -11,7 +11,7 @@ import {
     Authenticator,
     buildCollection,
     CircularProgressCenter,
-    createCMSDefaultTheme,
+    useCreateCMSDefaultTheme,
     FirebaseAuthDelegate,
     FirebaseLoginView,
     FireCMS,
@@ -130,7 +130,7 @@ export function CustomCMSApp() {
             >
                 {({ context, mode, loading }) => {
 
-                    const theme = createCMSDefaultTheme({ mode });
+                    const theme = useCreateCMSDefaultTheme({ mode });
                     const { navigation } = context;
 
                     let component;
