@@ -27,7 +27,7 @@ import { ErrorBoundary } from "../ErrorBoundary";
 export const TableHeader = React.memo<TableHeaderProps<any>>(TableHeaderInternal) as React.FunctionComponent<TableHeaderProps<any>>;
 
 type TableHeaderProps<M extends { [Key: string]: any }> = {
-    column: TableColumn<M>;
+    column: TableColumn<M, any>;
     onColumnSort: (key: Extract<keyof M, string>) => void;
     onFilterUpdate: (filterForProperty?: [TableWhereFilterOp, any]) => void;
     filter?: [TableWhereFilterOp, any];
@@ -179,7 +179,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
 }
 
 interface FilterFormProps<M> {
-    column: TableColumn<M>;
+    column: TableColumn<M, any>;
     onFilterUpdate: (filter?: [TableWhereFilterOp, any]) => void;
     filter?: [TableWhereFilterOp, any];
     onHover: boolean

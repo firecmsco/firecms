@@ -19,7 +19,7 @@ import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
 import { productsCollection } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
-import { galleryCollection } from "./collections/gallery_collection";
+import { showcaseCollection } from "./collections/sohwcase_collection";
 
 import { textSearchController } from "./text_search";
 
@@ -126,8 +126,7 @@ function SampleApp() {
         productsCollection,
         usersCollection,
         blogCollection,
-        galleryCollection,
-        collectionBroken
+        showcaseCollection
     ];
 
     if (process.env.NODE_ENV !== "production") {

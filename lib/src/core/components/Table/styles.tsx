@@ -263,12 +263,3 @@ export const baseTableCss = css`
     pointer-events: auto;
   }
 `;
-
-
-
-export interface CellStyleProps {
-    size: TableSize;
-    align: "right" | "left" | "center";
-}
-
-

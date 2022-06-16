@@ -14,7 +14,9 @@ import {
 } from "../core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
-import { useBuildFirebaseAuthDelegate } from "./hooks/useBuildFirebaseAuthDelegate";
+import {
+    useBuildFirebaseAuthDelegate
+} from "./hooks/useBuildFirebaseAuthDelegate";
 import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
@@ -113,10 +115,11 @@ export function FirebaseCMSApp({
 
     if (firebaseConfigError) {
         return <div>
-            It seems like the provided Firebase config is not correct. If you
-            are using the credentials provided automatically by Firebase
-            Hosting, make sure you link your Firebase app to Firebase
-            Hosting.
+            <p>It seems like the provided Firebase config is not correct. If you
+                are using the credentials provided automatically by Firebase
+                Hosting, make sure you link your Firebase app to Firebase
+                Hosting.</p>
+            <p>{String(firebaseConfigError)}</p>
         </div>;
     }
 

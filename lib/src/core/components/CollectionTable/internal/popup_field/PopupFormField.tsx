@@ -30,7 +30,7 @@ import {
 } from "../../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
-import { OnCellValueChangeParams } from "../../column_builder";
+import { OnCellValueChangeParams } from "../../types";
 import { ErrorView } from "../../../ErrorView";
 import { isReadOnly, resolveCollection } from "../../../../util";
 import { CustomDialogActions } from "../../../CustomDialogActions";

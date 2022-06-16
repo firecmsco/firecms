@@ -29,7 +29,7 @@ now becomes:
 ```typescript jsx
 buildProperty<string>({
     dataType: "string",
-    title: "Currency",
+    name: "Currency",
     enumValues: {
         EUR: "Euros",
         DOL: "Dollars"

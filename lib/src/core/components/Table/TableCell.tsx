@@ -5,11 +5,11 @@ import { Box, IconButton, Tooltip, useTheme } from "@mui/material";
 
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import { CellStyleProps } from "./styles";
 import { getRowHeight } from "./common";
 import isEqual from "react-fast-compare";
 import { ErrorTooltip } from "../ErrorTooltip";
 import { ErrorBoundary } from "../ErrorBoundary";
+import { TableSize } from "./TableProps";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -21,8 +21,10 @@ interface TableCellProps {
     saved?: boolean;
     error?: Error;
     allowScroll?: boolean;
+    align: "right" | "left" | "center";
+    size: TableSize;
     disabledTooltip?: string;
-    focused?: boolean;
+    focused: boolean;
     showExpandIcon?: boolean;
     removePadding?: boolean;
     fullHeight?: boolean;
@@ -31,33 +33,34 @@ interface TableCellProps {
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
-const TableCellInternal = ({
-                               children,
-                               selected,
-                               focused,
-                               disabled,
-                               disabledTooltip,
-                               size,
-                               saved,
-                               error,
-                               align,
-                               allowScroll,
-                               openPopup,
-                               removePadding,
-                               fullHeight,
-                               onSelect,
-                               showExpandIcon = true
-                           }: TableCellProps & CellStyleProps) => {
+export const TableCell = React.memo<TableCellProps>(
+    function TableCell({
+                           children,
+                           focused,
+                           size,
+                           selected,
+                           disabled,
+                           disabledTooltip,
+                           saved,
+                           error,
+                           align,
+                           allowScroll,
+                           openPopup,
+                           removePadding,
+                           fullHeight,
+                           onSelect,
+                           showExpandIcon = true
+                       }: TableCellProps) {
 
-    const [measureRef, bounds] = useMeasure();
-    const theme = useTheme();
-    const ref = React.createRef<HTMLDivElement>();
+        const [measureRef, bounds] = useMeasure();
+        const theme = useTheme();
+        const ref = React.createRef<HTMLDivElement>();
 
-    const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
-    const maxHeight = useMemo(() => getRowHeight(size), [size]);
+        const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
+        const maxHeight = useMemo(() => getRowHeight(size), [size]);
 
-    const [onHover, setOnHover] = useState(false);
-    const [internalSaved, setInternalSaved] = useState(saved);
+        const [onHover, setOnHover] = useState(false);
+        const [internalSaved, setInternalSaved] = useState(saved);
 
     const iconRef = React.createRef<HTMLButtonElement>();
     useEffect(() => {
@@ -160,7 +163,7 @@ const TableCellInternal = ({
         {children}
     </Box>;
 
-    const isSelected = !error && (selected || focused);
+    const isSelected = !error && selected;
 
     let border: string;
     if (isSelected) {
@@ -190,6 +193,7 @@ const TableCellInternal = ({
                 sx={{
                     position: "relative",
                     width: "100%",
+                    // color: "#" + randomColor(),
                     height: "100%",
                     borderRadius: "4px",
                     overflow: "hidden",
@@ -200,8 +204,8 @@ const TableCellInternal = ({
                     "&:hover": {
                         backgroundColor: disabled ? undefined : (theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default)
                     },
-                    justifyContent: justifyContent,
-                    border: border,
+                    justifyContent,
+                    border,
                     // alpha: disabled ? 0.8 : undefined,
                     backgroundColor: isSelected ? theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default : undefined,
                     transition: "border-color 300ms ease-in-out"
@@ -276,6 +280,7 @@ const TableCellInternal = ({
             </Box>
         </ErrorBoundary>
     );
-};
+}, isEqual) as React.FunctionComponent<TableCellProps>;
 
-export const TableCell = React.memo<TableCellProps & CellStyleProps>(TableCellInternal, isEqual) as React.FunctionComponent<TableCellProps & CellStyleProps>;
+
+

@@ -11,7 +11,7 @@ export type {
     UniqueFieldValidator,
     OnCellValueChange,
     OnCellValueChangeParams
-} from "./column_builder";
+} from "./types";
 
 
 

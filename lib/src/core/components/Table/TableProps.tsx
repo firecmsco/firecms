@@ -5,7 +5,7 @@ import { EnumValueConfig, WhereFilterOp } from "../../../models";
  * @see Table
  * @category Components
  */
-export interface TableProps<T extends object> {
+export interface TableProps<T extends object, E extends any> {
 
     /**
      * Array of arbitrary data
@@ -16,7 +16,13 @@ export interface TableProps<T extends object> {
      * Properties displayed in this collection. If this property is not set
      * every property is displayed, you can filter
      */
-    columns: TableColumn<T>[];
+    columns: TableColumn<T, E>[];
+
+    /**
+     * Custom cell renderer
+     * The renderer receives props `{ cellData, columns, column, columnIndex, rowData, rowIndex, container, isScrolling }`
+     */
+    cellRenderer: (params: CellRendererParams<T, E>) => React.ReactNode;
 
     /**
      * If enabled, content is loaded in batch
@@ -51,7 +57,7 @@ export interface TableProps<T extends object> {
     /**
      * Callback when a column is resized
      */
-    onColumnResize?: (params: OnTableColumnResizeParams<T>) => void;
+    onColumnResize?: (params: OnTableColumnResizeParams<T, E>) => void;
 
     /**
      * Size of the table
@@ -116,11 +122,21 @@ export type TableColumnFilter = {
     enumValues?: TableEnumValues;
 };
 
+export type CellRendererParams<T extends any, E extends any> = {
+    // key: string;
+    cellData?: any;
+    column: TableColumn<T, E>;
+    columnIndex: number;
+    rowData?: T;
+    rowIndex: number;
+    isScrolling?: boolean;
+};
+
 /**
  * @see Table
  * @category Components
  */
-export interface TableColumn<T extends any> {
+export interface TableColumn<T extends any, E extends any> {
 
     /**
      * Data key for the cell value, could be "a.b.c"
@@ -133,24 +149,14 @@ export interface TableColumn<T extends any> {
     width: number;
 
     /**
-     * Custom column cell renderer
-     * The renderer receives props `{ cellData, columns, column, columnIndex, rowData, rowIndex, container, isScrolling }`
-     */
-    cellRenderer: (params: {
-        cellData: any;
-        columns: TableColumn<T>[];
-        column: TableColumn<T>;
-        columnIndex: number;
-        rowData: T;
-        rowIndex: number;
-        container: any;
-        isScrolling?: boolean;
-    }) => React.ReactNode;
-
-    /**
      * Label displayed in the header
      */
     title?: string;
+
+    /**
+     * This column is frozen to the left
+     */
+    frozen?: boolean;
 
     /**
      * How is the
@@ -158,7 +164,7 @@ export interface TableColumn<T extends any> {
     headerAlign?: "left" | "center" | "right";
 
     /**
-     * Ico displayed in the header
+     * Icon displayed in the header
      */
     icon?: (hoverOrOpen: boolean) => React.ReactNode;
 
@@ -178,14 +184,13 @@ export interface TableColumn<T extends any> {
      */
     sortable?: boolean;
 
-    [key: string]: any;
-
 }
+
 /**
  * @see Table
  * @category Collection components
  */
-export type OnTableColumnResizeParams<T> = { width: number, key: string, column: TableColumn<T> };
+export type OnTableColumnResizeParams<T, E> = { width: number, key: string, column: TableColumn<T, E> };
 
 /**
  * @see Table

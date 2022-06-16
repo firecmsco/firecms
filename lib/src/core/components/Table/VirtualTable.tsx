@@ -1,20 +1,28 @@
 import React, { useCallback, useEffect, useRef } from "react";
 import useMeasure from "react-use-measure";
 
+import equal from "react-fast-compare"
+
 import { alpha, Box, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { styled } from "@mui/material/styles";
 import BaseTable, { Column, ColumnShape } from "react-base-table";
 import clsx from "clsx";
 
+// // @ts-ignore
+// import { FixedSizeList as List } from "react-window";
+// // @ts-ignore
+// import AutoSizer from "react-virtualized-auto-sizer";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { baseTableCss } from "./styles";
 import { TableHeader } from "./TableHeader";
 import {
+    CellRendererParams,
     TableColumn,
     TableFilterValues,
     TableProps,
+    TableSize,
     TableWhereFilterOp
 } from "./TableProps";
 
@@ -63,37 +71,101 @@ declare module "react" {
     }
 }
 
+type VirtualTableRowProps = { style: any, size: TableSize, children: JSX.Element[] };
+
+export const VirtualTableRow = React.memo<VirtualTableRowProps>(
+    function VirtualTableRow({
+                                 children,
+                                 size,
+                                 style
+                             }: VirtualTableRowProps) {
+        return <Box
+            component={"div"}
+            style={{ ...(style), width: "fit-content" }}
+            sx={{
+                display: "flex",
+                height: getRowHeight(size),
+                flexDirection: "row",
+                fontSize: "0.875rem"
+            }}>
+
+            {children}
+
+        </Box>;
+    },
+    equal
+);
+
+type VirtualTableCellProps<T, E> = {
+    dataKey: string;
+    column: TableColumn<T, E>;
+    rowData: any;
+    cellData: any;
+    rowIndex: any;
+    columnIndex: number;
+    cellRenderer: (params: CellRendererParams<T, E>) => React.ReactNode;
+};
+
+export const VirtualTableCell = React.memo<VirtualTableCellProps<any, any>>(
+    function VirtualTableCell<T, E>(props: VirtualTableCellProps<T, E>) {
+        return <Box
+            component={"div"}
+            sx={{
+                width: props.column.width,
+                height: "100%",
+                p: 0
+            }}
+        >
+            {props.rowData && props.cellRenderer(
+                {
+                    // key: props.column.key,
+                    cellData: props.cellData,
+                    rowData: props.rowData as any,
+                    rowIndex: props.rowIndex,
+                    isScrolling: false,
+                    column: props.column,
+                    columnIndex: props.columnIndex,
+                }
+            )}
+        </Box>;
+    },
+    (a, b) => {
+        return equal(a, b);
+    }
+);
+
 /**
  * This is a Table component that allows displaying arbitrary data, not
  * necessarily related to entities or properties. It is the component
- * that powers the entity collections but has a generic API so it
+ * that powers the entity collections but has a generic API, so it
  * can be reused.
  *
  * If you have an entity collection defined, you probably want to use
- * {@link CollectionTable} or {@link EntityCollectionView}
+ * {@link EntityCollectionTable} or {@link EntityCollectionView}
  *
  * @see CollectionTable
  * @see EntityCollectionView
  * @category Components
  */
-export function Table<T extends object>({
-                                            data,
-                                            onResetPagination,
-                                            onEndReached,
-                                            size = "m",
-                                            columns,
-                                            onRowClick,
-                                            onColumnResize,
-                                            filter: filterInput,
-                                            checkFilterCombination,
-                                            onFilterUpdate,
-                                            sortBy,
-                                            error,
-                                            emptyMessage,
-                                            onSortByUpdate,
-                                            loading,
-                                            hoverRow = true
-                                        }: TableProps<T>) {
+export function VirtualTable<T extends object, E extends any>({
+                                                                  data,
+                                                                  onResetPagination,
+                                                                  onEndReached,
+                                                                  size = "m",
+                                                                  columns,
+                                                                  onRowClick,
+                                                                  onColumnResize,
+                                                                  filter: filterInput,
+                                                                  checkFilterCombination,
+                                                                  onFilterUpdate,
+                                                                  sortBy,
+                                                                  error,
+                                                                  emptyMessage,
+                                                                  onSortByUpdate,
+                                                                  loading,
+                                                                  cellRenderer,
+                                                                  hoverRow = true
+                                                              }: TableProps<T, E>) {
 
     const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
     const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
@@ -185,7 +257,7 @@ export function Table<T extends object>({
         onRowClick(props);
     }, [onRowClick]);
 
-    const onInternalFilterUpdate = useCallback((column: TableColumn<any>, filterForProperty?: [TableWhereFilterOp, any]) => {
+    const onInternalFilterUpdate = useCallback((column: TableColumn<T, E>, filterForProperty?: [TableWhereFilterOp, any]) => {
 
         const filter = filterRef.current;
         let newFilterValue: TableFilterValues<any> = filter ? { ...filter } : {};
@@ -275,18 +347,69 @@ export function Table<T extends object>({
         );
     }
 
+    const Row = useCallback(({ index, style }: any) => {
+        const rowData = data && data[index];
+
+        return (
+            <VirtualTableRow style={style}
+                             size={size}>
+                {columns.map((column, columnIndex) => {
+                    const cellData = rowData && rowData[column.key];
+                    return <VirtualTableCell
+                        key={`cell_${column.key}`}
+                        dataKey={column.key}
+                        cellRenderer={cellRenderer}
+                        column={column}
+                        rowData={rowData}
+                        cellData={cellData}
+                        rowIndex={index}
+                        columnIndex={columnIndex}/>;
+                })}
+            </VirtualTableRow>
+        );
+    }, [columns, data, size]);
+
     const onBaseTableColumnResize = useCallback(({
                                                      column,
                                                      width
-                                                 }: { column: ColumnShape; width: number }) => {
+                                                 }: { column: ColumnShape<any>; width: number }) => {
         if (onColumnResize) {
             onColumnResize({
                 width,
                 key: column.key as string,
-                column: column as TableColumn<any>
+                column: column as TableColumn<any, any>
             });
         }
     }, [onColumnResize]);
+
+    const baseTableCellRenderer = useCallback(({
+                                                   // key,
+                                                   cellData,
+                                                   column,
+                                                   columnIndex,
+                                                   rowData,
+                                                   rowIndex,
+                                                   isScrolling
+                                               }:{
+        cellData: any;
+        columns: ColumnShape<T>[];
+        column: ColumnShape<T>;
+        columnIndex: number;
+        rowData: T;
+        rowIndex: number;
+        container: BaseTable<T>;
+        isScrolling?: boolean;
+    }) => {
+        return cellRenderer({
+            // key,
+            cellData,
+            column: column as TableColumn<any, any>,
+            columnIndex,
+            rowData,
+            rowIndex,
+            isScrolling,
+        });
+    }, [cellRenderer]);
 
     return <Root sx={{
         width: "100%",
@@ -320,7 +443,7 @@ export function Table<T extends object>({
                     title={column.title}
                     className={classes.column}
                     headerRenderer={headerRenderer}
-                    cellRenderer={column.cellRenderer as any}
+                    cellRenderer={baseTableCellRenderer}
                     height={getRowHeight(size)}
                     align={column.align}
                     flexGrow={1}

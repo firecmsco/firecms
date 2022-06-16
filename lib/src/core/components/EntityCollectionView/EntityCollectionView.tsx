@@ -281,7 +281,7 @@ export const EntityCollectionView = React.memo(
                 />
             );
 
-        }, [usedSelectionController, collection, collection, authController, fullPath]);
+        }, [usedSelectionController, collection, authController, fullPath]);
 
         return (
             <>
