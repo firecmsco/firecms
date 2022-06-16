@@ -41,13 +41,13 @@ import {
     ArrayOfReferencesFieldBinding
 } from "./field_bindings/ArrayOfReferencesFieldBinding";
 
-import { isReadOnly, resolveProperty } from "../core";
+import { ErrorBoundary, isReadOnly, resolveProperty } from "../core";
 import {
     ArrayCustomShapedFieldBinding
 } from "./field_bindings/ArrayCustomShapedFieldBinding";
 
 /**
- * This factory method renders a form field creating the corresponding configuration
+ * This component renders a form field creating the corresponding configuration
  * from a property. For example if bound to a string property, it will generate
  * a text field.
  *
@@ -255,7 +255,7 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
     };
 
     return (
-        <>
+        <ErrorBoundary>
 
             {React.createElement(component, cmsFieldProps)}
 
@@ -264,6 +264,6 @@ function FieldInternal<T extends CMSType, M extends { [Key: string]: any }>
                 This value has been updated elsewhere
             </FormHelperText>}
 
-        </>);
+        </ErrorBoundary>);
 
 }

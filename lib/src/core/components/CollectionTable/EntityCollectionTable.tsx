@@ -659,16 +659,6 @@ export function useColumnIds<M>(collection: ResolvedEntityCollection<M>, include
             ...additionalColumns.map((column) => column.id)
         ];
 
-        // let result: string[];
-        // if (displayedProperties) {
-        //     result = displayedProperties
-        //         .map((p) => {
-        //             return columnIds.find(id => id === p);
-        //         }).filter(c => !!c) as string[];
-        // } else {
-        //     result = columnIds.filter((columnId) => !hiddenColumnIds.includes(columnId));
-        // }
-
         if (includeSubcollections) {
             const subCollectionIds = subCollections
                 .map((collection) => getSubcollectionColumnId(collection));
@@ -738,4 +728,3 @@ const buildFilterableFromProperty = (property: ResolvedProperty,
     return undefined;
 
 };
-
