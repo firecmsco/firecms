@@ -28,10 +28,7 @@ import {
     CustomFieldValidator,
     mapPropertyToYup
 } from "../../../../form/validation";
-import { SelectedCellProps } from "../types";
-import {
-    useEntityCollectionTableController
-} from "../EntityCollectionTableContext";
+import { useEntityCollectionTableController } from "../EntityCollectionTable";
 
 export interface PropertyTableCellProps<T extends CMSType, M> {
     propertyKey: string;
@@ -85,8 +82,10 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
                                                              align,
                                                              width,
                                                              height,
-                                                             entity,
+                                                             entity
                                                          }: PropertyTableCellProps<T, M>) => {
+
+    console.log("PropertyTableCellInternal");
 
     const {
         collection,
@@ -190,7 +189,6 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
         } else {
             select({
                 columnIndex,
-                // rowIndex,
                 width,
                 height,
                 entity,
@@ -199,7 +197,7 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
                 collection
             });
         }
-    }, [collection, columnIndex, entity, height, propertyKey, width]);
+    }, [collection, columnIndex, entity, height, propertyKey, select, width]);
 
     const openPopup = useCallback((cellRect: DOMRect | undefined) => {
         if (!cellRect) {
@@ -302,7 +300,7 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
         } else if (property.dataType === "boolean") {
             innerComponent = <TableSwitch error={error}
                                           disabled={disabled}
-                                          focused={focused}
+                                          focused={focused && selected}
                                           internalValue={internalValue as boolean}
                                           updateValue={updateValue}
             />;
@@ -398,6 +396,8 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
     return (
         <ErrorBoundary>
             <TableCell
+                size={size}
+                focused={focused}
                 onSelect={onSelect}
                 selected={selected}
                 disabled={disabled || readOnly}

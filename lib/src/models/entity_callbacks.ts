@@ -63,9 +63,15 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any } = any, UserT
     collection: ResolvedEntityCollection<M>;
 
     /**
-     * Full path where this entity is being saved
+     * Full path of the CMS where this entity is being saved.
+     * Might contain unresolved aliases.
      */
     path: string;
+
+    /**
+     * Full path where this entity is being saved, with alias resolved
+     */
+    resolvedPath: string;
 
     /**
      * Id of the entity or undefined if new

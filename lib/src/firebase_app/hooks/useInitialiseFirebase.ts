@@ -39,7 +39,7 @@ export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
 
     const initFirebase = useCallback((config: Record<string, unknown>) => {
         try {
-            const initialisedFirebaseApp = initializeApp(config);
+            const initialisedFirebaseApp = initializeApp(config, "[DEFAULT]");
             setFirebaseConfigError(undefined);
             setFirebaseConfigLoading(false);
             if (onFirebaseInit)

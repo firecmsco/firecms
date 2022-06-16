@@ -1,17 +1,21 @@
 import React, { useCallback, useEffect, useRef } from "react";
+import useMeasure from "react-use-measure";
+
 import equal from "react-fast-compare"
 
 import { alpha, Box, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import { styled } from "@mui/material/styles";
+import BaseTable, { Column, ColumnShape } from "react-base-table";
+import clsx from "clsx";
 
-// @ts-ignore
-import { FixedSizeList as List } from "react-window";
-// @ts-ignore
-import AutoSizer from "react-virtualized-auto-sizer";
-
+// // @ts-ignore
+// import { FixedSizeList as List } from "react-window";
+// // @ts-ignore
+// import AutoSizer from "react-virtualized-auto-sizer";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { CircularProgressCenter } from "../CircularProgressCenter";
+import { baseTableCss } from "./styles";
 import { TableHeader } from "./TableHeader";
 import {
     CellRendererParams,
@@ -69,14 +73,13 @@ declare module "react" {
 
 type VirtualTableRowProps = { style: any, size: TableSize, children: JSX.Element[] };
 
-// eslint-disable-next-line react/display-name
 export const VirtualTableRow = React.memo<VirtualTableRowProps>(
-    ({
-         children,
-         size,
-         style
-     }: VirtualTableRowProps) => (
-        <Box
+    function VirtualTableRow({
+                                 children,
+                                 size,
+                                 style
+                             }: VirtualTableRowProps) {
+        return <Box
             component={"div"}
             style={{ ...(style), width: "fit-content" }}
             sx={{
@@ -88,7 +91,8 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps>(
 
             {children}
 
-        </Box>),
+        </Box>;
+    },
     equal
 );
 
@@ -102,9 +106,8 @@ type VirtualTableCellProps<T, E> = {
     cellRenderer: (params: CellRendererParams<T, E>) => React.ReactNode;
 };
 
-// eslint-disable-next-line react/display-name
 export const VirtualTableCell = React.memo<VirtualTableCellProps<any, any>>(
-    <T, E>(props: VirtualTableCellProps<T, E>) => {
+    function VirtualTableCell<T, E>(props: VirtualTableCellProps<T, E>) {
         return <Box
             component={"div"}
             sx={{
@@ -115,7 +118,7 @@ export const VirtualTableCell = React.memo<VirtualTableCellProps<any, any>>(
         >
             {props.rowData && props.cellRenderer(
                 {
-                    dataKey: props.column.dataKey,
+                    // key: props.column.key,
                     cellData: props.cellData,
                     rowData: props.rowData as any,
                     rowIndex: props.rowIndex,
@@ -127,24 +130,7 @@ export const VirtualTableCell = React.memo<VirtualTableCellProps<any, any>>(
         </Box>;
     },
     (a, b) => {
-        return true;
-        // return equal(
-        //     a.column.renderKey({
-        //         dataKey: a.column.dataKey,
-        //         cellData: a.cellData,
-        //         column: a.column,
-        //         columnIndex: a.columnIndex,
-        //         rowData: a.rowData,
-        //         rowIndex: a.rowIndex
-        //     }),
-        //     b.column.renderKey({
-        //         dataKey: b.column.dataKey,
-        //         cellData: b.cellData,
-        //         column: b.column,
-        //         columnIndex: b.columnIndex,
-        //         rowData: b.rowData,
-        //         rowIndex: b.rowIndex
-        //     }));
+        return equal(a, b);
     }
 );
 
@@ -184,7 +170,9 @@ export function VirtualTable<T extends object, E extends any>({
     const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
     const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
 
-    const tableRef = useRef<any>(null);
+    const [ref, bounds] = useMeasure();
+
+    const tableRef = useRef<BaseTable>(null);
 
     // saving the current filter as a ref as a workaround for header closure
     const filterRef = useRef<TableFilterValues<any> | undefined>();
@@ -275,19 +263,19 @@ export function VirtualTable<T extends object, E extends any>({
         let newFilterValue: TableFilterValues<any> = filter ? { ...filter } : {};
 
         if (!filterForProperty) {
-            delete newFilterValue[column.dataKey];
+            delete newFilterValue[column.key];
         } else {
-            newFilterValue[column.dataKey] = filterForProperty;
+            newFilterValue[column.key] = filterForProperty;
         }
         const newSortBy: [string, "asc" | "desc"] | undefined = sortByProperty && currentSort ? [sortByProperty, currentSort] : undefined;
         const isNewFilterCombinationValid = !checkFilterCombination || checkFilterCombination(newFilterValue, newSortBy);
         if (!isNewFilterCombinationValid) {
-            newFilterValue = filterForProperty ? { [column.dataKey]: filterForProperty } as TableFilterValues<Extract<keyof T, string>> : {};
+            newFilterValue = filterForProperty ? { [column.key]: filterForProperty } as TableFilterValues<Extract<keyof T, string>> : {};
         }
 
         if (onFilterUpdate) onFilterUpdate(newFilterValue);
 
-        if (column.dataKey !== sortByProperty) {
+        if (column.key !== sortByProperty) {
             resetSort();
         }
     }, [checkFilterCombination, currentSort, onFilterUpdate, resetSort, sortByProperty]);
@@ -298,8 +286,8 @@ export function VirtualTable<T extends object, E extends any>({
         const column = columns[columnIndex];
 
         const filterForThisProperty: [TableWhereFilterOp, any] | undefined =
-            column && filter && filter[column.dataKey]
-                ? filter[column.dataKey]
+            column && filter && filter[column.key]
+                ? filter[column.key]
                 : undefined;
 
         return (
@@ -307,7 +295,7 @@ export function VirtualTable<T extends object, E extends any>({
                 <TableHeader
                     onFilterUpdate={(value) => onInternalFilterUpdate(column, value)}
                     filter={filterForThisProperty}
-                    sort={sortByProperty === column.dataKey ? currentSort : undefined}
+                    sort={sortByProperty === column.key ? currentSort : undefined}
                     onColumnSort={onColumnSort}
                     column={column}/>
             </ErrorBoundary>
@@ -366,10 +354,10 @@ export function VirtualTable<T extends object, E extends any>({
             <VirtualTableRow style={style}
                              size={size}>
                 {columns.map((column, columnIndex) => {
-                    const cellData = rowData && rowData[column.dataKey];
+                    const cellData = rowData && rowData[column.key];
                     return <VirtualTableCell
-                        key={`cell_${column.dataKey}`}
-                        dataKey={column.dataKey}
+                        key={`cell_${column.key}`}
+                        dataKey={column.key}
                         cellRenderer={cellRenderer}
                         column={column}
                         rowData={rowData}
@@ -381,70 +369,92 @@ export function VirtualTable<T extends object, E extends any>({
         );
     }, [columns, data, size]);
 
-    // const onBaseTableColumnResize = useCallback(({
-    //                                                  column,
-    //                                                  width
-    //                                              }: { column: ColumnShape; width: number }) => {
-    //     if (onColumnResize) {
-    //         onColumnResize({
-    //             width,
-    //             key: column.key as string,
-    //             column: column as TableColumn<any>
-    //         });
-    //     }
-    // }, [onColumnResize]);
+    const onBaseTableColumnResize = useCallback(({
+                                                     column,
+                                                     width
+                                                 }: { column: ColumnShape<any>; width: number }) => {
+        if (onColumnResize) {
+            onColumnResize({
+                width,
+                key: column.key as string,
+                column: column as TableColumn<any, any>
+            });
+        }
+    }, [onColumnResize]);
 
-    // <BaseTable
-    //     rowClassName={clsx(classes.tableRow, { [classes.tableRowClickable]: hoverRow })}
-    //     data={data}
-    //     onColumnResizeEnd={onBaseTableColumnResize}
-    //     width={bounds.width}
-    //     height={bounds.height}
-    //     emptyRenderer={error ? buildErrorView() : buildEmptyView()}
-    //     fixed
-    //     ignoreFunctionInColumnCompare={false}
-    //     rowHeight={getRowHeight(size)}
-    //     ref={tableRef}
-    //     onScroll={onScroll}
-    //     overscanRowCount={2}
-    //     onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
-    //     onEndReached={onEndReachedInternal}
-    //     rowEventHandlers={{ onClick: clickRow as any }}
-    // >
-    //     {columns.map((column) =>
-    //         <Column
-    //             key={column.key}
-    //             title={column.title}
-    //             className={classes.column}
-    //             headerRenderer={headerRenderer}
-    //             cellRenderer={column.cellRenderer as any}
-    //             height={getRowHeight(size)}
-    //             align={column.align}
-    //             flexGrow={1}
-    //             flexShrink={0}
-    //             resizable={true}
-    //             size={size}
-    //             frozen={column.frozen}
-    //             dataKey={column.key}
-    //             width={column.width}/>)
-    //     }
-    // </BaseTable>
+    const baseTableCellRenderer = useCallback(({
+                                                   // key,
+                                                   cellData,
+                                                   column,
+                                                   columnIndex,
+                                                   rowData,
+                                                   rowIndex,
+                                                   isScrolling
+                                               }:{
+        cellData: any;
+        columns: ColumnShape<T>[];
+        column: ColumnShape<T>;
+        columnIndex: number;
+        rowData: T;
+        rowIndex: number;
+        container: BaseTable<T>;
+        isScrolling?: boolean;
+    }) => {
+        return cellRenderer({
+            // key,
+            cellData,
+            column: column as TableColumn<any, any>,
+            columnIndex,
+            rowData,
+            rowIndex,
+            isScrolling,
+        });
+    }, [cellRenderer]);
 
-    return (
-        <AutoSizer>
-            {({ height, width }: any) => (
-                <List
-                    key={size}
-                    width={width}
-                    height={height}
-                    overscanCount={3}
-                    itemCount={data?.length}
-                    itemSize={getRowHeight(size)}>
-                    {Row}
-                </List>
+    return <Root sx={{
+        width: "100%",
+        height: "100%",
+        overflow: "hidden"
+    }}
+                 ref={ref}
+                 css={baseTableCss}>
 
-            )}
-        </AutoSizer>
-    );
+        {bounds && <BaseTable
+            rowClassName={clsx(classes.tableRow, { [classes.tableRowClickable]: hoverRow })}
+            data={data}
+            onColumnResizeEnd={onBaseTableColumnResize}
+            width={bounds.width}
+            height={bounds.height}
+            emptyRenderer={error ? buildErrorView() : buildEmptyView()}
+            fixed
+            ignoreFunctionInColumnCompare={false}
+            rowHeight={getRowHeight(size)}
+            ref={tableRef}
+            onScroll={onScroll}
+            overscanRowCount={2}
+            onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
+            onEndReached={onEndReachedInternal}
+            rowEventHandlers={{ onClick: clickRow as any }}
+        >
+
+            {columns.map((column) =>
+                <Column
+                    key={column.key}
+                    title={column.title}
+                    className={classes.column}
+                    headerRenderer={headerRenderer}
+                    cellRenderer={baseTableCellRenderer}
+                    height={getRowHeight(size)}
+                    align={column.align}
+                    flexGrow={1}
+                    flexShrink={0}
+                    resizable={true}
+                    size={size}
+                    frozen={column.frozen}
+                    dataKey={column.key}
+                    width={column.width}/>)
+            }
+        </BaseTable>}
+    </Root>;
 
 }

@@ -121,7 +121,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
                                 backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
                             })}
                             onClick={() => {
-                                onColumnSort(column.dataKey as Extract<keyof M, string>);
+                                onColumnSort(column.key as Extract<keyof M, string>);
                             }}
                         >
                             {!sort && <ArrowUpwardIcon fontSize={"small"}/>}
@@ -154,7 +154,7 @@ function TableHeaderInternal<M extends { [Key: string]: any }>({
             </Grid>
 
             {column.sortable && <Popover
-                id={open ? `popover_${column.dataKey}` : undefined}
+                id={open ? `popover_${column.key}` : undefined}
                 open={open}
                 elevation={1}
                 anchorEl={ref.current}
@@ -192,7 +192,7 @@ function FilterForm<M>({
                            onHover
                        }: FilterFormProps<M>) {
 
-    const id = column.dataKey;
+    const id = column.key;
 
     const [filterInternal, setFilterInternal] = useState<[TableWhereFilterOp, any] | undefined>(filter);
 

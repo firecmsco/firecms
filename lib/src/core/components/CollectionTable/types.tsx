@@ -44,7 +44,6 @@ export type EntityCollectionTableProviderProps<M, AdditionalKey extends string, 
      */
     inlineEditing: ((entity: Entity<any>) => boolean) | boolean;
 
-
     /**
      * Builder for creating the buttons in each row
      * @param entity
@@ -57,18 +56,15 @@ export type EntityCollectionTableProviderProps<M, AdditionalKey extends string, 
 };
 
 export type EntityCollectionTableController<M, E> = {
-
     collection: EntityCollection<any>;
     path: string;
     inlineEditing: ((entity: Entity<any>) => boolean) | boolean;
     selectedCell?: SelectedCellProps<any>;
     focused: boolean;
     additionalColumnsMap: Record<string, AdditionalColumnDelegate<any, string, any>>;
-
     select: (cell?: SelectedCellProps<M>) => void;
     setPopupCell: (cell?: SelectedCellProps<M>) => void;
     onValueChange?: (params: OnCellChangeParams<any, M>) => void;
-
     /**
      * Size of the elements in the collection
      */
@@ -100,25 +96,21 @@ export type EntityCollectionTableController<M, E> = {
      * specify here the indexes created.
      */
     filterCombinations?: FilterCombination<Extract<keyof M, string>>[];
-
     data: Entity<M>[]
     dataLoading: boolean,
     noMoreToLoad: boolean,
     dataLoadingError?: Error;
-
     onTextSearch?: (searchString?: string) => void;
     onSizeChanged?: (size: CollectionSize) => void;
     clearFilter: () => void;
-
     onRowClick?: (props: { rowData: any; rowIndex: number; rowKey: string; event: React.SyntheticEvent }) => void;
-
     loadNextPage: () => void,
     resetPagination: () => void,
     paginationEnabled: boolean,
     setFilterValues: (filter?: TableFilterValues<any> | undefined) => void;
     filterValues?: FilterValues<Extract<keyof M, string>>,
     sortBy?: [Extract<keyof M, string>, "asc" | "desc"],
-    setSortBy: (sortBy?: [Extract<keyof M, string>, "asc" | "desc"]) => void,
+    setSortBy: (sortBy: [Extract<keyof M, string>, "asc" | "desc"] | undefined) => void,
 
 }
 
@@ -145,7 +137,6 @@ export type SelectedCellProps<M> =
         entity: Entity<M>
     };
 
-
 /**
  * @category Collection components
  */
@@ -156,4 +147,3 @@ export type UniqueFieldValidator = (props: { name: string, value: any, property:
  * @category Collection components
  */
 export type OnCellValueChange<T, M extends { [Key: string]: any }> = (params: OnCellValueChangeParams<T, M>) => Promise<void>;
-

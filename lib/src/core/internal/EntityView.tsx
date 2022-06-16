@@ -280,7 +280,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         );
 
-        const loading = dataLoading || (!usedEntity && status === "existing");
+        const loading = dataLoading || (!usedEntity && (status === "existing" || status === "copy"));
         const subCollectionsViews = subcollections && subcollections.map(
             (subcollection, colIndex) => {
                 const fullPath = usedEntity ? `${usedEntity?.path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.alias ?? subcollection.path)}` : undefined;

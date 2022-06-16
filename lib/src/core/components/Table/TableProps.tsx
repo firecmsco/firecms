@@ -123,7 +123,7 @@ export type TableColumnFilter = {
 };
 
 export type CellRendererParams<T extends any, E extends any> = {
-    dataKey: string;
+    // key: string;
     cellData?: any;
     column: TableColumn<T, E>;
     columnIndex: number;
@@ -137,23 +137,11 @@ export type CellRendererParams<T extends any, E extends any> = {
  * @category Components
  */
 export interface TableColumn<T extends any, E extends any> {
-    /**
-     * Use this key to force re-renders.
-     * `cellRenderer` is not taken into account for re-rendering cells
-     */
-    // renderKey: (params: {
-    //     dataKey: string;
-    //     cellData?: any;
-    //     column: TableColumn<T, E>;
-    //     columnIndex: number;
-    //     rowData?: T;
-    //     rowIndex: number;
-    // }) => string;
 
     /**
      * Data key for the cell value, could be "a.b.c"
      */
-    dataKey: string;
+    key: string;
 
     /**
      * The width of the column, gutter width is not included
@@ -166,12 +154,17 @@ export interface TableColumn<T extends any, E extends any> {
     title?: string;
 
     /**
+     * This column is frozen to the left
+     */
+    frozen?: boolean;
+
+    /**
      * How is the
      */
     headerAlign?: "left" | "center" | "right";
 
     /**
-     * Ico displayed in the header
+     * Icon displayed in the header
      */
     icon?: (hoverOrOpen: boolean) => React.ReactNode;
 
@@ -191,8 +184,8 @@ export interface TableColumn<T extends any, E extends any> {
      */
     sortable?: boolean;
 
-
 }
+
 /**
  * @see Table
  * @category Collection components

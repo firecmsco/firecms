@@ -9,11 +9,7 @@ import { getRowHeight } from "./common";
 import isEqual from "react-fast-compare";
 import { ErrorTooltip } from "../ErrorTooltip";
 import { ErrorBoundary } from "../ErrorBoundary";
-import { randomColor } from "../../util";
 import { TableSize } from "./TableProps";
-import {
-    useEntityCollectionTableController
-} from "../CollectionTable/EntityCollectionTableContext";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -37,34 +33,34 @@ interface TableCellProps {
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
-// eslint-disable-next-line react/display-name
-export const TableCell = React.memo<TableCellProps>(({
-                                                         children,
-                                                         focused,
-                                                         size,
-                                                         selected,
-                                                         disabled,
-                                                         disabledTooltip,
-                                                         saved,
-                                                         error,
-                                                         align,
-                                                         allowScroll,
-                                                         openPopup,
-                                                         removePadding,
-                                                         fullHeight,
-                                                         onSelect,
-                                                         showExpandIcon = true
-                                                     }: TableCellProps) => {
+export const TableCell = React.memo<TableCellProps>(
+    function TableCell({
+                           children,
+                           focused,
+                           size,
+                           selected,
+                           disabled,
+                           disabledTooltip,
+                           saved,
+                           error,
+                           align,
+                           allowScroll,
+                           openPopup,
+                           removePadding,
+                           fullHeight,
+                           onSelect,
+                           showExpandIcon = true
+                       }: TableCellProps) {
 
-    const [measureRef, bounds] = useMeasure();
-    const theme = useTheme();
-    const ref = React.createRef<HTMLDivElement>();
+        const [measureRef, bounds] = useMeasure();
+        const theme = useTheme();
+        const ref = React.createRef<HTMLDivElement>();
 
-    const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
-    const maxHeight = useMemo(() => getRowHeight(size), [size]);
+        const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
+        const maxHeight = useMemo(() => getRowHeight(size), [size]);
 
-    const [onHover, setOnHover] = useState(false);
-    const [internalSaved, setInternalSaved] = useState(saved);
+        const [onHover, setOnHover] = useState(false);
+        const [internalSaved, setInternalSaved] = useState(saved);
 
     const iconRef = React.createRef<HTMLButtonElement>();
     useEffect(() => {
@@ -197,7 +193,7 @@ export const TableCell = React.memo<TableCellProps>(({
                 sx={{
                     position: "relative",
                     width: "100%",
-                    color: "#" + randomColor(),
+                    // color: "#" + randomColor(),
                     height: "100%",
                     borderRadius: "4px",
                     overflow: "hidden",
@@ -285,5 +281,6 @@ export const TableCell = React.memo<TableCellProps>(({
         </ErrorBoundary>
     );
 }, isEqual) as React.FunctionComponent<TableCellProps>;
+
 
 

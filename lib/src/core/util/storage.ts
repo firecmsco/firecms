@@ -18,6 +18,7 @@ export function resolveStorageString<M>(input: string | ((context: UploadedFileC
     let result;
     if (typeof input === "function") {
         result = input({
+            path,
             entityId,
             values,
             property,
