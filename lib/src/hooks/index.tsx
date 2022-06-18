@@ -14,6 +14,6 @@ export * from "./useAuthController";
 export * from "./useSideEntityController";
 export * from "./useFireCMSContext";
 export * from "./useSnackbarController";
-export * from "./useModeState";
+export * from "./useModeController";
 export * from "./useClipboard";
 export * from "./useBreadcrumbsContext";

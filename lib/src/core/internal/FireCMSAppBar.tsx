@@ -19,7 +19,7 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-import { useAuthController, useModeState } from "../../hooks";
+import { useAuthController, useModeController } from "../../hooks";
 import { useBreadcrumbsContext } from "../../hooks/useBreadcrumbsContext";
 
 interface CMSAppBarProps {
@@ -42,7 +42,7 @@ export const FireCMSAppBar = React.memo(
         const { breadcrumbs } = breadcrumbsContext;
 
         const authController = useAuthController();
-        const { mode, toggleMode } = useModeState();
+        const { mode, toggleMode } = useModeController();
 
     const initial = authController.user?.displayName
         ? authController.user.displayName[0].toUpperCase()

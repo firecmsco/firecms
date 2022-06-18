@@ -71,25 +71,26 @@ function isStorageProperty<T>(property: ResolvedProperty) {
     return false;
 }
 
-const PropertyTableCellInternal = <T extends CMSType, M>({
-                                                             propertyKey,
-                                                             setPreventOutsideClick,
-                                                             setFocused,
-                                                             columnIndex,
-                                                             customFieldValidator,
-                                                             value,
-                                                             property,
-                                                             align,
-                                                             width,
-                                                             height,
-                                                             entity
-                                                         }: PropertyTableCellProps<T, M>) => {
+export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
+    function PropertyTableCellInternal<T extends CMSType, M>({
+                                                                 propertyKey,
+                                                                 setPreventOutsideClick,
+                                                                 setFocused,
+                                                                 columnIndex,
+                                                                 customFieldValidator,
+                                                                 value,
+                                                                 property,
+                                                                 align,
+                                                                 width,
+                                                                 height,
+                                                                 collection,
+                                                                 path,
+                                                                 entity
+                                                             }: PropertyTableCellProps<T, M>) {
 
     console.log("PropertyTableCellInternal");
 
     const {
-        collection,
-        path,
         onValueChange,
         size,
         selectedCell,
@@ -397,6 +398,7 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
         <ErrorBoundary>
             <TableCell
                 size={size}
+                width={width}
                 focused={focused}
                 onSelect={onSelect}
                 selected={selected}
@@ -419,16 +421,14 @@ const PropertyTableCellInternal = <T extends CMSType, M>({
         </ErrorBoundary>
     );
 
-};
-
-export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(PropertyTableCellInternal, areEqual) as React.FunctionComponent<PropertyTableCellProps<any, any>>;
+    },
+    areEqual) as React.FunctionComponent<PropertyTableCellProps<any, any>>;
 
 function areEqual(prevProps: PropertyTableCellProps<any, any>, nextProps: PropertyTableCellProps<any, any>) {
     return prevProps.height === nextProps.height &&
         prevProps.align === nextProps.align &&
         prevProps.width === nextProps.width &&
         equal(prevProps.property, nextProps.property) &&
-        equal(prevProps.value, nextProps.value) &&
-        equal(prevProps.entity, nextProps.entity)
+        equal(prevProps.value, nextProps.value)
         ;
 }

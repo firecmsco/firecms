@@ -340,6 +340,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 return (
                     <TableCell
                         size={size}
+                        width={column.width}
                         focused={focused}
                         key={`preview_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
                         value={entity.values[propertyKey]}
@@ -375,7 +376,15 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                                 width={column.width}
                                 height={getRowHeight(size)}
                                 entity={entity}
-                                path={entity.path}/>
+                                path={entity.path}
+                                {...{
+                                    setPopupCell,
+                                    select,
+                                    onValueChange,
+                                    size,
+                                    selectedCell,
+                                    focused,
+                                }}/>
                             : renderSkeletonText()
                         }
                     </ErrorBoundary>);
@@ -385,7 +394,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const additionalCellRenderer = useCallback(({
                                                         column,
-                                                        rowData
+                                                        rowData,
+                                                        width
                                                     }: CellRendererParams<any, any>) => {
 
             const entity: Entity<M> = rowData;
@@ -399,6 +409,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
             return (
                 <TableCell
+                    width={width}
                     size={size}
                     focused={focused}
                     value={value}
@@ -501,10 +512,14 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 if (tableRowActionsBuilder)
                     return tableRowActionsBuilder({
                         entity: props.rowData,
-                        size
+                        size,
+                        width: column.width,
+                        frozen: column.frozen
                     });
                 else
                     return <CollectionRowActions entity={props.rowData}
+                                                 width={column.width}
+                                                 frozen={column.frozen}
                                                  size={size}/>;
             } else if (additionalColumnsMap[columnKey]) {
                 return additionalCellRenderer(props);
@@ -515,51 +530,28 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             }
         }, [additionalCellRenderer, propertyCellRenderer, additionalColumns])
 
+        const checkFilterCombination = useCallback((filterValues:FilterValues<any>,
+                                                    sortBy?: [string, "asc" | "desc"]) => isFilterCombinationValid(filterValues, filterCombinations, sortBy), [filterCombinations]);
         return (
 
             <EntityCollectionTableContext.Provider
                 value={{
-                    collection,
-                    path,
                     setPopupCell,
                     select,
                     onValueChange,
-                    inlineEditing,
                     size,
                     selectedCell,
-                    focused,
-                    additionalColumnsMap,
-                    columns,
-                    popupFormField,
-                    cellRenderer,
-                    filterIsSet,
-                    textSearchEnabled,
-                    filterCombinations,
-                    onTextSearch,
-                    clearFilter,
-                    updateSize,
-                    data,
-                    dataLoading,
-                    onRowClick,
-                    noMoreToLoad,
-                    onSizeChanged,
-                    loadNextPage,
-                    resetPagination,
-                    dataLoadingError,
-                    paginationEnabled,
-                    filterValues,
-                    setFilterValues,
-                    sortBy,
-                    setSortBy: setSortBy as any// todo
+                    focused
                 }}
             >
 
-                <Box sx={{
+                <Box sx={(theme) => ({
                     height: "100%",
                     width: "100%",
                     display: "flex",
-                    flexDirection: "column"
-                }}>
+                    flexDirection: "column",
+                    backgroundColor: theme.palette.background.paper,
+                })}>
 
                     <CollectionTableToolbar filterIsSet={filterIsSet}
                                             onTextSearch={textSearchEnabled ? onTextSearch : undefined}
@@ -589,7 +581,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             sortBy={sortBy}
                             onSortByUpdate={setSortBy as any}
                             hoverRow={hoverRow}
-                            checkFilterCombination={(filterValues, sortBy) => isFilterCombinationValid(filterValues, filterCombinations, sortBy)}
+                            checkFilterCombination={checkFilterCombination}
                         />
                     </Box>
 
@@ -599,12 +591,12 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             </EntityCollectionTableContext.Provider>
         );
 
-    }
-    ,
+    },
     function areEqual(prevProps: EntityCollectionTableProps<any>, nextProps: EntityCollectionTableProps<any>) {
-        return prevProps.path === nextProps.path &&
-            equal(prevProps.collection, nextProps.collection) &&
-            prevProps.inlineEditing === nextProps.inlineEditing;
+        return true;
+        // return prevProps.path === nextProps.path &&
+        //     equal(prevProps.collection, nextProps.collection) &&
+        //     prevProps.inlineEditing === nextProps.inlineEditing;
     }
 ) as React.FunctionComponent<EntityCollectionTableProps<any>>;
 

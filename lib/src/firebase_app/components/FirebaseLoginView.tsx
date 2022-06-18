@@ -14,7 +14,7 @@ import {
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
 import { FireCMSLogo } from "../../core/components/FireCMSLogo";
-import { useAuthController, useModeState } from "../../hooks";
+import { useAuthController, useModeController } from "../../hooks";
 import {
     FirebaseAuthDelegate,
     FirebaseSignInOption,
@@ -73,7 +73,7 @@ export function FirebaseLoginView({
                                   }: FirebaseLoginViewProps) {
 
     const authController = useAuthController();
-    const modeState = useModeState();
+    const modeState = useModeController();
 
     const [passwordLoginSelected, setPasswordLoginSelected] = useState(false);
 

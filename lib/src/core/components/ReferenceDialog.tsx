@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { CollectionSize, Entity, EntityCollection } from "../../models";
-import { Box, Button, Typography, useTheme } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 
 import { EntityCollectionTable } from "./CollectionTable";
 import {
@@ -177,11 +177,15 @@ export function ReferenceDialog(
 
     const tableRowActionsBuilder = useCallback(({
                                                     entity,
-                                                    size
-                                                }: { entity: Entity<any>, size: CollectionSize }) => {
+                                                    size,
+                                                    width,
+                                                    frozen
+                                                }: { entity: Entity<any>, size: CollectionSize, width: number, frozen?: boolean }) => {
 
         const isSelected = selectedEntities && selectedEntities.map(e => e.id).indexOf(entity.id) > -1;
         return <CollectionRowActions
+            width={width}
+            frozen={frozen}
             entity={entity}
             size={size}
             isSelected={isSelected}

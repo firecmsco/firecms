@@ -1,22 +1,17 @@
-import { useMediaQuery } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { ModeState } from "../../hooks";
+import { useMediaQuery } from "@mui/material";
+import { ModeController } from "../../hooks";
 
-const DEFAULT_MODE_STATE: ModeState = {
+const DEFAULT_MODE_STATE: ModeController = {
     mode: "light",
     setMode: (mode: "light" | "dark") => {
     },
     toggleMode: () => {
     }
 };
+export const ModeStateContext = React.createContext<ModeController>(DEFAULT_MODE_STATE);
 
-export const ModeStateContext = React.createContext<ModeState>(DEFAULT_MODE_STATE);
-
-interface ModeProviderProps {
-    children: React.ReactNode;
-}
-
-export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
+export function useBuildModeController(): ModeController {
 
     const prefersDarkModeQuery = useMediaQuery("(prefers-color-scheme: dark)");
     const prefersDarkModeStorage: boolean | null = localStorage.getItem("prefers-dark-mode") != null ? localStorage.getItem("prefers-dark-mode") === "true" : null;
@@ -43,15 +38,9 @@ export const ModeProvider: React.FC<ModeProviderProps> = ({ children }) => {
         }
     };
 
-    return (
-        <ModeStateContext.Provider
-            value={{
-                mode,
-                setMode,
-                toggleMode
-            }}
-        >
-            {children}
-        </ModeStateContext.Provider>
-    );
-};
+    return {
+        mode,
+        setMode,
+        toggleMode
+    };
+}

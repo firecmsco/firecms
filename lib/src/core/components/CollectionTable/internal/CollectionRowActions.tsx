@@ -32,6 +32,8 @@ import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
  */
 export function CollectionRowActions<M extends { [Key: string]: any }>({
                                                                            entity,
+                                                                           width,
+                                                                           frozen,
                                                                            isSelected,
                                                                            selectionEnabled,
                                                                            size,
@@ -42,6 +44,8 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
                                                                        }:
                                                                            {
                                                                                entity: Entity<M>,
+                                                                               width: number,
+                                                                               frozen?: boolean,
                                                                                size: CollectionSize,
                                                                                isSelected?: boolean,
                                                                                selectionEnabled?: boolean,
@@ -88,13 +92,17 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
 
     return (
         <Box sx={theme => ({
-            width: "100%",
+            width: width,
             height: "100%",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             flexDirection: "column",
-            backgroundColor: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.8) : alpha(theme.palette.background.default, 0.8)
+            background: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.8) : alpha(theme.palette.background.default, 0.8),
+            position: frozen ? "sticky" : "initial",
+            left: frozen ? 0 : "initial",
+            backdropFilter: frozen ? "blur(4px)" : undefined,
+            zIndex: 1
         })}>
 
             {(editEnabled || deleteEnabled || selectionEnabled) &&

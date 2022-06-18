@@ -10989,7 +10989,7 @@ react-virtualized-auto-sizer@^1.0.2, react-virtualized-auto-sizer@^1.0.6:
   resolved "https://registry.yarnpkg.com/react-virtualized-auto-sizer/-/react-virtualized-auto-sizer-1.0.6.tgz#66c5b1c9278064c5ef1699ed40a29c11518f97ca"
   integrity sha512-7tQ0BmZqfVF6YYEWcIGuoR3OdYe8I/ZFbNclFlGOC3pMqunkYF/oL30NCjSGl9sMEb17AnzixDz98Kqc3N76HQ==
 
-react-virtualized@^9.22.3:
+react-virtualized@^9.22.3, "react-virtualized@git+https://git@github.com/remorses/react-virtualized-fixed-import.git#9.22.3":
   version "9.22.3"
   resolved "git+https://git@github.com/remorses/react-virtualized-fixed-import.git#6e416ee8aa6ac2087cecc68f68371d8fe561d9a4"
   dependencies:

@@ -245,8 +245,10 @@ export const EntityCollectionView = React.memo(
 
         const tableRowActionsBuilder = useCallback(({
                                                         entity,
-                                                        size
-                                                    }: { entity: Entity<any>, size: CollectionSize }) => {
+                                                        size,
+                                                        width,
+                                                        frozen
+                                                    }: { entity: Entity<any>, size: CollectionSize, width: number, frozen?:boolean }) => {
 
             const isSelected = isEntitySelected(entity);
 
@@ -271,6 +273,8 @@ export const EntityCollectionView = React.memo(
             return (
                 <CollectionRowActions
                     entity={entity}
+                    width={width}
+                    frozen={frozen}
                     isSelected={isSelected}
                     selectionEnabled={selectionEnabled}
                     size={size}

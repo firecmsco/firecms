@@ -1,10 +1,10 @@
-import { ModeStateContext } from "../core/contexts/ModeState";
+import { ModeStateContext } from "../core/contexts/ModeController";
 import { useContext } from "react";
 
 /**
  * @category Hooks and utilities
  */
-export interface ModeState {
+export interface ModeController {
     mode: "light" | "dark";
     setMode: (mode: "light" | "dark") => void;
     toggleMode: () => void;
@@ -17,7 +17,7 @@ export interface ModeState {
  * Consider that in order to use this hook you need to have a parent
  * `FireCMS`
  *
- * @see ModeState
+ * @see ModeController
  * @category Hooks and utilities
  */
-export const useModeState = () => useContext(ModeStateContext);
+export const useModeController = () => useContext(ModeStateContext);
