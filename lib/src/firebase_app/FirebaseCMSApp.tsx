@@ -157,7 +157,7 @@ export function FirebaseCMSApp({
                 locale={locale}
                 basePath={basePath}
                 baseCollectionPath={baseCollectionPath}>
-                {({ context, mode, loading }) => {
+                {({ context, loading }) => {
 
                     let component;
                     if (loading) {

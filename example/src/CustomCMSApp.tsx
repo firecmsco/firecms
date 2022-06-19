@@ -104,6 +104,7 @@ export function CustomCMSApp() {
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
     const modeController = useBuildModeController();
+    const theme = createCMSDefaultTheme({ mode: modeController.mode });
 
     if (configError) {
         return <div> {configError} </div>;
@@ -122,7 +123,6 @@ export function CustomCMSApp() {
         return <CircularProgressCenter/>;
     }
 
-    const theme = createCMSDefaultTheme({ mode: modeController.mode });
 
     return (
         <Router>

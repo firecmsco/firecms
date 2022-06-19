@@ -55,10 +55,6 @@ export interface FireCMSProps<UserType extends User> {
          */
         context: FireCMSContext;
         /**
-         * Main color scheme
-         */
-        mode: "dark" | "light";
-        /**
          * Is one of the main processes, auth and navigation resolving, currently
          * loading. If you are building your custom implementation, you probably
          * want to show a loading indicator if this flag is `true`
@@ -258,14 +254,10 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                                         dateAdapter={AdapterDateFns}
                                         utils={DateFnsUtils}
                                         locale={dateUtilsLocale}>
-                                        <ModeStateContext.Consumer>
-                                            {({ mode }) =>
-                                                children({
-                                                    context,
-                                                    mode,
-                                                    loading
-                                                })}
-                                        </ModeStateContext.Consumer>
+                                        {children({
+                                            context,
+                                            loading
+                                        })}
                                     </LocalizationProvider>
                                 </BreadcrumbsProvider>
                             </FireCMSContextProvider>

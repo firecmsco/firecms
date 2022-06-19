@@ -12,7 +12,7 @@ import {
     Authenticator,
     CircularProgressCenter,
     CMSView,
-    useCreateCMSDefaultTheme,
+    createCMSDefaultTheme,
     EntityCollection,
     FirebaseAuthDelegate,
     FirebaseLoginView,
@@ -22,6 +22,7 @@ import {
     Scaffold,
     SideDialogs,
     useBuildFirebaseAuthDelegate,
+    useBuildModeController,
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase
@@ -93,6 +94,9 @@ export function SassCMSApp() {
         return true;
     }, [configController]);
 
+    const modeController = useBuildModeController();
+    const theme = createCMSDefaultTheme({ mode: modeController.mode });
+
     if (configError) {
         return <div> {configError} </div>;
     }
@@ -132,6 +136,7 @@ export function SassCMSApp() {
             view: <RolesView collections={configController.collections}/>
         }
     ]
+
     return (
         <Router>
             {!configController.loading && <FireCMS authDelegate={authDelegate}
@@ -139,13 +144,13 @@ export function SassCMSApp() {
                                                    authentication={sassAuthenticator}
                                                    dataSource={dataSource}
                                                    views={views}
+                                                   modeController={modeController}
                                                    storageSource={storageSource}
                                                    EntityCollectionViewComponent={SassEntityCollectionView}
                                                    entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}>
                 {({ context, mode, loading }) => {
 
                     const authController = context.authController;
-                    const theme = useCreateCMSDefaultTheme({ mode });
 
                     let component;
                     if (loading || configController.loading) {
