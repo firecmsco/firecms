@@ -16,9 +16,9 @@ import { FixedSizeList as List } from "react-window";
 // @ts-ignore
 import AutoSizer from "react-virtualized-auto-sizer";
 
-import { ErrorBoundary } from "../ErrorBoundary";
-import { CircularProgressCenter } from "../CircularProgressCenter";
-import { TableHeader } from "./TableHeader";
+import { ErrorBoundary } from "../../ErrorBoundary";
+import { CircularProgressCenter } from "../../CircularProgressCenter";
+import { TableHeaderV2 } from "./TableHeaderV2";
 import {
     CellRendererParams,
     OnTableColumnResizeParams,
@@ -27,9 +27,9 @@ import {
     TableProps,
     TableSize,
     TableWhereFilterOp
-} from "./TableProps";
+} from "../TableProps";
 
-import { getRowHeight } from "./common";
+import { getRowHeight } from "../common";
 
 const VirtualListContext = createContext<VirtualTableContextProps>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -94,12 +94,21 @@ const HeaderRow = ({
                        columns,
                        currentSort,
                        onColumnSort,
-                       onInternalFilterUpdate,
+                       onFilterUpdate,
                        sortByProperty,
                        filter,
                        onColumnResize
                    }: VirtualTableContextProps) => {
 
+    const onColumnResizeInternal = (column: TableColumn<any, any>, width: number) => {
+        if (onColumnResize) {
+            onColumnResize({
+                width,
+                key: column.key as string,
+                column: column as TableColumn<any, any>
+            });
+        }
+    };
     const headerRenderer = useCallback(({ columnIndex }: { columnIndex: number }) => {
         const column = columns[columnIndex];
 
@@ -107,30 +116,21 @@ const HeaderRow = ({
             column && filter && filter[column.key]
                 ? filter[column.key]
                 : undefined;
-
         return (
             <ErrorBoundary key={"header_" + column.key}>
-                <TableHeader
-                    onFilterUpdate={(value) => onInternalFilterUpdate(column, value)}
-                    onColumnResize={(width) => {
-                        if (onColumnResize) {
-                            onColumnResize({
-                                width,
-                                key: column.key as string,
-                                column: column as TableColumn<any, any>
-                            });
-                        }
-                    }}
+                <TableHeaderV2
+                    onFilterUpdate={onFilterUpdate}
+                    onColumnResize={onColumnResizeInternal}
                     filter={filterForThisProperty}
                     sort={sortByProperty === column.key ? currentSort : undefined}
                     onColumnSort={onColumnSort}
                     column={column}/>
             </ErrorBoundary>
         );
-    }, [columns, currentSort, onColumnSort, onInternalFilterUpdate, sortByProperty, filter]);
+    }, [columns, filter, onFilterUpdate, onColumnResizeInternal, sortByProperty, currentSort, onColumnSort]);
 
     return (
-        <div style={{
+        <Box sx={theme => ({
             position: "sticky",
             display: "flex",
             width: "fit-content",
@@ -140,10 +140,10 @@ const HeaderRow = ({
             // width: "100%",
             zIndex: 2,
             height: 50,
-            borderBottom: "1px solid rgba(128, 128, 128, 0.1)"
-        }}>
+            borderBottom: `1px solid ${theme.palette.divider}`
+        })}>
             {columns.map((c, columnIndex) => headerRenderer({ columnIndex }))}
-        </div>
+        </Box>
     );
 };
 
@@ -153,7 +153,7 @@ type VirtualTableContextProps = {
     filter?: TableFilterValues<any>;
     onColumnSort: (key: string) => any;
     onColumnResize?: (params: OnTableColumnResizeParams<any, any>) => void;
-    onInternalFilterUpdate: (column: TableColumn<any, any>, filterForProperty?: [TableWhereFilterOp, any]) => void;
+    onFilterUpdate: (column: TableColumn<any, any>, filterForProperty?: [TableWhereFilterOp, any]) => void;
     sortByProperty?: string;
 };
 
@@ -189,7 +189,7 @@ const innerElementType = forwardRef<HTMLDivElement, { children: React.ReactNode 
  * @category Components
  */
 
-export const VirtualTable = React.memo<TableProps<any, any>>(
+export const VirtualTableV2 = React.memo<TableProps<any, any>>(
     function VirtualTable<T extends object, E extends any>({
                                                                data,
                                                                onResetPagination,
@@ -301,28 +301,28 @@ export const VirtualTable = React.memo<TableProps<any, any>>(
         onRowClick(props);
     }, [onRowClick]);
 
-    const onInternalFilterUpdate = useCallback((column: TableColumn<T, E>, filterForProperty?: [TableWhereFilterOp, any]) => {
+        const onFilterUpdateInternal = useCallback((column: TableColumn<T, E>, filterForProperty?: [TableWhereFilterOp, any]) => {
 
-        const filter = filterRef.current;
-        let newFilterValue: TableFilterValues<any> = filter ? { ...filter } : {};
+            const filter = filterRef.current;
+            let newFilterValue: TableFilterValues<any> = filter ? { ...filter } : {};
 
-        if (!filterForProperty) {
-            delete newFilterValue[column.key];
-        } else {
-            newFilterValue[column.key] = filterForProperty;
-        }
-        const newSortBy: [string, "asc" | "desc"] | undefined = sortByProperty && currentSort ? [sortByProperty, currentSort] : undefined;
-        const isNewFilterCombinationValid = !checkFilterCombination || checkFilterCombination(newFilterValue, newSortBy);
-        if (!isNewFilterCombinationValid) {
-            newFilterValue = filterForProperty ? { [column.key]: filterForProperty } as TableFilterValues<Extract<keyof T, string>> : {};
-        }
+            if (!filterForProperty) {
+                delete newFilterValue[column.key];
+            } else {
+                newFilterValue[column.key] = filterForProperty;
+            }
+            const newSortBy: [string, "asc" | "desc"] | undefined = sortByProperty && currentSort ? [sortByProperty, currentSort] : undefined;
+            const isNewFilterCombinationValid = !checkFilterCombination || checkFilterCombination(newFilterValue, newSortBy);
+            if (!isNewFilterCombinationValid) {
+                newFilterValue = filterForProperty ? { [column.key]: filterForProperty } as TableFilterValues<Extract<keyof T, string>> : {};
+            }
 
-        if (onFilterUpdate) onFilterUpdate(newFilterValue);
+            if (onFilterUpdate) onFilterUpdate(newFilterValue);
 
-        if (column.key !== sortByProperty) {
-            resetSort();
-        }
-    }, [checkFilterCombination, currentSort, onFilterUpdate, resetSort, sortByProperty]);
+            if (column.key !== sortByProperty) {
+                resetSort();
+            }
+        }, [checkFilterCombination, currentSort, onFilterUpdate, resetSort, sortByProperty]);
 
         const buildErrorView = useCallback(() => (
             <Box
@@ -401,7 +401,7 @@ export const VirtualTable = React.memo<TableProps<any, any>>(
                         onColumnResize,
                         filter: filterRef.current,
                         onColumnSort,
-                        onInternalFilterUpdate,
+                        onFilterUpdate: onFilterUpdateInternal,
                         sortByProperty
                     }}>
 

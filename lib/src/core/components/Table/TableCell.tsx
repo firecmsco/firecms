@@ -158,14 +158,6 @@ export const TableCell = React.memo<TableCellProps>(
         }
     }, [bounds, isOverflowing, maxHeight]);
 
-    const measuredDiv = <Box ref={measureRef}
-                             sx={{
-                                 width: "100%",
-                                 height: fullHeight ? "100%" : undefined
-                             }}>
-        {children}
-    </Box>;
-
     const isSelected = !error && selected;
 
     let border: string;
@@ -183,6 +175,7 @@ export const TableCell = React.memo<TableCellProps>(
 
     const scrollable = !disabled && allowScroll && isOverflowing;
     const faded = !disabled && !allowScroll && isOverflowing;
+
     return (
         <ErrorBoundary>
             <Box
@@ -193,24 +186,26 @@ export const TableCell = React.memo<TableCellProps>(
                 onMouseEnter={() => setOnHover(true)}
                 onMouseMove={() => setOnHover(true)}
                 onMouseLeave={() => setOnHover(false)}
-                sx={{
+                style={{
                     width,
+                    // color: "#" + randomColor(),
+                    alignItems: disabled || !isOverflowing ? "center" : undefined,
+                    backgroundColor: onHover
+                        ? (disabled ? undefined : (theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default))
+                        : (isSelected ? theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default : undefined)
+
+                }}
+                sx={{
                     position: "relative",
-                    color: "#" + randomColor(),
                     height: "100%",
                     borderRadius: "4px",
                     overflow: "hidden",
                     contain: "strict",
                     display: "flex",
-                    alignItems: disabled || !isOverflowing ? "center" : undefined,
                     padding: p,
-                    "&:hover": {
-                        backgroundColor: disabled ? undefined : (theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default)
-                    },
                     justifyContent,
+                    alpha: disabled ? 0.8 : undefined,
                     border,
-                    // alpha: disabled ? 0.8 : undefined,
-                    backgroundColor: isSelected ? theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default : undefined,
                     transition: "border-color 300ms ease-in-out"
                 }}>
 
@@ -223,7 +218,14 @@ export const TableCell = React.memo<TableCellProps>(
                         maskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
                         alignItems: faded ? "start" : (scrollable ? "start" : undefined)
                     }}>
-                    {measuredDiv}
+                    {!fullHeight && <Box ref={measureRef}
+                                         sx={{
+                                             width: "100%",
+                                             height: fullHeight ? "100%" : undefined
+                                         }}>
+                        {children}
+                    </Box>}
+                    {fullHeight && children}
                 </Box>
 
                 {disabled && onHover && disabledTooltip &&

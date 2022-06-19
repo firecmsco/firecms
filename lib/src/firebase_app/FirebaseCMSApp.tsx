@@ -6,10 +6,12 @@ import { BrowserRouter } from "react-router-dom";
 
 import {
     CircularProgressCenter,
+    createCMSDefaultTheme,
     FireCMS,
     NavigationRoutes,
     Scaffold,
     SideDialogs,
+    useBuildModeController,
 } from "../core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
@@ -24,8 +26,6 @@ import { FirebaseAuthDelegate } from "./models/auth";
 import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
-import { createCMSDefaultTheme } from "../core/theme";
-import { useBuildModeController } from "../core/contexts/ModeController";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID

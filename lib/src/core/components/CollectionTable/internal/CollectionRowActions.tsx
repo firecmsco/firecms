@@ -91,18 +91,21 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
     }, [entity, onCopyClicked, setAnchorEl]);
 
     return (
-        <Box sx={theme => ({
-            width: width,
-            height: "100%",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            flexDirection: "column",
-            background: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.8) : alpha(theme.palette.background.default, 0.8),
-            position: frozen ? "sticky" : "initial",
-            left: frozen ? 0 : "initial",
-            backdropFilter: frozen ? "blur(4px)" : undefined,
-            zIndex: 1
+        <Box
+            style={{
+                width
+            }}
+            sx={theme => ({
+                height: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexDirection: "column",
+                background: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.8) : alpha(theme.palette.background.default, 0.8),
+                position: frozen ? "sticky" : "initial",
+                left: frozen ? 0 : "initial",
+                backdropFilter: frozen ? "blur(4px)" : undefined,
+                zIndex: 1
         })}>
 
             {(editEnabled || deleteEnabled || selectionEnabled) &&

@@ -18,3 +18,5 @@ export * from "./builders";
 export * from "./util";
 
 export * from "./widgets";
+
+export * from "./useBuildModeController";

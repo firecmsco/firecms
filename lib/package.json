@@ -59,8 +59,8 @@
         "yup": "^0.32.11"
     },
     "peerDependencies": {
-        "@emotion/react": "^11.4.1",
-        "@emotion/styled": "^11.3.0",
+        "@emotion/react": "^11.9.3",
+        "@emotion/styled": "^11.9.3",
         "@mui/icons-material": "^5",
         "@mui/lab": "^5.0.0-alpha.48",
         "@mui/material": "^5.5.0",
@@ -80,8 +80,8 @@
         ]
     },
     "devDependencies": {
-        "@emotion/react": "^11.9.0",
-        "@emotion/styled": "^11.8.1",
+        "@emotion/react": "^11.9.3",
+        "@emotion/styled": "^11.9.3",
         "@mui/icons-material": "^5",
         "@mui/lab": "^5.0.0-alpha.81",
         "@mui/material": "^5",

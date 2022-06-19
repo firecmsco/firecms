@@ -2,7 +2,7 @@ import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
@@ -11,7 +11,7 @@ import {
     Authenticator,
     buildCollection,
     CircularProgressCenter,
-    useCreateCMSDefaultTheme,
+    createCMSDefaultTheme,
     FirebaseAuthDelegate,
     FirebaseLoginView,
     FireCMS,
@@ -19,6 +19,7 @@ import {
     Scaffold,
     SideDialogs,
     useBuildFirebaseAuthDelegate,
+    useBuildModeController,
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase,
@@ -102,6 +103,8 @@ export function CustomCMSApp() {
 
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
+    const modeController = useBuildModeController();
+
     if (configError) {
         return <div> {configError} </div>;
     }
@@ -119,19 +122,19 @@ export function CustomCMSApp() {
         return <CircularProgressCenter/>;
     }
 
+    const theme = createCMSDefaultTheme({ mode: modeController.mode });
+
     return (
         <Router>
             <FireCMS authDelegate={authDelegate}
                      collections={[productsCollection]}
                      authentication={myAuthenticator}
+                     modeController={modeController}
                      dataSource={dataSource}
                      storageSource={storageSource}
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
             >
                 {({ context, mode, loading }) => {
-
-                    const theme = useCreateCMSDefaultTheme({ mode });
-                    const { navigation } = context;
 
                     let component;
                     if (loading) {

@@ -222,6 +222,7 @@ export const productsCollection = buildCollection<Product>({
         images: {
             dataType: "array",
             name: "Images",
+            hideFromCollection: true,
             of: {
                 dataType: "string",
                 storage: {

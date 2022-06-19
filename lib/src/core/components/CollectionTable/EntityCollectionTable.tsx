@@ -62,6 +62,7 @@ import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { setIn } from "formik";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
+import { VirtualTableV2 } from "../Table/v2/VirtualTableV2";
 
 const DEFAULT_STATE = {} as any;
 

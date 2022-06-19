@@ -18,9 +18,12 @@ import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
-import { ErrorBoundary } from "../components/ErrorBoundary";
-import { useAuthController, useModeController } from "../../hooks";
-import { useBreadcrumbsContext } from "../../hooks/useBreadcrumbsContext";
+import { ErrorBoundary } from "../components";
+import {
+    useAuthController,
+    useBreadcrumbsContext,
+    useModeController
+} from "../../hooks";
 
 interface CMSAppBarProps {
     title: string;
