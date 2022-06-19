@@ -29,3 +29,5 @@ firebase-debug.log*
 .eslintcache
 
 report.**.json
+
+./sass
