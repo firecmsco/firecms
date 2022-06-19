@@ -104,7 +104,7 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
                 background: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.8) : alpha(theme.palette.background.default, 0.8),
                 position: frozen ? "sticky" : "initial",
                 left: frozen ? 0 : "initial",
-                backdropFilter: frozen ? "blur(4px)" : undefined,
+                backdropFilter: frozen ? "blur(8px)" : undefined,
                 zIndex: 1
         })}>
 

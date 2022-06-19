@@ -45,7 +45,7 @@ export const baseTableCss = css`
   }
 
   & .BaseTable__table-frozen-left .BaseTable__body {
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
   }
 
   & .BaseTable__table-frozen-left .BaseTable__header,

@@ -20,7 +20,7 @@ export function CustomDialogActions({
 
     return <Box sx={(theme) => ({
         background: translucent ? theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : alpha(theme.palette.background.paper, 0.1) : undefined,
-        backdropFilter: translucent ? "blur(4px)" : undefined,
+        backdropFilter: translucent ? "blur(8px)" : undefined,
         borderTop: `1px solid ${theme.palette.divider}`,
         py: 1,
         px: 2,

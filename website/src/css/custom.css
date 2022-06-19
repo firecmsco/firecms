@@ -212,7 +212,7 @@
 }
 
 .navbar.navbar--fixed-top:not(.navbar-sidebar--show) {
-    backdrop-filter: blur(4px);
+    backdrop-filter: blur(8px);
 }
 
 [role='banner']  {
