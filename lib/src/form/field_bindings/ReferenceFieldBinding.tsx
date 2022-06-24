@@ -103,7 +103,8 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
             multiselect: false,
             path,
             collection,
-            onSingleEntitySelected
+            onSingleEntitySelected,
+            forceFilter: property.forceFilter
         }
     );
 
@@ -198,11 +199,9 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                             onClick={disabled ? undefined : handleClickOpen}
                             justifyContent="center"
                             display="flex">
-                    <Typography variant={"body2"} sx={(theme) => ({
+                    <Typography variant={"label"} sx={(theme) => ({
                         flexGrow: 1,
                         textAlign: "center",
-                        color: "#838383",
-                        fontWeight: theme.typography.fontWeightMedium
                     })}>No value set</Typography>
                     {!disabled && <Button variant="outlined"
                                           color="primary">
@@ -278,8 +277,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
     return (
         <FormControl error={showError} fullWidth>
 
-            <Box sx={(theme) => ({
-
+            <Typography variant={"label"} sx={(theme) => ({
                 elevation: 0,
                 width: "100%",
                 padding: theme.spacing(1),
@@ -315,14 +313,13 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                     cursor: disabled ? undefined : "pointer",
                     backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
                 },
-                color: disabled ? (theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)") : "#838383",
+                color: disabled ? (theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)") : undefined,
                 fontWeight: theme.typography.fontWeightMedium
-
             })}>
 
                 {collection && buildEntityView(collection)}
 
-            </Box>
+            </Typography>
 
             {includeDescription &&
                 <FieldDescription property={property}/>}

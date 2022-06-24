@@ -61,8 +61,8 @@ export type EntityCollectionViewProps<M extends { [Key: string]: unknown }> = {
  * If you need a lower level implementation with more granular options, you
  * can use {@link EntityCollectionTable}.
  *
- * If you need a table that is not bound to the datasource or entities and
- * properties at all, you can check {@link Table}
+ * If you need a generic table that is not bound to the datasource or entities and
+ * properties at all, you can check {@link VirtualTable}
  *
  * @param fullPath
  * @param collection
@@ -134,12 +134,12 @@ export const EntityCollectionView = React.memo(
             setDeleteEntityClicked(undefined);
         }, [setSelectedEntities]);
 
-        const checkInlineEditing = useCallback((entity: Entity<any>) => {
+        const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
             if (!canEditEntity(collection, authController, fullPathToCollectionSegments(fullPath))) {
                 return false;
             }
             return collection.inlineEditing === undefined || collection.inlineEditing;
-        }, [collection.inlineEditing, collection, fullPath]);
+        }, [collection, authController, fullPath]);
 
         const onCollectionModifiedForUser = useCallback((path: string, partialCollection: LocalEntityCollection<M>) => {
             if (userConfigPersistence) {
@@ -289,13 +289,10 @@ export const EntityCollectionView = React.memo(
 
         return (
             <>
-
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
-                    path={fullPath}
-                    collection={collection}
+                    fullPath={fullPath}
                     onSizeChanged={onSizeChanged}
-                    inlineEditing={checkInlineEditing}
                     onEntityClick={onEntityClick}
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
@@ -310,6 +307,8 @@ export const EntityCollectionView = React.memo(
                         selectionController={usedSelectionController}
                         selectionEnabled={selectionEnabled}/>}
                     hoverRow={hoverRow}
+                    {...collection}
+                    inlineEditing={checkInlineEditing()}
                 />
 
                 {deleteEntityClicked &&

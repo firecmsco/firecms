@@ -138,7 +138,7 @@ export function MapFieldBinding<T extends object>({
         <FormControl fullWidth error={showError}>
 
             {!tableMode && <ExpandablePanel expanded={expanded}
-                                            title={title}>{mapFormView}</ExpandablePanel>}
+                                            Title={title}>{mapFormView}</ExpandablePanel>}
 
             {tableMode && mapFormView}
 

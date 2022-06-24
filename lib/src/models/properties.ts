@@ -6,6 +6,7 @@ import {
     ResolvedArrayProperty,
     ResolvedStringProperty
 } from "./resolved_entities";
+import { FilterValues } from "./collections";
 
 /**
  * @category Entity properties
@@ -548,6 +549,11 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      * Note that you can also use a collection alias.
      */
     path: string | false;
+
+    /**
+     * Allow selection of entities that pass the given filter only.
+     */
+    forceFilter?: FilterValues<string>;
 
     /**
      * Properties that need to be rendered when displaying a preview of this

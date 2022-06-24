@@ -1,6 +1,7 @@
 import { pink, red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material";
 
+
 /**
  * Use this function to build the default FireCMS MUI5 theme,
  * with some overrides.
@@ -41,29 +42,33 @@ export const createCMSDefaultTheme = (
             fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
             fontWeightMedium: 500,
             h6: {
-                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
-                fontWeight: 600,
+                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
                 fontSize: "1.15rem"
             },
             h5: {
-                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
-                fontWeight: 600
+                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
             },
             h4: {
-                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
-                fontWeight: 600
+                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
             },
             h3: {
-                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
                 fontWeight: 600
             },
             h2: {
-                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
                 fontWeight: 600
             },
             h1: {
-                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
                 fontWeight: 600
+            },
+            label: {
+                display: "block",
+                color: "#838383",
+                fontWeight: 500,
+                fontSize: "0.875rem",
+                lineHeight: 1.43
             }
         },
         components: {

@@ -88,8 +88,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                                  entity
                                                              }: PropertyTableCellProps<T, M>) {
 
-    console.log("PropertyTableCellInternal");
-
     const {
         onValueChange,
         size,
@@ -327,6 +325,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                       multiselect={false}
                                                       previewProperties={property.previewProperties}
                                                       title={property.name}
+                                                      forceFilter={property.forceFilter}
                                                       setPreventOutsideClick={setPreventOutsideClick}
                 />;
             }
@@ -368,6 +367,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                  path={arrayProperty.of.path}
                                                  previewProperties={arrayProperty.of.previewProperties}
                                                  title={arrayProperty.of.name}
+                                                 forceFilter={arrayProperty.of.forceFilter}
                                                  setPreventOutsideClick={setPreventOutsideClick}
                             />;
                     }

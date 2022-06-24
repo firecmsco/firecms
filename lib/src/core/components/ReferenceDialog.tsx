@@ -1,5 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { CollectionSize, Entity, EntityCollection } from "../../models";
+import {
+    CollectionSize,
+    Entity,
+    EntityCollection,
+    FilterValues
+} from "../../models";
 import { Box, Button, Typography } from "@mui/material";
 
 import { EntityCollectionTable } from "./CollectionTable";
@@ -62,6 +67,11 @@ export interface ReferenceDialogProps {
         */
     onClose?(): void;
 
+    /**
+     * Allow selection of entities that pass the given filter only.
+     */
+    forceFilter?: FilterValues<string>;
+
 }
 
 export function useReferenceDialogController(referenceDialogProps: Omit<ReferenceDialogProps, "path"> & {
@@ -105,13 +115,14 @@ export function ReferenceDialog(
         multiselect,
         collection,
         path: pathInput,
-        selectedEntityIds
+        selectedEntityIds,
+        forceFilter
     }: ReferenceDialogProps) {
 
     const navigationContext = useNavigationContext();
     const sideDialogContext = useSideDialogContext();
 
-    const path = navigationContext.resolveAliasesFrom(pathInput);
+    const fullPath = navigationContext.resolveAliasesFrom(pathInput);
 
     const dataSource = useDataSource();
 
@@ -126,7 +137,7 @@ export function ReferenceDialog(
             Promise.all(
                 selectedEntityIds.map((entityId) => {
                     return dataSource.fetchEntity({
-                        path,
+                        path: fullPath,
                         entityId,
                         collection
                     });
@@ -141,7 +152,7 @@ export function ReferenceDialog(
         return () => {
             unmounted = true;
         };
-    }, [dataSource, path, selectedEntityIds, collection]);
+    }, [dataSource, fullPath, selectedEntityIds, collection]);
 
     const onClear = useCallback(() => {
         if (!multiselect && onSingleEntitySelected) {
@@ -210,13 +221,14 @@ export function ReferenceDialog(
 
                 <Box sx={{ flexGrow: 1}}>
                 {selectedEntities &&
-                    <EntityCollectionTable path={path}
-                                           collection={collection}
+                    <EntityCollectionTable fullPath={fullPath}
                                            onEntityClick={onEntityClick}
+                                           forceFilter={forceFilter}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
                                            Title={<Typography variant={"h6"}>
                                                {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
                                            </Typography>}
+                                           {...collection}
                                            inlineEditing={false}
                                            Actions={<Button onClick={onClear}
                                                             color="primary">

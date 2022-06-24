@@ -214,7 +214,7 @@ function ReferencePreviewWrap({ children, onHover, size, onClick }: {
     size: PreviewSize;
     onClick?: () => void;
 }) {
-    return <Paper elevation={0} sx={(theme) => {
+    return <Typography variant={"label"} sx={(theme) => {
         const clickableStyles = onClick
             ? {
                 tabindex: 0,
@@ -227,13 +227,11 @@ function ReferencePreviewWrap({ children, onHover, size, onClick }: {
         return ({
             width: "100%",
             display: "flex",
-            color: "#838383",
             backgroundColor: darken(theme.palette.background.default, 0.1),
             borderRadius: `${theme.shape.borderRadius}px`,
             overflow: "hidden",
             padding: size === "regular" ? 1 : 0,
             itemsAlign: size === "tiny" ? "center" : undefined,
-            fontWeight: theme.typography.fontWeightMedium,
             ...clickableStyles
         });
     }}
@@ -246,5 +244,5 @@ function ReferencePreviewWrap({ children, onHover, size, onClick }: {
 
         {children}
 
-    </Paper>
+    </Typography>
 }

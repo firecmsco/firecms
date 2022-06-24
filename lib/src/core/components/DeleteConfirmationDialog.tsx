@@ -14,16 +14,16 @@ export function DeleteConfirmationDialog({
                                              open,
                                              onAccept,
                                              onCancel,
-                                             title,
+                                             Title,
                                              loading,
-                                             body
+                                             Body
                                          }: {
     open: boolean,
     onAccept: () => void,
     onCancel: () => void,
-    loading?:boolean,
-    title?: JSX.Element,
-    body?: JSX.Element,
+    loading?: boolean,
+    Title: JSX.Element,
+    Body?: JSX.Element,
 }) {
     return (
         <Dialog
@@ -31,11 +31,11 @@ export function DeleteConfirmationDialog({
             onClose={onCancel}
         >
             <DialogTitle>
-                {title ?? "Delete?"}
+                {Title}
             </DialogTitle>
-            {body && <DialogContent>
+            {Body && <DialogContent>
                 <DialogContentText>
-                    {body}
+                    {Body}
                 </DialogContentText>
             </DialogContent>}
             <CustomDialogActions>
@@ -49,7 +49,6 @@ export function DeleteConfirmationDialog({
                     type="submit"
                     loading={loading}
                     onClick={onAccept}
-                    loadingPosition="start"
                 >
                     Ok
                 </LoadingButton>

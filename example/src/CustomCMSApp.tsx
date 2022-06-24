@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -104,7 +104,7 @@ export function CustomCMSApp() {
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
     const modeController = useBuildModeController();
-    const theme = createCMSDefaultTheme({ mode: modeController.mode });
+    const theme = useMemo(() => createCMSDefaultTheme({ mode: modeController.mode }), []);
 
     if (configError) {
         return <div> {configError} </div>;
@@ -123,7 +123,6 @@ export function CustomCMSApp() {
         return <CircularProgressCenter/>;
     }
 
-
     return (
         <Router>
             <FireCMS authDelegate={authDelegate}
@@ -134,7 +133,7 @@ export function CustomCMSApp() {
                      storageSource={storageSource}
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
             >
-                {({ context, mode, loading }) => {
+                {({ context, loading }) => {
 
                     let component;
                     if (loading) {

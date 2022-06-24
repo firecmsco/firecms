@@ -18,6 +18,8 @@ export type NavigationRoutesProps = {
      */
     HomePage?: React.ComponentType;
 
+    CustomRoutes?: JSX.Element[]
+
 };
 
 /**
@@ -31,7 +33,7 @@ export type NavigationRoutesProps = {
  */
 
 export const NavigationRoutes = React.memo<NavigationRoutesProps>(
-    function NavigationRoutes({ HomePage = FireCMSHomePage }: NavigationRoutesProps) {
+    function NavigationRoutes({ HomePage = FireCMSHomePage, CustomRoutes }: NavigationRoutesProps) {
 
         const location = useLocation();
         const navigation = useNavigationContext();
@@ -95,6 +97,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                               }/>;
             }
         );
+
     const homeRoute = (
         <Route path={navigation.homeUrl}
                element={
@@ -122,6 +125,8 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
             {homeRoute}
 
             {notFoundRoute}
+
+            {CustomRoutes}
 
         </Routes>
     );

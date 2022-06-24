@@ -2,7 +2,12 @@ import React, { useCallback, useState } from "react";
 import { Box, Button } from "@mui/material";
 import { ReferencePreview } from "../../../../preview";
 import { ErrorView } from "../../index";
-import { CollectionSize, Entity, EntityReference } from "../../../../models";
+import {
+    CollectionSize,
+    Entity,
+    EntityReference,
+    FilterValues
+} from "../../../../models";
 import { useReferenceDialogController } from "../../ReferenceDialog";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
@@ -19,6 +24,7 @@ export function TableReferenceField(props: {
     previewProperties?: string[];
     title?: string;
     path: string;
+    forceFilter?: FilterValues<string>;
     setPreventOutsideClick: (value: any) => void;
 }) {
 
@@ -32,7 +38,8 @@ export function TableReferenceField(props: {
         size,
         previewProperties,
         title,
-        disabled
+        disabled,
+        forceFilter
     } = props;
 
     const [onHover, setOnHover] = useState(false);
@@ -70,7 +77,8 @@ export function TableReferenceField(props: {
             onClose: handleClose,
             onMultipleEntitiesSelected,
             onSingleEntitySelected,
-            selectedEntityIds
+            selectedEntityIds,
+            forceFilter
         }
     );
 

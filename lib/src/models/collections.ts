@@ -146,8 +146,14 @@ export interface EntityCollection<M extends { [Key: string]: any } = any,
     customId?: boolean | EnumValues | "optional";
 
     /**
+     * Force a filter in this view. If applied, the rest of the filters will
+     * be disabled. Filters applied with this prop cannot be changed
+     */
+    forceFilter?: FilterValues<Extract<keyof M, string>>;
+
+    /**
      * Initial filters applied to the collection this collection is related to.
-     * Defaults to none.
+     * Defaults to none. Filters applied with this prop can be changed
      */
     initialFilter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining collections by code
 

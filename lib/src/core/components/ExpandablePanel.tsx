@@ -4,13 +4,13 @@ import { Accordion, AccordionDetails, AccordionSummary, } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export function ExpandablePanel({
-                                    title,
+                                    Title,
                                     children,
                                     expanded = true,
                                     padding = 1,
                                     darken = true
                                 }: PropsWithChildren<{
-    title: React.ReactNode,
+    Title: React.ReactNode,
     expanded?: boolean;
     padding?: number | string;
     darken?: boolean
@@ -45,7 +45,7 @@ export function ExpandablePanel({
                                       // marginLeft: theme.spacing(1)
                                   }
                               })}>
-                {title}
+                {Title}
             </AccordionSummary>
             <AccordionDetails sx={(theme) => ({
                 padding: typeof padding === "string" ? padding : theme.spacing(padding),

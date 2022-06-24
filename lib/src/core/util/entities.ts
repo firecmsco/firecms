@@ -35,16 +35,6 @@ export function isPropertyBuilder<T>(propertyOrBuilder?: PropertyOrBuilder<T> | 
     return typeof propertyOrBuilder === "function";
 }
 
-export function editableProperty(property: PropertyOrBuilder): boolean {
-    if (isPropertyBuilder(property))
-        return false;
-    else if (property.dataType === "array" && typeof property.of === "function")
-        return false;
-    else if (property.dataType === "array" && Array.isArray(property.of))
-        return false;
-    return property.editable ?? false;
-}
-
 export function getDefaultValuesFor<M extends { [Key: string]: any }>(properties: PropertiesOrBuilders<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
     if (!properties) return {};
     return Object.entries(properties)

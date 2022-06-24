@@ -1,11 +1,5 @@
-import {
-    EntityCollection,
-    Properties,
-    PropertiesOrBuilders,
-    Property
-} from "../../models";
+import { EntityCollection, PropertiesOrBuilders, Property } from "../../models";
 import { mergeDeep } from "./objects";
-import { editableProperty } from "./entities";
 
 export function mergeCollections(target: EntityCollection, source: EntityCollection): EntityCollection {
     const subcollectionsMerged = target.subcollections?.map((targetSubcollection) => {
@@ -58,27 +52,6 @@ export function sortProperties<T>(properties: PropertiesOrBuilders<T>, propertie
     }
 }
 
-export function removeNonEditableProperties(properties: PropertiesOrBuilders<any>): Properties {
-    return Object.entries(properties)
-        .filter(([_, property]) => editableProperty(property))
-        .map(([key, propertyOrBuilder]) => {
-            const property = propertyOrBuilder as Property;
-            if (!editableProperty(property)) {
-                return undefined;
-            } else if (property.dataType === "map" && property.properties) {
-                return {
-                    [key]: {
-                        ...property,
-                        properties: removeNonEditableProperties(property.properties)
-                    }
-                };
-            } else {
-                return { [key]: property };
-            }
-        })
-        .filter((e) => Boolean(e))
-        .reduce((a, b) => ({ ...a, ...b }), {}) as Properties;
-}
 
 export function getFistAdditionalView<M>(collection: EntityCollection<M>) {
     const subcollections = collection.subcollections;

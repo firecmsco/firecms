@@ -33,7 +33,7 @@ export const usersCollection = buildCollection({
             description: "Products this user has liked",
             of: {
                 dataType: "reference",
-                path: "products"
+                path: "products",
             }
         },
         picture: {

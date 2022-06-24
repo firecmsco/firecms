@@ -21,6 +21,7 @@ interface CollectionTableToolbarProps {
     size: CollectionSize;
     filterIsSet: boolean;
     loading: boolean;
+    forceFilter: boolean;
     ActionsStart?: React.ReactNode;
     Actions?: React.ReactNode;
     Title?: React.ReactNode,
@@ -34,7 +35,7 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const filterView = props.filterIsSet &&
+    const filterView = !props.forceFilter && props.filterIsSet &&
         <Tooltip title="Clear filter">
             <IconButton
                 sx={{ height: "fit-content" }}

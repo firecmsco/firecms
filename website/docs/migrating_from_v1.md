@@ -8,6 +8,13 @@ FireCMS 2.0 is in alpha and the changes proposed here may break or
 not be relevant in future iterations
 :::
 
+In order to update the dependencies to the new version you can run the 
+command
+
+```
+yarn add @camberi/firecms@next firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab @mui/styles@^5 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
+```
+
 This is a guide on how to migrate FireCMS apps from version 1.0 to 2.0.
 
 ### Main config
@@ -170,5 +177,23 @@ buildProperty(({ values }) => ({
         draft: "Draft"
     }
 }))
+```
+
+### Style changes
+One of the fonts used by FireCMS has changed and you need to update the imports
+to reflect it:
+
+Before in V1:
+
+```
+import "typeface-rubik";
+import "typeface-space-mono";
+```
+
+afterwards in V2:
+
+```
+import "typeface-rubik";
+import "@fontsource/ibm-plex-mono";
 ```
 

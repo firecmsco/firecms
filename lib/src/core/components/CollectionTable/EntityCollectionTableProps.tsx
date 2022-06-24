@@ -1,5 +1,10 @@
 import React from "react";
-import { CollectionSize, Entity, EntityCollection } from "../../../models";
+import {
+    CollectionSize,
+    Entity,
+    EntityCollection,
+    FilterValues
+} from "../../../models";
 
 /**
  * @category Collection components
@@ -9,22 +14,12 @@ export type OnColumnResizeParams = { width: number, key: string };
 /**
  * @category Collection components
  */
-export interface EntityCollectionTableProps<M extends { [Key: string]: any }> {
+export type EntityCollectionTableProps<M extends { [Key: string]: any }> = EntityCollection<M> & {
 
     /**
      * Absolute collection path
      */
-    path: string;
-
-    /**
-     * Collection
-     */
-    collection: EntityCollection<M>;
-
-    /**
-     * Can the table be edited inline
-     */
-    inlineEditing: ((entity: Entity<M>) => boolean) | boolean;
+    fullPath: string;
 
     /**
      * List of entities that will be displayed on top, no matter the ordering.

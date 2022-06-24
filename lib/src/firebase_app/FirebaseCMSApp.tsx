@@ -11,7 +11,7 @@ import {
     NavigationRoutes,
     Scaffold,
     SideDialogs,
-    useBuildModeController,
+    useBuildModeController
 } from "../core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
@@ -110,6 +110,9 @@ export function FirebaseCMSApp({
         firebaseApp
     });
 
+    /**
+     * Controller used to manage the dark or light color mode
+     */
     const modeController = useBuildModeController();
 
     const theme = useMemo(() => createCMSDefaultTheme({
@@ -195,4 +198,20 @@ export function FirebaseCMSApp({
             </FireCMS>
         </BrowserRouter>
     );
+}
+
+declare module "@mui/material/styles" {
+    interface TypographyVariants {
+        label: React.CSSProperties;
+    }
+
+    interface TypographyVariantsOptions {
+        label?: React.CSSProperties;
+    }
+}
+
+declare module "@mui/material/Typography" {
+    interface TypographyPropsVariantOverrides {
+        label: true;
+    }
 }

@@ -28,7 +28,6 @@ import {
 } from "./collections/custom_collection_resolver";
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
-import { Locale } from "./types";
 import { locales } from "./collections/enums";
 
 export const collectionBroken = buildCollection<any>({

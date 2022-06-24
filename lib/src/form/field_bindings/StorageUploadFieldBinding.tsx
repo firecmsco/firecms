@@ -352,11 +352,7 @@ function FileDropComponent({
                     m: 2
                 }}>
                 <Typography align={"center"}
-                            variant={"body2"}
-                            sx={(theme) => ({
-                                color: "#838383",
-                                fontWeight: theme.typography.fontWeightMedium
-                            })}>
+                            variant={"label"}>
                     {helpText}
                 </Typography>
             </Box>

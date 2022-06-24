@@ -16,7 +16,6 @@ import {
     useReferenceDialogController
 } from "../../core/components/ReferenceDialog";
 
-
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 
 /**
@@ -71,7 +70,8 @@ export function ArrayOfReferencesFieldBinding({
             path: ofProperty.path,
             collection,
             onMultipleEntitiesSelected,
-            selectedEntityIds
+            selectedEntityIds,
+            forceFilter: ofProperty.forceFilter
         }
     );
 
@@ -133,7 +133,7 @@ export function ArrayOfReferencesFieldBinding({
             <FormControl fullWidth error={showError}>
 
                 {!tableMode &&
-                    <ExpandablePanel expanded={expanded} title={title}>
+                    <ExpandablePanel expanded={expanded} Title={title}>
                         {body}
                     </ExpandablePanel>}
 
