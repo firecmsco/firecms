@@ -37,7 +37,6 @@ export interface PropertyTableCellProps<T extends CMSType, M> {
     customFieldValidator?: CustomFieldValidator;
     value: T;
     collection: EntityCollection<M>;
-    setPreventOutsideClick: (value: boolean) => void;
     setFocused: (value: boolean) => void;
     property: ResolvedProperty<T>;
     height: number;
@@ -74,7 +73,6 @@ function isStorageProperty<T>(property: ResolvedProperty) {
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
     function PropertyTableCellInternal<T extends CMSType, M>({
                                                                  propertyKey,
-                                                                 setPreventOutsideClick,
                                                                  setFocused,
                                                                  columnIndex,
                                                                  customFieldValidator,
@@ -234,7 +232,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                  updateValue={updateValue}
                                                  propertyKey={propertyKey as string}
                                                  onBlur={onBlur}
-                                                 setPreventOutsideClick={setPreventOutsideClick}
             />;
             showExpandIcon = true;
             fullHeight = true;
@@ -253,7 +250,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                               onBlur={onBlur}
                                               internalValue={internalValue as string | number}
                                               updateValue={updateValue}
-                                              setPreventOutsideClick={setPreventOutsideClick}
                 />;
                 fullHeight = true;
             } else {
@@ -282,7 +278,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                               onBlur={onBlur}
                                               internalValue={internalValue as string | number}
                                               updateValue={updateValue}
-                                              setPreventOutsideClick={setPreventOutsideClick}
                 />;
                 fullHeight = true;
             } else if (!stringProperty.storage && !stringProperty.markdown) {
@@ -311,7 +306,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                              focused={focused}
                                              internalValue={internalValue as Date}
                                              updateValue={updateValue}
-                                             setPreventOutsideClick={setPreventOutsideClick}
             />;
             allowScroll = true;
         } else if (property.dataType === "reference") {
@@ -326,7 +320,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                       previewProperties={property.previewProperties}
                                                       title={property.name}
                                                       forceFilter={property.forceFilter}
-                                                      setPreventOutsideClick={setPreventOutsideClick}
                 />;
             }
             allowScroll = false;
@@ -350,7 +343,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                       onBlur={onBlur}
                                                       internalValue={internalValue as string | number}
                                                       updateValue={updateValue}
-                                                      setPreventOutsideClick={setPreventOutsideClick}
                         />;
                         allowScroll = true;
                         fullHeight = true;
@@ -368,7 +360,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                  previewProperties={arrayProperty.of.previewProperties}
                                                  title={arrayProperty.of.name}
                                                  forceFilter={arrayProperty.of.forceFilter}
-                                                 setPreventOutsideClick={setPreventOutsideClick}
                             />;
                     }
                     allowScroll = false;

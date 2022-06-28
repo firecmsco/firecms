@@ -16,7 +16,7 @@ import { EntityReference, ResolvedProperty } from "../../models";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { PreviewSize, PropertyPreview, SkeletonComponent } from "../index";
 
-import { ErrorView } from "../../core";
+import { ErrorView, getValueInPath } from "../../core";
 import {
     useEntityFetch,
     useNavigationContext,
@@ -161,7 +161,7 @@ function ReferencePreviewInternal<M>({
                                 {entity
                                     ? <PropertyPreview
                                         propertyKey={key as string}
-                                        value={entity.values[key as string]}
+                                        value={getValueInPath(entity.values as any, key)}
                                         property={childProperty as ResolvedProperty}
                                         entity={entity}
                                         size={"tiny"}/>

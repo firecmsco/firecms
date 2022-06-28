@@ -51,8 +51,6 @@
         "react-dropzone": "^14.2.1",
         "react-transition-group": "^4.4.2",
         "react-use-measure": "^2.1.1",
-        "react-virtualized": "^9.22.3",
-        "react-virtualized-auto-sizer": "^1.0.6",
         "react-window": "^1.8.7",
         "typeface-roboto": "^1.1.13",
         "typeface-rubik": "^1.1.13",

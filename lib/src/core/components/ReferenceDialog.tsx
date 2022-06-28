@@ -204,18 +204,25 @@ export function ReferenceDialog(
             toggleEntitySelection={toggleEntitySelection}
         />;
 
-    }, [multiselect, selectedEntityIds, toggleEntitySelection]);
+    }, [multiselect, selectedEntities, toggleEntitySelection]);
+
+    const onDone = useCallback((event: React.SyntheticEvent) => {
+        event.stopPropagation();
+        sideDialogContext.close();
+        if (onClose)
+            onClose();
+    }, [onClose]);
 
     if (!collection) {
         return <ErrorView
             error={"Could not find collection with id " + collection}/>
-    }
 
+    }
     return (
 
-            <Box sx={{
-                display: "flex",
-                flexDirection: "column",
+        <Box sx={{
+            display: "flex",
+            flexDirection: "column",
                 height: "100%"
             }}>
 
@@ -239,12 +246,7 @@ export function ReferenceDialog(
                 </Box>
                 <CustomDialogActions translucent={false}>
                     <Button
-                        onClick={(event) => {
-                            event.stopPropagation();
-                            sideDialogContext.close();
-                            if (onClose)
-                                onClose();
-                        }}
+                        onClick={onDone}
                         color="primary"
                         variant="outlined">
                         Done

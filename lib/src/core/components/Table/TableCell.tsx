@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import useMeasure from "react-use-measure";
 
-import { Box, IconButton, Tooltip, useTheme } from "@mui/material";
+import { Box, darken, IconButton, Tooltip, useTheme } from "@mui/material";
 
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -10,7 +10,6 @@ import isEqual from "react-fast-compare";
 import { ErrorTooltip } from "../ErrorTooltip";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { TableSize } from "./TableProps";
-import { randomColor } from "../../util";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -51,7 +50,7 @@ export const TableCell = React.memo<TableCellProps>(
                            removePadding,
                            fullHeight,
                            onSelect,
-        width,
+                           width,
                            showExpandIcon = true
                        }: TableCellProps) {
 
@@ -173,82 +172,92 @@ export const TableCell = React.memo<TableCellProps>(
         border = "2px solid transparent"
     }
 
-    const scrollable = !disabled && allowScroll && isOverflowing;
-    const faded = !disabled && !allowScroll && isOverflowing;
+        const scrollable = !disabled && allowScroll && isOverflowing;
+        const faded = !disabled && !allowScroll && isOverflowing;
 
-    return (
-        <ErrorBoundary>
-            <Box
-                tabIndex={selected || disabled ? undefined : 0}
-                ref={ref}
-                onFocus={onFocus}
-                onClick={onClick}
-                onMouseEnter={() => setOnHover(true)}
-                onMouseMove={() => setOnHover(true)}
-                onMouseLeave={() => setOnHover(false)}
-                style={{
-                    width,
-                    // color: "#" + randomColor(),
-                    alignItems: disabled || !isOverflowing ? "center" : undefined,
-                    backgroundColor: onHover
-                        ? (disabled ? undefined : (theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default))
-                        : (isSelected ? theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default : undefined)
+        const setOnHoverTrue = useCallback(() => setOnHover(true), []);
+        const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
-                }}
-                sx={{
-                    position: "relative",
-                    height: "100%",
-                    borderRadius: "4px",
-                    overflow: "hidden",
-                    contain: "strict",
-                    display: "flex",
-                    padding: p,
-                    justifyContent,
-                    alpha: disabled ? 0.8 : undefined,
-                    border,
-                    transition: "border-color 300ms ease-in-out"
-                }}>
-
+        return (
                 <Box
+                    tabIndex={selected || disabled ? undefined : 0}
+                    ref={ref}
+                    onFocus={onFocus}
+                    onClick={onClick}
+                    onMouseEnter={setOnHoverTrue}
+                    onMouseMove={setOnHoverTrue}
+                    onMouseLeave={setOnHoverFalse}
+                    style={{
+                        width,
+                        // color: "#" + randomColor(),
+                        alignItems: disabled || !isOverflowing ? "center" : undefined,
+                        backgroundColor: onHover
+                            ? (disabled ? undefined : darken(theme.palette.background.default, 0.02))
+                            : (isSelected ? theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default : undefined)
+
+                    }}
                     sx={{
-                        width: "100%",
-                        height: fullHeight ? "100%" : undefined,
-                        overflow: scrollable ? "auto" : undefined,
-                        WebkitMaskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
-                        maskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
-                        alignItems: faded ? "start" : (scrollable ? "start" : undefined)
-                    }}>
-                    {!fullHeight && <Box ref={measureRef}
-                                         sx={{
-                                             width: "100%",
-                                             height: fullHeight ? "100%" : undefined
-                                         }}>
-                        {children}
-                    </Box>}
-                    {fullHeight && children}
-                </Box>
-
-                {disabled && onHover && disabledTooltip &&
-                    <Box sx={{
-                        position: "absolute",
-                        top: 4,
-                        right: 4,
-                        fontSize: "14px"
-                    }}>
-                        <Tooltip title={disabledTooltip}>
-                            <RemoveCircleIcon color={"disabled"}
-                                              fontSize={"inherit"}/>
-                        </Tooltip>
-                    </Box>}
-
-                {(error || showExpandIcon) &&
-                    <Box sx={{
-                        position: "absolute",
-                        top: "2px",
-                        right: "2px"
+                        display: "flex",
+                        position: "relative",
+                        height: "100%",
+                        borderRadius: "4px",
+                        overflow: "hidden",
+                        contain: "strict",
+                        padding: p,
+                        alpha: disabled ? 0.8 : undefined,
+                        border,
+                        transition: "border-color 300ms ease-in-out"
                     }}>
 
-                        {selected && !disabled && showExpandIcon &&
+                    <ErrorBoundary>
+                        <Box
+                            sx={{
+                                display: "flex",
+                                width: "100%",
+                                height: fullHeight ? "100%" : undefined,
+                                justifyContent,
+                                overflow: scrollable ? "auto" : undefined,
+                                WebkitMaskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
+                                maskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
+                                alignItems: faded ? "start" : (scrollable ? "start" : undefined)
+                            }}>
+
+                            {!fullHeight && <Box ref={measureRef}
+                                                 sx={{
+                                                     display: "flex",
+                                                     width: "100%",
+                                                     justifyContent,
+                                                     height: fullHeight ? "100%" : undefined
+                                                 }}>
+                                {children}
+                            </Box>}
+
+                            {fullHeight && children}
+
+                        </Box>
+                    </ErrorBoundary>
+
+                    {disabled && onHover && disabledTooltip &&
+                        <Box sx={{
+                            position: "absolute",
+                            top: 4,
+                            right: 4,
+                            fontSize: "14px"
+                        }}>
+                            <Tooltip title={disabledTooltip}>
+                                <RemoveCircleIcon color={"disabled"}
+                                                  fontSize={"inherit"}/>
+                            </Tooltip>
+                        </Box>}
+
+                    {(error || showExpandIcon) &&
+                        <Box sx={{
+                            position: "absolute",
+                            top: "2px",
+                            right: "2px"
+                        }}>
+
+                            {selected && !disabled && showExpandIcon &&
                             <IconButton
                                 ref={iconRef}
                                 color={"inherit"}
@@ -283,6 +292,5 @@ export const TableCell = React.memo<TableCellProps>(
                 }
 
             </Box>
-        </ErrorBoundary>
     );
 }, isEqual) as React.FunctionComponent<TableCellProps>;

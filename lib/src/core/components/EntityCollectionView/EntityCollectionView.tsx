@@ -152,6 +152,7 @@ export const EntityCollectionView = React.memo(
                                                 width,
                                                 key
                                             }: OnColumnResizeParams) => {
+
             // Only for property columns
             if (!collection.properties[key]) return;
             const property: Partial<AnyProperty> = { columnWidth: width };

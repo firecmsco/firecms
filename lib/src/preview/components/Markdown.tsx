@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import MarkdownPreview from "@uiw/react-markdown-preview";
 
@@ -12,6 +12,8 @@ export interface MarkdownProps {
 export const Markdown = React.memo<MarkdownProps>(function Markdown({
                                                                         source
                                                                     }: MarkdownProps) {
+        const onClick = useCallback((e:React.SyntheticEvent) => e.stopPropagation(), []);
+
         return <MarkdownPreview source={typeof source === "string" ? source : ""}
                                 style={{
                                     fontSize: "inherit",
@@ -22,7 +24,7 @@ export const Markdown = React.memo<MarkdownProps>(function Markdown({
                                 }}
                                 components={{
                                     a: (props) => <a {...props}
-                                                     onClick={(e) => e.stopPropagation()}
+                                                     onClick={onClick}
                                                      target="_blank">{props.children}</a>
                                 }}
         />;
@@ -32,5 +34,3 @@ export const Markdown = React.memo<MarkdownProps>(function Markdown({
 function areEqual(prevProps: MarkdownProps, nextProps: MarkdownProps) {
     return prevProps.source === nextProps.source;
 }
-
-

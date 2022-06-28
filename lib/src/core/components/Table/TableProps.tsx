@@ -1,6 +1,8 @@
 import React from "react";
 import { EnumValueConfig, WhereFilterOp } from "../../../models";
 
+export type OnRowClickParams<T extends object> = { rowData: T; rowIndex: number; event: React.SyntheticEvent };
+
 /**
  * @see Table
  * @category Components
@@ -52,7 +54,7 @@ export interface TableProps<T extends object, E extends any> {
     /**
      * Callback when a row is clicked
      */
-    onRowClick?: (props: { rowData: T; rowIndex: number; rowKey: string; event: React.SyntheticEvent }) => void;
+    onRowClick?: (props: OnRowClickParams<T>) => void;
 
     /**
      * Callback when a column is resized
@@ -107,7 +109,6 @@ export interface TableProps<T extends object, E extends any> {
      */
     hoverRow?: boolean;
 
-    frozen?: "left" | "right" | true | false;
 }
 
 /**

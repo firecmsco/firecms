@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from "react";
+import React, { RefObject, useCallback, useRef, useState } from "react";
 import equal from "react-fast-compare";
 import {
     Badge,
@@ -8,6 +8,7 @@ import {
     Divider,
     Grid,
     IconButton,
+    lighten,
     Popover
 } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
@@ -26,88 +27,33 @@ import { DateTimeFilterField } from "../filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../../ErrorBoundary";
 
 type TableHeaderProps<M extends { [Key: string]: any }> = {
+    resizeHandleRef: RefObject<HTMLDivElement>;
+    columnIndex: number;
+    isResizingIndex: number;
     column: TableColumn<M, any>;
     onColumnSort: (key: Extract<keyof M, string>) => void;
     filter?: [TableWhereFilterOp, any];
     sort: TableSort;
     onFilterUpdate: (column: TableColumn<any, any>, filterForProperty?: [TableWhereFilterOp, any]) => void;
-    onColumnResize?: (column: TableColumn<M, any>, width: number) => void;
+    onClickResizeColumn?: (columnIndex: number, column: TableColumn<M, any>) => void;
 };
 
-export const TableHeaderV2 = React.memo<TableHeaderProps<any>>(
-    function TableHeaderInternal<M extends { [Key: string]: any }>({
-                                                                       sort,
-                                                                       onColumnSort,
-                                                                       onFilterUpdate,
-                                                                       filter,
-                                                                       column,
-                                                                       onColumnResize
-                                                                   }: TableHeaderProps<M>) {
+export const VirtualTableHeader = React.memo<TableHeaderProps<any>>(
+    function VirtualTableHeader<M extends { [Key: string]: any }>({
+                                                                      resizeHandleRef,
+                                                                      columnIndex,
+                                                                      isResizingIndex,
+                                                                      sort,
+                                                                      onColumnSort,
+                                                                      onFilterUpdate,
+                                                                      filter,
+                                                                      column,
+                                                                      onClickResizeColumn
+                                                                  }: TableHeaderProps<M>) {
 
-        const isResizing = useRef(false);
-
-        // useEffect(() => {
-        //     if (columnRef.current) {
-        //         document.addEventListener("mousemove", handleOnMouseMove);
-        //         document.addEventListener("mouseup", handleOnMouseUp);
-        //     }
-        //     return () => {
-        //         if (columnRef.current) {
-        //             document.removeEventListener("mousemove", handleOnMouseMove);
-        //             document.removeEventListener("mouseup", handleOnMouseUp);
-        //         }
-        //     };
-        // }, [columnRef])
-
-        const adjustWidthColumn = (width: number) => {
-            const minWidth = 100;
-            const maxWidth = 800;
-            const newWidth = width > maxWidth ? maxWidth : width < minWidth ? minWidth : width;
-            if (onColumnResize)
-                onColumnResize(column, newWidth);
-            console.log("www", newWidth)
-        };
-
-        const handleOnMouseMove = (e: MouseEvent) => {
-            e.stopPropagation();
-            if (isResizing.current && ref?.current) {
-                console.log("parent", ref.current.getBoundingClientRect().left)
-                console.log("event", e.clientX)
-                const newWidth =
-                    e.clientX -
-                    ref.current.getBoundingClientRect().left;
-                adjustWidthColumn(newWidth);
-            }
-        };
-
-        const setCursorDocument = (isResizing: boolean) => {
-            document.body.style.cursor = isResizing ? "col-resize" : "auto";
-        };
-
-        const handleOnMouseUp = (e: MouseEvent) => {
-            e.stopPropagation();
-            console.log("end resize");
-            isResizing.current = false;
-            setCursorDocument(false);
-            document.removeEventListener("dragover", preventDefault);
-            document.removeEventListener("drop", preventDefault);
-            document.removeEventListener("mousemove", handleOnMouseMove);
-            document.removeEventListener("mouseup", handleOnMouseUp);
-        };
-
-        const preventDefault = (event: MouseEvent) => event.preventDefault();
-        const onClickResizeColumn = () => {
-            console.log("start resize");
-            isResizing.current = true;
-            setCursorDocument(true);
-            document.addEventListener("dragover", preventDefault);
-            document.addEventListener("drop", preventDefault);
-            document.addEventListener("mousemove", handleOnMouseMove);
-            document.addEventListener("mouseup", handleOnMouseUp);
-        };
+        const ref = useRef<HTMLDivElement>(null);
 
         const [onHover, setOnHover] = useState(false);
-        const ref = useRef<HTMLDivElement>(null);
 
         const [openFilter, setOpenFilter] = React.useState(false);
 
@@ -124,22 +70,28 @@ export const TableHeaderV2 = React.memo<TableHeaderProps<any>>(
             setOpenFilter(false);
         }, [column, onFilterUpdate]);
 
+        const thisColumnIsResizing = isResizingIndex === columnIndex;
+        const anotherColumnIsResizing = isResizingIndex !== columnIndex && isResizingIndex > 0;
+
+        const hovered = !anotherColumnIsResizing && (onHover || thisColumnIsResizing);
+
         return (
             <ErrorBoundary>
                 <Grid
                     sx={theme => ({
                         width: column.width,
-                        position: "relative",
-                        // width: "calc(100% + 24px)",
-                        // margin: "0px -12px",
+                        // position: "relative",
                         padding: "0px 12px",
-                        color: onHover ? theme.palette.text.primary : theme.palette.text.secondary,
-                        backgroundColor: onHover ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
+                        color: hovered ? theme.palette.text.primary : theme.palette.text.secondary,
+                        backgroundColor: hovered ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
                         transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
                         height: "100%",
                         fontSize: "0.750rem",
                         textTransform: "uppercase",
-                        fontWeight: 600
+                        fontWeight: 600,
+                        position: column.frozen ? "sticky" : "relative",
+                        left: column.frozen ? 0 : undefined,
+                        zIndex: column.frozen ? 1 : 0
                     })}
                     ref={ref}
                     wrap={"nowrap"}
@@ -176,7 +128,7 @@ export const TableHeaderV2 = React.memo<TableHeaderProps<any>>(
                         </Box>
                     </Grid>
 
-                    {column.sortable && (sort || onHover || openFilter) &&
+                    {column.sortable && (sort || hovered || openFilter) &&
                         <Grid item>
                             <Badge color="secondary"
                                    variant="dot"
@@ -221,6 +173,7 @@ export const TableHeaderV2 = React.memo<TableHeaderProps<any>>(
                     </Grid>}
 
                     <Box
+                        ref={resizeHandleRef}
                         sx={(theme) => ({
                             position: "absolute",
                             height: "100%",
@@ -228,13 +181,13 @@ export const TableHeaderV2 = React.memo<TableHeaderProps<any>>(
                             top: 0,
                             right: 0,
                             cursor: "col-resize",
-                            backgroundColor: onHover ? theme.palette.primary.light : undefined
+                            backgroundColor: hovered ? (theme.palette.mode === "dark" ? lighten(theme.palette.background.default, 0.1) : darken(theme.palette.background.default, 0.15)) : undefined
                         })}
-                        onMouseDown={() => onClickResizeColumn()}
+                        onMouseDown={onClickResizeColumn ? () => onClickResizeColumn(columnIndex, column) : undefined}
                     />
                 </Grid>
 
-                {column.sortable && <Popover
+                {column.sortable && ref?.current && <Popover
                     id={openFilter ? `popover_${column.key}` : undefined}
                     open={openFilter}
                     elevation={1}
@@ -257,8 +210,7 @@ export const TableHeaderV2 = React.memo<TableHeaderProps<any>>(
 
             </ErrorBoundary>
         );
-    }
-    , equal) as React.FunctionComponent<TableHeaderProps<any>>;
+    }, equal) as React.FunctionComponent<TableHeaderProps<any>>;
 
 interface FilterFormProps<M> {
     column: TableColumn<M, any>;

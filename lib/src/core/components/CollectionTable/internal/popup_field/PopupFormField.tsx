@@ -47,7 +47,6 @@ interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     open: boolean;
     onClose: () => void;
     columnIndex?: number;
-    setPreventOutsideClick: (value: any) => void;
 
     /**
      * Callback when the value of a cell has been edited
@@ -64,7 +63,6 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                                                                      collection: inputCollection,
                                                                      path,
                                                                      cellRect,
-                                                                     setPreventOutsideClick,
                                                                      open,
                                                                      onClose,
                                                                      columnIndex,
@@ -172,13 +170,6 @@ export function PopupFormField<M extends { [Key: string]: any }>({
         [windowSize, cellRect]
     );
 
-    useEffect(
-        () => {
-            setPreventOutsideClick(open);
-        },
-        [open]
-    );
-
     const validationSchema = useMemo(() => {
         if (!collection || !entity) return;
         return getYupEntitySchema(
@@ -189,13 +180,13 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             customFieldValidator);
     }, [path, propertyKey, collection, entity]);
 
-    const adaptResize = () => {
+    const adaptResize = useCallback(() => {
         return updatePopupLocation(popupLocation);
-    };
+    }, [popupLocation, updatePopupLocation]);
 
-    const onMove = (position: { x: number, y: number }) => {
+    const onMove = useCallback((position: { x: number, y: number }) => {
         return updatePopupLocation(position);
-    };
+    }, [updatePopupLocation]);
 
     const saveValue = async (values: M) => {
         setSavingError(null);
@@ -366,7 +357,6 @@ export function PopupFormField<M extends { [Key: string]: any }>({
                 }}>
                     <IconButton
                         size={"small"}
-                        sx={{}}
                         onClick={(event) => {
                             event.stopPropagation();
                             onClose();

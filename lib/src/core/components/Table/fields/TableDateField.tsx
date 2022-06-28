@@ -12,7 +12,6 @@ export function TableDateField(props: {
     focused: boolean;
     disabled: boolean;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-    setPreventOutsideClick: (value: any) => void;
 }) {
 
     const {
@@ -20,17 +19,8 @@ export function TableDateField(props: {
         error,
         mode,
         internalValue,
-        setPreventOutsideClick,
         updateValue
     } = props;
-
-    const handleOpen = useCallback(() => {
-        setPreventOutsideClick(true);
-    }, []);
-
-    const handleClose = useCallback(() => {
-        setPreventOutsideClick(false);
-    }, []);
 
     const PickerComponent = mode === undefined || mode === "date_time"
         ? DateTimePicker
@@ -67,8 +57,6 @@ export function TableDateField(props: {
                         height: 26
                     }
                 }}
-                onOpen={handleOpen}
-                onClose={handleClose}
             />
     );
 }

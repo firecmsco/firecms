@@ -113,7 +113,6 @@ export function TableStorageUpload(props: {
     path: string;
     previewSize: PreviewSize;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
-    setPreventOutsideClick: (value: any) => void;
 }) {
 
     const {
@@ -125,8 +124,7 @@ export function TableStorageUpload(props: {
         entity,
         path,
         previewSize,
-        updateValue,
-        setPreventOutsideClick
+        updateValue
     } = props;
 
     const storageSource = useStorageSource();

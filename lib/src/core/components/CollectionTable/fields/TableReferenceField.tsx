@@ -25,13 +25,11 @@ export function TableReferenceField(props: {
     title?: string;
     path: string;
     forceFilter?: FilterValues<string>;
-    setPreventOutsideClick: (value: any) => void;
 }) {
 
     const {
         name,
         internalValue,
-        setPreventOutsideClick,
         updateValue,
         multiselect,
         path,
@@ -51,14 +49,9 @@ export function TableReferenceField(props: {
         throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
     }
 
-    const handleClose = useCallback(() => {
-        setPreventOutsideClick(false);
-    }, [setPreventOutsideClick]);
-
     const onSingleEntitySelected = useCallback((entity: Entity<any>) => {
         updateValue(entity ? getReferenceFrom(entity) : null);
-        setPreventOutsideClick(false);
-    }, [updateValue, setPreventOutsideClick]);
+    }, [updateValue]);
 
     const onMultipleEntitiesSelected = useCallback((entities: Entity<any>[]) => {
         updateValue(entities.map((e) => getReferenceFrom(e)));
@@ -74,7 +67,6 @@ export function TableReferenceField(props: {
             multiselect,
             path,
             collection,
-            onClose: handleClose,
             onMultipleEntitiesSelected,
             onSingleEntitySelected,
             selectedEntityIds,
@@ -85,9 +77,8 @@ export function TableReferenceField(props: {
     const handleOpen = useCallback(() => {
         if (disabled)
             return;
-        setPreventOutsideClick(true);
         referenceDialogController.open();
-    }, [disabled, referenceDialogController, setPreventOutsideClick]);
+    }, [disabled, referenceDialogController]);
 
     const valueNotSet = !internalValue || (Array.isArray(internalValue) && internalValue.length === 0);
 

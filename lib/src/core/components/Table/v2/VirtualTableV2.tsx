@@ -1,9 +1,11 @@
 import React, {
     createContext,
     forwardRef,
+    RefObject,
     useCallback,
     useEffect,
-    useRef
+    useRef,
+    useState
 } from "react";
 
 import equal from "react-fast-compare"
@@ -13,164 +15,63 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 
 // @ts-ignore
 import { FixedSizeList as List } from "react-window";
-// @ts-ignore
-import AutoSizer from "react-virtualized-auto-sizer";
+import useMeasure from "react-use-measure";
 
-import { ErrorBoundary } from "../../ErrorBoundary";
 import { CircularProgressCenter } from "../../CircularProgressCenter";
-import { TableHeaderV2 } from "./TableHeaderV2";
 import {
-    CellRendererParams,
     OnTableColumnResizeParams,
     TableColumn,
     TableFilterValues,
     TableProps,
-    TableSize,
     TableWhereFilterOp
 } from "../TableProps";
 
 import { getRowHeight } from "../common";
+import { VirtualTableContextProps } from "./types";
+import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
+import { VirtualTableRow } from "./VirtualTableRow";
+import { VirtualTableCell } from "./VirtualTableCell";
 
-const VirtualListContext = createContext<VirtualTableContextProps>({} as any);
+const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
 
-type VirtualTableRowProps = { style: any, size: TableSize, children: JSX.Element[] };
-
-export const VirtualTableRow = React.memo<VirtualTableRowProps>(
-    function VirtualTableRow({
-                                 children,
-                                 size,
-                                 style
-                             }: VirtualTableRowProps) {
-        return <Box
-            component={"div"}
-            style={{ ...(style), width: "fit-content" }}
-            sx={theme => ({
-                display: "flex",
-                height: getRowHeight(size),
-                flexDirection: "row",
-                fontSize: "0.875rem",
-                backgroundColor: theme.palette.background.paper,
-                borderBottom: "1px solid rgba(128, 128, 128, 0.1)"
-            })}>
-
-            {children}
-
-        </Box>;
-    },
-    (a, b) => a.size === b.size
-);
-
-type VirtualTableCellProps<T, E> = {
-    dataKey: string;
-    column: TableColumn<T, E>;
-    rowData: any;
-    cellData: any;
-    rowIndex: any;
-    columnIndex: number;
-    cellRenderer: (params: CellRendererParams<T, E>) => React.ReactNode;
-};
-
-export const VirtualTableCell = React.memo<VirtualTableCellProps<any, any>>(
-    function VirtualTableCell<T, E>(props: VirtualTableCellProps<T, E>) {
-        return props.rowData && props.cellRenderer(
-            {
-                cellData: props.cellData,
-                rowData: props.rowData as any,
-                rowIndex: props.rowIndex,
-                isScrolling: false,
-                column: props.column,
-                columnIndex: props.columnIndex,
-                width: props.column.width
-            }
-        );
-    },
-    (a, b) => {
-        return equal(a, b);
-    }
-);
-
-const HeaderRow = ({
-                       columns,
-                       currentSort,
-                       onColumnSort,
-                       onFilterUpdate,
-                       sortByProperty,
-                       filter,
-                       onColumnResize
-                   }: VirtualTableContextProps) => {
-
-    const onColumnResizeInternal = (column: TableColumn<any, any>, width: number) => {
-        if (onColumnResize) {
-            onColumnResize({
-                width,
-                key: column.key as string,
-                column: column as TableColumn<any, any>
-            });
-        }
-    };
-    const headerRenderer = useCallback(({ columnIndex }: { columnIndex: number }) => {
-        const column = columns[columnIndex];
-
-        const filterForThisProperty: [TableWhereFilterOp, any] | undefined =
-            column && filter && filter[column.key]
-                ? filter[column.key]
-                : undefined;
-        return (
-            <ErrorBoundary key={"header_" + column.key}>
-                <TableHeaderV2
-                    onFilterUpdate={onFilterUpdate}
-                    onColumnResize={onColumnResizeInternal}
-                    filter={filterForThisProperty}
-                    sort={sortByProperty === column.key ? currentSort : undefined}
-                    onColumnSort={onColumnSort}
-                    column={column}/>
-            </ErrorBoundary>
-        );
-    }, [columns, filter, onFilterUpdate, onColumnResizeInternal, sortByProperty, currentSort, onColumnSort]);
-
-    return (
-        <Box sx={theme => ({
-            position: "sticky",
-            display: "flex",
-            width: "fit-content",
-            flexDirection: "row",
-            top: 0,
-            left: 0,
-            // width: "100%",
-            zIndex: 2,
-            height: 50,
-            borderBottom: `1px solid ${theme.palette.divider}`
-        })}>
-            {columns.map((c, columnIndex) => headerRenderer({ columnIndex }))}
-        </Box>
-    );
-};
-
-type VirtualTableContextProps = {
-    columns: TableColumn<any, any>[];
-    currentSort: "asc" | "desc" | undefined;
-    filter?: TableFilterValues<any>;
-    onColumnSort: (key: string) => any;
-    onColumnResize?: (params: OnTableColumnResizeParams<any, any>) => void;
-    onFilterUpdate: (column: TableColumn<any, any>, filterForProperty?: [TableWhereFilterOp, any]) => void;
-    sortByProperty?: string;
-};
+type InnerElementProps = { children: React.ReactNode, style: any };
 
 // eslint-disable-next-line react/display-name
-const innerElementType = forwardRef<HTMLDivElement, { children: React.ReactNode }>(({
-                                                                                        children,
-                                                                                        ...rest
-                                                                                    }: { children: React.ReactNode }, ref) => {
+const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
+                                                                            children,
+                                                                            ...rest
+                                                                        }: InnerElementProps, ref) => {
 
     return (
         <VirtualListContext.Consumer>
-            {(virtualTableProps) => (
-                <div ref={ref} {...rest}>
-                    <HeaderRow {...virtualTableProps}/>
-                    {children}
-                </div>
-            )}
+            {(virtualTableProps) => {
+                const customView = virtualTableProps.customView;
+                if (customView) {
+                    return <Box sx={{
+                        display: "flex",
+                        height: "100%",
+                        flexDirection: "column",
+                        overflow: "auto"
+                    }}>
+                        <VirtualTableHeaderRow {...virtualTableProps}/>
+                        <Box sx={{
+                            flexGrow: 1,
+                            position: "sticky",
+                            left: 0
+                        }}>
+                            {customView}
+                        </Box>
+                    </Box>
+                }
+                return (
+                    <div ref={ref}
+                         {...rest}>
+                        <VirtualTableHeaderRow {...virtualTableProps}/>
+                        {children}
+                    </div>
+                );
+            }}
         </VirtualListContext.Consumer>
     );
 });
@@ -181,11 +82,6 @@ const innerElementType = forwardRef<HTMLDivElement, { children: React.ReactNode 
  * that powers the entity collections but has a generic API, so it
  * can be reused.
  *
- * If you have an entity collection defined, you probably want to use
- * {@link EntityCollectionTable} or {@link EntityCollectionView}
- *
- * @see CollectionTable
- * @see EntityCollectionView
  * @category Components
  */
 
@@ -195,85 +91,98 @@ export const VirtualTableV2 = React.memo<TableProps<any, any>>(
                                                                onResetPagination,
                                                                onEndReached,
                                                                size = "m",
-                                                               columns,
+                                                               columns: columnsProp,
                                                                onRowClick,
                                                                onColumnResize,
                                                                filter: filterInput,
                                                                checkFilterCombination,
                                                                onFilterUpdate,
-                                                                  sortBy,
-                                                                  error,
-                                                                  emptyMessage,
-                                                                  onSortByUpdate,
-                                                                  loading,
-                                                                  cellRenderer,
-                                                                  hoverRow = true
-                                                              }: TableProps<T, E>) {
+                                                               sortBy,
+                                                               error,
+                                                               emptyMessage,
+                                                               onSortByUpdate,
+                                                               loading,
+                                                               cellRenderer,
+                                                               hoverRow
+                                                           }: TableProps<T, E>) {
 
-    const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
-    const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
+        const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
+        const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
 
-        // const [ref, bounds] = useMeasure();
+        const [columns, setColumns] = useState(columnsProp);
 
-        const tableRef = useRef<any>(null);
+        const tableRef = useRef<HTMLDivElement>(null);
+        const endReachCallbackThreshold = useRef<number>(0);
 
-    // saving the current filter as a ref as a workaround for header closure
-    const filterRef = useRef<TableFilterValues<any> | undefined>();
+        useEffect(() => {
+            setColumns(columnsProp);
+        }, [columnsProp]);
 
-    // these refs are a workaround to prevent the scroll jump caused by Firestore
-    // firing listeners with incomplete data
-    const scrollRef = useRef<number>(0);
-    const endReachedTimestampRef = useRef<number>(0);
-
-    useEffect(() => {
-        if (tableRef.current && data?.length) {
-            tableRef.current.scrollToTop(scrollRef.current);
-        }
-    }, [data?.length]);
-
-    useEffect(() => {
-        filterRef.current = filterInput;
-    }, [filterInput]);
-
-    const onColumnSort = useCallback((key: string) => {
-
-        const isDesc = sortByProperty === key && currentSort === "desc";
-        const isAsc = sortByProperty === key && currentSort === "asc";
-        const newSort = isAsc ? "desc" : (isDesc ? undefined : "asc");
-        const newSortProperty: string | undefined = isDesc ? undefined : key;
-
-        const filter = filterRef.current;
-
-        const newSortBy: [string, "asc" | "desc"] | undefined = newSort && newSortProperty ? [newSortProperty, newSort] : undefined;
-        if (filter) {
-            if (checkFilterCombination && !checkFilterCombination(filter, newSortBy)) {
-                if (onFilterUpdate)
-                    onFilterUpdate(undefined);
+        const [measureRef, bounds] = useMeasure();
+        const onColumnResizeInternal = useCallback((params: OnTableColumnResizeParams<any, any>) => {
+            setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
+            if (onColumnResize) {
+                onColumnResize(params);
             }
-        }
+        }, [columns, onColumnResize]);
 
-        if (onResetPagination) {
-            onResetPagination();
-        }
+        // saving the current filter as a ref as a workaround for header closure
+        const filterRef = useRef<TableFilterValues<any> | undefined>();
 
-        if (onSortByUpdate) {
-            onSortByUpdate(newSortBy);
-        }
-
-        scrollToTop();
-    }, [checkFilterCombination, currentSort, onFilterUpdate, onResetPagination, onSortByUpdate, sortByProperty]);
-
-    const resetSort = useCallback(() => {
-        if (onSortByUpdate)
-            onSortByUpdate(undefined);
-    }, [onSortByUpdate]);
+        useEffect(() => {
+            filterRef.current = filterInput;
+        }, [filterInput]);
 
         const scrollToTop = useCallback(() => {
+            endReachCallbackThreshold.current = 0;
             if (tableRef.current) {
-                scrollRef.current = 0;
-                tableRef.current.scrollTo(0);
+                // scrollRef.current = [scrollRef.current[0], 0];
+                tableRef.current.scrollTo(tableRef.current?.scrollLeft, 0);
             }
         }, []);
+
+        const onColumnSort = useCallback((key: string) => {
+
+            const isDesc = sortByProperty === key && currentSort === "desc";
+            const isAsc = sortByProperty === key && currentSort === "asc";
+            const newSort = isAsc ? "desc" : (isDesc ? undefined : "asc");
+            const newSortProperty: string | undefined = isDesc ? undefined : key;
+
+            const filter = filterRef.current;
+
+            const newSortBy: [string, "asc" | "desc"] | undefined = newSort && newSortProperty ? [newSortProperty, newSort] : undefined;
+            if (filter) {
+                if (checkFilterCombination && !checkFilterCombination(filter, newSortBy)) {
+                    if (onFilterUpdate)
+                        onFilterUpdate(undefined);
+                }
+            }
+
+            if (onResetPagination) {
+                onResetPagination();
+            }
+
+            if (onSortByUpdate) {
+                onSortByUpdate(newSortBy);
+            }
+
+            scrollToTop();
+        }, [checkFilterCombination, currentSort, onFilterUpdate, onResetPagination, onSortByUpdate, scrollToTop, sortByProperty]);
+
+        const resetSort = useCallback(() => {
+            endReachCallbackThreshold.current = 0;
+            if (onSortByUpdate)
+                onSortByUpdate(undefined);
+        }, [onSortByUpdate]);
+
+        const maxScroll = Math.max((data?.length ?? 0) * getRowHeight(size) - bounds.height, 0);
+        const onEndReachedInternal = useCallback((scrollOffset: number) => {
+            if (onEndReached && (data?.length ?? 0) > 0 && scrollOffset > endReachCallbackThreshold.current + 500) {
+                endReachCallbackThreshold.current = scrollOffset;
+                console.log("onEndReached", scrollOffset, endReachCallbackThreshold.current)
+                onEndReached();
+            }
+        }, [data, onEndReached]);
 
         const onScroll = useCallback(({
                                           scrollOffset,
@@ -283,26 +192,13 @@ export const VirtualTableV2 = React.memo<TableProps<any, any>>(
             scrollOffset: number,
             scrollUpdateWasRequested: boolean;
         }) => {
-            const prudentTime = Date.now() - endReachedTimestampRef.current > 3000;
-            if (!scrollUpdateWasRequested && prudentTime) {
-                scrollRef.current = scrollOffset;
-            }
-        }, []);
-
-        const onEndReachedInternal = useCallback(() => {
-            endReachedTimestampRef.current = Date.now();
-        if (onEndReached)
-            onEndReached();
-    }, [onEndReached]);
-
-    const clickRow = useCallback((props: { rowData: T; rowIndex: number; rowKey: string; event: React.SyntheticEvent }) => {
-        if (!onRowClick)
-            return;
-        onRowClick(props);
-    }, [onRowClick]);
+            if (!scrollUpdateWasRequested && (scrollOffset >= maxScroll - 500))
+                onEndReachedInternal(scrollOffset);
+        }, [maxScroll, onEndReachedInternal]);
 
         const onFilterUpdateInternal = useCallback((column: TableColumn<T, E>, filterForProperty?: [TableWhereFilterOp, any]) => {
 
+            endReachCallbackThreshold.current = 0;
             const filter = filterRef.current;
             let newFilterValue: TableFilterValues<any> = filter ? { ...filter } : {};
 
@@ -366,110 +262,114 @@ export const VirtualTableV2 = React.memo<TableProps<any, any>>(
             );
         }, [emptyMessage, loading]);
 
-    const Row = useCallback(({ index, style }: any) => {
-        const rowData = data && data[index];
-        return (
-            <VirtualTableRow style={{
-                ...style,
-                // top: "50px"
-                top: `calc(${style.top}px + 50px)`
-            }}
-                             size={size}>
-                {columns.map((column, columnIndex) => {
-                    const cellData = rowData && rowData[column.key];
-                    return <VirtualTableCell
-                        key={`cell_${column.key}`}
-                        dataKey={column.key}
-                        cellRenderer={cellRenderer}
-                        column={column}
-                        rowData={rowData}
-                        cellData={cellData}
-                        rowIndex={index}
-                        columnIndex={columnIndex}/>;
-                })}
-            </VirtualTableRow>
-        );
-    }, [columns, data, size]);
+        const empty = !loading && (data?.length ?? 0) === 0;
+        const customView = empty ? buildEmptyView() : (error ? buildErrorView() : undefined);
 
-    return (
-        <AutoSizer>
-            {({ height, width }: any) => (
+        return (
+            <Box
+                ref={measureRef}
+                sx={{
+                    height: "100%", width: "100%"
+                }}>
                 <VirtualListContext.Provider
                     value={{
+                        data,
+                        size,
+                        cellRenderer,
                         columns,
                         currentSort,
-                        onColumnResize,
+                        onRowClick,
+                        customView,
+                        onColumnResize: onColumnResizeInternal,
                         filter: filterRef.current,
                         onColumnSort,
                         onFilterUpdate: onFilterUpdateInternal,
                         sortByProperty
                     }}>
 
-                    <List
+                    <MemoizedList
+                        outerRef={tableRef}
                         key={size}
-                        innerElementType={innerElementType}
-                        width={width}
-                        height={height}
-                        overscanCount={5}
-                        itemCount={data?.length}
+                        width={bounds.width}
+                        height={bounds.height}
+                        itemCount={data?.length ?? 0}
                         onScroll={onScroll}
-                        itemSize={getRowHeight(size)}>
-                        {Row}
-                    </List>
+                        hoverRow={hoverRow}
+                        itemSize={getRowHeight(size)}/>
+
                 </VirtualListContext.Provider>
-
-            )}
-        </AutoSizer>
+            </Box>
     );
-
-    // return <Root sx={{
-    //     width: "100%",
-    //     height: "100%",
-    //     overflow: "hidden"
-    // }}
-    //              ref={ref}
-    //              css={baseTableCss}>
-    //
-    //     {bounds && <BaseTable
-    //         rowClassName={clsx(classes.tableRow, { [classes.tableRowClickable]: hoverRow })}
-    //         data={data}
-    //         onColumnResizeEnd={onBaseTableColumnResize}
-    //         width={bounds.width}
-    //         height={bounds.height}
-    //         emptyRenderer={error ? buildErrorView() : buildEmptyView()}
-    //         fixed
-    //         ignoreFunctionInColumnCompare={false}
-    //         rowHeight={getRowHeight(size)}
-    //         ref={tableRef}
-    //         onScroll={onScroll}
-    //         overscanRowCount={2}
-    //         onEndReachedThreshold={PIXEL_NEXT_PAGE_OFFSET}
-    //         onEndReached={onEndReachedInternal}
-    //         rowEventHandlers={{ onClick: clickRow as any }}
-    //     >
-    //
-    //         {columns.map((column) =>
-    //             <Column
-    //                 key={column.key}
-    //                 title={column.title}
-    //                 className={classes.column}
-    //                 headerRenderer={headerRenderer}
-    //                 cellRenderer={baseTableCellRenderer}
-    //                 height={getRowHeight(size)}
-    //                 align={column.align}
-    //                 flexGrow={1}
-        //                 flexShrink={0}
-        //                 resizable={true}
-        //                 size={size}
-        //                 frozen={column.frozen}
-        //                 dataKey={column.key}
-        //                 width={column.width}/>)
-        //         }
-        //     </BaseTable>}
-        // </Root>;
-
     },
-    (a, b) => {
-        return equal(a, b);
-    }
+    equal
 );
+
+function MemoizedList({
+                          outerRef,
+                          width,
+                          height,
+                          itemCount,
+                          onScroll,
+                          itemSize,
+                          hoverRow
+                      }: {
+    outerRef: RefObject<HTMLDivElement>;
+    width: number;
+    height: number;
+    itemCount: number;
+    onScroll: (params: {
+        scrollDirection: "forward" | "backward",
+        scrollOffset: number,
+        scrollUpdateWasRequested: boolean;
+    }) => void;
+    itemSize: number;
+    hoverRow?: boolean;
+}) {
+
+    const Row = useCallback(({ index, style }: any) => {
+        return <VirtualListContext.Consumer>
+            {({ onRowClick, data, columns, size = "m", cellRenderer }) => {
+                const rowData = data && data[index];
+                return (
+                    <VirtualTableRow
+                        rowData={rowData}
+                        rowIndex={index}
+                        onRowClick={onRowClick}
+                        columns={columns}
+                        hoverRow={hoverRow}
+                        style={{
+                            ...style,
+                            top: `calc(${style.top}px + 50px)`
+                        }}
+                        size={size}>
+                        {columns.map((column, columnIndex) => {
+                            const cellData = rowData && rowData[column.key];
+                            return <VirtualTableCell
+                                key={`cell_${column.key}`}
+                                dataKey={column.key}
+                                cellRenderer={cellRenderer}
+                                column={column}
+                                rowData={rowData}
+                                cellData={cellData}
+                                rowIndex={index}
+                                columnIndex={columnIndex}/>;
+                        })}
+                    </VirtualTableRow>
+                );
+
+            }}
+        </VirtualListContext.Consumer>;
+    }, []);
+
+    return <List
+        outerRef={outerRef}
+        innerElementType={innerElementType}
+        width={width}
+        height={height}
+        overscanCount={3}
+        itemCount={itemCount}
+        onScroll={onScroll}
+        itemSize={itemSize}>
+        {Row}
+    </List>;
+}

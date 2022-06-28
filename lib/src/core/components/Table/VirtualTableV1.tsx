@@ -7,14 +7,11 @@ import { styled } from "@mui/material/styles";
 import BaseTable, { Column, ColumnShape } from "react-base-table";
 import clsx from "clsx";
 
-// // @ts-ignore
-// import { FixedSizeList as List } from "react-window";
-// // @ts-ignore
-// import AutoSizer from "react-virtualized-auto-sizer";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import { baseTableCss } from "./styles";
 import {
+    OnRowClickParams,
     TableColumn,
     TableFilterValues,
     TableProps,
@@ -184,7 +181,7 @@ export function VirtualTable<T extends object, E extends any>({
             onEndReached();
     }, [onEndReached]);
 
-    const clickRow = useCallback((props: { rowData: T; rowIndex: number; rowKey: string; event: React.SyntheticEvent }) => {
+    const clickRow = useCallback((props: OnRowClickParams<any>) => {
         if (!onRowClick)
             return;
         onRowClick(props);
