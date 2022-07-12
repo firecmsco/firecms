@@ -1,8 +1,6 @@
-import {
-    ReferenceProperty,
-} from "@camberi/firecms";
-import {PropertyBuilderProps, ValuesCountEntry} from "../models";
-import {findCommonInitialStringInPath, unslugify} from "../util";
+import { ReferenceProperty, } from "@camberi/firecms";
+import { PropertyBuilderProps } from "../models";
+import { findCommonInitialStringInPath } from "../util";
 
 export function buildReferenceProperty({
                                         totalDocsCount,

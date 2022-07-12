@@ -33,10 +33,7 @@ const classes = {
     dropZone: `${PREFIX}-dropZone`,
     activeDrop: `${PREFIX}-activeDrop`,
     acceptDrop: `${PREFIX}-acceptDrop`,
-    rejectDrop: `${PREFIX}-rejectDrop`,
-    arrayEntry: `${PREFIX}-arrayEntry`,
-    arrayEntryHovered: `${PREFIX}-arrayEntryHovered`,
-    thumbnailCloseIcon: `${PREFIX}-thumbnailCloseIcon`
+    rejectDrop: `${PREFIX}-rejectDrop`
 };
 
 const StyledBox = styled(Box)((
@@ -48,6 +45,7 @@ const StyledBox = styled(Box)((
     [`&.${classes.dropZone}`]: {
         position: "relative",
         height: "100%",
+        width: "100%",
         outline: 0,
         display: "flex",
         flexDirection: "row",
@@ -72,26 +70,6 @@ const StyledBox = styled(Box)((
     [`&.${classes.rejectDrop}`]: {
         borderColor: theme.palette.error.light
     },
-
-    [`& .${classes.arrayEntry}`]: {
-        border: "1px dashed transparent",
-        borderRadius: theme.shape.borderRadius
-    },
-
-    [`& .${classes.arrayEntryHovered}`]: {
-        opacity: 0.5,
-        border: "1px dashed gray",
-        boxSizing: "border-box"
-    },
-
-    [`& .${classes.thumbnailCloseIcon}`]: {
-        position: "absolute",
-        borderRadius: "9999px",
-        top: -8,
-        right: -8,
-        zIndex: 100,
-        backgroundColor: theme.palette.background.paper
-    }
 }));
 
 /**

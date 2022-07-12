@@ -246,6 +246,7 @@ export type PropertyBuilderProps<M extends { [Key: string]: any }> =
          */
         entityId?: string;
     };
+
 /**
  * @category Entity properties
  */

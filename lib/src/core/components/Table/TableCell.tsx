@@ -64,15 +64,17 @@ export const TableCell = React.memo<TableCellProps>(
         const [onHover, setOnHover] = useState(false);
         const [internalSaved, setInternalSaved] = useState(saved);
 
-    const iconRef = React.createRef<HTMLButtonElement>();
-    useEffect(() => {
-        if (iconRef.current && focused) {
-            iconRef.current.focus({ preventScroll: true });
-        }
-    }, [focused]);
+        const showError = !disabled && error;
 
-    useEffect(() => {
-        if (internalSaved !== saved) {
+        const iconRef = React.createRef<HTMLButtonElement>();
+        useEffect(() => {
+            if (iconRef.current && focused) {
+                iconRef.current.focus({ preventScroll: true });
+            }
+        }, [focused]);
+
+        useEffect(() => {
+            if (internalSaved !== saved) {
             if (saved) {
                 setInternalSaved(true);
             } else {
@@ -157,20 +159,20 @@ export const TableCell = React.memo<TableCellProps>(
         }
     }, [bounds, isOverflowing, maxHeight]);
 
-    const isSelected = !error && selected;
+        const isSelected = !showError && selected;
 
-    let border: string;
-    if (isSelected) {
-        if (internalSaved) {
-            border = `2px solid ${theme.palette.success.light}`;
+        let border: string;
+        if (isSelected) {
+            if (internalSaved) {
+                border = `2px solid ${theme.palette.success.light}`;
+            } else {
+                border = "2px solid #5E9ED6";
+            }
+        } else if (showError) {
+            border = `2px solid ${theme.palette.error.light} !important`
         } else {
-            border = "2px solid #5E9ED6";
+            border = "2px solid transparent"
         }
-    } else if (error) {
-        border = `2px solid ${theme.palette.error.light} !important`
-    } else {
-        border = "2px solid transparent"
-    }
 
         const scrollable = !disabled && allowScroll && isOverflowing;
         const faded = !disabled && !allowScroll && isOverflowing;
@@ -179,8 +181,8 @@ export const TableCell = React.memo<TableCellProps>(
         const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
         return (
-                <Box
-                    tabIndex={selected || disabled ? undefined : 0}
+            <Box
+                tabIndex={selected || disabled ? undefined : 0}
                     ref={ref}
                     onFocus={onFocus}
                     onClick={onClick}
@@ -214,6 +216,7 @@ export const TableCell = React.memo<TableCellProps>(
                             sx={{
                                 display: "flex",
                                 width: "100%",
+                                flexDirection: "column",
                                 height: fullHeight ? "100%" : undefined,
                                 justifyContent,
                                 overflow: scrollable ? "auto" : undefined,
@@ -250,14 +253,14 @@ export const TableCell = React.memo<TableCellProps>(
                             </Tooltip>
                         </Box>}
 
-                    {(error || showExpandIcon) &&
-                        <Box sx={{
-                            position: "absolute",
-                            top: "2px",
-                            right: "2px"
-                        }}>
+                {(showError || showExpandIcon) &&
+                    <Box sx={{
+                        position: "absolute",
+                        top: "2px",
+                        right: "2px"
+                    }}>
 
-                            {selected && !disabled && showExpandIcon &&
+                        {selected && !disabled && showExpandIcon &&
                             <IconButton
                                 ref={iconRef}
                                 color={"inherit"}
@@ -277,10 +280,10 @@ export const TableCell = React.memo<TableCellProps>(
                             </IconButton>
                         }
 
-                        {error && <ErrorTooltip
+                        {showError && <ErrorTooltip
                             arrow
                             placement={"left"}
-                            title={error.message}>
+                            title={showError.message}>
                             <ErrorOutlineIcon
                                 fontSize={"inherit"}
                                 color={"error"}
