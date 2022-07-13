@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    Box,
     Table,
     TableBody,
     TableCell,
@@ -23,7 +24,7 @@ export function MapPropertyPreview<T extends Record<string, unknown>>({
                                                                       }: PropertyPreviewProps<T>) {
 
     if (property.dataType !== "map") {
-        throw Error("Picked wrong preview component MapPreview");
+        throw Error("Picked wrong preview component MapPropertyPreview");
     }
 
     const mapProperty = property as ResolvedMapProperty;
@@ -46,20 +47,28 @@ export function MapPropertyPreview<T extends Record<string, unknown>>({
 
     if (size !== "regular")
         return (
-            <>
+            <Box sx={theme => ({
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                "& > *": {
+                    [theme.breakpoints.down("md")]: {
+                        marginBottom: `${theme.spacing(0.5)} !important`
+                    },
+                    marginBottom: `${theme.spacing(1)} !important`
+                }
+            })}>
                 {mapPropertyKeys.map((key, index) => (
-                    <div
+                    <ErrorBoundary
                         key={"map_preview_" + mapProperty.name + key + index}>
-                        <ErrorBoundary>
-                            <PropertyPreview propertyKey={key}
-                                             value={(value as any)[key]}
-                                             property={mapProperty.properties![key]}
-                                             entity={entity}
-                                             size={size}/>
-                        </ErrorBoundary>
-                    </div>
+                        <PropertyPreview propertyKey={key}
+                                         value={(value as any)[key]}
+                                         property={mapProperty.properties![key]}
+                                         entity={entity}
+                                         size={size}/>
+                    </ErrorBoundary>
                 ))}
-            </>
+            </Box>
         );
 
     return (
