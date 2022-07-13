@@ -156,7 +156,7 @@ export function DeleteEntityDialog<M extends { [Key: string]: any }>({
                             onEntityDelete(path, entityOrEntities as Entity<M>);
                         snackbarController.open({
                             type: "success",
-                            message: `${resolvedCollection.name} deleted`
+                            message: `${resolvedCollection.singularName ?? resolvedCollection.name} deleted`
                         });
                         onClose();
                     }

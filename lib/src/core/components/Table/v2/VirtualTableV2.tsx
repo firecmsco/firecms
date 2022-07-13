@@ -263,7 +263,7 @@ export const VirtualTableV2 = React.memo<TableProps<any, any>>(
         }, [emptyMessage, loading]);
 
         const empty = !loading && (data?.length ?? 0) === 0;
-        const customView = empty ? buildEmptyView() : (error ? buildErrorView() : undefined);
+        const customView = error ? buildErrorView() : (empty ? buildEmptyView() : undefined);
 
         return (
             <Box
@@ -284,7 +284,8 @@ export const VirtualTableV2 = React.memo<TableProps<any, any>>(
                         filter: filterRef.current,
                         onColumnSort,
                         onFilterUpdate: onFilterUpdateInternal,
-                        sortByProperty
+                        sortByProperty,
+                        hoverRow: hoverRow ?? false
                     }}>
 
                     <MemoizedList
@@ -294,12 +295,11 @@ export const VirtualTableV2 = React.memo<TableProps<any, any>>(
                         height={bounds.height}
                         itemCount={data?.length ?? 0}
                         onScroll={onScroll}
-                        hoverRow={hoverRow}
                         itemSize={getRowHeight(size)}/>
 
                 </VirtualListContext.Provider>
             </Box>
-    );
+        );
     },
     equal
 );
@@ -311,7 +311,6 @@ function MemoizedList({
                           itemCount,
                           onScroll,
                           itemSize,
-                          hoverRow
                       }: {
     outerRef: RefObject<HTMLDivElement>;
     width: number;
@@ -323,12 +322,18 @@ function MemoizedList({
         scrollUpdateWasRequested: boolean;
     }) => void;
     itemSize: number;
-    hoverRow?: boolean;
 }) {
 
     const Row = useCallback(({ index, style }: any) => {
         return <VirtualListContext.Consumer>
-            {({ onRowClick, data, columns, size = "m", cellRenderer }) => {
+            {({
+                  onRowClick,
+                  data,
+                  columns,
+                  size = "m",
+                  cellRenderer,
+                  hoverRow
+              }) => {
                 const rowData = data && data[index];
                 return (
                     <VirtualTableRow

@@ -10,7 +10,6 @@ interface DraggableProps {
 
 export function useDraggable({
                                  containerRef,
-                                 // ref,
                                  x,
                                  y,
                                  onMove
@@ -40,6 +39,7 @@ export function useDraggable({
     };
 
     const onMouseMove = (event: any) => {
+        console.log(event);
         onMove(
             event.screenX - relX,
             event.screenY - relY

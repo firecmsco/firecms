@@ -28,32 +28,32 @@ export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps
                                                                  entity
                                                              }: PropertyPreviewTableCellProps<T, M>) {
 
-    const {
-        size,
-        focused,
-    } = useEntityCollectionTableController();
+        const {
+            size,
+            focused,
+        } = useEntityCollectionTableController();
 
         const value = getValueInPath(entity.values as any, propertyKey);
         return (
-        <TableCell
-            size={size}
-            width={width}
-            focused={focused}
-            key={`preview_cell_${propertyKey}_${entity.id}_${columnIndex}`}
-            value={value}
-            align={align ?? "left"}
-            disabled={true}>
-            <PropertyPreview
+            <TableCell
+                size={size}
                 width={width}
-                height={getRowHeight(size)}
-                propertyKey={`preview_${propertyKey}_${entity.id}_${columnIndex}`}
-                property={property as any}
-                entity={entity}
+                focused={focused}
+                key={`preview_cell_${propertyKey}_${entity.id}_${columnIndex}`}
                 value={value}
-                size={getPreviewSizeFrom(size)}
-            />
-        </TableCell>
-    );
+                align={align ?? "left"}
+                disabled={true}>
+                <PropertyPreview
+                    width={width}
+                    height={getRowHeight(size)}
+                    propertyKey={`preview_${propertyKey}_${entity.id}_${columnIndex}`}
+                    property={property as any}
+                    entity={entity}
+                    value={value}
+                    size={getPreviewSizeFrom(size)}
+                />
+            </TableCell>
+        );
 
     },
     areEqual) as React.FunctionComponent<PropertyPreviewTableCellProps<any, any>>;

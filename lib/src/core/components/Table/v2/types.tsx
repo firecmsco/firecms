@@ -1,8 +1,11 @@
 import {
     CellRendererParams,
-    OnRowClickParams, OnTableColumnResizeParams,
+    OnRowClickParams,
+    OnTableColumnResizeParams,
     TableColumn,
-    TableFilterValues, TableSize, TableWhereFilterOp
+    TableFilterValues,
+    TableSize,
+    TableWhereFilterOp
 } from "../TableProps";
 
 export type VirtualTableRowProps<T> = {
@@ -29,4 +32,5 @@ export type VirtualTableContextProps<T> = {
     onFilterUpdate: (column: TableColumn<any, any>, filterForProperty?: [TableWhereFilterOp, any]) => void;
     sortByProperty?: string;
     customView?: React.ReactNode,
+    hoverRow: boolean;
 };

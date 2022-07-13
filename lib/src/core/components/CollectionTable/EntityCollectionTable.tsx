@@ -361,7 +361,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     <ErrorBoundary>
                         {entity
                             ? <PropertyTableCell
-                                key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
+                                key={`property_table_cell_${entity.id}_${propertyKey}`}
                                 align={column.align ?? "left"}
                                 propertyKey={propertyKey as string}
                                 property={property}
@@ -617,11 +617,6 @@ function isFilterCombinationValid<M>(
         return false;
     }
 
-    // only one filter set, different to the sort key
-    if (sortKey && filtersCount === 1 && filterKeys[0] !== sortKey) {
-        return false;
-    }
-
     return !!indexes && indexes
         .filter((compositeIndex) => !sortKey || sortKey in compositeIndex)
         .find((compositeIndex) =>
@@ -629,7 +624,7 @@ function isFilterCombinationValid<M>(
         ) !== undefined;
 }
 
-export function useColumnIds<M>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
+function useColumnIds<M>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
     return useMemo(() => {
         const displayedProperties = getCollectionColumnIds(collection);
 

@@ -46,8 +46,6 @@ export const VirtualTableHeaderRow = ({
         document.body.style.cursor = isResizing ? "col-resize" : "auto";
     }, []);
 
-    const preventDefault = useCallback((event: MouseEvent) => event.preventDefault(), []);
-
     const handleOnMouseUp = useCallback((e: MouseEvent) => {
         e.stopPropagation();
         e.preventDefault();
@@ -56,18 +54,14 @@ export const VirtualTableHeaderRow = ({
     }, [setCursorDocument]);
 
     const removeResizingListeners = useCallback(() => {
-        document.removeEventListener("dragover", preventDefault);
-        document.removeEventListener("drop", preventDefault);
         document.removeEventListener("mousemove", handleOnMouseMove);
         document.removeEventListener("mouseup", handleOnMouseUp);
-    }, [handleOnMouseMove, handleOnMouseUp, preventDefault]);
+    }, [handleOnMouseMove, handleOnMouseUp]);
 
     const attachResizeListeners = useCallback(() => {
-        document.addEventListener("dragover", preventDefault);
-        document.addEventListener("drop", preventDefault);
         document.addEventListener("mousemove", handleOnMouseMove);
         document.addEventListener("mouseup", handleOnMouseUp);
-    }, [handleOnMouseMove, handleOnMouseUp, preventDefault]);
+    }, [handleOnMouseMove, handleOnMouseUp]);
 
     useEffect(() => {
         if (isResizing) {

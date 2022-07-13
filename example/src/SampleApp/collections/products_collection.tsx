@@ -135,7 +135,7 @@ export const productsCollection = buildCollection<Product>({
         sampleView
     ],
     additionalColumns: [productAdditionalColumn],
-    filterCombinations: [{ category: "desc", available: "desc" }],
+    filterCombinations: [{ category: "desc", available: "desc" }, { category: "asc", available: "desc" } , { category: "desc", available: "asc" } , { category: "asc", available: "asc" }],
     properties: {
         name: {
             dataType: "string",

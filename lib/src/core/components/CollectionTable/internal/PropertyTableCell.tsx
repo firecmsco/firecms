@@ -388,6 +388,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
     return (
         <ErrorBoundary>
             <TableCell
+                key={`table_cell_${entity.id}_${propertyKey}`}
                 size={size}
                 width={width}
                 focused={focused}
@@ -417,6 +418,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
 
 function areEqual(prevProps: PropertyTableCellProps<any, any>, nextProps: PropertyTableCellProps<any, any>) {
     return prevProps.height === nextProps.height &&
+        prevProps.propertyKey === nextProps.propertyKey &&
         prevProps.align === nextProps.align &&
         prevProps.width === nextProps.width &&
         equal(prevProps.property, nextProps.property) &&

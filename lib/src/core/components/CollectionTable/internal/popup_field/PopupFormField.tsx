@@ -215,7 +215,6 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             cursor: "grab"
         })}>
             <Formik
-                // key={`popup_form_${propertyKey}_${entity?.id}`}
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
                 validationSchema={validationSchema}
                 validate={(values) => console.debug("Validating", values)}
@@ -328,7 +327,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
             key={`draggable_${propertyKey as string}_${entity.id}_${open}`}
             sx={theme => ({
                 display: "inline-block",
-                userSelect: "none",
+                // userSelect: "none",
                 position: "fixed",
                 zIndex: 1300,
                 boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
@@ -372,7 +371,7 @@ export function PopupFormField<M extends { [Key: string]: any }>({
 
     return (
         <Portal container={document.body}>
-                {draggable}
+            {draggable}
         </Portal>
     );
 

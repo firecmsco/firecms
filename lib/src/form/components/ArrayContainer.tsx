@@ -14,7 +14,7 @@ import {
     Droppable
 } from "react-beautiful-dnd";
 
-import { getHashValue } from "../../core/util/objects";
+import { getHashValue } from "../../core";
 
 interface ArrayContainerProps<T> {
     value: T[];
