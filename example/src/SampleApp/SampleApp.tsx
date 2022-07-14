@@ -9,7 +9,14 @@ import {
     FirebaseCMSApp,
 } from "@camberi/firecms";
 
-import { IconButton, Tooltip } from "@mui/material";
+import {
+    FormControlLabel,
+    FormGroup,
+    IconButton,
+    Switch,
+    Typography,
+    Tooltip
+} from "@mui/material";
 import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
@@ -29,6 +36,7 @@ import {
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 import { locales } from "./collections/enums";
+import { CustomLoginView } from "./CustomLoginView";
 
 export const collectionBroken = buildCollection<any>({
     name: "Broken Collection",
@@ -155,10 +163,7 @@ function SampleApp() {
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}
-        LoginViewProps={{
-            NoUserComponent: <>Sample custom message when no user exists</>,
-            disableSignupScreen: false,
-        }}
+        LoginView={CustomLoginView}
     />;
 }
 

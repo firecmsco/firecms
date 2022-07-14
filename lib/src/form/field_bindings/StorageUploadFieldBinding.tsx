@@ -410,7 +410,8 @@ export function StorageUpload({
     const metadata: Record<string, unknown> | undefined = storage?.metadata;
     const size = multipleFilesSupported ? "small" : "regular";
 
-    const moveItem = (fromIndex: number, toIndex: number) => {
+    const moveItem = useCallback((fromIndex: number, toIndex: number) => {
+        if (!multipleFilesSupported) return;
         const newValue = [...value];
         const item = newValue[fromIndex];
         newValue.splice(fromIndex, 1);
@@ -420,7 +421,7 @@ export function StorageUpload({
             .filter(e => !!e.storagePathOrDownloadUrl)
             .map(e => e.storagePathOrDownloadUrl as string);
         onChange(fieldValue);
-    };
+    }, [multipleFilesSupported, onChange, setInternalValue, value]);
 
     const onDragEnd = useCallback((result: any) => {
         // dropped outside the list

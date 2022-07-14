@@ -25,6 +25,7 @@ export const Newsletter = () => {
             },
             body: JSON.stringify({
                 "email_address": email,
+                "source": "landing"
             })
         }).then((res) => {
             console.log("res", res);

@@ -13,7 +13,7 @@ import {
 } from "@mui/material";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
-import { FireCMSLogo } from "../../core/components/FireCMSLogo";
+import { ErrorView, FireCMSLogo } from "../../core";
 import { useAuthController, useModeController } from "../../hooks";
 import {
     FirebaseAuthDelegate,
@@ -28,7 +28,6 @@ import {
     microsoftIcon,
     twitterIcon
 } from "./social_icons";
-import { ErrorView } from "../../core";
 import EmailIcon from "@mui/icons-material/Email";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -39,21 +38,47 @@ import { RECAPTCHA_CONTAINER_ID, useRecaptcha } from "../hooks/useRecaptcha";
  * @category Firebase
  */
 export interface FirebaseLoginViewProps {
+    /**
+     * Path to the logo displayed in the login screen
+     */
     logo?: string;
+
+    /**
+     * Enable the skip login button
+     */
     allowSkipLogin?: boolean;
+
+    /**
+     * Each of the sign in options that get a custom button
+     */
     signInOptions: Array<FirebaseSignInProvider | FirebaseSignInOption>;
-    firebaseApp: FirebaseApp;
-    authDelegate: FirebaseAuthDelegate;
+
+    /**
+     * Disable the login buttons
+     */
+    disabled?: boolean;
+
     /**
      * Prevent users from creating new users in when the `signInOptions` value
      * is `password`. This does not apply to the rest of login providers.
      */
     disableSignupScreen?: boolean;
+
     /**
      * Display this component when no user is found a user tries to log in
      * when the `signInOptions` value is `password`.
      */
     NoUserComponent?: ReactNode;
+
+    /**
+     * Display this component bellow the sign-in buttons.
+     * Useful for adding checkboxes for privacy and terms and conditions.
+     * You may want to use it in conjunction with the `disabled` prop.
+     */
+    AdditionalComponent?: ReactNode;
+
+    firebaseApp: FirebaseApp;
+    authDelegate: FirebaseAuthDelegate;
 }
 
 /**
@@ -69,7 +94,9 @@ export function FirebaseLoginView({
                                       firebaseApp,
                                       authDelegate,
                                       NoUserComponent,
-                                      disableSignupScreen = false
+                                      disableSignupScreen = false,
+                                      disabled = false,
+                                      AdditionalComponent
                                   }: FirebaseLoginViewProps) {
 
     const authController = useAuthController();
@@ -162,7 +189,7 @@ export function FirebaseLoginView({
                     flexDirection: "column",
                     alignItems: "center",
                     width: "100%",
-                    maxWidth: 340
+                    maxWidth: 380
                 }}>
 
                     <Box m={1} sx={{
@@ -183,32 +210,37 @@ export function FirebaseLoginView({
 
                     {(!passwordLoginSelected && !phoneLoginSelected) && <>
 
-                        {buildOauthLoginButtons(authDelegate, resolvedSignInOptions, modeState.mode)}
+                        {buildOauthLoginButtons(authDelegate, resolvedSignInOptions, modeState.mode, disabled)}
 
                         {resolvedSignInOptions.includes("password") &&
                         <LoginButton
+                            disabled={disabled}
                             text={"Email/password"}
                             icon={<EmailIcon fontSize={"large"}/>}
                             onClick={() => setPasswordLoginSelected(true)}/>}
 
                         {resolvedSignInOptions.includes("phone") &&
                         <LoginButton
+                            disabled={disabled}
                             text={"Phone number"}
                             icon={<Phone fontSize={"large"}/>}
                             onClick={() => setPhoneLoginSelected(true) }/>}
 
                         {resolvedSignInOptions.includes("anonymous") &&
                         <LoginButton
+                            disabled={disabled}
                             text={"Log in anonymously"}
                             icon={<PersonOutlineIcon fontSize={"large"}/>}
                             onClick={authDelegate.anonymousLogin}/>}
 
                         {allowSkipLogin &&
-                        <Box m={1}>
-                            <Button onClick={authDelegate.skipLogin}>
-                                Skip login
-                            </Button>
-                        </Box>
+                            <Box m={1}>
+                                <Button
+                                    disabled={disabled}
+                                    onClick={authDelegate.skipLogin}>
+                                    Skip login
+                                </Button>
+                            </Box>
                         }
 
                     </>}
@@ -226,6 +258,8 @@ export function FirebaseLoginView({
                         onClose={() => setPhoneLoginSelected(false)}
                     />}
 
+                    {AdditionalComponent}
+
                 </Box>
             </Box>
         </Fade>
@@ -235,12 +269,14 @@ export function FirebaseLoginView({
 function LoginButton({
                          icon,
                          onClick,
-                         text
-                     }: { icon: React.ReactNode, onClick: () => void, text: string }) {
+                         text,
+                         disabled
+                     }: { icon: React.ReactNode, onClick: () => void, text: string, disabled?: boolean }) {
     return (
         <Box m={0.5} width={"100%"}>
             <Button fullWidth
                     variant="outlined"
+                    disabled={disabled}
                     onClick={onClick}>
                 <Box sx={{
                     p: "1",
@@ -304,13 +340,13 @@ function PhoneLoginForm({
     return (
         <form onSubmit={handleSubmit}>
             {isInvalidCode &&
-            <Box p={2}>
-                <ErrorView
-                    error={"Invalid confirmation code"}/>
-            </Box>}
+                <Box p={2}>
+                    <ErrorView
+                        error={"Invalid confirmation code"}/>
+                </Box>}
 
+            <div id={RECAPTCHA_CONTAINER_ID}/>
 
-            <div id={RECAPTCHA_CONTAINER_ID} />
             <Grid container spacing={1}>
                 <Grid item xs={12}>
                     <IconButton
@@ -327,11 +363,11 @@ function PhoneLoginForm({
                 </Grid>
                 <Grid item xs={12}>
                     <TextField placeholder="" fullWidth
-                                value={phone}
-                                disabled={Boolean(phone && (authDelegate.authLoading || authDelegate.confirmationResult))}
-                                type="phone"
-                                required
-                                onChange={(event) => setPhone(event.target.value)}/>
+                               value={phone}
+                               disabled={Boolean(phone && (authDelegate.authLoading || authDelegate.confirmationResult))}
+                               type="phone"
+                               required
+                               onChange={(event) => setPhone(event.target.value)}/>
                 </Grid>
                 {Boolean(phone && authDelegate.confirmationResult) &&
                     <>
@@ -340,15 +376,15 @@ function PhoneLoginForm({
                             p: 1,
                             display: "flex"
                         }}>
-                        <Typography align={"center"}
-                                    variant={"subtitle2"}>{"Please enter the confirmation code"}</Typography>
+                            <Typography align={"center"}
+                                        variant={"subtitle2"}>{"Please enter the confirmation code"}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField placeholder="" fullWidth
-                                value={code}
-                                type="text"
-                                required
-                                onChange={(event) => setCode(event.target.value)}/>
+                                       value={code}
+                                       type="text"
+                                       required
+                                       onChange={(event) => setCode(event.target.value)}/>
                         </Grid>
                     </>
                 }
@@ -362,8 +398,8 @@ function PhoneLoginForm({
                     }}>
 
                         {authDelegate.authLoading &&
-                        <CircularProgress sx={{ p: 1 }} size={16}
-                                        thickness={8}/>
+                            <CircularProgress sx={{ p: 1 }} size={16}
+                                              thickness={8}/>
                         }
 
                         <Button type="submit">
@@ -488,7 +524,7 @@ function LoginForm({
                 </Grid>
 
                 <Grid item xs={12}>
-                    {availableProviders && buildOauthLoginButtons(authDelegate, availableProviders, mode)}
+                    {availableProviders && buildOauthLoginButtons(authDelegate, availableProviders, mode, false)}
                 </Grid>
             </Grid>
         );
@@ -565,34 +601,40 @@ function LoginForm({
 
 }
 
-function buildOauthLoginButtons(authDelegate: FirebaseAuthDelegate, providers: string[], mode: "light" | "dark") {
+function buildOauthLoginButtons(authDelegate: FirebaseAuthDelegate, providers: string[], mode: "light" | "dark", disabled: boolean) {
     return <>
         {providers.includes("google.com") && <LoginButton
+            disabled={disabled}
             text={"Sign in with Google"}
             icon={googleIcon(mode)}
             onClick={authDelegate.googleLogin}/>}
 
         {providers.includes("microsoft.com") && <LoginButton
+            disabled={disabled}
             text={"Sign in with Microsoft"}
             icon={microsoftIcon(mode)}
             onClick={authDelegate.microsoftLogin}/>}
 
         {providers.includes("apple.com") && <LoginButton
+            disabled={disabled}
             text={"Sign in with Apple"}
             icon={appleIcon(mode)}
             onClick={authDelegate.appleLogin}/>}
 
         {providers.includes("github.com") && <LoginButton
+            disabled={disabled}
             text={"Sign in with Github"}
             icon={githubIcon(mode)}
             onClick={authDelegate.githubLogin}/>}
 
         {providers.includes("facebook.com") && <LoginButton
+            disabled={disabled}
             text={"Sign in with Facebook"}
             icon={facebookIcon(mode)}
             onClick={authDelegate.facebookLogin}/>}
 
         {providers.includes("twitter.com") && <LoginButton
+            disabled={disabled}
             text={"Sign in with Twitter"}
             icon={twitterIcon(mode)}
             onClick={authDelegate.twitterLogin}/>}

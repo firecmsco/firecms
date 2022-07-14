@@ -166,21 +166,36 @@ need to include the id in the new object as well
 - `skipLoginButtonEnabled` renamed to `allowSkipLogin` in `FirebaseLoginViewProps`
 ```tsx
 buildProperty(({ values }) => ({
-    title: "Status",
-    dataType: "string",
-    enumValues: {
-        published: {
-            id: "published", // new compulsory field
-            label: "Published",
-            disabled: !values.header_image,
-        },
-        draft: "Draft"
-    }
+  title: "Status",
+  dataType: "string",
+  enumValues: {
+    published: {
+      id: "published", // new compulsory field
+      label: "Published",
+      disabled: !values.header_image,
+    },
+    draft: "Draft"
+  }
 }))
 ```
 
+- `LoginViewProps` has been removed by `LoginView` in `FirebaseCMSAppProps`. If
+  you were overriding the `LoginViewProps` before, you can now simply pass a
+  component that wraps `FirebaseLoginView`. This allows you to keep control of
+  the login view and add additional state if you need it. The simplest component
+  you would pass to `LoginView` looks like:
+
+```tsx
+import { FirebaseLoginView, FirebaseLoginViewProps } from "@camberi/firecms";
+
+export function CustomLoginView(props: FirebaseLoginViewProps) {
+  return <FirebaseLoginView {...props}/>;
+}
+```
+
 ### Style changes
-One of the fonts used by FireCMS has changed and you need to update the imports
+
+One of the fonts used by FireCMS has changed, and you need to update the imports
 to reflect it:
 
 Before in V1:

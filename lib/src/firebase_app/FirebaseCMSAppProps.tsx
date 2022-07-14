@@ -153,7 +153,8 @@ export interface FirebaseCMSAppProps {
     /**
      * Additional props passed to the login view. You can use this props
      * to disable registration in `password` mode, or to set up an additional
-     * message.
+     * message. Also, to add additional views to the login screen or disable
+     * the buttons.
      */
-    LoginViewProps?: Partial<FirebaseLoginViewProps>;
+    LoginView?: React.ComponentType<FirebaseLoginViewProps>;
 }

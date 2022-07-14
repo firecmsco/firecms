@@ -153,14 +153,12 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     }
                 })
                 .catch((e) => {
-                    console.error(e);
                     setError(e);
                 });
         } else {
             validation
                 .validate(internalValue)
                 .catch((e) => {
-                    console.error(e);
                     setError(e);
                 });
         }

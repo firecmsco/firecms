@@ -64,7 +64,7 @@ export const VirtualTableHeaderRow = ({
     }, [handleOnMouseMove, handleOnMouseUp]);
 
     useEffect(() => {
-        if (isResizing) {
+        if (isResizing >= 0) {
             attachResizeListeners();
         } else {
             removeResizingListeners();

@@ -69,7 +69,7 @@ export function FirebaseCMSApp({
                                    HomePage,
                                    basePath,
                                    baseCollectionPath,
-                                   LoginViewProps
+                                   LoginView
                                }: FirebaseCMSAppProps) {
 
     const {
@@ -166,15 +166,14 @@ export function FirebaseCMSApp({
                     if (loading) {
                         component = <CircularProgressCenter/>;
                     } else if (!context.authController.canAccessMainView) {
+                        const LoginViewUsed = LoginView ?? FirebaseLoginView;
                         component = (
-                            <FirebaseLoginView
+                            <LoginViewUsed
                                 logo={logo}
                                 allowSkipLogin={allowSkipLogin}
                                 signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
                                 firebaseApp={firebaseApp}
-                                authDelegate={authDelegate}
-                                {...LoginViewProps}
-                                />
+                                authDelegate={authDelegate}/>
                         );
                     } else {
                         component = (

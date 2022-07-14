@@ -39,7 +39,8 @@ export function useDraggable({
     };
 
     const onMouseMove = (event: any) => {
-        console.log(event);
+        if (event.target.localName === "input")
+            return;
         onMove(
             event.screenX - relX,
             event.screenY - relY
