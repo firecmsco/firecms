@@ -5,8 +5,8 @@ sidebar_label: Introduction
 slug: /
 ---
 
-<video width="600" height="400" autoplay>
-  <source src="https://firecms.co/img/dark_mode.mp4" type="video/mp4"/>
+<video class="intro_video" loop autoPlay muted>
+  <source src="/img/dark_mode.mp4" type="video/mp4"/>
 </video>
 
 FireCMS is an **open source headless CMS and admin panel** built by developers
@@ -26,16 +26,15 @@ easy to create your custom form fields, or your complete views.
 There are two ways to build top level views in FireCMS:
 
 - By creating mapping configurations for **collections** (to datasource
-  collections, such as Firestore collections)
-  and **schemas** (to datasource entities, such as Firestore documents).
+  collections, such as Firestore collections, with your schema).
   The best way to get a grasp of how
-  this works is checking the [Quickstart](quickstart.md),
-  [Collections](collections/collections.md) and [Entity schema](entities/entity_schemas.md)
+  this works is checking the [Quickstart](quickstart.mdx) and
+  [Collections](collections/collections.md)
   documentation.
 - Create **custom views** that sit in the main level of your navigation tree. In
   this case you can build your custom React component and make use of the
   internal components of the CMS as well as the provided hooks.
-  Check [Custom top level views](custom_top_level_views.md) for more details
+  Check [Custom top level views](navigation/custom_top_level_views.mdx) for more details
 
 
 :::note Custom backend
@@ -43,6 +42,36 @@ FireCMS was built with Firebase/Firestore as the default backend, but nothing
 stops you from implementing your own `DataSource`, `AuthController` and
 `StorageSource` and override the default implementations.
 :::
+
+FireCMS works as a complete app that is in charge of creating the views that
+you define based on your collections and entity schemas. It handles
+navigation for you as well as authentication and login.
+
+However, there is a lot of room to customization, including [custom top level views](navigation/custom_top_level_views.mdx),
+[custom schema views](properties/custom_schema_views.md), and [custom fields](properties/custom_fields.md)
+for your entity properties, in case the basic use cases we include don't suit your needs.
+
+In the simplest case, you will want to create some properties, include them
+in an entity collection, include it in a collection and include that in a CMS
+instance.
+
+## FirebaseCMSApp
+
+The entry point for setting up a FireCMS app based on Firebase is the `FirebaseCMSApp`.
+This component is in charge of building a full FireCMS instance, using Firebase Auth,
+Firestore, and Firebase Storage as backend services.
+
+Internally it will create a `FireCMS` which holds the main state and
+logic of the app, and create the app scaffold and routes.
+
+:::note
+It is also possible to use FireCMS by using lower level components and including
+`FireCMS` in your code, even without using Firebase.
+More details in the [Custom CMSApp](custom_cms_app.md) section
+:::
+
+You can find an example of a basic `FirebaseCMSApp` implementation in the
+[quickstart section](quickstart.mdx)
 
 ### Core technologies
 
@@ -107,7 +136,7 @@ if you are using Firestore), as well as **filtering and sorting** and
 
 ### ✨ Powerful forms
 
-![fields](../static/img/post_editing.png)
+![fields](/img/post_editing.png)
 
 When editing an entity, FireCMS offers a nested system of side dialogs that
 allow to navigate through **subcollections** and access custom views (such as a

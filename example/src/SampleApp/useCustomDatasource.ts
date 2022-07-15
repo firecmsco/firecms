@@ -1,10 +1,21 @@
-import { useFirestoreDataSource, DataSource,FetchCollectionProps, FetchEntityProps, Entity, SaveEntityProps, DeleteEntityProps, Property } from "@camberi/firecms";
+import {
+    DataSource,
+    DeleteEntityProps,
+    Entity,
+    FetchCollectionProps,
+    FetchEntityProps,
+    ResolvedProperty,
+    SaveEntityProps,
+    useFirestoreDataSource
+} from "@camberi/firecms";
 import { FirebaseApp } from "firebase/app";
 
-type CustomDataSourceProps = { firebaseApp?: FirebaseApp; };
+type CustomDataSourceProps = { firebaseApp?: FirebaseApp };
 
 export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps):DataSource {
-    const firestoreDataSource = useFirestoreDataSource({ firebaseApp });
+    const firestoreDataSource = useFirestoreDataSource({
+        firebaseApp,
+    });
 
     return {
         fetchCollection<M>(props: FetchCollectionProps<M>): Promise<Entity<M>[]>{
@@ -13,7 +24,7 @@ export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps):Data
             }
             return firestoreDataSource.fetchCollection(props);
         },
-        fetchEntity<M>(props: FetchEntityProps<M>): Promise<Entity<M>>{
+        fetchEntity<M>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined>{
             if(props.path === "your_path_custom"){
                 // make your custom http call and return your Entities
             }
@@ -28,8 +39,11 @@ export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps):Data
         deleteEntity<M>(props: DeleteEntityProps<M>): Promise<void>{
             return firestoreDataSource.deleteEntity(props);
         },
-        checkUniqueField(path: string, name: string, value: any, property: Property, entityId?: string): Promise<boolean>{
+        checkUniqueField(path: string, name: string, value: any, property: ResolvedProperty, entityId?: string): Promise<boolean>{
             return firestoreDataSource.checkUniqueField(path, name, value, property, entityId);
+        },
+        generateEntityId(path:string){
+            return firestoreDataSource.generateEntityId(path,);
         }
     }
 }

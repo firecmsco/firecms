@@ -3,27 +3,27 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "@camberi/firecms": "link:..",
-        "@emotion/react": "link:../node_modules/@emotion/react",
-        "@emotion/styled": "link:../node_modules/@emotion/styled",
-        "@mui/icons-material": "link:../node_modules/@mui/icons-material",
-        "@mui/lab": "link:../node_modules/@mui/lab",
-        "@mui/material": "link:../node_modules/@mui/material",
-        "@mui/styles": "link:../node_modules/@mui/styles",
-        "algoliasearch": "link:../node_modules/algoliasearch",
-        "firebase": "link:../node_modules/firebase",
-        "react": "link:../node_modules/react",
-        "react-dom": "link:../node_modules/react-dom",
-        "react-router": "link:../node_modules/react-router",
-        "react-router-dom": "link:../node_modules/react-router-dom",
-        "react-scripts": "link:../node_modules/react-scripts"
+        "@camberi/firecms": "2.0.0-alpha.1",
+        "@emotion/react": "^11.9.0",
+        "@emotion/styled": "^11.8.1",
+        "@mui/styles": "^5.0.0",
+        "@mui/icons-material": "^5",
+        "@mui/lab": "^5.0.0-alpha.81",
+        "@mui/material": "^5.5.0",
+        "algoliasearch": "^4.13.0",
+        "firebase": "^9.8.1",
+        "react": "^18.1.0",
+        "react-dom": "^18.1.0",
+        "react-router": "^6.3.0",
+        "react-router-dom": "^6.3.0",
+        "react-scripts": "^5.0.1"
     },
     "scripts": {
         "dev": "vite",
-        "build:vite": "vite build && tsc",
+        "build": "vite build && tsc",
+        "build:react": "react-scripts build --profile",
         "preview": "vite build && vite preview",
         "start": "react-scripts start",
-        "build": "react-scripts build",
         "test": "react-scripts test",
         "eject": "react-scripts eject",
         "deploy": "vite build && firebase deploy --only hosting"
@@ -47,12 +47,11 @@
         ]
     },
     "devDependencies": {
-        "@types/react": "link:../node_modules/@types/react",
-        "@types/react-dom": "link:../node_modules/@types/react-dom",
-        "@vitejs/plugin-react": "link:../node_modules/@vitejs/plugin-react",
-        "eslint-config-react-app": "link:../node_modules/eslint-config-react-app",
-        "typescript": "link:../node_modules/typescript",
-        "vite": "link:../node_modules/vite",
+        "@types/react": "^18.0.9",
+        "@types/react-dom": "^18.0.3",
+        "@vitejs/plugin-react": "^1.3.2",
+        "typescript": "^4.6.4",
+        "vite": "^2.9.8",
         "vite-plugin-fonts": "^0.4.0"
     }
 }

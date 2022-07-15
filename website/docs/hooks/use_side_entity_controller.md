@@ -49,7 +49,7 @@ export function ExampleCMSView() {
 
     // You don't need to provide a schema if the collection path is mapped in
     // the main navigation or you have set a `schemaResolver`
-    const customProductSchema = buildSchema({
+    const customproductCollection = buildCollection({
         name: "Product",
         properties: {
             name: {
@@ -65,7 +65,7 @@ export function ExampleCMSView() {
             onClick={() => sideEntityController.open({
                 entityId: "B003WT1622",
                 path: "/products",
-                schema: customProductSchema
+                collection: customproductCollection
             })}
             color="primary">
             Open entity with custom schema
@@ -86,7 +86,7 @@ can specify a custom `schema` (including callbacks and custom views),
 `permissions` and `subcollections`
 
 ```tsx
-import { buildSchema, SchemaOverrideHandler } from "@camberi/firecms";
+import { buildCollection, SchemaOverrideHandler } from "@camberi/firecms";
 
 const customSchemaOverrideHandler: SchemaOverrideHandler = ({
                                                   entityId,
@@ -97,7 +97,7 @@ const customSchemaOverrideHandler: SchemaOverrideHandler = ({
 }) => {
 
     if (entityId === "B0017TNJWY" && path === "products") {
-        const customProductSchema = buildSchema({
+        const customproductCollection = buildCollection({
             name: "Custom product",
             properties: {
                 name: {
@@ -110,7 +110,7 @@ const customSchemaOverrideHandler: SchemaOverrideHandler = ({
         });
 
         return {
-            schema: customProductSchema,
+            collection: customproductCollection,
             // permissions: ...,
             // subcollections: ...,
         };

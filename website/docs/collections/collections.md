@@ -4,26 +4,42 @@ title: Collections
 sidebar_label: Collections
 ---
 
-In FireCMS, **collections** represent groups of entities. Collections need to be
-associated with an entity schema. You can find collections
-at the **top level** of the navigation tree (the entries displayed in the home
-page and the navigation drawer), or as **subcollections**
+In FireCMS, **collections** represent groups of entities.
 
-Once you have defined at least one entity schema, you can include it in a
-**collection**. 
+You can find collections at the **top level** of the navigation tree (the
+entries displayed in the home page and the navigation drawer), or as **
+subcollections**
 
-You can find collection views as the first level of navigation in
-the main menu, or as subcollections inside other collections, following the
-Firestore data schema.
+The `name` and `properties` you define for your entity collection, will be used
+to generate the fields in the spreadsheet like collection tables, and the fields
+in the generated forms.
+
+:::note 
+FireCMS provides around 15 different fields (such as text fields,
+selects, and complex ones like reference or sortable array fields). If your use
+case is not covered by one of the provided fields, you can create your own
+[custom field](../properties/custom_fields.md).
+:::
+
+You can find collection views as the first level of navigation in the main menu,
+or as subcollections inside other collections.
 
 Check the full API reference
 in [Entity collections](../api/interfaces/entitycollection)
 
 * `name` The plural name of the view. E.g. 'products'.
 
-* `path` Relative Firestore path of this view to its parent. If this
-  view is in the root the path, it is equal to the absolute one. This path also
-  determines the URL in FireCMS.
+* `path` Relative Firestore path of this view to its parent. If this view is in
+  the root the path, it is equal to the absolute one. This path also determines
+  the URL in FireCMS.
+
+* `properties` Object defining the properties for the entity schema.
+
+* `customId` If this prop is not set, the ID of the document will be created by
+  the datasource. You can set the value to 'true' to force the users to choose
+  the ID. You can set the value to `true` to allow the users to choose the
+  ID. You can also pass a set
+  of values (as an `EnumValues` object) to allow users to pick from those only.
 
 * `subcollections` Following the Firestore document and collection schema, you
   can add subcollections to your entity in the same way you define the root
@@ -35,13 +51,6 @@ in [Entity collections](../api/interfaces/entitycollection)
   navigation view. If you set this value in a subcollection, it has no effect.
 
 * `description` Optional description of this view. You can use Markdown.
-
-* `properties` Properties displayed in this collection. If this prop is not
-  set, every property is displayed.
-
-* `excludedProperties` Properties that should **not** get displayed in the
-  collection view. All the other properties from the entity are displayed. It
-  has no effect if the `properties` value is set.
 
 * `filterCombinations` If you need to filter/sort by multiple properties in this
   collection, you can define the supported filter combinations here.
@@ -67,8 +76,8 @@ in [Entity collections](../api/interfaces/entitycollection)
 * `additionalColumns` You can add additional columns to the collection view by
   implementing an additional column delegate.
 
-* `textSearchEnabled` Flag to indicate if a search bar should be displayed on top of
-  the collection table.
+* `textSearchEnabled` Flag to indicate if a search bar should be displayed on
+  top of the collection table. Please note that you need to add
 
 * `permissions` You can specify an object with boolean permissions with the
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions
@@ -76,40 +85,117 @@ in [Entity collections](../api/interfaces/entitycollection)
   to customize the permissions based on user or entity.
 
 * `inlineEditing` Can the elements in this collection be edited inline in the
-  collection view. If this flag is set to false but `permissions.edit` is `true`
-  , entities can still be edited in the side panel.
+  collection view. If this flag is set to false but `permissions.edit` is `true`,  
+  entities can still be edited in the side panel.
 
 * `exportable` Should the data in this collection view include an export button.
   You can also set an [`ExportConfig`](../api/interfaces/exportconfig)
   configuration object to customize the export and add additional values.
   Defaults to `true`
 
-:::note
-In the examples you might see references to the type `Product`
-(which defines the model) or the schema `productSchema`, as declared in
-the [entity schemas section](../entities/entity_schemas.md)
-:::
 
 ### Sample collection
+:::tip
+You don't need to use `buildCollection` or `buildProperty` for building 
+the configuration. They are identity functions that will help you detect
+type and configuration errors
+:::
 
 ```tsx
-import { buildCollection } from "@camberi/firecms";
+import { buildCollection, buildProperty, EntityReference } from "@camberi/firecms";
+
+type Product = {
+  name: string;
+  main_image: string;
+  available: boolean;
+  price: number;
+  related_products: EntityReference[];
+  publisher: {
+    name: string;
+    external_id: string;
+  }
+}
 
 const productsCollection = buildCollection<Product>({
-    path: "products",
-    schema: productSchema,
-    name: "Products",
-    group: "Main",
-    description: "List of the products currently sold in our shop",
-    textSearchEnabled: true,
-    // additionalColumns: [productAdditionalColumn], // Example below
-    filterCombinations: [{ price: "desc", available: "desc" }],
-    permissions: ({ user, authController }) => ({
-        edit: true,
-        create: true,
-        delete: false
+  path: "products",
+  name: "Products",
+  group: "Main",
+  description: "List of the products currently sold in our shop",
+  textSearchEnabled: true,
+  properties: {
+    name: buildProperty({
+      dataType: "string",
+      title: "Name",
+      multiline: true
+      validation: { required: true }
     }),
-    excludedProperties: ["related_products"]
+    main_image: buildProperty({
+      dataType: "string",
+      title: "Image",
+      storage: {
+        mediaType: "image",
+        storagePath: "images",
+        acceptedFiles: ["image/*"],
+        metadata: {
+          cacheControl: "max-age=1000000"
+        }
+      },
+      description: "Upload field for images",
+      validation: {
+        required: true
+      }
+    }),
+    available: buildProperty({
+      dataType: "boolean",
+      title: "Available",
+      columnWidth: 100
+    }),
+    price: buildProperty(({ values }) => ({
+      dataType: "number",
+      title: "Price",
+      validation: {
+        requiredMessage: "You must set a price between 0 and 1000",
+        min: 0,
+        max: 1000
+      },
+      disabled: !values.available && {
+        clearOnDisabled: true,
+        disabledMessage: "You can only set the price on available items"
+      },
+      description: "Price with range validation"
+    })),
+    related_products: buildProperty({
+      dataType: "array",
+      title: "Related products",
+      description: "Reference to self",
+      of: {
+        dataType: "reference",
+        path: "products"
+      }
+    }),
+    publisher: buildProperty({
+      title: "Publisher",
+      description: "This is an example of a map property",
+      dataType: "map",
+      properties: {
+        name: {
+          title: "Name",
+          dataType: "string"
+        },
+        external_id: {
+          title: "External id",
+          dataType: "string"
+        }
+      }
+    })
+  },
+  // additionalColumns: [productAdditionalColumn], // Example below
+  filterCombinations: [{ price: "desc", available: "desc" }],
+  permissions: ({ user, authController }) => ({
+    edit: true,
+    create: true,
+    delete: false
+  })
 });
 
 ```
@@ -135,7 +221,7 @@ property values.
 
 ```tsx
 import {
-    buildSchema,
+    buildCollection,
     buildCollection,
     AdditionalColumnDelegate
 } from "@camberi/firecms";
@@ -154,13 +240,10 @@ export const fullNameAdditionalColumn: AdditionalColumnDelegate<User> = {
 
 const usersCollection = buildCollection<User>({
     path: "users",
-    schema: buildSchema<User>({
-        name: "User",
-        properties: {
-            name: { dataType: "string", title: "Name" }
-        }
-    }),
-    name: "Users",
+    name: "User",
+    properties: {
+      name: { dataType: "string", title: "Name" }
+    },
     additionalColumns: [
         fullNameAdditionalColumn
     ]
@@ -184,7 +267,7 @@ export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
             context.dataSource.fetchEntity({
               path: entity.path,
               entityId: entity.id,
-              schema: localeSchema
+              collection: localeSchema
             }).then((entity) => entity.values.name)
           }/>
 };
@@ -224,14 +307,16 @@ In order to do so, just pass the indexes configuration to your collection:
 import { buildCollection } from "@camberi/firecms";
 
 const productsCollection = buildCollection<Product>({
-    path: "products",
-    schema: productSchema,
-    name: "Products",
-    indexes: [
-        {
-            price: "asc",
-            available: "desc"
-        }
-    ]
+  path: "products",
+  name: "Product",
+  properties: { 
+      // ...
+  },
+  indexes: [
+    {
+      price: "asc",
+      available: "desc"
+    }
+  ]
 });
 ```

@@ -5,6 +5,7 @@ admin.initializeApp();
 import { DocumentSnapshot } from "firebase-functions/lib/providers/firestore";
 import { deleteInAlgolia, indexInAlgolia } from "./algolia";
 import { importDatabaseBackup } from "./backup";
+import { app } from "./api";
 
 export { setProductAvailableLocales, onDeleteSubcollections } from "./products";
 
@@ -47,9 +48,12 @@ export const onUsersUpdateIndexAlgolia = functions
 export const scheduledFirestoreImport = functions
     .region("europe-west3")
     .pubsub
-    .schedule("every 24 hours")
+    .schedule("every 1 hours")
     .onRun((context) => {
         return importDatabaseBackup();
     });
 
-
+export const api = functions
+    .region("europe-west3")
+    .https
+    .onRequest(app);

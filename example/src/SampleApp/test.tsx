@@ -1,9 +1,6 @@
-import React from "react";
-
 import {
-    buildEntityCallbacks,
-    buildSchema,
     buildCollection,
+    buildEntityCallbacks,
     EntityOnDeleteProps,
     EntityOnSaveProps
 } from "@camberi/firecms";
@@ -13,27 +10,9 @@ type Product = {
     uppercase_name: string;
 }
 
-const productSchema = buildSchema<Product>({
-
-    name: "Product",
-    properties: {
-        name: {
-            title: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        uppercase_name: {
-            title: "Uppercase Name",
-            dataType: "string",
-            disabled: true,
-            description: "This field gets updated with a preSave callback"
-        }
-    }
-});
-
-const productCallbacks = buildEntityCallbacks<Product>({
+const productCallbacks = buildEntityCallbacks({
     onPreSave: ({
-                    schema,
+                    collection,
                     path,
                     entityId,
                     values,
@@ -52,7 +31,7 @@ const productCallbacks = buildEntityCallbacks<Product>({
     },
 
     onPreDelete: ({
-                      schema,
+                      collection,
                       path,
                       entityId,
                       entity,
@@ -65,12 +44,25 @@ const productCallbacks = buildEntityCallbacks<Product>({
 
     onDelete: (props: EntityOnDeleteProps<Product>) => {
         console.log("onDelete", props);
-    }
+    },
 });
 
-const productsCollection = buildCollection<Product>({
-    name: "Products",
+
+const productCollection = buildCollection<Product>({
+    name: "Product",
     path: "products",
-    schema: productSchema,
+    properties: {
+        name: {
+            name: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        uppercase_name: {
+            name: "Uppercase Name",
+            dataType: "string",
+            disabled: true,
+            description: "This field gets updated with a preSave callback"
+        }
+    },
     callbacks: productCallbacks
 });

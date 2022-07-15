@@ -8,7 +8,7 @@
         "build": "yarn run copyChangelog && TYPEDOC_WATCH=false docusaurus build",
         "copyChangelog": "echo '---' > ./docs/CHANGELOG.md && echo 'id: changelog' >> ./docs/CHANGELOG.md && echo 'title: Changelog' >> ./docs/CHANGELOG.md && echo '---' >> ./docs/CHANGELOG.md && cat ../CHANGELOG.md >> ./docs/CHANGELOG.md ",
         "swizzle": "docusaurus swizzle --danger",
-        "deploy": "docusaurus deploy",
+        "deploy": "yarn build && firebase deploy --only hosting",
         "serve": "docusaurus serve",
         "clear": "docusaurus clear"
     },
@@ -16,24 +16,24 @@
         "node": ">=14"
     },
     "dependencies": {
-        "@docusaurus/core": "^2.0.0-beta.20",
-        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.20",
-        "@docusaurus/plugin-sitemap": "^2.0.0-beta.20",
-        "@docusaurus/preset-classic": "^2.0.0-beta.20",
+        "@docusaurus/core": "^2.0.0-beta.21",
+        "@docusaurus/plugin-google-gtag": "^2.0.0-beta.21",
+        "@docusaurus/plugin-sitemap": "^2.0.0-beta.21",
+        "@docusaurus/preset-classic": "^2.0.0-beta.21",
         "aos": "^2.3.4",
         "autoprefixer": "^10.4.7",
         "clsx": "^1.1.1",
         "docusaurus-plugin-sass": "^0.2.2",
-        "docusaurus-plugin-typedoc": "^0.17.4",
-        "postprocessing": "^6.26.4",
+        "docusaurus-plugin-typedoc": "^0.17.3",
+        "postprocessing": "^6.22.3",
+        "raw-loader": "^4.0.2",
         "react": "^18.1.0",
         "react-dom": "^18.1.0",
-        "react-syntax-highlighter": "^15.5.0",
-        "react-transition-group": "^4.4.2",
-        "sass": "^1.51.0",
+        "react-syntax-highlighter": "^15.4.4",
+        "react-transition-group": "^4.4.1",
+        "sass": "^1.49.9",
         "tailwindcss": "^3.0.24",
-        "three": "^0.140.2",
-        "ts-easing": "^0.2.0"
+        "three": "^0.137.0"
     },
     "browserslist": {
         "production": [
@@ -48,7 +48,7 @@
         ]
     },
     "devDependencies": {
-        "@docusaurus/module-type-aliases": "^2.0.0-beta.20",
+        "@docusaurus/module-type-aliases": "^2.0.0-beta.21",
         "@tsconfig/docusaurus": "^1.0.5",
         "@types/react": "^18.0.9",
         "@types/react-helmet": "^6.1.5",

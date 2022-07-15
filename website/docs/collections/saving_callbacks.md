@@ -20,10 +20,9 @@ containing a `string` and an error snackbar will be displayed.
 :::
 
 ```tsx
-import React from "react";
-
 import {
-    buildSchema,
+    buildCollection,
+    buildEntityCallbacks,
     EntityOnDeleteProps,
     EntityOnSaveProps
 } from "@camberi/firecms";
@@ -33,27 +32,9 @@ type Product = {
     uppercase_name: string;
 }
 
-const productSchema = buildSchema<Product>({
-
-    name: "Product",
-    properties: {
-        name: {
-            title: "Name",
-            validation: { required: true },
-            dataType: "string"
-        },
-        uppercase_name: {
-            title: "Uppercase Name",
-            dataType: "string",
-            disabled: true,
-            description: "This field gets updated with a preSave callback"
-        }
-    }
-});
-
 const productCallbacks = buildEntityCallbacks({
     onPreSave: ({
-                    schema,
+                    collection,
                     path,
                     entityId,
                     values,
@@ -72,7 +53,7 @@ const productCallbacks = buildEntityCallbacks({
     },
 
     onPreDelete: ({
-                      schema,
+                      collection,
                       path,
                       entityId,
                       entity,
@@ -87,11 +68,31 @@ const productCallbacks = buildEntityCallbacks({
         console.log("onDelete", props);
     },
 });
+
+
+const productCollection = buildCollection<Product>({
+    name: "Product",
+    path: "products",
+    properties: {
+        name: {
+            name: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        uppercase_name: {
+            name: "Uppercase Name",
+            dataType: "string",
+            disabled: true,
+            description: "This field gets updated with a preSave callback"
+        }
+    },
+    callbacks: productCallbacks
+});
 ```
 
 #### EntityOnSaveProps
 
-* `schema`: EntitySchema Resolved schema of the entity
+* `collection`: EntityCollection Resolved collection of the entity
 
 * `path`: string Full path where this entity is being saved
 
@@ -105,7 +106,7 @@ const productCallbacks = buildEntityCallbacks({
 
 #### EntityOnDeleteProps
 
-* `schema`: EntitySchema Resolved schema of the entity
+* `collection`: EntityCollection Resolved collection of the entity
 
 * `path`: string Full path where this entity is being saved
 

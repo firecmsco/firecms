@@ -6,12 +6,12 @@ export function SampleExtraActions({ selectionController }: {
     selectionController: SelectionController
 }) {
 
-    const snackbarContext = useSnackbarController();
+    const snackbarController = useSnackbarController();
     const { selectedEntities } = selectionController;
 
     const onClick = (event: React.MouseEvent) => {
         const count = selectedEntities ? selectedEntities.length : 0;
-        snackbarContext.open({
+        snackbarController.open({
             type: "success",
             message: `User defined code here! ${count} products selected`
         });

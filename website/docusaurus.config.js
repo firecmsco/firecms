@@ -1,5 +1,5 @@
 module.exports = {
-    title: 'FireCMS - Firestore/Firebase headless CMS',
+    title: 'FireCMS',
     tagline: 'Awesome headless CMS based Firestore/Firebase and React, and completely open-source',
     url: 'https://firecms.co',
     baseUrl: '/',
@@ -15,17 +15,9 @@ module.exports = {
             'docusaurus-plugin-typedoc',
             {
                 entryPoints: [
-                    '../src/index.ts',
-                    // '../src/core/index.tsx',
-                    // '../src/models/index.ts',
-                    // '../src/collection/index.tsx',
-                    // '../src/contexts/index.tsx',
-                    // '../src/form/index.tsx',
-                    // '../src/preview/index.ts',
-                    // '../src/side_dialog/index.ts',
-                    // '../src/hooks/index.tsx',
+                    '../lib/src/index.ts',
                 ],
-                tsconfig: '../tsconfig.json',
+                tsconfig: '../lib/tsconfig.json',
                 watch: process.env.TYPEDOC_WATCH,
             }
         ]
@@ -52,21 +44,26 @@ module.exports = {
             },
             items: [
                 {
-                    to: 'docs',
-                    activeBaseRegex: 'docs(/)?$',
+                    type: 'docSidebar',
+                    sidebarId: 'docsSidebar',
                     label: 'Docs',
                     position: 'left'
                 },
                 {
-                    to: 'docs/api',
-                    // activeBasePath: 'api',
+                    type: 'docSidebar',
+                    position: 'left',
+                    sidebarId: 'apiSidebar',
                     label: 'API',
-                    position: 'left'
                 },
                 {
                     to: 'blog',
                     label: 'Blog',
                     position: 'left'
+                },
+                {
+                    type: 'docsVersionDropdown',
+                    position: 'right',
+                    dropdownActiveClassDisabled: true,
                 },
                 {
                     to: 'https://demo.firecms.co',
@@ -81,7 +78,7 @@ module.exports = {
                     className: 'mr-2 header-github-link',
                     'aria-label': 'GitHub repository',
                     position: 'right'
-                }
+                },
             ]
         },
         footer: {
@@ -101,16 +98,24 @@ module.exports = {
                     title: 'Links',
                     items: [
                         {
-                            label: 'Docs',
-                            to: 'docs/'
-                        },
-                        {
                             label: 'Demo',
                             to: 'https://demo.firecms.co'
                         },
                         {
                             label: 'Camberi',
                             to: 'https://camberi.com'
+                        },
+                        {
+                            label: 'Privacy policy',
+                            to: '/privacy_policy'
+                        },
+                        {
+                            label: 'Terms and conditions',
+                            to: '/terms_conditions'
+                        },
+                        {
+                            label: 'Cookies policy',
+                            to: '/cookies_policy'
                         }
                     ]
                 },
@@ -155,13 +160,22 @@ module.exports = {
             '@docusaurus/preset-classic',
             {
                 docs: {
-                    sidebarPath: require.resolve('./sidebars.js')
+                    sidebarPath: require.resolve('./sidebars.js'),
+                    lastVersion: "1.0.0",
+                    editUrl: "https://github.com/Camberi/firecms/tree/website/website",
+                    versions: {
+                        "1.0.0": {
+                            label: '1.0.0',
+                        },
+                        current: {
+                            label: '2.0.0-alpha',
+                            path: '2.0.0',
+                            banner: "unreleased"
+                        }
+                    },
                 },
-                // blog: false,
                 blog: {
-                    showReadingTime: true,
-                    // editUrl:
-                    //     'https://github.com/facebook/docusaurus/edit/master/website/blog/'
+                    showReadingTime: true
                 },
                 theme: {
                     customCss: [

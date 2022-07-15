@@ -1,0 +1,28 @@
+{
+  "name": "schema-inference",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "prepare": "tsc",
+    "build": "tsc",
+    "start": "ts-node src/index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^12.16.1",
+    "ts-node": "^8.10.2",
+    "typescript": "^4.1.3"
+  },
+  "files": [
+    "build"
+  ],
+  "dependencies": {
+    "@camberi/firecms": "2.0.0-alpha.1",
+    "firebase": "^9.0.0",
+    "firebase-admin": "^9.9.0"
+  }
+}

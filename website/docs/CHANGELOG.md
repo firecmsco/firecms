@@ -2,6 +2,74 @@
 id: changelog
 title: Changelog
 ---
+
+## [2.0.0-alpha1] - 2021-12-13
+
+### Collections
+Collections and entity schemas have been merged into one single concept.
+All the fields related to entity schemas have been moved to the collection level.
+We felt it was redundant and the distribution of logic between those 2 concepts 
+was a bit arbitrary.
+
+### Properties
+- All the configuration options that were located under the `config` prop of
+  `properties` have been moved to the property level:
+```typescript jsx
+buildProperty<string>({
+    dataType: "string",
+    title: "Currency",
+    config:{
+      enumValues: {
+        EUR: "Euros",
+        DOL: "Dollars"
+      }
+    },
+    validation: {
+        required: true
+    }
+});
+```
+now becomes:
+```typescript jsx
+buildProperty<string>({
+    dataType: "string",
+    name: "Currency",
+    enumValues: {
+        EUR: "Euros",
+        DOL: "Dollars"
+    },
+    validation: {
+        required: true
+    }
+});
+```
+- The prop `title` in properties has been renamed to `name` for consistency with
+  schemas and collections naming
+- `PreviewComponent` has been renamed to `PropertyPreview`
+- `PreviewComponentProps` has been renamed to `PropertyPreviewProps`
+- Validation: The `email`validation prop in string properties is now placed
+  at the property level (not under `validation`)
+- `storageMeta`prop in string properties is now called `storage`
+- `name` in `FieldProps` which refers to a property key, is now called `propertyKey`
+- `name` in `PreviewComponent` which refers to a property key, is now called `propertyKey`
+- `name` in `CMSFormFieldProps` which refers to a property key, is now
+  called `propertyKey`
+- Removed `mediaType` in the storage configuration of string properties. It is
+  now inferred automatically.
+- `CollectionTable` is now renamed to `EntityCollectionTable`.
+- `TimestampProperty` is now renamed to `DateProperty` in order to reflect
+  better the alignment with JS types instead of Firebase ones. The discriminator
+  when declaring date properties now is `date` instead of `timestamp` 
+- `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where 
+  you pass a React Component directly: `Actions`
+- `toolbarActionsBuilder` in `CollectionTable` has been replaced by a prop where 
+  you pass a React Component directly: `Actions`
+
+### Custom properties and fields
+- The `buildPropertyField` utility function has been replaced by a component
+called `PropertyFieldBinding`. The props have not changed. 
+- `CMSFormFieldProps` have been renamed to `PropertyFieldBindingProps`
+
 ## [1.0.1] - 2022-06-02
 
 ### Changed
@@ -13,41 +81,41 @@ title: Changelog
 
 ### Changed
 
-- Fix for entity collections in read-only mode showing incorrect resolved 
-properties
+- Fix for entity collections in read-only mode showing incorrect resolved
+  properties
 - Fix for filter combinations bug
 
 ### Added
 - Enabled phone authentication
 - Added max size validation for file uploads
- 
+
 ## [1.0.0-rc.5] - 2022-04-11
 
 ### Changed
 
 - Fix for draggable bug in arrays with duplicated values.
 - Reversed icons in header tables. Also, now the initial sort option is "asc"
-as it is typical in most apps.
+  as it is typical in most apps.
 - Fix for cursor jumping to the end of an inline text field
- 
+
 ## [1.0.0-rc.4] - 2022-03-14
 
 ### Changed
 
 - Added `LoginViewProps` to `FirebaseCMSApp`. You can use it to customise
-the login flow, using the `disableSignupScreen` prop to prevent users from
-creating accounts in `password` mode. And to display a `NoUserComponent`
-when the user logging in `password` mode is not found 
+  the login flow, using the `disableSignupScreen` prop to prevent users from
+  creating accounts in `password` mode. And to display a `NoUserComponent`
+- when the user logging in `password` mode is not found
 - Fix for hidden CMS views bug.
 - Fix for array select filters
 - Fixed inline date popups
 - Fix for not editable tables not updating on data changes
 
-## [1.0.0-rc.3] - 2022-03-01
+## [1.0.0-rc.3] - 2022-02-28
 
 ### Changed
 
-- Fixed edge case of references in arrays not being resolved properly with 
+- Fixed edge case of references in arrays not being resolved properly with
   property builders. Thanks, Paul Aranzamendez!
 
 ## [1.0.0-rc.2] - 2022-02-08
@@ -57,7 +125,6 @@ when the user logging in `password` mode is not found
 - Fix for Portal import bug related to mui 5.4 version.
 - Allowing `optional` custom ids
 - Small cosmetic updates
-
 
 ## [1.0.0-rc.1] - 2022-01-23
 
@@ -71,14 +138,14 @@ when the user logging in `password` mode is not found
 ### Changed
 
 - Fix for array components losing focus
-- Added custom `regexMessage` for displaying when there is a string `regex` 
-validation error.
-- Property builders now include the `previousValues` prop, in case you need to 
-compare the updates with the original values (only in the form view and the
-popup view in the collection).
+- Added custom `regexMessage` for displaying when there is a string `regex`
+  validation error.
+- Property builders now include the `previousValues` prop, in case you need to
+  compare the updates with the original values (only in the form view and the
+  popup view in the collection).
 - Changed page not found error message.
 
- 
+
 ## [1.0.0-beta10] - 2022-01-11
 
 ### Changed

@@ -1,30 +1,28 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import "typeface-rubik";
-import "typeface-space-mono";
+import "@fontsource/ibm-plex-mono";
 
 import {
-    FirebaseAuthDelegate,
     Authenticator,
     buildCollection,
-    buildSchema,
     CircularProgressCenter,
     createCMSDefaultTheme,
+    FirebaseAuthDelegate,
     FirebaseLoginView,
     FireCMS,
-    NavigationBuilder,
-    NavigationBuilderProps,
     NavigationRoutes,
     Scaffold,
-    SideEntityDialogs,
-    useFirebaseAuthDelegate,
+    SideDialogs,
+    useBuildFirebaseAuthDelegate,
+    useBuildModeController,
     useFirebaseStorageSource,
     useFirestoreDataSource,
-    useInitialiseFirebase
+    useInitialiseFirebase,
 } from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
@@ -33,16 +31,22 @@ const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
 ];
 
-const productSchema = buildSchema({
-    name: "Product",
+const productsCollection = buildCollection({
+    path: "products",
+    permissions: ({ user }) => ({
+        edit: true,
+        create: true,
+        delete: true
+    }),
+    name: "Products",
     properties: {
         name: {
-            title: "Name",
+            name: "Name",
             validation: { required: true },
             dataType: "string"
         },
         price: {
-            title: "Price",
+            name: "Price",
             validation: {
                 required: true,
                 requiredMessage: "You must set a price between 0 and 1000",
@@ -53,16 +57,14 @@ const productSchema = buildSchema({
             dataType: "number"
         },
         status: {
-            title: "Status",
+            name: "Status",
             validation: { required: true },
             dataType: "string",
             description: "Should this product be visible in the website",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            config: {
-                enumValues: {
-                    private: "Private",
-                    public: "Public"
-                }
+            enumValues: {
+                private: "Private",
+                public: "Public"
             }
         }
     }
@@ -77,21 +79,6 @@ export function CustomCMSApp() {
 
     const signInOptions = DEFAULT_SIGN_IN_OPTIONS;
 
-    const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
-        collections: [
-            buildCollection({
-                path: "products",
-                schema: productSchema,
-                name: "Products",
-                permissions: ({ user }) => ({
-                    edit: true,
-                    create: true,
-                    delete: true
-                })
-            })
-        ]
-    });
-
     const myAuthenticator: Authenticator = ({ user }) => {
         console.log("Allowing access to", user?.email);
         return true;
@@ -104,16 +91,20 @@ export function CustomCMSApp() {
         firebaseConfigError
     } = useInitialiseFirebase({ firebaseConfig });
 
-    const authDelegate: FirebaseAuthDelegate = useFirebaseAuthDelegate({
+    const authDelegate: FirebaseAuthDelegate = useBuildFirebaseAuthDelegate({
         firebaseApp,
         signInOptions
     });
 
     const dataSource = useFirestoreDataSource({
-        firebaseApp: firebaseApp
+        firebaseApp,
         // You can add your `FirestoreTextSearchController` here
     });
+
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
+
+    const modeController = useBuildModeController();
+    const theme = useMemo(() => createCMSDefaultTheme({ mode: modeController.mode }), []);
 
     if (configError) {
         return <div> {configError} </div>;
@@ -134,16 +125,15 @@ export function CustomCMSApp() {
 
     return (
         <Router>
-            <FireCMS navigation={navigation}
-                     authDelegate={authDelegate}
+            <FireCMS authDelegate={authDelegate}
+                     collections={[productsCollection]}
                      authentication={myAuthenticator}
+                     modeController={modeController}
                      dataSource={dataSource}
                      storageSource={storageSource}
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
             >
-                {({ context, mode, loading }) => {
-
-                    const theme = createCMSDefaultTheme({ mode });
+                {({ context, loading }) => {
 
                     let component;
                     if (loading) {
@@ -160,7 +150,7 @@ export function CustomCMSApp() {
                         component = (
                             <Scaffold name={"My Online Shop"}>
                                 <NavigationRoutes/>
-                                <SideEntityDialogs/>
+                                <SideDialogs/>
                             </Scaffold>
                         );
                     }

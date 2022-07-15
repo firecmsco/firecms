@@ -5,7 +5,6 @@ import {
     performAlgoliaTextSearch
 } from "@camberi/firecms";
 
-console.log("import.meta", import.meta)
 let client: SearchClient | undefined = undefined;
 // process is defined for react-scripts builds
 if (typeof process !== "undefined") {

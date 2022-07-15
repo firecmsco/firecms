@@ -23,11 +23,11 @@ use them in your app and combine them with your code
 Some top-level components that you will find useful (same ones as used
 by `FirebaseCMSApp`):
 - [`FireCMS`](api/functions/firecms)
-- [`Scaffold`](api/functions/scaffold)
+- [`Scaffold`](api/variables/scaffold)
 - [`NavigationRoutes`](api/functions/navigationroutes)
-- [`SideEntityDialogs`](api/functions/sideentitydialogs)
+- [`SideDialogs`](api/functions/SideDialogs)
 - [`useInitialiseFirebase`](api/functions/useinitialisefirebase)
-- [`useFirebaseAuthDelegate`](api/functions/usefirebaseauthdelegate)
+- [`useBuildFirebaseAuthDelegate`](api/functions/useBuildFirebaseAuthDelegate)
 - [`useFirebaseStorageSource`](api/functions/usefirebasestoragesource)
 - [`useFirestoreDataSource`](api/functions/usefirestoredatasource)
 
@@ -36,12 +36,6 @@ You will also be responsible to initialise your MUI5 theme and your react-router
 
 You can see an example
 [here](https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx)
-
-:::note How did it go?
-This feature has been added in version 1.0.0.
-If you have been using FireCMS with a custom backend, we would love to hear your feedback
-either in https://www.reddit.com/r/firecms/ or directly at hello@camberi.com 😊
-:::
 
 
 ### Example custom app
@@ -54,22 +48,20 @@ import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import "typeface-rubik";
-import "typeface-space-mono";
+import "@fontsource/ibm-plex-mono";
 
 import {
-    AuthDelegate,
     Authenticator,
     buildCollection,
-    buildSchema,
     CircularProgressCenter,
     createCMSDefaultTheme,
+    FirebaseAuthDelegate,
+    useBuildFirestoreConfigurationPersistence,
     FirebaseLoginView,
     FireCMS,
-    NavigationBuilder,
-    NavigationBuilderProps,
     NavigationRoutes,
     Scaffold,
-    SideEntityDialogs,
+    SideDialogs,
     useFirebaseAuthDelegate,
     useFirebaseStorageSource,
     useFirestoreDataSource,
@@ -82,16 +74,22 @@ const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
 ];
 
-const productSchema = buildSchema({
+const productsCollection = buildCollection({
+    path: "products",
+    permissions: ({ user }) => ({
+        edit: true,
+        create: true,
+        delete: true
+    }),
     name: "Product",
     properties: {
         name: {
-            title: "Name",
+            name: "Name",
             validation: { required: true },
             dataType: "string"
         },
         price: {
-            title: "Price",
+            name: "Price",
             validation: {
                 required: true,
                 requiredMessage: "You must set a price between 0 and 1000",
@@ -102,16 +100,14 @@ const productSchema = buildSchema({
             dataType: "number"
         },
         status: {
-            title: "Status",
+            name: "Status",
             validation: { required: true },
             dataType: "string",
             description: "Should this product be visible in the website",
             longDescription: "Example of a long description hidden under a tooltip. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin quis bibendum turpis. Sed scelerisque ligula nec nisi pellentesque, eget viverra lorem facilisis. Praesent a lectus ac ipsum tincidunt posuere vitae non risus. In eu feugiat massa. Sed eu est non velit facilisis facilisis vitae eget ante. Nunc ut malesuada erat. Nullam sagittis bibendum porta. Maecenas vitae interdum sapien, ut aliquet risus. Donec aliquet, turpis finibus aliquet bibendum, tellus dui porttitor quam, quis pellentesque tellus libero non urna. Vestibulum maximus pharetra congue. Suspendisse aliquam congue quam, sed bibendum turpis. Aliquam eu enim ligula. Nam vel magna ut urna cursus sagittis. Suspendisse a nisi ac justo ornare tempor vel eu eros.",
-            config: {
-                enumValues: {
-                    private: "Private",
-                    public: "Public"
-                }
+            enumValues: {
+                private: "Private",
+                public: "Public"
             }
         }
     }
@@ -120,23 +116,11 @@ const productSchema = buildSchema({
 /**
  * This is an example of how to use the components provided by FireCMS for
  * a better customisation.
+ * @constructor
  */
 export function CustomCMSApp() {
 
-    const navigation: NavigationBuilder = ({ user }: NavigationBuilderProps) => ({
-        collections: [
-            buildCollection({
-                path: "products",
-                schema: productSchema,
-                name: "Products",
-                permissions: ({ user }) => ({
-                    edit: true,
-                    create: true,
-                    delete: true
-                })
-            })
-        ]
-    });
+    const signInOptions = DEFAULT_SIGN_IN_OPTIONS;
 
     const myAuthenticator: Authenticator = ({ user }) => {
         console.log("Allowing access to", user?.email);
@@ -150,14 +134,20 @@ export function CustomCMSApp() {
         firebaseConfigError
     } = useInitialiseFirebase({ firebaseConfig });
 
-    const authDelegate: AuthDelegate = useFirebaseAuthDelegate({
+    const authDelegate: FirebaseAuthDelegate = useFirebaseAuthDelegate({
         firebaseApp,
+        signInOptions
     });
 
     const dataSource = useFirestoreDataSource({
-        firebaseApp: firebaseApp
+        firebaseApp,
         // You can add your `FirestoreTextSearchController` here
     });
+
+    const collectionsController = useBuildFirestoreConfigurationPersistence({
+        firebaseApp
+    });
+
     const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
 
     if (configError) {
@@ -179,9 +169,10 @@ export function CustomCMSApp() {
 
     return (
         <Router>
-            <FireCMS navigation={navigation}
-                     authentication={myAuthenticator}
+            <FireCMS collections={[productsCollection]}
                      authDelegate={authDelegate}
+                     collectionsController={collectionsController}
+                     authentication={myAuthenticator}
                      dataSource={dataSource}
                      storageSource={storageSource}
                      entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
@@ -196,8 +187,8 @@ export function CustomCMSApp() {
                     } else if (!context.authController.canAccessMainView) {
                         component = (
                             <FirebaseLoginView
-                                skipLoginButtonEnabled={false}
-                                signInOptions={DEFAULT_SIGN_IN_OPTIONS}
+                                allowSkipLogin={false}
+                                signInOptions={signInOptions}
                                 firebaseApp={firebaseApp}
                                 authDelegate={authDelegate}/>
                         );
@@ -205,7 +196,7 @@ export function CustomCMSApp() {
                         component = (
                             <Scaffold name={"My Online Shop"}>
                                 <NavigationRoutes/>
-                                <SideEntityDialogs/>
+                                <SideDialogs/>
                             </Scaffold>
                         );
                     }

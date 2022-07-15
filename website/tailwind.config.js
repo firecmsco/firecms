@@ -27,6 +27,19 @@ module.exports = {
                     700: '#0064DA',
                     800: '#0059C2',
                     900: '#004391'
+                },
+                pink: {
+                    DEFAULT: '#FF5B79',
+                    '50': '#FFEAEE',
+                    '100': '#FFD5DD',
+                    '200': '#FFADBC',
+                    '300': '#FF849A',
+                    '400': '#FF5B79',
+                    '500': '#FF234B',
+                    '600': '#EA002B',
+                    '700': '#B20021',
+                    '800': '#7A0016',
+                    '900': '#42000C'
                 }
             },
             boxShadow: {
@@ -36,7 +49,7 @@ module.exports = {
                 md: '0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.03)',
                 lg: '0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)',
                 xl: '0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.02)',
-                '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.15)',
+                '2xl': '0 25px 50px -12px rgba(0, 0, 0, 0.20)',
                 inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)',
                 outline: '0 0 0 3px rgba(66, 153, 225, 0.5)',
                 none: 'none'
@@ -108,44 +121,7 @@ module.exports = {
                     '0%, 100%': { transform: 'translateY(0)' },
                     '50%': { transform: 'translateY(-5%)' }
                 }
-            },
-            customForms: theme => ({
-                default: {
-                    'input, textarea, multiselect, select, checkbox, radio': {
-                        backgroundColor: theme('colors.white'),
-                        borderColor: theme('colors.gray.300'),
-                        borderRadius: theme('borderRadius.default'),
-                        '&:focus': {
-                            outline: undefined,
-                            boxShadow: undefined,
-                            borderColor: theme('colors.gray.500')
-                        }
-                    },
-                    'input, textarea, multiselect, select': {
-                        backgroundColor: theme('colors.white'),
-                        fontSize: undefined,
-                        lineHeight: undefined,
-                        paddingTop: theme('spacing.3'),
-                        paddingRight: theme('spacing.4'),
-                        paddingBottom: theme('spacing.3'),
-                        paddingLeft: theme('spacing.4')
-                    },
-                    'input, textarea': {
-                        '&::placeholder': {
-                            color: theme('colors.gray.500')
-                        }
-                    },
-                    select: {
-                        paddingRight: theme('spacing.10'),
-                        iconColor: theme('colors.gray.400')
-                    },
-                    'checkbox, radio': {
-                        color: theme('colors.gray.800'),
-                        backgroundColor: theme('colors.white'),
-                        borderRadius: theme('borderRadius.sm')
-                    }
-                }
-            })
+            }
         }
     },
     variants: {

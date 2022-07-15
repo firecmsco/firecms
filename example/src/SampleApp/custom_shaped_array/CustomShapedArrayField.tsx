@@ -1,16 +1,12 @@
 import React, { ReactElement } from "react";
 import { Box, FormControl, FormHelperText, Paper } from "@mui/material";
-import {
-    buildPropertyField,
-    FieldDescription,
-    FieldProps
-} from "@camberi/firecms";
+import { FieldDescription, FieldProps, PropertyFieldBinding } from "@camberi/firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 
 export default function CustomShapedArrayField({
                                                    property,
-                                                   name,
+                                                   propertyKey,
                                                    value,
                                                    setValue,
                                                    customProps,
@@ -21,7 +17,7 @@ export default function CustomShapedArrayField({
                                                    includeDescription,
                                                    context,
                                                    ...props
-                                               }: FieldProps<any[], CustomShapedArrayProps>)
+                                               }: FieldProps<{ name: string, age: number }[], CustomShapedArrayProps>)
     : ReactElement {
 
     const properties = customProps.properties;
@@ -29,18 +25,22 @@ export default function CustomShapedArrayField({
     return (
         <FormControl fullWidth error={showError}>
 
-            <FormHelperText>{property.title ?? name}</FormHelperText>
+            <FormHelperText>{property.name ?? propertyKey}</FormHelperText>
 
             <Paper variant={"outlined"}>
                 <Box m={2}>
-                    {properties.map((property, index) =>
-                        <div key={`array_${index}`}>
-                            {buildPropertyField({
-                                name: `${name}[${index}]`,
+                    {properties.map((property, index) => {
+                            const fieldProps = {
+                                propertyKey: `${propertyKey}[${index}]`,
                                 property,
                                 context
-                            })}
-                        </div>
+                            };
+                            return (
+                                <div key={`array_${index}`}>
+                                    <PropertyFieldBinding {...fieldProps}/>
+                                </div>
+                            );
+                        }
                     )}
                 </Box>
             </Paper>

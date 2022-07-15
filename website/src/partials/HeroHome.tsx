@@ -19,11 +19,12 @@ function HeroHome({}) {
     }}/>;
 
     const video = <div
-        data-aos="fade-up"
+        // data-aos="fade-up"
+        data-aos="fade-left"
         data-aos-delay="400"
         className="xl:max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4">
         <video
-            className={"rounded-xl border-gray-200 shadow-3xl"}
+            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
             width="100%" loop autoPlay muted>
             <source src={darkModeVideo} type="video/mp4"/>
         </video>
@@ -33,28 +34,32 @@ function HeroHome({}) {
         className="sm:px-6 px-16 my-4 xl:my-8">
 
         <div className="text-center xl:text-right">
-            <h1
-                className="block text-5xl md:text-6xl font-extrabold tracking-tight leading-none"
-            >
+            <h1 className="block tracking-tight text-5xl md:text-6xl font-extrabold tracking-tight leading-none">
+                <div className={"block"}>
                 <span
                     data-aos="zoom-y-out"
-                    data-aos-delay="50"
-                    className="block">Your </span>
+                    data-aos-delay="100">Your </span>
+                    <span
+                        data-aos="zoom-y-out"
+                        data-aos-delay="200"
+                        style={{
+                            // mixBlendMode: "color-dodge",
+                            fontSize: "10rem",
+                            WebkitBackgroundClip: "text",
+                            backgroundClip: "text",
+                            backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
+                        }}
+                        className="font-extrabold text-transparent bg-clip-text">CMS</span>
+                </div>
                 <span
                     data-aos="zoom-y-out"
-                    data-aos-delay="100"
-                    className="block">Firestore-based </span>
+                    data-aos-delay="300">based on </span>
+                <span
+                    data-aos="zoom-y-out"
+                    data-aos-delay="400"
+                    className={"text-7xl md:text-8xl "}
+                    style={{ color: "#FFA000" }}>Firestore</span>
 
-                <span
-                    data-aos="zoom-y-out"
-                    data-aos-delay="150"
-                    style={{
-                        // mixBlendMode: "color-dodge",
-                        WebkitBackgroundClip: "text",
-                        backgroundClip: "text",
-                        backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
-                    }}
-                    className="text-8xl font-extrabold text-8xl md:text-9xl text-transparent bg-clip-text">CMS</span>
             </h1>
 
             <div className="mt-8 mb-16 flex justify-center xl:justify-end"

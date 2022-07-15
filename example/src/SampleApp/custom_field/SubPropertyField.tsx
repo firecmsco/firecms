@@ -1,10 +1,11 @@
 import React, { useEffect } from "react";
 import { FormControl, FormHelperText, Paper } from "@mui/material";
 import {
-    buildPropertyField,
+    buildProperty,
     FieldDescription,
     FieldProps,
-    LabelWithIcon
+    LabelWithIcon,
+    PropertyFieldBinding
 } from "@camberi/firecms";
 
 /**
@@ -13,38 +14,34 @@ import {
 export const CustomField = ({
                          property,
                          value,
-                         name,
+                         propertyKey,
                          tableMode,
                          error,
                          showError,
                          includeDescription,
                          context,
                          setValue,
-                     }: FieldProps<object>) => {
+                     }: FieldProps<Record<string, any>>) => {
     useEffect(() => {
         if (!value) setValue({});
     }, [value, setValue]);
 
+    const fieldProps = {
+        propertyKey: `${propertyKey}.sample`,
+        property: buildProperty({
+            name: "Sample",
+            dataType: "string",
+            validation: {
+                required: true,
+            },
+        }),
+        context,
+    };
+
     return (
         <FormControl fullWidth error={showError}>
-            {!tableMode && (
-                <FormHelperText filled required={property.validation?.required}>
-                    <LabelWithIcon property={property} />
-                </FormHelperText>
-            )}
-
             <Paper elevation={0}>
-                {buildPropertyField({
-                    name: `${name}.sample`,
-                    property: {
-                        title: "Sample",
-                        dataType: "string",
-                        validation: {
-                            required: true,
-                        },
-                    },
-                    context,
-                })}
+                <PropertyFieldBinding {...fieldProps}/>
             </Paper>
 
             {includeDescription && <FieldDescription property={property} />}

@@ -6,44 +6,70 @@ module.exports = {
             id: 'intro'
         },
         'quickstart',
+        'new_in_v2',
         {
             type: 'category',
-            label: 'Entities',
+            label: "Collections",
+            collapsed: false,
             items: [
-                'entities/entity_schemas',
+                "collections/collections",
+                "collections/saving_callbacks",
+                "collections/permissions",
+                "collections/exporting_data",
+                "collections/text_search",
+            ]
+        },
+        {
+            type: "category",
+            label: "Properties",
+            collapsed: false,
+            items: [
+                "properties/properties_intro",
                 {
-                    type: 'category',
-                    label: 'Properties',
+                    type: "category",
+                    label: "Fields",
                     items: [
-                        'entities/properties/properties_intro',
-                        'entities/properties/string',
-                        'entities/properties/number',
-                        'entities/properties/boolean',
-                        'entities/properties/reference',
-                        'entities/properties/timestamp',
-                        'entities/properties/array',
-                        'entities/properties/map',
-                        'entities/properties/geopoint'
+                        "properties/fields/text_fields",
+                        "properties/fields/selects",
+                        "properties/fields/file_upload",
+                        "properties/fields/references",
+                        "properties/fields/switch",
+                        "properties/fields/date_time",
+                        "properties/fields/repeat",
+                        "properties/fields/block",
                     ]
                 },
-                'entities/conditional_fields',
-                'entities/custom_fields',
-                'entities/custom_previews',
-                'entities/custom_schema_views',
+                {
+                    type: "category",
+                    label: "Config",
+                    items: [
+                        "properties/config/string",
+                        "properties/config/number",
+                        "properties/config/boolean",
+                        "properties/config/reference",
+                        "properties/config/date",
+                        "properties/config/array",
+                        "properties/config/map",
+                        "properties/config/geopoint"
+                    ]
+                },
+                "properties/conditional_fields",
+                "properties/custom_fields",
+                "properties/custom_previews",
+                "properties/custom_schema_views",
             ]
         },
         {
-            type: 'category',
-            label: 'Collections',
+            type: "category",
+            label: "Navigation",
+            collapsed: false,
             items: [
-                'collections/collections',
-                'collections/saving_callbacks',
-                'collections/permissions',
-                'collections/exporting_data',
+                "navigation/navigation",
+                "navigation/custom_top_level_views",
             ]
         },
-        'navigation',
-        'custom_top_level_views',
+        "firebase_setup",
+        'deployment',
         {
             type: 'category',
             label: 'Provided hooks',
@@ -58,23 +84,15 @@ module.exports = {
         },
         {
             type: 'category',
-            label: 'Firebase CMS app',
-            items: [
-                'firebase_cms_app',
-                'firebase_setup',
-                'deployment',
-            ]
-        },
-        {
-            type: 'category',
             label: 'Recipes',
+            collapsed: false,
             items: [
                 // 'recipes/recipes_index',
                 'recipes/building_a_blog',
             ]
         },
         'custom_cms_app',
-        'migrating_from_alpha_versions',
+        'migrating_from_v1',
         'changelog'
     ],
 

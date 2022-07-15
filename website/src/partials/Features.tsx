@@ -14,7 +14,9 @@ import FirebaseLogo from "@site/static/img/firebase.svg";
 // @ts-ignore
 import pricePreview from "@site/static/img/price.png";
 // @ts-ignore
-import cmsPreviewVideo from "@site/static/img/editing.mp4";
+import editingDemoVideo from "@site/static/img/editing_demo.mp4";
+// @ts-ignore
+import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
 // @ts-ignore
 import customFieldVideo from "@site/static/img/custom_fields.mp4";
 
@@ -28,7 +30,8 @@ import {
 
 function Features() {
 
-    const { isDarkTheme } = useColorMode();
+    const { colorMode } = useColorMode();
+    const isDarkTheme = colorMode === "dark";
 
     return (
         <section className="relative">
@@ -79,13 +82,15 @@ function Features() {
                         >
                             <div
                                 className="relative flex flex-col">
-
                                 <div className={"p-4"}>
                                     <video
-                                        className={"rounded-xl shadow-2xl border-gray-200"}
+                                        key={`demo_video_${isDarkTheme}`}
+                                        style={{minHeight: 589}}
+                                        className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                                         width="100%" loop autoPlay muted>
-                                        <source src={cmsPreviewVideo}
-                                                type="video/mp4"/>
+                                        <source
+                                            src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
+                                            type="video/mp4"/>
                                     </video>
                                 </div>
 
@@ -110,7 +115,7 @@ function Features() {
                                 className="custom-code-block relative flex-col font-mono">
 
                                 <SyntaxHighlighter
-                                    className={"shadow-2xl"}
+                                    className={"border border-solid dark:border-gray-800 border-gray-200"}
                                     language={"typescript"}
                                     showLineNumbers={false}
                                     style={isDarkTheme ? vs2015 : atomOneLight}
@@ -164,9 +169,14 @@ function Features() {
                                 </div>
 
                                 <p className="md:text-right text-xl text-gray-600 dark:text-gray-200">
-                                    Define your entity schemas and choose from
+                                    Define your schemas and choose from
                                     multiple form widgets and validation
                                     options.
+                                </p>
+
+                                <p className="md:text-right text-xl text-gray-600 dark:text-gray-200">
+                                    Use advanced features like conditional logic for
+                                    your fields, references to other collections, markdown or file uploads
                                 </p>
                             </div>
                         </div>
@@ -183,7 +193,7 @@ function Features() {
                             data-aos="fade-right"
                             data-aos-delay="120"
                         >
-                            <div className="md:pr-4 lg:pr-12 xl:pr-16 mb-8">
+                            <div className="md:pr-4 lg:pr-10 xl:pr-12 mb-8">
                                 <div className={"flex items-center mb-3"}>
 
                                     <div
@@ -222,26 +232,24 @@ function Features() {
                                 <div
                                     className="custom-code-block relative flex-col font-mono">
                                     <SyntaxHighlighter
-                                        className={"shadow-2xl"}
+                                        className={"border border-solid dark:border-gray-800 border-gray-200"}
                                         language={"typescript"}
                                         showLineNumbers={false}
                                         style={isDarkTheme ? vs2015 : atomOneLight}
                                     >
-                                        {`const productSchema: EntitySchema = buildSchema({
+{`const productCollection = buildCollection({
     name: "Product",
     properties: {
         name: {
             dataType: "string",
-            title: "Name"
+            title: "Name",
+            defaultValue: "Default name"
         },
         uppercase: {
             dataType: "string",
             title: "Uppercase Name",
             readOnly: true
         }
-    },
-    defaultValues: {
-        name: "Default name",
     }
 });
 
@@ -273,7 +281,7 @@ const productCallbacks = buildEntityCallbacks({
                         >
                             <div className={"p-4"}>
                                 <video
-                                    className={"rounded-xl shadow-2xl border-gray-200"}
+                                    className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                                     width="100%" loop autoPlay muted>
                                     <source src={customFieldVideo}
                                             type="video/mp4"/>

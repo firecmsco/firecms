@@ -1,0 +1,3 @@
+[submodule "sass"]
+	path = sass
+	url = git@github.com:Camberi/firecms_sass.git

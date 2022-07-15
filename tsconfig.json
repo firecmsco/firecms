@@ -30,8 +30,8 @@
         "types": ["vite/client", "node", "jest"],
     },
     "include": [
-        "src",
-        "./src/**/*.ts"
+      "lib/src",
+      "./lib/src/**/*.ts"
     ],
     "exclude": [
         "node_modules",

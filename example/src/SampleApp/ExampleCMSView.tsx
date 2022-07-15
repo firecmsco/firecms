@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Button } from "@mui/material";
 
 import {
-    buildSchema,
+    buildCollection,
     EntityCollection,
     EntityCollectionView,
     useAuthController,
@@ -33,16 +33,17 @@ export function ExampleCMSView({
     // hook to do operations related to authentication
     const authController = useAuthController();
 
-    const customProductSchema = buildSchema({
-        name: "Custom product",
+    const customProductCollection = buildCollection({
+        path: "custom_product",
+        name: "Custom products",
         properties: {
             name: {
-                title: "Name",
+                name: "Name",
                 validation: { required: true },
                 dataType: "string"
             },
             very_custom_field: {
-                title: "Very custom field",
+                name: "Very custom field",
                 dataType: "string"
             }
         }
@@ -81,7 +82,7 @@ export function ExampleCMSView({
                     onClick={() => sideEntityController.open({
                         entityId: "B003WT1622",
                         path: "/products-test",
-                        schema: customProductSchema,
+                        collection: customProductCollection,
                         width: 800
                     })}
                     color="primary">
@@ -93,11 +94,9 @@ export function ExampleCMSView({
                     height: 400,
                     padding: 32
                 }}>
-                    <EntityCollectionView path={path}
-                                          collection={{
-                                              ...collection,
-                                              selectionController
-                                          }}/>
+                    <EntityCollectionView  {...collection}
+                                           fullPath={path}
+                                           selectionController={selectionController}/>
                 </div>
 
 
