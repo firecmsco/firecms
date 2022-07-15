@@ -56,7 +56,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                 window.removeEventListener("beforeunload", beforeunload);
         };
 
-    }, [blocked, collection, window]);
+    }, [blocked, collection]);
 
     if (!props || !collection) {
         return <div style={{ width: FORM_CONTAINER_WIDTH }}/>;

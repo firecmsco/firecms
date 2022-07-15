@@ -7,10 +7,10 @@ import {
 } from "../../models";
 import { Box, Button, Typography } from "@mui/material";
 
-import { EntityCollectionTable } from "./CollectionTable";
+import { EntityCollectionTable } from "./EntityCollectionTable";
 import {
     CollectionRowActions
-} from "./CollectionTable/internal/CollectionRowActions";
+} from "./EntityCollectionTable/internal/CollectionRowActions";
 import { useDataSource, useNavigationContext } from "../../hooks";
 import { ErrorView } from "./ErrorView";
 import { CustomDialogActions } from "./CustomDialogActions";

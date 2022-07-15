@@ -6,7 +6,7 @@ import React from "react";
  * @param data
  * @param timeoutMs
  */
-export function useDebouncedData<T>(data: T[], timeoutMs = 3000) {
+export function useDebouncedData<T>(data: T[], timeoutMs = 2000) {
 
     const [deferredData, setDeferredData] = React.useState(data);
     const dataLength = React.useRef(deferredData.length);

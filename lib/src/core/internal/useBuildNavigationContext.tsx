@@ -172,7 +172,7 @@ export function useBuildNavigationContext<UserType extends User>({
             ...(collections ?? []).map(collection => ({
                 url: buildUrlCollectionPath(collection.alias ?? collection.path),
                 type: "collection",
-                name: collection.name,
+                name: collection.name.trim(),
                 path: collection.alias ?? collection.path,
                 collection,
                 description: collection.description?.trim(),
@@ -182,19 +182,20 @@ export function useBuildNavigationContext<UserType extends User>({
                 !view.hideFromNavigation
                     ? ({
                         url: buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
-                        name: view.name,
+                        name: view.name.trim(),
                         type: "view",
                         view,
-                        description: view.description,
-                        group: view.group
+                        description: view.description?.trim(),
+                        group: view.group?.trim()
                     })
                     : undefined)
                 .filter((view) => !!view) as TopNavigationEntry[]
         ];
 
-        const groups: string[] = Array.from(new Set(
-            Object.values(navigationEntries).map(e => e.group).filter(Boolean) as string[]
-        ).values());
+        const groups: string[] = Object.values(navigationEntries)
+            .map(e => e.group)
+            .filter(Boolean)
+            .filter((value, index, array) => array.indexOf(value) === index) as string[];
 
         return { navigationEntries, groups };
     }, [authController, buildCMSUrlPath, buildUrlCollectionPath]);

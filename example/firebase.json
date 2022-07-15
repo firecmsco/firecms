@@ -1,6 +1,5 @@
 {
     "hosting": {
-        "site": "firecms-demo-v2",
         "public": "build",
         "ignore": [
             "firebase.json",

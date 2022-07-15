@@ -296,7 +296,7 @@ export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
 /**
  * Use this interface for adding additional columns to entity collection views.
- * If you need to do some async loading you can use AsyncPreviewComponent
+ * If you need to do some async loading you can use {@link AsyncPreviewComponent}
  * @category Models
  */
 export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any,
@@ -319,6 +319,9 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: any } = any
      */
     width?: number;
 
+    /**
+     *
+     */
     hideFromCollection?: boolean;
 
     /**
@@ -371,7 +374,7 @@ export interface EntityCustomViewParams<M extends { [Key: string]: any } = any> 
 
     /**
      * Modified values in the form that have not been saved yet.
-     * If the entity is not new and the values are not modified, this values
+     * If the entity is not new and the values are not modified, these values
      * are the same as in `entity`
      */
     modifiedValues?: EntityValues<M>;

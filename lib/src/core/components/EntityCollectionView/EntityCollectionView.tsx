@@ -13,14 +13,14 @@ import {
 import {
     EntityCollectionTable,
     OnColumnResizeParams
-} from "../CollectionTable";
+} from "../EntityCollectionTable";
 
 import {
     CollectionRowActions
-} from "../CollectionTable/internal/CollectionRowActions";
+} from "../EntityCollectionTable/internal/CollectionRowActions";
 import {
     DeleteEntityDialog
-} from "../CollectionTable/internal/DeleteEntityDialog";
+} from "../EntityCollectionTable/internal/DeleteEntityDialog";
 
 import {
     canCreateEntity,

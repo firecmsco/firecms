@@ -13,6 +13,7 @@ import CustomShapedArrayField
 import CustomShapedArrayPreview
     from "../custom_shaped_array/CustomShapedArrayPreview";
 import { locales } from "./enums";
+import { usersCollection } from "./users_collection";
 
 const relaxedStatus:EnumValues = [
     {
@@ -599,5 +600,8 @@ export const testCollection = buildCollection({
             },
             dependencies: ["name"]
         }
+    ],
+    subcollections: [
+        usersCollection
     ]
 });

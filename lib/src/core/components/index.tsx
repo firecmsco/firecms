@@ -12,7 +12,7 @@ export { CircularProgressCenter } from "./CircularProgressCenter";
 export * from "./FireCMSHomePage";
 export * from "./EntityCollectionView/EntityCollectionView";
 
-export * from "./CollectionTable";
+export * from "./EntityCollectionTable";
 export * from "./CustomDialogActions";
 export * from "./BreadcrumbUpdater";
 export * from "./NotFoundPage";

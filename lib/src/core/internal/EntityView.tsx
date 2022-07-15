@@ -58,6 +58,13 @@ export interface EntityViewProps<M> {
     onValuesAreModified: (modified: boolean) => void;
 }
 
+/**
+ * This is the default view that is used as the content of a side panel when
+ * an entity is opened.
+ * You probably don't want to use this view directly since it is bound to the
+ * side panel. Instead, you might want to use {@link EntityForm} or
+ * {@link EntityCollectionView}
+ */
 export const EntityView = React.memo<EntityViewProps<any>>(
     function EntityView<M extends { [Key: string]: any }, UserType extends User>({
                                                                                      path,
@@ -200,10 +207,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
             onValuesAreModified(false);
 
-            if (tabsPosition === -1)
-                sideDialogContext.close();
-
-        }, [collection.name, collection.singularName, tabsPosition]);
+        }, [collection.name, collection.singularName, onValuesAreModified]);
 
         const onSaveFailure = useCallback((e: Error) => {
 
@@ -342,9 +346,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const onDiscard = useCallback(() => {
             onValuesAreModified(false);
-            if (tabsPosition === -1)
-                sideDialogContext.close();
-        }, [tabsPosition]);
+        }, []);
 
         const onSideTabClick = useCallback((value: number) => {
             setTabsPosition(value);
@@ -389,6 +391,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     key={`entity_detail_collection_tab_${subcollection.name}`}
                     label={subcollection.name}/>
         );
+
         const customViewTabs = customViews && customViews.map(
             (view) =>
                 <Tab
@@ -400,6 +403,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     key={`entity_detail_custom_tab_${view.name}`}
                     label={view.name}/>
         );
+
         const header = (
             <Box sx={{
                 paddingLeft: 2,

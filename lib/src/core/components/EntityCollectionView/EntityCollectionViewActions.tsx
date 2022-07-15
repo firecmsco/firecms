@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 
 import { Add, Delete } from "@mui/icons-material";
-import { ExportButton } from "../CollectionTable/internal/ExportButton";
+import { ExportButton } from "../EntityCollectionTable/internal/ExportButton";
 
 import { canCreateEntity, canDeleteEntity } from "../../util/permissions";
 import { useAuthController, useFireCMSContext } from "../../../hooks";
