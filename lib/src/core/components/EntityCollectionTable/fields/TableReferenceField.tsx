@@ -42,6 +42,9 @@ export function TableReferenceField(props: {
 
     const [onHover, setOnHover] = useState(false);
 
+    const hoverTrue = useCallback(() => setOnHover(true), []);
+    const hoverFalse = useCallback(() => setOnHover(false), []);
+
     const navigationContext = useNavigationContext();
 
     const collection = navigationContext.getCollection(path);
@@ -99,20 +102,18 @@ export function TableReferenceField(props: {
     const buildMultipleReferenceField = () => {
         if (Array.isArray(internalValue))
             return <>
-                {internalValue.map((reference, index) => {
-
-                        return <Box sx={{ m: 0.5 }}
-                                    key={`preview_array_ref_${name}_${index}`}>
-                            <ReferencePreview
-                                onClick={disabled ? undefined : handleOpen}
-                                size={"tiny"}
-                                reference={reference}
-                                onHover={onHover}
-                                disabled={!path}
-                                previewProperties={previewProperties}
-                            />
-                        </Box>;
-                    }
+                {internalValue.map((reference, index) =>
+                    <Box sx={{ m: 0.5, width: "100%" }}
+                         key={`preview_array_ref_${name}_${index}`}>
+                        <ReferencePreview
+                            onClick={disabled ? undefined : handleOpen}
+                            size={"tiny"}
+                            reference={reference}
+                            onHover={onHover}
+                            disabled={!path}
+                            previewProperties={previewProperties}
+                        />
+                    </Box>
                 )
                 }
             </>;
@@ -124,18 +125,14 @@ export function TableReferenceField(props: {
         return <ErrorView error={"The specified collection does not exist"}/>;
 
     return (
-        <div
-            onMouseEnter={() => setOnHover(true)}
-            onMouseMove={() => setOnHover(true)}
-            onMouseLeave={() => setOnHover(false)}>
+        <Box sx={{ width: "100%" }}
+             onMouseEnter={hoverTrue}
+             onMouseMove={hoverTrue}
+             onMouseLeave={hoverFalse}>
 
-            {internalValue && !multiselect &&
-            buildSingleReferenceField()
-            }
+            {internalValue && !multiselect && buildSingleReferenceField()}
 
-            {internalValue && multiselect &&
-            buildMultipleReferenceField()
-            }
+            {internalValue && multiselect && buildMultipleReferenceField()}
 
             {valueNotSet &&
                 <Button
@@ -146,6 +143,6 @@ export function TableReferenceField(props: {
                     Edit {title}
                 </Button>}
 
-        </div>
+        </Box>
     );
 }

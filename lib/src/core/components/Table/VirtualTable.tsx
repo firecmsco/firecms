@@ -17,16 +17,16 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import { FixedSizeList as List } from "react-window";
 import useMeasure from "react-use-measure";
 
-import { CircularProgressCenter } from "../../CircularProgressCenter";
+import { CircularProgressCenter } from "../CircularProgressCenter";
 import {
     OnTableColumnResizeParams,
     TableColumn,
     TableFilterValues,
     TableProps,
     TableWhereFilterOp
-} from "../TableProps";
+} from "./TableProps";
 
-import { getRowHeight } from "../common";
+import { getRowHeight } from "./common";
 import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
@@ -85,7 +85,7 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
  * @category Components
  */
 
-export const VirtualTableV2 = React.memo<TableProps<any, any>>(
+export const VirtualTable = React.memo<TableProps<any, any>>(
     function VirtualTable<T extends object, E extends any>({
                                                                data,
                                                                onResetPagination,

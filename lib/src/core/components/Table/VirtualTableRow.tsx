@@ -4,7 +4,7 @@ import equal from "react-fast-compare"
 
 import { Box, darken } from "@mui/material";
 
-import { getRowHeight } from "../common";
+import { getRowHeight } from "./common";
 import { VirtualTableRowProps } from "./types";
 
 export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(

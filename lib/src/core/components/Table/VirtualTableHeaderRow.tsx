@@ -1,7 +1,7 @@
 import React, { createRef, useCallback, useEffect, useState } from "react";
 
-import { TableColumn, TableWhereFilterOp } from "../TableProps";
-import { ErrorBoundary } from "../../ErrorBoundary";
+import { TableColumn, TableWhereFilterOp } from "./TableProps";
+import { ErrorBoundary } from "../ErrorBoundary";
 import { VirtualTableHeader } from "./VirtualTableHeader";
 import { VirtualTableContextProps } from "./types";
 import { Box } from "@mui/material";

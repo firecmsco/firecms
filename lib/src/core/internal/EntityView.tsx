@@ -7,6 +7,7 @@ import {
     IconButton,
     Tab,
     Tabs,
+    Typography,
     useMediaQuery,
     useTheme
 } from "@mui/material";
@@ -127,7 +128,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const editEnabled = usedEntity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path)) : false;
 
         useEffect(() => {
-            setUsedEntity(entity);
+            if (entity)
+                setUsedEntity(entity);
             if (usedEntity)
                 setReadOnly(!editEnabled);
         }, [entity, editEnabled]);
@@ -284,7 +286,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         );
 
-        const loading = dataLoading || (!usedEntity && (status === "existing" || status === "copy"));
+        const loading = (dataLoading && !usedEntity) || (!usedEntity && (status === "existing" || status === "copy"));
+
         const subCollectionsViews = subcollections && subcollections.map(
             (subcollection, colIndex) => {
                 const fullPath = usedEntity ? `${usedEntity?.path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.alias ?? subcollection.path)}` : undefined;
@@ -314,14 +317,15 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                     fullPath={fullPath}
                                     isSubCollection={true}
                                     {...subcollection}/>
-                                : <Box m={3}
-                                       display={"flex"}
-                                       alignItems={"center"}
-                                       justifyContent={"center"}>
-                                    <Box>
+                                : <Box
+                                    sx={{ width: "100%", height: "100%", p: 3 }}
+                                    display={"flex"}
+                                    alignItems={"center"}
+                                    justifyContent={"center"}>
+                                    <Typography variant={"label"}>
                                         You need to save your entity before
                                         adding additional collections
-                                    </Box>
+                                    </Typography>
                                 </Box>)
                         }
 

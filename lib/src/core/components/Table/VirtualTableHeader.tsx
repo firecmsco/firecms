@@ -20,11 +20,11 @@ import {
     TableColumnFilter,
     TableSort,
     TableWhereFilterOp
-} from "../TableProps";
-import { StringNumberFilterField } from "../filters/StringNumberFilterField";
-import { BooleanFilterField } from "../filters/BooleanFilterField";
-import { DateTimeFilterField } from "../filters/DateTimeFilterfield";
-import { ErrorBoundary } from "../../ErrorBoundary";
+} from "./TableProps";
+import { StringNumberFilterField } from "./filters/StringNumberFilterField";
+import { BooleanFilterField } from "./filters/BooleanFilterField";
+import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
+import { ErrorBoundary } from "../ErrorBoundary";
 
 type TableHeaderProps<M extends { [Key: string]: any }> = {
     resizeHandleRef: RefObject<HTMLDivElement>;

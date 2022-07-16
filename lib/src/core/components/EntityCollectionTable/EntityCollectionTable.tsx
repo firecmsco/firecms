@@ -67,7 +67,6 @@ import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { setIn } from "formik";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
-import { VirtualTableV2 } from "../Table/v2/VirtualTableV2";
 import { PropertyPreviewTableCell } from "./internal/PropertyPreviewTableCell";
 import { useDebouncedData } from "../../../firebase_app/hooks/useDebouncedData";
 
@@ -560,7 +559,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         loading={dataLoading}/>
 
                     <Box sx={{ flexGrow: 1 }}>
-                        <VirtualTableV2
+                        <VirtualTable
                             data={data}
                             columns={columns}
                             cellRenderer={cellRenderer}

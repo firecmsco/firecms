@@ -6,7 +6,7 @@ import {
     TableFilterValues,
     TableSize,
     TableWhereFilterOp
-} from "../TableProps";
+} from "./TableProps";
 
 export type VirtualTableRowProps<T> = {
     style: any,

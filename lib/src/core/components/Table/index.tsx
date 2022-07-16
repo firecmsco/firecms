@@ -1,2 +1,2 @@
-export { VirtualTable } from "./VirtualTableV1";
+export { VirtualTable } from "./VirtualTable";
 export * from "./TableProps";
