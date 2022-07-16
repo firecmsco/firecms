@@ -179,7 +179,6 @@ export const VirtualTableV2 = React.memo<TableProps<any, any>>(
         const onEndReachedInternal = useCallback((scrollOffset: number) => {
             if (onEndReached && (data?.length ?? 0) > 0 && scrollOffset > endReachCallbackThreshold.current + 500) {
                 endReachCallbackThreshold.current = scrollOffset;
-                console.log("onEndReached", scrollOffset, endReachCallbackThreshold.current)
                 onEndReached();
             }
         }, [data, onEndReached]);
