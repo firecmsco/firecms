@@ -59,14 +59,16 @@ export function MapPropertyPreview<T extends Record<string, unknown>>({
                 }
             })}>
                 {mapPropertyKeys.map((key, index) => (
-                    <ErrorBoundary
-                        key={"map_preview_" + mapProperty.name + key + index}>
-                        <PropertyPreview propertyKey={key}
-                                         value={(value as any)[key]}
-                                         property={mapProperty.properties![key]}
-                                         entity={entity}
-                                         size={size}/>
-                    </ErrorBoundary>
+                    <div>
+                        <ErrorBoundary
+                            key={"map_preview_" + mapProperty.name + key + index}>
+                            <PropertyPreview propertyKey={key}
+                                             value={(value as any)[key]}
+                                             property={mapProperty.properties![key]}
+                                             entity={entity}
+                                             size={size}/>
+                        </ErrorBoundary>
+                    </div>
                 ))}
             </Box>
         );

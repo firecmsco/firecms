@@ -67,13 +67,9 @@ export function useBuildNavigationContext<UserType extends User>({
             ]
         );
 
-        // we reorder collections so that nested paths are included first
-        const sortedCollections = [...(resolvedCollections ?? [])]
-            .sort((a, b) => b.path.length - a.path.length);
-
-        setCollections(sortedCollections);
+        setCollections(resolvedCollections);
         setViews(resolvedViews);
-        setTopLevelNavigation(computeTopNavigation(sortedCollections, resolvedViews));
+        setTopLevelNavigation(computeTopNavigation(resolvedCollections ?? [], resolvedViews));
 
         setNavigationLoading(false);
         setInitialised(true);
@@ -196,9 +192,13 @@ export function useBuildNavigationContext<UserType extends User>({
             .map(e => e.group)
             .filter(Boolean)
             .filter((value, index, array) => array.indexOf(value) === index) as string[];
-
+        console.log("s", {
+            collections: collections ?? [],
+            navigationEntries,
+            groups
+        });
         return { navigationEntries, groups };
-    }, [authController, buildCMSUrlPath, buildUrlCollectionPath]);
+    }, [buildCMSUrlPath, buildUrlCollectionPath]);
 
     const state = location.state as any;
     /**
