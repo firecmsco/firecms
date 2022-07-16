@@ -11133,7 +11133,7 @@ react-app-polyfill@^3.0.0:
     regenerator-runtime "^0.13.9"
     whatwg-fetch "^3.6.2"
 
-react-base-table@^1.13.0, react-base-table@^1.13.1:
+react-base-table@^1.13.0:
   version "1.13.2"
   resolved "https://registry.yarnpkg.com/react-base-table/-/react-base-table-1.13.2.tgz#bf76a3d68cd86d7b9935e620aacd7f883be99f19"
   integrity sha512-VhyKXZwEu8U/wH2eY3Ie3GJbvGP9wQzts26k1t/A7b8IS1OM31j8ul6HAvLmudpT33XqFPD7/KK18tfx/5I/eA==

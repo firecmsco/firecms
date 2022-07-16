@@ -139,6 +139,9 @@ buildProperty<string>({
 });
 ```
 
+- The `buildPropertyField` utility function has been replaced by a component
+  called `PropertyFieldBinding`. The props have not changed.
+- `CMSFormFieldProps` have been renamed to `PropertyFieldBindingProps`
 - `TimestampProperty` is now renamed to `DateProperty` in order to reflect
   better the alignment with JS types instead of Firebase ones. The discriminator
   when declaring date properties now is `date` instead of `timestamp`.
@@ -179,7 +182,7 @@ buildProperty(({ values }) => ({
 }))
 ```
 
-- `LoginViewProps` has been removed by `LoginView` in `FirebaseCMSAppProps`. If
+- `LoginViewProps` has been replaced by `LoginView` in `FirebaseCMSAppProps`. If
   you were overriding the `LoginViewProps` before, you can now simply pass a
   component that wraps `FirebaseLoginView`. This allows you to keep control of
   the login view and add additional state if you need it. The simplest component
@@ -192,7 +195,7 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
   return <FirebaseLoginView {...props}/>;
 }
 ```
-
+ 
 ### Style changes
 
 One of the fonts used by FireCMS has changed, and you need to update the imports
