@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
-import { Entity, EntityCollection } from "../../models";
+import { Entity, EntityCollection, FireCMSContext, User } from "../../models";
 import { useDataSource } from "./useDataSource";
 import { useNavigationContext } from "../useNavigationContext";
+import { useFireCMSContext } from "../useFireCMSContext";
 
 /**
  * @category Hooks and utilities
@@ -34,7 +35,7 @@ const CACHE:Record<string, Entity<any>| undefined> = {};
  * @category Hooks and utilities
  */
 
-export function useEntityFetch<M extends { [Key: string]: any }>(
+export function useEntityFetch<M extends { [Key: string]: any }, UserType extends User>(
     {
         path: inputPath,
         entityId,
@@ -47,6 +48,8 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
 
     const path = navigationContext.resolveAliasesFrom(inputPath);
 
+    const context: FireCMSContext<UserType> = useFireCMSContext();
+
     const [entity, setEntity] = useState<Entity<M> | undefined>();
     const [dataLoading, setDataLoading] = useState<boolean>(true);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
@@ -55,7 +58,19 @@ export function useEntityFetch<M extends { [Key: string]: any }>(
 
         setDataLoading(true);
 
-        const onEntityUpdate = (updatedEntity: Entity<M> | undefined) => {
+        const onEntityUpdate = async (updatedEntity: Entity<M> | undefined) => {
+            if (collection.callbacks?.onPostFetch && updatedEntity) {
+                try {
+                    updatedEntity = await collection.callbacks.onPostFetch({
+                        collection,
+                        path,
+                        entity: updatedEntity,
+                        context
+                    });
+                } catch (e: any) {
+                    console.error(e);
+                }
+            }
             CACHE[`${path}/${entityId}`] = updatedEntity;
             setEntity(updatedEntity);
             setDataLoading(false);
