@@ -51,7 +51,7 @@ export function DateTimeField({
                 label={
                     <LabelWithIcon property={property}/>
                 }
-                renderInput={(props) => (
+                renderInput={(props:any) => (
                     <MuiTextField {...props}
                                   fullWidth
                                   InputProps={{
@@ -66,7 +66,7 @@ export function DateTimeField({
                                   helperText={showError ? error : null}/>
                 )}
                 disabled={disabled}
-                onChange={(dateValue) => {
+                onChange={(dateValue:any) => {
                     return setValue(
                         dateValue
                     );

@@ -106,7 +106,7 @@ export function DateTimeFilterField({
                     InputProps={{
                         // disableUnderline: true,
                     }}
-                    renderInput={(props) => (
+                    renderInput={(props:any) => (
                         <Input
                             startAdornment={
                                 <CalendarTodayIcon fontSize={"small"}/>

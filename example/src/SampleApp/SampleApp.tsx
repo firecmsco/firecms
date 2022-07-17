@@ -118,10 +118,6 @@ function SampleApp() {
         schema: testEntitySchema,
         callbacks: testCallbacks,
         name: "Test entity",
-        permissions: ({ authController }) => ({
-            edit: false,
-            create: false,
-        }),
         additionalColumns: [
             {
                 id: "full_name",

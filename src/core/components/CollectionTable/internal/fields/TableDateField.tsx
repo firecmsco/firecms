@@ -51,7 +51,7 @@ export function TableDateField(props: {
                 onChange={(dateValue: Date | null) => {
                     updateValue(dateValue);
                 }}
-                renderInput={(params) =>
+                renderInput={(params:any) =>
                     <MuiTextField {...params}
                                   variant={"standard"}
                                   error={Boolean(error)}
