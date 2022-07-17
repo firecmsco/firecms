@@ -17,8 +17,5 @@
         "preview": "cd example && yarn preview",
         "deploy": "cd example && yarn deploy",
         "build": "cd lib && yarn build"
-    },
-    "resolutions": {
-        "react-virtualized": "git+https://git@github.com/remorses/react-virtualized-fixed-import.git#9.22.3"
     }
 }

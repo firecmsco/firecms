@@ -1,8 +1,8 @@
 import React from "react";
 
 import { Box, TextField as MuiTextField } from "@mui/material";
-import DatePicker from "@mui/lab/DatePicker";
-import DateTimePicker from "@mui/lab/DateTimePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 import { FieldProps } from "../../models";
 
@@ -49,7 +49,6 @@ export function DateTimeFieldBinding({
         <>
 
             <PickerComponent
-                clearable
                 autoFocus={autoFocus}
                 value={internalValue}
                 label={

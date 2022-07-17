@@ -54,6 +54,7 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
                             <Typography variant={"caption"}>
                                 By signing in you agree to our <a
                                 target="_blank"
+                                rel="noopener noreferrer"
                                 href={"https://firecms.co/terms_conditions"}>
                                 Terms and Conditions</a>
                             </Typography>

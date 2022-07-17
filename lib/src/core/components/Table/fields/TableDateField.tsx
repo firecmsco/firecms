@@ -1,7 +1,7 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { Box, TextField as MuiTextField } from "@mui/material";
-import DateTimePicker from "@mui/lab/DateTimePicker";
-import DatePicker from "@mui/lab/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
 export function TableDateField(props: {
     name: string;
@@ -29,7 +29,6 @@ export function TableDateField(props: {
     return (
         <PickerComponent
             value={internalValue ?? null}
-            clearable
             disabled={disabled}
             onChange={(dateValue: Date | null) => {
                 updateValue(dateValue);

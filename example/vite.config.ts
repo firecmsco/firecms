@@ -6,6 +6,9 @@ import ViteFonts from 'vite-plugin-fonts'
 
 // https://vitejs.dev/config/
 export default defineConfig({
+  esbuild: {
+    logOverride: { "this-is-undefined-in-esm": "silent" }
+  },
   build: {
     outDir: './build'
   },

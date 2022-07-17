@@ -7,6 +7,7 @@ const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
 
 export default defineConfig(() => ({
     esbuild: {
+        logOverride: { "this-is-undefined-in-esm": "silent" }
         // jsxInject: "import React from 'react'",
     },
     build: {

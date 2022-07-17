@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
-import DateTimePicker from "@mui/lab/DateTimePicker";
-import DatePicker from "@mui/lab/DatePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { TableWhereFilterOp } from "../TableProps";
 
@@ -107,7 +107,6 @@ export function DateTimeFilterField({
             <Box flexGrow={1} ml={1}>
 
                 <PickerComponent
-                    clearable
                     InputProps={{
                         // disableUnderline: true,
                     }}
