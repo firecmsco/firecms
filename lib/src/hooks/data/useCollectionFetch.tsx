@@ -1,7 +1,8 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Entity, EntityCollection, FilterValues } from "../../models";
+import { Entity, EntityCollection, FilterValues, FireCMSContext, User } from "../../models";
 import { useDataSource } from "./useDataSource";
 import { useNavigationContext } from "../useNavigationContext";
+import { useFireCMSContext } from "../useFireCMSContext";
 
 /**
  * @category Hooks and utilities
@@ -66,7 +67,7 @@ export interface CollectionFetchResult<M extends { [Key: string]: any }> {
  * @param entitiesDisplayedFirst
  * @category Hooks and utilities
  */
-export function useCollectionFetch<M>(
+export function useCollectionFetch<M, UserType extends User>(
     {
         path: inputPath,
         collection,
@@ -84,6 +85,8 @@ export function useCollectionFetch<M>(
 
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
+
+    const context: FireCMSContext<UserType> = useFireCMSContext();
 
     const initialEntities = useMemo(() => entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [], [entitiesDisplayedFirst]);
     const [data, setData] = useState<Entity<M>[]>(initialEntities);
@@ -105,7 +108,21 @@ export function useCollectionFetch<M>(
 
         setDataLoading(true);
 
-        const onEntitiesUpdate = (entities: Entity<M>[]) => {
+        const onEntitiesUpdate = async (entities: Entity<M>[]) => {
+            if (collection.callbacks?.onPostFetch) {
+                try {
+                    entities = await Promise.all(
+                        entities.map((entity) =>
+                            collection.callbacks!.onPostFetch!({
+                                collection,
+                                path,
+                                entity,
+                                context
+                            })));
+                } catch (e: any) {
+                    console.error(e);
+                }
+            }
             setDataLoading(false);
             setDataLoadingError(undefined);
             updateData(entities);

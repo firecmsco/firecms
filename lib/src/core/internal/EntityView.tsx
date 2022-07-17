@@ -116,7 +116,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             dataLoading,
             // eslint-disable-next-line no-unused-vars
             dataLoadingError
-        } = useEntityFetch<M>({
+        } = useEntityFetch<M, UserType>({
             path,
             entityId: currentEntityId,
             collection,

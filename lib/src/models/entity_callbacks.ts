@@ -1,3 +1,4 @@
+import { EntityCollection } from "./collections";
 import { Entity, EntityStatus, EntityValues, } from "./entities";
 import { FireCMSContext } from "./firecms_context";
 import { ResolvedEntityCollection } from "./resolved_entities";
@@ -10,6 +11,13 @@ import { User } from "./user";
  * @category Models
  */
 export interface EntityCallbacks<M extends { [Key: string]: any } = any, UserType extends User = User> {
+
+    /**
+     * Callback used after fetching data
+     * @param entityFetchProps
+     */
+    onPostFetch?(entityFetchProps: EntityOnPostFetchProps<M, UserType>)
+        : Promise<Entity<M>> | Entity<M>;
 
     /**
      * Callback used when save is successful
@@ -49,6 +57,34 @@ export interface EntityCallbacks<M extends { [Key: string]: any } = any, UserTyp
      * @param entityDeleteProps
      */
     onDelete?(entityDeleteProps: EntityOnDeleteProps<M, UserType>): void;
+}
+
+/**
+ * Parameters passed to hooks when an entity is fetched
+ * @category Models
+ */
+export interface EntityOnPostFetchProps<M extends { [Key: string]: any } = any, UserType extends User = User> {
+
+    /**
+     * Collection of the entity
+     */
+    collection: EntityCollection<M>;
+
+    /**
+     * Full path of the CMS where this collection is being fetched.
+     * Might contain unresolved aliases.
+     */
+    path: string;
+
+    /**
+     * Fetched entity
+     */
+    entity: Entity<M>
+
+    /**
+     * Context of the app status
+     */
+    context: FireCMSContext<UserType>;
 }
 
 /**

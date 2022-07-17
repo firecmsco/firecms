@@ -233,7 +233,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             dataLoading,
             noMoreToLoad,
             dataLoadingError
-        } = useCollectionFetch<M>({
+        } = useCollectionFetch<M, UserType>({
             entitiesDisplayedFirst,
             path: fullPath,
             collection,
