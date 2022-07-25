@@ -8,7 +8,7 @@ import {
     User
 } from "../../models";
 import { useDataSource } from "./useDataSource";
-import { resolveCollection, resolveCollectionPathAliases } from "../../core";
+import { resolveCollection } from "../../core";
 
 /**
  * @category Hooks and utilities

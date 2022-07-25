@@ -336,6 +336,7 @@ function MemoizedList({
                 const rowData = data && data[index];
                 return (
                     <VirtualTableRow
+                        key={`row_${index}`}
                         rowData={rowData}
                         rowIndex={index}
                         onRowClick={onRowClick}

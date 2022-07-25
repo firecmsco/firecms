@@ -1,6 +1,7 @@
 import { EntityCollection } from "./collections";
 import { User } from "./user";
 import { ResolvedEntityCollection } from "./resolved_entities";
+import { Entity } from "./entities";
 
 /**
  * Props used to open a side dialog
@@ -49,6 +50,17 @@ export interface EntitySidePanelProps<M = any, UserType extends User = User> {
      */
     updateUrl?: boolean;
 
+    /**
+     * Callback when the entity is updated
+     * @param params
+     */
+    onUpdate?: (params: { entity: Entity<any> }) => void;
+
+    /**
+     * Should this panel close when saving
+     */
+    closeOnSave?: boolean;
+
 }
 
 /**
@@ -68,8 +80,6 @@ export interface SideEntityController {
      * At least you need to pass the path of the entity you would like
      * to edit. You can set an entityId if you would like to edit and existing one
      * (or a new one with that id).
-     * If you wish, you can also override the `CollectionOverrideHandler` at
-     * the FireCMS level.
      * @param props
      */
     open: (props: EntitySidePanelProps) => void;

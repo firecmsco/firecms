@@ -1,4 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState
+} from "react";
 import { useSideDialogsController } from "../hooks/useSideDialogsController";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { ErrorBoundary } from "./components";
@@ -16,7 +22,7 @@ export type SideDialogContextProps = {
     setBlockedNavigationMessage: (message?: React.ReactNode) => void,
     width: string,
     setWidth: (width: string) => void,
-    close: () => void
+    close: (force?:boolean) => void
 }
 
 const SideDialogContext = React.createContext<SideDialogContextProps>({
@@ -55,7 +61,7 @@ export function SideDialogs() {
     //  we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed
     const allPanels = [
         ...sidePanels,
-        // undefined
+        undefined
     ];
 
     return <>
@@ -109,13 +115,14 @@ function SideDialogView({
         setDrawerCloseRequested(false);
     };
 
-    const onCloseRequest = () => {
-        if (blocked) {
+    const onCloseRequest = (force?:boolean) => {
+        console.log("onCloseRequest", blocked, force);
+        if (blocked && !force) {
             setDrawerCloseRequested(true);
         } else {
             sideDialogsController.close();
         }
-    }
+    };
 
     return (
         <SideDialogContext.Provider
@@ -144,7 +151,7 @@ function SideDialogView({
                                 width,
                                 maxWidth: "100vw"
                             }}>
-                            <panel.Component {...panel.props}/>
+                            {panel.Component}
                         </Box>
                     </ErrorBoundary>}
 

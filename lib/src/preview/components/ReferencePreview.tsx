@@ -16,7 +16,7 @@ import { EntityReference, ResolvedProperty } from "../../models";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { PreviewSize, PropertyPreview, SkeletonComponent } from "../index";
 
-import { ErrorView, getValueInPath } from "../../core";
+import { ErrorView, getValueInPath, isReferenceProperty } from "../../core";
 import {
     useEntityFetch,
     useNavigationContext,
@@ -98,6 +98,10 @@ function ReferencePreviewInternal<M>({
         if (!res || !res.length) {
             res = Object.keys(resolvedCollection.properties);
         }
+        res = res.filter(key => {
+            const property = resolvedCollection.properties[key];
+            return property && !isReferenceProperty(property);
+        });
 
         if (size === "small" || size === "regular")
             res = res.slice(0, 3);
@@ -120,6 +124,7 @@ function ReferencePreviewInternal<M>({
     if (!reference) {
         body = buildError("Reference not set");
     } else if (!(reference instanceof EntityReference)) {
+        console.error("Reference preview received value of type", typeof reference);
         body = buildError("Unexpected value", JSON.stringify(reference));
     } else if (entity && !entity.values) {
         body = buildError("Reference does not exist", reference.path);

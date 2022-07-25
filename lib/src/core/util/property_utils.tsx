@@ -4,14 +4,27 @@ import FunctionsIcon from "@mui/icons-material/Functions";
 import Crop75Icon from "@mui/icons-material/Crop75";
 
 import {
-    Properties, PropertiesOrBuilders,
-    Property,
+    PropertiesOrBuilders,
     PropertyOrBuilder,
     ResolvedProperty
 } from "../../models";
 import { getWidget, Widget } from "../widgets";
 import { Box } from "@mui/material";
 import { isPropertyBuilder } from "./entities";
+import { resolveProperty } from "./resolutions";
+
+export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder) {
+    const resolvedProperty = resolveProperty({ propertyOrBuilder });
+    if (!resolvedProperty) return null;
+    if (resolvedProperty.dataType === "reference") {
+        return true;
+    }
+    if (resolvedProperty.dataType === "array") {
+        if (Array.isArray(resolvedProperty.of)) return false;
+        else return resolvedProperty.of?.dataType === "reference"
+    }
+    return false;
+}
 
 export function getIdIcon(
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",

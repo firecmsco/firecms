@@ -192,11 +192,6 @@ export function useBuildNavigationContext<UserType extends User>({
             .map(e => e.group)
             .filter(Boolean)
             .filter((value, index, array) => array.indexOf(value) === index) as string[];
-        console.log("s", {
-            collections: collections ?? [],
-            navigationEntries,
-            groups
-        });
         return { navigationEntries, groups };
     }, [buildCMSUrlPath, buildUrlCollectionPath]);
 

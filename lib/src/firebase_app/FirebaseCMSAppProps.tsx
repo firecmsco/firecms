@@ -134,13 +134,6 @@ export interface FirebaseCMSAppProps {
     textSearchController?: FirestoreTextSearchController;
 
     /**
-     * In case you need to override the home page.
-     * You may want to use {@link useNavigation} in order to get the resolved
-     * navigation.
-     */
-    HomePage?: React.ComponentType;
-
-    /**
      * Default path under the navigation routes of the CMS will be created
      */
     basePath?: string;
@@ -149,6 +142,13 @@ export interface FirebaseCMSAppProps {
      * Default path under the collection routes of the CMS will be created
      */
     baseCollectionPath?: string;
+
+    /**
+     * In case you need to override the home page.
+     * You may want to use {@link useNavigation} in order to get the resolved
+     * navigation.
+     */
+    HomePage?: React.ComponentType;
 
     /**
      * Additional props passed to the login view. You can use this props

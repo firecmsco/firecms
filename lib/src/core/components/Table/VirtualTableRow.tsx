@@ -20,11 +20,13 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
 
         const [onHover, setOnHover] = useState(false);
 
-        const onClick = useCallback((event: React.SyntheticEvent) => onRowClick ? onRowClick({
-            rowData,
-            rowIndex,
-            event
-        }) : undefined, [onRowClick, rowData, rowIndex]);
+        const onClick = useCallback((event: React.SyntheticEvent) => onRowClick
+            ? onRowClick({
+                rowData,
+                rowIndex,
+                event
+            })
+            : undefined, [onRowClick, rowData, rowIndex]);
 
         const setOnHoverTrue = useCallback(() => setOnHover(true), []);
         const setOnHoverFalse = useCallback(() => setOnHover(false), []);
@@ -45,7 +47,6 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
                     borderBottom: "1px solid rgba(128, 128, 128, 0.1)",
                     backgroundColor: hoverRow && onHover
                         ? darken(theme.palette.background.default, 0.01)
-                        // ? "red"
                         : undefined
                 })}>
 

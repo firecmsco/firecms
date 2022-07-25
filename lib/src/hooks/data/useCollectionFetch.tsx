@@ -25,12 +25,6 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
     itemCount?: number;
 
     /**
-     * List of entities that will be displayed on top, no matter the ordering.
-     * This is used for reference fields selection
-     */
-    entitiesDisplayedFirst?: Entity<M>[];
-
-    /**
      * Filter the fetched data by the property
      */
     filterValues?: FilterValues<Extract<keyof M, string>>;
@@ -50,10 +44,10 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
  * @category Hooks and utilities
  */
 export interface CollectionFetchResult<M extends { [Key: string]: any }> {
-    data: Entity<M>[]
-    dataLoading: boolean,
-    noMoreToLoad: boolean,
-    dataLoadingError?: Error
+    data: Entity<M>[];
+    dataLoading: boolean;
+    noMoreToLoad: boolean;
+    dataLoadingError?: Error;
 }
 
 /**
@@ -64,7 +58,6 @@ export interface CollectionFetchResult<M extends { [Key: string]: any }> {
  * @param sortBy
  * @param itemCount
  * @param searchString
- * @param entitiesDisplayedFirst
  * @category Hooks and utilities
  */
 export function useCollectionFetch<M, UserType extends User>(
@@ -75,7 +68,6 @@ export function useCollectionFetch<M, UserType extends User>(
         sortBy,
         itemCount,
         searchString,
-        entitiesDisplayedFirst
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
 
     const dataSource = useDataSource();
@@ -88,32 +80,22 @@ export function useCollectionFetch<M, UserType extends User>(
 
     const context: FireCMSContext<UserType> = useFireCMSContext();
 
-    const initialEntities = useMemo(() => entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [], [entitiesDisplayedFirst]);
-    const [data, setData] = useState<Entity<M>[]>(initialEntities);
+    const [data, setData] = useState<Entity<M>[]>([]);
 
     const [dataLoading, setDataLoading] = useState<boolean>(false);
     const [dataLoadingError, setDataLoadingError] = useState<Error | undefined>();
     const [noMoreToLoad, setNoMoreToLoad] = useState<boolean>(false);
-
-    const updateData = useCallback((entities: Entity<M>[]) => {
-        if (!initialEntities) {
-            setData(entities);
-        } else {
-            const displayedFirstId = new Set(initialEntities.map((e) => e.id));
-            setData([...initialEntities, ...entities.filter((e) => !displayedFirstId.has(e.id))]);
-        }
-    }, [initialEntities]);
 
     useEffect(() => {
 
         setDataLoading(true);
 
         const onEntitiesUpdate = async (entities: Entity<M>[]) => {
-            if (collection.callbacks?.onPostFetch) {
+            if (collection.callbacks?.onFetch) {
                 try {
                     entities = await Promise.all(
                         entities.map((entity) =>
-                            collection.callbacks!.onPostFetch!({
+                            collection.callbacks!.onFetch!({
                                 collection,
                                 path,
                                 entity,
@@ -125,7 +107,7 @@ export function useCollectionFetch<M, UserType extends User>(
             }
             setDataLoading(false);
             setDataLoadingError(undefined);
-            updateData(entities);
+            setData(entities);
             setNoMoreToLoad(!itemCount || entities.length < itemCount);
         };
 

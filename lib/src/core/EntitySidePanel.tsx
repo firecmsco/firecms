@@ -38,7 +38,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
             }
         }
         return usedCollection;
-    }, [props]);
+    }, [navigationContext, props]);
 
     useEffect(() => {
         function beforeunload(e: any) {

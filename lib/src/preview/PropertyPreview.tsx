@@ -52,7 +52,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
     } else if (property.Preview) {
         content = createElement(property.Preview as React.ComponentType<PropertyPreviewProps>,
             {
-                propertyKey: propertyKey,
+                propertyKey,
                 value,
                 property,
                 size,

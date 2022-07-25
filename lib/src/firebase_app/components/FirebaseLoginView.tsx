@@ -556,7 +556,7 @@ function LoginForm({
                     <Grid item xs={12}
                           sx={{ display: shouldShowEmail ? "inherit" : "none" }}>
                         <TextField placeholder="Email" fullWidth autoFocus
-                                   value={email}
+                                   value={email ?? ""}
                                    disabled={authDelegate.authLoading}
                                    type="email"
                                    onChange={(event) => setEmail(event.target.value)}/>
@@ -569,7 +569,7 @@ function LoginForm({
                     <Grid item xs={12}
                           sx={{ display: loginMode || (registrationMode && !disableSignupScreen) ? "inherit" : "none" }}>
                         <TextField placeholder="Password" fullWidth
-                                   value={password}
+                                   value={password ?? ""}
                                    disabled={authDelegate.authLoading}
                                    inputRef={passwordRef}
                                    type="password"

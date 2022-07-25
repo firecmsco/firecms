@@ -140,9 +140,8 @@ export function EntityForm<M extends { [Key: string]: any }>({
     const [entityIdError, setEntityIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<Error | undefined>();
 
-    const initialValuesRef = React.useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
-
-    const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValuesRef.current);
+    const [initialValues, setInitialValues] = useState<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
+    const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
 
     const doOnValuesChanges = (values?: EntityValues<M>) => {
         setInternalValue(values);
@@ -155,14 +154,14 @@ export function EntityForm<M extends { [Key: string]: any }>({
         path,
         entityId,
         values: internalValue,
-        previousValues: initialValuesRef.current
+        previousValues: initialValues
     }), [inputCollection, path, entityId, internalValue]);
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
-        if (initialValuesRef.current && status === "existing") {
+        if (initialValues && status === "existing") {
             return Object.keys(collection.properties)
                 .map((key) => {
-                    const initialValue = (initialValuesRef.current as any)[key];
+                    const initialValue = (initialValues as any)[key];
                     const latestValue = (baseDataSourceValues as any)[key];
                     if (!equal(initialValue, latestValue)) {
                         return { [key]: latestValue };
@@ -173,7 +172,7 @@ export function EntityForm<M extends { [Key: string]: any }>({
         } else {
             return {};
         }
-    }, [baseDataSourceValues, collection.properties, status]);
+    }, [baseDataSourceValues, collection.properties, initialValues, status]);
 
     const saveValues = useCallback((values: EntityValues<M>, formikActions: FormikHelpers<EntityValues<M>>) => {
 
@@ -187,32 +186,33 @@ export function EntityForm<M extends { [Key: string]: any }>({
         setSavingError(undefined);
         setEntityIdError(false);
 
-        let savedEntityId: string | undefined;
         if (status === "existing") {
             if (!entity?.id) throw Error("Form misconfiguration when saving, no id for existing entity");
-            savedEntityId = entity.id;
         } else if (status === "new" || status === "copy") {
             if (collection.customId) {
                 if (collection.customId !== "optional" && !entityId) {
                     throw Error("Form misconfiguration when saving, entityId should be set");
                 }
-                savedEntityId = entityId;
             }
         } else {
             throw Error("New FormType added, check EntityForm");
         }
 
-        if (onEntitySave)
+        if (onEntitySave) {
             onEntitySave({
                 collection,
                 path,
-                entityId: savedEntityId,
+                entityId,
                 values,
                 previousValues: entity?.values
             })
                 .then(_ => {
-                    initialValuesRef.current = values;
-                    formikActions.setTouched({});
+                    setInitialValues(values);
+                    formikActions.resetForm({
+                        values,
+                        submitCount: 0,
+                        touched: {}
+                    });
                 })
                 .catch(e => {
                     console.error(e);
@@ -221,6 +221,7 @@ export function EntityForm<M extends { [Key: string]: any }>({
                 .finally(() => {
                     formikActions.setSubmitting(false);
                 });
+        }
 
     }, [status, path, collection, entity, onEntitySave, mustSetCustomId, entityId]);
 
@@ -241,7 +242,7 @@ export function EntityForm<M extends { [Key: string]: any }>({
 
     return (
         <Formik
-            initialValues={initialValuesRef.current}
+            initialValues={baseDataSourceValues as M}
             onSubmit={saveValues}
             validateOnMount={false}
             validationSchema={validationSchema}
@@ -290,7 +291,7 @@ export function EntityForm<M extends { [Key: string]: any }>({
 
                     {entityId && <FormInternal
                         {...props}
-                        baseDataSourceValues={baseDataSourceValues}
+                        initialValues={initialValues}
                         onModified={onModified}
                         onValuesChanged={doOnValuesChanges}
                         underlyingChanges={underlyingChanges}
@@ -308,7 +309,7 @@ export function EntityForm<M extends { [Key: string]: any }>({
 }
 
 function FormInternal<M>({
-                             baseDataSourceValues,
+                             initialValues,
                              values,
                              onModified,
                              onValuesChanged,
@@ -323,9 +324,10 @@ function FormInternal<M>({
                              status,
                              handleSubmit,
                              savingError,
+                             dirty,
                              errors
                          }: FormikProps<M> & {
-    baseDataSourceValues: Partial<M>,
+    initialValues: Partial<M>,
     onModified: ((modified: boolean) => void) | undefined,
     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
     underlyingChanges: Partial<M>,
@@ -337,7 +339,7 @@ function FormInternal<M>({
     savingError?: Error,
 }) {
 
-    const modified = !equal(baseDataSourceValues, values);
+    const modified = dirty;
     useEffect(() => {
         if (onModified)
             onModified(modified);
@@ -405,7 +407,7 @@ function FormInternal<M>({
         </Grid>
     );
 
-    const disabled = isSubmitting || (!modified && status === "existing");
+    const disabled = isSubmitting || !modified;
     const formRef = React.createRef<HTMLDivElement>();
 
     return (

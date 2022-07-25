@@ -59,9 +59,9 @@ export function useEntityFetch<M extends { [Key: string]: any }, UserType extend
         setDataLoading(true);
 
         const onEntityUpdate = async (updatedEntity: Entity<M> | undefined) => {
-            if (collection.callbacks?.onPostFetch && updatedEntity) {
+            if (collection.callbacks?.onFetch && updatedEntity) {
                 try {
-                    updatedEntity = await collection.callbacks.onPostFetch({
+                    updatedEntity = await collection.callbacks.onFetch({
                         collection,
                         path,
                         entity: updatedEntity,

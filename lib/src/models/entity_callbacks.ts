@@ -16,7 +16,7 @@ export interface EntityCallbacks<M extends { [Key: string]: any } = any, UserTyp
      * Callback used after fetching data
      * @param entityFetchProps
      */
-    onPostFetch?(entityFetchProps: EntityOnPostFetchProps<M, UserType>)
+    onFetch?(entityFetchProps: EntityOnPostFetchProps<M, UserType>)
         : Promise<Entity<M>> | Entity<M>;
 
     /**
@@ -110,7 +110,7 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any } = any, UserT
     resolvedPath: string;
 
     /**
-     * Id of the entity or undefined if new
+     * ID of the entity
      */
     entityId?: string;
 

@@ -1,10 +1,4 @@
-import React, {
-    useCallback,
-    useContext,
-    useDeferredValue,
-    useEffect,
-    useMemo
-} from "react";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import equal from "react-fast-compare";
 import {
@@ -69,6 +63,7 @@ import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
 import { PropertyPreviewTableCell } from "./internal/PropertyPreviewTableCell";
 import { useDebouncedData } from "../../../firebase_app/hooks/useDebouncedData";
+import { useDataOrder } from "../../../hooks/data/useDataOrder";
 
 const DEFAULT_STATE = {} as any;
 
@@ -229,12 +224,11 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         }, [fullPath, collection, resolvedCollection]);
 
         const {
-            data: inputData,
+            data: rawData,
             dataLoading,
             noMoreToLoad,
             dataLoadingError
         } = useCollectionFetch<M, UserType>({
-            entitiesDisplayedFirst,
             path: fullPath,
             collection,
             filterValues,
@@ -243,8 +237,13 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             itemCount
         });
 
+        const orderedData = useDataOrder({
+            data: rawData,
+            entitiesDisplayedFirst
+        });
+
         // hack to fix Firestore listeners firing with incomplete data
-        const data = useDebouncedData(inputData);
+        const data = useDebouncedData(orderedData);
 
         const loadNextPage = useCallback(() => {
             if (!paginationEnabled || dataLoading || noMoreToLoad)
@@ -345,7 +344,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             if (!inlineEditing) {
                 return (entity
                         ? <PropertyPreviewTableCell
-                            key={`table_cell_${propertyKey}_${rowIndex}_${columnIndex}`}
+                            key={`table_cell_${entity.id}_${propertyKey}`}
                             align={column.align ?? "left"}
                             propertyKey={propertyKey as string}
                             property={property}

@@ -5,17 +5,30 @@ import {
     EntityCollection,
     FilterValues
 } from "../../models";
-import { Box, Button, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    Typography,
+    useMediaQuery,
+    useTheme
+} from "@mui/material";
+import { Add } from "@mui/icons-material";
 
 import { EntityCollectionTable } from "./EntityCollectionTable";
 import {
     CollectionRowActions
 } from "./EntityCollectionTable/internal/CollectionRowActions";
-import { useDataSource, useNavigationContext } from "../../hooks";
+import {
+    useAuthController,
+    useDataSource,
+    useNavigationContext,
+    useSideEntityController
+} from "../../hooks";
 import { ErrorView } from "./ErrorView";
 import { CustomDialogActions } from "./CustomDialogActions";
 import { useSideDialogsController } from "../../hooks/useSideDialogsController";
 import { useSideDialogContext } from "../SideDialogs";
+import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 
 /**
  * @category Components
@@ -83,8 +96,8 @@ export function useReferenceDialogController(referenceDialogProps: Omit<Referenc
         if (referenceDialogProps.path) {
             sideDialogsController.open({
                 key: `reference_${referenceDialogProps.path}`,
-                Component: ReferenceDialog,
-                props: referenceDialogProps as ReferenceDialogProps,
+                Component:
+                    <ReferenceDialog {...referenceDialogProps as ReferenceDialogProps}/>,
                 width: "90vw"
             });
         }
@@ -121,12 +134,14 @@ export function ReferenceDialog(
 
     const navigationContext = useNavigationContext();
     const sideDialogContext = useSideDialogContext();
+    const sideEntityController = useSideEntityController();
 
     const fullPath = navigationContext.resolveAliasesFrom(pathInput);
 
     const dataSource = useDataSource();
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
+    const [entitiesDisplayedFirst, setEntitiesDisplayedFirst] = useState<Entity<any>[]>([]);
 
     /**
      * Fetch initially selected ids
@@ -143,11 +158,15 @@ export function ReferenceDialog(
                     });
                 }))
                 .then((entities) => {
-                    if (!unmounted)
-                        setSelectedEntities(entities.filter(e => e !== undefined) as Entity<any>[]);
+                    if (!unmounted) {
+                        const result = entities.filter(e => e !== undefined) as Entity<any>[];
+                        setSelectedEntities(result);
+                        setEntitiesDisplayedFirst(result);
+                    }
                 });
         } else {
             setSelectedEntities([]);
+            setEntitiesDisplayedFirst([]);
         }
         return () => {
             unmounted = true;
@@ -177,10 +196,23 @@ export function ReferenceDialog(
         }
     }, [onMultipleEntitiesSelected, selectedEntities]);
 
+    const onNewClick = useCallback(() =>
+            sideEntityController.open({
+                path: fullPath,
+                collection,
+                updateUrl: true,
+                onUpdate: ({ entity }) => {
+                    setEntitiesDisplayedFirst([entity, ...entitiesDisplayedFirst]);
+                    onEntityClick(entity);
+                },
+                closeOnSave: true
+            }),
+        [sideEntityController, fullPath, collection, entitiesDisplayedFirst, toggleEntitySelection]);
+
     const onEntityClick = useCallback((entity: Entity<any>) => {
         if (!multiselect && onSingleEntitySelected) {
             onSingleEntitySelected(entity);
-            sideDialogContext.close();
+            sideDialogContext.close(false);
         } else {
             toggleEntitySelection(entity);
         }
@@ -208,7 +240,7 @@ export function ReferenceDialog(
 
     const onDone = useCallback((event: React.SyntheticEvent) => {
         event.stopPropagation();
-        sideDialogContext.close();
+        sideDialogContext.close(false);
         if (onClose)
             onClose();
     }, [onClose]);
@@ -223,11 +255,11 @@ export function ReferenceDialog(
         <Box sx={{
             display: "flex",
             flexDirection: "column",
-                height: "100%"
-            }}>
+            height: "100%"
+        }}>
 
-                <Box sx={{ flexGrow: 1}}>
-                {selectedEntities &&
+            <Box sx={{ flexGrow: 1 }}>
+                {entitiesDisplayedFirst &&
                     <EntityCollectionTable fullPath={fullPath}
                                            onEntityClick={onEntityClick}
                                            forceFilter={forceFilter}
@@ -237,23 +269,66 @@ export function ReferenceDialog(
                                            </Typography>}
                                            {...collection}
                                            inlineEditing={false}
-                                           Actions={<Button onClick={onClear}
-                                                            color="primary">
-                                               Clear
-                                           </Button>}
-                                           entitiesDisplayedFirst={selectedEntities}
+                                           Actions={<ReferenceDialogActions
+                                               collection={collection}
+                                               path={fullPath}
+                                               onNewClick={onNewClick}
+                                               onClear={onClear}/>}
+                                           entitiesDisplayedFirst={entitiesDisplayedFirst}
                     />}
-                </Box>
-                <CustomDialogActions translucent={false}>
-                    <Button
-                        onClick={onDone}
-                        color="primary"
-                        variant="outlined">
-                        Done
-                    </Button>
-                </CustomDialogActions>
             </Box>
+            <CustomDialogActions translucent={false}>
+                <Button
+                    onClick={onDone}
+                    color="primary"
+                    variant="outlined">
+                    Done
+                </Button>
+            </CustomDialogActions>
+        </Box>
 
     );
 
+}
+
+export function ReferenceDialogActions({
+                                           collection,
+                                           path,
+                                           onClear,
+                                           onNewClick
+                                       }: { collection: EntityCollection<any>, path: string, onClear: () => void, onNewClick: () => void }) {
+
+    const authController = useAuthController();
+
+    const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+
+    const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path)) &&
+        onNewClick && (largeLayout
+            ? <Button
+                onClick={onNewClick}
+                startIcon={<Add/>}
+                size="large"
+                variant="contained"
+                color="primary">
+                Add {collection.singularName ?? collection.name}
+            </Button>
+            : <Button
+                onClick={onNewClick}
+                size="medium"
+                variant="contained"
+                color="primary"
+            >
+                <Add/>
+            </Button>);
+
+    return (
+        <>
+            <Button onClick={onClear}
+                    color="primary">
+                Clear
+            </Button>
+            {addButton}
+        </>
+    );
 }

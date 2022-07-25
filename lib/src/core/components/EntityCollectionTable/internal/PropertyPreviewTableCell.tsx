@@ -30,7 +30,7 @@ export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps
 
         const {
             size,
-            focused,
+            focused
         } = useEntityCollectionTableController();
 
         const value = getValueInPath(entity.values as any, propertyKey);
@@ -39,14 +39,14 @@ export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps
                 size={size}
                 width={width}
                 focused={focused}
-                key={`preview_cell_${propertyKey}_${entity.id}_${columnIndex}`}
+                key={`preview_cell_${propertyKey}_${entity.id}`}
                 value={value}
                 align={align ?? "left"}
                 disabled={true}>
                 <PropertyPreview
                     width={width}
                     height={getRowHeight(size)}
-                    propertyKey={`preview_${propertyKey}_${entity.id}_${columnIndex}`}
+                    propertyKey={propertyKey}
                     property={property as any}
                     entity={entity}
                     value={value}

@@ -17,18 +17,30 @@ this version:
 
 ### General
 
-- More consistent naming all through the app.
+- More consistent **naming** all through the app.
 - Better documentation.
-- Visual and performance refactor of forms, especially in order to support
+- Visual and performance refactor of **forms**, especially in order to support
   complex nested structures of array and map properties.
+- In order to improve customization, you can now define your own components for
+  some key parts of the library. For example, you may want to add actions to
+  every `EntityCollectionView` in your instance, so you can create your
+  component wrapping `EntityCollectionView` and setting is as the default. Or
+  add your terms and conditions checkbox to the login screen.
+- Reference dialogs are now opened using the side dialog.
 
 ### Collections and schemas
 
-- Entity schemas have been removed and merged with collections, in order to
+- There is a completely new `VirtualTable` component used internally,
+  replacing `react-base-table`. We have implemented it from scratch to suit our
+  needs and have seen a massive increase in **performance**.
+- You can now have multiple collections at the same path, thanks to the
+  introduction of **aliases**.
+- **Entity schemas have been removed** and merged with collections, in order to
   simplify code since they felt redundant.
 - Entity side dialogs now open the first tab by default, in order to save some
-  clicks.
-- You can now assign icons to collections and custom views.
+  clicks. Also, they don't close after saving, allowing users to do further
+  modifications, or add entities to sub-collections.
+- You can now assign **icons** to collections and custom views.
 - When creating a new entity, the id gets assigned as the first step. This
   allows developers to use the internal callbacks of properties that depend on
   the id of the new entity, such as file upload paths or file names.

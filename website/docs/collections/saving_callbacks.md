@@ -5,7 +5,8 @@ sidebar_label: Saving and deleting callbacks
 ---
 
 When you are saving an entity you can attach different callbacks before and
-after it gets saved: `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
+after it gets saved or fetched:
+`onFetch`, `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
 
 These callbacks are defined at the collection level under the prop `callbacks`.
 

@@ -22,7 +22,12 @@ import {
     ResolvedProperty
 } from "../../models";
 import { FieldDescription } from "../index";
-import { ErrorBoundary, ErrorView, getReferenceFrom, } from "../../core";
+import {
+    ErrorBoundary,
+    ErrorView,
+    getReferenceFrom,
+    isReferenceProperty,
+} from "../../core";
 import { PropertyPreview, SkeletonComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
@@ -160,7 +165,10 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                 if (!listProperties || !listProperties.length) {
                     listProperties = allProperties;
                 }
-                listProperties = listProperties.slice(0, 3);
+                listProperties = listProperties.filter(key => {
+                    const propertyOrBuilder = collection.properties[key];
+                    return propertyOrBuilder && !isReferenceProperty(propertyOrBuilder);
+                }).slice(0, 3);
 
                 body = (
                     <Box display={"flex"}

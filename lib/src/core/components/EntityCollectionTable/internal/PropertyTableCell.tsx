@@ -71,7 +71,7 @@ function isStorageProperty<T>(property: ResolvedProperty) {
 }
 
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
-    function PropertyTableCellInternal<T extends CMSType, M>({
+    function PropertyTableCell<T extends CMSType, M>({
                                                                  propertyKey,
                                                                  setFocused,
                                                                  columnIndex,

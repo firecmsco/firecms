@@ -1,8 +1,4 @@
-import {
-    PreviewSize,
-    PropertyPreviewProps,
-    ReferencePreview
-} from "../index";
+import { PreviewSize, PropertyPreviewProps, ReferencePreview } from "../index";
 import { ResolvedReferenceProperty } from "../../models";
 
 import { Box } from "@mui/material";
@@ -33,12 +29,18 @@ export function ArrayOfReferencesPreview({
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
-        (<>
+        <Box sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: "100%"
+        }}>
             {value &&
                 value.map((reference, index) => {
                         const ofProperty = property.of as ResolvedReferenceProperty;
                         return <Box sx={{
-                            margin: 0.5
+                            marginTop: 0.25,
+                            marginBottom: 0.25,
+                            width: "100%"
                         }}
                                     key={`preview_array_ref_${propertyKey}_${index}`}>
                             <ReferencePreview
@@ -50,6 +52,6 @@ export function ArrayOfReferencesPreview({
                         </Box>;
                     }
                 )}
-        </>)
+        </Box>
     );
 }

@@ -39,7 +39,7 @@ export type EntityValues<M> = M;
  */
 export class EntityReference {
     /**
-     * Id of the entity
+     * ID of the entity
      */
     readonly id: string;
     /**

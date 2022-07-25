@@ -57,6 +57,8 @@ export interface EntityViewProps<M> {
     selectedSubPath?: string;
     formWidth?: number | string;
     onValuesAreModified: (modified: boolean) => void;
+    onUpdate?: (params: { entity: Entity<any> }) => void;
+    closeOnSave?: boolean;
 }
 
 /**
@@ -74,7 +76,9 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                                                                      copy,
                                                                                      collection,
                                                                                      onValuesAreModified,
-                                                                                     formWidth
+                                                                                     formWidth,
+                                                                                     onUpdate,
+                                                                                     closeOnSave
                                                                                  }: EntityViewProps<M>) {
 
         const theme = useTheme();
@@ -196,7 +200,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             console.error(e);
         }, []);
 
-        const onSaveSuccess = useCallback((updatedEntity: Entity<M>) => {
+        const onSaveSuccess = (updatedEntity: Entity<M>, closeAfterSave:boolean) => {
 
             snackbarController.open({
                 type: "success",
@@ -209,7 +213,15 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
             onValuesAreModified(false);
 
-        }, [collection.name, collection.singularName, onValuesAreModified]);
+            if (onUpdate)
+                onUpdate({ entity: updatedEntity });
+
+            if (closeOnSave) {
+                sideDialogContext.setBlocked(false);
+                sideDialogContext.close(true);
+            }
+
+        };
 
         const onSaveFailure = useCallback((e: Error) => {
 
@@ -228,13 +240,15 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                                     path,
                                                     entityId,
                                                     values,
-                                                    previousValues
+                                                    previousValues,
+                                                    closeAfterSave
                                                 }: {
             collection: ResolvedEntityCollection<M>,
             path: string,
             entityId: string | undefined,
             values: EntityValues<M>,
-            previousValues?: EntityValues<M>
+            previousValues?: EntityValues<M>,
+            closeAfterSave:boolean
         }): Promise<void> => {
 
             if (!status)
@@ -249,7 +263,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 status,
                 dataSource,
                 context,
-                onSaveSuccess,
+                onSaveSuccess: (updatedEntity: Entity<M>) => onSaveSuccess(updatedEntity, closeAfterSave),
                 onSaveFailure,
                 onPreSaveHookError,
                 onSaveSuccessHookError
@@ -423,7 +437,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         pb: 1,
                         alignSelf: "center"
                     }}>
-                    <IconButton onClick={() => sideDialogContext.close()}
+                    <IconButton onClick={() => sideDialogContext.close(false)}
                                 size="large">
                         <CloseIcon/>
                     </IconButton>

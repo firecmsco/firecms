@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { SideDialogPanelProps, SideDialogsController } from "../../models";
+import equal from "react-fast-compare"
 
 export function useBuildSideDialogsController(): SideDialogsController {
 
@@ -9,17 +10,15 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
     const [sidePanels, setSidePanels] = useState<SideDialogPanelProps[]>([]);
 
-    const routesStore = useRef<Record<string, SideDialogPanelProps>>({});
     const routesCount = useRef<number>(0);
 
     useEffect(() => {
         const state = location.state as any;
         const panelKeys: string[] = state?.panels ?? [];
-        setSidePanels(panelKeys
-            .map(key => routesStore.current[key])
-            .filter(p => Boolean(p)) as SideDialogPanelProps[]
-        );
-    }, [location]);
+        const newPanels = sidePanels.filter(panel => panelKeys.includes(panel.key) || !panel.urlPath);
+        if (!equal(sidePanels, newPanels))
+            setSidePanels(newPanels);
+    }, [location, sidePanels]);
 
     const close = useCallback(() => {
 
@@ -47,15 +46,11 @@ export function useBuildSideDialogsController(): SideDialogsController {
                 }
             );
         }
-    }, [sidePanels, location, routesCount]);
+    }, [sidePanels, navigate, location]);
 
     const open = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
         const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
-
-        newPanels.forEach((panel) => {
-            routesStore.current[panel.key] = panel;
-        });
         routesCount.current = routesCount.current + newPanels.length;
 
         const baseLocation = (location.state as any)?.base_location ?? location;
@@ -82,9 +77,6 @@ export function useBuildSideDialogsController(): SideDialogsController {
     const replace = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
         const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
-        newPanels.forEach((panel) => {
-            routesStore.current[panel.key] = panel;
-        });
 
         const baseLocation = (location.state as any)?.base_location ?? location;
 
