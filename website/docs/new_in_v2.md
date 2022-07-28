@@ -26,7 +26,8 @@ this version:
   every `EntityCollectionView` in your instance, so you can create your
   component wrapping `EntityCollectionView` and setting is as the default. Or
   add your terms and conditions checkbox to the login screen.
-- Reference dialogs are now opened using the side dialog.
+- Reference dialogs are now opened using the side dialog, and you can create new
+  entities directly from the reference selection view.
 
 ### Collections and schemas
 

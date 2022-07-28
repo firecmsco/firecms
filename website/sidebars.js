@@ -43,7 +43,7 @@ module.exports = {
                     type: "category",
                     label: "Config",
                     items: [
-                        "properties/config/common",
+                        "properties/config/properties_common",
                         "properties/config/string",
                         "properties/config/number",
                         "properties/config/boolean",
