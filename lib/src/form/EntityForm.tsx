@@ -1,4 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, {
+    MutableRefObject,
+    useCallback,
+    useEffect,
+    useMemo,
+    useRef,
+    useState
+} from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import {
     Entity,
@@ -21,7 +28,7 @@ import {
     isReadOnly,
     resolveCollection
 } from "../core";
-import { useDataSource } from "../hooks";
+import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
 
@@ -61,7 +68,8 @@ export interface EntityFormProps<M extends { [Key: string]: any }> {
                 path: string,
                 entityId: string | undefined,
                 values: EntityValues<M>,
-                previousValues?: EntityValues<M>
+                previousValues?: EntityValues<M>,
+                closeAfterSave: boolean
             }
     ): Promise<void>;
 
@@ -97,16 +105,17 @@ export interface EntityFormProps<M extends { [Key: string]: any }> {
  * @category Components
  */
 export function EntityForm<M extends { [Key: string]: any }>({
-                                  status,
-                                  path,
-                                  collection: inputCollection,
-                                  entity,
-                                  onEntitySave,
-                                  onDiscard,
-                                  onModified,
-                                  onValuesChanged
-                              }: EntityFormProps<M>) {
+                                                                 status,
+                                                                 path,
+                                                                 collection: inputCollection,
+                                                                 entity,
+                                                                 onEntitySave,
+                                                                 onDiscard,
+                                                                 onModified,
+                                                                 onValuesChanged,
+                                                             }: EntityFormProps<M>) {
 
+    const context = useFireCMSContext();
     const dataSource = useDataSource();
 
     const initialResolvedCollection = useMemo(() => resolveCollection({
@@ -122,7 +131,9 @@ export function EntityForm<M extends { [Key: string]: any }>({
         if ((status === "new" || status === "copy") && initialResolvedCollection.customId === "optional")
             return dataSource.generateEntityId(path);
         return mustSetCustomId ? undefined : (entity?.id ?? dataSource.generateEntityId(path));
-    }, [entity?.id]);
+    }, []);
+
+    const closeAfterSaveRef = useRef(false);
 
     const baseDataSourceValues: Partial<EntityValues<M>> = useMemo(() => {
         const properties = initialResolvedCollection.properties;
@@ -141,10 +152,10 @@ export function EntityForm<M extends { [Key: string]: any }>({
     const [savingError, setSavingError] = React.useState<Error | undefined>();
 
     const [initialValues, setInitialValues] = useState<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
-    const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(initialValues);
+    const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(initialValues);
 
     const doOnValuesChanges = (values?: EntityValues<M>) => {
-        setInternalValue(values);
+        setInternalValues(values);
         if (onValuesChanged)
             onValuesChanged(values);
     }
@@ -153,9 +164,28 @@ export function EntityForm<M extends { [Key: string]: any }>({
         collection: inputCollection,
         path,
         entityId,
-        values: internalValue,
+        values: internalValues,
         previousValues: initialValues
-    }), [inputCollection, path, entityId, internalValue]);
+    }), [inputCollection, path, entityId, internalValues, initialValues]);
+
+    const onIdUpdate = collection.callbacks?.onIdUpdate;
+    useEffect(() => {
+        if (onIdUpdate && internalValues && status === "new") {
+            try {
+                setEntityId(
+                    onIdUpdate({
+                        collection,
+                        path,
+                        entityId,
+                        values: internalValues,
+                        context
+                    })
+                );
+            } catch (e) {
+                console.error(e);
+            }
+        }
+    }, [collection, context, entityId, internalValues, path, status]);
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
         if (initialValues && status === "existing") {
@@ -204,7 +234,8 @@ export function EntityForm<M extends { [Key: string]: any }>({
                 path,
                 entityId,
                 values,
-                previousValues: entity?.values
+                previousValues: entity?.values,
+                closeAfterSave: closeAfterSaveRef.current
             })
                 .then(_ => {
                     setInitialValues(values);
@@ -219,6 +250,7 @@ export function EntityForm<M extends { [Key: string]: any }>({
                     setSavingError(e);
                 })
                 .finally(() => {
+                    closeAfterSaveRef.current = false;
                     formikActions.setSubmitting(false);
                 });
         }
@@ -300,7 +332,8 @@ export function EntityForm<M extends { [Key: string]: any }>({
                         entityId={entityId}
                         collection={collection}
                         status={status}
-                        savingError={savingError}/>}
+                        savingError={savingError}
+                        closeAfterSaveRef={closeAfterSaveRef}/>}
                 </>
             }
             }
@@ -325,7 +358,8 @@ function FormInternal<M>({
                              handleSubmit,
                              savingError,
                              dirty,
-                             errors
+                             errors,
+                             closeAfterSaveRef
                          }: FormikProps<M> & {
     initialValues: Partial<M>,
     onModified: ((modified: boolean) => void) | undefined,
@@ -337,6 +371,7 @@ function FormInternal<M>({
     entityId: string,
     status: "new" | "existing" | "copy",
     savingError?: Error,
+    closeAfterSaveRef: MutableRefObject<boolean>,
 }) {
 
     const modified = dirty;
@@ -461,14 +496,31 @@ function FormInternal<M>({
                     </Button>}
 
                 <Button
-                    variant="contained"
+                    variant="text"
                     color="primary"
                     type="submit"
                     disabled={disabled}
+                    onClick={() => {
+                        closeAfterSaveRef.current = false;
+                    }}
                 >
                     {status === "existing" && "Save"}
                     {status === "copy" && "Create copy"}
                     {status === "new" && "Create"}
+                </Button>
+
+                <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={disabled}
+                    onClick={() => {
+                        closeAfterSaveRef.current = true;
+                    }}
+                >
+                    {status === "existing" && "Save and close"}
+                    {status === "copy" && "Create copy and close"}
+                    {status === "new" && "Create and close"}
                 </Button>
 
             </CustomDialogActions>

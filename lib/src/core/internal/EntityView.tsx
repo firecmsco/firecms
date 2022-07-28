@@ -58,7 +58,6 @@ export interface EntityViewProps<M> {
     formWidth?: number | string;
     onValuesAreModified: (modified: boolean) => void;
     onUpdate?: (params: { entity: Entity<any> }) => void;
-    closeOnSave?: boolean;
 }
 
 /**
@@ -78,7 +77,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                                                                      onValuesAreModified,
                                                                                      formWidth,
                                                                                      onUpdate,
-                                                                                     closeOnSave
                                                                                  }: EntityViewProps<M>) {
 
         const theme = useTheme();
@@ -216,7 +214,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             if (onUpdate)
                 onUpdate({ entity: updatedEntity });
 
-            if (closeOnSave) {
+            if (closeAfterSave) {
                 sideDialogContext.setBlocked(false);
                 sideDialogContext.close(true);
             }

@@ -72,7 +72,7 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
 
     const property = propertyContext.property;
     if (isPropertyBuilder(property)) {
-        console.log("Error in property", propertyContext);
+        console.error("Error in property", propertyContext);
         throw Error("Trying to create a yup mapping from a property builder. Please use resolved properties only");
     }
 

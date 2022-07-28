@@ -439,7 +439,6 @@ function LoginForm({
     const registrationMode = availableProviders && !availableProviders.includes("password");
 
     useEffect(() => {
-        console.log("loginMode", loginMode);
         if ((loginMode || registrationMode) && passwordRef.current) {
             passwordRef.current.focus()
         }
@@ -461,7 +460,6 @@ function LoginForm({
     function handleEnterEmail() {
         if (email) {
             authDelegate.fetchSignInMethodsForEmail(email).then((availableProviders) => {
-                console.log(availableProviders);
                 setAvailableProviders(availableProviders)
             });
         }

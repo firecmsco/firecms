@@ -16,7 +16,7 @@ export interface EntityCallbacks<M extends { [Key: string]: any } = any, UserTyp
      * Callback used after fetching data
      * @param entityFetchProps
      */
-    onFetch?(entityFetchProps: EntityOnPostFetchProps<M, UserType>)
+    onFetch?(entityFetchProps: EntityOnFetchProps<M, UserType>)
         : Promise<Entity<M>> | Entity<M>;
 
     /**
@@ -57,13 +57,21 @@ export interface EntityCallbacks<M extends { [Key: string]: any } = any, UserTyp
      * @param entityDeleteProps
      */
     onDelete?(entityDeleteProps: EntityOnDeleteProps<M, UserType>): void;
+
+    /**
+     * Callback fired when any value in the form changes. You can use it
+     * to define the ID of a `new` entity based on the current values.
+     *
+     * @param idUpdateProps
+     */
+    onIdUpdate?(idUpdateProps:EntityIdUpdateProps): string;
 }
 
 /**
  * Parameters passed to hooks when an entity is fetched
  * @category Models
  */
-export interface EntityOnPostFetchProps<M extends { [Key: string]: any } = any, UserType extends User = User> {
+export interface EntityOnFetchProps<M extends { [Key: string]: any } = any, UserType extends User = User> {
 
     /**
      * Collection of the entity
@@ -160,6 +168,38 @@ export interface EntityOnDeleteProps<M extends { [Key: string]: any } = any, Use
      * Deleted entity
      */
     entity: Entity<M>;
+
+    /**
+     * Context of the app status
+     */
+    context: FireCMSContext;
+}
+
+/**
+ * Parameters passed to hooks when an entity is deleted
+ * @category Models
+ */
+export interface EntityIdUpdateProps<M extends { [Key: string]: any } = any, UserType extends User = User> {
+
+    /**
+     * collection of the entity being deleted
+     */
+    collection: ResolvedEntityCollection<M>;
+
+    /**
+     * Path of the parent collection
+     */
+    path: string;
+
+    /**
+     * Current entity id
+     */
+    entityId?: string;
+
+    /**
+     * Entity values
+     */
+    values: EntityValues<M>;
 
     /**
      * Context of the app status

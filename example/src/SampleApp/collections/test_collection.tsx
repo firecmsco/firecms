@@ -3,9 +3,12 @@ import {
     buildProperties,
     buildProperty,
     EntityCallbacks,
+    EntityIdUpdateProps,
+    EntityOnFetchProps,
     EnumValues,
     Properties,
-    resolveNavigationFrom
+    resolveNavigationFrom,
+    toSnakeCase
 } from "@camberi/firecms";
 import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
@@ -34,6 +37,25 @@ const relaxedStatus:EnumValues = [
 ];
 
 export const testCallbacks: EntityCallbacks = {
+    onFetch({
+                collection,
+                context,
+                entity,
+                path,
+            }: EntityOnFetchProps) {
+        const values = entity.values;
+        values.name = "Forced name";
+        return entity;
+    },
+    onIdUpdate({
+                   collection,
+                   context,
+                   entityId,
+                   path,
+                   values
+               }: EntityIdUpdateProps): string {
+        return toSnakeCase(values?.name)
+    },
 
     onPreSave: ({
                     collection,

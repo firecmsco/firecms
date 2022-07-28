@@ -6,22 +6,23 @@ sidebar_label: Saving and deleting callbacks
 
 When you are saving an entity you can attach different callbacks before and
 after it gets saved or fetched:
-`onFetch`, `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
+`onFetch`, `onIdUpdate`, `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
 
 These callbacks are defined at the collection level under the prop `callbacks`.
 
-This is useful if you need to add some logic or edit some fields before/after
-saving or deleting entities.
+This is useful if you need to add some logic or edit some fields or the entity
+IF before/after saving or deleting entities.
 
-All callbacks are asynchronous.
+Most callbacks are asynchronous.
 
-:::note
+:::note 
 You can stop the execution of these callbacks by throwing an `Error`
 containing a `string` and an error snackbar will be displayed.
 :::
 
 ```tsx
 import {
+    toSnakeCase,
     buildCollection,
     buildEntityCallbacks,
     EntityOnDeleteProps,
@@ -41,6 +42,7 @@ const productCallbacks = buildEntityCallbacks({
                     values,
                     status
                 }) => {
+        // return the updated values
         values.uppercase_name = values.name?.toUpperCase();
         return values;
     },
@@ -68,6 +70,27 @@ const productCallbacks = buildEntityCallbacks({
     onDelete: (props: EntityOnDeleteProps<Product>) => {
         console.log("onDelete", props);
     },
+
+    onFetch({
+                collection,
+                context,
+                entity,
+                path,
+            }: EntityOnFetchProps) {
+        entity.values.name = "Forced name";
+        return entity;
+    },
+
+    onIdUpdate({
+                   collection,
+                   context,
+                   entityId,
+                   path,
+                   values
+               }: EntityIdUpdateProps): string {
+        // return the desired ID
+        return toSnakeCase(values?.name)
+    },
 });
 
 
@@ -93,11 +116,11 @@ const productCollection = buildCollection<Product>({
 
 #### EntityOnSaveProps
 
-* `collection`: EntityCollection Resolved collection of the entity
+* `collection`: Resolved collection of the entity
 
 * `path`: string Full path where this entity is being saved
 
-* `entityId`?: string Id of the entity or undefined if new
+* `entityId`: string ID of the entity
 
 * `values`: EntityValues Values being saved
 
@@ -105,15 +128,27 @@ const productCollection = buildCollection<Product>({
 
 * `context`: FireCMSContext Context of the app status
 
+
 #### EntityOnDeleteProps
 
-* `collection`: EntityCollection Resolved collection of the entity
+* `collection`:  Resolved collection of the entity
 
 * `path`: string Full path where this entity is being saved
 
-* `entityId`?: string Id of the entity or undefined if new
+* `entityId`: string ID of the entity
 
 * `entity`: Entity Deleted entity
 
 * `context`: FireCMSContext Context of the app status
 
+#### EntityIdUpdateProps
+
+* `collection`: EntityCollection Resolved collection of the entity
+
+* `path`: string Full path where this entity is being saved
+
+* `entityId`: string ID of the entity
+
+* `values`: Entity values
+
+* `context`: FireCMSContext Context of the app status

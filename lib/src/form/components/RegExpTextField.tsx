@@ -16,11 +16,8 @@ export default function RegExpTextField(props: TextFieldProps) {
 
     const internalOnChange = (event: ChangeEvent<any>) => {
         setInternalValue(event.target.value);
-        console.log("f", event.target.value)
         if (props.onChange) {
             const regexp = hydrateRegExp(event.target.value);
-
-            console.log("h", regexp)
             props.onChange(regexp as any);
         }
     };
