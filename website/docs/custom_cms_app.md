@@ -24,7 +24,7 @@ Some top-level components that you will find useful (same ones as used
 by `FirebaseCMSApp`):
 - [`FireCMS`](api/functions/firecms)
 - [`Scaffold`](api/variables/scaffold)
-- [`NavigationRoutes`](api/functions/navigationroutes)
+- [`NavigationRoutes`](api/functions/NavigationRoutes)
 - [`SideDialogs`](api/functions/SideDialogs)
 - [`useInitialiseFirebase`](api/functions/useinitialisefirebase)
 - [`useBuildFirebaseAuthDelegate`](api/functions/useBuildFirebaseAuthDelegate)

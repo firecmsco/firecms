@@ -44,7 +44,7 @@ export const testCallbacks: EntityCallbacks = {
                 path,
             }: EntityOnFetchProps) {
         const values = entity.values;
-        values.name = "Forced name";
+        // values.name = "Forced name";
         return entity;
     },
     onIdUpdate({
@@ -194,6 +194,14 @@ export const testCollection = buildCollection({
                 path: "test_entity",
             }
         },
+        timestamp: buildProperty({
+            name: "When posted",
+            validation: { required: false },
+            description: "Posted",
+            dataType: "date",
+            columnWidth: 325,
+            mode: "date_time"
+        }),
         // test_date: {
         //     name: "Test date",
         //     dataType: "date"
