@@ -194,6 +194,50 @@ export const testCollection = buildCollection({
                 path: "test_entity",
             }
         },
+        url_image: {
+            dataType: 'string',
+            storage: {
+                storagePath: 'images',
+                acceptedFiles: ['image/*'],
+                storeUrl: true,
+                metadata: {
+                    cacheControl: 'max-age=1000000',
+                },
+            },
+        },
+        impacts: {
+            name: "Impacts",
+            validation: { required: true },
+            dataType: "array",
+            of: buildProperty({
+                dataType: "map",
+                properties: {
+                    name: {
+                        name: "Name",
+                        validation: { required: true },
+                        dataType: "string"
+                    },
+                    point1: {
+                        name: "Point-1",
+                        validation: { required: true },
+                        dataType: "number"
+                    },
+                    point2: {
+                        name: "Point-2",
+                        validation: { required: true },
+                        dataType: "number"
+                    }
+                }
+            })
+        },
+        timestamp: buildProperty({
+            name: "When posted",
+            validation: { required: false },
+            description: "Posted",
+            dataType: "date",
+            columnWidth: 325,
+            mode: "date_time"
+        }),
         // test_date: {
         //     name: "Test date",
         //     dataType: "date"

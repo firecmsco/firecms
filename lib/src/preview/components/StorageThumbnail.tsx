@@ -40,21 +40,17 @@ export function StorageThumbnailInternal({
         if (!storagePathOrDownloadUrl)
             return;
         let unmounted = false;
-        if (storeUrl) {
-            setDownloadConfig({ url: storagePathOrDownloadUrl });
-            URL_CACHE[storagePathOrDownloadUrl] = { url: storagePathOrDownloadUrl };
-        } else if (storagePathOrDownloadUrl)
-            storage.getDownloadURL(storagePathOrDownloadUrl)
-                .then(function (downloadConfig) {
-                    if (!unmounted) {
-                        setDownloadConfig(downloadConfig);
-                        URL_CACHE[storagePathOrDownloadUrl] = downloadConfig;
-                    }
-                });
+        storage.getDownloadURL(storagePathOrDownloadUrl)
+            .then(function (downloadConfig) {
+                if (!unmounted) {
+                    setDownloadConfig(downloadConfig);
+                    URL_CACHE[storagePathOrDownloadUrl] = downloadConfig;
+                }
+            });
         return () => {
             unmounted = true;
         };
-    }, [storeUrl, storagePathOrDownloadUrl]);
+    }, [storagePathOrDownloadUrl]);
 
     if (!storagePathOrDownloadUrl) return null;
 

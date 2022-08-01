@@ -80,8 +80,8 @@ export interface StorageSource {
                  }: UploadFileProps) => Promise<UploadFileResult>;
 
     /**
-     * Convert a storage path into a download url
+     * Convert a storage path or URL into a download configuration
      * @param path
      */
-    getDownloadURL: (path: string) => Promise<DownloadConfig>
+    getDownloadURL: (pathOrUrl: string) => Promise<DownloadConfig>
 }

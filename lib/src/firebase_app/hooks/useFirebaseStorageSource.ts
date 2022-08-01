@@ -48,16 +48,16 @@ export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceP
             }));
         },
 
-        async getDownloadURL(storagePath: string): Promise<DownloadConfig> {
+        async getDownloadURL(storagePathOrUrl: string): Promise<DownloadConfig> {
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
-            if (urlsCache[storagePath])
-                return urlsCache[storagePath];
-            const fileRef = ref(storage, storagePath);
+            if (urlsCache[storagePathOrUrl])
+                return urlsCache[storagePathOrUrl];
+            const fileRef = ref(storage, storagePathOrUrl);
             const [url, metadata] = await Promise.all([getDownloadURL(fileRef), getMetadata(fileRef)]);
             const result:DownloadConfig = {
                 url, metadata: metadata as DownloadMetadata
             }
-            urlsCache[storagePath] = result;
+            urlsCache[storagePathOrUrl] = result;
             return result;
         }
     };
