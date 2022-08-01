@@ -1,7 +1,7 @@
 ---
 id: callbacks
 title: Entity callbacks
-sidebar_label: Saving and deleting callbacks
+sidebar_label: Entity callbacks
 ---
 
 When working with an entity, you can attach different callbacks before and
