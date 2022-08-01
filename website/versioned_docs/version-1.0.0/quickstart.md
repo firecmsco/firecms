@@ -23,7 +23,7 @@ but it is not compulsory.
 Authentication and authorization are also enabled, and make use of the `extra`
 field in the `authController` to check for permissions.
 
-### Steps:
+### Steps
 
 - Create a new React app including Typescript:
 

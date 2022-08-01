@@ -6,7 +6,6 @@ import {
     darken,
     IconButton,
     lighten,
-    Paper,
     Skeleton,
     Tooltip,
     Typography
@@ -16,13 +15,17 @@ import { EntityReference, ResolvedProperty } from "../../models";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { PreviewSize, PropertyPreview, SkeletonComponent } from "../index";
 
-import { ErrorView, getValueInPath, isReferenceProperty } from "../../core";
+import {
+    ErrorView,
+    getReferencePreviewKeys,
+    getValueInPath,
+    resolveCollection
+} from "../../core";
 import {
     useEntityFetch,
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
-import { resolveCollection } from "../../core";
 
 export type ReferencePreviewProps = {
     disabled: boolean;
@@ -92,23 +95,8 @@ function ReferencePreviewInternal<M>({
     }), [collection]);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const listProperties = useMemo(() => {
-        if (!resolvedCollection) return [];
-        let res = previewProperties;
-        if (!res || !res.length) {
-            res = Object.keys(resolvedCollection.properties);
-        }
-        res = res.filter(key => {
-            const property = resolvedCollection.properties[key];
-            return property && !isReferenceProperty(property);
-        });
-
-        if (size === "small" || size === "regular")
-            res = res.slice(0, 3);
-        else if (size === "tiny")
-            res = res.slice(0, 1);
-        return res;
-    }, [previewProperties, resolvedCollection?.properties, size]);
+    const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, previewProperties, size === "small" || size === "regular" ? 3 : 1),
+        [previewProperties, resolvedCollection, size]);
 
     let body: JSX.Element;
 

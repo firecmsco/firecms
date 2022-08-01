@@ -19,13 +19,13 @@ import {
     EntityCollection,
     EntityReference,
     FieldProps,
-    ResolvedProperty
+    ResolvedProperty, ResolvedReferenceProperty
 } from "../../models";
 import { FieldDescription } from "../index";
 import {
     ErrorBoundary,
     ErrorView,
-    getReferenceFrom,
+    getReferenceFrom, getReferencePreviewKeys,
     isReferenceProperty,
 } from "../../core";
 import { PropertyPreview, SkeletonComponent } from "../../preview";
@@ -39,6 +39,8 @@ import {
 import {
     useReferenceDialogController
 } from "../../core/components/ReferenceDialog";
+
+
 
 /**
  * Field that opens a reference selection dialog.
@@ -160,15 +162,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
         } else {
             if (validValue) {
 
-                const allProperties = Object.keys(collection.properties);
-                let listProperties = property.previewProperties?.filter(p => allProperties.includes(p as string));
-                if (!listProperties || !listProperties.length) {
-                    listProperties = allProperties;
-                }
-                listProperties = listProperties.filter(key => {
-                    const propertyOrBuilder = collection.properties[key];
-                    return propertyOrBuilder && !isReferenceProperty(propertyOrBuilder);
-                }).slice(0, 3);
+                const listProperties = getReferencePreviewKeys(collection, property.previewProperties, 3);
 
                 body = (
                     <Box display={"flex"}
@@ -177,7 +171,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: any }>({
                          ml={1}
                          mr={1}>
 
-                        {listProperties && listProperties.map((key, index) => {
+                        {listProperties && listProperties.map((key) => {
                             const property = collection.properties[key as string];
                             if (!property) return null;
                             return (

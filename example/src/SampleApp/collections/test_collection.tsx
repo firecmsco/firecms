@@ -44,7 +44,7 @@ export const testCallbacks: EntityCallbacks = {
                 path,
             }: EntityOnFetchProps) {
         const values = entity.values;
-        values.name = "Forced name";
+        // values.name = "Forced name";
         return entity;
     },
     onIdUpdate({
@@ -192,6 +192,7 @@ export const testCollection = buildCollection({
                 dataType: "reference",
                 name: "Self refs",
                 path: "test_entity",
+                // previewProperties: ["name","url_image"]
             }
         },
         url_image: {
