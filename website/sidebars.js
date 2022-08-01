@@ -13,7 +13,7 @@ module.exports = {
             collapsed: false,
             items: [
                 "collections/collections",
-                "collections/saving_callbacks",
+                "collections/callbacks",
                 "collections/permissions",
                 "collections/exporting_data",
                 "collections/text_search",

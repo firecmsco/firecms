@@ -10,14 +10,14 @@ module.exports = {
     projectName: 'FireCMS',
     plugins: [
         'docusaurus-tailwindcss-loader',
-        'docusaurus-plugin-sass',
+        "docusaurus-plugin-sass",
         [
-            'docusaurus-plugin-typedoc',
+            "docusaurus-plugin-typedoc",
             {
                 entryPoints: [
-                    '../lib/src/index.ts',
+                    "../lib/src/index.ts",
                 ],
-                tsconfig: '../lib/tsconfig.json',
+                tsconfig: "../lib/tsconfig.json",
                 watch: process.env.TYPEDOC_WATCH,
             }
         ]
@@ -160,16 +160,17 @@ module.exports = {
             '@docusaurus/preset-classic',
             {
                 docs: {
-                    sidebarPath: require.resolve('./sidebars.js'),
-                    lastVersion: "1.0.0",
+                    sidebarPath: require.resolve("./sidebars.js"),
+                    lastVersion: "current",
                     editUrl: "https://github.com/Camberi/firecms/tree/website/website",
                     versions: {
                         "1.0.0": {
-                            label: '1.0.0',
+                            label: "1.0.0",
+                            path: "1.0.0",
                         },
                         current: {
-                            label: '2.0.0-alpha',
-                            path: '2.0.0',
+                            label: "2.0.0-alpha",
+                            // path: "2.0.0",
                             banner: "unreleased"
                         }
                     },

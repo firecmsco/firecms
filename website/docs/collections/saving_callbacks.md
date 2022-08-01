@@ -1,10 +1,10 @@
 ---
-id: saving_callbacks
-title: Saving and deleting callbacks
-sidebar_label: Saving and deleting callbacks
+id: callbacks
+title: Entity callbacks
+sidebar_label: Entity callbacks
 ---
 
-When you are saving an entity you can attach different callbacks before and
+When working with an entity, you can attach different callbacks before and
 after it gets saved or fetched:
 `onFetch`, `onIdUpdate`, `onPreSave`, `onSaveSuccess` and `onSaveFailure`.
 
@@ -140,6 +140,7 @@ const productCollection = buildCollection<Product>({
 * `entity`: Entity Deleted entity
 
 * `context`: FireCMSContext Context of the app status
+
 
 #### EntityIdUpdateProps
 
