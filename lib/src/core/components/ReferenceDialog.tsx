@@ -196,6 +196,15 @@ export function ReferenceDialog(
         }
     }, [onMultipleEntitiesSelected, selectedEntities]);
 
+    const onEntityClick = useCallback((entity: Entity<any>) => {
+        if (!multiselect && onSingleEntitySelected) {
+            onSingleEntitySelected(entity);
+            sideDialogContext.close(false);
+        } else {
+            toggleEntitySelection(entity);
+        }
+    }, [sideDialogContext, multiselect, onSingleEntitySelected, toggleEntitySelection]);
+
     const onNewClick = useCallback(() =>
             sideEntityController.open({
                 path: fullPath,
@@ -207,16 +216,7 @@ export function ReferenceDialog(
                 },
                 closeOnSave: true
             }),
-        [sideEntityController, fullPath, collection, entitiesDisplayedFirst, toggleEntitySelection]);
-
-    const onEntityClick = useCallback((entity: Entity<any>) => {
-        if (!multiselect && onSingleEntitySelected) {
-            onSingleEntitySelected(entity);
-            sideDialogContext.close(false);
-        } else {
-            toggleEntitySelection(entity);
-        }
-    }, [sideDialogContext, multiselect, onSingleEntitySelected, toggleEntitySelection]);
+        [sideEntityController, fullPath, collection, entitiesDisplayedFirst, onEntityClick]);
 
     const tableRowActionsBuilder = useCallback(({
                                                     entity,
@@ -243,7 +243,7 @@ export function ReferenceDialog(
         sideDialogContext.close(false);
         if (onClose)
             onClose();
-    }, [onClose]);
+    }, [onClose, sideDialogContext]);
 
     if (!collection) {
         return <ErrorView

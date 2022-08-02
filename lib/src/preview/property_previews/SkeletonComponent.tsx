@@ -231,6 +231,9 @@ export function renderSkeletonImageThumbnail(size: PreviewSize) {
     const imageSize = size === "tiny" ? 40 : size === "small" ? 100 : 200;
     return (
         <Skeleton variant="rectangular"
+                  sx={theme => ({
+                      borderRadius: `${theme.shape.borderRadius}px`,
+                  })}
                   width={imageSize}
                   height={imageSize}/>
     );

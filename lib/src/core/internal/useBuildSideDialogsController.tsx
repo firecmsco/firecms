@@ -10,15 +10,19 @@ export function useBuildSideDialogsController(): SideDialogsController {
 
     const [sidePanels, setSidePanels] = useState<SideDialogPanelProps[]>([]);
 
+    const routesStore = useRef<Record<string, SideDialogPanelProps>>({});
     const routesCount = useRef<number>(0);
 
     useEffect(() => {
         const state = location.state as any;
         const panelKeys: string[] = state?.panels ?? [];
-        const newPanels = sidePanels.filter(panel => panelKeys.includes(panel.key) || !panel.urlPath);
-        if (!equal(sidePanels, newPanels))
+        // const newPanels = sidePanels.filter(panel => panelKeys.includes(panel.key) || !panel.urlPath);
+        const newPanels = panelKeys
+            .map(key => routesStore.current[key])
+            .filter(p => Boolean(p)) as SideDialogPanelProps[];
+        // if (!equal(sidePanels.map(p => p.key), newPanels.map(p => p.key)))
             setSidePanels(newPanels);
-    }, [location, sidePanels]);
+    }, [location]);
 
     const close = useCallback(() => {
 
@@ -51,6 +55,10 @@ export function useBuildSideDialogsController(): SideDialogsController {
     const open = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
         const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
+
+        newPanels.forEach((panel) => {
+            routesStore.current[panel.key] = panel;
+        });
         routesCount.current = routesCount.current + newPanels.length;
 
         const baseLocation = (location.state as any)?.base_location ?? location;
@@ -77,6 +85,9 @@ export function useBuildSideDialogsController(): SideDialogsController {
     const replace = useCallback((panelProps: SideDialogPanelProps | SideDialogPanelProps[]) => {
 
         const newPanels: SideDialogPanelProps[] = Array.isArray(panelProps) ? panelProps : [panelProps];
+        newPanels.forEach((panel) => {
+            routesStore.current[panel.key] = panel;
+        });
 
         const baseLocation = (location.state as any)?.base_location ?? location;
 

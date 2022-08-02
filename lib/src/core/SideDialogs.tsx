@@ -1,10 +1,4 @@
-import React, {
-    useCallback,
-    useContext,
-    useEffect,
-    useRef,
-    useState
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks/useSideDialogsController";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { ErrorBoundary } from "./components";
@@ -12,7 +6,6 @@ import {
     UnsavedChangesDialog,
     useNavigationUnsavedChangesDialog
 } from "./internal/useUnsavedChangesDialog";
-import { FORM_CONTAINER_WIDTH } from "./internal/common";
 import { Box } from "@mui/material";
 import { SideDialogPanelProps } from "../models";
 
@@ -20,9 +13,9 @@ export type SideDialogContextProps = {
     blocked: boolean,
     setBlocked: (blocked: boolean) => void,
     setBlockedNavigationMessage: (message?: React.ReactNode) => void,
-    width: string,
+    width?: string,
     setWidth: (width: string) => void,
-    close: (force?:boolean) => void
+    close: (force?: boolean) => void
 }
 
 const SideDialogContext = React.createContext<SideDialogContextProps>({
@@ -58,20 +51,17 @@ export function SideDialogs() {
     const sideDialogsController = useSideDialogsController();
 
     const sidePanels = sideDialogsController.sidePanels;
-    //  we add an extra closed drawer, that it is used to maintain the transition when a drawer is removed
-    const allPanels = [
-        ...sidePanels,
-        undefined
-    ];
+
+    const panels: (SideDialogPanelProps | undefined)[] = [...sidePanels];
+    panels.push(undefined);
 
     return <>
         {
-            allPanels.map((panel, index) => {
-                return <SideDialogView
+            panels.map((panel, index) =>
+                <SideDialogView
                     key={`side_dialog_${index}`}
                     panel={panel}
-                    offsetPosition={sidePanels.length - index - 1}/>;
-            })
+                    offsetPosition={sidePanels.length - index - 1}/>)
         }
     </>;
 }
@@ -81,7 +71,7 @@ function SideDialogView({
                             panel
                         }: {
     offsetPosition: number,
-    panel?: SideDialogPanelProps<{}>
+    panel?: SideDialogPanelProps
 }) {
 
     // was the closing of the dialog requested by the drawer
@@ -89,7 +79,9 @@ function SideDialogView({
     const [blocked, setBlocked] = useState(false);
     const [blockedNavigationMessage, setBlockedNavigationMessage] = useState<React.ReactNode | undefined>();
 
-    const [width, setWidth] = useState(panel?.width ?? FORM_CONTAINER_WIDTH);
+    const [width, setWidth] = useState<string | undefined>(panel?.width);
+    const [open, setOpen] = useState<boolean>(Boolean(panel));
+
     const sideDialogsController = useSideDialogsController();
 
     const {
@@ -102,8 +94,12 @@ function SideDialogView({
     );
 
     useEffect(() => {
-        setWidth(panel?.width ?? FORM_CONTAINER_WIDTH);
-    }, [panel?.width])
+        setWidth(panel?.width);
+        if (panel)
+            setTimeout(() => setOpen(true));
+        else
+            setOpen(false);
+    }, [panel])
 
     const handleDrawerCloseOk = () => {
         setBlocked(false);
@@ -115,7 +111,7 @@ function SideDialogView({
         setDrawerCloseRequested(false);
     };
 
-    const onCloseRequest = (force?:boolean) => {
+    const onCloseRequest = (force?: boolean) => {
         if (blocked && !force) {
             setDrawerCloseRequested(true);
         } else {
@@ -135,12 +131,11 @@ function SideDialogView({
             }}>
 
             <SideDialogDrawer
-                open={Boolean(panel)}
+                open={open && Boolean(panel)}
                 onClose={onCloseRequest}
                 offsetPosition={offsetPosition}
             >
                 {panel &&
-                    <ErrorBoundary>
                         <Box
                             sx={{
                                 display: "flex",
@@ -150,9 +145,10 @@ function SideDialogView({
                                 width,
                                 maxWidth: "100vw"
                             }}>
-                            {panel.Component}
-                        </Box>
-                    </ErrorBoundary>}
+                            <ErrorBoundary>
+                                {panel.Component}
+                            </ErrorBoundary>
+                        </Box>}
 
                 {!panel && <div style={{ width }}/>}
 

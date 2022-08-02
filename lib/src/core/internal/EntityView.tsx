@@ -76,7 +76,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                                                                      collection,
                                                                                      onValuesAreModified,
                                                                                      formWidth,
-                                                                                     onUpdate,
+                                                                                     onUpdate
                                                                                  }: EntityViewProps<M>) {
 
         const theme = useTheme();
@@ -140,7 +140,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             if (!selectedSubPath)
                 setTabsPosition(-1);
 
-            if (largeLayout) {
+            // if (largeLayout) {
                 if (customViews) {
                     const index = customViews
                         .map((c) => c.path)
@@ -154,8 +154,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         .findIndex((p) => p === selectedSubPath);
                     setTabsPosition(index + customViewsCount);
                 }
-            }
-        }, [selectedSubPath, largeLayout, customViewsCount]);
+            // }
+        }, [selectedSubPath, customViewsCount]);
 
         useEffect(() => {
             if (largeLayoutTabSelected.current === largeLayout)

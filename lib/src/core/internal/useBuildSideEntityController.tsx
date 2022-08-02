@@ -139,7 +139,7 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
     return sidePanels;
 }
 
-const propsToSidePanel = (props: EntitySidePanelProps<any, any>, navigation: NavigationContext, smallLayout: boolean): SideDialogPanelProps<EntitySidePanelProps> => {
+const propsToSidePanel = (props: EntitySidePanelProps<any, any>, navigation: NavigationContext, smallLayout: boolean): SideDialogPanelProps => {
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
     const newPath = props.entityId
