@@ -12,7 +12,7 @@ export default function CustomShapedArrayPreview({
                                                      size,
                                                      customProps
                                                  }: PropertyPreviewProps<any[], CustomShapedArrayProps>)
-    : ReactElement {
+     {
 
     if (!customProps)
         throw Error("Properties not specified");

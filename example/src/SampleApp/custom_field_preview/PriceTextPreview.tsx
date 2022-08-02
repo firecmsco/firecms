@@ -1,4 +1,4 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { PropertyPreviewProps } from "@camberi/firecms";
 import Box from "@mui/material/Box";
 
@@ -9,8 +9,7 @@ export default function PriceTextPreview({
                                              size,
                                              customProps,
                                              entity
-                                         }: PropertyPreviewProps<number>)
-    : ReactElement {
+                                         }: PropertyPreviewProps<number>) {
 
     return (
         <Box

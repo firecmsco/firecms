@@ -18,7 +18,7 @@ export default function CustomShapedArrayField({
                                                    context,
                                                    ...props
                                                }: FieldProps<{ name: string, age: number }[], CustomShapedArrayProps>)
-    : ReactElement {
+     {
 
     const properties = customProps.properties;
 

@@ -32,7 +32,7 @@ import CheckBoxOutlined from "@mui/icons-material/CheckBoxOutlined";
 export default function CustomBooleanPreview({
                                                  value, property, size
                                              }: PreviewComponentProps<boolean>)
-    : ReactElement {
+     {
     return (
         value ? <CheckBoxOutlined/> : <CheckBoxOutlineBlank/>
     );

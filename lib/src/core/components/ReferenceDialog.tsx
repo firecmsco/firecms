@@ -150,13 +150,12 @@ export function ReferenceDialog(
         let unmounted = false;
         if (selectedEntityIds && collection) {
             Promise.all(
-                selectedEntityIds.map((entityId) => {
-                    return dataSource.fetchEntity({
+                selectedEntityIds.map((entityId) =>
+                    dataSource.fetchEntity({
                         path: fullPath,
                         entityId,
                         collection
-                    });
-                }))
+                    })))
                 .then((entities) => {
                     if (!unmounted) {
                         const result = entities.filter(e => e !== undefined) as Entity<any>[];
