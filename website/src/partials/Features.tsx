@@ -122,7 +122,7 @@ function Features() {
                                 >
                                     {
                                         `const price = buildProperty({
-    title: "Price",
+    name: "Price",
     description: "Price with range validation",
     dataType: "number",
     validation: {
