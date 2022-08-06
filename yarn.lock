@@ -1213,6 +1213,27 @@
     typeface-space-mono "^1.1.13"
     yup "^0.32.9"
 
+"@camberi/firecms@2.0.0-alpha.22":
+  version "2.0.0-alpha.22"
+  resolved "https://registry.yarnpkg.com/@camberi/firecms/-/firecms-2.0.0-alpha.22.tgz#2d087cb9e1eaf7cbbebb5a7e7470fec5ee981af8"
+  integrity sha512-y2vVI+9pJ6nVInPt9S0u+PMZpTdiulsbwW4jpLXsOPoqzJ5HfvQIlmtuVjBAkpwOib9hY5npcbQv/Q+3sYCeEw==
+  dependencies:
+    "@date-io/date-fns" "^2.13.2"
+    "@fontsource/ibm-plex-mono" "^4.5.9"
+    "@uiw/react-md-editor" "^3.11.0"
+    date-fns "^2.28.0"
+    formik "^2.2.9"
+    history "^5"
+    object-hash "^3.0.0"
+    react-beautiful-dnd "^13.1.0"
+    react-dropzone "^14.2.1"
+    react-transition-group "^4.4.2"
+    react-use-measure "^2.1.1"
+    react-window "^1.8.7"
+    typeface-roboto "^1.1.13"
+    typeface-rubik "^1.1.13"
+    yup "^0.32.11"
+
 "@cspotcode/source-map-support@^0.8.0":
   version "0.8.1"
   resolved "https://registry.yarnpkg.com/@cspotcode/source-map-support/-/source-map-support-0.8.1.tgz#00629c35a688e05a88b1cda684fb9d5e73f000a1"
@@ -2631,6 +2652,11 @@
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.2.0.tgz#d7a6013b8aafcc64c778a0ccb83355a11204d3b2"
   integrity sha512-Ba7HmkFgfQxZqqaeIWWkNK0rEhpxVQHIoVyW1YDSkGsGIXzcaW4deC8B0pZrNSSyLTdIk7y+5olKt5+g0GmFIQ==
+
+"@react-oauth/google@0.2.6":
+  version "0.2.6"
+  resolved "https://registry.yarnpkg.com/@react-oauth/google/-/google-0.2.6.tgz#42f7a18c62d677c77ee8e1fc2eec2ccbe50be997"
+  integrity sha512-Az6w/EL3QHSvWVbfX2WbUB15PGqM0hm86bpAoyvjw2nhDdPp9IOjpFg5HfSGJQJBydjbCFnZjI8PJskTzLOhew==
 
 "@rollup/plugin-babel@^5.2.0":
   version "5.3.1"

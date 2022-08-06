@@ -7,12 +7,12 @@
     "workspaces": [
         "lib",
         "example",
-        "sass",
+        "saas",
         "schema-inference"
     ],
     "scripts": {
         "dev": "cd example && yarn dev",
-        "sass": "cd sass && yarn dev",
+        "saas": "cd saas && yarn dev",
         "website": "cd website && yarn start",
         "preview": "cd example && yarn preview",
         "deploy": "cd example && yarn deploy",

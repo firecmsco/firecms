@@ -177,6 +177,24 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entities",
     properties: {
+        background: {
+            dataType: "number",   // NB – this was string” above..
+            name: "Colour",
+            enumValues:
+                [
+                    {
+                        id: 4281080974,
+                        label: " Blue ",
+                        color: "blueDarker"
+                    },
+                    {
+                        id: 4293947270,
+                        label: " Cyan ",
+                        color: "cyanDarker"
+                    },
+                ],
+            validation: { required: true },
+        },
         name: {
             dataType: "string",
             name: "Name"

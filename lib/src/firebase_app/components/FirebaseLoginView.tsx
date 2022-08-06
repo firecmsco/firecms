@@ -38,6 +38,17 @@ import { RECAPTCHA_CONTAINER_ID, useRecaptcha } from "../hooks/useRecaptcha";
  * @category Firebase
  */
 export interface FirebaseLoginViewProps {
+
+    /**
+     * Firebase app this login view is accesing
+     */
+    firebaseApp: FirebaseApp;
+
+    /**
+     * Delegate holding the auth state
+     */
+    authDelegate: FirebaseAuthDelegate;
+
     /**
      * Path to the logo displayed in the login screen
      */
@@ -77,13 +88,11 @@ export interface FirebaseLoginViewProps {
      */
     AdditionalComponent?: ReactNode;
 
-    firebaseApp: FirebaseApp;
-    authDelegate: FirebaseAuthDelegate;
 }
 
 /**
  * Use this component to render a login view, that updates
- * the state of the {@link AuthController} based on the result
+ * the state of the {@link FirebaseAuthDelegate} based on the result
  * @constructor
  * @category Firebase
  */

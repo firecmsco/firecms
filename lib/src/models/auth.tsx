@@ -72,7 +72,7 @@ export interface AuthController<UserType extends User = User> {
 /**
  * Controller for retrieving the logged user or performing auth related operations.
  * Note that if you are implementing your AuthDelegate, you probably will want
- * to do it as the result of a hook. Check {@link useFirebaseAuthDelegate} code
+ * to do it as the result of a hook. Check {@link useBuildFirebaseAuthDelegate} code
  * for an example.
  * @category Hooks and utilities
  */

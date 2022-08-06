@@ -27,9 +27,14 @@ export interface InitialiseFirebaseResult {
  * @param firebaseConfig
  * @category Firebase
  */
-export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
+export function useInitialiseFirebase({
+                                          firebaseConfig,
+                                          onFirebaseInit,
+                                          name
+                                      }: {
     onFirebaseInit?: ((config: object) => void) | undefined,
-    firebaseConfig: Record<string, unknown> | undefined
+    firebaseConfig: Record<string, unknown> | undefined,
+    name?: string;
 }): InitialiseFirebaseResult {
 
     const [firebaseApp, setFirebaseApp] = React.useState<FirebaseApp | undefined>();
@@ -39,7 +44,7 @@ export function useInitialiseFirebase({ firebaseConfig, onFirebaseInit }: {
 
     const initFirebase = useCallback((config: Record<string, unknown>) => {
         try {
-            const initialisedFirebaseApp = initializeApp(config, "[DEFAULT]");
+            const initialisedFirebaseApp = initializeApp(config, name ?? "[DEFAULT]");
             setFirebaseConfigError(undefined);
             setFirebaseConfigLoading(false);
             if (onFirebaseInit)
