@@ -59,17 +59,6 @@ export type Authenticator<UserType extends User = User> = ({ user }: {
     authController: AuthController<UserType>;
 
     /**
-     * Format of the dates in the CMS.
-     * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
-     */
-    dateTimeFormat?: string;
-
-    /**
-     * Locale of the CMS, currently only affecting dates
-     */
-    locale?: Locale;
-
-    /**
      * Connector to your database, e.g. your Firestore database
      */
     dataSource: DataSource;

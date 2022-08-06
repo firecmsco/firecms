@@ -82,6 +82,8 @@ export const VirtualTableHeaderRow = ({
     return (
         <Box sx={theme => ({
             position: "sticky",
+            minWidth: "100%",
+            backgroundColor: theme.palette.background.default,
             display: "flex",
             width: "fit-content",
             flexDirection: "row",

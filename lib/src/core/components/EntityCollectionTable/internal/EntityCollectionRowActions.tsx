@@ -19,6 +19,8 @@ import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
 /**
  *
  * @param entity
+ * @param width
+ * @param frozen
  * @param isSelected
  * @param selectionEnabled
  * @param size
@@ -30,7 +32,7 @@ import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
  *
  * @category Collection components
  */
-export function CollectionRowActions<M extends { [Key: string]: any }>({
+export function EntityCollectionRowActions<M extends { [Key: string]: any }>({
                                                                            entity,
                                                                            width,
                                                                            frozen,
@@ -70,11 +72,12 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
         setAnchorEl(null);
     }, [setAnchorEl]);
 
-    const onCheckboxChange = (event: React.ChangeEvent) => {
+    const onCheckboxChange = useCallback((event: React.ChangeEvent) => {
         if (toggleEntitySelection)
             toggleEntitySelection(entity);
+        event.preventDefault();
         event.stopPropagation();
-    };
+    }, [entity, toggleEntitySelection]);
 
     const onDeleteClick = useCallback((event: MouseEvent) => {
         event.stopPropagation();
@@ -90,11 +93,18 @@ export function CollectionRowActions<M extends { [Key: string]: any }>({
         setAnchorEl(null);
     }, [entity, onCopyClicked, setAnchorEl]);
 
+    const onClick = useCallback((event: MouseEvent) => {
+        event.stopPropagation();
+        if (toggleEntitySelection)
+            toggleEntitySelection(entity);
+    }, [entity, toggleEntitySelection]);
+
     return (
         <Box
             style={{
                 width
             }}
+            onClick={onClick}
             sx={theme => ({
                 height: "100%",
                 display: "flex",

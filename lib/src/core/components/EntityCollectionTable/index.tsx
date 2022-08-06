@@ -12,6 +12,3 @@ export type {
     OnCellValueChange,
     OnCellValueChangeParams
 } from "./types";
-
-
-

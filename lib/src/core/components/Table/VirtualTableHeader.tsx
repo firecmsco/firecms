@@ -26,7 +26,7 @@ import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../ErrorBoundary";
 
-type TableHeaderProps<M extends { [Key: string]: any }> = {
+type VirtualTableHeaderProps<M extends { [Key: string]: any }> = {
     resizeHandleRef: RefObject<HTMLDivElement>;
     columnIndex: number;
     isResizingIndex: number;
@@ -38,7 +38,7 @@ type TableHeaderProps<M extends { [Key: string]: any }> = {
     onClickResizeColumn?: (columnIndex: number, column: TableColumn<M, any>) => void;
 };
 
-export const VirtualTableHeader = React.memo<TableHeaderProps<any>>(
+export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
     function VirtualTableHeader<M extends { [Key: string]: any }>({
                                                                       resizeHandleRef,
                                                                       columnIndex,
@@ -49,7 +49,7 @@ export const VirtualTableHeader = React.memo<TableHeaderProps<any>>(
                                                                       filter,
                                                                       column,
                                                                       onClickResizeColumn
-                                                                  }: TableHeaderProps<M>) {
+                                                                  }: VirtualTableHeaderProps<M>) {
 
         const ref = useRef<HTMLDivElement>(null);
 
@@ -210,7 +210,7 @@ export const VirtualTableHeader = React.memo<TableHeaderProps<any>>(
 
             </ErrorBoundary>
         );
-    }, equal) as React.FunctionComponent<TableHeaderProps<any>>;
+    }, equal) as React.FunctionComponent<VirtualTableHeaderProps<any>>;
 
 interface FilterFormProps<M> {
     column: TableColumn<M, any>;

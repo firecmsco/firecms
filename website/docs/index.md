@@ -67,7 +67,7 @@ logic of the app, and create the app scaffold and routes.
 :::note
 It is also possible to use FireCMS by using lower level components and including
 `FireCMS` in your code, even without using Firebase.
-More details in the [Custom CMSApp](custom_cms_app.md) section
+More details in the [Custom CMSApp](custom_cms_app.mdx) section
 :::
 
 You can find an example of a basic `FirebaseCMSApp` implementation in the
@@ -89,7 +89,7 @@ You can use this library as a full application, with routing enabled.
 But if you need better customisation and to use the internal components, tweak the
 MUI theme, control the routes or replace the backend altogether
 (including auth, storage and data), you can do it starting from version 1.0.0.
-Check the details in the [Custom CMSApp](custom_cms_app.md) section
+Check the details in the [Custom CMSApp](custom_cms_app.mdx) section
 :::
 
 
@@ -199,5 +199,5 @@ There are built-in hooks `onPreSave`, `onSaveSuccess`, `onSaveFailure`,
 
 FireCMS has a good separation of concerns. All the logic related to
 Firebase/Firestore is abstracted away behind 3 interfaces: `DataSource`,
-`StorageSource` and `AuthDelegate`. This means you can extend or even completely
+`StorageSource` and `AuthController`. This means you can extend or even completely
 replace those 3 implementations with your own.

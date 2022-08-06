@@ -22,10 +22,9 @@ import {
 } from "../../models";
 import { PropertyPreview } from "../../preview";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { getIconForProperty, getIdIcon } from "../util/property_utils";
+import { getIconForProperty, getIdIcon, resolveCollection } from "../util";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
-import { resolveCollection } from "../util/resolutions";
 
 const PREFIX = "EntityPreview";
 
@@ -84,13 +83,12 @@ export function EntityPreview<M>(
         path
     }: EntityPreviewProps<M>) {
 
-
     const resolvedCollection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection<M>({
         collection,
         path,
         entityId: entity.id,
-        values: entity.values,
-    }), [collection, collection, path, entity]);
+        values: entity.values
+    }), [collection, path, entity]);
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 

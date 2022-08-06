@@ -134,7 +134,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 setUsedEntity(entity);
             if (usedEntity)
                 setReadOnly(!editEnabled);
-        }, [entity, editEnabled]);
+        }, [entity, editEnabled, usedEntity]);
 
         useEffect(() => {
             if (!selectedSubPath)

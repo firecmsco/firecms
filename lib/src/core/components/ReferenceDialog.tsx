@@ -16,8 +16,8 @@ import { Add } from "@mui/icons-material";
 
 import { EntityCollectionTable } from "./EntityCollectionTable";
 import {
-    CollectionRowActions
-} from "./EntityCollectionTable/internal/CollectionRowActions";
+    EntityCollectionRowActions
+} from "./EntityCollectionTable/internal/EntityCollectionRowActions";
 import {
     useAuthController,
     useDataSource,
@@ -225,7 +225,7 @@ export function ReferenceDialog(
                                                 }: { entity: Entity<any>, size: CollectionSize, width: number, frozen?: boolean }) => {
 
         const isSelected = selectedEntities && selectedEntities.map(e => e.id).indexOf(entity.id) > -1;
-        return <CollectionRowActions
+        return <EntityCollectionRowActions
             width={width}
             frozen={frozen}
             entity={entity}

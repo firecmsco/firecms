@@ -4,7 +4,7 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 
-import { AuthDelegate } from "../../models";
+import { AuthController } from "../../models";
 
 /**
  * @category Firebase
@@ -33,8 +33,8 @@ export type FirebaseSignInOption = {
 /**
  * @category Firebase
  */
-export type FirebaseAuthDelegate =
-    AuthDelegate<FirebaseUser> & {
+export type FirebaseAuthController =
+    AuthController<FirebaseUser> & {
 
     authLoading: boolean;
 

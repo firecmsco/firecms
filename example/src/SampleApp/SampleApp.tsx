@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import { getAnalytics } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
@@ -95,7 +95,7 @@ function SampleApp() {
         getAnalytics();
     };
 
-    const myAuthenticator: Authenticator<FirebaseUser> = async ({
+    const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
                                                                     user,
                                                                     authController
                                                                 }) => {
@@ -111,7 +111,8 @@ function SampleApp() {
 
         console.log("Allowing access to", user);
         return true;
-    };
+    }, []);
+
      const localeNestedCollection = buildCollection<any>({
          path: "products/B000P0MDMS/locales",
          alias: "custom-locale",

@@ -41,6 +41,7 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
                 onMouseLeave={setOnHoverFalse}
                 sx={theme => ({
                     display: "flex",
+                    minWidth: "100%",
                     height: getRowHeight(size),
                     flexDirection: "row",
                     fontSize: "0.875rem",

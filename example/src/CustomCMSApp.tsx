@@ -8,21 +8,21 @@ import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 
 import {
-    Authenticator,
     buildCollection,
     CircularProgressCenter,
     createCMSDefaultTheme,
-    FirebaseAuthDelegate,
+    FirebaseAuthController,
     FirebaseLoginView,
     FireCMS,
     NavigationRoutes,
     Scaffold,
     SideDialogs,
-    useBuildFirebaseAuthDelegate,
+    useFirebaseAuthController,
     useBuildModeController,
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase,
+    useValidateAuthenticator,
 } from "@camberi/firecms";
 
 import { firebaseConfig } from "./firebase_config";
@@ -79,11 +79,6 @@ export function CustomCMSApp() {
 
     const signInOptions = DEFAULT_SIGN_IN_OPTIONS;
 
-    const myAuthenticator: Authenticator = ({ user }) => {
-        console.log("Allowing access to", user?.email);
-        return true;
-    };
-
     const {
         firebaseApp,
         firebaseConfigLoading,
@@ -91,7 +86,7 @@ export function CustomCMSApp() {
         firebaseConfigError
     } = useInitialiseFirebase({ firebaseConfig });
 
-    const authDelegate: FirebaseAuthDelegate = useBuildFirebaseAuthDelegate({
+    const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions
     });
@@ -105,6 +100,21 @@ export function CustomCMSApp() {
 
     const modeController = useBuildModeController();
     const theme = useMemo(() => createCMSDefaultTheme({ mode: modeController.mode }), []);
+
+    const {
+        authLoading,
+        canAccessMainView,
+        notAllowedError
+    } = useValidateAuthenticator({
+        authController,
+        authentication: ({ user }) => {
+            console.log("Allowing access to", user?.email);
+            return true;
+        },
+        dataSource,
+        storageSource
+    });
+
 
     if (configError) {
         return <div> {configError} </div>;
@@ -125,9 +135,8 @@ export function CustomCMSApp() {
 
     return (
         <Router>
-            <FireCMS authDelegate={authDelegate}
+            <FireCMS authController={authController}
                      collections={[productsCollection]}
-                     authentication={myAuthenticator}
                      modeController={modeController}
                      dataSource={dataSource}
                      storageSource={storageSource}
@@ -138,13 +147,13 @@ export function CustomCMSApp() {
                     let component;
                     if (loading) {
                         component = <CircularProgressCenter/>;
-                    } else if (!context.authController.canAccessMainView) {
+                    } else if (!canAccessMainView) {
                         component = (
                             <FirebaseLoginView
                                 allowSkipLogin={false}
                                 signInOptions={signInOptions}
                                 firebaseApp={firebaseApp}
-                                authDelegate={authDelegate}/>
+                                authController={authController}/>
                         );
                     } else {
                         component = (

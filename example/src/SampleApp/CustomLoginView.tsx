@@ -9,13 +9,13 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
 
     const submittedNewsletter = useRef(false);
 
-    const authDelegate = props.authDelegate;
+    const authController = props.authController;
     useEffect(() => {
-        if (newsletterSubscribed && authDelegate.user?.email && !submittedNewsletter.current) {
+        if (newsletterSubscribed && authController.user?.email && !submittedNewsletter.current) {
             submittedNewsletter.current = true;
-            handleSubmit(authDelegate.user.email);
+            handleSubmit(authController.user.email);
         }
-    }, [newsletterSubscribed, authDelegate.user]);
+    }, [newsletterSubscribed, authController.user]);
 
     return (
         <FirebaseLoginView

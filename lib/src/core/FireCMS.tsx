@@ -6,7 +6,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 
 import {
-    AuthDelegate,
+    AuthController,
     Authenticator,
     CMSView,
     CollectionOverrideHandler,
@@ -29,7 +29,6 @@ import {
 import {
     useBuildNavigationContext
 } from "./internal/useBuildNavigationContext";
-import { useBuildAuthController } from "./internal/useBuildAuthController";
 import {
     useBuildSideDialogsController
 } from "./internal/useBuildSideDialogsController";
@@ -77,15 +76,6 @@ export interface FireCMSProps<UserType extends User> {
     views?: CMSView[] | CMSViewsBuilder;
 
     /**
-     * Do the users need to log in to access the CMS.
-     * You can specify an Authenticator function to discriminate which users can
-     * access the CMS or not.
-     * If not specified, authentication is enabled but no user restrictions
-     * apply.
-     */
-    authentication?: boolean | Authenticator<UserType>;
-
-    /**
      * Used to override collections based on the collection path and entityId.
      * This resolver allows to override the collection for specific entities, or
      * specific collections, app wide.
@@ -119,9 +109,8 @@ export interface FireCMSProps<UserType extends User> {
 
     /**
      * Delegate for implementing your auth operations.
-     * @see useFirebaseAuthDelegate
      */
-    authDelegate: AuthDelegate<UserType>;
+    authController: AuthController<UserType>;
 
     /**
      * Optional link builder you can add to generate a button in your entity forms.
@@ -175,11 +164,10 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         views,
         modeController,
         entityLinkBuilder,
-        authentication,
         userConfigPersistence,
         dateTimeFormat,
         locale,
-        authDelegate,
+        authController,
         collectionOverrideHandler,
         storageSource,
         dataSource,
@@ -192,14 +180,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     const usedBasedCollectionPath = baseCollectionPath ?? DEFAULT_COLLECTION_PATH;
 
     const dateUtilsLocale = locale ? locales[locale] : undefined;
-    const authController = useBuildAuthController({
-        authDelegate,
-        authentication,
-        dateTimeFormat,
-        locale,
-        dataSource,
-        storageSource
-    });
 
     const navigation = useBuildNavigationContext({
         basePath: usedBasePath,

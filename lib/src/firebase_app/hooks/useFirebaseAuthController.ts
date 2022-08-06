@@ -18,9 +18,9 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
-import { AuthDelegate } from "../../models";
+import { AuthController } from "../../models";
 import {
-    FirebaseAuthDelegate,
+    FirebaseAuthController,
     FirebaseSignInOption,
     FirebaseSignInProvider
 } from "../models/auth";
@@ -36,14 +36,14 @@ interface FirebaseAuthHandlerProps {
 }
 
 /**
- * Use this hook to build an {@link AuthDelegate} based on Firebase Auth
+ * Use this hook to build an {@link AuthController} based on Firebase Auth
  * @category Firebase
  */
-export const useBuildFirebaseAuthDelegate = (
+export const useFirebaseAuthController = (
     {
         firebaseApp,
         signInOptions
-    }: FirebaseAuthHandlerProps): FirebaseAuthDelegate => {
+    }: FirebaseAuthHandlerProps): FirebaseAuthController => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
     const [authProviderError, setAuthProviderError] = useState<any>();
@@ -51,6 +51,8 @@ export const useBuildFirebaseAuthDelegate = (
     const [authLoading, setAuthLoading] = useState(true);
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
     const [confirmationResult, setConfirmationResult] = useState<void | ConfirmationResult>();
+
+    const [extra, setExtra] = useState<any>();
 
     function skipLogin() {
         setLoginSkipped(true);
@@ -86,7 +88,7 @@ export const useBuildFirebaseAuthDelegate = (
 
     const getProviderOptions = useCallback((providerId: FirebaseSignInProvider): FirebaseSignInOption | undefined => {
         return signInOptions.find((option) => {
-            if (option === null) throw Error("useFirebaseAuthDelegate");
+            if (option === null) throw Error("useFirebaseAuthController");
             if (typeof option === "object" && option.provider === providerId)
                 return option as FirebaseSignInOption;
             return undefined;
@@ -227,6 +229,8 @@ export const useBuildFirebaseAuthDelegate = (
         emailPasswordLogin,
         phoneLogin,
         fetchSignInMethodsForEmail: getSignInMethodsForEmail,
-        createUserWithEmailAndPassword: registerWithPasswordEmail
+        createUserWithEmailAndPassword: registerWithPasswordEmail,
+        extra,
+        setExtra
     };
 };

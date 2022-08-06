@@ -148,7 +148,7 @@ There are built-in hooks `onPreSave`, `onSaveSuccess`, `onSaveFailure`,
 
 FireCMS has a good separation of concerns. All the logic related to
 Firebase/Firestore is abstracted away behind 3 interfaces: `DataSource`,
-`StorageSource` and `AuthDelegate`. This means you can extend or even completely
+`StorageSource` and `AuthController`. This means you can extend or even completely
 replace those 3 implementations with your own.
 
 ## Included example

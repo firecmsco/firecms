@@ -1,0 +1,48 @@
+---
+id: custom_cms_app
+title: Custom CMSApp
+sidebar_label: Custom CMSApp
+---
+
+FireCMS was originally developed to create Firebase/Firestore-based CMS apps
+with very little effort. We offer sensible defaults and multiple customization
+options and callbacks.
+
+But there are a few situations where you may want to have more control and build
+your app using the same components that we use internally.
+
+In the process of having a cleaner code, all the code related to Firebase has
+been isolated into 3 components, one for authentication (auth delegate), one
+for the data source and one for storage. These components are abstracted away
+behind their respective interfaces. This means you can replace any of those
+services with your custom implementation!
+
+For this reason we expose many of the components used internally, so you can
+use them in your app and combine them with your code
+
+Some top-level components that you will find useful (same ones as used
+by `FirebaseCMSApp`):
+- [`FireCMS`](api/functions/firecms)
+- [`Scaffold`](api/variables/scaffold)
+- [`NavigationRoutes`](api/variables/NavigationRoutes)
+- [`SideDialogs`](api/functions/SideDialogs)
+- [`useInitialiseFirebase`](api/functions/useinitialisefirebase)
+- [`useFirebaseAuthController`](api/functions/useFirebaseAuthController)
+- [`useFirebaseStorageSource`](api/functions/usefirebasestoragesource)
+- [`useFirestoreDataSource`](api/functions/usefirestoredatasource)
+
+You will also be responsible for initialising your MUI5 theme and your react-router
+`Router`
+
+You can see an example
+[here](https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx)
+
+
+### Example custom app
+
+import CodeBlock from "@theme/CodeBlock";
+import MyComponentSource from "!!raw-loader!../../example/src/CustomCMSApp";
+
+<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+
+

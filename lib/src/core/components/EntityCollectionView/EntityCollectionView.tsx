@@ -16,8 +16,8 @@ import {
 } from "../EntityCollectionTable";
 
 import {
-    CollectionRowActions
-} from "../EntityCollectionTable/internal/CollectionRowActions";
+    EntityCollectionRowActions
+} from "../EntityCollectionTable/internal/EntityCollectionRowActions";
 import {
     DeleteEntityDialog
 } from "../EntityCollectionTable/internal/DeleteEntityDialog";
@@ -271,7 +271,7 @@ export const EntityCollectionView = React.memo(
             });
 
             return (
-                <CollectionRowActions
+                <EntityCollectionRowActions
                     entity={entity}
                     width={width}
                     frozen={frozen}

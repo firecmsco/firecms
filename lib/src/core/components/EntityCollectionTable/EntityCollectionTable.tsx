@@ -50,7 +50,7 @@ import {
     resolveProperty
 } from "../../util";
 import { getRowHeight } from "../Table/common";
-import { CollectionRowActions } from "./internal/CollectionRowActions";
+import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
 import {
     EntityCollectionTableController,
     OnCellValueChange,
@@ -504,10 +504,10 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         frozen: column.frozen
                     });
                 else
-                    return <CollectionRowActions entity={props.rowData}
-                                                 width={column.width}
-                                                 frozen={column.frozen}
-                                                 size={size}/>;
+                    return <EntityCollectionRowActions entity={props.rowData}
+                                                       width={column.width}
+                                                       frozen={column.frozen}
+                                                       size={size}/>;
             } else if (additionalColumnsMap[columnKey]) {
                 return additionalCellRenderer(props);
             } else if (props.columnIndex < columns.length + 1) {

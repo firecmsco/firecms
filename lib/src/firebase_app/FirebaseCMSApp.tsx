@@ -16,16 +16,17 @@ import {
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
 import {
-    useBuildFirebaseAuthDelegate
-} from "./hooks/useBuildFirebaseAuthDelegate";
+    useFirebaseAuthController
+} from "./hooks/useFirebaseAuthController";
 import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
-import { FirebaseAuthDelegate } from "./models/auth";
+import { FirebaseAuthController } from "./models/auth";
 import {
     useBuildLocalConfigurationPersistence
 } from "../core/internal/useBuildLocalConfigurationPersistence";
+import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -85,7 +86,7 @@ export function FirebaseCMSApp({
     /**
      * Controller for managing authentication
      */
-    const authDelegate: FirebaseAuthDelegate = useBuildFirebaseAuthDelegate({
+    const authController: FirebaseAuthController = useFirebaseAuthController({
         firebaseApp,
         signInOptions
     });
@@ -108,6 +109,20 @@ export function FirebaseCMSApp({
      */
     const storageSource = useFirebaseStorageSource({
         firebaseApp
+    });
+
+    /**
+     * Validate authenticator
+     */
+    const {
+        authLoading,
+        canAccessMainView,
+        notAllowedError
+    } = useValidateAuthenticator({
+        authController,
+        authentication,
+        dataSource,
+        storageSource
     });
 
     /**
@@ -148,8 +163,7 @@ export function FirebaseCMSApp({
             <FireCMS
                 collections={collections}
                 views={views}
-                authDelegate={authDelegate}
-                authentication={authentication}
+                authController={authController}
                 userConfigPersistence={userConfigPersistence}
                 collectionOverrideHandler={collectionOverrideHandler}
                 modeController={modeController}
@@ -163,9 +177,9 @@ export function FirebaseCMSApp({
                 {({ context, loading }) => {
 
                     let component;
-                    if (loading) {
+                    if (loading || authLoading) {
                         component = <CircularProgressCenter/>;
-                    } else if (!context.authController.canAccessMainView) {
+                    } else if (!canAccessMainView) {
                         const LoginViewUsed = LoginView ?? FirebaseLoginView;
                         component = (
                             <LoginViewUsed
@@ -173,7 +187,8 @@ export function FirebaseCMSApp({
                                 allowSkipLogin={allowSkipLogin}
                                 signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
                                 firebaseApp={firebaseApp}
-                                authDelegate={authDelegate}/>
+                                authController={authController}
+                                notAllowedError={notAllowedError}/>
                         );
                     } else {
                         component = (
