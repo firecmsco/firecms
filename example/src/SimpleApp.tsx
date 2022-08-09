@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 
 import { User as FirebaseUser } from "firebase/auth";
 import {
@@ -199,7 +199,7 @@ const productsCollection = buildCollection<Product>({
 
 export default function App() {
 
-    const myAuthenticator: Authenticator<FirebaseUser> = async ({
+    const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
                                                                     user,
                                                                     authController
                                                                 }) => {
@@ -215,7 +215,7 @@ export default function App() {
         authController.setExtra(sampleUserRoles);
 
         return true;
-    };
+    }, []);
 
     return <FirebaseCMSApp
         name={"My Online Shop"}

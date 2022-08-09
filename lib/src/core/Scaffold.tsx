@@ -1,11 +1,17 @@
-import React, { PropsWithChildren, useEffect } from "react";
+import React, { PropsWithChildren, useCallback, useEffect } from "react";
 
-import { Box, Drawer as MuiDrawer } from "@mui/material";
+import { Box, Drawer as MuiDrawer, Link, useTheme } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
-import { FireCMSAppBar } from "./internal/FireCMSAppBar";
-import { useLocation } from "react-router-dom";
+import { NavLink, useLocation } from "react-router-dom";
 import { useNavigationContext } from "../hooks";
-import { CircularProgressCenter } from "./components";
+import { CircularProgressCenter, FireCMSLogo } from "./components";
+import { CSSObject, styled, Theme } from "@mui/material/styles";
+import IconButton from "@mui/material/IconButton";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { FireCMSAppBar } from "./internal/FireCMSAppBar";
+
+export const DRAWER_WIDTH = 280;
 
 /**
  * @category Core
@@ -63,60 +69,108 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             Drawer
         } = props;
 
-        const navigationContext = useNavigationContext();
-        const [drawerOpen, setDrawerOpen] = React.useState(false);
+        const navigation = useNavigationContext();
         const containerRef = useRestoreScroll();
 
-        const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
-        const closeDrawer = () => setDrawerOpen(false);
+        const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+        const theme = useTheme();
 
         const UsedDrawer = Drawer || FireCMSDrawer;
 
+        const handleDrawerOpen = useCallback(() => {
+            setDrawerOpen(true);
+        }, []);
+
+        const handleDrawerClose = useCallback(() => {
+            setDrawerOpen(false);
+        }, []);
+
+        let logoComponent;
+        if (logo) {
+            logoComponent = <img
+                style={{
+                    maxWidth: "100%",
+                    maxHeight: "100%"
+                }}
+                src={logo}
+                alt={"Logo"}/>;
+        } else {
+            logoComponent = <FireCMSLogo/>;
+        }
+
         return (
-            (<>
-                <nav>
-                    <MuiDrawer
-                        variant="temporary"
-                        anchor={"left"}
-                        open={drawerOpen}
-                        onClose={closeDrawer}
-                        sx={{
-                            width: 280
-                        }}
-                        ModalProps={{
-                            keepMounted: true
-                        }}
-                    >
-                        {navigationContext.loading
+            <Box sx={{ display: "flex", height: "100vh" }}>
+
+                <FireCMSAppBar title={name}
+                               drawerOpen={drawerOpen}
+                               handleDrawerOpen={handleDrawerOpen}
+                               toolbarExtraWidget={toolbarExtraWidget}/>
+
+                <StyledDrawer variant="permanent" open={drawerOpen}>
+
+                    <DrawerHeader>
+                        {drawerOpen && <Link
+                            key={"breadcrumb-home"}
+                            color="inherit"
+                            onClick={handleDrawerClose}
+                            component={NavLink}
+                            to={navigation.homeUrl}>
+
+                            {logoComponent}
+
+                        </Link>}
+                    </DrawerHeader>
+
+                    {drawerOpen && <IconButton onClick={handleDrawerClose}
+                                               sx={{
+                                                   position: "absolute",
+                                                   right: 8,
+                                                   top: 16
+                                               }}>
+                        {theme.direction === "rtl"
+                            ? <ChevronRightIcon/>
+                            : <ChevronLeftIcon/>}
+                    </IconButton>}
+
+                    <nav>
+                        {navigation.loading
                             ? <CircularProgressCenter/>
                             : <UsedDrawer
                                 logo={logo}
-                                closeDrawer={closeDrawer}/>}
+                                drawerOpen={drawerOpen}
+                                closeDrawer={handleDrawerClose}/>}
+                    </nav>
+                </StyledDrawer>
 
-                    </MuiDrawer>
-                </nav>
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    width: "100vw",
-                    height: "100vh"
-                }}>
-
-                    <FireCMSAppBar title={name}
-                                   handleDrawerToggle={handleDrawerToggle}
-                                   toolbarExtraWidget={toolbarExtraWidget}/>
-                    <Box component={"main"}
-                         sx={{
-                             flexGrow: 1,
-                             width: "100%",
-                             height: "100%",
-                             overflow: "auto"
-                         }}
-                         ref={containerRef}>
-                        {children}
+                <Box component={"main"}
+                     sx={{
+                         display: "flex",
+                         flexDirection: "column",
+                         flexGrow: 1,
+                         width: "100%",
+                         height: "100%",
+                         overflow: "auto"
+                     }}
+                     ref={containerRef}>
+                    <DrawerHeader/>
+                    <Box sx={{
+                        flexGrow: 1,
+                        height: "100%",
+                        m: 2,
+                        overflow: "hidden",
+                        borderRadius: "12px",
+                        border: `1px solid ${theme.palette.divider}`
+                    }}>
+                        <Box sx={{
+                            height: "100%",
+                            overflow: "scroll",
+                        }}>
+                            {children}
+                        </Box>
                     </Box>
                 </Box>
-            </>)
+            </Box>
         );
     },
     function areEqual(prevProps: PropsWithChildren<ScaffoldProps>, nextProps: PropsWithChildren<ScaffoldProps>) {
@@ -160,3 +214,57 @@ function useRestoreScroll() {
 
     return containerRef;
 }
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+    // display: "flex",
+    // alignItems: "center",
+    // justifyContent: "flex-end",
+    padding: theme.spacing(4, 12, 1, 3),
+    // necessary for content to be below app bar
+    ...theme.mixins.toolbar
+}));
+
+const StyledDrawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" })(
+    ({ theme, open }) => ({
+        width: DRAWER_WIDTH,
+        flexShrink: 0,
+        whiteSpace: "nowrap",
+        boxSizing: "border-box",
+        border: "none",
+        ...(open && {
+            ...openedMixin(theme),
+            "& .MuiDrawer-paper": openedMixin(theme)
+        }),
+        ...(!open && {
+            ...closedMixin(theme),
+            "& .MuiDrawer-paper": closedMixin(theme)
+        })
+    })
+);
+
+const openedMixin = (theme: Theme): CSSObject => ({
+    willChange: "width",
+    width: DRAWER_WIDTH,
+    border: "none",
+    transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.enteringScreen
+    }),
+    backgroundColor: theme.palette.background.default,
+    overflowX: "hidden"
+});
+
+const closedMixin = (theme: Theme): CSSObject => ({
+    willChange: "width",
+    transition: theme.transitions.create("width", {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+    }),
+    border: "none",
+    overflowX: "hidden",
+    backgroundColor: theme.palette.background.default,
+    width: `calc(${theme.spacing(8)})`,
+    [theme.breakpoints.up("sm")]: {
+        width: `calc(${theme.spacing(9)})`
+    }
+});

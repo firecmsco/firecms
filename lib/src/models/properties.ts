@@ -1,6 +1,6 @@
 import { FieldProps } from "./fields";
 import { PropertyPreviewProps } from "../preview";
-import { ChipColor } from "./colors";
+import { ChipColorKey, ChipColorScheme } from "./colors";
 import { EntityReference, EntityValues, GeoPoint } from "./entities";
 import {
     ResolvedArrayProperty,
@@ -202,10 +202,23 @@ export type EnumValues = EnumValueConfig[]
  * @category Entity properties
  */
 export interface EnumValueConfig {
+    /**
+     * Value stored in the data source.
+     */
     id: string | number;
+    /**
+     * Displayed label
+     */
     label: string;
+    /**
+     * This value will not be selectable
+     */
     disabled?: boolean;
-    color?: ChipColor;
+    /**
+     * You can pick from a list of predefined color combinations or define
+     * your own `ChipColorScheme`
+     */
+    color?: ChipColorKey | ChipColorScheme;
 }
 
 /**

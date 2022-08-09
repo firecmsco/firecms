@@ -28,6 +28,8 @@ this version:
   add your terms and conditions checkbox to the login screen.
 - Reference dialogs are now opened using the side dialog, and you can create new
   entities directly from the reference selection view.
+- `AuthDelegate` and `AuthController` have been merged into `AuthController`
+  which now serves both previous purposes.
 
 ### Collections and schemas
 

@@ -3,6 +3,8 @@ import React from "react";
 import { ErrorBoundary, resolvePropertyEnum } from "../../core";
 import { ColorChip, EnumValuesChip } from "../components/ColorChip";
 import { PropertyPreviewProps } from "../index";
+import { getColorScheme } from "../../core/util/enums";
+import { getColorSchemeForSeed } from "../../core/util/chip_utils";
 
 /**
  * @category Preview components
@@ -22,10 +24,11 @@ export function StringPropertyPreview({
             enumValues={resolvedProperty.enumValues}
             small={size !== "regular"}/>;
     } else if (property.previewAsTag) {
+        const colorScheme = getColorSchemeForSeed(propertyKey ?? "");
         return (
             <ErrorBoundary>
                 <ColorChip
-                    colorSeed={propertyKey ?? ""}
+                    colorScheme={colorScheme}
                     label={value}
                     small={size !== "regular"}
                 />

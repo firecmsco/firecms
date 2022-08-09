@@ -170,6 +170,7 @@ export const EntityCollectionView = React.memo(
             <Box sx={{
                 display: "flex",
                 flexDirection: "row",
+                contain: "content",
                 "& > *:not(:last-child)": {
                     [theme.breakpoints.down("md")]: {
                         mr: theme.spacing(1)

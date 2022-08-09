@@ -1,7 +1,6 @@
 import React from "react";
 import {
     AuthController,
-    Authenticator,
     CMSView,
     CollectionOverrideHandler,
     EntityCollection,
@@ -9,7 +8,7 @@ import {
 } from "../models";
 import { FirestoreTextSearchController } from "./models/text_search";
 import { User as FirebaseUser } from "firebase/auth";
-import { FirebaseSignInOption, FirebaseSignInProvider } from "./models/auth";
+import { Authenticator, FirebaseSignInOption, FirebaseSignInProvider } from "./models/auth";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 
 export type EntityCollectionsBuilder = (params: { authController: AuthController }) => EntityCollection[] | Promise<EntityCollection[]>;

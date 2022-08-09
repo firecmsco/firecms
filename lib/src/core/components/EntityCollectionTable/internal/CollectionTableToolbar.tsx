@@ -50,7 +50,7 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
         <FilledSelect
             variant={"standard"}
             value={props.size}
-            sx={{ width: 56 }}
+            sx={{ width: 56, height: 40 }}
             onChange={(evt: any) => props.onSizeChanged(evt.target.value)}
             renderValue={(value: any) => value.toUpperCase()}
         >
@@ -89,7 +89,7 @@ export function CollectionTableToolbar<M extends { [Key: string]: any }>(props: 
                          [theme.breakpoints.down("md")]: {
                              marginRight: `${theme.spacing(1)} !important`
                          },
-                         marginRight: `${theme.spacing(1)} !important`
+                         marginRight: `${theme.spacing(2)} !important`
                      }
                  }}>
 

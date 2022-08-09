@@ -4,7 +4,7 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 
-import { AuthController } from "../../models";
+import { AuthController, DataSource, StorageSource, User } from "../../models";
 
 /**
  * @category Firebase
@@ -73,3 +73,31 @@ export type FirebaseAuthController =
     skipLogin?: () => void;
 
 };
+
+/**
+ * Implement this function to allow access to specific users.
+ * You might also want to load additional data for a user asynchronously
+ * and store it using the `setExtra` method in the `authController`.
+ * @category Firebase
+ */
+export type Authenticator<UserType extends User = User> = ({ user }: {
+    /**
+     * Logged in user or null
+     */
+    user: UserType | null;
+
+    /**
+     * AuthController
+     */
+    authController: AuthController<UserType>;
+
+    /**
+     * Connector to your database, e.g. your Firestore database
+     */
+    dataSource: DataSource;
+
+    /**
+     * Used storage implementation
+     */
+    storageSource: StorageSource;
+}) => boolean | Promise<boolean>;

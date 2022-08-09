@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useState } from "react";
 import { User as FirebaseUser } from "firebase/auth";
 
-import { Authenticator, DataSource, StorageSource } from "../../models";
-import { FirebaseAuthController } from "../models/auth";
+import { DataSource, StorageSource } from "../../models";
+import { Authenticator, FirebaseAuthController } from "../models/auth";
 
 export function useValidateAuthenticator({
                                              authController,

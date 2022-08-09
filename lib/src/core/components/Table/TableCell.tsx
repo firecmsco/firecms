@@ -192,6 +192,7 @@ export const TableCell = React.memo<TableCellProps>(
                     style={{
                         width,
                         // color: "#" + randomColor(),
+                        contain: "content",
                         alignItems: disabled || !isOverflowing ? "center" : undefined,
                         backgroundColor: onHover
                             ? (disabled ? undefined : darken(theme.palette.background.default, 0.02))

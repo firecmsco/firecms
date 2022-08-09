@@ -221,7 +221,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 }
             });
 
-        }, [fullPath, collection, resolvedCollection]);
+        }, [fullPath, collection]);
 
         const {
             data: rawData,

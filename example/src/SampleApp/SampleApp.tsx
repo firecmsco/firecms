@@ -9,14 +9,7 @@ import {
     FirebaseCMSApp,
 } from "@camberi/firecms";
 
-import {
-    FormControlLabel,
-    FormGroup,
-    IconButton,
-    Switch,
-    Typography,
-    Tooltip
-} from "@mui/material";
+import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
@@ -35,35 +28,7 @@ import {
 } from "./collections/custom_collection_resolver";
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
-import { locales } from "./collections/enums";
 import { CustomLoginView } from "./CustomLoginView";
-
-export const collectionBroken = buildCollection<any>({
-    name: "Broken Collection",
-    path: "top_level_3/some_document/sub_collection",
-    permissions: ({ authController }) => ({
-        edit: true,
-        create: true,
-        delete: true,
-    }),
-    properties: {
-        name: {
-            name: "Name",
-            description: "The name of the thing.",
-            dataType: "map",
-            properties: {
-                de: {
-                    name: "Name (de)",
-                    dataType: "string",
-                },
-                en: {
-                    name: "Name (en)",
-                    dataType: "string",
-                },
-            },
-        },
-    },
-});
 
 function SampleApp() {
 
@@ -89,7 +54,6 @@ function SampleApp() {
         view: <ExampleCMSView path={"users"} collection={usersCollection}/>
     }];
 
-
     const onFirebaseInit = (config: Object) => {
         // Just calling analytics enables screen tracking
         getAnalytics();
@@ -113,24 +77,7 @@ function SampleApp() {
         return true;
     }, []);
 
-     const localeNestedCollection = buildCollection<any>({
-         path: "products/B000P0MDMS/locales",
-         alias: "custom-locale",
-         customId: locales,
-         name: "Locales",
-         singularName: "Locale",
-         properties: {
-             name: {
-                 name: "Name",
-                 validation: { required: true },
-                 dataType: "string"
-             }
-         }
-    });
-
-
     const collections = [
-        localeNestedCollection,
         productsCollection,
         usersCollection,
         blogCollection,

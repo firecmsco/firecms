@@ -13,7 +13,7 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
         backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.05) : darken(theme.palette.background.default, 0.2),
         fontSize: 14,
         fontWeight: theme.typography.fontWeightMedium,
-        padding: "10px 26px 10px 12px",
+        padding: "8px 26px 8px 12px",
         transition: theme.transitions.create(["border-color", "box-shadow"]),
         "&:focus": {
             borderRadius: 4

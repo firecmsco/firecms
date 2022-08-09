@@ -1,7 +1,15 @@
 /**
  * @category Models
  */
-export type ChipColor =
+export type ChipColorScheme = {
+    color: string;
+    text: string;
+}
+
+/**
+ * @category Models
+ */
+export type ChipColorKey =
     | "blueLighter"
     | "cyanLighter"
     | "tealLighter"

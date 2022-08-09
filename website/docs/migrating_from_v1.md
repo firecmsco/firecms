@@ -20,10 +20,14 @@ This is a guide on how to migrate FireCMS apps from version 1.0 to 2.0.
 ### Main config
 
 The main navigation has been revamped: 
-- The `navigation` prop has been removed and replaced with `collections` and `views`.
-- If you need to have dynamic collections or views based on the user or other config,
-you can use a `EntityCollectionsBuilder` or `CMSViewsBuilder` in an analogous way 
-to v1.
+- The `navigation` prop has been removed and replaced with `collections`
+  and `views`.
+- If you need to have dynamic collections or views based on the user or other
+  config, you can use a `EntityCollectionsBuilder` or `CMSViewsBuilder` in an
+  analogous way to v1.
+- The authentication and authorization logic has been moved away from `FireCMS`
+  and now it is handled externally. Note that this only affects you if you are
+  using a custom app, **not** if you are using the usual `FirebaseCMSApp`
 
 ### Collections
 
@@ -215,3 +219,16 @@ import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 ```
 
+### Custom apps
+
+The authorization and authentication logic has been moved away from the core of
+the `FireCMS` component, and now it is handled by the components implementing 
+it. 
+
+Specifically, the `Authenticator` logic has been extracted into a new hook
+`useValidateAuthenticator` from the core. You are free to use it in your 
+implementation as before or use your custom logic, for displaying the 
+login screen when needed. It is now easier to implement you `AuthController`
+and your custom login flow.
+
+Check a sample [custom app](./custom_cms_app) for referece

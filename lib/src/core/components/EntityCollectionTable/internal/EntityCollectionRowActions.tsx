@@ -111,10 +111,11 @@ export function EntityCollectionRowActions<M extends { [Key: string]: any }>({
                 alignItems: "center",
                 justifyContent: "center",
                 flexDirection: "column",
-                background: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.8) : alpha(theme.palette.background.default, 0.8),
                 position: frozen ? "sticky" : "initial",
                 left: frozen ? 0 : "initial",
-                backdropFilter: frozen ? "blur(8px)" : undefined,
+                background: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.96) : alpha(theme.palette.background.default, 0.96),
+                // backdropFilter: frozen ? "blur(8px)" : undefined,
+                contain: "strict",
                 zIndex: 1
         })}>
 

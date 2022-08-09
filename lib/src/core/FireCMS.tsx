@@ -7,7 +7,6 @@ import * as locales from "date-fns/locale";
 
 import {
     AuthController,
-    Authenticator,
     CMSView,
     CollectionOverrideHandler,
     DataSource,

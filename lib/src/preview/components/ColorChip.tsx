@@ -1,13 +1,9 @@
 import { Chip, useTheme } from "@mui/material";
-import React, { useMemo } from "react";
-import {
-    getColorSchemeForKey,
-    getColorSchemeForSeed
-} from "../../core/util/chip_utils";
-import { ChipColor, EnumValueConfig } from "../../models";
+import React from "react";
+import { ChipColorScheme, EnumValueConfig } from "../../models";
 import {
     buildEnumLabel,
-    getColorSchemaKey,
+    getColorScheme,
     getLabelOrConfigFrom
 } from "../../core/util/enums";
 
@@ -26,12 +22,11 @@ export function EnumValuesChip({
                                    small
                                }: EnumValuesChipProps) {
     if (!enumValues) return null;
-    const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValues, enumKey?.toString()) : undefined;
+    const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValues, enumKey) : undefined;
     const label = buildEnumLabel(enumValue);
-    const colorSchemaKey = getColorSchemaKey(enumValues, enumKey.toString());
+    const colorScheme = getColorScheme(enumValues, enumKey.toString());
     return <ColorChip
-        colorSeed={`${enumKey}`}
-        colorSchemaKey={colorSchemaKey}
+        colorScheme={colorScheme}
         label={label !== undefined ? label : enumKey}
         error={!label}
         outlined={false}
@@ -41,8 +36,7 @@ export function EnumValuesChip({
 export interface ColorChipProps {
     label: string;
     small?: boolean;
-    colorSeed?: string;
-    colorSchemaKey?: ChipColor;
+    colorScheme?: ChipColorScheme;
     error?: boolean;
     outlined?: boolean;
 }
@@ -51,26 +45,21 @@ export interface ColorChipProps {
  * @category Preview components
  */
 export function ColorChip({
-                               colorSeed,
-                               label,
-                               colorSchemaKey,
-                               error,
-                               outlined,
-                               small
-                           }: ColorChipProps) {
+                              label,
+                              colorScheme,
+                              error,
+                              outlined,
+                              small
+                          }: ColorChipProps) {
 
     const theme = useTheme();
-    const collection = useMemo(() =>
-        colorSchemaKey
-            ? getColorSchemeForKey(colorSchemaKey)
-            : getColorSchemeForSeed(colorSeed ?? label), [colorSeed, colorSchemaKey, label]);
 
     return (
         <Chip
             sx={{
                 maxWidth: "100%",
-                backgroundColor: error ? "#eee" : collection.color,
-                color: error ? "red" : collection.text,
+                backgroundColor: error || !colorScheme ? "#eee" : colorScheme.color,
+                color: error || !colorScheme ? "red" : colorScheme.text,
                 fontWeight: theme!.typography.fontWeightRegular
             }}
             size={small ? "small" : "medium"}

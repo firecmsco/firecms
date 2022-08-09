@@ -19,33 +19,38 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
+import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import {
     useAuthController,
     useBreadcrumbsContext,
     useModeController
 } from "../../hooks";
+import { styled } from "@mui/material/styles";
+import { DRAWER_WIDTH } from "../Scaffold";
 
 interface CMSAppBarProps {
     title: string;
-    handleDrawerToggle: () => void,
+    handleDrawerOpen: () => void,
     /**
      * A component that gets rendered on the upper side of the main toolbar
      */
     toolbarExtraWidget?: React.ReactNode;
+
+    drawerOpen: boolean;
 }
 
-export const FireCMSAppBar = React.memo(
-    function FireCMSAppBar({
-                               title,
-                               handleDrawerToggle,
-                               toolbarExtraWidget
-                           }: CMSAppBarProps) {
+export const FireCMSAppBar = function FireCMSAppBar({
+                                                        title,
+                                                        handleDrawerOpen,
+                                                        toolbarExtraWidget,
+                                                        drawerOpen
+                                                    }: CMSAppBarProps) {
 
     const breadcrumbsContext = useBreadcrumbsContext();
-        const { breadcrumbs } = breadcrumbsContext;
+    const { breadcrumbs } = breadcrumbsContext;
 
-        const authController = useAuthController();
-        const { mode, toggleMode } = useModeController();
+    const authController = useAuthController();
+    const { mode, toggleMode } = useModeController();
 
     const initial = authController.user?.displayName
         ? authController.user.displayName[0].toUpperCase()
@@ -54,16 +59,21 @@ export const FireCMSAppBar = React.memo(
     return (
         <Slide
             direction="down" in={true} mountOnEnter unmountOnExit>
-            <AppBar
-                position={"relative"}
-                elevation={1}>
+
+            <StyledAppBar
+                position={"fixed"}
+                open={drawerOpen}>
+
                 <Toolbar>
                     <IconButton
                         color="inherit"
                         aria-label="Open drawer"
                         edge="start"
-                        onClick={handleDrawerToggle}
-                        sx={{ mr: 2 }}
+                        onClick={handleDrawerOpen}
+                        sx={{
+                            mr: 2,
+                            ...(drawerOpen && { display: "none" })
+                        }}
                         size="large">
                         <MenuIcon/>
                     </IconButton>
@@ -98,7 +108,7 @@ export const FireCMSAppBar = React.memo(
                                     to={entry.url}>
                                     <Chip
                                         sx={theme => ({
-                                            backgroundColor: theme.palette.grey[100],
+                                            backgroundColor: theme.palette.grey[200],
                                             height: theme.spacing(3),
                                             color: theme.palette.grey[800],
                                             fontWeight: theme.typography.fontWeightMedium,
@@ -156,12 +166,30 @@ export const FireCMSAppBar = React.memo(
                     </Button>
 
                 </Toolbar>
-            </AppBar>
+            </StyledAppBar>
         </Slide>
     );
-    },
-    function areEqual(prevProps: CMSAppBarProps, nextProps: CMSAppBarProps) {
-        return prevProps.title === nextProps.title;
-    }
-)
+}
 
+interface AppBarProps extends MuiAppBarProps {
+    open?: boolean;
+}
+
+const StyledAppBar = styled(Box, {
+    shouldForwardProp: (prop) => prop !== "open"
+})<AppBarProps>(({ theme, open }) => ({
+    width: "100%",
+    zIndex: theme.zIndex.drawer + 1,
+    transition: theme.transitions.create(["width", "margin"], {
+        easing: theme.transitions.easing.sharp,
+        duration: theme.transitions.duration.leavingScreen
+    }),
+    ...(open && {
+        marginLeft: DRAWER_WIDTH,
+        width: `calc(100% - ${DRAWER_WIDTH}px)`,
+        transition: theme.transitions.create(["width", "margin"], {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen
+        })
+    })
+}));

@@ -2,7 +2,7 @@ import React from "react";
 import { Backdrop, Modal, Paper } from "@mui/material";
 import { SlideFade } from "./SlideFadeTransition";
 
-export interface EntityDrawerProps {
+export interface SideDialogDrawerProps {
 
     /**
      * The contents of the drawer.
@@ -38,7 +38,7 @@ const defaultTransitionDuration = {
  * The props of the [Modal](/api/modal/) component are available
  * when `variant="temporary"` is set.
  */
-export const SideDialogDrawer = React.forwardRef<HTMLDivElement, EntityDrawerProps>(function EntityDrawer(props, ref) {
+export const SideDialogDrawer = React.forwardRef<HTMLDivElement, SideDialogDrawerProps>(function EntityDrawer(props, ref) {
 
     const {
         children,
@@ -78,7 +78,9 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, EntityDrawerPro
                         position: "fixed",
                         outline: 0,
                         left: "auto",
-                        right: 0
+                        right: 0,
+                        overflow: "hidden",
+                        borderRadius: "16px 0 0 16px"
                     }}
                 >
                     {children}

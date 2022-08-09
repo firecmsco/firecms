@@ -1,4 +1,5 @@
-import { ChipColor, EnumValueConfig, EnumValues } from "../../models";
+import { ChipColorScheme, EnumValueConfig, EnumValues } from "../../models";
+import { CHIP_COLORS, getColorSchemeForSeed } from "./chip_utils";
 
 export function enumToObjectEntries(enumValues: EnumValues): [string | number, string | EnumValueConfig][] {
     return Array.isArray(enumValues)
@@ -11,10 +12,15 @@ export function getLabelOrConfigFrom(enumValues: EnumValueConfig[], key?: string
     return enumValues.find((entry) => entry.id === key);
 }
 
-export function getColorSchemaKey(enumValues: EnumValueConfig[], key: string | number): ChipColor | undefined {
+export function getColorScheme(enumValues: EnumValueConfig[], key: string | number): ChipColorScheme | undefined {
     const labelOrConfig = getLabelOrConfigFrom(enumValues, key);
+    if (!labelOrConfig?.color)
+        return getColorSchemeForSeed(key.toString());
     if (typeof labelOrConfig === "object" && "color" in labelOrConfig) {
-        return labelOrConfig.color;
+        if (typeof labelOrConfig.color === "string")
+            return CHIP_COLORS[labelOrConfig.color];
+        if (typeof labelOrConfig.color === "object")
+            return labelOrConfig.color;
     }
     return undefined;
 }
