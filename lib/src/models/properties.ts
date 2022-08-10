@@ -216,7 +216,7 @@ export interface EnumValueConfig {
     disabled?: boolean;
     /**
      * You can pick from a list of predefined color combinations or define
-     * your own `ChipColorScheme`
+     * your own {@link ChipColorScheme}
      */
     color?: ChipColorKey | ChipColorScheme;
 }

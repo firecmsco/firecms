@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
+import { Box, Button, Paper } from "@mui/material";
 
 import {
     buildCollection,
@@ -89,15 +89,18 @@ export function ExampleCMSView({
                     Open entity with custom schema
                 </Button>
 
-                <div style={{
-                    width: 800,
-                    height: 400,
-                    padding: 32
-                }}>
+                <Paper
+                    variant={"outlined"}
+                    sx={{
+                        width: 800,
+                        height: 400,
+                        overflow: "hidden",
+                        m: 3
+                    }}>
                     <EntityCollectionView  {...collection}
                                            fullPath={path}
                                            selectionController={selectionController}/>
-                </div>
+                </Paper>
 
 
             </Box>

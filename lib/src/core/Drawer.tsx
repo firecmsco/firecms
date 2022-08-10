@@ -3,7 +3,6 @@ import React, { useCallback } from "react";
 import { NavLink } from "react-router-dom";
 import {
     Box,
-    Divider,
     List,
     ListItem,
     SvgIconTypeMap,
@@ -14,6 +13,7 @@ import { useNavigationContext } from "../hooks";
 import HomeIcon from "@mui/icons-material/Home";
 import { TopNavigationResult } from "../models";
 import { getIconForView } from "./util";
+import { grey } from "@mui/material/colors";
 
 /**
  * Props used in case you need to override the default drawer
@@ -39,6 +39,16 @@ export function Drawer({
     if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
 
+    const [tooltipsOpen, setTooltipsOpen] = React.useState(false);
+
+    const handleClose = () => {
+        setTooltipsOpen(false);
+    };
+
+    const handleOpen = () => {
+        setTooltipsOpen(true);
+    };
+
     const {
         navigationEntries,
         groups
@@ -48,8 +58,9 @@ export function Drawer({
 
     const buildNavigationListItem = useCallback((index: number, Icon: React.ComponentType<SvgIconTypeMap["props"]>, url: string, name: string) => {
 
-        const icon = <Icon fontSize={"medium"} color={"disabled"}/>;
-        return <ListItem
+        const icon = <Icon fontSize={"medium"}
+                           sx={theme => ({ color: theme.palette.mode === "dark" ? grey[500] : grey[700] })}/>;
+        const listItem = <ListItem
             // @ts-ignore
             button
             key={`navigation_${index}`}
@@ -69,12 +80,7 @@ export function Drawer({
             to={url}
         >
 
-            {drawerOpen && icon}
-
-            {!drawerOpen && <Tooltip
-                title={name}>
-                {icon}
-            </Tooltip>}
+            {icon}
 
             <Typography
                 variant={"subtitle2"}
@@ -87,7 +93,18 @@ export function Drawer({
                 {name.toUpperCase()}
             </Typography>
         </ListItem>;
-    }, [drawerOpen]);
+        if (drawerOpen)
+            return listItem;
+        else
+            return <Tooltip
+                open={tooltipsOpen}
+                onClose={handleClose}
+                onOpen={handleOpen}
+                placement="right"
+                title={name}>
+                {listItem}
+            </Tooltip>;
+    }, [drawerOpen, tooltipsOpen]);
 
     const buildGroupHeader = useCallback((group?: string) => {
         if (!drawerOpen) return <Box sx={{ height: 16}}/>;

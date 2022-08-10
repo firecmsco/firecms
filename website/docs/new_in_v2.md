@@ -62,6 +62,7 @@ this version:
   options such as the color of the tag.
 - Storage fields have been simplified and now the preview type can be inferred
   from the uploaded file.
+- You can now totally customise the colors of enum chips.
 - It should be easier now to create your own custom fields and to reuse the
   internal fields of the CMS, which have been renamed and are now exported as:
   - `ArrayCustomShapedFieldBinding`

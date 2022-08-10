@@ -177,6 +177,19 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entities",
     properties: {
+        test_enum: buildProperty({
+            dataType: "string",
+            name: "Currency",
+            enumValues: [
+                { id: "EUR", label: "Euros", color: "blueDark" },
+                {
+                    id: "DOL", label: "Dollars", color: {
+                        color: "#FFFFFF",
+                        text: "#333333",
+                    }
+                }
+            ]
+        }),
         background: {
             dataType: "number",   // NB – this was string” above..
             name: "Colour",

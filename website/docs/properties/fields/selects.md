@@ -89,8 +89,36 @@ buildProperty({
 ```
 
 The data type is [`array`](../config/array) with either string or number
-properties as the `of` prop, using enum values. 
+properties as the `of` prop, using enum values.
 
 Internally the component used
 is [`SelectFieldBinding`](../../api/functions/SelectFieldBinding).
 
+### Customising the colors
+
+You can pick the colors among a list of predefined values:
+
+import CodeBlock from "@theme/CodeBlock"; import MyComponentSource from "!!
+raw-loader!../../lib/src/modes/colors.ts";
+
+<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+
+And you can also define custom colors using the HTML syntax `#AAAAAA`:
+
+```typescript jsx
+import { buildProperty } from "@camberi/firecms";
+
+buildProperty({
+    dataType: "string",
+    name: "Currency",
+    enumValues: [
+        { id: "EUR", label: "Euros", color: "blueDark" },
+        {
+            id: "DOL", label: "Dollars", color: {
+                color: "#FFFFFF",
+                text: "#333333",
+            }
+        }
+    ]
+});
+```

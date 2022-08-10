@@ -151,21 +151,23 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                          width: "100%",
                          height: "100%",
                          overflow: "auto"
-                     }}
-                     ref={containerRef}>
+                     }}>
                     <DrawerHeader/>
-                    <Box sx={{
-                        flexGrow: 1,
-                        height: "100%",
-                        m: 2,
-                        overflow: "hidden",
-                        borderRadius: "12px",
-                        border: `1px solid ${theme.palette.divider}`
-                    }}>
-                        <Box sx={{
+                    <Box
+                        sx={{
+                            flexGrow: 1,
                             height: "100%",
-                            overflow: "scroll",
+                            m: 2,
+                            overflow: "hidden",
+                            borderRadius: "12px",
+                            border: `1px solid ${theme.palette.divider}`
                         }}>
+                        <Box
+                            ref={containerRef}
+                            sx={{
+                                height: "100%",
+                                overflow: "scroll",
+                            }}>
                             {children}
                         </Box>
                     </Box>
