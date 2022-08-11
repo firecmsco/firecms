@@ -80,12 +80,11 @@ function Features() {
                             className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 md:order-1"
                             data-aos="fade-left"
                         >
-                            <div
-                                className="relative flex flex-col">
+                            <div className="relative flex flex-col">
                                 <div className={"p-4"}>
                                     <video
                                         key={`demo_video_${isDarkTheme}`}
-                                        style={{minHeight: 589}}
+                                        style={{ maxHeight: 589 }}
                                         className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                                         width="100%" loop autoPlay muted>
                                         <source

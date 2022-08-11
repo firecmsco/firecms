@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { Checkbox, FormControlLabel, Theme } from "@mui/material";
-import { TableWhereFilterOp } from "../TableProps";
+import { TableWhereFilterOp } from "../VirtualTableProps";
 
 const PREFIX = "BooleanFilterField";
 

@@ -377,7 +377,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     </ErrorBoundary>);
             }
 
-        }, [collection, customFieldValidator, focused, fullPath, inlineEditing, size]);
+        }, [collection, customFieldValidator, fullPath, inlineEditing, size]);
 
         const additionalCellRenderer = useCallback(({
                                                         column,
@@ -491,9 +491,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         );
 
         const cellRenderer = useCallback((props: CellRendererParams<any, any>) => {
-            const column = columns[props.columnIndex];
-            if (!column)
-                throw Error("Internal: no column");
+            const column = props.column;
             const columnKey = column.key;
             if (props.columnIndex === 0) {
                 if (tableRowActionsBuilder)

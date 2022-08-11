@@ -6,6 +6,7 @@ import {
     getColorScheme,
     getLabelOrConfigFrom
 } from "../../core/util/enums";
+import { getColorSchemeForSeed } from "../../core/util/chip_utils";
 
 export interface EnumValuesChipProps {
     enumValues: EnumValueConfig[] | undefined;
@@ -54,12 +55,13 @@ export function ColorChip({
 
     const theme = useTheme();
 
+    const usedColorScheme = colorScheme ?? getColorSchemeForSeed(label);
     return (
         <Chip
             sx={{
                 maxWidth: "100%",
-                backgroundColor: error || !colorScheme ? "#eee" : colorScheme.color,
-                color: error || !colorScheme ? "red" : colorScheme.text,
+                backgroundColor: error || !usedColorScheme ? "#eee" : usedColorScheme.color,
+                color: error || !usedColorScheme ? "red" : usedColorScheme.text,
                 fontWeight: theme!.typography.fontWeightRegular
             }}
             size={small ? "small" : "medium"}

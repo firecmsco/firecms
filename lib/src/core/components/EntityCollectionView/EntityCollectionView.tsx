@@ -73,13 +73,19 @@ export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends { [Key: string]: unknown }>({
                                                                                     fullPath,
                                                                                     isSubCollection,
-                                                                                    ...collection
+                                                                                    ...collectionProp
                                                                                 }: EntityCollectionViewProps<M>
     ) {
 
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
+
+        const [collection, setCollection] = useState(collectionProp);
+
+        useEffect(() => {
+            setCollection(collectionProp);
+        }, [collectionProp])
 
         const theme = useTheme();
 
@@ -112,14 +118,14 @@ export const EntityCollectionView = React.memo(
                 collection,
                 updateUrl: true
             });
-        }, [fullPath, collection, collection]);
+        }, [fullPath, collection, sideEntityController]);
 
         const onNewClick = useCallback(() =>
             sideEntityController.open({
                 path: fullPath,
                 collection,
                 updateUrl: true
-            }), [fullPath, collection, collection, sideEntityController]);
+            }), [fullPath, collection, sideEntityController]);
 
         const onMultipleDeleteClick = useCallback(() => {
             setDeleteEntityClicked(selectedEntities);
@@ -157,7 +163,8 @@ export const EntityCollectionView = React.memo(
             const property: Partial<AnyProperty> = { columnWidth: width };
             const localCollection = { properties: { [key as keyof M]: property } } as LocalEntityCollection<M>;
             onCollectionModifiedForUser(fullPath, localCollection);
-        }, [collection.properties, onCollectionModifiedForUser, fullPath]);
+            setCollection(mergeDeep(collection, localCollection));
+        }, [collection, onCollectionModifiedForUser, fullPath]);
 
         const onSizeChanged = useCallback((size: CollectionSize) => {
             if (userConfigPersistence)

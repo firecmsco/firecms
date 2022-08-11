@@ -1,4 +1,4 @@
-import { TableSize } from "./TableProps";
+import { TableSize } from "./VirtualTableProps";
 
 export function getRowHeight(size: TableSize): number {
     switch (size) {

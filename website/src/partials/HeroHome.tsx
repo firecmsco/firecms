@@ -31,7 +31,7 @@ function HeroHome({}) {
     </div>;
 
     const titleDiv = <div
-        className="sm:px-6 px-16 my-4 xl:my-8">
+        className="px-6 md:px-16 my-4 xl:my-8">
 
         <div className="text-center xl:text-right">
             <h1 className="block tracking-tight text-5xl md:text-6xl font-extrabold tracking-tight leading-none">
@@ -57,13 +57,12 @@ function HeroHome({}) {
                 <span
                     data-aos="zoom-y-out"
                     data-aos-delay="400"
-                    className={"text-7xl md:text-8xl "}
+                    className={"text-5xl md:text-8xl "}
                     style={{ color: "#FFA000" }}>Firestore</span>
 
             </h1>
 
-            <div className="mt-8 mb-16 flex justify-center xl:justify-end"
-            >
+            <div className="mt-8 mb-16 flex justify-center xl:justify-end">
                 <HeroButtons/>
             </div>
 

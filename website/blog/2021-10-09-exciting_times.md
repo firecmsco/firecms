@@ -85,7 +85,7 @@ behind their respective interfaces. This means you can replace any of those
 parts with your custom implementation!
 
 We have three new types that abstract away the services provided by Firebase:
-- [`AuthDelegate`](/docs/1.0.0/api/interfaces/authdelegate), in charge of handling
+- [`AuthDelegate`](/docs/1.0.0/api/types/authdelegate), in charge of handling
   the auth operation such as login or sign out, and build the logged-in user.
 - [`DataSource`](/docs/1.0.0/api/interfaces/datasource), in charge of handling data
   operation (fetch, listen, save, delete).
