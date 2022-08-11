@@ -7,7 +7,7 @@ export type OnRowClickParams<T extends object> = { rowData: T; rowIndex: number;
  * @see Table
  * @category Components
  */
-export interface TableProps<T extends object, E extends any> {
+export interface VirtualTableProps<T extends object, E extends any> {
 
     /**
      * Array of arbitrary data

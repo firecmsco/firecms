@@ -3,7 +3,6 @@ import React from "react";
 import { ErrorBoundary, resolvePropertyEnum } from "../../core";
 import { ColorChip, EnumValuesChip } from "../components/ColorChip";
 import { PropertyPreviewProps } from "../index";
-import { getColorScheme } from "../../core/util/enums";
 import { getColorSchemeForSeed } from "../../core/util/chip_utils";
 
 /**
@@ -34,11 +33,11 @@ export function StringPropertyPreview({
                 />
             </ErrorBoundary>);
     } else {
-        return <>
-            {value && (value.includes("\n")
-                ? value.split("\n").map((str, index) =>
-                    <div key={`string_preview_${index}`}>{str}</div>)
-                : value)}
-        </>;
+        return value && value.includes("\n")
+            ? <div>
+                {value.split("\n").map((str, index) =>
+                    <div key={`string_preview_${index}`}>{str}</div>)}
+            </div>
+            : <>{value}</>;
     }
 }

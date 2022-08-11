@@ -166,7 +166,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                             ref={containerRef}
                             sx={{
                                 height: "100%",
-                                overflow: "scroll",
+                                overflow: "auto",
                             }}>
                             {children}
                         </Box>

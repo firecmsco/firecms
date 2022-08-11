@@ -9,7 +9,7 @@ import { getRowHeight } from "./common";
 import isEqual from "react-fast-compare";
 import { ErrorTooltip } from "../ErrorTooltip";
 import { ErrorBoundary } from "../ErrorBoundary";
-import { TableSize } from "./TableProps";
+import { TableSize } from "./VirtualTableProps";
 
 interface TableCellProps {
     children: React.ReactNode;

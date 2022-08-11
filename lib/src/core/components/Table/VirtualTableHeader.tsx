@@ -20,7 +20,7 @@ import {
     TableColumnFilter,
     TableSort,
     TableWhereFilterOp
-} from "./TableProps";
+} from "./VirtualTableProps";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterfield";

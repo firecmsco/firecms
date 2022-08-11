@@ -22,9 +22,9 @@ import {
     OnTableColumnResizeParams,
     TableColumn,
     TableFilterValues,
-    TableProps,
-    TableWhereFilterOp
-} from "./TableProps";
+    TableWhereFilterOp,
+    VirtualTableProps
+} from "./VirtualTableProps";
 
 import { getRowHeight } from "./common";
 import { VirtualTableContextProps } from "./types";
@@ -85,7 +85,7 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
  * @category Components
  */
 
-export const VirtualTable = React.memo<TableProps<any, any>>(
+export const VirtualTable = React.memo<VirtualTableProps<any, any>>(
     function VirtualTable<T extends object, E extends any>({
                                                                data,
                                                                onResetPagination,
@@ -104,7 +104,7 @@ export const VirtualTable = React.memo<TableProps<any, any>>(
                                                                loading,
                                                                cellRenderer,
                                                                hoverRow
-                                                           }: TableProps<T, E>) {
+                                                           }: VirtualTableProps<T, E>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
         const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
@@ -119,7 +119,12 @@ export const VirtualTable = React.memo<TableProps<any, any>>(
         }, [columnsProp]);
 
         const [measureRef, bounds] = useMeasure();
+
         const onColumnResizeInternal = useCallback((params: OnTableColumnResizeParams<any, any>) => {
+            setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
+        }, [columns]);
+
+        const onColumnResizeEndInternal = useCallback((params: OnTableColumnResizeParams<any, any>) => {
             setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
             if (onColumnResize) {
                 onColumnResize(params);
@@ -280,6 +285,7 @@ export const VirtualTable = React.memo<TableProps<any, any>>(
                         onRowClick,
                         customView,
                         onColumnResize: onColumnResizeInternal,
+                        onColumnResizeEnd: onColumnResizeEndInternal,
                         filter: filterRef.current,
                         onColumnSort,
                         onFilterUpdate: onFilterUpdateInternal,

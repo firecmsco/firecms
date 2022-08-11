@@ -1,57 +1,71 @@
 import React, { createRef, useCallback, useEffect, useState } from "react";
 
-import { TableColumn, TableWhereFilterOp } from "./TableProps";
+import { TableColumn, TableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { VirtualTableHeader } from "./VirtualTableHeader";
 import { VirtualTableContextProps } from "./types";
 import { Box } from "@mui/material";
 
 export const VirtualTableHeaderRow = ({
-                       columns,
-                       currentSort,
-                       onColumnSort,
-                       onFilterUpdate,
-                       sortByProperty,
-                       filter,
-                       onColumnResize
-                   }: VirtualTableContextProps<any>) => {
+                                          columns,
+                                          currentSort,
+                                          onColumnSort,
+                                          onFilterUpdate,
+                                          sortByProperty,
+                                          filter,
+                                          onColumnResize,
+                                          onColumnResizeEnd
+                                      }: VirtualTableContextProps<any>) => {
 
     const columnRefs = columns.map(() => createRef<HTMLDivElement>());
     const [isResizing, setIsResizing] = useState(-1);
 
-    const adjustWidthColumn = useCallback((index: number, width: number) => {
+    const adjustWidthColumn = useCallback((index: number, width: number, end: boolean) => {
         const column = columns[index];
         const minWidth = 100;
         const maxWidth = 800;
         const newWidth = width > maxWidth ? maxWidth : (width < minWidth ? minWidth : width);
-        onColumnResize({
+        const params = {
             width: newWidth,
             key: column.key as string,
             column: { ...column, width: newWidth } as TableColumn<any, any>
-        });
-    }, [columns, onColumnResize]);
+        };
+        if (!end)
+            onColumnResize(params);
+        else
+            onColumnResizeEnd(params);
+    }, [columns, onColumnResize, onColumnResizeEnd]);
 
-    const handleOnMouseMove = useCallback((e: MouseEvent) => {
-        e.stopPropagation();
-        e.preventDefault();
+    const getEventNewWidth = useCallback((e: MouseEvent) => {
         if (isResizing >= 0) {
             const left = columnRefs[isResizing].current?.parentElement?.getBoundingClientRect().left;
             if (!left) return;
-            const newWidth = e.clientX - left;
-            adjustWidthColumn(isResizing, newWidth);
+            return e.clientX - left;
         }
-    }, [adjustWidthColumn, columnRefs, isResizing]);
+        return undefined;
+    }, [columnRefs, isResizing]);
 
     const setCursorDocument = useCallback((isResizing: boolean) => {
         document.body.style.cursor = isResizing ? "col-resize" : "auto";
     }, []);
 
+    const handleOnMouseMove = useCallback((e: MouseEvent) => {
+        e.stopPropagation();
+        e.preventDefault();
+        const newWidth = getEventNewWidth(e);
+        if (newWidth)
+            adjustWidthColumn(isResizing, newWidth, false);
+    }, [adjustWidthColumn, getEventNewWidth, isResizing]);
+
     const handleOnMouseUp = useCallback((e: MouseEvent) => {
         e.stopPropagation();
         e.preventDefault();
+        const newWidth = getEventNewWidth(e);
+        if (newWidth)
+            adjustWidthColumn(isResizing, newWidth, true);
         setIsResizing(-1);
         setCursorDocument(false);
-    }, [setCursorDocument]);
+    }, [adjustWidthColumn, getEventNewWidth, isResizing, setCursorDocument]);
 
     const removeResizingListeners = useCallback(() => {
         document.removeEventListener("mousemove", handleOnMouseMove);

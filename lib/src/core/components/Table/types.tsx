@@ -6,7 +6,7 @@ import {
     TableFilterValues,
     TableSize,
     TableWhereFilterOp
-} from "./TableProps";
+} from "./VirtualTableProps";
 
 export type VirtualTableRowProps<T> = {
     style: any,
@@ -29,6 +29,7 @@ export type VirtualTableContextProps<T> = {
     onRowClick?: (props: OnRowClickParams<any>) => void;
     onColumnSort: (key: string) => any;
     onColumnResize: (params: OnTableColumnResizeParams<any, any>) => void;
+    onColumnResizeEnd: (params: OnTableColumnResizeParams<any, any>) => void;
     onFilterUpdate: (column: TableColumn<any, any>, filterForProperty?: [TableWhereFilterOp, any]) => void;
     sortByProperty?: string;
     customView?: React.ReactNode,

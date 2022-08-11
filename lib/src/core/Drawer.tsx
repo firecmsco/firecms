@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 
 import { NavLink } from "react-router-dom";
 import {
@@ -36,18 +36,15 @@ export function Drawer({
 
     const navigation = useNavigationContext();
 
+    const [onHover, setOnHover] = useState(false);
+
+    const tooltipsOpen = onHover && !drawerOpen;
+
+    const setOnHoverTrue = useCallback(() => setOnHover(true), []);
+    const setOnHoverFalse = useCallback(() => setOnHover(false), []);
+
     if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
-
-    const [tooltipsOpen, setTooltipsOpen] = React.useState(false);
-
-    const handleClose = () => {
-        setTooltipsOpen(false);
-    };
-
-    const handleOpen = () => {
-        setTooltipsOpen(true);
-    };
 
     const {
         navigationEntries,
@@ -56,58 +53,8 @@ export function Drawer({
 
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
-    const buildNavigationListItem = useCallback((index: number, Icon: React.ComponentType<SvgIconTypeMap["props"]>, url: string, name: string) => {
-
-        const icon = <Icon fontSize={"medium"}
-                           sx={theme => ({ color: theme.palette.mode === "dark" ? grey[500] : grey[700] })}/>;
-        const listItem = <ListItem
-            // @ts-ignore
-            button
-            key={`navigation_${index}`}
-            component={NavLink}
-            // onClick={closeDrawer}
-            // @ts-ignore
-            style={({ isActive }) => ({
-                fontWeight: isActive ? "600" : "500",
-                background: isActive ? "rgba(128,128,128,0.1)" : "inherit",
-                minHeight: "48px",
-                borderRadius: "0 16px 16px 0"
-            })}
-            sx={{
-                pl: 3,
-                alignItems: "center"
-            }}
-            to={url}
-        >
-
-            {icon}
-
-            <Typography
-                variant={"subtitle2"}
-                sx={{
-                    opacity: drawerOpen ? 1.0 : 0.0,
-                    fontWeight: "inherit",
-                    ml: 3,
-                    p: 0.5
-                }}>
-                {name.toUpperCase()}
-            </Typography>
-        </ListItem>;
-        if (drawerOpen)
-            return listItem;
-        else
-            return <Tooltip
-                open={tooltipsOpen}
-                onClose={handleClose}
-                onOpen={handleOpen}
-                placement="right"
-                title={name}>
-                {listItem}
-            </Tooltip>;
-    }, [drawerOpen, tooltipsOpen]);
-
     const buildGroupHeader = useCallback((group?: string) => {
-        if (!drawerOpen) return <Box sx={{ height: 16}}/>;
+        if (!drawerOpen) return <Box sx={{ height: 16 }}/>;
         return <Box pt={2} pl={2} pr={2} pb={0.5} sx={{
             display: "flex",
             flexDirection: "row",
@@ -124,9 +71,16 @@ export function Drawer({
     }, [drawerOpen]);
 
     return (
-        <List>
+        <List
+            onMouseEnter={setOnHoverTrue}
+            onMouseMove={setOnHoverTrue}
+            onMouseLeave={setOnHoverFalse}>
 
-            {!drawerOpen && buildNavigationListItem(0, HomeIcon, navigation.homeUrl, "Home")}
+            {!drawerOpen && <DrawerNavigationItem Icon={HomeIcon}
+                                                  tooltipsOpen={tooltipsOpen}
+                                                  drawerOpen={drawerOpen}
+                                                  url={navigation.homeUrl}
+                                                  name={"Home"}/>}
 
             {groups.map((group) => (
                 <React.Fragment
@@ -134,20 +88,88 @@ export function Drawer({
                     {buildGroupHeader(group)}
                     {Object.values(navigationEntries)
                         .filter(e => e.group === group)
-                        .map((view, index) => buildNavigationListItem(index,
-                            getIconForView(view.collection ?? view.view),
-                            view.url,
-                            view.name))}
+                        .map((view, index) =>
+                            <DrawerNavigationItem
+                                key={`navigation_${index}`}
+                                Icon={getIconForView(view.collection ?? view.view)}
+                                tooltipsOpen={tooltipsOpen}
+                                drawerOpen={drawerOpen}
+                                url={view.url}
+                                name={view.name}/>)}
                 </React.Fragment>
             ))}
 
             {ungroupedNavigationViews.length > 0 && buildGroupHeader()}
 
-            {ungroupedNavigationViews.map((view, index) => buildNavigationListItem(index,
-                getIconForView(view.collection ?? view.view),
-                view.url,
-                view.name))}
+            {ungroupedNavigationViews.map((view, index) =>
+                <DrawerNavigationItem
+                    key={`navigation_${index}`}
+                    Icon={getIconForView(view.collection ?? view.view)}
+                    tooltipsOpen={tooltipsOpen}
+                    drawerOpen={drawerOpen}
+                    url={view.url}
+                    name={view.name}/>)}
 
         </List>
     );
+}
+
+export function DrawerNavigationItem({
+                                         name,
+                                         Icon,
+                                         drawerOpen,
+                                         tooltipsOpen,
+                                         url
+                                     }: {
+    Icon: React.ComponentType<SvgIconTypeMap["props"]>,
+    name: string,
+    tooltipsOpen: boolean,
+    drawerOpen: boolean,
+    url: string
+}) {
+
+    const icon = <Icon fontSize={"medium"}
+                       sx={theme => ({ color: theme.palette.mode === "dark" ? grey[500] : grey[700] })}/>;
+    const listItem = <ListItem
+        // @ts-ignore
+        button
+        component={NavLink}
+        // onClick={closeDrawer}
+        // @ts-ignore
+        style={({ isActive }) => ({
+            fontWeight: isActive ? "600" : "500",
+            background: isActive ? "rgba(128,128,128,0.1)" : "inherit",
+            minHeight: "48px",
+            borderRadius: "0 16px 16px 0"
+        })}
+        sx={{
+            pl: 3,
+            alignItems: "center"
+        }}
+        to={url}
+    >
+
+        {icon}
+
+        <Typography
+            variant={"subtitle2"}
+            sx={{
+                opacity: drawerOpen ? 1.0 : 0.0,
+                fontWeight: "inherit",
+                ml: 3,
+                p: 0.5
+            }}>
+            {name.toUpperCase()}
+        </Typography>
+    </ListItem>;
+
+    if (drawerOpen)
+        return listItem;
+    else
+        return <Tooltip
+            open={tooltipsOpen}
+            placement="right"
+            title={name}>
+            {listItem}
+        </Tooltip>;
 }

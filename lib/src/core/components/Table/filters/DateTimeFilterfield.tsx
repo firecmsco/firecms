@@ -12,7 +12,7 @@ import Tooltip from "@mui/material/Tooltip/Tooltip";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import { TableWhereFilterOp } from "../TableProps";
+import { TableWhereFilterOp } from "../VirtualTableProps";
 
 interface DateTimeFilterFieldProps {
     name: string,

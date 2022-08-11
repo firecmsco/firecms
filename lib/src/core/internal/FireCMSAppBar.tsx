@@ -1,6 +1,5 @@
 import React from "react";
 import {
-    AppBar,
     Avatar,
     Box,
     Breadcrumbs,
@@ -19,7 +18,7 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
-import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import {
     useAuthController,
     useBreadcrumbsContext,
@@ -57,13 +56,12 @@ export const FireCMSAppBar = function FireCMSAppBar({
         : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
 
     return (
-        <Slide
-            direction="down" in={true} mountOnEnter unmountOnExit>
+        <StyledAppBar
+            position={"fixed"}
+            open={drawerOpen}>
 
-            <StyledAppBar
-                position={"fixed"}
-                open={drawerOpen}>
-
+            <Slide
+                direction="down" in={true} mountOnEnter unmountOnExit>
                 <Toolbar>
                     <IconButton
                         color="inherit"
@@ -132,11 +130,11 @@ export const FireCMSAppBar = function FireCMSAppBar({
                     <Box flexGrow={1}/>
 
                     {toolbarExtraWidget &&
-                    <ErrorBoundary>
-                        {
-                            toolbarExtraWidget
-                        }
-                    </ErrorBoundary>}
+                        <ErrorBoundary>
+                            {
+                                toolbarExtraWidget
+                            }
+                        </ErrorBoundary>}
 
                     <Box p={1} mr={1}>
                         <IconButton
@@ -166,8 +164,8 @@ export const FireCMSAppBar = function FireCMSAppBar({
                     </Button>
 
                 </Toolbar>
+            </Slide>
             </StyledAppBar>
-        </Slide>
     );
 }
 

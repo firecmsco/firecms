@@ -5,7 +5,7 @@ export type { ScaffoldProps } from "./Scaffold";
 export { Scaffold } from "./Scaffold";
 
 export type { DrawerProps } from "./Drawer";
-export { Drawer } from "./Drawer";
+export { Drawer, DrawerNavigationItem } from "./Drawer";
 
 export { createCMSDefaultTheme } from "./theme";
 
