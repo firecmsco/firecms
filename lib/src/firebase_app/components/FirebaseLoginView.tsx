@@ -224,25 +224,25 @@ export function FirebaseLoginView({
                         {buildOauthLoginButtons(authController, resolvedSignInOptions, modeState.mode, disabled)}
 
                         {resolvedSignInOptions.includes("password") &&
-                        <LoginButton
-                            disabled={disabled}
-                            text={"Email/password"}
-                            icon={<EmailIcon fontSize={"large"}/>}
-                            onClick={() => setPasswordLoginSelected(true)}/>}
+                            <LoginButton
+                                disabled={disabled}
+                                text={"Email/password"}
+                                icon={<EmailIcon fontSize={"large"}/>}
+                                onClick={() => setPasswordLoginSelected(true)}/>}
 
                         {resolvedSignInOptions.includes("phone") &&
-                        <LoginButton
-                            disabled={disabled}
-                            text={"Phone number"}
-                            icon={<Phone fontSize={"large"}/>}
-                            onClick={() => setPhoneLoginSelected(true) }/>}
+                            <LoginButton
+                                disabled={disabled}
+                                text={"Phone number"}
+                                icon={<Phone fontSize={"large"}/>}
+                                onClick={() => setPhoneLoginSelected(true) }/>}
 
                         {resolvedSignInOptions.includes("anonymous") &&
-                        <LoginButton
-                            disabled={disabled}
-                            text={"Log in anonymously"}
-                            icon={<PersonOutlineIcon fontSize={"large"}/>}
-                            onClick={authController.anonymousLogin}/>}
+                            <LoginButton
+                                disabled={disabled}
+                                text={"Log in anonymously"}
+                                icon={<PersonOutlineIcon fontSize={"large"}/>}
+                                onClick={authController.anonymousLogin}/>}
 
                         {allowSkipLogin &&
                             <Box m={1}>

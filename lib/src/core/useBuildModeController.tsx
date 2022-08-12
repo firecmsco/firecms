@@ -1,8 +1,12 @@
 import { useMediaQuery } from "@mui/material";
-import React, { useState, useEffect } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { ModeController } from "../hooks/useModeController";
 
+/**
+ * Use this hook to build a color mode controller that determines
+ * the theme of the CMS
+ */
 export function useBuildModeController(): ModeController {
 
     const prefersDarkModeQuery = useMediaQuery("(prefers-color-scheme: dark)");
@@ -14,7 +18,7 @@ export function useBuildModeController(): ModeController {
         setMode(prefersDarkMode ? "dark" : "light");
     }, [prefersDarkMode]);
 
-    const toggleMode = () => {
+    const toggleMode = useCallback(() => {
         if (mode === "light") {
             if (!prefersDarkModeQuery)
                 localStorage.setItem("prefers-dark-mode", "true");
@@ -28,7 +32,7 @@ export function useBuildModeController(): ModeController {
                 localStorage.removeItem("prefers-dark-mode");
             setMode("light");
         }
-    };
+    }, [mode, prefersDarkModeQuery]);
 
     return {
         mode,

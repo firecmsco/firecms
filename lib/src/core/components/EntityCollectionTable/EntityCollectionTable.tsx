@@ -492,6 +492,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const cellRenderer = useCallback((props: CellRendererParams<any, any>) => {
             const column = props.column;
+            const columns = props.columns;
             const columnKey = column.key;
             if (props.columnIndex === 0) {
                 if (tableRowActionsBuilder)
@@ -513,7 +514,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             } else {
                 throw Error("Internal: columns not mapped properly");
             }
-        }, [columns, additionalColumnsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
+        }, [additionalColumnsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
 
         const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
                                                     sortBy?: [string, "asc" | "desc"]) => isFilterCombinationValid(filterValues, filterCombinations, sortBy), [filterCombinations]);

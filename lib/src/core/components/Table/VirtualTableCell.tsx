@@ -7,6 +7,7 @@ import { CellRendererParams, TableColumn } from "./VirtualTableProps";
 type VirtualTableCellProps<T, E> = {
     dataKey: string;
     column: TableColumn<T, E>;
+    columns: TableColumn<T, E>[];
     rowData: any;
     cellData: any;
     rowIndex: any;
@@ -23,6 +24,7 @@ export const VirtualTableCell = React.memo<VirtualTableCellProps<any, any>>(
                 rowIndex: props.rowIndex,
                 isScrolling: false,
                 column: props.column,
+                columns: props.columns,
                 columnIndex: props.columnIndex,
                 width: props.column.width
             }

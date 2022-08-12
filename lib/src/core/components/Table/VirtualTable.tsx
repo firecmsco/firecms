@@ -360,6 +360,7 @@ function MemoizedList({
                                 dataKey={column.key}
                                 cellRenderer={cellRenderer}
                                 column={column}
+                                columns={columns}
                                 rowData={rowData}
                                 cellData={cellData}
                                 rowIndex={index}

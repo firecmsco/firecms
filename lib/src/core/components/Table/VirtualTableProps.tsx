@@ -127,6 +127,7 @@ export type CellRendererParams<T extends any, E extends any> = {
     // key: string;
     cellData?: any;
     column: TableColumn<T, E>;
+    columns: TableColumn<T, E>[];
     columnIndex: number;
     rowData?: T;
     rowIndex: number;
