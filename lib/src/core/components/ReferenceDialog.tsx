@@ -136,7 +136,8 @@ export function ReferenceDialog(
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
 
-    const fullPath = navigationContext.resolveAliasesFrom(pathInput);
+    // const fullPath = navigationContext.resolveAliasesFrom(pathInput);
+    const fullPath = pathInput;
 
     const dataSource = useDataSource();
 

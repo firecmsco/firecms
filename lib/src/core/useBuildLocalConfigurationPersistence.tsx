@@ -1,8 +1,8 @@
 import {
     LocalEntityCollection,
     UserConfigurationPersistence
-} from "../../models";
-import { stripCollectionPath } from "../util";
+} from "../models";
+import { stripCollectionPath } from "./util";
 
 export function useBuildLocalConfigurationPersistence(): UserConfigurationPersistence {
 

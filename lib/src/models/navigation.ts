@@ -46,12 +46,10 @@ export type NavigationContext = {
 
     /**
      * Get the collection configuration for a given path.
-     * If you use this method you can use a baseCollection that will be used
-     * to resolve the initial properties of the collection, before applying
-     * the collection configuration changes that are persisted.
-     * If you don't specify it, the collection is fetched from the local navigation.
+     * The collection is resolved from the given path or alias, located
+     * among the
      */
-    getCollection: <M>(path: string,
+    getCollection: <M>(pathOrAlias: string,
                        entityId?: string,
                        includeUserOverride?: boolean) => EntityCollection<M> | undefined;
 

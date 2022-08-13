@@ -80,12 +80,18 @@ export const EntityCollectionView = React.memo(
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
+        const userOverride = userConfigPersistence?.getCollectionConfig<M>(fullPath);
 
-        const [collection, setCollection] = useState(collectionProp);
+        const initialCollection = useMemo(() => {
+            return userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp;
+        }, [collectionProp, userOverride]);
 
-        useEffect(() => {
-            setCollection(collectionProp);
-        }, [collectionProp])
+        const [collection, setCollection] = useState(initialCollection);
+
+        // useEffect(() => {
+        //     if (!equal(collection, collectionProp))
+        //         setCollection(collectionProp);
+        // }, [collectionProp])
 
         const theme = useTheme();
 

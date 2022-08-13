@@ -20,3 +20,4 @@ export * from "./util";
 export * from "./widgets";
 
 export * from "./useBuildModeController";
+export * from "./useBuildLocalConfigurationPersistence";

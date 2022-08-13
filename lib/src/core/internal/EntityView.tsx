@@ -302,7 +302,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const subCollectionsViews = subcollections && subcollections.map(
             (subcollection, colIndex) => {
-                const fullPath = usedEntity ? `${usedEntity?.path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.alias ?? subcollection.path)}` : undefined;
+                const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.alias ?? subcollection.path)}` : undefined;
 
                 return (
                     <Box

@@ -25,7 +25,7 @@ import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./models/auth";
 import {
     useBuildLocalConfigurationPersistence
-} from "../core/internal/useBuildLocalConfigurationPersistence";
+} from "../core/useBuildLocalConfigurationPersistence";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
 
 const DEFAULT_SIGN_IN_OPTIONS = [

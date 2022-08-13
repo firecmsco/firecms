@@ -91,6 +91,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                                           path={urlPath}
                                           title={collection.name}>
                                           <EntityCollectionViewComponent
+                                              key={`collection_view_${collection.alias ?? collection.path}`}
                                               isSubCollection={false}
                                               fullPath={collection.alias ?? collection.path}
                                               {...collection}/>

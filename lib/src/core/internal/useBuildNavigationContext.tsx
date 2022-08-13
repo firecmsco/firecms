@@ -80,7 +80,7 @@ export function useBuildNavigationContext<UserType extends User>({
     }, [processCollections]);
 
     const getCollection = useCallback(<M extends { [Key: string]: any }>(
-        path: string,
+        pathOrAlias: string,
         entityId?: string,
         includeUserOverride = false
     ): EntityCollection<M> | undefined => {
@@ -88,9 +88,9 @@ export function useBuildNavigationContext<UserType extends User>({
         if (!collections)
             return undefined;
 
-        const baseCollection = getCollectionByPathOrAlias<M>(removeInitialAndTrailingSlashes(path), collections);
+        const baseCollection = getCollectionByPathOrAlias<M>(removeInitialAndTrailingSlashes(pathOrAlias), collections);
 
-        const userOverride = includeUserOverride ? getCollectionUserOverride(path) : undefined;
+        const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig<M>(pathOrAlias) : undefined;
 
         const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride) : undefined;
 
@@ -98,7 +98,7 @@ export function useBuildNavigationContext<UserType extends User>({
 
         const resolvedProps: Partial<EntityCollection> | undefined = collectionOverrideHandler && collectionOverrideHandler({
             entityId,
-            path: removeInitialAndTrailingSlashes(path)
+            path: removeInitialAndTrailingSlashes(pathOrAlias)
         });
 
         if (resolvedProps)
@@ -149,12 +149,6 @@ export function useBuildNavigationContext<UserType extends User>({
 
     const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${encodePath(path)}` : `/${encodePath(path)}`,
         [cleanBasePath]);
-
-    const getCollectionUserOverride = useCallback(<M, >(path: string): LocalEntityCollection<M> | undefined => {
-        if (!userConfigPersistence)
-            return undefined
-        return userConfigPersistence.getCollectionConfig<M>(path);
-    }, [userConfigPersistence]);
 
     const resolveAliasesFrom = useCallback((path: string): string => {
         if (!collections)
