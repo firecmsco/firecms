@@ -52,7 +52,6 @@ export function sortProperties<T>(properties: PropertiesOrBuilders<T>, propertie
     }
 }
 
-
 export function getFistAdditionalView<M>(collection: EntityCollection<M>) {
     const subcollections = collection.subcollections;
     const subcollectionsCount = subcollections?.length ?? 0;

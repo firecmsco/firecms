@@ -1,5 +1,10 @@
 import * as admin from "firebase-admin";
-import {DataType, EntityCollection, Properties, Property} from "@camberi/firecms";
+import {
+    DataType,
+    EntityCollection,
+    Properties,
+    Property
+} from "@camberi/firecms";
 import {
     PropertyBuilderProps,
     TypesCount,
@@ -7,11 +12,12 @@ import {
     ValuesCountEntry,
     ValuesCountRecord
 } from "./models";
-import {buildStringProperty} from "./builders/string_property_builder";
-import {buildValidation} from "./builders/validation_builder";
+import { buildStringProperty } from "./builders/string_property_builder";
+import { buildValidation } from "./builders/validation_builder";
 import { removeInitialAndTrailingSlashes, unslugify } from "./util";
-import {buildReferenceProperty} from "./builders/reference_property_builder";
-import {getDocuments} from "./firestore";
+import { buildReferenceProperty } from "./builders/reference_property_builder";
+import { getDocuments } from "./firestore";
+
 
 /**
  * Build the guessed schema from a data collection
@@ -21,15 +27,16 @@ export async function getEntityCollection(collectionPath: string): Promise<Entit
     const cleanPath = removeInitialAndTrailingSlashes(collectionPath);
     const docs = await getDocuments(cleanPath);
     console.log("Building schema from documents:", docs.map(d => d.ref.path))
-    const entityProperties = await buildEntityProperties(docs);
+    const properties = await buildEntityProperties(docs);
+    const propertiesOrder = buildPropertiesOrder(properties);
     const lastPathSegment = cleanPath.includes("/") ? cleanPath.split("/").slice(-1)[0] : cleanPath;
     return {
         path: cleanPath,
         name: unslugify(lastPathSegment),
-        properties: entityProperties
+        properties,
+        propertiesOrder
     };
 }
-
 
 export async function buildEntityProperties(docs: admin.firestore.DocumentSnapshot[]): Promise<Properties> {
     const typesCount: TypesCountRecord = {};
@@ -46,8 +53,20 @@ export async function buildEntityProperties(docs: admin.firestore.DocumentSnapsh
     return buildPropertiesFromCount(docs.length, typesCount, valuesCount);
 }
 
+
+function buildPropertiesOrder(properties: Properties<any>): string [] {
+    function isTitle(s: string) {
+        return s === "title" || s === "name";
+    }
+    const keys = Object.keys(properties);
+    keys.sort(); // alphabetically
+    keys.sort((a, b) => {
+        return (isTitle(b) ? 1 : 0) - (isTitle(a) ? 1 : 0);
+    });
+    return keys;
+}
+
 /**
- *
  * @param type
  * @param typesCount
  * @param fieldValue
@@ -161,11 +180,11 @@ function getHighestTypesCount(typesCount: TypesCount): number {
 function getHighestRecordCount(record: TypesCountRecord): number {
     return Object.entries(record)
         .map(([key, typesCount]) => getHighestTypesCount(typesCount))
-        .reduce((a, b) => Math.max(a, b));
+        .reduce((a, b) => Math.max(a, b), 0);
 }
 
 function getMostProbableType(typesCount: TypesCount): DataType {
-    let highestCount = 0;
+    let highestCount = -1;
     let probableType: DataType = "string"; //default
     Object.entries(typesCount).forEach(([type, count]) => {
         let countValue;
@@ -242,7 +261,7 @@ function buildPropertiesFromCount(totalDocsCount: number, typesCountRecord: Type
 
     const res: Properties = {};
     Object.entries(typesCountRecord).forEach(([key, typesCount]) => {
-        let mostProbableType = getMostProbableType(typesCount);
+        const mostProbableType = getMostProbableType(typesCount);
         res[key] = buildPropertyFromCount(key, totalDocsCount, mostProbableType, typesCount, valuesCountRecord ? valuesCountRecord[key] : undefined, key);
     })
     return res;

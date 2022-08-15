@@ -154,7 +154,7 @@ export function useBuildNavigationContext<UserType extends User>({
         if (!collections)
             throw Error("Collections have not been initialised yet");
         return resolveCollectionPathAliases(path, collections);
-    }, [baseCollectionPath, collections]);
+    }, [collections]);
 
     const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {
         // return (collection.editable && resolvePermissions(collection, authController, paths).editCollection) ?? DEFAULT_PERMISSIONS.editCollection;

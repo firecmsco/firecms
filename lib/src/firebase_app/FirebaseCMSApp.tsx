@@ -11,21 +11,17 @@ import {
     NavigationRoutes,
     Scaffold,
     SideDialogs,
+    useBuildLocalConfigurationPersistence,
     useBuildModeController
 } from "../core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
-import {
-    useFirebaseAuthController
-} from "./hooks/useFirebaseAuthController";
+import { useFirebaseAuthController } from "./hooks/useFirebaseAuthController";
 import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./models/auth";
-import {
-    useBuildLocalConfigurationPersistence
-} from "../core/useBuildLocalConfigurationPersistence";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
