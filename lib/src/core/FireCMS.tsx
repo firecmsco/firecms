@@ -193,7 +193,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     const sideDialogsController = useBuildSideDialogsController();
     const sideEntityController = useBuildSideEntityController(navigation, sideDialogsController);
 
-    const loading = authController.authLoading || authController.initialLoading || navigation.loading;
+    const loading = authController.initialLoading || navigation.loading;
 
     if (navigation.navigationLoadingError) {
         return (

@@ -269,7 +269,7 @@ export function FirebaseLoginView({
                         onClose={() => setPhoneLoginSelected(false)}
                     />}
 
-                    {AdditionalComponent}
+                    {!passwordLoginSelected && !phoneLoginSelected && AdditionalComponent}
 
                 </Box>
             </Box>
