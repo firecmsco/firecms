@@ -86,6 +86,19 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             setDrawerOpen(false);
         }, []);
 
+        // on alt/option key press
+        useEffect(() => {
+            const escFunction = (event: any) => {
+                if (event.keyCode === 18) {
+                    setDrawerOpen(!drawerOpen);
+                }
+            };
+            document.addEventListener("keydown", escFunction, false);
+            return () => {
+                document.removeEventListener("keydown", escFunction, false);
+            };
+        });
+
         let logoComponent;
         if (logo) {
             logoComponent = <img

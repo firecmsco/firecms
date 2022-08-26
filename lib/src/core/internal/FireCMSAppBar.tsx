@@ -10,6 +10,7 @@ import {
     Link,
     Slide,
     Toolbar,
+    Tooltip,
     Typography
 } from "@mui/material";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -26,6 +27,7 @@ import {
 } from "../../hooks";
 import { styled } from "@mui/material/styles";
 import { DRAWER_WIDTH } from "../Scaffold";
+import { getAltSymbol } from "../util/os";
 
 interface CMSAppBarProps {
     title: string;
@@ -63,18 +65,20 @@ export const FireCMSAppBar = function FireCMSAppBar({
             <Slide
                 direction="down" in={true} mountOnEnter unmountOnExit>
                 <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="Open drawer"
-                        edge="start"
-                        onClick={handleDrawerOpen}
-                        sx={{
-                            mr: 2,
-                            ...(drawerOpen && { display: "none" })
-                        }}
-                        size="large">
-                        <MenuIcon/>
-                    </IconButton>
+                    <Tooltip title={getAltSymbol()}>
+                        <IconButton
+                            color="inherit"
+                            aria-label="Open drawer"
+                            edge="start"
+                            onClick={handleDrawerOpen}
+                            sx={{
+                                mr: 2,
+                                ...(drawerOpen && { display: "none" })
+                            }}
+                            size="large">
+                            <MenuIcon/>
+                        </IconButton>
+                    </Tooltip>
 
                     <Hidden lgDown>
                         <Box mr={3}>

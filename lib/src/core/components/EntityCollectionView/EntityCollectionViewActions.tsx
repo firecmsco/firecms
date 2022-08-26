@@ -90,7 +90,7 @@ export function EntityCollectionViewActions<M>({
             </IconButton>;
         multipleDeleteButton =
             <Tooltip
-                title={multipleDeleteEnabled ? "Multiple delete" : "You have selected one entity you cannot delete"}>
+                title={multipleDeleteEnabled ? "Delete" : "You have selected at least one entity you cannot delete"}>
                 <span>{button}</span>
             </Tooltip>
     }

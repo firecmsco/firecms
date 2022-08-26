@@ -28,7 +28,14 @@ export function useValidateAuthenticator({
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
     const [authVerified, setAuthVerified] = useState<boolean>(!authenticationEnabled);
 
-    const canAccessMainView = authVerified && (!authenticationEnabled || Boolean(authController.user) || Boolean(authController.loginSkipped)) && !notAllowedError;
+    const canAccessMainView = (authVerified) &&
+        (!authenticationEnabled || Boolean(authController.user) || Boolean(authController.loginSkipped)) &&
+        !notAllowedError;
+
+    useEffect(() => {
+        if (authController.loginSkipped)
+            setAuthVerified(true);
+    }, [authController.loginSkipped]);
 
     const checkAuthentication = useCallback(async () => {
         if (authController.initialLoading || !authController.user) return;

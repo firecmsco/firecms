@@ -61,8 +61,8 @@ export function FireCMSHomePage() {
                                     .filter((entry) => entry.group === group || (!entry.group && group === undefined)) // so we don't miss empty groups
                                     .map((entry) =>
                                         <Grid item
-                                              sm={12}
-                                              md={6}
+                                              xs={12}
+                                              sm={6}
                                               lg={4}
                                               key={`nav_${entry.group}_${entry.name}`}>
                                             <NavigationCard entry={entry}/>

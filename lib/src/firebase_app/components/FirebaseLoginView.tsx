@@ -277,7 +277,7 @@ export function FirebaseLoginView({
     );
 }
 
-function LoginButton({
+export function LoginButton({
                          icon,
                          onClick,
                          text,

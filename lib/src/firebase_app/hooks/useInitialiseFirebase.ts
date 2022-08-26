@@ -25,6 +25,7 @@ export interface InitialiseFirebaseResult {
  *
  * @param onFirebaseInit
  * @param firebaseConfig
+ * @param name
  * @category Firebase
  */
 export function useInitialiseFirebase({
@@ -54,7 +55,7 @@ export function useInitialiseFirebase({
             console.error("Error initialising Firebase", e);
             setFirebaseConfigError(e);
         }
-    }, [onFirebaseInit]);
+    }, [name, onFirebaseInit]);
 
     useEffect(() => {
 

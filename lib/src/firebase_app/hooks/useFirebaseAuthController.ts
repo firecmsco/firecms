@@ -54,11 +54,6 @@ export const useFirebaseAuthController = (
 
     const [extra, setExtra] = useState<any>();
 
-    function skipLogin() {
-        setLoginSkipped(true);
-        setLoggedUser(null);
-    }
-
     useEffect(() => {
         if (!firebaseApp) return;
         const auth = getAuth(firebaseApp);
@@ -69,6 +64,11 @@ export const useFirebaseAuthController = (
             error => setAuthProviderError(error)
         );
     }, [firebaseApp]);
+
+    const skipLogin = useCallback(() => {
+        setLoginSkipped(true);
+        setLoggedUser(null);
+    }, []);
 
     const updateFirebaseUser = useCallback(async (firebaseUser: FirebaseUser | null) => {
         setLoggedUser(firebaseUser);
