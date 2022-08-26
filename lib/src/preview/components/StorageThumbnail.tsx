@@ -55,8 +55,14 @@ export function StorageThumbnailInternal({
     if (!storagePathOrDownloadUrl) return null;
 
     const filetype = downloadConfig?.metadata ? getFiletype(downloadConfig?.metadata.contentType) : undefined;
+    const previewType = filetype?.startsWith("image")
+        ? "image"
+        : (filetype?.startsWith("video")
+            ? "video"
+            : (filetype?.startsWith("audio") ? "audio" : undefined));
+
     return downloadConfig
-        ? <UrlComponentPreview fileType={filetype}
+        ? <UrlComponentPreview previewType={previewType}
                                url={downloadConfig.url}
                                size={size}/>
         : renderSkeletonImageThumbnail(size);

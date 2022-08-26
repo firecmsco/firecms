@@ -43,12 +43,12 @@ export const usersCollection = buildCollection({
                 large: {
                     name: "Large",
                     dataType: "string",
-                    url: true,
+                    url: "image",
                 },
                 thumbnail: {
                     name: "Thumbnail",
                     dataType: "string",
-                    url: true,
+                    url: "image",
                 }
             },
             previewProperties: ["large"]

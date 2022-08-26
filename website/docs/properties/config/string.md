@@ -67,30 +67,44 @@ to `true` to add a link, or one of the supported media types to render a preview
 import { buildProperty } from "./builders";
 
 const amazonLinkProperty = buildProperty({
-    dataType: "string",
-    name: "Amazon link",
-    url: true
+  dataType: "string",
+  name: "Amazon link",
+  url: true
+});
+```
+
+You can also define the preview type for the url: `image`, `video` or `audio`:
+
+```tsx
+import { buildProperty } from "./builders";
+
+const imageProperty = buildProperty({
+  name: "Image",
+  dataType: "string",
+  url: "image",
 });
 ```
 
 ### `enumValues`
-You can use the enum values providing a map of possible
-exclusive values the property can take, mapped to the label that it is
-displayed in the dropdown. You can use a simple object with the format
-`value` => `label`, or with the format `value` => [`EnumValueConfig`](../../api/interfaces/enumvalueconfig) if you
-need extra customization, (like disabling specific options or assigning
-colors). If you need to ensure the order of the elements, you can pass
-a `Map` instead of a plain object.
+
+You can use the enum values providing a map of possible exclusive values the
+property can take, mapped to the label that it is displayed in the dropdown. You
+can use a simple object with the format
+`value` => `label`, or with the format `value`
+=> [`EnumValueConfig`](../../api/interfaces/enumvalueconfig) if you need extra
+customization, (like disabling specific options or assigning colors). If you
+need to ensure the order of the elements, you can pass a `Map` instead of a
+plain object.
 
 ```tsx
 import { buildProperty } from "./builders";
 
 const amazonLinkProperty = buildProperty({
-    dataType: "string",
-    name: "Amazon link",
-    enumValues: {
-      "es": "Spanish",
-      "de": "German",
+  dataType: "string",
+  name: "Amazon link",
+  enumValues: {
+    "es": "Spanish",
+    "de": "German",
       "en": "English",
       "it": "Italian",
       "fr": {

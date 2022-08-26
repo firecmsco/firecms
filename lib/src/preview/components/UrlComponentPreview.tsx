@@ -7,18 +7,18 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { PreviewSize } from "../index";
 import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
-import { FileType } from "../../models";
+import { FileType, PreviewType } from "../../models";
 
 /**
  * @category Preview components
  */
 export function UrlComponentPreview({
                                         url,
-                                        fileType,
+                                        previewType,
                                         size
-                                    }: { url: string, fileType?: FileType, size: PreviewSize }): React.ReactElement {
+                                    }: { url: string, previewType?: PreviewType, size: PreviewSize }): React.ReactElement {
 
-    if (!fileType) {
+    if (!previewType) {
         return (
             <Link sx={(theme) => ({
                 display: "flex",
@@ -36,18 +36,18 @@ export function UrlComponentPreview({
         );
     }
 
-    if (fileType === "image/*") {
+    if (previewType === "image") {
         return <ImagePreview key={`image_preview_${url}_${size}`}
                              url={url}
                              size={size}/>;
-    } else if (fileType === "audio/*") {
+    } else if (previewType === "audio") {
         return <audio controls
                       src={url}
                       key={`audio_preview_${url}_${size}`}>
             Your browser does not support the
             <code>audio</code> element.
         </audio>;
-    } else if (fileType === "video/*") {
+    } else if (previewType === "video") {
         return <CardMedia
             key={`video_preview_${url}_${size}`}
             sx={{ maxWidth: size === "small" ? 300 : 500 }}

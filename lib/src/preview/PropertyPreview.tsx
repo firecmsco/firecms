@@ -67,8 +67,15 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
         const stringProperty = property as ResolvedStringProperty;
         if (typeof value === "string") {
             if (stringProperty.url) {
-                content =
-                    <UrlComponentPreview size={fieldProps.size} url={value}/>;
+                if (typeof stringProperty.url === "boolean")
+                    content =
+                        <UrlComponentPreview size={fieldProps.size}
+                                             url={value}/>;
+                else if (typeof stringProperty.url === "string")
+                    content =
+                        <UrlComponentPreview size={fieldProps.size}
+                                             url={value}
+                                             previewType={stringProperty.url}/>;
             } else if (stringProperty.storage) {
                 content = <StorageThumbnail
                     storeUrl={property.storage?.storeUrl ?? false}

@@ -364,7 +364,7 @@ export interface StringProperty extends BaseProperty<string> {
      * If the value of this property is a URL, you can set this flag to true
      * to add a link, or one of the supported media types to render a preview
      */
-    url?: boolean;
+    url?: boolean | PreviewType;
 
     /**
      * Does this field include an email
@@ -774,6 +774,12 @@ export interface UploadedFileContext {
 }
 
 /**
+ * Used for previewing urls if the download file is knows
+ * @category Entity properties
+ */
+export type PreviewType = "image" | "video" | "audio";
+
+/**
  * MIME types for storage fields
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
  * @category Entity properties
@@ -785,5 +791,4 @@ export type FileType =
     | "application/*"
     | "text/*"
     | "font/*"
-    | string
-    ;
+    | string;
