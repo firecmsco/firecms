@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import {
+    CMSType,
     Entity,
     EntityCollection,
     EntityStatus,
@@ -35,7 +36,7 @@ import { CustomIdField } from "./components/CustomIdField";
 /**
  * @category Components
  */
-export interface EntityFormProps<M extends { [Key: string]: any }> {
+export interface EntityFormProps<M extends { [Key: string]: CMSType }> {
 
     /**
      * New or existing status
@@ -104,7 +105,7 @@ export interface EntityFormProps<M extends { [Key: string]: any }> {
  * @constructor
  * @category Components
  */
-export function EntityForm<M extends { [Key: string]: any }>({
+export function EntityForm<M extends { [Key: string]: CMSType }>({
                                                                  status,
                                                                  path,
                                                                  collection: inputCollection,
@@ -341,7 +342,7 @@ export function EntityForm<M extends { [Key: string]: any }>({
     );
 }
 
-function FormInternal<M>({
+function FormInternal<M extends { [Key: string]: CMSType }>({
                              initialValues,
                              values,
                              onModified,

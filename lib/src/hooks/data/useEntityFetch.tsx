@@ -7,7 +7,7 @@ import { useFireCMSContext } from "../useFireCMSContext";
 /**
  * @category Hooks and utilities
  */
-export interface EntityFetchProps<M extends { [Key: string]: any }> {
+export interface EntityFetchProps<M extends { [Key: string]: CMSType }> {
     path: string;
     entityId?: string;
     collection: EntityCollection<M>;
@@ -17,7 +17,7 @@ export interface EntityFetchProps<M extends { [Key: string]: any }> {
 /**
  * @category Hooks and utilities
  */
-export interface EntityFetchResult<M extends { [Key: string]: any }> {
+export interface EntityFetchResult<M extends { [Key: string]: CMSType }> {
     entity?: Entity<M>,
     dataLoading: boolean,
     dataLoadingError?: Error
@@ -35,7 +35,7 @@ const CACHE:Record<string, Entity<any>| undefined> = {};
  * @category Hooks and utilities
  */
 
-export function useEntityFetch<M extends { [Key: string]: any }, UserType extends User>(
+export function useEntityFetch<M extends { [Key: string]: CMSType }, UserType extends User>(
     {
         path: inputPath,
         entityId,

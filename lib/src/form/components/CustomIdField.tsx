@@ -18,6 +18,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { ErrorMessage } from "formik";
 
 import {
+    CMSType,
     Entity,
     EntityStatus,
     EnumValueConfig,
@@ -54,7 +55,7 @@ const StyledFormControl = styled(FormControl)((
     }
 }));
 
-export function CustomIdField<M, UserType>({
+export function CustomIdField<M extends { [Key: string]: CMSType }, UserType>({
                                                customId,
                                                entityId,
                                                status,

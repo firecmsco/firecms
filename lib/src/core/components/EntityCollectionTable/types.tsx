@@ -1,5 +1,5 @@
 import {
-    AdditionalColumnDelegate,
+    AdditionalColumnDelegate, CMSType,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -11,7 +11,7 @@ import {
 import { CellRendererParams, TableColumn, TableFilterValues } from "../Table";
 import { OnCellChangeParams } from "./internal/PropertyTableCell";
 
-export type EntityCollectionTableProviderProps<M, AdditionalKey extends string, UserType extends User> = {
+export type EntityCollectionTableProviderProps<M extends { [Key: string]: CMSType }, AdditionalKey extends string, UserType extends User> = {
 
     /**
      * Absolute collection path
@@ -55,7 +55,7 @@ export type EntityCollectionTableProviderProps<M, AdditionalKey extends string, 
                               }: { entity: Entity<M>, size: CollectionSize }) => React.ReactNode;
 };
 
-export type EntityCollectionTableController<M, E> = {
+export type EntityCollectionTableController<M extends { [Key: string]: CMSType }> = {
 
     selectedCell?: SelectedCellProps<any>;
     focused: boolean;
@@ -72,7 +72,7 @@ export type EntityCollectionTableController<M, E> = {
  * Props passed in a callback when the content of a cell in a table has been edited
  * @category Collection components
  */
-export interface OnCellValueChangeParams<T, M extends { [Key: string]: any }> {
+export interface OnCellValueChangeParams<T, M extends { [Key: string]: CMSType }> {
     value: T,
     propertyKey: string,
     entity: Entity<M>,
@@ -80,7 +80,7 @@ export interface OnCellValueChangeParams<T, M extends { [Key: string]: any }> {
     setError: (e: Error) => void
 }
 
-export type SelectedCellProps<M> =
+export type SelectedCellProps<M extends { [Key: string]: CMSType }> =
     {
         propertyKey: keyof M,
         columnIndex: number,
@@ -100,4 +100,4 @@ export type UniqueFieldValidator = (props: { name: string, value: any, property:
  * Callback when a cell has changed in a table
  * @category Collection components
  */
-export type OnCellValueChange<T, M extends { [Key: string]: any }> = (params: OnCellValueChangeParams<T, M>) => Promise<void>;
+export type OnCellValueChange<T, M extends { [Key: string]: CMSType }> = (params: OnCellValueChangeParams<T, M>) => Promise<void>;

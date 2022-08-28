@@ -10,7 +10,7 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import { EntityReference, ResolvedProperty } from "../../models";
+import { CMSType, EntityReference, ResolvedProperty } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { PreviewSize, PropertyPreview, SkeletonComponent } from "../index";
@@ -50,7 +50,7 @@ function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewP
         ;
 }
 
-function ReferencePreviewInternal<M>({
+function ReferencePreviewInternal<M extends { [Key: string]: CMSType }>({
                                          disabled,
                                          reference,
                                          previewProperties,

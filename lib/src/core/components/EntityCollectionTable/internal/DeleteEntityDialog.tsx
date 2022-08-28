@@ -17,7 +17,7 @@ import {
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { resolveCollection } from "../../../util/resolutions";
 
-export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
+export interface DeleteEntityDialogProps<M extends { [Key: string]: CMSType }> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
     path: string,
     collection: EntityCollection<M>
@@ -30,7 +30,7 @@ export interface DeleteEntityDialogProps<M extends { [Key: string]: any }> {
     onMultipleEntitiesDelete?(path: string, entities: Entity<M>[]): void;
 }
 
-export function DeleteEntityDialog<M extends { [Key: string]: any }>({
+export function DeleteEntityDialog<M extends { [Key: string]: CMSType }>({
                                                                          entityOrEntitiesToDelete,
                                                                          collection,
                                                                          onClose,

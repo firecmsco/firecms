@@ -1,10 +1,11 @@
 import { EntityCollection } from "./collections";
+import { CMSType } from "./properties";
 
 /**
  * Use to resolve the collection properties for specific path, entity id or values.
  * @category Models
  */
-export type LocalEntityCollection<M> = Partial<EntityCollection<M>>;
+export type LocalEntityCollection<M extends { [Key: string]: CMSType }> = Partial<EntityCollection<M>>;
 
 /**
  * This interface is in charge of defining the controller that persists
@@ -12,6 +13,6 @@ export type LocalEntityCollection<M> = Partial<EntityCollection<M>>;
  * a data source, such as local storage or Firestore.
  */
 export interface UserConfigurationPersistence {
-    onCollectionModified: <M>(path: string, partialCollection: LocalEntityCollection<M>) => void;
-    getCollectionConfig: <M>(path: string) => LocalEntityCollection<M>;
+    onCollectionModified: <M extends { [Key: string]: CMSType }>(path: string, partialCollection: LocalEntityCollection<M>) => void;
+    getCollectionConfig: <M extends { [Key: string]: CMSType }>(path: string) => LocalEntityCollection<M>;
 }

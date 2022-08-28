@@ -1,5 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { Entity, EntityCollection, FilterValues, FireCMSContext, User } from "../../models";
+import {
+    CMSType,
+    Entity,
+    EntityCollection,
+    FilterValues,
+    FireCMSContext,
+    User
+} from "../../models";
 import { useDataSource } from "./useDataSource";
 import { useNavigationContext } from "../useNavigationContext";
 import { useFireCMSContext } from "../useFireCMSContext";
@@ -7,7 +14,7 @@ import { useFireCMSContext } from "../useFireCMSContext";
 /**
  * @category Hooks and utilities
  */
-export interface CollectionFetchProps<M extends { [Key: string]: any }> {
+export interface CollectionFetchProps<M extends { [Key: string]: CMSType }> {
 
     /**
      * Absolute collection path
@@ -43,7 +50,7 @@ export interface CollectionFetchProps<M extends { [Key: string]: any }> {
 /**
  * @category Hooks and utilities
  */
-export interface CollectionFetchResult<M extends { [Key: string]: any }> {
+export interface CollectionFetchResult<M extends { [Key: string]: CMSType }> {
     data: Entity<M>[];
     dataLoading: boolean;
     noMoreToLoad: boolean;
@@ -60,7 +67,7 @@ export interface CollectionFetchResult<M extends { [Key: string]: any }> {
  * @param searchString
  * @category Hooks and utilities
  */
-export function useCollectionFetch<M, UserType extends User>(
+export function useCollectionFetch<M extends { [Key: string]: CMSType }, UserType extends User>(
     {
         path: inputPath,
         collection,

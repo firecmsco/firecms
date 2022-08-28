@@ -1,4 +1,5 @@
 import {
+    CMSType,
     EntityReference,
     GeoPoint,
     ResolvedArrayProperty,
@@ -43,15 +44,15 @@ export type CustomFieldValidator = (props: {
     parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
 }) => Promise<boolean>;
 
-interface PropertyContext<M> {
-    property: ResolvedProperty<M>,
+interface PropertyContext<T extends CMSType> {
+    property: ResolvedProperty<T>,
     parentProperty?: ResolvedMapProperty<any> | ResolvedArrayProperty<any>,
     entityId: string,
     customFieldValidator?: CustomFieldValidator,
     name?: any
 }
 
-export function getYupEntitySchema<M>(
+export function getYupEntitySchema<M extends { [Key: string]: CMSType }>(
     entityId: string,
     properties: ResolvedProperties<M>,
     customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
@@ -97,12 +98,12 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
     throw Error("Unsupported data type in yup mapping");
 }
 
-export function getYupMapObjectSchema({
-                                                                            property,
-                                                                            entityId,
-                                                                            customFieldValidator,
-                                                                            name
-                                                                        }: PropertyContext<object>): ObjectSchema<any> {
+export function getYupMapObjectSchema<M extends { [Key: string]: CMSType }>({
+                                          property,
+                                          entityId,
+                                          customFieldValidator,
+                                          name
+                                      }: PropertyContext<M>): ObjectSchema<any> {
     const objectSchema: any = {};
     if (property.properties)
         Object.entries(property.properties).forEach(([childName, childProperty]: [string, ResolvedProperty]) => {

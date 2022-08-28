@@ -1,4 +1,5 @@
 import {
+    CMSType,
     Entity,
     EntityReference,
     ExportConfig,
@@ -14,7 +15,7 @@ interface Header {
     label: string;
 }
 
-export function downloadCSV<M>(data: Entity<M>[],
+export function downloadCSV<M extends { [Key: string]: CMSType }>(data: Entity<M>[],
                                additionalData: Record<string, any>[] | undefined,
                                collection: ResolvedEntityCollection<M>,
                                path: string,
@@ -45,7 +46,7 @@ export function getExportableData(data: any[],
 }
 
 
-function getExportHeaders<M extends { [Key: string]: any }, UserType extends User>(properties: ResolvedProperties<M>,
+function getExportHeaders<M extends { [Key: string]: CMSType }, UserType extends User>(properties: ResolvedProperties<M>,
                                                                       path: string,
                                                                       exportConfig?: ExportConfig<UserType>): Header[] {
     const headers = [
@@ -112,7 +113,7 @@ function processCSVValue(inputValue: any,
     return value;
 }
 
-function processCSVValues<M extends { [Key: string]: any }>
+function processCSVValues<M extends { [Key: string]: CMSType }>
 (inputValues: Record<keyof M, any>, properties: ResolvedProperties<M>): Record<keyof M, any> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {

@@ -1,4 +1,5 @@
 import { EntityCollection } from "./collections";
+import { CMSType } from "./properties";
 
 /**
  * Context that includes the resolved navigation and utility methods and
@@ -49,7 +50,7 @@ export type NavigationContext = {
      * The collection is resolved from the given path or alias, located
      * among the
      */
-    getCollection: <M>(pathOrAlias: string,
+    getCollection: <M extends { [Key: string]: CMSType }>(pathOrAlias: string,
                        entityId?: string,
                        includeUserOverride?: boolean) => EntityCollection<M> | undefined;
 

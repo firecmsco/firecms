@@ -13,6 +13,7 @@ import {
 
 import GetAppIcon from "@mui/icons-material/GetApp";
 import {
+    CMSType,
     Entity,
     EntityCollection,
     ExportConfig,
@@ -24,7 +25,7 @@ import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { resolveCollection } from "../../../util/resolutions";
 
-interface ExportButtonProps<M extends { [Key: string]: any }, UserType extends User> {
+interface ExportButtonProps<M extends { [Key: string]: CMSType }, UserType extends User> {
     collection: EntityCollection<M>;
     path: string;
     exportConfig?: ExportConfig<UserType>;
@@ -32,7 +33,7 @@ interface ExportButtonProps<M extends { [Key: string]: any }, UserType extends U
 
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
-export function ExportButton<M extends { [Key: string]: any }, UserType extends User>({
+export function ExportButton<M extends { [Key: string]: CMSType }, UserType extends User>({
                                                                              collection: inputCollection,
                                                                              path,
                                                                              exportConfig

@@ -4,11 +4,12 @@ import {
     ResolvedEntityCollection,
     ResolvedProperty
 } from "./resolved_entities";
+import { CMSType } from "./properties";
 
 /**
  * @category Datasource
  */
-export interface FetchEntityProps<M> {
+export interface FetchEntityProps<M extends { [Key: string]: CMSType }> {
     path: string;
     entityId: string;
     collection: EntityCollection<M>
@@ -17,7 +18,7 @@ export interface FetchEntityProps<M> {
 /**
  * @category Datasource
  */
-export type ListenEntityProps<M> = FetchEntityProps<M> & {
+export type ListenEntityProps<M extends { [Key: string]: CMSType }> = FetchEntityProps<M> & {
     onUpdate: (entity: Entity<M>) => void,
     onError?: (error: Error) => void,
 }
@@ -25,7 +26,7 @@ export type ListenEntityProps<M> = FetchEntityProps<M> & {
 /**
  * @category Datasource
  */
-export interface FetchCollectionProps<M> {
+export interface FetchCollectionProps<M extends { [Key: string]: CMSType }> {
     path: string;
     collection: EntityCollection<M> | ResolvedEntityCollection<M>;
     filter?: FilterValues<Extract<keyof M, string>>,
@@ -39,7 +40,7 @@ export interface FetchCollectionProps<M> {
 /**
  * @category Datasource
  */
-export type ListenCollectionProps<M> =
+export type ListenCollectionProps<M extends { [Key: string]: CMSType }> =
     FetchCollectionProps<M> &
     {
         onUpdate: (entities: Entity<M>[]) => void;
@@ -49,7 +50,7 @@ export type ListenCollectionProps<M> =
 /**
  * @category Datasource
  */
-export interface SaveEntityProps<M> {
+export interface SaveEntityProps<M extends { [Key: string]: CMSType }> {
     path: string;
     values: Partial<EntityValues<M>>;
     entityId?: string; // can be empty for new entities
@@ -61,7 +62,7 @@ export interface SaveEntityProps<M> {
 /**
  * @category Datasource
  */
-export interface DeleteEntityProps<M> {
+export interface DeleteEntityProps<M extends { [Key: string]: CMSType }> {
     entity: Entity<M>;
 }
 
@@ -86,7 +87,7 @@ export interface DataSource {
      * @return Function to cancel subscription
      * @see useCollectionFetch if you need this functionality implemented as a hook
      */
-    fetchCollection<M>({
+    fetchCollection<M extends { [Key: string]: CMSType }>({
                            path,
                            collection,
                            filter,
@@ -114,7 +115,7 @@ export interface DataSource {
      * @return Function to cancel subscription
      * @see useCollectionFetch if you need this functionality implemented as a hook
      */
-    listenCollection?<M>(
+    listenCollection?<M extends { [Key: string]: CMSType }>(
         {
             path,
             collection,
@@ -135,7 +136,7 @@ export interface DataSource {
      * @param entityId
      * @param collection
      */
-    fetchEntity<M>({
+    fetchEntity<M extends { [Key: string]: CMSType }>({
                        path,
                        entityId,
                        collection
@@ -151,7 +152,7 @@ export interface DataSource {
      * @param onError
      * @return Function to cancel subscription
      */
-    listenEntity?<M>({
+    listenEntity?<M extends { [Key: string]: CMSType }>({
                          path,
                          entityId,
                          collection,
@@ -166,7 +167,7 @@ export interface DataSource {
      * @param collection
      * @param status
      */
-    saveEntity<M>(
+    saveEntity<M extends { [Key: string]: CMSType }>(
         {
             path,
             entityId,
@@ -180,7 +181,7 @@ export interface DataSource {
      * @param entity
      * @return was the whole deletion flow successful
      */
-    deleteEntity<M>(
+    deleteEntity<M extends { [Key: string]: CMSType }>(
         {
             entity
         }: DeleteEntityProps<M>

@@ -1,4 +1,9 @@
-import { EntityCollection, PropertiesOrBuilders, Property } from "../../models";
+import {
+    CMSType,
+    EntityCollection,
+    PropertiesOrBuilders,
+    Property
+} from "../../models";
 import { mergeDeep } from "./objects";
 
 export function mergeCollections(target: EntityCollection, source: EntityCollection): EntityCollection {
@@ -22,13 +27,13 @@ export function mergeCollections(target: EntityCollection, source: EntityCollect
     }
 }
 
-export function sortProperties<T>(properties: PropertiesOrBuilders<T>, propertiesOrder?: (keyof T)[]): PropertiesOrBuilders<T> {
+export function sortProperties<M extends { [Key: string]: CMSType }>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {
     try {
         const propertiesKeys = Object.keys(properties);
         const allPropertiesOrder = propertiesOrder ?? propertiesKeys;
         return allPropertiesOrder
             .map((key) => {
-                if (properties[key as keyof T]) {
+                if (properties[key as keyof M]) {
                     const property = properties[key] as Property;
                     if (typeof property === "object" && property?.dataType === "map") {
                         return ({
@@ -45,14 +50,14 @@ export function sortProperties<T>(properties: PropertiesOrBuilders<T>, propertie
                 }
             })
             .filter((a) => a !== undefined)
-            .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as PropertiesOrBuilders<T>;
+            .reduce((a: any, b: any) => ({ ...a, ...b }), {}) as PropertiesOrBuilders<M>;
     } catch (e) {
         console.error("Error sorting properties", e);
         return properties;
     }
 }
 
-export function getFistAdditionalView<M>(collection: EntityCollection<M>) {
+export function getFistAdditionalView<M extends { [Key: string]: CMSType }>(collection: EntityCollection<M>) {
     const subcollections = collection.subcollections;
     const subcollectionsCount = subcollections?.length ?? 0;
     const customViews = collection.views;

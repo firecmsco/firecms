@@ -3,7 +3,7 @@ import { Box, Popover, Typography, useTheme } from "@mui/material";
 import equal from "react-fast-compare"
 
 import {
-    AnyProperty,
+    AnyProperty, CMSType,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -40,7 +40,7 @@ import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 /**
  * @category Components
  */
-export type EntityCollectionViewProps<M extends { [Key: string]: unknown }> = {
+export type EntityCollectionViewProps<M extends { [Key: string]: CMSType }> = {
     fullPath: string;
     isSubCollection?: boolean;
 } & EntityCollection<M>;
@@ -70,7 +70,7 @@ export type EntityCollectionViewProps<M extends { [Key: string]: unknown }> = {
  * @category Components
  */
 export const EntityCollectionView = React.memo(
-    function EntityCollectionView<M extends { [Key: string]: unknown }>({
+    function EntityCollectionView<M extends { [Key: string]: CMSType }>({
                                                                                     fullPath,
                                                                                     isSubCollection,
                                                                                     ...collectionProp
@@ -340,7 +340,7 @@ export const EntityCollectionView = React.memo(
         );
     }, equal) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
-export function useSelectionController<M = any>(): SelectionController {
+export function useSelectionController<M extends { [Key: string]: CMSType } = any>(): SelectionController {
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
 

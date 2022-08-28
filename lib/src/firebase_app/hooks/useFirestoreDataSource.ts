@@ -1,4 +1,5 @@
 import {
+    CMSType,
     DataSource,
     DeleteEntityProps,
     Entity,
@@ -81,7 +82,7 @@ export function useFirestoreDataSource({
      * @param resolvedCollection
      * @category Firestore
      */
-    function createEntityFromCollection<M extends { [Key: string]: any }>
+    function createEntityFromCollection<M extends { [Key: string]: CMSType }>
     (
         doc: DocumentSnapshot,
         path: string,
@@ -140,7 +141,7 @@ export function useFirestoreDataSource({
         return query(collectionReference, ...queryParams);
     }
 
-    function getAndBuildEntity<M>(path: string,
+    function getAndBuildEntity<M extends { [Key: string]: CMSType }>(path: string,
                                   entityId: string,
                                   collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M> | undefined> {
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
@@ -160,7 +161,7 @@ export function useFirestoreDataSource({
             });
     }
 
-    async function performTextSearch<M>(path: string,
+    async function performTextSearch<M extends { [Key: string]: CMSType }>(path: string,
                                         searchString: string,
                                         collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M>[]> {
         if (!textSearchController)
@@ -198,7 +199,7 @@ export function useFirestoreDataSource({
          * @see useCollectionFetch if you need this functionality implemented as a hook
          * @category Firestore
          */
-        fetchCollection<M extends { [Key: string]: any }>({
+        fetchCollection<M extends { [Key: string]: CMSType }>({
                                                               path,
                                                               collection,
                                                               filter,
@@ -245,7 +246,7 @@ export function useFirestoreDataSource({
          * @see useCollectionFetch if you need this functionality implemented as a hook
          * @category Firestore
          */
-        listenCollection<M extends { [Key: string]: any }>(
+        listenCollection<M extends { [Key: string]: CMSType }>(
             {
                 path,
                 collection,
@@ -297,7 +298,7 @@ export function useFirestoreDataSource({
          * @param collection
          * @category Firestore
          */
-        fetchEntity<M extends { [Key: string]: any }>({
+        fetchEntity<M extends { [Key: string]: CMSType }>({
                                                           path,
                                                           entityId,
                                                           collection
@@ -316,7 +317,7 @@ export function useFirestoreDataSource({
          * @return Function to cancel subscription
          * @category Firestore
          */
-        listenEntity<M extends { [Key: string]: any }>(
+        listenEntity<M extends { [Key: string]: CMSType }>(
             {
                 path,
                 entityId,
@@ -353,7 +354,7 @@ export function useFirestoreDataSource({
          * @param status
          * @category Firestore
          */
-        saveEntity: async function <M extends { [Key: string]: any }>(
+        saveEntity: async function <M extends { [Key: string]: CMSType }>(
             {
                 path,
                 entityId,
@@ -402,7 +403,7 @@ export function useFirestoreDataSource({
          * @param collection
          * @category Firestore
          */
-        async deleteEntity<M extends { [Key: string]: any }>(
+        async deleteEntity<M extends { [Key: string]: CMSType }>(
             {
                 entity
             }: DeleteEntityProps<M>

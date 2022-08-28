@@ -1,34 +1,34 @@
-import { EntityCollection, EntityCustomView } from "../../models";
+import { CMSType, EntityCollection, EntityCustomView } from "../../models";
 import {
     getCollectionPathsCombinations,
     removeInitialAndTrailingSlashes
 } from "./navigation_utils";
 
-export type NavigationViewInternal<M> =
+export type NavigationViewInternal<M extends { [Key: string]: CMSType }> =
     | NavigationViewEntityInternal<M>
     | NavigationViewCollectionInternal<M>
     | NavigationViewEntityCustomInternal<M>;
 
-interface NavigationViewEntityInternal<M> {
+interface NavigationViewEntityInternal<M extends { [Key: string]: CMSType }> {
     type: "entity";
     entityId: string;
     path: string;
     parentCollection: EntityCollection<M>;
 }
 
-interface NavigationViewCollectionInternal<M> {
+interface NavigationViewCollectionInternal<M extends { [Key: string]: CMSType }> {
     type: "collection";
     path: string;
     collection: EntityCollection<M>;
 }
 
-interface NavigationViewEntityCustomInternal<M> {
+interface NavigationViewEntityCustomInternal<M extends { [Key: string]: CMSType }> {
     type: "custom_view";
     path: string;
     view: EntityCustomView<M>;
 }
 
-export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: any }>(props: {
+export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: CMSType }>(props: {
     path: string,
     collections: EntityCollection[] | undefined,
     customViews?: EntityCustomView<M>[],

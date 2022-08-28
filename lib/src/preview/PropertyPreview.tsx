@@ -107,7 +107,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
                     content =
                         <ArrayOfMapsPreview propertyKey={propertyKey}
                                             property={property as ResolvedArrayProperty}
-                                            value={value as object[]}
+                                            value={value}
                                             entity={entity}
                                             size={size}
                         />;

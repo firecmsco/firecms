@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import {
+    CMSType,
     FieldProps,
     Properties,
     ResolvedProperties,
@@ -27,7 +28,7 @@ import { PropertyFieldBinding } from "../PropertyFieldBinding";
  * and tables to the specified properties.
  * @category Form fields
  */
-export function MapFieldBinding<T extends object>({
+export function MapFieldBinding<T extends { [Key: string]: CMSType }>({
                                                       propertyKey,
                                                       value,
                                                       showError,

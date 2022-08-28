@@ -1,5 +1,6 @@
 import React from "react";
 import {
+    CMSType,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -14,7 +15,7 @@ export type OnColumnResizeParams = { width: number, key: string };
 /**
  * @category Collection components
  */
-export type EntityCollectionTableProps<M extends { [Key: string]: any }> = EntityCollection<M> & {
+export type EntityCollectionTableProps<M extends { [Key: string]: CMSType }> = EntityCollection<M> & {
 
     /**
      * Absolute collection path

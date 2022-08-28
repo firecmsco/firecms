@@ -14,6 +14,7 @@ import {
     Typography
 } from "@mui/material";
 import {
+    CMSType,
     Entity,
     EntityCollection,
     FireCMSContext,
@@ -62,7 +63,7 @@ const StyledTableContainer = styled(TableContainer)((
 /**
  * @category Components
  */
-export interface EntityPreviewProps<M> {
+export interface EntityPreviewProps<M extends { [Key: string]: CMSType }> {
     entity: Entity<M>;
     collection: EntityCollection<M>;
     path: string;
@@ -76,7 +77,7 @@ export interface EntityPreviewProps<M> {
  * @constructor
  * @category Components
  */
-export function EntityPreview<M>(
+export function EntityPreview<M extends { [Key: string]: CMSType }>(
     {
         entity,
         collection,

@@ -1,3 +1,5 @@
+import { CMSType } from "./properties";
+
 /**
  * New or existing status
  * @category Models
@@ -8,7 +10,7 @@ export type EntityStatus = "new" | "existing" | "copy";
  * Representation of an entity fetched from the datasource
  * @category Models
  */
-export interface Entity<M extends { [Key: string]: any }> {
+export interface Entity<M extends { [Key: string]: CMSType }> {
 
     /**
      * ID of the entity

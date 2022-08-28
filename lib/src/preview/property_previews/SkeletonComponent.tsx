@@ -1,4 +1,5 @@
 import {
+    CMSType,
     ResolvedArrayProperty,
     ResolvedMapProperty,
     ResolvedProperties,
@@ -143,7 +144,7 @@ function renderMap<T extends object>(property: ResolvedMapProperty<T>, size: Pre
 
 }
 
-function renderArrayOfMaps<M>(properties: ResolvedProperties<M>, size: PreviewSize, previewProperties?: string[]) {
+function renderArrayOfMaps<M extends { [Key: string]: CMSType }>(properties: ResolvedProperties<M>, size: PreviewSize, previewProperties?: string[]) {
     let tableProperties = previewProperties;
     if (!tableProperties || !tableProperties.length) {
         tableProperties = Object.keys(properties) as string[];

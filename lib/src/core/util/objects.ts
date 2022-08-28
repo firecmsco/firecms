@@ -9,7 +9,7 @@ export function isObject(item: any) {
     return (item && typeof item === "object" && !Array.isArray(item));
 }
 
-export function mergeDeep<T>(target: T, source: any): T {
+export function mergeDeep<T extends {}>(target: T, source: any): T {
     const targetIsObject = isObject(target);
     const output:T = targetIsObject ? Object.assign({}, target) : target;
     if (targetIsObject && isObject(source)) {

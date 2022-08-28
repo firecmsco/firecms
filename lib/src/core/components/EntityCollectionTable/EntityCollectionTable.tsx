@@ -7,7 +7,7 @@ import {
     getSubcollectionColumnId
 } from "./internal/common";
 import {
-    AdditionalColumnDelegate,
+    AdditionalColumnDelegate, CMSType,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -67,9 +67,9 @@ import { useDataOrder } from "../../../hooks/data/useDataOrder";
 
 const DEFAULT_STATE = {} as any;
 
-export const EntityCollectionTableContext = React.createContext<EntityCollectionTableController<any, any>>(DEFAULT_STATE);
+export const EntityCollectionTableContext = React.createContext<EntityCollectionTableController<any>>(DEFAULT_STATE);
 
-export const useEntityCollectionTableController = () => useContext<EntityCollectionTableController<any, any>>(EntityCollectionTableContext);
+export const useEntityCollectionTableController = () => useContext<EntityCollectionTableController<any>>(EntityCollectionTableContext);
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -98,7 +98,7 @@ const DEFAULT_PAGE_SIZE = 50;
  * @category Components
  */
 export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>(
-    function EntityCollectionTable<M, AdditionalKey extends string, UserType extends User>
+    function EntityCollectionTable<M extends { [Key: string]: CMSType }, AdditionalKey extends string, UserType extends User>
     ({
          fullPath,
          initialFilter,
@@ -520,7 +520,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                                                     sortBy?: [string, "asc" | "desc"]) => isFilterCombinationValid(filterValues, filterCombinations, sortBy), [filterCombinations]);
 
         const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
-            setFilterValues({ ...updatedFilterValues, ...forceFilter });
+            setFilterValues({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
         }, [forceFilter]);
 
         return (
@@ -621,7 +621,7 @@ function isFilterCombinationValid<M>(
         ) !== undefined;
 }
 
-function useColumnIds<M>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
+function useColumnIds<M extends { [Key: string]: CMSType }>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
     return useMemo(() => {
         const displayedProperties = getCollectionColumnIds(collection);
 

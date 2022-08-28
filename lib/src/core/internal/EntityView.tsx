@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {
+    CMSType,
     Entity,
     EntityCollection,
     EntityStatus,
@@ -49,7 +50,7 @@ import {
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 
-export interface EntityViewProps<M> {
+export interface EntityViewProps<M extends { [Key: string]: CMSType }> {
     path: string;
     collection: EntityCollection<M>;
     entityId?: string;
@@ -68,7 +69,7 @@ export interface EntityViewProps<M> {
  * {@link EntityCollectionView}
  */
 export const EntityView = React.memo<EntityViewProps<any>>(
-    function EntityView<M extends { [Key: string]: any }, UserType extends User>({
+    function EntityView<M extends { [Key: string]: CMSType }, UserType extends User>({
                                                                                      path,
                                                                                      entityId,
                                                                                      selectedSubPath,

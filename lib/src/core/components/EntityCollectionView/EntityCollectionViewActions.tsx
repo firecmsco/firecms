@@ -13,6 +13,7 @@ import { ExportButton } from "../EntityCollectionTable/internal/ExportButton";
 import { canCreateEntity, canDeleteEntity } from "../../util/permissions";
 import { useAuthController, useFireCMSContext } from "../../../hooks";
 import {
+    CMSType,
     Entity,
     EntityCollection,
     ExportConfig,
@@ -20,7 +21,7 @@ import {
 } from "../../../models";
 import { fullPathToCollectionSegments } from "../../util/paths";
 
-export type EntityCollectionViewActionsProps<M> = {
+export type EntityCollectionViewActionsProps<M extends { [Key: string]: CMSType }> = {
     collection: EntityCollection<M>;
     path: string;
     selectionEnabled: boolean;
@@ -31,7 +32,7 @@ export type EntityCollectionViewActionsProps<M> = {
     selectionController: SelectionController;
 }
 
-export function EntityCollectionViewActions<M>({
+export function EntityCollectionViewActions<M extends { [Key: string]: CMSType }>({
                                                    collection,
                                                    onNewClick,
                                                    exportable,

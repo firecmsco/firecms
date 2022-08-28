@@ -56,13 +56,4 @@ export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps
         );
 
     },
-    areEqual) as React.FunctionComponent<PropertyPreviewTableCellProps<any, any>>;
-
-function areEqual(prevProps: PropertyPreviewTableCellProps<any, any>, nextProps: PropertyPreviewTableCellProps<any, any>) {
-    return prevProps.align === nextProps.align &&
-        prevProps.width === nextProps.width &&
-        prevProps.propertyKey === nextProps.propertyKey &&
-        equal(prevProps.property, nextProps.property) &&
-        equal(prevProps.property, nextProps.property)
-        ;
-}
+    equal) as React.FunctionComponent<PropertyPreviewTableCellProps<any, any>>;

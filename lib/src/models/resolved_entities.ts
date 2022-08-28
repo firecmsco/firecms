@@ -18,7 +18,7 @@ import { EntityCollection } from "./collections";
  * are resolved to regular `Property` objects.
  * @category Models
  */
-export type ResolvedEntityCollection<M extends { [Key: string]: any } = any> =
+export type ResolvedEntityCollection<M extends { [Key: string]: CMSType } = any> =
     Omit<EntityCollection<M>, "properties"> &
     {
         properties: ResolvedProperties<M>,
@@ -42,7 +42,7 @@ export type ResolvedProperty<T extends CMSType = CMSType> =
 /**
  * @category Entity properties
  */
-export type ResolvedProperties<M extends { [Key: string]: any } = any> = {
+export type ResolvedProperties<M extends { [Key: string]: CMSType } = any> = {
     [k in keyof M]: ResolvedProperty<M[keyof M]>;
 };
 
@@ -140,7 +140,7 @@ export type ResolvedMapProperty<T extends { [Key: string]: any } = any> =
     {
         dataType: "map";
         resolved: true;
-        properties?: ResolvedProperties<Partial<T>>;
+        properties?: ResolvedProperties<T>;
         propertiesOrder?: string[];
         fromBuilder: boolean;
     }

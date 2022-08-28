@@ -10,7 +10,7 @@ import { User } from "./user";
  * Useful for adding your own logic or blocking the execution of the operation.
  * @category Models
  */
-export interface EntityCallbacks<M extends { [Key: string]: any } = any, UserType extends User = User> {
+export interface EntityCallbacks<M extends { [Key: string]: CMSType } = any, UserType extends User = User> {
 
     /**
      * Callback used after fetching data
@@ -71,7 +71,7 @@ export interface EntityCallbacks<M extends { [Key: string]: any } = any, UserTyp
  * Parameters passed to hooks when an entity is fetched
  * @category Models
  */
-export interface EntityOnFetchProps<M extends { [Key: string]: any } = any, UserType extends User = User> {
+export interface EntityOnFetchProps<M extends { [Key: string]: CMSType } = any, UserType extends User = User> {
 
     /**
      * Collection of the entity
@@ -99,7 +99,7 @@ export interface EntityOnFetchProps<M extends { [Key: string]: any } = any, User
  * Parameters passed to hooks when an entity is saved
  * @category Models
  */
-export interface EntityOnSaveProps<M extends { [Key: string]: any } = any, UserType extends User = User> {
+export interface EntityOnSaveProps<M extends { [Key: string]: CMSType } = any, UserType extends User = User> {
 
     /**
      * Resolved collection of the entity
@@ -147,7 +147,7 @@ export interface EntityOnSaveProps<M extends { [Key: string]: any } = any, UserT
  * Parameters passed to hooks when an entity is deleted
  * @category Models
  */
-export interface EntityOnDeleteProps<M extends { [Key: string]: any } = any, UserType extends User = User> {
+export interface EntityOnDeleteProps<M extends { [Key: string]: CMSType } = any, UserType extends User = User> {
 
     /**
      * collection of the entity being deleted
@@ -179,7 +179,7 @@ export interface EntityOnDeleteProps<M extends { [Key: string]: any } = any, Use
  * Parameters passed to hooks when an entity is deleted
  * @category Models
  */
-export interface EntityIdUpdateProps<M extends { [Key: string]: any } = any, UserType extends User = User> {
+export interface EntityIdUpdateProps<M extends { [Key: string]: CMSType } = any, UserType extends User = User> {
 
     /**
      * collection of the entity being deleted

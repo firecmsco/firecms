@@ -25,7 +25,7 @@ import {
  * @param collection
  * @category Builder
  */
-export function buildCollection<M extends { [Key: string]: any } = any,
+export function buildCollection<M extends { [Key: string]: CMSType } = any,
     AdditionalKey extends string = string,
     UserType extends User = User>(
     collection: EntityCollection<M, AdditionalKey, UserType>
@@ -60,7 +60,7 @@ export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrB
  * @param properties
  * @category Builder
  */
-export function buildProperties<M = any>(
+export function buildProperties<M extends { [Key: string]: CMSType } = any>(
     properties: PropertiesOrBuilders<M>
 ): PropertiesOrBuilders<M> {
     return properties;
@@ -72,7 +72,7 @@ export function buildProperties<M = any>(
  * @param propertiesOrBuilder
  * @category Builder
  */
-export function buildPropertiesOrBuilder<M = any>(
+export function buildPropertiesOrBuilder<M extends { [Key: string]: CMSType } = any>(
     propertiesOrBuilder: PropertiesOrBuilders<M>
 ): PropertiesOrBuilders<M> {
     return propertiesOrBuilder;
@@ -108,7 +108,7 @@ export function buildEnumValueConfig(
  * @param callbacks
  * @category Builder
  */
-export function buildEntityCallbacks<M = any>(
+export function buildEntityCallbacks<M extends { [Key: string]: CMSType }= any>(
     callbacks: EntityCallbacks<M>
 ): EntityCallbacks<M> {
     return callbacks;
@@ -120,7 +120,7 @@ export function buildEntityCallbacks<M = any>(
  * @param additionalColumnDelegate
  * @category Builder
  */
-export function buildAdditionalColumnDelegate<M extends { [Key: string]: any } = any, AdditionalKey extends string = string, UserType extends User = User>(
+export function buildAdditionalColumnDelegate<M extends { [Key: string]: CMSType } = any, AdditionalKey extends string = string, UserType extends User = User>(
     additionalColumnDelegate: AdditionalColumnDelegate<M, AdditionalKey, UserType>
 ): AdditionalColumnDelegate<M, AdditionalKey, UserType> {
     return additionalColumnDelegate;

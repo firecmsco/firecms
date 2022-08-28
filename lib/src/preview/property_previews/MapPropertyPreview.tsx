@@ -9,13 +9,13 @@ import {
 } from "@mui/material";
 
 import { PropertyPreview, PropertyPreviewProps } from "../index";
-import { ResolvedMapProperty } from "../../models";
+import { CMSType, ResolvedMapProperty } from "../../models";
 import { ErrorBoundary } from "../../core";
 
 /**
  * @category Preview components
  */
-export function MapPropertyPreview<T extends Record<string, unknown>>({
+export function MapPropertyPreview<T extends Record<string, CMSType>>({
                                                                           propertyKey,
                                                                           value,
                                                                           property,

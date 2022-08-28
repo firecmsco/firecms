@@ -1,5 +1,5 @@
 import React from "react";
-import { ArrayProperty, ResolvedMapProperty } from "../../models";
+import { ArrayProperty, CMSType, ResolvedMapProperty } from "../../models";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
@@ -14,7 +14,7 @@ export function ArrayOfMapsPreview({
                                        property: inputProperty,
                                        size,
                                        entity
-                                   }: PropertyPreviewProps<object[]>) {
+                                   }: PropertyPreviewProps<CMSType[]>) {
 
     const property = resolveArrayProperty({
         property: inputProperty,

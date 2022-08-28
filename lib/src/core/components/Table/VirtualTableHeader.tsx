@@ -26,7 +26,7 @@ import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../ErrorBoundary";
 
-type VirtualTableHeaderProps<M extends { [Key: string]: any }> = {
+type VirtualTableHeaderProps<M extends { [Key: string]: CMSType }> = {
     resizeHandleRef: RefObject<HTMLDivElement>;
     columnIndex: number;
     isResizingIndex: number;
@@ -39,7 +39,7 @@ type VirtualTableHeaderProps<M extends { [Key: string]: any }> = {
 };
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
-    function VirtualTableHeader<M extends { [Key: string]: any }>({
+    function VirtualTableHeader<M extends { [Key: string]: CMSType }>({
                                                                       resizeHandleRef,
                                                                       columnIndex,
                                                                       isResizingIndex,

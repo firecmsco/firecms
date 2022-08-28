@@ -36,7 +36,7 @@ import { isReadOnly, resolveCollection } from "../../../../util";
 import { CustomDialogActions } from "../../../CustomDialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 
-interface PopupFormFieldProps<M extends { [Key: string]: any }> {
+interface PopupFormFieldProps<M extends { [Key: string]: CMSType }> {
     entity?: Entity<M>;
     customFieldValidator?: CustomFieldValidator;
     path: string;
@@ -55,7 +55,7 @@ interface PopupFormFieldProps<M extends { [Key: string]: any }> {
     onCellValueChange?: (params: OnCellValueChangeParams<any, M>) => Promise<void>;
 }
 
-export function PopupFormField<M extends { [Key: string]: any }>({
+export function PopupFormField<M extends { [Key: string]: CMSType }>({
                                                                      tableKey,
                                                                      entity,
                                                                      customFieldValidator,

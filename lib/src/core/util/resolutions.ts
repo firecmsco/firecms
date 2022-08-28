@@ -1,5 +1,5 @@
 import {
-    ArrayProperty,
+    ArrayProperty, CMSType,
     EntityCollection,
     EntityValues,
     EnumValueConfig,
@@ -23,7 +23,7 @@ import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
 import { getIn } from "formik";
 
-export const resolveCollection = <M extends { [Key: string]: any } = any, >
+export const resolveCollection = <M extends { [Key: string]: CMSType } = any, >
 ({
      collection,
      path,
@@ -81,7 +81,7 @@ export const resolveCollection = <M extends { [Key: string]: any } = any, >
  * @param propertyValue
  * @param values
  */
-export function resolveProperty<T, M>({
+export function resolveProperty<T extends CMSType, M>({
                                           propertyOrBuilder,
                                           propertyValue,
                                           fromBuilder = false,
@@ -255,7 +255,7 @@ export function resolveArrayProperty<T extends any[], M>({
  * @param properties
  * @param value
  */
-export function resolveProperties<M>({
+export function resolveProperties<M extends { [Key: string]: CMSType }>({
                                          properties,
                                          propertyValue,
                                          ...props
