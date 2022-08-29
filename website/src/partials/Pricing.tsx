@@ -10,7 +10,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 function Pricing() {
 
     const community = <div
-        className="bg-white dark:bg-gray-900 m-4 sm:m-6 lg:m-10 lg:col-span-1 rounded-lg overflow-hidden border border-solid dark:border-gray-800 border-gray-200 ">
+        className="flex flex-col bg-white dark:bg-gray-900 m-4 sm:m-6 lg:m-10 lg:col-span-1 rounded-lg overflow-hidden border border-solid dark:border-gray-800 border-gray-200 ">
         <div
             className="p-4 bg-green-500 text-center ">
             <h3 className="h5 mb-0 text-white ">
@@ -31,13 +31,14 @@ function Pricing() {
                 rel="noopener noreferrer"
                 target="_blank"
                 href={"https://github.com/sponsors/Camberi"}>sponsor</a>
+                ❤️
             </p>
             <p>
-                ❤️
+                Also, you are welcome to join our <a href={"https://discord.gg/V9atqmbG"}>Discord channel</a>
             </p>
         </div>
 
-        <div className="flex flex-col m-8">
+        <div className="flex flex-col m-8 justify-self-end">
             <a
                 className={"btn mx-auto sm:mb-0 font-bold py-4 bg-black text-white font-bold hover:text-white uppercase border border-solid w-full sm:w-auto rounded"}
                 href={useBaseUrl("docs/")}
@@ -49,7 +50,7 @@ function Pricing() {
 
 
     const advanced = <div
-        className="bg-white dark:bg-gray-900 m-4 sm:m-6 lg:m-10 lg:col-span-1 rounded-lg overflow-hidden border border-solid dark:border-gray-800 border-gray-200 ">
+        className="flex flex-col bg-white dark:bg-gray-900 m-4 sm:m-6 lg:m-10 lg:col-span-1 rounded-lg overflow-hidden border border-solid dark:border-gray-800 border-gray-200 ">
         <div
             className="p-4 bg-blue-600 text-center ">
             <h3 className="h5 mb-0 text-white ">
@@ -72,7 +73,7 @@ function Pricing() {
             <p>🙌</p>
         </div>
 
-        <div className="flex flex-col m-8">
+        <div className="flex flex-col m-8 justify-self-end">
             <a
                 className={"btn mx-auto sm:mb-0 font-bold py-4 bg-black text-white font-bold hover:text-white uppercase border border-solid w-full sm:w-auto rounded"}
                 href={"mailto: hello@camberi.com"}

@@ -123,13 +123,13 @@ module.exports = {
                     title: 'Community',
                     items: [
                         {
-                            label: 'Reddit',
-                            href: 'https://www.reddit.com/r/firecms/'
+                            label: "Discord",
+                            href: "https://discord.gg/V9atqmbG"
                         },
                         {
-                            label: 'Github',
-                            href: 'https://github.com/Camberi/firecms'
-                        }
+                            label: "Github",
+                            href: "https://github.com/Camberi/firecms"
+                        },
                         // {
                         //     label: 'Discord',
                         //     href: 'https://discordapp.com/invite/docusaurus',
@@ -138,14 +138,23 @@ module.exports = {
                         //     label: 'Twitter',
                         //     href: 'https://twitter.com/docusaurus',
                         // },
-                        //           {
-                        //               //Renders the html pass-through instead of a simple link
-                        //               html: `
-                        //   <a href="https://www.netlify.com" target="_blank" rel="noreferrer noopener" aria-label="Deploys by Netlify">
-                        //     <img src="https://www.netlify.com/img/global/badges/netlify-color-accent.svg" alt="Deploys by Netlify" />
-                        //   </a>
-                        // `,
-                        //           },
+                    ]
+                },
+                {
+                    // title: "Community",
+                    items: [
+                        {
+                            //Renders the html pass-through instead of a simple link
+                            html: `
+                          <iframe
+                src="https://discordapp.com/widget?id=1013768502458470442&theme=dark"
+                width="300"
+                height="300"
+                allowTransparency="true"
+                frameBorder="0"
+                sandbox="allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts"></iframe>
+                        `,
+                        },
                     ]
                 }
             ],
