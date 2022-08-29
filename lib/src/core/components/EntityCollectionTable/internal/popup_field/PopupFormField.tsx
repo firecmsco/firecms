@@ -13,6 +13,7 @@ import { Portal } from "@mui/base";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import {
+    CMSType,
     Entity,
     EntityCollection,
     EntityValues,

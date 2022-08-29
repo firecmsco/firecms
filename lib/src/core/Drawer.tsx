@@ -10,7 +10,6 @@ import {
     Typography
 } from "@mui/material";
 import { useNavigationContext } from "../hooks";
-import HomeIcon from "@mui/icons-material/Home";
 import { TopNavigationResult } from "../models";
 import { getIconForView } from "./util";
 import { grey } from "@mui/material/colors";
@@ -20,7 +19,6 @@ import { grey } from "@mui/material/colors";
  * @category Core
  */
 export type DrawerProps<T = {}> = T & {
-    logo: string | undefined,
     drawerOpen: boolean,
     closeDrawer: () => any,
 }
@@ -75,12 +73,6 @@ export function Drawer({
             onMouseEnter={setOnHoverTrue}
             onMouseMove={setOnHoverTrue}
             onMouseLeave={setOnHoverFalse}>
-
-            {!drawerOpen && <DrawerNavigationItem Icon={HomeIcon}
-                                                  tooltipsOpen={tooltipsOpen}
-                                                  drawerOpen={drawerOpen}
-                                                  url={navigation.homeUrl}
-                                                  name={"Home"}/>}
 
             {groups.map((group) => (
                 <React.Fragment

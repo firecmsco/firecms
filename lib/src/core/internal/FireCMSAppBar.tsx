@@ -10,10 +10,8 @@ import {
     Link,
     Slide,
     Toolbar,
-    Tooltip,
     Typography
 } from "@mui/material";
-import MenuIcon from "@mui/icons-material/Menu";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
@@ -27,11 +25,9 @@ import {
 } from "../../hooks";
 import { styled } from "@mui/material/styles";
 import { DRAWER_WIDTH } from "../Scaffold";
-import { getAltSymbol } from "../util/os";
 
 interface CMSAppBarProps {
     title: string;
-    handleDrawerOpen: () => void,
     /**
      * A component that gets rendered on the upper side of the main toolbar
      */
@@ -42,7 +38,6 @@ interface CMSAppBarProps {
 
 export const FireCMSAppBar = function FireCMSAppBar({
                                                         title,
-                                                        handleDrawerOpen,
                                                         toolbarExtraWidget,
                                                         drawerOpen
                                                     }: CMSAppBarProps) {
@@ -65,20 +60,6 @@ export const FireCMSAppBar = function FireCMSAppBar({
             <Slide
                 direction="down" in={true} mountOnEnter unmountOnExit>
                 <Toolbar>
-                    <Tooltip title={getAltSymbol()}>
-                        <IconButton
-                            color="inherit"
-                            aria-label="Open drawer"
-                            edge="start"
-                            onClick={handleDrawerOpen}
-                            sx={{
-                                mr: 2,
-                                ...(drawerOpen && { display: "none" })
-                            }}
-                            size="large">
-                            <MenuIcon/>
-                        </IconButton>
-                    </Tooltip>
 
                     <Hidden lgDown>
                         <Box mr={3}>
@@ -180,14 +161,16 @@ interface AppBarProps extends MuiAppBarProps {
 const StyledAppBar = styled(Box, {
     shouldForwardProp: (prop) => prop !== "open"
 })<AppBarProps>(({ theme, open }) => ({
-    width: "100%",
+    // width: "100%",
+    marginLeft: theme.spacing(8),
+    width: `calc(100% - ${theme.spacing(8)})`,
     zIndex: theme.zIndex.drawer + 1,
     transition: theme.transitions.create(["width", "margin"], {
         easing: theme.transitions.easing.sharp,
         duration: theme.transitions.duration.leavingScreen
     }),
     ...(open && {
-        marginLeft: DRAWER_WIDTH,
+        marginLeft: `calc(${DRAWER_WIDTH}px - 8px)`,
         width: `calc(100% - ${DRAWER_WIDTH}px)`,
         transition: theme.transitions.create(["width", "margin"], {
             easing: theme.transitions.easing.sharp,

@@ -1,15 +1,25 @@
 import React, { PropsWithChildren, useCallback, useEffect } from "react";
 
-import { Box, Drawer as MuiDrawer, Link, useTheme } from "@mui/material";
+import {
+    Box,
+    Drawer as MuiDrawer,
+    DrawerProps as MuiDrawerProps,
+    Link,
+    Toolbar,
+    Tooltip,
+    useTheme
+} from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { NavLink, useLocation } from "react-router-dom";
 import { useNavigationContext } from "../hooks";
 import { CircularProgressCenter, FireCMSLogo } from "./components";
 import { CSSObject, styled, Theme } from "@mui/material/styles";
+import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { FireCMSAppBar } from "./internal/FireCMSAppBar";
+import { getAltSymbol } from "./util/os";
 
 export const DRAWER_WIDTH = 280;
 
@@ -99,58 +109,21 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             };
         });
 
-        let logoComponent;
-        if (logo) {
-            logoComponent = <img
-                style={{
-                    maxWidth: "100%",
-                    maxHeight: "100%"
-                }}
-                src={logo}
-                alt={"Logo"}/>;
-        } else {
-            logoComponent = <FireCMSLogo/>;
-        }
-
         return (
             <Box sx={{ display: "flex", height: "100vh" }}>
 
                 <FireCMSAppBar title={name}
                                drawerOpen={drawerOpen}
-                               handleDrawerOpen={handleDrawerOpen}
                                toolbarExtraWidget={toolbarExtraWidget}/>
 
-                <StyledDrawer variant="permanent" open={drawerOpen}>
-
-                    <DrawerHeader>
-                        {drawerOpen && <Link
-                            key={"breadcrumb-home"}
-                            color="inherit"
-                            onClick={handleDrawerClose}
-                            component={NavLink}
-                            to={navigation.homeUrl}>
-
-                            {logoComponent}
-
-                        </Link>}
-                    </DrawerHeader>
-
-                    {drawerOpen && <IconButton onClick={handleDrawerClose}
-                                               sx={{
-                                                   position: "absolute",
-                                                   right: 8,
-                                                   top: 16
-                                               }}>
-                        {theme.direction === "rtl"
-                            ? <ChevronRightIcon/>
-                            : <ChevronLeftIcon/>}
-                    </IconButton>}
-
+                <StyledDrawer variant="permanent"
+                              open={drawerOpen}
+                              logo={logo}
+                              setDrawerOpen={setDrawerOpen}>
                     <nav>
                         {navigation.loading
                             ? <CircularProgressCenter/>
                             : <UsedDrawer
-                                logo={logo}
                                 drawerOpen={drawerOpen}
                                 closeDrawer={handleDrawerClose}/>}
                     </nav>
@@ -231,31 +204,118 @@ function useRestoreScroll() {
 }
 
 const DrawerHeader = styled("div")(({ theme }) => ({
-    // display: "flex",
+    display: "flex",
+    flexDirection: "column",
     // alignItems: "center",
     // justifyContent: "flex-end",
-    padding: theme.spacing(4, 12, 1, 3),
+    // padding: theme.spacing(4, 12, 1, 3),
     // necessary for content to be below app bar
     ...theme.mixins.toolbar
 }));
 
-const StyledDrawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== "open" })(
-    ({ theme, open }) => ({
-        width: DRAWER_WIDTH,
-        flexShrink: 0,
-        whiteSpace: "nowrap",
-        boxSizing: "border-box",
-        border: "none",
-        ...(open && {
-            ...openedMixin(theme),
-            "& .MuiDrawer-paper": openedMixin(theme)
-        }),
-        ...(!open && {
-            ...closedMixin(theme),
-            "& .MuiDrawer-paper": closedMixin(theme)
-        })
-    })
-);
+function StyledDrawer(props: MuiDrawerProps & {
+    logo?: string,
+    setDrawerOpen: (open: boolean) => void,
+}) {
+
+    const navigation = useNavigationContext();
+    const theme = useTheme();
+
+    const open = props.open;
+    const logo = props.logo;
+    const setDrawerOpen = props.setDrawerOpen;
+
+    let logoComponent;
+    if (logo) {
+        logoComponent = <img
+            style={{
+                maxWidth: "100%",
+                maxHeight: "100%"
+            }}
+            src={logo}
+            alt={"Logo"}/>;
+    } else {
+        logoComponent = <FireCMSLogo/>;
+    }
+
+    return <MuiDrawer
+        {...props}
+        sx={{
+            width: DRAWER_WIDTH,
+            flexShrink: 0,
+            whiteSpace: "nowrap",
+            boxSizing: "border-box",
+            border: "none",
+            ...(open && {
+                ...openedMixin(theme),
+                "& .MuiDrawer-paper": openedMixin(theme)
+            }),
+            ...(!open && {
+                ...closedMixin(theme),
+                "& .MuiDrawer-paper": closedMixin(theme)
+            })
+        }
+        }>
+
+        {<Toolbar sx={{
+            position: "absolute",
+            left: open ? "-100%" : 0,
+            transition: theme.transitions.create("left", {
+                easing: theme.transitions.easing.sharp,
+                duration: theme.transitions.duration.enteringScreen
+            })
+        }}>
+            <Tooltip title={getAltSymbol()}
+                     placement={"right"}
+                     open={open ? false : undefined}>
+                <IconButton
+                    color="inherit"
+                    aria-label="Open drawer"
+                    edge="start"
+                    onClick={() => setDrawerOpen(true)}
+                    size="large">
+                    <MenuIcon/>
+                </IconButton>
+            </Tooltip>
+        </Toolbar>}
+
+        <Link
+            key={"breadcrumb-home"}
+            color="inherit"
+            component={NavLink}
+            to={navigation.homeUrl}
+            sx={theme => ({
+                transition: theme.transitions.create("padding", {
+                    easing: theme.transitions.easing.sharp,
+                    duration: theme.transitions.duration.enteringScreen
+                }),
+                p: theme.spacing(
+                    open ? 4 : 9,
+                    open ? 12 : 2,
+                    0,
+                    open ? 3 : 2)
+            })}>
+            <Tooltip title={"Home"} placement={"right"}>
+                {logoComponent}
+            </Tooltip>
+
+        </Link>
+
+        {open && <IconButton onClick={() => setDrawerOpen(false)}
+                             sx={{
+                                 position: "absolute",
+                                 right: 8,
+                                 top: 16
+                             }}>
+            {theme.direction === "rtl"
+                ? <ChevronRightIcon/>
+                : <ChevronLeftIcon/>}
+        </IconButton>}
+
+        {props.children}
+
+    </MuiDrawer>;
+}
 
 const openedMixin = (theme: Theme): CSSObject => ({
     willChange: "width",
@@ -278,8 +338,5 @@ const closedMixin = (theme: Theme): CSSObject => ({
     border: "none",
     overflowX: "hidden",
     backgroundColor: theme.palette.background.default,
-    width: `calc(${theme.spacing(8)})`,
-    [theme.breakpoints.up("sm")]: {
         width: `calc(${theme.spacing(9)})`
-    }
 });
