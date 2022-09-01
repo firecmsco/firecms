@@ -14,7 +14,7 @@ the controllers.
 Use this hook to get a snackbar controller to display snackbars, with a message,
 a type and an optional title.
 
-The props provided by this context are:
+The props provided by this hook are:
 
 * `isOpen` Is there currently an open snackbar
 * `close()` Close the currently open snackbar

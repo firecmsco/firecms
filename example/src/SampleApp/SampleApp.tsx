@@ -51,7 +51,7 @@ function SampleApp() {
         name: "Additional",
         group: "Content",
         description: "This is an example of an additional view that is defined by the user",
-        view: <ExampleCMSView path={"users"} collection={usersCollection}/>
+        view: <ExampleCMSView />
     }];
 
     const onFirebaseInit = (config: Object) => {

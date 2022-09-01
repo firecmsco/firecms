@@ -14,7 +14,7 @@ the controllers.
 ## `useAuthController`
 For state and operations regarding authentication.
 
-The props provided by this context are:
+The props provided by this hook are:
 
 * `user` The Firebase user currently logged in or null
 * `authProviderError` Error dispatched by the auth provider

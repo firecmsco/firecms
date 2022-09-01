@@ -9,13 +9,17 @@ export function serializeRegExp(input: RegExp): string {
     return input.toString();
 }
 
+/**
+ * Get a RegExp out of a serialized string
+ * @param input
+ */
 export function hydrateRegExp(input?: string): RegExp | undefined {
     if (!input) return undefined;
     const fragments = input.match(/\/(.*?)\/([a-z]*)?$/i);
     if (fragments) {
-        return new RegExp(fragments[1], fragments[2] || '');
+        return new RegExp(fragments[1], fragments[2] || "");
     } else {
-        return new RegExp(input, '');
+        return new RegExp(input, "");
     }
 }
 

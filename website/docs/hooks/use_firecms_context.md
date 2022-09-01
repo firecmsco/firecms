@@ -8,7 +8,7 @@ Get the context that includes the internal controllers and contexts used by the 
 Some controllers and context included in this context can be accessed
 directly from their respective hooks.
 
-The props provided by this context are:
+The props provided by this hook are:
 
 * `dateTimeFormat`?: Format of the dates in the CMS.
   Defaults to 'MMMM dd, yyyy, HH:mm:ss'

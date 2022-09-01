@@ -11,10 +11,7 @@ import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { ErrorView, ExpandablePanel, getReferenceFrom } from "../../core";
 
-import { useClearRestoreValue, useNavigationContext } from "../../hooks";
-import {
-    useReferenceDialogController
-} from "../../core/components/ReferenceDialog";
+import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 
@@ -65,7 +62,7 @@ export function ArrayOfReferencesFieldBinding({
         setValue(entities.map(e => getReferenceFrom(e)));
     }, [setValue]);
 
-    const referenceDialogController = useReferenceDialogController({
+    const referenceDialogController = useReferenceDialog({
             multiselect: true,
             path: ofProperty.path,
             collection,

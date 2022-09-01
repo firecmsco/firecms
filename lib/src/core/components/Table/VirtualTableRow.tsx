@@ -42,8 +42,8 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
                 sx={theme => ({
                     display: "flex",
                     minWidth: "100%",
-                    // width: "fit-content",
                     height: getRowHeight(size),
+                    cursor: onRowClick ? "pointer" : undefined,
                     flexDirection: "row",
                     fontSize: "0.875rem",
                     borderBottom: "1px solid rgba(128, 128, 128, 0.1)",

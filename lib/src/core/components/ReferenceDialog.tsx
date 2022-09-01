@@ -21,12 +21,10 @@ import {
 import {
     useAuthController,
     useDataSource,
-    useNavigationContext,
     useSideEntityController
 } from "../../hooks";
 import { ErrorView } from "./ErrorView";
 import { CustomDialogActions } from "./CustomDialogActions";
-import { useSideDialogsController } from "../../hooks/useSideDialogsController";
 import { useSideDialogContext } from "../SideDialogs";
 import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 
@@ -38,12 +36,12 @@ export interface ReferenceDialogProps {
     /**
      * Allow multiple selection of values
      */
-    multiselect: boolean;
+    multiselect?: boolean;
 
     /**
      * Entity collection config
      */
-    collection: EntityCollection;
+    collection?: EntityCollection;
 
     /**
      * Absolute path of the collection.
@@ -59,7 +57,7 @@ export interface ReferenceDialogProps {
     selectedEntityIds?: string[];
 
     /**
-     * If `multiselect` is set to `false`, you will get the select entity
+     * If `multiselect` is set to `false`, you will get the selected entity
      * in this callback.
      * @param entity
      * @callback
@@ -75,7 +73,7 @@ export interface ReferenceDialogProps {
     onMultipleEntitiesSelected?(entities: Entity<any>[]): void;
 
     /**
-     * Is the dialog currently open
+     * If the dialog currently open, close it
      * @callback
         */
     onClose?(): void;
@@ -87,37 +85,10 @@ export interface ReferenceDialogProps {
 
 }
 
-export function useReferenceDialogController(referenceDialogProps: Omit<ReferenceDialogProps, "path"> & {
-    path?: string | false;
-}) {
-
-    const sideDialogsController = useSideDialogsController();
-    const open = useCallback(() => {
-        if (referenceDialogProps.path) {
-            sideDialogsController.open({
-                key: `reference_${referenceDialogProps.path}`,
-                Component:
-                    <ReferenceDialog {...referenceDialogProps as ReferenceDialogProps}/>,
-                width: "90vw"
-            });
-        }
-    }, [referenceDialogProps, sideDialogsController]);
-
-    const close = useCallback(() => {
-        sideDialogsController.close();
-    }, [sideDialogsController]);
-
-    return {
-        open,
-        close
-    }
-
-}
-
 /**
  * This component renders an overlay dialog that allows to select entities
  * in a given collection.
- * You probably want to open this dialog as a side view using {@link useReferenceDialogController}
+ * You probably want to open this dialog as a side view using {@link useReferenceDialog}
  * @category Components
  */
 export function ReferenceDialog(
@@ -132,7 +103,6 @@ export function ReferenceDialog(
         forceFilter
     }: ReferenceDialogProps) {
 
-    const navigationContext = useNavigationContext();
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
 
@@ -291,7 +261,7 @@ export function ReferenceDialog(
 
 }
 
-export function ReferenceDialogActions({
+function ReferenceDialogActions({
                                            collection,
                                            path,
                                            onClear,

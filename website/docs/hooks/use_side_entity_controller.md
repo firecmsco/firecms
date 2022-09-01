@@ -24,7 +24,7 @@ level, you can pass a `SchemaOverrideHandler` to your `FireCMS` instance to set
 an override.
 :::
 
-The props provided by this context are:
+The props provided by this hook are:
 
 * `close()` Close the last panel
 * `sidePanels` List of side entity panels currently open

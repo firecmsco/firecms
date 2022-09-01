@@ -17,3 +17,5 @@ export * from "./useSnackbarController";
 export * from "./useModeController";
 export * from "./useClipboard";
 export * from "./useBreadcrumbsContext";
+
+export * from "./useReferenceDialog";

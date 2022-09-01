@@ -7,7 +7,6 @@ import {
     CMSView,
     CollectionOverrideHandler,
     EntityCollection,
-    LocalEntityCollection,
     NavigationContext,
     TopNavigationEntry,
     TopNavigationResult,
@@ -95,7 +94,7 @@ export function useBuildNavigationContext<UserType extends User>({
 
         const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride) : undefined;
 
-        let result: Partial<EntityCollection> | undefined;
+        let result: Partial<EntityCollection> | undefined = overriddenCollection;
 
         const resolvedProps: Partial<EntityCollection> | undefined = collectionOverrideHandler && collectionOverrideHandler({
             entityId,

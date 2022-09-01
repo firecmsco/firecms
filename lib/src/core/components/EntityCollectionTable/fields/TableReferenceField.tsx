@@ -8,11 +8,10 @@ import {
     EntityReference,
     FilterValues
 } from "../../../../models";
-import { useReferenceDialogController } from "../../ReferenceDialog";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { getReferenceFrom } from "../../../util";
-import { useNavigationContext } from "../../../../hooks";
+import { useNavigationContext, useReferenceDialog } from "../../../../hooks";
 
 export function TableReferenceField(props: {
     name: string;
@@ -66,7 +65,7 @@ export function TableReferenceField(props: {
             : internalValue.id ? [internalValue.id] : [])
         : [];
 
-    const referenceDialogController = useReferenceDialogController({
+    const referenceDialogController = useReferenceDialog({
             multiselect,
             path,
             collection,

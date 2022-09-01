@@ -1,4 +1,5 @@
 import {
+    CMSType,
     DataSource,
     DeleteEntityProps,
     Entity,
@@ -18,25 +19,25 @@ export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps):Data
     });
 
     return {
-        fetchCollection<M>(props: FetchCollectionProps<M>): Promise<Entity<M>[]>{
+        fetchCollection<M extends { [Key: string]: CMSType }>(props: FetchCollectionProps<M>): Promise<Entity<M>[]>{
             if(props.path === "your_path_custom"){
                 // make your custom http call and return your Entities
             }
             return firestoreDataSource.fetchCollection(props);
         },
-        fetchEntity<M>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined>{
+        fetchEntity<M extends { [Key: string]: CMSType }>(props: FetchEntityProps<M>): Promise<Entity<M> | undefined>{
             if(props.path === "your_path_custom"){
                 // make your custom http call and return your Entities
             }
             return firestoreDataSource.fetchEntity(props);
         },
-        saveEntity<M>(props: SaveEntityProps<M>): Promise<Entity<M>>{
+        saveEntity<M extends { [Key: string]: CMSType }>(props: SaveEntityProps<M>): Promise<Entity<M>>{
             if(props.path === "your_path_custom"){
                 // make your custom http call and return your Entities
             }
             return firestoreDataSource.saveEntity(props);
         },
-        deleteEntity<M>(props: DeleteEntityProps<M>): Promise<void>{
+        deleteEntity<M extends { [Key: string]: CMSType }>(props: DeleteEntityProps<M>): Promise<void>{
             return firestoreDataSource.deleteEntity(props);
         },
         checkUniqueField(path: string, name: string, value: any, property: ResolvedProperty, entityId?: string): Promise<boolean>{

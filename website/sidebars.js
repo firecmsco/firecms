@@ -78,6 +78,7 @@ module.exports = {
                 'hooks/use_auth_controller',
                 'hooks/use_side_entity_controller',
                 'hooks/use_snackbar_controller',
+                'hooks/use_reference_dialog',
                 'hooks/use_firecms_context',
                 'hooks/use_data_source',
                 'hooks/use_storage_source',

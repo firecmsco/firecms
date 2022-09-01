@@ -35,12 +35,9 @@ import {
     useClearRestoreValue,
     useEntityFetch,
     useNavigationContext,
-    useSideEntityController
+    useSideEntityController,
+    useReferenceDialog
 } from "../../hooks";
-import {
-    useReferenceDialogController
-} from "../../core/components/ReferenceDialog";
-
 
 
 /**
@@ -107,7 +104,7 @@ export function ReferenceFieldBinding<M extends { [Key: string]: CMSType }>({
         setValue(entity ? getReferenceFrom(entity) : null);
     }, [disabled, setValue]);
 
-    const referenceDialogController = useReferenceDialogController({
+    const referenceDialogController = useReferenceDialog({
             multiselect: false,
             path,
             collection,
