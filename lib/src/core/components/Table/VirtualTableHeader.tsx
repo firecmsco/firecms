@@ -25,6 +25,7 @@ import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../ErrorBoundary";
+import { CMSType } from "../../../models";
 
 type VirtualTableHeaderProps<M extends { [Key: string]: CMSType }> = {
     resizeHandleRef: RefObject<HTMLDivElement>;

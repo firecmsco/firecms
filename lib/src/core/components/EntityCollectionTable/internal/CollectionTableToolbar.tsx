@@ -9,7 +9,7 @@ import {
     useTheme
 } from "@mui/material";
 
-import { CollectionSize } from "../../../../models";
+import { CMSType, CollectionSize } from "../../../../models";
 import { SearchBar } from "./SearchBar";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import {

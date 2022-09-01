@@ -1,6 +1,7 @@
 import { User } from "./user";
 import { AuthController } from "./auth";
 import { EntityCollection } from "./collections";
+import { CMSType } from "./properties";
 
 /**
  * Define the operations that can be performed in a collection.

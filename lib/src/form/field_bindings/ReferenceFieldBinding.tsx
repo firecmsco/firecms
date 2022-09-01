@@ -15,6 +15,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 
 import {
+    CMSType,
     Entity,
     EntityCollection,
     EntityReference,

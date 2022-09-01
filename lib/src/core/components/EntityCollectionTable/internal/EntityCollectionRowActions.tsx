@@ -1,4 +1,4 @@
-import { CollectionSize, Entity } from "../../../../models";
+import { CMSType, CollectionSize, Entity } from "../../../../models";
 
 import React, { MouseEvent, useCallback } from "react";
 import {

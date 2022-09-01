@@ -1,5 +1,6 @@
 import {
     AuthController,
+    CMSType,
     EntityCollection,
     Permissions,
     User

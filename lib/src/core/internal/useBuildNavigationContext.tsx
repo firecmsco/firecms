@@ -3,6 +3,7 @@ import { useLocation } from "react-router-dom";
 
 import {
     AuthController,
+    CMSType,
     CMSView,
     CollectionOverrideHandler,
     EntityCollection,

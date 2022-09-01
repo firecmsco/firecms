@@ -1,4 +1,4 @@
-import { Entity, EntityCallbacks, EntityCollection, } from "../../../../models";
+import { CMSType, Entity, EntityCallbacks, EntityCollection, } from "../../../../models";
 import React, { useCallback, useMemo, useState } from "react";
 import {
     Button,
