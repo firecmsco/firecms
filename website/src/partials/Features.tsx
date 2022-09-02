@@ -241,12 +241,12 @@ function Features() {
     properties: {
         name: {
             dataType: "string",
-            title: "Name",
+            name: "Name",
             defaultValue: "Default name"
         },
         uppercase: {
             dataType: "string",
-            title: "Uppercase Name",
+            name: "Uppercase Name",
             readOnly: true
         }
     }

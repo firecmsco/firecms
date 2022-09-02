@@ -47,7 +47,7 @@ export const blogSchema = buildCollection({
     properties: {
         // ...
         reviewed: {
-            title: "Reviewed",
+            name: "Reviewed",
             dataType: "boolean",
             Preview: CustomBooleanPreview
         },

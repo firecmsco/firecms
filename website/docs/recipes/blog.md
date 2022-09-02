@@ -55,7 +55,7 @@ prop in validation to true:
 
 ```tsx
 buildProperty({
-    title: "Title",
+    name: "Title",
     validation: { required: true },
     dataType: "string"
 })
@@ -65,7 +65,7 @@ An image that will be on the top of the blog post:
 
 ```tsx
 buildProperty({
-    title: "Header image",
+    name: "Header image",
     dataType: "string",
     storage: {
         storagePath: "images",
@@ -82,7 +82,7 @@ is created.
 
 ```tsx
 buildProperty( {
-    title: "Created on",
+    name: "Created on",
     dataType: "date",
     autoValue: "on_create"
 })
@@ -93,7 +93,7 @@ You could also add a date field that gets updated whenever a document is saved,
 with this configuration:
 ```tsx
 buildProperty( {
-    title: "Updated on",
+    name: "Updated on",
     dataType: "date",
     autoValue: "on_update"
 })
@@ -111,7 +111,7 @@ is set:
 
 ```tsx
 buildProperty(({ values }) => ({
-    title: "Status",
+    name: "Status",
     validation: { required: true },
     dataType: "string",
     columnWidth: 140,
@@ -145,7 +145,7 @@ use case. You just need to define
 
 ```tsx
 buildProperty({
-    title: "Content",
+    name: "Content",
     description: "Example of a complex array with multiple properties as children",
     validation: { required: true },
     dataType: "array",
@@ -155,7 +155,7 @@ buildProperty({
         valueField: "value",
         properties: {
             images: buildProperty({
-                title: "Images",
+                name: "Images",
                 dataType: "array",
                 of: buildProperty({
                     dataType: "string",
@@ -171,11 +171,11 @@ buildProperty({
             }),
             text: buildProperty({
                 dataType: "string",
-                title: "Text",
+                name: "Text",
                 markdown: true
             }),
             products: buildProperty({
-                title: "Products",
+                name: "Products",
                 dataType: "array",
                 of: {
                     dataType: "reference",
@@ -261,12 +261,12 @@ export const blogSchema = buildCollection({
     }],
     properties: {
         name: buildProperty({
-            title: "Name",
+            name: "Name",
             validation: { required: true },
             dataType: "string"
         }),
         header_image: buildProperty({
-            title: "Header image",
+            name: "Header image",
             dataType: "string",
             storage: {
                 mediaType: "image",
@@ -278,7 +278,7 @@ export const blogSchema = buildCollection({
             }
         }),
         content: buildProperty({
-            title: "Content",
+            name: "Content",
             description: "Example of a complex array with multiple properties as children",
             validation: { required: true },
             dataType: "array",
@@ -288,7 +288,7 @@ export const blogSchema = buildCollection({
                 valueField: "value",
                 properties: {
                     images: buildProperty({
-                        title: "Images",
+                        name: "Images",
                         dataType: "array",
                         of: buildProperty({
                             dataType: "string",
@@ -305,11 +305,11 @@ export const blogSchema = buildCollection({
                     }),
                     text: buildProperty({
                         dataType: "string",
-                        title: "Text",
+                        name: "Text",
                         markdown: true
                     }),
                     products: buildProperty({
-                        title: "Products",
+                        name: "Products",
                         dataType: "array",
                         of: {
                             dataType: "reference",
@@ -320,7 +320,7 @@ export const blogSchema = buildCollection({
             }
         }),
         status: buildProperty(({ values }) => ({
-            title: "Status",
+            name: "Status",
             validation: { required: true },
             dataType: "string",
             columnWidth: 140,
@@ -334,7 +334,7 @@ export const blogSchema = buildCollection({
             defaultValue: "draft"
         })),
         created_on: buildProperty( {
-            title: "Created on",
+            name: "Created on",
             dataType: "date",
             autoValue: "on_create"
         })

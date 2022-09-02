@@ -131,12 +131,12 @@ const productsCollection = buildCollection<Product>({
   properties: {
     name: buildProperty({
       dataType: "string",
-      title: "Name",
+      name: "Name",
       validation: { required: true }
     }),
     main_image: buildProperty({
       dataType: "string",
-      title: "Image",
+      name: "Image",
       storage: {
         mediaType: "image",
         storagePath: "images",
@@ -152,12 +152,12 @@ const productsCollection = buildCollection<Product>({
     }),
     available: buildProperty({
       dataType: "boolean",
-      title: "Available",
+      name: "Available",
       columnWidth: 100
     }),
     price: buildProperty(({ values }) => ({
       dataType: "number",
-      title: "Price",
+      name: "Price",
       validation: {
         requiredMessage: "You must set a price between 0 and 1000",
         min: 0,
@@ -171,7 +171,7 @@ const productsCollection = buildCollection<Product>({
     })),
     related_products: buildProperty({
       dataType: "array",
-      title: "Related products",
+      name: "Related products",
       description: "Reference to self",
       of: {
         dataType: "reference",
@@ -179,16 +179,16 @@ const productsCollection = buildCollection<Product>({
       }
     }),
     publisher: buildProperty({
-      title: "Publisher",
+      name: "Publisher",
       description: "This is an example of a map property",
       dataType: "map",
       properties: {
         name: {
-          title: "Name",
+          name: "Name",
           dataType: "string"
         },
         external_id: {
-          title: "External id",
+          name: "External id",
           dataType: "string"
         }
       }
@@ -235,7 +235,7 @@ type User = { name:string}
 
 export const fullNameAdditionalColumn: AdditionalColumnDelegate<User> = {
         id: "full_name",
-        title: "Full Name",
+        name: "Full Name",
         builder: ({ entity }) => {
             let values = entity.values;
             return typeof values.name === "string" ? values.name.toUpperCase() : "No name provided";
@@ -247,7 +247,7 @@ const usersCollection = buildCollection<User>({
     path: "users",
     name: "User",
     properties: {
-      name: { dataType: "string", title: "Name" }
+      name: { dataType: "string", name: "Name" }
     },
     additionalColumns: [
         fullNameAdditionalColumn

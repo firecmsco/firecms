@@ -41,11 +41,11 @@ export const productCollection: EntityCollection = buildCollection<Partial<Produ
     properties: {
         available: {
             dataType: "boolean",
-            title: "Available"
+            name: "Available"
         },
         price: ({ values }) => ({
             dataType: "number",
-            title: "Price",
+            name: "Price",
             validation: {
                 requiredMessage: "You must set a price between 0 and 1000",
                 min: 0,
@@ -112,7 +112,7 @@ export const userSchema: EntityCollection = buildCollection<User>({
 
             return ({
                 dataType: "map",
-                title: "Source",
+                name: "Source",
                 properties: properties
             });
         }

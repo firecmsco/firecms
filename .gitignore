@@ -31,3 +31,11 @@ firebase-debug.log*
 report.**.json
 
 ./sass
+
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions

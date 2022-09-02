@@ -33,12 +33,12 @@ const blogSchema = buildCollection({
     ],
     properties: {
         name: {
-            title: "Name",
+            name: "Name",
             validation: { required: true },
             dataType: "string"
         },
         header_image: {
-            title: "Header image",
+            name: "Header image",
             dataType: "string",
             storage: {
                 mediaType: "image",
@@ -50,7 +50,7 @@ const blogSchema = buildCollection({
             }
         },
         content: {
-            title: "Content",
+            name: "Content",
             description: "Example of a complex array with multiple properties as children",
             validation: { required: true },
             dataType: "array",
@@ -58,7 +58,7 @@ const blogSchema = buildCollection({
             oneOf: {
                 properties: {
                     images: {
-                        title: "Images",
+                        name: "Images",
                         dataType: "array",
                         of: {
                             dataType: "string",
@@ -71,11 +71,11 @@ const blogSchema = buildCollection({
                     },
                     text: {
                         dataType: "string",
-                        title: "Text",
+                        name: "Text",
                         markdown: true
                     },
                     products: {
-                        title: "Products",
+                        name: "Products",
                         dataType: "array",
                         of: {
                             dataType: "reference",
