@@ -17,5 +17,6 @@
         "preview": "cd example && yarn preview",
         "deploy": "cd example && yarn deploy",
         "build": "cd lib && yarn build"
-    }
+    },
+    "packageManager": "yarn@3.2.3"
 }

@@ -7,8 +7,7 @@ import React, {
 } from "react";
 import equal from "react-fast-compare"
 
-import { Box, Button, IconButton, Typography } from "@mui/material";
-import { Portal } from "@mui/base";
+import { Box, Button, IconButton, Typography, Portal } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 

@@ -3,6 +3,8 @@ import { useCallback, useEffect, useState } from "react";
 import {
     ApplicationVerifier,
     Auth,
+    ConfirmationResult,
+    createUserWithEmailAndPassword,
     FacebookAuthProvider,
     fetchSignInMethodsForEmail,
     getAuth,
@@ -10,6 +12,7 @@ import {
     GoogleAuthProvider,
     OAuthProvider,
     onAuthStateChanged,
+    signInAnonymously,
     signInWithEmailAndPassword,
     signInWithPhoneNumber,
     signInWithPopup,
@@ -24,11 +27,6 @@ import {
     FirebaseSignInOption,
     FirebaseSignInProvider
 } from "../models/auth";
-import {
-    ConfirmationResult,
-    createUserWithEmailAndPassword,
-    signInAnonymously
-} from "@firebase/auth";
 
 interface FirebaseAuthHandlerProps {
     firebaseApp?: FirebaseApp;
