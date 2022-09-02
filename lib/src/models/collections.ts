@@ -195,6 +195,14 @@ export interface EntityCollection<M extends { [Key: string]: CMSType } = any,
      */
     filterCombinations?: FilterCombination<Extract<keyof M, string>>[];
 
+    /**
+     * Should this collection be hidden from the main navigation panel, if
+     * it is at the root level, or in the entity side panel if it's a
+     * subcollection.
+     * It will still be accessible if you reach the specified path.
+     * You can also use this collection as a reference target.
+     */
+    hideFromNavigation?: boolean;
 }
 
 /**

@@ -101,7 +101,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const [modifiedValues, setModifiedValues] = useState<EntityValues<M> | undefined>();
 
-        const subcollections = collection.subcollections;
+        const subcollections = (collection.subcollections ?? []).filter(c => !c.hideFromNavigation);
         const subcollectionsCount = subcollections?.length ?? 0;
         const customViews = collection.views;
         const customViewsCount = customViews?.length ?? 0;
@@ -141,7 +141,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             if (!selectedSubPath)
                 setTabsPosition(-1);
 
-            // if (largeLayout) {
                 if (customViews) {
                     const index = customViews
                         .map((c) => c.path)
@@ -149,14 +148,13 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     setTabsPosition(index);
                 }
 
-                if (collection.subcollections && selectedSubPath) {
-                    const index = collection.subcollections
+                if (subcollections && selectedSubPath) {
+                    const index = subcollections
                         .map((c) => c.path)
                         .findIndex((p) => p === selectedSubPath);
                     setTabsPosition(index + customViewsCount);
                 }
-            // }
-        }, [selectedSubPath, customViewsCount]);
+        }, [selectedSubPath, customViewsCount, customViews, subcollections]);
 
         useEffect(() => {
             if (largeLayoutTabSelected.current === largeLayout)

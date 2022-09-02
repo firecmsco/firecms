@@ -93,6 +93,12 @@ in [Entity collections](../api/interfaces/entitycollection)
   configuration object to customize the export and add additional values.
   Defaults to `true`
 
+* `hideFromNavigation` Should this collection be hidden from the main navigation panel, if
+  it is at the root level, or in the entity side panel if it's a
+  subcollection.
+  It will still be accessible if you reach the specified path.
+  You can also use this collection as a reference target.
+
 
 ### Sample collection
 :::tip
@@ -126,7 +132,6 @@ const productsCollection = buildCollection<Product>({
     name: buildProperty({
       dataType: "string",
       title: "Name",
-      multiline: true
       validation: { required: true }
     }),
     main_image: buildProperty({

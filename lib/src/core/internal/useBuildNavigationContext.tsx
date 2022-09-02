@@ -17,7 +17,7 @@ import {
     getCollectionByPathOrAlias,
     mergeDeep,
     removeInitialAndTrailingSlashes,
-    resolveCollectionPathAliases,
+    resolveCollectionPathAliases
 } from "../util";
 import { CMSViewsBuilder, EntityCollectionsBuilder } from "../../firebase_app";
 
@@ -116,7 +116,7 @@ export function useBuildNavigationContext<UserType extends User>({
             };
         }
 
-        if(!result) return undefined;
+        if (!result) return undefined;
 
         return { ...overriddenCollection, ...result } as EntityCollection<M>;
 
@@ -159,15 +159,18 @@ export function useBuildNavigationContext<UserType extends User>({
     const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {
         // return (collection.editable && resolvePermissions(collection, authController, paths).editCollection) ?? DEFAULT_PERMISSIONS.editCollection;
         const navigationEntries: TopNavigationEntry[] = [
-            ...(collections ?? []).map(collection => ({
-                url: buildUrlCollectionPath(collection.alias ?? collection.path),
-                type: "collection",
-                name: collection.name.trim(),
-                path: collection.alias ?? collection.path,
-                collection,
-                description: collection.description?.trim(),
-                group: collection.group?.trim()
-            } as TopNavigationEntry)),
+            ...(collections ?? []).map(collection => (!collection.hideFromNavigation
+                ? {
+                    url: buildUrlCollectionPath(collection.alias ?? collection.path),
+                    type: "collection",
+                    name: collection.name.trim(),
+                    path: collection.alias ?? collection.path,
+                    collection,
+                    description: collection.description?.trim(),
+                    group: collection.group?.trim()
+                }
+                : undefined))
+                .filter(Boolean) as TopNavigationEntry[],
             ...(views ?? []).map(view =>
                 !view.hideFromNavigation
                     ? ({
@@ -179,7 +182,7 @@ export function useBuildNavigationContext<UserType extends User>({
                         group: view.group?.trim()
                     })
                     : undefined)
-                .filter((view) => !!view) as TopNavigationEntry[]
+                .filter(Boolean) as TopNavigationEntry[]
         ];
 
         const groups: string[] = Object.values(navigationEntries)
