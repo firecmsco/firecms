@@ -7,8 +7,7 @@
     "workspaces": [
         "lib",
         "example",
-        "saas",
-        "schema-inference"
+        "saas"
     ],
     "scripts": {
         "dev": "cd example && yarn dev",
