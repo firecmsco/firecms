@@ -26,7 +26,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { DRAWER_WIDTH } from "../Scaffold";
 
-interface CMSAppBarProps {
+interface FireCMSAppBarProps {
     title: string;
     /**
      * A component that gets rendered on the upper side of the main toolbar
@@ -40,7 +40,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                                         title,
                                                         toolbarExtraWidget,
                                                         drawerOpen
-                                                    }: CMSAppBarProps) {
+                                                    }: FireCMSAppBarProps) {
 
     const breadcrumbsContext = useBreadcrumbsContext();
     const { breadcrumbs } = breadcrumbsContext;
