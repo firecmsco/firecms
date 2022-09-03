@@ -30,7 +30,7 @@ export const sampleAdditionalExportColumn: ExportMappingFunction = {
 
 const blogCollection = buildCollection({
     path: "blog",
-    collection: blogSchema,
+    collection: blogCollection,
     name: "Blog",
     exportable: {
         additionalColumns: [sampleAdditionalExportColumn]

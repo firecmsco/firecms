@@ -26,7 +26,7 @@ const sampleView: EntityCustomView = {
     )
 };
 
-const blogSchema = buildCollection({
+const blogCollection = buildCollection({
     name: "Blog entry",
     views: [
         sampleView

@@ -4,12 +4,28 @@ title: Custom CMSApp
 sidebar_label: Custom CMSApp
 ---
 
+:::important
+You only need to build a custom FireCMS app if you need a high degree of
+customization, like custom layouts, data source or storage source adaptations
+or special navigation or routing.
+Most use-cases are covered by the basic set-up. If you are getting
+started with FireCMS, it is recommended to follow the
+[quickstart](quickstart.mdx)
+:::
+
 FireCMS was originally developed to create Firebase/Firestore-based CMS apps
 with very little effort. We offer sensible defaults and multiple customization
 options and callbacks.
 
+The simpler way to use FireCMS is using the component `FirebaseCMSApp`, which
+is in charge of navigation, initialising Firebase auth, storage and a
+Firestore datasource.
+
 But there are a few situations where you may want to have more control and build
 your app using the same components that we use internally.
+
+In that case you will want to use `FireCMS` as your main component, and inject
+all your dependencies.
 
 In the process of having a cleaner code, all the code related to Firebase has
 been isolated into 3 components, one for authentication (auth delegate), one
@@ -34,8 +50,6 @@ by `FirebaseCMSApp`):
 You will also be responsible for initialising your MUI5 theme and your react-router
 `Router`
 
-You can see an example
-[here](https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx)
 
 
 ### Example custom app

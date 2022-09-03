@@ -91,6 +91,7 @@ module.exports = {
             items: [
                 // 'recipes/recipes_index',
                 'recipes/building_a_blog',
+                'recipes/copy_entity',
             ]
         },
         'custom_cms_app',

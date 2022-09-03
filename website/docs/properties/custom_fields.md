@@ -74,7 +74,7 @@ export default function CustomColorTextField({
 
 ...and how it is used:
 ```tsx
-export const blogSchema = buildCollection({
+export const blogCollection = buildCollection({
     name: "Blog entry",
     properties: {
         // ...

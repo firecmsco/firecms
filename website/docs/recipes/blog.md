@@ -252,7 +252,7 @@ we get the following code for the blog collection:
 ```tsx
 import { buildCollection, buildProperty } from "@camberi/firecms";
 
-export const blogSchema = buildCollection({
+export const blogCollection = buildCollection({
     name: "Blog entry",
     views: [{
         path: "preview",

@@ -1,0 +1,69 @@
+---
+id: copy_entity
+title: Copying an entity from one collection to another
+sidebar_label: Copying an entity
+---
+
+![Product selection](/img/product_selection.png)
+
+:::note
+In this tutorial we assume you have set up a Firebase project and a FireCMS
+instance. If you don't, check the [Quickstart](firebase_setup.md) and
+[Firebase setup section](firebase_setup.md) sections.
+:::
+
+In this tutorial we will show how you can add a button to your collection,
+that will allow you to **copy entities from another collection**.
+
+It is very common in NoSQL databases, such as Firestore, to keep denormalized
+data in different collections. That is, keeping the same information in multiple
+locations, instead of normalized databases where information should be ideally
+stored only once.
+
+### Declare your collections
+
+For illustrative purposes, let's create two simple `products` collection,
+that we will be copying from and to:
+
+import CodeBlock from "@theme/CodeBlock";
+import MyComponentSource from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/simple_product_collection";
+
+<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+
+### Add a custom action to your collection
+
+For the next step we will add a custom button to our target collection.
+This button will open a reference dialog and allow users to select an entity in
+the source.
+
+This example is using some hooks provided by FireCMS for developing
+custom component.
+
+import CopyButton from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/copy_button";
+
+<CodeBlock language="tsx">{CopyButton}</CodeBlock>
+
+### Add the custom copy action
+
+After your component is ready, you can plug it into your collections `extraActions`:
+```tsx
+// Target collection
+export const productsCollectionCopy = buildCollection<Product>({
+    name: "Products copy target",
+    path: "products_copied",
+    properties: properties,
+    extraActions: ({ path, collection }: ExtraActionsParams) =>
+        <CopyEntityButton
+            pathFrom={"products"}
+            collectionFrom={productsCollection}
+            pathTo={path}
+            collectionTo={collection}
+        />,
+});
+```
+
+## Full code
+
+import FullCode from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/full";
+
+<CodeBlock language="tsx">{FullCode}</CodeBlock>

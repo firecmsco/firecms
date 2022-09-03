@@ -374,9 +374,10 @@ export function useFirestoreDataSource({
             const properties: ResolvedProperties<M> = resolvedCollection.properties;
             const collectionReference: CollectionReference = collectionClause(firestore, path);
 
+            const firestoreValues = cmsToFirestoreModel(values, firestore);
             const updatedFirestoreValues: EntityValues<M> = updateDateAutoValues(
                 {
-                    inputValues: cmsToFirestoreModel(values, firestore),
+                    inputValues: firestoreValues,
                     properties,
                     status,
                     timestampNowValue: serverTimestamp()
