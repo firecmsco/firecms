@@ -1,23 +1,8 @@
 import React, { useEffect, useRef } from "react";
 import Layout from "@theme/Layout";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
-
-
-import HeroHome from "../partials/HeroHome";
-import FeaturesHome from "../partials/Features";
-import FeaturesBlocks from "../partials/FeaturesBlocks";
-import Testimonials from "../partials/Testimonials";
-
-import Separator from "../partials/Separator";
-import FirebaseIntro from "../partials/FirebaseIntro";
-
-import AOS from "aos";
 import "aos/dist/aos.css";
 import "../css/tailwind.css";
-import Pricing from "../partials/Pricing";
 import Head from "@docusaurus/Head";
-import { Newsletter } from "../partials/Newsletter";
 
 function PrivacyPolicy() {
     const divRef = useRef<HTMLSpanElement>(null);

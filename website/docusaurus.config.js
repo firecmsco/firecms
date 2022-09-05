@@ -23,11 +23,11 @@ module.exports = {
         ]
     ],
     themeConfig: {
-        image: 'img/firecms_logo.svg',
+        image: 'img/logo_small.png',
         announcementBar: {
-            id: 'new_version_rc.5',
+            id: 'new_version_2',
             content:
-                'Version 1.0.0 is out! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/quickstart">quickstart</a> to get started!',
+                'Version 2.0.0 is now in alpha! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/quickstart">quickstart</a> to get started!',
             backgroundColor: '#FF5B79',
             textColor: 'black',
             isCloseable: true,

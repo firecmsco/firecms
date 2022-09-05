@@ -18,7 +18,7 @@ function HeroButtons() {
     return <>
 
         <a
-            className={"btn shadow-none mb-4 sm:mb-0 font-bold py-4 text-white font-bold hover:bg-gray-900  uppercase border border-solid w-full sm:w-auto rounded"}
+            className={"btn shadow-none mb-4 sm:mb-0 font-bold py-4 text-white font-bold dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full sm:w-auto rounded"}
             href={"https://discord.gg/V9atqmbG"}
         >
             {discordIcon}
