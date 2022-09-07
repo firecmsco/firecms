@@ -1,9 +1,20 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import equal from "react-fast-compare";
+
 import { User as FirebaseUser } from "firebase/auth";
 
 import { DataSource, StorageSource } from "../../models";
 import { Authenticator, FirebaseAuthController } from "../models/auth";
 
+/**
+ * This hook is used internally for validating an authenticator.
+ * You may want to use it if you are not using {@link FirebaseCMSApp}, but
+ * building your own custom {@link FireCMS} instance.
+ * @param authController
+ * @param authentication
+ * @param storageSource
+ * @param dataSource
+ */
 export function useValidateAuthenticator({
                                              authController,
                                              authentication,
@@ -37,10 +48,19 @@ export function useValidateAuthenticator({
             setAuthVerified(true);
     }, [authController.loginSkipped]);
 
+    /**
+     * We use this ref to check the authentication only if the user has
+     * changed
+     */
+    const checkedUserRef = useRef<FirebaseUser | undefined>();
+
     const checkAuthentication = useCallback(async () => {
-        if (authController.initialLoading || !authController.user) return;
+        if (authController.initialLoading || !authController.user) {
+            checkedUserRef.current = undefined;
+            return;
+        }
         const delegateUser = authController.user;
-        if (authentication instanceof Function && delegateUser) {
+        if (authentication instanceof Function && delegateUser && !equal(checkedUserRef.current, delegateUser)) {
             setAuthLoading(true);
             try {
                 const allowed = await authentication({
@@ -59,12 +79,13 @@ export function useValidateAuthenticator({
             }
             setAuthLoading(false);
             setAuthVerified(true);
+            checkedUserRef.current = delegateUser;
         }
 
         if (!authController.initialLoading && !delegateUser)
             setAuthVerified(true);
 
-    }, [authController.user, authController.signOut, authentication]);
+    }, [authController, authentication, dataSource, storageSource]);
 
     useEffect(() => {
         checkAuthentication();

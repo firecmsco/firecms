@@ -4,9 +4,9 @@ import {
     ApplicationVerifier,
     Auth,
     ConfirmationResult,
-    createUserWithEmailAndPassword,
+    createUserWithEmailAndPassword as createUserWithEmailAndPasswordFirebase,
     FacebookAuthProvider,
-    fetchSignInMethodsForEmail,
+    fetchSignInMethodsForEmail as fetchSignInMethodsForEmailFirebase,
     getAuth,
     GithubAuthProvider,
     GoogleAuthProvider,
@@ -190,18 +190,18 @@ export const useFirebaseAuthController = (
             .then(() => setAuthLoading(false));
     }, []);
 
-    const registerWithPasswordEmail = useCallback((email: string, password: string) => {
+    const createUserWithEmailAndPassword = useCallback((email: string, password: string) => {
         const auth = getAuth();
         setAuthLoading(true);
-        createUserWithEmailAndPassword(auth, email, password)
+        createUserWithEmailAndPasswordFirebase(auth, email, password)
             .catch(setAuthProviderError)
             .then(() => setAuthLoading(false));
     }, []);
 
-    const getSignInMethodsForEmail = useCallback((email: string): Promise<string[]> => {
+    const fetchSignInMethodsForEmail = useCallback((email: string): Promise<string[]> => {
         const auth = getAuth();
         setAuthLoading(true);
-        return fetchSignInMethodsForEmail(auth, email)
+        return fetchSignInMethodsForEmailFirebase(auth, email)
             .then((res) => {
                 setAuthLoading(false);
                 return res;
@@ -226,8 +226,8 @@ export const useFirebaseAuthController = (
         twitterLogin,
         emailPasswordLogin,
         phoneLogin,
-        fetchSignInMethodsForEmail: getSignInMethodsForEmail,
-        createUserWithEmailAndPassword: registerWithPasswordEmail,
+        fetchSignInMethodsForEmail,
+        createUserWithEmailAndPassword,
         extra,
         setExtra
     };
