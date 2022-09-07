@@ -23,24 +23,30 @@ module.exports = {
         ]
     ],
     themeConfig: {
-        image: 'img/logo_small.png',
+        image: "img/logo_small.png",
         announcementBar: {
-            id: 'new_version_2',
+            id: "new_version_2",
             content:
-                'Version 2.0.0 is now in alpha! 🎉 Check the <a target="_blank" rel="noopener noreferrer" href="/docs/quickstart">quickstart</a> to get started!',
-            backgroundColor: '#FF5B79',
-            textColor: 'black',
+                "Version 2.0.0 is now in alpha! 🎉 Check the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/docs/quickstart\">quickstart</a> to get started!",
+            backgroundColor: "#FF5B79",
+            textColor: "black",
             isCloseable: true,
         },
-        colorMode:{
-            defaultMode: 'dark',
+        metadata: [
+            {
+                name: "twitter:card",
+                content: "summary"
+            }
+        ],
+        colorMode: {
+            defaultMode: "dark",
             respectPrefersColorScheme: false,
         },
         navbar: {
-            title: 'FireCMS',
+            title: "FireCMS",
             logo: {
-                alt: 'FireCMS Logo',
-                src: 'img/firecms_logo.svg'
+                alt: "FireCMS Logo",
+                src: "img/firecms_logo.svg"
             },
             items: [
                 {
