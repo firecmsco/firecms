@@ -1,4 +1,6 @@
 import React from "react";
+import { User as FirebaseUser } from "firebase/auth";
+
 import {
     AuthController,
     CMSView,
@@ -7,9 +9,13 @@ import {
     Locale
 } from "../models";
 import { FirestoreTextSearchController } from "./models/text_search";
-import { User as FirebaseUser } from "firebase/auth";
-import { Authenticator, FirebaseSignInOption, FirebaseSignInProvider } from "./models/auth";
+import {
+    Authenticator,
+    FirebaseSignInOption,
+    FirebaseSignInProvider
+} from "./models/auth";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
+import { useNavigationContext } from "../hooks";
 
 export type EntityCollectionsBuilder = (params: { authController: AuthController }) => EntityCollection[] | Promise<EntityCollection[]>;
 
@@ -27,9 +33,15 @@ export interface FirebaseCMSAppProps {
     name: string;
 
     /**
-     * Logo to be displayed in the drawer of the CMS
+     * Logo to be displayed in the drawer of the CMS.
+     * If not specified, the FireCMS logo will be used
      */
     logo?: string;
+
+    /**
+     * Logo used in dark mode. If not specified, `logo` will always be used.
+     */
+    logoDark?: string;
 
     /**
      * List of the mapped collections in the CMS.
@@ -144,7 +156,7 @@ export interface FirebaseCMSAppProps {
 
     /**
      * In case you need to override the home page.
-     * You may want to use {@link useNavigation} in order to get the resolved
+     * You may want to use {@link useNavigationContext} in order to get the resolved
      * navigation.
      */
     HomePage?: React.ComponentType;
