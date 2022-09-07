@@ -179,27 +179,27 @@ export function FirebaseCMSApp({
                     } else {
                         const usedLogo = modeController.mode === "dark" ? logoDark : logo ?? logo;
                         if (!canAccessMainView) {
-                                                const LoginViewUsed = LoginView ?? FirebaseLoginView;
-                                                component = (
-                                                    <LoginViewUsed
-                                                        logo={usedLogo}
-                                                        allowSkipLogin={allowSkipLogin}
-                                                        signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
-                                                        firebaseApp={firebaseApp}
-                                                        authController={authController}
-                                                        notAllowedError={notAllowedError}/>
-                                                );
-                                            } else {
-                                                component = (
-                                                    <Scaffold
-                                                        name={name}
-                                                        logo={usedLogo}
-                                                        toolbarExtraWidget={toolbarExtraWidget}>
-                                                        <NavigationRoutes HomePage={HomePage}/>
-                                                        <SideDialogs/>
-                                                    </Scaffold>
-                                                );
-                                            }
+                            const LoginViewUsed = LoginView ?? FirebaseLoginView;
+                            component = (
+                                <LoginViewUsed
+                                    logo={usedLogo}
+                                    allowSkipLogin={allowSkipLogin}
+                                    signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
+                                    firebaseApp={firebaseApp}
+                                    authController={authController}
+                                    notAllowedError={notAllowedError}/>
+                            );
+                        } else {
+                            component = (
+                                <Scaffold
+                                    name={name}
+                                    logo={usedLogo}
+                                    toolbarExtraWidget={toolbarExtraWidget}>
+                                    <NavigationRoutes HomePage={HomePage}/>
+                                    <SideDialogs/>
+                                </Scaffold>
+                            );
+                        }
                     }
 
                     return (
