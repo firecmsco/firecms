@@ -74,7 +74,7 @@ function SampleApp() {
 
         authController.setExtra({
             roles: {
-                admin: !!idTokenResult?.claims?.admin
+                admin: true
             },
         });
 
