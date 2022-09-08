@@ -239,7 +239,7 @@ use in any SSR framework using React, such as `next.js`
 You could also have more complex setup that sends your data to your SSR app
 through an API and render the result.
 
-You can find the code for `BlogEntryPreview` in https://github.com/Camberi/firecms/blob/master/example/src/SampleApp/custom_schema_view/BlogEntryPreview.tsx
+You can find the code for `BlogEntryPreview` in https://github.com/Camberi/firecms/blob/v1/example/src/SampleApp/custom_schema_view/BlogEntryPreview.tsx
 
 
 ## Complete code:
@@ -249,9 +249,9 @@ we get the following code for the blog collection:
 
 
 ```tsx
-import { buildCollection, buildProperty } from "@camberi/firecms";
+import { buildSchema, buildProperty } from "@camberi/firecms";
 
-export const blogSchema = buildCollection({
+export const blogSchema = buildSchema({
     name: "Blog entry",
     views: [{
         path: "preview",
