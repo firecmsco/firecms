@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
 
-interface FieldDescriptionPopoverProps<T extends CMSType> {
+interface FieldDescriptionPopoverProps<T extends any> {
     property: ResolvedProperty<T>,
 }
 
@@ -18,7 +18,7 @@ interface FieldDescriptionPopoverProps<T extends CMSType> {
  * Render the field description for a property
  * @category Form custom fields
  */
-export function FieldDescription<T extends CMSType>({ property }: FieldDescriptionPopoverProps<T>) {
+export function FieldDescription<T extends any>({ property }: FieldDescriptionPopoverProps<T>) {
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     return (
 

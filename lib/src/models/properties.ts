@@ -18,7 +18,7 @@ export type CMSType =
     | Date
     | GeoPoint
     | EntityReference
-    | { [Key: string]: CMSType }
+    | object
     | CMSType[];
 
 /**
@@ -37,7 +37,7 @@ export type AnyProperty =
 /**
  * @category Entity properties
  */
-export type Property<T extends CMSType = CMSType> =
+export type Property<T extends any = CMSType> =
     T extends string ? StringProperty :
         T extends number ? NumberProperty :
             T extends boolean ? BooleanProperty :
@@ -64,7 +64,7 @@ export type DataType =
  * Interface including all common properties of a CMS property
  * @category Entity properties
  */
-export interface BaseProperty<T extends CMSType, CustomProps = any> {
+export interface BaseProperty<T extends any, CustomProps = any> {
 
     /**
      * Datatype of the property
@@ -225,14 +225,14 @@ export interface EnumValueConfig {
  * Record of properties of an entity or a map property
  * @category Entity properties
  */
-export type Properties<M extends { [Key: string]: CMSType } = any> = {
+export type Properties<M extends object = any> = {
     [k in keyof M]: Property<M[keyof M]>;
 };
 
 /**
  * @category Entity properties
  */
-export type PropertyBuilderProps<M extends { [Key: string]: CMSType }> =
+export type PropertyBuilderProps<M extends object> =
     {
         /**
          * Current values of the entity
@@ -263,7 +263,7 @@ export type PropertyBuilderProps<M extends { [Key: string]: CMSType }> =
 /**
  * @category Entity properties
  */
-export type PropertyBuilder<T extends CMSType = CMSType, M extends { [Key: string]: CMSType } = any> = ({
+export type PropertyBuilder<T extends any = CMSType, M extends object = any> = ({
                                                                          values,
                                                                          previousValues,
                                                                          propertyValue,
@@ -274,14 +274,14 @@ export type PropertyBuilder<T extends CMSType = CMSType, M extends { [Key: strin
 /**
  * @category Entity properties
  */
-export type PropertyOrBuilder<T extends CMSType = CMSType, M extends { [Key: string]: CMSType } = any> =
+export type PropertyOrBuilder<T extends any = CMSType, M extends object = any> =
     Property<T>
     | PropertyBuilder<T, M>;
 
 /**
  * @category Entity properties
  */
-export type PropertiesOrBuilders<M extends { [Key: string]: CMSType } = any> =
+export type PropertiesOrBuilders<M extends object = any> =
     {
         [k in keyof M]: PropertyOrBuilder<M[k], M>;
     };
@@ -385,7 +385,7 @@ export interface StringProperty extends BaseProperty<string> {
 /**
  * @category Entity properties
  */
-export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> extends BaseProperty<T> {
+export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends any = any> extends BaseProperty<T> {
 
     dataType: "array";
 
@@ -395,7 +395,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      * You can leave this field empty only if you are providing a custom field,
      * otherwise an error will be thrown.
      */
-    of?: PropertyOrBuilder<ArrayT> | Property[];
+    of?: PropertyOrBuilder<ArrayT> | Property<any>[];
 
     /**
      * Use this field if you would like to have an array of properties.
@@ -454,7 +454,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
 /**
  * @category Entity properties
  */
-export interface MapProperty<T extends { [Key: string]: CMSType } = any> extends BaseProperty<T> {
+export interface MapProperty<T extends object = any> extends BaseProperty<T> {
 
     dataType: "map";
 

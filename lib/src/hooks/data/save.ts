@@ -14,7 +14,7 @@ import { resolveCollection } from "../../core";
 /**
  * @category Hooks and utilities
  */
-export type SaveEntityWithCallbacksProps<M extends { [Key: string]: CMSType }> =
+export type SaveEntityWithCallbacksProps<M extends object> =
     SaveEntityProps<M> &
     {
         callbacks?: EntityCallbacks<M>;
@@ -50,7 +50,7 @@ export type SaveEntityWithCallbacksProps<M extends { [Key: string]: CMSType }> =
  * @see useDataSource
  * @category Hooks and utilities
  */
-export async function saveEntityWithCallbacks<M extends { [Key: string]: CMSType }, UserType extends User>({
+export async function saveEntityWithCallbacks<M extends object, UserType extends User>({
                                                                collection,
                                                                path,
                                                                entityId,

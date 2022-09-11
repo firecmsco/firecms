@@ -13,14 +13,6 @@ import { SampleProductsView } from "../custom_entity_view/SampleProductsView";
 import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";
 
-const sampleView: EntityCustomView = {
-    path: "sample_custom_view",
-    name: "Custom view",
-    builder: ({ collection, entity, modifiedValues }) =>
-        <SampleProductsView entity={entity}
-                            modifiedValues={modifiedValues}/>
-};
-
 export const productExtraActionBuilder = ({
                                               selectionController
                                           }: ExtraActionsParams) => {
@@ -132,7 +124,13 @@ export const productsCollection = buildCollection<Product>({
     // extraActions: productExtraActionBuilder,
     subcollections: [localeCollection],
     views: [
-        sampleView
+        {
+            path: "sample_custom_view",
+            name: "Custom view",
+            builder: ({ collection, entity, modifiedValues }) =>
+                <SampleProductsView entity={entity}
+                                    modifiedValues={modifiedValues}/>
+        }
     ],
     additionalColumns: [productAdditionalColumn],
     filterCombinations: [{ category: "desc", available: "desc" }, { category: "asc", available: "desc" } , { category: "desc", available: "asc" } , { category: "asc", available: "asc" }],

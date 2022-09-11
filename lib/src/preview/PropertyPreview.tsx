@@ -34,7 +34,7 @@ import { PropertyPreviewProps } from "./PropertyPreviewProps";
 /**
  * @category Preview components
  */
-export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
+export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
     let content: JSX.Element | any;
     const {
         property: inputProperty, propertyKey, value, size, height, width, entity

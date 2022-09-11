@@ -1,4 +1,4 @@
-import { CMSType, Entity, Property, ResolvedProperty } from "../models";
+import { Entity, Property, ResolvedProperty } from "../models";
 
 /**
  * @category Preview components
@@ -8,7 +8,7 @@ export type PreviewSize = "regular" | "small" | "tiny";
 /**
  * @category Preview components
  */
-export interface PropertyPreviewProps<T extends CMSType = CMSType, CustomProps = any> {
+export interface PropertyPreviewProps<T extends any = any, CustomProps = any> {
     /**
      * Name of the property
      */

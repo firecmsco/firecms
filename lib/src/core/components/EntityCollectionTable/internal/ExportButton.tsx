@@ -25,7 +25,7 @@ import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { resolveCollection } from "../../../util/resolutions";
 
-interface ExportButtonProps<M extends { [Key: string]: CMSType }, UserType extends User> {
+interface ExportButtonProps<M extends object, UserType extends User> {
     collection: EntityCollection<M>;
     path: string;
     exportConfig?: ExportConfig<UserType>;
@@ -33,7 +33,7 @@ interface ExportButtonProps<M extends { [Key: string]: CMSType }, UserType exten
 
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
-export function ExportButton<M extends { [Key: string]: CMSType }, UserType extends User>({
+export function ExportButton<M extends object, UserType extends User>({
                                                                              collection: inputCollection,
                                                                              path,
                                                                              exportConfig

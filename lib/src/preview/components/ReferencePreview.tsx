@@ -50,7 +50,7 @@ function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewP
         ;
 }
 
-function ReferencePreviewInternal<M extends { [Key: string]: CMSType }>({
+function ReferencePreviewInternal<M extends object>({
                                          disabled,
                                          reference,
                                          previewProperties,

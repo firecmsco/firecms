@@ -63,7 +63,7 @@ const StyledTableContainer = styled(TableContainer)((
 /**
  * @category Components
  */
-export interface EntityPreviewProps<M extends { [Key: string]: CMSType }> {
+export interface EntityPreviewProps<M extends object> {
     entity: Entity<M>;
     collection: EntityCollection<M>;
     path: string;
@@ -77,7 +77,7 @@ export interface EntityPreviewProps<M extends { [Key: string]: CMSType }> {
  * @constructor
  * @category Components
  */
-export function EntityPreview<M extends { [Key: string]: CMSType }>(
+export function EntityPreview<M extends object>(
     {
         entity,
         collection,

@@ -14,7 +14,7 @@ import { useFireCMSContext } from "../useFireCMSContext";
 /**
  * @category Hooks and utilities
  */
-export interface CollectionFetchProps<M extends { [Key: string]: CMSType }> {
+export interface CollectionFetchProps<M extends object> {
 
     /**
      * Absolute collection path
@@ -50,7 +50,7 @@ export interface CollectionFetchProps<M extends { [Key: string]: CMSType }> {
 /**
  * @category Hooks and utilities
  */
-export interface CollectionFetchResult<M extends { [Key: string]: CMSType }> {
+export interface CollectionFetchResult<M extends object> {
     data: Entity<M>[];
     dataLoading: boolean;
     noMoreToLoad: boolean;
@@ -67,7 +67,7 @@ export interface CollectionFetchResult<M extends { [Key: string]: CMSType }> {
  * @param searchString
  * @category Hooks and utilities
  */
-export function useCollectionFetch<M extends { [Key: string]: CMSType }, UserType extends User>(
+export function useCollectionFetch<M extends object, UserType extends User>(
     {
         path: inputPath,
         collection,

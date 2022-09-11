@@ -4,7 +4,12 @@ import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
-import { CMSType, EnumValues, PropertiesOrBuilders } from "./properties";
+import {
+    CMSType,
+    EnumValues,
+    PropertiesOrBuilders,
+    PropertyOrBuilder
+} from "./properties";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -13,7 +18,7 @@ import { CMSType, EnumValues, PropertiesOrBuilders } from "./properties";
  *
  * @category Models
  */
-export interface EntityCollection<M extends { [Key: string]: CMSType } = any,
+export interface EntityCollection<M extends object = any,
     AdditionalKey extends string = string,
     UserType extends User = User> {
 
@@ -210,7 +215,7 @@ export interface EntityCollection<M extends { [Key: string]: CMSType } = any,
  *
  * @category Models
  */
-export interface ExtraActionsParams<M extends { [Key: string]: CMSType } = any, UserType extends User = User> {
+export interface ExtraActionsParams<M extends object = any, UserType extends User = User> {
     /**
      * Collection path of this entity
      */
@@ -239,7 +244,7 @@ export interface ExtraActionsParams<M extends { [Key: string]: CMSType } = any, 
  * If you want to pass a `SelectionController` to
  * @category Models
  */
-export type SelectionController<M extends { [Key: string]: CMSType } = any> = {
+export type SelectionController<M extends object = any> = {
     selectedEntities: Entity<M>[];
     setSelectedEntities: (selectedEntities: Entity<M>[]) => void;
     isEntitySelected: (entity: Entity<M>) => boolean;
@@ -307,7 +312,7 @@ export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
  * If you need to do some async loading you can use {@link AsyncPreviewComponent}
  * @category Models
  */
-export interface AdditionalColumnDelegate<M extends { [Key: string]: CMSType } = any,
+export interface AdditionalColumnDelegate<M extends object = any,
     AdditionalKey extends string = string,
     UserType extends User = User> {
 
@@ -356,7 +361,7 @@ export interface AdditionalColumnDelegate<M extends { [Key: string]: CMSType } =
  * It gets rendered as a tab.
  * @category Models
  */
-export type EntityCustomView<M extends { [Key: string]: CMSType } = any> =
+export type EntityCustomView<M extends object = any> =
     {
         path: string,
         name: string,
@@ -368,7 +373,7 @@ export type EntityCustomView<M extends { [Key: string]: CMSType } = any> =
  * an entity view.
  * @category Models
  */
-export interface EntityCustomViewParams<M extends { [Key: string]: CMSType } = any> {
+export interface EntityCustomViewParams<M extends object = any> {
 
     /**
      * collection used by this entity

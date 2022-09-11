@@ -44,15 +44,15 @@ export type CustomFieldValidator = (props: {
     parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
 }) => Promise<boolean>;
 
-interface PropertyContext<T extends CMSType> {
+interface PropertyContext<T extends any> {
     property: ResolvedProperty<T>,
-    parentProperty?: ResolvedMapProperty<any> | ResolvedArrayProperty<any>,
+    parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
     entityId: string,
     customFieldValidator?: CustomFieldValidator,
     name?: any
 }
 
-export function getYupEntitySchema<M extends { [Key: string]: CMSType }>(
+export function getYupEntitySchema<M extends object>(
     entityId: string,
     properties: ResolvedProperties<M>,
     customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
@@ -69,7 +69,7 @@ export function getYupEntitySchema<M extends { [Key: string]: CMSType }>(
     return yup.object().shape(objectSchema);
 }
 
-export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySchema<unknown> {
+export function mapPropertyToYup<T>(propertyContext: PropertyContext<T>): AnySchema<unknown> {
 
     const property = propertyContext.property;
     if (isPropertyBuilder(property)) {
@@ -78,27 +78,27 @@ export function mapPropertyToYup(propertyContext: PropertyContext<any>): AnySche
     }
 
     if (property.dataType === "string") {
-        return getYupStringSchema(propertyContext);
+        return getYupStringSchema(propertyContext as PropertyContext<string>);
     } else if (property.dataType === "number") {
-        return getYupNumberSchema(propertyContext);
+        return getYupNumberSchema(propertyContext as PropertyContext<number>);
     } else if (property.dataType === "boolean") {
-        return getYupBooleanSchema(propertyContext);
+        return getYupBooleanSchema(propertyContext as PropertyContext<boolean>);
     } else if (property.dataType === "map") {
-        return getYupMapObjectSchema(propertyContext);
+        return getYupMapObjectSchema(propertyContext as PropertyContext<object>);
     } else if (property.dataType === "array") {
-        return getYupArraySchema(propertyContext);
+        return getYupArraySchema(propertyContext as PropertyContext<any[]>);
     } else if (property.dataType === "date") {
-        return getYupDateSchema(propertyContext);
+        return getYupDateSchema(propertyContext as PropertyContext<Date>);
     } else if (property.dataType === "geopoint") {
-        return getYupGeoPointSchema(propertyContext);
+        return getYupGeoPointSchema(propertyContext as PropertyContext<GeoPoint>);
     } else if (property.dataType === "reference") {
-        return getYupReferenceSchema(propertyContext);
+        return getYupReferenceSchema(propertyContext as PropertyContext<EntityReference>);
     }
     console.error("Unsupported data type in yup mapping", property)
     throw Error("Unsupported data type in yup mapping");
 }
 
-export function getYupMapObjectSchema<M extends { [Key: string]: CMSType }>({
+export function getYupMapObjectSchema<M extends object>({
                                           property,
                                           entityId,
                                           customFieldValidator,
@@ -108,7 +108,7 @@ export function getYupMapObjectSchema<M extends { [Key: string]: CMSType }>({
     if (property.properties)
         Object.entries(property.properties).forEach(([childName, childProperty]: [string, ResolvedProperty]) => {
             objectSchema[childName] = mapPropertyToYup({
-                property: childProperty,
+                property: childProperty as ResolvedProperty,
                 parentProperty: property as ResolvedMapProperty,
                 customFieldValidator,
                 name: `${name}[${childName}]`,

@@ -2,13 +2,12 @@ import { EntityCollection } from "./collections";
 import { User } from "./user";
 import { ResolvedEntityCollection } from "./resolved_entities";
 import { Entity } from "./entities";
-import { CMSType } from "./properties";
 
 /**
  * Props used to open a side dialog
  * @category Hooks and utilities
  */
-export interface EntitySidePanelProps<M extends { [Key: string]: CMSType } = any, UserType extends User = User> {
+export interface EntitySidePanelProps<M extends object = any, UserType extends User = User> {
 
     /**
      * Absolute path of the entity
@@ -83,11 +82,11 @@ export interface SideEntityController {
      * (or a new one with that id).
      * @param props
      */
-    open: (props: EntitySidePanelProps) => void;
+    open: <M extends object = object, UserType extends User = User>(props: EntitySidePanelProps<M, UserType>) => void;
 
     /**
      * Replace the last open entity panel with the given one.
      * @param props
      */
-    replace: (props: EntitySidePanelProps) => void;
+    replace: <M extends object = object, UserType extends User = User>(props: EntitySidePanelProps<M, UserType>) => void;
 }

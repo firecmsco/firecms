@@ -55,7 +55,7 @@ const StyledFormControl = styled(FormControl)((
     }
 }));
 
-export function CustomIdField<M extends { [Key: string]: CMSType }, UserType>({
+export function CustomIdField<M extends object, UserType>({
                                                customId,
                                                entityId,
                                                status,

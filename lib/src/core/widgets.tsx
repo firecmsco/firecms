@@ -18,7 +18,13 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import EmailIcon from "@mui/icons-material/Email";
 import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
 
-import { ArrayProperty, DataType, isPropertyBuilder, Property } from "../index";
+import {
+    ArrayProperty,
+    DataType,
+    isPropertyBuilder,
+    Property,
+    ResolvedProperty
+} from "../index";
 import { SvgIconProps } from "@mui/material";
 
 export type Widget = {
@@ -186,12 +192,12 @@ export const WIDGETS: Record<WidgetId, Widget> = {
     }
 };
 
-export function getWidget(property: Property): Widget | undefined {
+export function getWidget(property: Property | ResolvedProperty): Widget | undefined {
     const widgetId = getWidgetId(property);
     return widgetId ? WIDGETS[widgetId] : undefined;
 }
 
-export function getWidgetId(property: Property): WidgetId | undefined {
+export function getWidgetId(property: Property | ResolvedProperty): WidgetId | undefined {
     if (property.dataType === "string") {
         if (property.multiline) {
             return "multiline";

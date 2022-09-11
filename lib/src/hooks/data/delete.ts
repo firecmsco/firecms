@@ -13,7 +13,7 @@ import {
 /**
  * @category Hooks and utilities
  */
-export type DeleteEntityWithCallbacksProps<M extends { [Key: string]: CMSType }> =
+export type DeleteEntityWithCallbacksProps<M extends object> =
     DeleteEntityProps<M>
     & {
     callbacks?: EntityCallbacks<M>;
@@ -44,7 +44,7 @@ export type DeleteEntityWithCallbacksProps<M extends { [Key: string]: CMSType }>
  * @param context
  * @category Hooks and utilities
  */
-export async function deleteEntityWithCallbacks<M extends { [Key: string]: CMSType }, UserType extends User>({
+export async function deleteEntityWithCallbacks<M extends object, UserType extends User>({
                                                                  dataSource,
                                                                  entity,
                                                                  collection,

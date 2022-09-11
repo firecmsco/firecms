@@ -32,7 +32,7 @@ import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
  *
  * @category Collection components
  */
-export function EntityCollectionRowActions<M extends { [Key: string]: CMSType }>({
+export function EntityCollectionRowActions<M extends object>({
                                                                            entity,
                                                                            width,
                                                                            frozen,

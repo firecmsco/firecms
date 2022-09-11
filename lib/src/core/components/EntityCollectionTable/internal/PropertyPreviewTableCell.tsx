@@ -9,17 +9,17 @@ import { useEntityCollectionTableController } from "../EntityCollectionTable";
 import { getRowHeight } from "../../Table/common";
 import { getValueInPath } from "../../../util";
 
-export interface PropertyPreviewTableCellProps<T extends CMSType, M> {
+export interface PropertyPreviewTableCellProps<T extends any, M> {
     propertyKey: string;
     columnIndex: number;
     align: "right" | "left" | "center";
     property: ResolvedProperty<T>;
     width: number;
-    entity: Entity<any>;
+    entity: Entity<M>;
 }
 
 export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps<any, any>>(
-    function PropertyPreviewTableCell<T extends CMSType, M>({
+    function PropertyPreviewTableCell<T extends any, M>({
                                                                  propertyKey,
                                                                  columnIndex,
                                                                  property,

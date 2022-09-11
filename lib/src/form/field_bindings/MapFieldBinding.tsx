@@ -28,7 +28,7 @@ import { PropertyFieldBinding } from "../PropertyFieldBinding";
  * and tables to the specified properties.
  * @category Form fields
  */
-export function MapFieldBinding<T extends { [Key: string]: CMSType }>({
+export function MapFieldBinding<T extends object>({
                                                       propertyKey,
                                                       value,
                                                       showError,

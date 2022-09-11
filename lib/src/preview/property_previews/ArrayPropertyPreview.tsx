@@ -2,12 +2,9 @@ import React from "react";
 
 import { Box, Divider } from "@mui/material";
 
-import {
-    PreviewSize,
-    PropertyPreview,
-    PropertyPreviewProps
-} from "../index";
+import { PreviewSize, PropertyPreview, PropertyPreviewProps } from "../index";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
+import { ResolvedProperty } from "../../models";
 
 /**
  * @category Preview components
@@ -45,7 +42,7 @@ export function ArrayPropertyPreview({
         }}>
             {values &&
                 values.map((value, index) => {
-                    const of = property.resolvedProperties[index] ??
+                    const of:ResolvedProperty = property.resolvedProperties[index] ??
                         (property.resolvedProperties[index] ?? (Array.isArray(property.of) ? property.of[index] : property.of));
                     return of
                         ? <React.Fragment
@@ -57,9 +54,9 @@ export function ArrayPropertyPreview({
                                     <PropertyPreview
                                         propertyKey={propertyKey}
                                         entity={entity}
-                                            value={value}
-                                            property={of}
-                                            size={childSize}/>
+                                        value={value}
+                                        property={of}
+                                        size={childSize}/>
                                     </ErrorBoundary>
                                 </Box>
                                 {index < values.length - 1 && <Divider/>}

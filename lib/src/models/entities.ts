@@ -10,7 +10,7 @@ export type EntityStatus = "new" | "existing" | "copy";
  * Representation of an entity fetched from the datasource
  * @category Models
  */
-export interface Entity<M extends { [Key: string]: CMSType }> {
+export interface Entity<M> {
 
     /**
      * ID of the entity

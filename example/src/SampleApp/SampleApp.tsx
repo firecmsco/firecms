@@ -71,10 +71,10 @@ function SampleApp() {
         // This is an example of retrieving async data related to the user
         // and storing it in the user extra field
         const idTokenResult = await user?.getIdTokenResult();
-
+        const userIsAdmin = idTokenResult?.claims.admin || user?.email?.endsWith("@camberi.com");
         authController.setExtra({
             roles: {
-                admin: true
+                admin: userIsAdmin
             },
         });
 

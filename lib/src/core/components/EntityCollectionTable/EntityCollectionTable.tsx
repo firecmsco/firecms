@@ -98,7 +98,7 @@ const DEFAULT_PAGE_SIZE = 50;
  * @category Components
  */
 export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>(
-    function EntityCollectionTable<M extends { [Key: string]: CMSType }, AdditionalKey extends string, UserType extends User>
+    function EntityCollectionTable<M extends object, AdditionalKey extends string, UserType extends User>
     ({
          fullPath,
          initialFilter,
@@ -419,7 +419,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         }, [additionalColumnsMap, size]);
 
         const allColumns: TableColumn<Entity<M>, any>[] = useMemo(() => {
-                const columnsResult: TableColumn<Entity<M>, any>[] = Object.entries<Property>(resolvedCollection.properties)
+                const columnsResult: TableColumn<Entity<M>, any>[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
                     .flatMap(([key, property]) => {
                         if (property.dataType === "map" && property.spreadChildren && property.properties) {
                             return Object.keys(property.properties).map(childKey => `${key}.${childKey}`);
@@ -621,7 +621,7 @@ function isFilterCombinationValid<M>(
         ) !== undefined;
 }
 
-function useColumnIds<M extends { [Key: string]: CMSType }>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
+function useColumnIds<M extends object>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
     return useMemo(() => {
         const displayedProperties = getCollectionColumnIds(collection);
 
@@ -644,7 +644,7 @@ function useColumnIds<M extends { [Key: string]: CMSType }>(collection: Resolved
 }
 
 function getCollectionColumnIds(collection: ResolvedEntityCollection) {
-    return Object.entries<Property>(collection.properties)
+    return Object.entries<ResolvedProperty>(collection.properties)
         .filter(([_, property]) => !property.hideFromCollection)
         .filter(([_, property]) => !(property.disabled && typeof property.disabled === "object" && property.disabled.hidden))
         .flatMap(([key, property]) => {

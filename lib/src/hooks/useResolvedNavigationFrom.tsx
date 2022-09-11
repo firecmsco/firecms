@@ -16,7 +16,7 @@ import { useFireCMSContext } from "./useFireCMSContext";
  * @see resolveNavigationFrom
  * @category Hooks and utilities
  */
-export type ResolvedNavigationEntry<M extends { [Key: string]: CMSType }> =
+export type ResolvedNavigationEntry<M extends object> =
     | ResolvedNavigationEntity<M>
     | ResolvedNavigationCollection<M>
     | ResolvedNavigationEntityCustom<M>;
@@ -25,7 +25,7 @@ export type ResolvedNavigationEntry<M extends { [Key: string]: CMSType }> =
  * @see resolveNavigationFrom
  * @category Hooks and utilities
  */
-export interface ResolvedNavigationEntity<M extends { [Key: string]: CMSType }> {
+export interface ResolvedNavigationEntity<M extends object> {
     type: "entity";
     entity: Entity<M>;
     entityId: string;
@@ -37,7 +37,7 @@ export interface ResolvedNavigationEntity<M extends { [Key: string]: CMSType }> 
  * @see resolveNavigationFrom
  * @category Hooks and utilities
  */
-export interface ResolvedNavigationCollection<M extends { [Key: string]: CMSType }> {
+export interface ResolvedNavigationCollection<M extends object> {
     type: "collection";
     path: string;
     collection: EntityCollection<M>;
@@ -47,7 +47,7 @@ export interface ResolvedNavigationCollection<M extends { [Key: string]: CMSType
  * @see resolveNavigationFrom
  * @category Hooks and utilities
  */
-interface ResolvedNavigationEntityCustom<M extends { [Key: string]: CMSType }> {
+interface ResolvedNavigationEntityCustom<M extends object> {
     type: "custom_view";
     path: string;
     view: EntityCustomView<M>;
@@ -64,7 +64,7 @@ interface ResolvedNavigationEntityCustom<M extends { [Key: string]: CMSType }> {
  * @param context
  * @category Hooks and utilities
  */
-export function resolveNavigationFrom<M extends { [Key: string]: CMSType }, UserType extends User>({
+export function resolveNavigationFrom<M extends object, UserType extends User>({
                                              path,
                                              context
                                          }: { path: string, context: FireCMSContext<UserType> }): Promise<ResolvedNavigationEntry<M>[]> {
@@ -120,7 +120,7 @@ export interface NavigationFromProps {
 /**
  * @category Hooks and utilities
  */
-export interface NavigationFrom<M extends { [Key: string]: CMSType }> {
+export interface NavigationFrom<M extends object> {
     data?: ResolvedNavigationEntry<M>[]
     dataLoading: boolean,
     dataLoadingError?: Error
@@ -132,7 +132,7 @@ export interface NavigationFrom<M extends { [Key: string]: CMSType }> {
  * in any React component that lives under `FireCMS`
  * @category Hooks and utilities
  */
-export function useResolvedNavigationFrom<M extends { [Key: string]: CMSType }, UserType extends User>(
+export function useResolvedNavigationFrom<M extends object, UserType extends User>(
     {
         path
     }: NavigationFromProps): NavigationFrom<M> {

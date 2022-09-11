@@ -88,7 +88,7 @@ export function ArrayOneOfPreview({
                                 propertyKey={propertyKey}
                                 value={value[valueField]}
                                 entity={entity}
-                                property={property.resolvedProperties[index] ?? properties[value[typeField]] as ResolvedProperty<any>}
+                                property={(property.resolvedProperties[index] ?? properties[value[typeField]]) as ResolvedProperty<any>}
                                 size={childSize}/>}
                         </ErrorBoundary>
                     </div>

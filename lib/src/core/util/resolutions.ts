@@ -23,7 +23,7 @@ import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
 import { getIn } from "formik";
 
-export const resolveCollection = <M extends { [Key: string]: CMSType } = any, >
+export const resolveCollection = <M extends object = any, >
 ({
      collection,
      path,
@@ -50,7 +50,7 @@ export const resolveCollection = <M extends { [Key: string]: CMSType } = any, >
     const resolvedProperties = Object.entries(collection.properties)
         .map(([key, propertyOrBuilder]) => ({
             [key]: resolveProperty({
-                propertyOrBuilder,
+                propertyOrBuilder: propertyOrBuilder as PropertyOrBuilder | ResolvedProperty,
                 values: usedValues,
                 previousValues: usedPreviousValues,
                 path,
@@ -81,7 +81,7 @@ export const resolveCollection = <M extends { [Key: string]: CMSType } = any, >
  * @param propertyValue
  * @param values
  */
-export function resolveProperty<T extends CMSType, M>({
+export function resolveProperty<T extends any, M>({
                                           propertyOrBuilder,
                                           propertyValue,
                                           fromBuilder = false,
@@ -255,7 +255,7 @@ export function resolveArrayProperty<T extends any[], M>({
  * @param properties
  * @param value
  */
-export function resolveProperties<M extends { [Key: string]: CMSType }>({
+export function resolveProperties<M extends object>({
                                          properties,
                                          propertyValue,
                                          ...props

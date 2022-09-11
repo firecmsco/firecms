@@ -32,11 +32,11 @@ export function isHidden(property: Property | ResolvedProperty): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-export function isPropertyBuilder<T extends CMSType>(propertyOrBuilder?: PropertyOrBuilder<T> | ResolvedProperty<T>): propertyOrBuilder is PropertyBuilder<T> {
+export function isPropertyBuilder<T extends any>(propertyOrBuilder?: PropertyOrBuilder<T> | ResolvedProperty<T>): propertyOrBuilder is PropertyBuilder<T> {
     return typeof propertyOrBuilder === "function";
 }
 
-export function getDefaultValuesFor<M extends { [Key: string]: CMSType }>(properties: PropertiesOrBuilders<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
+export function getDefaultValuesFor<M extends object>(properties: PropertiesOrBuilders<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
     if (!properties) return {};
     return Object.entries(properties)
         .map(([key, property]) => {
@@ -61,7 +61,7 @@ function getDefaultValueFor(property: PropertyOrBuilder) {
  * Update the automatic values in an entity before save
  * @category Datasource
  */
-export function updateDateAutoValues<M extends { [Key: string]: CMSType }>({
+export function updateDateAutoValues<M extends object>({
                                                                            inputValues,
                                                                            properties,
                                                                            status,
@@ -103,7 +103,7 @@ export function updateDateAutoValues<M extends { [Key: string]: CMSType }>({
  * @param properties
  * @category Datasource
  */
-export function sanitizeData<M extends { [Key: string]: CMSType }>
+export function sanitizeData<M extends object>
 (
     values: EntityValues<M>,
     properties: ResolvedProperties<M>
@@ -121,7 +121,7 @@ export function getReferenceFrom(entity: Entity<any>): EntityReference {
     return new EntityReference(entity.id, entity.path);
 }
 
-export function traverseValuesProperties<M extends { [Key: string]: CMSType }>(
+export function traverseValuesProperties<M extends object>(
     inputValues: Partial<EntityValues<M>>,
     properties: ResolvedProperties<M>,
     operation: (value: any, property: Property) => any

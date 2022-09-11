@@ -36,7 +36,7 @@ import { CustomIdField } from "./components/CustomIdField";
 /**
  * @category Components
  */
-export interface EntityFormProps<M extends { [Key: string]: CMSType }> {
+export interface EntityFormProps<M extends object> {
 
     /**
      * New or existing status
@@ -105,7 +105,7 @@ export interface EntityFormProps<M extends { [Key: string]: CMSType }> {
  * @constructor
  * @category Components
  */
-export function EntityForm<M extends { [Key: string]: CMSType }>({
+export function EntityForm<M extends object>({
                                                                  status,
                                                                  path,
                                                                  collection: inputCollection,
@@ -342,7 +342,7 @@ export function EntityForm<M extends { [Key: string]: CMSType }>({
     );
 }
 
-function FormInternal<M extends { [Key: string]: CMSType }>({
+function FormInternal<M extends object>({
                              initialValues,
                              values,
                              onModified,

@@ -13,7 +13,7 @@ const DEFAULT_PERMISSIONS = {
     delete: true
 };
 
-export function resolvePermissions<M extends { [Key: string]: CMSType }, UserType extends User>
+export function resolvePermissions<M extends object, UserType extends User>
 (collection: EntityCollection<M>,
  authController: AuthController<UserType>,
  paths: string[]): Permissions {
@@ -35,7 +35,7 @@ export function resolvePermissions<M extends { [Key: string]: CMSType }, UserTyp
     throw Error("New type of permission added and not mapped");
 }
 
-export function canEditEntity<M extends { [Key: string]: CMSType }, UserType extends User>
+export function canEditEntity<M extends object, UserType extends User>
 (
     collection: EntityCollection<M>,
     authController: AuthController<UserType>,
@@ -43,7 +43,7 @@ export function canEditEntity<M extends { [Key: string]: CMSType }, UserType ext
     return resolvePermissions(collection, authController, paths).edit ?? DEFAULT_PERMISSIONS.edit;
 }
 
-export function canCreateEntity<M extends { [Key: string]: CMSType }, UserType extends User>
+export function canCreateEntity<M extends object, UserType extends User>
 (
     collection: EntityCollection<M>,
     authController: AuthController<UserType>,
@@ -51,7 +51,7 @@ export function canCreateEntity<M extends { [Key: string]: CMSType }, UserType e
     return resolvePermissions(collection, authController, paths).create ?? DEFAULT_PERMISSIONS.create;
 }
 
-export function canDeleteEntity<M extends { [Key: string]: CMSType }, UserType extends User>
+export function canDeleteEntity<M extends object, UserType extends User>
 (
     collection: EntityCollection<M>,
     authController: AuthController<UserType>,

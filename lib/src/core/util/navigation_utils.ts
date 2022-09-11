@@ -63,7 +63,7 @@ export function resolveCollectionPathAliases(path: string, allCollections: Entit
  * @param pathOrAlias
  * @param collections
  */
-export function getCollectionByPathOrAlias<M extends { [Key: string]: CMSType }>(pathOrAlias: string, collections: EntityCollection[]): EntityCollection | undefined {
+export function getCollectionByPathOrAlias<M extends object>(pathOrAlias: string, collections: EntityCollection[]): EntityCollection | undefined {
 
     const subpaths = removeInitialAndTrailingSlashes(pathOrAlias).split("/");
     if (subpaths.length % 2 === 0) {

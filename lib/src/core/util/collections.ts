@@ -2,7 +2,7 @@ import {
     CMSType,
     EntityCollection,
     PropertiesOrBuilders,
-    Property
+    Property, ResolvedEntityCollection
 } from "../../models";
 import { mergeDeep } from "./objects";
 
@@ -27,7 +27,7 @@ export function mergeCollections(target: EntityCollection, source: EntityCollect
     }
 }
 
-export function sortProperties<M extends { [Key: string]: CMSType }>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {
+export function sortProperties<M extends object>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {
     try {
         const propertiesKeys = Object.keys(properties);
         const allPropertiesOrder = propertiesOrder ?? propertiesKeys;
@@ -57,7 +57,7 @@ export function sortProperties<M extends { [Key: string]: CMSType }>(properties:
     }
 }
 
-export function getFistAdditionalView<M extends { [Key: string]: CMSType }>(collection: EntityCollection<M>) {
+export function getFistAdditionalView<M extends object>(collection: EntityCollection<M> | ResolvedEntityCollection<M>) {
     const subcollections = collection.subcollections;
     const subcollectionsCount = subcollections?.length ?? 0;
     const customViews = collection.views;

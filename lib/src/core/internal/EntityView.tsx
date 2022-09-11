@@ -50,7 +50,7 @@ import {
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 
-export interface EntityViewProps<M extends { [Key: string]: CMSType }> {
+export interface EntityViewProps<M extends object> {
     path: string;
     collection: EntityCollection<M>;
     entityId?: string;
@@ -69,7 +69,7 @@ export interface EntityViewProps<M extends { [Key: string]: CMSType }> {
  * {@link EntityCollectionView}
  */
 export const EntityView = React.memo<EntityViewProps<any>>(
-    function EntityView<M extends { [Key: string]: CMSType }, UserType extends User>({
+    function EntityView<M extends object, UserType extends User>({
                                                                                      path,
                                                                                      entityId,
                                                                                      selectedSubPath,

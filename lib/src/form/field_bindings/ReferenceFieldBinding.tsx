@@ -47,7 +47,7 @@ import {
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ReferenceFieldBinding<M extends { [Key: string]: CMSType }>({
+export function ReferenceFieldBinding<M extends object>({
                                                                      propertyKey,
                                                                      value,
                                                                      setValue,

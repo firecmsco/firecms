@@ -9,7 +9,7 @@ import { CMSType } from "./properties";
 /**
  * @category Datasource
  */
-export interface FetchEntityProps<M extends { [Key: string]: CMSType }> {
+export interface FetchEntityProps<M extends object> {
     path: string;
     entityId: string;
     collection: EntityCollection<M>
@@ -18,7 +18,7 @@ export interface FetchEntityProps<M extends { [Key: string]: CMSType }> {
 /**
  * @category Datasource
  */
-export type ListenEntityProps<M extends { [Key: string]: CMSType }> = FetchEntityProps<M> & {
+export type ListenEntityProps<M extends object> = FetchEntityProps<M> & {
     onUpdate: (entity: Entity<M>) => void,
     onError?: (error: Error) => void,
 }
@@ -26,7 +26,7 @@ export type ListenEntityProps<M extends { [Key: string]: CMSType }> = FetchEntit
 /**
  * @category Datasource
  */
-export interface FetchCollectionProps<M extends { [Key: string]: CMSType }> {
+export interface FetchCollectionProps<M extends object> {
     path: string;
     collection: EntityCollection<M> | ResolvedEntityCollection<M>;
     filter?: FilterValues<Extract<keyof M, string>>,
@@ -40,7 +40,7 @@ export interface FetchCollectionProps<M extends { [Key: string]: CMSType }> {
 /**
  * @category Datasource
  */
-export type ListenCollectionProps<M extends { [Key: string]: CMSType }> =
+export type ListenCollectionProps<M extends object> =
     FetchCollectionProps<M> &
     {
         onUpdate: (entities: Entity<M>[]) => void;
@@ -50,7 +50,7 @@ export type ListenCollectionProps<M extends { [Key: string]: CMSType }> =
 /**
  * @category Datasource
  */
-export interface SaveEntityProps<M extends { [Key: string]: CMSType }> {
+export interface SaveEntityProps<M extends object> {
     path: string;
     values: Partial<EntityValues<M>>;
     entityId?: string; // can be empty for new entities
@@ -62,7 +62,7 @@ export interface SaveEntityProps<M extends { [Key: string]: CMSType }> {
 /**
  * @category Datasource
  */
-export interface DeleteEntityProps<M extends { [Key: string]: CMSType }> {
+export interface DeleteEntityProps<M extends object> {
     entity: Entity<M>;
 }
 
@@ -87,7 +87,7 @@ export interface DataSource {
      * @return Function to cancel subscription
      * @see useCollectionFetch if you need this functionality implemented as a hook
      */
-    fetchCollection<M extends { [Key: string]: CMSType }>({
+    fetchCollection<M extends object>({
                            path,
                            collection,
                            filter,
@@ -115,7 +115,7 @@ export interface DataSource {
      * @return Function to cancel subscription
      * @see useCollectionFetch if you need this functionality implemented as a hook
      */
-    listenCollection?<M extends { [Key: string]: CMSType }>(
+    listenCollection?<M extends object>(
         {
             path,
             collection,
@@ -136,7 +136,7 @@ export interface DataSource {
      * @param entityId
      * @param collection
      */
-    fetchEntity<M extends { [Key: string]: CMSType }>({
+    fetchEntity<M extends object>({
                        path,
                        entityId,
                        collection
@@ -152,7 +152,7 @@ export interface DataSource {
      * @param onError
      * @return Function to cancel subscription
      */
-    listenEntity?<M extends { [Key: string]: CMSType }>({
+    listenEntity?<M extends object>({
                          path,
                          entityId,
                          collection,
@@ -167,7 +167,7 @@ export interface DataSource {
      * @param collection
      * @param status
      */
-    saveEntity<M extends { [Key: string]: CMSType }>(
+    saveEntity<M extends object>(
         {
             path,
             entityId,
@@ -181,7 +181,7 @@ export interface DataSource {
      * @param entity
      * @return was the whole deletion flow successful
      */
-    deleteEntity<M extends { [Key: string]: CMSType }>(
+    deleteEntity<M extends object>(
         {
             entity
         }: DeleteEntityProps<M>

@@ -27,7 +27,7 @@ import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { CMSType } from "../../../models";
 
-type VirtualTableHeaderProps<M extends { [Key: string]: CMSType }> = {
+type VirtualTableHeaderProps<M extends object> = {
     resizeHandleRef: RefObject<HTMLDivElement>;
     columnIndex: number;
     isResizingIndex: number;
@@ -40,7 +40,7 @@ type VirtualTableHeaderProps<M extends { [Key: string]: CMSType }> = {
 };
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
-    function VirtualTableHeader<M extends { [Key: string]: CMSType }>({
+    function VirtualTableHeader<M extends object>({
                                                                       resizeHandleRef,
                                                                       columnIndex,
                                                                       isResizingIndex,

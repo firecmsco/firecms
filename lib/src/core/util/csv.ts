@@ -15,7 +15,7 @@ interface Header {
     label: string;
 }
 
-export function downloadCSV<M extends { [Key: string]: CMSType }>(data: Entity<M>[],
+export function downloadCSV<M extends object>(data: Entity<M>[],
                                additionalData: Record<string, any>[] | undefined,
                                collection: ResolvedEntityCollection<M>,
                                path: string,
@@ -46,13 +46,13 @@ export function getExportableData(data: any[],
 }
 
 
-function getExportHeaders<M extends { [Key: string]: CMSType }, UserType extends User>(properties: ResolvedProperties<M>,
+function getExportHeaders<M extends object, UserType extends User>(properties: ResolvedProperties<M>,
                                                                       path: string,
                                                                       exportConfig?: ExportConfig<UserType>): Header[] {
     const headers = [
         { label: "id", key: "id" },
         ...Object.entries(properties)
-            .map(([childKey, property]) => getHeaders(property, childKey, ""))
+            .map(([childKey, property]) => getHeaders(property as ResolvedProperty, childKey, ""))
             .flat()
     ];
 
@@ -113,12 +113,12 @@ function processCSVValue(inputValue: any,
     return value;
 }
 
-function processCSVValues<M extends { [Key: string]: CMSType }>
+function processCSVValues<M extends object>
 (inputValues: Record<keyof M, any>, properties: ResolvedProperties<M>): Record<keyof M, any> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues as any)[key];
-            const updatedValue = processCSVValue(inputValue, property);
+            const updatedValue = processCSVValue(inputValue, property as ResolvedProperty);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
         })

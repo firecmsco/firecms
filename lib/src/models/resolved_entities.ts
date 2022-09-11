@@ -18,7 +18,7 @@ import { EntityCollection } from "./collections";
  * are resolved to regular `Property` objects.
  * @category Models
  */
-export type ResolvedEntityCollection<M extends { [Key: string]: CMSType } = any> =
+export type ResolvedEntityCollection<M extends object = any> =
     Omit<EntityCollection<M>, "properties"> &
     {
         properties: ResolvedProperties<M>,
@@ -29,7 +29,7 @@ export type ResolvedEntityCollection<M extends { [Key: string]: CMSType } = any>
 /**
  * @category Entity properties
  */
-export type ResolvedProperty<T extends CMSType = CMSType> =
+export type ResolvedProperty<T extends any = any> =
     T extends string ? ResolvedStringProperty :
         T extends number ? ResolvedNumberProperty :
             T extends boolean ? ResolvedBooleanProperty :
@@ -42,7 +42,7 @@ export type ResolvedProperty<T extends CMSType = CMSType> =
 /**
  * @category Entity properties
  */
-export type ResolvedProperties<M extends { [Key: string]: CMSType } = any> = {
+export type ResolvedProperties<M extends object = any> = {
     [k in keyof M]: ResolvedProperty<M[keyof M]>;
 };
 
@@ -117,18 +117,18 @@ export type ResolvedReferenceProperty =
 /**
  * @category Entity properties
  */
-export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> =
+export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends any = any> =
     Omit<ArrayProperty, "of" | "oneOf" | "dataType"> &
     {
         dataType: "array";
         resolved: true;
-        of?: ResolvedProperty<ArrayT> | ResolvedProperty[],
+        of?: ResolvedProperty<ArrayT> | ResolvedProperty<any>[],
         oneOf?: {
-            properties: Record<string, ResolvedProperty>
+            properties: Record<string, ResolvedProperty<any>>
             typeField?: string;
             valueField?: string;
         },
-        resolvedProperties: ResolvedProperty[];
+        resolvedProperties: ResolvedProperty<any>[];
         fromBuilder: boolean;
     }
 

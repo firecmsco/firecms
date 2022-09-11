@@ -4,31 +4,31 @@ import {
     removeInitialAndTrailingSlashes
 } from "./navigation_utils";
 
-export type NavigationViewInternal<M extends { [Key: string]: CMSType }> =
+export type NavigationViewInternal<M extends object> =
     | NavigationViewEntityInternal<M>
     | NavigationViewCollectionInternal<M>
     | NavigationViewEntityCustomInternal<M>;
 
-interface NavigationViewEntityInternal<M extends { [Key: string]: CMSType }> {
+interface NavigationViewEntityInternal<M extends object> {
     type: "entity";
     entityId: string;
     path: string;
     parentCollection: EntityCollection<M>;
 }
 
-interface NavigationViewCollectionInternal<M extends { [Key: string]: CMSType }> {
+interface NavigationViewCollectionInternal<M extends object> {
     type: "collection";
     path: string;
     collection: EntityCollection<M>;
 }
 
-interface NavigationViewEntityCustomInternal<M extends { [Key: string]: CMSType }> {
+interface NavigationViewEntityCustomInternal<M extends object> {
     type: "custom_view";
     path: string;
     view: EntityCustomView<M>;
 }
 
-export function getNavigationEntriesFromPathInternal<M extends { [Key: string]: CMSType }>(props: {
+export function getNavigationEntriesFromPathInternal<M extends object>(props: {
     path: string,
     collections: EntityCollection[] | undefined,
     customViews?: EntityCustomView<M>[],

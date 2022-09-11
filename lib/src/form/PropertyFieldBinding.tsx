@@ -73,7 +73,7 @@ import {
  * @category Form custom fields
  */
 // export const PropertyFieldBinding = React.memo(
-    export function PropertyFieldBinding<T extends CMSType = any, M extends { [Key: string]: CMSType } = any>
+    export function PropertyFieldBinding<T extends any = any, M extends object = any>
     ({
          propertyKey,
          property,
@@ -195,7 +195,7 @@ import {
     // ,
     // equal);
 
-function FieldInternal<T extends CMSType, M extends { [Key: string]: CMSType }>
+function FieldInternal<T extends any, M extends object>
 ({
      component,
      componentProps: {
