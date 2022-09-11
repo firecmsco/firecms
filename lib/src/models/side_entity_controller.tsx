@@ -7,7 +7,7 @@ import { Entity } from "./entities";
  * Props used to open a side dialog
  * @category Hooks and utilities
  */
-export interface EntitySidePanelProps<M extends object = any, UserType extends User = User> {
+export interface EntitySidePanelProps<M extends object = object, UserType extends User = User> {
 
     /**
      * Absolute path of the entity

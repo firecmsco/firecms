@@ -23,7 +23,7 @@ import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
 import { getIn } from "formik";
 
-export const resolveCollection = <M extends object = any, >
+export const resolveCollection = <M extends object = object, >
 ({
      collection,
      path,

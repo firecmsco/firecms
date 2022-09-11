@@ -11,7 +11,7 @@ import {
  *
  * @category Form custom fields
  */
-export interface FieldProps<T extends any, CustomProps = any, M extends object = any> {
+export interface FieldProps<T extends any, CustomProps = any, M extends object = object> {
 
     /**
      * Name of the property
@@ -145,7 +145,7 @@ export interface FormContext<M extends object> {
  * custom field you can use {@link PropertyFieldBinding} with these props.
  * @category Form custom fields
  */
-export interface PropertyFieldBindingProps<M extends object = any> {
+export interface PropertyFieldBindingProps<M extends object = object> {
 
     /**
      * The name of the property, such as `age`. You can use nested and array

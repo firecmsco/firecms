@@ -73,7 +73,7 @@ import {
  * @category Form custom fields
  */
 // export const PropertyFieldBinding = React.memo(
-    export function PropertyFieldBinding<T extends any = any, M extends object = any>
+    export function PropertyFieldBinding<T extends any = any, M extends object = object>
     ({
          propertyKey,
          property,

@@ -1,10 +1,10 @@
-import { CMSType, EntityCollection, EntityCustomView } from "../../models";
+import { EntityCollection, EntityCustomView } from "../../models";
 import {
     getCollectionPathsCombinations,
     removeInitialAndTrailingSlashes
 } from "./navigation_utils";
 
-export type NavigationViewInternal<M extends object> =
+export type NavigationViewInternal<M extends object = any> =
     | NavigationViewEntityInternal<M>
     | NavigationViewCollectionInternal<M>
     | NavigationViewEntityCustomInternal<M>;
@@ -28,12 +28,12 @@ interface NavigationViewEntityCustomInternal<M extends object> {
     view: EntityCustomView<M>;
 }
 
-export function getNavigationEntriesFromPathInternal<M extends object>(props: {
+export function getNavigationEntriesFromPathInternal(props: {
     path: string,
     collections: EntityCollection[] | undefined,
-    customViews?: EntityCustomView<M>[],
+    customViews?: EntityCustomView[],
     currentFullPath?: string,
-}): NavigationViewInternal<M> [] {
+}): NavigationViewInternal [] {
 
     const {
         path,
@@ -44,11 +44,11 @@ export function getNavigationEntriesFromPathInternal<M extends object>(props: {
     const subpaths = removeInitialAndTrailingSlashes(path).split("/");
     const subpathCombinations = getCollectionPathsCombinations(subpaths);
 
-    const result: NavigationViewInternal<M> [] = [];
+    const result: NavigationViewInternal[] = [];
     for (let i = 0; i < subpathCombinations.length; i++) {
         const subpathCombination = subpathCombinations[i];
 
-        const collection = collections && collections.find((entry) => entry.alias === subpathCombination || entry.path === subpathCombination);
+        const collection: EntityCollection<any> | undefined = collections && collections.find((entry) => entry.alias === subpathCombination || entry.path === subpathCombination);
 
         if (collection) {
             const pathOrAlias = collection.alias ?? collection.path;

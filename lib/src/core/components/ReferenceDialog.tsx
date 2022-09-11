@@ -31,7 +31,7 @@ import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 /**
  * @category Components
  */
-export interface ReferenceDialogProps {
+export interface ReferenceDialogProps<M extends object> {
 
     /**
      * Allow multiple selection of values
@@ -41,7 +41,7 @@ export interface ReferenceDialogProps {
     /**
      * Entity collection config
      */
-    collection?: EntityCollection;
+    collection?: EntityCollection<M>;
 
     /**
      * Absolute path of the collection.
@@ -91,7 +91,7 @@ export interface ReferenceDialogProps {
  * You probably want to open this dialog as a side view using {@link useReferenceDialog}
  * @category Components
  */
-export function ReferenceDialog(
+export function ReferenceDialog<M extends object>(
     {
         onSingleEntitySelected,
         onMultipleEntitiesSelected,
@@ -101,7 +101,7 @@ export function ReferenceDialog(
         path: pathInput,
         selectedEntityIds,
         forceFilter
-    }: ReferenceDialogProps) {
+    }: ReferenceDialogProps<M>) {
 
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();

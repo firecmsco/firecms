@@ -3,7 +3,7 @@ import { Box, Popover, Typography, useTheme } from "@mui/material";
 import equal from "react-fast-compare"
 
 import {
-    AnyProperty, CMSType,
+    AnyProperty,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -71,10 +71,10 @@ export type EntityCollectionViewProps<M extends object> = {
  */
 export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends object>({
-                                                                                    fullPath,
-                                                                                    isSubCollection,
-                                                                                    ...collectionProp
-                                                                                }: EntityCollectionViewProps<M>
+                                                        fullPath,
+                                                        isSubCollection,
+                                                        ...collectionProp
+                                                    }: EntityCollectionViewProps<M>
     ) {
 
         const sideEntityController = useSideEntityController();
@@ -311,7 +311,8 @@ export const EntityCollectionView = React.memo(
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     Title={Title}
-                    Actions={<EntityCollectionViewActions
+                    Actions={
+                    <EntityCollectionViewActions
                         collection={collection}
                         exportable={exportable}
                         onMultipleDeleteClick={onMultipleDeleteClick}
@@ -340,7 +341,7 @@ export const EntityCollectionView = React.memo(
         );
     }, equal) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
-export function useSelectionController<M extends object = any>(): SelectionController {
+export function useSelectionController<M extends object = object>(): SelectionController<M> {
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
 

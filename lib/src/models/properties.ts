@@ -225,7 +225,7 @@ export interface EnumValueConfig {
  * Record of properties of an entity or a map property
  * @category Entity properties
  */
-export type Properties<M extends object = any> = {
+export type Properties<M extends object = object> = {
     [k in keyof M]: Property<M[keyof M]>;
 };
 
@@ -263,7 +263,7 @@ export type PropertyBuilderProps<M extends object> =
 /**
  * @category Entity properties
  */
-export type PropertyBuilder<T extends any = CMSType, M extends object = any> = ({
+export type PropertyBuilder<T extends any = CMSType, M extends object = object> = ({
                                                                          values,
                                                                          previousValues,
                                                                          propertyValue,
@@ -274,14 +274,14 @@ export type PropertyBuilder<T extends any = CMSType, M extends object = any> = (
 /**
  * @category Entity properties
  */
-export type PropertyOrBuilder<T extends any = CMSType, M extends object = any> =
+export type PropertyOrBuilder<T extends any = CMSType, M extends object = object> =
     Property<T>
     | PropertyBuilder<T, M>;
 
 /**
  * @category Entity properties
  */
-export type PropertiesOrBuilders<M extends object = any> =
+export type PropertiesOrBuilders<M extends object = object> =
     {
         [k in keyof M]: PropertyOrBuilder<M[k], M>;
     };

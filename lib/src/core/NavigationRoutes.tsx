@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
-import { CMSView } from "../models";
+import { CMSView, EntityCollection } from "../models";
 import { FireCMSHomePage, NotFoundPage } from "./components";
 import {
     useBreadcrumbsContext,
@@ -94,7 +94,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                                               key={`collection_view_${collection.alias ?? collection.path}`}
                                               isSubCollection={false}
                                               fullPath={collection.alias ?? collection.path}
-                                              {...collection}/>
+                                              {...collection as EntityCollection<any>}/>
                                       </BreadcrumbUpdater>
                                   }/>;
                 }

@@ -29,7 +29,7 @@ export type EntityCollectionViewActionsProps<M extends object> = {
     onNewClick: () => void;
     onMultipleDeleteClick: () => void;
     selectedEntities: Entity<M>[];
-    selectionController: SelectionController;
+    selectionController: SelectionController<M>;
 }
 
 export function EntityCollectionViewActions<M extends object>({

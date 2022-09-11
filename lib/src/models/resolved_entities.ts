@@ -18,7 +18,7 @@ import { EntityCollection } from "./collections";
  * are resolved to regular `Property` objects.
  * @category Models
  */
-export type ResolvedEntityCollection<M extends object = any> =
+export type ResolvedEntityCollection<M extends object = object> =
     Omit<EntityCollection<M>, "properties"> &
     {
         properties: ResolvedProperties<M>,
@@ -42,7 +42,7 @@ export type ResolvedProperty<T extends any = any> =
 /**
  * @category Entity properties
  */
-export type ResolvedProperties<M extends object = any> = {
+export type ResolvedProperties<M extends object = object> = {
     [k in keyof M]: ResolvedProperty<M[keyof M]>;
 };
 

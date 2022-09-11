@@ -25,7 +25,7 @@ import {
  * @param collection
  * @category Builder
  */
-export function buildCollection<M extends object = any,
+export function buildCollection<M extends object = object,
     AdditionalKey extends string = string,
     UserType extends User = User>(
     collection: EntityCollection<M, AdditionalKey, UserType>
@@ -60,7 +60,7 @@ export function buildProperty<T extends any = CMSType, P extends PropertyOrBuild
  * @param properties
  * @category Builder
  */
-export function buildProperties<M extends object = any>(
+export function buildProperties<M extends object = object>(
     properties: PropertiesOrBuilders<M>
 ): PropertiesOrBuilders<M> {
     return properties;
@@ -72,7 +72,7 @@ export function buildProperties<M extends object = any>(
  * @param propertiesOrBuilder
  * @category Builder
  */
-export function buildPropertiesOrBuilder<M extends object = any>(
+export function buildPropertiesOrBuilder<M extends object = object>(
     propertiesOrBuilder: PropertiesOrBuilders<M>
 ): PropertiesOrBuilders<M> {
     return propertiesOrBuilder;
@@ -120,7 +120,7 @@ export function buildEntityCallbacks<M extends object= any>(
  * @param additionalColumnDelegate
  * @category Builder
  */
-export function buildAdditionalColumnDelegate<M extends object = any, AdditionalKey extends string = string, UserType extends User = User>(
+export function buildAdditionalColumnDelegate<M extends object = object, AdditionalKey extends string = string, UserType extends User = User>(
     additionalColumnDelegate: AdditionalColumnDelegate<M, AdditionalKey, UserType>
 ): AdditionalColumnDelegate<M, AdditionalKey, UserType> {
     return additionalColumnDelegate;
