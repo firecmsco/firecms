@@ -1,11 +1,5 @@
 import React, { useCallback } from "react";
-import {
-    CMSType,
-    FieldProps,
-    Properties,
-    ResolvedProperties,
-    ResolvedProperty
-} from "../../models";
+import { FieldProps, Properties, ResolvedProperties } from "../../models";
 import {
     Box,
     FormControl,
@@ -28,7 +22,7 @@ import { PropertyFieldBinding } from "../PropertyFieldBinding";
  * and tables to the specified properties.
  * @category Form fields
  */
-export function MapFieldBinding<T extends object>({
+export function MapFieldBinding<T extends Record<string, any>>({
                                                       propertyKey,
                                                       value,
                                                       showError,
@@ -50,11 +44,11 @@ export function MapFieldBinding<T extends object>({
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
     }
 
-    let mapProperties: Record<string, ResolvedProperty>;
+    let mapProperties: ResolvedProperties;
     if (!pickOnlySomeKeys) {
-        mapProperties = property.properties as ResolvedProperties;
+        mapProperties = property.properties;
     } else if (value) {
-        mapProperties = pick(property.properties as ResolvedProperties,
+        mapProperties = pick(property.properties,
             ...Object.keys(value)
                 .filter(key => key in property.properties!)
         );

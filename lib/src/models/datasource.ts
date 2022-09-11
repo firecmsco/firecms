@@ -9,7 +9,7 @@ import { CMSType } from "./properties";
 /**
  * @category Datasource
  */
-export interface FetchEntityProps<M extends object> {
+export interface FetchEntityProps<M extends Record<string, any> = any> {
     path: string;
     entityId: string;
     collection: EntityCollection<M>
@@ -18,7 +18,7 @@ export interface FetchEntityProps<M extends object> {
 /**
  * @category Datasource
  */
-export type ListenEntityProps<M extends object> = FetchEntityProps<M> & {
+export type ListenEntityProps<M extends Record<string, any> = any> = FetchEntityProps<M> & {
     onUpdate: (entity: Entity<M>) => void,
     onError?: (error: Error) => void,
 }
@@ -26,7 +26,7 @@ export type ListenEntityProps<M extends object> = FetchEntityProps<M> & {
 /**
  * @category Datasource
  */
-export interface FetchCollectionProps<M extends object> {
+export interface FetchCollectionProps<M extends Record<string, any> = any> {
     path: string;
     collection: EntityCollection<M> | ResolvedEntityCollection<M>;
     filter?: FilterValues<Extract<keyof M, string>>,
@@ -40,7 +40,7 @@ export interface FetchCollectionProps<M extends object> {
 /**
  * @category Datasource
  */
-export type ListenCollectionProps<M extends object> =
+export type ListenCollectionProps<M extends Record<string, any> = any> =
     FetchCollectionProps<M> &
     {
         onUpdate: (entities: Entity<M>[]) => void;
@@ -50,7 +50,7 @@ export type ListenCollectionProps<M extends object> =
 /**
  * @category Datasource
  */
-export interface SaveEntityProps<M extends object> {
+export interface SaveEntityProps<M extends Record<string, any> = any> {
     path: string;
     values: Partial<EntityValues<M>>;
     entityId?: string; // can be empty for new entities
@@ -62,7 +62,7 @@ export interface SaveEntityProps<M extends object> {
 /**
  * @category Datasource
  */
-export interface DeleteEntityProps<M extends object> {
+export interface DeleteEntityProps<M extends Record<string, any> = any> {
     entity: Entity<M>;
 }
 
@@ -87,7 +87,7 @@ export interface DataSource {
      * @return Function to cancel subscription
      * @see useCollectionFetch if you need this functionality implemented as a hook
      */
-    fetchCollection<M extends object>({
+    fetchCollection<M extends Record<string, any> = any>({
                            path,
                            collection,
                            filter,
@@ -115,7 +115,7 @@ export interface DataSource {
      * @return Function to cancel subscription
      * @see useCollectionFetch if you need this functionality implemented as a hook
      */
-    listenCollection?<M extends object>(
+    listenCollection?<M extends Record<string, any> = any>(
         {
             path,
             collection,
@@ -136,7 +136,7 @@ export interface DataSource {
      * @param entityId
      * @param collection
      */
-    fetchEntity<M extends object>({
+    fetchEntity<M extends Record<string, any> = any>({
                        path,
                        entityId,
                        collection
@@ -152,7 +152,7 @@ export interface DataSource {
      * @param onError
      * @return Function to cancel subscription
      */
-    listenEntity?<M extends object>({
+    listenEntity?<M extends Record<string, any> = any>({
                          path,
                          entityId,
                          collection,
@@ -167,7 +167,7 @@ export interface DataSource {
      * @param collection
      * @param status
      */
-    saveEntity<M extends object>(
+    saveEntity<M extends Record<string, any> = any>(
         {
             path,
             entityId,
@@ -181,7 +181,7 @@ export interface DataSource {
      * @param entity
      * @return was the whole deletion flow successful
      */
-    deleteEntity<M extends object>(
+    deleteEntity<M extends Record<string, any> = any>(
         {
             entity
         }: DeleteEntityProps<M>

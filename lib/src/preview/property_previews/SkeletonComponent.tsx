@@ -1,5 +1,4 @@
 import {
-    CMSType,
     ResolvedArrayProperty,
     ResolvedMapProperty,
     ResolvedProperties,
@@ -86,7 +85,7 @@ export function SkeletonComponent({
     return (content || null);
 }
 
-function renderMap<T extends object>(property: ResolvedMapProperty<T>, size: PreviewSize) {
+function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<T>, size: PreviewSize) {
 
     if (!property.properties)
         return <></>;
@@ -105,11 +104,14 @@ function renderMap<T extends object>(property: ResolvedMapProperty<T>, size: Pre
         return (
             <List>
                 {mapProperties && mapProperties.map((key: string) => (
-                    <ListItem key={property.name + key}>
-                        <SkeletonComponent
-                            property={(property.properties as any)[key]}
-                            size={"small"}/>
-                    </ListItem>
+                    <>
+                        {property.properties &&
+                            <ListItem key={property.name + key}>
+                                <SkeletonComponent
+                                    property={property.properties[key]}
+                                    size={"small"}/>
+                            </ListItem>}
+                    </>
                 ))}
             </List>
         );
@@ -131,9 +133,9 @@ function renderMap<T extends object>(property: ResolvedMapProperty<T>, size: Pre
                                 <Skeleton variant="text"/>
                             </TableCell>
                             <TableCell key={`table-cell-${key}`} component="th">
-                                <SkeletonComponent
-                                    property={(property.properties as any)[key]}
-                                    size={"small"}/>
+                                {property.properties && <SkeletonComponent
+                                    property={property.properties[key]}
+                                    size={"small"}/>}
                             </TableCell>
                         </TableRow>
                     );
@@ -144,7 +146,7 @@ function renderMap<T extends object>(property: ResolvedMapProperty<T>, size: Pre
 
 }
 
-function renderArrayOfMaps<M extends object>(properties: ResolvedProperties<M>, size: PreviewSize, previewProperties?: string[]) {
+function renderArrayOfMaps<M extends Record<string, any>>(properties: ResolvedProperties<M>, size: PreviewSize, previewProperties?: string[]) {
     let tableProperties = previewProperties;
     if (!tableProperties || !tableProperties.length) {
         tableProperties = Object.keys(properties) as string[];
@@ -166,7 +168,7 @@ function renderArrayOfMaps<M extends object>(properties: ResolvedProperties<M>, 
                                             component="th"
                                         >
                                             <SkeletonComponent
-                                                property={(properties as any)[key]}
+                                                property={(properties)[key]}
                                                 size={"small"}/>
                                         </TableCell>
                                     )

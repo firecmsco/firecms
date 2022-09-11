@@ -4,25 +4,25 @@ import {
     removeInitialAndTrailingSlashes
 } from "./navigation_utils";
 
-export type NavigationViewInternal<M extends object = any> =
+export type NavigationViewInternal<M extends Record<string, any> = any> =
     | NavigationViewEntityInternal<M>
     | NavigationViewCollectionInternal<M>
     | NavigationViewEntityCustomInternal<M>;
 
-interface NavigationViewEntityInternal<M extends object> {
+interface NavigationViewEntityInternal<M extends Record<string, any>> {
     type: "entity";
     entityId: string;
     path: string;
     parentCollection: EntityCollection<M>;
 }
 
-interface NavigationViewCollectionInternal<M extends object> {
+interface NavigationViewCollectionInternal<M extends Record<string, any>> {
     type: "collection";
     path: string;
     collection: EntityCollection<M>;
 }
 
-interface NavigationViewEntityCustomInternal<M extends object> {
+interface NavigationViewEntityCustomInternal<M extends Record<string, any>> {
     type: "custom_view";
     path: string;
     view: EntityCustomView<M>;
@@ -31,7 +31,7 @@ interface NavigationViewEntityCustomInternal<M extends object> {
 export function getNavigationEntriesFromPathInternal(props: {
     path: string,
     collections: EntityCollection[] | undefined,
-    customViews?: EntityCustomView[],
+    customViews?: EntityCustomView<any>[],
     currentFullPath?: string,
 }): NavigationViewInternal [] {
 

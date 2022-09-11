@@ -86,7 +86,7 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
  */
 
 export const VirtualTable = React.memo<VirtualTableProps<any, any>>(
-    function VirtualTable<T extends object, E extends any>({
+    function VirtualTable<T extends Record<string, any>, E extends any>({
                                                                data,
                                                                onResetPagination,
                                                                onEndReached,

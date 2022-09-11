@@ -1,5 +1,4 @@
 import React, { ComponentType, ReactElement } from "react";
-import equal from "react-fast-compare"
 import { FormHelperText } from "@mui/material";
 
 import {
@@ -29,12 +28,8 @@ import { SwitchFieldBinding } from "./field_bindings/SwitchFieldBinding";
 import { DateTimeFieldBinding } from "./field_bindings/DateTimeFieldBinding";
 import { ReferenceFieldBinding } from "./field_bindings/ReferenceFieldBinding";
 import { MapFieldBinding } from "./field_bindings/MapFieldBinding";
-import {
-    RepeatFieldBinding
-} from "./field_bindings/RepeatFieldBinding";
-import {
-    BlockFieldBinding
-} from "./field_bindings/BlockFieldBinding";
+import { RepeatFieldBinding } from "./field_bindings/RepeatFieldBinding";
+import { BlockFieldBinding } from "./field_bindings/BlockFieldBinding";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 import { MarkdownFieldBinding } from "./field_bindings/MarkdownFieldBinding";
 import {
@@ -73,91 +68,92 @@ import {
  * @category Form custom fields
  */
 // export const PropertyFieldBinding = React.memo(
-    export function PropertyFieldBinding<T extends any = any, M extends object = object>
-    ({
-         propertyKey,
-         property,
-         context,
-         includeDescription,
-         underlyingValueHasChanged,
-         disabled,
-         tableMode,
-         partOfArray,
-         autoFocus,
-         shouldAlwaysRerender
-     }: PropertyFieldBindingProps<M>): ReactElement<PropertyFieldBindingProps<M>> {
+export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = any, M extends Record<string, any> = Record<string, any>>
+({
+     propertyKey,
+     property,
+     context,
+     includeDescription,
+     underlyingValueHasChanged,
+     disabled,
+     tableMode,
+     partOfArray,
+     autoFocus,
+     shouldAlwaysRerender
+ }: PropertyFieldBindingProps<any, M>): ReactElement<PropertyFieldBindingProps<any, M>> {
 
-        let component: ComponentType<FieldProps<T, any, M>> | undefined;
-        const resolvedProperty = resolveProperty({
-            propertyOrBuilder: property,
-            values: context.values,
-            path: context.path,
-            entityId: context.entityId
-        }) as ResolvedProperty;
-
-        if (isReadOnly(resolvedProperty)) {
-            component = ReadOnlyFieldBinding;
-        } else if (resolvedProperty.Field) {
-            component = resolvedProperty.Field as ComponentType<FieldProps<T>>;
-        } else if (resolvedProperty.dataType === "array") {
-            const of = (resolvedProperty as ResolvedArrayProperty).of;
-            if (of) {
-                if (Array.isArray(of)) {
-                    component = ArrayCustomShapedFieldBinding as ComponentType<FieldProps<T>>;
-                } else if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
-                    component = ArrayEnumSelectBinding as ComponentType<FieldProps<any>>;
-                } else if (of.dataType === "string" && of.storage) {
-                    component = StorageUploadFieldBinding as ComponentType<FieldProps<any>>;
-                } else if (of.dataType === "reference") {
-                    component = ArrayOfReferencesFieldBinding as ComponentType<FieldProps<any>>;
-                } else {
-                    component = RepeatFieldBinding as ComponentType<FieldProps<T>>;
-                }
+    let component: ComponentType<FieldProps> | undefined;
+    const resolvedProperty:ResolvedProperty<T>| null = resolveProperty({
+        propertyOrBuilder: property,
+        values: context.values,
+        path: context.path,
+        entityId: context.entityId
+    });
+    if (resolvedProperty === null) {
+        return <></>;
+    } else if (isReadOnly(resolvedProperty)) {
+        component = ReadOnlyFieldBinding;
+    } else if (resolvedProperty.Field) {
+        component = resolvedProperty.Field;
+    } else if (resolvedProperty.dataType === "array") {
+        const of = (resolvedProperty as ResolvedArrayProperty).of;
+        if (of) {
+            if (Array.isArray(of)) {
+                component = ArrayCustomShapedFieldBinding;
+            } else if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
+                component = ArrayEnumSelectBinding;
+            } else if (of.dataType === "string" && of.storage) {
+                component = StorageUploadFieldBinding;
+            } else if (of.dataType === "reference") {
+                component = ArrayOfReferencesFieldBinding;
+            } else {
+                component = RepeatFieldBinding;
             }
+        }
             const oneOf = (resolvedProperty as ResolvedArrayProperty).oneOf;
             if (oneOf) {
-                component = BlockFieldBinding as ComponentType<FieldProps<T>>;
+                component = BlockFieldBinding;
             }
             if (!of && !oneOf) {
                 throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
             }
         } else if (resolvedProperty.dataType === "map") {
-            component = MapFieldBinding as ComponentType<FieldProps<any>>;
+        component = MapFieldBinding;
         } else if (resolvedProperty.dataType === "reference") {
             if (!resolvedProperty.path)
-                component = ReadOnlyFieldBinding as ComponentType<FieldProps<any>>;
+                component = ReadOnlyFieldBinding;
             else {
-                component = ReferenceFieldBinding as ComponentType<FieldProps<any>>;
+                component = ReferenceFieldBinding;
             }
         } else if (resolvedProperty.dataType === "date") {
-            component = DateTimeFieldBinding as ComponentType<FieldProps<any>>;
+        component = DateTimeFieldBinding;
         } else if (resolvedProperty.dataType === "boolean") {
-            component = SwitchFieldBinding as ComponentType<FieldProps<any>>;
+        component = SwitchFieldBinding;
         } else if (resolvedProperty.dataType === "number") {
             if (resolvedProperty.enumValues) {
-                component = SelectFieldBinding as ComponentType<FieldProps<any>>;
+                component = SelectFieldBinding;
             } else {
-                component = TextFieldBinding as ComponentType<FieldProps<any>>;
+                component = TextFieldBinding;
             }
         } else if (resolvedProperty.dataType === "string") {
             if (resolvedProperty.storage) {
-                component = StorageUploadFieldBinding as ComponentType<FieldProps<any>>;
+                component = StorageUploadFieldBinding;
             } else if (resolvedProperty.markdown) {
-                component = MarkdownFieldBinding as ComponentType<FieldProps<any>>;
+                component = MarkdownFieldBinding;
             } else if (resolvedProperty.email || resolvedProperty.url || resolvedProperty.multiline) {
-                component = TextFieldBinding as ComponentType<FieldProps<T>>;
+                component = TextFieldBinding;
             } else if (resolvedProperty.enumValues) {
-                component = SelectFieldBinding as ComponentType<FieldProps<T>>;
+                component = SelectFieldBinding;
             } else {
-                component = TextFieldBinding as ComponentType<FieldProps<T>>;
+                component = TextFieldBinding;
             }
         }
 
         if (component) {
 
-            const componentProps = {
+            const componentProps: PropertyFieldBindingProps<T, M> = {
                 propertyKey,
-                property: resolvedProperty,
+                property: resolvedProperty as ResolvedProperty<T>,
                 includeDescription,
                 underlyingValueHasChanged,
                 context,
@@ -179,7 +175,7 @@ import {
                 >
                     {(fieldProps: FormikFieldProps<T>) => {
                         return <FieldInternal
-                            component={component as ComponentType<FieldProps<T>>}
+                            component={component as ComponentType<FieldProps>}
                             componentProps={componentProps}
                             fieldProps={fieldProps}/>;
                     }}
@@ -195,7 +191,7 @@ import {
     // ,
     // equal);
 
-function FieldInternal<T extends any, M extends object>
+function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, any>>
 ({
      component,
      componentProps: {
@@ -213,8 +209,8 @@ function FieldInternal<T extends any, M extends object>
      fieldProps
  }:
      {
-         component: ComponentType<FieldProps<T>>,
-         componentProps: PropertyFieldBindingProps<M>,
+         component: ComponentType<FieldProps>,
+         componentProps: PropertyFieldBindingProps<T, M>,
          fieldProps: FormikFieldProps<T>
      }) {
 
@@ -230,7 +226,7 @@ function FieldInternal<T extends any, M extends object>
 
     const isSubmitting = fieldProps.form.isSubmitting;
 
-    const cmsFieldProps: FieldProps<T> = {
+    const cmsFieldProps: FieldProps<T, CustomProps, M> = {
         propertyKey,
         value: value as T,
         initialValue,

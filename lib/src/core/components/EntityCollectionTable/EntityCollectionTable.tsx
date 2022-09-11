@@ -7,14 +7,14 @@ import {
     getSubcollectionColumnId
 } from "./internal/common";
 import {
-    AdditionalColumnDelegate, CMSType,
+    AdditionalColumnDelegate,
     CollectionSize,
     Entity,
     EntityCollection,
     FilterCombination,
     FilterValues,
     FireCMSContext,
-    Property,
+    PropertyOrBuilder,
     ResolvedEntityCollection,
     ResolvedProperty,
     SaveEntityProps,
@@ -50,7 +50,9 @@ import {
     resolveProperty
 } from "../../util";
 import { getRowHeight } from "../Table/common";
-import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
+import {
+    EntityCollectionRowActions
+} from "./internal/EntityCollectionRowActions";
 import {
     EntityCollectionTableController,
     OnCellValueChange,
@@ -98,7 +100,7 @@ const DEFAULT_PAGE_SIZE = 50;
  * @category Components
  */
 export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>(
-    function EntityCollectionTable<M extends object, AdditionalKey extends string, UserType extends User>
+    function EntityCollectionTable<M extends Record<string, any>, AdditionalKey extends string, UserType extends User>
     ({
          fullPath,
          initialFilter,
@@ -325,14 +327,14 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
             const propertyKey = column.key;
 
-            const propertyOrBuilder = getPropertyInPath(collection.properties, propertyKey);
+            const propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
             if (!propertyOrBuilder) {
                 return null;
             }
             const property = resolveProperty({
                 propertyOrBuilder,
                 path: fullPath,
-                propertyValue: entity.values ? getValueInPath(entity.values as any, propertyKey) : undefined,
+                propertyValue: entity.values ? getValueInPath(entity.values, propertyKey) : undefined,
                 values: entity.values,
                 entityId: entity.id
             });
@@ -364,7 +366,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                                 propertyKey={propertyKey as string}
                                 property={property}
                                 setFocused={setFocused}
-                                value={entity?.values ? getValueInPath(entity.values as any, propertyKey) : undefined}
+                                value={entity?.values ? getValueInPath(entity.values, propertyKey) : undefined}
                                 collection={collection}
                                 customFieldValidator={customFieldValidator}
                                 columnIndex={columnIndex}
@@ -390,7 +392,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             const additionalColumn = additionalColumnsMap[column.key as AdditionalKey];
             const value = additionalColumn.dependencies
                 ? Object.entries(entity.values)
-                    .filter(([key, value]) => additionalColumn.dependencies!.includes(key as any))
+                    .filter(([key, value]) => additionalColumn.dependencies!.includes(key as Extract<keyof M, string>))
                     .reduce((a, b) => ({ ...a, ...b }), {})
                 : undefined;
 
@@ -572,7 +574,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             filter={filterValues}
                             onFilterUpdate={onFilterUpdate}
                             sortBy={sortBy}
-                            onSortByUpdate={setSortBy as any}
+                            onSortByUpdate={setSortBy as ((sortBy?: [string, "asc" | "desc"]) => void)}
                             hoverRow={hoverRow}
                             checkFilterCombination={checkFilterCombination}
                         />
@@ -621,7 +623,7 @@ function isFilterCombinationValid<M>(
         ) !== undefined;
 }
 
-function useColumnIds<M extends object>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
+function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
     return useMemo(() => {
         const displayedProperties = getCollectionColumnIds(collection);
 
@@ -643,7 +645,7 @@ function useColumnIds<M extends object>(collection: ResolvedEntityCollection<M>,
     }, [collection, includeSubcollections]);
 }
 
-function getCollectionColumnIds(collection: ResolvedEntityCollection) {
+function getCollectionColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>) {
     return Object.entries<ResolvedProperty>(collection.properties)
         .filter(([_, property]) => !property.hideFromCollection)
         .filter(([_, property]) => !(property.disabled && typeof property.disabled === "object" && property.disabled.hidden))

@@ -9,7 +9,7 @@ import { useEntityCollectionTableController } from "../EntityCollectionTable";
 import { getRowHeight } from "../../Table/common";
 import { getValueInPath } from "../../../util";
 
-export interface PropertyPreviewTableCellProps<T extends any, M> {
+export interface PropertyPreviewTableCellProps<T extends CMSType, M extends Record<string, any>> {
     propertyKey: string;
     columnIndex: number;
     align: "right" | "left" | "center";
@@ -19,7 +19,7 @@ export interface PropertyPreviewTableCellProps<T extends any, M> {
 }
 
 export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps<any, any>>(
-    function PropertyPreviewTableCell<T extends any, M>({
+    function PropertyPreviewTableCell<T extends CMSType, M extends Record<string, any>>({
                                                                  propertyKey,
                                                                  columnIndex,
                                                                  property,
@@ -33,7 +33,7 @@ export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps
             focused
         } = useEntityCollectionTableController();
 
-        const value = getValueInPath(entity.values as any, propertyKey);
+        const value = getValueInPath(entity.values , propertyKey);
         return (
             <TableCell
                 size={size}
@@ -47,7 +47,7 @@ export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps
                     width={width}
                     height={getRowHeight(size)}
                     propertyKey={propertyKey}
-                    property={property as any}
+                    property={property }
                     entity={entity}
                     value={value}
                     size={getPreviewSizeFrom(size)}

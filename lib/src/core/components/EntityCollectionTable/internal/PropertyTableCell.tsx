@@ -36,7 +36,7 @@ import {
 import { useEntityCollectionTableController } from "../EntityCollectionTable";
 import { useClearRestoreValue } from "../../../../hooks";
 
-export interface PropertyTableCellProps<T extends any, M extends object> {
+export interface PropertyTableCellProps<T extends any, M extends Record<string, any>> {
     propertyKey: string;
     columnIndex: number;
     align: "right" | "left" | "center";
@@ -54,7 +54,7 @@ export interface PropertyTableCellProps<T extends any, M extends object> {
 /**
  * Props passed in a callback when the content of a cell in a table has been edited
  */
-export interface OnCellChangeParams<T, M extends object> {
+export interface OnCellChangeParams<T, M extends Record<string, any>> {
     value: T,
     propertyKey: string,
     entity: Entity<M>;
@@ -77,7 +77,7 @@ function isStorageProperty<T>(property: ResolvedProperty) {
 }
 
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
-    function PropertyTableCell<T extends any, M extends object>({
+    function PropertyTableCell<T extends any, M extends Record<string, any>>({
                                                          propertyKey,
                                                          setFocused,
                                                          columnIndex,

@@ -3,7 +3,6 @@ import {
     AsyncPreviewComponent,
     buildCollection,
     EntityCallbacks,
-    EntityCustomView,
     ExtraActionsParams
 } from "@camberi/firecms";
 
@@ -76,7 +75,7 @@ const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
         }/>
 };
 
-export const productCallbacks: EntityCallbacks = {
+export const productCallbacks: EntityCallbacks<Product> = {
     onPreSave: ({
                     collection,
                     path,
@@ -84,7 +83,7 @@ export const productCallbacks: EntityCallbacks = {
                     values,
                     status
                 }) => {
-        values.uppercase_name = values.name.toUpperCase();
+        values.uppercase_name = values?.name?.toUpperCase();
         return values;
     },
 

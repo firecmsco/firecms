@@ -36,7 +36,7 @@ import { CustomIdField } from "./components/CustomIdField";
 /**
  * @category Components
  */
-export interface EntityFormProps<M extends object> {
+export interface EntityFormProps<M extends Record<string, any>> {
 
     /**
      * New or existing status
@@ -105,7 +105,7 @@ export interface EntityFormProps<M extends object> {
  * @constructor
  * @category Components
  */
-export function EntityForm<M extends object>({
+export function EntityForm<M extends Record<string, any>>({
                                                                  status,
                                                                  path,
                                                                  collection: inputCollection,
@@ -192,8 +192,8 @@ export function EntityForm<M extends object>({
         if (initialValues && status === "existing") {
             return Object.keys(collection.properties)
                 .map((key) => {
-                    const initialValue = (initialValues as any)[key];
-                    const latestValue = (baseDataSourceValues as any)[key];
+                    const initialValue = (initialValues )[key];
+                    const latestValue = (baseDataSourceValues )[key];
                     if (!equal(initialValue, latestValue)) {
                         return { [key]: latestValue };
                     }
@@ -342,7 +342,7 @@ export function EntityForm<M extends object>({
     );
 }
 
-function FormInternal<M extends object>({
+function FormInternal<M extends Record<string, any>>({
                              initialValues,
                              values,
                              onModified,
@@ -417,13 +417,13 @@ function FormInternal<M extends object>({
 
                     const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
                     const shouldAlwaysRerender = shouldPropertyReRender(property);
-                    const cmsFormFieldProps: PropertyFieldBindingProps = {
+                    const cmsFormFieldProps: PropertyFieldBindingProps<any,M> = {
                         propertyKey: key,
                         disabled,
                         property,
                         includeDescription: true,
                         underlyingValueHasChanged,
-                        context: context as FormContext<M>,
+                        context,
                         tableMode: false,
                         partOfArray: false,
                         autoFocus: false,

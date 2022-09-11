@@ -1,13 +1,13 @@
 import React from "react";
 import { EnumValueConfig, WhereFilterOp } from "../../../models";
 
-export type OnRowClickParams<T extends object> = { rowData: T; rowIndex: number; event: React.SyntheticEvent };
+export type OnRowClickParams<T extends Record<string, any>> = { rowData: T; rowIndex: number; event: React.SyntheticEvent };
 
 /**
  * @see Table
  * @category Components
  */
-export interface VirtualTableProps<T extends object, E extends any> {
+export interface VirtualTableProps<T extends Record<string, any>, E extends any> {
 
     /**
      * Array of arbitrary data

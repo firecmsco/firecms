@@ -11,7 +11,7 @@ import {
  *
  * @category Form custom fields
  */
-export interface FieldProps<T extends any, CustomProps = any, M extends object = object> {
+export interface FieldProps<T extends CMSType = any, CustomProps = any, M extends Record<string, any> = any> {
 
     /**
      * Name of the property
@@ -117,7 +117,7 @@ export interface FieldProps<T extends any, CustomProps = any, M extends object =
  * Context passed to custom fields
  * @category Form custom fields
  */
-export interface FormContext<M extends object> {
+export interface FormContext<M extends Record<string, any> = any> {
 
     /**
      * Collection of the entity being modified
@@ -145,7 +145,7 @@ export interface FormContext<M extends object> {
  * custom field you can use {@link PropertyFieldBinding} with these props.
  * @category Form custom fields
  */
-export interface PropertyFieldBindingProps<M extends object = object> {
+export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<string, any> = any> {
 
     /**
      * The name of the property, such as `age`. You can use nested and array
@@ -156,7 +156,7 @@ export interface PropertyFieldBindingProps<M extends object = object> {
     /**
      * The CMS property you are binding this field to
      */
-    property: Property | ResolvedProperty;
+    property: Property<T> | ResolvedProperty<T>;
 
     /**
      * The context where this field is being rendered. You get a context as a

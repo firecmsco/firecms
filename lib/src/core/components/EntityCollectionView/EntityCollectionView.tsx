@@ -40,7 +40,7 @@ import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 /**
  * @category Components
  */
-export type EntityCollectionViewProps<M extends object> = {
+export type EntityCollectionViewProps<M extends Record<string, any>> = {
     fullPath: string;
     isSubCollection?: boolean;
 } & EntityCollection<M>;
@@ -70,7 +70,7 @@ export type EntityCollectionViewProps<M extends object> = {
  * @category Components
  */
 export const EntityCollectionView = React.memo(
-    function EntityCollectionView<M extends object>({
+    function EntityCollectionView<M extends Record<string, any>>({
                                                         fullPath,
                                                         isSubCollection,
                                                         ...collectionProp
@@ -341,7 +341,7 @@ export const EntityCollectionView = React.memo(
         );
     }, equal) as React.FunctionComponent<EntityCollectionViewProps<any>>
 
-export function useSelectionController<M extends object = object>(): SelectionController<M> {
+export function useSelectionController<M extends Record<string, any>>(): SelectionController<M> {
 
     const [selectedEntities, setSelectedEntities] = useState<Entity<M>[]>([]);
 

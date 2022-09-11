@@ -18,8 +18,9 @@ import { EntityCollection } from "./collections";
  * are resolved to regular `Property` objects.
  * @category Models
  */
-export type ResolvedEntityCollection<M extends object = object> =
-    Omit<EntityCollection<M>, "properties"> &
+export type ResolvedEntityCollection<M extends Record<string, any> = any> =
+    Omit<EntityCollection<M>, "properties">
+    &
     {
         properties: ResolvedProperties<M>,
         originalCollection: EntityCollection<M>,
@@ -29,20 +30,20 @@ export type ResolvedEntityCollection<M extends object = object> =
 /**
  * @category Entity properties
  */
-export type ResolvedProperty<T extends any = any> =
+export type ResolvedProperty<T extends any = CMSType> =
     T extends string ? ResolvedStringProperty :
         T extends number ? ResolvedNumberProperty :
             T extends boolean ? ResolvedBooleanProperty :
                 T extends Date ? ResolvedTimestampProperty :
                     T extends GeoPoint ? ResolvedGeopointProperty :
                         T extends EntityReference ? ResolvedReferenceProperty :
-                            T extends Array<CMSType> ? ResolvedArrayProperty<T> :
-                                T extends { [Key: string]: any } ? ResolvedMapProperty<T> : never;
+                            T extends CMSType[] ? ResolvedArrayProperty<T> :
+                                T extends Record<string, any> ? ResolvedMapProperty<T> : any;
 
 /**
  * @category Entity properties
  */
-export type ResolvedProperties<M extends object = object> = {
+export type ResolvedProperties<M extends Record<string, any> = any> = {
     [k in keyof M]: ResolvedProperty<M[keyof M]>;
 };
 
@@ -117,12 +118,14 @@ export type ResolvedReferenceProperty =
 /**
  * @category Entity properties
  */
-export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends any = any> =
+export type ResolvedArrayProperty
+    <T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType>
+    =
     Omit<ArrayProperty, "of" | "oneOf" | "dataType"> &
     {
         dataType: "array";
         resolved: true;
-        of?: ResolvedProperty<ArrayT> | ResolvedProperty<any>[],
+        of?: ResolvedProperty<any> | ResolvedProperty<any>[],
         oneOf?: {
             properties: Record<string, ResolvedProperty<any>>
             typeField?: string;
@@ -135,12 +138,12 @@ export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends any
 /**
  * @category Entity properties
  */
-export type ResolvedMapProperty<T extends { [Key: string]: any } = any> =
+export type ResolvedMapProperty<T extends Record<string, any> = any> =
     Omit<MapProperty, "properties" | "dataType" | "propertiesOrder"> &
     {
         dataType: "map";
         resolved: true;
         properties?: ResolvedProperties<T>;
-        propertiesOrder?: string[];
+        propertiesOrder?: Extract<keyof T, string>[];
         fromBuilder: boolean;
     }

@@ -20,7 +20,7 @@ export const VirtualTableCell = React.memo<VirtualTableCellProps<any, any>>(
         return props.rowData && props.cellRenderer(
             {
                 cellData: props.cellData,
-                rowData: props.rowData as any,
+                rowData: props.rowData ,
                 rowIndex: props.rowIndex,
                 isScrolling: false,
                 column: props.column,

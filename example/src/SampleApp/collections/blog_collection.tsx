@@ -6,7 +6,7 @@ import {
 } from "@camberi/firecms";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
 
-type BlogEntry = {
+export type BlogEntry = {
     name: string,
     header_image: string,
     content: any[],

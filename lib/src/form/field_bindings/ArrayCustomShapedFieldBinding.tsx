@@ -28,7 +28,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         context,
                                                                         disabled,
                                                                         shouldAlwaysRerender
-                                                                    }: FieldProps<T>) {
+                                                                    }: FieldProps<T, any, any>) {
 
     if (!Array.isArray(property.resolvedProperties))
         throw Error("ArrayCustomShapedFieldBinding misconfiguration. Property `of` not set");

@@ -1,9 +1,7 @@
 import React, { createElement } from "react";
 import {
-    CMSType,
     EntityReference,
-    ResolvedArrayProperty,
-    ResolvedMapProperty,
+    ResolvedArrayProperty, ResolvedMapProperty,
     ResolvedNumberProperty,
     ResolvedStringProperty
 } from "../models";
@@ -45,7 +43,7 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
         propertyValue: value
     });
 
-    const fieldProps = { ...props };
+    const fieldProps:PropertyPreviewProps = { ...props };
 
     if (value === undefined || property === null) {
         content = <EmptyValue/>;

@@ -9,19 +9,19 @@ import {
 } from "@mui/material";
 
 import { PropertyPreview, PropertyPreviewProps } from "../index";
-import { CMSType, ResolvedMapProperty } from "../../models";
+import { ResolvedMapProperty } from "../../models";
 import { ErrorBoundary } from "../../core";
 
 /**
  * @category Preview components
  */
-export function MapPropertyPreview<T extends Record<string, CMSType>>({
-                                                                          propertyKey,
-                                                                          value,
-                                                                          property,
-                                                                          entity,
-                                                                          size
-                                                                      }: PropertyPreviewProps<T>) {
+export function MapPropertyPreview<T extends Record<string, any> = Record<string, any>>({
+                                                         propertyKey,
+                                                         value,
+                                                         property,
+                                                         entity,
+                                                         size
+                                                     }: PropertyPreviewProps<T>) {
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPropertyPreview");
@@ -63,7 +63,7 @@ export function MapPropertyPreview<T extends Record<string, CMSType>>({
                         <ErrorBoundary
                             key={"map_preview_" + mapProperty.name + key + index}>
                             <PropertyPreview propertyKey={key}
-                                             value={(value as any)[key]}
+                                             value={(value )[key]}
                                              property={mapProperty.properties![key]}
                                              entity={entity}
                                              size={size}/>
@@ -103,7 +103,7 @@ export function MapPropertyPreview<T extends Record<string, CMSType>>({
                                 <ErrorBoundary>
                                     <PropertyPreview
                                         propertyKey={key}
-                                        value={(value as any)[key]}
+                                        value={(value )[key]}
                                         property={mapProperty.properties![key]}
                                         entity={entity}
                                         size={"small"}/>

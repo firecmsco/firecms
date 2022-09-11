@@ -8,7 +8,7 @@ import { CMSType, ResolvedProperty } from "../models";
  * @param setValue
  * @ignore
  */
-export function useClearRestoreValue<T extends any>({
+export function useClearRestoreValue<T extends CMSType>({
                                                             property,
                                                             value,
                                                             setValue

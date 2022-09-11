@@ -19,8 +19,8 @@ type Product = {
 type CopyEntityButtonProps = {
     pathFrom: string;
     pathTo: string;
-    collectionFrom: EntityCollection;
-    collectionTo: EntityCollection;
+    collectionFrom: EntityCollection<any>;
+    collectionTo: EntityCollection<any>;
 };
 
 function CopyEntityButton({
@@ -99,7 +99,7 @@ export const productsCollectionCopy = buildCollection<Product>({
     name: "Products copy target",
     path: "products_copied",
     properties: properties,
-    extraActions: ({ path, collection }: ExtraActionsParams) =>
+    extraActions: ({ path, collection }: ExtraActionsParams<Product>) =>
         <CopyEntityButton
             pathFrom={"products"}
             collectionFrom={productsCollection}

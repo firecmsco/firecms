@@ -13,7 +13,7 @@ import { useNavigationContext } from "./useNavigationContext";
  * This is the same hook used internally when a reference property is defined.
  * @category Hooks and utilities
  */
-export function useReferenceDialog<M extends object>(referenceDialogProps: Omit<ReferenceDialogProps<M>, "path"> & {
+export function useReferenceDialog<M extends Record<string, any>>(referenceDialogProps: Omit<ReferenceDialogProps<M>, "path"> & {
     path?: string | false;
 }) {
 

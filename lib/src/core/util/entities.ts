@@ -32,11 +32,11 @@ export function isHidden(property: Property | ResolvedProperty): boolean {
     return typeof property.disabled === "object" && Boolean(property.disabled.hidden);
 }
 
-export function isPropertyBuilder<T extends any>(propertyOrBuilder?: PropertyOrBuilder<T> | ResolvedProperty<T>): propertyOrBuilder is PropertyBuilder<T> {
+export function isPropertyBuilder<T extends CMSType, M extends Record<string, any>>(propertyOrBuilder?: PropertyOrBuilder<T, M> | Property<T> | ResolvedProperty<T>): propertyOrBuilder is PropertyBuilder<T, M> {
     return typeof propertyOrBuilder === "function";
 }
 
-export function getDefaultValuesFor<M extends object>(properties: PropertiesOrBuilders<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
+export function getDefaultValuesFor<M extends Record<string, any>>(properties: PropertiesOrBuilders<M> | ResolvedProperties<M>): Partial<EntityValues<M>> {
     if (!properties) return {};
     return Object.entries(properties)
         .map(([key, property]) => {
@@ -61,17 +61,17 @@ function getDefaultValueFor(property: PropertyOrBuilder) {
  * Update the automatic values in an entity before save
  * @category Datasource
  */
-export function updateDateAutoValues<M extends object>({
-                                                                           inputValues,
-                                                                           properties,
-                                                                           status,
-                                                                           timestampNowValue
-                                                                       }:
-                                                                           {
-                                                                               inputValues: Partial<EntityValues<M>>,
-                                                                               properties: ResolvedProperties<M>,
-                                                                               status: EntityStatus,
-                                                                               timestampNowValue: any,
+export function updateDateAutoValues<M extends Record<string, any>>({
+                                                                        inputValues,
+                                                                        properties,
+                                                                        status,
+                                                                        timestampNowValue
+                                                                    }:
+                                                                        {
+                                                                            inputValues: Partial<EntityValues<M>>,
+                                                                            properties: ResolvedProperties<M>,
+                                                                            status: EntityStatus,
+                                                                            timestampNowValue: any,
                                                                            }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
@@ -103,7 +103,7 @@ export function updateDateAutoValues<M extends object>({
  * @param properties
  * @category Datasource
  */
-export function sanitizeData<M extends object>
+export function sanitizeData<M extends Record<string, any>>
 (
     values: EntityValues<M>,
     properties: ResolvedProperties<M>
@@ -121,14 +121,14 @@ export function getReferenceFrom(entity: Entity<any>): EntityReference {
     return new EntityReference(entity.id, entity.path);
 }
 
-export function traverseValuesProperties<M extends object>(
+export function traverseValuesProperties<M extends Record<string, any>>(
     inputValues: Partial<EntityValues<M>>,
     properties: ResolvedProperties<M>,
     operation: (value: any, property: Property) => any
 ): EntityValues<M> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
-            const inputValue = inputValues && (inputValues as any)[key];
+            const inputValue = inputValues && (inputValues )[key];
             const updatedValue = traverseValueProperty(inputValue, property as Property, operation);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });

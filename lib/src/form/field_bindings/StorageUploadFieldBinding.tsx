@@ -116,7 +116,7 @@ export function StorageUploadFieldBinding({
                                               property,
                                               includeDescription,
                                               context,
-                                              isSubmitting,
+                                              isSubmitting
                                           }: StorageUploadFieldProps) {
 
     const storageSource = useStorageSource();
@@ -181,7 +181,7 @@ export function StorageUploadFieldBinding({
                 multipleFilesSupported={multipleFilesSupported}/>
 
                 {includeDescription &&
-                <FieldDescription property={property as any}/>}
+                <FieldDescription property={property}/>}
 
                 {showError && <FormHelperText>{error}</FormHelperText>}
 

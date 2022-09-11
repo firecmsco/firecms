@@ -18,7 +18,7 @@ export type CMSType =
     | Date
     | GeoPoint
     | EntityReference
-    | object
+    | Record<string, any>
     | CMSType[];
 
 /**
@@ -45,7 +45,7 @@ export type Property<T extends any = CMSType> =
                     T extends GeoPoint ? GeopointProperty :
                         T extends EntityReference ? ReferenceProperty :
                             T extends Array<CMSType> ? ArrayProperty<T> :
-                                T extends { [Key: string]: any } ? MapProperty<T> : AnyProperty;
+                                T extends Record<string, any> ? MapProperty<T> : AnyProperty;
 
 /**
  * @category Entity properties
@@ -64,7 +64,7 @@ export type DataType =
  * Interface including all common properties of a CMS property
  * @category Entity properties
  */
-export interface BaseProperty<T extends any, CustomProps = any> {
+export interface BaseProperty<T extends CMSType, CustomProps = any> {
 
     /**
      * Datatype of the property
@@ -225,14 +225,14 @@ export interface EnumValueConfig {
  * Record of properties of an entity or a map property
  * @category Entity properties
  */
-export type Properties<M extends object = object> = {
+export type Properties<M extends Record<string, any> = any> = {
     [k in keyof M]: Property<M[keyof M]>;
 };
 
 /**
  * @category Entity properties
  */
-export type PropertyBuilderProps<M extends object> =
+export type PropertyBuilderProps<M extends Record<string, any> = any> =
     {
         /**
          * Current values of the entity
@@ -263,7 +263,8 @@ export type PropertyBuilderProps<M extends object> =
 /**
  * @category Entity properties
  */
-export type PropertyBuilder<T extends any = CMSType, M extends object = object> = ({
+export type PropertyBuilder<T extends any, M extends Record<string, any> = any> = ({
+// export type PropertyBuilder<T extends any = CMSType, M extends Record<string, any>= Record<string, any>> = ({
                                                                          values,
                                                                          previousValues,
                                                                          propertyValue,
@@ -274,14 +275,14 @@ export type PropertyBuilder<T extends any = CMSType, M extends object = object> 
 /**
  * @category Entity properties
  */
-export type PropertyOrBuilder<T extends any = CMSType, M extends object = object> =
+export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, CMSType> = Record<string, any>> =
     Property<T>
     | PropertyBuilder<T, M>;
 
 /**
  * @category Entity properties
  */
-export type PropertiesOrBuilders<M extends object = object> =
+export type PropertiesOrBuilders<M extends Record<string, CMSType>> =
     {
         [k in keyof M]: PropertyOrBuilder<M[k], M>;
     };
@@ -385,7 +386,7 @@ export interface StringProperty extends BaseProperty<string> {
 /**
  * @category Entity properties
  */
-export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends any = any> extends BaseProperty<T> {
+export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> extends BaseProperty<T> {
 
     dataType: "array";
 
@@ -417,14 +418,14 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends any = 
          * Record of properties, where the key is the `type` and the value
          * is the corresponding property
          */
-        properties: Properties;
+        properties: Properties<any>;
 
         /**
          * Order in which the properties are displayed.
          * If you are specifying your collection as code, the order is the same as the
          * one you define in `properties`, and you don't need to specify this prop.
          */
-        propertiesOrder?: (Extract<keyof T, string>)[];
+        propertiesOrder?: Extract<keyof T, string>[];
 
         /**
          * Name of the field to use as the discriminator for type
@@ -454,7 +455,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends any = 
 /**
  * @category Entity properties
  */
-export interface MapProperty<T extends object = any> extends BaseProperty<T> {
+export interface MapProperty<T extends Record<string, CMSType> = Record<string, CMSType>> extends BaseProperty<T> {
 
     dataType: "map";
 
@@ -468,7 +469,7 @@ export interface MapProperty<T extends object = any> extends BaseProperty<T> {
      * If you are specifying your collection as code, the order is the same as the
      * one you define in `properties`, and you don't need to specify this prop.
      */
-    propertiesOrder?: (Extract<keyof T, string>)[];
+    propertiesOrder?: Extract<keyof T, string>[];
 
     /**
      * Rules for validating this property

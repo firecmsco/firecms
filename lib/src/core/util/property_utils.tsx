@@ -84,7 +84,7 @@ export function getColorForProperty(property: PropertyOrBuilder): string {
  * @param properties
  * @param path
  */
-export function getPropertyInPath(properties: PropertiesOrBuilders<any>, path: string): PropertyOrBuilder | undefined {
+export function getPropertyInPath<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, path: string): PropertyOrBuilder<any, M> | undefined {
     if (typeof properties === "object") {
         if (path in properties) {
             return properties[path];

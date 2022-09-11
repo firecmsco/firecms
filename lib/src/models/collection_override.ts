@@ -7,4 +7,4 @@ import { EntityCollection } from "./collections";
 export type CollectionOverrideHandler = (props: {
     entityId?: string,
     path: string
-}) => Partial<EntityCollection> | undefined;
+}) => Partial<EntityCollection<any>> | undefined;

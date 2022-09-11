@@ -1,7 +1,7 @@
 import { CMSType, Entity } from "../../models";
 import { useEffect, useMemo, useState } from "react";
 
-export interface DataOrderProps<M extends object> {
+export interface DataOrderProps<M extends Record<string, any>> {
     data: Entity<M>[];
     entitiesDisplayedFirst?: Entity<M>[];
 }
@@ -12,7 +12,7 @@ export interface DataOrderProps<M extends object> {
  * @param entitiesDisplayedFirst
  * @category Hooks and utilities
  */
-export function useDataOrder<M extends object>(
+export function useDataOrder<M extends Record<string, any>>(
     {
         data,
         entitiesDisplayedFirst

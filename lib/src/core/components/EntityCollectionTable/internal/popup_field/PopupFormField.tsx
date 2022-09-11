@@ -7,12 +7,11 @@ import React, {
 } from "react";
 import equal from "react-fast-compare"
 
-import { Box, Button, IconButton, Typography, Portal } from "@mui/material";
+import { Box, Button, IconButton, Portal, Typography } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
 import {
-    CMSType,
     Entity,
     EntityCollection,
     EntityValues,
@@ -36,7 +35,7 @@ import { isReadOnly, resolveCollection } from "../../../../util";
 import { CustomDialogActions } from "../../../CustomDialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 
-interface PopupFormFieldProps<M extends object> {
+interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
     customFieldValidator?: CustomFieldValidator;
     path: string;
@@ -55,17 +54,17 @@ interface PopupFormFieldProps<M extends object> {
     onCellValueChange?: (params: OnCellValueChangeParams<any, M>) => Promise<void>;
 }
 
-export function PopupFormField<M extends object>({
-                                                                     tableKey,
-                                                                     entity,
-                                                                     customFieldValidator,
-                                                                     propertyKey,
-                                                                     collection: inputCollection,
-                                                                     path,
-                                                                     cellRect,
-                                                                     open,
-                                                                     onClose,
-                                                                     columnIndex,
+export function PopupFormField<M extends Record<string, any>>({
+                                                                  tableKey,
+                                                                  entity,
+                                                                  customFieldValidator,
+                                                                  propertyKey,
+                                                                  collection: inputCollection,
+                                                                  path,
+                                                                  cellRect,
+                                                                  open,
+                                                                  onClose,
+                                                                  columnIndex,
                                                                      onCellValueChange
                                                                  }: PopupFormFieldProps<M>) {
 
@@ -256,9 +255,9 @@ export function PopupFormField<M extends object>({
                         path
                     };
 
-                    const property: ResolvedProperty<any> | undefined = collection.properties[propertyKey];
+                    const property: ResolvedProperty<any> | undefined = propertyKey && collection.properties[propertyKey];
 
-                    const fieldProps: PropertyFieldBindingProps | undefined = propertyKey && property
+                    const fieldProps: PropertyFieldBindingProps<any, M> | undefined = propertyKey && property
                         ? {
                             propertyKey: propertyKey as string,
                             disabled: isSubmitting || isReadOnly(property) || !!property.disabled,

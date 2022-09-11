@@ -25,7 +25,7 @@ import {
  * @param collection
  * @category Builder
  */
-export function buildCollection<M extends object = object,
+export function buildCollection<M extends Record<string, any> = any,
     AdditionalKey extends string = string,
     UserType extends User = User>(
     collection: EntityCollection<M, AdditionalKey, UserType>
@@ -39,7 +39,7 @@ export function buildCollection<M extends object = object,
  * @param property
  * @category Builder
  */
-export function buildProperty<T extends any = CMSType, P extends PropertyOrBuilder<T> = PropertyOrBuilder<T>>(
+export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrBuilder<T> = PropertyOrBuilder<T>, M extends Record<string, any> = Record<string, any>>(
     property: P
 ):
     P extends StringProperty ? StringProperty :
@@ -50,7 +50,7 @@ export function buildProperty<T extends any = CMSType, P extends PropertyOrBuild
                         P extends ReferenceProperty ? ReferenceProperty :
                             P extends ArrayProperty ? ArrayProperty :
                                 P extends MapProperty ? MapProperty :
-                                    P extends PropertyBuilder<T> ? PropertyBuilder<T> : never {
+                                    P extends PropertyBuilder<T, M> ? PropertyBuilder<T, M> : never {
     return property as any;
 }
 
@@ -60,7 +60,7 @@ export function buildProperty<T extends any = CMSType, P extends PropertyOrBuild
  * @param properties
  * @category Builder
  */
-export function buildProperties<M extends object = object>(
+export function buildProperties<M extends Record<string, any>>(
     properties: PropertiesOrBuilders<M>
 ): PropertiesOrBuilders<M> {
     return properties;
@@ -72,7 +72,7 @@ export function buildProperties<M extends object = object>(
  * @param propertiesOrBuilder
  * @category Builder
  */
-export function buildPropertiesOrBuilder<M extends object = object>(
+export function buildPropertiesOrBuilder<M extends Record<string, any>>(
     propertiesOrBuilder: PropertiesOrBuilders<M>
 ): PropertiesOrBuilders<M> {
     return propertiesOrBuilder;
@@ -108,7 +108,7 @@ export function buildEnumValueConfig(
  * @param callbacks
  * @category Builder
  */
-export function buildEntityCallbacks<M extends object= any>(
+export function buildEntityCallbacks<M extends Record<string, any> = any>(
     callbacks: EntityCallbacks<M>
 ): EntityCallbacks<M> {
     return callbacks;
@@ -120,7 +120,7 @@ export function buildEntityCallbacks<M extends object= any>(
  * @param additionalColumnDelegate
  * @category Builder
  */
-export function buildAdditionalColumnDelegate<M extends object = object, AdditionalKey extends string = string, UserType extends User = User>(
+export function buildAdditionalColumnDelegate<M extends Record<string, any>, AdditionalKey extends string = string, UserType extends User = User>(
     additionalColumnDelegate: AdditionalColumnDelegate<M, AdditionalKey, UserType>
 ): AdditionalColumnDelegate<M, AdditionalKey, UserType> {
     return additionalColumnDelegate;

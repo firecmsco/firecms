@@ -1,4 +1,4 @@
-import { Entity, Property, ResolvedProperty } from "../models";
+import { CMSType, Entity, Property, ResolvedProperty } from "../models";
 
 /**
  * @category Preview components
@@ -8,7 +8,7 @@ export type PreviewSize = "regular" | "small" | "tiny";
 /**
  * @category Preview components
  */
-export interface PropertyPreviewProps<T extends any = any, CustomProps = any> {
+export interface PropertyPreviewProps<T extends any = any, CustomProps = any, M extends Record<string, any> = Record<string, any>> {
     /**
      * Name of the property
      */
@@ -54,5 +54,5 @@ export interface PropertyPreviewProps<T extends any = any, CustomProps = any> {
     /**
      * Entity this property refers to
      */
-    entity?: Entity<any>;
+    entity?: Entity<M>;
 }

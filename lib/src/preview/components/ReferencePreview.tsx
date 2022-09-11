@@ -50,7 +50,7 @@ function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewP
         ;
 }
 
-function ReferencePreviewInternal<M extends object>({
+function ReferencePreviewInternal<M extends Record<string, any>>({
                                          disabled,
                                          reference,
                                          previewProperties,
@@ -154,7 +154,7 @@ function ReferencePreviewInternal<M extends object>({
                                 {entity
                                     ? <PropertyPreview
                                         propertyKey={key as string}
-                                        value={getValueInPath(entity.values as any, key)}
+                                        value={getValueInPath(entity.values , key)}
                                         property={childProperty as ResolvedProperty}
                                         entity={entity}
                                         size={"tiny"}/>

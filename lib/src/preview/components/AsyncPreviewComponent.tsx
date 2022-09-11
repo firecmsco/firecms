@@ -15,7 +15,7 @@ export interface AsyncPreviewComponentProps {
  */
 export const AsyncPreviewComponent = React.memo(AsyncPreviewComponentInternal) as React.FunctionComponent<AsyncPreviewComponentProps>;
 
-function AsyncPreviewComponentInternal<M extends object>(
+function AsyncPreviewComponentInternal<M extends Record<string, any>>(
     {
         builder
     }: AsyncPreviewComponentProps): JSX.Element {

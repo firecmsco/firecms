@@ -23,7 +23,7 @@ import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
 import { getIn } from "formik";
 
-export const resolveCollection = <M extends object = object, >
+export const resolveCollection = <M extends Record<string, any>, >
 ({
      collection,
      path,
@@ -81,13 +81,13 @@ export const resolveCollection = <M extends object = object, >
  * @param propertyValue
  * @param values
  */
-export function resolveProperty<T extends any, M>({
+export function resolveProperty<T extends CMSType = any, M extends Record<string, any> = any>({
                                           propertyOrBuilder,
                                           propertyValue,
                                           fromBuilder = false,
                                           ...props
                                       }: {
-    propertyOrBuilder: PropertyOrBuilder<T> | ResolvedProperty<T>,
+    propertyOrBuilder: PropertyOrBuilder<T, M> | ResolvedProperty<T>,
     propertyValue?: unknown,
     values?: Partial<M>,
     previousValues?: Partial<M>,
@@ -95,10 +95,10 @@ export function resolveProperty<T extends any, M>({
     entityId?: string,
     index?: number,
     fromBuilder?: boolean
-}): ResolvedProperty | null {
+}): ResolvedProperty<T> | null {
 
     if (typeof propertyOrBuilder === "object" && "resolved" in propertyOrBuilder) {
-        return propertyOrBuilder as ResolvedProperty;
+        return propertyOrBuilder as ResolvedProperty<T>;
     }
 
     if (!propertyOrBuilder) {
@@ -129,30 +129,30 @@ export function resolveProperty<T extends any, M>({
     } else if (propertyOrBuilder.dataType === "map" && propertyOrBuilder.properties) {
         const properties = resolveProperties({
             ...props,
-            properties: propertyOrBuilder.properties as PropertiesOrBuilders,
+            properties: propertyOrBuilder.properties,
             propertyValue
         });
         return {
             ...propertyOrBuilder,
             fromBuilder,
             properties
-        } as ResolvedProperty;
+        } as ResolvedProperty<T>;
     } else if (propertyOrBuilder.dataType === "array") {
         return resolveArrayProperty({
             property: propertyOrBuilder,
             propertyValue,
             fromBuilder,
             ...props
-        })
+        }) as ResolvedProperty<any>;
     } else if ((propertyOrBuilder.dataType === "string" || propertyOrBuilder.dataType === "number") && propertyOrBuilder.enumValues) {
-        return resolvePropertyEnum(propertyOrBuilder, fromBuilder);
+        return resolvePropertyEnum(propertyOrBuilder, fromBuilder) as ResolvedProperty<any>;
     }
 
     return {
         ...propertyOrBuilder,
         resolved: true,
         fromBuilder
-    } as ResolvedProperty;
+    } as ResolvedProperty<T>;
 }
 
 export function resolveArrayProperty<T extends any[], M>({
@@ -224,7 +224,7 @@ export function resolveArrayProperty<T extends any[], M>({
             }).filter(e => Boolean(e)) as ResolvedProperty[]
             : [];
         const properties = resolveProperties({
-            properties: property.oneOf.properties as PropertiesOrBuilders,
+            properties: property.oneOf.properties,
             propertyValue: undefined,
             ...props
         });
@@ -255,7 +255,7 @@ export function resolveArrayProperty<T extends any[], M>({
  * @param properties
  * @param value
  */
-export function resolveProperties<M extends object>({
+export function resolveProperties<M extends Record<string, any>>({
                                          properties,
                                          propertyValue,
                                          ...props

@@ -15,7 +15,7 @@ export type OnColumnResizeParams = { width: number, key: string };
 /**
  * @category Collection components
  */
-export type EntityCollectionTableProps<M extends object> = EntityCollection<M> & {
+export type EntityCollectionTableProps<M extends Record<string, any>> = EntityCollection<M> & {
 
     /**
      * Absolute collection path

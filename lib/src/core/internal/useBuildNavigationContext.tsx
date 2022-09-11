@@ -79,7 +79,7 @@ export function useBuildNavigationContext<UserType extends User>({
         processCollections();
     }, [processCollections]);
 
-    const getCollection = useCallback(<M extends object>(
+    const getCollection = useCallback(<M extends Record<string, any>>(
         pathOrAlias: string,
         entityId?: string,
         includeUserOverride = false

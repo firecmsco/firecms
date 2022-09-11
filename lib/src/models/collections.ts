@@ -4,12 +4,7 @@ import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
-import {
-    CMSType,
-    EnumValues,
-    PropertiesOrBuilders,
-    PropertyOrBuilder
-} from "./properties";
+import { EnumValues, PropertiesOrBuilders } from "./properties";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -18,7 +13,7 @@ import {
  *
  * @category Models
  */
-export interface EntityCollection<M extends object = object,
+export interface EntityCollection<M extends Record<string, any> = any,
     AdditionalKey extends string = string,
     UserType extends User = User> {
 
@@ -79,7 +74,7 @@ export interface EntityCollection<M extends object = object,
      * If you are specifying your collection as code, the order is the same as the
      * one you define in `properties`
      */
-    propertiesOrder?: (keyof M)[];
+    propertiesOrder?: Extract<keyof M, string>[];
 
     /**
      * If enabled, content is loaded in batches. If `false` all entities in the
@@ -215,7 +210,7 @@ export interface EntityCollection<M extends object = object,
  *
  * @category Models
  */
-export interface ExtraActionsParams<M extends object = object, UserType extends User = User> {
+export interface ExtraActionsParams<M extends Record<string, any> = any, UserType extends User = User> {
     /**
      * Collection path of this entity
      */
@@ -244,7 +239,7 @@ export interface ExtraActionsParams<M extends object = object, UserType extends 
  * If you want to pass a `SelectionController` to
  * @category Models
  */
-export type SelectionController<M extends object = object> = {
+export type SelectionController<M extends Record<string, any> = any> = {
     selectedEntities: Entity<M>[];
     setSelectedEntities: (selectedEntities: Entity<M>[]) => void;
     isEntitySelected: (entity: Entity<M>) => boolean;
@@ -312,7 +307,7 @@ export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
  * If you need to do some async loading you can use {@link AsyncPreviewComponent}
  * @category Models
  */
-export interface AdditionalColumnDelegate<M extends object = object,
+export interface AdditionalColumnDelegate<M extends Record<string, any> = any,
     AdditionalKey extends string = string,
     UserType extends User = User> {
 
@@ -353,7 +348,7 @@ export interface AdditionalColumnDelegate<M extends object = object,
      * If you don't specify this prop, the generated column will not rerender
      * on entity property updates.
      */
-    dependencies?: Partial<Extract<keyof M, string>>[];
+    dependencies?: Extract<keyof M, string>[];
 }
 
 /**
@@ -361,7 +356,7 @@ export interface AdditionalColumnDelegate<M extends object = object,
  * It gets rendered as a tab.
  * @category Models
  */
-export type EntityCustomView<M extends object = object> =
+export type EntityCustomView<M extends Record<string, any> = any> =
     {
         path: string,
         name: string,
@@ -373,7 +368,7 @@ export type EntityCustomView<M extends object = object> =
  * an entity view.
  * @category Models
  */
-export interface EntityCustomViewParams<M extends object = object> {
+export interface EntityCustomViewParams<M extends Record<string, any> = any> {
 
     /**
      * collection used by this entity

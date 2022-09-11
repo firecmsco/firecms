@@ -5,7 +5,7 @@ import { EntityCollectionView, ErrorBoundary } from "../components";
 /**
  * @category Components
  */
-export interface NavigationEntityCollectionViewProps<M extends object> {
+export interface NavigationEntityCollectionViewProps<M extends Record<string, any>> {
 
     /**
      * Absolute path this collection view points to
@@ -20,7 +20,7 @@ export interface NavigationEntityCollectionViewProps<M extends object> {
 
 }
 
-export function NavigationEntityCollectionView<M extends object>({
+export function NavigationEntityCollectionView<M extends Record<string, any>>({
                                                                                          fullPath,
                                                                                          overriddenCollection: baseCollection
                                                                                      }: NavigationEntityCollectionViewProps<M>) {

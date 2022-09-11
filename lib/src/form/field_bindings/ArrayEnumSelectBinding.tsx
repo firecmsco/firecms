@@ -36,7 +36,7 @@ export function ArrayEnumSelectBinding({
                                     property,
                                     includeDescription,
                                     autoFocus
-                                }: FieldProps<EnumType[]>) {
+                                }: FieldProps<EnumType[], any, any>) {
 
     if (!property.of) {
         throw Error("Using wrong component ArrayEnumSelect");

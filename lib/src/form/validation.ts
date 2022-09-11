@@ -52,7 +52,7 @@ interface PropertyContext<T extends any> {
     name?: any
 }
 
-export function getYupEntitySchema<M extends object>(
+export function getYupEntitySchema<M extends Record<string, any>>(
     entityId: string,
     properties: ResolvedProperties<M>,
     customFieldValidator?: CustomFieldValidator): ObjectSchema<any> {
@@ -60,7 +60,7 @@ export function getYupEntitySchema<M extends object>(
     Object.entries(properties as Record<string, ResolvedProperty>)
         .forEach(([name, property]) => {
             objectSchema[name] = mapPropertyToYup({
-                property,
+                property: property as ResolvedProperty<any>,
                 customFieldValidator,
                 name,
                 entityId
@@ -98,7 +98,7 @@ export function mapPropertyToYup<T>(propertyContext: PropertyContext<T>): AnySch
     throw Error("Unsupported data type in yup mapping");
 }
 
-export function getYupMapObjectSchema<M extends object>({
+export function getYupMapObjectSchema<M extends Record<string, any>>({
                                           property,
                                           entityId,
                                           customFieldValidator,
@@ -108,7 +108,7 @@ export function getYupMapObjectSchema<M extends object>({
     if (property.properties)
         Object.entries(property.properties).forEach(([childName, childProperty]: [string, ResolvedProperty]) => {
             objectSchema[childName] = mapPropertyToYup({
-                property: childProperty as ResolvedProperty,
+                property: childProperty as ResolvedProperty<any>,
                 parentProperty: property as ResolvedMapProperty,
                 customFieldValidator,
                 name: `${name}[${childName}]`,
@@ -349,7 +349,7 @@ function getYupArraySchema({
         if (Array.isArray(property.of)) {
             const yupProperties = (property.of as ResolvedProperty[]).map((p, index) => ({
                 [`${name}[${index}]`]: mapPropertyToYup({
-                    property: p,
+                    property: p as ResolvedProperty<any>,
                     parentProperty: property,
                     entityId
                 })

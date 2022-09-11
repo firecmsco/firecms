@@ -183,7 +183,6 @@ export const SlideFade = React.forwardRef(function SlideFade(props: SlideProps, 
     );
 });
 
-
 interface SlideProps {
     /**
      * A single child content element.

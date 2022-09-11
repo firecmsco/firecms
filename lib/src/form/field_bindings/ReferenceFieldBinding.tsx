@@ -47,7 +47,7 @@ import {
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ReferenceFieldBinding<M extends object>({
+export function ReferenceFieldBinding<M extends Record<string, any>>({
                                                                      propertyKey,
                                                                      value,
                                                                      setValue,
@@ -181,7 +181,7 @@ export function ReferenceFieldBinding<M extends object>({
                                         entity
                                             ? <PropertyPreview
                                                 propertyKey={key as string}
-                                                value={(entity.values as any)[key]}
+                                                value={(entity.values )[key]}
                                                 property={property as ResolvedProperty}
                                                 entity={entity}
                                                 size={"tiny"}/>

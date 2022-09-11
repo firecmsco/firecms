@@ -21,7 +21,7 @@ import {
 } from "../../../models";
 import { fullPathToCollectionSegments } from "../../util/paths";
 
-export type EntityCollectionViewActionsProps<M extends object> = {
+export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
     path: string;
     selectionEnabled: boolean;
@@ -32,7 +32,7 @@ export type EntityCollectionViewActionsProps<M extends object> = {
     selectionController: SelectionController<M>;
 }
 
-export function EntityCollectionViewActions<M extends object>({
+export function EntityCollectionViewActions<M extends Record<string, any>>({
                                                    collection,
                                                    onNewClick,
                                                    exportable,

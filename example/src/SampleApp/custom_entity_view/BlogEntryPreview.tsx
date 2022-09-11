@@ -20,13 +20,14 @@ import {
 } from "@camberi/firecms";
 import { Product } from "../types";
 import { productsCollection } from "../collections/products_collection";
+import { BlogEntry } from "../collections/blog_collection";
 
 /**
  * This is a sample view used to render the content of a blog entry.
  * It is bound to the data that is modified in the form.
  * @constructor
  */
-export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams) {
+export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<BlogEntry>) {
 
     const storage = useStorageSource();
 

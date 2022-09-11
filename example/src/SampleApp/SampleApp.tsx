@@ -90,7 +90,7 @@ function SampleApp() {
     ];
 
     if (process.env.NODE_ENV !== "production") {
-        collections.push(buildCollection(testCollection));
+        collections.push(testCollection);
     }
 
     return <FirebaseCMSApp

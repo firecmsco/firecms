@@ -63,7 +63,7 @@ const StyledTableContainer = styled(TableContainer)((
 /**
  * @category Components
  */
-export interface EntityPreviewProps<M extends object> {
+export interface EntityPreviewProps<M extends Record<string, any>> {
     entity: Entity<M>;
     collection: EntityCollection<M>;
     path: string;
@@ -77,7 +77,7 @@ export interface EntityPreviewProps<M extends object> {
  * @constructor
  * @category Components
  */
-export function EntityPreview<M extends object>(
+export function EntityPreview<M extends Record<string, any>>(
     {
         entity,
         collection,
@@ -133,7 +133,7 @@ export function EntityPreview<M extends object>(
 
                     {collection && Object.entries(properties)
                         .map(([key, property]) => {
-                            const value = (entity.values as any)[key];
+                            const value = (entity.values )[key];
                             return (
                                 <TableRow
                                     key={"entity_prev" + property.name + key}>

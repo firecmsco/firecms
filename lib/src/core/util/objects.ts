@@ -18,7 +18,7 @@ export function mergeDeep<T extends {}>(target: T, source: any): T {
                 if (!(key in target))
                     Object.assign(output, { [key]: source[key] });
                 else
-                    (output as any)[key] = mergeDeep((target as any)[key], source[key]);
+                    (output )[key] = mergeDeep((target )[key], source[key]);
             } else {
                 Object.assign(output, { [key]: source[key] });
             }
@@ -30,11 +30,11 @@ export function mergeDeep<T extends {}>(target: T, source: any): T {
 export function getValueInPath(o: object | undefined, path: string): any {
     if (typeof o === "object") {
         if (path in o) {
-            return (o as any)[path];
+            return (o )[path];
         }
         if (path.includes(".")) {
             const pathSegments = path.split(".");
-            return getValueInPath((o as any)[pathSegments[0]], pathSegments.slice(1).join("."))
+            return getValueInPath((o )[pathSegments[0]], pathSegments.slice(1).join("."))
         }
     }
     return undefined;

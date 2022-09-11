@@ -30,7 +30,7 @@ interface CollectionTableToolbarProps {
     clearFilter: () => void;
 }
 
-export function CollectionTableToolbar<M extends object>(props: CollectionTableToolbarProps) {
+export function CollectionTableToolbar<M extends Record<string, any>>(props: CollectionTableToolbarProps) {
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));

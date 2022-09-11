@@ -63,7 +63,7 @@ export function TableSelect(props: {
             if (!evt.target.value)
                 updateValue(null)
             else
-                updateValue(evt.target.value as any);
+                updateValue(evt.target.value );
         } else {
             throw Error("Missing mapping in TableSelect");
         }
@@ -125,7 +125,7 @@ export function TableSelect(props: {
                                   disabled={isEnumValueDisabled(labelOrConfig)}
                                   dense={true}>
                             <Checkbox
-                                checked={Array.isArray(internalValue) && (internalValue as any[]).map(v => v.toString()).includes(enumKey.toString())}/>
+                                checked={Array.isArray(internalValue) && internalValue.map(v => v.toString()).includes(enumKey.toString())}/>
                             <ListItemText primary={chip}/>
                         </MenuItem>
                     );

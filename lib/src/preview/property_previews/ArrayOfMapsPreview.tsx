@@ -1,5 +1,4 @@
 import React from "react";
-import { ArrayProperty, CMSType, ResolvedMapProperty } from "../../models";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
@@ -14,7 +13,7 @@ export function ArrayOfMapsPreview({
                                        property: inputProperty,
                                        size,
                                        entity
-                                   }: PropertyPreviewProps<CMSType[]>) {
+                                   }: PropertyPreviewProps<Record<string, any>[]>) {
 
     const property = resolveArrayProperty({
         property: inputProperty,
@@ -28,13 +27,13 @@ export function ArrayOfMapsPreview({
     if (property?.dataType !== "array" || !property.of || property.of.dataType !== "map")
         throw Error("Picked wrong preview component ArrayOfMapsPreview");
 
-    const mapProperty = (property as ArrayProperty).of as ResolvedMapProperty;
+    const mapProperty = property.of;
     const properties = mapProperty.properties;
     if (!properties) {
         throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
     }
     const values = value;
-    const previewProperties = mapProperty.previewProperties;
+    const previewProperties: string[] | undefined = mapProperty.previewProperties;
 
     if (!values) return null;
 
@@ -66,7 +65,7 @@ export function ArrayOfMapsPreview({
                                         <ErrorBoundary>
                                             <PropertyPreview
                                                 propertyKey={key as string}
-                                                value={(v as any)[key]}
+                                                value={(v )[key]}
                                                 property={properties[key as string]}
                                                 entity={entity}
                                                 size={"small"}/>

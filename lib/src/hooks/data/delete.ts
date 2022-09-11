@@ -13,7 +13,7 @@ import {
 /**
  * @category Hooks and utilities
  */
-export type DeleteEntityWithCallbacksProps<M extends object> =
+export type DeleteEntityWithCallbacksProps<M extends Record<string, any>> =
     DeleteEntityProps<M>
     & {
     callbacks?: EntityCallbacks<M>;
@@ -44,7 +44,7 @@ export type DeleteEntityWithCallbacksProps<M extends object> =
  * @param context
  * @category Hooks and utilities
  */
-export async function deleteEntityWithCallbacks<M extends object, UserType extends User>({
+export async function deleteEntityWithCallbacks<M extends Record<string, any>, UserType extends User>({
                                                                  dataSource,
                                                                  entity,
                                                                  collection,

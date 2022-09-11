@@ -50,7 +50,7 @@ export type NavigationContext = {
      * The collection is resolved from the given path or alias, located
      * among the
      */
-    getCollection: <M extends object>(pathOrAlias: string,
+    getCollection: <M extends Record<string, any> = any>(pathOrAlias: string,
                        entityId?: string,
                        includeUserOverride?: boolean) => EntityCollection<M> | undefined;
 

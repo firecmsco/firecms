@@ -46,18 +46,17 @@ export function ArrayEnumPreview({
             flexWrap: "wrap",
             gap: theme.spacing(0.5)
         })}>
-            {value &&
-                (value as any[]).map((enumKey, index) => {
-                        return (
-                            <ErrorBoundary
-                                key={`preview_array_ref_${name}_${index}`}>
-                                <EnumValuesChip
-                                    enumKey={enumKey}
-                                    enumValues={enumValues}
-                                    small={size !== "regular"}/>
-                            </ErrorBoundary>
-                        );
-                    }
+            {value && value.map((enumKey, index) => {
+                    return (
+                        <ErrorBoundary
+                            key={`preview_array_ref_${name}_${index}`}>
+                            <EnumValuesChip
+                                enumKey={enumKey}
+                                enumValues={enumValues}
+                                small={size !== "regular"}/>
+                        </ErrorBoundary>
+                    );
+                }
                 )}
         </Box>
     );

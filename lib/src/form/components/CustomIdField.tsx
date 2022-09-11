@@ -55,7 +55,7 @@ const StyledFormControl = styled(FormControl)((
     }
 }));
 
-export function CustomIdField<M extends object, UserType>({
+export function CustomIdField<M extends Record<string, any>, UserType>({
                                                customId,
                                                entityId,
                                                status,

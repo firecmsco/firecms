@@ -2,9 +2,10 @@ import {
     CMSType,
     EntityCollection,
     PropertiesOrBuilders,
-    Property, ResolvedEntityCollection
+    Property, PropertyOrBuilder, ResolvedEntityCollection
 } from "../../models";
 import { mergeDeep } from "./objects";
+import { isPropertyBuilder } from "./entities";
 
 export function mergeCollections(target: EntityCollection, source: EntityCollection): EntityCollection {
     const subcollectionsMerged = target.subcollections?.map((targetSubcollection) => {
@@ -27,19 +28,19 @@ export function mergeCollections(target: EntityCollection, source: EntityCollect
     }
 }
 
-export function sortProperties<M extends object>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {
+export function sortProperties<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {
     try {
         const propertiesKeys = Object.keys(properties);
         const allPropertiesOrder = propertiesOrder ?? propertiesKeys;
         return allPropertiesOrder
             .map((key) => {
                 if (properties[key as keyof M]) {
-                    const property = properties[key] as Property;
-                    if (typeof property === "object" && property?.dataType === "map") {
+                    const property = properties[key] as PropertyOrBuilder;
+                    if (!isPropertyBuilder(property) && property?.dataType === "map" && property.properties) {
                         return ({
                             [key]: {
                                 ...property,
-                                properties: sortProperties(property.properties ?? {}, property.propertiesOrder)
+                                properties: sortProperties(property.properties, property.propertiesOrder)
                             }
                         });
                     } else {
@@ -57,7 +58,7 @@ export function sortProperties<M extends object>(properties: PropertiesOrBuilder
     }
 }
 
-export function getFistAdditionalView<M extends object>(collection: EntityCollection<M> | ResolvedEntityCollection<M>) {
+export function getFistAdditionalView<M extends Record<string, any>>(collection: EntityCollection<M> | ResolvedEntityCollection<M>) {
     const subcollections = collection.subcollections;
     const subcollectionsCount = subcollections?.length ?? 0;
     const customViews = collection.views;
