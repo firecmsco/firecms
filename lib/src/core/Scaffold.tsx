@@ -257,10 +257,27 @@ function StyledDrawer(props: MuiDrawerProps & {
         }
         }>
 
+        <IconButton onClick={() => setDrawerOpen(false)}
+                    sx={{
+                        position: "absolute",
+                        right: 8,
+                        top: 16,
+                        opacity: open ? 1.0 : 0.0,
+                        transition: theme.transitions.create("opacity", {
+                            easing: theme.transitions.easing.sharp,
+                            duration: theme.transitions.duration.enteringScreen
+                        })
+                    }}>
+            {theme.direction === "rtl"
+                ? <ChevronRightIcon/>
+                : <ChevronLeftIcon/>}
+        </IconButton>
+
         {<Toolbar sx={{
             position: "absolute",
             left: open ? "-100%" : 0,
-            transition: theme.transitions.create("left", {
+            opacity: open ? 0.0 : 1.0,
+            transition: theme.transitions.create(["left", "opacity"], {
                 easing: theme.transitions.easing.sharp,
                 duration: theme.transitions.duration.enteringScreen
             })
@@ -285,7 +302,7 @@ function StyledDrawer(props: MuiDrawerProps & {
             component={NavLink}
             to={navigation.homeUrl}
             sx={theme => ({
-                transition: theme.transitions.create("padding", {
+                transition: theme.transitions.create(["padding"], {
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.enteringScreen
                 }),
@@ -300,17 +317,6 @@ function StyledDrawer(props: MuiDrawerProps & {
             </Tooltip>
 
         </Link>
-
-        {open && <IconButton onClick={() => setDrawerOpen(false)}
-                             sx={{
-                                 position: "absolute",
-                                 right: 8,
-                                 top: 16
-                             }}>
-            {theme.direction === "rtl"
-                ? <ChevronRightIcon/>
-                : <ChevronLeftIcon/>}
-        </IconButton>}
 
         {props.children}
 
