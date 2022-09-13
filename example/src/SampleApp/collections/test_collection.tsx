@@ -228,10 +228,15 @@ export const testCollection = buildCollection({
         },
         url_image: {
             dataType: 'string',
+            name: "URL image",
             storage: {
                 storagePath: 'images',
                 acceptedFiles: ['image/*'],
                 storeUrl: true,
+                fileName:  async ({file}) =>{
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    return file.name;
+                },
                 metadata: {
                     cacheControl: 'max-age=1000000',
                 },

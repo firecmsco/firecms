@@ -30,6 +30,7 @@ this version:
   entities directly from the reference selection view.
 - `AuthDelegate` and `AuthController` have been merged into `AuthController`
   which now serves both previous purposes.
+- You can now define a specific logo for dark mode.
 
 ### Collections and schemas
 
@@ -47,6 +48,11 @@ this version:
 - When creating a new entity, the id gets assigned as the first step. This
   allows developers to use the internal callbacks of properties that depend on
   the id of the new entity, such as file upload paths or file names.
+- New entity callbacks:
+  - `onFetch` you can use this callback if you need to modify data after it is 
+  read from the data source.
+  - `onIdUpdate` you can use this callback to modify the id based on other
+  values
 
 ### Properties and builders
 
@@ -55,7 +61,7 @@ this version:
   the local value of the property you are defining in the callback, which
   simplifies the process of building complex properties that depend on other
   values or themselves.
-- You can spread MapProperty fields in a collection using the `spreadChildren`
+- You can spread `MapProperty` fields in a collection using the `spreadChildren`
   prop.
 - Date properties: you can now select between date or date/time modes.
 - Enums can be defined now as arrays of objects with multiple configuration

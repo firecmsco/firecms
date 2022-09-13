@@ -1,5 +1,4 @@
 import {
-    CMSType,
     DataSource,
     DeleteEntityProps,
     Entity,
@@ -18,7 +17,11 @@ import {
     SaveEntityProps,
     WhereFilterOp
 } from "../../models";
-import { sanitizeData, updateDateAutoValues } from "../../core/util/entities";
+import {
+    resolveCollection,
+    sanitizeData,
+    updateDateAutoValues
+} from "../../core";
 import {
     collection as collectionClause,
     CollectionReference,
@@ -45,7 +48,6 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../models/text_search";
 import { useEffect, useRef } from "react";
-import { resolveCollection } from "../../core/util/resolutions";
 
 /**
  * @category Firebase

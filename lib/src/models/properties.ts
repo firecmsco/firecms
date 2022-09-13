@@ -693,7 +693,7 @@ export interface StorageConfig {
      *
      * @param context
      */
-    fileName?: string | ((context: UploadedFileContext) => string);
+    fileName?: string | ((context: UploadedFileContext) => string | Promise<string>);
 
     /**
      * Absolute path in your bucket.

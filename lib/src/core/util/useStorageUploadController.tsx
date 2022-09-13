@@ -1,6 +1,5 @@
 import equal from "react-fast-compare";
 
-import { resolveStorageString } from "./storage";
 import {
     EntityValues,
     Property,
@@ -13,6 +12,7 @@ import {
 import { useCallback, useEffect, useState } from "react";
 import { PreviewSize } from "../../preview";
 import { randomString } from "./strings";
+import { resolveFilenameString, resolveStoragePathString } from "./storage";
 
 /**
  * Internal representation of an item in the storage
@@ -64,7 +64,7 @@ export function useStorageUploadController<M>({
     if (!storage)
         throw Error("Storage meta must be specified");
 
-    const metadata: Record<string, unknown> | undefined = storage?.metadata;
+    const metadata: Record<string, any> | undefined = storage?.metadata;
     const size = multipleFilesSupported ? "small" : "regular";
 
     const internalInitialValue: StorageFieldItem[] =
@@ -89,10 +89,9 @@ export function useStorageUploadController<M>({
         }
     }, [internalInitialValue, value, initialValue]);
 
-    const fileNameBuilder = useCallback((file: File) => {
+    const fileNameBuilder = useCallback(async (file: File) => {
         if (storage.fileName) {
-
-            const fileName = resolveStorageString(storage.fileName, storage, entityValues, entityId, path, property, file, propertyKey);
+            const fileName = await resolveFilenameString(storage.fileName, storage, entityValues, entityId, path, property, file, propertyKey);
             if (!fileName || fileName.length === 0) {
                 throw Error("You need to return a valid filename");
             }
@@ -102,7 +101,7 @@ export function useStorageUploadController<M>({
     }, [entityId, entityValues, path, property, propertyKey, storage]);
 
     const storagePathBuilder = useCallback((file: File) => {
-        return resolveStorageString(storage.storagePath, storage, entityValues, entityId, path, property, file, propertyKey) ?? "/";
+        return resolveStoragePathString(storage.storagePath, storage, entityValues, entityId, path, property, file, propertyKey) ?? "/";
     }, [entityId, entityValues, path, property, propertyKey, storage]);
 
     const onFileUploadComplete = useCallback(async (uploadedPath: string,
@@ -139,7 +138,7 @@ export function useStorageUploadController<M>({
         }
     }, [internalValue, multipleFilesSupported, onChange, storage, storageSource]);
 
-    const onFilesAdded = useCallback((acceptedFiles: File[]) => {
+    const onFilesAdded = useCallback(async (acceptedFiles: File[]) => {
 
         if (!acceptedFiles.length || disabled)
             return;
@@ -147,20 +146,21 @@ export function useStorageUploadController<M>({
         let newInternalValue: StorageFieldItem[];
         if (multipleFilesSupported) {
             newInternalValue = [...internalValue,
-                ...(acceptedFiles.map(file => ({
-                    id: getRandomId(),
-                    file,
-                    fileName: fileNameBuilder(file),
-                    metadata,
-                    size: size
-                } as StorageFieldItem)))];
+                ...(await Promise.all(
+                    acceptedFiles.map(async file => ({
+                        id: getRandomId(),
+                        file,
+                        fileName: await fileNameBuilder(file),
+                        metadata,
+                        size
+                    } as StorageFieldItem))))];
         } else {
             newInternalValue = [{
                 id: getRandomId(),
                 file: acceptedFiles[0],
-                fileName: fileNameBuilder(acceptedFiles[0]),
+                fileName: await fileNameBuilder(acceptedFiles[0]),
                 metadata,
-                size: size
+                size
             }];
         }
 
