@@ -127,7 +127,7 @@ export type ResolvedArrayProperty
         resolved: true;
         of?: ResolvedProperty<any> | ResolvedProperty<any>[],
         oneOf?: {
-            properties: Record<string, ResolvedProperty<any>>
+            properties: ResolvedProperties
             typeField?: string;
             valueField?: string;
         },

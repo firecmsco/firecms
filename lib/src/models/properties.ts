@@ -418,7 +418,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
          * Record of properties, where the key is the `type` and the value
          * is the corresponding property
          */
-        properties: Properties<any>;
+        properties: Properties;
 
         /**
          * Order in which the properties are displayed.

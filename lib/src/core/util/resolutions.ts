@@ -161,7 +161,7 @@ export function resolveArrayProperty<T extends any[], M>({
                                                              ...props
                                                          }: {
     property: ArrayProperty<T> | ResolvedArrayProperty<T>,
-    propertyValue: unknown,
+    propertyValue: any,
     values?: Partial<M>,
     previousValues?: Partial<M>,
     path?: string,
@@ -223,7 +223,7 @@ export function resolveArrayProperty<T extends any[], M>({
                 });
             }).filter(e => Boolean(e)) as ResolvedProperty[]
             : [];
-        const properties = resolveProperties({
+        const properties = resolveProperties<any>({
             properties: property.oneOf.properties,
             propertyValue: undefined,
             ...props

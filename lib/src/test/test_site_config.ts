@@ -10,7 +10,7 @@ const locales: EnumValues = {
 };
 
 
-export const productsCollection = buildCollection<any>({
+export const productsCollection = buildCollection({
     path: "products",
     name: "Products",
     singularName: "Product",
