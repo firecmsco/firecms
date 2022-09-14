@@ -34,7 +34,7 @@ function Pricing() {
                 ❤️
             </p>
             <p>
-                Also, you are welcome to join our <a href={"https://discord.gg/EfptnPFycm"}>Discord channel</a>
+                Also, you are welcome to join our <a href={"https://discord.gg/fxy7xsQm3m"}>Discord channel</a>
             </p>
         </div>
 
