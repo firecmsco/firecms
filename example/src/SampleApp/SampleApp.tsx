@@ -2,12 +2,7 @@ import React, { useCallback } from "react";
 
 import { getAnalytics } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
-import {
-    Authenticator,
-    buildCollection,
-    CMSView,
-    FirebaseCMSApp,
-} from "@camberi/firecms";
+import { Authenticator, CMSView, FirebaseCMSApp, } from "@camberi/firecms";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";

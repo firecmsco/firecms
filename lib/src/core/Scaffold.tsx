@@ -152,7 +152,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                             ref={containerRef}
                             sx={{
                                 height: "100%",
-                                overflow: "auto",
+                                overflow: "auto"
                             }}>
                             {children}
                         </Box>
@@ -221,9 +221,7 @@ function StyledDrawer(props: MuiDrawerProps & {
     const navigation = useNavigationContext();
     const theme = useTheme();
 
-    const open = props.open;
-    const logo = props.logo;
-    const setDrawerOpen = props.setDrawerOpen;
+    const { open, logo, setDrawerOpen, ...drawerProps } = props;
 
     let logoComponent;
     if (logo) {
@@ -238,8 +236,17 @@ function StyledDrawer(props: MuiDrawerProps & {
         logoComponent = <FireCMSLogo/>;
     }
 
+    const menuIconButton = <IconButton
+        color="inherit"
+        aria-label="Open drawer"
+        edge="start"
+        onClick={() => setDrawerOpen(true)}
+        size="large">
+        <MenuIcon/>
+    </IconButton>;
     return <MuiDrawer
-        {...props}
+        {...drawerProps}
+        open={open}
         sx={{
             width: DRAWER_WIDTH,
             flexShrink: 0,
@@ -273,7 +280,7 @@ function StyledDrawer(props: MuiDrawerProps & {
                 : <ChevronLeftIcon/>}
         </IconButton>
 
-        {<Toolbar sx={{
+        <Toolbar sx={{
             position: "absolute",
             left: open ? "-100%" : 0,
             opacity: open ? 0.0 : 1.0,
@@ -282,19 +289,13 @@ function StyledDrawer(props: MuiDrawerProps & {
                 duration: theme.transitions.duration.enteringScreen
             })
         }}>
-            <Tooltip title={getAltSymbol()}
-                     placement={"right"}
-                     open={open ? false : undefined}>
-                <IconButton
-                    color="inherit"
-                    aria-label="Open drawer"
-                    edge="start"
-                    onClick={() => setDrawerOpen(true)}
-                    size="large">
-                    <MenuIcon/>
-                </IconButton>
-            </Tooltip>
-        </Toolbar>}
+            {!open
+                ? <Tooltip title={getAltSymbol()}
+                           placement={"right"}>
+                    {menuIconButton}
+                </Tooltip>
+                : menuIconButton}
+        </Toolbar>
 
         <Link
             key={"breadcrumb-home"}

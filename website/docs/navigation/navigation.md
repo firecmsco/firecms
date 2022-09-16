@@ -27,12 +27,11 @@ them and then build the schema with them.
 import {
     // ...
     EntityCollectionsBuilder,
-    EntityCollectionsBuilderProps
 } from "@camberi/firecms";
 
 // ...
 
-const collectionsBuilder = async ({ user }: EntityCollectionsBuilderProps) => ({
+const collectionsBuilder:EntityCollectionsBuilder = async ({ authController }) => ({
     collections: [
         buildCollection({
             path: "products",
