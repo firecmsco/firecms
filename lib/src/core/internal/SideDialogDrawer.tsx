@@ -1,6 +1,5 @@
 import React from "react";
-import { Backdrop, Modal, Paper } from "@mui/material";
-import { SlideFade } from "./SlideFadeTransition";
+import { Backdrop, Modal, Paper, Slide, useTheme } from "@mui/material";
 
 export interface SideDialogDrawerProps {
 
@@ -25,8 +24,6 @@ export interface SideDialogDrawerProps {
      */
     offsetPosition: number;
 
-    onExitAnimation?: () => void;
-
 }
 
 const defaultTransitionDuration = {
@@ -45,9 +42,9 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, SideDialogDrawe
         onClose,
         open,
         offsetPosition,
-        onExitAnimation
     } = props;
 
+    const theme = useTheme();
     return (
         <Modal
             BackdropProps={{
@@ -60,17 +57,17 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, SideDialogDrawe
             keepMounted={true}
             disableEnforceFocus={true}
             sx={{
-                transition: "transform 200ms cubic-bezier(0.33, 1, 0.68, 1)",
-                transform: `translateX(-${(offsetPosition) * 240}px)`
+                transition: `transform 300ms ${theme.transitions.easing.easeOut}`,
+                transform: `translateX(-${(offsetPosition) * 200}px)`
             }}
         >
-            <SlideFade
+            <Slide
                 in={open}
                 timeout={defaultTransitionDuration}
-                onExitAnimation={onExitAnimation}
+                direction={"left"}
             >
                 <Paper
-                    elevation={1}
+                    variant={"outlined"}
                     square
                     sx={{
                         height: "100%",
@@ -85,7 +82,7 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, SideDialogDrawe
                 >
                     {children}
                 </Paper>
-            </SlideFade>
+            </Slide>
         </Modal>
     );
 });

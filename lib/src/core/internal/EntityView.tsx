@@ -373,7 +373,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     updateUrl: true
                 });
             }
-        }, [sideEntityController, entityId]);
+        }, [entityId, sideEntityController, path, getSelectedSubPath]);
 
         const form = !readOnly
             ? (
@@ -528,7 +528,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                         }
                                     }}>
                                     {loading
-                                        ? <CircularProgressCenter/>
+                                        ?
+                                        <CircularProgressCenter/>
                                         : form}
                                 </Box>
                             </Box>

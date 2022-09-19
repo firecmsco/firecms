@@ -14,14 +14,11 @@ export type SideDialogContextProps = {
     setBlocked: (blocked: boolean) => void,
     setBlockedNavigationMessage: (message?: React.ReactNode) => void,
     width?: string,
-    setWidth: (width: string) => void,
     close: (force?: boolean) => void
 }
 
 const SideDialogContext = React.createContext<SideDialogContextProps>({
     width: "",
-    setWidth: (width: string) => {
-    },
     blocked: false,
     setBlocked: (blocked: boolean) => {
     },
@@ -79,8 +76,8 @@ function SideDialogView({
     const [blocked, setBlocked] = useState(false);
     const [blockedNavigationMessage, setBlockedNavigationMessage] = useState<React.ReactNode | undefined>();
 
-    const [width, setWidth] = useState<string | undefined>(panel?.width);
-    const [open, setOpen] = useState<boolean>(Boolean(panel));
+    const widthRef = React.useRef<string | undefined>(panel?.width);
+    const width = widthRef.current;
 
     const sideDialogsController = useSideDialogsController();
 
@@ -94,11 +91,8 @@ function SideDialogView({
     );
 
     useEffect(() => {
-        setWidth(panel?.width);
         if (panel)
-            setTimeout(() => setOpen(true));
-        else
-            setOpen(false);
+            widthRef.current = panel.width;
     }, [panel])
 
     const handleDrawerCloseOk = () => {
@@ -126,12 +120,11 @@ function SideDialogView({
                 setBlocked,
                 setBlockedNavigationMessage,
                 width,
-                setWidth,
                 close: onCloseRequest
             }}>
 
             <SideDialogDrawer
-                open={open && Boolean(panel)}
+                open={Boolean(panel)}
                 onClose={onCloseRequest}
                 offsetPosition={offsetPosition}
             >
@@ -142,7 +135,7 @@ function SideDialogView({
                                 flexDirection: "column",
                                 height: "100%",
                                 transition: "width 250ms ease-in-out",
-                                width,
+                                width: panel.width,
                                 maxWidth: "100vw"
                             }}>
                             <ErrorBoundary>
