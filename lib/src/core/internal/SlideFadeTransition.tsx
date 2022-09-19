@@ -90,9 +90,8 @@ export const SlideFade = React.forwardRef(function SlideFade(props: SlideProps, 
 
         node.style.webkitTransform = "none";
         node.style.transform = "none";
-        node.style.opacity = 1;
+        // node.style.opacity = 1;
     });
-
 
     const handleExit: any = normalizedTransitionCallback((node: any) => {
         const transitionProps = getTransitionProps(
@@ -102,16 +101,16 @@ export const SlideFade = React.forwardRef(function SlideFade(props: SlideProps, 
             }
         );
 
-        node.style.opacity = 0.5;
-        node.style.webkitTransition = theme.transitions.create(["-webkit-transform", "opacity"], {
-            ...transitionProps,
-            easing: theme.transitions.easing.sharp
-        });
-
-        node.style.transition = theme.transitions.create(["transform", "opacity"], {
-            ...transitionProps,
-            easing: theme.transitions.easing.sharp
-        });
+        // node.style.opacity = 0.5;
+        // node.style.webkitTransition = theme.transitions.create(["-webkit-transform", "opacity"], {
+        //     ...transitionProps,
+        //     easing: theme.transitions.easing.sharp
+        // });
+        //
+        // node.style.transition = theme.transitions.create(["transform", "opacity"], {
+        //     ...transitionProps,
+        //     easing: theme.transitions.easing.sharp
+        // });
 
         setTranslateValue(node);
     });

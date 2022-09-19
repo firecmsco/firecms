@@ -17,6 +17,7 @@ import {
     NavigationRoutes,
     Scaffold,
     SideDialogs,
+    SnackbarProvider,
     useBuildModeController,
     useFirebaseAuthController,
     useFirebaseStorageSource,
@@ -135,43 +136,45 @@ export function CustomCMSApp() {
 
     return (
         <Router>
-            <FireCMS authController={authController}
-                     collections={[productsCollection]}
-                     modeController={modeController}
-                     dataSource={dataSource}
-                     storageSource={storageSource}
-                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-            >
-                {({ context, loading }) => {
+            <SnackbarProvider>
+                <FireCMS authController={authController}
+                         collections={[productsCollection]}
+                         modeController={modeController}
+                         dataSource={dataSource}
+                         storageSource={storageSource}
+                         entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                >
+                    {({ context, loading }) => {
 
-                    let component;
-                    if (loading) {
-                        component = <CircularProgressCenter/>;
-                    } else if (!canAccessMainView) {
-                        component = (
-                            <FirebaseLoginView
-                                allowSkipLogin={false}
-                                signInOptions={signInOptions}
-                                firebaseApp={firebaseApp}
-                                authController={authController}/>
-                        );
-                    } else {
-                        component = (
-                            <Scaffold name={"My Online Shop"}>
-                                <NavigationRoutes/>
-                                <SideDialogs/>
-                            </Scaffold>
-                        );
-                    }
+                        let component;
+                        if (loading) {
+                            component = <CircularProgressCenter/>;
+                        } else if (!canAccessMainView) {
+                            component = (
+                                <FirebaseLoginView
+                                    allowSkipLogin={false}
+                                    signInOptions={signInOptions}
+                                    firebaseApp={firebaseApp}
+                                    authController={authController}/>
+                            );
+                        } else {
+                            component = (
+                                <Scaffold name={"My Online Shop"}>
+                                    <NavigationRoutes/>
+                                    <SideDialogs/>
+                                </Scaffold>
+                            );
+                        }
 
-                    return (
-                        <ThemeProvider theme={theme}>
-                            <CssBaseline/>
-                            {component}
-                        </ThemeProvider>
-                    );
-                }}
-            </FireCMS>
+                        return (
+                            <ThemeProvider theme={theme}>
+                                <CssBaseline/>
+                                {component}
+                            </ThemeProvider>
+                        );
+                    }}
+                </FireCMS>
+            </SnackbarProvider>
         </Router>
     );
 

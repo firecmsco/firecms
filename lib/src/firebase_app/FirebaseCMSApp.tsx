@@ -23,6 +23,7 @@ import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./models/auth";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
+import { SnackbarProvider } from "../core/contexts/SnackbarContext";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -157,59 +158,61 @@ export function FirebaseCMSApp({
 
     return (
         <BrowserRouter basename={basePath}>
-            <FireCMS
-                collections={collections}
-                views={views}
-                authController={authController}
-                userConfigPersistence={userConfigPersistence}
-                collectionOverrideHandler={collectionOverrideHandler}
-                modeController={modeController}
-                dateTimeFormat={dateTimeFormat}
-                dataSource={dataSource}
-                storageSource={storageSource}
-                entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                locale={locale}
-                basePath={basePath}
-                baseCollectionPath={baseCollectionPath}>
-                {({ context, loading }) => {
+            <SnackbarProvider>
+                <FireCMS
+                    collections={collections}
+                    views={views}
+                    authController={authController}
+                    userConfigPersistence={userConfigPersistence}
+                    collectionOverrideHandler={collectionOverrideHandler}
+                    modeController={modeController}
+                    dateTimeFormat={dateTimeFormat}
+                    dataSource={dataSource}
+                    storageSource={storageSource}
+                    entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                    locale={locale}
+                    basePath={basePath}
+                    baseCollectionPath={baseCollectionPath}>
+                    {({ context, loading }) => {
 
-                    let component;
-                    if (loading || authLoading) {
-                        component = <CircularProgressCenter/>;
-                    } else {
-                        const usedLogo = modeController.mode === "dark" ? logoDark : logo ?? logo;
-                        if (!canAccessMainView) {
-                            const LoginViewUsed = LoginView ?? FirebaseLoginView;
-                            component = (
-                                <LoginViewUsed
-                                    logo={usedLogo}
-                                    allowSkipLogin={allowSkipLogin}
-                                    signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
-                                    firebaseApp={firebaseApp}
-                                    authController={authController}
-                                    notAllowedError={notAllowedError}/>
-                            );
+                        let component;
+                        if (loading || authLoading) {
+                            component = <CircularProgressCenter/>;
                         } else {
-                            component = (
-                                <Scaffold
-                                    name={name}
-                                    logo={usedLogo}
-                                    toolbarExtraWidget={toolbarExtraWidget}>
-                                    <NavigationRoutes HomePage={HomePage}/>
-                                    <SideDialogs/>
-                                </Scaffold>
-                            );
+                            const usedLogo = modeController.mode === "dark" ? logoDark : logo ?? logo;
+                            if (!canAccessMainView) {
+                                const LoginViewUsed = LoginView ?? FirebaseLoginView;
+                                component = (
+                                    <LoginViewUsed
+                                        logo={usedLogo}
+                                        allowSkipLogin={allowSkipLogin}
+                                        signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
+                                        firebaseApp={firebaseApp}
+                                        authController={authController}
+                                        notAllowedError={notAllowedError}/>
+                                );
+                            } else {
+                                component = (
+                                    <Scaffold
+                                        name={name}
+                                        logo={usedLogo}
+                                        toolbarExtraWidget={toolbarExtraWidget}>
+                                        <NavigationRoutes HomePage={HomePage}/>
+                                        <SideDialogs/>
+                                    </Scaffold>
+                                );
+                            }
                         }
-                    }
 
-                    return (
-                        <ThemeProvider theme={theme}>
-                            <CssBaseline/>
-                            {component}
-                        </ThemeProvider>
-                    );
-                }}
-            </FireCMS>
+                        return (
+                            <ThemeProvider theme={theme}>
+                                <CssBaseline/>
+                                {component}
+                            </ThemeProvider>
+                        );
+                    }}
+                </FireCMS>
+            </SnackbarProvider>
         </BrowserRouter>
     );
 }

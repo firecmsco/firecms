@@ -21,3 +21,5 @@ export * from "./widgets";
 
 export * from "./useBuildModeController";
 export * from "./useBuildLocalConfigurationPersistence";
+
+export { SnackbarProvider } from "./contexts/SnackbarContext";

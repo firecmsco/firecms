@@ -18,7 +18,7 @@ import { EntityCollectionViewProps } from "../core";
  * @category Hooks and utilities
  * @see useFireCMSContext
  */
-export interface FireCMSContext<UserType extends User = User> {
+export interface FireCMSContext<UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>> {
 
     /**
      * Format of the dates in the CMS.
@@ -62,7 +62,7 @@ export interface FireCMSContext<UserType extends User = User> {
     /**
      * Used auth controller
      */
-    authController: AuthController<UserType>;
+    authController: AuthControllerType;
 
     /**
      * Builder for generating utility links for entities

@@ -10,7 +10,7 @@ import { useFireCMSContext } from "./useFireCMSContext";
  * @see AuthController
  * @category Hooks and utilities
  */
-export function useAuthController<UserType extends User = User>(): AuthController<UserType> {
-    const context = useFireCMSContext<UserType>();
+export function useAuthController<UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>>(): AuthControllerType {
+    const context = useFireCMSContext<UserType, AuthControllerType>();
     return context.authController;
 }

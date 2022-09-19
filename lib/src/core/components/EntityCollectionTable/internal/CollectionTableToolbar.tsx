@@ -15,7 +15,7 @@ import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import {
     FilledMenuItem,
     FilledSelect
-} from "../../../../form/components/FilledSelect";
+} from "../../FilledSelect";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;

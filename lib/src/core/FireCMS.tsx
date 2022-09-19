@@ -18,7 +18,6 @@ import {
     User,
     UserConfigurationPersistence
 } from "../models";
-import { SnackbarContext, SnackbarProvider } from "./contexts/SnackbarContext";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { ModeStateContext } from "./contexts/ModeController";
@@ -33,7 +32,7 @@ import {
 } from "./internal/useBuildSideDialogsController";
 import { CMSViewsBuilder, EntityCollectionsBuilder } from "../firebase_app";
 import { EntityCollectionView, EntityCollectionViewProps } from "./components";
-import { ModeController } from "../hooks";
+import { ModeController, useSnackbarController } from "../hooks";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -193,6 +192,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     const sideDialogsController = useBuildSideDialogsController();
     const sideEntityController = useBuildSideEntityController(navigation, sideDialogsController);
 
+    const snackbarController = useSnackbarController();
+
     const loading = authController.initialLoading || navigation.loading;
 
     if (navigation.navigationLoadingError) {
@@ -204,46 +205,37 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         );
     }
 
+    const context: FireCMSContext = {
+        authController,
+        sideDialogsController,
+        sideEntityController,
+        entityLinkBuilder,
+        dateTimeFormat,
+        locale,
+        navigation,
+        dataSource,
+        storageSource,
+        snackbarController,
+        userConfigPersistence,
+        EntityCollectionViewComponent
+    };
+
     return (
 
         <ModeStateContext.Provider value={modeController}>
-            <SnackbarProvider>
-                <SnackbarContext.Consumer>
-                    {(snackbarController) => {
-
-                        const context: FireCMSContext = {
-                            authController,
-                            sideDialogsController,
-                            sideEntityController,
-                            entityLinkBuilder,
-                            dateTimeFormat,
-                            locale,
-                            navigation,
-                            dataSource,
-                            storageSource,
-                            snackbarController,
-                            userConfigPersistence,
-                            EntityCollectionViewComponent
-                        };
-
-                        return (
-                            <FireCMSContextProvider {...context} >
-                                <BreadcrumbsProvider>
-                                    <LocalizationProvider
-                                        dateAdapter={AdapterDateFns}
-                                        utils={DateFnsUtils}
-                                        locale={dateUtilsLocale}>
-                                        {children({
-                                            context,
-                                            loading
-                                        })}
-                                    </LocalizationProvider>
-                                </BreadcrumbsProvider>
-                            </FireCMSContextProvider>
-                        );
-                    }}
-                </SnackbarContext.Consumer>
-            </SnackbarProvider>
+            <FireCMSContextProvider {...context} >
+                <BreadcrumbsProvider>
+                    <LocalizationProvider
+                        dateAdapter={AdapterDateFns}
+                        utils={DateFnsUtils}
+                        locale={dateUtilsLocale}>
+                        {children({
+                            context,
+                            loading
+                        })}
+                    </LocalizationProvider>
+                </BreadcrumbsProvider>
+            </FireCMSContextProvider>
         </ModeStateContext.Provider>
     );
 }
