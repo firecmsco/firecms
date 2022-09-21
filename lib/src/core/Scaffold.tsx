@@ -1,4 +1,5 @@
 import React, { PropsWithChildren, useCallback, useEffect } from "react";
+import equal from "react-fast-compare"
 
 import {
     Box,
@@ -161,10 +162,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             </Box>
         );
     },
-    function areEqual(prevProps: PropsWithChildren<ScaffoldProps>, nextProps: PropsWithChildren<ScaffoldProps>) {
-        return prevProps.name === nextProps.name &&
-            prevProps.logo === nextProps.logo;
-    }
+    equal
 )
 
 function useRestoreScroll() {

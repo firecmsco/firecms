@@ -8,7 +8,7 @@ import {
 let client: SearchClient | undefined = undefined;
 // process is defined for react-scripts builds
 if (typeof process !== "undefined") {
-    if (process?.env.REACT_APP_ALGOLIA_APP_ID && process?.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
+    if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
         client = algoliasearch(process.env.REACT_APP_ALGOLIA_APP_ID, process.env.REACT_APP_ALGOLIA_SEARCH_KEY);
     }
 }

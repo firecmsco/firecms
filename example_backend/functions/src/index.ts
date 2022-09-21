@@ -2,14 +2,16 @@ import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
 admin.initializeApp();
 
-import { DocumentSnapshot } from "firebase-functions/lib/providers/firestore";
+import { Change } from "firebase-functions/v1";
+import { DocumentSnapshot } from "firebase-functions/v1/firestore";
+
 import { deleteInAlgolia, indexInAlgolia } from "./algolia";
 import { importDatabaseBackup } from "./backup";
 import { app } from "./api";
 
 export { setProductAvailableLocales, onDeleteSubcollections } from "./products";
 
-function updateIndex(snap: functions.Change<DocumentSnapshot>, indexName: string) {
+function updateIndex(snap: Change<DocumentSnapshot>, indexName: string) {
     if (!snap.after.exists) return deleteInAlgolia(indexName, snap.after.id);
     return indexInAlgolia(indexName, snap.after.data(), snap.after.id);
 }
