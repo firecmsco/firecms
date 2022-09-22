@@ -242,6 +242,7 @@ function StyledDrawer(props: MuiDrawerProps & {
         size="large">
         <MenuIcon/>
     </IconButton>;
+
     return <MuiDrawer
         {...drawerProps}
         open={open}
@@ -312,7 +313,9 @@ function StyledDrawer(props: MuiDrawerProps & {
                     open ? 3 : 2)
             })}>
             <Tooltip title={"Home"} placement={"right"}>
-                {logoComponent}
+                <div>
+                    {logoComponent}
+                </div>
             </Tooltip>
 
         </Link>
