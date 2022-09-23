@@ -8,7 +8,6 @@ import React, {
 } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import {
-    CMSType,
     Entity,
     EntityCollection,
     EntityStatus,
@@ -62,7 +61,7 @@ export interface EntityFormProps<M extends Record<string, any>> {
     /**
      * The callback function called when Save is clicked and validation is correct
      */
-    onEntitySave?(
+    onEntitySave?: (
         props:
             {
                 collection: ResolvedEntityCollection<M>,
@@ -72,23 +71,23 @@ export interface EntityFormProps<M extends Record<string, any>> {
                 previousValues?: EntityValues<M>,
                 closeAfterSave: boolean
             }
-    ): Promise<void>;
+    ) => Promise<void>;
 
     /**
      * The callback function called when discard is clicked
      */
-    onDiscard?(): void;
+    onDiscard?: () => void;
 
     /**
      * The callback function when the form is dirty, so the values are different
      * from the original ones
      */
-    onModified?(dirty: boolean): void;
+    onModified?: (dirty: boolean) => void;
 
     /**
      * The callback function when the form original values have been modified
      */
-    onValuesChanged?(values?: EntityValues<M>): void;
+    onValuesChanged?: (values?: EntityValues<M>) => void;
 
 }
 
@@ -192,8 +191,8 @@ export function EntityForm<M extends Record<string, any>>({
         if (initialValues && status === "existing") {
             return Object.keys(collection.properties)
                 .map((key) => {
-                    const initialValue = (initialValues )[key];
-                    const latestValue = (baseDataSourceValues )[key];
+                    const initialValue = initialValues[key];
+                    const latestValue = baseDataSourceValues[key];
                     if (!equal(initialValue, latestValue)) {
                         return { [key]: latestValue };
                     }
