@@ -27,9 +27,9 @@ import {
     ErrorBoundary,
     ErrorView,
     getReferenceFrom, getReferencePreviewKeys,
-    isReferenceProperty,
+    isReferenceProperty
 } from "../../core";
-import { PropertyPreview, SkeletonComponent } from "../../preview";
+import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
     useClearRestoreValue,
@@ -38,7 +38,6 @@ import {
     useSideEntityController,
     useReferenceDialog
 } from "../../hooks";
-
 
 /**
  * Field that opens a reference selection dialog.
@@ -94,7 +93,7 @@ export function ReferenceFieldBinding<M extends Record<string, any>>({
     } = useEntityFetch({
         path: validValue ? value.path : property.path,
         entityId: validValue ? value.id : undefined,
-        collection: collection,
+        collection,
         useCache: true
     });
 
@@ -181,11 +180,11 @@ export function ReferenceFieldBinding<M extends Record<string, any>>({
                                         entity
                                             ? <PropertyPreview
                                                 propertyKey={key as string}
-                                                value={(entity.values )[key]}
+                                                value={(entity.values)[key]}
                                                 property={property as ResolvedProperty}
                                                 entity={entity}
                                                 size={"tiny"}/>
-                                            : <SkeletonComponent
+                                            : <SkeletonPropertyComponent
                                                 property={property as ResolvedProperty}
                                                 size={"tiny"}/>}
                                     </ErrorBoundary>
@@ -201,7 +200,7 @@ export function ReferenceFieldBinding<M extends Record<string, any>>({
                             display="flex">
                     <Typography variant={"label"} sx={(theme) => ({
                         flexGrow: 1,
-                        textAlign: "center",
+                        textAlign: "center"
                     })}>No value set</Typography>
                     {!disabled && <Button variant="outlined"
                                           color="primary">

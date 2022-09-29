@@ -12,14 +12,20 @@ const publicationProperty = buildProperty({
     dataType: "date"
 });
 ```
-## `autoValue` "on_create" | "on_update"
-
-## `mode` "date" | "date_time"
+### `autoValue` "on_create" | "on_update"
 
 Used this prop to update this timestamp automatically upon entity creation
 or update.
 
-## `validation`
+### `mode` "date" | "date_time"
+
+Set the granularity of the field to a date, or date + time.
+Defaults to `date_time`.
+
+### `clearable`
+Add an icon to clear the value and set it to `null`. Defaults to `false`
+
+### `validation`
 
 * `required` Should this field be compulsory.
 * `requiredMessage` Message to be displayed as a validation error.

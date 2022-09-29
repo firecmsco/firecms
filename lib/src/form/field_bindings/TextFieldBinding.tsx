@@ -5,10 +5,13 @@ import {
     FormControl,
     FormControlLabel,
     FormHelperText,
+    IconButton,
     InputLabel,
     Switch,
     Typography
 } from "@mui/material";
+
+import ClearIcon from "@mui/icons-material/Clear";
 
 import { FieldProps } from "../../models";
 import { FieldDescription } from "../index";
@@ -49,6 +52,10 @@ export function TextFieldBinding<T extends string | number>({
         value,
         setValue
     });
+
+    const handleClearClick = useCallback(() => {
+        setValue(null);
+    }, [setValue]);
 
     const isMultiline = Boolean(multiline);
 
@@ -107,6 +114,16 @@ export function TextFieldBinding<T extends string | number>({
                     inputProps={{
                         rows: 4
                     }}
+                    endAdornment={
+                        property.clearable && <IconButton
+                            sx={{
+                                position: "absolute",
+                                right: "16px"
+                            }}
+                            onClick={handleClearClick}>
+                            <ClearIcon/>
+                        </IconButton>
+                    }
                     value={valueIsInfinity ? "Infinity" : (value ?? "")}
                     disabled={disabled}
                     onChange={(evt) => {

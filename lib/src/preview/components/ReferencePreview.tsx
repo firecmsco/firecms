@@ -13,7 +13,7 @@ import {
 import { CMSType, EntityReference, ResolvedProperty } from "../../models";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { PreviewSize, PropertyPreview, SkeletonComponent } from "../index";
+import { PreviewSize, PropertyPreview, SkeletonPropertyComponent } from "../index";
 
 import {
     ErrorView,
@@ -154,11 +154,11 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                 {entity
                                     ? <PropertyPreview
                                         propertyKey={key as string}
-                                        value={getValueInPath(entity.values , key)}
+                                        value={getValueInPath(entity.values, key)}
                                         property={childProperty as ResolvedProperty}
                                         entity={entity}
                                         size={"tiny"}/>
-                                    : <SkeletonComponent
+                                    : <SkeletonPropertyComponent
                                         property={childProperty as ResolvedProperty}
                                         size={"tiny"}/>
                                 }

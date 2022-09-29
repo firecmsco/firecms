@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
     FormControl,
     FormHelperText,
+    IconButton,
     InputLabel,
     MenuItem,
     Select as MuiSelect
 } from "@mui/material";
+
+import ClearIcon from "@mui/icons-material/Clear";
 
 import { EnumType, FieldProps } from "../../models";
 import { FieldDescription } from "../index";
@@ -25,18 +28,18 @@ type SelectProps<T extends EnumType> = FieldProps<T>;
  * @category Form fields
  */
 export function SelectFieldBinding<T extends EnumType>({
-                                               propertyKey,
-                                               value,
-                                               setValue,
-                                               error,
-                                               showError,
-                                               disabled,
-                                               autoFocus,
-                                               touched,
-                                               property,
-                                               includeDescription,
-                                               shouldAlwaysRerender
-                                           }: SelectProps<T>) {
+                                                           propertyKey,
+                                                           value,
+                                                           setValue,
+                                                           error,
+                                                           showError,
+                                                           disabled,
+                                                           autoFocus,
+                                                           touched,
+                                                           property,
+                                                           includeDescription,
+                                                           shouldAlwaysRerender
+                                                       }: SelectProps<T>) {
 
     const enumValues = property.enumValues;
 
@@ -45,6 +48,10 @@ export function SelectFieldBinding<T extends EnumType>({
         value,
         setValue
     });
+
+    const handleClearClick = useCallback(() => {
+        setValue(null);
+    }, [setValue]);
 
     return (
         <FormControl
@@ -76,6 +83,16 @@ export function SelectFieldBinding<T extends EnumType>({
                 autoFocus={autoFocus}
                 value={value ?? ""}
                 disabled={disabled}
+                endAdornment={
+                    property.clearable && <IconButton
+                        sx={{
+                            position: "absolute",
+                            right: "32px"
+                        }}
+                        onClick={handleClearClick}>
+                        <ClearIcon/>
+                    </IconButton>
+                }
                 onChange={(evt: any) => {
                     const eventValue = evt.target.value;
                     const newValue = eventValue
@@ -103,11 +120,11 @@ export function SelectFieldBinding<T extends EnumType>({
                                 small={true}/>
                         </MenuItem>
                     );
-                    })}
+                })}
             </MuiSelect>
 
             {includeDescription &&
-            <FieldDescription property={property}/>}
+                <FieldDescription property={property}/>}
 
             {showError && <FormHelperText>{error}</FormHelperText>}
 

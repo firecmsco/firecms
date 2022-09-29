@@ -275,14 +275,14 @@ export type PropertyBuilder<T extends any, M extends Record<string, any> = any> 
 /**
  * @category Entity properties
  */
-export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, CMSType> = Record<string, any>> =
+export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = Record<string, any>> =
     Property<T>
     | PropertyBuilder<T, M>;
 
 /**
  * @category Entity properties
  */
-export type PropertiesOrBuilders<M extends Record<string, CMSType>> =
+export type PropertiesOrBuilders<M extends Record<string, any> = Record<string, any>> =
     {
         [k in keyof M]: PropertyOrBuilder<M[k], M>;
     };
@@ -306,6 +306,10 @@ export interface NumberProperty extends BaseProperty<number> {
      */
     validation?: NumberPropertyValidationSchema,
 
+    /**
+     * Add an icon to clear the value and set it to `null`. Defaults to `false`
+     */
+    clearable?: boolean;
 }
 
 /**
@@ -380,7 +384,12 @@ export interface StringProperty extends BaseProperty<string> {
     /**
      * Rules for validating this property
      */
-    validation?: StringPropertyValidationSchema,
+    validation?: StringPropertyValidationSchema;
+
+    /**
+     * Add an icon to clear the value and set it to `null`. Defaults to `false`
+     */
+    clearable?: boolean;
 }
 
 /**
@@ -529,6 +538,10 @@ export interface DateProperty extends BaseProperty<Date> {
      */
     autoValue?: "on_create" | "on_update"
 
+    /**
+     * Add an icon to clear the value and set it to `null`. Defaults to `false`
+     */
+    clearable?: boolean;
 }
 
 /**

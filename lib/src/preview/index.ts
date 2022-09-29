@@ -13,7 +13,7 @@ export * from "./property_previews/ArrayOfReferencesPreview";
 export * from "./property_previews/MapPropertyPreview";
 export * from "./property_previews/ArrayPropertyPreview";
 export * from "./property_previews/ArrayOneOfPreview";
-export * from "./property_previews/SkeletonComponent";
+export * from "./property_previews/SkeletonPropertyComponent";
 
 export * from "./components/AsyncPreviewComponent";
 export * from "./components/DatePreview";

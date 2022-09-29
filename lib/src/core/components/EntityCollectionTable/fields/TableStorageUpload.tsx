@@ -2,7 +2,7 @@ import * as React from "react";
 import { useMemo, useState } from "react";
 import { styled } from "@mui/material/styles";
 
-import { Box, IconButton, Theme, Typography } from "@mui/material";
+import { Box, IconButton, Theme, Typography, useTheme } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -27,50 +27,37 @@ import {
     StorageUploadProgress
 } from "../../../../form/components/StorageUploadProgress";
 
-const PREFIX = "TableStorageUpload";
+const dropZoneMixin = (hasValue: boolean) => ({
+    transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
+    position: "relative",
+    height: "100%",
+    width: "100%",
+    outline: 0,
+    display: "flex",
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: hasValue ? "start" : "center",
+    alignItems: "center",
+    border: "2px solid",
+    borderColor: "transparent"
+});
 
-const classes = {
-    dropZone: `${PREFIX}-dropZone`,
-    activeDrop: `${PREFIX}-activeDrop`,
-    acceptDrop: `${PREFIX}-acceptDrop`,
-    rejectDrop: `${PREFIX}-rejectDrop`
-};
+const activeDropMixin = (theme: Theme) => ({
+    background: "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important",
+    borderRadius: `${theme.shape.borderRadius}px`,
+    border: "2px solid",
+    borderColor: "transparent"
+});
 
-const StyledBox = styled(Box)((
-    { theme, hasValue }: {
-        hasValue: boolean,
-        theme: Theme
-    }
-) => ({
-    [`&.${classes.dropZone}`]: {
-        position: "relative",
-        height: "100%",
-        width: "100%",
-        outline: 0,
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        justifyContent: hasValue ? "start" : "center",
-        alignItems: "center"
-    },
+const acceptDropMixin = (theme: Theme) => ({
+    background: "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important",
+    // background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.09) 10px, rgba(0, 0, 0, 0.12) 10px, rgba(0, 0, 0, 0.12) 20px) !important",
+    borderColor: theme.palette.success.light
+});
 
-    [`&.${classes.activeDrop}`]: {
-        borderRadius: theme.shape.borderRadius,
-        border: "2px solid",
-        borderColor: "transparent"
-    },
-
-    [`&.${classes.acceptDrop}`]: {
-        transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-        background: "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important",
-        // background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.09) 10px, rgba(0, 0, 0, 0.12) 10px, rgba(0, 0, 0, 0.12) 20px) !important",
-        borderColor: theme.palette.success.light
-    },
-
-    [`&.${classes.rejectDrop}`]: {
-        borderColor: theme.palette.error.light
-    }
-}));
+const rejectDropMixin = (theme: Theme) => ({
+    borderColor: theme.palette.error.light
+});
 
 /**
  * Field that allows to upload files to Google Cloud Storage.
@@ -212,22 +199,22 @@ function StorageUpload({
         isDragAccept,
         isDragReject
     } = useDropzone({
-        accept: storage.acceptedFiles ? storage.acceptedFiles.map(e => ({ [e]: [] })).reduce((a, b) => ({ ...a, ...b }), {}) : undefined,
-        disabled,
-        maxSize: storage.maxSize,
-        noClick: true,
-        noKeyboard: true,
-        onDrop: onFilesAdded,
-        onDropRejected: (fileRejections, event) => {
-            for (const fileRejection of fileRejections) {
-                for (const error of fileRejection.errors) {
-                    snackbarContext.open({
-                        type: "error",
-                        title: "Error uploading file",
-                        message: `File is larger than ${storage.maxSize} bytes`
-                    });
+            accept: storage.acceptedFiles ? storage.acceptedFiles.map(e => ({ [e]: [] })).reduce((a, b) => ({ ...a, ...b }), {}) : undefined,
+            disabled,
+            maxSize: storage.maxSize,
+            noClick: true,
+            noKeyboard: true,
+            onDrop: onFilesAdded,
+            onDropRejected: (fileRejections, event) => {
+                for (const fileRejection of fileRejections) {
+                    for (const error of fileRejection.errors) {
+                        snackbarContext.open({
+                            type: "error",
+                            title: "Error uploading file",
+                            message: `File is larger than ${storage.maxSize} bytes`
+                        });
+                    }
                 }
-            }
             }
         }
     );
@@ -244,18 +231,19 @@ function StorageUpload({
 
     const imageSize = useMemo(() => getThumbnailMeasure(previewSize), [previewSize]);
 
+    const theme = useTheme();
+
     return (
-        // @ts-ignore
-        <StyledBox {...rootProps}
-                   hasValue={hasValue}
-                   onMouseEnter={() => setOnHover(true)}
-                   onMouseMove={() => setOnHover(true)}
-                   onMouseLeave={() => setOnHover(false)}
-                   className={clsx(classes.dropZone, {
-                       [classes.activeDrop]: isDragActive,
-                       [classes.rejectDrop]: isDragReject,
-                       [classes.acceptDrop]: isDragAccept
-                   })}
+        <Box {...rootProps}
+             onMouseEnter={() => setOnHover(true)}
+             onMouseMove={() => setOnHover(true)}
+             onMouseLeave={() => setOnHover(false)}
+             sx={{
+                 ...dropZoneMixin(hasValue),
+                 ...(isDragActive ? activeDropMixin(theme) : {}),
+                 ...(isDragAccept ? acceptDropMixin(theme) : {}),
+                 ...(isDragReject ? rejectDropMixin(theme) : {})
+             }}
         >
 
             <input autoFocus={autoFocus} {...getInputProps()} />
@@ -307,25 +295,25 @@ function StorageUpload({
             </Box>}
 
             {onHover &&
-            <IconButton
-                color={"inherit"}
-                size={"small"}
-                onClick={open}
-                sx={{
-                    position: "absolute",
-                    bottom: 2,
-                    right: 2
-                }}>
-                <EditIcon sx={{
-                    width: 16,
-                    height: 16,
-                    fill: "#888"
-                }
-                }/>
-            </IconButton>
+                <IconButton
+                    color={"inherit"}
+                    size={"small"}
+                    onClick={open}
+                    sx={{
+                        position: "absolute",
+                        bottom: 2,
+                        right: 2
+                    }}>
+                    <EditIcon sx={{
+                        width: 16,
+                        height: 16,
+                        fill: "#888"
+                    }
+                    }/>
+                </IconButton>
             }
 
-        </StyledBox>
+        </Box>
     );
 
 }
@@ -338,11 +326,11 @@ interface TableStorageItemPreviewProps {
 }
 
 export function TableStorageItemPreview({
-                                       property,
-                                       value,
-                                       size,
-                                       entity
-                                   }: TableStorageItemPreviewProps) {
+                                            property,
+                                            value,
+                                            size,
+                                            entity
+                                        }: TableStorageItemPreviewProps) {
 
     return (
         <Box
@@ -351,12 +339,12 @@ export function TableStorageItemPreview({
         >
 
             {value &&
-            <ErrorBoundary>
-                <PropertyPreview value={value}
-                                 property={property}
-                                 entity={entity}
-                                 size={size}/>
-            </ErrorBoundary>
+                <ErrorBoundary>
+                    <PropertyPreview value={value}
+                                     property={property}
+                                     entity={entity}
+                                     size={size}/>
+                </ErrorBoundary>
             }
 
         </Box>

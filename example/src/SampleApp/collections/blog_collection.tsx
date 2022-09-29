@@ -72,7 +72,7 @@ export const blogCollection = buildCollection<BlogEntry>({
                 published: {
                     id: "published",
                     label: "Published",
-                    disabled: !values.header_image,
+                    disabled: !values.header_image
                 },
                 draft: "Draft"
             },
@@ -136,7 +136,8 @@ export const blogCollection = buildCollection<BlogEntry>({
         }),
         publish_date: buildProperty({
             name: "Publish date",
-            dataType: "date"
+            dataType: "date",
+            clearable: true
         }),
         reviewed: buildProperty({
             name: "Reviewed",
@@ -154,6 +155,6 @@ export const blogCollection = buildCollection<BlogEntry>({
         }
     },
     initialFilter: {
-        "status": ["==", "published"]
+        status: ["==", "published"]
     }
 });

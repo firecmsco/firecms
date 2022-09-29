@@ -72,6 +72,13 @@ export const createCMSDefaultTheme = (
             }
         },
         components: {
+            MuiSkeleton: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: radius
+                    }
+                }
+            },
             MuiButton: {
                 styleOverrides: {
                     root: {
@@ -105,6 +112,12 @@ export const createCMSDefaultTheme = (
                     root: {
                         "&.mono": {
                             fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                        },
+                        "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
+                            display: "none"
+                        },
+                        "& input[type=number]": {
+                            MozAppearance: "textfield"
                         }
                     }
                 }

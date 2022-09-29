@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useCallback } from "react";
 
-import { Box, TextField as MuiTextField } from "@mui/material";
+import { Box, IconButton, TextField as MuiTextField } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import ClearIcon from "@mui/icons-material/Clear";
 
 import { FieldProps } from "../../models";
 
@@ -20,18 +21,18 @@ type DateTimeFieldProps = FieldProps<Date>;
  * @category Form fields
  */
 export function DateTimeFieldBinding({
-                                  propertyKey,
-                                  value,
-                                  setValue,
-                                  autoFocus,
-                                  error,
-                                  showError,
-                                  disabled,
-                                  touched,
-                                  property,
-                                  includeDescription,
-                                  shouldAlwaysRerender
-                              }: DateTimeFieldProps) {
+                                         propertyKey,
+                                         value,
+                                         setValue,
+                                         autoFocus,
+                                         error,
+                                         showError,
+                                         disabled,
+                                         touched,
+                                         property,
+                                         includeDescription,
+                                         shouldAlwaysRerender
+                                     }: DateTimeFieldProps) {
 
     const internalValue = value || null;
 
@@ -40,6 +41,10 @@ export function DateTimeFieldBinding({
         value,
         setValue
     });
+
+    const handleClearClick = useCallback(() => {
+        setValue(null);
+    }, [setValue]);
 
     const PickerComponent = property.mode === undefined || property.mode === "date_time"
         ? DateTimePicker
@@ -66,7 +71,17 @@ export function DateTimeFieldBinding({
                                           sx: {
                                               minHeight: "64px"
                                           },
-                                          endAdornment: <Box sx={{ pr: 2 }}>
+                                          endAdornment: <Box
+                                              sx={{ pr: 2, gap: 2 }}>
+                                              {property.clearable && <IconButton
+                                                  sx={{
+                                                      position: "absolute",
+                                                      right: "56px",
+                                                      top: "12px"
+                                                  }}
+                                                  onClick={handleClearClick}>
+                                                  <ClearIcon/>
+                                              </IconButton>}
                                               {params.InputProps?.endAdornment}
                                           </Box>
                                       }}
@@ -79,7 +94,7 @@ export function DateTimeFieldBinding({
             />
 
             {includeDescription &&
-            <FieldDescription property={property}/>}
+                <FieldDescription property={property}/>}
 
         </>
     );

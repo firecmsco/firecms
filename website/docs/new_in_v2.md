@@ -33,8 +33,11 @@ this version:
 - You can now define a specific logo for dark mode.
 - If you are using `FireCMS` instead of `FirebaseAppCMS`:
   - You need to add an additional `SnackbarProvider` in your tree.
-  It was provided by `FireCMS` before but we treat it as a separate component 
+  It was provided by `FireCMS` before, but we treat it as a separate component 
   now for better customization.
+- In the collection view, text inputs now save the values onBlur instead of
+  onChange, or after pressing enter. This is to avoid saving the value on every
+  keystroke, which can be annoying for the user.
 
 ### Collections and schemas
 
@@ -70,6 +73,8 @@ this version:
 - Date properties: you can now select between date or date/time modes.
 - Enums can be defined now as arrays of objects with multiple configuration
   options such as the color of the tag.
+- You can add a `clearable` prop to `StringProperty`, `NumberProperty` and `DateProperty` 
+  to allow users to clear the value.
 - Storage fields have been simplified and now the preview type can be inferred
   from the uploaded file.
 - You can now totally customise the colors of enum chips.

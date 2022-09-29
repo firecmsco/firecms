@@ -19,8 +19,6 @@ const nameProperty = buildProperty({
 });
 ```
 
-## `config`
-
 ### `storage`
 You can specify a `StorageMeta` configuration. It is used to
 indicate that this string refers to a path in Google Cloud Storage.
@@ -131,6 +129,9 @@ const property = buildProperty({
 });
 ```
 
+### `clearable`
+Add an icon to clear the value and set it to `null`. Defaults to `false`
+
 ### `markdown`
 Should this string property be displayed as a markdown field.
   If `true`, the field is rendered as a text editors that supports markdown
@@ -162,7 +163,7 @@ const property = buildProperty({
     }
 });
 ```
-## `validation`
+### `validation`
 
 * `required` Should this field be compulsory.
 * `requiredMessage` Message to be displayed as a validation error.

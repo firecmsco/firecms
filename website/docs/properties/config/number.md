@@ -17,8 +17,9 @@ const rangeProperty = buildProperty({
 });
 ```
 
+### `clearable`
+Add an icon to clear the value and set it to `null`. Defaults to `false`
 
-## `config`
 
 ### `enumValues`
 You can use the enum values providing a map of possible
@@ -52,7 +53,7 @@ const property = buildProperty({
 });
 ```
 
-## `validation`
+### `validation`
 
 * `required` Should this field be compulsory.
 * `requiredMessage` Message to be displayed as a validation error.

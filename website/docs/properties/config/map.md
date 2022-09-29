@@ -33,13 +33,13 @@ const ctaProperty = buildProperty({
 });
 ```
 
-##  `properties`
+###  `properties`
 Record of properties included in this map.
 
-## `previewProperties`
+### `previewProperties`
 List of properties rendered as this map preview. Defaults to first 3.
 
-## `validation`
+### `validation`
 
 * `required` Should this field be compulsory.
 * `requiredMessage` Message to be displayed as a validation error.

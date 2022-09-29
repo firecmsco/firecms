@@ -1,13 +1,17 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
     Checkbox,
     FormControl,
     FormHelperText,
+    IconButton,
     InputLabel,
     ListItemText,
     MenuItem,
     Select as MuiSelect
 } from "@mui/material";
+
+import ClearIcon from "@mui/icons-material/Clear";
+
 import { EnumType, FieldProps, ResolvedProperty } from "../../models";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
@@ -27,30 +31,31 @@ import { ErrorView } from "../../core";
  * @category Form fields
  */
 export function ArrayEnumSelectBinding({
-                                    propertyKey,
-                                    value,
-                                    setValue,
-                                    error,
-                                    showError,
-                                    disabled,
-                                    property,
-                                    includeDescription,
-                                    autoFocus
-                                }: FieldProps<EnumType[], any, any>) {
+                                           propertyKey,
+                                           value,
+                                           setValue,
+                                           error,
+                                           showError,
+                                           disabled,
+                                           property,
+                                           includeDescription,
+                                           autoFocus
+                                       }: FieldProps<EnumType[], any, any>) {
 
-    if (!property.of) {
+    const of = property.of;
+    if (!of) {
         throw Error("Using wrong component ArrayEnumSelect");
     }
 
-    if (Array.isArray(property.of)) {
+    if (Array.isArray(of)) {
         throw Error("Using array properties instead of single one in `of` in ArrayProperty");
     }
 
-    if (property.of.dataType !== "string" && property.of.dataType !== "number") {
+    if (of.dataType !== "string" && of.dataType !== "number") {
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
-    const enumValues = property.of.enumValues;
+    const enumValues = of.enumValues;
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");
@@ -62,7 +67,11 @@ export function ArrayEnumSelectBinding({
         setValue
     });
 
-    if (enumValues instanceof Error){
+    const handleClearClick = useCallback(() => {
+        setValue(null);
+    }, [setValue]);
+
+    if (enumValues instanceof Error) {
         return <ErrorView error={enumValues.message}/>;
     }
 
@@ -97,9 +106,19 @@ export function ArrayEnumSelectBinding({
                 value={validValue ? value.map(v => v.toString()) : []}
                 autoFocus={autoFocus}
                 disabled={disabled}
+                endAdornment={
+                    of.clearable && <IconButton
+                        sx={{
+                            position: "absolute",
+                            right: "32px"
+                        }}
+                        onClick={handleClearClick}>
+                        <ClearIcon/>
+                    </IconButton>
+                }
                 onChange={(evt: any) => {
                     let newValue;
-                    if ((property.of as ResolvedProperty)?.dataType === "number")
+                    if ((of as ResolvedProperty)?.dataType === "number")
                         newValue = evt.target.value ? evt.target.value.map((e: any) => parseFloat(e)) : [];
                     else
                         newValue = evt.target.value;
@@ -118,10 +137,11 @@ export function ArrayEnumSelectBinding({
                     .map(([enumKey, labelOrConfig]) => {
                         const checked = validValue && value.map(v => v.toString()).includes(enumKey.toString());
                         return (
-                            <MenuItem key={`form-select-${propertyKey}-${enumKey}`}
-                                      value={enumKey}
-                                      disabled={isEnumValueDisabled(labelOrConfig)}
-                                      dense={true}>
+                            <MenuItem
+                                key={`form-select-${propertyKey}-${enumKey}`}
+                                value={enumKey}
+                                disabled={isEnumValueDisabled(labelOrConfig)}
+                                dense={true}>
                                 <Checkbox checked={checked}/>
                                 <ListItemText primary={
                                     <EnumValuesChip

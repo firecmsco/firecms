@@ -20,7 +20,7 @@ import {
 import { PreviewSize } from "../index";
 import { getThumbnailMeasure } from "../util";
 
-export interface SkeletonComponentProps {
+export interface SkeletonPropertyComponentProps {
     property: ResolvedProperty,
     size: PreviewSize
 }
@@ -28,10 +28,10 @@ export interface SkeletonComponentProps {
 /**
  * @category Preview components
  */
-export function SkeletonComponent({
+export function SkeletonPropertyComponent({
                                          property,
                                          size
-                                     }: SkeletonComponentProps
+                                     }: SkeletonPropertyComponentProps
 ) {
 
     if (!property) {
@@ -107,7 +107,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
                     <>
                         {property.properties &&
                             <ListItem key={property.name + key}>
-                                <SkeletonComponent
+                                <SkeletonPropertyComponent
                                     property={property.properties[key]}
                                     size={"small"}/>
                             </ListItem>}
@@ -133,7 +133,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
                                 <Skeleton variant="text"/>
                             </TableCell>
                             <TableCell key={`table-cell-${key}`} component="th">
-                                {property.properties && <SkeletonComponent
+                                {property.properties && <SkeletonPropertyComponent
                                     property={property.properties[key]}
                                     size={"small"}/>}
                             </TableCell>
@@ -167,7 +167,7 @@ function renderArrayOfMaps<M extends Record<string, any>>(properties: ResolvedPr
                                             key={`table-cell-${key}`}
                                             component="th"
                                         >
-                                            <SkeletonComponent
+                                            <SkeletonPropertyComponent
                                                 property={(properties)[key]}
                                                 size={"small"}/>
                                         </TableCell>
@@ -214,8 +214,8 @@ function renderGenericArrayCell(
             {
                 [0, 1].map((value, index) =>
                     <>
-                        <SkeletonComponent property={property}
-                                           size={"small"}/>
+                        <SkeletonPropertyComponent property={property}
+                                                   size={"small"}/>
                     </>
                 )}
         </Grid>
@@ -235,7 +235,7 @@ export function renderSkeletonImageThumbnail(size: PreviewSize) {
     return (
         <Skeleton variant="rectangular"
                   sx={theme => ({
-                      borderRadius: `${theme.shape.borderRadius}px`,
+                      borderRadius: `${theme.shape.borderRadius}px`
                   })}
                   width={imageSize}
                   height={imageSize}/>

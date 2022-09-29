@@ -4,7 +4,7 @@ title: Array
 sidebar_label: Array
 ---
 
-##  `of`
+###  `of`
 
 The property of this array.
 
@@ -43,7 +43,7 @@ const productReferences = buildProperty({
 });
 ```
 
-## `oneOf`
+### `oneOf`
 
 Use this field if you would like to have an array of properties.
 It is useful if you need to have values of different types in the same
@@ -86,7 +86,7 @@ const contentProperty = buildProperty({
 });
 ```
 
-## `validation`
+### `validation`
 
 * `required` Should this field be compulsory.
 * `requiredMessage` Message to be displayed as a validation error.

@@ -138,6 +138,7 @@ export const productsCollection = buildCollection<Product>({
             dataType: "string",
             name: "Name",
             description: "Name of this product",
+            clearable: true,
             validation: {
                 required: true
             }

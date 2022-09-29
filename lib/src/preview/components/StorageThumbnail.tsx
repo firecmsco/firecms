@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 
 import {
     renderSkeletonImageThumbnail
-} from "../property_previews/SkeletonComponent";
+} from "../property_previews/SkeletonPropertyComponent";
 import { UrlComponentPreview } from "./UrlComponentPreview";
 import { PreviewSize } from "../index";
 import { useStorageSource } from "../../hooks";

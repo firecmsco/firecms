@@ -15,7 +15,7 @@ const availableProperty = buildProperty({
 
 
 
-## `validation`
+### `validation`
 
 * `required` Should this field be compulsory.
 * `requiredMessage` Message to be displayed as a validation error.
