@@ -1,4 +1,4 @@
-import React, { useDeferredValue, useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { TextareaAutosize } from "@mui/material";
 
 import { useDebounce } from "../../../util";
@@ -24,8 +24,9 @@ export function TableInput(props: {
             updateValue(internalValue);
     }, [internalValue, value]);
 
-    useDebounce(internalValue, doUpdate);
+    useDebounce(internalValue, doUpdate, 3000);
 
+    // update on external value change
     useEffect(
         () => {
             if (!focused && value !== internalValue)
@@ -70,6 +71,9 @@ export function TableInput(props: {
                     const newValue = evt.target.value as string;
                     if (multiline || !newValue.endsWith("\n"))
                         setInternalValue(newValue);
+                }}
+                onBlur={() => {
+                    doUpdate();
                 }}
             />
         </div>

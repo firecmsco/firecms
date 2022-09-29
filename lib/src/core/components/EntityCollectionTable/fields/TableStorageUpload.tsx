@@ -69,7 +69,7 @@ const StyledBox = styled(Box)((
 
     [`&.${classes.rejectDrop}`]: {
         borderColor: theme.palette.error.light
-    },
+    }
 }));
 
 /**
@@ -213,7 +213,7 @@ function StorageUpload({
         isDragReject
     } = useDropzone({
         accept: storage.acceptedFiles ? storage.acceptedFiles.map(e => ({ [e]: [] })).reduce((a, b) => ({ ...a, ...b }), {}) : undefined,
-        disabled: disabled,
+        disabled,
         maxSize: storage.maxSize,
         noClick: true,
         noKeyboard: true,

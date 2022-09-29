@@ -31,7 +31,7 @@ export function NumberTableInput(props: {
 
     }, [internalValue, value]);
 
-    useDebounce(internalValue, doUpdate);
+    useDebounce(internalValue, doUpdate, 3000);
 
     useEffect(
         () => {

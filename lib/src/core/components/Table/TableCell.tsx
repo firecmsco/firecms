@@ -75,99 +75,97 @@ export const TableCell = React.memo<TableCellProps>(
 
         useEffect(() => {
             if (internalSaved !== saved) {
-            if (saved) {
-                setInternalSaved(true);
-            } else {
-                setInternalSaved(true);
+                if (saved) {
+                    setInternalSaved(true);
+                } else {
+                    setInternalSaved(true);
+                }
+            }
+            const removeSavedState = () => {
+                setInternalSaved(false);
+            };
+            const handler = setTimeout(removeSavedState, 500);
+
+            return () => {
+                clearTimeout(handler);
+            };
+        }, [saved]);
+
+        let p = theme.spacing(0);
+        if (!removePadding) {
+            switch (size) {
+                case "l":
+                case "xl":
+                    p = theme.spacing(2);
+                    break;
+                case "m":
+                    p = theme.spacing(1);
+                    break;
+                case "s":
+                    p = theme.spacing(0.5);
+                    break;
+                default:
+                    p = theme.spacing(0.25);
+                    break;
             }
         }
-        const removeSavedState = () => {
-            setInternalSaved(false);
-        };
-        const handler = setTimeout(removeSavedState, 500);
 
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [saved]);
-
-    let p = theme.spacing(0);
-    if (!removePadding) {
-        switch (size) {
-            case "l":
-            case "xl":
-                p = theme.spacing(2);
+        let justifyContent;
+        switch (align) {
+            case "right":
+                justifyContent = "flex-end";
                 break;
-            case "m":
-                p = theme.spacing(1);
+            case "center":
+                justifyContent = "center";
                 break;
-            case "s":
-                p = theme.spacing(0.5);
-                break;
+            case "left":
             default:
-                p = theme.spacing(0.25);
-                break;
+                justifyContent = "flex-start";
         }
-    }
 
-    let justifyContent;
-    switch (align) {
-        case "right":
-            justifyContent = "flex-end";
-            break;
-        case "center":
-            justifyContent = "center";
-            break;
-        case "left":
-        default:
-            justifyContent = "flex-start";
-    }
+        const doOpenPopup = useCallback(() => {
+            if (openPopup) {
+                const cellRect = ref && ref?.current?.getBoundingClientRect();
+                openPopup(cellRect);
+            }
+        }, [ref]);
 
-    const doOpenPopup = useCallback(() => {
-        if (openPopup) {
+        const onClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+            if (event.detail === 3) {
+                doOpenPopup();
+            }
+        }, [doOpenPopup]);
+
+        const onSelectCallback = useCallback(() => {
+            if (!onSelect) return;
             const cellRect = ref && ref?.current?.getBoundingClientRect();
-            openPopup(cellRect);
-        }
-    }, [ref]);
+            if (disabled) {
+                onSelect(undefined);
+            } else if (!selected && cellRect) {
+                onSelect(cellRect);
+            }
+        }, [ref, onSelect, selected, disabled]);
 
-    const onClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-        if (event.detail === 3) {
-            doOpenPopup();
-        }
-    }, [doOpenPopup]);
+        const onFocus = useCallback((event: React.SyntheticEvent<HTMLDivElement>) => {
+            onSelectCallback();
+            event.stopPropagation();
+        }, [onSelectCallback]);
 
-    const onSelectCallback = useCallback(() => {
-        if (!onSelect) return;
-        const cellRect = ref && ref?.current?.getBoundingClientRect();
-        if (disabled) {
-            onSelect(undefined);
-        } else if (!selected && cellRect) {
-            onSelect(cellRect);
-        }
-    }, [ref, onSelect, selected, disabled]);
-
-    const onFocus = useCallback((event: React.SyntheticEvent<HTMLDivElement>) => {
-        onSelectCallback();
-        event.stopPropagation();
-    }, [onSelectCallback]);
-
-    useEffect(() => {
-        if (bounds) {
-            const newOverflowingValue = bounds.height > maxHeight;
-            if (isOverflowing !== newOverflowingValue)
-                setIsOverflowing(newOverflowingValue);
-        }
-    }, [bounds, isOverflowing, maxHeight]);
+        useEffect(() => {
+            if (bounds) {
+                const newOverflowingValue = bounds.height > maxHeight;
+                if (isOverflowing !== newOverflowingValue)
+                    setIsOverflowing(newOverflowingValue);
+            }
+        }, [bounds, isOverflowing, maxHeight]);
 
         const isSelected = !showError && selected;
 
         let border: string;
-        if (isSelected) {
-            if (internalSaved) {
-                border = `2px solid ${theme.palette.success.light}`;
-            } else {
-                border = "2px solid #5E9ED6";
-            }
+        if (internalSaved) {
+            border = `2px solid ${theme.palette.success.light}`;
+        } else if (isSelected) {
+            border = "2px solid #5E9ED6";
         } else if (showError) {
             border = `2px solid ${theme.palette.error.light} !important`
         } else {
@@ -183,76 +181,76 @@ export const TableCell = React.memo<TableCellProps>(
         return (
             <Box
                 tabIndex={selected || disabled ? undefined : 0}
-                    ref={ref}
-                    onFocus={onFocus}
-                    onClick={onClick}
-                    onMouseEnter={setOnHoverTrue}
-                    onMouseMove={setOnHoverTrue}
-                    onMouseLeave={setOnHoverFalse}
-                    style={{
-                        width,
-                        // color: "#" + randomColor(),
-                        contain: "content",
-                        alignItems: disabled || !isOverflowing ? "center" : undefined,
-                        backgroundColor: onHover
-                            ? (disabled ? undefined : darken(theme.palette.background.default, 0.02))
-                            : (isSelected ? theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default : undefined)
+                ref={ref}
+                onFocus={onFocus}
+                onClick={onClick}
+                onMouseEnter={setOnHoverTrue}
+                onMouseMove={setOnHoverTrue}
+                onMouseLeave={setOnHoverFalse}
+                style={{
+                    width,
+                    // color: "#" + randomColor(),
+                    contain: "content",
+                    alignItems: disabled || !isOverflowing ? "center" : undefined,
+                    backgroundColor: onHover
+                        ? (disabled ? undefined : darken(theme.palette.background.default, 0.02))
+                        : (isSelected ? theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default : undefined)
 
-                    }}
-                    sx={{
-                        display: "flex",
-                        position: "relative",
-                        height: "100%",
-                        borderRadius: "4px",
-                        overflow: "hidden",
-                        contain: "strict",
-                        padding: p,
-                        alpha: disabled ? 0.8 : undefined,
-                        border,
-                        transition: "border-color 300ms ease-in-out"
-                    }}>
+                }}
+                sx={{
+                    display: "flex",
+                    position: "relative",
+                    height: "100%",
+                    borderRadius: "4px",
+                    overflow: "hidden",
+                    contain: "strict",
+                    padding: p,
+                    alpha: disabled ? 0.8 : undefined,
+                    border,
+                    transition: "border-color 300ms ease-in-out"
+                }}>
 
-                    <ErrorBoundary>
-                        <Box
-                            sx={{
-                                display: "flex",
-                                width: "100%",
-                                flexDirection: "column",
-                                height: fullHeight ? "100%" : undefined,
-                                justifyContent,
-                                overflow: scrollable ? "auto" : undefined,
-                                WebkitMaskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
-                                maskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
-                                alignItems: faded ? "start" : (scrollable ? "start" : undefined)
-                            }}>
-
-                            {!fullHeight && <Box ref={measureRef}
-                                                 sx={{
-                                                     display: "flex",
-                                                     width: "100%",
-                                                     justifyContent,
-                                                     height: fullHeight ? "100%" : undefined
-                                                 }}>
-                                {children}
-                            </Box>}
-
-                            {fullHeight && children}
-
-                        </Box>
-                    </ErrorBoundary>
-
-                    {disabled && onHover && disabledTooltip &&
-                        <Box sx={{
-                            position: "absolute",
-                            top: 4,
-                            right: 4,
-                            fontSize: "14px"
+                <ErrorBoundary>
+                    <Box
+                        sx={{
+                            display: "flex",
+                            width: "100%",
+                            flexDirection: "column",
+                            height: fullHeight ? "100%" : undefined,
+                            justifyContent,
+                            overflow: scrollable ? "auto" : undefined,
+                            WebkitMaskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
+                            maskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
+                            alignItems: faded ? "start" : (scrollable ? "start" : undefined)
                         }}>
-                            <Tooltip title={disabledTooltip}>
-                                <RemoveCircleIcon color={"disabled"}
-                                                  fontSize={"inherit"}/>
-                            </Tooltip>
+
+                        {!fullHeight && <Box ref={measureRef}
+                                             sx={{
+                                                 display: "flex",
+                                                 width: "100%",
+                                                 justifyContent,
+                                                 height: fullHeight ? "100%" : undefined
+                                             }}>
+                            {children}
                         </Box>}
+
+                        {fullHeight && children}
+
+                    </Box>
+                </ErrorBoundary>
+
+                {disabled && onHover && disabledTooltip &&
+                    <Box sx={{
+                        position: "absolute",
+                        top: 4,
+                        right: 4,
+                        fontSize: "14px"
+                    }}>
+                        <Tooltip title={disabledTooltip}>
+                            <RemoveCircleIcon color={"disabled"}
+                                              fontSize={"inherit"}/>
+                        </Tooltip>
+                    </Box>}
 
                 {(showError || showExpandIcon) &&
                     <Box sx={{
@@ -296,5 +294,5 @@ export const TableCell = React.memo<TableCellProps>(
                 }
 
             </Box>
-    );
-}, isEqual) as React.FunctionComponent<TableCellProps>;
+        );
+    }, isEqual) as React.FunctionComponent<TableCellProps>;

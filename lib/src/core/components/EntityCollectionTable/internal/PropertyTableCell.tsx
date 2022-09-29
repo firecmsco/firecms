@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import equal from "react-fast-compare"
 import {
-    CMSType,
     Entity,
     EntityCollection,
     EntityReference,
@@ -79,7 +78,6 @@ function isStorageProperty<T>(property: ResolvedProperty) {
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
     function PropertyTableCell<T extends any, M extends Record<string, any>>({
                                                          propertyKey,
-                                                         setFocused,
                                                          columnIndex,
                                                          customFieldValidator,
                                                          value,
@@ -122,10 +120,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             customFieldValidator,
             name: propertyKey
         }), [entity.id, property, propertyKey]);
-
-        const onBlur = useCallback(() => {
-            setFocused(false);
-        }, []);
 
         useEffect(
             () => {
@@ -239,7 +233,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                      previewSize={getPreviewSizeFrom(size)}
                                                      updateValue={updateValue}
                                                      propertyKey={propertyKey as string}
-                                                     onBlur={onBlur}
                 />;
                 showExpandIcon = true;
                 fullHeight = true;
@@ -255,7 +248,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                   small={getPreviewSizeFrom(size) !== "regular"}
                                                   enumValues={numberProperty.enumValues}
                                                   error={error}
-                                                  onBlur={onBlur}
                                                   internalValue={internalValue as string | number}
                                                   updateValue={updateValue}
                     />;
@@ -266,7 +258,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                         error={error}
                         focused={focused}
                         disabled={disabled}
-                        onBlur={onBlur}
                         value={internalValue as number}
                         updateValue={updateValue}
                     />;
@@ -283,7 +274,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                   small={getPreviewSizeFrom(size) !== "regular"}
                                                   enumValues={stringProperty.enumValues}
                                                   error={error}
-                                                  onBlur={onBlur}
                                                   internalValue={internalValue as string | number}
                                                   updateValue={updateValue}
                     />;
@@ -350,7 +340,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                              valueType={arrayProperty.of.dataType}
                                              enumValues={arrayProperty.of.enumValues}
                                              error={error}
-                                             onBlur={onBlur}
                                              internalValue={internalValue as string | number}
                                              updateValue={updateValue}
                                 />;
