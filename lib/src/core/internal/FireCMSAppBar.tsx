@@ -68,8 +68,10 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                 key={"breadcrumb-home"}
                                 color="inherit"
                                 component={ReactLink}
-                                to={"/"}>
-                                <Typography variant="h6" noWrap>
+                                to={"."}>
+                                <Typography variant="h6"
+                                            noWrap
+                                            className={"weight-500"}>
                                     {title}
                                 </Typography>
                             </Link>
@@ -150,7 +152,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
                 </Toolbar>
             </Slide>
-            </StyledAppBar>
+        </StyledAppBar>
     );
 }
 

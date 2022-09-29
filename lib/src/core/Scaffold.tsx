@@ -300,7 +300,7 @@ function StyledDrawer(props: MuiDrawerProps & {
             key={"breadcrumb-home"}
             color="inherit"
             component={NavLink}
-            to={navigation.homeUrl}
+            to={"."}
             sx={theme => ({
                 transition: theme.transitions.create(["padding"], {
                     easing: theme.transitions.easing.sharp,

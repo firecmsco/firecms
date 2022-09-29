@@ -1,7 +1,6 @@
 import { pink, red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material";
 
-
 /**
  * Use this function to build the default FireCMS MUI5 theme,
  * with some overrides.
@@ -43,16 +42,18 @@ export const createCMSDefaultTheme = (
             fontWeightMedium: 500,
             h6: {
                 fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
-                fontSize: "1.15rem"
+                fontSize: "1.15rem",
+                fontWeight: 400
             },
             h5: {
                 fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontSize: "1.55rem"
             },
             h4: {
-                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif"
             },
             h3: {
-                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif"
             },
             h2: {
                 fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",

@@ -16,7 +16,7 @@ it("cmsToFirestoreModel", () => {
         order: 2,
         title: { en: 'Test pill in english' }
     };
-    const result = cmsToFirestoreModel(inputValues, {} );
+    const result = cmsToFirestoreModel(inputValues, {} as any);
     expect(result).toEqual(inputValues);
 });
 

@@ -48,7 +48,7 @@ export const useFirebaseAuthController = (
     const [initialLoading, setInitialLoading] = useState(true);
     const [authLoading, setAuthLoading] = useState(true);
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
-    const [confirmationResult, setConfirmationResult] = useState<void | ConfirmationResult>();
+    const [confirmationResult, setConfirmationResult] = useState<undefined | ConfirmationResult>();
 
     const [extra, setExtra] = useState<any>();
 
@@ -124,8 +124,8 @@ export const useFirebaseAuthController = (
         return signInWithPhoneNumber(auth, phone, applicationVerifier)
             .catch(setAuthProviderError)
             .then((res) => {
-                setAuthLoading(false)
-                setConfirmationResult(res)
+                setAuthLoading(false);
+                setConfirmationResult(res ?? undefined);
             });
     }, []);
 

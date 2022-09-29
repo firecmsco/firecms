@@ -38,7 +38,7 @@ export type FirebaseAuthController =
 
     authLoading: boolean;
 
-    confirmationResult: void | ConfirmationResult,
+    confirmationResult?: ConfirmationResult;
 
     googleLogin: () => void;
 
