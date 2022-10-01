@@ -50,6 +50,7 @@
         "react-beautiful-dnd": "^13.1.0",
         "react-dropzone": "^14.2.1",
         "react-fast-compare": "^3.2.0",
+        "react-image-file-resizer": "^0.4.8",
         "react-transition-group": "^4.4.2",
         "react-use-measure": "^2.1.1",
         "react-window": "^1.8.7",
