@@ -686,6 +686,12 @@ export interface StorageConfig {
     acceptedFiles?: FileType[];
 
     /**
+     * Use client side image compression and resizing
+     * Will only be applied to these MIME types: image/jpeg, image/png and image/webp
+     */
+    imageCompression?: ImageCompression;
+
+    /**
      * Specific metadata set in your uploaded file.
      * For the default Firebase implementation, the values passed here are of type
      * `firebase.storage.UploadMetadata`
@@ -806,3 +812,20 @@ export type FileType =
     | "text/*"
     | "font/*"
     | string;
+
+export interface ImageCompression {
+    /**
+     * New image max height (ratio is preserved)
+     */
+    maxHeight?: number;
+
+    /**
+     * New image max width (ratio is preserved)
+     */
+    maxWidth?: number;
+
+    /**
+     * A number between 0 and 100. Used for the JPEG compression.(if no compress is needed, just set it to 100)
+     */
+    quality: number;
+}
