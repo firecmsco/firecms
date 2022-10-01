@@ -2,6 +2,7 @@ import equal from "react-fast-compare";
 
 import {
     EntityValues,
+    ImageCompression,
     Property,
     ResolvedArrayProperty,
     ResolvedStringProperty,
@@ -13,6 +14,7 @@ import { useCallback, useEffect, useState } from "react";
 import { PreviewSize } from "../../preview";
 import { randomString } from "./strings";
 import { resolveFilenameString, resolveStoragePathString } from "./storage";
+import Resizer from "react-image-file-resizer";
 
 /**
  * Internal representation of an item in the storage
@@ -66,6 +68,25 @@ export function useStorageUploadController<M>({
 
     const metadata: Record<string, any> | undefined = storage?.metadata;
     const size = multipleFilesSupported ? "small" : "regular";
+
+    const compression: ImageCompression | undefined = storage?.imageCompression
+    const supportedTypes = { "image/jpeg": "JPEG", "image/png": "PNG", "image/webp": "WEBP" }
+    const compressionFormat = (file: File) => supportedTypes[file.type] ? supportedTypes[file.type] : null
+
+    const resizeAndCompressImage = (file: File, compression: ImageCompression) => new Promise<File>((resolve) => {
+        const quality = compression.quality >= 0 ? compression.quality <= 100 ? compression.quality : 100 : 100
+
+        Resizer.imageFileResizer(
+            file,
+            compression.maxWidth || Number.MAX_VALUE,
+            compression.maxHeight || Number.MAX_VALUE,
+            compressionFormat(file),
+            quality,
+            0,
+            (file: string | Blob | File | ProgressEvent<FileReader>) => resolve(file as File),
+            "file",
+        )
+    })
 
     const internalInitialValue: StorageFieldItem[] =
         (multipleFilesSupported
@@ -146,19 +167,29 @@ export function useStorageUploadController<M>({
         let newInternalValue: StorageFieldItem[];
         if (multipleFilesSupported) {
             newInternalValue = [...internalValue,
-                ...(await Promise.all(
-                    acceptedFiles.map(async file => ({
+                ...(await Promise.all(acceptedFiles.map(async file => {
+                    if (compression && compressionFormat(file)) {
+                        file = await resizeAndCompressImage(file, compression)
+                    }
+
+                    return {
                         id: getRandomId(),
                         file,
                         fileName: await fileNameBuilder(file),
                         metadata,
                         size
-                    } as StorageFieldItem))))];
+                    } as StorageFieldItem;
+                })))];
         } else {
+            let file = acceptedFiles[0]
+            if (compression && compressionFormat(file)) {
+                file = await resizeAndCompressImage(file, compression)
+            }
+
             newInternalValue = [{
                 id: getRandomId(),
-                file: acceptedFiles[0],
-                fileName: await fileNameBuilder(acceptedFiles[0]),
+                file,
+                fileName: await fileNameBuilder(file),
                 metadata,
                 size
             }];
