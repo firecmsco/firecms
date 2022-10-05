@@ -14,7 +14,8 @@
         "saas": "cd saas && yarn dev",
         "website": "cd website && yarn start",
         "preview": "cd example && yarn preview",
-        "deploy": "cd example && yarn deploy",
+        "deploy-demo": "cd example && yarn deploy",
+        "deploy-web": "cd website && yarn deploy",
         "build": "cd lib && yarn build"
     },
     "packageManager": "yarn@3.2.3"

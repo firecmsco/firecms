@@ -41,7 +41,7 @@ export const testCallbacks: EntityCallbacks = {
                 collection,
                 context,
                 entity,
-                path,
+                path
             }: EntityOnFetchProps) {
         const values = entity.values;
         // values.name = "Forced name";
@@ -81,12 +81,11 @@ const validatedCustom = buildProperty({
     properties: {
         sample: {
             name: "Sample",
-            dataType: "string",
+            dataType: "string"
         }
     },
     Field: CustomField
 });
-
 
 export const translationProperties: Properties<any> = {
     en: {
@@ -154,7 +153,7 @@ export const formPropertyEntry = buildProperty(({ propertyValue }) => {
     const name = propertyValue?.text?.en ?? "Form entry";
     return {
         dataType: "map",
-        name: name,
+        name,
         expanded: false,
         properties: {
             type: {
@@ -170,7 +169,6 @@ export const formPropertyEntry = buildProperty(({ propertyValue }) => {
     };
 });
 
-
 export const testCollection = buildCollection({
     callbacks: testCallbacks,
     path: "test_entity",
@@ -183,15 +181,17 @@ export const testCollection = buildCollection({
             enumValues: [
                 { id: "EUR", label: "Euros", color: "blueDark" },
                 {
-                    id: "DOL", label: "Dollars", color: {
+                    id: "DOL",
+label: "Dollars",
+color: {
                         color: "#FFFFFF",
-                        text: "#333333",
+                        text: "#333333"
                     }
                 }
             ]
         }),
         background: {
-            dataType: "number",   // NB – this was string” above..
+            dataType: "number", // NB – this was string” above..
             name: "Colour",
             enumValues:
                 [
@@ -204,9 +204,9 @@ export const testCollection = buildCollection({
                         id: 4293947270,
                         label: " Cyan ",
                         color: "cyanDarker"
-                    },
+                    }
                 ],
-            validation: { required: true },
+            validation: { required: true }
         },
         name: {
             dataType: "string",
@@ -215,32 +215,32 @@ export const testCollection = buildCollection({
         self_ref: {
             name: "Self ref",
             dataType: "reference",
-            path: "test_entity",
+            path: "test_entity"
         },
         self_refs: {
             dataType: "array",
             of: {
                 dataType: "reference",
                 name: "Self refs",
-                path: "test_entity",
+                path: "test_entity"
                 // previewProperties: ["name","url_image"]
             }
         },
         url_image: {
-            dataType: 'string',
+            dataType: "string",
             name: "URL image",
             storage: {
-                storagePath: 'images',
-                acceptedFiles: ['image/*'],
+                storagePath: "images",
+                acceptedFiles: ["image/*"],
                 storeUrl: true,
-                fileName:  async ({file}) =>{
+                fileName: async ({ file }) => {
                     await new Promise(resolve => setTimeout(resolve, 100));
                     return file.name;
                 },
                 metadata: {
-                    cacheControl: 'max-age=1000000',
-                },
-            },
+                    cacheControl: "max-age=1000000"
+                }
+            }
         },
         impacts: {
             name: "Impacts",
@@ -274,7 +274,7 @@ export const testCollection = buildCollection({
             dataType: "date",
             columnWidth: 325,
             mode: "date_time"
-        }),
+        })
         // test_date: {
         //     name: "Test date",
         //     dataType: "date"
@@ -685,12 +685,12 @@ export const testCollection = buildCollection({
         //     }
         // }),
     },
-    additionalColumns: [
+    additionalFields: [
         {
             id: "full_name",
             name: "Full Name",
-            builder: ({entity}) => {
-                let values = entity.values;
+            builder: ({ entity }) => {
+                const values = entity.values;
                 return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";
             },
             dependencies: ["name"]

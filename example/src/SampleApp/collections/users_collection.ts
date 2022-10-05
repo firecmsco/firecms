@@ -33,7 +33,7 @@ export const usersCollection = buildCollection({
             description: "Products this user has liked",
             of: {
                 dataType: "reference",
-                path: "products",
+                path: "products"
             }
         },
         picture: {
@@ -43,18 +43,18 @@ export const usersCollection = buildCollection({
                 large: {
                     name: "Large",
                     dataType: "string",
-                    url: "image",
+                    url: "image"
                 },
                 thumbnail: {
                     name: "Thumbnail",
                     dataType: "string",
-                    url: "image",
+                    url: "image"
                 }
             },
             previewProperties: ["large"]
         }
     },
-    additionalColumns: [
+    additionalFields: [
         {
             id: "sample_additional",
             name: "Sample additional",

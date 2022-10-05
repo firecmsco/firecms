@@ -1,5 +1,4 @@
 import {
-    CMSType,
     Entity,
     EntityReference,
     ExportConfig,
@@ -34,7 +33,7 @@ export function getExportableData(data: any[],
                                   headers: Header[]
 ) {
 
-    const mergedData: any[] = data.map(e => ({ id: e.id, ...processCSVValues(e.values , properties) }));
+    const mergedData: any[] = data.map(e => ({ id: e.id, ...processCSVValues(e.values, properties) }));
     if (additionalData) {
         additionalData.forEach((additional, index) => {
             mergedData[index] = { ...mergedData[index], ...additional };
@@ -44,7 +43,6 @@ export function getExportableData(data: any[],
         return headers.map((header) => getValueInPath(entry, header.key));
     });
 }
-
 
 function getExportHeaders<M extends Record<string, any>, UserType extends User>(properties: ResolvedProperties<M>,
                                                                       path: string,
@@ -56,8 +54,8 @@ function getExportHeaders<M extends Record<string, any>, UserType extends User>(
             .flat()
     ];
 
-    if (exportConfig?.additionalColumns) {
-        headers.push(...exportConfig.additionalColumns.map((column) => ({
+    if (exportConfig?.additionalFields) {
+        headers.push(...exportConfig.additionalFields.map((column) => ({
             label: column.key,
             key: column.key
         })));
@@ -72,7 +70,7 @@ function getExportHeaders<M extends Record<string, any>, UserType extends User>(
  * @param propertyKey
  * @param prefix
  */
-function getHeaders(property: ResolvedProperty, propertyKey: string, prefix: string = ""): Header[] {
+function getHeaders(property: ResolvedProperty, propertyKey: string, prefix = ""): Header[] {
     const currentKey = prefix ? `${prefix}.${propertyKey}` : propertyKey;
     if (property.dataType === "map" && property.properties) {
         return Object.entries(property.properties)
@@ -117,7 +115,7 @@ function processCSVValues<M extends Record<string, any>>
 (inputValues: Record<keyof M, any>, properties: ResolvedProperties<M>): Record<keyof M, any> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
-            const inputValue = inputValues && (inputValues )[key];
+            const inputValue = inputValues && (inputValues)[key];
             const updatedValue = processCSVValue(inputValue, property as ResolvedProperty);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
@@ -144,4 +142,3 @@ export function downloadBlob(content: BlobPart[], filename: string, contentType:
     pom.setAttribute("download", filename);
     pom.click();
 }
-

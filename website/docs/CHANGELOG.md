@@ -111,7 +111,7 @@ code and better performance.
 
 ### Added
 
-- Optional `dependencies` prop in `AdditionalColumnDelegate` so that additional
+- Optional `dependencies` prop in `AdditionalFieldDelegate` so that additional
   columns are always up-to-date when they depend on another entity property.
   Just pass an array of property keys
 
@@ -702,7 +702,7 @@ If you need more info: https://firecms.co/blog/types_refactor
   field as disabled, instead of a preview. You can use the new flag `readOnly`
   to preserve the previous state
 - Fix for empty strings on hooks and default values were causing a crash.
-- Fix for additional column keys when defining collections.
+- Fix for additional field keys when defining collections.
 - [BREAKING] `CMSFieldProps` is now called `FieldProps`
 - [BREAKING] `FormFieldProps` is now called `CMSFormFieldProps`
 - [BREAKING] `createFormField` is no longer passed as an argument

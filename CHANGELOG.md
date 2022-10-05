@@ -107,7 +107,7 @@ code and better performance.
 
 ### Added
 
-- Optional `dependencies` prop in `AdditionalColumnDelegate` so that additional
+- Optional `dependencies` prop in `AdditionalFieldDelegate` so that additional
   columns are always up-to-date when they depend on another entity property.
   Just pass an array of property keys
 

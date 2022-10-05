@@ -72,9 +72,12 @@ export interface EntityCollection<M extends Record<string, any> = any,
     /**
      * Order in which the properties are displayed.
      * If you are specifying your collection as code, the order is the same as the
-     * one you define in `properties`
+     * one you define in `properties`. Additional columns are added at the
+     * end of the list, if the order is not specified.
+     * Note that if you set this prop, other ways to hide fields, like
+     * `hidden` in the property definition, will not work.
      */
-    propertiesOrder?: Extract<keyof M, string>[];
+    propertiesOrder?: Extract<keyof M | AdditionalKey, string>[];
 
     /**
      * If enabled, content is loaded in batches. If `false` all entities in the
@@ -169,10 +172,20 @@ export interface EntityCollection<M extends Record<string, any> = any,
     views?: EntityCustomView<M>[];
 
     /**
-     * You can add additional columns to the collection view by implementing
-     * an additional column delegate.
+     * You can add additional fields to the collection view by implementing
+     * an additional field delegate.
      */
-    additionalColumns?: AdditionalColumnDelegate<M, AdditionalKey, UserType>[];
+    additionalFields?: AdditionalFieldDelegate<M, AdditionalKey, UserType>[];
+
+    /**
+     * DEPRECATED: Use `additionalFields` instead
+     *
+     * This prop will be removed in the final version
+     *
+     * You can add additional fields to the collection view by implementing
+     * an additional field delegate.
+     */
+    additionalColumns?: AdditionalFieldDelegate<M, AdditionalKey, UserType>[];
 
     /**
      * Default size of the rendered collection
@@ -269,12 +282,12 @@ export type WhereFilterOp =
 export type FilterValues<Key extends string> = Partial<Record<Key, [WhereFilterOp, any]>>;
 
 /**
- * You can use this configuration to add additional columns to the data
+ * You can use this configuration to add additional fields to the data
  * exports
  * @category Models
  */
 export interface ExportConfig<UserType extends User = User> {
-    additionalColumns: ExportMappingFunction<UserType> []
+    additionalFields: ExportMappingFunction<UserType> []
 }
 
 /**
@@ -303,11 +316,11 @@ export type FilterCombination<Key extends string> = Partial<Record<Key, "asc" | 
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
 /**
- * Use this interface for adding additional columns to entity collection views.
+ * Use this interface for adding additional fields to entity collection views.
  * If you need to do some async loading you can use {@link AsyncPreviewComponent}
  * @category Models
  */
-export interface AdditionalColumnDelegate<M extends Record<string, any> = any,
+export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
     AdditionalKey extends string = string,
     UserType extends User = User> {
 
@@ -326,11 +339,6 @@ export interface AdditionalColumnDelegate<M extends Record<string, any> = any,
      * Width of the generated column in pixels
      */
     width?: number;
-
-    /**
-     *
-     */
-    hideFromCollection?: boolean;
 
     /**
      * Builder for the content of the cell for this column

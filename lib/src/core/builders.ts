@@ -1,5 +1,5 @@
 import {
-    AdditionalColumnDelegate,
+    AdditionalFieldDelegate,
     ArrayProperty,
     BooleanProperty,
     CMSType,
@@ -116,12 +116,12 @@ export function buildEntityCallbacks<M extends Record<string, any> = any>(
 
 /**
  * Identity function we use to defeat the type system of Typescript and build
- * additional column delegates views with all its properties
- * @param additionalColumnDelegate
+ * additional field delegates views with all its properties
+ * @param additionalFieldDelegate
  * @category Builder
  */
-export function buildAdditionalColumnDelegate<M extends Record<string, any>, AdditionalKey extends string = string, UserType extends User = User>(
-    additionalColumnDelegate: AdditionalColumnDelegate<M, AdditionalKey, UserType>
-): AdditionalColumnDelegate<M, AdditionalKey, UserType> {
-    return additionalColumnDelegate;
+export function buildAdditionalFieldDelegate<M extends Record<string, any>, AdditionalKey extends string = string, UserType extends User = User>(
+    additionalFieldDelegate: AdditionalFieldDelegate<M, AdditionalKey, UserType>
+): AdditionalFieldDelegate<M, AdditionalKey, UserType> {
+    return additionalFieldDelegate;
 }

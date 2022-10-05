@@ -1,5 +1,5 @@
 import {
-    AdditionalColumnDelegate,
+    AdditionalFieldDelegate,
     AsyncPreviewComponent,
     buildCollection,
     EntityCallbacks,
@@ -20,7 +20,6 @@ export const productExtraActionBuilder = ({
             selectionController={selectionController}/>
     );
 };
-
 
 export const localeCollection = buildCollection<Locale>({
     path: "locales",
@@ -61,8 +60,7 @@ export const localeCollection = buildCollection<Locale>({
     }
 });
 
-
-const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
+const productAdditionalField: AdditionalFieldDelegate<Product> = {
     id: "spanish_title",
     name: "Spanish title",
     builder: ({ entity, context }) =>
@@ -118,7 +116,7 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         // we use some custom logic by storing user data in the `extra`
         // field of the user
-        delete: Boolean(authController.extra?.roles?.admin),
+        delete: Boolean(authController.extra?.roles?.admin)
     }),
     // extraActions: productExtraActionBuilder,
     subcollections: [localeCollection],
@@ -131,8 +129,9 @@ export const productsCollection = buildCollection<Product>({
                                     modifiedValues={modifiedValues}/>
         }
     ],
-    additionalColumns: [productAdditionalColumn],
-    filterCombinations: [{ category: "desc", available: "desc" }, { category: "asc", available: "desc" } , { category: "desc", available: "asc" } , { category: "asc", available: "asc" }],
+    additionalFields: [productAdditionalField],
+    // propertiesOrder: ["name", "price", "category", "spanish_title", "currency", "locales"],
+    filterCombinations: [{ category: "desc", available: "desc" }, { category: "asc", available: "desc" }, { category: "desc", available: "asc" }, { category: "asc", available: "asc" }],
     properties: {
         name: {
             dataType: "string",
@@ -286,4 +285,3 @@ export const productsCollection = buildCollection<Product>({
     }
 
 });
-

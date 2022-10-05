@@ -7,7 +7,7 @@ import {
     getSubcollectionColumnId
 } from "./internal/common";
 import {
-    AdditionalColumnDelegate,
+    AdditionalFieldDelegate,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -152,8 +152,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
 
-        const additionalColumns = useMemo(() => {
-            const subcollectionColumns: AdditionalColumnDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
+        const additionalFields = useMemo(() => {
+            const subcollectionColumns: AdditionalFieldDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
                 return {
                     id: getSubcollectionColumnId(subcollection),
                     name: subcollection.name,
@@ -179,7 +179,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     )
                 };
             }) ?? [];
-            return [...(resolvedCollection.additionalColumns ?? []), ...subcollectionColumns];
+            return [...(resolvedCollection.additionalFields ?? resolvedCollection.additionalColumns ?? []), ...subcollectionColumns];
         }, [resolvedCollection, collection, fullPath]);
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
@@ -276,13 +276,13 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const tableKey = React.useRef<string>(Math.random().toString(36));
 
-        const additionalColumnsMap: Record<string, AdditionalColumnDelegate<M, string, UserType>> = useMemo(() => {
-            return additionalColumns
-                ? additionalColumns
+        const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, string, UserType>> = useMemo(() => {
+            return additionalFields
+                ? additionalFields
                     .map((aC) => ({ [aC.id]: aC }))
                     .reduce((a, b) => ({ ...a, ...b }), {})
                 : {};
-        }, [additionalColumns]);
+        }, [additionalFields]);
 
         // on ESC key press
         useEffect(() => {
@@ -312,7 +312,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             setFocused(true);
         }, []);
 
-        const displayedProperties = useColumnIds<M>(resolvedCollection, true);
+        const displayedColumnIds = useColumnIds<M>(resolvedCollection, true);
 
         const customFieldValidator: CustomFieldValidator | undefined = uniqueFieldValidator;
 
@@ -389,10 +389,10 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
             const entity: Entity<M> = rowData;
 
-            const additionalColumn = additionalColumnsMap[column.key as AdditionalKey];
-            const value = additionalColumn.dependencies
+            const additionalField = additionalFieldsMap[column.key as AdditionalKey];
+            const value = additionalField.dependencies
                 ? Object.entries(entity.values)
-                    .filter(([key, value]) => additionalColumn.dependencies!.includes(key as Extract<keyof M, string>))
+                    .filter(([key, value]) => additionalField.dependencies!.includes(key as Extract<keyof M, string>))
                     .reduce((a, b) => ({ ...a, ...b }), {})
                 : undefined;
 
@@ -410,7 +410,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     disabledTooltip={"This column can't be edited directly"}
                 >
                     <ErrorBoundary>
-                        {additionalColumn.builder({
+                        {additionalField.builder({
                             entity,
                             context
                         })}
@@ -418,7 +418,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 </TableCell>
             );
 
-        }, [additionalColumnsMap, size]);
+        }, [additionalFieldsMap, size]);
 
         const allColumns: TableColumn<Entity<M>, any>[] = useMemo(() => {
                 const columnsResult: TableColumn<Entity<M>, any>[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
@@ -444,20 +444,20 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         });
                     });
 
-                const additionalTableColumns: TableColumn<Entity<M>, any>[] = additionalColumns
-                    ? additionalColumns.map((additionalColumn) =>
+                const additionalTableColumns: TableColumn<Entity<M>, any>[] = additionalFields
+                    ? additionalFields.map((additionalField) =>
                         ({
-                            key: additionalColumn.id,
+                            key: additionalField.id,
                             type: "additional",
                             align: "left",
                             sortable: false,
-                            title: additionalColumn.name,
-                            width: additionalColumn.width ?? 200
+                            title: additionalField.name,
+                            width: additionalField.width ?? 200
                         }))
                     : [];
                 return [...columnsResult, ...additionalTableColumns];
             },
-            [additionalColumns, disabledFilterChange, forceFilter, resolvedCollection.properties]);
+            [additionalFields, disabledFilterChange, forceFilter, resolvedCollection.properties]);
 
         const idColumn: TableColumn<any, any> = useMemo(() => ({
             key: "id",
@@ -469,11 +469,11 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const columns: TableColumn<any, any>[] = useMemo(() => [
             idColumn,
-            ...displayedProperties
+            ...displayedColumnIds
                 .map((p) => {
                     return allColumns.find(c => c.key === p);
                 }).filter(c => !!c) as TableColumn<Entity<M>, any>[]
-        ], [allColumns, displayedProperties, idColumn]);
+        ], [allColumns, displayedColumnIds, idColumn]);
 
         const popupFormField = (
             <PopupFormField
@@ -509,14 +509,14 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                                                        width={column.width}
                                                        frozen={column.frozen}
                                                        size={size}/>;
-            } else if (additionalColumnsMap[columnKey]) {
+            } else if (additionalFieldsMap[columnKey]) {
                 return additionalCellRenderer(props);
             } else if (props.columnIndex < columns.length + 1) {
                 return propertyCellRenderer(props);
             } else {
                 throw Error("Internal: columns not mapped properly");
             }
-        }, [additionalColumnsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
+        }, [additionalFieldsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
 
         const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
                                                     sortBy?: [string, "asc" | "desc"]) => isFilterCombinationValid(filterValues, filterCombinations, sortBy), [filterCombinations]);
@@ -625,14 +625,18 @@ function isFilterCombinationValid<M>(
 
 function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
     return useMemo(() => {
-        const displayedProperties = getCollectionColumnIds(collection);
 
-        const additionalColumns = collection.additionalColumns ?? [];
+        if (collection.propertiesOrder)
+            return collection.propertiesOrder;
+
+        const displayedProperties = getCollectionPropertyIds(collection);
+
+        const additionalFields = collection.additionalFields ?? collection.additionalColumns ?? [];
         const subCollections: EntityCollection[] = collection.subcollections ?? [];
 
         const columnIds: string[] = [
             ...displayedProperties,
-            ...additionalColumns.map((column) => column.id)
+            ...additionalFields.map((field) => field.id)
         ];
 
         if (includeSubcollections) {
@@ -645,7 +649,7 @@ function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityC
     }, [collection, includeSubcollections]);
 }
 
-function getCollectionColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>) {
+function getCollectionPropertyIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>) {
     return Object.entries<ResolvedProperty>(collection.properties)
         .filter(([_, property]) => !property.hideFromCollection)
         .filter(([_, property]) => !(property.disabled && typeof property.disabled === "object" && property.disabled.hidden))

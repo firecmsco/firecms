@@ -95,27 +95,27 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
             const pendingDownload = dataRef.current && entities.length > dataRef.current.length && fetchLargeDataAccepted;
 
             dataRef.current = entities;
-            const additionalColumnsData = await fetchAdditionalColumns(entities);
-            additionalDataRef.current = additionalColumnsData;
+            const additionalFieldsData = await fetchAdditionalFields(entities);
+            additionalDataRef.current = additionalFieldsData;
             setDataLoading(false);
             setDataLoadingError(undefined);
 
             if (pendingDownload) {
-                doDownload(entities, additionalColumnsData, collection, path, exportConfig);
+                doDownload(entities, additionalFieldsData, collection, path, exportConfig);
                 handleClose();
             }
         };
 
-        const fetchAdditionalColumns = async (entities: Entity<M>[]) => {
+        const fetchAdditionalFields = async (entities: Entity<M>[]) => {
 
-            if (!exportConfig?.additionalColumns) {
+            if (!exportConfig?.additionalFields) {
                 return;
             }
 
-            const additionalColumns = exportConfig.additionalColumns;
+            const additionalFields = exportConfig.additionalFields;
 
             const resolvedColumnsValues: Record<string, any>[] = await Promise.all(entities.map(async (entity) => {
-                return (await Promise.all(additionalColumns.map(async (column) => {
+                return (await Promise.all(additionalFields.map(async (column) => {
                     return {
                         [column.key]: await column.builder({
                             entity,
@@ -214,4 +214,3 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
 
     </>;
 }
-

@@ -10,11 +10,11 @@ exporting data in `csv` format.
 You can switch off the exporting function by setting the `exportable` parameter
 in your collection to `false`
 
-All the regular columns are exported, but not the additional columns that you
+All the regular columns are exported, but not the additional fields that you
 set up in your collection view, since you can build them with any React
 component.
 
-If you need to add additional columns in your export file, you can create
+If you need to add additional fields in your export file, you can create
 them by setting an `ExportConfig` in your `exportable` prop:
 
 ```tsx
@@ -33,7 +33,7 @@ const blogCollection = buildCollection({
     collection: blogCollection,
     name: "Blog",
     exportable: {
-        additionalColumns: [sampleAdditionalExportColumn]
+        additionalFields: [sampleAdditionalExportColumn]
     },
 });
 ```

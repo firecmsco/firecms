@@ -36,7 +36,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     group: "Content",
     icon: "Article",
     exportable: {
-        additionalColumns: [sampleAdditionalExportColumn]
+        additionalFields: [sampleAdditionalExportColumn]
     },
     description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
     textSearchEnabled: true,

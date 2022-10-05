@@ -14,7 +14,7 @@ The `name` and `properties` you define for your entity collection, will be used
 to generate the fields in the spreadsheet like collection tables, and the fields
 in the generated forms.
 
-:::note 
+:::note
 FireCMS provides around 15 different fields (such as text fields,
 selects, and complex ones like reference or sortable array fields). If your use
 case is not covered by one of the provided fields, you can create your own
@@ -73,19 +73,21 @@ in [Entity collections](../api/interfaces/entitycollection)
   pagination size (50 by default)
   Defaults to `true`
 
-* `additionalColumns` You can add additional columns to the collection view by
-  implementing an additional column delegate.
+* `additionalFields` You can add additional fields to both the collection view,
+  and the form view by implementing an additional field delegate.
 
 * `textSearchEnabled` Flag to indicate if a search bar should be displayed on
   top of the collection table. Please note that you need to add
 
 * `permissions` You can specify an object with boolean permissions with the
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions
-  the user can perform. You can also pass a [`PermissionsBuilder`](../api/types/permissionsbuilder)
+  the user can perform. You can also pass
+  a [`PermissionsBuilder`](../api/types/permissionsbuilder)
   to customize the permissions based on user or entity.
 
 * `inlineEditing` Can the elements in this collection be edited inline in the
-  collection view. If this flag is set to false but `permissions.edit` is `true`,  
+  collection view. If this flag is set to false but `permissions.edit` is `true`
+  ,  
   entities can still be edited in the side panel.
 
 * `exportable` Should the data in this collection view include an export button.
@@ -93,114 +95,119 @@ in [Entity collections](../api/interfaces/entitycollection)
   configuration object to customize the export and add additional values.
   Defaults to `true`
 
-* `hideFromNavigation` Should this collection be hidden from the main navigation panel, if
+* `hideFromNavigation` Should this collection be hidden from the main navigation
+  panel, if
   it is at the root level, or in the entity side panel if it's a
   subcollection.
   It will still be accessible if you reach the specified path.
   You can also use this collection as a reference target.
 
-
 ### Sample collection
+
 :::tip
-You don't need to use `buildCollection` or `buildProperty` for building 
+You don't need to use `buildCollection` or `buildProperty` for building
 the configuration. They are identity functions that will help you detect
 type and configuration errors
 :::
 
 ```tsx
-import { buildCollection, buildProperty, EntityReference } from "@camberi/firecms";
+import {
+    buildCollection,
+    buildProperty,
+    EntityReference
+} from "@camberi/firecms";
 
 type Product = {
-  name: string;
-  main_image: string;
-  available: boolean;
-  price: number;
-  related_products: EntityReference[];
-  publisher: {
     name: string;
-    external_id: string;
-  }
+    main_image: string;
+    available: boolean;
+    price: number;
+    related_products: EntityReference[];
+    publisher: {
+        name: string;
+        external_id: string;
+    }
 }
 
 const productsCollection = buildCollection<Product>({
-  path: "products",
-  name: "Products",
-  group: "Main",
-  description: "List of the products currently sold in our shop",
-  textSearchEnabled: true,
-  properties: {
-    name: buildProperty({
-      dataType: "string",
-      name: "Name",
-      validation: { required: true }
-    }),
-    main_image: buildProperty({
-      dataType: "string",
-      name: "Image",
-      storage: {
-        mediaType: "image",
-        storagePath: "images",
-        acceptedFiles: ["image/*"],
-        metadata: {
-          cacheControl: "max-age=1000000"
-        }
-      },
-      description: "Upload field for images",
-      validation: {
-        required: true
-      }
-    }),
-    available: buildProperty({
-      dataType: "boolean",
-      name: "Available",
-      columnWidth: 100
-    }),
-    price: buildProperty(({ values }) => ({
-      dataType: "number",
-      name: "Price",
-      validation: {
-        requiredMessage: "You must set a price between 0 and 1000",
-        min: 0,
-        max: 1000
-      },
-      disabled: !values.available && {
-        clearOnDisabled: true,
-        disabledMessage: "You can only set the price on available items"
-      },
-      description: "Price with range validation"
-    })),
-    related_products: buildProperty({
-      dataType: "array",
-      name: "Related products",
-      description: "Reference to self",
-      of: {
-        dataType: "reference",
-        path: "products"
-      }
-    }),
-    publisher: buildProperty({
-      name: "Publisher",
-      description: "This is an example of a map property",
-      dataType: "map",
-      properties: {
-        name: {
-          name: "Name",
-          dataType: "string"
-        },
-        external_id: {
-          name: "External id",
-          dataType: "string"
-        }
-      }
+    path: "products",
+    name: "Products",
+    group: "Main",
+    description: "List of the products currently sold in our shop",
+    textSearchEnabled: true,
+    properties: {
+        name: buildProperty({
+            dataType: "string",
+            name: "Name",
+            validation: { required: true }
+        }),
+        main_image: buildProperty({
+            dataType: "string",
+            name: "Image",
+            storage: {
+                mediaType: "image",
+                storagePath: "images",
+                acceptedFiles: ["image/*"],
+                metadata: {
+                    cacheControl: "max-age=1000000"
+                }
+            },
+            description: "Upload field for images",
+            validation: {
+                required: true
+            }
+        }),
+        available: buildProperty({
+            dataType: "boolean",
+            name: "Available",
+            columnWidth: 100
+        }),
+        price: buildProperty(({ values }) => ({
+            dataType: "number",
+            name: "Price",
+            validation: {
+                requiredMessage: "You must set a price between 0 and 1000",
+                min: 0,
+                max: 1000
+            },
+            disabled: !values.available && {
+                clearOnDisabled: true,
+                disabledMessage: "You can only set the price on available items"
+            },
+            description: "Price with range validation"
+        })),
+        related_products: buildProperty({
+            dataType: "array",
+            name: "Related products",
+            description: "Reference to self",
+            of: {
+                dataType: "reference",
+                path: "products"
+            }
+        }),
+        publisher: buildProperty({
+            name: "Publisher",
+            description: "This is an example of a map property",
+            dataType: "map",
+            properties: {
+                name: {
+                    name: "Name",
+                    dataType: "string"
+                },
+                external_id: {
+                    name: "External id",
+                    dataType: "string"
+                }
+            }
+        })
+    },
+    // additionalFields: [productAdditionalField], // Example below
+    filterCombinations: [{ price: "desc", available: "desc" }],
+    permissions: ({ user, authController }) => ({
+        edit: true,
+        create: true,
+        delete: false
     })
-  },
-  // additionalColumns: [productAdditionalColumn], // Example below
-  filterCombinations: [{ price: "desc", available: "desc" }],
-  permissions: ({ user, authController }) => ({
-    edit: true,
-    create: true,
-    delete: false
-  })
 });
 
 ```
@@ -208,14 +215,14 @@ const productsCollection = buildCollection<Product>({
 ### Additional columns
 
 If you would like to include a column that does not map directly to a property,
-you can use the `additionalColumns` field, providing a
-`AdditionalColumnDelegate`, which includes an id, a title, and a builder that
+you can use the `additionalFields` field, providing a
+`AdditionalFieldDelegate`, which includes an id, a title, and a builder that
 receives the corresponding entity.
 
 In the builder you can return any React Component.
 
 :::important
-If your additional column depends on the value of another property of the entity
+If your additional field depends on the value of another property of the entity
 you can define the `dependencies` prop as an array of property keys so that
 the data is always updated.
 This will trigger a rerender whenever there is a change in any of the specified
@@ -228,29 +235,29 @@ property values.
 import {
     buildCollection,
     buildCollection,
-    AdditionalColumnDelegate
+    AdditionalFieldDelegate
 } from "@camberi/firecms";
 
-type User = { name:string}
+type User = { name: string }
 
-export const fullNameAdditionalColumn: AdditionalColumnDelegate<User> = {
-        id: "full_name",
-        name: "Full Name",
-        builder: ({ entity }) => {
-            let values = entity.values;
-            return typeof values.name === "string" ? values.name.toUpperCase() : "No name provided";
-        },
-        dependencies: ["name"]
-    };
+export const fullNameAdditionalField: AdditionalFieldDelegate<User> = {
+    id: "full_name",
+    name: "Full Name",
+    builder: ({ entity }) => {
+        let values = entity.values;
+        return typeof values.name === "string" ? values.name.toUpperCase() : "No name provided";
+    },
+    dependencies: ["name"]
+};
 
 const usersCollection = buildCollection<User>({
     path: "users",
     name: "User",
     properties: {
-      name: { dataType: "string", name: "Name" }
+        name: { dataType: "string", name: "Name" }
     },
-    additionalColumns: [
-        fullNameAdditionalColumn
+    additionalFields: [
+        fullNameAdditionalField
     ]
 });
 ```
@@ -259,22 +266,22 @@ const usersCollection = buildCollection<User>({
 
 ```tsx
 import {
-  buildCollection,
-  AdditionalColumnDelegate,
-  AsyncPreviewComponent
+    buildCollection,
+    AdditionalFieldDelegate,
+    AsyncPreviewComponent
 } from "@camberi/firecms";
 
-export const productAdditionalColumn: AdditionalColumnDelegate<Product> = {
-  id: "spanish_title",
-  title: "Spanish title",
-  builder: ({ entity, context }) =>
-          <AsyncPreviewComponent builder={
+export const productAdditionalField: AdditionalFieldDelegate<Product> = {
+    id: "spanish_title",
+    title: "Spanish title",
+    builder: ({ entity, context }) =>
+        <AsyncPreviewComponent builder={
             context.dataSource.fetchEntity({
-              path: entity.path,
-              entityId: entity.id,
-              collection: localeSchema
+                path: entity.path,
+                entityId: entity.id,
+                collection: localeSchema
             }).then((entity) => entity.values.name)
-          }/>
+        }/>
 };
 ```
 
@@ -312,16 +319,16 @@ In order to do so, just pass the indexes configuration to your collection:
 import { buildCollection } from "@camberi/firecms";
 
 const productsCollection = buildCollection<Product>({
-  path: "products",
-  name: "Product",
-  properties: { 
-      // ...
-  },
-  indexes: [
-    {
-      price: "asc",
-      available: "desc"
-    }
-  ]
+    path: "products",
+    name: "Product",
+    properties: {
+        // ...
+    },
+    indexes: [
+        {
+            price: "asc",
+            available: "desc"
+        }
+    ]
 });
 ```

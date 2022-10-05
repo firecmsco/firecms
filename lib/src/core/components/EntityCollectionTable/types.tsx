@@ -1,5 +1,5 @@
 import {
-    AdditionalColumnDelegate, CMSType,
+    AdditionalFieldDelegate, CMSType,
     CollectionSize,
     Entity,
     EntityCollection,

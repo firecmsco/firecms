@@ -104,6 +104,10 @@ const usersCollection = buildCollection({
     });
 ```
 
+- `AdditionalColumnDelegate` has been renamed to `AdditionalFieldDelegate`. 
+  The signature is the same. The prop in the collection is now called
+  `additionalFields`, instead of `additionalColumns`.
+
 ### Properties
 
 - The `title` prop of properties has been renamed to `name`. _Note that this is
