@@ -112,7 +112,7 @@ export function EntityForm<M extends Record<string, any>>({
                                                                  onEntitySave,
                                                                  onDiscard,
                                                                  onModified,
-                                                                 onValuesChanged,
+                                                                 onValuesChanged
                                                              }: EntityFormProps<M>) {
 
     const context = useFireCMSContext();
@@ -128,7 +128,7 @@ export function EntityForm<M extends Record<string, any>>({
         (Boolean(initialResolvedCollection.customId) && initialResolvedCollection.customId !== "optional");
 
     const inputEntityId = useMemo(() => {
-        if ((status === "new" || status === "copy") && initialResolvedCollection.customId === "optional")
+        if ((status === "new" || status === "copy") && !initialResolvedCollection.customId)
             return dataSource.generateEntityId(path);
         return mustSetCustomId ? undefined : (entity?.id ?? dataSource.generateEntityId(path));
     }, []);
@@ -170,7 +170,7 @@ export function EntityForm<M extends Record<string, any>>({
 
     const onIdUpdate = collection.callbacks?.onIdUpdate;
     useEffect(() => {
-        if (onIdUpdate && internalValues && status === "new") {
+        if (onIdUpdate && internalValues && (status === "new" || status === "copy")) {
             try {
                 setEntityId(
                     onIdUpdate({
@@ -295,7 +295,7 @@ export function EntityForm<M extends Record<string, any>>({
                                 marginTop: theme.spacing(2),
                                 paddingLeft: theme.spacing(2),
                                 paddingRight: theme.spacing(2),
-                                paddingTop: theme.spacing(2),
+                                paddingTop: theme.spacing(2)
                             },
                             [theme.breakpoints.down("md")]: {
                                 marginTop: theme.spacing(1),
@@ -416,7 +416,7 @@ function FormInternal<M extends Record<string, any>>({
 
                     const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
                     const shouldAlwaysRerender = shouldPropertyReRender(property);
-                    const cmsFormFieldProps: PropertyFieldBindingProps<any,M> = {
+                    const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
                         propertyKey: key,
                         disabled,
                         property,

@@ -316,6 +316,11 @@ export type FilterCombination<Key extends string> = Partial<Record<Key, "asc" | 
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
 /**
+ * DEPRECATED: Use `AdditionalFieldDelegate` instead
+ */
+export type AdditionalColumnDelegate = AdditionalFieldDelegate;
+
+/**
  * Use this interface for adding additional fields to entity collection views.
  * If you need to do some async loading you can use {@link AsyncPreviewComponent}
  * @category Models
