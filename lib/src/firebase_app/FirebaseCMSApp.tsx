@@ -11,6 +11,7 @@ import {
     NavigationRoutes,
     Scaffold,
     SideDialogs,
+    SnackbarProvider,
     useBuildLocalConfigurationPersistence,
     useBuildModeController
 } from "../core";
@@ -23,7 +24,6 @@ import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./models/auth";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
-import { SnackbarProvider } from "../core/contexts/SnackbarContext";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID

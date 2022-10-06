@@ -41,14 +41,17 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, SideDialogDrawe
         children,
         onClose,
         open,
-        offsetPosition,
+        offsetPosition
     } = props;
 
     const theme = useTheme();
     return (
         <Modal
             BackdropProps={{
-                transitionDuration: defaultTransitionDuration
+                transitionDuration: defaultTransitionDuration,
+                sx: {
+                    backgroundColor: theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.85)" : "rgba(0, 0, 0, 0.6)"
+                }
             }}
             BackdropComponent={Backdrop}
             open={open}
