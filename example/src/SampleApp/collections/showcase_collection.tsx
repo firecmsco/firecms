@@ -1,6 +1,5 @@
 import { buildCollection, buildProperty } from "@camberi/firecms";
 
-
 export const showcaseCollection = buildCollection({
     path: "showcase",
     customId: false,
@@ -62,9 +61,9 @@ export const showcaseCollection = buildCollection({
             of: {
                 dataType: "string",
                 enumValues: {
-                    "es": "Spanish",
-                    "en": "English",
-                    "fr": {
+                    es: "Spanish",
+                    en: "English",
+                    fr: {
                         id: "fr",
                         label: "French",
                         disabled: true
@@ -141,7 +140,7 @@ export const showcaseCollection = buildCollection({
         client: buildProperty({
             dataType: "reference",
             path: "users",
-            name: "Related client",
+            name: "Related client"
         }),
         related_products: buildProperty({
             dataType: "array",
@@ -177,7 +176,7 @@ export const showcaseCollection = buildCollection({
                         storage: {
                             storagePath: "images",
                             acceptedFiles: ["image/*"]
-                        },
+                        }
                     },
                     text: {
                         dataType: "string",
@@ -195,5 +194,5 @@ export const showcaseCollection = buildCollection({
                 }
             }
         })
-    },
+    }
 });

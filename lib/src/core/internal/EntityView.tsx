@@ -13,7 +13,6 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {
-    CMSType,
     Entity,
     EntityCollection,
     EntityStatus,
@@ -70,15 +69,15 @@ export interface EntityViewProps<M extends Record<string, any>> {
  */
 export const EntityView = React.memo<EntityViewProps<any>>(
     function EntityView<M extends Record<string, any>, UserType extends User>({
-                                                                                     path,
-                                                                                     entityId,
-                                                                                     selectedSubPath,
-                                                                                     copy,
-                                                                                     collection,
-                                                                                     onValuesAreModified,
-                                                                                     formWidth,
-                                                                                     onUpdate
-                                                                                 }: EntityViewProps<M>) {
+                                                                                  path,
+                                                                                  entityId,
+                                                                                  selectedSubPath,
+                                                                                  copy,
+                                                                                  collection,
+                                                                                  onValuesAreModified,
+                                                                                  formWidth,
+                                                                                  onUpdate
+                                                                              }: EntityViewProps<M>) {
 
         const theme = useTheme();
         const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
@@ -133,27 +132,30 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         useEffect(() => {
             if (entity)
                 setUsedEntity(entity);
+        }, [entity]);
+
+        useEffect(() => {
             if (usedEntity)
                 setReadOnly(!editEnabled);
-        }, [entity, editEnabled, usedEntity]);
+        }, [editEnabled, usedEntity]);
 
         useEffect(() => {
             if (!selectedSubPath)
                 setTabsPosition(-1);
 
-                if (customViews) {
-                    const index = customViews
-                        .map((c) => c.path)
-                        .findIndex((p) => p === selectedSubPath);
-                    setTabsPosition(index);
-                }
+            if (customViews) {
+                const index = customViews
+                    .map((c) => c.path)
+                    .findIndex((p) => p === selectedSubPath);
+                setTabsPosition(index);
+            }
 
-                if (subcollections && selectedSubPath) {
-                    const index = subcollections
-                        .map((c) => c.path)
-                        .findIndex((p) => p === selectedSubPath);
-                    setTabsPosition(index + customViewsCount);
-                }
+            if (subcollections && selectedSubPath) {
+                const index = subcollections
+                    .map((c) => c.path)
+                    .findIndex((p) => p === selectedSubPath);
+                setTabsPosition(index + customViewsCount);
+            }
         }, [selectedSubPath, customViewsCount, customViews, subcollections]);
 
         useEffect(() => {
@@ -197,7 +199,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             console.error(e);
         }, []);
 
-        const onSaveSuccess = (updatedEntity: Entity<M>, closeAfterSave:boolean) => {
+        const onSaveSuccess = (updatedEntity: Entity<M>, closeAfterSave: boolean) => {
 
             snackbarController.open({
                 type: "success",
@@ -245,7 +247,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             entityId: string | undefined,
             values: EntityValues<M>,
             previousValues?: EntityValues<M>,
-            closeAfterSave:boolean
+            closeAfterSave: boolean
         }): Promise<void> => {
 
             if (!status)
@@ -528,8 +530,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                         }
                                     }}>
                                     {loading
-                                        ?
-                                        <CircularProgressCenter/>
+                                        ? <CircularProgressCenter/>
                                         : form}
                                 </Box>
                             </Box>

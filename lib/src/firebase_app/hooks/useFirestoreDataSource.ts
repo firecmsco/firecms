@@ -74,7 +74,7 @@ export function useFirestoreDataSource({
 
     useEffect(() => {
         if (!firebaseApp) return;
-            firestoreRef.current = getFirestore(firebaseApp);
+        firestoreRef.current = getFirestore(firebaseApp);
     }, [firebaseApp]);
 
     /**
@@ -144,8 +144,8 @@ export function useFirestoreDataSource({
     }
 
     function getAndBuildEntity<M extends Record<string, any>>(path: string,
-                                  entityId: string,
-                                  collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M> | undefined> {
+                                                              entityId: string,
+                                                              collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M> | undefined> {
         if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
 
         return getDoc(doc(firestore, path, entityId))
@@ -164,8 +164,8 @@ export function useFirestoreDataSource({
     }
 
     async function performTextSearch<M extends Record<string, any>>(path: string,
-                                        searchString: string,
-                                        collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M>[]> {
+                                                                    searchString: string,
+                                                                    collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M>[]> {
         if (!textSearchController)
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
         const ids = await textSearchController({ path, searchString });
@@ -202,15 +202,15 @@ export function useFirestoreDataSource({
          * @category Firestore
          */
         fetchCollection<M extends Record<string, any>>({
-                                                              path,
-                                                              collection,
-                                                              filter,
-                                                              limit,
-                                                              startAfter,
-                                                              searchString,
-                                                              orderBy,
-                                                              order
-                                                          }: FetchCollectionProps<M>
+                                                           path,
+                                                           collection,
+                                                           filter,
+                                                           limit,
+                                                           startAfter,
+                                                           searchString,
+                                                           orderBy,
+                                                           order
+                                                       }: FetchCollectionProps<M>
         ): Promise<Entity<M>[]> {
 
             if (searchString) {
@@ -301,10 +301,10 @@ export function useFirestoreDataSource({
          * @category Firestore
          */
         fetchEntity<M extends Record<string, any>>({
-                                                          path,
-                                                          entityId,
-                                                          collection
-                                                      }: FetchEntityProps<M>
+                                                       path,
+                                                       entityId,
+                                                       collection
+                                                   }: FetchEntityProps<M>
         ): Promise<Entity<M> | undefined> {
             return getAndBuildEntity(path, entityId, collection);
         },
@@ -393,11 +393,12 @@ export function useFirestoreDataSource({
             else
                 documentReference = doc(collectionReference);
 
-            return setDoc(documentReference, updatedFirestoreValues, { merge: true }).then(() => ({
-                id: documentReference.id,
-                path,
-                values: firestoreToCMSModel(updatedFirestoreValues) as EntityValues<M>
-            }));
+            return setDoc(documentReference, updatedFirestoreValues, { merge: true })
+                .then(() => ({
+                    id: documentReference.id,
+                    path,
+                    values: firestoreToCMSModel(updatedFirestoreValues)
+                }));
         },
 
         /**
@@ -452,7 +453,7 @@ export function useFirestoreDataSource({
 
         },
 
-        generateEntityId(path:string): string {
+        generateEntityId(path: string): string {
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
             return doc(collectionClause(firestore, path)).id;
         }
@@ -471,34 +472,35 @@ export function useFirestoreDataSource({
  * @param data
  * @category Firestore
  */
-export function firestoreToCMSModel<M>(data: any): any {
-    const traverse = (input: any): any => {
-        if (input == null) return input;
-        if (serverTimestamp().isEqual(input)) {
-            return null;
-        }
-        if (input instanceof Timestamp) {
-            return input.toDate();
-        }
-        if (input instanceof GeoPoint) {
-            return new GeoPoint(input.latitude, input.longitude);
-        }
-        if (input instanceof DocumentReference) {
-            return new EntityReference(input.id, getCMSPathFromFirestorePath(input.path));
-        }
-        if (Array.isArray(input)) {
-            return input.map(traverse);
-        }
-        if (typeof input === "object") {
-            const result = {}
-            for (const key of Object.keys(input)) {
-                result[key] = traverse(input[key]);
-            }
-            return result;
-        }
-        return input;
+export function firestoreToCMSModel(data: any): any {
+    console.log("firestoreToCMSModel", data);
+    if (data === null) return data;
+    if (serverTimestamp().isEqual(data)) {
+        return null;
     }
-    return traverse(data)
+    if (data instanceof Timestamp || typeof data.toDate === "function") {
+        return data.toDate();
+    }
+    if (data instanceof Date) {
+        return data;
+    }
+    if (data instanceof GeoPoint) {
+        return new GeoPoint(data.latitude, data.longitude);
+    }
+    if (data instanceof DocumentReference) {
+        return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path));
+    }
+    if (Array.isArray(data)) {
+        return data.map(firestoreToCMSModel);
+    }
+    if (typeof data === "object") {
+        const result = {}
+        for (const key of Object.keys(data)) {
+            result[key] = firestoreToCMSModel(data[key]);
+        }
+        return result;
+    }
+    return data;
 }
 
 export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
@@ -509,7 +511,7 @@ export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
     } else if (data instanceof GeoPoint) {
         return new FirestoreGeoPoint(data.latitude, data.longitude);
     } else if (data instanceof Date) {
-        return data;
+        return Timestamp.fromDate(data);
     } else if (data && typeof data === "object") {
         return Object.entries(data)
             .map(([key, v]) => ({ [key]: cmsToFirestoreModel(v, firestore) }))

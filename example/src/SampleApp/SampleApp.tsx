@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import { getAnalytics } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
-import { Authenticator, CMSView, FirebaseCMSApp, } from "@camberi/firecms";
+import { Authenticator, CMSView, FirebaseCMSApp } from "@camberi/firecms";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
@@ -14,7 +14,7 @@ import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
 import { productsCollection } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
-import { showcaseCollection } from "./collections/sohwcase_collection";
+import { showcaseCollection } from "./collections/showcase_collection";
 
 import { textSearchController } from "./text_search";
 
@@ -59,7 +59,7 @@ function SampleApp() {
                                                                     authController
                                                                 }) => {
 
-        if(user?.email?.includes("flanders")){
+        if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");
         }
 
@@ -70,7 +70,7 @@ function SampleApp() {
         authController.setExtra({
             roles: {
                 admin: userIsAdmin
-            },
+            }
         });
 
         console.log("Allowing access to", user);
@@ -92,8 +92,8 @@ function SampleApp() {
         name={"My Online Shop"}
         authentication={myAuthenticator}
         signInOptions={[
-            'password',
-            'google.com',
+            "password",
+            "google.com"
             // 'anonymous',
             // 'phone',
             // 'facebook.com',
@@ -116,4 +116,3 @@ function SampleApp() {
 }
 
 export default SampleApp;
-
