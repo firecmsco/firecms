@@ -1,15 +1,15 @@
 import { Chip, useTheme } from "@mui/material";
 import React from "react";
-import { ChipColorScheme, EnumValueConfig } from "../../models";
+import { ChipColorScheme, EnumValueConfig, EnumValues } from "../../models";
 import {
-    buildEnumLabel,
+    buildEnumLabel, enumToObjectEntries,
     getColorScheme,
     getLabelOrConfigFrom
 } from "../../core/util/enums";
 import { getColorSchemeForSeed } from "../../core/util/chip_utils";
 
 export interface EnumValuesChipProps {
-    enumValues: EnumValueConfig[] | undefined;
+    enumValues?: EnumValues;
     enumKey: any;
     small: boolean;
 }
@@ -23,9 +23,10 @@ export function EnumValuesChip({
                                    small
                                }: EnumValuesChipProps) {
     if (!enumValues) return null;
-    const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValues, enumKey) : undefined;
+    const enumValuesConfig = enumToObjectEntries(enumValues);
+    const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValuesConfig, enumKey) : undefined;
     const label = buildEnumLabel(enumValue);
-    const colorScheme = getColorScheme(enumValues, enumKey.toString());
+    const colorScheme = getColorScheme(enumValuesConfig, enumKey.toString());
     return <ColorChip
         colorScheme={colorScheme}
         label={label !== undefined ? label : enumKey}

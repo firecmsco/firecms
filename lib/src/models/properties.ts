@@ -201,7 +201,7 @@ export type EnumValues = EnumValueConfig[]
  * Configuration for a particular entry in an `EnumValues`
  * @category Entity properties
  */
-export interface EnumValueConfig {
+export type EnumValueConfig = {
     /**
      * Value stored in the data source.
      */

@@ -1,10 +1,24 @@
 import { ChipColorScheme, EnumValueConfig, EnumValues } from "../../models";
 import { CHIP_COLORS, getColorSchemeForSeed } from "./chip_utils";
 
-export function enumToObjectEntries(enumValues: EnumValues): [string | number, string | EnumValueConfig][] {
-    return Array.isArray(enumValues)
-        ? enumValues.map(entry => [entry.id, entry])
-        : Object.entries<string | EnumValueConfig>(enumValues);
+export function enumToObjectEntries(enumValues: EnumValues): EnumValueConfig[] {
+    if (Array.isArray(enumValues)) {
+        return enumValues;
+    } else {
+        return Object.entries(enumValues).map(([id, value]) => {
+            if (typeof value === "string") {
+                return {
+                    id,
+                    label: value
+                }
+            } else {
+                return {
+                    ...value,
+                    id
+                }
+            }
+        });
+    }
 }
 
 export function getLabelOrConfigFrom(enumValues: EnumValueConfig[], key?: string | number): EnumValueConfig | undefined {

@@ -63,7 +63,7 @@ export function TableSelect(props: {
             if (!evt.target.value)
                 updateValue(null)
             else
-                updateValue(evt.target.value );
+                updateValue(evt.target.value);
         } else {
             throw Error("Missing mapping in TableSelect");
         }
@@ -112,8 +112,9 @@ export function TableSelect(props: {
             onChange={onChange}
             renderValue={renderValue}>
 
-            {enumToObjectEntries(enumValues).map(([enumKey, labelOrConfig]) => {
+            {enumToObjectEntries(enumValues).map((enumValueConfig) => {
 
+                const enumKey = enumValueConfig.id;
                 const chip = <EnumValuesChip
                     enumKey={enumKey}
                     enumValues={enumValues}
@@ -122,7 +123,7 @@ export function TableSelect(props: {
                     return (
                         <MenuItem key={`select-${name}-${enumKey}`}
                                   value={enumKey}
-                                  disabled={isEnumValueDisabled(labelOrConfig)}
+                                  disabled={isEnumValueDisabled(enumValueConfig)}
                                   dense={true}>
                             <Checkbox
                                 checked={Array.isArray(internalValue) && internalValue.map(v => v.toString()).includes(enumKey.toString())}/>
@@ -131,8 +132,9 @@ export function TableSelect(props: {
                     );
                 } else {
                     return (
-                        <MenuItem key={`select-${name}-${enumKey}`} value={enumKey}
-                                  disabled={isEnumValueDisabled(labelOrConfig)}
+                        <MenuItem key={`select-${name}-${enumKey}`}
+                                  value={enumKey}
+                                  disabled={isEnumValueDisabled(enumValueConfig)}
                                   dense={true}>
                             {chip}
                         </MenuItem>

@@ -160,7 +160,7 @@ function ArrayOneOfEntry({
 
     const property = typeInternal ? properties[typeInternal] : undefined;
 
-    const enumValues: EnumValueConfig[] = Object.entries(properties)
+    const enumValuesConfigs: EnumValueConfig[] = Object.entries(properties)
         .map(([key, property]) => ({ id: key, label: property.name ?? key }));
 
     const typeFieldName = `${name}[${typeField}]`;
@@ -209,18 +209,19 @@ function ArrayOneOfEntry({
                                 renderValue={(enumKey: any) =>
                                     <EnumValuesChip
                                         enumKey={enumKey}
-                                        enumValues={enumValues}
+                                        enumValues={enumValuesConfigs}
                                         small={true}/>
                                 }>
-                                {enumToObjectEntries(enumValues)
-                                    .map(([enumKey, labelOrConfig]) => {
+                                {enumValuesConfigs
+                                    .map((enumValueConfig) => {
+                                        const enumKey = enumValueConfig.id;
                                         return (
                                             <MenuItem
                                                 key={`select_${name}_${index}_${enumKey}`}
                                                 value={enumKey}>
                                                 <EnumValuesChip
                                                     enumKey={enumKey}
-                                                    enumValues={enumValues}
+                                                    enumValues={enumValuesConfigs}
                                                     small={true}/>
                                             </MenuItem>
                                         );

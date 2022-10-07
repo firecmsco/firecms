@@ -42,6 +42,7 @@
         "brace-style": "off",
         "curly": "off",
         "semi": 0,
+        "space-in-parens": "warn",
         "key-spacing": "warn",
         "no-trailing-spaces": "warn",
         "comma-dangle": "warn",

@@ -135,13 +135,14 @@ export function ArrayEnumSelectBinding({
                 )}>
 
                 {enumToObjectEntries(enumValues)
-                    .map(([enumKey, labelOrConfig]) => {
+                    .map((enumConfig) => {
+                        const enumKey = enumConfig.id;
                         const checked = validValue && value.map(v => v.toString()).includes(enumKey.toString());
                         return (
                             <MenuItem
                                 key={`form-select-${propertyKey}-${enumKey}`}
                                 value={enumKey}
-                                disabled={isEnumValueDisabled(labelOrConfig)}
+                                disabled={isEnumValueDisabled(enumConfig)}
                                 dense={true}>
                                 <Checkbox checked={checked}/>
                                 <ListItemText primary={

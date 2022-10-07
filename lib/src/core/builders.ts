@@ -11,7 +11,7 @@ import {
     GeopointProperty,
     MapProperty,
     NumberProperty,
-    PropertiesOrBuilders,
+    PropertiesOrBuilders, Property,
     PropertyBuilder,
     PropertyOrBuilder,
     ReferenceProperty,
@@ -39,7 +39,7 @@ export function buildCollection<M extends Record<string, any> = any,
  * @param property
  * @category Builder
  */
-export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrBuilder<T> = PropertyOrBuilder<T>, M extends Record<string, any> = Record<string, any>>(
+export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrBuilder<T> = Property<T>, M extends Record<string, any> = Record<string, any>>(
     property: P
 ):
     P extends StringProperty ? StringProperty :

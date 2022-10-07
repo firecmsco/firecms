@@ -8,14 +8,16 @@ import { resolveEnumValues } from "../../core";
  * @category Preview components
  */
 export function NumberPropertyPreview({
-                                  value,
-                                  property,
-                                  size
-                              }: PropertyPreviewProps<number>): React.ReactElement {
+                                          value,
+                                          property,
+                                          size
+                                      }: PropertyPreviewProps<number>): React.ReactElement {
 
     if (property.enumValues) {
         const enumKey = value;
         const enumValues = resolveEnumValues(property.enumValues);
+        if (!enumValues)
+            return <>{value}</>;
         return <EnumValuesChip
             enumKey={enumKey}
             enumValues={enumValues}
