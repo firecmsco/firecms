@@ -131,7 +131,13 @@ export const productsCollection = buildCollection<Product>({
     ],
     additionalFields: [productAdditionalField],
     // propertiesOrder: ["name", "price", "category", "spanish_title", "currency", "locales"],
-    filterCombinations: [{ category: "desc", available: "desc" }, { category: "asc", available: "desc" }, { category: "desc", available: "asc" }, { category: "asc", available: "asc" }],
+    filterCombinations: [{
+        category: "desc",
+        available: "desc"
+    }, { category: "asc", available: "desc" }, {
+        category: "desc",
+        available: "asc"
+    }, { category: "asc", available: "asc" }],
     properties: {
         name: {
             dataType: "string",
@@ -161,6 +167,7 @@ export const productsCollection = buildCollection<Product>({
         category: {
             dataType: "string",
             name: "Category",
+            clearable: true,
             enumValues: categories
         },
         available: {

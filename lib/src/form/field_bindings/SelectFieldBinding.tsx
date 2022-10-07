@@ -87,6 +87,7 @@ export function SelectFieldBinding<T extends EnumType>({
                     property.clearable && <IconButton
                         sx={{
                             position: "absolute",
+                            top: "12px",
                             right: "32px"
                         }}
                         onClick={handleClearClick}>
