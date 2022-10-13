@@ -140,8 +140,8 @@ export function ArrayContainer<T>({
                                 {hasValue && internalIds.map((internalId: number, index: number) => {
                                     return (
                                         <Draggable
-                                            key={`array_field_${name}_${internalId}}`}
-                                            draggableId={`array_field_${name}_${internalId}}`}
+                                            key={`array_field_${name}_${internalId}`}
+                                            draggableId={`array_field_${name}_${internalId}`}
                                             isDragDisabled={disabled}
                                             index={index}>
                                             {(provided, snapshot) => (

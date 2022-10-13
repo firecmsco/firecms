@@ -317,8 +317,8 @@ function FileDropComponent({
 
                     return (
                         <Draggable
-                            key={`array_field_${name}_${entry.id}}`}
-                            draggableId={`array_field_${name}_${entry.id}}`}
+                            key={`array_field_${name}_${entry.id}`}
+                            draggableId={`array_field_${name}_${entry.id}`}
                             index={index}>
                             {(provided, snapshot) => (
                                 <Box
