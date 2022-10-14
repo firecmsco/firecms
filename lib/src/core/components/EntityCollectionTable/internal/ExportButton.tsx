@@ -13,17 +13,20 @@ import {
 
 import GetAppIcon from "@mui/icons-material/GetApp";
 import {
-    CMSType,
     Entity,
     EntityCollection,
     ExportConfig,
     ResolvedEntityCollection,
     User
 } from "../../../../models";
-import { useDataSource, useFireCMSContext } from "../../../../hooks";
+import {
+    useDataSource,
+    useFireCMSContext,
+    useNavigationContext
+} from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
-import { resolveCollection } from "../../../util/resolutions";
+import { resolveCollection } from "../../../util";
 
 interface ExportButtonProps<M extends Record<string, any>, UserType extends User> {
     collection: EntityCollection<M>;
@@ -34,16 +37,19 @@ interface ExportButtonProps<M extends Record<string, any>, UserType extends User
 const INITIAL_DOCUMENTS_LIMIT = 200;
 
 export function ExportButton<M extends Record<string, any>, UserType extends User>({
-                                                                             collection: inputCollection,
-                                                                             path,
-                                                                             exportConfig
-                                                                         }: ExportButtonProps<M, UserType>
+                                                                                       collection: inputCollection,
+                                                                                       path: inputPath,
+                                                                                       exportConfig
+                                                                                   }: ExportButtonProps<M, UserType>
 ) {
 
     const dataSource = useDataSource();
     const context = useFireCMSContext<UserType>();
+    const navigationContext = useNavigationContext();
 
-    const collection:ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection({
+    const path = navigationContext.resolveAliasesFrom(inputPath);
+
+    const collection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection({
         collection: inputCollection,
         path
     }), [inputCollection, path]);
@@ -177,18 +183,19 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                     <br/>
 
                     {needsToAcceptFetchAllData &&
-                    <Alert elevation={1}
-                              variant="filled"
-                              severity={"warning"}>
-                        <div>
-                            This collections has a large number
-                            of documents (more than {INITIAL_DOCUMENTS_LIMIT}).
-                        </div>
-                        <div>
-                            Would you like to proceed?
-                        </div>
+                        <Alert elevation={1}
+                               variant="filled"
+                               severity={"warning"}>
+                            <div>
+                                This collections has a large number
+                                of documents (more
+                                than {INITIAL_DOCUMENTS_LIMIT}).
+                            </div>
+                            <div>
+                                Would you like to proceed?
+                            </div>
 
-                    </Alert>}
+                        </Alert>}
 
                 </DialogContentText>
             </DialogContent>

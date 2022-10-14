@@ -1,6 +1,6 @@
 import { PropsWithChildren, useCallback, useState } from "react";
 
-import { Accordion, AccordionDetails, AccordionSummary, } from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export function ExpandablePanel({
@@ -23,9 +23,6 @@ export function ExpandablePanel({
                    expanded={expandedInternal}
                    sx={{
                        backgroundColor: darken ? undefined : "inherit"
-                       // backgroundColor: theme.palette.mode === "dark"
-                       //     ? darken(theme.palette.background.paper, 0.1)
-                       //     : darken(theme.palette.background.paper, 0.05),
                    }}
                    TransitionProps={{ unmountOnExit: true }}
                    onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => setExpandedInternal(expanded), [])}>
@@ -48,7 +45,7 @@ export function ExpandablePanel({
                 {Title}
             </AccordionSummary>
             <AccordionDetails sx={(theme) => ({
-                padding: typeof padding === "string" ? padding : theme.spacing(padding),
+                padding: typeof padding === "string" ? padding : theme.spacing(padding)
             })}>
                 {children}
             </AccordionDetails>
