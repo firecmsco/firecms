@@ -827,5 +827,5 @@ export interface ImageCompression {
     /**
      * A number between 0 and 100. Used for the JPEG compression.(if no compress is needed, just set it to 100)
      */
-    quality: number;
+    quality?: number;
 }

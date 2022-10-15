@@ -157,6 +157,9 @@ export const productsCollection = buildCollection<Product>({
                 maxSize: 1024 * 1024,
                 metadata: {
                     cacheControl: "max-age=1000000"
+                },
+                imageCompression: {
+                    maxHeight: 200
                 }
             },
             description: "Upload field for images",
