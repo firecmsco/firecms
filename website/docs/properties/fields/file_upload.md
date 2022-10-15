@@ -23,6 +23,9 @@ placeholders that get replaced with the corresponding values.
 You can also allow the upload of only some file types based on the MIME type, or
 restrict the file size.
 
+If the file uploaded is an image, you can also choose to resize it before
+it gets uploaded to the storage backend, with the `imageCompression` prop.
+
 ### Single file upload
 
 ![Field](/img/fields/File_upload.png)

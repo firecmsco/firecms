@@ -1856,6 +1856,7 @@ __metadata:
     react-dom: ^18.2.0
     react-dropzone: ^14.2.2
     react-fast-compare: ^3.2.0
+    react-image-file-resizer: ^0.4.8
     react-router: ^6.4.1
     react-router-dom: ^6.4.1
     react-scripts: ^5.0.1
@@ -14854,6 +14855,13 @@ __metadata:
   version: 3.2.0
   resolution: "react-fast-compare@npm:3.2.0"
   checksum: 8ef272c825ae329f61633ce4ce7f15aa5b84e5214d88bc0823880236e03e985a13195befa2c7a4eda7db3b017dc7985729152d88445823f652403cf36c2b86aa
+  languageName: node
+  linkType: hard
+
+"react-image-file-resizer@npm:^0.4.8":
+  version: 0.4.8
+  resolution: "react-image-file-resizer@npm:0.4.8"
+  checksum: b8f169bc816dd3c10910868e1049ec356e3cd063a87a0eaaf9801c96560fbf21b71019054da91c757ee85ed1ef7b1987821636c81f4f8eae1f8fe3be088ae2ea
   languageName: node
   linkType: hard
 

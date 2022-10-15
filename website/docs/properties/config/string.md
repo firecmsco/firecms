@@ -20,8 +20,10 @@ const nameProperty = buildProperty({
 ```
 
 ### `storage`
+
 You can specify a `StorageMeta` configuration. It is used to
 indicate that this string refers to a path in Google Cloud Storage.
+
 * `mediaType` Media type of this reference, used for displaying the
   preview.
 * `storagePath` Absolute path in your bucket. You can specify it
@@ -39,35 +41,41 @@ indicate that this string refers to a path in Google Cloud Storage.
   disabled, may make the URL unusable and lose the original reference to
   Cloud Storage, so it is not encouraged to use this flag. Defaults to
   false.
+* `imageCompression` Use client side image compression and resizing
+  Will only be applied to these MIME types: `image/jpeg`, `image/png`
+  and `image/webp`
+
 ```tsx
 import { buildProperty } from "./builders";
 
 const imageProperty = buildProperty({
     dataType: "string",
     storage: {
-      mediaType: "image",
-      storagePath: (context) => {
-        return "images";
-      },
-      acceptedFiles: ["image/*"],
-      fileName: (context) => {
-        return context.file.name;
-      }
+        mediaType: "image",
+        storagePath: (context) => {
+            return "images";
+        },
+        acceptedFiles: ["image/*"],
+        fileName: (context) => {
+            return context.file.name;
+        }
     }
 });
 ```
 
 ### `url`
+
 If the value of this property is a URL, you can set this flag
-to `true` to add a link, or one of the supported media types to render a preview.
+to `true` to add a link, or one of the supported media types to render a
+preview.
 
 ```tsx
 import { buildProperty } from "./builders";
 
 const amazonLinkProperty = buildProperty({
-  dataType: "string",
-  name: "Amazon link",
-  url: true
+    dataType: "string",
+    name: "Amazon link",
+    url: true
 });
 ```
 
@@ -77,9 +85,9 @@ You can also define the preview type for the url: `image`, `video` or `audio`:
 import { buildProperty } from "./builders";
 
 const imageProperty = buildProperty({
-  name: "Image",
-  dataType: "string",
-  url: "image",
+    name: "Image",
+    dataType: "string",
+    url: "image",
 });
 ```
 
@@ -98,23 +106,24 @@ plain object.
 import { buildProperty } from "./builders";
 
 const amazonLinkProperty = buildProperty({
-  dataType: "string",
-  name: "Amazon link",
-  enumValues: {
-    "es": "Spanish",
-    "de": "German",
-      "en": "English",
-      "it": "Italian",
-      "fr": {
-          id: "fr",
-          label: "French",
-          disabled: true
-      }
-  }
+    dataType: "string",
+    name: "Amazon link",
+    enumValues: {
+        "es": "Spanish",
+        "de": "German",
+        "en": "English",
+        "it": "Italian",
+        "fr": {
+            id: "fr",
+            label: "French",
+            disabled: true
+        }
+    }
 });
 ```
 
 ### `multiline`
+
 Is this string property long enough, so it should be displayed
 in a multiple line field. Defaults to false. If set to `true`, the number
 of lines adapts to the content.
@@ -130,12 +139,14 @@ const property = buildProperty({
 ```
 
 ### `clearable`
+
 Add an icon to clear the value and set it to `null`. Defaults to `false`
 
 ### `markdown`
+
 Should this string property be displayed as a markdown field.
-  If `true`, the field is rendered as a text editors that supports markdown
-  highlight syntax. It also includes a preview of the result.
+If `true`, the field is rendered as a text editors that supports markdown
+highlight syntax. It also includes a preview of the result.
 
 ```tsx
 import { buildProperty } from "./builders";
@@ -148,6 +159,7 @@ const property = buildProperty({
 ```
 
 ### `previewAsTag`
+
 Should this string be rendered as a tag instead of just text.
 
 ```tsx
@@ -163,6 +175,7 @@ const property = buildProperty({
     }
 });
 ```
+
 ### `validation`
 
 * `required` Should this field be compulsory.
@@ -184,18 +197,21 @@ const property = buildProperty({
 * `lowercase` Transforms the string value to lowercase.
 * `uppercase` Transforms the string value to uppercase.
 
-
 ---
 
 Based on your configuration the form field widgets that are created are:
 
 - [`TextFieldBinding`](../../api/functions/TextFieldBinding) generic text field
-- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) if `enumValues` are set in the string config, this field renders a select
+- [`SelectFieldBinding`](../../api/functions/SelectFieldBinding) if `enumValues`
+  are set in the string config, this field renders a select
   where each option is a colored chip.
-- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding) the property has a
+- [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding)
+  the property has a
   storage configuration.
-- [`MarkdownFieldBinding.`](../../api/functions/MarkdownFieldBinding) the property has a
+- [`MarkdownFieldBinding.`](../../api/functions/MarkdownFieldBinding) the
+  property has a
   markdown configuration.
 
 Links:
+
 - [API](../../api/interfaces/stringproperty)
