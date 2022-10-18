@@ -1,6 +1,6 @@
 import {
     AuthController,
-    CMSType,
+    CMSType, Entity,
     EntityCollection,
     Permissions,
     User
@@ -16,7 +16,8 @@ const DEFAULT_PERMISSIONS = {
 export function resolvePermissions<M extends Record<string, any>, UserType extends User>
 (collection: EntityCollection<M>,
  authController: AuthController<UserType>,
- paths: string[]): Permissions {
+ paths: string[],
+ entity: Entity<M> | null): Permissions {
 
     const permission = collection.permissions;
     if (permission === undefined) {
@@ -25,6 +26,7 @@ export function resolvePermissions<M extends Record<string, any>, UserType exten
         return permission as Permissions;
     } else if (typeof permission === "function") {
         return permission({
+            entity,
             user: authController.user,
             authController,
             collection,
@@ -39,26 +41,28 @@ export function canEditEntity<M extends Record<string, any>, UserType extends Us
 (
     collection: EntityCollection<M>,
     authController: AuthController<UserType>,
-    paths: string[]): boolean {
-    return resolvePermissions(collection, authController, paths).edit ?? DEFAULT_PERMISSIONS.edit;
+    paths: string[],
+entity: Entity<M> | null): boolean {
+    return resolvePermissions(collection, authController, paths, entity).edit ?? DEFAULT_PERMISSIONS.edit;
 }
 
 export function canCreateEntity<M extends Record<string, any>, UserType extends User>
 (
     collection: EntityCollection<M>,
     authController: AuthController<UserType>,
-    paths: string[]): boolean {
-    return resolvePermissions(collection, authController, paths).create ?? DEFAULT_PERMISSIONS.create;
+    paths: string[],
+    entity: Entity<M> | null): boolean {
+    return resolvePermissions(collection, authController, paths, entity).create ?? DEFAULT_PERMISSIONS.create;
 }
 
 export function canDeleteEntity<M extends Record<string, any>, UserType extends User>
 (
     collection: EntityCollection<M>,
     authController: AuthController<UserType>,
-    paths: string[]): boolean {
-    return resolvePermissions(collection, authController, paths).delete ?? DEFAULT_PERMISSIONS.delete;
+    paths: string[],
+    entity: Entity<M> | null): boolean {
+    return resolvePermissions(collection, authController, paths, entity).delete ?? DEFAULT_PERMISSIONS.delete;
 }
-
 
 // export function resolveCollectionsPermissions(roles: Role[]): Record<string, Permissions> {
 //     const collectionIds = Array.from(new Set(roles.flatMap(role => Object.keys(role.collections))));

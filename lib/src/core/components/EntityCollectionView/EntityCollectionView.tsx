@@ -147,7 +147,7 @@ export const EntityCollectionView = React.memo(
         }, [setSelectedEntities]);
 
         const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
-            if (!canEditEntity(collection, authController, fullPathToCollectionSegments(fullPath))) {
+            if (!canEditEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity ?? null)) {
                 return false;
             }
             return collection.inlineEditing === undefined || collection.inlineEditing;
@@ -266,8 +266,8 @@ export const EntityCollectionView = React.memo(
 
             const isSelected = isEntitySelected(entity);
 
-            const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath));
-            const deleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath));
+            const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity);
+            const deleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity);
 
             const onCopyClicked = (clickedEntity: Entity<M>) => sideEntityController.open({
                 entityId: clickedEntity.id,

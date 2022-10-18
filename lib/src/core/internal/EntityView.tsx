@@ -127,7 +127,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
 
-        const editEnabled = usedEntity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path)) : false;
+        const editEnabled = usedEntity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path), usedEntity ?? null) : false;
 
         useEffect(() => {
             if (entity)

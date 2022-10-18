@@ -273,7 +273,7 @@ function ReferenceDialogActions({
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path)) &&
+    const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path), null) &&
         onNewClick && (largeLayout
             ? <Button
                 onClick={onNewClick}

@@ -2,6 +2,7 @@ import { User } from "./user";
 import { AuthController } from "./auth";
 import { EntityCollection } from "./collections";
 import { CMSType } from "./properties";
+import { Entity } from "./entities";
 
 /**
  * Define the operations that can be performed in a collection.
@@ -33,6 +34,13 @@ export interface Permissions {
  * @category Models
  */
 export interface PermissionsBuilderProps<M extends Record<string, any> = any, UserType extends User = User> {
+    /**
+     * Entity being edited, might be null in some cases, when the operation
+     * refers to the collection.
+     * For example, when deciding whether a user can create a new entity
+     * in a collection, the entity will be null.
+     */
+    entity: Entity<M> | null;
 
     /**
      * Path segments of the collection e.g. ['products', 'locales']
