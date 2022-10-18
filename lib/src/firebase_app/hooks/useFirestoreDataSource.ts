@@ -473,7 +473,6 @@ export function useFirestoreDataSource({
  * @category Firestore
  */
 export function firestoreToCMSModel(data: any): any {
-    console.log("firestoreToCMSModel", data);
     if (data === null) return data;
     if (serverTimestamp().isEqual(data)) {
         return null;

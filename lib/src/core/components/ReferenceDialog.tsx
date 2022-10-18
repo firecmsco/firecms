@@ -20,7 +20,7 @@ import {
 } from "./EntityCollectionTable/internal/EntityCollectionRowActions";
 import {
     useAuthController,
-    useDataSource,
+    useDataSource, useNavigationContext,
     useSideEntityController
 } from "../../hooks";
 import { ErrorView } from "./ErrorView";
@@ -105,9 +105,9 @@ export function ReferenceDialog<M extends Record<string, any>>(
 
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
+    const navigation = useNavigationContext();
 
-    // const fullPath = navigationContext.resolveAliasesFrom(pathInput);
-    const fullPath = pathInput;
+    const fullPath = navigation.resolveAliasesFrom(pathInput);
 
     const dataSource = useDataSource();
 
@@ -220,6 +220,7 @@ export function ReferenceDialog<M extends Record<string, any>>(
             error={"Could not find collection with id " + collection}/>
 
     }
+
     return (
 
         <Box sx={{
@@ -262,11 +263,11 @@ export function ReferenceDialog<M extends Record<string, any>>(
 }
 
 function ReferenceDialogActions({
-                                           collection,
-                                           path,
-                                           onClear,
-                                           onNewClick
-                                       }: { collection: EntityCollection<any>, path: string, onClear: () => void, onNewClick: () => void }) {
+                                    collection,
+                                    path,
+                                    onClear,
+                                    onNewClick
+                                }: { collection: EntityCollection<any>, path: string, onClear: () => void, onNewClick: () => void }) {
 
     const authController = useAuthController();
 
