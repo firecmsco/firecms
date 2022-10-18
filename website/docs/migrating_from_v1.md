@@ -107,6 +107,8 @@ const usersCollection = buildCollection({
 - `AdditionalColumnDelegate` has been renamed to `AdditionalFieldDelegate`. 
   The signature is the same. The prop in the collection is now called
   `additionalFields`, instead of `additionalColumns`.
+- `EntityPermissionsBuilderProps` has been renamed to `PermissionsBuilderProps` and
+ `EntityPermissionsBuilder` has been renamed to `PermissionsBuilder`
 
 ### Properties
 
