@@ -1,3 +1,7 @@
 [submodule "saas"]
 	path = saas
 	url = git@github.com:Camberi/firecms_saas.git
+
+[submodule "collection_editor"]
+	path = collection_editor
+	url = git@github.com:Camberi/firecms_collection_editor.git
