@@ -15,6 +15,11 @@ export default defineConfig(() => ({
             name: 'FireCMS',
             fileName: (format) => `index.${format}.js`,
         },
+        collection_editor: {
+            entry: path.resolve(__dirname, "src/index.ts"),
+            name: 'FireCMS',
+            fileName: (format:string) => `index.${format}.js`,
+        },
         target: 'esnext',
         sourcemap: true,
         rollupOptions: {
