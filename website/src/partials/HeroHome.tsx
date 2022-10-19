@@ -31,7 +31,7 @@ function HeroHome({}) {
     </div>;
 
     const titleDiv = <div
-        className="px-6 md:px-16 my-4 xl:my-8">
+        className="px-8 md:px-16 my-4 xl:my-8">
 
         <div className="text-center xl:text-right">
             <h1 className="block tracking-tight text-5xl md:text-6xl font-extrabold tracking-tight leading-none">
@@ -44,7 +44,7 @@ function HeroHome({}) {
                         data-aos-delay="200"
                         style={{
                             // mixBlendMode: "color-dodge",
-                            fontSize: "10rem",
+                            fontSize: "9rem",
                             WebkitBackgroundClip: "text",
                             backgroundClip: "text",
                             backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
@@ -71,7 +71,7 @@ function HeroHome({}) {
     </div>;
 
     return (
-        <section className="relative" style={{
+        <section className="relative my-16" style={{
             isolation: "isolate"
         }}>
 
@@ -85,7 +85,7 @@ function HeroHome({}) {
             </BrowserOnly>
 
 
-            <div className="xl:grid xl:grid-cols-12 xl:my-24 md:my-16 my-8 ">
+            <div className="xl:grid xl:grid-cols-12 xl:my-24 md:my-16 my-8">
 
                 <div className={"col-span-7"}>
                     {titleDiv}
