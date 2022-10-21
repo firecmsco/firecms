@@ -71,10 +71,10 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
  */
 export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
-                                                        fullPath,
-                                                        isSubCollection,
-                                                        ...collectionProp
-                                                    }: EntityCollectionViewProps<M>
+                                                                     fullPath,
+                                                                     isSubCollection,
+                                                                     ...collectionProp
+                                                                 }: EntityCollectionViewProps<M>
     ) {
 
         const sideEntityController = useSideEntityController();
@@ -88,10 +88,13 @@ export const EntityCollectionView = React.memo(
 
         const [collection, setCollection] = useState(initialCollection);
 
-        // useEffect(() => {
-        //     if (!equal(collection, collectionProp))
-        //         setCollection(collectionProp);
-        // }, [collectionProp])
+        useEffect(() => {
+            setCollection((current) => {
+                if (!equal(current, collectionProp))
+                    return collectionProp;
+                else return current;
+            });
+        }, [collectionProp])
 
         const theme = useTheme();
 
@@ -193,7 +196,7 @@ export const EntityCollectionView = React.memo(
             }}>
                 <Box>
                     <Typography
-                        variant={ "h6" }
+                        variant={"h6"}
                         sx={{
                             lineHeight: "1.15",
                             textOverflow: "ellipsis",
@@ -262,7 +265,7 @@ export const EntityCollectionView = React.memo(
                                                         size,
                                                         width,
                                                         frozen
-                                                    }: { entity: Entity<any>, size: CollectionSize, width: number, frozen?:boolean }) => {
+                                                    }: { entity: Entity<any>, size: CollectionSize, width: number, frozen?: boolean }) => {
 
             const isSelected = isEntitySelected(entity);
 
@@ -312,15 +315,15 @@ export const EntityCollectionView = React.memo(
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     Title={Title}
                     Actions={
-                    <EntityCollectionViewActions
-                        collection={collection}
-                        exportable={exportable}
-                        onMultipleDeleteClick={onMultipleDeleteClick}
-                        onNewClick={onNewClick}
-                        path={fullPath}
-                        selectedEntities={selectedEntities}
-                        selectionController={usedSelectionController}
-                        selectionEnabled={selectionEnabled}/>}
+                        <EntityCollectionViewActions
+                            collection={collection}
+                            exportable={exportable}
+                            onMultipleDeleteClick={onMultipleDeleteClick}
+                            onNewClick={onNewClick}
+                            path={fullPath}
+                            selectedEntities={selectedEntities}
+                            selectionController={usedSelectionController}
+                            selectionEnabled={selectionEnabled}/>}
                     hoverRow={hoverRow}
                     {...collection}
                     inlineEditing={checkInlineEditing()}
