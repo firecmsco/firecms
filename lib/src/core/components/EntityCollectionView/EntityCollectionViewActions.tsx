@@ -23,7 +23,7 @@ import { fullPathToCollectionSegments } from "../../util/paths";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
-    path: string;
+    fullPath: string;
     selectionEnabled: boolean;
     exportable: boolean | ExportConfig;
     onNewClick: () => void;
@@ -33,15 +33,15 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
 }
 
 export function EntityCollectionViewActions<M extends Record<string, any>>({
-                                                   collection,
-                                                   onNewClick,
-                                                   exportable,
-                                                   onMultipleDeleteClick,
-                                                   selectionEnabled,
-                                                   path,
-                                                   selectionController,
-                                                   selectedEntities
-                                               }: EntityCollectionViewActionsProps<M>) {
+                                                                               collection,
+                                                                               onNewClick,
+                                                                               exportable,
+                                                                               onMultipleDeleteClick,
+                                                                               selectionEnabled,
+                                                                               fullPath,
+                                                                               selectionController,
+                                                                               selectedEntities
+                                                                           }: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
     const authController = useAuthController();
@@ -49,7 +49,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path), null) &&
+    const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null) &&
         onNewClick && (largeLayout
             ? <Button
                 onClick={onNewClick}
@@ -61,14 +61,14 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             </Button>
             : <Button
                 onClick={onNewClick}
-            size="medium"
-            variant="contained"
-            color="primary"
-        >
-            <Add/>
-        </Button>);
+                size="medium"
+                variant="contained"
+                color="primary"
+            >
+                <Add/>
+            </Button>);
 
-    const multipleDeleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(path), null);
+    const multipleDeleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
 
     let multipleDeleteButton: JSX.Element | undefined;
     if (selectionEnabled) {
@@ -96,22 +96,30 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             </Tooltip>
     }
 
-    const extraActions = collection.extraActions
-        ? collection.extraActions({
-            path,
-            collection,
-            selectionController,
-            context
-        })
+    const actionProps = {
+        path: fullPath,
+        collection,
+        selectionController,
+        context
+    };
+
+    const actions = collection.Actions
+        ? Array.isArray(collection.Actions)
+            ? <>
+                {collection.Actions.map((Action, i) => (
+                    <Action key={`actions_${i}`} {...actionProps}/>
+                ))}
+            </>
+            : <collection.Actions {...actionProps}/>
         : undefined;
 
     const exportButton = exportable &&
         <ExportButton collection={collection}
                       exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
-                      path={path}/>;
+                      path={fullPath}/>;
     return (
         <>
-            {extraActions}
+            {actions}
             {multipleDeleteButton}
             {exportButton}
             {addButton}

@@ -3,7 +3,7 @@ import {
     buildProperties,
     Entity,
     EntityCollection,
-    ExtraActionsParams,
+    CollectionActionsProps,
     useDataSource,
     useReferenceDialog,
     useSnackbarController
@@ -91,19 +91,19 @@ const properties = buildProperties<Product>({
 export const productsCollection = buildCollection<Product>({
     name: "Products",
     path: "products",
-    properties: properties
+    properties
 });
 
 // Target collection
 export const productsCollectionCopy = buildCollection<Product>({
     name: "Products copy target",
     path: "products_copied",
-    properties: properties,
-    extraActions: ({ path, collection }: ExtraActionsParams<Product>) =>
+    properties,
+    Actions: ({ path, collection }: CollectionActionsProps<Product>) =>
         <CopyEntityButton
             pathFrom={"products"}
             collectionFrom={productsCollection}
             pathTo={path}
             collectionTo={collection}
-        />,
+        />
 });

@@ -69,7 +69,8 @@ export function FirebaseCMSApp({
                                    HomePage,
                                    basePath,
                                    baseCollectionPath,
-                                   LoginView
+                                   LoginView,
+    CollectionActions
                                }: FirebaseCMSAppProps) {
 
     useBrowserTitleAndIcon(name, logo);

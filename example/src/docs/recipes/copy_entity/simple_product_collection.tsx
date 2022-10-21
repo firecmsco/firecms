@@ -1,12 +1,12 @@
 import { buildCollection, buildProperties } from "@camberi/firecms";
 
-type Product = {
+export type Product = {
     name: string;
     price: number;
 }
 
 // Common properties of our target and source collections
-const properties = buildProperties<Product>({
+export const properties = buildProperties<Product>({
     name: {
         name: "Name",
         validation: { required: true },
@@ -26,12 +26,12 @@ const properties = buildProperties<Product>({
 export const productsCollection = buildCollection<Product>({
     name: "Products",
     path: "products",
-    properties: properties
+    properties
 });
 
 // Target collection
 export const productsCollectionCopy = buildCollection<Product>({
     name: "Products copy target",
     path: "products_copied",
-    properties: properties
+    properties
 });

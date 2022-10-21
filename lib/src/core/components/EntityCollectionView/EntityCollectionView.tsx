@@ -258,7 +258,7 @@ export const EntityCollectionView = React.memo(
                 </Box>
 
             </Box>
-        ), [collection.description, collection.singularName, fullPath, open, anchorEl]);
+        ), [theme, collection.description, collection.name, fullPath, open, anchorEl]);
 
         const tableRowActionsBuilder = useCallback(({
                                                         entity,
@@ -314,18 +314,18 @@ export const EntityCollectionView = React.memo(
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     Title={Title}
+                    {...collection}
                     Actions={
                         <EntityCollectionViewActions
                             collection={collection}
                             exportable={exportable}
                             onMultipleDeleteClick={onMultipleDeleteClick}
                             onNewClick={onNewClick}
-                            path={fullPath}
+                            fullPath={fullPath}
                             selectedEntities={selectedEntities}
                             selectionController={usedSelectionController}
                             selectionEnabled={selectionEnabled}/>}
                     hoverRow={hoverRow}
-                    {...collection}
                     inlineEditing={checkInlineEditing()}
                 />
 
