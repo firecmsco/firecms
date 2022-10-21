@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
@@ -24,6 +24,7 @@ import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./models/auth";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
+import { useBrowserTitleAndIcon } from "../hooks";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -70,6 +71,8 @@ export function FirebaseCMSApp({
                                    baseCollectionPath,
                                    LoginView
                                }: FirebaseCMSAppProps) {
+
+    useBrowserTitleAndIcon(name, logo);
 
     const {
         firebaseApp,
@@ -179,7 +182,7 @@ export function FirebaseCMSApp({
                         if (loading || authLoading) {
                             component = <CircularProgressCenter/>;
                         } else {
-                            const usedLogo = modeController.mode === "dark" ? logoDark : logo ?? logo;
+                            const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
                             if (!canAccessMainView) {
                                 const LoginViewUsed = LoginView ?? FirebaseLoginView;
                                 component = (
@@ -215,20 +218,4 @@ export function FirebaseCMSApp({
             </SnackbarProvider>
         </BrowserRouter>
     );
-}
-
-declare module "@mui/material/styles" {
-    interface TypographyVariants {
-        label: React.CSSProperties;
-    }
-
-    interface TypographyVariantsOptions {
-        label?: React.CSSProperties;
-    }
-}
-
-declare module "@mui/material/Typography" {
-    interface TypographyPropsVariantOverrides {
-        label: true;
-    }
 }

@@ -1,6 +1,22 @@
 import { pink, red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material";
 
+declare module "@mui/material/styles" {
+    interface TypographyVariants {
+        label: React.CSSProperties;
+    }
+
+    interface TypographyVariantsOptions {
+        label?: React.CSSProperties;
+    }
+}
+
+declare module "@mui/material/Typography" {
+    interface TypographyPropsVariantOverrides {
+        label: true;
+    }
+}
+
 /**
  * Use this function to build the default FireCMS MUI5 theme,
  * with some overrides.
