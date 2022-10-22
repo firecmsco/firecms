@@ -65,16 +65,17 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
     );
 }
 
-
 const handleSubmit = (email: string) => {
-    fetch("https://europe-west3-firecms-demo-27150.cloudfunctions.net/api/sign_up_newsletter", {
+    fetch("https://europe-west3-firecms-demo-27150.cloudfunctions.net/sign_up_newsletter", {
         method: "POST",
+        mode: "no-cors",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*"
         },
         body: JSON.stringify({
-            "email_address": email,
-            "source": "demo"
+            email_address: email,
+            source: "demo"
         })
     }).then((res) => {
         console.log("newsletter response", res);
