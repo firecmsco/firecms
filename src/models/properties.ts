@@ -624,6 +624,12 @@ export interface StorageMeta {
     metadata?: any,
 
     /**
+     * Use client side image compression and resizing
+     * Will only be applied to these MIME types: image/jpeg, image/png and image/webp
+     */
+    imageCompression?: ImageCompression;
+
+    /**
      * You can use this callback to customize the uploaded filename
      * @param context
      */
@@ -700,6 +706,23 @@ export interface MapFieldConfig<T extends {}> extends FieldConfig<T> {
      */
     pickOnlySomeKeys?: boolean;
 
+}
+
+export interface ImageCompression {
+    /**
+     * New image max height (ratio is preserved)
+     */
+    maxHeight?: number;
+
+    /**
+     * New image max width (ratio is preserved)
+     */
+    maxWidth?: number;
+
+    /**
+     * A number between 0 and 100. Used for the JPEG compression.(if no compress is needed, just set it to 100)
+     */
+    quality: number;
 }
 
 /**

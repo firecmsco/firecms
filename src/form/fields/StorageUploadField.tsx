@@ -18,6 +18,7 @@ import makeStyles from "@mui/styles/makeStyles";
 import {
     ArrayProperty,
     FieldProps,
+    ImageCompression,
     Property,
     StorageMeta,
     StringProperty
@@ -37,6 +38,7 @@ import {
 } from "../../hooks";
 import { isReadOnly } from "../../core/utils";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import Resizer from "react-image-file-resizer";
 
 const useStyles = makeStyles((theme: Theme) => ({
     dropZone: {
@@ -460,6 +462,25 @@ export function StorageUpload({
 
     const size = multipleFilesSupported ? "small" : "regular";
 
+    const compression: ImageCompression | undefined = storageMeta?.imageCompression
+    const supportedTypes = { "image/jpeg": "JPEG", "image/png": "PNG", "image/webp": "WEBP" }
+    const compressionFormat = (file: File) => supportedTypes[file.type] ? supportedTypes[file.type] : null
+
+    const resizeAndCompressImage = (file: File, compression: ImageCompression) => new Promise<File>((resolve) => {
+        const quality = compression.quality >= 0 ? compression.quality <= 100 ? compression.quality : 100 : 100
+
+        Resizer.imageFileResizer(
+            file,
+            compression.maxWidth || Number.MAX_VALUE,
+            compression.maxHeight || Number.MAX_VALUE,
+            compressionFormat(file),
+            quality,
+            0,
+            (file: string | Blob | File | ProgressEvent<FileReader>) => resolve(file as File),
+            "file",
+        )
+    })
+
     const internalInitialValue: StorageFieldItem[] =
         (multipleFilesSupported
             ? value as string[]
@@ -516,7 +537,7 @@ export function StorageUpload({
         );
     }
 
-    const onExternalDrop = (acceptedFiles: File[]) => {
+    const onExternalDrop = async (acceptedFiles: File[]) => {
 
         if (!acceptedFiles.length || disabled)
             return;
@@ -524,20 +545,31 @@ export function StorageUpload({
         let newInternalValue: StorageFieldItem[];
         if (multipleFilesSupported) {
             newInternalValue = [...internalValue,
-                ...(acceptedFiles.map(file => ({
-                    id: getRandomId(),
-                    file,
-                    fileName: fileNameBuilder(file),
-                    metadata,
-                    size: size
-                } as StorageFieldItem)))];
+                ...(await Promise.all(acceptedFiles.map(async file => {
+                    if (compression && compressionFormat(file)) {
+                        file = await resizeAndCompressImage(file, compression)
+                    }
+
+                    return {
+                        id: getRandomId(),
+                        file,
+                        fileName: fileNameBuilder(file),
+                        metadata,
+                        size
+                    } as StorageFieldItem;
+                })))];
         } else {
+            let file = acceptedFiles[0]
+            if (compression && compressionFormat(file)) {
+                file = await resizeAndCompressImage(file, compression)
+            }
+
             newInternalValue = [{
                 id: getRandomId(),
-                file: acceptedFiles[0],
-                fileName: fileNameBuilder(acceptedFiles[0]),
+                file,
+                fileName: fileNameBuilder(file),
                 metadata,
-                size: size
+                size
             }];
         }
 
