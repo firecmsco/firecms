@@ -127,7 +127,7 @@ export const createCMSDefaultTheme = (
                 styleOverrides: {
                     root: {
                         "&.mono": {
-                            fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                            fontFamily: "'IBM Plex Mono', 'Space Mono', 'Lucida Console', monospace"
                         },
                         "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
                             display: "none"

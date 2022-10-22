@@ -1,5 +1,5 @@
 import { hashString } from "./hash";
-import { ChipColorKey, ChipColorScheme } from "../../models";
+import { ChipColorKey, ChipColorScheme } from "../../types";
 
 export const CHIP_COLORS: Record<string, ChipColorScheme> = {
     blueLighter: { color: "#cfdfff", text: "#102046" },

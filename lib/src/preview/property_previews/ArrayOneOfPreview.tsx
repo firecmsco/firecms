@@ -9,7 +9,7 @@ import {
     PropertyPreviewProps
 } from "../index";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
-import { ResolvedProperty } from "../../models";
+import { ResolvedProperty } from "../../types";
 import {
     DEFAULT_ONE_OF_TYPE,
     DEFAULT_ONE_OF_VALUE

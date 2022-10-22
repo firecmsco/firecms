@@ -14,7 +14,7 @@ import {
     ResolvedNumberProperty,
     ResolvedProperty,
     ResolvedStringProperty
-} from "../../../../models";
+} from "../../../../types";
 import { TableInput } from "../../Table/fields/TableInput";
 import { TableSelect } from "../../Table/fields/TableSelect";
 import { NumberTableInput } from "../../Table/fields/TableNumberInput";

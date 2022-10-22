@@ -24,3 +24,5 @@ export * from "./DeleteConfirmationDialog";
 
 export * from "./FireCMSLogo";
 export * from "./FirebaseLogo";
+
+export * from "./CenteredView";

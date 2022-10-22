@@ -1,5 +1,5 @@
 import React from "react";
-import { FireCMSContext } from "../../models";
+import { FireCMSContext } from "../../types";
 
 export const FireCMSContextInstance = React.createContext<FireCMSContext>({
     sideDialogsController: {} as any,

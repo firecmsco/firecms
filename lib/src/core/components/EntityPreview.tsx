@@ -20,7 +20,7 @@ import {
     FireCMSContext,
     ResolvedEntityCollection,
     ResolvedProperties
-} from "../../models";
+} from "../../types";
 import { PropertyPreview } from "../../preview";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon, resolveCollection } from "../util";
@@ -133,7 +133,7 @@ export function EntityPreview<M extends Record<string, any>>(
 
                     {collection && Object.entries(properties)
                         .map(([key, property]) => {
-                            const value = (entity.values )[key];
+                            const value = (entity.values)[key];
                             return (
                                 <TableRow
                                     key={"entity_prev" + property.name + key}>

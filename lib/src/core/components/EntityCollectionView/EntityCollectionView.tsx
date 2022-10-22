@@ -9,7 +9,7 @@ import {
     EntityCollection,
     LocalEntityCollection,
     SelectionController
-} from "../../../models";
+} from "../../../types";
 import {
     EntityCollectionTable,
     OnColumnResizeParams

@@ -11,7 +11,7 @@ import {
     PropertyOrBuilder,
     ResolvedProperties,
     ResolvedProperty
-} from "../../models";
+} from "../../types";
 import { setDateToMidnight } from "./dates";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
 
@@ -128,7 +128,7 @@ export function traverseValuesProperties<M extends Record<string, any>>(
 ): EntityValues<M> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
-            const inputValue = inputValues && (inputValues )[key];
+            const inputValue = inputValues && (inputValues)[key];
             const updatedValue = traverseValueProperty(inputValue, property as Property, operation);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });

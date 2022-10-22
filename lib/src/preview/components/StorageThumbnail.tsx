@@ -6,7 +6,7 @@ import {
 import { UrlComponentPreview } from "./UrlComponentPreview";
 import { PreviewSize } from "../index";
 import { useStorageSource } from "../../hooks";
-import { DownloadConfig, FileType } from "../../models";
+import { DownloadConfig, FileType } from "../../types";
 
 type StorageThumbnailProps = {
     storagePathOrDownloadUrl: string;

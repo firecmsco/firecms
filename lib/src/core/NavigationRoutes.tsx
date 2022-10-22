@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
-import { CMSView, CollectionActionsProps, EntityCollection } from "../models";
+import { CMSView, CollectionActionsProps, EntityCollection } from "../types";
 import { FireCMSHomePage, NotFoundPage } from "./components";
 import {
     useBreadcrumbsContext,

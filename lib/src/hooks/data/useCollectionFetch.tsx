@@ -6,7 +6,7 @@ import {
     FilterValues,
     FireCMSContext,
     User
-} from "../../models";
+} from "../../types";
 import { useDataSource } from "./useDataSource";
 import { useNavigationContext } from "../useNavigationContext";
 import { useFireCMSContext } from "../useFireCMSContext";
@@ -74,7 +74,7 @@ export function useCollectionFetch<M extends Record<string, any>, UserType exten
         filterValues,
         sortBy,
         itemCount,
-        searchString,
+        searchString
     }: CollectionFetchProps<M>): CollectionFetchResult<M> {
 
     const dataSource = useDataSource();

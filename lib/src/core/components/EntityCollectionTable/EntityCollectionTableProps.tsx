@@ -5,7 +5,7 @@ import {
     Entity,
     EntityCollection,
     FilterValues
-} from "../../../models";
+} from "../../../types";
 
 /**
  * @category Collection components

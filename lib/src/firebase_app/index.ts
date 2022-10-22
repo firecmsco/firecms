@@ -12,7 +12,7 @@ export { FirebaseLoginView, LoginButton } from "./components/FirebaseLoginView";
 export type { InitialiseFirebaseResult } from "./hooks/useInitialiseFirebase";
 export { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 
-export * from "./models/auth";
+export * from "./types/auth";
 
-export type { FirestoreTextSearchController } from "./models/text_search";
-export { performAlgoliaTextSearch } from "./models/text_search";
+export type { FirestoreTextSearchController } from "./types/text_search";
+export { performAlgoliaTextSearch } from "./types/text_search";

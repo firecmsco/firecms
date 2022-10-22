@@ -1,4 +1,4 @@
-import { EntityCollection, EntityCustomView } from "../../models";
+import { EntityCollection, EntityCustomView } from "../../types";
 import {
     getCollectionPathsCombinations,
     removeInitialAndTrailingSlashes

@@ -1,5 +1,5 @@
 import { PreviewSize, PropertyPreviewProps, ReferencePreview } from "../index";
-import { ResolvedReferenceProperty } from "../../models";
+import { ResolvedReferenceProperty } from "../../types";
 
 import { Box } from "@mui/material";
 import { resolveArrayProperty } from "../../core";

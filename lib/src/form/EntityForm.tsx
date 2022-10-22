@@ -16,7 +16,7 @@ import {
     PropertyFieldBindingProps,
     ResolvedEntityCollection,
     ResolvedProperty
-} from "../models";
+} from "../types";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { PropertyFieldBinding } from "./PropertyFieldBinding";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";

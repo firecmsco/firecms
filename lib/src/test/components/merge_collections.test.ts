@@ -1,4 +1,4 @@
-import { EntityCollection, PropertyBuilder } from "../../models";
+import { EntityCollection, PropertyBuilder } from "../../types";
 import { mergeCollections } from "../../core/util/collections";
 
 const priceBuilder:PropertyBuilder = ({ values }: any) => ({

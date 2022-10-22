@@ -11,7 +11,7 @@ import {
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig
-} from "../../../../models";
+} from "../../../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize, PropertyPreview } from "../../../../preview";
 import { ErrorBoundary } from "../../ErrorBoundary";

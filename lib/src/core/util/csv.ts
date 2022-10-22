@@ -6,7 +6,7 @@ import {
     ResolvedProperties,
     ResolvedProperty,
     User
-} from "../../models";
+} from "../../types";
 import { getValueInPath } from "./objects";
 
 interface Header {

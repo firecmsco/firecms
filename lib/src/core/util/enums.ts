@@ -1,4 +1,4 @@
-import { ChipColorScheme, EnumValueConfig, EnumValues } from "../../models";
+import { ChipColorScheme, EnumValueConfig, EnumValues } from "../../types";
 import { CHIP_COLORS, getColorSchemeForSeed } from "./chip_utils";
 
 export function enumToObjectEntries(enumValues: EnumValues): EnumValueConfig[] {

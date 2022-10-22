@@ -19,7 +19,7 @@ import {
     FieldProps,
     FormContext,
     ResolvedProperty
-} from "../../models";
+} from "../../types";
 import { ExpandablePanel } from "../../core";
 import {
     DEFAULT_ONE_OF_TYPE,

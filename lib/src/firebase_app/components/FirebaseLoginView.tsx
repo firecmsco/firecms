@@ -19,7 +19,7 @@ import {
     FirebaseAuthController,
     FirebaseSignInOption,
     FirebaseSignInProvider
-} from "../models/auth";
+} from "../types/auth";
 import {
     appleIcon,
     facebookIcon,

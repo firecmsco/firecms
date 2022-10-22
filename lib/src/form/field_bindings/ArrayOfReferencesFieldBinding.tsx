@@ -6,7 +6,7 @@ import {
     EntityReference,
     FieldProps,
     ResolvedProperty
-} from "../../models";
+} from "../../types";
 import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { ErrorView, ExpandablePanel, getReferenceFrom } from "../../core";

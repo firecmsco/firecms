@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldProps } from "../../models";
+import { FieldProps } from "../../types";
 import { Box, FormControl, FormHelperText } from "@mui/material";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";

@@ -17,7 +17,7 @@ import {
     StorageSource,
     User,
     UserConfigurationPersistence
-} from "../models";
+} from "../types";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { ModeStateContext } from "./contexts/ModeController";

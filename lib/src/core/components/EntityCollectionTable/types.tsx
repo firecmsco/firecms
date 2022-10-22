@@ -7,7 +7,7 @@ import {
     FilterValues,
     ResolvedProperty,
     User
-} from "../../../models";
+} from "../../../types";
 import { CellRendererParams, TableColumn, TableFilterValues } from "../Table";
 import { OnCellChangeParams } from "./internal/PropertyTableCell";
 

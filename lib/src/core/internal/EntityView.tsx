@@ -19,7 +19,7 @@ import {
     EntityValues,
     ResolvedEntityCollection,
     User
-} from "../../models";
+} from "../../types";
 import {
     CircularProgressCenter,
     EntityPreview,

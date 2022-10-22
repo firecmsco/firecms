@@ -18,7 +18,7 @@ import {
     EntityCollection,
     ExportConfig,
     SelectionController
-} from "../../../models";
+} from "../../../types";
 import { fullPathToCollectionSegments } from "../../util/paths";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {

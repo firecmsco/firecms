@@ -21,12 +21,12 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
-import { AuthController } from "../../models";
+import { AuthController } from "../../types";
 import {
     FirebaseAuthController,
     FirebaseSignInOption,
     FirebaseSignInProvider
-} from "../models/auth";
+} from "../types/auth";
 
 interface FirebaseAuthHandlerProps {
     firebaseApp?: FirebaseApp;

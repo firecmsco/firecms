@@ -1,6 +1,6 @@
 import React from "react";
 import equal from "react-fast-compare"
-import { CMSType, Entity, ResolvedProperty } from "../../../../models";
+import { CMSType, Entity, ResolvedProperty } from "../../../../types";
 import { PropertyPreview } from "../../../../preview";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
@@ -33,7 +33,7 @@ export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps
             focused
         } = useEntityCollectionTableController();
 
-        const value = getValueInPath(entity.values , propertyKey);
+        const value = getValueInPath(entity.values, propertyKey);
         return (
             <TableCell
                 size={size}

@@ -7,13 +7,13 @@ import {
     CollectionOverrideHandler,
     EntityCollection, CollectionActionsProps,
     Locale
-} from "../models";
-import { FirestoreTextSearchController } from "./models/text_search";
+} from "../types";
+import { FirestoreTextSearchController } from "./types/text_search";
 import {
     Authenticator,
     FirebaseSignInOption,
     FirebaseSignInProvider
-} from "./models/auth";
+} from "./types/auth";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 import { useNavigationContext } from "../hooks";
 

@@ -7,7 +7,7 @@ import {
     PropertiesOrBuilders,
     PropertyOrBuilder,
     ResolvedProperty
-} from "../../models";
+} from "../../types";
 import { getWidget, Widget } from "../widgets";
 import { Box } from "@mui/material";
 import { isPropertyBuilder } from "./entities";

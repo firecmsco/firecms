@@ -21,7 +21,7 @@ import {
     EntityReference,
     FieldProps,
     ResolvedProperty, ResolvedReferenceProperty
-} from "../../models";
+} from "../../types";
 import { FieldDescription } from "../index";
 import {
     ErrorBoundary,

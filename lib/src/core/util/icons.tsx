@@ -3,7 +3,7 @@ import ShowChartIcon from "@mui/icons-material/ShowChart";
 
 import * as mui from "@mui/icons-material";
 
-import { CMSView, EntityCollection } from "../../models";
+import { CMSView, EntityCollection } from "../../types";
 import { SvgIconTypeMap } from "@mui/material";
 
 export function getIcon(iconKey:string) {

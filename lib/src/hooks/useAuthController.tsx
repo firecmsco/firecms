@@ -1,4 +1,4 @@
-import { AuthController, User } from "../models";
+import { AuthController, User } from "../types";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 /**

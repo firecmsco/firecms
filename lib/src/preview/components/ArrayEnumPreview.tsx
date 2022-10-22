@@ -1,29 +1,10 @@
-import { EnumValueConfig } from "../../models";
-
-import { styled } from "@mui/material/styles";
-
 import React from "react";
 
+import { EnumValueConfig } from "../../types";
 import { ErrorBoundary } from "../../core";
 import { EnumValuesChip } from "./ColorChip";
-import { Box, Theme } from "@mui/material";
+import { Box } from "@mui/material";
 import { PreviewSize } from "../PropertyPreviewProps";
-
-const PREFIX = "ArrayEnumPreview";
-
-const classes = {
-    arrayWrap: `${PREFIX}-arrayWrap`,
-    arrayItem: `${PREFIX}-arrayItem`
-};
-
-const Root = styled("div")((
-   { theme } : {
-        theme: Theme
-    }
-) => ({
-    [`& .${classes.arrayItem}`]: {
-    }
-}));
 
 /**
  * @category Preview components

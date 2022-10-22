@@ -1,6 +1,5 @@
 import { useFireCMSContext } from "./useFireCMSContext";
-import { UserConfigurationPersistence } from "../models";
-
+import { UserConfigurationPersistence } from "../types";
 
 /**
  * Use this controller to access the configuration that is stored extenally,

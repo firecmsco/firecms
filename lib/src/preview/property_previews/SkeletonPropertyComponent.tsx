@@ -4,7 +4,7 @@ import {
     ResolvedProperties,
     ResolvedProperty,
     ResolvedStringProperty
-} from "../../models";
+} from "../../types";
 import React from "react";
 import {
     Box,

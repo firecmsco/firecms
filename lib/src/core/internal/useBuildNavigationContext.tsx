@@ -12,7 +12,7 @@ import {
     TopNavigationResult,
     User,
     UserConfigurationPersistence
-} from "../../models";
+} from "../../types";
 import {
     getCollectionByPathOrAlias,
     mergeDeep,
