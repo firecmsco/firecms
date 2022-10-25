@@ -2,7 +2,11 @@ import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView, CollectionActionsProps, EntityCollection } from "../types";
-import { FireCMSHomePage, NotFoundPage } from "./components";
+import {
+    EntityCollectionView,
+    FireCMSHomePage,
+    NotFoundPage
+} from "./components";
 import {
     useBreadcrumbsContext,
     useFireCMSContext,
@@ -42,7 +46,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         const navigation = useNavigationContext();
 
         const context = useFireCMSContext();
-        const EntityCollectionViewComponent = context.EntityCollectionViewComponent;
+        const plugins = context.plugins ?? [];
 
         if (!navigation)
             return <></>;
@@ -87,14 +91,22 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         const collectionRoutes = sortedCollections
             .map((collection) => {
                     const urlPath = navigation.buildUrlCollectionPath(collection.alias ?? collection.path);
-                    const allActions = [...actionsToArray(context.CollectionActions), ...actionsToArray(collection.Actions)];
+                    const allActions = [];
+                    if (plugins) {
+                        plugins.forEach(plugin => {
+                            if (plugin.collectionActions) {
+                                allActions.push(...actionsToArray(plugin.collectionActions));
+                            }
+                        });
+                    }
+                    allActions.push(...actionsToArray(collection.Actions))
                     return <Route path={urlPath + "/*"}
                                   key={`navigation_${collection.alias ?? collection.path}`}
                                   element={
                                       <BreadcrumbUpdater
                                           path={urlPath}
                                           title={collection.name}>
-                                          <EntityCollectionViewComponent
+                                          <EntityCollectionView
                                               key={`collection_view_${collection.alias ?? collection.path}`}
                                               isSubCollection={false}
                                               fullPath={collection.alias ?? collection.path}

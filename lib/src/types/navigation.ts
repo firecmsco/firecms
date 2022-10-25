@@ -167,7 +167,7 @@ export interface CMSView {
 export interface TopNavigationEntry {
     url: string;
     name: string;
-    path?: string;
+    path: string;
     type: "collection" | "view";
     collection?: EntityCollection;
     view: CMSView;

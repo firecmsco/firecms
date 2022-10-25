@@ -219,7 +219,11 @@ export interface EntityCollection<M extends Record<string, any> = any,
 }
 
 /**
- * Parameter passed to the `Actions` prop in the collection configuration
+ * Parameter passed to the `Actions` prop in the collection configuration.
+ * Note that actions are rendered in the collection toolbar, as well
+ * as in the home page card.
+ * If you don't want to render the actions in the home page card, you can
+ * return `null` if mode is `home`.
  *
  * @category Models
  */
@@ -237,7 +241,7 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
 
     /**
      * Use this controller to get the selected entities and to update the
-     * selected entities state
+     * selected entities state.
      */
     selectionController: SelectionController<M>;
 
@@ -245,6 +249,7 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
      * Context of the app status
      */
     context: FireCMSContext<UserType>;
+
 }
 
 /**

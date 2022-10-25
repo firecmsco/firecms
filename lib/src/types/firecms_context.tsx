@@ -11,6 +11,7 @@ import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SideDialogsController } from "./side_dialogs_controller";
 import { EntityCollectionViewProps } from "../core";
 import { CollectionActionsProps } from "./collections";
+import { FireCMSPlugin } from "./plugins";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -80,19 +81,20 @@ export interface FireCMSContext<UserType extends User = User, AuthControllerType
      */
     userConfigPersistence?: UserConfigurationPersistence;
 
-    /**
-     * Component used to render a collection view.
-     * Defaults to {@link EntityCollectionView}
-     */
-    EntityCollectionViewComponent: React.ComponentType<EntityCollectionViewProps<any>>;
+    // /**
+    //  * Component used to render a collection view.
+    //  * Defaults to {@link EntityCollectionView}
+    //  */
+    // EntityCollectionViewComponent: React.ComponentType<EntityCollectionViewProps<any>>;
+    //
+    // /**
+    //  * Builder for adding extra actions to the entity list.
+    //  * This is useful for adding actions that are not related to the CRUD operations.
+    //  * You can add this general prop to add actions to all the collections, or you can
+    //  * add the {@link EntityCollection.Actions} to add actions to a specific
+    //  * collection.
+    //  */
+    // CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
 
-    /**
-     * Builder for adding extra actions to the entity list.
-     * This is useful for adding actions that are not related to the CRUD operations.
-     * You can add this general prop to add actions to all the collections, or you can
-     * add the {@link EntityCollection.Actions} to add actions to a specific
-     * collection.
-     */
-    CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
-
+    plugins?: FireCMSPlugin<any>[];
 }

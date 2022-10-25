@@ -107,10 +107,10 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         ? Array.isArray(collection.Actions)
             ? <>
                 {collection.Actions.map((Action, i) => (
-                    <Action key={`actions_${i}`} {...actionProps}/>
+                    <Action key={`actions_${i}`} {...actionProps} />
                 ))}
             </>
-            : <collection.Actions {...actionProps}/>
+            : <collection.Actions {...actionProps} />
         : undefined;
 
     const exportButton = exportable &&

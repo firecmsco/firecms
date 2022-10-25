@@ -176,8 +176,7 @@ export function FirebaseCMSApp({
                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                     locale={locale}
                     basePath={basePath}
-                    baseCollectionPath={baseCollectionPath}
-                    CollectionActions={CollectionActions}>
+                    baseCollectionPath={baseCollectionPath}>
                     {({ context, loading }) => {
 
                         let component;

@@ -8,9 +8,9 @@ import {
 export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 
     const snackbarController = useSnackbarController();
-    const { selectedEntities } = selectionController;
 
     const onClick = (event: React.MouseEvent) => {
+        const selectedEntities = selectionController?.selectedEntities;
         const count = selectedEntities ? selectedEntities.length : 0;
         snackbarController.open({
             type: "success",

@@ -22,6 +22,7 @@ import {
 } from "../../types";
 import {
     CircularProgressCenter,
+    EntityCollectionView,
     EntityPreview,
     ErrorBoundary
 } from "../components";
@@ -92,7 +93,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const context = useFireCMSContext();
         const authController = useAuthController<UserType>();
 
-        const EntityCollectionViewComponent = context.EntityCollectionViewComponent;
+        // const EntityCollectionViewComponent = context.EntityCollectionViewComponent;
 
         const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
         const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
@@ -326,7 +327,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
                         {!loading &&
                             (usedEntity && fullPath
-                                ? <EntityCollectionViewComponent
+                                ? <EntityCollectionView
                                     fullPath={fullPath}
                                     isSubCollection={true}
                                     {...subcollection}/>

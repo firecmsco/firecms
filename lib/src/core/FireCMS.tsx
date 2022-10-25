@@ -33,6 +33,7 @@ import {
 import { CMSViewsBuilder, EntityCollectionsBuilder } from "../firebase_app";
 import { EntityCollectionView, EntityCollectionViewProps } from "./components";
 import { ModeController, useSnackbarController } from "../hooks";
+import { FireCMSPlugin } from "../types/plugins";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -138,21 +139,22 @@ export interface FireCMSProps<UserType extends User> {
      */
     modeController: ModeController;
 
-    /**
-     * Component used to render a collection view.
-     * Defaults to {@link EntityCollectionView}
-     */
-    EntityCollectionViewComponent?: React.ComponentType<EntityCollectionViewProps<any>>;
+    // /**
+    //  * Component used to render a collection view.
+    //  * Defaults to {@link EntityCollectionView}
+    //  */
+    // EntityCollectionViewComponent?: React.ComponentType<EntityCollectionViewProps<any>>;
+    //
+    // /**
+    //  * Builder for adding extra actions to the entity list.
+    //  * This is useful for adding actions that are not related to the CRUD operations.
+    //  * You can add this general prop to add actions to all the collections, or you can
+    //  * add the {@link EntityCollection.Actions} to add actions to a specific
+    //  * collection.
+    //  */
+    // CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
 
-    /**
-     * Builder for adding extra actions to the entity list.
-     * This is useful for adding actions that are not related to the CRUD operations.
-     * You can add this general prop to add actions to all the collections, or you can
-     * add the {@link EntityCollection.Actions} to add actions to a specific
-     * collection.
-     */
-    CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
-
+    plugins?: FireCMSPlugin<any>[];
 }
 
 /**
@@ -180,8 +182,9 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         dataSource,
         basePath,
         baseCollectionPath,
-        EntityCollectionViewComponent = EntityCollectionView,
-        CollectionActions
+        // EntityCollectionViewComponent = EntityCollectionView,
+        // CollectionActions,
+        plugins
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -196,7 +199,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         collections,
         views,
         collectionOverrideHandler,
-        userConfigPersistence
+        userConfigPersistence,
+        plugins
     });
 
     const sideDialogsController = useBuildSideDialogsController();
@@ -204,7 +208,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     const snackbarController = useSnackbarController();
 
-    const loading = authController.initialLoading || navigation.loading;
+    const loading = authController.initialLoading || navigation.loading || (plugins?.some(p => p.loading) ?? false);
 
     if (navigation.navigationLoadingError) {
         return (
@@ -227,9 +231,21 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         storageSource,
         snackbarController,
         userConfigPersistence,
-        EntityCollectionViewComponent,
-        CollectionActions
+        plugins
     };
+
+    let childrenResult = children({
+        context,
+        loading
+    })
+
+    if (!loading && plugins) {
+        plugins.forEach((plugin: FireCMSPlugin<any>) => {
+            if (plugin.wrapContent) {
+                childrenResult = plugin.wrapContent({ context, children: childrenResult });
+            }
+        });
+    }
 
     return (
 
@@ -240,10 +256,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                         dateAdapter={AdapterDateFns}
                         utils={DateFnsUtils}
                         locale={dateUtilsLocale}>
-                        {children({
-                            context,
-                            loading
-                        })}
+                        {childrenResult}
                     </LocalizationProvider>
                 </BreadcrumbsProvider>
             </FireCMSContextProvider>

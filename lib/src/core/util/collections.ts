@@ -7,6 +7,11 @@ import {
 import { mergeDeep } from "./objects";
 import { isPropertyBuilder } from "./entities";
 
+/**
+ *
+ * @param target
+ * @param source
+ */
 export function mergeCollections(target: EntityCollection, source: EntityCollection): EntityCollection {
     const subcollectionsMerged = target.subcollections?.map((targetSubcollection) => {
         const modifiedCollection =
@@ -26,6 +31,34 @@ export function mergeCollections(target: EntityCollection, source: EntityCollect
         subcollections: subcollectionsMerged,
         properties: sortProperties(mergedCollection.properties, mergedCollection.propertiesOrder)
     }
+}
+
+/**
+ *
+ * @param fetchedCollections
+ * @param baseCollections
+ */
+export function joinCollectionLists(fetchedCollections: EntityCollection[], baseCollections: EntityCollection[] | undefined): EntityCollection[] {
+    const resolvedFetchedCollections: EntityCollection[] = fetchedCollections.map(c => ({
+        ...c,
+        editable: true,
+        deletable: true
+    }));
+    const updatedCollections = (baseCollections ?? [])
+        .map((navigationCollection) => {
+            const storedCollection = resolvedFetchedCollections?.find((collection) => collection.path === navigationCollection.path) ??
+                resolvedFetchedCollections?.find((collection) => collection.alias === navigationCollection.alias);
+            if (!storedCollection) {
+                return { ...navigationCollection, deletable: false };
+            } else {
+                const mergedCollection = mergeCollections(navigationCollection, storedCollection);
+                return { ...mergedCollection, deletable: false };
+            }
+        });
+    const storedCollections = resolvedFetchedCollections
+        .filter((col) => !updatedCollections.map(c => c.path).includes(col.path) || !updatedCollections.map(c => c.alias).includes(col.alias));
+
+    return [...updatedCollections, ...storedCollections];
 }
 
 export function sortProperties<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {

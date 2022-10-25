@@ -14,8 +14,12 @@ import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { Link as ReactLink } from "react-router-dom";
 
 import { Markdown } from "../../preview";
-import { useNavigationContext } from "../../hooks";
-import { TopNavigationEntry } from "../../types";
+import { useFireCMSContext, useNavigationContext } from "../../hooks";
+import {
+    CollectionActionsProps,
+    HomePageActionsProps,
+    TopNavigationEntry
+} from "../../types";
 import { getIconForView } from "../util";
 
 /**
@@ -65,7 +69,7 @@ export function FireCMSHomePage() {
                                               sm={6}
                                               lg={4}
                                               key={`nav_${entry.group}_${entry.name}`}>
-                                            <NavigationCard entry={entry}/>
+                                            <NavigationCard {...entry}/>
                                         </Grid>)
                                 }
                             </Grid>
@@ -78,12 +82,37 @@ export function FireCMSHomePage() {
     );
 }
 
-type NavigationCardProps = {
-    entry: TopNavigationEntry,
-};
+export function NavigationCard({
+                                   view,
+                                   path,
+                                   collection,
+                                   url,
+                                   name,
+                                   description
+                               }: TopNavigationEntry) {
 
-function NavigationCard({ entry }: NavigationCardProps) {
-    const CollectionIcon = getIconForView(entry.collection ?? entry.view);
+    const CollectionIcon = getIconForView(collection ?? view);
+
+    const context = useFireCMSContext();
+
+    let Actions: JSX.Element | undefined;
+    if (context.plugins && collection) {
+        const actionProps: HomePageActionsProps = {
+            path,
+            collection,
+            context
+        };
+        Actions = <>
+            {context.plugins.map((plugin, i) => (
+                plugin.homePageCollectionActions
+                    ? <plugin.homePageCollectionActions
+                        key={`actions_${i}`} {...actionProps}/>
+                    : null
+            ))}
+        </>
+        ;
+    }
+
     return (
         <Paper variant={"outlined"}>
 
@@ -95,7 +124,7 @@ function NavigationCard({ entry }: NavigationCardProps) {
                     minHeight: 248
                 }}
                 component={ReactLink}
-                to={entry.url}
+                to={url}
             >
                 <CardContent
                     sx={{
@@ -112,17 +141,24 @@ function NavigationCard({ entry }: NavigationCardProps) {
                     }}>
 
                         <CollectionIcon color={"disabled"}/>
+                        <div onClick={(event: React.MouseEvent) => {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }}>
+                            {Actions}
+                        </div>
+
                     </Box>
 
                     <Typography gutterBottom variant="h5"
                                 component="h2">
-                        {entry.name}
+                        {name}
                     </Typography>
 
-                    {entry.description && <Typography variant="body2"
-                                                      color="textSecondary"
-                                                      component="div">
-                        <Markdown source={entry.description}/>
+                    {description && <Typography variant="body2"
+                                                color="textSecondary"
+                                                component="div">
+                        <Markdown source={description}/>
                     </Typography>}
                 </CardContent>
 
