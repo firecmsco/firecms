@@ -150,13 +150,15 @@ export interface EntityCollection<M extends Record<string, any> = any,
 
     /**
      * Force a filter in this view. If applied, the rest of the filters will
-     * be disabled. Filters applied with this prop cannot be changed
+     * be disabled. Filters applied with this prop cannot be changed.
+     * e.g. `forceFilter: { age: [">=", 18] }`
      */
     forceFilter?: FilterValues<Extract<keyof M, string>>;
 
     /**
      * Initial filters applied to the collection this collection is related to.
-     * Defaults to none. Filters applied with this prop can be changed
+     * Defaults to none. Filters applied with this prop can be changed.
+     * e.g. `initialFilter: { age: [">=", 18] }`
      */
     initialFilter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining collections by code
 

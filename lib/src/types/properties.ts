@@ -263,14 +263,14 @@ export type PropertyBuilderProps<M extends Record<string, any> = any> =
 /**
  * @category Entity properties
  */
-export type PropertyBuilder<T extends any, M extends Record<string, any> = any> = ({
-// export type PropertyBuilder<T extends any = CMSType, M extends Record<string, any>= Record<string, any>> = ({
-                                                                         values,
-                                                                         previousValues,
-                                                                         propertyValue,
-                                                                         path,
-                                                                         entityId
-                                                                     }: PropertyBuilderProps<M>) => Property<T> | null;
+export type PropertyBuilder<T extends any = any, M extends Record<string, any> = any> =
+    ({
+         values,
+         previousValues,
+         propertyValue,
+         path,
+         entityId
+     }: PropertyBuilderProps<M>) => Property<T> | null;
 
 /**
  * @category Entity properties
@@ -580,6 +580,7 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
 
     /**
      * Allow selection of entities that pass the given filter only.
+     * e.g. `forceFilter: { age: [">=", 18] }`
      */
     forceFilter?: FilterValues<string>;
 
