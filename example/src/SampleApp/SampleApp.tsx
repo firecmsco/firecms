@@ -202,33 +202,36 @@ function SampleApp() {
         return navigation;
     };
 
-    return <FirebaseCMSApp
-        name={"My Online Shop"}
-        authentication={myAuthenticator}
-        signInOptions={[
-            'password',
-            'google.com',
-            // 'phone',
-            // 'anonymous',
-            // 'facebook.com',
-            // 'github.com',
-            // 'twitter.com',
-            // 'microsoft.com',
-            // 'apple.com'
-        ]}
-        textSearchController={textSearchController}
-        allowSkipLogin={true}
-        logo={logo}
-        navigation={navigation}
-        schemaOverrideHandler={customSchemaOverrideHandler}
-        firebaseConfig={firebaseConfig}
-        onFirebaseInit={onFirebaseInit}
-        toolbarExtraWidget={githubLink}
-        LoginViewProps={{
-            NoUserComponent: <>Sample custom message when no user exists</>,
-            disableSignupScreen: false,
-        }}
-    />;
+    return <div>
+            <div id="recaptcha"></div>
+            <FirebaseCMSApp
+            name={"My Online Shop"}
+            authentication={myAuthenticator}
+            signInOptions={[
+                'password',
+                'google.com',
+                // 'phone',
+                // 'anonymous',
+                // 'facebook.com',
+                // 'github.com',
+                // 'twitter.com',
+                // 'microsoft.com',
+                // 'apple.com'
+            ]}
+            textSearchController={textSearchController}
+            allowSkipLogin={true}
+            logo={logo}
+            navigation={navigation}
+            schemaOverrideHandler={customSchemaOverrideHandler}
+            firebaseConfig={firebaseConfig}
+            onFirebaseInit={onFirebaseInit}
+            toolbarExtraWidget={githubLink}
+            LoginViewProps={{
+                NoUserComponent: <>Sample custom message when no user exists</>,
+                disableSignupScreen: false,
+            }}
+        />
+    </div>;
 }
 
 export default SampleApp;
