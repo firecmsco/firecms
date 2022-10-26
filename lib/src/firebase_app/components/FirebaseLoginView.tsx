@@ -33,6 +33,14 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
 import { Phone } from "@mui/icons-material";
 import { RECAPTCHA_CONTAINER_ID, useRecaptcha } from "../hooks/useRecaptcha";
+import {
+    getAuth,
+    getMultiFactorResolver,
+    PhoneAuthProvider,
+    PhoneMultiFactorGenerator,
+    RecaptchaVerifier,
+    signInWithEmailAndPassword
+} from "firebase/auth";
 
 /**
  * @category Firebase
@@ -125,6 +133,7 @@ export function FirebaseLoginView({
 
     function buildErrorView() {
         let errorView: any;
+        if (authController.user != null) return errorView; // if the user is logged in via MFA
         const ignoredCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
         if (authController.authError) {
             if (authController.authError.code === "auth/operation-not-allowed") {
@@ -148,6 +157,38 @@ export function FirebaseLoginView({
                     </div>;
             } else if (!ignoredCodes.includes(authController.authError.code)) {
                 console.error(authController.authError);
+                if (authController.authError.code == 'auth/multi-factor-auth-required') {
+                    const auth = getAuth();
+                    const recaptchaVerifier = new RecaptchaVerifier('recaptcha', {size:"invisible"}, auth);
+                    //useRecaptcha();
+                    
+                    const resolver = getMultiFactorResolver(auth, authController.authError);
+                    
+                    if (resolver.hints[0].factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
+
+                        const phoneInfoOptions = { multiFactorHint: resolver.hints[0],
+                                                   session: resolver.session };
+                        const phoneAuthProvider = new PhoneAuthProvider(auth);
+                        // Send SMS verification code
+                        phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+                            .then(function (verificationId) {
+                                // Ask user for the SMS verification code. Then:
+                                let verificationCode;
+                                verificationCode = String(window.prompt('Please enter the verification ' + 'code that was sent to your mobile device.'));
+                                const cred = PhoneAuthProvider.credential(verificationId, verificationCode);
+                                 const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+                                // // Complete sign-in.
+                                return resolver.resolveSignIn(multiFactorAssertion);                             
+                                
+                            })
+                            
+                    } else {
+                        // Unsupported second factor.
+                    }
+
+                   
+                
+                }
                 errorView =
                     <Box p={1}>
                         <ErrorView error={authController.authError.message}/>

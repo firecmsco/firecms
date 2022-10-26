@@ -26,7 +26,7 @@ import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
 import {
     SampleCollectionActions
-} from "./collection_actions/SampleCollectionActions";
+} from "./collection_actions/SampleCollectionActions"; 
 
 function SampleApp() {
 
@@ -91,7 +91,10 @@ function SampleApp() {
         collections.push(testCollection);
     }
 
-    return <FirebaseCMSApp
+    return <div>
+        <div id="recaptcha"></div>
+    
+    <FirebaseCMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
         signInOptions={[
@@ -116,7 +119,8 @@ function SampleApp() {
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}
         LoginView={CustomLoginView}
-    />;
+    />
+    </div>;
 }
 
 export default SampleApp;
