@@ -8,7 +8,8 @@
         "lib",
         "example",
         "saas",
-        "collection_editor"
+        "collection_editor",
+        "user_management"
     ],
     "scripts": {
         "dev": "cd example && yarn dev",

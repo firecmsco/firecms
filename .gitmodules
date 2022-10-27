@@ -5,3 +5,7 @@
 [submodule "collection_editor"]
 	path = collection_editor
 	url = git@github.com:Camberi/firecms_collection_editor.git
+
+[submodule "user_management"]
+	path = user_management
+	url = git@github.com:Camberi/firecms_collection_editor.git

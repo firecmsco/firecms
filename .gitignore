@@ -32,6 +32,7 @@ report.**.json
 
 ./sass
 ./collection_editor
+./collection_editor
 
 .pnp.*
 .yarn/*
