@@ -208,6 +208,12 @@ color: {
                 ],
             validation: { required: true }
         },
+
+        test_date: {
+            name: "Test date",
+            dataType: "date",
+            mode: "date"
+        },
         name: {
             dataType: "string",
             name: "Name"
@@ -242,42 +248,30 @@ color: {
                 }
             }
         },
-        impacts: {
-            name: "Impacts",
-            validation: { required: true },
-            dataType: "array",
-            of: buildProperty({
-                dataType: "map",
-                properties: {
-                    name: {
-                        name: "Name",
-                        validation: { required: true },
-                        dataType: "string"
-                    },
-                    point1: {
-                        name: "Point-1",
-                        validation: { required: true },
-                        dataType: "number"
-                    },
-                    point2: {
-                        name: "Point-2",
-                        validation: { required: true },
-                        dataType: "number"
-                    }
-                }
-            })
-        },
-        timestamp: buildProperty({
-            name: "When posted",
-            validation: { required: false },
-            description: "Posted",
-            dataType: "date",
-            columnWidth: 325,
-            mode: "date_time"
-        })
-        // test_date: {
-        //     name: "Test date",
-        //     dataType: "date"
+        // impacts: {
+        //     name: "Impacts",
+        //     validation: { required: true },
+        //     dataType: "array",
+        //     of: buildProperty({
+        //         dataType: "map",
+        //         properties: {
+        //             name: {
+        //                 name: "Name",
+        //                 validation: { required: true },
+        //                 dataType: "string"
+        //             },
+        //             point1: {
+        //                 name: "Point-1",
+        //                 validation: { required: true },
+        //                 dataType: "number"
+        //             },
+        //             point2: {
+        //                 name: "Point-2",
+        //                 validation: { required: true },
+        //                 dataType: "number"
+        //             }
+        //         }
+        //     })
         // },
         // product: {
         //     name: "Product",
@@ -640,16 +634,16 @@ color: {
         //         acceptedFiles: ["image/*"]
         //     }
         // },
-        // created_on: {
-        //     name: "Created on",
-        //     dataType: "date",
-        //     autoValue: "on_create"
-        // },
-        // updated_on: {
-        //     name: "Updated on",
-        //     dataType: "date",
-        //     autoValue: "on_update"
-        // },
+        created_on: {
+            name: "Created on",
+            dataType: "date",
+            autoValue: "on_create"
+        },
+        updated_on: {
+            name: "Updated on",
+            dataType: "date",
+            autoValue: "on_update",
+        },
         // description: {
         //     name: "Description",
         //     dataType: "string",

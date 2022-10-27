@@ -48,6 +48,7 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../models/text_search";
 import { useEffect, useRef } from "react";
+import { setDateToMidnight } from "../util/dates";
 
 /**
  * @category Firebase
@@ -382,7 +383,8 @@ export function useFirestoreDataSource({
                     inputValues: firestoreValues,
                     properties,
                     status,
-                    timestampNowValue: serverTimestamp()
+                    timestampNowValue: serverTimestamp(),
+                    setDateToMidnight
                 });
 
             console.debug("Saving entity", path, entityId, updatedFirestoreValues);
