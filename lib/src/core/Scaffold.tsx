@@ -89,26 +89,9 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         const UsedDrawer = Drawer || FireCMSDrawer;
 
-        const handleDrawerOpen = useCallback(() => {
-            setDrawerOpen(true);
-        }, []);
-
         const handleDrawerClose = useCallback(() => {
             setDrawerOpen(false);
         }, []);
-
-        // on alt/option key press
-        useEffect(() => {
-            const escFunction = (event: any) => {
-                if (event.keyCode === 18) {
-                    setDrawerOpen(!drawerOpen);
-                }
-            };
-            document.addEventListener("keydown", escFunction, false);
-            return () => {
-                document.removeEventListener("keydown", escFunction, false);
-            };
-        });
 
         return (
             <Box sx={{ display: "flex", height: "100vh", width: "100vw" }}>
@@ -289,7 +272,7 @@ function StyledDrawer(props: MuiDrawerProps & {
             })
         }}>
             {!open
-                ? <Tooltip title={getAltSymbol()}
+                ? <Tooltip title={"Open menu"}
                            placement={"right"}>
                     {menuIconButton}
                 </Tooltip>
