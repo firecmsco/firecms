@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
-import { CMSView, CollectionActionsProps, EntityCollection } from "../types";
+import { CMSView } from "../types";
 import {
     EntityCollectionView,
     FireCMSHomePage,
@@ -12,6 +12,7 @@ import {
     useFireCMSContext,
     useNavigationContext
 } from "../hooks";
+import { toArray } from "./util/arrays";
 
 /**
  * @category Components
@@ -94,12 +95,12 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                     const allActions = [];
                     if (plugins) {
                         plugins.forEach(plugin => {
-                            if (plugin.collectionActions) {
-                                allActions.push(...actionsToArray(plugin.collectionActions));
+                            if (plugin.collections?.collectionActions) {
+                                allActions.push(...toArray(plugin.collections?.collectionActions));
                             }
                         });
                     }
-                    allActions.push(...actionsToArray(collection.Actions))
+                    allActions.push(...toArray(collection.Actions));
                     return <Route path={urlPath + "/*"}
                                   key={`navigation_${collection.alias ?? collection.path}`}
                                   element={
@@ -150,8 +151,6 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
             </Routes>
         );
     });
-
-const actionsToArray = (actions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[]) => Array.isArray(actions) ? actions : (actions ? [actions] : [])
 
 interface BreadcrumbUpdaterProps {
     title: string;

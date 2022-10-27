@@ -4,7 +4,6 @@ import {
     ResolvedEntityCollection,
     ResolvedProperty
 } from "./resolved_entities";
-import { CMSType } from "./properties";
 
 /**
  * @category Datasource

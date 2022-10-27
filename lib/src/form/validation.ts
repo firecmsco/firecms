@@ -1,5 +1,4 @@
 import {
-    CMSType,
     EntityReference,
     GeoPoint,
     ResolvedArrayProperty,

@@ -20,7 +20,8 @@ import {
 } from "./EntityCollectionTable/internal/EntityCollectionRowActions";
 import {
     useAuthController,
-    useDataSource, useNavigationContext,
+    useDataSource,
+    useNavigationContext,
     useSideEntityController
 } from "../../hooks";
 import { ErrorView } from "./ErrorView";

@@ -18,7 +18,6 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { ErrorMessage } from "formik";
 
 import {
-    CMSType,
     Entity,
     EntityStatus,
     EnumValueConfig,

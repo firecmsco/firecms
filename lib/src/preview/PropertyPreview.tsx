@@ -1,7 +1,8 @@
 import React, { createElement } from "react";
 import {
     EntityReference,
-    ResolvedArrayProperty, ResolvedMapProperty,
+    ResolvedArrayProperty,
+    ResolvedMapProperty,
     ResolvedNumberProperty,
     ResolvedStringProperty
 } from "../types";

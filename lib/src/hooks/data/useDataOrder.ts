@@ -1,4 +1,4 @@
-import { CMSType, Entity } from "../../types";
+import { Entity } from "../../types";
 import { useEffect, useMemo, useState } from "react";
 
 export interface DataOrderProps<M extends Record<string, any>> {

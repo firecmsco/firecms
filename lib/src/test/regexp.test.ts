@@ -1,7 +1,4 @@
-import {
-    isValidRegExp,
-    serializeRegExp
-} from "../core/util/regexp";
+import { isValidRegExp, serializeRegExp } from "../core/util/regexp";
 
 it("Serialize", () => {
     expect(serializeRegExp(/\d.*/)).toEqual("/\\d.*/");

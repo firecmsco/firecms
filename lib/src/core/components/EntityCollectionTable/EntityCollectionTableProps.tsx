@@ -1,11 +1,5 @@
 import React from "react";
-import {
-    CMSType,
-    CollectionSize,
-    Entity,
-    EntityCollection,
-    FilterValues
-} from "../../../types";
+import { CollectionSize, Entity, EntityCollection } from "../../../types";
 
 /**
  * @category Collection components

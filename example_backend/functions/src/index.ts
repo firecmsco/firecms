@@ -1,14 +1,13 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-
-admin.initializeApp();
-
 import { Change } from "firebase-functions/v1";
 import { DocumentSnapshot } from "firebase-functions/v1/firestore";
 
 import { deleteInAlgolia, indexInAlgolia } from "./algolia";
 import { importDatabaseBackup } from "./backup";
 import { addUserToMailchimp } from "./mailchimp";
+
+admin.initializeApp();
 
 export { setProductAvailableLocales, onDeleteSubcollections } from "./products";
 

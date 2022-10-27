@@ -13,7 +13,6 @@ import { ExportButton } from "../EntityCollectionTable/internal/ExportButton";
 import { canCreateEntity, canDeleteEntity } from "../../util/permissions";
 import { useAuthController, useFireCMSContext } from "../../../hooks";
 import {
-    CMSType,
     Entity,
     EntityCollection,
     ExportConfig,

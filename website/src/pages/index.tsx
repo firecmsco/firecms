@@ -18,6 +18,7 @@ import "../css/tailwind.css";
 import Pricing from "../partials/Pricing";
 import Head from "@docusaurus/Head";
 import { Newsletter } from "../partials/Newsletter";
+
 // import { Newsletter } from "../partials/Newsletter";
 
 function Home() {

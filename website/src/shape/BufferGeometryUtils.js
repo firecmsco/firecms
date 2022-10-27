@@ -1,14 +1,14 @@
 import {
-	BufferAttribute,
-	BufferGeometry,
-	Float32BufferAttribute,
-	InterleavedBuffer,
-	InterleavedBufferAttribute,
-	TriangleFanDrawMode,
-	TriangleStripDrawMode,
-	TrianglesDrawMode,
-	Vector3
-} from 'three';
+    BufferAttribute,
+    BufferGeometry,
+    Float32BufferAttribute,
+    InterleavedBuffer,
+    InterleavedBufferAttribute,
+    TriangleFanDrawMode,
+    TrianglesDrawMode,
+    TriangleStripDrawMode,
+    Vector3
+} from "three";
 
 class BufferGeometryUtils {
 

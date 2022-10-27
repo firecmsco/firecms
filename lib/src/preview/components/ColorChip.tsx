@@ -1,8 +1,9 @@
 import { Chip, useTheme } from "@mui/material";
 import React from "react";
-import { ChipColorScheme, EnumValueConfig, EnumValues } from "../../types";
+import { ChipColorScheme, EnumValues } from "../../types";
 import {
-    buildEnumLabel, enumToObjectEntries,
+    buildEnumLabel,
+    enumToObjectEntries,
     getColorScheme,
     getLabelOrConfigFrom
 } from "../../core/util/enums";

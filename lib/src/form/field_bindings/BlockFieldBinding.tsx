@@ -13,7 +13,6 @@ import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
-import { enumToObjectEntries } from "../../core/util/enums";
 import {
     EnumValueConfig,
     FieldProps,

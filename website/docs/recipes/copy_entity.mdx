@@ -25,8 +25,16 @@ stored only once.
 For illustrative purposes, let's create two simple `products` collection,
 that we will be copying from and to:
 
+
 import CodeBlock from "@theme/CodeBlock";
-import MyComponentSource from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/simple_product_collection";
+import MyComponentSource
+    from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/simple_product_collection";
+import CopyButton
+    from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/copy_button";
+import CopyButtonUse
+    from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/copy_button_use";
+import FullCode
+    from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/full";
 
 <CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
 
@@ -39,7 +47,7 @@ the source.
 This example is using some hooks provided by FireCMS for developing
 custom component.
 
-import CopyButton from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/copy_button";
+
 
 <CodeBlock language="tsx">{CopyButton}</CodeBlock>
 
@@ -47,12 +55,12 @@ import CopyButton from "!!raw-loader!firecms-example/src/docs/recipes/copy_entit
 
 After your component is ready, you can plug it into your collections `Actions`:
 
-import CopyButtonUse from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/copy_button_use";
+
 
 <CodeBlock language="tsx">{CopyButtonUse}</CodeBlock>
 
 ## Full code
 
-import FullCode from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/full";
+
 
 <CodeBlock language="tsx">{FullCode}</CodeBlock>

@@ -4,8 +4,9 @@ import { User as FirebaseUser } from "firebase/auth";
 import {
     AuthController,
     CMSView,
+    CollectionActionsProps,
     CollectionOverrideHandler,
-    EntityCollection, CollectionActionsProps,
+    EntityCollection,
     Locale
 } from "../types";
 import { FirestoreTextSearchController } from "./types/text_search";

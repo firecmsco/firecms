@@ -1,5 +1,6 @@
 import {
-    ArrayProperty, CMSType,
+    ArrayProperty,
+    CMSType,
     EntityCollection,
     EntityValues,
     EnumValueConfig,

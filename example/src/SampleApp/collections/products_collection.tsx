@@ -6,7 +6,9 @@ import {
 } from "@camberi/firecms";
 
 import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
-import { SampleCollectionActions } from "../collection_actions/SampleCollectionActions";
+import {
+    SampleCollectionActions
+} from "../collection_actions/SampleCollectionActions";
 import { SampleProductsView } from "../custom_entity_view/SampleProductsView";
 import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";

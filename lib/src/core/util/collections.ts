@@ -1,8 +1,8 @@
 import {
-    CMSType,
     EntityCollection,
     PropertiesOrBuilders,
-    Property, PropertyOrBuilder, ResolvedEntityCollection
+    PropertyOrBuilder,
+    ResolvedEntityCollection
 } from "../../types";
 import { mergeDeep } from "./objects";
 import { isPropertyBuilder } from "./entities";

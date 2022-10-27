@@ -1,7 +1,6 @@
 import { User } from "./user";
 import { AuthController } from "./auth";
 import { EntityCollection } from "./collections";
-import { CMSType } from "./properties";
 import { Entity } from "./entities";
 
 /**

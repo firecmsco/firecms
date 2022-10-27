@@ -10,10 +10,14 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import { CMSType, EntityReference, ResolvedProperty } from "../../types";
+import { EntityReference, ResolvedProperty } from "../../types";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { PreviewSize, PropertyPreview, SkeletonPropertyComponent } from "../index";
+import {
+    PreviewSize,
+    PropertyPreview,
+    SkeletonPropertyComponent
+} from "../index";
 
 import {
     ErrorView,

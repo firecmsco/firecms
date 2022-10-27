@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from "react";
-import { useMediaQuery } from "@mui/material";
+import React from "react";
 import { ModeController } from "../../hooks";
 
 const DEFAULT_MODE_STATE: ModeController = {

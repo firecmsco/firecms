@@ -1,8 +1,3 @@
-import { AuthController } from "./auth";
-import { Locale } from "./locales";
-import { DataSource } from "./datasource";
-import { StorageSource } from "./storage";
-
 /**
  * This interface represents a user.
  * It has the some of the same fields as a Firebase User.

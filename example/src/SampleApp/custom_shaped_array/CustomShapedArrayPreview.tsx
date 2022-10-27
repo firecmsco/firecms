@@ -1,8 +1,8 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import {
+    Property,
     PropertyPreview,
-    PropertyPreviewProps,
-    Property
+    PropertyPreviewProps
 } from "@camberi/firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 import { Box } from "@mui/material";

@@ -4,7 +4,6 @@ import {
     buildProperty,
     FieldDescription,
     FieldProps,
-    LabelWithIcon,
     PropertyFieldBinding
 } from "@camberi/firecms";
 

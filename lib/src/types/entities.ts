@@ -1,5 +1,3 @@
-import { CMSType } from "./properties";
-
 /**
  * New or existing status
  * @category Models

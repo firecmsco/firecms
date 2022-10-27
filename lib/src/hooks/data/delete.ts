@@ -1,5 +1,4 @@
 import {
-    CMSType,
     DataSource,
     DeleteEntityProps,
     Entity,

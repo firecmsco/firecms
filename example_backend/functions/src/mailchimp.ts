@@ -1,4 +1,5 @@
 import * as axios from "axios";
+
 const md5 = require('md5');
 
 export function addUserToMailchimp(emailAddress: string, source?: string):any {

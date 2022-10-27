@@ -3,11 +3,7 @@ import React from "react";
 import { styled } from "@mui/material/styles";
 
 import { Divider, Theme } from "@mui/material";
-import {
-    PreviewSize,
-    PropertyPreview,
-    PropertyPreviewProps
-} from "../index";
+import { PreviewSize, PropertyPreview, PropertyPreviewProps } from "../index";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";
 import {

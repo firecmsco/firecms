@@ -1,8 +1,4 @@
-import {
-    CMSType,
-    LocalEntityCollection,
-    UserConfigurationPersistence
-} from "../types";
+import { LocalEntityCollection, UserConfigurationPersistence } from "../types";
 import { stripCollectionPath } from "./util";
 
 export function useBuildLocalConfigurationPersistence(): UserConfigurationPersistence {

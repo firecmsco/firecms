@@ -9,8 +9,6 @@ import { User } from "./user";
 import { SnackbarController } from "../hooks";
 import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SideDialogsController } from "./side_dialogs_controller";
-import { EntityCollectionViewProps } from "../core";
-import { CollectionActionsProps } from "./collections";
 import { FireCMSPlugin } from "./plugins";
 
 /**
@@ -96,5 +94,5 @@ export interface FireCMSContext<UserType extends User = User, AuthControllerType
     //  */
     // CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
 
-    plugins?: FireCMSPlugin<any>[];
+    plugins?: FireCMSPlugin[];
 }

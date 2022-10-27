@@ -1,9 +1,9 @@
 import {
     buildCollection,
     buildProperties,
+    CollectionActionsProps,
     Entity,
     EntityCollection,
-    CollectionActionsProps,
     useDataSource,
     useReferenceDialog,
     useSnackbarController

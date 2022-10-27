@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { GoogleAuthProvider, User as FirebaseUser } from "firebase/auth";
+import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 
@@ -22,11 +22,7 @@ import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
-import {
-    FirebaseAuthController,
-    FirebaseSignInOption,
-    FirebaseSignInProvider
-} from "./types/auth";
+import { FirebaseAuthController } from "./types/auth";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
 import { useBrowserTitleAndIcon } from "../hooks";
 

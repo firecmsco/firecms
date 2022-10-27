@@ -1,4 +1,4 @@
-import { CMSType, EntityCollection } from "../../types";
+import { EntityCollection } from "../../types";
 
 export function removeInitialAndTrailingSlashes(s: string): string {
     return removeInitialSlash(removeTrailingSlash(s));

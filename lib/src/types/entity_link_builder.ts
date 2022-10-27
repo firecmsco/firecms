@@ -1,5 +1,4 @@
 import { Entity } from "./entities";
-import { CMSType } from "./properties";
 
 /**
  * @category Models

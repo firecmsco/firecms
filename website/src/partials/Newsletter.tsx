@@ -1,7 +1,8 @@
 import React, { useState } from "react"
 
 // @ts-ignore
-import collectionEditorVideo from "@site/static/img/collection_editor_preview.mp4";
+import collectionEditorVideo
+    from "@site/static/img/collection_editor_preview.mp4";
 
 export const Newsletter = () => {
     const [email, setEmail] = useState("");

@@ -11,7 +11,7 @@ import {
     CollectionOverrideHandler,
     DataSource,
     EntityCollection,
-    EntityLinkBuilder, CollectionActionsProps,
+    EntityLinkBuilder,
     FireCMSContext,
     Locale,
     StorageSource,
@@ -31,7 +31,6 @@ import {
     useBuildSideDialogsController
 } from "./internal/useBuildSideDialogsController";
 import { CMSViewsBuilder, EntityCollectionsBuilder } from "../firebase_app";
-import { EntityCollectionView, EntityCollectionViewProps } from "./components";
 import { ModeController, useSnackbarController } from "../hooks";
 import { FireCMSPlugin } from "../types/plugins";
 
@@ -154,7 +153,7 @@ export interface FireCMSProps<UserType extends User> {
     //  */
     // CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
 
-    plugins?: FireCMSPlugin<any>[];
+    plugins?: FireCMSPlugin[];
 }
 
 /**
@@ -234,19 +233,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         plugins
     };
 
-    let childrenResult = children({
-        context,
-        loading
-    })
-
-    if (!loading && plugins) {
-        plugins.forEach((plugin: FireCMSPlugin<any>) => {
-            if (plugin.wrapContent) {
-                childrenResult = plugin.wrapContent({ context, children: childrenResult });
-            }
-        });
-    }
-
     return (
 
         <ModeStateContext.Provider value={modeController}>
@@ -256,10 +242,45 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                         dateAdapter={AdapterDateFns}
                         utils={DateFnsUtils}
                         locale={dateUtilsLocale}>
-                        {childrenResult}
+                        <FireCMSInternal context={context} loading={loading}>
+                            {children}
+                        </FireCMSInternal>
                     </LocalizationProvider>
                 </BreadcrumbsProvider>
             </FireCMSContextProvider>
         </ModeStateContext.Provider>
     );
+}
+
+export function FireCMSInternal({
+                                    context,
+                                    loading,
+                                    children
+                                }: {
+    context: FireCMSContext;
+    loading: boolean;
+    children: (props: {
+        context: FireCMSContext;
+        loading: boolean;
+    }) => React.ReactNode;
+}) {
+    let childrenResult = children({
+        context,
+        loading
+    })
+
+    const plugins = context.plugins;
+    if (!loading && plugins) {
+        plugins.forEach((plugin: FireCMSPlugin) => {
+            if (plugin.wrapperComponent) {
+                childrenResult = (
+                    <plugin.wrapperComponent context={context}>
+                        {childrenResult}
+                    </plugin.wrapperComponent>
+                );
+            }
+        });
+    }
+
+    return <>{childrenResult}</>;
 }

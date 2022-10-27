@@ -3,10 +3,10 @@ import { useLocation } from "react-router-dom";
 
 import {
     AuthController,
-    CMSType,
     CMSView,
     CollectionOverrideHandler,
-    EntityCollection, FireCMSPlugin,
+    EntityCollection,
+    FireCMSPlugin,
     NavigationContext,
     TopNavigationEntry,
     TopNavigationResult,
@@ -29,7 +29,7 @@ type BuildNavigationContextProps<UserType extends User> = {
     views?: CMSView[] | CMSViewsBuilder;
     collectionOverrideHandler: CollectionOverrideHandler | undefined;
     userConfigPersistence?: UserConfigurationPersistence;
-    plugins?: FireCMSPlugin<any>[];
+    plugins?: FireCMSPlugin[];
 };
 
 export function useBuildNavigationContext<UserType extends User>({
@@ -245,9 +245,9 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
     }
 
     if (plugins) {
-        plugins.forEach((plugin: FireCMSPlugin<any>) => {
-            if (plugin.injectCollections) {
-                resolvedCollections = plugin.injectCollections(resolvedCollections ?? []);
+        plugins.forEach((plugin: FireCMSPlugin) => {
+            if (plugin.collections?.injectCollections) {
+                resolvedCollections = plugin.collections?.injectCollections(resolvedCollections ?? []);
             }
         });
     }

@@ -14,7 +14,7 @@ import {
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
 import { ErrorView, FireCMSLogo } from "../../core";
-import { useAuthController, useModeController } from "../../hooks";
+import { useModeController } from "../../hooks";
 import {
     FirebaseAuthController,
     FirebaseSignInOption,

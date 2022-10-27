@@ -1,14 +1,10 @@
 import {
-    AdditionalFieldDelegate, CMSType,
     CollectionSize,
     Entity,
     EntityCollection,
-    FilterCombination,
-    FilterValues,
     ResolvedProperty,
     User
 } from "../../../types";
-import { CellRendererParams, TableColumn, TableFilterValues } from "../Table";
 import { OnCellChangeParams } from "./internal/PropertyTableCell";
 
 export type EntityCollectionTableProviderProps<M extends Record<string, any>, AdditionalKey extends string, UserType extends User> = {

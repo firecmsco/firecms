@@ -9,13 +9,10 @@ import {
     useTheme
 } from "@mui/material";
 
-import { CMSType, CollectionSize } from "../../../../types";
+import { CollectionSize } from "../../../../types";
 import { SearchBar } from "./SearchBar";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
-import {
-    FilledMenuItem,
-    FilledSelect
-} from "../../FilledSelect";
+import { FilledMenuItem, FilledSelect } from "../../FilledSelect";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;

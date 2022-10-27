@@ -1,7 +1,6 @@
 import { Skeleton } from "@mui/material";
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { CMSType } from "../../types";
 
 export interface AsyncPreviewComponentProps {
     builder: Promise<React.ReactNode>;

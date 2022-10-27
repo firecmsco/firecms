@@ -1,7 +1,6 @@
 import { EntityCollection } from "./collections";
 import { Entity, EntityStatus, EntityValues, } from "./entities";
 import { FireCMSContext } from "./firecms_context";
-import { CMSType } from "./properties";
 import { ResolvedEntityCollection } from "./resolved_entities";
 import { User } from "./user";
 

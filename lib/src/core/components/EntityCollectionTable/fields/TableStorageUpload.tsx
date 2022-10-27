@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useMemo, useState } from "react";
-import { styled } from "@mui/material/styles";
 
 import { Box, IconButton, Theme, Typography, useTheme } from "@mui/material";
 
@@ -15,8 +14,6 @@ import {
 import { useDropzone } from "react-dropzone";
 import { PreviewSize, PropertyPreview } from "../../../../preview";
 import { ErrorBoundary } from "../../ErrorBoundary";
-
-import clsx from "clsx";
 import { useSnackbarController, useStorageSource } from "../../../../hooks";
 import { getThumbnailMeasure } from "../../../../preview/util";
 import {

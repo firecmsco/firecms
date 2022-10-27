@@ -1,5 +1,5 @@
-
 import * as THREE from "three";
+
 export const BufferGeometryUtils = {
 
     computeTangents: function ( geometry ) {

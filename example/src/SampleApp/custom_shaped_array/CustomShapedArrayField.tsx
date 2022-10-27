@@ -1,6 +1,10 @@
-import React, { ReactElement } from "react";
+import React from "react";
 import { Box, FormControl, FormHelperText, Paper } from "@mui/material";
-import { FieldDescription, FieldProps, PropertyFieldBinding } from "@camberi/firecms";
+import {
+    FieldDescription,
+    FieldProps,
+    PropertyFieldBinding
+} from "@camberi/firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 

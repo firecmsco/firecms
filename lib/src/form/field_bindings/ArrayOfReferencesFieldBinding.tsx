@@ -11,7 +11,11 @@ import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { ErrorView, ExpandablePanel, getReferenceFrom } from "../../core";
 
-import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
+import {
+    useClearRestoreValue,
+    useNavigationContext,
+    useReferenceDialog
+} from "../../hooks";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 

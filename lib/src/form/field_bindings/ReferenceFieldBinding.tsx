@@ -15,19 +15,18 @@ import ClearIcon from "@mui/icons-material/Clear";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 
 import {
-    CMSType,
     Entity,
     EntityCollection,
     EntityReference,
     FieldProps,
-    ResolvedProperty, ResolvedReferenceProperty
+    ResolvedProperty
 } from "../../types";
 import { FieldDescription } from "../index";
 import {
     ErrorBoundary,
     ErrorView,
-    getReferenceFrom, getReferencePreviewKeys,
-    isReferenceProperty
+    getReferenceFrom,
+    getReferencePreviewKeys
 } from "../../core";
 import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
@@ -35,8 +34,8 @@ import {
     useClearRestoreValue,
     useEntityFetch,
     useNavigationContext,
-    useSideEntityController,
-    useReferenceDialog
+    useReferenceDialog,
+    useSideEntityController
 } from "../../hooks";
 
 /**

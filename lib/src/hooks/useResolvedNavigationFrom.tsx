@@ -1,5 +1,4 @@
 import {
-    CMSType,
     Entity,
     EntityCollection,
     EntityCustomView,

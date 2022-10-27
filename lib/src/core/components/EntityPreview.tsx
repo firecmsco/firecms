@@ -14,7 +14,6 @@ import {
     Typography
 } from "@mui/material";
 import {
-    CMSType,
     Entity,
     EntityCollection,
     FireCMSContext,

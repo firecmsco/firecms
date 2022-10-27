@@ -1,6 +1,4 @@
-import {
-    buildCollection,
-} from "@camberi/firecms";
+import { buildCollection, } from "@camberi/firecms";
 import { Product } from "./types";
 
 export const productsCollection = buildCollection<Product>({
