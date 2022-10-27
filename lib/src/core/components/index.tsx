@@ -9,7 +9,7 @@ export { ReferenceDialog } from "./ReferenceDialog";
 
 export { CircularProgressCenter } from "./CircularProgressCenter";
 
-export * from "./FireCMSHomePage";
+export * from "./HomePage";
 export * from "./EntityCollectionView/EntityCollectionView";
 
 export * from "./EntityCollectionTable";
