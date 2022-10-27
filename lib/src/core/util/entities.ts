@@ -12,7 +12,6 @@ import {
     ResolvedProperties,
     ResolvedProperty
 } from "../../models";
-import { setDateToMidnight } from "./dates";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
 
 export function isReadOnly(property: Property | ResolvedProperty): boolean {
@@ -65,13 +64,15 @@ export function updateDateAutoValues<M extends Record<string, any>>({
                                                                         inputValues,
                                                                         properties,
                                                                         status,
-                                                                        timestampNowValue
+                                                                        timestampNowValue,
+                                                                        setDateToMidnight
                                                                     }:
                                                                         {
                                                                             inputValues: Partial<EntityValues<M>>,
                                                                             properties: ResolvedProperties<M>,
                                                                             status: EntityStatus,
                                                                             timestampNowValue: any,
+                                                                            setDateToMidnight: (input?: any) => any | undefined
                                                                            }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
@@ -128,7 +129,7 @@ export function traverseValuesProperties<M extends Record<string, any>>(
 ): EntityValues<M> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
-            const inputValue = inputValues && (inputValues )[key];
+            const inputValue = inputValues && (inputValues)[key];
             const updatedValue = traverseValueProperty(inputValue, property as Property, operation);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
