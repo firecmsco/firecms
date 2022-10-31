@@ -91,10 +91,7 @@ function SampleApp() {
         collections.push(testCollection);
     }
 
-    return <div>
-        <div id="recaptcha"></div>
-    
-    <FirebaseCMSApp
+    return <FirebaseCMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
         signInOptions={[
@@ -119,8 +116,8 @@ function SampleApp() {
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}
         LoginView={CustomLoginView}
-    />
-    </div>;
+    />;
+    
 }
 
 export default SampleApp;
