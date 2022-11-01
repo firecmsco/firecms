@@ -24,7 +24,7 @@ The main navigation has been revamped:
   and `views`.
 - If you need to have dynamic collections or views based on the user or other
   config, you can use a `EntityCollectionsBuilder` or `CMSViewsBuilder` in an
-  analogous way to v1.
+  analogous way to v1, though the return types are different.
 - The authentication and authorization logic has been moved away from `FireCMS`
   and now it is handled externally. Note that this only affects you if you are
   using a custom app, **not** if you are using the usual `FirebaseCMSApp`
