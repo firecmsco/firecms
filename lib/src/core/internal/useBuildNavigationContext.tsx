@@ -236,10 +236,10 @@ function encodePath(input: string) {
         .replaceAll("%23", "#");
 }
 
-async function resolveCollections(collections: undefined | EntityCollection[] | (EntityCollectionsBuilder), authController: AuthController, plugins?: FireCMSPlugin[]) {
+async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder, authController: AuthController, plugins?: FireCMSPlugin[]) {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
-        resolvedCollections = await collections({ authController });
+        resolvedCollections = await collections({ user: authController.user, authController });
     } else if (Array.isArray(collections)) {
         resolvedCollections = collections;
     }
@@ -254,10 +254,10 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
     return resolvedCollections;
 }
 
-async function resolveCMSViews(baseViews: CMSView[] | ((params: { authController: AuthController }) => (CMSView[] | Promise<CMSView[]>)) | undefined, authController: AuthController) {
+async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefined, authController: AuthController) {
     let resolvedViews: CMSView[] = [];
     if (typeof baseViews === "function") {
-        resolvedViews = await baseViews({ authController });
+        resolvedViews = await baseViews({ user: authController.user, authController });
     } else if (Array.isArray(baseViews)) {
         resolvedViews = baseViews;
     }

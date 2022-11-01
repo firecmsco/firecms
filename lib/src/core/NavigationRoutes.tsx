@@ -119,7 +119,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
             );
 
         const homeRoute = (
-            <Route path={navigation.homeUrl}
+            <Route path={"/"}
                    element={
                        <BreadcrumbUpdater
                            path={navigation.homeUrl}
