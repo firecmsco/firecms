@@ -3,7 +3,6 @@ import { useLocation } from "react-router-dom";
 
 import {
     AuthController,
-    CMSType,
     CMSView,
     CollectionOverrideHandler,
     EntityCollection,
@@ -234,20 +233,20 @@ function encodePath(input: string) {
         .replaceAll("%23", "#");
 }
 
-async function resolveCollections(collections: undefined | EntityCollection[] | (EntityCollectionsBuilder), authController: AuthController) {
+async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder, authController: AuthController) {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
-        resolvedCollections = await collections({ authController });
+        resolvedCollections = await collections({ user: authController.user, authController });
     } else if (Array.isArray(collections)) {
         resolvedCollections = collections;
     }
     return resolvedCollections;
 }
 
-async function resolveCMSViews(baseViews: CMSView[] | ((params: { authController: AuthController }) => (CMSView[] | Promise<CMSView[]>)) | undefined, authController: AuthController) {
+async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefined, authController: AuthController) {
     let resolvedViews: CMSView[] = [];
     if (typeof baseViews === "function") {
-        resolvedViews = await baseViews({ authController });
+        resolvedViews = await baseViews({ user: authController.user, authController });
     } else if (Array.isArray(baseViews)) {
         resolvedViews = baseViews;
     }

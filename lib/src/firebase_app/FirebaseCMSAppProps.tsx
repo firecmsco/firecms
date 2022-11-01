@@ -6,7 +6,8 @@ import {
     CMSView,
     CollectionOverrideHandler,
     EntityCollection,
-    Locale
+    Locale,
+    User
 } from "../models";
 import { FirestoreTextSearchController } from "./models/text_search";
 import {
@@ -17,9 +18,9 @@ import {
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 import { useNavigationContext } from "../hooks";
 
-export type EntityCollectionsBuilder = (params: { authController: AuthController }) => EntityCollection[] | Promise<EntityCollection[]>;
+export type EntityCollectionsBuilder = (params: { user: User | null, authController: AuthController }) => EntityCollection[] | Promise<EntityCollection[]>;
 
-export type CMSViewsBuilder = (params: { authController: AuthController }) => CMSView[] | Promise<CMSView[]>;
+export type CMSViewsBuilder = (params: { user: User | null, authController: AuthController }) => CMSView[] | Promise<CMSView[]>;
 
 /**
  * Main entry point that defines the CMS configuration
