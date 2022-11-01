@@ -8,7 +8,7 @@ import { PropsWithChildren } from "react";
  * NOTE: This is a work in progress and the API is not stable yet.
  * @category Core
  */
-export type FireCMSPlugin = {
+export type FireCMSPlugin<T = any> = {
 
     /**
      * Name of the plugin
@@ -40,7 +40,7 @@ export type FireCMSPlugin = {
     }
 
     /**
-     * You can use this method to add higher order components to the CMS.
+     * You can use this prop to add higher order components to the CMS.
      * The components will be added to the root of the CMS, so any component
      * rendered underneath by this plugin will have access to the context
      * provided by this HOC.
@@ -48,7 +48,10 @@ export type FireCMSPlugin = {
      * you can use the hooks provided by the CMS.
      * @param props
      */
-    wrapperComponent?: React.ComponentType<PropsWithChildren<GenericPluginProps>>;
+    wrapperComponent?: {
+        component: React.ComponentType<PropsWithChildren<T & { context: FireCMSContext }>>;
+        props?: T;
+    };
 
     homePage?: {
         /**
@@ -62,6 +65,10 @@ export type FireCMSPlugin = {
          */
         additionalCards?: React.ComponentType<HomePageAdditionalCardsProps> | React.ComponentType<HomePageAdditionalCardsProps>[];
 
+        /**
+         * Include a section in the home page with a custom component and title.
+         * @param props
+         */
         includeSection?: (props: GenericPluginProps) => {
             title: string;
             children: React.ReactNode;

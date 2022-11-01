@@ -252,11 +252,11 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     );
 }
 
-export function FireCMSInternal({
-                                    context,
-                                    loading,
-                                    children
-                                }: {
+function FireCMSInternal({
+                             context,
+                             loading,
+                             children
+                         }: {
     context: FireCMSContext;
     loading: boolean;
     children: (props: {
@@ -274,9 +274,10 @@ export function FireCMSInternal({
         plugins.forEach((plugin: FireCMSPlugin) => {
             if (plugin.wrapperComponent) {
                 childrenResult = (
-                    <plugin.wrapperComponent context={context}>
+                    <plugin.wrapperComponent.component {...plugin.wrapperComponent.props}
+                                                       context={context}>
                         {childrenResult}
-                    </plugin.wrapperComponent>
+                    </plugin.wrapperComponent.component>
                 );
             }
         });
