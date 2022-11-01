@@ -4,7 +4,6 @@ import {
     ResolvedEntityCollection,
     ResolvedProperty
 } from "./resolved_entities";
-import { CMSType } from "./properties";
 
 /**
  * @category Datasource
@@ -208,4 +207,10 @@ export interface DataSource {
      * Generate an id for a new entity
      */
     generateEntityId(path: string): string;
+
+    /**
+     * Count the number of entities in a collection
+     * @param path
+     */
+    countEntities(path: string): Promise<number>;
 }

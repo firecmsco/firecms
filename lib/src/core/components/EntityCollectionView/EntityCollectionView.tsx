@@ -27,11 +27,17 @@ import {
     canDeleteEntity,
     canEditEntity,
     fullPathToCollectionSegments,
-    mergeDeep,
-    removeInitialAndTrailingSlashes
+    mergeDeep
 } from "../../util";
-import { Markdown } from "../../../preview";
-import { useAuthController, useSideEntityController } from "../../../hooks";
+import {
+    Markdown,
+    renderSkeletonText
+} from "../../../preview";
+import {
+    useAuthController,
+    useDataSource, useNavigationContext,
+    useSideEntityController
+} from "../../../hooks";
 import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
@@ -71,10 +77,10 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
  */
 export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
-                                                        fullPath,
-                                                        isSubCollection,
-                                                        ...collectionProp
-                                                    }: EntityCollectionViewProps<M>
+                                                                     fullPath,
+                                                                     isSubCollection,
+                                                                     ...collectionProp
+                                                                 }: EntityCollectionViewProps<M>
     ) {
 
         const sideEntityController = useSideEntityController();
@@ -193,7 +199,7 @@ export const EntityCollectionView = React.memo(
             }}>
                 <Box>
                     <Typography
-                        variant={ "h6" }
+                        variant={"h6"}
                         sx={{
                             lineHeight: "1.15",
                             textOverflow: "ellipsis",
@@ -211,20 +217,7 @@ export const EntityCollectionView = React.memo(
                     >
                         {`${collection.name}`}
                     </Typography>
-                    <Typography
-                        sx={{
-                            display: "block",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            maxWidth: "160px",
-                            direction: "rtl",
-                            textAlign: "left"
-                        }}
-                        variant={"caption"}
-                        color={"textSecondary"}>
-                        {`/${removeInitialAndTrailingSlashes(fullPath)}/`}
-                    </Typography>
+                    <EntitiesCount fullPath={fullPath}/>
 
                     {collection.description &&
                         <Popover
@@ -262,7 +255,7 @@ export const EntityCollectionView = React.memo(
                                                         size,
                                                         width,
                                                         frozen
-                                                    }: { entity: Entity<any>, size: CollectionSize, width: number, frozen?:boolean }) => {
+                                                    }: { entity: Entity<any>, size: CollectionSize, width: number, frozen?: boolean }) => {
 
             const isSelected = isEntitySelected(entity);
 
@@ -312,15 +305,15 @@ export const EntityCollectionView = React.memo(
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     Title={Title}
                     Actions={
-                    <EntityCollectionViewActions
-                        collection={collection}
-                        exportable={exportable}
-                        onMultipleDeleteClick={onMultipleDeleteClick}
-                        onNewClick={onNewClick}
-                        path={fullPath}
-                        selectedEntities={selectedEntities}
-                        selectionController={usedSelectionController}
-                        selectionEnabled={selectionEnabled}/>}
+                        <EntityCollectionViewActions
+                            collection={collection}
+                            exportable={exportable}
+                            onMultipleDeleteClick={onMultipleDeleteClick}
+                            onNewClick={onNewClick}
+                            path={fullPath}
+                            selectedEntities={selectedEntities}
+                            selectionController={usedSelectionController}
+                            selectionEnabled={selectionEnabled}/>}
                     hoverRow={hoverRow}
                     {...collection}
                     inlineEditing={checkInlineEditing()}
@@ -363,4 +356,34 @@ export function useSelectionController<M extends Record<string, any>>(): Selecti
         isEntitySelected,
         toggleEntitySelection
     };
+}
+
+function EntitiesCount({ fullPath }: { fullPath: string }) {
+
+    const dataSource = useDataSource();
+    const navigation = useNavigationContext();
+    const [count, setCount] = useState<number | undefined>(undefined);
+    const [error, setError] = useState<Error | undefined>(undefined);
+
+    useEffect(() => {
+        dataSource.countEntities(navigation.resolveAliasesFrom(fullPath)).then(setCount).catch(setError);
+    }, [fullPath, dataSource, navigation]);
+
+    if (error) {
+        return null;
+    }
+
+    return <Typography
+        sx={{
+            display: "block",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            maxWidth: "160px",
+            textAlign: "left"
+        }}
+        variant={"caption"}
+        color={"textSecondary"}>
+        {count ? `${count} entities` : renderSkeletonText()}
+    </Typography>;
 }
