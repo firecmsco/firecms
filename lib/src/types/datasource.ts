@@ -207,4 +207,10 @@ export interface DataSource {
      * Generate an id for a new entity
      */
     generateEntityId(path: string): string;
+
+    /**
+     * Count the number of entities in a collection
+     * @param path
+     */
+    countEntities(path: string): Promise<number>;
 }

@@ -27,11 +27,17 @@ import {
     canDeleteEntity,
     canEditEntity,
     fullPathToCollectionSegments,
-    mergeDeep,
-    removeInitialAndTrailingSlashes
+    mergeDeep
 } from "../../util";
-import { Markdown } from "../../../preview";
-import { useAuthController, useSideEntityController } from "../../../hooks";
+import {
+    Markdown,
+    renderSkeletonText
+} from "../../../preview";
+import {
+    useAuthController,
+    useDataSource, useNavigationContext,
+    useSideEntityController
+} from "../../../hooks";
 import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
@@ -214,20 +220,7 @@ export const EntityCollectionView = React.memo(
                     >
                         {`${collection.name}`}
                     </Typography>
-                    <Typography
-                        sx={{
-                            display: "block",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            maxWidth: "160px",
-                            direction: "rtl",
-                            textAlign: "left"
-                        }}
-                        variant={"caption"}
-                        color={"textSecondary"}>
-                        {`/${removeInitialAndTrailingSlashes(fullPath)}/`}
-                    </Typography>
+                    <EntitiesCount fullPath={fullPath}/>
 
                     {collection.description &&
                         <Popover
@@ -366,4 +359,34 @@ export function useSelectionController<M extends Record<string, any>>(): Selecti
         isEntitySelected,
         toggleEntitySelection
     };
+}
+
+function EntitiesCount({ fullPath }: { fullPath: string }) {
+
+    const dataSource = useDataSource();
+    const navigation = useNavigationContext();
+    const [count, setCount] = useState<number | undefined>(undefined);
+    const [error, setError] = useState<Error | undefined>(undefined);
+
+    useEffect(() => {
+        dataSource.countEntities(navigation.resolveAliasesFrom(fullPath)).then(setCount).catch(setError);
+    }, [fullPath, dataSource, navigation]);
+
+    if (error) {
+        return null;
+    }
+
+    return <Typography
+        sx={{
+            display: "block",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            maxWidth: "160px",
+            textAlign: "left"
+        }}
+        variant={"caption"}
+        color={"textSecondary"}>
+        {count ? `${count} entities` : renderSkeletonText()}
+    </Typography>;
 }

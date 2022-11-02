@@ -31,6 +31,7 @@ import {
     DocumentSnapshot,
     Firestore,
     GeoPoint as FirestoreGeoPoint,
+    getCountFromServer,
     getDoc,
     getDocs,
     getFirestore,
@@ -458,6 +459,13 @@ export function useFirestoreDataSource({
         generateEntityId(path: string): string {
             if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
             return doc(collectionClause(firestore, path)).id;
+        },
+
+        async countEntities(path: string): Promise<number> {
+            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+            const coll = collectionClause(firestore, path);
+            const snapshot = await getCountFromServer(coll);
+            return snapshot.data().count;
         }
 
     };
