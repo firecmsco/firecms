@@ -8,7 +8,7 @@ import {
     PropertyPreviewProps
 } from "../index";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
-import { ResolvedProperty } from "../../models";
+import { ResolvedProperty } from "../../types";
 
 import { Theme } from "@mui/material";
 

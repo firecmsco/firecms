@@ -6,7 +6,7 @@ import { siteConfig } from "./test_site_config";
 import {
     getNavigationEntriesFromPathInternal
 } from "../core/util/navigation_from_path";
-import { EntityCollection } from "../models";
+import { EntityCollection } from "../types";
 
 
 const collections = siteConfig.collections as EntityCollection[];

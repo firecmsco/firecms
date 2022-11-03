@@ -16,7 +16,7 @@ import {
     ResolvedProperty,
     SaveEntityProps,
     WhereFilterOp
-} from "../../models";
+} from "../../types";
 import {
     resolveCollection,
     sanitizeData,
@@ -47,7 +47,7 @@ import {
     where as whereClause
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { FirestoreTextSearchController } from "../models/text_search";
+import { FirestoreTextSearchController } from "../types/text_search";
 import { useEffect, useRef } from "react";
 import { setDateToMidnight } from "../util/dates";
 

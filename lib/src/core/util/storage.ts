@@ -4,7 +4,7 @@ import {
     ResolvedStringProperty,
     StorageConfig,
     UploadedFileContext
-} from "../../models";
+} from "../../types";
 import { randomString } from "./strings";
 
 export async function resolveFilenameString<M>(

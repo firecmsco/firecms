@@ -4,7 +4,7 @@ import {
     Entity,
     EntityCollection,
     FilterValues
-} from "../../models";
+} from "../../types";
 import {
     Box,
     Button,

@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from "react";
-import { CMSType, FieldProps, ResolvedProperty } from "../../models";
+import { CMSType, FieldProps, ResolvedProperty } from "../../types";
 import { FormControl, FormHelperText } from "@mui/material";
 import { FieldDescription } from "../index";
 import { ArrayContainer, LabelWithIcon } from "../components";

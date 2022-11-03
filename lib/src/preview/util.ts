@@ -1,4 +1,4 @@
-import { CollectionSize } from "../models";
+import { CollectionSize } from "../types";
 import { PreviewSize } from "./index";
 
 export const TINY_THUMBNAIL = 40;

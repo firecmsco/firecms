@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { CMSType, ResolvedProperty } from "../models";
+import { CMSType, ResolvedProperty } from "../types";
 
 /**
  * Hook we use to restore a value after it has been cleared

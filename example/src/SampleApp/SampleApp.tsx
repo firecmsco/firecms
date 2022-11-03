@@ -24,6 +24,9 @@ import {
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
+import {
+    SampleCollectionActions
+} from "./collection_actions/SampleCollectionActions"; 
 
 function SampleApp() {
 
@@ -105,6 +108,7 @@ function SampleApp() {
         textSearchController={textSearchController}
         allowSkipLogin={true}
         logo={logo}
+        CollectionActions={SampleCollectionActions}
         collections={(params) => collections}
         views={customViews}
         collectionOverrideHandler={customCollectionOverrideHandler}
@@ -113,6 +117,7 @@ function SampleApp() {
         toolbarExtraWidget={githubLink}
         LoginView={CustomLoginView}
     />;
+    
 }
 
 export default SampleApp;

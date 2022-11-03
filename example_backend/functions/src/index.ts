@@ -1,5 +1,6 @@
 import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
+
 admin.initializeApp();
 
 import { Change } from "firebase-functions/v1";
@@ -7,7 +8,7 @@ import { DocumentSnapshot } from "firebase-functions/v1/firestore";
 
 import { deleteInAlgolia, indexInAlgolia } from "./algolia";
 import { importDatabaseBackup } from "./backup";
-import { app } from "./api";
+import { addUserToMailchimp } from "./mailchimp";
 
 export { setProductAvailableLocales, onDeleteSubcollections } from "./products";
 
@@ -55,7 +56,39 @@ export const scheduledFirestoreImport = functions
         return importDatabaseBackup();
     });
 
-export const api = functions
+export const sign_up_newsletter = functions
     .region("europe-west3")
     .https
-    .onRequest(app);
+    .onRequest((req, res) => {
+
+        const data = typeof req.body === "string" ? JSON.parse(req.body) : req.body;
+        console.log("sign_up_newsletter", data, typeof data);
+        res.set('Access-Control-Allow-Origin', '*');
+
+        if (req.method === 'OPTIONS') {
+            res.set('Access-Control-Allow-Methods', 'POST');
+            res.set('Access-Control-Allow-Headers', 'Content-Type');
+            res.set('Access-Control-Max-Age', '3600');
+            res.status(204).send('');
+            return Promise.resolve();
+        } else {
+
+            const emailAddress = data.email_address;
+            const source = data.source;
+
+            if (!emailAddress)
+                throw Error("empty email_address");
+            const result = addUserToMailchimp(emailAddress, source);
+            return result
+                .then(function (response: any) {
+                    console.log("response from mailchimp", response);
+                    res.send(response);
+                    res.sendStatus(200);
+                })
+                .catch(function (error: any) {
+                    console.error(error);
+                    res.sendStatus(500);
+                });
+        }
+
+    });

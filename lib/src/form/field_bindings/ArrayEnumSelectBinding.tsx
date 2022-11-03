@@ -12,7 +12,7 @@ import {
 
 import ClearIcon from "@mui/icons-material/Clear";
 
-import { EnumType, FieldProps, ResolvedProperty } from "../../models";
+import { EnumType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";

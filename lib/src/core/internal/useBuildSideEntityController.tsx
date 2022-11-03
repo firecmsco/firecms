@@ -7,7 +7,7 @@ import {
     SideDialogPanelProps,
     SideDialogsController,
     SideEntityController
-} from "../../models";
+} from "../../types";
 import {
     getNavigationEntriesFromPathInternal,
     NavigationViewInternal

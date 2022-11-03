@@ -1,7 +1,7 @@
 import React from "react";
 import { FormControl, FormHelperText, Paper } from "@mui/material";
 
-import { Entity, FieldProps } from "../../models";
+import { Entity, FieldProps } from "../../types";
 
 import { PropertyPreview } from "../../preview";
 import { FieldDescription } from "../index";

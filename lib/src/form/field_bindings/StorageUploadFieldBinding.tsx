@@ -10,7 +10,7 @@ import {
     ResolvedArrayProperty,
     ResolvedStringProperty,
     StorageConfig
-} from "../../models";
+} from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
 import { FieldDescription } from "../index";
@@ -92,7 +92,7 @@ const StyledBox = styled(Box)(({ theme }:
     [`&.${classes.rejectDrop}`]: {
         border: "2px solid",
         borderColor: theme.palette.error.light
-    },
+    }
 
 }));
 
@@ -507,4 +507,3 @@ export function StorageUpload({
     );
 
 }
-

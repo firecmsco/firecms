@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 
 import { PropertyPreview, PropertyPreviewProps } from "../index";
-import { ResolvedMapProperty } from "../../models";
+import { ResolvedMapProperty } from "../../types";
 import { ErrorBoundary } from "../../core";
 
 /**
@@ -63,7 +63,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                         <ErrorBoundary
                             key={"map_preview_" + mapProperty.name + key + index}>
                             <PropertyPreview propertyKey={key}
-                                             value={(value )[key]}
+                                             value={(value)[key]}
                                              property={mapProperty.properties![key]}
                                              entity={entity}
                                              size={size}/>
@@ -103,7 +103,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                 <ErrorBoundary>
                                     <PropertyPreview
                                         propertyKey={key}
-                                        value={(value )[key]}
+                                        value={(value)[key]}
                                         property={mapProperty.properties![key]}
                                         entity={entity}
                                         size={"small"}/>

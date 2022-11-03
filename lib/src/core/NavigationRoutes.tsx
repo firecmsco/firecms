@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
-import { CMSView, EntityCollection } from "../models";
+import { CMSView, CollectionActionsProps, EntityCollection } from "../types";
 import { FireCMSHomePage, NotFoundPage } from "./components";
 import {
     useBreadcrumbsContext,
@@ -33,7 +33,10 @@ export type NavigationRoutesProps = {
  */
 
 export const NavigationRoutes = React.memo<NavigationRoutesProps>(
-    function NavigationRoutes({ HomePage = FireCMSHomePage, CustomRoutes }: NavigationRoutesProps) {
+    function NavigationRoutes({
+                                  HomePage = FireCMSHomePage,
+                                  CustomRoutes
+                              }: NavigationRoutesProps) {
 
         const location = useLocation();
         const navigation = useNavigationContext();
@@ -84,6 +87,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         const collectionRoutes = sortedCollections
             .map((collection) => {
                     const urlPath = navigation.buildUrlCollectionPath(collection.alias ?? collection.path);
+                    const allActions = [...actionsToArray(context.CollectionActions), ...actionsToArray(collection.Actions)];
                     return <Route path={urlPath + "/*"}
                                   key={`navigation_${collection.alias ?? collection.path}`}
                                   element={
@@ -94,7 +98,8 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                                               key={`collection_view_${collection.alias ?? collection.path}`}
                                               isSubCollection={false}
                                               fullPath={collection.alias ?? collection.path}
-                                              {...collection}/>
+                                              {...collection}
+                                              Actions={allActions}/>
                                       </BreadcrumbUpdater>
                                   }/>;
                 }
@@ -134,6 +139,8 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         );
     });
 
+const actionsToArray = (actions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[]) => Array.isArray(actions) ? actions : (actions ? [actions] : [])
+
 interface BreadcrumbUpdaterProps {
     title: string;
     path: string;
@@ -158,7 +165,7 @@ function BreadcrumbUpdater({
     React.useEffect(() => {
         breadcrumbsContext.set({
             breadcrumbs: [{
-                title: title,
+                title,
                 url: path
             }]
         });

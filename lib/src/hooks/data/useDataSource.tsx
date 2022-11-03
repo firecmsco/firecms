@@ -1,4 +1,4 @@
-import { DataSource } from "../../models";
+import { DataSource } from "../../types";
 import { useFireCMSContext } from "../useFireCMSContext";
 
 /**

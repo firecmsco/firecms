@@ -12,6 +12,10 @@ export interface InitialiseFirebaseResult {
     firebaseConfigError?: Error
 }
 
+const hostingError = "It seems like the provided Firebase config is not correct. If you \n" +
+    "are using the credentials provided automatically by Firebase \n" +
+    "Hosting, make sure you link your Firebase app to Firebase Hosting. \n";
+
 /**
  * Function used to initialise Firebase, either by using the provided config,
  * or by fetching it by Firebase Hosting, if not specified.
@@ -41,19 +45,18 @@ export function useInitialiseFirebase({
     const [firebaseApp, setFirebaseApp] = React.useState<FirebaseApp | undefined>();
     const [firebaseConfigLoading, setFirebaseConfigLoading] = React.useState<boolean>(false);
     const [configError, setConfigError] = React.useState<string>();
-    const [firebaseConfigError, setFirebaseConfigError] = React.useState<Error | undefined>();
 
     const initFirebase = useCallback((config: Record<string, unknown>) => {
         try {
             const initialisedFirebaseApp = initializeApp(config, name ?? "[DEFAULT]");
-            setFirebaseConfigError(undefined);
+            setConfigError(undefined);
             setFirebaseConfigLoading(false);
             if (onFirebaseInit)
                 onFirebaseInit(config);
             setFirebaseApp(initialisedFirebaseApp);
         } catch (e: any) {
             console.error("Error initialising Firebase", e);
-            setFirebaseConfigError(e);
+            setConfigError(hostingError + "\n" + (e.message ?? JSON.stringify(e)));
         }
     }, [name, onFirebaseInit]);
 
@@ -92,7 +95,6 @@ export function useInitialiseFirebase({
     return {
         firebaseApp,
         firebaseConfigLoading,
-        configError,
-        firebaseConfigError
+        configError
     };
 }

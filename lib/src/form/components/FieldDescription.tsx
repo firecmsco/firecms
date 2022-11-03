@@ -1,5 +1,5 @@
 import React from "react";
-import { CMSType, ResolvedProperty } from "../../models";
+import { CMSType, ResolvedProperty } from "../../types";
 
 import {
     Box,

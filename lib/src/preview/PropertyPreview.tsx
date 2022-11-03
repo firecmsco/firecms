@@ -4,7 +4,7 @@ import {
     ResolvedArrayProperty, ResolvedMapProperty,
     ResolvedNumberProperty,
     ResolvedStringProperty
-} from "../models";
+} from "../types";
 
 import {
     ArrayOfMapsPreview,

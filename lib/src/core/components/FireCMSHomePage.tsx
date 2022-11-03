@@ -15,7 +15,7 @@ import { Link as ReactLink } from "react-router-dom";
 
 import { Markdown } from "../../preview";
 import { useNavigationContext } from "../../hooks";
-import { TopNavigationEntry } from "../../models";
+import { TopNavigationEntry } from "../../types";
 import { getIconForView } from "../util";
 
 /**

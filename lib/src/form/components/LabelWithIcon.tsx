@@ -1,5 +1,5 @@
 import React from "react";
-import { Property, ResolvedProperty } from "../../models";
+import { Property, ResolvedProperty } from "../../types";
 import { getIconForProperty } from "../../core/util/property_utils";
 import { Typography } from "@mui/material";
 

@@ -5,7 +5,7 @@ import {
     EntityCustomView,
     FireCMSContext,
     User
-} from "../models";
+} from "../types";
 import { useEffect, useState } from "react";
 import {
     getNavigationEntriesFromPathInternal
@@ -78,7 +78,7 @@ export function resolveNavigationFrom<M extends Record<string, any>, UserType ex
 
     const navigationEntries = getNavigationEntriesFromPathInternal({
         path,
-        collections: navigation.collections ?? [],
+        collections: navigation.collections ?? []
     });
 
     const resultPromises: Promise<ResolvedNavigationEntry<any>>[] = navigationEntries
@@ -93,7 +93,7 @@ export function resolveNavigationFrom<M extends Record<string, any>, UserType ex
                 return dataSource.fetchEntity({
                     path: entry.path,
                     entityId: entry.entityId,
-                    collection: collection
+                    collection
                 })
                     .then((entity) => {
                         if (!entity) return undefined;

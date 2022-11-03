@@ -4,7 +4,7 @@ import {
     EntityCollection,
     Permissions,
     User
-} from "../../models";
+} from "../../types";
 
 const DEFAULT_PERMISSIONS = {
     read: true,

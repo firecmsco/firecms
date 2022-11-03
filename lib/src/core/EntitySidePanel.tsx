@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from "react";
 
-import { EntitySidePanelProps } from "../models";
+import { EntitySidePanelProps } from "../types";
 import { FORM_CONTAINER_WIDTH } from "./internal/common";
 import { useNavigationContext, useSideEntityController } from "../hooks";
 

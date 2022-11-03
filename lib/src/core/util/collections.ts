@@ -3,7 +3,7 @@ import {
     EntityCollection,
     PropertiesOrBuilders,
     Property, PropertyOrBuilder, ResolvedEntityCollection
-} from "../../models";
+} from "../../types";
 import { mergeDeep } from "./objects";
 import { isPropertyBuilder } from "./entities";
 

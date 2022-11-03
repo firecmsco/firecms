@@ -7,7 +7,7 @@ import {
     FireCMSContext,
     SaveEntityProps,
     User
-} from "../../models";
+} from "../../types";
 import { useDataSource } from "./useDataSource";
 import { resolveCollection } from "../../core";
 

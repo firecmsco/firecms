@@ -1,4 +1,4 @@
-import { NavigationContext } from "../models";
+import { NavigationContext } from "../types";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 /**

@@ -19,3 +19,4 @@ export * from "./useClipboard";
 export * from "./useBreadcrumbsContext";
 
 export * from "./useReferenceDialog";
+export * from "./useBrowserTitleAndIcon";

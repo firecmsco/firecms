@@ -1,5 +1,5 @@
 import { PropertyPreviewProps } from "../index";
-import { ResolvedNumberProperty, ResolvedStringProperty } from "../../models";
+import { ResolvedNumberProperty, ResolvedStringProperty } from "../../types";
 import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
 
 /**

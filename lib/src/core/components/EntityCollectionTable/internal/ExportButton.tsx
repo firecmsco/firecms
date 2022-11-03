@@ -18,7 +18,7 @@ import {
     ExportConfig,
     ResolvedEntityCollection,
     User
-} from "../../../../models";
+} from "../../../../types";
 import {
     useDataSource,
     useFireCMSContext,

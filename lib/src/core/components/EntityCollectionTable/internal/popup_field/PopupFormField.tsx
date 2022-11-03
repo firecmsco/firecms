@@ -20,7 +20,7 @@ import {
     ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty
-} from "../../../../../models";
+} from "../../../../../types";
 import { Form, Formik, FormikProps } from "formik";
 import { useDraggable } from "./useDraggable";
 import {
