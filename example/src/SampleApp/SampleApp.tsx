@@ -26,7 +26,7 @@ import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
 import {
     SampleCollectionActions
-} from "./collection_actions/SampleCollectionActions";
+} from "./collection_actions/SampleCollectionActions"; 
 
 function SampleApp() {
 
@@ -117,6 +117,7 @@ function SampleApp() {
         toolbarExtraWidget={githubLink}
         LoginView={CustomLoginView}
     />;
+    
 }
 
 export default SampleApp;
