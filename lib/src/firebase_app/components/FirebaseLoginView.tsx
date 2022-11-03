@@ -1,4 +1,10 @@
-import React, { ReactNode, useEffect, useRef, useState } from "react";
+import React, {
+    ReactNode,
+    useCallback,
+    useEffect,
+    useRef,
+    useState
+} from "react";
 
 import {
     Box,
@@ -14,7 +20,7 @@ import {
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
 import { ErrorView, FireCMSLogo } from "../../core";
-import { useAuthController, useModeController } from "../../hooks";
+import { useModeController } from "../../hooks";
 import {
     FirebaseAuthController,
     FirebaseSignInOption,
@@ -38,8 +44,7 @@ import {
     getMultiFactorResolver,
     PhoneAuthProvider,
     PhoneMultiFactorGenerator,
-    RecaptchaVerifier,
-    signInWithEmailAndPassword
+    RecaptchaVerifier
 } from "firebase/auth";
 
 /**
@@ -48,7 +53,7 @@ import {
 export interface FirebaseLoginViewProps {
 
     /**
-     * Firebase app this login view is accesing
+     * Firebase app this login view is accessing
      */
     firebaseApp: FirebaseApp;
 
@@ -131,38 +136,38 @@ export function FirebaseLoginView({
         } else return o as FirebaseSignInProvider;
     })
 
-
-    function sendSMS() {
+    const sendMFASms = useCallback(() => {
         const auth = getAuth();
-        const recaptchaVerifier = new RecaptchaVerifier('recaptcha', {size:"invisible"}, auth);
-        //useRecaptcha();
-        
+        const recaptchaVerifier = new RecaptchaVerifier("recaptcha", { size: "invisible" }, auth);
+
         const resolver = getMultiFactorResolver(auth, authController.authError);
-        
+
         if (resolver.hints[0].factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
 
-            const phoneInfoOptions = { multiFactorHint: resolver.hints[0],
-                                       session: resolver.session };
+            const phoneInfoOptions = {
+                multiFactorHint: resolver.hints[0],
+                session: resolver.session
+            };
             const phoneAuthProvider = new PhoneAuthProvider(auth);
             // Send SMS verification code
             phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
                 .then(function (verificationId) {
+
                     // Ask user for the SMS verification code. Then:
-                    let verificationCode;
-                    verificationCode = String(window.prompt('Please enter the verification ' + 'code that was sent to your mobile device.'));
+                    const verificationCode = String(window.prompt("Please enter the verification " + "code that was sent to your mobile device."));
                     const cred = PhoneAuthProvider.credential(verificationId, verificationCode);
-                     const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+                    const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
                     // // Complete sign-in.
-                    return resolver.resolveSignIn(multiFactorAssertion);                             
-                    
+                    return resolver.resolveSignIn(multiFactorAssertion);
+
                 })
-                
+
         } else {
             // Unsupported second factor.
+            console.warn("Unsupported second factor.");
         }
 
-       
-    }
+    }, [authController.authError]);
 
     function buildErrorView() {
         let errorView: any;
@@ -189,10 +194,8 @@ export function FirebaseLoginView({
                             </Box>}
                     </div>;
             } else if (!ignoredCodes.includes(authController.authError.code)) {
-                console.error(authController.authError);
-                if (authController.authError.code == 'auth/multi-factor-auth-required') {
-                   sendSMS();
-                
+                if (authController.authError.code === "auth/multi-factor-auth-required") {
+                    sendMFASms();
                 }
                 errorView =
                     <Box p={1}>
@@ -228,15 +231,13 @@ export function FirebaseLoginView({
     }
 
     return (
-        <div>
-            <div id="recaptcha"></div>
-        
+
         <Fade
             in={true}
             timeout={500}
             mountOnEnter
             unmountOnExit>
-            
+
             <Box sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -245,6 +246,7 @@ export function FirebaseLoginView({
                 minHeight: "100vh",
                 p: 2
             }}>
+                <div id="recaptcha"></div>
                 <Box sx={{
                     display: "flex",
                     flexDirection: "column",
@@ -285,13 +287,14 @@ export function FirebaseLoginView({
                                 disabled={disabled}
                                 text={"Phone number"}
                                 icon={<Phone fontSize={"large"}/>}
-                                onClick={() => setPhoneLoginSelected(true) }/>}
+                                onClick={() => setPhoneLoginSelected(true)}/>}
 
                         {resolvedSignInOptions.includes("anonymous") &&
                             <LoginButton
                                 disabled={disabled}
                                 text={"Log in anonymously"}
-                                icon={<PersonOutlineIcon fontSize={"large"}/>}
+                                icon={<PersonOutlineIcon
+                                    fontSize={"large"}/>}
                                 onClick={authController.anonymousLogin}/>}
 
                         {allowSkipLogin &&
@@ -324,17 +327,15 @@ export function FirebaseLoginView({
                 </Box>
             </Box>
         </Fade>
-
-        </div>
     );
 }
 
 export function LoginButton({
-                         icon,
-                         onClick,
-                         text,
-                         disabled
-                     }: { icon: React.ReactNode, onClick: () => void, text: string, disabled?: boolean }) {
+                                icon,
+                                onClick,
+                                text,
+                                disabled
+                            }: { icon: React.ReactNode, onClick: () => void, text: string, disabled?: boolean }) {
     return (
         <Box m={0.5} width={"100%"}>
             <Button fullWidth
@@ -370,9 +371,9 @@ export function LoginButton({
 }
 
 function PhoneLoginForm({
-                       onClose,
-                       authController
-                   }: {
+                            onClose,
+                            authController
+                        }: {
     onClose: () => void,
     authController: FirebaseAuthController,
 }) {
@@ -646,8 +647,8 @@ function LoginForm({
                         }}>
 
                             {authController.authLoading &&
-                            <CircularProgress sx={{ p: 1 }} size={16}
-                                              thickness={8}/>
+                                <CircularProgress sx={{ p: 1 }} size={16}
+                                                  thickness={8}/>
                             }
 
                             <Button type="submit">
