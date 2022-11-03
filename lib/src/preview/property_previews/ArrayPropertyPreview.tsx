@@ -4,7 +4,7 @@ import { Box, Divider } from "@mui/material";
 
 import { PreviewSize, PropertyPreview, PropertyPreviewProps } from "../index";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
-import { ResolvedProperty } from "../../models";
+import { ResolvedProperty } from "../../types";
 
 /**
  * @category Preview components

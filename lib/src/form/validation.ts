@@ -6,7 +6,7 @@ import {
     ResolvedMapProperty,
     ResolvedProperties,
     ResolvedProperty
-} from "../models";
+} from "../types";
 import * as yup from "yup";
 import {
     AnySchema,

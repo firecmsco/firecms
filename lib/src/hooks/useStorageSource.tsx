@@ -1,4 +1,4 @@
-import { StorageSource } from "../models";
+import { StorageSource } from "../types";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 /**

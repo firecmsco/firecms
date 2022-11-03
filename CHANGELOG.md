@@ -535,7 +535,7 @@ If you need more info: https://firecms.co/blog/types_refactor
       the CMS hooks.
     - `CMSMainView` which includes the views of the app including login screen
       and main collection and entity components. You can see an
-      example [here](https://github.com/Camberi/firecms/blob/master/example/src/CustomCMSApp.tsx)
+      example [here](https://github.com/Camberi/firecms/blob/v1/example/src/CustomCMSApp.tsx)
 - Fix for a bug when saving entities.
 - [BREAKING] `AuthContextController` has been renamed to `AuthController`
 
@@ -804,9 +804,9 @@ If you need more info: https://firecms.co/blog/types_refactor
 - [BREAKING] The custom fields API has been refactored and simplified. The
   Formik props have been abstracted away and only the relevant fields are
   exposed. You can find the new
-  props [here](https://github.com/Camberi/firecms/blob/master/src/form/form_props.tsx)
+  props [here](https://github.com/Camberi/firecms/blob/v1/src/form/form_props.tsx)
   an example of the new implementation
-  [here](https://github.com/Camberi/firecms/blob/master/example/src/custom_field/CustomColorTextField.tsx)
+  [here](https://github.com/Camberi/firecms/blob/v1/example/src/custom_field/CustomColorTextField.tsx)
 - Fixed date autovalues generating modified form prompt, even if it wasn't
 
 ## [0.20.0] - 2020-12-15
@@ -977,4 +977,4 @@ If you need more info: https://firecms.co/blog/types_refactor
   properties.
 - Renamed `urlMediaType` to `url` in the string property configuration.
 
-[here]: https://github.com/Camberi/firecms/blob/master/example/src/custom_field/CustomColorTextField.tsx
+[here]: https://github.com/Camberi/firecms/blob/v1/example/src/custom_field/CustomColorTextField.tsx

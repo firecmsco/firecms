@@ -1,10 +1,10 @@
 import React, { useMemo } from "react";
-
-import { GoogleAuthProvider } from "firebase/auth";
+import { GoogleAuthProvider, User as FirebaseUser } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 
 import {
+    CenteredView,
     CircularProgressCenter,
     createCMSDefaultTheme,
     FireCMS,
@@ -22,8 +22,13 @@ import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
-import { FirebaseAuthController } from "./models/auth";
+import {
+    FirebaseAuthController,
+    FirebaseSignInOption,
+    FirebaseSignInProvider
+} from "./types/auth";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
+import { useBrowserTitleAndIcon } from "../hooks";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -68,14 +73,19 @@ export function FirebaseCMSApp({
                                    HomePage,
                                    basePath,
                                    baseCollectionPath,
-                                   LoginView
+                                   LoginView,
+                                   CollectionActions
                                }: FirebaseCMSAppProps) {
+
+    /**
+     * Update the browser title and icon
+     */
+    useBrowserTitleAndIcon(name, logo);
 
     const {
         firebaseApp,
         firebaseConfigLoading,
-        configError,
-        firebaseConfigError
+        configError
     } = useInitialiseFirebase({
         onFirebaseInit,
         firebaseConfig
@@ -128,6 +138,10 @@ export function FirebaseCMSApp({
      */
     const modeController = useBuildModeController();
 
+    /**
+     * It is important to memoize the theme, otherwise the app will re-render
+     * whenever there is a state change in the CMS.
+     */
     const theme = useMemo(() => createCMSDefaultTheme({
         mode: modeController.mode,
         primaryColor,
@@ -136,17 +150,7 @@ export function FirebaseCMSApp({
     }), [fontFamily, modeController.mode, primaryColor, secondaryColor]);
 
     if (configError) {
-        return <div> {configError} </div>;
-    }
-
-    if (firebaseConfigError) {
-        return <div>
-            <p>It seems like the provided Firebase config is not correct. If you
-                are using the credentials provided automatically by Firebase
-                Hosting, make sure you link your Firebase app to Firebase
-                Hosting.</p>
-            <p>{String(firebaseConfigError)}</p>
-        </div>;
+        return <CenteredView>{configError}</CenteredView>;
     }
 
     if (firebaseConfigLoading || !firebaseApp) {
@@ -172,14 +176,15 @@ export function FirebaseCMSApp({
                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                     locale={locale}
                     basePath={basePath}
-                    baseCollectionPath={baseCollectionPath}>
+                    baseCollectionPath={baseCollectionPath}
+                    CollectionActions={CollectionActions}>
                     {({ context, loading }) => {
 
                         let component;
                         if (loading || authLoading) {
                             component = <CircularProgressCenter/>;
                         } else {
-                            const usedLogo = modeController.mode === "dark" ? logoDark : logo ?? logo;
+                            const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
                             if (!canAccessMainView) {
                                 const LoginViewUsed = LoginView ?? FirebaseLoginView;
                                 component = (
@@ -215,20 +220,4 @@ export function FirebaseCMSApp({
             </SnackbarProvider>
         </BrowserRouter>
     );
-}
-
-declare module "@mui/material/styles" {
-    interface TypographyVariants {
-        label: React.CSSProperties;
-    }
-
-    interface TypographyVariantsOptions {
-        label?: React.CSSProperties;
-    }
-}
-
-declare module "@mui/material/Typography" {
-    interface TypographyPropsVariantOverrides {
-        label: true;
-    }
 }

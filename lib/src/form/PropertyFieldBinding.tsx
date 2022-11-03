@@ -14,7 +14,7 @@ import {
     PropertyFieldBindingProps,
     ResolvedArrayProperty,
     ResolvedProperty
-} from "../models";
+} from "../types";
 
 import { SelectFieldBinding } from "./field_bindings/SelectFieldBinding";
 import {

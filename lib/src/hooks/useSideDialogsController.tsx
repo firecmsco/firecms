@@ -1,4 +1,4 @@
-import { SideDialogsController } from "../models";
+import { SideDialogsController } from "../types";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 /**

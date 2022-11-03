@@ -1,4 +1,4 @@
-import { EnumValueConfig } from "../../../../models";
+import { EnumValueConfig } from "../../../../types";
 import { ArrayEnumPreview, EnumValuesChip } from "../../../../preview";
 import React, { useCallback, useEffect, useState } from "react";
 import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";

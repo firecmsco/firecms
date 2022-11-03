@@ -18,7 +18,7 @@ export const Newsletter = () => {
         setSubmitClicked(true);
         if (!validEmail) return;
         setLoading(true);
-        fetch("https://europe-west3-firecms-demo-27150.cloudfunctions.net/api/sign_up_newsletter", {
+        fetch("https://europe-west3-firecms-demo-27150.cloudfunctions.net/sign_up_newsletter", {
             method: "POST",
             headers: {
                 'Content-Type': 'application/json',
@@ -57,10 +57,12 @@ export const Newsletter = () => {
                         Stay in the loop
                     </h2>
 
-                    <div className="flex flex-col space-y-2 items-center mb-8 text-lg">
+                    <div
+                        className="flex flex-col space-y-2 items-center mb-8 text-lg">
                         <div>
                             We are working on a FireCMS <strong>cloud
-                            offering</strong> that will include a state of the art
+                            offering</strong> that will include a state of the
+                            art
                             collection editor.
                         </div>
                         <div> Sign up to be able to try it as soon

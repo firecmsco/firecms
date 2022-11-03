@@ -20,7 +20,7 @@ import {
     SaveEntityProps,
     User,
     WhereFilterOp
-} from "../../../models";
+} from "../../../types";
 import { TableCell } from "../Table/TableCell";
 import { renderSkeletonText } from "../../../preview";
 import { CustomFieldValidator } from "../../../form/validation";

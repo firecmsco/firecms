@@ -11,13 +11,13 @@ import {
     CollectionOverrideHandler,
     DataSource,
     EntityCollection,
-    EntityLinkBuilder,
+    EntityLinkBuilder, CollectionActionsProps,
     FireCMSContext,
     Locale,
     StorageSource,
     User,
     UserConfigurationPersistence
-} from "../models";
+} from "../types";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { ModeStateContext } from "./contexts/ModeController";
@@ -144,6 +144,15 @@ export interface FireCMSProps<UserType extends User> {
      */
     EntityCollectionViewComponent?: React.ComponentType<EntityCollectionViewProps<any>>;
 
+    /**
+     * Builder for adding extra actions to the entity list.
+     * This is useful for adding actions that are not related to the CRUD operations.
+     * You can add this general prop to add actions to all the collections, or you can
+     * add the {@link EntityCollection.Actions} to add actions to a specific
+     * collection.
+     */
+    CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
+
 }
 
 /**
@@ -171,7 +180,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         dataSource,
         basePath,
         baseCollectionPath,
-        EntityCollectionViewComponent = EntityCollectionView
+        EntityCollectionViewComponent = EntityCollectionView,
+        CollectionActions
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -217,7 +227,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         storageSource,
         snackbarController,
         userConfigPersistence,
-        EntityCollectionViewComponent
+        EntityCollectionViewComponent,
+        CollectionActions
     };
 
     return (

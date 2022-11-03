@@ -2,7 +2,7 @@ import {
     CMSType,
     LocalEntityCollection,
     UserConfigurationPersistence
-} from "../models";
+} from "../types";
 import { stripCollectionPath } from "./util";
 
 export function useBuildLocalConfigurationPersistence(): UserConfigurationPersistence {

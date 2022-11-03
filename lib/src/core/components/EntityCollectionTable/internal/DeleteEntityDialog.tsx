@@ -1,4 +1,4 @@
-import { CMSType, Entity, EntityCallbacks, EntityCollection, } from "../../../../models";
+import { CMSType, Entity, EntityCallbacks, EntityCollection } from "../../../../types";
 import React, { useCallback, useMemo, useState } from "react";
 import {
     Button,
@@ -220,4 +220,3 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
         </Dialog>
     );
 }
-

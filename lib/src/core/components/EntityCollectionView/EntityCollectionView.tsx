@@ -9,7 +9,7 @@ import {
     EntityCollection,
     LocalEntityCollection,
     SelectionController
-} from "../../../models";
+} from "../../../types";
 import {
     EntityCollectionTable,
     OnColumnResizeParams
@@ -94,10 +94,13 @@ export const EntityCollectionView = React.memo(
 
         const [collection, setCollection] = useState(initialCollection);
 
-        // useEffect(() => {
-        //     if (!equal(collection, collectionProp))
-        //         setCollection(collectionProp);
-        // }, [collectionProp])
+        useEffect(() => {
+            setCollection((current) => {
+                if (!equal(current, collectionProp))
+                    return collectionProp;
+                else return current;
+            });
+        }, [collectionProp])
 
         const theme = useTheme();
 
@@ -248,7 +251,7 @@ export const EntityCollectionView = React.memo(
                 </Box>
 
             </Box>
-        ), [collection.description, collection.singularName, fullPath, open, anchorEl]);
+        ), [theme, collection.description, collection.name, fullPath, open, anchorEl]);
 
         const tableRowActionsBuilder = useCallback(({
                                                         entity,
@@ -304,18 +307,18 @@ export const EntityCollectionView = React.memo(
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     Title={Title}
+                    {...collection}
                     Actions={
                         <EntityCollectionViewActions
                             collection={collection}
                             exportable={exportable}
                             onMultipleDeleteClick={onMultipleDeleteClick}
                             onNewClick={onNewClick}
-                            path={fullPath}
+                            fullPath={fullPath}
                             selectedEntities={selectedEntities}
                             selectionController={usedSelectionController}
                             selectionEnabled={selectionEnabled}/>}
                     hoverRow={hoverRow}
-                    {...collection}
                     inlineEditing={checkInlineEditing()}
                 />
 

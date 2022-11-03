@@ -7,7 +7,7 @@ import {
     useNavigationUnsavedChangesDialog
 } from "./internal/useUnsavedChangesDialog";
 import { Box } from "@mui/material";
-import { SideDialogPanelProps } from "../models";
+import { SideDialogPanelProps } from "../types";
 
 export type SideDialogContextProps = {
     blocked: boolean,

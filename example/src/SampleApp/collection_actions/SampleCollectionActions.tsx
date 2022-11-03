@@ -1,10 +1,11 @@
 import React from "react";
 import { Button } from "@mui/material";
-import { SelectionController, useSnackbarController } from "@camberi/firecms";
+import {
+    CollectionActionsProps,
+    useSnackbarController
+} from "@camberi/firecms";
 
-export function SampleExtraActions({ selectionController }: {
-    selectionController: SelectionController
-}) {
+export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 
     const snackbarController = useSnackbarController();
     const { selectedEntities } = selectionController;
@@ -16,6 +17,7 @@ export function SampleExtraActions({ selectionController }: {
             message: `User defined code here! ${count} products selected`
         });
     };
+
     return (
         <Button onClick={onClick} color="primary">
             Extra action

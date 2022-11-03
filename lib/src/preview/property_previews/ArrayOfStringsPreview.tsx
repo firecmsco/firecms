@@ -1,6 +1,6 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
-import { ResolvedStringProperty } from "../../models";
+import { ResolvedStringProperty } from "../../types";
 import { PropertyPreviewProps } from "../index";
 
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
@@ -41,7 +41,7 @@ const Root = styled("div")((
 export function ArrayOfStringsPreview({
                                           propertyKey,
                                           value,
-                                          property:inputProperty,
+                                          property: inputProperty,
                                           entity,
                                           size
                                       }: PropertyPreviewProps<string[]>) {

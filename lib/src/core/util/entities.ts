@@ -11,7 +11,7 @@ import {
     PropertyOrBuilder,
     ResolvedProperties,
     ResolvedProperty
-} from "../../models";
+} from "../../types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "./common";
 
 export function isReadOnly(property: Property | ResolvedProperty): boolean {

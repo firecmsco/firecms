@@ -3,7 +3,7 @@ import React from "react";
 import format from "date-fns/format";
 import * as locales from "date-fns/locale";
 import { defaultDateFormat } from "../../core/util/dates";
-import { FireCMSContext } from "../../models";
+import { FireCMSContext } from "../../types";
 import { useFireCMSContext } from "../../hooks";
 
 /**

@@ -10,7 +10,7 @@ import {
     Typography
 } from "@mui/material";
 import { useNavigationContext } from "../hooks";
-import { TopNavigationResult } from "../models";
+import { TopNavigationResult } from "../types";
 import { getIconForView } from "./util";
 import { grey } from "@mui/material/colors";
 

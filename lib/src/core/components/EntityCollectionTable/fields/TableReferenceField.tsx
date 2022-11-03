@@ -7,7 +7,7 @@ import {
     Entity,
     EntityReference,
     FilterValues
-} from "../../../../models";
+} from "../../../../types";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { getReferenceFrom } from "../../../util";

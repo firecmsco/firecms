@@ -26,7 +26,7 @@ field in the `authController` to check for permissions.
 #### Create a new React app including Typescript:
 
 ```
-yarn create react-app my-cms --template typescript
+yarn create vite my-cms --template react-ts
 ```
 
 #### Go into the new directory:
@@ -38,10 +38,10 @@ cd my-cms
 #### Install FireCMS and it's peer dependencies:
 
 ```
-yarn add @camberi/firecms@next firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab@^5 @mui/x-date-pickers@^5.0.0-beta.1 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
+yarn add @camberi/firecms@next firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab@latest @mui/x-date-pickers@^5.0.0-beta.1 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
 ```
 
-You can replace the content of the file App.tsx with the following sample code.
+You can then replace the content of the file App.tsx with the following sample code.
 
 Remember to **replace** the Firebase config with the one you get after creating
 a webapp in the Firebase console.
@@ -59,7 +59,7 @@ import MyComponentSource from "!!raw-loader!firecms-example/src/docs/SimpleApp";
 Then simply run:
 
 ```
-yarn start
+yarn dev
 ```
 
 You should be able to see your FireCMS instance in your browser, awesome!

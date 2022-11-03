@@ -7,7 +7,7 @@ import {
 } from "@mui/material";
 import clsx from "clsx";
 
-import { FieldProps } from "../../models";
+import { FieldProps } from "../../types";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
@@ -41,7 +41,6 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                                                            includeDescription,
                                                            shouldAlwaysRerender
                                                        }: SwitchFieldProps, ref) {
-
 
     useClearRestoreValue({
         property,
@@ -139,7 +138,6 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                 {showError && <FormHelperText>{error}</FormHelperText>}
 
             </FormControl>
-
 
         </>
 

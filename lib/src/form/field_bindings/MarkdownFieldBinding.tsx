@@ -7,7 +7,7 @@ import MDEditor from "@uiw/react-md-editor";
 
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
-import { FieldProps } from "../../models";
+import { FieldProps } from "../../types";
 
 import { useClearRestoreValue } from "../../hooks";
 

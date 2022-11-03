@@ -1,9 +1,9 @@
-import { EntityCollection } from "../../models";
+import { EntityCollection } from "../../types";
 import { isReferenceProperty } from "./property_utils";
 
 export function getReferencePreviewKeys(targetCollection: EntityCollection<any>,
                                         previewProperties?: string[],
-                                        limit: number = 3) {
+                                        limit = 3) {
     const allProperties = Object.keys(targetCollection.properties);
     let listProperties = previewProperties?.filter(p => allProperties.includes(p as string));
     if (listProperties && listProperties.length > 0) {

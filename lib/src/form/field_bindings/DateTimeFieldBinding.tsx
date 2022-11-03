@@ -5,7 +5,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import ClearIcon from "@mui/icons-material/Clear";
 
-import { FieldProps } from "../../models";
+import { FieldProps } from "../../types";
 
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";

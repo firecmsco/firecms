@@ -130,7 +130,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * Builder for rendering additional components such as buttons in the
      * collection toolbar
      */
-    extraActions?: (extraActionsParams: ExtraActionsParams<M, UserType>) => React.ReactNode;
+    Actions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
 
     /**
      * Pass your own selection controller if you want to control selected
@@ -219,13 +219,14 @@ export interface EntityCollection<M extends Record<string, any> = any,
 }
 
 /**
- * Parameter passed to the `extraActions` builder in the collection configuration
+ * Parameter passed to the `Actions` prop in the collection configuration
  *
  * @category Models
  */
-export interface ExtraActionsParams<M extends Record<string, any> = any, UserType extends User = User> {
+export interface CollectionActionsProps<M extends Record<string, any> = any, UserType extends User = User> {
     /**
-     * Collection path of this entity
+     * Collection path of this entity. This is the full path, like
+     * `users/1234/addresses`
      */
     path: string;
 
@@ -373,7 +374,7 @@ export type EntityCustomView<M extends Record<string, any> = any> =
     {
         path: string,
         name: string,
-        builder: (extraActionsParams: EntityCustomViewParams<M>) => React.ReactNode
+        builder: (params: EntityCustomViewParams<M>) => React.ReactNode
     }
 
 /**

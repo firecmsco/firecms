@@ -3,8 +3,8 @@ import equal from "react-fast-compare";
 
 import { User as FirebaseUser } from "firebase/auth";
 
-import { DataSource, StorageSource } from "../../models";
-import { Authenticator, FirebaseAuthController } from "../models/auth";
+import { DataSource, StorageSource } from "../../types";
+import { Authenticator, FirebaseAuthController } from "../types/auth";
 
 /**
  * This hook is used internally for validating an authenticator.

@@ -1,6 +1,22 @@
 import { pink, red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material";
 
+declare module "@mui/material/styles" {
+    interface TypographyVariants {
+        label: React.CSSProperties;
+    }
+
+    interface TypographyVariantsOptions {
+        label?: React.CSSProperties;
+    }
+}
+
+declare module "@mui/material/Typography" {
+    interface TypographyPropsVariantOverrides {
+        label: true;
+    }
+}
+
 /**
  * Use this function to build the default FireCMS MUI5 theme,
  * with some overrides.
@@ -111,7 +127,7 @@ export const createCMSDefaultTheme = (
                 styleOverrides: {
                     root: {
                         "&.mono": {
-                            fontFamily: "'Space Mono', 'Lucida Console', monospace"
+                            fontFamily: "'IBM Plex Mono', 'Space Mono', 'Lucida Console', monospace"
                         },
                         "& input::-webkit-outer-spin-button, & input::-webkit-inner-spin-button": {
                             display: "none"

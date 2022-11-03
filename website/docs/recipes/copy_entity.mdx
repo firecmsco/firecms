@@ -45,22 +45,11 @@ import CopyButton from "!!raw-loader!firecms-example/src/docs/recipes/copy_entit
 
 ### Add the custom copy action
 
-After your component is ready, you can plug it into your collections `extraActions`:
-```tsx
-// Target collection
-export const productsCollectionCopy = buildCollection<Product>({
-    name: "Products copy target",
-    path: "products_copied",
-    properties: properties,
-    extraActions: ({ path, collection }: ExtraActionsParams) =>
-        <CopyEntityButton
-            pathFrom={"products"}
-            collectionFrom={productsCollection}
-            pathTo={path}
-            collectionTo={collection}
-        />,
-});
-```
+After your component is ready, you can plug it into your collections `Actions`:
+
+import CopyButtonUse from "!!raw-loader!firecms-example/src/docs/recipes/copy_entity/copy_button_use";
+
+<CodeBlock language="tsx">{CopyButtonUse}</CodeBlock>
 
 ## Full code
 

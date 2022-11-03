@@ -5,7 +5,7 @@ import {
     Entity,
     EntityCollection,
     FilterValues
-} from "../../../models";
+} from "../../../types";
 
 /**
  * @category Collection components
@@ -15,7 +15,7 @@ export type OnColumnResizeParams = { width: number, key: string };
 /**
  * @category Collection components
  */
-export type EntityCollectionTableProps<M extends Record<string, any>> = EntityCollection<M> & {
+export type EntityCollectionTableProps<M extends Record<string, any>> = Omit<EntityCollection<M>, "Actions"> & {
 
     /**
      * Absolute collection path
@@ -50,7 +50,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>> = EntityCo
      * @param entity
      * @param size
      */
-    tableRowActionsBuilder?: (params: { entity: Entity<M>, size: CollectionSize, width: number, frozen?:boolean  }) => React.ReactNode;
+    tableRowActionsBuilder?: (params: { entity: Entity<M>, size: CollectionSize, width: number, frozen?:boolean }) => React.ReactNode;
 
     /**
      * Callback when anywhere on the table is clicked

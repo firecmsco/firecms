@@ -24,7 +24,7 @@ import {
     EnumValueConfig,
     EnumValues,
     FireCMSContext
-} from "../../models";
+} from "../../types";
 
 import {
     useClipboard,

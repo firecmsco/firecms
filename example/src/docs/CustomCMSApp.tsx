@@ -23,10 +23,10 @@ import {
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase,
-    useValidateAuthenticator,
+    useValidateAuthenticator
 } from "@camberi/firecms";
 
-import { firebaseConfig } from "./firebase_config";
+import { firebaseConfig } from "../firebase_config";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -93,11 +93,11 @@ export function CustomCMSApp() {
     });
 
     const dataSource = useFirestoreDataSource({
-        firebaseApp,
+        firebaseApp
         // You can add your `FirestoreTextSearchController` here
     });
 
-    const storageSource = useFirebaseStorageSource({ firebaseApp: firebaseApp });
+    const storageSource = useFirebaseStorageSource({ firebaseApp });
 
     const modeController = useBuildModeController();
     const theme = useMemo(() => createCMSDefaultTheme({ mode: modeController.mode }), []);
@@ -115,7 +115,6 @@ export function CustomCMSApp() {
         dataSource,
         storageSource
     });
-
 
     if (configError) {
         return <div> {configError} </div>;

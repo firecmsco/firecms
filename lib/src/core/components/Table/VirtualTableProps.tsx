@@ -1,5 +1,5 @@
 import React from "react";
-import { EnumValueConfig, WhereFilterOp } from "../../../models";
+import { EnumValueConfig, WhereFilterOp } from "../../../types";
 
 export type OnRowClickParams<T extends Record<string, any>> = { rowData: T; rowIndex: number; event: React.SyntheticEvent };
 

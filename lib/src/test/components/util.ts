@@ -1,4 +1,4 @@
-import { EntityCollection } from "../../models";
+import { EntityCollection } from "../../types";
 
 export const productCollection: EntityCollection = {
     path: "product",

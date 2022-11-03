@@ -63,7 +63,7 @@ in [Entity collections](../api/interfaces/entitycollection)
 * `initialSort` Default sort applied to this collection. It takes tuples in the
   shape `["property_name", "asc"]` or `["property_name", "desc"]`
 
-* `extraActions` Builder for rendering additional components such as buttons in
+* `Actions` Builder for rendering additional components such as buttons in
   the collection toolbar. The builder takes an object with
   props `entityCollection`  and `selectedEntities` if any are set by the end
   user.

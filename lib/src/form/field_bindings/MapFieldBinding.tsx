@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { FieldProps, Properties, ResolvedProperties } from "../../models";
+import { FieldProps, Properties, ResolvedProperties } from "../../types";
 import {
     Box,
     FormControl,

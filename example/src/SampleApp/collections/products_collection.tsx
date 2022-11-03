@@ -2,24 +2,14 @@ import {
     AdditionalFieldDelegate,
     AsyncPreviewComponent,
     buildCollection,
-    EntityCallbacks,
-    ExtraActionsParams
+    EntityCallbacks
 } from "@camberi/firecms";
 
 import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
-import { SampleExtraActions } from "../collection_actions/SampleExtraActions";
+import { SampleCollectionActions } from "../collection_actions/SampleCollectionActions";
 import { SampleProductsView } from "../custom_entity_view/SampleProductsView";
 import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";
-
-export const productExtraActionBuilder = ({
-                                              selectionController
-                                          }: ExtraActionsParams) => {
-    return (
-        <SampleExtraActions
-            selectionController={selectionController}/>
-    );
-};
 
 export const localeCollection = buildCollection<Locale>({
     path: "locales",
@@ -118,7 +108,7 @@ export const productsCollection = buildCollection<Product>({
         // field of the user
         delete: Boolean(authController.extra?.roles?.admin)
     }),
-    // extraActions: productExtraActionBuilder,
+    Actions: SampleCollectionActions,
     subcollections: [localeCollection],
     views: [
         {
