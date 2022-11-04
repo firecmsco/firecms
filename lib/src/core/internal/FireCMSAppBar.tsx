@@ -10,7 +10,9 @@ import {
     Link,
     Slide,
     Toolbar,
-    Typography
+    Typography,
+    useMediaQuery,
+    useTheme
 } from "@mui/material";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
@@ -48,14 +50,33 @@ export const FireCMSAppBar = function FireCMSAppBar({
     const authController = useAuthController();
     const { mode, toggleMode } = useModeController();
 
+    const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("sm"));
+
     const initial = authController.user?.displayName
         ? authController.user.displayName[0].toUpperCase()
         : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
 
     return (
-        <StyledAppBar
-            position={"fixed"}
-            open={drawerOpen}>
+        <Box
+            sx={{
+                position: "fixed",
+                marginLeft: theme.spacing(8),
+                width: `calc(100% - ${theme.spacing(8)})`,
+                zIndex: largeLayout ? theme.zIndex.drawer + 1 : undefined,
+                transition: theme.transitions.create(["width", "margin"], {
+                    easing: theme.transitions.easing.sharp,
+                    duration: theme.transitions.duration.leavingScreen
+                }),
+                ...(drawerOpen && largeLayout && {
+                    marginLeft: `calc(${DRAWER_WIDTH}px - 8px)`,
+                    width: `calc(100% - ${DRAWER_WIDTH}px)`,
+                    transition: theme.transitions.create(["width", "margin"], {
+                        easing: theme.transitions.easing.sharp,
+                        duration: theme.transitions.duration.enteringScreen
+                    })
+                })
+            }}>
 
             <Slide
                 direction="down" in={true} mountOnEnter unmountOnExit>
@@ -78,7 +99,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         </Box>
                     </Hidden>
 
-                    <Box mr={2}>
+                    {largeLayout && <Box mr={2}>
                         <Breadcrumbs
                             separator={<NavigateNextIcon
                                 htmlColor={"rgb(0,0,0,0.87)"}
@@ -112,7 +133,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                             )
                             }
                         </Breadcrumbs>
-                    </Box>
+                    </Box>}
 
                     <Box flexGrow={1}/>
 
@@ -152,31 +173,6 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
                 </Toolbar>
             </Slide>
-        </StyledAppBar>
+        </Box>
     );
 }
-
-interface AppBarProps extends MuiAppBarProps {
-    open?: boolean;
-}
-
-const StyledAppBar = styled(Box, {
-    shouldForwardProp: (prop) => prop !== "open"
-})<AppBarProps>(({ theme, open }) => ({
-    // width: "100%",
-    marginLeft: theme.spacing(8),
-    width: `calc(100% - ${theme.spacing(8)})`,
-    zIndex: theme.zIndex.drawer + 1,
-    transition: theme.transitions.create(["width", "margin"], {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-    }),
-    ...(open && {
-        marginLeft: `calc(${DRAWER_WIDTH}px - 8px)`,
-        width: `calc(100% - ${DRAWER_WIDTH}px)`,
-        transition: theme.transitions.create(["width", "margin"], {
-            easing: theme.transitions.easing.sharp,
-            duration: theme.transitions.duration.enteringScreen
-        })
-    })
-}));

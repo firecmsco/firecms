@@ -33,7 +33,8 @@ export type FireCMSPlugin<T = any> = {
         injectCollections?: (collections: EntityCollection[]) => EntityCollection[];
 
         /**
-         * Use this component to add custom actions to the entity collections.
+         * Use this component to add custom actions to the entity collections
+         * toolbar.
          */
         CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
 

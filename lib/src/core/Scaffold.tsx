@@ -8,6 +8,7 @@ import {
     Link,
     Toolbar,
     Tooltip,
+    useMediaQuery,
     useTheme
 } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
@@ -20,7 +21,6 @@ import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { FireCMSAppBar } from "./internal/FireCMSAppBar";
-import { getAltSymbol } from "./util/os";
 
 export const DRAWER_WIDTH = 280;
 
@@ -80,12 +80,13 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             Drawer
         } = props;
 
+        const theme = useTheme();
+        const largeLayout = useMediaQuery(theme.breakpoints.up("sm"));
+
         const navigation = useNavigationContext();
         const containerRef = useRestoreScroll();
 
         const [drawerOpen, setDrawerOpen] = React.useState(false);
-
-        const theme = useTheme();
 
         const UsedDrawer = Drawer || FireCMSDrawer;
 
@@ -100,10 +101,10 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                                drawerOpen={drawerOpen}
                                toolbarExtraWidget={toolbarExtraWidget}/>
 
-                <StyledDrawer variant="permanent"
-                              open={drawerOpen}
-                              logo={logo}
-                              setDrawerOpen={setDrawerOpen}>
+                <StyledDrawer
+                    open={drawerOpen}
+                    logo={logo}
+                    setDrawerOpen={setDrawerOpen}>
                     <nav>
                         {navigation.loading
                             ? <CircularProgressCenter/>
@@ -127,7 +128,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         sx={{
                             flexGrow: 1,
                             height: "100%",
-                            m: 2,
+                            m: largeLayout ? 2 : 1,
                             overflow: "hidden",
                             borderRadius: "12px",
                             border: `1px solid ${theme.palette.divider}`
@@ -199,8 +200,8 @@ function StyledDrawer(props: MuiDrawerProps & {
     setDrawerOpen: (open: boolean) => void,
 }) {
 
-    const navigation = useNavigationContext();
     const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("sm"));
 
     const { open, logo, setDrawerOpen, ...drawerProps } = props;
 
@@ -222,90 +223,102 @@ function StyledDrawer(props: MuiDrawerProps & {
         aria-label="Open drawer"
         edge="start"
         onClick={() => setDrawerOpen(true)}
-        size="large">
+        size="large"
+        sx={{
+            position: "absolute",
+            top: 8,
+            left: 24
+        }}>
         <MenuIcon/>
     </IconButton>;
 
-    return <MuiDrawer
-        {...drawerProps}
-        open={open}
-        sx={{
-            width: DRAWER_WIDTH,
-            flexShrink: 0,
-            whiteSpace: "nowrap",
-            boxSizing: "border-box",
-            border: "none",
-            ...(open && {
-                ...openedMixin(theme),
-                "& .MuiDrawer-paper": openedMixin(theme)
-            }),
-            ...(!open && {
-                ...closedMixin(theme),
-                "& .MuiDrawer-paper": closedMixin(theme)
-            })
-        }
-        }>
+    return <>
 
-        <IconButton onClick={() => setDrawerOpen(false)}
-                    sx={{
-                        position: "absolute",
-                        right: 8,
-                        top: 16,
-                        opacity: open ? 1.0 : 0.0,
-                        transition: theme.transitions.create("opacity", {
-                            easing: theme.transitions.easing.sharp,
-                            duration: theme.transitions.duration.enteringScreen
-                        })
-                    }}>
-            {theme.direction === "rtl"
-                ? <ChevronRightIcon/>
-                : <ChevronLeftIcon/>}
-        </IconButton>
+        {!largeLayout && menuIconButton}
 
-        <Toolbar sx={{
-            position: "absolute",
-            left: open ? "-100%" : 0,
-            opacity: open ? 0.0 : 1.0,
-            transition: theme.transitions.create(["left", "opacity"], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen
-            })
-        }}>
-            {!open
-                ? <Tooltip title={"Open menu"}
-                           placement={"right"}>
-                    {menuIconButton}
-                </Tooltip>
-                : menuIconButton}
-        </Toolbar>
+        <MuiDrawer
+            {...drawerProps}
+            variant={largeLayout ? "permanent" : "temporary"}
+            open={open}
+            onClose={!largeLayout ? () => setDrawerOpen(false) : undefined}
+            sx={{
+                width: DRAWER_WIDTH,
+                flexShrink: 0,
+                whiteSpace: "nowrap",
+                boxSizing: "border-box",
+                border: "none",
+                ...(open && {
+                    ...openedMixin(theme),
+                    "& .MuiDrawer-paper": openedMixin(theme)
+                }),
+                ...(!open && {
+                    ...closedMixin(theme, largeLayout),
+                    "& .MuiDrawer-paper": closedMixin(theme, largeLayout)
+                })
+            }}
+        >
 
-        <Link
-            key={"breadcrumb-home"}
-            color="inherit"
-            component={NavLink}
-            to={"."}
-            sx={theme => ({
-                transition: theme.transitions.create(["padding"], {
+            <IconButton onClick={() => setDrawerOpen(false)}
+                        sx={{
+                            position: "absolute",
+                            right: 8,
+                            top: 16,
+                            opacity: open ? 1.0 : 0.0,
+                            transition: theme.transitions.create("opacity", {
+                                easing: theme.transitions.easing.sharp,
+                                duration: theme.transitions.duration.enteringScreen
+                            })
+                        }}>
+                {theme.direction === "rtl"
+                    ? <ChevronRightIcon/>
+                    : <ChevronLeftIcon/>}
+            </IconButton>
+
+            <Toolbar sx={{
+                position: "absolute",
+                left: open ? "-100%" : 0,
+                opacity: open ? 0.0 : 1.0,
+                transition: theme.transitions.create(["left", "opacity"], {
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.enteringScreen
-                }),
-                p: theme.spacing(
-                    open ? 4 : 9,
-                    open ? 12 : 2,
-                    0,
-                    open ? 3 : 2)
-            })}>
-            <Tooltip title={"Home"} placement={"right"}>
-                <div>
-                    {logoComponent}
-                </div>
-            </Tooltip>
+                })
+            }}>
+                {!open
+                    ? <Tooltip title={"Open menu"}
+                               placement={"right"}>
+                        {menuIconButton}
+                    </Tooltip>
+                    : menuIconButton}
+            </Toolbar>
 
-        </Link>
+            <Link
+                key={"breadcrumb-home"}
+                color="inherit"
+                component={NavLink}
+                to={"."}
+                sx={theme => ({
+                    transition: theme.transitions.create(["padding"], {
+                        easing: theme.transitions.easing.sharp,
+                        duration: theme.transitions.duration.enteringScreen
+                    }),
+                    p: theme.spacing(
+                        open ? 4 : 9,
+                        open ? 12 : 2,
+                        0,
+                        open ? 3 : 2)
+                })}>
+                <Tooltip title={"Home"} placement={"right"}>
+                    <div>
+                        {logoComponent}
+                    </div>
+                </Tooltip>
 
-        {props.children}
+            </Link>
 
-    </MuiDrawer>;
+            {props.children}
+
+        </MuiDrawer>
+    </>;
 }
 
 const openedMixin = (theme: Theme): CSSObject => ({
@@ -320,7 +333,7 @@ const openedMixin = (theme: Theme): CSSObject => ({
     overflowX: "hidden"
 });
 
-const closedMixin = (theme: Theme): CSSObject => ({
+const closedMixin = (theme: Theme, large: boolean): CSSObject => ({
     willChange: "width",
     transition: theme.transitions.create("width", {
         easing: theme.transitions.easing.sharp,
@@ -329,5 +342,5 @@ const closedMixin = (theme: Theme): CSSObject => ({
     border: "none",
     overflowX: "hidden",
     backgroundColor: theme.palette.background.default,
-        width: `calc(${theme.spacing(9)})`
+    width: large ? `calc(${theme.spacing(9)})` : "0px"
 });
