@@ -42,7 +42,7 @@ export interface SideDialogPanelProps {
     /**
      * The component type that will be rendered
      */
-    Component: JSX.Element;
+    component: React.ReactNode;
 
     /**
      * Optional width of the panel

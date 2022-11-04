@@ -69,7 +69,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
 
     const multipleDeleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
 
-    let multipleDeleteButton: JSX.Element | undefined;
+    let multipleDeleteButton: React.ReactNode | undefined;
     if (selectionEnabled) {
         const button = largeLayout
             ? <Button

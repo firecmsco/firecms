@@ -31,7 +31,7 @@ export type Widget = {
     name: string;
     description: string;
     dataType: DataType;
-    icon: React.ComponentType<SvgIconProps>;
+    Icon: React.ComponentType<SvgIconProps>;
     color: string;
 }
 
@@ -61,133 +61,133 @@ export const WIDGETS: Record<WidgetId, Widget> = {
         name: "Text field",
         description: "Simple short text",
         dataType: "string",
-        icon: ShortTextIcon,
+        Icon: ShortTextIcon,
         color: "#2d7ff9"
     },
     multiline: {
         name: "Multiline",
         description: "Text with multiple lines",
         dataType: "string",
-        icon: SubjectIcon,
+        Icon: SubjectIcon,
         color: "#2d7ff9"
     },
     markdown: {
         name: "Markdown",
         description: "Text with advanced markdown syntax",
         dataType: "string",
-        icon: FormatQuoteIcon,
+        Icon: FormatQuoteIcon,
         color: "#2d7ff9"
     },
     url: {
         name: "Url",
         description: "Text with URL validation",
         dataType: "string",
-        icon: HttpIcon,
+        Icon: HttpIcon,
         color: "#154fb3"
     },
     email: {
         name: "Email",
         description: "Text with email validation",
         dataType: "string",
-        icon: EmailIcon,
+        Icon: EmailIcon,
         color: "#154fb3"
     },
     select: {
         name: "Select/enum",
         description: "Select one text value from within an enumeration",
         dataType: "string",
-        icon: ListIcon,
+        Icon: ListIcon,
         color: "#4223c9"
     },
     multi_select: {
         name: "Multi select",
         description: "Select multiple text values from within an enumeration",
         dataType: "array",
-        icon: ListAltIcon,
+        Icon: ListAltIcon,
         color: "#4223c9"
     },
     number_input: {
         name: "Number input",
         description: "Simple number field with validation",
         dataType: "number",
-        icon: NumbersIcon,
+        Icon: NumbersIcon,
         color: "#bec920"
     },
     number_select: {
         name: "Number select",
         description: "Select a number value from within an enumeration",
         dataType: "number",
-        icon: FormatListNumberedIcon,
+        Icon: FormatListNumberedIcon,
         color: "#bec920"
     },
     multi_number_select: {
         name: "Multiple number select",
         description: "Select multiple number values from within an enumeration",
         dataType: "array",
-        icon: FormatListNumberedIcon,
+        Icon: FormatListNumberedIcon,
         color: "#bec920"
     },
     file_upload: {
         name: "File upload",
         description: "Input for uploading single files",
         dataType: "string",
-        icon: UploadFileIcon,
+        Icon: UploadFileIcon,
         color: "#f92d9a"
     },
     multi_file_upload: {
         name: "Multiple file upload",
         description: "Input for uploading multiple files",
         dataType: "array",
-        icon: DriveFolderUploadIcon,
+        Icon: DriveFolderUploadIcon,
         color: "#f92d9a"
     },
     reference: {
         name: "Reference",
         description: "The value refers to a different collection",
         dataType: "reference",
-        icon: LinkIcon,
+        Icon: LinkIcon,
         color: "#ff0042"
     },
     multi_references: {
         name: "Multiple references",
         description: "Multiple values that refer to a different collection",
         dataType: "array",
-        icon: AddLinkIcon,
+        Icon: AddLinkIcon,
         color: "#ff0042"
     },
     switch: {
         name: "Switch",
         description: "True or false field (or yes or no, 0 or 1...)",
         dataType: "boolean",
-        icon: FlagIcon,
+        Icon: FlagIcon,
         color: "#20d9d2"
     },
     date_time: {
         name: "Date/time",
         description: "A date time select field",
         dataType: "date",
-        icon: ScheduleIcon,
+        Icon: ScheduleIcon,
         color: "#8b46ff"
     },
     group: {
         name: "Group",
         description: "Group of multiple fields",
         dataType: "map",
-        icon: BallotOutlinedIcon,
+        Icon: BallotOutlinedIcon,
         color: "#ff9408"
     },
     repeat: {
         name: "Repeat/list",
         description: "A field that gets repeated multiple times (e.g. multiple text fields)",
         dataType: "array",
-        icon: RepeatIcon,
+        Icon: RepeatIcon,
         color: "#ff9408"
     },
     block: {
         name: "Block",
         description: "A complex field that allows the user to compose different fields together, with a key->value format",
         dataType: "array",
-        icon: ViewStreamIcon,
+        Icon: ViewStreamIcon,
         color: "#ff9408"
     }
 };

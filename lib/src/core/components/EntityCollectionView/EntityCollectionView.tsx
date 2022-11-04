@@ -308,7 +308,7 @@ export const EntityCollectionView = React.memo(
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     title={Title}
                     {...collection}
-                    Actions={
+                    actions={
                         <EntityCollectionViewActions
                             collection={collection}
                             exportable={exportable}

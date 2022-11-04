@@ -35,7 +35,7 @@ export function getIdIcon(
 function getIconForWidget(widget: Widget | undefined,
                           color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error",
                           fontSize: "inherit" | "medium" | "large" | "small" | undefined) {
-    const Icon = widget?.icon ?? Crop75Icon;
+    const Icon = widget?.Icon ?? Crop75Icon;
     return <Icon color={color} fontSize={fontSize}/>;
 }
 

@@ -38,7 +38,7 @@ export function SkeletonPropertyComponent({
         console.error("No property assigned for skeleton component", property, size);
     }
 
-    let content: JSX.Element | any;
+    let content: React.ReactNode | any;
     if (property.dataType === "string") {
         const stringProperty = property as ResolvedStringProperty;
         if (stringProperty.url) {

@@ -35,7 +35,7 @@ export type FireCMSPlugin<T = any> = {
         /**
          * Use this component to add custom actions to the entity collections.
          */
-        collectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
+        CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
 
     }
 
@@ -49,7 +49,7 @@ export type FireCMSPlugin<T = any> = {
      * @param props
      */
     wrapperComponent?: {
-        component: React.ComponentType<PropsWithChildren<T & { context: FireCMSContext }>>;
+        Component: React.ComponentType<PropsWithChildren<T & { context: FireCMSContext }>>;
         props?: T;
     };
 
@@ -58,12 +58,12 @@ export type FireCMSPlugin<T = any> = {
          * Use this component to add custom actions to the navigation card
          * in the home page.
          */
-        collectionActions?: React.ComponentType<HomePageActionsProps>;
+        CollectionActions?: React.ComponentType<HomePageActionsProps>;
 
         /**
          * Add additional cards to each collection group in the home page.
          */
-        additionalCards?: React.ComponentType<HomePageAdditionalCardsProps> | React.ComponentType<HomePageAdditionalCardsProps>[];
+        AdditionalCards?: React.ComponentType<HomePageAdditionalCardsProps> | React.ComponentType<HomePageAdditionalCardsProps>[];
 
         /**
          * Include a section in the home page with a custom component and title.
@@ -78,7 +78,7 @@ export type FireCMSPlugin<T = any> = {
 }
 
 /**
- * Props passed to the {@link FireCMSPlugin.homePage.collectionActions} method.
+ * Props passed to the {@link FireCMSPlugin.homePage.CollectionActions} method.
  * You can use it to add custom actions to the navigation card of each collection.
  *
  * @category Models

@@ -139,7 +139,7 @@ function SideDialogView({
                                 maxWidth: "100vw"
                             }}>
                             <ErrorBoundary>
-                                {panel.Component}
+                                {panel.component}
                             </ErrorBoundary>
                         </Box>}
 

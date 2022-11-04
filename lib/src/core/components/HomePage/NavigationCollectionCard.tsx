@@ -40,17 +40,17 @@ export function NavigationCollectionCard({
 
     const context = useFireCMSContext();
 
-    let Actions: JSX.Element | undefined;
+    let actions: React.ReactNode | undefined;
     if (context.plugins && collection) {
         const actionProps: HomePageActionsProps = {
             path,
             collection,
             context
         };
-        Actions = <>
+        actions = <>
             {context.plugins.map((plugin, i) => (
-                plugin.homePage?.collectionActions
-                    ? <plugin.homePage.collectionActions
+                plugin.homePage?.CollectionActions
+                    ? <plugin.homePage.CollectionActions
                         key={`actions_${i}`} {...actionProps}/>
                     : null
             ))}
@@ -90,7 +90,7 @@ export function NavigationCollectionCard({
                             event.preventDefault();
                             event.stopPropagation();
                         }}>
-                            {Actions}
+                            {actions}
                         </div>
 
                     </Box>

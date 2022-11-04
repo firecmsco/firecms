@@ -165,7 +165,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
         }
     }, [entityOrEntities, multipleEntities, performDelete, onMultipleEntitiesDelete, path, onClose, snackbarController, resolvedCollection.name, onEntityDelete]);
 
-    let content: JSX.Element;
+    let content: React.ReactNode;
     if (entityOrEntities && multipleEntities) {
         content = <div>Multiple entities</div>;
     } else {

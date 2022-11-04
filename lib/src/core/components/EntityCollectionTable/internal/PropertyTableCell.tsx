@@ -214,7 +214,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             }
         }, [collection, columnIndex, entity, height, propertyKey, width]);
 
-        let innerComponent: JSX.Element | undefined;
+        let innerComponent: React.ReactNode | undefined;
         let allowScroll = false;
         let showExpandIcon = false;
         let removePadding = false;

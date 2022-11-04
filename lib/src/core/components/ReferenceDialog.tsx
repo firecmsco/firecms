@@ -241,7 +241,7 @@ export function ReferenceDialog<M extends Record<string, any>>(
                                            </Typography>}
                                            {...collection}
                                            inlineEditing={false}
-                                           Actions={<ReferenceDialogActions
+                                           actions={<ReferenceDialogActions
                                                collection={collection}
                                                path={fullPath}
                                                onNewClick={onNewClick}

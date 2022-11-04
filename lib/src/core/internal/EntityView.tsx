@@ -270,7 +270,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             });
         }, [status, collection, dataSource, context, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError]);
 
-        const customViewsView: JSX.Element[] | undefined = customViews && customViews.map(
+        const customViewsView: React.ReactNode[] | undefined = customViews && customViews.map(
             (customView, colIndex) => {
                 return (
                     <Box

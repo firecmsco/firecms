@@ -274,10 +274,10 @@ function FireCMSInternal({
         plugins.forEach((plugin: FireCMSPlugin) => {
             if (plugin.wrapperComponent) {
                 childrenResult = (
-                    <plugin.wrapperComponent.component {...plugin.wrapperComponent.props}
+                    <plugin.wrapperComponent.Component {...plugin.wrapperComponent.props}
                                                        context={context}>
                         {childrenResult}
-                    </plugin.wrapperComponent.component>
+                    </plugin.wrapperComponent.Component>
                 );
             }
         });

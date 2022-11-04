@@ -14,7 +14,7 @@ export type VirtualTableRowProps<T> = {
     rowData: T;
     rowIndex: number;
     onRowClick?: (props: OnRowClickParams<any>) => void;
-    children: JSX.Element[];
+    children: React.ReactNode[];
     columns: TableColumn<T, any>[];
     hoverRow?: boolean;
 };

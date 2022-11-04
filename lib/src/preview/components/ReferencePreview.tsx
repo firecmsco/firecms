@@ -102,7 +102,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
     const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, previewProperties, size === "small" || size === "regular" ? 3 : 1),
         [previewProperties, resolvedCollection, size]);
 
-    let body: JSX.Element;
+    let body: React.ReactNode;
 
     function buildError(error: string, tooltip?: string) {
         return <ErrorView error={error} tooltip={tooltip}/>;

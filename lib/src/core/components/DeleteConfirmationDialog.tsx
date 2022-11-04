@@ -14,16 +14,16 @@ export function DeleteConfirmationDialog({
                                              open,
                                              onAccept,
                                              onCancel,
-                                             Title,
+                                             title,
                                              loading,
-                                             Body
+                                             body
                                          }: {
     open: boolean,
     onAccept: () => void,
     onCancel: () => void,
     loading?: boolean,
-    Title: JSX.Element,
-    Body?: JSX.Element,
+    title: React.ReactNode,
+    body?: React.ReactNode,
 }) {
     return (
         <Dialog
@@ -31,11 +31,11 @@ export function DeleteConfirmationDialog({
             onClose={onCancel}
         >
             <DialogTitle>
-                {Title}
+                {title}
             </DialogTitle>
-            {Body && <DialogContent>
+            {body && <DialogContent>
                 <DialogContentText>
-                    {Body}
+                    {body}
                 </DialogContentText>
             </DialogContent>}
             <CustomDialogActions>

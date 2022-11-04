@@ -148,7 +148,7 @@ const propsToSidePanel = (props: EntitySidePanelProps<any, any>, navigation: Nav
 
     return ({
         key: `${props.path}/${props.entityId}`,
-        Component: <EntitySidePanel {...props}/>,
+        component: <EntitySidePanel {...props}/>,
         urlPath: newPath,
         parentUrlPath: navigation.buildUrlCollectionPath(collectionPath),
         width: getEntityViewWidth(props, smallLayout)

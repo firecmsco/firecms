@@ -28,8 +28,11 @@ The main navigation has been revamped:
 - The authentication and authorization logic has been moved away from `FireCMS`
   and now it is handled externally. Note that this only affects you if you are
   using a custom app, **not** if you are using the usual `FirebaseCMSApp`
-- Every prop of type `ReactNode` is now spelled in lowercase for consistency.
+- Every prop of type `React.ReactNode` is now spelled in lowercase for consistency.
   For example, `AdditionalComponent` is now `additionalComponent`.
+  Or `Actions` is now `actions`.
+- Every prop of type `React.ComponentType` is now spelled in uppercase for consistency.
+  For example, `icon` is now `Icon`.
   Or `Actions` is now `actions`.
 
 ### Collections

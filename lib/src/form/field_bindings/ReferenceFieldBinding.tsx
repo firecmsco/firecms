@@ -135,7 +135,7 @@ export function ReferenceFieldBinding<M extends Record<string, any>>({
 
         const missingEntity = entity && !entity.values;
 
-        let body: JSX.Element;
+        let body: React.ReactNode;
         if (!collection) {
             body = (
                 <ErrorView

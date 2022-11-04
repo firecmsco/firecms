@@ -278,7 +278,7 @@ function createFilterField(id: React.Key,
                            filterConfig: TableColumnFilter,
                            filterValue: [TableWhereFilterOp, any] | undefined,
                            setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void
-): JSX.Element {
+): React.ReactNode {
 
     if (filterConfig.dataType === "number" || filterConfig.dataType === "string") {
         const dataType = filterConfig.dataType;

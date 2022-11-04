@@ -34,7 +34,7 @@ import { PropertyPreviewProps } from "./PropertyPreviewProps";
  * @category Preview components
  */
 export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
-    let content: JSX.Element | any;
+    let content: React.ReactNode | any;
     const {
         property: inputProperty, propertyKey, value, size, height, width, entity
     } = props;

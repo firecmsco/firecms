@@ -30,7 +30,7 @@ export function useReferenceDialog<M extends Record<string, any>>(referenceDialo
 
             sideDialogsController.open({
                 key: `reference_${referenceDialogProps.path}`,
-                Component:
+                component:
                     <ReferenceDialog
                         {...referenceDialogProps as ReferenceDialogProps<M>}
                         collection={usedCollection}/>,

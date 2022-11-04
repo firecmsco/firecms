@@ -23,7 +23,7 @@ export type NavigationRoutesProps = {
      */
     HomePage?: React.ComponentType;
 
-    CustomRoutes?: JSX.Element[]
+    customRoutes?: React.ReactNode[]
 
 };
 
@@ -40,7 +40,7 @@ export type NavigationRoutesProps = {
 export const NavigationRoutes = React.memo<NavigationRoutesProps>(
     function NavigationRoutes({
                                   HomePage = FireCMSHomePage,
-                                  CustomRoutes
+                                  customRoutes
                               }: NavigationRoutesProps) {
 
         const location = useLocation();
@@ -75,13 +75,13 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
             />;
         };
 
-        const customRoutes: JSX.Element[] = [];
+        const cmsViews: React.ReactNode[] = [];
         if (navigation.views) {
             navigation.views.forEach((cmsView) => {
                 if (Array.isArray(cmsView.path))
-                    customRoutes.push(...cmsView.path.map(path => buildCMSViewRoute(path, cmsView)));
+                    cmsViews.push(...cmsView.path.map(path => buildCMSViewRoute(path, cmsView)));
                 else
-                    customRoutes.push(buildCMSViewRoute(cmsView.path, cmsView));
+                    cmsViews.push(buildCMSViewRoute(cmsView.path, cmsView));
             });
         }
 
@@ -95,8 +95,8 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                     const allActions = [];
                     if (plugins) {
                         plugins.forEach(plugin => {
-                            if (plugin.collections?.collectionActions) {
-                                allActions.push(...toArray(plugin.collections?.collectionActions));
+                            if (plugin.collections?.CollectionActions) {
+                                allActions.push(...toArray(plugin.collections?.CollectionActions));
                             }
                         });
                     }
@@ -140,13 +140,13 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
 
                 {collectionRoutes}
 
-                {customRoutes}
+                {cmsViews}
 
                 {homeRoute}
 
                 {notFoundRoute}
 
-                {CustomRoutes}
+                {customRoutes}
 
             </Routes>
         );

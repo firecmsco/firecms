@@ -32,12 +32,12 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
         allGroups.push(undefined);
     }
 
-    let AdditionalSections: JSX.Element | undefined;
+    let additionalSections: React.ReactNode | undefined;
     if (context.plugins) {
         const sectionProps: GenericPluginProps = {
             context
         };
-        AdditionalSections = <>
+        additionalSections = <>
             {context.plugins.filter(plugin => plugin.homePage?.includeSection)
                 .map((plugin, i) => {
                     const section = plugin.homePage!.includeSection!(sectionProps)
@@ -65,8 +65,8 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
 
                 if (context.plugins) {
                     context.plugins.forEach(plugin => {
-                        if (plugin.homePage?.additionalCards) {
-                            AdditionalCards.push(...toArray(plugin.homePage?.additionalCards));
+                        if (plugin.homePage?.AdditionalCards) {
+                            AdditionalCards.push(...toArray(plugin.homePage?.AdditionalCards));
                         }
                     });
                 }
@@ -110,7 +110,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
                 );
             })}
 
-            {AdditionalSections}
+            {additionalSections}
 
             {additionalChildren}
 
