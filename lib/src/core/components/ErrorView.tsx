@@ -7,7 +7,7 @@ import { ErrorTooltip } from "./ErrorTooltip";
  * @category Components
  */
 export interface ErrorViewProps {
-    error: React.ReactElement | string,
+    error: Error | React.ReactElement | string,
     tooltip?: string
 }
 
@@ -23,6 +23,7 @@ export function ErrorView({
                               error,
                               tooltip
                           }: ErrorViewProps): React.ReactElement {
+    const component = error instanceof Error ? error.message : error;
 
     const body = (
         <Box
@@ -34,7 +35,7 @@ export function ErrorView({
             <ErrorIcon fontSize={"small"} color={"error"}/>
             <Box sx={{
                 paddingLeft: 2
-            }}>{error}</Box>
+            }}>{component}</Box>
         </Box>
     );
 

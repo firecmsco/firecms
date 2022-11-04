@@ -22,7 +22,8 @@ export function CenteredView({
                     flexDirection: "column",
                     justifyContent: "center",
                     alignItems: "center",
-                    minHeight: "100vh",
+                    height: "100vh",
+                    maxHeight: "100%",
                     p: 2
                 }}>
                 <Box sx={{
