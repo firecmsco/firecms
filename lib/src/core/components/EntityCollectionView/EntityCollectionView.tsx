@@ -306,7 +306,7 @@ export const EntityCollectionView = React.memo(
                     onEntityClick={onEntityClick}
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
-                    Title={Title}
+                    title={Title}
                     {...collection}
                     Actions={
                         <EntityCollectionViewActions

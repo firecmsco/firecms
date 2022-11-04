@@ -19,9 +19,9 @@ interface CollectionTableToolbarProps {
     filterIsSet: boolean;
     loading: boolean;
     forceFilter: boolean;
-    ActionsStart?: React.ReactNode;
-    Actions?: React.ReactNode;
-    Title?: React.ReactNode,
+    actionsStart?: React.ReactNode;
+    actions?: React.ReactNode;
+    title?: React.ReactNode,
     onTextSearch?: (searchString?: string) => void;
     onSizeChanged: (size: CollectionSize) => void;
     clearFilter: () => void;
@@ -90,13 +90,13 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
                      }
                  }}>
 
-                {props.Title && <Hidden lgDown>
-                    {props.Title}
+                {props.title && <Hidden lgDown>
+                    {props.title}
                 </Hidden>}
 
                 {sizeSelect}
 
-                {props.ActionsStart}
+                {props.actionsStart}
 
                 {filterView}
 
@@ -124,7 +124,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
                         onTextSearch={props.onTextSearch}/>
                 }
 
-                {props.Actions}
+                {props.actions}
 
             </Box>
 

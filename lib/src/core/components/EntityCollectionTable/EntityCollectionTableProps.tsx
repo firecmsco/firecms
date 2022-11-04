@@ -25,19 +25,19 @@ export type EntityCollectionTableProps<M extends Record<string, any>> = Omit<Ent
     /**
      * Override the title in the toolbar
      */
-    Title?: React.ReactNode;
+    title?: React.ReactNode;
 
     /**
      * Additional component that renders actions such as buttons in the
      * collection toolbar, displayed on the right side
      */
-    Actions?: React.ReactNode;
+    actions?: React.ReactNode;
 
     /**
      * Additional component that renders actions such as buttons in the
      * collection toolbar, displayed on the left side
      */
-    ActionsStart?: React.ReactNode;
+    actionsStart?: React.ReactNode;
 
     /**
      * Builder for creating the buttons in each row

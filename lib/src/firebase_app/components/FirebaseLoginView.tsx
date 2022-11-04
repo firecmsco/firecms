@@ -92,14 +92,14 @@ export interface FirebaseLoginViewProps {
      * Display this component when no user is found a user tries to log in
      * when the `signInOptions` value is `password`.
      */
-    NoUserComponent?: ReactNode;
+    noUserComponent?: ReactNode;
 
     /**
      * Display this component bellow the sign-in buttons.
      * Useful for adding checkboxes for privacy and terms and conditions.
      * You may want to use it in conjunction with the `disabled` prop.
      */
-    AdditionalComponent?: ReactNode;
+    additionalComponent?: ReactNode;
 
     notAllowedError?: any;
 
@@ -117,10 +117,10 @@ export function FirebaseLoginView({
                                       signInOptions,
                                       firebaseApp,
                                       authController,
-                                      NoUserComponent,
+                                      noUserComponent,
                                       disableSignupScreen = false,
                                       disabled = false,
-                                      AdditionalComponent,
+                                      additionalComponent,
                                       notAllowedError
                                   }: FirebaseLoginViewProps) {
 
@@ -313,7 +313,7 @@ export function FirebaseLoginView({
                         authController={authController}
                         onClose={() => setPasswordLoginSelected(false)}
                         mode={modeState.mode}
-                        NoUserComponent={NoUserComponent}
+                        noUserComponent={noUserComponent}
                         disableSignupScreen={disableSignupScreen}
                     />}
 
@@ -322,7 +322,7 @@ export function FirebaseLoginView({
                         onClose={() => setPhoneLoginSelected(false)}
                     />}
 
-                    {!passwordLoginSelected && !phoneLoginSelected && AdditionalComponent}
+                    {!passwordLoginSelected && !phoneLoginSelected && additionalComponent}
 
                 </Box>
             </Box>
@@ -481,13 +481,13 @@ function LoginForm({
                        onClose,
                        authController,
                        mode,
-                       NoUserComponent,
+                       noUserComponent,
                        disableSignupScreen
                    }: {
     onClose: () => void,
     authController: FirebaseAuthController,
     mode: "light" | "dark",
-    NoUserComponent?: ReactNode,
+    noUserComponent?: ReactNode,
     disableSignupScreen: boolean
 }) {
 
@@ -625,7 +625,7 @@ function LoginForm({
                     </Grid>
 
                     <Grid item xs={12}>
-                        {registrationMode && NoUserComponent}
+                        {registrationMode && noUserComponent}
                     </Grid>
 
                     <Grid item xs={12}

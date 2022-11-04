@@ -79,7 +79,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
         <FormControl fullWidth error={showError}>
 
             {!tableMode && <ExpandablePanel expanded={expanded}
-                                            Title={title}>
+                                            title={title}>
                 {arrayContainer}
             </ExpandablePanel>}
 

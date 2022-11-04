@@ -236,7 +236,7 @@ export function ReferenceDialog<M extends Record<string, any>>(
                                            onEntityClick={onEntityClick}
                                            forceFilter={forceFilter}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
-                                           Title={<Typography variant={"h6"}>
+                                           title={<Typography variant={"h6"}>
                                                {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
                                            </Typography>}
                                            {...collection}

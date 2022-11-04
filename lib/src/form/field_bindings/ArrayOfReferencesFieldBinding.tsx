@@ -134,7 +134,7 @@ export function ArrayOfReferencesFieldBinding({
             <FormControl fullWidth error={showError}>
 
                 {!tableMode &&
-                    <ExpandablePanel expanded={expanded} Title={title}>
+                    <ExpandablePanel expanded={expanded} title={title}>
                         {body}
                     </ExpandablePanel>}
 

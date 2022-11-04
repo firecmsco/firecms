@@ -29,7 +29,8 @@ The main navigation has been revamped:
   and now it is handled externally. Note that this only affects you if you are
   using a custom app, **not** if you are using the usual `FirebaseCMSApp`
 - Every prop of type `ReactNode` is now spelled in lowercase for consistency.
-  
+  For example, `AdditionalComponent` is now `additionalComponent`.
+  Or `Actions` is now `actions`.
 
 ### Collections
 

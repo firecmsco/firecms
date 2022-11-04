@@ -21,11 +21,11 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
         <FirebaseLoginView
             {...props}
             disableSignupScreen={false}
-            NoUserComponent={<>
+            noUserComponent={<>
                 Sample custom message when no user exists
             </>}
             disabled={!termsAccepted}
-            AdditionalComponent={
+            additionalComponent={
                 <FormGroup>
                     <FormControlLabel
                         control={
