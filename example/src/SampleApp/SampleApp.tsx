@@ -202,9 +202,7 @@ function SampleApp() {
         return navigation;
     };
 
-    return <div>
-            <div id="recaptcha"></div>
-            <FirebaseCMSApp
+    return <FirebaseCMSApp
             name={"My Online Shop"}
             authentication={myAuthenticator}
             signInOptions={[
@@ -231,7 +229,7 @@ function SampleApp() {
                 disableSignupScreen: false,
             }}
         />
-    </div>;
+    
 }
 
 export default SampleApp;

@@ -107,6 +107,34 @@ export function FirebaseLoginView({
         } else return o as FirebaseSignInProvider;
     })
 
+    function sendSMS() {
+        const auth = getAuth();
+        const recaptchaVerifier = new RecaptchaVerifier('recaptcha', {size:"invisible"}, auth);
+        
+        const resolver = getMultiFactorResolver(auth, authDelegate.authError);
+        
+        if (resolver.hints[0].factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
+
+            const phoneInfoOptions = { multiFactorHint: resolver.hints[0],
+                                       session: resolver.session };
+            const phoneAuthProvider = new PhoneAuthProvider(auth);
+            // Send SMS verification code
+            phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
+                .then(function (verificationId) {
+                    // Ask user for the SMS verification code. Then:
+                    let verificationCode;
+                    verificationCode = String(window.prompt('Please enter the verification ' + 'code that was sent to your mobile device.'));
+                    const cred = PhoneAuthProvider.credential(verificationId, verificationCode);
+                     const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
+                    // // Complete sign-in.
+                    return resolver.resolveSignIn(multiFactorAssertion);                             
+                    
+                })
+                
+        } else {
+            // Unsupported second factor.
+        }
+    }
     function buildErrorView() {
         let errorView: any;
         
@@ -135,35 +163,7 @@ export function FirebaseLoginView({
                     </>;
             } else if (!ignoredCodes.includes(authDelegate.authError.code)) {
                 if (authDelegate.authError.code == 'auth/multi-factor-auth-required') {
-                    const auth = getAuth();
-                    const recaptchaVerifier = new RecaptchaVerifier('recaptcha', {size:"invisible"}, auth);
-                    
-                    const resolver = getMultiFactorResolver(auth, authDelegate.authError);
-                    
-                    if (resolver.hints[0].factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
-
-                        const phoneInfoOptions = { multiFactorHint: resolver.hints[0],
-                                                   session: resolver.session };
-                        const phoneAuthProvider = new PhoneAuthProvider(auth);
-                        // Send SMS verification code
-                        phoneAuthProvider.verifyPhoneNumber(phoneInfoOptions, recaptchaVerifier)
-                            .then(function (verificationId) {
-                                // Ask user for the SMS verification code. Then:
-                                let verificationCode;
-                                verificationCode = String(window.prompt('Please enter the verification ' + 'code that was sent to your mobile device.'));
-                                const cred = PhoneAuthProvider.credential(verificationId, verificationCode);
-                                 const multiFactorAssertion = PhoneMultiFactorGenerator.assertion(cred);
-                                // // Complete sign-in.
-                                return resolver.resolveSignIn(multiFactorAssertion);                             
-                                
-                            })
-                            
-                    } else {
-                        // Unsupported second factor.
-                    }
-
-                   
-                
+                   sendSMS();
                 }
                 errorView =
                     <Box p={1}>
@@ -198,6 +198,8 @@ export function FirebaseLoginView({
 
 
     return (
+        <div>
+        <div id="recaptcha"></div>
         <Fade
             in={true}
             timeout={500}
@@ -280,6 +282,7 @@ export function FirebaseLoginView({
                 </Box>
             </Box>
         </Fade>
+        </div>
     );
 }
 
