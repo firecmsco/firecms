@@ -4,9 +4,8 @@ import {
     FieldDescription,
     FieldProps,
     PropertyFieldBinding
-} from "@camberi/firecms";
+} from "firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
-
 
 export default function CustomShapedArrayField({
                                                    property,
@@ -52,9 +51,9 @@ export default function CustomShapedArrayField({
             {includeDescription &&
             <FieldDescription property={property}/>}
 
-            {showError
-            && typeof error === "string"
-            && <FormHelperText>{error}</FormHelperText>}
+            {showError &&
+            typeof error === "string" &&
+            <FormHelperText>{error}</FormHelperText>}
 
         </FormControl>
 

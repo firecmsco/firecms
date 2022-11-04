@@ -1,6 +1,6 @@
 import React from "react";
 import { Box, Button } from "@mui/material";
-import { Entity, EntityValues, useSnackbarController } from "@camberi/firecms";
+import { Entity, EntityValues, useSnackbarController } from "firecms";
 import { Product } from "../types";
 
 export function SampleProductsView({ entity, modifiedValues }: {
@@ -17,7 +17,7 @@ export function SampleProductsView({ entity, modifiedValues }: {
         });
     };
 
-    const values = modifiedValues ? modifiedValues : {};
+    const values = modifiedValues || {};
 
     return (
         <Box

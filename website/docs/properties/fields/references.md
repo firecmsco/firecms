@@ -16,7 +16,7 @@ properties.
 ![Field](/img/fields/Reference.png)
 
 ```typescript jsx
-import { buildProperty } from "@camberi/firecms";
+import { buildProperty } from "firecms";
 
 buildProperty({
     dataType: "reference",
@@ -36,7 +36,7 @@ is [`ReferenceFieldBinding`](../../api/functions/ReferenceFieldBinding).
 ![Field](/img/fields/Multi_reference.png)
 
 ```typescript jsx
-import { buildProperty } from "@camberi/firecms";
+import { buildProperty } from "firecms";
 
 buildProperty({
     dataType: "array",

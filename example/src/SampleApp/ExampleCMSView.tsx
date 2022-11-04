@@ -23,7 +23,7 @@ import {
     useSelectionController,
     useSideEntityController,
     useSnackbarController
-} from "@camberi/firecms";
+} from "firecms";
 import { Product } from "./types";
 import { usersCollection } from "./collections/users_collection";
 
@@ -112,11 +112,10 @@ export function ExampleCMSView() {
                                 additional view
                             </Typography>
                             <Typography>
-                                {authController.user ?
-                                    <>Logged in
+                                {authController.user
+                                    ? <>Logged in
                                         as {authController.user.displayName}</>
-                                    :
-                                    <>You are not logged in</>}
+                                    : <>You are not logged in</>}
                             </Typography>
                         </Grid>
 
@@ -202,7 +201,7 @@ export function ExampleCMSView() {
                                     overflow: "hidden",
                                     my: 2
                                 }}>
-                                <EntityCollectionView  {...usersCollection}
+                                <EntityCollectionView {...usersCollection}
                                                        fullPath={"users"}
                                                        selectionController={selectionController}/>
                             </Paper>

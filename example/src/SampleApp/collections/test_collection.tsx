@@ -9,7 +9,7 @@ import {
     Properties,
     resolveNavigationFrom,
     toSnakeCase
-} from "@camberi/firecms";
+} from "firecms";
 import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
 
@@ -642,8 +642,8 @@ color: {
         updated_on: {
             name: "Updated on",
             dataType: "date",
-            autoValue: "on_update",
-        },
+            autoValue: "on_update"
+        }
         // description: {
         //     name: "Description",
         //     dataType: "string",

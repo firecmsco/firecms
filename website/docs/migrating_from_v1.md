@@ -12,7 +12,7 @@ In order to update the dependencies to the new version you can run the
 command
 
 ```
-yarn add @camberi/firecms@next firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab@^5.0.0-alpha.90 @mui/x-date-pickers@^5.0.0-beta.1 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
+yarn add firecms@next firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab@^5.0.0-alpha.90 @mui/x-date-pickers@^5.0.0-beta.1 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
 ```
 
 This is a guide on how to migrate FireCMS apps from version 1.0 to 2.0.
@@ -28,6 +28,8 @@ The main navigation has been revamped:
 - The authentication and authorization logic has been moved away from `FireCMS`
   and now it is handled externally. Note that this only affects you if you are
   using a custom app, **not** if you are using the usual `FirebaseCMSApp`
+- Every prop of type `ReactNode` is now spelled in lowercase for consistency.
+  
 
 ### Collections
 
@@ -201,7 +203,7 @@ buildProperty(({ values }) => ({
   you would pass to `LoginView` looks like:
 
 ```tsx
-import { FirebaseLoginView, FirebaseLoginViewProps } from "@camberi/firecms";
+import { FirebaseLoginView, FirebaseLoginViewProps } from "firecms";
 
 export function CustomLoginView(props: FirebaseLoginViewProps) {
   return <FirebaseLoginView {...props}/>;

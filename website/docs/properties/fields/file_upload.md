@@ -31,7 +31,7 @@ it gets uploaded to the storage backend, with the `imageCompression` prop.
 ![Field](/img/fields/File_upload.png)
 
 ```typescript jsx
-import { buildProperty } from "@camberi/firecms";
+import { buildProperty } from "firecms";
 
 buildProperty({
     dataType: "string",
@@ -61,7 +61,7 @@ is [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
 ![Field](/img/fields/Multi_file_upload.png)
 
 ```typescript jsx
-import { buildProperty } from "@camberi/firecms";
+import { buildProperty } from "firecms";
 
 buildProperty({
     dataType: "array",
