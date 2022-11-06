@@ -81,7 +81,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         } = props;
 
         const theme = useTheme();
-        const largeLayout = useMediaQuery(theme.breakpoints.up("sm"));
+        const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
         const navigation = useNavigationContext();
         const containerRef = useRestoreScroll();
@@ -201,7 +201,7 @@ function StyledDrawer(props: MuiDrawerProps & {
 }) {
 
     const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("sm"));
+    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const { open, logo, setDrawerOpen, ...drawerProps } = props;
 

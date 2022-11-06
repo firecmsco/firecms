@@ -245,7 +245,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         });
 
         // hack to fix Firestore listeners firing with incomplete data
-        const data = useDebouncedData(orderedData);
+        const data = useDebouncedData(orderedData, { filterValues, sortBy, searchString, itemCount });
 
         const loadNextPage = useCallback(() => {
             if (!paginationEnabled || dataLoading || noMoreToLoad)

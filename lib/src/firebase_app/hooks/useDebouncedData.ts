@@ -1,16 +1,19 @@
 import React from "react";
+import equal from "react-fast-compare";
 
 /**
  * Hack to prevent data updates for incomplete callbacks from Firestore
  * triggers
  * @param data
+ * @param filters
  * @param timeoutMs
  */
-export function useDebouncedData<T>(data: T[], timeoutMs = 2000) {
+export function useDebouncedData<T>(data: T[], filters: any, timeoutMs = 2000) {
 
     const [deferredData, setDeferredData] = React.useState(data);
     const dataLength = React.useRef(deferredData.length ?? 0);
     const pendingUpdate = React.useRef(false);
+    const currentFilters = React.useRef(filters);
 
     React.useEffect(() => {
 
@@ -22,7 +25,9 @@ export function useDebouncedData<T>(data: T[], timeoutMs = 2000) {
 
         pendingUpdate.current = true;
 
-        const immediateUpdate = data.length >= dataLength.current;
+        const immediateUpdate = data.length >= dataLength.current || !equal(currentFilters.current, filters);
+        currentFilters.current = filters;
+
         let handler: any;
         if (immediateUpdate)
             performUpdate()
@@ -34,7 +39,7 @@ export function useDebouncedData<T>(data: T[], timeoutMs = 2000) {
             if (pendingUpdate.current && immediateUpdate)
                 performUpdate();
         };
-    }, [data, timeoutMs]);
+    }, [data, timeoutMs, filters]);
 
     return deferredData;
 }

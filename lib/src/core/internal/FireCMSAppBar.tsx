@@ -51,7 +51,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
     const { mode, toggleMode } = useModeController();
 
     const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("sm"));
+    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const initial = authController.user?.displayName
         ? authController.user.displayName[0].toUpperCase()

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-import { Link as ReactLink } from "react-router-dom";
+import { Link as ReactLink, useNavigate } from "react-router-dom";
 
 import { Markdown } from "../../../preview";
 import { useFireCMSContext } from "../../../hooks";
@@ -38,6 +38,7 @@ export function NavigationCollectionCard({
 
     const CollectionIcon = getIconForView(collection ?? view);
 
+    const navigate = useNavigate();
     const context = useFireCMSContext();
 
     let actions: React.ReactNode | undefined;
@@ -68,8 +69,11 @@ export function NavigationCollectionCard({
                     alignItems: "flex-start",
                     minHeight: 248
                 }}
-                component={ReactLink}
-                to={url}
+                onClick={() => {
+                    navigate(url);
+                }}
+                // component={"div"}
+                // to={url}
             >
                 <CardContent
                     sx={{
