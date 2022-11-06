@@ -3,17 +3,12 @@
   "name": "FireCMS demo app",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "demo_logo.png",
       "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "type": "image/png"
     },
     {
-      "src": "shop_logo192.png",
-      "type": "image/png",
-      "sizes": "192x192"
-    },
-    {
-      "src": "shop_logo512.png",
+      "src": "demo_logo.png",
       "type": "image/png",
       "sizes": "512x512"
     }
