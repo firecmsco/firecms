@@ -67,48 +67,6 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         const dodecahedron = new THREE.DodecahedronGeometry(radius, complexity);
         return dodecahedron;
 
-        // for (let i = 0; i < dodecahedron.attributes.position.count; i++) {
-        //     const x = dodecahedron.attributes.position.array[i * 3];
-        //     const y = dodecahedron.attributes.position.array[i * 3 + 1];
-        //     const z = dodecahedron.attributes.position.array[i * 3 + 2];
-        //     const pos = [
-        //         x,
-        //         y,
-        //         z
-        //     ];
-        //     const norm = [
-        //         dodecahedron.attributes.normal.array[i * 3],
-        //         dodecahedron.attributes.normal.array[i * 3 + 1],
-        //         dodecahedron.attributes.normal.array[i * 3 + 2]
-        //     ];
-        //     const uv = [
-        //         dodecahedron.attributes.uv.array[i * 2],
-        //         dodecahedron.attributes.uv.array[i * 2 + 1]
-        //     ];
-        //     vertices.push({ pos, norm, uv });
-        //
-        // }
-        //
-        // const positions: number[] = [];
-        // const normals: number[] = [];
-        // const uvs: number[] = [];
-        // for (const vertex of vertices) {
-        //     positions.push(...vertex.pos);
-        //     normals.push(...vertex.norm);
-        //     uvs.push(...vertex.uv);
-        // }
-        //
-        // const geometry = new THREE.BufferGeometry();
-        // const positionNumComponents = 3;
-        // const normalNumComponents = 3;
-        // const uvNumComponents = 2;
-        // geometry.setAttribute(
-        //     "position",
-        //     new THREE.BufferAttribute(new Float32Array(positions), positionNumComponents));
-        //
-        // const merged = BufferGeometryUtils.mergeVertices(geometry);
-        // merged.computeVertexNormals();
-        // return merged;
     }
 
 
@@ -169,7 +127,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, DISPLACEMENT_AREA, 6.0);
 
-        const geometry = buildNightGeometry(SPHERE_RADIUS, 26);
+        const geometry = buildNightGeometry(SPHERE_RADIUS, 30);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = .2;
         mesh.initialPositionY = 17;
@@ -503,14 +461,6 @@ function buildVertexShader() {
                         0.615, -0.5586, -0.05639);
 
 
-    vec3 blendNormal(vec3 base, vec3 blend) {
-        return blend;
-    }
-
-    vec3 blendNormal(vec3 base, vec3 blend, float opacity) {
-        return (blendNormal(base, blend) * opacity + base * (1.0 - opacity));
-    }
-
     vec3 getColor(){
 
         vec3 st = v_position / u_sphere_radius;
@@ -526,21 +476,26 @@ function buildVertexShader() {
     
         for (int i = 1; i < u_colors_count; i++) {
         
-                float noiseFlow = (1. + float(i)) / 1.;
-                float noiseSpeed = (1. + float(i)) * 0.1;
-                float noiseSeed = 7. + float(i) * 13.;
+        
+            float noiseFlow = (1. + float(i)) / 30.;
+            float noiseSpeed = (1. + float(i)) * 0.11;
+            float noiseSeed = 13. + float(i) * 7.;
+                // float noiseFlow = (1. + float(i)) / 1.;
+                // float noiseSpeed = (1. + float(i)) * 0.1;
+                // float noiseSeed = 7. + float(i) * 13.;
                 
                 float noise = snoise(
                     vec3(
-                        st.x + noiseFlow * 10.0,
-                        st.y + noiseFlow * 10.0,
-                        u_time * noiseSpeed + noiseSeed
-                    )
+                        st.x * 1.5 + noiseFlow,
+                        st.y * 1.5 + noiseFlow,
+                        u_time * noiseSpeed 
+                    ) + noiseSeed
                 );
                 
                 noise = clamp(minNoise, maxNoise + float(i) * 0.05, noise);
                 vec3 nextColor = u_colors[i];
-                color = mix(color, nextColor, smoothstep(0.0, 1., noise));
+                color = mix(color, nextColor, smoothstep(0.0, .5, noise));
+               
             
         }
     
@@ -588,7 +543,7 @@ vec3 czm_saturation(vec3 rgb, float adjustment) {
 void main(){
     vec3 color = v_color;
     color.rgb +=  v_displacement_amount * 0.3;
-    color.rg -=  (1.0 - v_position.z / u_sphere_radius) * 0.1;
+    // color.rg -=  (1.0 - v_position.z / u_sphere_radius) * 0.1;
     color = czm_saturation(color, 1.2);
     gl_FragColor = vec4(color,1.0);
 }
