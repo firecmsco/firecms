@@ -4,10 +4,10 @@ import { Box, Fade } from "@mui/material";
 
 export function CenteredView({
                                  children,
-                                 maxWidth = 380
+                                 maxWidth = "100%"
                              }: {
     children: React.ReactNode;
-    maxWidth?: number;
+    maxWidth?: number | string;
 }) {
 
     return (
@@ -20,19 +20,15 @@ export function CenteredView({
                 sx={{
                     display: "flex",
                     flexDirection: "column",
-                    justifyContent: "center",
                     alignItems: "center",
                     height: "100vh",
                     maxHeight: "100%",
                     p: 2
                 }}>
                 <Box sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
                     width: "100%",
-                    maxWidth,
-                    gap: 2
+                    margin: "auto",
+                    maxWidth
                 }}>
 
                     {children}

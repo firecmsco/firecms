@@ -72,8 +72,6 @@ export function NavigationCollectionCard({
                 onClick={() => {
                     navigate(url);
                 }}
-                // component={"div"}
-                // to={url}
             >
                 <CardContent
                     sx={{
