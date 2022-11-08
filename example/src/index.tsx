@@ -5,4 +5,8 @@ import SampleApp from "./SampleApp/SampleApp";
 
 const container = document.getElementById("root");
 const root = createRoot(container as any);
-root.render(<SampleApp/>);
+root.render(
+    <React.StrictMode>
+        <SampleApp/>
+    </React.StrictMode>
+);

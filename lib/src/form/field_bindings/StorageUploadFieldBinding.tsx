@@ -23,7 +23,7 @@ import {
     useSnackbarController,
     useStorageSource
 } from "../../hooks";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
+import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import {
     StorageFieldItem,
     useStorageUploadController

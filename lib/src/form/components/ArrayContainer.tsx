@@ -12,7 +12,7 @@ import {
     Draggable,
     DraggableProvided,
     Droppable
-} from "react-beautiful-dnd";
+} from "@hello-pangea/dnd";
 
 import { getHashValue } from "../../core";
 
