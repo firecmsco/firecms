@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useCallback, useEffect } from "react";
 import equal from "react-fast-compare"
 
 import {
+    alpha,
     Box,
     Drawer as MuiDrawer,
     DrawerProps as MuiDrawerProps,
@@ -16,6 +17,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { useNavigationContext } from "../hooks";
 import { CircularProgressCenter, FireCMSLogo } from "./components";
 import { CSSObject, styled, Theme } from "@mui/material/styles";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -244,6 +246,7 @@ function StyledDrawer(props: MuiDrawerProps & {
             sx={{
                 width: DRAWER_WIDTH,
                 flexShrink: 0,
+                height: "100%",
                 whiteSpace: "nowrap",
                 boxSizing: "border-box",
                 border: "none",
@@ -261,7 +264,7 @@ function StyledDrawer(props: MuiDrawerProps & {
             <IconButton onClick={() => setDrawerOpen(false)}
                         sx={{
                             position: "absolute",
-                            right: 8,
+                            right: 16,
                             top: 16,
                             opacity: open ? 1.0 : 0.0,
                             transition: theme.transitions.create("opacity", {
@@ -316,6 +319,35 @@ function StyledDrawer(props: MuiDrawerProps & {
             </Link>
 
             {props.children}
+
+            <Link sx={(theme) => ({
+                width: DRAWER_WIDTH,
+                position: "fixed",
+                bottom: 0,
+                left: open ? 0 : "-100%",
+                opacity: open ? 1.0 : 0.0,
+                transition: theme.transitions.create(["left", "opacity"], {
+                    easing: theme.transitions.easing.sharp,
+                    duration: theme.transitions.duration.enteringScreen
+                }),
+                px: "24px",
+                py: 1,
+                display: "flex",
+                alignItems: "center",
+                fontWeight: theme.typography.fontWeightMedium,
+                background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : alpha(theme.palette.background.paper, 0.1),
+                backdropFilter: "blur(8px)"
+                // borderTop: `1px solid ${theme.palette.divider}`
+            })}
+                  href={"https://firecms.co"}
+                  onMouseDown={(e: React.MouseEvent) => {
+                      e.preventDefault();
+                  }}
+                  target="_blank">
+                <OpenInNewIcon style={{ marginRight: "24px" }}
+                               fontSize={"small"}/>
+                firecms.co
+            </Link>
 
         </MuiDrawer>
     </>;

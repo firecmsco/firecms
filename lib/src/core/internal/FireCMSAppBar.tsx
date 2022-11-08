@@ -80,10 +80,10 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
             <Slide
                 direction="down" in={true} mountOnEnter unmountOnExit>
-                <Toolbar>
+                <Toolbar sx={{ gap: 1 }}>
 
                     <Hidden lgDown>
-                        <Box mr={3}>
+                        <Box mr={2}>
                             <Link
                                 underline={"none"}
                                 key={"breadcrumb-home"}
@@ -99,7 +99,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         </Box>
                     </Hidden>
 
-                    {largeLayout && <Box mr={2}>
+                    {largeLayout && <Box>
                         <Breadcrumbs
                             separator={<NavigateNextIcon
                                 htmlColor={"rgb(0,0,0,0.87)"}
@@ -144,7 +144,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                             }
                         </ErrorBoundary>}
 
-                    <Box p={1} mr={1}>
+                    <Box p={1}>
                         <IconButton
                             color="inherit"
                             aria-label="Open drawer"
@@ -157,7 +157,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         </IconButton>
                     </Box>
 
-                    <Box p={1} mr={1}>
+                    <Box p={1}>
                         {authController.user && authController.user.photoURL
                             ? <Avatar
                                 src={authController.user.photoURL}/>
