@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
-import { Link as ReactLink, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { Markdown } from "../../../preview";
 import { useFireCMSContext } from "../../../hooks";
@@ -63,6 +63,7 @@ export function NavigationCollectionCard({
         <Paper variant={"outlined"}>
 
             <CardActionArea
+                component={"div"}
                 sx={{
                     display: "flex",
                     flexDirection: "column",

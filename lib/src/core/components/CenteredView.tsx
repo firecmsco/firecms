@@ -4,10 +4,12 @@ import { Box, Fade } from "@mui/material";
 
 export function CenteredView({
                                  children,
-                                 maxWidth = "100%"
+                                 maxWidth = "100%",
+    fullScreen = true
                              }: {
     children: React.ReactNode;
     maxWidth?: number | string;
+    fullScreen?: boolean
 }) {
 
     return (
@@ -21,7 +23,7 @@ export function CenteredView({
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    height: "100vh",
+                    height: fullScreen ? "100vh" : "100%",
                     maxHeight: "100%",
                     p: 2
                 }}>

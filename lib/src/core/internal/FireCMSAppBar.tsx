@@ -19,13 +19,11 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
-import { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
 import {
     useAuthController,
     useBreadcrumbsContext,
     useModeController
 } from "../../hooks";
-import { styled } from "@mui/material/styles";
 import { DRAWER_WIDTH } from "../Scaffold";
 
 interface FireCMSAppBarProps {
