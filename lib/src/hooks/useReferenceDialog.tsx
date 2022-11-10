@@ -1,5 +1,5 @@
 import { useSideDialogsController } from "./useSideDialogsController";
-import { ReferenceDialog, ReferenceDialogProps } from "../core";
+import { ReferenceSelectionView, ReferenceDialogProps } from "../core";
 import { useCallback } from "react";
 import { useNavigationContext } from "./useNavigationContext";
 
@@ -31,7 +31,7 @@ export function useReferenceDialog<M extends Record<string, any>>(referenceDialo
             sideDialogsController.open({
                 key: `reference_${referenceDialogProps.path}`,
                 component:
-                    <ReferenceDialog
+                    <ReferenceSelectionView
                         {...referenceDialogProps as ReferenceDialogProps<M>}
                         collection={usedCollection}/>,
                 width: "90vw"

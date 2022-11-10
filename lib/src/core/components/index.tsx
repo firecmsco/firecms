@@ -4,8 +4,8 @@ export { ErrorView } from "./ErrorView";
 export type { EntityPreviewProps } from "./EntityPreview";
 export { EntityPreview } from "./EntityPreview";
 
-export type { ReferenceDialogProps } from "./ReferenceDialog";
-export { ReferenceDialog } from "./ReferenceDialog";
+export type { ReferenceDialogProps } from "./ReferenceSelectionView";
+export { ReferenceSelectionView } from "./ReferenceSelectionView";
 
 export { CircularProgressCenter } from "./CircularProgressCenter";
 

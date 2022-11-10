@@ -87,12 +87,11 @@ export interface ReferenceDialogProps<M extends Record<string, any>> {
 }
 
 /**
- * This component renders an overlay dialog that allows to select entities
- * in a given collection.
+ * This component allows to select entities from a given collection.
  * You probably want to open this dialog as a side view using {@link useReferenceDialog}
  * @category Components
  */
-export function ReferenceDialog<M extends Record<string, any>>(
+export function ReferenceSelectionView<M extends Record<string, any>>(
     {
         onSingleEntitySelected,
         onMultipleEntitiesSelected,
