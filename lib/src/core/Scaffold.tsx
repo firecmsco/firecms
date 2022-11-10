@@ -97,7 +97,15 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         }, []);
 
         return (
-            <Box sx={{ display: "flex", height: "100vh", width: "100vw" }}>
+            <Box sx={{
+                display: "flex",
+                height: "100vh",
+                width: "100vw",
+                pt: "env(safe-area-inset-top)",
+                pl: "env(safe-area-inset-left)",
+                pr: "env(safe-area-inset-right)",
+                pb: "env(safe-area-inset-bottom)"
+            }}>
 
                 <FireCMSAppBar title={name}
                                drawerOpen={drawerOpen}
