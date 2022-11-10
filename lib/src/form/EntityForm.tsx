@@ -105,15 +105,15 @@ export interface EntityFormProps<M extends Record<string, any>> {
  * @category Components
  */
 export function EntityForm<M extends Record<string, any>>({
-                                                                 status,
-                                                                 path,
-                                                                 collection: inputCollection,
-                                                                 entity,
-                                                                 onEntitySave,
-                                                                 onDiscard,
-                                                                 onModified,
-                                                                 onValuesChanged
-                                                             }: EntityFormProps<M>) {
+                                                              status,
+                                                              path,
+                                                              collection: inputCollection,
+                                                              entity,
+                                                              onEntitySave,
+                                                              onDiscard,
+                                                              onModified,
+                                                              onValuesChanged
+                                                          }: EntityFormProps<M>) {
 
     const context = useFireCMSContext();
     const dataSource = useDataSource();
@@ -127,10 +127,16 @@ export function EntityForm<M extends Record<string, any>>({
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
         (Boolean(initialResolvedCollection.customId) && initialResolvedCollection.customId !== "optional");
 
-    const inputEntityId = useMemo(() => {
-        if ((status === "new" || status === "copy") && !initialResolvedCollection.customId)
-            return dataSource.generateEntityId(path);
-        return mustSetCustomId ? undefined : (entity?.id ?? dataSource.generateEntityId(path));
+    const initialEntityId = useMemo(() => {
+        if (status === "new" || status === "copy") {
+            if (mustSetCustomId) {
+                return undefined;
+            } else {
+                return dataSource.generateEntityId(path);
+            }
+        } else {
+            return entity?.id;
+        }
     }, []);
 
     const closeAfterSaveRef = useRef(false);
@@ -147,7 +153,7 @@ export function EntityForm<M extends Record<string, any>>({
         }
     }, [status, initialResolvedCollection, entity]);
 
-    const [entityId, setEntityId] = React.useState<string | undefined>(inputEntityId);
+    const [entityId, setEntityId] = React.useState<string | undefined>(initialEntityId);
     const [entityIdError, setEntityIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<Error | undefined>();
 
@@ -342,25 +348,25 @@ export function EntityForm<M extends Record<string, any>>({
 }
 
 function FormInternal<M extends Record<string, any>>({
-                             initialValues,
-                             values,
-                             onModified,
-                             onValuesChanged,
-                             underlyingChanges,
-                             entityId,
-                             entity,
-                             touched,
-                             setFieldValue,
-                             collection,
-                             path,
-                             isSubmitting,
-                             status,
-                             handleSubmit,
-                             savingError,
-                             dirty,
-                             errors,
-                             closeAfterSaveRef
-                         }: FormikProps<M> & {
+                                                         initialValues,
+                                                         values,
+                                                         onModified,
+                                                         onValuesChanged,
+                                                         underlyingChanges,
+                                                         entityId,
+                                                         entity,
+                                                         touched,
+                                                         setFieldValue,
+                                                         collection,
+                                                         path,
+                                                         isSubmitting,
+                                                         status,
+                                                         handleSubmit,
+                                                         savingError,
+                                                         dirty,
+                                                         errors,
+                                                         closeAfterSaveRef
+                                                     }: FormikProps<M> & {
     initialValues: Partial<M>,
     onModified: ((modified: boolean) => void) | undefined,
     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
@@ -442,7 +448,7 @@ function FormInternal<M extends Record<string, any>>({
         </Grid>
     );
 
-    const disabled = isSubmitting || !modified;
+    const disabled = isSubmitting || (!modified && status === "existing");
     const formRef = React.createRef<HTMLDivElement>();
 
     return (
