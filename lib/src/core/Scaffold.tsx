@@ -339,7 +339,7 @@ function StyledDrawer(props: MuiDrawerProps & {
                 backdropFilter: "blur(8px)"
                 // borderTop: `1px solid ${theme.palette.divider}`
             })}
-                  href={"https://firecms.co"}
+                  href={"https://firecms.co?utm_source=demo_drawer"}
                   onMouseDown={(e: React.MouseEvent) => {
                       e.preventDefault();
                   }}

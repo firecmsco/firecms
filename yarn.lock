@@ -1667,6 +1667,154 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@camberi/firecms@workspace:lib":
+  version: 0.0.0-use.local
+  resolution: "@camberi/firecms@workspace:lib"
+  dependencies:
+    "@date-io/date-fns": ^2.16.0
+    "@emotion/react": ^11.10.5
+    "@emotion/styled": ^11.10.5
+    "@fontsource/ibm-plex-mono": ^4.5.12
+    "@hello-pangea/dnd": ^16.0.1
+    "@mui/icons-material": ^5.10.9
+    "@mui/lab": ^5.0.0-alpha.105
+    "@mui/material": ^5.10.11
+    "@mui/x-date-pickers": ^5.0.5
+    "@testing-library/jest-dom": ^5.16.5
+    "@testing-library/react": ^13.4.0
+    "@testing-library/user-event": ^14.4.3
+    "@types/jest": ^29.2.0
+    "@types/node": ^18.11.7
+    "@types/object-hash": ^2.2.1
+    "@types/react": ^18.0.24
+    "@types/react-dom": ^18.0.8
+    "@types/react-measure": ^2.0.8
+    "@typescript-eslint/eslint-plugin": ^5.41.0
+    "@typescript-eslint/parser": ^5.41.0
+    "@uiw/react-markdown-preview": ^4.1.4
+    "@uiw/react-md-editor": ^3.19.3
+    "@vitejs/plugin-react": ^2.2.0
+    algoliasearch: ^4.14.2
+    cross-env: ^7.0.3
+    date-fns: ^2.29.3
+    eslint: ^8.26.0
+    eslint-config-standard: ^17.0.0
+    eslint-plugin-import: ^2.26.0
+    eslint-plugin-n: ^15.3.0
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-react: ^7.31.10
+    eslint-plugin-react-hooks: ^4.6.0
+    firebase: ^9.13.0
+    formik: ^2.2.9
+    history: ^5.3.0
+    jest: ^29.2.2
+    npm-run-all: ^4.1.5
+    object-hash: ^3.0.0
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-dropzone: ^14.2.3
+    react-fast-compare: ^3.2.0
+    react-image-file-resizer: ^0.4.8
+    react-router: ^6.4.2
+    react-router-dom: ^6.4.2
+    react-scripts: ^5.0.1
+    react-transition-group: ^4.4.5
+    react-use-measure: ^2.1.1
+    react-window: ^1.8.7
+    tsd: ^0.24.1
+    typeface-roboto: ^1.1.13
+    typeface-rubik: ^1.1.13
+    typescript: ^4.8.4
+    vite: ^3.2.0
+    yup: ^0.32.11
+  peerDependencies:
+    "@emotion/react": ^11.9.3
+    "@emotion/styled": ^11.9.3
+    "@mui/icons-material": ^5.8.4
+    "@mui/lab": ^5.0.0-alpha.90
+    "@mui/material": ^5.9.0
+    "@mui/x-date-pickers": ^5.0.0-beta.1
+    algoliasearch: ^4.13.0
+    firebase: ^9.0.0
+    react: ^18.0.0
+    react-dom: ^18.0.0
+    react-router: ^6.2.0
+    react-router-dom: ^6.2.0
+    react-scripts: ^5.0.1
+  languageName: unknown
+  linkType: soft
+
+"@camberi/firecms_collection_editor@workspace:collection_editor":
+  version: 0.0.0-use.local
+  resolution: "@camberi/firecms_collection_editor@workspace:collection_editor"
+  dependencies:
+    "@camberi/firecms": "workspace:lib"
+    "@emotion/react": ^11.10.5
+    "@emotion/styled": ^11.10.5
+    "@mui/icons-material": ^5.10.9
+    "@mui/lab": ^5.0.0-alpha.105
+    "@mui/material": ^5.10.11
+    "@types/react": ^18.0.24
+    "@types/react-dom": ^18.0.8
+    "@typescript-eslint/eslint-plugin": ^5.41.0
+    "@typescript-eslint/parser": ^5.41.0
+    "@vitejs/plugin-react": ^2.2.0
+    algoliasearch: ^4.14.2
+    eslint: ^8.26.0
+    eslint-config-standard: ^17.0.0
+    eslint-plugin-import: ^2.26.0
+    eslint-plugin-n: ^15.3.0
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-react: ^7.31.10
+    eslint-plugin-react-hooks: ^4.6.0
+    firebase: ^9.13.0
+    flexsearch: 0.7.21
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-router: ^6.4.2
+    react-router-dom: ^6.4.2
+    react-scripts: ^5.0.1
+    typescript: ^4.8.4
+    vite: ^3.2.0
+    vite-plugin-fonts: ^0.6.0
+  languageName: unknown
+  linkType: soft
+
+"@camberi/firecms_user_management@workspace:user_management":
+  version: 0.0.0-use.local
+  resolution: "@camberi/firecms_user_management@workspace:user_management"
+  dependencies:
+    "@camberi/firecms": "workspace:lib"
+    "@emotion/react": ^11.10.5
+    "@emotion/styled": ^11.10.5
+    "@mui/icons-material": ^5.10.9
+    "@mui/lab": ^5.0.0-alpha.105
+    "@mui/material": ^5.10.11
+    "@types/react": ^18.0.24
+    "@types/react-dom": ^18.0.8
+    "@typescript-eslint/eslint-plugin": ^5.41.0
+    "@typescript-eslint/parser": ^5.41.0
+    "@vitejs/plugin-react": ^2.2.0
+    algoliasearch: ^4.14.2
+    eslint: ^8.26.0
+    eslint-config-standard: ^17.0.0
+    eslint-plugin-import: ^2.26.0
+    eslint-plugin-n: ^15.3.0
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-react: ^7.31.10
+    eslint-plugin-react-hooks: ^4.6.0
+    firebase: ^9.13.0
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-router: ^6.4.2
+    react-router-dom: ^6.4.2
+    react-scripts: ^5.0.1
+    typescript: ^4.8.4
+    vite: ^3.2.0
+    vite-plugin-fonts: ^0.6.0
+  languageName: unknown
+  linkType: soft
+
 "@csstools/normalize.css@npm:*":
   version: 12.0.0
   resolution: "@csstools/normalize.css@npm:12.0.0"
@@ -2602,114 +2750,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/collection_editor@workspace:collection_editor":
-  version: 0.0.0-use.local
-  resolution: "@firecms/collection_editor@workspace:collection_editor"
-  dependencies:
-    "@emotion/react": ^11.10.5
-    "@emotion/styled": ^11.10.5
-    "@mui/icons-material": ^5.10.9
-    "@mui/lab": ^5.0.0-alpha.105
-    "@mui/material": ^5.10.11
-    "@types/react": ^18.0.24
-    "@types/react-dom": ^18.0.8
-    "@typescript-eslint/eslint-plugin": ^5.41.0
-    "@typescript-eslint/parser": ^5.41.0
-    "@vitejs/plugin-react": ^2.2.0
-    algoliasearch: ^4.14.2
-    eslint: ^8.26.0
-    eslint-config-standard: ^17.0.0
-    eslint-plugin-import: ^2.26.0
-    eslint-plugin-n: ^15.3.0
-    eslint-plugin-promise: ^6.1.1
-    eslint-plugin-react: ^7.31.10
-    eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.13.0
-    firecms: "workspace:lib"
-    flexsearch: 0.7.21
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-router: ^6.4.2
-    react-router-dom: ^6.4.2
-    react-scripts: ^5.0.1
-    typescript: ^4.8.4
-    vite: ^3.2.0
-    vite-plugin-fonts: ^0.6.0
-  languageName: unknown
-  linkType: soft
-
-"@firecms/user_management@workspace:user_management":
-  version: 0.0.0-use.local
-  resolution: "@firecms/user_management@workspace:user_management"
-  dependencies:
-    "@emotion/react": ^11.10.5
-    "@emotion/styled": ^11.10.5
-    "@mui/icons-material": ^5.10.9
-    "@mui/lab": ^5.0.0-alpha.105
-    "@mui/material": ^5.10.11
-    "@types/react": ^18.0.24
-    "@types/react-dom": ^18.0.8
-    "@typescript-eslint/eslint-plugin": ^5.41.0
-    "@typescript-eslint/parser": ^5.41.0
-    "@vitejs/plugin-react": ^2.2.0
-    algoliasearch: ^4.14.2
-    eslint: ^8.26.0
-    eslint-config-standard: ^17.0.0
-    eslint-plugin-import: ^2.26.0
-    eslint-plugin-n: ^15.3.0
-    eslint-plugin-promise: ^6.1.1
-    eslint-plugin-react: ^7.31.10
-    eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.13.0
-    firecms: "workspace:lib"
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-router: ^6.4.2
-    react-router-dom: ^6.4.2
-    react-scripts: ^5.0.1
-    typescript: ^4.8.4
-    vite: ^3.2.0
-    vite-plugin-fonts: ^0.6.0
-  languageName: unknown
-  linkType: soft
-
-"@firemcs/saas@workspace:saas":
-  version: 0.0.0-use.local
-  resolution: "@firemcs/saas@workspace:saas"
-  dependencies:
-    "@emotion/react": ^11.10.5
-    "@emotion/styled": ^11.10.5
-    "@firecms/collection_editor": "workspace:collection_editor"
-    "@mui/icons-material": ^5.10.9
-    "@mui/lab": ^5.0.0-alpha.105
-    "@mui/material": ^5.10.11
-    "@react-oauth/google": 0.2.8
-    "@types/react": ^18.0.24
-    "@types/react-dom": ^18.0.8
-    "@typescript-eslint/eslint-plugin": ^5.41.0
-    "@typescript-eslint/parser": ^5.41.0
-    "@vitejs/plugin-react": ^2.2.0
-    algoliasearch: ^4.14.2
-    eslint: ^8.26.0
-    eslint-config-standard: ^17.0.0
-    eslint-plugin-import: ^2.26.0
-    eslint-plugin-n: ^15.3.0
-    eslint-plugin-promise: ^6.1.1
-    eslint-plugin-react: ^7.31.10
-    eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.13.0
-    firecms: "workspace:lib"
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-router: ^6.4.2
-    react-router-dom: ^6.4.2
-    react-scripts: ^5.0.1
-    typescript: ^4.8.4
-    vite: ^3.2.0
-    vite-plugin-fonts: ^0.6.0
-  languageName: unknown
-  linkType: soft
-
 "@fontsource/ibm-plex-mono@npm:^4.5.12":
   version: 4.5.12
   resolution: "@fontsource/ibm-plex-mono@npm:4.5.12"
@@ -2764,7 +2804,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@hello-pangea/dnd@npm:^16.0.0":
+"@hello-pangea/dnd@npm:^16.0.1":
   version: 16.0.1
   resolution: "@hello-pangea/dnd@npm:16.0.1"
   dependencies:
@@ -8625,6 +8665,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example@workspace:example"
   dependencies:
+    "@camberi/firecms": "workspace:lib"
     "@emotion/react": ^11.10.5
     "@emotion/styled": ^11.10.5
     "@mui/icons-material": ^5.10.9
@@ -8644,7 +8685,6 @@ __metadata:
     eslint-plugin-react: ^7.31.10
     eslint-plugin-react-hooks: ^4.6.0
     firebase: ^9.13.0
-    firecms: "workspace:lib"
     react: ^18.2.0
     react-dom: ^18.2.0
     react-router: ^6.4.2
@@ -8659,83 +8699,6 @@ __metadata:
 "firecms-parent@workspace:.":
   version: 0.0.0-use.local
   resolution: "firecms-parent@workspace:."
-  languageName: unknown
-  linkType: soft
-
-"firecms@workspace:lib":
-  version: 0.0.0-use.local
-  resolution: "firecms@workspace:lib"
-  dependencies:
-    "@date-io/date-fns": ^2.16.0
-    "@emotion/react": ^11.10.5
-    "@emotion/styled": ^11.10.5
-    "@fontsource/ibm-plex-mono": ^4.5.12
-    "@hello-pangea/dnd": ^16.0.0
-    "@mui/icons-material": ^5.10.9
-    "@mui/lab": ^5.0.0-alpha.105
-    "@mui/material": ^5.10.11
-    "@mui/x-date-pickers": ^5.0.5
-    "@testing-library/jest-dom": ^5.16.5
-    "@testing-library/react": ^13.4.0
-    "@testing-library/user-event": ^14.4.3
-    "@types/jest": ^29.2.0
-    "@types/node": ^18.11.7
-    "@types/object-hash": ^2.2.1
-    "@types/react": ^18.0.24
-    "@types/react-dom": ^18.0.8
-    "@types/react-measure": ^2.0.8
-    "@typescript-eslint/eslint-plugin": ^5.41.0
-    "@typescript-eslint/parser": ^5.41.0
-    "@uiw/react-markdown-preview": ^4.1.4
-    "@uiw/react-md-editor": ^3.19.3
-    "@vitejs/plugin-react": ^2.2.0
-    algoliasearch: ^4.14.2
-    cross-env: ^7.0.3
-    date-fns: ^2.29.3
-    eslint: ^8.26.0
-    eslint-config-standard: ^17.0.0
-    eslint-plugin-import: ^2.26.0
-    eslint-plugin-n: ^15.3.0
-    eslint-plugin-promise: ^6.1.1
-    eslint-plugin-react: ^7.31.10
-    eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.13.0
-    formik: ^2.2.9
-    history: ^5.3.0
-    jest: ^29.2.2
-    npm-run-all: ^4.1.5
-    object-hash: ^3.0.0
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-dropzone: ^14.2.3
-    react-fast-compare: ^3.2.0
-    react-image-file-resizer: ^0.4.8
-    react-router: ^6.4.2
-    react-router-dom: ^6.4.2
-    react-scripts: ^5.0.1
-    react-transition-group: ^4.4.5
-    react-use-measure: ^2.1.1
-    react-window: ^1.8.7
-    tsd: ^0.24.1
-    typeface-roboto: ^1.1.13
-    typeface-rubik: ^1.1.13
-    typescript: ^4.8.4
-    vite: ^3.2.0
-    yup: ^0.32.11
-  peerDependencies:
-    "@emotion/react": ^11.9.3
-    "@emotion/styled": ^11.9.3
-    "@mui/icons-material": ^5.8.4
-    "@mui/lab": ^5.0.0-alpha.90
-    "@mui/material": ^5.9.0
-    "@mui/x-date-pickers": ^5.0.0
-    algoliasearch: ^4.13.0
-    firebase: ^9.0.0
-    react: ^18.0.0
-    react-dom: ^18.0.0
-    react-router: ^6.2.0
-    react-router-dom: ^6.2.0
-    react-scripts: ^5.0.1
   languageName: unknown
   linkType: soft
 
@@ -15505,6 +15468,43 @@ __metadata:
   checksum: cb4f97ad25a75ebc11a8ef4e33bb962f8af8516bb2001082ceabd8902e15b98f4b84b4f8a9b222e5d57fc3bd1379c483886ed4619367a7680dad65316993021d
   languageName: node
   linkType: hard
+
+"saas@workspace:saas":
+  version: 0.0.0-use.local
+  resolution: "saas@workspace:saas"
+  dependencies:
+    "@camberi/firecms": "workspace:lib"
+    "@camberi/firecms_collection_editor": "workspace:collection_editor"
+    "@emotion/react": ^11.10.5
+    "@emotion/styled": ^11.10.5
+    "@mui/icons-material": ^5.10.9
+    "@mui/lab": ^5.0.0-alpha.105
+    "@mui/material": ^5.10.11
+    "@react-oauth/google": 0.2.8
+    "@types/react": ^18.0.24
+    "@types/react-dom": ^18.0.8
+    "@typescript-eslint/eslint-plugin": ^5.41.0
+    "@typescript-eslint/parser": ^5.41.0
+    "@vitejs/plugin-react": ^2.2.0
+    algoliasearch: ^4.14.2
+    eslint: ^8.26.0
+    eslint-config-standard: ^17.0.0
+    eslint-plugin-import: ^2.26.0
+    eslint-plugin-n: ^15.3.0
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-react: ^7.31.10
+    eslint-plugin-react-hooks: ^4.6.0
+    firebase: ^9.13.0
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-router: ^6.4.2
+    react-router-dom: ^6.4.2
+    react-scripts: ^5.0.1
+    typescript: ^4.8.4
+    vite: ^3.2.0
+    vite-plugin-fonts: ^0.6.0
+  languageName: unknown
+  linkType: soft
 
 "sade@npm:^1.7.3":
   version: 1.8.1
