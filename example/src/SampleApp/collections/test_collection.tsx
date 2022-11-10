@@ -13,7 +13,7 @@ import {
 import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
 
-const relaxedStatus:EnumValues = [
+const relaxedStatus: EnumValues = [
     {
         id: "-3",
         label: "Very tense",
@@ -182,8 +182,8 @@ export const testCollection = buildCollection({
                 { id: "EUR", label: "Euros", color: "blueDark" },
                 {
                     id: "DOL",
-label: "Dollars",
-color: {
+                    label: "Dollars",
+                    color: {
                         color: "#FFFFFF",
                         text: "#333333"
                     }

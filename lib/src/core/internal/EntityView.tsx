@@ -143,19 +143,22 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         useEffect(() => {
             if (!selectedSubPath)
                 setTabsPosition(-1);
+            else {
+                if (customViews) {
+                    const index = customViews
+                        .map((c) => c.path)
+                        .findIndex((p) => p === selectedSubPath);
+                    if (index !== -1)
+                        setTabsPosition(index);
+                }
 
-            if (customViews) {
-                const index = customViews
-                    .map((c) => c.path)
-                    .findIndex((p) => p === selectedSubPath);
-                setTabsPosition(index);
-            }
-
-            if (subcollections && selectedSubPath) {
-                const index = subcollections
-                    .map((c) => c.path)
-                    .findIndex((p) => p === selectedSubPath);
-                setTabsPosition(index + customViewsCount);
+                if (subcollections) {
+                    const index = subcollections
+                        .map((c) => c.path)
+                        .findIndex((p) => p === selectedSubPath);
+                    if (index !== -1)
+                        setTabsPosition(index + customViewsCount);
+                }
             }
         }, [selectedSubPath, customViewsCount, customViews, subcollections]);
 
