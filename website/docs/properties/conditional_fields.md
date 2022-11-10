@@ -13,6 +13,16 @@ and return your property.
 This is useful for changing property configurations like available values on the
 fly, based on other values.
 
+:::tip
+In FireCMS2 you can use property builders at any level of your property tree
+(including children of maps an arrays). In version 1.0 this was restricted to
+the root level only.
+
+You can access the complete values of the entity being edited in the builder
+with the `values` prop, but also the value of the property being built with
+`propertyValue`.
+:::
+
 ### Example 1
 
 Example of field that gets enabled or disabled based on other values:
@@ -61,7 +71,7 @@ export const productCollection: EntityCollection = buildCollection<Partial<Produ
 });
 ```
 
-### Example 2:
+### Example 2
 
 A `User` type that has a `source` field that can be of type `facebook`
 or `apple`, and its fields change accordingly
