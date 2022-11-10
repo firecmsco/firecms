@@ -27,7 +27,7 @@ import {
     buildEntityCallbacks,
     EntityOnDeleteProps,
     EntityOnSaveProps
-} from "firecms";
+} from "@camberi/firecms";
 
 type Product = {
     name: string;

@@ -17,7 +17,7 @@ import {
     Markdown,
     useDataSource,
     useStorageSource
-} from "firecms";
+} from "@camberi/firecms";
 import { Product } from "../types";
 import { productsCollection } from "../collections/products_collection";
 import { BlogEntry } from "../collections/blog_collection";
@@ -164,6 +164,7 @@ function ProductGroupPreview({ references }: { references: EntityReference[] }) 
                 .then((results) => setProducts(results));
         }
     }, [references, dataSource]);
+
 
     if (!references)
         return <></>;

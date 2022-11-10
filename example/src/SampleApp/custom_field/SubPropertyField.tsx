@@ -5,7 +5,7 @@ import {
     FieldDescription,
     FieldProps,
     PropertyFieldBinding
-} from "firecms";
+} from "@camberi/firecms";
 
 /**
  * Simple map field to test validation of custom fields
@@ -19,7 +19,7 @@ export const CustomField = ({
                          showError,
                          includeDescription,
                          context,
-                         setValue
+                         setValue,
                      }: FieldProps<Record<string, any>>) => {
     useEffect(() => {
         if (!value) setValue({});
@@ -31,10 +31,10 @@ export const CustomField = ({
             name: "Sample",
             dataType: "string",
             validation: {
-                required: true
-            }
+                required: true,
+            },
         }),
-        context
+        context,
     };
 
     return (

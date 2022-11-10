@@ -3,9 +3,9 @@ import algoliasearch, { SearchClient } from "algoliasearch";
 import {
     FirestoreTextSearchController,
     performAlgoliaTextSearch
-} from "firecms";
+} from "@camberi/firecms";
 
-let client: SearchClient | undefined;
+let client: SearchClient | undefined = undefined;
 // process is defined for react-scripts builds
 if (typeof process !== "undefined") {
     if (process.env.REACT_APP_ALGOLIA_APP_ID && process.env.REACT_APP_ALGOLIA_SEARCH_KEY) {
@@ -27,7 +27,7 @@ const usersIndex = client && client.initIndex("users");
 const blogIndex = client && client.initIndex("blog");
 
 export const textSearchController: FirestoreTextSearchController =
-    ({ path, searchString }) => {
+    ({path, searchString}) => {
         if (path === "products")
             return productsIndex && performAlgoliaTextSearch(productsIndex, searchString);
         if (path === "users")

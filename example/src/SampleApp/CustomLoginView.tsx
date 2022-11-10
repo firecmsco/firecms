@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { FirebaseLoginView, FirebaseLoginViewProps } from "firecms";
+import { FirebaseLoginView, FirebaseLoginViewProps } from "@camberi/firecms";
 import { FormControlLabel, FormGroup, Switch, Typography } from "@mui/material";
 
 export function CustomLoginView(props: FirebaseLoginViewProps) {

@@ -7,7 +7,7 @@ import {
     buildProperty,
     EntityReference,
     FirebaseCMSApp
-} from "firecms";
+} from "@camberi/firecms";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";

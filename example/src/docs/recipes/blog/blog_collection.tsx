@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty } from "firecms";
+import { buildCollection, buildProperty } from "@camberi/firecms";
 import { BlogEntryPreview } from "./BlogEntryPreview";
 import { BlogEntry } from "./types";
 
@@ -79,7 +79,7 @@ export const blogCollection = buildCollection<BlogEntry>({
                 published: {
                     id: "published",
                     label: "Published",
-                    disabled: !values.header_image
+                    disabled: !values.header_image,
                 },
                 draft: "Draft"
             },

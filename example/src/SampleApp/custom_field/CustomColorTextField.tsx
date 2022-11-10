@@ -1,6 +1,6 @@
 import React from "react";
 import { TextField } from "@mui/material";
-import { FieldDescription, FieldProps } from "firecms";
+import { FieldDescription, FieldProps } from "@camberi/firecms";
 
 interface CustomColorTextFieldProps {
     color: string
@@ -17,6 +17,7 @@ export default function CustomColorTextField({
                                                  context, // the rest of the entity values here
                                                  ...props
                                              }: FieldProps<string, CustomColorTextFieldProps>) {
+
 
     return (
         <>

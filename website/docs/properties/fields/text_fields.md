@@ -15,7 +15,7 @@ If you define a string property with no other configuration parameters, you will
 get a text field:
 
 ```typescript jsx
-import { buildProperty } from "firecms";
+import { buildProperty } from "@camberi/firecms";
 
 buildProperty({
     dataType: "string",
@@ -41,7 +41,7 @@ contain line breaks.
 Set the `multiline` flag to `true` in a string property.
 
 ```typescript jsx
-import { buildProperty } from "firecms";
+import { buildProperty } from "@camberi/firecms";
 
 buildProperty({
     dataType: "string",
@@ -69,7 +69,7 @@ editing capabilities of text using the Markdown format.
 Set the `markdown` flag to `true` in a string property.
 
 ```typescript jsx
-import { buildProperty } from "firecms";
+import { buildProperty } from "@camberi/firecms";
 
 buildProperty({
     dataType: "string",
@@ -97,7 +97,7 @@ user is a valid URL.
 Set the `url` flag to `true` in a string property.
 
 ```typescript jsx
-import { buildProperty } from "firecms";
+import { buildProperty } from "@camberi/firecms";
 
 buildProperty({
     dataType: "string",
@@ -125,7 +125,7 @@ end user is a valid email.
 Set the `email` flag to `true` in a string property.
 
 ```typescript jsx
-import { buildProperty } from "firecms";
+import { buildProperty } from "@camberi/firecms";
 
 buildProperty({
     dataType: "string",

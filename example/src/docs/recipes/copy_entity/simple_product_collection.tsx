@@ -1,4 +1,4 @@
-import { buildCollection, buildProperties } from "firecms";
+import { buildCollection, buildProperties } from "@camberi/firecms";
 
 export type Product = {
     name: string;

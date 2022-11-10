@@ -1,4 +1,4 @@
-import { buildCollection } from "firecms";
+import { buildCollection, } from "@camberi/firecms";
 import { Product } from "./types";
 
 export const productsCollection = buildCollection<Product>({
@@ -134,3 +134,4 @@ export const productsCollection = buildCollection<Product>({
     }
 
 });
+

@@ -4,7 +4,7 @@ import {
     useDataSource,
     useReferenceDialog,
     useSnackbarController
-} from "firecms";
+} from "@camberi/firecms";
 import { Button } from "@mui/material";
 import { useCallback } from "react";
 

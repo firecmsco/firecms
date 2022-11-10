@@ -3,7 +3,7 @@ import {
     Property,
     PropertyPreview,
     PropertyPreviewProps
-} from "firecms";
+} from "@camberi/firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 import { Box } from "@mui/material";
 

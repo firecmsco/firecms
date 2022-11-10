@@ -121,7 +121,7 @@ import {
     buildCollection,
     buildProperty,
     EntityReference
-} from "firecms";
+} from "@camberi/firecms";
 
 type Product = {
     name: string;
@@ -242,7 +242,7 @@ import {
     buildCollection,
     buildCollection,
     AdditionalFieldDelegate
-} from "firecms";
+} from "@camberi/firecms";
 
 type User = { name: string }
 
@@ -275,7 +275,7 @@ import {
     buildCollection,
     AdditionalFieldDelegate,
     AsyncPreviewComponent
-} from "firecms";
+} from "@camberi/firecms";
 
 export const productAdditionalField: AdditionalFieldDelegate<Product> = {
     id: "spanish_title",
@@ -322,7 +322,7 @@ can specify the filters that you have enabled in your Firestore configuration.
 In order to do so, just pass the indexes configuration to your collection:
 
 ```tsx
-import { buildCollection } from "firecms";
+import { buildCollection } from "@camberi/firecms";
 
 const productsCollection = buildCollection<Product>({
     path: "products",

@@ -1,4 +1,4 @@
-import { buildCollection, CollectionOverrideHandler } from "firecms";
+import { buildCollection, CollectionOverrideHandler } from "@camberi/firecms";
 
 /**
  * You can use a custom collection resolver to override configs for specific

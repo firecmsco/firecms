@@ -3,7 +3,7 @@ import {
     buildCollection,
     buildProperty,
     ExportMappingFunction
-} from "firecms";
+} from "@camberi/firecms";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
 
 export type BlogEntry = {

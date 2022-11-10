@@ -3,7 +3,7 @@ import {
     AsyncPreviewComponent,
     buildCollection,
     EntityCallbacks
-} from "firecms";
+} from "@camberi/firecms";
 
 import PriceTextPreview from "../custom_field_preview/PriceTextPreview";
 import {

@@ -24,7 +24,7 @@ import {
     useFirestoreDataSource,
     useInitialiseFirebase,
     useValidateAuthenticator
-} from "firecms";
+} from "@camberi/firecms";
 
 import { firebaseConfig } from "../firebase_config";
 

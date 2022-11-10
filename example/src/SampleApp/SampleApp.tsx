@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import { getAnalytics } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
-import { Authenticator, CMSView, FirebaseCMSApp } from "firecms";
+import { Authenticator, CMSView, FirebaseCMSApp } from "@camberi/firecms";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
@@ -26,7 +26,7 @@ import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
 import {
     SampleCollectionActions
-} from "./collection_actions/SampleCollectionActions";
+} from "./collection_actions/SampleCollectionActions"; 
 
 function SampleApp() {
 
@@ -117,7 +117,7 @@ function SampleApp() {
         toolbarExtraWidget={githubLink}
         LoginView={CustomLoginView}
     />;
-
+    
 }
 
 export default SampleApp;

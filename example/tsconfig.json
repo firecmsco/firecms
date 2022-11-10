@@ -18,7 +18,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "firecms": ["../lib/src/index.ts"]
+      "@camberi/firecms": ["../lib/src/index.ts"]
     }
   },
   "include": ["./src"]

@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty } from "firecms";
+import { buildCollection, buildProperty } from "@camberi/firecms";
 
 export const showcaseCollection = buildCollection({
     path: "showcase",

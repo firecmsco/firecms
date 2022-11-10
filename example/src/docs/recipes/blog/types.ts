@@ -1,4 +1,4 @@
-import { EntityReference } from "firecms";
+import { EntityReference } from "@camberi/firecms";
 
 export type Product = {
     name: string;
@@ -41,3 +41,5 @@ export type BlogEntryProducts = {
     type: "products";
     value: Product[];
 }
+
+

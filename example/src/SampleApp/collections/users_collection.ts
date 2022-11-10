@@ -1,4 +1,4 @@
-import { buildCollection } from "firecms";
+import { buildCollection } from "@camberi/firecms";
 
 export const usersCollection = buildCollection({
     path: "users",
