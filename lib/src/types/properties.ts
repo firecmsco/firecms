@@ -481,7 +481,9 @@ export interface MapProperty<T extends Record<string, CMSType> = Record<string, 
     propertiesOrder?: Extract<keyof T, string>[];
 
     /**
-     * Rules for validating this property
+     * Rules for validating this property.
+     * NOTE: If you don't set `required` in the map property, an empty object
+     * will be considered valid, even if you set `required` in the properties.
      */
     validation?: PropertyValidationSchema,
 

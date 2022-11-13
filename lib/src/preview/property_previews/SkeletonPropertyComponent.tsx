@@ -29,9 +29,9 @@ export interface SkeletonPropertyComponentProps {
  * @category Preview components
  */
 export function SkeletonPropertyComponent({
-                                         property,
-                                         size
-                                     }: SkeletonPropertyComponentProps
+                                              property,
+                                              size
+                                          }: SkeletonPropertyComponentProps
 ) {
 
     if (!property) {
@@ -53,7 +53,7 @@ export function SkeletonPropertyComponent({
 
         if (arrayProperty.of) {
             if (Array.isArray(arrayProperty.of)) {
-                content = <>{arrayProperty.of.map(p => renderGenericArrayCell(p))} </>;
+                content = <>{arrayProperty.of.map((p, i) => renderGenericArrayCell(p, i))} </>;
             } else {
                 if (arrayProperty.of.dataType === "map" && arrayProperty.of.properties) {
                     content = renderArrayOfMaps(arrayProperty.of.properties, size, arrayProperty.of.previewProperties);
@@ -120,26 +120,28 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
         <Table size={"small"}>
             <TableBody>
                 {mapProperties &&
-                mapProperties.map((key, index) => {
-                    return (
-                        <TableRow key={`table_${property.name}_${index}`}
-                                  sx={{
-                                      "&:last-child th, &:last-child td": {
-                                          borderBottom: 0
-                                      }
-                                  }}>
-                            <TableCell key={`table-cell-title-${key}`}
-                                       component="th">
-                                <Skeleton variant="text"/>
-                            </TableCell>
-                            <TableCell key={`table-cell-${key}`} component="th">
-                                {property.properties && <SkeletonPropertyComponent
-                                    property={property.properties[key]}
-                                    size={"small"}/>}
-                            </TableCell>
-                        </TableRow>
-                    );
-                })}
+                    mapProperties.map((key, index) => {
+                        return (
+                            <TableRow key={`table_${property.name}_${index}`}
+                                      sx={{
+                                          "&:last-child th, &:last-child td": {
+                                              borderBottom: 0
+                                          }
+                                      }}>
+                                <TableCell key={`table-cell-title-${key}`}
+                                           component="th">
+                                    <Skeleton variant="text"/>
+                                </TableCell>
+                                <TableCell key={`table-cell-${key}`}
+                                           component="th">
+                                    {property.properties &&
+                                        <SkeletonPropertyComponent
+                                            property={property.properties[key]}
+                                            size={"small"}/>}
+                                </TableCell>
+                            </TableRow>
+                        );
+                    })}
             </TableBody>
         </Table>
     );
@@ -206,15 +208,17 @@ function renderArrayEnumTableCell() {
 }
 
 function renderGenericArrayCell(
-    property: ResolvedProperty
+    property: ResolvedProperty,
+    index = 0
 ) {
     return (
-        <Grid>
+        <Grid key={"array_index"}>
 
             {
                 [0, 1].map((value, index) =>
                     <>
-                        <SkeletonPropertyComponent property={property}
+                        <SkeletonPropertyComponent key={`i_${index}`}
+                                                   property={property}
                                                    size={"small"}/>
                     </>
                 )}

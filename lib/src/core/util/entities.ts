@@ -73,7 +73,7 @@ export function updateDateAutoValues<M extends Record<string, any>>({
                                                                             status: EntityStatus,
                                                                             timestampNowValue: any,
                                                                             setDateToMidnight: (input?: any) => any | undefined
-                                                                           }): EntityValues<M> {
+                                                                        }): EntityValues<M> {
     return traverseValuesProperties(
         inputValues,
         properties,
@@ -95,7 +95,7 @@ export function updateDateAutoValues<M extends Record<string, any>>({
                 return inputValue;
             }
         }
-    );
+    ) ?? {} as M;
 }
 
 /**
@@ -126,16 +126,18 @@ export function traverseValuesProperties<M extends Record<string, any>>(
     inputValues: Partial<EntityValues<M>>,
     properties: ResolvedProperties<M>,
     operation: (value: any, property: Property) => any
-): EntityValues<M> {
+): EntityValues<M> | undefined {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues)[key];
             const updatedValue = traverseValueProperty(inputValue, property as Property, operation);
-            if (updatedValue === undefined) return {};
+            if (updatedValue === undefined) return undefined;
             return ({ [key]: updatedValue });
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
-    return { ...inputValues, ...updatedValues };
+    const result = { ...inputValues, ...updatedValues };
+    if (Object.keys(result).length === 0) return undefined;
+    return result;
 }
 
 export function traverseValueProperty(inputValue: any,

@@ -26,7 +26,7 @@ declare module "yup" {
         uniqueInArray(mapper: (a: T) => T, message: string): ArraySchema<T>;
     }
 }
-yup.addMethod(yup.array, "uniqueInArray", function(
+yup.addMethod(yup.array, "uniqueInArray", function (
     mapper = (a: any) => a,
     message: string
 ) {
@@ -98,23 +98,41 @@ export function mapPropertyToYup<T>(propertyContext: PropertyContext<T>): AnySch
 }
 
 export function getYupMapObjectSchema<M extends Record<string, any>>({
-                                          property,
-                                          entityId,
-                                          customFieldValidator,
-                                          name
-                                      }: PropertyContext<M>): ObjectSchema<any> {
+                                                                         property,
+                                                                         entityId,
+                                                                         customFieldValidator,
+                                                                         name
+                                                                     }: PropertyContext<M>): ObjectSchema<any> {
     const objectSchema: any = {};
+    const validation = property.validation;
     if (property.properties)
         Object.entries(property.properties).forEach(([childName, childProperty]: [string, ResolvedProperty]) => {
-            objectSchema[childName] = mapPropertyToYup({
-                property: childProperty as ResolvedProperty<any>,
+            objectSchema[childName] = mapPropertyToYup<any>({
+                property: childProperty,
                 parentProperty: property as ResolvedMapProperty,
                 customFieldValidator,
                 name: `${name}[${childName}]`,
                 entityId
             });
         });
+
     return yup.object().shape(objectSchema);
+    // const object: ObjectSchema<any> = yup.object().shape(objectSchema);
+    // return validation?.required
+    //     ? object.required(validation?.requiredMessage ? validation.requiredMessage : "Required").nullable(true)
+    //     : yup.object().optional().default(undefined).notRequired().nullable(true).test(
+    //         "empty-check",
+    //         "Optional map can be empty",
+    //         (o: any, testContext: any) => {
+    //             try {
+    //                 if (!o || Object.keys(o).length === 0) return true;
+    //                 return object.validateSync(o);
+    //             } catch (e) {
+    //                 testContext.createError(e);
+    //                 console.error(e);
+    //                 return false;
+    //             }
+    //         });
 }
 
 function getYupStringSchema({
@@ -267,12 +285,12 @@ function getYupDateSchema({
 }
 
 function getYupReferenceSchema({
-                                                                     property,
-                                                                     parentProperty,
-                                                                     customFieldValidator,
-                                                                     name,
+                                   property,
+                                   parentProperty,
+                                   customFieldValidator,
+                                   name,
                                    entityId
-                                                                 }: PropertyContext<EntityReference>): AnySchema {
+                               }: PropertyContext<EntityReference>): AnySchema {
     let collection: ObjectSchema<any> = yup.object();
     const validation = property.validation;
     if (validation) {

@@ -195,8 +195,11 @@ export function EntityForm<M extends Record<string, any>>({
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
         if (initialValues && status === "existing") {
-            return Object.keys(collection.properties)
-                .map((key) => {
+            return Object.entries(collection.properties)
+                .map(([key, property]) => {
+                    if (isReadOnly(property) || isHidden(property)) {
+                        return {};
+                    }
                     const initialValue = initialValues[key];
                     const latestValue = baseDataSourceValues[key];
                     if (!equal(initialValue, latestValue)) {

@@ -175,6 +175,26 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entities",
     properties: {
+        map: {
+            dataType: "map",
+            properties: {
+                sample: {
+                    name: "Sample",
+                    dataType: "string",
+                    validation: {
+                        required: true
+                    }
+                },
+                num: {
+                    name: "Num",
+                    dataType: "number",
+                    validation: {
+                        required: true,
+                        min: 5
+                    }
+                }
+            }
+        },
         test_enum: buildProperty({
             dataType: "string",
             name: "Currency",
@@ -205,8 +225,7 @@ export const testCollection = buildCollection({
                         label: " Cyan ",
                         color: "cyanDarker"
                     }
-                ],
-            validation: { required: true }
+                ]
         },
 
         test_date: {
@@ -642,8 +661,8 @@ export const testCollection = buildCollection({
         updated_on: {
             name: "Updated on",
             dataType: "date",
-            autoValue: "on_update",
-        },
+            autoValue: "on_update"
+        }
         // description: {
         //     name: "Description",
         //     dataType: "string",

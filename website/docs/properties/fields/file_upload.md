@@ -26,6 +26,11 @@ restrict the file size.
 If the file uploaded is an image, you can also choose to resize it before
 it gets uploaded to the storage backend, with the `imageCompression` prop.
 
+:::note
+You can save the URL of the uploaded file, instead of the Storage pah,
+by setting the `storeUrl`.
+:::
+
 ### Single file upload
 
 ![Field](/img/fields/File_upload.png)
