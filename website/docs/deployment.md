@@ -29,7 +29,7 @@ look similar to this (remember to replace `[YOUR_SITE_HERE]`).
 {
     "hosting": {
         "site": "[YOUR_SITE_HERE]",
-        "public": "build",
+        "public": "dist",
         "ignore": [
             "firebase.json",
             "**/.*",
