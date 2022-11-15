@@ -61,17 +61,21 @@ export function useBuildNavigationContext<UserType extends User>({
     const fullCollectionPath = cleanBasePath ? `/${cleanBasePath}/${cleanBaseCollectionPath}` : `/${cleanBaseCollectionPath}`;
 
     const processCollections = useCallback(async () => {
-        // if (baseCollections === undefined) return;
 
-        const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
-                resolveCollections(baseCollections, authController, plugins),
-                resolveCMSViews(baseViews, authController)
-            ]
-        );
+        try {
+            const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
+                    resolveCollections(baseCollections, authController, plugins),
+                    resolveCMSViews(baseViews, authController)
+                ]
+            );
 
-        setCollections(resolvedCollections);
-        setViews(resolvedViews);
-        setTopLevelNavigation(computeTopNavigation(resolvedCollections ?? [], resolvedViews));
+            setCollections(resolvedCollections);
+            setViews(resolvedViews);
+            setTopLevelNavigation(computeTopNavigation(resolvedCollections ?? [], resolvedViews));
+        } catch (e) {
+            console.error(e);
+            setNavigationLoadingError(e as any);
+        }
 
         setNavigationLoading(false);
         setInitialised(true);
@@ -239,7 +243,10 @@ function encodePath(input: string) {
 async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder, authController: AuthController, plugins?: FireCMSPlugin[]) {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
-        resolvedCollections = await collections({ user: authController.user, authController });
+        resolvedCollections = await collections({
+            user: authController.user,
+            authController
+        });
     } else if (Array.isArray(collections)) {
         resolvedCollections = collections;
     }
@@ -257,7 +264,10 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
 async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefined, authController: AuthController) {
     let resolvedViews: CMSView[] = [];
     if (typeof baseViews === "function") {
-        resolvedViews = await baseViews({ user: authController.user, authController });
+        resolvedViews = await baseViews({
+            user: authController.user,
+            authController
+        });
     } else if (Array.isArray(baseViews)) {
         resolvedViews = baseViews;
     }

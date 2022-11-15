@@ -199,7 +199,7 @@ export function FirebaseLoginView({
                 }
                 errorView =
                     <Box p={1}>
-                        <ErrorView error={authController.authError.message}/>
+                        <ErrorView error={authController.authError}/>
                     </Box>;
             }
         }
@@ -265,8 +265,7 @@ export function FirebaseLoginView({
 
                     {notAllowedMessage &&
                         <Box p={2}>
-                            <ErrorView
-                                error={notAllowedMessage}/>
+                            <ErrorView error={notAllowedMessage}/>
                         </Box>}
 
                     {buildErrorView()}
@@ -405,8 +404,7 @@ function PhoneLoginForm({
         <form onSubmit={handleSubmit}>
             {isInvalidCode &&
                 <Box p={2}>
-                    <ErrorView
-                        error={"Invalid confirmation code"}/>
+                    <ErrorView error={"Invalid confirmation code"}/>
                 </Box>}
 
             <div id={RECAPTCHA_CONTAINER_ID}/>

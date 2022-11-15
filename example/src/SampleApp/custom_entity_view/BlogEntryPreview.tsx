@@ -80,8 +80,8 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
                                 return <ProductGroupPreview
                                     key={`preview_products_${index}`}
                                     references={entry.value}/>;
-                            return <ErrorView
-                                error={"Unexpected value in blog entry"}/>
+                            return <ErrorView key={`preview_images_${index}`}
+                                              error={"Unexpected value in blog entry"}/>
                         }
                     )}
 
@@ -164,7 +164,6 @@ function ProductGroupPreview({ references }: { references: EntityReference[] }) 
                 .then((results) => setProducts(results));
         }
     }, [references, dataSource]);
-
 
     if (!references)
         return <></>;

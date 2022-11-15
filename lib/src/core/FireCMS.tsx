@@ -33,6 +33,7 @@ import {
 import { CMSViewsBuilder, EntityCollectionsBuilder } from "../firebase_app";
 import { ModeController, useSnackbarController } from "../hooks";
 import { FireCMSPlugin } from "../types/plugins";
+import { CenteredView, ErrorView } from "./components";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -211,10 +212,11 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     if (navigation.navigationLoadingError) {
         return (
-            <div>
-                <p>There was an error while loading your navigation config</p>
-                <p>{navigation.navigationLoadingError}</p>
-            </div>
+            <CenteredView maxWidth={300}>
+                <ErrorView
+                    title={"Error loading navigation"}
+                    error={navigation.navigationLoadingError}/>
+            </CenteredView>
         );
     }
 

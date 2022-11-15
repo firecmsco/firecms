@@ -26,7 +26,7 @@ import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
 import {
     SampleCollectionActions
-} from "./collection_actions/SampleCollectionActions"; 
+} from "./collection_actions/SampleCollectionActions";
 
 function SampleApp() {
 
@@ -49,7 +49,7 @@ function SampleApp() {
         name: "Additional",
         group: "Content",
         description: "This is an example of an additional view that is defined by the user",
-        view: <ExampleCMSView />
+        view: <ExampleCMSView/>
     }];
 
     const onFirebaseInit = (config: Object) => {
@@ -58,9 +58,9 @@ function SampleApp() {
     };
 
     const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
-                                                                    user,
-                                                                    authController
-                                                                }) => {
+                                                                                user,
+                                                                                authController
+                                                                            }) => {
 
         if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");
@@ -117,7 +117,7 @@ function SampleApp() {
         toolbarExtraWidget={githubLink}
         LoginView={CustomLoginView}
     />;
-    
+
 }
 
 export default SampleApp;

@@ -1,12 +1,13 @@
 import React from "react";
 import ErrorIcon from "@mui/icons-material/Error";
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ErrorTooltip } from "./ErrorTooltip";
 
 /**
  * @category Components
  */
 export interface ErrorViewProps {
+    title?: string;
     error: Error | React.ReactElement | string,
     tooltip?: string
 }
@@ -14,12 +15,14 @@ export interface ErrorViewProps {
 /**
  * Generic error view. Displayed for example when an unexpected value comes
  * from the datasource in a collection view.
+ * @param title
  * @param error
  * @param tooltip
  * @constructor
  * @category Components
  */
 export function ErrorView({
+                              title,
                               error,
                               tooltip
                           }: ErrorViewProps): React.ReactElement {
@@ -35,7 +38,12 @@ export function ErrorView({
             <ErrorIcon fontSize={"small"} color={"error"}/>
             <Box sx={{
                 paddingLeft: 2
-            }}>{component}</Box>
+            }}>
+                {title && <Typography sx={{
+                    fontWeight: "bold"
+                }}>{title}</Typography>}
+                <div>{component}</div>
+            </Box>
         </Box>
     );
 

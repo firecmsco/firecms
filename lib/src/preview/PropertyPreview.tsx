@@ -44,7 +44,7 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
         propertyValue: value
     });
 
-    const fieldProps:PropertyPreviewProps = { ...props };
+    const fieldProps: PropertyPreviewProps = { ...props };
 
     if (value === undefined || property === null) {
         content = <EmptyValue/>;
@@ -208,6 +208,7 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
 function buildWrongValueType(name: string | undefined, dataType: string, value: any) {
     console.error(`Unexpected value for property ${name}, of type ${dataType}`, value);
     return (
-        <ErrorView error={`Unexpected value: ${JSON.stringify(value)}`}/>
+        <ErrorView title={"Unexpected value"}
+                   error={`${JSON.stringify(value)}`}/>
     );
 }
