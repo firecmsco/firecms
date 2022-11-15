@@ -28,7 +28,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
     } = navigationContext.topLevelNavigation;
 
     const allGroups: Array<string | undefined> = [...groups];
-    if (navigationEntries.filter(e => !e.group).length > 0) {
+    if (navigationEntries.filter(e => !e.group).length > 0 || navigationEntries.length === 0) {
         allGroups.push(undefined);
     }
 
