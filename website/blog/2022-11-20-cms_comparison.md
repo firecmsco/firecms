@@ -18,26 +18,26 @@ We can distinguish some categories straight away:
 
 * General purpose or web oriented
 * Headless or traditional
-* By the APIs provided (GraphQL, REST, SDKs)
+* By access to data APIs (GraphQL, REST, SDKs)
 * Cloud based or self-hosted
+
 
 > We are building this guide to help you pick the right CMS for your project.
 > We will be updating it regularly, so make sure to check back often.
-> If you have any suggestions or want to contribute, please reach out to us.
 >
->
-> **Disclaimer**: I am the founder of FireCMS, a Firebase/Firestore-based CMS,
-> so I will not be making any assessments about the CMS solutions described in
-> the article.
-> We will focus on providing a list of features that each CMS provides, so the
-> reader can pick what's best for them.
+> One of the motivations for this guide is to help users understand the
+> differences between CMSs. Despite creating FireCMS, we are not trying to
+> promote it as the best solution for everyone. We are just trying to help
+> people understand the trade-offs of different solutions.
+> This is the same thing we say to our users when they ask us for advice on
+> what solution to use.
 
 ## General purpose or web oriented
 
 The first thing to consider is whether you need a general purpose CMS or a
 web-oriented one. A general purpose CMS is a tool that can be used to manage
-content for any kind of project, while a web-oriented CMS is a tool that is
-designed to manage content for websites and web apps.
+content for any kind of project (apps, desktop, web), while a web-oriented CMS
+is a tool that is designed to manage content for websites.
 
 **Web oriented CMSs** are built with the assumption that the content will be
 displayed on a website, and they usually provide a **web editor** to edit the
@@ -49,32 +49,48 @@ Web oriented CMSs are usually simpler to use, but they are also more limited in
 terms of features and integrations. They provide built-in support for
 pages, headers, footers, navigation menus, and other common website features,
 but they are not as flexible as general purpose CMSs. Also, they will typically
-have a `published` flag for each entity.
+have a `published` flag (or equivalent) for each entity. Of course, nothing
+stops you from using a general purpose CMS to manage content for a website.
+
+Do you need a **blog**? A web-oriented CMS will likely have a built-in blog
+solution, while a general purpose CMS will not.
 
 Examples of web-oriented CMSs are [Wordpress](https://wordpress.com/),
 [Prismic](https://prismic.io/) or [Storyblok](https://www.storyblok.com/).
 Those are the way to go if your main goal is to build a website and a
 web editor is useful to you.
 
+General purpose CMSs can be used to manage any type of content. Think of things
+like the menu of a restaurant or a delivery app. Or the exercises and videos of
+a fitness app. Or the podcasts in a podcast app.
+If you are working on a mobile app or a web app where you need to manage any
+content related to your business, [FireCMS](https://firecms.co) is a great
+option. It has all the advantages of other general purpose CMSs, but it uses
+Firebase as a backend, so you have access to all the robustness, extensibility
+and features of Google Cloud.
+
 ## Headless or traditional
 
 Traditional CMSs are the ones that provide a web editor to edit the content,
-and they will be responsible for rendering the content on the website. So
+and they will be responsible for rendering it on the website. So
 the admin interface and the website are tightly coupled.
 
-Headless CMSs are the opposite: they provide an API to manage the content,
-and they are not responsible for rendering the content on the website. The
+Headless CMSs are the opposite: they are not coupled to the rendering of the
+website and are in charge of managing the content exclusively.
+CMS and website are different software components in this case.
+They provide an API to access the content. The
 website is responsible for rendering the content, and it can be built with
 any technology.
 
 Headless CMSs are more flexible than traditional CMSs, but they require more
-work to build the website. The benefit is that you can build the website
+work to build the website. The benefit is that you can build it
 with any technology you want.
 
 Note that a CMS can be **web-oriented** and **headless** at the same time. In
 this case, the CMS will provide a web editor to edit the content, but it will
 not be responsible for rendering it on the website. Examples of this are
-[Prismic](https://prismic.io/) or [Contentful](https://www.contentful.com/).
+[Prismic](https://prismic.io/), [Contentful](https://www.contentful.com/)
+or [Agility CMS](https://agilitycms.com/).
 
 Examples of headless and general purpose CMSs are [Strapi](https://strapi.io/),
 [GraphCMS](https://graphcms.com/) or [Sanity](https://www.sanity.io/)
@@ -84,7 +100,7 @@ It is a general purpose CMS that can be used to manage content
 for any kind of project, including websites, web apps, mobile apps, desktop
 apps, etc.
 
-## APIs provided
+## Access to data APIs
 
 The next thing to consider is the APIs provided by the CMS. The most common
 APIs are **REST** and **GraphQL**. REST APIs are the most common, but they
@@ -102,8 +118,6 @@ At the same time, having Firebase as a backend means that you can use all the
 Firebase features, like authentication, hosting, functions, etc. No other CMS
 can offer this.
 
-Check the comparison table below to see which APIs are provided by each CMS.
-
 ## Cloud based or self-hosted
 
 The last thing to consider is whether you want a cloud based CMS or a
@@ -112,19 +126,74 @@ don't need to worry about hosting and maintenance. Self-hosted CMSs are
 installed on your own servers, and have a little more overhead, but also
 better flexibility.
 
+## Other considerations
+
+### Main user type
+
+If your main user type is a content editor, you should consider a CMS that
+allows them to edit the content without having to write code. Also, you want to
+make sure that the CMS is easy to use, and that it provides a good user
+experience, as well as preventing users from making mistakes, that could
+potentially break the apps linked to the underlying database.
+
+### Data portability
+
+If you are planning to use a CMS for a long time, you should consider the
+data portability. You want to make sure that you can easily export the data
+from the CMS, and that you can easily import it in another CMS.
+
+Also, you want to check the license of the CMS. Some CMSs are open source,
+while others are proprietary.
+
 ## CMSs comparison
 
-| CMS                   | Open Source | Cloud Service | On Premises Installation | Cloud Service Hosted in Europe | Commercial Support Available? | Web builder | Real time support | GraphQL: API | REST: API | Search: Full Text Search | Image: Manipulation | CDN Support | Backup Feature | Import/Export | CLI   | SDK: Java | SDK: C# | SDK: PHP | SDK: JavaScript | SDK: React | SDK: AngularJS | SDK: TypeScript | Web Hooks | Eventbus | Client Side Forms | Plugin System | Customizable UI | User Management | Role Based Permissions | Document Level Permissions | OAuth 2.0 Support | Content Trees | Content Relations: Support for nesting fields/elements | Versioning |
-|-----------------------|-------------|---------------|--------------------------|--------------------------------|-------------------------------|-------------|-------------------|--------------|-----------|--------------------------|---------------------|-------------|----------------|---------------|-------|-----------|---------|----------|-----------------|------------|----------------|-----------------|-----------|----------|-------------------|---------------|-----------------|-----------------|------------------------|----------------------------|-------------------|---------------|--------------------------------------------------------|------------|
-| FireCMS               |     ✓    | WIP           |           ✓           |              ✓              |              ✓             |    ✕    |        ✓       |     ✕    |    ✓   |           ✓           |         ✓        |     ✓    |      ✓      |      ✓     | ✕ |    ✓   |   ✓  |   ✓   |       ✓      |    ✓    |      ✓      |       ✓      |    ✓   |   ✓   |        ✓       |      ✓     |       ✓      |       ✓      |          ✓          |            ✓            |        ✓       |      ✓     |                          ✓                          |    ✓    |
-| Agility CMS           |    ✕    |      ✓     |           ✕          |              ✕             |              ✓             |    ✕    |       ✕       |     ✓     |    ✓   |           ✓           |         ✓        |     ✓    | ~          |      ✓     | ✕ |   ✕   |   ✓  |   ✕  |       ✓      |    ✓    |      ✕     |      ✕      |    ✓   | ~    |        ✓       |      ✓     |       ✓      |       ✓      |          ✓          |            ✓            |        ✓       |      ✓     |                          ✓                          |    ✓    |
-| ButterCMS             |    ✕    |      ✓     |           ✕          | ~                          |              ✓             |    ✕    |       ✕       |     ✓     |    ✓   |           ✓           |         ✓        |     ✓    |      ✕     |      ✓     | ✕ |   ✕   |   ✓  |   ✓   |       ✓      |    ✓    |      ✓      |      ✕      |    ✓   |   ✕  |       ✕       |     ✕     |      ✕      |      ✕      |          ✓          |            ✕           |       ✕       |     ✕     |                          ✓                          |    ✕   |
-| Contentful            |    ✕    |      ✓     |           ✕          |              ✕             |              ✓             |    ✕    |       ✕       |     ✓     |    ✓   |           ✓           |         ✓        |     ✓    |      ✕     |      ✓     |  ✓ |    ✓   |   ✓  |   ✓   |       ✓      |    ✕   |      ✕     |       ✓      |    ✓   |   ✕  |       ✕       |     ✕     |       ✓      |      ✕      |          ✓          |            ✕           |        ✓       |     ✕     |                          ✓                          |    ✓    |
-| Ghost                 |     ✓    |      ✓     |           ✓           | ~                          |              ✓             |     ✓    |       ✕       |     ✕    |    ✓   | ~                    | ~               | ~       | ~          | ~         |  ✓ | ~     | ~   | ~    |       ✓      | ~      | ~          | ~           |    ✓   | ~    | ~             |     ✕     | ~           |      ✕      |          ✓          |            ✕           | ~             | ~         | ~                                                  |    ✕   |
-| GraphCMS              |    ✕    |      ✓     |           ✕          |              ✓              |              ✓             |    ✕    |       ✕       |     ✓     |    ✓   |           ✓           |         ✓        |     ✓    |      ✓      |      ✓     | ✕ |   ✕   |  ✕  |   ✕  |       ✓      |    ✓    |      ✓      |       ✓      |    ✓   |   ✕  |        ✓       |     ✕     |      ✕      |      ✕      |          ✓          |            ✕           |       ✕       |     ✕     |                          ✕                         |    ✕   |
-| Keystone JS           |     ✓    |     ✕     |           ✕          |              ✕             |             ✕             |    ✕    |       ✕       |     ✓     |   ✕   |           ✕          |                     |    ✕    |      ✕     |      ✓     |  ✓ |   ✕   |  ✕  |   ✕  |      ✕      |    ✕   |      ✕     |      ✕      |   ✕   |   ✕  |        ✓       |      ✓     |       ✓      |       ✓      |          ✓          |            ✓            |        ✓       |     ✕     |                                                        |    ✕   |
-| Prismic               |    ✕    |      ✓     |           ✕          | ~                          |              ✓             |     ✓    |       ✕       |     ✓     |    ✓   |           ✓           |         ✓        |     ✓    |      ✕     |      ✓     |  ✓ |    ✓   |   ✓  |   ✓   |       ✓      |    ✕   |      ✕     |      ✕      |    ✓   |   ✕  |       ✕       |     ✕     |      ✕      |      ✕      |          ✓          |            ✕           |       ✕       |     ✕     |                          ✕                         |    ✓    |
-| Sanity                |     ✓    |      ✓     |           ✕          |              ✓              |              ✓             |    ✕    |       ✕       |     ✓     |    ✓   |           ✓           |         ✓        |     ✓    |      ✕     |      ✓     |  ✓ |   ✕   |   ✓  |   ✓   |       ✓      |    ✓    |      ✕     |       ✓      |    ✓   |   ✓   |        ✓       |      ✓     |       ✓      |       ✓      |          ✓          |            ✓            |        ✓       |     ✕     |                          ✓                          |    ✓    |
-| Storyblok             |    ✕    |      ✓     |           ✓           |              ✓              |              ✓             |     ✓    |       ✕       |     ✓     |    ✓   |           ✓           |         ✓        |     ✓    |      ✓      |      ✓     |  ✓ |    ✓   |  ✕  |   ✓   |       ✓      |    ✓    |      ✓      |       ✓      |    ✓   |   ✓   |       ✕       |      ✓     |       ✓      |       ✓      |          ✓          |            ✓            |        ✓       |      ✓     |                          ✓                          |    ✓    |
-| Strapi                |     ✓    |     ✕     |           ✓           | ~                          |              ✓             |    ✕    |       ✕       |     ✓     |    ✓   |           ✓           |         ✓        |     ✓    |      ✕     |     ✕     |  ✓ |   ✕   |  ✕  |   ✕  |       ✓      |    ✕   |      ✕     |      ✕      |    ✓   |   ✕  |        ✓       |      ✓     |       ✓      |       ✓      |          ✓          |            ✓            |        ✓       |     ✕     |                          ✓                          |    ✕   |
-| Wordpress - unite cms |     ✓    |      ✓     |           ✓           |              ✓              |              ✓             |     ✓    |       ✕       |     ✓     |    ✓   | ~                    | ~               |     ✓    |      ✕     |      ✓     |  ✓ |   ✕   |  ✕  |   ✕  |      ✕      |    ✕   |      ✕     |      ✕      |    ✓   |   ✕  |       ✕       |     ✕     |       ✓      |      ✕      |          ✓          |            ✓            | ~             | ~         |                          ✓                          |    ✓    |
+Check the comparison table below to see which APIs are provided by each CMS.
+
+| NAME                           | FireCMS | Agility CMS | ButterCMS | Contentful | Ghost | GraphCMS | Keystone JS | Prismic | Sanity | Storyblok | Strapi | Wordpress - unite cms |
+|:------------------------------:|:-------:|:-----------:|:---------:|:----------:|:-----:|:--------:|:-----------:|:-------:|:------:|:---------:|:------:|:---------------------:|
+| **Installation**               |         |             |           |            |       |          |             |         |        |           |        |                       |
+| Open Source                    | ✅       | ❌           | ❌         | ❌          | ✅     | ❌        | ✅           | ❌       | ✅      | ❌         | ✅      | ✅                     |
+| Cloud Service                  | WIP     | ✅           | ✅         | ✅          | ✅     | ✅        | ❌           | ✅       | ✅      | ✅         | ❌      | ✅                     |
+| On Premises Installation       | ✅       | ❌           | ❌         | ❌          | ✅     | ❌        | ❌           | ❌       | ❌      | ✅         | ✅      | ✅                     |
+| Cloud Service Hosted in Europe | ✅       | ❌           | ~         | ❌          | ~     | ✅        | ❌           | ~       | ✅      | ✅         | ~      | ✅                     |
+| Commercial Support Available?  | ✅       | ✅           | ✅         | ✅          | ✅     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ✅                     |
+| **Users**                      |         |             |           |            |       |          |             |         |        |           |        |                       |
+| User Management                | ✅       | ✅           | ❌         | ❌          | ❌     | ❌        | ✅           | ❌       | ✅      | ✅         | ✅      | ❌                     |
+| Role Based Permissions         | ✅       | ✅           | ✅         | ✅          | ✅     | ✅        | ✅           | ✅       | ✅      | ✅         | ✅      | ✅                     |
+| Document Level Permissions     | ✅       | ✅           | ❌         | ❌          | ❌     | ❌        | ✅           | ❌       | ✅      | ✅         | ✅      | ✅                     |
+| **Features**                   |         |             |           |            |       |          |             |         |        |           |        |                       |
+| Web builder                    | ❌       | ❌           | ❌         | ❌          | ✅     | ❌        | ❌           | ✅       | ❌      | ✅         | ❌      | ✅                     |
+| Real time support              | ✅       | ❌           | ❌         | ❌          | ❌     | ❌        | ❌           | ❌       | ❌      | ❌         | ❌      | ❌                     |
+| Search: Full Text Search       | ✅       | ✅           | ✅         | ✅          | ~     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ~                     |
+| Eventbus                       | ✅       | ~           | ❌         | ❌          | ~     | ❌        | ❌           | ❌       | ✅      | ✅         | ❌      | ❌                     |
+| Client Side Forms              | ✅       | ✅           | ❌         | ❌          | ~     | ✅        | ✅           | ❌       | ✅      | ❌         | ✅      | ❌                     |
+| Plugin System                  | ✅       | ✅           | ❌         | ❌          | ❌     | ❌        | ✅           | ❌       | ✅      | ✅         | ✅      | ❌                     |
+| Customizable UI                | ✅       | ✅           | ❌         | ✅          | ~     | ❌        | ✅           | ❌       | ✅      | ✅         | ✅      | ✅                     |
+| Content Trees                  | ✅       | ✅           | ❌         | ❌          | ~     | ❌        | ❌           | ❌       | ❌      | ✅         | ❌      | ~                     |
+| Nesting fields/elements        | ✅       | ✅           | ✅         | ✅          | ~     | ❌        |             | ❌       | ✅      | ✅         | ✅      | ✅                     |
+| Image: Manipulation            | ✅       | ✅           | ✅         | ✅          | ~     | ✅        |             | ✅       | ✅      | ✅         | ✅      | ~                     |
+| **Technical**                  |         |             |           |            |       |          |             |         |        |           |        |                       |
+| OAuth 2.0 Support              | ✅       | ✅           | ❌         | ✅          | ~     | ❌        | ✅           | ❌       | ✅      | ✅         | ✅      | ~                     |
+| CDN Support                    | ✅       | ✅           | ✅         | ✅          | ~     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ✅                     |
+| Backup Feature                 | ✅       | ~           | ❌         | ❌          | ~     | ✅        | ❌           | ❌       | ❌      | ✅         | ❌      | ❌                     |
+| Import/Export                  | ✅       | ✅           | ✅         | ✅          | ~     | ✅        | ✅           | ✅       | ✅      | ✅         | ❌      | ✅                     |
+| CLI                            | ❌       | ❌           | ❌         | ✅          | ✅     | ❌        | ✅           | ✅       | ✅      | ✅         | ✅      | ✅                     |
+| Web Hooks                      | ✅       | ✅           | ✅         | ✅          | ✅     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ✅                     |
+| Versioning                     | ✅       | ✅           | ❌         | ✅          | ❌     | ❌        | ❌           | ✅       | ✅      | ✅         | ❌      | ✅                     |
+| **Data**                       |         |             |           |            |       |          |             |         |        |           |        |                       |
+| GraphQL: API                   | ❌       | ✅           | ✅         | ✅          | ❌     | ✅        | ✅           | ✅       | ✅      | ✅         | ✅      | ✅                     |
+| REST: API                      | ✅       | ✅           | ✅         | ✅          | ✅     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ✅                     |
+| SDK: Java                      | ✅       | ❌           | ❌         | ✅          | ~     | ❌        | ❌           | ✅       | ❌      | ✅         | ❌      | ❌                     |
+| SDK: C#                        | ✅       | ✅           | ✅         | ✅          | ~     | ❌        | ❌           | ✅       | ✅      | ❌         | ❌      | ❌                     |
+| SDK: PHP                       | ✅       | ❌           | ✅         | ✅          | ~     | ❌        | ❌           | ✅       | ✅      | ✅         | ❌      | ❌                     |
+| SDK: JavaScript                | ✅       | ✅           | ✅         | ✅          | ✅     | ✅        | ❌           | ✅       | ✅      | ✅         | ✅      | ❌                     |
+| SDK: React                     | ✅       | ✅           | ✅         | ❌          | ~     | ✅        | ❌           | ❌       | ✅      | ✅         | ❌      | ❌                     |
+| SDK: AngularJS                 | ✅       | ❌           | ✅         | ❌          | ~     | ✅        | ❌           | ❌       | ❌      | ✅         | ❌      | ❌                     |
+| SDK: TypeScript                | ✅       | ❌           | ❌         | ✅          | ~     | ✅        | ❌           | ❌       | ✅      | ✅         | ❌      | ❌                     |
+
+:::tip
+Picking a CMS is a very personal decision, and there is no one-size-fits-all
+solution.
+You should consider your team's experience, the project's requirements and
+your budget.
+:::

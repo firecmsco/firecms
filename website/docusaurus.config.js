@@ -1,15 +1,15 @@
 module.exports = {
-    title: 'FireCMS',
-    tagline: 'Awesome headless CMS based Firestore/Firebase and React, and completely open-source',
-    url: 'https://firecms.co',
-    baseUrl: '/',
-    onBrokenLinks: 'throw',
-    onBrokenMarkdownLinks: 'warn',
-    favicon: 'img/favicon.ico',
-    organizationName: 'Camberi',
-    projectName: 'FireCMS',
+    title: "FireCMS",
+    tagline: "Awesome headless CMS based Firestore/Firebase and React, and completely open-source",
+    url: "https://firecms.co",
+    baseUrl: "/",
+    onBrokenLinks: "throw",
+    onBrokenMarkdownLinks: "warn",
+    favicon: "img/favicon.ico",
+    organizationName: "Camberi",
+    projectName: "FireCMS",
     plugins: [
-        'docusaurus-tailwindcss-loader',
+        "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
         [
             "docusaurus-plugin-typedoc",
@@ -25,9 +25,9 @@ module.exports = {
     themeConfig: {
         image: "img/logo_small.png",
         announcementBar: {
-            id: "new_version_2",
+            id: "star",
             content:
-                "Version 2.0.0 is now in alpha! 🎉 Check the <a target=\"_blank\" rel=\"noopener noreferrer\" href=\"/docs/quickstart\">quickstart</a> to get started!",
+                "You can support FireCMS by giving a ⭐&nbsp;on <strong><a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/Camberi/firecms\">GitHub</a></strong> ✨",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,
@@ -50,83 +50,83 @@ module.exports = {
             },
             items: [
                 {
-                    type: 'docSidebar',
-                    sidebarId: 'docsSidebar',
-                    label: 'Docs',
-                    position: 'left'
+                    type: "docSidebar",
+                    sidebarId: "docsSidebar",
+                    label: "Docs",
+                    position: "left"
                 },
                 {
-                    type: 'docSidebar',
-                    position: 'left',
-                    sidebarId: 'apiSidebar',
-                    label: 'API',
+                    type: "docSidebar",
+                    position: "left",
+                    sidebarId: "apiSidebar",
+                    label: "API",
                 },
                 {
-                    to: 'blog',
-                    label: 'Blog',
-                    position: 'left'
+                    to: "blog",
+                    label: "Blog",
+                    position: "left"
                 },
                 {
-                    type: 'docsVersionDropdown',
-                    position: 'right',
+                    type: "docsVersionDropdown",
+                    position: "right",
                     dropdownActiveClassDisabled: true,
                 },
                 {
-                    to: 'https://demo.firecms.co',
-                    label: 'Demo',
+                    to: "https://demo.firecms.co",
+                    label: "Demo",
                     className: "btn mr-2 px-6 py-2 text-white font-bold uppercase bg-blue-600 hover:text-white hover:bg-blue-700",
-                    'aria-label': 'Open the demo project',
-                    position: 'right'
+                    "aria-label": "Open the demo project",
+                    position: "right"
                 },
                 {
-                    href: 'https://github.com/Camberi/firecms',
+                    href: "https://github.com/Camberi/firecms",
                     // label: 'GitHub',
-                    className: 'mr-2 header-github-link',
-                    'aria-label': 'GitHub repository',
-                    position: 'right'
+                    className: "mr-2 header-github-link",
+                    "aria-label": "GitHub repository",
+                    position: "right"
                 },
             ]
         },
         footer: {
             links: [
                 {
-                    title: 'Get in touch',
+                    title: "Get in touch",
                     items: [
                         {
-                            label: 'Contact',
-                            href: 'mailto: hello@camberi.com'
+                            label: "Contact",
+                            href: "mailto: hello@camberi.com"
                         }
                     ]
                 },
 
                 {
                     // Label of the section of these links
-                    title: 'Links',
+                    title: "Links",
                     items: [
                         {
-                            label: 'Demo',
-                            to: 'https://demo.firecms.co'
+                            label: "Demo",
+                            to: "https://demo.firecms.co"
                         },
                         {
-                            label: 'Camberi',
-                            to: 'https://camberi.com'
+                            label: "Camberi",
+                            to: "https://camberi.com"
                         },
                         {
-                            label: 'Privacy policy',
-                            to: '/privacy_policy'
+                            label: "Privacy policy",
+                            to: "/privacy_policy"
                         },
                         {
-                            label: 'Terms and conditions',
-                            to: '/terms_conditions'
+                            label: "Terms and conditions",
+                            to: "/terms_conditions"
                         },
                         {
-                            label: 'Cookies policy',
-                            to: '/cookies_policy'
+                            label: "Cookies policy",
+                            to: "/cookies_policy"
                         }
                     ]
                 },
                 {
-                    title: 'Community',
+                    title: "Community",
                     items: [
                         {
                             label: "Discord",
@@ -167,12 +167,12 @@ module.exports = {
             copyright: `MIT © ${new Date().getFullYear()} - camberi`
         },
         prism: {
-            theme: require('prism-react-renderer/themes/vsDark')
+            theme: require("prism-react-renderer/themes/vsDark")
         }
     },
     presets: [
         [
-            '@docusaurus/preset-classic',
+            "@docusaurus/preset-classic",
             {
                 docs: {
                     sidebarPath: require.resolve("./sidebars.js"),
@@ -195,11 +195,11 @@ module.exports = {
                 },
                 theme: {
                     customCss: [
-                        require.resolve('./src/css/custom.css'),
+                        require.resolve("./src/css/custom.css"),
                     ]
                 },
                 gtag: {
-                    trackingID: 'G-NL75PPNYXD'
+                    trackingID: "G-NL75PPNYXD"
                 }
             }
         ]
