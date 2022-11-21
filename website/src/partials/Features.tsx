@@ -15,10 +15,13 @@ import FirebaseLogo from "@site/static/img/firebase.svg";
 import pricePreview from "@site/static/img/price.png";
 // @ts-ignore
 import editingDemoVideo from "@site/static/img/editing_demo.mp4";
+
 // @ts-ignore
 import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
 // @ts-ignore
 import customFieldVideo from "@site/static/img/custom_fields.mp4";
+// @ts-ignore
+import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 
 import { useColorMode } from '@docusaurus/theme-common';
 
@@ -174,8 +177,10 @@ function Features() {
                                 </p>
 
                                 <p className="md:text-right text-xl text-gray-600 dark:text-gray-200">
-                                    Use advanced features like conditional logic for
-                                    your fields, references to other collections, markdown or file uploads
+                                    Use advanced features like conditional logic
+                                    for
+                                    your fields, references to other
+                                    collections, markdown or file uploads
                                 </p>
                             </div>
                         </div>
@@ -236,7 +241,7 @@ function Features() {
                                         showLineNumbers={false}
                                         style={isDarkTheme ? vs2015 : atomOneLight}
                                     >
-{`const productCollection = buildCollection({
+                                        {`const productCollection = buildCollection({
     name: "Product",
     properties: {
         name: {
@@ -282,8 +287,9 @@ const productCallbacks = buildEntityCallbacks({
                                 <video
                                     className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                                     width="100%" loop autoPlay muted>
-                                    <source src={customFieldVideo}
-                                            type="video/mp4"/>
+                                    <source
+                                        src={isDarkTheme ? customFieldDarkVideo : customFieldVideo}
+                                        type="video/mp4"/>
                                 </video>
                             </div>
 

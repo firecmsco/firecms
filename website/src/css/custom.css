@@ -8,6 +8,7 @@
     src: url(https://fonts.gstatic.com/s/rubik/v14/iJWKBXyIfDnIV7nMrXyw023e1Ik.woff2) format('woff2');
     unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
+
 /* cyrillic */
 @font-face {
     font-family: 'Rubik';
@@ -17,6 +18,7 @@
     src: url(https://fonts.gstatic.com/s/rubik/v14/iJWKBXyIfDnIV7nFrXyw023e1Ik.woff2) format('woff2');
     unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
+
 /* hebrew */
 @font-face {
     font-family: 'Rubik';
@@ -26,6 +28,7 @@
     src: url(https://fonts.gstatic.com/s/rubik/v14/iJWKBXyIfDnIV7nDrXyw023e1Ik.woff2) format('woff2');
     unicode-range: U+0590-05FF, U+20AA, U+25CC, U+FB1D-FB4F;
 }
+
 /* latin-ext */
 @font-face {
     font-family: 'Rubik';
@@ -35,6 +38,7 @@
     src: url(https://fonts.gstatic.com/s/rubik/v14/iJWKBXyIfDnIV7nPrXyw023e1Ik.woff2) format('woff2');
     unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+
 /* latin */
 @font-face {
     font-family: 'Rubik';
@@ -55,6 +59,7 @@
     src: url(https://fonts.gstatic.com/s/rubik/v20/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-2Y-FWkUzdYPFkZVOA6w.woff) format('woff');
     unicode-range: U+0460-052F, U+1C80-1C88, U+20B4, U+2DE0-2DFF, U+A640-A69F, U+FE2E-FE2F;
 }
+
 /* cyrillic */
 @font-face {
     font-family: 'Rubik';
@@ -64,6 +69,7 @@
     src: url(https://fonts.gstatic.com/s/rubik/v20/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-2Y-FU0UzdYPFkZVOA6w.woff) format('woff');
     unicode-range: U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
 }
+
 /* hebrew */
 @font-face {
     font-family: 'Rubik';
@@ -73,6 +79,7 @@
     src: url(https://fonts.gstatic.com/s/rubik/v20/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-2Y-FVUUzdYPFkZVOA6w.woff) format('woff');
     unicode-range: U+0590-05FF, U+200C-2010, U+20AA, U+25CC, U+FB1D-FB4F;
 }
+
 /* latin-ext */
 @font-face {
     font-family: 'Rubik';
@@ -82,6 +89,7 @@
     src: url(https://fonts.gstatic.com/s/rubik/v20/iJWZBXyIfDnIV5PNhY1KTN7Z-Yh-2Y-FWUUzdYPFkZVOA6w.woff) format('woff');
     unicode-range: U+0100-024F, U+0259, U+1E00-1EFF, U+2020, U+20A0-20AB, U+20AD-20CF, U+2113, U+2C60-2C7F, U+A720-A7FF;
 }
+
 /* latin */
 @font-face {
     font-family: 'Rubik';
@@ -104,18 +112,20 @@
     --ifm-color-primary-lightest: #3e97ff;
     --ifm-code-font-size: 95%;
     --ifm-font-weight-bold: 600;
+    --ifm-h1-font-size: 3rem;
     --ifm-custom-navbar-background-color: rgba(255, 255, 255, 0.33);
     /*--ifm-heading-font-family: 'Spline Sans Mono', "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
     /*--ifm-font-family-base: 'IBM Plex Mono', 'Noto Sans', sans-serif,  Helvetica, Arial, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI",  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
 
     --ifm-font-family-base: 'Rubik', "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    --ifm-heading-font-family: 'Rubik', 'Noto Sans', sans-serif,  Helvetica, Arial, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI",  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --ifm-heading-font-family: 'Rubik', 'Noto Sans', sans-serif, Helvetica, Arial, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     /*--ifm-code-background: 95%;*/
 }
 
-[data-theme='dark']  {
+[data-theme='dark'] {
     --ifm-custom-navbar-background-color: rgba(38, 38, 38, 0.33);
 }
+
 .navbar.navbar--fixed-top {
     background-color: var(--ifm-custom-navbar-background-color);
 }
@@ -124,8 +134,8 @@
     backdrop-filter: blur(8px);
 }
 
-[role='banner']  {
-   z-index: 5;
+[role='banner'] {
+    z-index: 5;
 }
 
 .font-mono code {
@@ -141,7 +151,7 @@ a.btn {
     text-decoration: none;
 }
 
-.custom-code-block pre{
+.custom-code-block pre {
     overflow: inherit !important;
 }
 
@@ -197,4 +207,9 @@ img[alt=firebase_setup] {
     width: 100%;
     height: 100%;
     -webkit-mask: var(--ifm-menu-link-sublist-icon) 50%/2rem 2rem no-repeat;
+}
+
+article {
+    display: flex;
+    flex-direction: column;
 }

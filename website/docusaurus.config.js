@@ -50,16 +50,20 @@ module.exports = {
             },
             items: [
                 {
-                    type: "docSidebar",
-                    sidebarId: "docsSidebar",
-                    label: "Docs",
+                    label: "Showcase",
+                    items: [
+                        {
+                            label: "MedicalMotion content editing",
+                            to: "/showcase/advanced_forms",
+                        },
+                    ],
                     position: "left"
                 },
                 {
                     type: "docSidebar",
-                    position: "left",
-                    sidebarId: "apiSidebar",
-                    label: "API",
+                    sidebarId: "docsSidebar",
+                    label: "Docs",
+                    position: "left"
                 },
                 {
                     to: "blog",

@@ -684,7 +684,9 @@ export interface StorageConfig {
 
     /**
      * File MIME types that can be uploaded to this reference. Don't specify for
-     * all
+     * all.
+     * Note that you can also use the asterisk notation, so `image/*`
+     * accepts any image file, and so on.
      */
     acceptedFiles?: FileType[];
 

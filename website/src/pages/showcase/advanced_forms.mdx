@@ -1,0 +1,88 @@
+---
+id: advanced_forms
+title: MedicalMotion content editing
+---
+
+# Advanced forms
+
+Depending on your business logic, you might be fine with using the default
+fields provided by FireCMS. We include around **20 fields** that should cover most
+of your needs. Ranging from simple text fields or selects to complex ones like
+file uploaders, date pickers or reference fields, we cover all the bases.
+
+But sometimes, you might need to create a more complex editing form and create
+specific fields that are not covered by the default ones. In this case, you can
+create your own custom fields and use them in your entity collection.
+
+## MedicalMotion exercises
+
+[MedicalMotion](https://www.medicalmotion.com/) is a platform that generates
+customised physiotherapy treatments.
+The exercises are created by the physical therapists and then assigned to their
+patients using AI. The exercises collection is managed by the internal team
+using FireCMS.
+
+Let's see how MedicalMotion uses the same body selection component
+that end users see, in their backend admin panel.
+
+:::info Reusable components
+There are multiple benefits for **keeping consistency** between the different
+components of the platform. For example, the exercises are used in the
+physiotherapy treatments, but also in the patient's dashboard.
+:::
+
+Each exercise affects different body parts and the physical therapist can
+choose which body parts are affected by the exercise. This could be
+resolved by using a simple select field, but we wanted to make it more
+interactive and show the user a preview of the body part affected by the
+exercise.
+
+The field is stored as a simple **array of strings** in the database, but we
+wanted to show the user a preview of the body part affected by the exercise:
+
+```
+bodyParts: ["shoulder", "elbow"]
+```
+
+This is how the affected body parts of an exercise field works:
+
+<video style={{maxWidth:"100%", margin:"16px 0px 32px", alignSelf:"center"}}
+loop autoPlay muted>
+<source src="/img/custom_fields_dark_wide.mp4" type="video/mp4"/>
+</video>
+
+The field is defined as a Component that receives `FieldProps` as a prop, and
+then assigned to the entity collection.
+
+You can check more details about how this is implemented
+in [Custom fields](/docs/properties/custom_fields).
+
+## Fine grained permissions
+
+MedicalMotion also uses FireCMS to manage their **users and permissions**. They
+have a complex permission system that allows them to define permissions at
+different levels:
+
+- Collection level
+- Entity level
+- Property level
+
+This is achieved by using a Firestore collection that stores the users and
+the roles assigned to them. The roles are defined as a simple array of strings
+that are used to check if the user has permission to perform an action.
+
+```
+roles: ["admin", "editor"]
+```
+
+Each role define which actions can be performed on the collection, entity or
+property. For example, the `admin` role can perform any action on the
+collection, while the `editor` role can only perform `read` and `update`.
+
+Also, specific roles are used for content managers or physiotherapists.
+Physiotherapists can only edit the exercises assigned to them, while admins
+can review and edit all the exercises.
+
+
+
+

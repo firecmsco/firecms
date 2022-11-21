@@ -28,8 +28,9 @@ indicate that this string refers to a path in Google Cloud Storage.
   preview.
 * `storagePath` Absolute path in your bucket. You can specify it
   directly or use a callback
-* `acceptedFiles` File MIME types that can be uploaded to this
-  reference.
+* `acceptedFiles` File [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) that can be uploaded to this
+  reference. Note that you can also use the asterisk notation, so `image/*`
+  accepts any image file, and so on.
 * `metadata` Specific metadata set in your uploaded file.
 * `fileName` You can specify a fileName callback if you need to
   customize the name of the file
