@@ -234,7 +234,7 @@ export function FirebaseLoginView({
 
         <Fade
             in={true}
-            timeout={500}
+            timeout={800}
             mountOnEnter
             unmountOnExit>
 

@@ -1,5 +1,6 @@
 import { EntityCollection } from "../../types";
 import { isReferenceProperty } from "./property_utils";
+import { isPropertyBuilder } from "./entities";
 
 export function getReferencePreviewKeys(targetCollection: EntityCollection<any>,
                                         previewProperties?: string[],
@@ -12,7 +13,7 @@ export function getReferencePreviewKeys(targetCollection: EntityCollection<any>,
         listProperties = allProperties;
         return listProperties.filter(key => {
             const propertyOrBuilder = targetCollection.properties[key];
-            return propertyOrBuilder && !isReferenceProperty(propertyOrBuilder);
+            return propertyOrBuilder && !isPropertyBuilder(propertyOrBuilder) && !isReferenceProperty(propertyOrBuilder);
         }).slice(0, limit);
     }
 }

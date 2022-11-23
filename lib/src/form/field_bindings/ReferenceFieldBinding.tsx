@@ -46,19 +46,19 @@ import {
  * @category Form fields
  */
 export function ReferenceFieldBinding<M extends Record<string, any>>({
-                                                                     propertyKey,
-                                                                     value,
-                                                                     setValue,
-                                                                     error,
-                                                                     showError,
-                                                                     disabled,
-                                                                     touched,
-                                                                     autoFocus,
-                                                                     property,
-                                                                     includeDescription,
-                                                                     context,
-                                                                     shouldAlwaysRerender
-                                                                 }: FieldProps<EntityReference>) {
+                                                                         propertyKey,
+                                                                         value,
+                                                                         setValue,
+                                                                         error,
+                                                                         showError,
+                                                                         disabled,
+                                                                         touched,
+                                                                         autoFocus,
+                                                                         property,
+                                                                         includeDescription,
+                                                                         context,
+                                                                         shouldAlwaysRerender
+                                                                     }: FieldProps<EntityReference>) {
 
     if (typeof property.path !== "string") {
         throw Error("Picked the wrong component ReferenceField");
@@ -227,16 +227,16 @@ export function ReferenceFieldBinding<M extends Record<string, any>>({
                         </Box>
 
                         {entity &&
-                        <Box
-                            alignSelf={"center"}
-                            m={1}>
-                            <Tooltip title={value && value.path}>
-                                <Typography variant={"caption"}
-                                            className={"mono"}>
-                                    {entity.id}
-                                </Typography>
-                            </Tooltip>
-                        </Box>}
+                            <Box
+                                alignSelf={"center"}
+                                m={1}>
+                                <Tooltip title={value && value.path}>
+                                    <Typography variant={"caption"}
+                                                className={"mono"}>
+                                        {entity.id}
+                                    </Typography>
+                                </Tooltip>
+                            </Box>}
 
                         {!missingEntity && entity && value && <Box>
                             <Tooltip title={`See details for ${entity.id}`}>

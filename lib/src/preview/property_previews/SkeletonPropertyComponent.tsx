@@ -9,13 +9,12 @@ import React from "react";
 import {
     Box,
     Grid,
-    List,
-    ListItem,
     Skeleton,
     Table,
     TableBody,
     TableCell,
-    TableRow
+    TableRow,
+    Typography
 } from "@mui/material";
 import { PreviewSize } from "../index";
 import { getThumbnailMeasure } from "../util";
@@ -90,54 +89,70 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
     if (!property.properties)
         return <></>;
 
-    let mapProperties: string[];
-    if (!size) {
-        mapProperties = Object.keys(property.properties);
+    let mapPropertyKeys: string[];
+    if (size === "regular") {
+        mapPropertyKeys = Object.keys(property.properties);
     } else {
-        if (property.previewProperties)
-            mapProperties = property.previewProperties as unknown as string[];
-        else
-            mapProperties = Object.keys(property.properties).slice(0, 3);
+        mapPropertyKeys = (property.previewProperties || Object.keys(property.properties)) as string[];
+        if (size === "small")
+            mapPropertyKeys = mapPropertyKeys.slice(0, 3);
+        else if (size === "tiny")
+            mapPropertyKeys = mapPropertyKeys.slice(0, 1);
     }
 
-    if (size)
+    if (size !== "regular")
         return (
-            <List>
-                {mapProperties && mapProperties.map((key: string) => (
-                    <>
-                        {property.properties &&
-                            <ListItem key={property.name + key}>
-                                <SkeletonPropertyComponent
-                                    property={property.properties[key]}
-                                    size={"small"}/>
-                            </ListItem>}
-                    </>
+            <Box sx={theme => ({
+                width: "100%",
+                display: "flex",
+                flexDirection: "column",
+                "& > *": {
+                    [theme.breakpoints.down("md")]: {
+                        marginBottom: `${theme.spacing(0.5)} !important`
+                    },
+                    marginBottom: `${theme.spacing(1)} !important`
+                }
+            })}>
+                {mapPropertyKeys.map((key, index) => (
+                    <div key={`map_${key}`}>
+                        {property.properties && property.properties[key] && <SkeletonPropertyComponent
+                            property={property.properties[key]}
+                            size={"small"}/>}
+                    </div>
                 ))}
-            </List>
+            </Box>
         );
 
     return (
-        <Table size={"small"}>
+        <Table size="small">
             <TableBody>
-                {mapProperties &&
-                    mapProperties.map((key, index) => {
+                {mapPropertyKeys &&
+                    mapPropertyKeys.map((key, index) => {
                         return (
-                            <TableRow key={`table_${property.name}_${index}`}
-                                      sx={{
-                                          "&:last-child th, &:last-child td": {
-                                              borderBottom: 0
-                                          }
-                                      }}>
-                                <TableCell key={`table-cell-title-${key}`}
+                            <TableRow
+                                key={`map_preview_table__${index}`}
+                                sx={{
+                                    "&:last-child th, &:last-child td": {
+                                        borderBottom: 0
+                                    }
+                                }}>
+                                <TableCell key={`table-cell-title--${key}`}
+                                           sx={{
+                                               verticalAlign: "top"
+                                           }}
+                                           width="30%"
                                            component="th">
-                                    <Skeleton variant="text"/>
+                                    <Typography variant={"caption"}
+                                                color={"textSecondary"}>
+                                        {property.properties![key].name}
+                                    </Typography>
                                 </TableCell>
                                 <TableCell key={`table-cell-${key}`}
+                                           width="70%"
                                            component="th">
-                                    {property.properties &&
-                                        <SkeletonPropertyComponent
-                                            property={property.properties[key]}
-                                            size={"small"}/>}
+                                    {property.properties && property.properties[key] && <SkeletonPropertyComponent
+                                        property={property.properties[key]}
+                                        size={"small"}/>}
                                 </TableCell>
                             </TableRow>
                         );
@@ -145,7 +160,6 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
             </TableBody>
         </Table>
     );
-
 }
 
 function renderArrayOfMaps<M extends Record<string, any>>(properties: ResolvedProperties<M>, size: PreviewSize, previewProperties?: string[]) {

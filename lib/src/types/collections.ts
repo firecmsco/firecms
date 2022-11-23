@@ -408,3 +408,5 @@ export interface EntityCustomViewParams<M extends Record<string, any> = any> {
      */
     modifiedValues?: EntityValues<M>;
 }
+
+export type InferCollectionType<S extends EntityCollection> = S extends EntityCollection<infer M> ? M : never;
