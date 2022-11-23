@@ -37,7 +37,7 @@ import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import {
     CellRendererParams,
     TableColumn,
-    TableColumnFilter,
+    TableColumnFilter, TableSize,
     VirtualTable
 } from "../Table";
 import {
@@ -292,7 +292,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                                                       columnIndex,
                                                       rowData,
                                                       rowIndex
-                                                  }: CellRendererParams<any, any>) => {
+                                                  }: CellRendererParams<any>) => {
 
             const entity: Entity<M> = rowData;
 
@@ -356,7 +356,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                                                         column,
                                                         rowData,
                                                         width
-                                                    }: CellRendererParams<any, any>) => {
+                                                    }: CellRendererParams<any>) => {
 
             const entity: Entity<M> = rowData;
 
@@ -391,8 +391,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         }, [additionalFieldsMap, size]);
 
-        const allColumns: TableColumn<Entity<M>, any>[] = useMemo(() => {
-                const columnsResult: TableColumn<Entity<M>, any>[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
+        const allColumns: TableColumn[] = useMemo(() => {
+                const columnsResult: TableColumn[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
                     .flatMap(([key, property]) => {
                         if (property.dataType === "map" && property.spreadChildren && property.properties) {
                             return Object.keys(property.properties).map(childKey => `${key}.${childKey}`);
@@ -408,14 +408,15 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             property,
                             align: getCellAlignment(property),
                             icon: (hoverOrOpen) => getIconForProperty(property, hoverOrOpen ? undefined : "disabled", "small"),
-                            title: property.name || key as string,
+                            title: property.name ?? key as string,
                             sortable: forceFilter ? Object.keys(forceFilter).includes(key) : true,
                             filter: disabledFilterChange ? undefined : buildFilterableFromProperty(property),
-                            width: getPropertyColumnWidth(property)
+                            width: getPropertyColumnWidth(property),
+                            resizable: true
                         });
                     });
 
-                const additionalTableColumns: TableColumn<Entity<M>, any>[] = additionalFields
+                const additionalTableColumns: TableColumn[] = additionalFields
                     ? additionalFields.map((additionalField) =>
                         ({
                             key: additionalField.id,
@@ -430,20 +431,21 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             },
             [additionalFields, disabledFilterChange, forceFilter, resolvedCollection.properties]);
 
-        const idColumn: TableColumn<any, any> = useMemo(() => ({
+        const idColumn: TableColumn = useMemo(() => ({
             key: "id",
-            width: 160,
+            width: largeLayout ? 160 : 130,
             title: "ID",
+            resizable: false,
             frozen: largeLayout,
             headerAlign: "center"
         }), [largeLayout])
 
-        const columns: TableColumn<any, any>[] = useMemo(() => [
+        const columns: TableColumn[] = useMemo(() => [
             idColumn,
             ...displayedColumnIds
                 .map((p) => {
                     return allColumns.find(c => c.key === p);
-                }).filter(c => !!c) as TableColumn<Entity<M>, any>[]
+                }).filter(c => !!c) as TableColumn[]
         ], [allColumns, displayedColumnIds, idColumn]);
 
         const popupFormField = (
@@ -463,7 +465,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             />
         );
 
-        const cellRenderer = useCallback((props: CellRendererParams<any, any>) => {
+        const cellRenderer = useCallback((props: CellRendererParams<any>) => {
             const column = props.column;
             const columns = props.columns;
             const columnKey = column.key;
@@ -562,16 +564,16 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 );
 
 const onValueChange: OnCellValueChange<any, any> = ({
-                                                      fullPath,
-                                                      collection,
-                                                      dataSource,
-                                                      context,
-                                                      value,
-                                                      propertyKey,
-                                                      setSaved,
-                                                      setError,
-                                                      entity
-                                                  }) => {
+                                                        fullPath,
+                                                        collection,
+                                                        dataSource,
+                                                        context,
+                                                        value,
+                                                        propertyKey,
+                                                        setSaved,
+                                                        setError,
+                                                        entity
+                                                    }) => {
 
     const updatedValues = setIn({ ...entity.values }, propertyKey, value);
 

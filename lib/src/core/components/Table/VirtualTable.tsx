@@ -85,26 +85,26 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
  * @category Components
  */
 
-export const VirtualTable = React.memo<VirtualTableProps<any, any>>(
-    function VirtualTable<T extends Record<string, any>, E extends any>({
-                                                               data,
-                                                               onResetPagination,
-                                                               onEndReached,
-                                                               size = "m",
-                                                               columns: columnsProp,
-                                                               onRowClick,
-                                                               onColumnResize,
-                                                               filter: filterInput,
-                                                               checkFilterCombination,
-                                                               onFilterUpdate,
-                                                               sortBy,
-                                                               error,
-                                                               emptyMessage,
-                                                               onSortByUpdate,
-                                                               loading,
-                                                               cellRenderer,
-                                                               hoverRow
-                                                           }: VirtualTableProps<T, E>) {
+export const VirtualTable = React.memo<VirtualTableProps<any>>(
+    function VirtualTable<T extends Record<string, any>>({
+                                                                                             data,
+                                                                                             onResetPagination,
+                                                                                             onEndReached,
+                                                                                             size = "m",
+                                                                                             columns: columnsProp,
+                                                                                             onRowClick,
+                                                                                             onColumnResize,
+                                                                                             filter: filterInput,
+                                                                                             checkFilterCombination,
+                                                                                             onFilterUpdate,
+                                                                                             sortBy,
+                                                                                             error,
+                                                                                             emptyMessage,
+                                                                                             onSortByUpdate,
+                                                                                             loading,
+                                                                                             cellRenderer,
+                                                                                             hoverRow
+                                                                                         }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
         const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
@@ -120,11 +120,11 @@ export const VirtualTable = React.memo<VirtualTableProps<any, any>>(
 
         const [measureRef, bounds] = useMeasure();
 
-        const onColumnResizeInternal = useCallback((params: OnTableColumnResizeParams<any, any>) => {
+        const onColumnResizeInternal = useCallback((params: OnTableColumnResizeParams) => {
             setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
         }, [columns]);
 
-        const onColumnResizeEndInternal = useCallback((params: OnTableColumnResizeParams<any, any>) => {
+        const onColumnResizeEndInternal = useCallback((params: OnTableColumnResizeParams) => {
             setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
             if (onColumnResize) {
                 onColumnResize(params);
@@ -200,7 +200,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any, any>>(
                 onEndReachedInternal(scrollOffset);
         }, [maxScroll, onEndReachedInternal]);
 
-        const onFilterUpdateInternal = useCallback((column: TableColumn<T, E>, filterForProperty?: [TableWhereFilterOp, any]) => {
+        const onFilterUpdateInternal = useCallback((column: TableColumn, filterForProperty?: [TableWhereFilterOp, any]) => {
 
             endReachCallbackThreshold.current = 0;
             const filter = filterRef.current;
@@ -315,7 +315,7 @@ function MemoizedList({
                           height,
                           itemCount,
                           onScroll,
-                          itemSize,
+                          itemSize
                       }: {
     outerRef: RefObject<HTMLDivElement>;
     width: number;
@@ -353,7 +353,7 @@ function MemoizedList({
                             top: `calc(${style.top}px + 50px)`
                         }}
                         size={size}>
-                        {columns.map((column, columnIndex) => {
+                        {columns.map((column:TableColumn, columnIndex:number) => {
                             const cellData = rowData && rowData[column.key];
                             return <VirtualTableCell
                                 key={`cell_${column.key}`}
@@ -378,7 +378,7 @@ function MemoizedList({
         innerElementType={innerElementType}
         width={width}
         height={height}
-        overscanCount={3}
+        overscanCount={4}
         itemCount={itemCount}
         onScroll={onScroll}
         itemSize={itemSize}>

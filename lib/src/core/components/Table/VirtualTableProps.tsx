@@ -7,7 +7,7 @@ export type OnRowClickParams<T extends Record<string, any>> = { rowData: T; rowI
  * @see Table
  * @category Components
  */
-export interface VirtualTableProps<T extends Record<string, any>, E extends any> {
+export interface VirtualTableProps<T extends Record<string, any>> {
 
     /**
      * Array of arbitrary data
@@ -18,13 +18,13 @@ export interface VirtualTableProps<T extends Record<string, any>, E extends any>
      * Properties displayed in this collection. If this property is not set
      * every property is displayed, you can filter
      */
-    columns: TableColumn<T, E>[];
+    columns: TableColumn[];
 
     /**
      * Custom cell renderer
      * The renderer receives props `{ cellData, columns, column, columnIndex, rowData, rowIndex, container, isScrolling }`
      */
-    cellRenderer: (params: CellRendererParams<T, E>) => React.ReactNode;
+    cellRenderer: (params: CellRendererParams<T>) => React.ReactNode;
 
     /**
      * If enabled, content is loaded in batch
@@ -59,7 +59,7 @@ export interface VirtualTableProps<T extends Record<string, any>, E extends any>
     /**
      * Callback when a column is resized
      */
-    onColumnResize?: (params: OnTableColumnResizeParams<T, E>) => void;
+    onColumnResize?: (params: OnTableColumnResizeParams) => void;
 
     /**
      * Size of the table
@@ -123,11 +123,10 @@ export type TableColumnFilter = {
     enumValues?: TableEnumValues;
 };
 
-export type CellRendererParams<T extends any, E extends any> = {
-    // key: string;
+export type CellRendererParams<T extends any> = {
     cellData?: any;
-    column: TableColumn<T, E>;
-    columns: TableColumn<T, E>[];
+    column: TableColumn;
+    columns: TableColumn[];
     columnIndex: number;
     rowData?: T;
     rowIndex: number;
@@ -139,7 +138,7 @@ export type CellRendererParams<T extends any, E extends any> = {
  * @see Table
  * @category Components
  */
-export interface TableColumn<T extends any, E extends any> {
+export interface TableColumn {
 
     /**
      * Data key for the cell value, could be "a.b.c"
@@ -187,13 +186,18 @@ export interface TableColumn<T extends any, E extends any> {
      */
     sortable?: boolean;
 
+    /**
+     * Can it be resized
+     */
+    resizable?: boolean;
+
 }
 
 /**
  * @see Table
  * @category Collection components
  */
-export type OnTableColumnResizeParams<T, E> = { width: number, key: string, column: TableColumn<T, E> };
+export type OnTableColumnResizeParams = { width: number, key: string, column: TableColumn };
 
 /**
  * @see Table

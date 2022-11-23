@@ -30,26 +30,26 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
     resizeHandleRef: RefObject<HTMLDivElement>;
     columnIndex: number;
     isResizingIndex: number;
-    column: TableColumn<M, any>;
+    column: TableColumn;
     onColumnSort: (key: Extract<keyof M, string>) => void;
     filter?: [TableWhereFilterOp, any];
     sort: TableSort;
-    onFilterUpdate: (column: TableColumn<any, any>, filterForProperty?: [TableWhereFilterOp, any]) => void;
-    onClickResizeColumn?: (columnIndex: number, column: TableColumn<M, any>) => void;
+    onFilterUpdate: (column: TableColumn, filterForProperty?: [TableWhereFilterOp, any]) => void;
+    onClickResizeColumn?: (columnIndex: number, column: TableColumn) => void;
 };
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
     function VirtualTableHeader<M extends Record<string, any>>({
-                                                                      resizeHandleRef,
-                                                                      columnIndex,
-                                                                      isResizingIndex,
-                                                                      sort,
-                                                                      onColumnSort,
-                                                                      onFilterUpdate,
-                                                                      filter,
-                                                                      column,
-                                                                      onClickResizeColumn
-                                                                  }: VirtualTableHeaderProps<M>) {
+                                                                   resizeHandleRef,
+                                                                   columnIndex,
+                                                                   isResizingIndex,
+                                                                   sort,
+                                                                   onColumnSort,
+                                                                   onFilterUpdate,
+                                                                   filter,
+                                                                   column,
+                                                                   onClickResizeColumn
+                                                               }: VirtualTableHeaderProps<M>) {
 
         const ref = useRef<HTMLDivElement>(null);
 
@@ -172,7 +172,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                         </Badge>
                     </Grid>}
 
-                    <Box
+                    {column.resizable && <Box
                         ref={resizeHandleRef}
                         sx={(theme) => ({
                             position: "absolute",
@@ -184,7 +184,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                             backgroundColor: hovered ? (theme.palette.mode === "dark" ? lighten(theme.palette.background.default, 0.1) : darken(theme.palette.background.default, 0.15)) : undefined
                         })}
                         onMouseDown={onClickResizeColumn ? () => onClickResizeColumn(columnIndex, column) : undefined}
-                    />
+                    />}
                 </Grid>
 
                 {column.sortable && ref?.current && <Popover
@@ -213,7 +213,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
     }, equal) as React.FunctionComponent<VirtualTableHeaderProps<any>>;
 
 interface FilterFormProps<M> {
-    column: TableColumn<M, any>;
+    column: TableColumn;
     onFilterUpdate: (filter?: [TableWhereFilterOp, any]) => void;
     filter?: [TableWhereFilterOp, any];
     onHover: boolean

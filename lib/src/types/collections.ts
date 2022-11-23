@@ -338,7 +338,7 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
     UserType extends User = User> {
 
     /**
-     * Id of this column. You can use this id in the `properties` field of the
+     * ID of this column. You can use this id in the `properties` field of the
      * collection in any order you want
      */
     id: AdditionalKey;

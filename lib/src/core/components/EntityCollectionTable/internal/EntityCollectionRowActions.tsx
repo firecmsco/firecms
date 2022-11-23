@@ -12,7 +12,9 @@ import {
     MenuItem,
     Skeleton,
     Tooltip,
-    Typography
+    Typography,
+    useMediaQuery,
+    useTheme
 } from "@mui/material";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
 
@@ -33,29 +35,32 @@ import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
  * @category Collection components
  */
 export function EntityCollectionRowActions<M extends Record<string, any>>({
-                                                                           entity,
-                                                                           width,
-                                                                           frozen,
-                                                                           isSelected,
-                                                                           selectionEnabled,
-                                                                           size,
-                                                                           toggleEntitySelection,
-                                                                           onCopyClicked,
-                                                                           onEditClicked,
-                                                                           onDeleteClicked
-                                                                       }:
-                                                                           {
-                                                                               entity: Entity<M>,
-                                                                               width: number,
-                                                                               frozen?: boolean,
-                                                                               size: CollectionSize,
-                                                                               isSelected?: boolean,
-                                                                               selectionEnabled?: boolean,
-                                                                               toggleEntitySelection?: (selectedEntity: Entity<M>) => void
-                                                                               onEditClicked?: (selectedEntity: Entity<M>) => void,
-                                                                               onCopyClicked?: (selectedEntity: Entity<M>) => void,
-                                                                               onDeleteClicked?: (selectedEntity: Entity<M>) => void,
-                                                                           }) {
+                                                                              entity,
+                                                                              width,
+                                                                              frozen,
+                                                                              isSelected,
+                                                                              selectionEnabled,
+                                                                              size,
+                                                                              toggleEntitySelection,
+                                                                              onCopyClicked,
+                                                                              onEditClicked,
+                                                                              onDeleteClicked
+                                                                          }:
+                                                                              {
+                                                                                  entity: Entity<M>,
+                                                                                  width: number,
+                                                                                  frozen?: boolean,
+                                                                                  size: CollectionSize,
+                                                                                  isSelected?: boolean,
+                                                                                  selectionEnabled?: boolean,
+                                                                                  toggleEntitySelection?: (selectedEntity: Entity<M>) => void
+                                                                                  onEditClicked?: (selectedEntity: Entity<M>) => void,
+                                                                                  onCopyClicked?: (selectedEntity: Entity<M>) => void,
+                                                                                  onDeleteClicked?: (selectedEntity: Entity<M>) => void,
+                                                                              }) {
+
+    const theme = useTheme();
+    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     const editEnabled = Boolean(onEditClicked);
     const copyEnabled = Boolean(onCopyClicked);
@@ -117,66 +122,67 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                 // backdropFilter: frozen ? "blur(8px)" : undefined,
                 contain: "strict",
                 zIndex: 1
-        })}>
+            })}>
 
             {(editEnabled || deleteEnabled || selectionEnabled) &&
-            <Box sx={{
-                minWidth: 138,
-                display: "flex",
-                justifyContent: "center"
-            }}
-            >
-                {editEnabled &&
-                <Tooltip title={`Edit ${entity.id}`}>
-                    <IconButton
-                        onClick={(event: MouseEvent) => {
-                            event.stopPropagation();
-                            if (onEditClicked)
-                                onEditClicked(entity);
-                        }}
-                        size="large">
-                        <KeyboardTab/>
-                    </IconButton>
-                </Tooltip>
-                }
+                <Box sx={{
+                    minWidth: 138,
+                    display: "flex",
+                    justifyContent: "center"
+                }}>
+                    {editEnabled &&
+                        <Tooltip title={`Edit ${entity.id}`}>
+                            <IconButton
+                                onClick={(event: MouseEvent) => {
+                                    event.stopPropagation();
+                                    if (onEditClicked)
+                                        onEditClicked(entity);
+                                }}
+                                size={largeLayout ? "medium" : "small"}>
+                                <KeyboardTab/>
+                            </IconButton>
+                        </Tooltip>
+                    }
 
-                {selectionEnabled &&
-                <Tooltip title={`Select ${entity.id}`}>
-                    <Checkbox
-                        checked={isSelected}
-                        onChange={onCheckboxChange}
-                    />
-                </Tooltip>}
+                    {selectionEnabled &&
+                        <Tooltip title={`Select ${entity.id}`}>
+                            <Checkbox
+                                size={largeLayout ? "medium" : "small"}
+                                checked={isSelected}
+                                onChange={onCheckboxChange}
+                            />
+                        </Tooltip>}
 
-                {(copyEnabled || deleteEnabled) &&
-                <IconButton onClick={openMenu} size="large">
-                    <MoreVert/>
-                </IconButton>
-                }
+                    {(copyEnabled || deleteEnabled) &&
+                        <IconButton onClick={openMenu}
+                                    size={largeLayout ? "medium" : "small"}>
+                            <MoreVert/>
+                        </IconButton>
+                    }
 
-                {(copyEnabled || deleteEnabled) && <Menu
-                    anchorEl={anchorEl}
-                    open={Boolean(anchorEl)}
-                    onClose={closeMenu}
-                    elevation={1}
-                >
-                    {deleteEnabled && <MenuItem onClick={onDeleteClick}>
-                        <ListItemIcon>
-                            <Delete/>
-                        </ListItemIcon>
-                        <ListItemText primary={"Delete"}/>
-                    </MenuItem>}
+                    {(copyEnabled || deleteEnabled) && <Menu
+                        anchorEl={anchorEl}
+                        open={Boolean(anchorEl)}
+                        onClose={closeMenu}
+                        elevation={1}
+                    >
+                        {deleteEnabled && <MenuItem onClick={onDeleteClick}>
+                            <ListItemIcon>
+                                <Delete/>
+                            </ListItemIcon>
+                            <ListItemText primary={"Delete"}/>
+                        </MenuItem>}
 
-                    {copyEnabled && <MenuItem onClick={onCopyClick}>
-                        <ListItemIcon>
-                            <FileCopy/>
-                        </ListItemIcon>
-                        <ListItemText primary="Copy"/>
-                    </MenuItem>}
+                        {copyEnabled && <MenuItem onClick={onCopyClick}>
+                            <ListItemIcon>
+                                <FileCopy/>
+                            </ListItemIcon>
+                            <ListItemText primary="Copy"/>
+                        </MenuItem>}
 
-                </Menu>}
+                    </Menu>}
 
-            </Box>}
+                </Box>}
 
             {size !== "xs" && (
                 <Box sx={{

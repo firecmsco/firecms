@@ -28,7 +28,7 @@ export const VirtualTableHeaderRow = ({
         const params = {
             width: newWidth,
             key: column.key as string,
-            column: { ...column, width: newWidth } as TableColumn<any, any>
+            column: { ...column, width: newWidth } as TableColumn
         };
         if (!end)
             onColumnResize(params);
