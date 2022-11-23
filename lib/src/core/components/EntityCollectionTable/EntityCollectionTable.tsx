@@ -81,7 +81,7 @@ const DEFAULT_PAGE_SIZE = 50;
  * the {@link DataSource} and holding the state of filtering and sorting.
  *
  * This component is used internally by {@link EntityCollectionView} and
- * {@link ReferenceDialog}
+ * {@link useReferenceDialog}
  *
  * Please note that you only need to use this component if you are building
  * a custom view. If you just need to create a default view you can do it
@@ -124,6 +124,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const theme = useTheme();
         const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
         const disabledFilterChange = Boolean(forceFilter);
+
+        const tableKey = React.useRef<string>(Math.random().toString(36));
 
         const context: FireCMSContext<UserType> = useFireCMSContext();
 
@@ -179,8 +181,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     )
                 };
             }) ?? [];
-            return [...(resolvedCollection.additionalFields ?? resolvedCollection.additionalColumns ?? []), ...subcollectionColumns];
-        }, [resolvedCollection, collection, fullPath]);
+            return [...(collection.additionalFields ?? collection.additionalColumns ?? []), ...subcollectionColumns];
+        }, [collection, fullPath]);
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
             ({
@@ -189,41 +191,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                  property,
                  entityId
              }) => dataSource.checkUniqueField(fullPath, name, value, property, entityId),
-            [fullPath, dataSource]);
-
-        const onValueChange: OnCellValueChange<any, M> = useCallback(({
-                                                                          value,
-                                                                          propertyKey,
-                                                                          setSaved,
-                                                                          setError,
-                                                                          entity
-                                                                      }) => {
-
-            const updatedValues = setIn({ ...entity.values }, propertyKey, value);
-
-            const saveProps: SaveEntityProps<M> = {
-                path: fullPath,
-                entityId: entity.id,
-                values: updatedValues,
-                previousValues: entity.values,
-                collection,
-                status: "existing"
-            };
-
-            return saveEntityWithCallbacks({
-                ...saveProps,
-                callbacks: collection.callbacks,
-                dataSource,
-                context,
-                onSaveSuccess: () => setSaved(true),
-                onSaveFailure: (e: Error) => {
-                    console.error("Save failure");
-                    console.error(e);
-                    setError(e);
-                }
-            });
-
-        }, [fullPath, collection]);
+            [fullPath]);
 
         const {
             data: rawData,
@@ -245,14 +213,19 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         });
 
         // hack to fix Firestore listeners firing with incomplete data
-        const data = useDebouncedData(orderedData, { filterValues, sortBy, searchString, itemCount });
+        const data = useDebouncedData(orderedData, {
+            filterValues,
+            sortBy,
+            searchString,
+            itemCount
+        });
 
-        const loadNextPage = useCallback(() => {
+        const loadNextPage = () => {
             if (!paginationEnabled || dataLoading || noMoreToLoad)
                 return;
             if (itemCount !== undefined)
                 setItemCount(itemCount + pageSize);
-        }, [dataLoading, itemCount, noMoreToLoad, pageSize, paginationEnabled]);
+        };
 
         const resetPagination = useCallback(() => {
             setItemCount(pageSize);
@@ -273,8 +246,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         }, []);
 
         const onTextSearch = useCallback((newSearchString?: string) => setSearchString(newSearchString), []);
-
-        const tableKey = React.useRef<string>(Math.random().toString(36));
 
         const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, string, UserType>> = useMemo(() => {
             return additionalFields
@@ -588,7 +559,45 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
     },
     equal
-) as React.FunctionComponent<EntityCollectionTableProps<any>>;
+);
+
+const onValueChange: OnCellValueChange<any, any> = ({
+                                                      fullPath,
+                                                      collection,
+                                                      dataSource,
+                                                      context,
+                                                      value,
+                                                      propertyKey,
+                                                      setSaved,
+                                                      setError,
+                                                      entity
+                                                  }) => {
+
+    const updatedValues = setIn({ ...entity.values }, propertyKey, value);
+
+    const saveProps: SaveEntityProps = {
+        path: fullPath,
+        entityId: entity.id,
+        values: updatedValues,
+        previousValues: entity.values,
+        collection,
+        status: "existing"
+    };
+
+    return saveEntityWithCallbacks({
+        ...saveProps,
+        callbacks: collection.callbacks,
+        dataSource,
+        context,
+        onSaveSuccess: () => setSaved(true),
+        onSaveFailure: (e: Error) => {
+            console.error("Save failure");
+            console.error(e);
+            setError(e);
+        }
+    });
+
+};
 
 function isFilterCombinationValid<M>(
     filterValues: FilterValues<Extract<keyof M, string>>,

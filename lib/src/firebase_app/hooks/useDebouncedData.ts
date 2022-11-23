@@ -8,12 +8,14 @@ import equal from "react-fast-compare";
  * @param filters
  * @param timeoutMs
  */
-export function useDebouncedData<T>(data: T[], filters: any, timeoutMs = 2000) {
+export function useDebouncedData<T>(data: T[], filters: any, timeoutMs = 5000) {
 
     const [deferredData, setDeferredData] = React.useState(data);
     const dataLength = React.useRef(deferredData.length ?? 0);
     const pendingUpdate = React.useRef(false);
     const currentFilters = React.useRef(filters);
+
+    const immediateUpdate = data.length >= dataLength.current || !equal(currentFilters.current, filters);
 
     React.useEffect(() => {
 
@@ -24,8 +26,6 @@ export function useDebouncedData<T>(data: T[], filters: any, timeoutMs = 2000) {
         };
 
         pendingUpdate.current = true;
-
-        const immediateUpdate = data.length >= dataLength.current || !equal(currentFilters.current, filters);
         currentFilters.current = filters;
 
         let handler: any;
@@ -40,6 +40,7 @@ export function useDebouncedData<T>(data: T[], filters: any, timeoutMs = 2000) {
                 performUpdate();
         };
     }, [data, timeoutMs, filters]);
+    console.log("useDebouncedData", immediateUpdate, data);
 
-    return deferredData;
+    return immediateUpdate ? data : deferredData;
 }

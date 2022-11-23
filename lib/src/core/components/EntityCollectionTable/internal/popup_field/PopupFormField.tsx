@@ -12,9 +12,10 @@ import { Box, Button, IconButton, Portal, Typography } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import {
+    DataSource,
     Entity,
     EntityCollection,
-    EntityValues,
+    EntityValues, FireCMSContext,
     FormContext,
     PropertyFieldBindingProps,
     ResolvedEntityCollection,
@@ -34,6 +35,7 @@ import { ErrorView } from "../../../ErrorView";
 import { isReadOnly, resolveCollection } from "../../../../util";
 import { CustomDialogActions } from "../../../CustomDialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
+import { useDataSource, useFireCMSContext } from "../../../../../hooks";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
@@ -54,19 +56,28 @@ interface PopupFormFieldProps<M extends Record<string, any>> {
     onCellValueChange?: (params: OnCellValueChangeParams<any, M>) => Promise<void>;
 }
 
-export function PopupFormField<M extends Record<string, any>>({
-                                                                  tableKey,
-                                                                  entity,
-                                                                  customFieldValidator,
-                                                                  propertyKey,
-                                                                  collection: inputCollection,
-                                                                  path,
-                                                                  cellRect,
-                                                                  open,
-                                                                  onClose,
-                                                                  columnIndex,
-                                                                     onCellValueChange
-                                                                 }: PopupFormFieldProps<M>) {
+export function PopupFormField<M extends Record<string, any>>(props: PopupFormFieldProps<M>) {
+    if (!props.open) return null;
+    return <PopupFormFieldInternal {...props} />;
+
+}
+
+export function PopupFormFieldInternal<M extends Record<string, any>>({
+                                                                          tableKey,
+                                                                          entity,
+                                                                          customFieldValidator,
+                                                                          propertyKey,
+                                                                          collection: inputCollection,
+                                                                          path,
+                                                                          cellRect,
+                                                                          open,
+                                                                          onClose,
+                                                                          columnIndex,
+                                                                          onCellValueChange
+                                                                      }: PopupFormFieldProps<M>) {
+
+    const dataSource = useDataSource();
+    const context = useFireCMSContext();
 
     const [savingError, setSavingError] = React.useState<any>();
     const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
@@ -189,14 +200,18 @@ export function PopupFormField<M extends Record<string, any>>({
 
     const saveValue = async (values: M) => {
         setSavingError(null);
-        if (entity && onCellValueChange && propertyKey) {
+        if (inputCollection && entity && onCellValueChange && propertyKey) {
             return onCellValueChange({
                 value: values[propertyKey as string],
                 propertyKey: propertyKey as string,
                 entity,
                 setError: setSavingError,
                 setSaved: () => {
-                }
+                },
+                fullPath: path,
+                collection: inputCollection,
+                dataSource,
+                context
             });
         }
         return Promise.resolve();

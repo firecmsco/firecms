@@ -1,11 +1,12 @@
 import {
     CollectionSize,
+    DataSource,
     Entity,
     EntityCollection,
+    FireCMSContext,
     ResolvedProperty,
     User
 } from "../../../types";
-import { OnCellChangeParams } from "./internal/PropertyTableCell";
 
 export type EntityCollectionTableProviderProps<M extends Record<string, any>, AdditionalKey extends string, UserType extends User> = {
 
@@ -57,7 +58,7 @@ export type EntityCollectionTableController<M extends Record<string, any>> = {
     focused: boolean;
     select: (cell?: SelectedCellProps<M>) => void;
     setPopupCell: (cell?: SelectedCellProps<M>) => void;
-    onValueChange?: (params: OnCellChangeParams<any, M>) => void;
+    onValueChange?: (params: OnCellValueChangeParams<any, M>) => void;
     /**
      * Size of the elements in the collection
      */
@@ -74,6 +75,10 @@ export interface OnCellValueChangeParams<T, M extends Record<string, any>> {
     entity: Entity<M>,
     setSaved: (saved: boolean) => void
     setError: (e: Error) => void
+    fullPath: string
+    collection: EntityCollection<M>
+    dataSource: DataSource,
+    context: FireCMSContext
 }
 
 export type SelectedCellProps<M extends Record<string, any>> =

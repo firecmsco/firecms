@@ -33,7 +33,11 @@ import {
     mapPropertyToYup
 } from "../../../../form/validation";
 import { useEntityCollectionTableController } from "../EntityCollectionTable";
-import { useClearRestoreValue } from "../../../../hooks";
+import {
+    useClearRestoreValue,
+    useDataSource,
+    useFireCMSContext
+} from "../../../../hooks";
 
 export interface PropertyTableCellProps<T extends any, M extends Record<string, any>> {
     propertyKey: string;
@@ -48,17 +52,6 @@ export interface PropertyTableCellProps<T extends any, M extends Record<string, 
     width: number;
     entity: Entity<any>;
     path: string;
-}
-
-/**
- * Props passed in a callback when the content of a cell in a table has been edited
- */
-export interface OnCellChangeParams<T, M extends Record<string, any>> {
-    value: T,
-    propertyKey: string,
-    entity: Entity<M>;
-    setError: (e: Error) => void,
-    setSaved: (saved: boolean) => void
 }
 
 function isStorageProperty<T>(property: ResolvedProperty) {
@@ -89,6 +82,9 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                          path,
                                                          entity
                                                      }: PropertyTableCellProps<T, M>) {
+
+        const dataSource = useDataSource();
+        const context = useFireCMSContext();
 
         const {
             onValueChange,
@@ -143,7 +139,11 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                             propertyKey,
                             setError,
                             setSaved,
-                            entity
+                            entity,
+                            fullPath: path,
+                            collection,
+                            dataSource,
+                            context
                         });
                     }
                 })
