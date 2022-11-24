@@ -39,8 +39,7 @@ export function useDebouncedData<T>(data: T[], filters: any, timeoutMs = 5000) {
             if (pendingUpdate.current && immediateUpdate)
                 performUpdate();
         };
-    }, [data, timeoutMs, filters]);
-    console.log("useDebouncedData", immediateUpdate, data);
+    }, [data, timeoutMs, filters, immediateUpdate]);
 
     return immediateUpdate ? data : deferredData;
 }

@@ -23,6 +23,11 @@ export type EntityCollectionTableProps<M extends Record<string, any>> = Omit<Ent
     entitiesDisplayedFirst?: Entity<M>[];
 
     /**
+     * Display these entities as selected
+     */
+    selectedEntities?: Entity<M>[];
+
+    /**
      * Override the title in the toolbar
      */
     title?: React.ReactNode;

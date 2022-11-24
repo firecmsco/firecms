@@ -2,7 +2,7 @@ import React, { useCallback, useState } from "react";
 
 import equal from "react-fast-compare"
 
-import { Box, darken } from "@mui/material";
+import { Box, darken, lighten } from "@mui/material";
 
 import { getRowHeight } from "./common";
 import { VirtualTableRowProps } from "./types";
@@ -48,7 +48,9 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
                     fontSize: "0.875rem",
                     borderBottom: "1px solid rgba(128, 128, 128, 0.1)",
                     backgroundColor: hoverRow && onHover
-                        ? darken(theme.palette.background.default, 0.01)
+                        ? (theme.palette.mode === "dark"
+                            ? lighten(theme.palette.background.paper, 0.01)
+                            : "rgb(252, 252, 253)") //darken(theme.palette.background.default, 0.005))
                         : undefined
                 })}>
 

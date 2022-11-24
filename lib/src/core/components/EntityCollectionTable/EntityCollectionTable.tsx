@@ -21,7 +21,6 @@ import {
     User,
     WhereFilterOp
 } from "../../../types";
-import { TableCell } from "../Table/TableCell";
 import { renderSkeletonText } from "../../../preview";
 import { CustomFieldValidator } from "../../../form/validation";
 import { PropertyTableCell } from "./internal/PropertyTableCell";
@@ -66,6 +65,7 @@ import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
 import { PropertyPreviewTableCell } from "./internal/PropertyPreviewTableCell";
 import { useDebouncedData } from "../../../firebase_app/hooks/useDebouncedData";
 import { useDataOrder } from "../../../hooks/data/useDataOrder";
+import { TableCell } from "./internal/TableCell";
 
 const DEFAULT_STATE = {} as any;
 
@@ -112,6 +112,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          title,
          tableRowActionsBuilder,
          entitiesDisplayedFirst,
+         selectedEntities,
          onEntityClick,
          onColumnResize,
          onSizeChanged,
@@ -151,6 +152,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
         const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
         const [focused, setFocused] = React.useState<boolean>(false);
+
+        const selectedEntityIds = selectedEntities?.map(e => e.id);
 
         const filterIsSet = !!filterValues && Object.keys(filterValues).length > 0;
 
@@ -350,7 +353,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     </ErrorBoundary>);
             }
 
-        }, [collection, customFieldValidator, fullPath, inlineEditing, size]);
+        }, [collection, customFieldValidator, fullPath, inlineEditing, size, selectedEntityIds]);
 
         const additionalCellRenderer = useCallback(({
                                                         column,
@@ -374,6 +377,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     focused={focused}
                     value={value}
                     selected={false}
+                    selectedRow={selectedEntityIds?.includes(entity.id) ?? false}
                     disabled={true}
                     align={"left"}
                     allowScroll={false}
@@ -389,7 +393,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 </TableCell>
             );
 
-        }, [additionalFieldsMap, size]);
+        }, [additionalFieldsMap, size, selectedEntityIds]);
 
         const allColumns: TableColumn[] = useMemo(() => {
                 const columnsResult: TableColumn[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
@@ -448,23 +452,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 }).filter(c => !!c) as TableColumn[]
         ], [allColumns, displayedColumnIds, idColumn]);
 
-        const popupFormField = (
-            <PopupFormField
-                key={`popup_form_${popupCell?.columnIndex}_${popupCell?.entity?.id}`}
-                open={Boolean(popupCell)}
-                onClose={onPopupClose}
-                cellRect={popupCell?.cellRect}
-                columnIndex={popupCell?.columnIndex}
-                propertyKey={popupCell?.propertyKey}
-                collection={popupCell?.collection}
-                entity={popupCell?.entity}
-                tableKey={tableKey.current}
-                customFieldValidator={customFieldValidator}
-                path={fullPath}
-                onCellValueChange={onValueChange}
-            />
-        );
-
         const cellRenderer = useCallback((props: CellRendererParams<any>) => {
             const column = props.column;
             const columns = props.columns;
@@ -507,6 +494,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     onValueChange,
                     size,
                     selectedCell,
+                    selectedEntityIds,
                     focused
                 }}
             >
@@ -553,7 +541,20 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         />
                     </Box>
 
-                    {popupFormField}
+                    <PopupFormField
+                        key={`popup_form_${popupCell?.columnIndex}_${popupCell?.entity?.id}`}
+                        open={Boolean(popupCell)}
+                        onClose={onPopupClose}
+                        cellRect={popupCell?.cellRect}
+                        columnIndex={popupCell?.columnIndex}
+                        propertyKey={popupCell?.propertyKey}
+                        collection={popupCell?.collection}
+                        entity={popupCell?.entity}
+                        tableKey={tableKey.current}
+                        customFieldValidator={customFieldValidator}
+                        path={fullPath}
+                        onCellValueChange={onValueChange}
+                    />
 
                 </Box>
             </EntityCollectionTableContext.Provider>

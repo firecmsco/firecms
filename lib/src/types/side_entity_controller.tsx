@@ -57,6 +57,11 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any, UserT
     onUpdate?: (params: { entity: Entity<any> }) => void;
 
     /**
+     * Callback when the dialog is closed
+     */
+    onClose?: () => void;
+
+    /**
      * Should this panel close when saving
      */
     closeOnSave?: boolean;

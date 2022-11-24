@@ -59,6 +59,7 @@ export type EntityCollectionTableController<M extends Record<string, any>> = {
     select: (cell?: SelectedCellProps<M>) => void;
     setPopupCell: (cell?: SelectedCellProps<M>) => void;
     onValueChange?: (params: OnCellValueChangeParams<any, M>) => void;
+    selectedEntityIds?: string[];
     /**
      * Size of the elements in the collection
      */

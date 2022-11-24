@@ -59,6 +59,7 @@ export interface EntityViewProps<M extends Record<string, any>> {
     formWidth?: number | string;
     onValuesAreModified: (modified: boolean) => void;
     onUpdate?: (params: { entity: Entity<any> }) => void;
+    onClose?: () => void;
 }
 
 /**
@@ -77,7 +78,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                                                                   collection,
                                                                                   onValuesAreModified,
                                                                                   formWidth,
-                                                                                  onUpdate
+                                                                                  onUpdate,
+                                                                                  onClose
                                                                               }: EntityViewProps<M>) {
 
         const theme = useTheme();
@@ -222,6 +224,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             if (closeAfterSave) {
                 sideDialogContext.setBlocked(false);
                 sideDialogContext.close(true);
+                onClose?.();
             }
 
         };
@@ -440,7 +443,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         pb: 1,
                         alignSelf: "center"
                     }}>
-                    <IconButton onClick={() => sideDialogContext.close(false)}
+                    <IconButton onClick={() => {
+                        onClose?.();
+                        return sideDialogContext.close(false);
+                    }}
                                 size="large">
                         <CloseIcon/>
                     </IconButton>

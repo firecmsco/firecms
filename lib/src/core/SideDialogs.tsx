@@ -99,6 +99,7 @@ function SideDialogView({
         setBlocked(false);
         setDrawerCloseRequested(false);
         sideDialogsController.close();
+        panel?.onClose?.();
     };
 
     const handleDrawerCloseCancel = () => {
@@ -110,6 +111,7 @@ function SideDialogView({
             setDrawerCloseRequested(true);
         } else {
             sideDialogsController.close();
+            panel?.onClose?.();
         }
     };
 

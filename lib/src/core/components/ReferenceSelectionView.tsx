@@ -240,6 +240,7 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
                                            </Typography>}
                                            {...collection}
                                            inlineEditing={false}
+                                           selectedEntities={selectedEntities}
                                            actions={<ReferenceDialogActions
                                                collection={collection}
                                                path={fullPath}

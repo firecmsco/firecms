@@ -62,4 +62,8 @@ export interface SideDialogPanelProps {
      */
     parentUrlPath?: string;
 
+    /**
+     * Callback when the panel is closed
+     */
+    onClose?: () => void;
 }

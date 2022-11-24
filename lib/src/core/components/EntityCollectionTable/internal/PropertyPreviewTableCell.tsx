@@ -4,10 +4,10 @@ import { CMSType, Entity, ResolvedProperty } from "../../../../types";
 import { PropertyPreview } from "../../../../preview";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
-import { TableCell } from "../../Table/TableCell";
 import { useEntityCollectionTableController } from "../EntityCollectionTable";
 import { getRowHeight } from "../../Table/common";
 import { getValueInPath } from "../../../util";
+import { TableCell } from "./TableCell";
 
 export interface PropertyPreviewTableCellProps<T extends CMSType, M extends Record<string, any>> {
     propertyKey: string;
@@ -30,8 +30,10 @@ export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps
 
         const {
             size,
-            focused
+            focused,
+            selectedEntityIds
         } = useEntityCollectionTableController();
+        const selectedRow = selectedEntityIds?.includes(entity.id) ?? false
 
         const value = getValueInPath(entity.values, propertyKey);
         return (
@@ -39,6 +41,7 @@ export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps
                 size={size}
                 width={width}
                 focused={focused}
+                selectedRow={selectedRow}
                 key={`preview_cell_${propertyKey}_${entity.id}`}
                 value={value}
                 align={align ?? "left"}

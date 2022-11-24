@@ -151,6 +151,7 @@ const propsToSidePanel = (props: EntitySidePanelProps<any, any>, navigation: Nav
         component: <EntitySidePanel {...props}/>,
         urlPath: newPath,
         parentUrlPath: navigation.buildUrlCollectionPath(collectionPath),
-        width: getEntityViewWidth(props, smallLayout)
+        width: getEntityViewWidth(props, smallLayout),
+        onClose: props.onClose
     });
 };

@@ -1,15 +1,22 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import useMeasure from "react-use-measure";
 
-import { Box, darken, IconButton, Tooltip, useTheme } from "@mui/material";
+import {
+    Box,
+    darken,
+    IconButton,
+    lighten,
+    Tooltip,
+    useTheme
+} from "@mui/material";
 
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import { getRowHeight } from "./common";
 import isEqual from "react-fast-compare";
-import { ErrorTooltip } from "../ErrorTooltip";
-import { ErrorBoundary } from "../ErrorBoundary";
-import { TableSize } from "./VirtualTableProps";
+import { TableSize } from "../../Table";
+import { getRowHeight } from "../../Table/common";
+import { ErrorBoundary } from "../../ErrorBoundary";
+import { ErrorTooltip } from "../../ErrorTooltip";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -30,8 +37,34 @@ interface TableCellProps {
     removePadding?: boolean;
     fullHeight?: boolean;
     selected?: boolean;
+    selectedRow: boolean;
     onSelect?: (cellRect: DOMRect | undefined) => void;
     openPopup?: (cellRect: DOMRect | undefined) => void;
+}
+
+function getBackgroundColor(onHover: any, selectedRow: boolean, disabled: boolean, theme: any, isSelected: undefined | boolean) {
+    if (onHover && !disabled) {
+        if (theme.palette.mode === "dark") {
+            return lighten(theme.palette.background.paper, 0.03);
+        } else {
+            return darken(theme.palette.background.default, 0.02);
+        }
+    }
+    if (isSelected) {
+        if (theme.palette.mode === "dark") {
+            return lighten(theme.palette.background.paper, 0.035);
+        } else {
+            return darken(theme.palette.background.default, 0.025);
+        }
+    }
+    if (selectedRow) {
+        if (theme.palette.mode === "dark") {
+            return lighten(theme.palette.background.paper, 0.022);
+        } else {
+            return darken(theme.palette.background.default, 0.008);
+        }
+    }
+    return undefined
 }
 
 export const TableCell = React.memo<TableCellProps>(
@@ -43,6 +76,7 @@ export const TableCell = React.memo<TableCellProps>(
                            disabled,
                            disabledTooltip,
                            saved,
+                           selectedRow,
                            error,
                            align,
                            allowScroll,
@@ -192,10 +226,8 @@ export const TableCell = React.memo<TableCellProps>(
                     // color: "#" + randomColor(),
                     contain: "content",
                     alignItems: disabled || !isOverflowing ? "center" : undefined,
-                    backgroundColor: onHover
-                        ? (disabled ? undefined : darken(theme.palette.background.default, 0.02))
-                        : (isSelected ? theme.palette.mode === "dark" ? theme.palette.background.paper : theme.palette.background.default : undefined)
-
+                    backgroundColor: getBackgroundColor(onHover, selectedRow, disabled, theme, isSelected),
+                    transition: "background-color 0.6s ease"
                 }}
                 sx={{
                     display: "flex",

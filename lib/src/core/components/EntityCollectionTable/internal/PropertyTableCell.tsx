@@ -26,7 +26,6 @@ import { TableReferenceField } from "../fields/TableReferenceField";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { isReadOnly } from "../../../util";
-import { TableCell } from "../../Table/TableCell";
 import { TableStorageUpload } from "../fields/TableStorageUpload";
 import {
     CustomFieldValidator,
@@ -38,6 +37,7 @@ import {
     useDataSource,
     useFireCMSContext
 } from "../../../../hooks";
+import { TableCell } from "./TableCell";
 
 export interface PropertyTableCellProps<T extends any, M extends Record<string, any>> {
     propertyKey: string;
@@ -70,18 +70,18 @@ function isStorageProperty<T>(property: ResolvedProperty) {
 
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
     function PropertyTableCell<T extends any, M extends Record<string, any>>({
-                                                         propertyKey,
-                                                         columnIndex,
-                                                         customFieldValidator,
-                                                         value,
-                                                         property,
-                                                         align,
-                                                         width,
-                                                         height,
-                                                         collection,
-                                                         path,
-                                                         entity
-                                                     }: PropertyTableCellProps<T, M>) {
+                                                                                 propertyKey,
+                                                                                 columnIndex,
+                                                                                 customFieldValidator,
+                                                                                 value,
+                                                                                 property,
+                                                                                 align,
+                                                                                 width,
+                                                                                 height,
+                                                                                 collection,
+                                                                                 path,
+                                                                                 entity
+                                                                             }: PropertyTableCellProps<T, M>) {
 
         const dataSource = useDataSource();
         const context = useFireCMSContext();
@@ -92,8 +92,10 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             selectedCell,
             focused,
             select,
-            setPopupCell
+            setPopupCell,
+            selectedEntityIds
         } = useEntityCollectionTableController();
+        const selectedRow = selectedEntityIds?.includes(entity.id) ?? false;
 
         const selected = selectedCell?.columnIndex === columnIndex &&
             selectedCell?.entity.id === entity.id;
@@ -394,6 +396,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     focused={focused}
                     onSelect={onSelect}
                     selected={selected}
+                    selectedRow={selectedRow}
                     disabled={disabled || readOnly}
                     disabledTooltip={disabledTooltip ?? "Disabled"}
                     removePadding={removePadding}
