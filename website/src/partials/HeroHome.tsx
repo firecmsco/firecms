@@ -5,7 +5,7 @@ import BrowserOnly from "@docusaurus/BrowserOnly";
 // @ts-ignore
 import darkModeVideo from "@site/static/img/dark_mode.mp4";
 
-const LazyThreeJSAnimationShader = React.lazy(() => import("../shape/ThreeJSAnimationShader"));
+// const LazyThreeJSAnimationShader = React.lazy(() => import("../shape/ThreeJSAnimationShader"));
 
 function HeroHome({}) {
 
@@ -75,14 +75,14 @@ function HeroHome({}) {
             isolation: "isolate"
         }}>
 
-            <BrowserOnly
-                fallback={fallback}>
-                {() => (
-                    <Suspense fallback={fallback}>
-                        <LazyThreeJSAnimationShader/>
-                    </Suspense>
-                )}
-            </BrowserOnly>
+            {/*<BrowserOnly*/}
+            {/*    fallback={fallback}>*/}
+            {/*    {() => (*/}
+            {/*        <Suspense fallback={fallback}>*/}
+            {/*            <LazyThreeJSAnimationShader/>*/}
+            {/*        </Suspense>*/}
+            {/*    )}*/}
+            {/*</BrowserOnly>*/}
 
 
             <div className="xl:grid xl:grid-cols-12 xl:my-24 md:my-16 my-8">

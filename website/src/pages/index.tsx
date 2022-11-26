@@ -18,6 +18,7 @@ import "../css/tailwind.css";
 import Pricing from "../partials/Pricing";
 import Head from "@docusaurus/Head";
 import { Newsletter } from "../partials/Newsletter";
+import { PagesBackground } from "../partials/PagesBackground";
 
 // import { Newsletter } from "../partials/Newsletter";
 
@@ -74,6 +75,8 @@ function Home() {
             <div className="flex flex-col min-h-screen overflow-hidden ">
 
                 <main className="flex-grow">
+
+
                     <HeroHome/>
 
                     <Separator/>

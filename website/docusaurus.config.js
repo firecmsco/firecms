@@ -53,7 +53,11 @@ module.exports = {
                     label: "Showcase",
                     items: [
                         {
-                            label: "MedicalMotion content editing",
+                            label: "Multiple editing options",
+                            to: "/showcase/real_time",
+                        },
+                        {
+                            label: "Advanced content editing",
                             to: "/showcase/advanced_forms",
                         },
                     ],

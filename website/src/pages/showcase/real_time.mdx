@@ -1,0 +1,95 @@
+---
+id: real_time
+title: Multiple editing options
+---
+
+<div style={{height: "350px"}}/>
+
+
+# Multiple editing options
+
+FireCMS allows you to edit the data in the database in both an **inline** table,
+and in **dedicated forms**.
+
+Inline editing is very useful when you want to quickly edit a few fields of a
+document. For example, if you have a list of users, you can quickly edit the
+name of the user by clicking on the name and editing it.
+
+<video style={{maxWidth:"100%", margin:"16px 0px 32px", alignSelf:"center"}}
+       loop autoPlay muted>
+    <source src="/img/inline_table_editing.mp4" type="video/mp4"/>
+</video>
+
+You can also edit the data in a dedicated form. This is useful when you want to
+edit a lot of fields, or when you want to edit a field that is not shown in the
+table.
+
+:::tip
+You can force the CMS to always open the form when editing a document by
+setting the `inlineEditing` property to `false` in the collection configuration.
+:::
+
+## Real-time updates
+
+FireCMS uses Firestore as a backend, which is a **real time database**. This means
+that any change in the database is reflected in the CMS in real time.
+This is a very powerful feature that allows you to have a CMS that is always
+up-to-date with the data in the database.
+
+These updates will be reflected both in the table and in the edit form (as long
+as you have not modified the specific field that was updated).
+
+This allows you to move some of your logic to backend functions, or have
+completely dynamic data, and still have a CMS that is always up-to-date.
+
+There is a big benefit to using Firebase/Firestore as a backend for your CMS:
+you can leverage all the advanced features that Google Cloud Platform offers,
+such as **Cloud Functions**, **Cloud Storage**, **BigQuery**, etc.
+
+## Data synchronization with an external service
+
+> The power of Cloud functions
+
+Let's see how FireCMS helps [MedicalMotion](https://medicalmotion.com/) to
+synchronize the videos of the exercises they use in their platform with
+Vimeo.
+
+We use a **Cloud Function** to synchronize the videos with Vimeo. This function
+is triggered every time a new video is uploaded to the database. We listen
+to the `onWrite` event of the `videos` collection, and we check if the file
+field has been modified.
+
+If the file has been modified, we upload the file to Vimeo and we update the
+database with the new video URL.
+
+<img
+    src="/img/video_sync.png"
+    alt="Diagram of the video synchronization process"
+    style={{
+        width: "100%"
+    }}/>
+
+We leverage the **real time updates** of Firestore to update a `status` field
+in the database. This field is used to show the status of the video in the
+CMS. In can take values like `In progress`, `In sync`, `Error`, etc.
+
+<video style={{maxWidth:"100%", margin:"16px 0px 32px", alignSelf:"center"}}
+       loop autoPlay muted>
+    <source src="/img/video_sync.mp4" type="video/mp4"/>
+</video>
+
+> The `seconds` field in this video are also updated automatically in
+> a separate step.
+
+This is just an example of how you can use FireCMS to build a CMS that is
+adaptable to your business logic. Serverless functions are a great way to
+extend the functionalities offered by this project and make it even more
+powerful.
+
+
+
+
+
+
+
+

@@ -134,25 +134,25 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         scene.add(mesh);
         meshes.push(mesh);
 
-        const mesh2 = createShape(width, height, 2, 1 / 1.5, 1 / 3, 3, -10, 1.0);
-        scene.add(mesh2);
-        meshes.push(mesh2);
-
-        const mesh3 = createShape(width, height, 1.5, 1 / 2, 1 / 2.5, -2, -20, 1.0);
-        scene.add(mesh3);
-        meshes.push(mesh3);
-
-        const mesh4 = createShape(width, height, 1.5, 1 / 1.5, 1 / 2, -1, -32, 1.0);
-        scene.add(mesh4);
-        meshes.push(mesh4);
-
-        const mesh5 = createShape(width, height, 1, 1 / 1.5, 1 / 2.5, -4.5, -38, 1.0);
-        scene.add(mesh5);
-        meshes.push(mesh5);
-
-        const mesh6 = createShape(width, height, 2.5, 1 / 1.5, 1 / 2.5, 6.5, -50, 1.0);
-        scene.add(mesh6);
-        meshes.push(mesh6);
+        // const mesh2 = createShape(width, height, 2, 1 / 1.5, 1 / 3, 3, -10, 1.0);
+        // scene.add(mesh2);
+        // meshes.push(mesh2);
+        //
+        // const mesh3 = createShape(width, height, 1.5, 1 / 2, 1 / 2.5, -2, -20, 1.0);
+        // scene.add(mesh3);
+        // meshes.push(mesh3);
+        //
+        // const mesh4 = createShape(width, height, 1.5, 1 / 1.5, 1 / 2, -1, -32, 1.0);
+        // scene.add(mesh4);
+        // meshes.push(mesh4);
+        //
+        // const mesh5 = createShape(width, height, 1, 1 / 1.5, 1 / 2.5, -4.5, -38, 1.0);
+        // scene.add(mesh5);
+        // meshes.push(mesh5);
+        //
+        // const mesh6 = createShape(width, height, 2.5, 1 / 1.5, 1 / 2.5, 6.5, -50, 1.0);
+        // scene.add(mesh6);
+        // meshes.push(mesh6);
 
         const left = width / -CAMERA_FACTOR;
         const right = width / CAMERA_FACTOR;
@@ -253,6 +253,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
                 width: "100vw",
                 position: "fixed",
                 top: `0px`,
+                left: `0px`,
                 zIndex: -10
             }}
             ref={canvasRef}
