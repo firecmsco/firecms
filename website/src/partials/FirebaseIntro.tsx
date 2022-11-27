@@ -50,7 +50,7 @@ function FirebaseIntro() {
                         <b>FireCMS</b> is an open source headless CMS built by <b>developers
                         for developers</b>.
                         <br/>
-                        Get a back office app for your Firebase project in
+                        Get a back-office app/dashboard for your Firebase project in
                         <b> no time</b>.
                     </p>
                     <div

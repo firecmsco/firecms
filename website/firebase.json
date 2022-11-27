@@ -2,6 +2,7 @@
     "hosting": {
         "public": "build",
         "site": "firecms-landing",
+        "trailingSlash": false,
         "ignore": [
             "firebase.json",
             "**/.*",

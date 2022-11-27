@@ -208,7 +208,12 @@ module.exports = {
                 },
                 gtag: {
                     trackingID: "G-NL75PPNYXD"
-                }
+                },
+                sitemap: {
+                    changefreq: 'weekly',
+                    priority: 0.5,
+                    filename: 'sitemap.xml'
+                },
             }
         ]
     ]
