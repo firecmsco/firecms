@@ -408,6 +408,6 @@ function EntitiesCount({ fullPath }: { fullPath: string }) {
         }}
         variant={"caption"}
         color={"textSecondary"}>
-        {count ? `${count} entities` : renderSkeletonText()}
+        {count !== undefined ? `${count} entities` : renderSkeletonText()}
     </Typography>;
 }

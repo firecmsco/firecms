@@ -11,7 +11,7 @@ export function isObject(item: any) {
 
 export function mergeDeep<T extends {}>(target: T, source: any): T {
     const targetIsObject = isObject(target);
-    const output:T = targetIsObject ? Object.assign({}, target) : target;
+    const output: T = targetIsObject ? Object.assign({}, target) : target;
     if (targetIsObject && isObject(source)) {
         Object.keys(source).forEach(key => {
             if (isObject(source[key])) {
@@ -81,20 +81,22 @@ export function getHashValue<T>(v: T) {
     return hash(v, { ignoreUnknown: true });
 }
 
-export function removeUndefined(obj: object) {
-    const res: object = {};
-    Object.keys(obj).forEach((key) => {
-        if (!isEmptyObject(obj)) {
-            if (obj[key] === Object(obj[key])) {
-                const childRes = removeUndefined(obj[key]);
-                if (!isEmptyObject(childRes))
+export function removeUndefined(value: any): any {
+    if (Array.isArray(value)) {
+        return value.map((v: any) => removeUndefined(v));
+    }
+    if (typeof value === "object") {
+        const res: object = {};
+        Object.keys(value).forEach((key) => {
+            if (!isEmptyObject(value)) {
+                const childRes = removeUndefined(value[key]);
+                if (childRes !== undefined && !isEmptyObject(childRes))
                     res[key] = childRes;
-            } else if (obj[key] !== undefined) {
-                res[key] = obj[key];
             }
-        }
-    });
-    return res;
+        });
+        return res;
+    }
+    return value;
 }
 
 export function isEmptyObject(obj: object) {
