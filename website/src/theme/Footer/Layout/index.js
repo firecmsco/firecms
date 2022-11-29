@@ -5,7 +5,7 @@ export default function LayoutWrapper(props) {
     return (
         <>
             <section
-                className="relative">
+                className="relative mt-16">
                 <div
                     className={"mx-auto px-4 sm:px-6 bg-pink-400 text-white "}>
                     <div

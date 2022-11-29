@@ -12,7 +12,7 @@ export function PagesBackground() {
         console.log(window.location);
         if (ExecutionEnvironment.canUseDOM
             && (window.location.pathname === "/"
-             || window.location.pathname.startsWith("/showcase"))) {
+             || window.location.pathname.startsWith("/features"))) {
             setShowAnimation(true);
         }
     }, [ExecutionEnvironment.canUseDOM]);

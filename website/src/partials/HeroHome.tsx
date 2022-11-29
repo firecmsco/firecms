@@ -87,11 +87,11 @@ function HeroHome({}) {
 
             <div className="xl:grid xl:grid-cols-12 xl:my-24 md:my-16 my-8">
 
-                <div className={"col-span-7"}>
+                <div className={"col-span-7 xl:flex xl:items-center xl:justify-end"}>
                     {titleDiv}
                 </div>
 
-                <div className={"col-span-5"}>
+                <div className={"col-span-5 min-h-fit"}>
                     {video}
                 </div>
 

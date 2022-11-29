@@ -50,15 +50,19 @@ module.exports = {
             },
             items: [
                 {
-                    label: "Showcase",
+                    label: "Features",
                     items: [
                         {
                             label: "Multiple editing options",
-                            to: "/showcase/real_time",
+                            to: "/features/multiple_editing_options",
                         },
                         {
                             label: "Advanced content editing",
-                            to: "/showcase/advanced_forms",
+                            to: "/features/advanced_forms",
+                        },
+                        {
+                            label: "The most powerful backend",
+                            to: "/features/backend_extension",
                         },
                     ],
                     position: "left"

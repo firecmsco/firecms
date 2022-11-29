@@ -164,6 +164,10 @@ h1, h2, h3 {
     font-weight: 700;
 }
 
+h2{
+    margin-top: 2rem;
+}
+
 .header-github-link:hover {
     opacity: 0.6;
 }

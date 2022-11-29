@@ -108,7 +108,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
     function initScene(ref: HTMLCanvasElement, width: number, height: number): SceneState {
 
         const renderer = new THREE.WebGLRenderer({
-            // antialias: true,
+            antialias: true,
             alpha: true,
             canvas: ref
         });
@@ -127,7 +127,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, DISPLACEMENT_AREA, 6.0);
 
-        const geometry = buildNightGeometry(SPHERE_RADIUS, 30);
+        const geometry = buildNightGeometry(SPHERE_RADIUS, 24);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = .2;
         mesh.initialPositionY = 17;
@@ -213,7 +213,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
             meshes.forEach((mesh) => {
                 mesh.material.uniforms.u_time.value = clockRef.current.getElapsedTime() * TIME_DILATION;
-                mesh.position.y = mesh.initialPositionY + scrollRef.current / 140;
+                mesh.position.y = mesh.initialPositionY + scrollRef.current / 100;
                 mesh.rotation.x = scrollRef.current / 2000;
             });
 
@@ -250,10 +250,14 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         <canvas
             style={{
                 height: "100vh",
+                maxHeight: "900px",
                 width: "100vw",
+                maxWidth: "2000px",
                 position: "fixed",
                 top: `0px`,
+                margin: "auto",
                 left: `0px`,
+                right: 0,
                 zIndex: -10
             }}
             ref={canvasRef}
