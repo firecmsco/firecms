@@ -244,7 +244,7 @@ export const TableCell = React.memo<TableCellProps>(
 
                 <ErrorBoundary>
                     <Box
-                        sx={{
+                        style={{
                             display: "flex",
                             width: "100%",
                             flexDirection: "column",

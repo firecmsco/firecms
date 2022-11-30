@@ -294,33 +294,24 @@ export function EntityForm<M extends Record<string, any>>({
                 return <>
 
                     <Box
+
                         sx={(theme) => ({
-                            width: "100%",
-                            marginTop: theme.spacing(3),
                             paddingLeft: theme.spacing(4),
                             paddingRight: theme.spacing(4),
                             paddingTop: theme.spacing(3),
+                            paddingBottom: theme.spacing(4),
+                            marginBottom: theme.spacing(2),
                             [theme.breakpoints.down("lg")]: {
-                                marginTop: theme.spacing(2),
                                 paddingLeft: theme.spacing(2),
                                 paddingRight: theme.spacing(2),
-                                paddingTop: theme.spacing(2)
+                                paddingTop: theme.spacing(2),
+                                paddingBottom: theme.spacing(3)
                             },
                             [theme.breakpoints.down("md")]: {
-                                marginTop: theme.spacing(1),
-                                paddingLeft: theme.spacing(2),
-                                paddingRight: theme.spacing(2),
-                                paddingTop: theme.spacing(2)
+                                padding: theme.spacing(2)
                             }
-                        })}>
-
-                        <Typography
-                            sx={{
-                                marginTop: 4,
-                                marginBottom: 4
-                            }}
-                            variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
-                        </Typography>
+                        })}
+                    >
 
                         <CustomIdField customId={collection.customId}
                                        entityId={entityId}
@@ -328,24 +319,24 @@ export function EntityForm<M extends Record<string, any>>({
                                        onChange={setEntityId}
                                        error={entityIdError}
                                        entity={entity}/>
-                    </Box>
 
-                    {entityId && <FormInternal
-                        {...props}
-                        initialValues={initialValues}
-                        onModified={onModified}
-                        onValuesChanged={doOnValuesChanges}
-                        underlyingChanges={underlyingChanges}
-                        path={path}
-                        entity={entity}
-                        entityId={entityId}
-                        collection={collection}
-                        status={status}
-                        savingError={savingError}
-                        closeAfterSaveRef={closeAfterSaveRef}/>}
+                        {entityId && <FormInternal
+                            {...props}
+                            initialValues={initialValues}
+                            onModified={onModified}
+                            onValuesChanged={doOnValuesChanges}
+                            underlyingChanges={underlyingChanges}
+                            path={path}
+                            entity={entity}
+                            entityId={entityId}
+                            collection={collection}
+                            status={status}
+                            savingError={savingError}
+                            closeAfterSaveRef={closeAfterSaveRef}/>}
+
+                    </Box>
                 </>
-            }
-            }
+            }}
         </Formik>
     );
 }
@@ -458,24 +449,8 @@ function FormInternal<M extends Record<string, any>>({
 
         <Form onSubmit={handleSubmit}
               noValidate>
-            <Box
-                sx={(theme) => ({
-                    paddingLeft: theme.spacing(4),
-                    paddingRight: theme.spacing(4),
-                    paddingTop: theme.spacing(3),
-                    paddingBottom: theme.spacing(4),
-                    marginBottom: theme.spacing(2),
-                    [theme.breakpoints.down("lg")]: {
-                        paddingLeft: theme.spacing(2),
-                        paddingRight: theme.spacing(2),
-                        paddingTop: theme.spacing(2),
-                        paddingBottom: theme.spacing(3)
-                    },
-                    [theme.breakpoints.down("md")]: {
-                        padding: theme.spacing(2)
-                    }
-                })}
-                ref={formRef}>
+            <Box sx={{ mt: 4 }}
+                 ref={formRef}>
 
                 {formFields}
 

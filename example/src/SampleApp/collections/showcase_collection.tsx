@@ -3,6 +3,7 @@ import { buildCollection, buildProperty } from "@camberi/firecms";
 export const showcaseCollection = buildCollection({
     path: "showcase",
     customId: false,
+    icon: "ShowChart",
     name: "Showcase",
     properties: {
         name: buildProperty({

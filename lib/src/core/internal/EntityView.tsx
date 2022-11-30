@@ -95,11 +95,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const context = useFireCMSContext();
         const authController = useAuthController<UserType>();
 
-        // const EntityCollectionViewComponent = context.EntityCollectionViewComponent;
-
         const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
         const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
-        const [readOnly, setReadOnly] = useState<boolean>(false);
 
         const [modifiedValues, setModifiedValues] = useState<EntityValues<M> | undefined>();
 
@@ -129,8 +126,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         });
 
         const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
-
-        const editEnabled = usedEntity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path), usedEntity ?? null) : false;
+        const [readOnly, setReadOnly] = useState<boolean | undefined>(undefined);
 
         useEffect(() => {
             if (entity)
@@ -138,9 +134,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         }, [entity]);
 
         useEffect(() => {
+            const editEnabled = usedEntity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path), usedEntity ?? null) : false;
             if (usedEntity)
                 setReadOnly(!editEnabled);
-        }, [editEnabled, usedEntity]);
+        }, [authController, usedEntity]);
 
         useEffect(() => {
             if (!selectedSubPath)
@@ -306,7 +303,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         );
 
-        const loading = (dataLoading && !usedEntity) || (!usedEntity && (status === "existing" || status === "copy"));
+        const loading = (dataLoading && !usedEntity) || (!usedEntity && (status === "existing" || status === "copy")) || readOnly === undefined;
 
         const subCollectionsViews = subcollections && subcollections.map(
             (subcollection, colIndex) => {
@@ -384,25 +381,27 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         }, [entityId, sideEntityController, path, getSelectedSubPath]);
 
-        const form = !readOnly
-            ? (
-                <EntityForm
-                    key={`form_${path}_${usedEntity?.id ?? "new"}`}
-                    status={status}
-                    path={path}
-                    collection={collection}
-                    onEntitySave={onEntitySave}
-                    onDiscard={onDiscard}
-                    onValuesChanged={setModifiedValues}
-                    onModified={onValuesAreModified}
-                    entity={usedEntity}/>
-            )
-            : (
-                <EntityPreview
-                    entity={usedEntity as Entity<M>}
-                    path={path}
-                    collection={collection}/>
-            );
+        const form = readOnly === undefined
+? null
+            : (!readOnly
+                ? (
+                    <EntityForm
+                        key={`form_${path}_${usedEntity?.id ?? "new"}`}
+                        status={status}
+                        path={path}
+                        collection={collection}
+                        onEntitySave={onEntitySave}
+                        onDiscard={onDiscard}
+                        onValuesChanged={setModifiedValues}
+                        onModified={onValuesAreModified}
+                        entity={usedEntity}/>
+                )
+                : (
+                    <EntityPreview
+                        entity={usedEntity as Entity<M>}
+                        path={path}
+                        collection={collection}/>
+                ));
 
         const subcollectionTabs = subcollections && subcollections.map(
             (subcollection) =>
@@ -539,9 +538,42 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                             width: CONTAINER_FULL_WIDTH
                                         }
                                     }}>
+
+                                    <Box
+                                        sx={(theme) => ({
+                                            width: "100%",
+                                            marginTop: theme.spacing(3),
+                                            paddingLeft: theme.spacing(4),
+                                            paddingRight: theme.spacing(4),
+                                            paddingTop: theme.spacing(3),
+                                            [theme.breakpoints.down("lg")]: {
+                                                marginTop: theme.spacing(2),
+                                                paddingLeft: theme.spacing(2),
+                                                paddingRight: theme.spacing(2),
+                                                paddingTop: theme.spacing(2)
+                                            },
+                                            [theme.breakpoints.down("md")]: {
+                                                marginTop: theme.spacing(1),
+                                                paddingLeft: theme.spacing(2),
+                                                paddingRight: theme.spacing(2),
+                                                paddingTop: theme.spacing(2)
+                                            }
+                                        })}>
+
+                                        <Typography
+                                            sx={{
+                                                marginTop: 4,
+                                                marginBottom: 4
+                                            }}
+                                            variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
+                                        </Typography>
+
+                                    </Box>
+
                                     {loading
                                         ? <CircularProgressCenter/>
                                         : form}
+
                                 </Box>
                             </Box>
 

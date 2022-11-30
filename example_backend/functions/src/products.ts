@@ -34,7 +34,7 @@ function availableLocalesForProduct(productRef: DocumentReference): Promise<stri
 }
 
 /**
- * When a locale is updated, we check update the 'available_locales' field in the product
+ * When a product is deleted, we delete all its locales
  */
 export const onDeleteSubcollections = functions
     .region('europe-west3')

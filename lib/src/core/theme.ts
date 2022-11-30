@@ -59,7 +59,7 @@ export const createCMSDefaultTheme = (
             h6: {
                 fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
                 fontSize: "1.15rem",
-                fontWeight: 400
+                fontWeight: 500
             },
             h5: {
                 fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",

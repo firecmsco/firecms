@@ -27,6 +27,7 @@ import { CustomLoginView } from "./CustomLoginView";
 import {
     SampleCollectionActions
 } from "./collection_actions/SampleCollectionActions";
+import { cryptoCollection } from "./collections/crypto_collection";
 
 function SampleApp() {
 
@@ -84,7 +85,8 @@ function SampleApp() {
         productsCollection,
         usersCollection,
         blogCollection,
-        showcaseCollection
+        showcaseCollection,
+        cryptoCollection
     ];
 
     if (process.env.NODE_ENV !== "production") {

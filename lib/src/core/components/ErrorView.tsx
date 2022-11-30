@@ -39,9 +39,11 @@ export function ErrorView({
             <Box sx={{
                 paddingLeft: 2
             }}>
-                {title && <Typography sx={{
-                    fontWeight: "bold"
-                }}>{title}</Typography>}
+                {title && <Typography
+                    variant={"body2"}
+                    sx={{
+                        fontWeight: "bold"
+                    }}>{title}</Typography>}
                 <div>{component}</div>
             </Box>
         </Box>

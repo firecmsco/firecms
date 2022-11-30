@@ -91,3 +91,7 @@ export const sign_up_newsletter = functions
         }
 
     });
+
+export {
+    alpacaBchFirestoreImport, alpacaEthFirestoreImport, alpacaBtcFirestoreImport, alpacaLtcFirestoreImport
+} from "./alpaca";
