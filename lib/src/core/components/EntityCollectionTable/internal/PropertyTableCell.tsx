@@ -38,6 +38,7 @@ import {
     useFireCMSContext
 } from "../../../../hooks";
 import { TableCell } from "./TableCell";
+import { PropertyPreviewTableCell } from "./PropertyPreviewTableCell";
 
 export interface PropertyTableCellProps<T extends any, M extends Record<string, any>> {
     propertyKey: string;
@@ -45,6 +46,7 @@ export interface PropertyTableCellProps<T extends any, M extends Record<string, 
     align: "right" | "left" | "center";
     customFieldValidator?: CustomFieldValidator;
     value: T;
+    readonly: boolean;
     collection: EntityCollection<M>;
     setFocused: (value: boolean) => void;
     property: ResolvedProperty<T>;
@@ -80,7 +82,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                                                  height,
                                                                                  collection,
                                                                                  path,
-                                                                                 entity
+                                                                                 entity,
+                                                                                 readonly
                                                                              }: PropertyTableCellProps<T, M>) {
 
         const dataSource = useDataSource();
@@ -106,9 +109,16 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         const [error, setError] = useState<Error | undefined>();
         const [saved, setSaved] = useState<boolean>(false);
 
+        const onValueUpdated = useCallback(() => {
+            setSaved(true)
+            setTimeout(() => {
+                setSaved(false);
+            }, 100);
+        }, []);
+
         const customField = Boolean(property.Field);
         const customPreview = Boolean(property.Preview);
-        const readOnly = isReadOnly(property);
+        const readOnlyProperty = isReadOnly(property);
         const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
         const disabled = Boolean(property.disabled);
 
@@ -124,9 +134,10 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 if (!equal(value, internalValueRef.current)) {
                     setInternalValue(value);
                     internalValueRef.current = value;
+                    onValueUpdated();
                 }
             },
-            [value]
+            [onValueUpdated, value]
         );
 
         const saveValues = useCallback((value: any) => {
@@ -140,7 +151,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                             value,
                             propertyKey,
                             setError,
-                            setSaved,
+                            onValueUpdated,
                             entity,
                             fullPath: path,
                             collection,
@@ -222,7 +233,19 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         let removePadding = false;
         let fullHeight = false;
 
-        if (!readOnly && !customField && (!customPreview || selected)) {
+        if (readonly || readOnlyProperty) {
+            return <PropertyPreviewTableCell
+                key={`table_cell_${entity.id}_${propertyKey}`}
+                align={align}
+                propertyKey={propertyKey as string}
+                property={property}
+                columnIndex={columnIndex}
+                disabledTooltip={disabledTooltip}
+                width={width}
+                entity={entity}/>;
+        }
+
+        if (!customField && (!customPreview || selected)) {
             const isAStorageProperty = isStorageProperty(property);
             if (isAStorageProperty) {
                 innerComponent = <TableStorageUpload error={error}
@@ -373,7 +396,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
 
         if (!innerComponent) {
             allowScroll = false;
-            showExpandIcon = selected && !innerComponent && !disabled && !readOnly;
+            showExpandIcon = selected && !innerComponent && !disabled && !readOnlyProperty;
             innerComponent = (
                 <PropertyPreview
                     width={width}
@@ -397,7 +420,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     onSelect={onSelect}
                     selected={selected}
                     selectedRow={selectedRow}
-                    disabled={disabled || readOnly}
+                    disabled={disabled || readOnlyProperty}
                     disabledTooltip={disabledTooltip ?? "Disabled"}
                     removePadding={removePadding}
                     fullHeight={fullHeight}

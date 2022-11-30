@@ -317,41 +317,27 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 return null;
             }
 
-            if (!inlineEditing) {
-                return (entity
-                        ? <PropertyPreviewTableCell
-                            key={`table_cell_${entity.id}_${propertyKey}`}
+            return (
+                <ErrorBoundary>
+                    {entity
+                        ? <PropertyTableCell
+                            key={`property_table_cell_${entity.id}_${propertyKey}`}
+                            readonly={!inlineEditing}
                             align={column.align ?? "left"}
                             propertyKey={propertyKey as string}
                             property={property}
+                            setFocused={setFocused}
+                            value={entity?.values ? getValueInPath(entity.values, propertyKey) : undefined}
+                            collection={collection}
+                            customFieldValidator={customFieldValidator}
                             columnIndex={columnIndex}
                             width={column.width}
-                            entity={entity}/>
+                            height={getRowHeight(size)}
+                            entity={entity}
+                            path={entity.path}/>
                         : renderSkeletonText()
-                );
-            } else {
-
-                return (
-                    <ErrorBoundary>
-                        {entity
-                            ? <PropertyTableCell
-                                key={`property_table_cell_${entity.id}_${propertyKey}`}
-                                align={column.align ?? "left"}
-                                propertyKey={propertyKey as string}
-                                property={property}
-                                setFocused={setFocused}
-                                value={entity?.values ? getValueInPath(entity.values, propertyKey) : undefined}
-                                collection={collection}
-                                customFieldValidator={customFieldValidator}
-                                columnIndex={columnIndex}
-                                width={column.width}
-                                height={getRowHeight(size)}
-                                entity={entity}
-                                path={entity.path}/>
-                            : renderSkeletonText()
-                        }
-                    </ErrorBoundary>);
-            }
+                    }
+                </ErrorBoundary>);
 
         }, [collection, customFieldValidator, fullPath, inlineEditing, size, selectedEntityIds]);
 
@@ -571,7 +557,7 @@ const onValueChange: OnCellValueChange<any, any> = ({
                                                         context,
                                                         value,
                                                         propertyKey,
-                                                        setSaved,
+                                                        onValueUpdated,
                                                         setError,
                                                         entity
                                                     }) => {
@@ -592,7 +578,7 @@ const onValueChange: OnCellValueChange<any, any> = ({
         callbacks: collection.callbacks,
         dataSource,
         context,
-        onSaveSuccess: () => setSaved(true),
+        onSaveSuccess: () => onValueUpdated(),
         onSaveFailure: (e: Error) => {
             console.error("Save failure");
             console.error(e);

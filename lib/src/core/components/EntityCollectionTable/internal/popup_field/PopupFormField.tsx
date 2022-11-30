@@ -206,7 +206,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                 propertyKey: propertyKey as string,
                 entity,
                 setError: setSavingError,
-                setSaved: () => {
+                onValueUpdated: () => {
                 },
                 fullPath: path,
                 collection: inputCollection,

@@ -16,17 +16,19 @@ export interface PropertyPreviewTableCellProps<T extends CMSType, M extends Reco
     property: ResolvedProperty<T>;
     width: number;
     entity: Entity<M>;
+    disabledTooltip?: string;
 }
 
 export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps<any, any>>(
     function PropertyPreviewTableCell<T extends CMSType, M extends Record<string, any>>({
-                                                                 propertyKey,
-                                                                 columnIndex,
-                                                                 property,
-                                                                 align,
-                                                                 width,
-                                                                 entity
-                                                             }: PropertyPreviewTableCellProps<T, M>) {
+                                                                                            propertyKey,
+                                                                                            columnIndex,
+                                                                                            property,
+                                                                                            align,
+                                                                                            width,
+                                                                                            entity,
+                                                                                            disabledTooltip
+                                                                                        }: PropertyPreviewTableCellProps<T, M>) {
 
         const {
             size,
@@ -45,12 +47,13 @@ export const PropertyPreviewTableCell = React.memo<PropertyPreviewTableCellProps
                 key={`preview_cell_${propertyKey}_${entity.id}`}
                 value={value}
                 align={align ?? "left"}
+                disabledTooltip={disabledTooltip ?? "Read only"}
                 disabled={true}>
                 <PropertyPreview
                     width={width}
                     height={getRowHeight(size)}
                     propertyKey={propertyKey}
-                    property={property }
+                    property={property}
                     entity={entity}
                     value={value}
                     size={getPreviewSizeFrom(size)}

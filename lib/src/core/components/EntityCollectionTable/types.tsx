@@ -74,7 +74,7 @@ export interface OnCellValueChangeParams<T, M extends Record<string, any>> {
     value: T,
     propertyKey: string,
     entity: Entity<M>,
-    setSaved: (saved: boolean) => void
+    onValueUpdated: () => void
     setError: (e: Error) => void
     fullPath: string
     collection: EntityCollection<M>

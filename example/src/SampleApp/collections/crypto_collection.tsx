@@ -9,7 +9,7 @@ export const cryptoCollection = buildCollection({
         create: false,
         delete: false,
         read: true,
-        edit: true
+        edit: false
     },
     properties: {
         image: {

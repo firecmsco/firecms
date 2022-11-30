@@ -42,7 +42,7 @@ interface TableCellProps {
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
-function getBackgroundColor(onHover: any, selectedRow: boolean, disabled: boolean, theme: any, isSelected: undefined | boolean) {
+function getBackgroundColor(onHover: any, selectedRow: boolean, disabled: boolean, saved: boolean, theme: any, isSelected: boolean) {
     if (onHover && !disabled) {
         if (theme.palette.mode === "dark") {
             return lighten(theme.palette.background.paper, 0.03);
@@ -57,14 +57,14 @@ function getBackgroundColor(onHover: any, selectedRow: boolean, disabled: boolea
             return darken(theme.palette.background.default, 0.025);
         }
     }
-    if (selectedRow) {
+    if (selectedRow || saved) {
         if (theme.palette.mode === "dark") {
             return lighten(theme.palette.background.paper, 0.022);
         } else {
             return darken(theme.palette.background.default, 0.008);
         }
     }
-    return undefined
+    return undefined;
 }
 
 export const TableCell = React.memo<TableCellProps>(
@@ -108,12 +108,8 @@ export const TableCell = React.memo<TableCellProps>(
         }, [focused]);
 
         useEffect(() => {
-            if (internalSaved !== saved) {
-                if (saved) {
-                    setInternalSaved(true);
-                } else {
-                    setInternalSaved(true);
-                }
+            if (saved) {
+                setInternalSaved(true);
             }
             const removeSavedState = () => {
                 setInternalSaved(false);
@@ -226,8 +222,7 @@ export const TableCell = React.memo<TableCellProps>(
                     // color: "#" + randomColor(),
                     contain: "content",
                     alignItems: disabled || !isOverflowing ? "center" : undefined,
-                    backgroundColor: getBackgroundColor(onHover, selectedRow, disabled, theme, isSelected),
-                    transition: "background-color 0.6s ease"
+                    backgroundColor: getBackgroundColor(onHover, selectedRow, disabled, saved ?? false, theme, isSelected ?? false)
                 }}
                 sx={{
                     display: "flex",
@@ -237,14 +232,13 @@ export const TableCell = React.memo<TableCellProps>(
                     overflow: "hidden",
                     contain: "strict",
                     padding: p,
-                    alpha: disabled ? 0.8 : undefined,
                     border,
-                    transition: "border-color 300ms ease-in-out"
+                    transition: "border-color 400ms ease-in-out, background-color 600ms ease"
                 }}>
 
                 <ErrorBoundary>
                     <Box
-                        style={{
+                        sx={{
                             display: "flex",
                             width: "100%",
                             flexDirection: "column",
