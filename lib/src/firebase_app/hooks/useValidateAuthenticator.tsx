@@ -33,7 +33,7 @@ export function useValidateAuthenticator({
     authVerified: boolean,
 } {
 
-    const authenticationEnabled = authentication === undefined || !!authentication;
+    const authenticationEnabled = Boolean(authentication);
 
     const [authLoading, setAuthLoading] = useState<boolean>(false);
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
