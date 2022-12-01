@@ -63,7 +63,7 @@ export function useBuildNavigationContext<UserType extends User>({
 
     const fullCollectionPath = cleanBasePath ? `/${cleanBasePath}/${cleanBaseCollectionPath}` : `/${cleanBaseCollectionPath}`;
 
-    const processCollections = useCallback(async () => {
+    const refreshNavigation = useCallback(async () => {
 
         try {
             const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
@@ -82,11 +82,11 @@ export function useBuildNavigationContext<UserType extends User>({
 
         setNavigationLoading(false);
         setInitialised(true);
-    }, [authController, baseViews, baseCollections, plugins]);
+    }, [authController, baseViews, dataSource, baseCollections, plugins]);
 
     useEffect(() => {
-        processCollections();
-    }, [processCollections]);
+        refreshNavigation();
+    }, [refreshNavigation]);
 
     const getCollection = useCallback(<M extends Record<string, any>>(
         pathOrAlias: string,
@@ -226,7 +226,8 @@ export function useBuildNavigationContext<UserType extends User>({
         buildCMSUrlPath,
         resolveAliasesFrom,
         topLevelNavigation,
-        baseLocation
+        baseLocation,
+        refreshNavigation
     };
 }
 

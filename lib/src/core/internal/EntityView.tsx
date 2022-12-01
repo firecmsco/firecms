@@ -134,10 +134,14 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         }, [entity]);
 
         useEffect(() => {
-            const editEnabled = usedEntity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path), usedEntity ?? null) : false;
-            if (usedEntity)
-                setReadOnly(!editEnabled);
-        }, [authController, usedEntity]);
+            if (status === "new") {
+                setReadOnly(false);
+            } else {
+                const editEnabled = usedEntity ? canEditEntity(collection, authController, fullPathToCollectionSegments(path), usedEntity ?? null) : false;
+                if (usedEntity)
+                    setReadOnly(!editEnabled);
+            }
+        }, [authController, usedEntity, status]);
 
         useEffect(() => {
             if (!selectedSubPath)
@@ -303,7 +307,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         );
 
-        const loading = (dataLoading && !usedEntity) || (!usedEntity && (status === "existing" || status === "copy")) || readOnly === undefined;
+        const loading = (dataLoading && !usedEntity) || ((!usedEntity || readOnly === undefined) && (status === "existing" || status === "copy"));
 
         const subCollectionsViews = subcollections && subcollections.map(
             (subcollection, colIndex) => {
@@ -381,8 +385,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         }, [entityId, sideEntityController, path, getSelectedSubPath]);
 
-        const form = readOnly === undefined
-? null
+        const form = (readOnly === undefined)
+            ? null
             : (!readOnly
                 ? (
                     <EntityForm

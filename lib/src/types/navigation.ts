@@ -111,6 +111,11 @@ export type NavigationContext = {
      * opening a side dialog
      */
     baseLocation: string;
+
+    /**
+     * Call this method to recalculate the navigation
+     */
+    refreshNavigation: () => void;
 }
 
 /**
