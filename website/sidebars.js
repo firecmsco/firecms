@@ -92,6 +92,7 @@ module.exports = {
                 // 'recipes/recipes_index',
                 "recipes/building_a_blog",
                 "recipes/copy_entity",
+                "recipes/documents_as_subcollections",
             ]
         },
         "custom_cms_app",

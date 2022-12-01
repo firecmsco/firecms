@@ -1,0 +1,76 @@
+---
+id: documents_as_subcollections
+title: Dynamic root collections
+sidebar_label: Dynamic root collections
+---
+
+:::note
+In this tutorial we assume you have set up a Firebase project and a FireCMS
+instance. If you don't, check the [Quickstart](firebase_setup.md) and
+[Firebase setup](firebase_setup.md) sections.
+:::
+
+Let's build a more complex example where the main navigation is **loaded dynamically** from
+the database. We will use the `units` collection as the one for generating the
+rest of the navigation.
+
+For this example we will have `Units` and `Lessons` as the main content types,
+imagine we are modeling the structure for a course.
+
+In the units collection we will create a document for each unit:
+
+![dynamic_navigation_collection](/img/recipes/dynamic_navigation_collection.png)
+
+And each of those documents will generate a new navigation item. In this case
+we will have 3 navigation items, one for each unit:
+
+![dynamic_navigation_home](/img/recipes/dynamic_navigation_home.png)
+
+
+### Declare the main collection
+
+Let's define the `units` collection as the main one:
+
+:::note
+We are going to implement a couple on callbacks on entity save and delete to
+update the navigation when data is changed.
+That prevents the suer from refreshing the app in order to see the changes.
+How cool is that?
+:::
+
+import CodeBlock from "@theme/CodeBlock";
+import UnitCollection
+    from "!!raw-loader!firecms-example/src/docs/recipes/document_as_subcollection/unit_collection";
+import CollectionBuilder
+    from "!!raw-loader!firecms-example/src/docs/recipes/document_as_subcollection/collection_builder";
+import FullCode
+    from "!!raw-loader!firecms-example/src/docs/recipes/document_as_subcollection/full";
+
+<CodeBlock language="tsx">{UnitCollection}</CodeBlock>
+
+
+### Dynamic collection builder
+
+Typically in FireCMS you pass a static list of collections to the main CMS
+component, but in this case we need to build the collections dynamically based
+on the data in the database.
+
+FireCMS allows you to pass a function that returns a list of collections to the
+`collections` prop of the `FirebaseCMSApp` component.
+
+<CodeBlock language="tsx">{CollectionBuilder}</CodeBlock>
+
+:::tip
+Collections can be conveniently loaded asynchronously.
+:::
+
+This code is fetching the data that is being generated in the `units` collection
+and creating a new collection for each of the documents.
+
+
+## Full code
+
+Wiring it all together we get a simple app that allows us to create new units
+and lessons and navigate between them:
+
+<CodeBlock language="tsx">{FullCode}</CodeBlock>

@@ -127,7 +127,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, DISPLACEMENT_AREA, 6.0);
 
-        const geometry = buildNightGeometry(SPHERE_RADIUS, 24);
+        const geometry = buildNightGeometry(SPHERE_RADIUS, 20);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = .2;
         mesh.initialPositionY = 17;

@@ -183,6 +183,10 @@ the user. This allows for advanced cases where you trigger a Cloud
 Function after saving an entity that modifies some values, and you want to get
 real time updates.
 
+You can add your **custom logic** or validation in multiple points of the user flow.
+There are built-in hooks `onPreSave`, `onSaveSuccess`, `onSaveFailure`,
+`onPreDelete` and `onDelete`.
+
 ### 🗂️ Files storage
 
 FireCMS supports uploading files to Firebase Storage out of the box, and
@@ -191,11 +195,7 @@ allowing for reordering.
 
 You can change the Firebase Storage implementation with your own.
 
-### 🙌 Your logic
-
-You can add your custom logic or validation in multiple points of the user flow.
-There are built-in hooks `onPreSave`, `onSaveSuccess`, `onSaveFailure`,
-`onPreDelete` and `onDelete`.
+### 🙌 Custom backend
 
 FireCMS has a good separation of concerns. All the logic related to
 Firebase/Firestore is abstracted away behind 3 interfaces: `DataSource`,

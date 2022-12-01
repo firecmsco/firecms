@@ -198,6 +198,7 @@ img[alt=firebase_setup] {
 }
 
 .intro_video {
+    max-width: 800px;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -216,4 +217,8 @@ img[alt=firebase_setup] {
 article {
     display: flex;
     flex-direction: column;
+}
+
+article p img {
+    max-width: 800px;
 }
