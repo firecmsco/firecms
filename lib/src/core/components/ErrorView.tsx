@@ -44,7 +44,7 @@ export function ErrorView({
                     sx={{
                         fontWeight: "500"
                     }}>{title}</Typography>}
-                <div>{component}</div>
+                <Typography variant={"body2"}>{component}</Typography>
             </Box>
         </Box>
     );

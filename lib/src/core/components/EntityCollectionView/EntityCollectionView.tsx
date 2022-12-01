@@ -27,7 +27,7 @@ import {
     canDeleteEntity,
     canEditEntity,
     fullPathToCollectionSegments,
-    mergeDeep
+    mergeDeep, resolvePermissions
 } from "../../util";
 import {
     Markdown,
@@ -115,10 +115,17 @@ export const EntityCollectionView = React.memo(
         const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
+        const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
+            if (!canEditEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity ?? null)) {
+                return false;
+            }
+            return collection.inlineEditing === undefined || collection.inlineEditing;
+        }, [collection, authController, fullPath]);
+
         const exportable = collection.exportable === undefined || collection.exportable;
 
         const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
-        const hoverRow = collection.inlineEditing !== undefined && !collection.inlineEditing;
+        const hoverRow = !checkInlineEditing();
 
         const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
 
@@ -166,13 +173,6 @@ export const EntityCollectionView = React.memo(
             setSelectedEntities([]);
             setDeleteEntityClicked(undefined);
         }, [setSelectedEntities]);
-
-        const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
-            if (!canEditEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity ?? null)) {
-                return false;
-            }
-            return collection.inlineEditing === undefined || collection.inlineEditing;
-        }, [collection, authController, fullPath]);
 
         const onCollectionModifiedForUser = useCallback((path: string, partialCollection: LocalEntityCollection<M>) => {
             if (userConfigPersistence) {

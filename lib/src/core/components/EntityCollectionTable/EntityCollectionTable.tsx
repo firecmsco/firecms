@@ -62,7 +62,6 @@ import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { setIn } from "formik";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
-import { PropertyPreviewTableCell } from "./internal/PropertyPreviewTableCell";
 import { useDebouncedData } from "../../../firebase_app/hooks/useDebouncedData";
 import { useDataOrder } from "../../../hooks/data/useDataOrder";
 import { TableCell } from "./internal/TableCell";

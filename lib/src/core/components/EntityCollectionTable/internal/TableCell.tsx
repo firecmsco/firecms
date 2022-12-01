@@ -111,11 +111,9 @@ export const TableCell = React.memo<TableCellProps>(
             if (saved) {
                 setInternalSaved(true);
             }
-            const removeSavedState = () => {
+            const handler = setTimeout(() => {
                 setInternalSaved(false);
-            };
-            const handler = setTimeout(removeSavedState, 500);
-
+            }, 500);
             return () => {
                 clearTimeout(handler);
             };

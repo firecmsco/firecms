@@ -20,7 +20,6 @@ import { TableSelect } from "../../Table/fields/TableSelect";
 import { NumberTableInput } from "../../Table/fields/TableNumberInput";
 import { TableSwitch } from "../../Table/fields/TableSwitch";
 import { TableDateField } from "../../Table/fields/TableDateField";
-import { ErrorBoundary } from "../../ErrorBoundary";
 import { PropertyPreview } from "../../../../preview";
 import { TableReferenceField } from "../fields/TableReferenceField";
 
@@ -38,7 +37,7 @@ import {
     useFireCMSContext
 } from "../../../../hooks";
 import { TableCell } from "./TableCell";
-import { PropertyPreviewTableCell } from "./PropertyPreviewTableCell";
+import { getRowHeight } from "../../Table/common";
 
 export interface PropertyTableCellProps<T extends any, M extends Record<string, any>> {
     propertyKey: string;
@@ -234,15 +233,27 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         let fullHeight = false;
 
         if (readonly || readOnlyProperty) {
-            return <PropertyPreviewTableCell
-                key={`table_cell_${entity.id}_${propertyKey}`}
-                align={align}
-                propertyKey={propertyKey as string}
-                property={property}
-                columnIndex={columnIndex}
-                disabledTooltip={disabledTooltip}
+            return <TableCell
+                size={size}
                 width={width}
-                entity={entity}/>;
+                focused={focused}
+                saved={saved}
+                selectedRow={selectedRow}
+                key={`preview_cell_${propertyKey}_${entity.id}`}
+                value={internalValue}
+                align={align ?? "left"}
+                disabledTooltip={disabledTooltip ?? (readOnlyProperty ? "Read only" : undefined)}
+                disabled={true}>
+                <PropertyPreview
+                    width={width}
+                    height={getRowHeight(size)}
+                    propertyKey={propertyKey}
+                    property={property}
+                    entity={entity}
+                    value={value}
+                    size={getPreviewSizeFrom(size)}
+                />
+            </TableCell>;
         }
 
         if (!customField && (!customPreview || selected)) {
