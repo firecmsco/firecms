@@ -5,6 +5,7 @@ import {
     AuthController,
     CMSView,
     CollectionOverrideHandler,
+    DataSource,
     EntityCollection,
     FireCMSPlugin,
     NavigationContext,
@@ -30,6 +31,7 @@ type BuildNavigationContextProps<UserType extends User> = {
     collectionOverrideHandler: CollectionOverrideHandler | undefined;
     userConfigPersistence?: UserConfigurationPersistence;
     plugins?: FireCMSPlugin[];
+    dataSource: DataSource;
 };
 
 export function useBuildNavigationContext<UserType extends User>({
@@ -40,7 +42,8 @@ export function useBuildNavigationContext<UserType extends User>({
                                                                      views: baseViews,
                                                                      collectionOverrideHandler,
                                                                      userConfigPersistence,
-                                                                     plugins
+                                                                     plugins,
+                                                                     dataSource
                                                                  }: BuildNavigationContextProps<UserType>): NavigationContext {
 
     const location = useLocation();
@@ -64,8 +67,8 @@ export function useBuildNavigationContext<UserType extends User>({
 
         try {
             const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
-                    resolveCollections(baseCollections, authController, plugins),
-                    resolveCMSViews(baseViews, authController)
+                    resolveCollections(baseCollections, authController, dataSource, plugins),
+                    resolveCMSViews(baseViews, authController, dataSource)
                 ]
             );
 
@@ -240,12 +243,13 @@ function encodePath(input: string) {
         .replaceAll("%23", "#");
 }
 
-async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder, authController: AuthController, plugins?: FireCMSPlugin[]) {
+async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder, authController: AuthController, dataSource: DataSource, plugins?: FireCMSPlugin[]) {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
         resolvedCollections = await collections({
             user: authController.user,
-            authController
+            authController,
+            dataSource
         });
     } else if (Array.isArray(collections)) {
         resolvedCollections = collections;
@@ -261,12 +265,13 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
     return resolvedCollections;
 }
 
-async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefined, authController: AuthController) {
+async function resolveCMSViews(baseViews: CMSView[] | CMSViewsBuilder | undefined, authController: AuthController, dataSource: DataSource) {
     let resolvedViews: CMSView[] = [];
     if (typeof baseViews === "function") {
         resolvedViews = await baseViews({
             user: authController.user,
-            authController
+            authController,
+            dataSource
         });
     } else if (Array.isArray(baseViews)) {
         resolvedViews = baseViews;

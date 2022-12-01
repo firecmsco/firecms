@@ -182,8 +182,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         dataSource,
         basePath,
         baseCollectionPath,
-        // EntityCollectionViewComponent = EntityCollectionView,
-        // CollectionActions,
         plugins
     } = props;
 
@@ -200,6 +198,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         views,
         collectionOverrideHandler,
         userConfigPersistence,
+        dataSource,
         plugins
     });
 

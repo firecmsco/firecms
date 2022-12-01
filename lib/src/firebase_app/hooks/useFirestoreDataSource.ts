@@ -71,14 +71,6 @@ export function useFirestoreDataSource({
                                            textSearchController
                                        }: FirestoreDataSourceProps): DataSource {
 
-    const firestoreRef = useRef<Firestore>();
-    const firestore = firestoreRef.current;
-
-    useEffect(() => {
-        if (!firebaseApp) return;
-        firestoreRef.current = getFirestore(firebaseApp);
-    }, [firebaseApp]);
-
     /**
      *
      * @param doc
@@ -108,8 +100,9 @@ export function useFirestoreDataSource({
 
     function buildQuery<M>(path: string, filter: FilterValues<Extract<keyof M, string>> | undefined, orderBy: string | undefined, order: "desc" | "asc" | undefined, startAfter: any[] | undefined, limit: number | undefined) {
 
-        if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
+        const firestore = getFirestore(firebaseApp);
         const collectionReference: Query = collectionClause(firestore, path);
 
         const queryParams = [];
@@ -148,7 +141,9 @@ export function useFirestoreDataSource({
     function getAndBuildEntity<M extends Record<string, any>>(path: string,
                                                               entityId: string,
                                                               collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M> | undefined> {
-        if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+
+        const firestore = getFirestore(firebaseApp);
 
         return getDoc(doc(firestore, path, entityId))
             .then((docSnapshot) => {
@@ -329,8 +324,10 @@ export function useFirestoreDataSource({
                 onUpdate,
                 onError
             }: ListenEntityProps<M>): () => void {
-            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
-            // console.debug("Listening entity", path, entityId);
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+
+            const firestore = getFirestore(firebaseApp);
+
             return onSnapshot(
                 doc(firestore, path, entityId),
                 {
@@ -367,7 +364,9 @@ export function useFirestoreDataSource({
                 status
             }: SaveEntityProps<M>): Promise<Entity<M>> {
 
-            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+
+            const firestore = getFirestore(firebaseApp);
 
             const resolvedCollection = resolveCollection<M>({
                 collection,
@@ -415,7 +414,10 @@ export function useFirestoreDataSource({
                 entity
             }: DeleteEntityProps<M>
         ): Promise<void> {
-            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+
+            const firestore = getFirestore(firebaseApp);
+
             return deleteDoc(doc(firestore, entity.path, entity.id));
         },
 
@@ -437,7 +439,9 @@ export function useFirestoreDataSource({
             entityId?: string
         ): Promise<boolean> {
 
-            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+
+            const firestore = getFirestore(firebaseApp);
 
             console.debug("Check unique field entity", path, name, value, entityId);
 
@@ -457,12 +461,14 @@ export function useFirestoreDataSource({
         },
 
         generateEntityId(path: string): string {
-            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            const firestore = getFirestore(firebaseApp);
             return doc(collectionClause(firestore, path)).id;
         },
 
         async countEntities(path: string): Promise<number> {
-            if (!firestore) throw Error("useFirestoreDataSource Firestore not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            const firestore = getFirestore(firebaseApp);
             const coll = collectionClause(firestore, path);
             const snapshot = await getCountFromServer(coll);
             return snapshot.data().count;
