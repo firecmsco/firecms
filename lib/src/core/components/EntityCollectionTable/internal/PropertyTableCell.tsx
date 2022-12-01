@@ -411,32 +411,30 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         }
 
         return (
-            <ErrorBoundary>
-                <TableCell
-                    key={`table_cell_${entity.id}_${propertyKey}`}
-                    size={size}
-                    width={width}
-                    focused={focused}
-                    onSelect={onSelect}
-                    selected={selected}
-                    selectedRow={selectedRow}
-                    disabled={disabled || readOnlyProperty}
-                    disabledTooltip={disabledTooltip ?? "Disabled"}
-                    removePadding={removePadding}
-                    fullHeight={fullHeight}
-                    saved={saved}
-                    error={error}
-                    align={align}
-                    allowScroll={allowScroll}
-                    showExpandIcon={showExpandIcon}
-                    openPopup={!disabled ? openPopup : undefined}
-                    value={internalValue}
-                >
+            <TableCell
+                key={`table_cell_${entity.id}_${propertyKey}`}
+                size={size}
+                width={width}
+                focused={focused}
+                onSelect={onSelect}
+                selected={selected}
+                selectedRow={selectedRow}
+                disabled={disabled || readOnlyProperty}
+                disabledTooltip={disabledTooltip ?? "Disabled"}
+                removePadding={removePadding}
+                fullHeight={fullHeight}
+                saved={saved}
+                error={error}
+                align={align}
+                allowScroll={allowScroll}
+                showExpandIcon={showExpandIcon}
+                openPopup={!disabled ? openPopup : undefined}
+                value={internalValue}
+            >
 
-                    {innerComponent}
+                {innerComponent}
 
-                </TableCell>
-            </ErrorBoundary>
+            </TableCell>
         );
 
     },

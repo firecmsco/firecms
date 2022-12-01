@@ -222,7 +222,7 @@ export const TableCell = React.memo<TableCellProps>(
                     // color: "#" + randomColor(),
                     contain: "content",
                     alignItems: disabled || !isOverflowing ? "center" : undefined,
-                    backgroundColor: getBackgroundColor(onHover, selectedRow, disabled, saved ?? false, theme, isSelected ?? false)
+                    backgroundColor: getBackgroundColor(onHover, selectedRow, disabled, internalSaved ?? false, theme, isSelected ?? false)
                 }}
                 sx={{
                     display: "flex",
@@ -233,11 +233,15 @@ export const TableCell = React.memo<TableCellProps>(
                     contain: "strict",
                     padding: p,
                     border,
+                    justifyContent,
                     transition: "border-color 400ms ease-in-out, background-color 600ms ease"
                 }}>
 
                 <ErrorBoundary>
-                    <Box
+
+                    {fullHeight && !faded && children}
+
+                    {(!fullHeight || faded) && <Box
                         sx={{
                             display: "flex",
                             width: "100%",
@@ -260,9 +264,7 @@ export const TableCell = React.memo<TableCellProps>(
                             {children}
                         </Box>}
 
-                        {fullHeight && children}
-
-                    </Box>
+                    </Box>}
                 </ErrorBoundary>
 
                 {disabled && onHover && disabledTooltip &&

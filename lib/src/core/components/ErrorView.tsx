@@ -42,7 +42,7 @@ export function ErrorView({
                 {title && <Typography
                     variant={"body2"}
                     sx={{
-                        fontWeight: "bold"
+                        fontWeight: "500"
                     }}>{title}</Typography>}
                 <div>{component}</div>
             </Box>
