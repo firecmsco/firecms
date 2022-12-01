@@ -44,6 +44,7 @@ export const useFirebaseAuthController = (
     }: FirebaseAuthHandlerProps): FirebaseAuthController => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
+    const [authError, setAuthError] = useState<any>();
     const [authProviderError, setAuthProviderError] = useState<any>();
     const [initialLoading, setInitialLoading] = useState(true);
     const [authLoading, setAuthLoading] = useState(true);
@@ -54,13 +55,20 @@ export const useFirebaseAuthController = (
 
     useEffect(() => {
         if (!firebaseApp) return;
-        const auth = getAuth(firebaseApp);
-        setLoggedUser(auth.currentUser)
-        return onAuthStateChanged(
-            auth,
-            updateFirebaseUser,
-            error => setAuthProviderError(error)
-        );
+        try {
+            const auth = getAuth(firebaseApp);
+            setAuthError(undefined);
+            setLoggedUser(auth.currentUser)
+            return onAuthStateChanged(
+                auth,
+                updateFirebaseUser,
+                error => setAuthProviderError(error)
+            );
+        } catch (e) {
+            setAuthError(e);
+            return () => {
+            };
+        }
     }, [firebaseApp]);
 
     const skipLogin = useCallback(() => {
@@ -210,7 +218,8 @@ export const useFirebaseAuthController = (
 
     return {
         user: loggedUser ?? null,
-        authError: authProviderError,
+        authError,
+        authProviderError,
         authLoading,
         initialLoading,
         confirmationResult,

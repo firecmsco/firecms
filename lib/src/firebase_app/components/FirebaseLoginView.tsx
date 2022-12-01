@@ -140,7 +140,7 @@ export function FirebaseLoginView({
         const auth = getAuth();
         const recaptchaVerifier = new RecaptchaVerifier("recaptcha", { size: "invisible" }, auth);
 
-        const resolver = getMultiFactorResolver(auth, authController.authError);
+        const resolver = getMultiFactorResolver(auth, authController.authProviderError);
 
         if (resolver.hints[0].factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
 
@@ -167,14 +167,14 @@ export function FirebaseLoginView({
             console.warn("Unsupported second factor.");
         }
 
-    }, [authController.authError]);
+    }, [authController.authProviderError]);
 
     function buildErrorView() {
         let errorView: any;
         if (authController.user != null) return errorView; // if the user is logged in via MFA
         const ignoredCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
-        if (authController.authError) {
-            if (authController.authError.code === "auth/operation-not-allowed") {
+        if (authController.authProviderError) {
+            if (authController.authProviderError.code === "auth/operation-not-allowed") {
                 errorView =
                     <div>
                         <Box p={1}>
@@ -193,13 +193,13 @@ export function FirebaseLoginView({
                                 </a>
                             </Box>}
                     </div>;
-            } else if (!ignoredCodes.includes(authController.authError.code)) {
-                if (authController.authError.code === "auth/multi-factor-auth-required") {
+            } else if (!ignoredCodes.includes(authController.authProviderError.code)) {
+                if (authController.authProviderError.code === "auth/multi-factor-auth-required") {
                     sendMFASms();
                 }
                 errorView =
                     <Box p={1}>
-                        <ErrorView error={authController.authError}/>
+                        <ErrorView error={authController.authProviderError}/>
                     </Box>;
             }
         }

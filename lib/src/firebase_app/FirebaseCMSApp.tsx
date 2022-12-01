@@ -69,8 +69,7 @@ export function FirebaseCMSApp({
                                    HomePage,
                                    basePath,
                                    baseCollectionPath,
-                                   LoginView,
-                                   CollectionActions
+                                   LoginView
                                }: FirebaseCMSAppProps) {
 
     /**

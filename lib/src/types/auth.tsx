@@ -34,9 +34,14 @@ export type AuthController<UserType extends User = User> = {
     authLoading: boolean;
 
     /**
-     * Error dispatched by the auth provider
+     * Error initializing the authentication
      */
     authError?: any;
+
+    /**
+     * Error dispatched by the auth provider
+     */
+    authProviderError?: any;
 
     /**
      * Utility field you can use to store your custom data.

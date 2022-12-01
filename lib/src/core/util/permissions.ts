@@ -16,7 +16,7 @@ const DEFAULT_PERMISSIONS = {
 export function resolvePermissions<M extends Record<string, any>, UserType extends User>
 (collection: EntityCollection<M>,
  authController: AuthController<UserType>,
- paths: string[],
+ pathSegments: string[],
  entity: Entity<M> | null): Permissions {
 
     const permission = collection.permissions;
@@ -30,7 +30,7 @@ export function resolvePermissions<M extends Record<string, any>, UserType exten
             user: authController.user,
             authController,
             collection,
-            pathSegments: paths
+            pathSegments
         });
     }
     console.error("Permissions:", permission);
@@ -42,7 +42,7 @@ export function canEditEntity<M extends Record<string, any>, UserType extends Us
     collection: EntityCollection<M>,
     authController: AuthController<UserType>,
     paths: string[],
-entity: Entity<M> | null): boolean {
+    entity: Entity<M> | null): boolean {
     return resolvePermissions(collection, authController, paths, entity).edit ?? DEFAULT_PERMISSIONS.edit;
 }
 

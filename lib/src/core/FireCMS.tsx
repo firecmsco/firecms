@@ -219,6 +219,16 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         );
     }
 
+    if (authController.authError) {
+        return (
+            <CenteredView maxWidth={300}>
+                <ErrorView
+                    title={"Error loading auth"}
+                    error={authController.authError}/>
+            </CenteredView>
+        );
+    }
+
     const context: FireCMSContext = {
         authController,
         sideDialogsController,
