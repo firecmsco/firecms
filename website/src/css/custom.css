@@ -120,6 +120,14 @@
     --ifm-font-family-base: 'Rubik', "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     --ifm-heading-font-family: 'Rubik', 'Noto Sans', sans-serif, Helvetica, Arial, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     /*--ifm-code-background: 95%;*/
+
+    --docsearch-primary-color: #0070f4;
+    --docsearch-modal-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
+    --docsearch-searchbox-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
+    --docsearch-hit-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
+    --docsearch-key-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
+    --docsearch-footer-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
+    --docsearch-logo-color: #0070f4;
 }
 
 [data-theme='dark'] {
@@ -221,4 +229,31 @@ article {
 
 article p img {
     max-width: 800px;
+}
+
+
+html[data-theme="dark"] {
+    /*--docsearch-text-color: #f5f6f7;*/
+    /*--docsearch-container-background: rgba(9,10,17,0.8);*/
+    --docsearch-modal-background: #1b1b1d;
+    --docsearch-footer-background: #1b1b1d;
+    /*--docsearch-modal-shadow: inset 1px 1px 0 0 #2c2e40,0 3px 8px 0 #000309;*/
+    /*--docsearch-searchbox-background: #090a11;*/
+    --docsearch-searchbox-focus-background: #111;
+    /*--docsearch-hit-color: #bec3c9;*/
+    /*--docsearch-hit-shadow: none;*/
+    /*--docsearch-hit-background: #090a11;*/
+    /*--docsearch-key-gradient: linear-gradient(-26.5deg,#565872,#31355b);*/
+    /*--docsearch-key-shadow: inset 0 -2px 0 0 #282d55,inset 0 0 1px 1px #51577d,0 2px 2px 0 rgba(3,4,9,0.3);*/
+    /*--docsearch-footer-background: #1e2136;*/
+    /*--docsearch-footer-shadow: inset 0 1px 0 0 rgba(73,76,106,0.5),0 -4px 8px 0 rgba(0,0,0,0.2);*/
+    --docsearch-logo-color: #0070f4;
+    /*--docsearch-muted-color: #7f8497;*/
+
+    --docsearch-primary-color: #0070f4;
+    --docsearch-modal-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
+    --docsearch-searchbox-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
+    --docsearch-hit-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
+    --docsearch-key-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
+    --docsearch-footer-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
 }

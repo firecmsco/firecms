@@ -1,3 +1,4 @@
+require('dotenv').config();
 module.exports = {
     title: "FireCMS",
     tagline: "Awesome headless CMS based Firestore/Firebase and React, and completely open-source",
@@ -8,6 +9,10 @@ module.exports = {
     favicon: "img/favicon.ico",
     organizationName: "Camberi",
     projectName: "FireCMS",
+    customFields: {
+        docSearchApiKey: process.env.REACT_APP_DOC_SEARCH_KEY,
+        docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID,
+    },
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
@@ -77,6 +82,11 @@ module.exports = {
                     to: "blog",
                     label: "Blog",
                     position: "left"
+                },
+                {
+                    type: "html",
+                    position: "right",
+                    value: "<div id=\"docsearch\"></div>"
                 },
                 {
                     type: "docsVersionDropdown",
@@ -205,13 +215,13 @@ module.exports = {
                 blog: {
                     showReadingTime: true
                 },
-                theme: {
-                    customCss: [
-                        require.resolve("./src/css/custom.css"),
-                    ]
-                },
+                // theme: {
+                //     customCss: [
+                //         require.resolve("./src/css/custom.css"),
+                //     ]
+                // },
                 gtag: {
-                    trackingID: "G-NL75PPNYXD"
+                    trackingID: process.env.REACT_APP_GTAG_ID
                 },
                 sitemap: {
                     changefreq: 'weekly',

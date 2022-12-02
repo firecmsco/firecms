@@ -261,6 +261,9 @@ export type PropertyBuilderProps<M extends Record<string, any> = any> =
     };
 
 /**
+ * You can use this type to define a property dynamically, based
+ * on the current values of the entity, the previous values and the
+ * current value of the property, as well as the path and entity ID.
  * @category Entity properties
  */
 export type PropertyBuilder<T extends any = any, M extends Record<string, any> = any> =

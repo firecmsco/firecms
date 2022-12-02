@@ -16,6 +16,7 @@
         "node": ">=14"
     },
     "dependencies": {
+        "@docsearch/js": "3",
         "@docusaurus/core": "^2.2.0",
         "@docusaurus/plugin-google-gtag": "^2.2.0",
         "@docusaurus/plugin-sitemap": "^2.2.0",
@@ -25,6 +26,7 @@
         "clsx": "^1.2.1",
         "docusaurus-plugin-sass": "^0.2.2",
         "docusaurus-plugin-typedoc": "^0.17.5",
+        "dotenv": "^16.0.3",
         "postprocessing": "^6.29.1",
         "raw-loader": "^4.0.2",
         "react": "^18.2.0",
