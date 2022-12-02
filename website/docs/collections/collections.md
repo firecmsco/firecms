@@ -27,7 +27,9 @@ or as subcollections inside other collections.
 Check the full API reference
 in [Entity collections](../api/interfaces/entitycollection)
 
-* `name` The plural name of the view. E.g. 'products'.
+* `name` The plural name of the collection. E.g. 'Products'.
+
+* `singularName` The singular name of an entry in the collection. E.g. 'Product'.
 
 * `path` Relative Firestore path of this view to its parent. If this view is in
   the root the path, it is equal to the absolute one. This path also determines
