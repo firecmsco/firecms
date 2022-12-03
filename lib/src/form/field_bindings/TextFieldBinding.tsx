@@ -90,10 +90,10 @@ export function TextFieldBinding<T extends string | number>({
                 error={showError}
                 disabled={valueIsInfinity}
                 sx={{
-                    "& .MuiInputLabel-formControl": {
-                        mt: 1 / 2,
-                        ml: 1 / 2
-                    },
+                    // "& .MuiInputLabel-formControl": {
+                    //     mt: 1 / 2,
+                    //     ml: 1 / 2
+                    // },
                     "& .MuiInputLabel-shrink": {
                         mt: -1 / 4
                     }

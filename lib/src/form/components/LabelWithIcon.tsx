@@ -1,11 +1,12 @@
 import React from "react";
 import { Property, ResolvedProperty } from "../../types";
 import { getIconForProperty } from "../../core/util/property_utils";
-import { Typography } from "@mui/material";
+import { Box, SxProps, Theme, Typography } from "@mui/material";
 
 interface LabelWithIconProps {
     property: Property | ResolvedProperty;
     small?: boolean;
+    sx?: SxProps<Theme>;
 }
 
 /**
@@ -15,23 +16,31 @@ interface LabelWithIconProps {
  */
 export function LabelWithIcon({
                                   property,
-                                  small
+                                  small,
+                                  sx
                               }: LabelWithIconProps) {
     const required = property.validation?.required;
 
     return (
-        <Typography color={"textSecondary"} component={"span"}
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        transformOrigin: "left top",
-                        transform: small ? "translate(8px, 0px) scale(0.75)" : undefined
-        }}>
-            {getIconForProperty(property)}
-            <span style={{ paddingLeft: "12px" }}>{property.name}</span>
-            {required && <span aria-hidden="true"
-                               className="MuiInputLabel-asterisk MuiFormLabel-asterisk">*</span>}
+        <Box sx={{
+            display: "flex",
+            paddingBottom: "2px",
+            alignItems: "center",
+            gap: small ? 1 : 1.5,
+            ...sx
+        }} component={"span"}>
 
-        </Typography>
+            {getIconForProperty(property)}
+            <Typography component={"span"}
+                        sx={{
+                            fontWeight: 500,
+                            fontSize: small ? "1rem" : ".85rem",
+                            transformOrigin: "left top",
+                            transform: small ? "translate(8px, 0px) scale(0.75)" : undefined
+                        }}>{property.name}&nbsp;{required && "*"}</Typography>
+            {/*{required && <span aria-hidden="true"*/}
+            {/*                   className="MuiInputLabel-asterisk MuiFormLabel-asterisk">*</span>}*/}
+
+        </Box>
     );
 }

@@ -46,7 +46,7 @@ export function ReadOnlyFieldBinding({
 
             <Paper
                 sx={(theme) => ({
-                    minHeight: "64px",
+                    minHeight: "56px",
                     elevation: 0,
                     padding: theme.spacing(2),
                     [theme.breakpoints.up("md")]: {

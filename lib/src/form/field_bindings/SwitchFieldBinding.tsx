@@ -3,7 +3,8 @@ import {
     FormControl,
     FormControlLabel,
     FormHelperText,
-    Switch
+    Switch,
+    Typography
 } from "@mui/material";
 import clsx from "clsx";
 
@@ -11,13 +12,6 @@ import { FieldProps } from "../../types";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-
-const PREFIX = "SwitchField";
-
-const classes = {
-    formControl: `${PREFIX}-formControl`,
-    focus: `${PREFIX}-focus`
-};
 
 type SwitchFieldProps = FieldProps<boolean>;
 
@@ -29,18 +23,18 @@ type SwitchFieldProps = FieldProps<boolean>;
  * @category Form fields
  */
 export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
-                                                           propertyKey,
-                                                           value,
-                                                           setValue,
-                                                           error,
-                                                           showError,
-                                                           autoFocus,
-                                                           disabled,
-                                                           touched,
-                                                           property,
-                                                           includeDescription,
-                                                           shouldAlwaysRerender
-                                                       }: SwitchFieldProps, ref) {
+                                                                                   propertyKey,
+                                                                                   value,
+                                                                                   setValue,
+                                                                                   error,
+                                                                                   showError,
+                                                                                   autoFocus,
+                                                                                   disabled,
+                                                                                   touched,
+                                                                                   property,
+                                                                                   includeDescription,
+                                                                                   shouldAlwaysRerender
+                                                                               }: SwitchFieldProps, ref) {
 
     useClearRestoreValue({
         property,
@@ -55,18 +49,14 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
             <FormControl fullWidth>
 
                 <FormControlLabel
-                    className={clsx(
-                        {
-                            [classes.focus]: focus
-                        })}
                     sx={theme => ({
+                        color: focus ? theme.palette.primary.main : theme.palette.text.secondary,
                         justifyContent: "space-between",
                         margin: 0,
                         width: "100%",
                         minHeight: "64px",
                         paddingLeft: "16px",
                         paddingRight: "24px",
-                        color: "rgba(0, 0, 0, 0.87)",
                         boxSizing: "border-box",
                         position: "relative",
                         display: "inline-flex",
@@ -127,13 +117,13 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                     }
                     disabled={disabled}
                     label={
-                            <LabelWithIcon
-                                property={property}/>
-                }
+                        <LabelWithIcon
+                            property={property}/>
+                    }
                 />
 
                 {includeDescription &&
-                <FieldDescription property={property}/>}
+                    <FieldDescription property={property}/>}
 
                 {showError && <FormHelperText>{error}</FormHelperText>}
 

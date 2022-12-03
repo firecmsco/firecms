@@ -56,9 +56,6 @@ export function DateTimeFieldBinding({
             <PickerComponent
                 autoFocus={autoFocus}
                 value={internalValue}
-                label={
-                    <LabelWithIcon property={property}/>
-                }
                 renderInput={(params) =>
                     (
                         <MuiTextField {...params}
@@ -66,6 +63,9 @@ export function DateTimeFieldBinding({
                                       sx={{
                                           minHeight: "64px"
                                       }}
+                                      label={
+                                          <LabelWithIcon property={property}/>
+                                      }
                                       InputProps={{
                                           ...params.InputProps,
                                           sx: {

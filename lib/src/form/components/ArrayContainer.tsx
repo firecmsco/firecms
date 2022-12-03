@@ -169,7 +169,7 @@ export function ArrayContainer<T>({
                                             disabled={disabled}
                                             startIcon={<AddIcon/>}
                                             onClick={insertInEnd}>
-                                        Add
+                                        Add to {name}
                                     </Button>
                                 </Box>}
                             </div>

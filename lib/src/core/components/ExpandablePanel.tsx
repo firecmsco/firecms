@@ -21,11 +21,13 @@ export function ExpandablePanel({
         <Accordion variant={"outlined"}
                    disableGutters
                    expanded={expandedInternal}
-                   sx={{
+                   sx={theme => ({
+                       color: theme.palette.text.secondary,
                        backgroundColor: darken ? undefined : "inherit"
-                   }}
+                   })}
                    TransitionProps={{ unmountOnExit: true }}
                    onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => setExpandedInternal(expanded), [])}>
+
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                               sx={(theme) => ({
                                   minHeight: "56px",
@@ -36,19 +38,17 @@ export function ExpandablePanel({
                                   borderBottomRightRadius: !expandedInternal ? `${theme.shape.borderRadius}px` : undefined,
                                   "&.Mui-expanded": {
                                       borderBottom: `1px solid ${theme.palette.divider}`
-                                  },
-                                  // flexDirection: "row-reverse",
-                                  "& .MuiAccordionSummary-content": {
-                                      // marginLeft: theme.spacing(1)
                                   }
                               })}>
                 {title}
             </AccordionSummary>
+
             <AccordionDetails sx={(theme) => ({
                 padding: typeof padding === "string" ? padding : theme.spacing(padding)
             })}>
                 {children}
             </AccordionDetails>
+
         </Accordion>
     )
 }
