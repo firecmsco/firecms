@@ -58,7 +58,7 @@ export const usersCollection = buildCollection({
         {
             id: "sample_additional",
             name: "Sample additional",
-            builder: ({ entity }) => `Generated column: ${entity.values.first_name}`,
+            Builder: ({ entity }) => <>{`Generated column: ${entity.values.first_name}`}</>,
             dependencies: ["first_name"]
         }
     ]

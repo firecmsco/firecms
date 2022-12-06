@@ -328,6 +328,8 @@ export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
  */
 export type AdditionalColumnDelegate = AdditionalFieldDelegate;
 
+export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, UserType extends User = User> = { entity: Entity<M>, context: FireCMSContext<UserType> };
+
 /**
  * Use this interface for adding additional fields to entity collection views.
  * If you need to do some async loading you can use {@link AsyncPreviewComponent}
@@ -354,20 +356,23 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
     width?: number;
 
     /**
+     * DEPRECATED: Use `Builder` instead
      * Builder for the content of the cell for this column
      */
-    builder: ({ entity, context }: {
-        entity: Entity<M>,
-        context: FireCMSContext<UserType>;
-    }) => React.ReactNode;
+    builder?: React.ComponentType<AdditionalFieldDelegateProps<M, UserType>>;
+
+    /**
+     * Builder for the content of the cell for this column
+     */
+    Builder?: React.ComponentType<AdditionalFieldDelegateProps<M, UserType>>;
 
     /**
      * If this column needs to update dynamically based on other properties,
      * you can define an array of keys as strings with the
      * `dependencies` prop.
      * e.g. ["name", "surname"]
-     * If you don't specify this prop, the generated column will not rerender
-     * on entity property updates.
+     * This is a performance optimization, if you don't define dependencies
+     * it will be updated in every render.
      */
     dependencies?: Extract<keyof M, string>[];
 }

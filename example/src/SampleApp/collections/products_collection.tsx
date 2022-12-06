@@ -55,11 +55,11 @@ export const localeCollection = buildCollection<Locale>({
 const productAdditionalField: AdditionalFieldDelegate<Product> = {
     id: "spanish_title",
     name: "Spanish title",
-    builder: ({ entity, context }) =>
+    Builder: ({ entity, context }) =>
         <AsyncPreviewComponent builder={
             context.dataSource.fetchEntity({
-                path: entity.path,
-                entityId: entity.id,
+                path: `${entity.path}/${entity.id}/locales`,
+                entityId: "es",
                 collection: localeCollection
             }).then((entity) => entity?.values.name)
         }/>

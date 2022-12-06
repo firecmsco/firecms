@@ -702,7 +702,7 @@ export const testCollection = buildCollection({
         {
             id: "full_name",
             name: "Full Name",
-            builder: ({ entity }) => {
+            Builder: ({ entity }) => {
                 const values = entity.values;
                 return typeof values.name === "string" ? values.name.toUpperCase() : "Nope";
             },

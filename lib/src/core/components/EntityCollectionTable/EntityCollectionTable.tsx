@@ -163,7 +163,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     name: subcollection.name,
                     width: 200,
                     dependencies: [],
-                    builder: ({ entity }) => (
+                    Builder: ({ entity }) => (
                         <Button color={"primary"}
                                 variant={"outlined"}
                                 startIcon={<KeyboardTabIcon
@@ -250,11 +250,11 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const onTextSearch = useCallback((newSearchString?: string) => setSearchString(newSearchString), []);
 
         const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, string, UserType>> = useMemo(() => {
-            return additionalFields
+            return (additionalFields
                 ? additionalFields
                     .map((aC) => ({ [aC.id]: aC }))
                     .reduce((a, b) => ({ ...a, ...b }), {})
-                : {};
+                : {}) as Record<string, AdditionalFieldDelegate<M, string, UserType>>;
         }, [additionalFields]);
 
         // on ESC key press
@@ -353,10 +353,20 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 ? Object.entries(entity.values)
                     .filter(([key, value]) => additionalField.dependencies!.includes(key as Extract<keyof M, string>))
                     .reduce((a, b) => ({ ...a, ...b }), {})
-                : undefined;
+                : entity;
+
+            if (additionalField.builder) {
+                console.warn("`additionalField.builder` is deprecated. Use `additionalField.Builder` instead.");
+            }
+
+            const Builder = additionalField.builder ?? additionalField.Builder;
+            if (!Builder) {
+                throw new Error("No builder provided for additional field");
+            }
 
             return (
                 <TableCell
+                    key={`additional_table_cell_${entity.id}_${column.key}`}
                     width={width}
                     size={size}
                     focused={focused}
@@ -370,10 +380,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     disabledTooltip={"This column can't be edited directly"}
                 >
                     <ErrorBoundary>
-                        {additionalField.builder({
-                            entity,
-                            context
-                        })}
+                        <Builder entity={entity}
+                                 context={context}/>
                     </ErrorBoundary>
                 </TableCell>
             );
@@ -627,6 +635,10 @@ function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityC
             return collection.propertiesOrder;
 
         const displayedProperties = getCollectionPropertyIds(collection);
+
+        if (collection.additionalColumns) {
+            console.warn("`additionalColumns` is deprecated and will be removed in previous versions. Use `additionalFields` instead, with the same structure.");
+        }
 
         const additionalFields = collection.additionalFields ?? collection.additionalColumns ?? [];
         const subCollections: EntityCollection[] = collection.subcollections ?? [];
