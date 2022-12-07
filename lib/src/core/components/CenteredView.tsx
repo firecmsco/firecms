@@ -5,7 +5,7 @@ import { Box, Fade } from "@mui/material";
 export function CenteredView({
                                  children,
                                  maxWidth = "100%",
-    fullScreen = true
+                                 fullScreen = true
                              }: {
     children: React.ReactNode;
     maxWidth?: number | string;

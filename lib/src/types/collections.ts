@@ -163,7 +163,10 @@ export interface EntityCollection<M extends Record<string, any> = any,
     initialFilter?: FilterValues<Extract<keyof M, string>>; // setting FilterValues<M> can break defining collections by code
 
     /**
-     * Default sort applied to this collection
+     * Default sort applied to this collection.
+     * When setting this prop, entities will have a default order
+     * applied in the collection.
+     * e.g. `initialSort: ["order", "asc"]`
      */
     initialSort?: [Extract<keyof M, string>, "asc" | "desc"];
 

@@ -76,7 +76,7 @@ export function getHashValue<T>(v: T) {
         else if (v instanceof Date)
             return v.toLocaleString();
         else if (v instanceof GeoPoint)
-            return hash(v);
+            return hash(v as Record<string, unknown>);
     }
     return hash(v, { ignoreUnknown: true });
 }

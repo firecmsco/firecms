@@ -802,7 +802,7 @@ export interface UploadedFileContext {
 }
 
 /**
- * Used for previewing urls if the download file is knows
+ * Used for previewing urls if the download file is known
  * @category Entity properties
  */
 export type PreviewType = "image" | "video" | "audio";

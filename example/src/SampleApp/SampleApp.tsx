@@ -24,9 +24,6 @@ import {
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
-import {
-    SampleCollectionActions
-} from "./collection_actions/SampleCollectionActions";
 import { cryptoCollection } from "./collections/crypto_collection";
 
 function SampleApp() {
@@ -110,7 +107,6 @@ function SampleApp() {
         textSearchController={textSearchController}
         allowSkipLogin={true}
         logo={logo}
-        CollectionActions={SampleCollectionActions}
         collections={(params) => collections}
         views={customViews}
         collectionOverrideHandler={customCollectionOverrideHandler}
