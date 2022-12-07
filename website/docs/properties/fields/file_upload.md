@@ -26,7 +26,9 @@ The complete list of params you can use when uploading files:
   preview.
 * `storagePath` Absolute path in your bucket. You can specify it
   directly or use a callback
-* `acceptedFiles` File [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types) that can be uploaded to this
+* `acceptedFiles`
+  File [MIME type](https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types)
+  that can be uploaded to this
   reference. Note that you can also use the asterisk notation, so `image/*`
   accepts any image file, and so on.
 * `metadata` Specific metadata set in your uploaded file.
@@ -55,7 +57,7 @@ customize the path and name of the file. The available placeholders are:
 - {entityId} - ID of the entity
 - {propertyKey} - ID of this property
 - {path} - Path of this entity
-:::
+  :::
 
 ### Single file upload
 
@@ -114,3 +116,20 @@ The data type is [`array`](../config/array).
 
 Internally the component used
 is [`StorageUploadFieldBinding`](../../api/functions/StorageUploadFieldBinding).
+
+### Custom support for images, videos and audio
+
+You are free to use the `storage` property to upload any kind of file, but
+FireCMS also provides some custom support for images, videos and audio.
+
+You don't need to make any specific changes and this behaviour is enabled by
+default. FireCMS will automatically detect if the file is an image, video or
+audio and will display the preview accordingly.
+
+The MIME types supported for custom previews are:
+
+- `image/*`
+- `video/*`
+- `audio/*`
+
+(this includes all file formats related to these categories)
