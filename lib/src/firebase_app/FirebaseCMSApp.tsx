@@ -145,7 +145,7 @@ export function FirebaseCMSApp({
     }), [fontFamily, modeController.mode, primaryColor, secondaryColor]);
 
     if (configError) {
-        return <CenteredView>{configError}</CenteredView>;
+        return <CenteredView fullScreen={true}>{configError}</CenteredView>;
     }
 
     if (firebaseConfigLoading || !firebaseApp) {

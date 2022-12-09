@@ -82,6 +82,9 @@ export function getHashValue<T>(v: T) {
 }
 
 export function removeUndefined(value: any): any {
+    if (typeof value === "function") {
+        return value;
+    }
     if (Array.isArray(value)) {
         return value.map((v: any) => removeUndefined(v));
     }

@@ -211,7 +211,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     if (navigation.navigationLoadingError) {
         return (
-            <CenteredView maxWidth={300}>
+            <CenteredView maxWidth={300} fullScreen={true}>
                 <ErrorView
                     title={"Error loading navigation"}
                     error={navigation.navigationLoadingError}/>
@@ -221,7 +221,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     if (authController.authError) {
         return (
-            <CenteredView maxWidth={300}>
+            <CenteredView maxWidth={300} fullScreen={true}>
                 <ErrorView
                     title={"Error loading auth"}
                     error={authController.authError}/>
