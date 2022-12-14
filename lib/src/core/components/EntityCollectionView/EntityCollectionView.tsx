@@ -7,7 +7,7 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
-    LocalEntityCollection,
+    PartialEntityCollection,
     SelectionController
 } from "../../../types";
 import {
@@ -172,7 +172,7 @@ export const EntityCollectionView = React.memo(
             setDeleteEntityClicked(undefined);
         }, [setSelectedEntities]);
 
-        const onCollectionModifiedForUser = useCallback((path: string, partialCollection: LocalEntityCollection<M>) => {
+        const onCollectionModifiedForUser = useCallback((path: string, partialCollection: PartialEntityCollection<M>) => {
             if (userConfigPersistence) {
                 const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
                 const updatedConfig = mergeDeep(currentStoredConfig, partialCollection);
@@ -187,7 +187,7 @@ export const EntityCollectionView = React.memo(
             // Only for property columns
             if (!collection.properties[key]) return;
             const property: Partial<AnyProperty> = { columnWidth: width };
-            const localCollection = { properties: { [key as keyof M]: property } } as LocalEntityCollection<M>;
+            const localCollection = { properties: { [key as keyof M]: property } } as PartialEntityCollection<M>;
             setCollection(mergeDeep(collection, localCollection));
             onCollectionModifiedForUser(fullPath, localCollection);
         }, [collection, onCollectionModifiedForUser, fullPath]);
