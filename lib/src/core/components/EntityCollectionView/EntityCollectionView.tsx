@@ -317,7 +317,7 @@ export const EntityCollectionView = React.memo(
         }, [usedSelectionController, collection, authController, fullPath]);
 
         return (
-            <>
+            <Box sx={{ overflow: "hidden", height: "100%", width: "100%" }}>
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     fullPath={fullPath}
@@ -353,7 +353,7 @@ export const EntityCollectionView = React.memo(
                         onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
                         onClose={() => setDeleteEntityClicked(undefined)}/>}
 
-            </>
+            </Box>
         );
     }, equal) as React.FunctionComponent<EntityCollectionViewProps<any>>
 

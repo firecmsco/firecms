@@ -16,21 +16,38 @@ export function useBuildModeController(): ModeController {
 
     useEffect(() => {
         setMode(prefersDarkMode ? "dark" : "light");
+        setDocumentMode(prefersDarkMode ? "dark" : "light");
     }, [prefersDarkMode]);
 
+    // color-scheme: dark;
+    const setDarkMode = useCallback(() => {
+        setMode("dark");
+        setDocumentMode("dark");
+    }, [prefersDarkModeQuery]);
+
+    const setLightMode = useCallback(() => {
+        setMode("light");
+        setDocumentMode("light");
+    }, []);
+
+    const setDocumentMode = useCallback((mode: "light" | "dark") => {
+        document.body.style.setProperty("color-scheme", mode);
+    }, [document]);
+
     const toggleMode = useCallback(() => {
+
         if (mode === "light") {
             if (!prefersDarkModeQuery)
                 localStorage.setItem("prefers-dark-mode", "true");
             else
                 localStorage.removeItem("prefers-dark-mode");
-            setMode("dark");
+            setDarkMode();
         } else {
             if (prefersDarkModeQuery)
                 localStorage.setItem("prefers-dark-mode", "false");
             else
                 localStorage.removeItem("prefers-dark-mode");
-            setMode("light");
+            setLightMode();
         }
     }, [mode, prefersDarkModeQuery]);
 

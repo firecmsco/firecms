@@ -2,6 +2,7 @@ import { ModeStateContext } from "../core/contexts/ModeController";
 import { useContext } from "react";
 
 /**
+ * Use this controller to change color mode
  * @category Hooks and utilities
  */
 export interface ModeController {
