@@ -197,7 +197,7 @@ export function EntityForm<M extends Record<string, any>>({
         if (initialValues && status === "existing") {
             return Object.entries(collection.properties)
                 .map(([key, property]) => {
-                    if (isReadOnly(property) || isHidden(property)) {
+                    if (isHidden(property)) {
                         return {};
                     }
                     const initialValue = initialValues[key];
@@ -285,7 +285,7 @@ export function EntityForm<M extends Record<string, any>>({
         <Formik
             initialValues={baseDataSourceValues as M}
             onSubmit={saveValues}
-            validateOnMount={false}
+            validateOnMount={true}
             validationSchema={validationSchema}
             validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}

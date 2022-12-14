@@ -83,7 +83,7 @@ export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = 
  }: PropertyFieldBindingProps<any, M>): ReactElement<PropertyFieldBindingProps<any, M>> {
 
     let component: ComponentType<FieldProps> | undefined;
-    const resolvedProperty:ResolvedProperty<T>| null = resolveProperty({
+    const resolvedProperty: ResolvedProperty<T> | null = resolveProperty({
         propertyOrBuilder: property,
         values: context.values,
         path: context.path,
@@ -110,86 +110,87 @@ export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = 
                 component = RepeatFieldBinding;
             }
         }
-            const oneOf = (resolvedProperty as ResolvedArrayProperty).oneOf;
-            if (oneOf) {
-                component = BlockFieldBinding;
-            }
-            if (!of && !oneOf) {
-                throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
-            }
-        } else if (resolvedProperty.dataType === "map") {
+        const oneOf = (resolvedProperty as ResolvedArrayProperty).oneOf;
+        if (oneOf) {
+            component = BlockFieldBinding;
+        }
+        if (!of && !oneOf) {
+            throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
+        }
+    } else if (resolvedProperty.dataType === "map") {
         component = MapFieldBinding;
-        } else if (resolvedProperty.dataType === "reference") {
-            if (!resolvedProperty.path)
-                component = ReadOnlyFieldBinding;
-            else {
-                component = ReferenceFieldBinding;
-            }
-        } else if (resolvedProperty.dataType === "date") {
+    } else if (resolvedProperty.dataType === "reference") {
+        if (!resolvedProperty.path)
+            component = ReadOnlyFieldBinding;
+        else {
+            component = ReferenceFieldBinding;
+        }
+    } else if (resolvedProperty.dataType === "date") {
         component = DateTimeFieldBinding;
-        } else if (resolvedProperty.dataType === "boolean") {
+    } else if (resolvedProperty.dataType === "boolean") {
         component = SwitchFieldBinding;
-        } else if (resolvedProperty.dataType === "number") {
-            if (resolvedProperty.enumValues) {
-                component = SelectFieldBinding;
-            } else {
-                component = TextFieldBinding;
-            }
-        } else if (resolvedProperty.dataType === "string") {
-            if (resolvedProperty.storage) {
-                component = StorageUploadFieldBinding;
-            } else if (resolvedProperty.markdown) {
-                component = MarkdownFieldBinding;
-            } else if (resolvedProperty.email || resolvedProperty.url || resolvedProperty.multiline) {
-                component = TextFieldBinding;
-            } else if (resolvedProperty.enumValues) {
-                component = SelectFieldBinding;
-            } else {
-                component = TextFieldBinding;
-            }
+    } else if (resolvedProperty.dataType === "number") {
+        if (resolvedProperty.enumValues) {
+            component = SelectFieldBinding;
+        } else {
+            component = TextFieldBinding;
         }
-
-        if (component) {
-
-            const componentProps: PropertyFieldBindingProps<T, M> = {
-                propertyKey,
-                property: resolvedProperty as ResolvedProperty<T>,
-                includeDescription,
-                underlyingValueHasChanged,
-                context,
-                disabled,
-                tableMode,
-                partOfArray,
-                autoFocus,
-                shouldAlwaysRerender
-            };
-
-            // we use the standard Field for user defined fields, since it rebuilds
-            // when there are changes in other values, in contrast to FastField
-            const FieldComponent = shouldAlwaysRerender || resolvedProperty.Field ? Field : FastField;
-
-            return (
-                <FieldComponent
-                    required={resolvedProperty.validation?.required}
-                    name={`${propertyKey}`}
-                >
-                    {(fieldProps: FormikFieldProps<T>) => {
-                        return <FieldInternal
-                            component={component as ComponentType<FieldProps>}
-                            componentProps={componentProps}
-                            fieldProps={fieldProps}/>;
-                    }}
-                </FieldComponent>
-            );
-
+    } else if (resolvedProperty.dataType === "string") {
+        if (resolvedProperty.storage) {
+            component = StorageUploadFieldBinding;
+        } else if (resolvedProperty.markdown) {
+            component = MarkdownFieldBinding;
+        } else if (resolvedProperty.email || resolvedProperty.url || resolvedProperty.multiline) {
+            component = TextFieldBinding;
+        } else if (resolvedProperty.enumValues) {
+            component = SelectFieldBinding;
+        } else {
+            component = TextFieldBinding;
         }
+    }
+
+    if (component) {
+
+        const componentProps: PropertyFieldBindingProps<T, M> = {
+            propertyKey,
+            property: resolvedProperty as ResolvedProperty<T>,
+            includeDescription,
+            underlyingValueHasChanged,
+            context,
+            disabled,
+            tableMode,
+            partOfArray,
+            autoFocus,
+            shouldAlwaysRerender
+        };
+
+        // we use the standard Field for user defined fields, since it rebuilds
+        // when there are changes in other values, in contrast to FastField
+        const FieldComponent = shouldAlwaysRerender || resolvedProperty.Field ? Field : FastField;
 
         return (
-            <div>{`Currently the field ${resolvedProperty.dataType} is not supported`}</div>
+            <FieldComponent
+                required={resolvedProperty.validation?.required}
+                name={`${propertyKey}`}
+            >
+                {(fieldProps: FormikFieldProps<T>) => {
+                    return <FieldInternal
+                        component={component as ComponentType<FieldProps>}
+                        componentProps={componentProps}
+                        fieldProps={fieldProps}/>;
+                }}
+            </FieldComponent>
         );
+
     }
-    // ,
-    // equal);
+
+    return (
+        <div>{`Currently the field ${resolvedProperty.dataType} is not supported`}</div>
+    );
+}
+
+// ,
+// equal);
 
 function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, any>>
 ({
@@ -256,9 +257,9 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
             {React.createElement(component, cmsFieldProps)}
 
             {underlyingValueHasChanged && !isSubmitting &&
-            <FormHelperText>
-                This value has been updated elsewhere
-            </FormHelperText>}
+                <FormHelperText>
+                    This value has been updated elsewhere
+                </FormHelperText>}
 
         </ErrorBoundary>);
 

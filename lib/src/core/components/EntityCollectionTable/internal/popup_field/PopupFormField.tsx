@@ -231,6 +231,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             <Formik
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
                 validationSchema={validationSchema}
+                validateOnMount={true}
                 validate={(values) => console.debug("Validating", values)}
                 onSubmit={(values, actions) => {
                     saveValue(values)

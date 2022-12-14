@@ -43,7 +43,7 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
     const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
     const smallLayout: boolean = useMediaQuery(theme.breakpoints.down("sm"));
 
-    // only on initialisation
+    // only on initialisation, create panels from URL
     useEffect(() => {
         if (!navigation.loading && !initialised.current) {
             if (navigation.isUrlCollectionPath(location.pathname)) {

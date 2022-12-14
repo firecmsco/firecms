@@ -27,15 +27,13 @@ import {
     canDeleteEntity,
     canEditEntity,
     fullPathToCollectionSegments,
-    mergeDeep, resolvePermissions
+    mergeDeep
 } from "../../util";
-import {
-    Markdown,
-    renderSkeletonText
-} from "../../../preview";
+import { Markdown, renderSkeletonText } from "../../../preview";
 import {
     useAuthController,
-    useDataSource, useNavigationContext,
+    useDataSource,
+    useNavigationContext,
     useSideEntityController
 } from "../../../hooks";
 import {
@@ -86,21 +84,21 @@ export const EntityCollectionView = React.memo(
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
-        const userOverride = userConfigPersistence?.getCollectionConfig<M>(fullPath);
 
         const initialCollection = useMemo(() => {
+            const userOverride = userConfigPersistence?.getCollectionConfig<M>(fullPath);
             return userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp;
-        }, [collectionProp, userOverride]);
+        }, [collectionProp]);
 
         const [collection, setCollection] = useState(initialCollection);
 
-        useEffect(() => {
-            setCollection((current) => {
-                if (!equal(current, collectionProp))
-                    return collectionProp;
-                else return current;
-            });
-        }, [collectionProp])
+        // useEffect(() => {
+        //     setCollection((current) => {
+        //         if (!equal(current, collectionProp))
+        //             return collectionProp;
+        //         else return current;
+        //     });
+        // }, [collectionProp])
 
         const unselectNavigatedEntity = () => {
             const currentSelection = selectedNavigationEntity;
@@ -177,7 +175,8 @@ export const EntityCollectionView = React.memo(
         const onCollectionModifiedForUser = useCallback((path: string, partialCollection: LocalEntityCollection<M>) => {
             if (userConfigPersistence) {
                 const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
-                userConfigPersistence.onCollectionModified(path, mergeDeep(currentStoredConfig, partialCollection));
+                const updatedConfig = mergeDeep(currentStoredConfig, partialCollection);
+                userConfigPersistence.onCollectionModified(path, updatedConfig);
             }
         }, [userConfigPersistence]);
 
@@ -189,8 +188,8 @@ export const EntityCollectionView = React.memo(
             if (!collection.properties[key]) return;
             const property: Partial<AnyProperty> = { columnWidth: width };
             const localCollection = { properties: { [key as keyof M]: property } } as LocalEntityCollection<M>;
-            onCollectionModifiedForUser(fullPath, localCollection);
             setCollection(mergeDeep(collection, localCollection));
+            onCollectionModifiedForUser(fullPath, localCollection);
         }, [collection, onCollectionModifiedForUser, fullPath]);
 
         const onSizeChanged = useCallback((size: CollectionSize) => {
