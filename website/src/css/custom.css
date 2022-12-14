@@ -225,10 +225,11 @@ img[alt=firebase_setup] {
 article {
     display: flex;
     flex-direction: column;
+    font-size: 1.06rem;
 }
 
 article p img {
-    max-width: 800px;
+    max-width: 100%;
 }
 
 
