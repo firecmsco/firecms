@@ -251,6 +251,13 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
     selectionController: SelectionController<M>;
 
     /**
+     * Entities that are currently loaded in the collection view.
+     * Note that this is not the full list of entities, but only the ones
+     * currently loaded in the collection view.
+     */
+    loadedEntities: Entity<M>[];
+
+    /**
      * Context of the app status
      */
     context: FireCMSContext<UserType>;

@@ -13,6 +13,7 @@ import { ExportButton } from "../EntityCollectionTable/internal/ExportButton";
 import { canCreateEntity, canDeleteEntity } from "../../util/permissions";
 import { useAuthController, useFireCMSContext } from "../../../hooks";
 import {
+    CollectionActionsProps,
     Entity,
     EntityCollection,
     ExportConfig,
@@ -22,12 +23,12 @@ import { fullPathToCollectionSegments } from "../../util/paths";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
-    fullPath: string;
+    path: string;
     selectionEnabled: boolean;
     exportable: boolean | ExportConfig;
     onNewClick: () => void;
     onMultipleDeleteClick: () => void;
-    selectedEntities: Entity<M>[];
+    loadedEntities: Entity<M>[];
     selectionController: SelectionController<M>;
 }
 
@@ -37,9 +38,9 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                                                                                exportable,
                                                                                onMultipleDeleteClick,
                                                                                selectionEnabled,
-                                                                               fullPath,
-                                                                               selectionController,
-                                                                               selectedEntities
+                                                                               path,
+                                                                               loadedEntities,
+                                                                               selectionController
                                                                            }: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
@@ -48,7 +49,9 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null) &&
+    const selectedEntities = selectionController.selectedEntities;
+
+    const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path), null) &&
         onNewClick && (largeLayout
             ? <Button
                 onClick={onNewClick}
@@ -67,7 +70,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 <Add/>
             </Button>);
 
-    const multipleDeleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
+    const multipleDeleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(path), null);
 
     let multipleDeleteButton: React.ReactNode | undefined;
     if (selectionEnabled) {
@@ -95,10 +98,11 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             </Tooltip>
     }
 
-    const actionProps = {
-        path: fullPath,
+    const actionProps: CollectionActionsProps = {
+        path,
         collection,
         selectionController,
+        loadedEntities,
         context
     };
 
@@ -115,7 +119,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     const exportButton = exportable &&
         <ExportButton collection={collection}
                       exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
-                      path={fullPath}/>;
+                      path={path}/>;
     return (
         <>
             {actions}

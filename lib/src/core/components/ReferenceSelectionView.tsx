@@ -28,6 +28,9 @@ import { ErrorView } from "./ErrorView";
 import { CustomDialogActions } from "./CustomDialogActions";
 import { useSideDialogContext } from "../SideDialogs";
 import { canCreateEntity, fullPathToCollectionSegments } from "../util";
+import {
+    useSelectionController
+} from "./EntityCollectionView/EntityCollectionView";
 
 /**
  * @category Components
@@ -111,8 +114,10 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
 
     const dataSource = useDataSource();
 
-    const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
+    // const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
     const [entitiesDisplayedFirst, setEntitiesDisplayedFirst] = useState<Entity<any>[]>([]);
+
+    const selectionController = useSelectionController();
 
     /**
      * Fetch initially selected ids
@@ -130,18 +135,18 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
                 .then((entities) => {
                     if (!unmounted) {
                         const result = entities.filter(e => e !== undefined) as Entity<any>[];
-                        setSelectedEntities(result);
+                        selectionController.setSelectedEntities(result);
                         setEntitiesDisplayedFirst(result);
                     }
                 });
         } else {
-            setSelectedEntities([]);
+            selectionController.setSelectedEntities([]);
             setEntitiesDisplayedFirst([]);
         }
         return () => {
             unmounted = true;
         };
-    }, [dataSource, fullPath, selectedEntityIds, collection]);
+    }, [dataSource, fullPath, selectedEntityIds, collection, selectionController]);
 
     const onClear = useCallback(() => {
         if (!multiselect && onSingleEntitySelected) {
@@ -153,18 +158,19 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
 
     const toggleEntitySelection = useCallback((entity: Entity<any>) => {
         let newValue;
+        const selectedEntities = selectionController.selectedEntities;
         if (selectedEntities) {
             if (selectedEntities.map((e) => e.id).indexOf(entity.id) > -1) {
                 newValue = selectedEntities.filter((item: Entity<any>) => item.id !== entity.id);
             } else {
                 newValue = [...selectedEntities, entity];
             }
-            setSelectedEntities(newValue);
+            selectionController.setSelectedEntities(newValue);
 
             if (onMultipleEntitiesSelected)
                 onMultipleEntitiesSelected(newValue);
         }
-    }, [onMultipleEntitiesSelected, selectedEntities]);
+    }, [onMultipleEntitiesSelected, selectionController.selectedEntities]);
 
     const onEntityClick = useCallback((entity: Entity<any>) => {
         if (!multiselect && onSingleEntitySelected) {
@@ -194,7 +200,7 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
                                                     width,
                                                     frozen
                                                 }: { entity: Entity<any>, size: CollectionSize, width: number, frozen?: boolean }) => {
-
+        const selectedEntities = selectionController.selectedEntities;
         const isSelected = selectedEntities && selectedEntities.map(e => e.id).indexOf(entity.id) > -1;
         return <EntityCollectionRowActions
             width={width}
@@ -206,7 +212,7 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
             toggleEntitySelection={toggleEntitySelection}
         />;
 
-    }, [multiselect, selectedEntities, toggleEntitySelection]);
+    }, [multiselect, selectionController.selectedEntities, toggleEntitySelection]);
 
     const onDone = useCallback((event: React.SyntheticEvent) => {
         event.stopPropagation();
@@ -240,12 +246,13 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
                                            </Typography>}
                                            {...collection}
                                            inlineEditing={false}
-                                           selectedEntities={selectedEntities}
-                                           actions={<ReferenceDialogActions
-                                               collection={collection}
-                                               path={fullPath}
-                                               onNewClick={onNewClick}
-                                               onClear={onClear}/>}
+                                           selectionController={selectionController}
+                                           ActionsBuilder={() =>
+                                               <ReferenceDialogActions
+                                                   collection={collection}
+                                                   path={fullPath}
+                                                   onNewClick={onNewClick}
+                                                   onClear={onClear}/>}
                                            entitiesDisplayedFirst={entitiesDisplayedFirst}
                     />}
             </Box>

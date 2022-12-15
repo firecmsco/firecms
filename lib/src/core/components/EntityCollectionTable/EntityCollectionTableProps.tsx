@@ -1,5 +1,10 @@
 import React from "react";
-import { CollectionSize, Entity, EntityCollection } from "../../../types";
+import {
+    CollectionActionsProps,
+    CollectionSize,
+    Entity,
+    EntityCollection, SelectionController
+} from "../../../types";
 
 /**
  * @category Collection components
@@ -25,18 +30,17 @@ export type EntityCollectionTableProps<M extends Record<string, any>> = Omit<Ent
     /**
      * Display these entities as selected
      */
-    selectedEntities?: Entity<M>[];
+    selectionController: SelectionController<M>;
+
+    /**
+     * List of entities that will be displayed as selected;
+     */
+    highlightedEntities?: Entity<M>[];
 
     /**
      * Override the title in the toolbar
      */
     title?: React.ReactNode;
-
-    /**
-     * Additional component that renders actions such as buttons in the
-     * collection toolbar, displayed on the right side
-     */
-    actions?: React.ReactNode;
 
     /**
      * Additional component that renders actions such as buttons in the
@@ -70,4 +74,10 @@ export type EntityCollectionTableProps<M extends Record<string, any>> = Omit<Ent
      * Should apply a different style to a row when hovering
      */
     hoverRow?: boolean;
+
+    /**
+     * Additional component that renders actions such as buttons in the
+     * collection toolbar, displayed on the right side
+     */
+    ActionsBuilder?: React.ComponentType<CollectionActionsProps>;
 }

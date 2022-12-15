@@ -4,6 +4,7 @@ import equal from "react-fast-compare"
 
 import {
     AnyProperty,
+    CollectionActionsProps,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -326,18 +327,20 @@ export const EntityCollectionView = React.memo(
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
                     title={Title}
-                    selectedEntities={(selectedEntities ?? []).length > 0 ? selectedEntities : (selectedNavigationEntity ? [selectedNavigationEntity] : [])}
+                    selectionController={usedSelectionController}
+                    highlightedEntities={selectedNavigationEntity ? [selectedNavigationEntity] : []}
                     {...collection}
-                    actions={
+                    ActionsBuilder={({ loadedEntities, path, collection, selectionController }:CollectionActionsProps) => (
                         <EntityCollectionViewActions
                             collection={collection}
                             exportable={exportable}
                             onMultipleDeleteClick={onMultipleDeleteClick}
                             onNewClick={onNewClick}
-                            fullPath={fullPath}
-                            selectedEntities={selectedEntities}
-                            selectionController={usedSelectionController}
-                            selectionEnabled={selectionEnabled}/>}
+                            path={path}
+                            loadedEntities={loadedEntities}
+                            selectionController={selectionController}
+                            selectionEnabled={selectionEnabled}/>
+                    )}
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
                 />

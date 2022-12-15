@@ -107,11 +107,12 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          filterCombinations,
          forceFilter,
          actionsStart,
-         actions,
+         ActionsBuilder,
          title,
          tableRowActionsBuilder,
          entitiesDisplayedFirst,
-         selectedEntities,
+         selectionController,
+         highlightedEntities,
          onEntityClick,
          onColumnResize,
          onSizeChanged,
@@ -124,6 +125,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const theme = useTheme();
         const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
         const disabledFilterChange = Boolean(forceFilter);
+        const selectedEntities = selectionController?.selectedEntities ?? highlightedEntities;
 
         const tableKey = React.useRef<string>(Math.random().toString(36));
 
@@ -509,7 +511,15 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         onSizeChanged={updateSize}
                         title={title}
                         actionsStart={actionsStart}
-                        actions={actions}
+                        actions={ActionsBuilder
+                            ? <ActionsBuilder
+                                path={fullPath}
+                                collection={collection}
+                                context={context}
+                                selectionController={selectionController}
+                                loadedEntities={data}
+                            />
+                            : undefined}
                         loading={dataLoading}/>
 
                     <Box sx={{ flexGrow: 1 }}>
