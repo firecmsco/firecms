@@ -147,6 +147,9 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const [searchString, setSearchString] = React.useState<string | undefined>();
         const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
 
+        const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
+                                                    sortBy?: [string, "asc" | "desc"]) => isFilterCombinationValid(filterValues, filterCombinations, sortBy), [filterCombinations]);
+
         const initialSortInternal = useMemo(() => {
             if (initialSort && forceFilter && !checkFilterCombination(forceFilter, initialSort)) {
                 console.warn("Initial sort is not compatible with the force filter. Ignoring initial sort");
@@ -480,9 +483,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 throw Error("Internal: columns not mapped properly");
             }
         }, [additionalFieldsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
-
-        const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
-                                                    sortBy?: [string, "asc" | "desc"]) => isFilterCombinationValid(filterValues, filterCombinations, sortBy), [filterCombinations]);
 
         const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
             setFilterValues({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
