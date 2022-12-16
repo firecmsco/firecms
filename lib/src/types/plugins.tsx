@@ -84,7 +84,7 @@ export type FireCMSPlugin<T = any> = {
  *
  * @category Models
  */
-export interface HomePageActionsProps<M extends Record<string, any> = any, UserType extends User = User> {
+export interface HomePageActionsProps<M extends Record<string, any> = any, UserType extends User = User, EC extends EntityCollection<M> = EntityCollection<M>> {
     /**
      * Collection path of this entity. This is the full path, like
      * `users/1234/addresses`
@@ -94,7 +94,7 @@ export interface HomePageActionsProps<M extends Record<string, any> = any, UserT
     /**
      * The collection configuration
      */
-    collection: EntityCollection<M>;
+    collection: EC;
 
     /**
      * Context of the app status

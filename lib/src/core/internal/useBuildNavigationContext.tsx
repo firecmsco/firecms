@@ -88,18 +88,18 @@ export function useBuildNavigationContext<UserType extends User>({
         refreshNavigation();
     }, [refreshNavigation]);
 
-    const getCollection = useCallback(<M extends Record<string, any>>(
+    const getCollection = useCallback(<EC extends EntityCollection>(
         pathOrAlias: string,
         entityId?: string,
         includeUserOverride = false
-    ): EntityCollection<M> | undefined => {
+    ): EC | undefined => {
 
         if (!collections)
             return undefined;
 
-        const baseCollection = getCollectionByPathOrAlias<M>(removeInitialAndTrailingSlashes(pathOrAlias), collections);
+        const baseCollection = getCollectionByPathOrAlias(removeInitialAndTrailingSlashes(pathOrAlias), collections);
 
-        const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig<M>(pathOrAlias) : undefined;
+        const userOverride = includeUserOverride ? userConfigPersistence?.getCollectionConfig(pathOrAlias) : undefined;
 
         const overriddenCollection = baseCollection ? mergeDeep(baseCollection, userOverride) : undefined;
 
@@ -127,7 +127,7 @@ export function useBuildNavigationContext<UserType extends User>({
 
         if (!result) return undefined;
 
-        return { ...overriddenCollection, ...result } as EntityCollection<M>;
+        return { ...overriddenCollection, ...result } as EC;
 
     }, [
         basePath,

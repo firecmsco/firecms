@@ -87,24 +87,24 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
 
 export const VirtualTable = React.memo<VirtualTableProps<any>>(
     function VirtualTable<T extends Record<string, any>>({
-                                                                                             data,
-                                                                                             onResetPagination,
-                                                                                             onEndReached,
-                                                                                             size = "m",
-                                                                                             columns: columnsProp,
-                                                                                             onRowClick,
-                                                                                             onColumnResize,
-                                                                                             filter: filterInput,
-                                                                                             checkFilterCombination,
-                                                                                             onFilterUpdate,
-                                                                                             sortBy,
-                                                                                             error,
-                                                                                             emptyMessage,
-                                                                                             onSortByUpdate,
-                                                                                             loading,
-                                                                                             cellRenderer,
-                                                                                             hoverRow
-                                                                                         }: VirtualTableProps<T>) {
+                                                             data,
+                                                             onResetPagination,
+                                                             onEndReached,
+                                                             size = "m",
+                                                             columns: columnsProp,
+                                                             onRowClick,
+                                                             onColumnResize,
+                                                             filter: filterInput,
+                                                             checkFilterCombination,
+                                                             onFilterUpdate,
+                                                             sortBy,
+                                                             error,
+                                                             emptyMessage,
+                                                             onSortByUpdate,
+                                                             loading,
+                                                             cellRenderer,
+                                                             hoverRow
+                                                         }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
         const currentSort: "asc" | "desc" | undefined = sortBy ? sortBy[1] : undefined;
@@ -353,7 +353,7 @@ function MemoizedList({
                             top: `calc(${style.top}px + 50px)`
                         }}
                         size={size}>
-                        {columns.map((column:TableColumn, columnIndex:number) => {
+                        {columns.map((column: TableColumn, columnIndex: number) => {
                             const cellData = rowData && rowData[column.key];
                             return <VirtualTableCell
                                 key={`cell_${column.key}`}

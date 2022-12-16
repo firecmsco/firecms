@@ -147,8 +147,16 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const [searchString, setSearchString] = React.useState<string | undefined>();
         const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
 
+        const initialSortInternal = useMemo(() => {
+            if (initialSort && forceFilter && !checkFilterCombination(forceFilter, initialSort)) {
+                console.warn("Initial sort is not compatible with the force filter. Ignoring initial sort");
+                return undefined;
+            }
+            return initialSort;
+        }, [initialSort, forceFilter]);
+
         const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? initialFilter ?? undefined);
-        const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSort);
+        const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortInternal);
 
         const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
         const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);

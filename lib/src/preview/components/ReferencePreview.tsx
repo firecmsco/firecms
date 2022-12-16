@@ -10,7 +10,7 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import { EntityReference, ResolvedProperty } from "../../types";
+import { EntityCollection, EntityReference, ResolvedProperty } from "../../types";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import {
@@ -74,7 +74,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
         </ReferencePreviewWrap>
     }
 
-    const collection = navigationContext.getCollection<M>(reference.path);
+    const collection = navigationContext.getCollection<EntityCollection<M>>(reference.path);
     if (!collection) {
         throw Error(`Couldn't find the corresponding collection view for the path: ${reference.path}`);
     }

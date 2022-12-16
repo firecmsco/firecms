@@ -49,9 +49,9 @@ export type NavigationContext = {
      * The collection is resolved from the given path or alias, located
      * among the
      */
-    getCollection: <M extends Record<string, any> = any>(pathOrAlias: string,
+    getCollection: <EC extends EntityCollection = EntityCollection<any>>(pathOrAlias: string,
                        entityId?: string,
-                       includeUserOverride?: boolean) => EntityCollection<M> | undefined;
+                       includeUserOverride?: boolean) => EC | undefined;
 
     /**
      * Default path under the navigation routes of the CMS will be created

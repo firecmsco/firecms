@@ -9,7 +9,9 @@ export function stripCollectionPath(path: string): string {
     return segmentsToStrippedPath(fullPathToCollectionSegments(path));
 }
 
-export function segmentsToStrippedPath(paths:string[]){
+export function segmentsToStrippedPath(paths: string[]) {
+    if (paths.length === 1)
+        return paths[0];
     return paths.reduce((a, b) => `${a}${COLLECTION_PATH_SEPARATOR}${b}`);
 }
 
