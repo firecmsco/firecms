@@ -20,8 +20,5 @@
         "deploy-web": "cd website && yarn deploy",
         "build": "cd lib && yarn build"
     },
-    "packageManager": "yarn@3.2.3",
-    "dependencies": {
-        "@alpacahq/alpaca-trade-api": "^2.16.1"
-    }
+    "packageManager": "yarn@3.2.3"
 }

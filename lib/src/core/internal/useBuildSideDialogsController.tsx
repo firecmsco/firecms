@@ -15,8 +15,8 @@ export function useBuildSideDialogsController(): SideDialogsController {
     const routesCount = useRef<number>(0);
 
     const updateSidePanels = (newPanels: SideDialogPanelProps[]) => {
-        setSidePanels(newPanels);
         sidePanelsRef.current = newPanels;
+        setSidePanels(newPanels);
     };
 
     useEffect(() => {

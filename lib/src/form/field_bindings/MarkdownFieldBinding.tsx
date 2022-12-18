@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 
 import { styled } from "@mui/material/styles";
 
@@ -18,7 +18,7 @@ const classes = {
 };
 
 const StyledFormControl = styled(FormControl)((
-   { theme } : {
+    { theme }: {
         theme: Theme
     }
 ) => ({
@@ -39,7 +39,7 @@ const StyledFormControl = styled(FormControl)((
             color: "inherit",
             boxShadow: "inherit",
             borderRadius: 6,
-            backgroundColor: theme.palette.mode === "light" ? "rgb(240, 240, 240)" : "#323232"
+            backgroundColor: theme.palette.mode === "light" ? "rgb(240, 240, 240)" : "#272729"
         },
         "& .w-md-editor-toolbar": {
             borderBottom: "inherit",
@@ -56,20 +56,31 @@ const StyledFormControl = styled(FormControl)((
  * @category Form fields
  */
 export function MarkdownFieldBinding({
-                                  propertyKey,
-                                  value,
-                                  setValue,
-                                  error,
-                                  showError,
-                                  disabled,
-                                  autoFocus,
-                                  touched,
-                                  property,
-                                  tableMode,
-                                  includeDescription,
-                                  context,
-                                  shouldAlwaysRerender
-                              }: FieldProps<string>) {
+                                         propertyKey,
+                                         value,
+                                         setValue,
+                                         error,
+                                         showError,
+                                         disabled,
+                                         autoFocus,
+                                         touched,
+                                         property,
+                                         tableMode,
+                                         includeDescription,
+                                         context,
+                                         shouldAlwaysRerender
+                                     }: FieldProps<string>) {
+
+    const ref = useRef<HTMLDivElement>(null);
+
+    // This is a hack to make the editor resize based on content
+    useEffect(() => {
+        setTimeout(() => {
+            ref.current?.firstElementChild?.removeAttribute("height");
+            document.querySelector("#form_field_description > div > div.MarkdownField-root > div")?.removeAttribute("height");
+            console.log("ref.current", ref.current);
+        }, 1);
+    }, [ref.current]);
 
     useClearRestoreValue({
         property,
@@ -99,7 +110,7 @@ export function MarkdownFieldBinding({
                 <LabelWithIcon property={property}/>
             </FormHelperText>}
 
-            <div className={classes.root}>
+            <div className={classes.root} ref={ref}>
                 <MDEditor
                     value={typeof value === "string" ? value : ""}
                     preview={"edit"}
@@ -113,10 +124,10 @@ export function MarkdownFieldBinding({
             <Box display={"flex"}>
                 <Box flexGrow={1}>
                     {showError &&
-                    typeof error === "string" &&
-                    <FormHelperText>{error}</FormHelperText>}
+                        typeof error === "string" &&
+                        <FormHelperText>{error}</FormHelperText>}
                     {includeDescription &&
-                    <FieldDescription property={property}/>}
+                        <FieldDescription property={property}/>}
                 </Box>
             </Box>
 

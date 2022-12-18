@@ -101,18 +101,18 @@ export const EntityCollectionView = React.memo(
         //     });
         // }, [collectionProp])
 
-        const unselectNavigatedEntity = () => {
+        const theme = useTheme();
+
+        const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
+        const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
+
+        const unselectNavigatedEntity = useCallback(() => {
             const currentSelection = selectedNavigationEntity;
             setTimeout(() => {
                 if (currentSelection === selectedNavigationEntity)
                     setSelectedNavigationEntity(undefined);
             }, 2000);
-        };
-
-        const theme = useTheme();
-
-        const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
-        const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
+        }, [selectedNavigationEntity]);
 
         const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
             if (!canEditEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity ?? null)) {
@@ -265,6 +265,31 @@ export const EntityCollectionView = React.memo(
             </Box>
         ), [theme, collection.description, collection.name, fullPath, open, anchorEl]);
 
+        const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
+
+        const onCopyClicked = useCallback((clickedEntity: Entity<M>) => {
+            setSelectedNavigationEntity(clickedEntity);
+            sideEntityController.open({
+                entityId: clickedEntity.id,
+                path: fullPath,
+                copy: true,
+                collection,
+                updateUrl: true,
+                onClose: unselectNavigatedEntity
+            });
+        }, [sideEntityController, collection, fullPath, unselectNavigatedEntity]);
+
+        const onEditClicked = useCallback((clickedEntity: Entity<M>) => {
+            setSelectedNavigationEntity(clickedEntity);
+            sideEntityController.open({
+                entityId: clickedEntity.id,
+                path: fullPath,
+                collection,
+                updateUrl: true,
+                onClose: unselectNavigatedEntity
+            });
+        }, [sideEntityController, collection, fullPath, unselectNavigatedEntity]);
+
         const tableRowActionsBuilder = useCallback(({
                                                         entity,
                                                         size,
@@ -274,31 +299,7 @@ export const EntityCollectionView = React.memo(
 
             const isSelected = isEntitySelected(entity);
 
-            const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity);
             const deleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity);
-
-            const onCopyClicked = (clickedEntity: Entity<M>) => {
-                setSelectedNavigationEntity(entity);
-                sideEntityController.open({
-                    entityId: clickedEntity.id,
-                    path: fullPath,
-                    copy: true,
-                    collection,
-                    updateUrl: true,
-                    onClose: unselectNavigatedEntity
-                });
-            };
-
-            const onEditClicked = (clickedEntity: Entity<M>) => {
-                setSelectedNavigationEntity(entity);
-                sideEntityController.open({
-                    entityId: clickedEntity.id,
-                    path: fullPath,
-                    collection,
-                    updateUrl: true,
-                    onClose: unselectNavigatedEntity
-                });
-            };
 
             return (
                 <EntityCollectionRowActions
@@ -315,7 +316,7 @@ export const EntityCollectionView = React.memo(
                 />
             );
 
-        }, [usedSelectionController, collection, authController, fullPath]);
+        }, [isEntitySelected, collection, authController, fullPath, selectionEnabled, toggleEntitySelection, onEditClicked, createEnabled, onCopyClicked]);
 
         return (
             <Box sx={{ overflow: "hidden", height: "100%", width: "100%" }}>
@@ -330,7 +331,12 @@ export const EntityCollectionView = React.memo(
                     selectionController={usedSelectionController}
                     highlightedEntities={selectedNavigationEntity ? [selectedNavigationEntity] : []}
                     {...collection}
-                    ActionsBuilder={({ loadedEntities, path, collection, selectionController }:CollectionActionsProps) => (
+                    ActionsBuilder={({
+                                         loadedEntities,
+                                         path,
+                                         collection,
+                                         selectionController
+                                     }: CollectionActionsProps) => (
                         <EntityCollectionViewActions
                             collection={collection}
                             exportable={exportable}

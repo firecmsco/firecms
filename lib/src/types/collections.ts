@@ -97,7 +97,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`.
      */
-    permissions?: Permissions | PermissionsBuilder<M, UserType>;
+    permissions?: Permissions | PermissionsBuilder<EntityCollection<M>, UserType, M>;
 
     /**
      * Are the entities in this collection selectable. Defaults to true

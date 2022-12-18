@@ -29,18 +29,18 @@ interface TextFieldProps<T extends string | number> extends FieldProps<T> {
  * @category Form fields
  */
 export function TextFieldBinding<T extends string | number>({
-                                                         propertyKey,
-                                                         value,
-                                                         setValue,
-                                                         error,
-                                                         showError,
-                                                         disabled,
-                                                         autoFocus,
-                                                         property,
-                                                         includeDescription,
-                                                         allowInfinity,
-                                                         shouldAlwaysRerender
-                                                     }: TextFieldProps<T>) {
+                                                                propertyKey,
+                                                                value,
+                                                                setValue,
+                                                                error,
+                                                                showError,
+                                                                disabled,
+                                                                autoFocus,
+                                                                property,
+                                                                includeDescription,
+                                                                allowInfinity,
+                                                                shouldAlwaysRerender
+                                                            }: TextFieldProps<T>) {
 
     let multiline: boolean | undefined;
     if (property.dataType === "string") {
@@ -100,7 +100,7 @@ export function TextFieldBinding<T extends string | number>({
                 }}
                 fullWidth>
 
-                <InputLabel>
+                <InputLabel sx={{ top: "4px" }}>
                     <LabelWithIcon property={property}/>
                 </InputLabel>
 
@@ -137,30 +137,30 @@ export function TextFieldBinding<T extends string | number>({
                         {showError && <FormHelperText>{error}</FormHelperText>}
 
                         {includeDescription &&
-                        <FieldDescription property={property}/>}
+                            <FieldDescription property={property}/>}
                     </Box>
 
                     {allowInfinity &&
-                    <FormControlLabel
-                        checked={valueIsInfinity}
-                        style={{ marginRight: 0 }}
-                        labelPlacement={"start"}
-                        control={
-                            <Switch
-                                size={"small"}
-                                type={"checkbox"}
-                                onChange={(evt) => {
-                                    updateValue(
-                                        evt.target.checked ? Infinity as T : undefined);
-                                }}/>
-                        }
-                        disabled={disabled}
-                        label={
-                            <Typography variant={"caption"}>
-                                Set value to Infinity
-                            </Typography>
-                        }
-                    />
+                        <FormControlLabel
+                            checked={valueIsInfinity}
+                            style={{ marginRight: 0 }}
+                            labelPlacement={"start"}
+                            control={
+                                <Switch
+                                    size={"small"}
+                                    type={"checkbox"}
+                                    onChange={(evt) => {
+                                        updateValue(
+                                            evt.target.checked ? Infinity as T : undefined);
+                                    }}/>
+                            }
+                            disabled={disabled}
+                            label={
+                                <Typography variant={"caption"}>
+                                    Set value to Infinity
+                                </Typography>
+                            }
+                        />
                     }
                 </Box>
 

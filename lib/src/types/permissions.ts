@@ -1,6 +1,6 @@
 import { User } from "./user";
 import { AuthController } from "./auth";
-import { EntityCollection } from "./collections";
+import { EntityCollection, InferCollectionType } from "./collections";
 import { Entity } from "./entities";
 
 /**
@@ -32,7 +32,7 @@ export interface Permissions {
  * Props passed to a {@link PermissionsBuilder}
  * @category Models
  */
-export interface PermissionsBuilderProps<M extends Record<string, any> = any, UserType extends User = User> {
+export interface PermissionsBuilderProps<EC extends EntityCollection = EntityCollection, UserType extends User = User, M extends any = InferCollectionType<EC>> {
     /**
      * Entity being edited, might be null in some cases, when the operation
      * refers to the collection.
@@ -54,7 +54,7 @@ export interface PermissionsBuilderProps<M extends Record<string, any> = any, Us
     /**
      * Collection these permissions apply to
      */
-    collection: EntityCollection<M>;
+    collection: EC;
 
     /**
      * Auth controller
@@ -67,10 +67,10 @@ export interface PermissionsBuilderProps<M extends Record<string, any> = any, Us
  * based on the logged user or collection.
  * @category Models
  */
-export type PermissionsBuilder<M extends Record<string, any> = any, UserType extends User = User> =
+export type PermissionsBuilder<EC extends EntityCollection = EntityCollection, UserType extends User = User, M extends any = InferCollectionType<EC>> =
     (({
           pathSegments,
           user,
           collection,
           authController
-      }: PermissionsBuilderProps<M, UserType>) => Permissions);
+      }: PermissionsBuilderProps<EC, UserType, M>) => Permissions);

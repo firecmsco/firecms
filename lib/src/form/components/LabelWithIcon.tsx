@@ -19,11 +19,9 @@ export function LabelWithIcon({
                                   small,
                                   sx
                               }: LabelWithIconProps) {
-    const required = property.validation?.required;
-
     return (
         <Box sx={{
-            display: "flex",
+            display: "inline-flex",
             paddingBottom: "2px",
             alignItems: "center",
             gap: small ? 1 : 1.5,
@@ -37,9 +35,7 @@ export function LabelWithIcon({
                             fontSize: small ? "1rem" : ".85rem",
                             transformOrigin: "left top",
                             transform: small ? "translate(8px, 0px) scale(0.75)" : undefined
-                        }}>{property.name}&nbsp;{required && "*"}</Typography>
-            {/*{required && <span aria-hidden="true"*/}
-            {/*                   className="MuiInputLabel-asterisk MuiFormLabel-asterisk">*</span>}*/}
+                        }}>{property.name}</Typography>
 
         </Box>
     );
