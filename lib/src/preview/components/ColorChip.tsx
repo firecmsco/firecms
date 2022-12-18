@@ -27,7 +27,7 @@ export function EnumValuesChip({
     const enumValuesConfig = enumToObjectEntries(enumValues);
     const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValuesConfig, enumKey) : undefined;
     const label = buildEnumLabel(enumValue);
-    const colorScheme = getColorScheme(enumValuesConfig, enumKey.toString());
+    const colorScheme = getColorScheme(enumValuesConfig, enumKey);
     return <ColorChip
         colorScheme={colorScheme}
         label={label !== undefined ? label : enumKey}
