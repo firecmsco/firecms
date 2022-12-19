@@ -12,7 +12,7 @@ import {
 import { CollectionSize } from "../../../../types";
 import { SearchBar } from "./SearchBar";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
-import { FilledMenuItem, FilledSelect } from "../../FilledSelect";
+import { FilledMenuItem, FilledSelect } from "../../fields/FilledSelect";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;

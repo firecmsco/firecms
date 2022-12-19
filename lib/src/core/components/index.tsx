@@ -26,3 +26,5 @@ export * from "./FireCMSLogo";
 export * from "./FirebaseLogo";
 
 export * from "./CenteredView";
+
+export * from "./fields/FilledSelect";

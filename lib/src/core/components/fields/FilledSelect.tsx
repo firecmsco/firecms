@@ -23,6 +23,8 @@ const StyledInput = styled(InputBase)(({ theme }) => ({
 
 export function FilledSelect<T>(props: SelectProps<T>) {
     return <Select
+        input={<StyledInput/>}
+        renderValue={(value: any) => value.toUpperCase()}
         {...props}
         MenuProps={{
             MenuListProps: {
@@ -33,8 +35,6 @@ export function FilledSelect<T>(props: SelectProps<T>) {
             },
             elevation: 1
         }}
-        input={<StyledInput/>}
-        renderValue={(value: any) => value.toUpperCase()}
     >
         {props.children}
     </Select>
