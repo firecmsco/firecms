@@ -76,7 +76,6 @@ function Home() {
 
                 <main className="flex-grow">
 
-
                     <HeroHome/>
 
                     <Separator/>

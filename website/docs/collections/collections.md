@@ -311,6 +311,13 @@ Subcollections are easily accessible from the side view while editing an entity.
 
 ### Filters
 
+:::tip
+If you need to have some filters and sorting applied by default you can use the
+`initialFilter` and `initialSort` prop.
+You can also force a filter combination to be always applied by using the
+`forceFilter` prop.
+:::
+
 Filtering is enabled by default for string, numbers, booleans, timestamps and
 arrays. A dropdown is included in every column of the collection where
 applicable.

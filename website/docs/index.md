@@ -12,6 +12,14 @@ slug: /
 FireCMS is an **open source headless CMS and admin panel** built by developers
 for developers.
 
+FireCMS is a content management system (CMS) that is built on top of the
+Firebase platform. It is a cloud-based system that allows users to manage and
+publish content to their websites or applications. With FireCMS, users can
+create and edit pages, upload and manage media files, and manage users and
+permissions. FireCMS is designed to be easy to use and can be integrated with
+other Firebase services, such as Firebase Authentication and Firebase Cloud
+Functions, to provide additional features and functionality.
+
 It generates **CRUD views** based on your configuration. It is easy to set up
 for the straight forward cases and easy to extend and customise.
 
@@ -34,8 +42,8 @@ There are two ways to build top level views in FireCMS:
 - Create **custom views** that sit in the main level of your navigation tree. In
   this case you can build your custom React component and make use of the
   internal components of the CMS as well as the provided hooks.
-  Check [Custom top level views](navigation/custom_top_level_views.mdx) for more details
-
+  Check [Custom top level views](navigation/custom_top_level_views.mdx) for more
+  details
 
 :::note Custom backend
 FireCMS was built with Firebase/Firestore as the default backend, but nothing
@@ -47,9 +55,12 @@ FireCMS works as a complete app that is in charge of creating the views that
 you define based on your collections and entity schemas. It handles
 navigation for you as well as authentication and login.
 
-However, there is a lot of room to customization, including [custom top level views](navigation/custom_top_level_views.mdx),
-[custom schema views](properties/custom_schema_views.md), and [custom fields](properties/custom_fields.md)
-for your entity properties, in case the basic use cases we include don't suit your needs.
+However, there is a lot of room to customization,
+including [custom top level views](navigation/custom_top_level_views.mdx),
+[custom schema views](properties/custom_schema_views.md),
+and [custom fields](properties/custom_fields.md)
+for your entity properties, in case the basic use cases we include don't suit
+your needs.
 
 In the simplest case, you will want to create some properties, include them
 in an entity collection, include it in a collection and include that in a CMS
@@ -57,8 +68,10 @@ instance.
 
 ## FirebaseCMSApp
 
-The entry point for setting up a FireCMS app based on Firebase is the `FirebaseCMSApp`.
-This component is in charge of building a full FireCMS instance, using Firebase Auth,
+The entry point for setting up a FireCMS app based on Firebase is
+the `FirebaseCMSApp`.
+This component is in charge of building a full FireCMS instance, using Firebase
+Auth,
 Firestore, and Firebase Storage as backend services.
 
 Internally it will create a `FireCMS` which holds the main state and
@@ -86,18 +99,20 @@ FireCMS is based on these great technologies:
 
 :::important
 You can use this library as a full application, with routing enabled.
-But if you need better customisation and to use the internal components, tweak the
+But if you need better customisation and to use the internal components, tweak
+the
 MUI theme, control the routes or replace the backend altogether
 (including auth, storage and data), you can do it starting from version 1.0.0.
 Check the details in the [Custom CMSApp](custom_cms_app.mdx) section
 :::
 
-
 ## Firebase
 
 If Firebase is your chosen backend:
+
 * You need to enable the **Firestore** database in your Firebase project.
-* If you want to have  **authentication** enabled in your CMS config, you need to enable
+* If you want to have  **authentication** enabled in your CMS config, you need
+  to enable
   the corresponding auth method in your project.
 * Also, if you are using **storage** fields in your string properties, you need
   to enable Firebase Storage.
@@ -111,7 +126,6 @@ linked to it, you can omit the `firebaseConfig` specification, since it gets
 picked up automatically.
 
 More details in [the deployment section](deployment.md)
-
 
 ## Features
 
@@ -183,7 +197,8 @@ the user. This allows for advanced cases where you trigger a Cloud
 Function after saving an entity that modifies some values, and you want to get
 real time updates.
 
-You can add your **custom logic** or validation in multiple points of the user flow.
+You can add your **custom logic** or validation in multiple points of the user
+flow.
 There are built-in hooks `onPreSave`, `onSaveSuccess`, `onSaveFailure`,
 `onPreDelete` and `onDelete`.
 
@@ -199,5 +214,6 @@ You can change the Firebase Storage implementation with your own.
 
 FireCMS has a good separation of concerns. All the logic related to
 Firebase/Firestore is abstracted away behind 3 interfaces: `DataSource`,
-`StorageSource` and `AuthController`. This means you can extend or even completely
+`StorageSource` and `AuthController`. This means you can extend or even
+completely
 replace those 3 implementations with your own.

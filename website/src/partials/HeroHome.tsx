@@ -58,7 +58,7 @@ function HeroHome({}) {
                     data-aos="zoom-y-out"
                     data-aos-delay="400"
                     className={"text-5xl md:text-8xl "}
-                    style={{ color: "#FFA000" }}>Firestore</span>
+                    style={{ color: "#FFA000" }}>Firebase</span>
 
             </h1>
 
