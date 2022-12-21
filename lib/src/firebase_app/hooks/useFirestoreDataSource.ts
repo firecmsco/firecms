@@ -48,7 +48,7 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../types/text_search";
-import { useEffect, useRef } from "react";
+import { useCallback } from "react";
 import { setDateToMidnight } from "../util/dates";
 
 /**
@@ -71,34 +71,26 @@ export function useFirestoreDataSource({
                                            textSearchController
                                        }: FirestoreDataSourceProps): DataSource {
 
-    /**
-     *
-     * @param doc
-     * @param path
-     * @param resolvedCollection
-     * @category Firestore
-     */
-    function createEntityFromCollection<M extends Record<string, any>>
-    (
-        doc: DocumentSnapshot,
+    const createEntityFromCollection = useCallback(<M extends Record<string, any>>(
+        docSnap: DocumentSnapshot,
         path: string,
         resolvedCollection: ResolvedEntityCollection<M>
-    ): Entity<M> {
+    ): Entity<M> => {
 
-        const values = firestoreToCMSModel(doc.data());
-        const data = doc.data()
+        const values = firestoreToCMSModel(docSnap.data());
+        const data = docSnap.data()
             ? resolvedCollection.properties
                 ? sanitizeData(values as EntityValues<M>, resolvedCollection.properties)
-                : doc.data()
+                : docSnap.data()
             : undefined;
         return {
-            id: doc.id,
-            path: getCMSPathFromFirestorePath(doc.ref.path),
+            id: docSnap.id,
+            path: getCMSPathFromFirestorePath(docSnap.ref.path),
             values: data
         };
-    }
+    }, []);
 
-    function buildQuery<M>(path: string, filter: FilterValues<Extract<keyof M, string>> | undefined, orderBy: string | undefined, order: "desc" | "asc" | undefined, startAfter: any[] | undefined, limit: number | undefined) {
+    const buildQuery = useCallback(<M>(path: string, filter: FilterValues<Extract<keyof M, string>> | undefined, orderBy: string | undefined, order: "desc" | "asc" | undefined, startAfter: any[] | undefined, limit: number | undefined) => {
 
         if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
@@ -136,11 +128,11 @@ export function useFirestoreDataSource({
         }
 
         return query(collectionReference, ...queryParams);
-    }
+    }, [firebaseApp]);
 
-    function getAndBuildEntity<M extends Record<string, any>>(path: string,
-                                                              entityId: string,
-                                                              collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M> | undefined> {
+    const getAndBuildEntity = useCallback(<M extends Record<string, any>>(path: string,
+                                                                          entityId: string,
+                                                                          collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M> | undefined> => {
         if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
         const firestore = getFirestore(firebaseApp);
@@ -158,11 +150,11 @@ export function useFirestoreDataSource({
                 });
                 return createEntityFromCollection(docSnapshot, path, resolvedCollection);
             });
-    }
+    }, [firebaseApp]);
 
-    async function performTextSearch<M extends Record<string, any>>(path: string,
-                                                                    searchString: string,
-                                                                    collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M>[]> {
+    const performTextSearch = useCallback(async <M extends Record<string, any>>(path: string,
+                                                                                searchString: string,
+                                                                                collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M>[]> => {
         if (!textSearchController)
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
         const ids = await textSearchController({ path, searchString });
@@ -180,7 +172,7 @@ export function useFirestoreDataSource({
             );
         return Promise.all(promises)
             .then((res) => res.filter((e) => e !== undefined && e.values) as Entity<M>[]);
-    }
+    }, [getAndBuildEntity]);
 
     return {
 
@@ -198,17 +190,17 @@ export function useFirestoreDataSource({
          * @see useCollectionFetch if you need this functionality implemented as a hook
          * @category Firestore
          */
-        fetchCollection<M extends Record<string, any>>({
-                                                           path,
-                                                           collection,
-                                                           filter,
-                                                           limit,
-                                                           startAfter,
-                                                           searchString,
-                                                           orderBy,
-                                                           order
-                                                       }: FetchCollectionProps<M>
-        ): Promise<Entity<M>[]> {
+        fetchCollection: useCallback(<M extends Record<string, any>>({
+                                                                         path,
+                                                                         collection,
+                                                                         filter,
+                                                                         limit,
+                                                                         startAfter,
+                                                                         searchString,
+                                                                         orderBy,
+                                                                         order
+                                                                     }: FetchCollectionProps<M>
+        ): Promise<Entity<M>[]> => {
 
             if (searchString) {
                 return performTextSearch(path, searchString, collection);
@@ -227,7 +219,7 @@ export function useFirestoreDataSource({
                         });
                         return createEntityFromCollection(doc, path, resolvedCollection);
                     }));
-        },
+        }, [buildQuery, performTextSearch]),
 
         /**
          * Listen to a entities in a given path
@@ -245,7 +237,7 @@ export function useFirestoreDataSource({
          * @see useCollectionFetch if you need this functionality implemented as a hook
          * @category Firestore
          */
-        listenCollection<M extends Record<string, any>>(
+        listenCollection: useCallback(<M extends Record<string, any>>(
             {
                 path,
                 collection,
@@ -258,7 +250,7 @@ export function useFirestoreDataSource({
                 onUpdate,
                 onError
             }: ListenCollectionProps<M>
-        ): () => void {
+        ): () => void => {
 
             console.debug("Listening collection", path, limit, filter, startAfter, orderBy, order);
 
@@ -288,7 +280,7 @@ export function useFirestoreDataSource({
                     error: onError
                 }
             );
-        },
+        }, [buildQuery, performTextSearch]),
 
         /**
          * Retrieve an entity given a path and a collection
@@ -297,14 +289,12 @@ export function useFirestoreDataSource({
          * @param collection
          * @category Firestore
          */
-        fetchEntity<M extends Record<string, any>>({
-                                                       path,
-                                                       entityId,
-                                                       collection
-                                                   }: FetchEntityProps<M>
-        ): Promise<Entity<M> | undefined> {
-            return getAndBuildEntity(path, entityId, collection);
-        },
+        fetchEntity: useCallback(<M extends Record<string, any>>({
+                                                                     path,
+                                                                     entityId,
+                                                                     collection
+                                                                 }: FetchEntityProps<M>
+        ): Promise<Entity<M> | undefined> => getAndBuildEntity(path, entityId, collection), [getAndBuildEntity]),
 
         /**
          *
@@ -316,14 +306,14 @@ export function useFirestoreDataSource({
          * @return Function to cancel subscription
          * @category Firestore
          */
-        listenEntity<M extends Record<string, any>>(
+        listenEntity: useCallback(<M extends Record<string, any>>(
             {
                 path,
                 entityId,
                 collection,
                 onUpdate,
                 onError
-            }: ListenEntityProps<M>): () => void {
+            }: ListenEntityProps<M>): () => void => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
             const firestore = getFirestore(firebaseApp);
@@ -342,7 +332,7 @@ export function useFirestoreDataSource({
                     error: onError
                 }
             );
-        },
+        }, [firebaseApp]),
 
         /**
          * Save entity to the specified path. Note that Firestore does not allow
@@ -355,14 +345,14 @@ export function useFirestoreDataSource({
          * @param status
          * @category Firestore
          */
-        saveEntity: async function <M extends Record<string, any>>(
+        saveEntity: useCallback(<M extends Record<string, any>>(
             {
                 path,
                 entityId,
                 values,
                 collection,
                 status
-            }: SaveEntityProps<M>): Promise<Entity<M>> {
+            }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
@@ -401,7 +391,7 @@ export function useFirestoreDataSource({
                     path,
                     values: firestoreToCMSModel(updatedFirestoreValues)
                 }));
-        },
+        }, [firebaseApp]),
 
         /**
          * Delete an entity
@@ -409,17 +399,17 @@ export function useFirestoreDataSource({
          * @param collection
          * @category Firestore
          */
-        async deleteEntity<M extends Record<string, any>>(
+        deleteEntity: useCallback(<M extends Record<string, any>>(
             {
                 entity
             }: DeleteEntityProps<M>
-        ): Promise<void> {
+        ): Promise<void> => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
             const firestore = getFirestore(firebaseApp);
 
             return deleteDoc(doc(firestore, entity.path, entity.id));
-        },
+        }, [firebaseApp]),
 
         /**
          * Check if the given property is unique in the given collection
@@ -431,13 +421,13 @@ export function useFirestoreDataSource({
          * @return `true` if there are no other fields besides the given entity
          * @category Firestore
          */
-        checkUniqueField(
+        checkUniqueField: useCallback((
             path: string,
             name: string,
             value: any,
             property: ResolvedProperty,
             entityId?: string
-        ): Promise<boolean> {
+        ): Promise<boolean> => {
 
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
@@ -458,21 +448,21 @@ export function useFirestoreDataSource({
                     snapshots.docs.filter(doc => doc.id !== entityId).length === 0
                 );
 
-        },
+        }, [firebaseApp]),
 
-        generateEntityId(path: string): string {
+        generateEntityId: useCallback((path: string): string => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
             const firestore = getFirestore(firebaseApp);
             return doc(collectionClause(firestore, path)).id;
-        },
+        }, [firebaseApp]),
 
-        async countEntities(path: string): Promise<number> {
+        countEntities: useCallback(async (path: string): Promise<number> => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
             const firestore = getFirestore(firebaseApp);
             const coll = collectionClause(firestore, path);
             const snapshot = await getCountFromServer(coll);
             return snapshot.data().count;
-        }
+        }, [firebaseApp])
 
     };
 
