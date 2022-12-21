@@ -20,7 +20,7 @@ import {
 } from "./EntityCollectionTable/internal/EntityCollectionRowActions";
 import {
     useAuthController,
-    useDataSource,
+    useDataSource, useFireCMSContext,
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
@@ -109,6 +109,7 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();
     const navigation = useNavigationContext();
+    const context = useFireCMSContext();
 
     const fullPath = navigation.resolveAliasesFrom(pathInput);
 
@@ -149,6 +150,9 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
     }, [dataSource, fullPath, selectedEntityIds, collection, selectionController]);
 
     const onClear = useCallback(() => {
+        context.onAnalyticsEvent?.("reference_selection_clear", {
+            path: fullPath
+        });
         if (!multiselect && onSingleEntitySelected) {
             onSingleEntitySelected(null);
         } else if (onMultipleEntitiesSelected) {
@@ -159,6 +163,11 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
     const toggleEntitySelection = useCallback((entity: Entity<any>) => {
         let newValue;
         const selectedEntities = selectionController.selectedEntities;
+
+        context.onAnalyticsEvent?.("reference_selection_toggle", {
+            path: fullPath,
+            entityId: entity.id
+        });
         if (selectedEntities) {
             if (selectedEntities.map((e) => e.id).indexOf(entity.id) > -1) {
                 newValue = selectedEntities.filter((item: Entity<any>) => item.id !== entity.id);
@@ -173,7 +182,12 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
     }, [onMultipleEntitiesSelected, selectionController.selectedEntities]);
 
     const onEntityClick = useCallback((entity: Entity<any>) => {
+
         if (!multiselect && onSingleEntitySelected) {
+            context.onAnalyticsEvent?.("reference_selected_single", {
+                path: fullPath,
+                entityId: entity.id
+            });
             onSingleEntitySelected(entity);
             sideDialogContext.close(false);
         } else {
@@ -181,7 +195,11 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
         }
     }, [sideDialogContext, multiselect, onSingleEntitySelected, toggleEntitySelection]);
 
-    const onNewClick = useCallback(() =>
+    // create a new entity from within the reference dialog
+    const onNewClick = useCallback(() => {
+            context.onAnalyticsEvent?.("reference_selection_new_entity", {
+                path: fullPath
+            });
             sideEntityController.open({
                 path: fullPath,
                 collection,
@@ -191,7 +209,8 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
                     onEntityClick(entity);
                 },
                 closeOnSave: true
-            }),
+            });
+        },
         [sideEntityController, fullPath, collection, entitiesDisplayedFirst, onEntityClick]);
 
     const tableRowActionsBuilder = useCallback(({

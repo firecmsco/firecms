@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { getAnalytics } from "firebase/analytics";
+import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 import { Authenticator, CMSView, FirebaseCMSApp } from "@camberi/firecms";
 
@@ -50,7 +50,7 @@ function SampleApp() {
         view: <ExampleCMSView/>
     }];
 
-    const onFirebaseInit = (config: Object) => {
+    const onFirebaseInit = (config: object) => {
         // Just calling analytics enables screen tracking
         getAnalytics();
     };
@@ -90,6 +90,11 @@ function SampleApp() {
         collections.push(testCollection);
     }
 
+    const onAnalyticsEvent = useCallback((event: string, data?: object) => {
+        const analytics = getAnalytics();
+        logEvent(analytics, event, data);
+    }, []);
+
     return <FirebaseCMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
@@ -114,6 +119,7 @@ function SampleApp() {
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}
         LoginView={CustomLoginView}
+        onAnalyticsEvent={onAnalyticsEvent}
     />;
 
 }

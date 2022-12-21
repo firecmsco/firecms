@@ -32,7 +32,7 @@ import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
     useClearRestoreValue,
-    useEntityFetch,
+    useEntityFetch, useFireCMSContext,
     useNavigationContext,
     useReferenceDialog,
     useSideEntityController
@@ -59,6 +59,8 @@ export function ReferenceFieldBinding<M extends Record<string, any>>({
                                                                          context,
                                                                          shouldAlwaysRerender
                                                                      }: FieldProps<EntityReference>) {
+
+    const fireCMSContext = useFireCMSContext();
 
     if (typeof property.path !== "string") {
         throw Error("Picked the wrong component ReferenceField");
@@ -123,12 +125,17 @@ export function ReferenceFieldBinding<M extends Record<string, any>>({
 
     const seeEntityDetails = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
-        if (entity)
+        if (entity) {
+            fireCMSContext.onAnalyticsEvent?.("entity_click_from_reference", {
+                path: entity.path,
+                entityId: entity.id
+            });
             sideEntityController.open({
                 entityId: entity.id,
                 path,
                 updateUrl: true
             });
+        }
     }, [entity, path, sideEntityController]);
 
     const buildEntityView = useCallback((collection?: EntityCollection<any>) => {

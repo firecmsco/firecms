@@ -71,17 +71,6 @@ export function MarkdownFieldBinding({
                                          shouldAlwaysRerender
                                      }: FieldProps<string>) {
 
-    const ref = useRef<HTMLDivElement>(null);
-
-    // This is a hack to make the editor resize based on content
-    useEffect(() => {
-        setTimeout(() => {
-            ref.current?.firstElementChild?.removeAttribute("height");
-            document.querySelector("#form_field_description > div > div.MarkdownField-root > div")?.removeAttribute("height");
-            console.log("ref.current", ref.current);
-        }, 1);
-    }, [ref.current]);
-
     useClearRestoreValue({
         property,
         value,
@@ -110,7 +99,7 @@ export function MarkdownFieldBinding({
                 <LabelWithIcon property={property}/>
             </FormHelperText>}
 
-            <div className={classes.root} ref={ref}>
+            <div className={classes.root}>
                 <MDEditor
                     value={typeof value === "string" ? value : ""}
                     preview={"edit"}

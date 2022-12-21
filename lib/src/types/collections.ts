@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Dispatch, SetStateAction } from "react";
 import { Entity, EntityValues } from "./entities";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
@@ -272,7 +272,7 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
  */
 export type SelectionController<M extends Record<string, any> = any> = {
     selectedEntities: Entity<M>[];
-    setSelectedEntities: (selectedEntities: Entity<M>[]) => void;
+    setSelectedEntities: Dispatch<SetStateAction<Entity<M>[]>>;
     isEntitySelected: (entity: Entity<M>) => boolean;
     toggleEntitySelection: (entity: Entity<M>) => void;
 }

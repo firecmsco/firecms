@@ -2,6 +2,7 @@ import React from "react";
 import { User as FirebaseUser } from "firebase/auth";
 
 import {
+    CMSAnalyticsEvent,
     AuthController,
     CMSView,
     CollectionActionsProps,
@@ -178,5 +179,10 @@ export interface FirebaseCMSAppProps {
      * the buttons.
      */
     LoginView?: React.ComponentType<FirebaseLoginViewProps>;
+
+    /**
+     * Callback used to get analytics events from the CMS
+     */
+    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
 
 }

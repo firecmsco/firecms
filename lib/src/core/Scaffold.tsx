@@ -14,7 +14,7 @@ import {
 } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { NavLink, useLocation } from "react-router-dom";
-import { useNavigationContext } from "../hooks";
+import { useFireCMSContext, useNavigationContext } from "../hooks";
 import { CircularProgressCenter, FireCMSLogo } from "./components";
 import { CSSObject, styled, Theme } from "@mui/material/styles";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -204,7 +204,7 @@ function StyledDrawer(props: MuiDrawerProps & {
     logo?: string,
     setDrawerOpen: (open: boolean) => void,
 }) {
-
+    const context = useFireCMSContext();
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -314,7 +314,9 @@ function StyledDrawer(props: MuiDrawerProps & {
                         open ? 3 : 2)
                 })}>
                 <Tooltip title={"Home"} placement={"right"}>
-                    <div>
+                    <div onClick={() => {
+                        context.onAnalyticsEvent?.("drawer_navigate_to_home");
+                    }}>
                         {logoComponent}
                     </div>
                 </Tooltip>

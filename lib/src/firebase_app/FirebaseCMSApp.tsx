@@ -25,6 +25,7 @@ import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./types/auth";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
 import { useBrowserTitleAndIcon } from "../hooks";
+import { useTraceUpdate } from "../core/util/useTraceUpdate";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -69,7 +70,8 @@ export function FirebaseCMSApp({
                                    HomePage,
                                    basePath,
                                    baseCollectionPath,
-                                   LoginView
+                                   LoginView,
+                                   onAnalyticsEvent
                                }: FirebaseCMSAppProps) {
 
     /**
@@ -171,9 +173,18 @@ export function FirebaseCMSApp({
                     entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
                     locale={locale}
                     basePath={basePath}
-                    baseCollectionPath={baseCollectionPath}>
+                    baseCollectionPath={baseCollectionPath}
+                    onAnalyticsEvent={onAnalyticsEvent}>
                     {({ context, loading }) => {
 
+                        // eslint-disable-next-line react-hooks/rules-of-hooks
+                        // useTraceUpdate({
+                        //     context,
+                        //     loading,
+                        //     authLoading,
+                        //     canAccessMainView,
+                        //     notAllowedError
+                        // });
                         let component;
                         if (loading || authLoading) {
                             component = <CircularProgressCenter/>;

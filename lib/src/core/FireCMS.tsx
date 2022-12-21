@@ -6,6 +6,7 @@ import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 
 import {
+    CMSAnalyticsEvent,
     AuthController,
     CMSView,
     CollectionOverrideHandler,
@@ -13,6 +14,7 @@ import {
     EntityCollection,
     EntityLinkBuilder,
     FireCMSContext,
+    FireCMSPlugin,
     Locale,
     StorageSource,
     User,
@@ -32,8 +34,8 @@ import {
 } from "./internal/useBuildSideDialogsController";
 import { CMSViewsBuilder, EntityCollectionsBuilder } from "../firebase_app";
 import { ModeController, useSnackbarController } from "../hooks";
-import { FireCMSPlugin } from "../types/plugins";
 import { CenteredView, ErrorView } from "./components";
+import { useTraceUpdate } from "./util/useTraceUpdate";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -139,22 +141,16 @@ export interface FireCMSProps<UserType extends User> {
      */
     modeController: ModeController;
 
-    // /**
-    //  * Component used to render a collection view.
-    //  * Defaults to {@link EntityCollectionView}
-    //  */
-    // EntityCollectionViewComponent?: React.ComponentType<EntityCollectionViewProps<any>>;
-    //
-    // /**
-    //  * Builder for adding extra actions to the entity list.
-    //  * This is useful for adding actions that are not related to the CRUD operations.
-    //  * You can add this general prop to add actions to all the collections, or you can
-    //  * add the {@link EntityCollection.Actions} to add actions to a specific
-    //  * collection.
-    //  */
-    // CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
-
+    /**
+     * Use plugins to modify the behaviour of the CMS.
+     * Currently, in ALPHA, and likely subject to change.
+     */
     plugins?: FireCMSPlugin[];
+
+    /**
+     * Callback used to get analytics events from the CMS
+     */
+    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
 }
 
 /**
@@ -182,7 +178,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         dataSource,
         basePath,
         baseCollectionPath,
-        plugins
+        plugins,
+        onAnalyticsEvent
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -241,7 +238,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         storageSource,
         snackbarController,
         userConfigPersistence,
-        plugins
+        plugins,
+        onAnalyticsEvent
     };
 
     return (
@@ -275,6 +273,7 @@ function FireCMSInternal({
         loading: boolean;
     }) => React.ReactNode;
 }) {
+
     let childrenResult = children({
         context,
         loading

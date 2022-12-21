@@ -23,6 +23,7 @@ import {
     CONTAINER_FULL_WIDTH,
     FORM_CONTAINER_WIDTH
 } from "./common";
+import { useFireCMSContext } from "../../hooks";
 
 const NEW_URL_HASH = "new";
 

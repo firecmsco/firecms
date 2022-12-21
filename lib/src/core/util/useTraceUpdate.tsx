@@ -1,17 +1,23 @@
 import { useEffect, useRef } from "react";
 
-export function useTraceUpdate(props:any) {
+function printChanged(props: any, prev: any, path = "", depth = 0) {
+    if (depth > 10) {
+        return;
+    }
+    if (props && prev && typeof props === "object" && typeof prev === "object") {
+        Object.keys(props).forEach((key) => {
+            printChanged(props[key], prev[key], path + "." + key, depth + 1);
+        });
+    } else if (props !== prev) {
+        console.log("Changed props:", path);
+    }
+
+}
+
+export function useTraceUpdate(props: any) {
     const prev = useRef(props);
     useEffect(() => {
-        const changedProps = Object.entries(props).reduce((ps, [k, v]) => {
-            if (prev.current[k] !== v) {
-                ps[k] = [prev.current[k], v];
-            }
-            return ps;
-        }, {});
-        if (Object.keys(changedProps).length > 0) {
-            console.log("Changed props:", changedProps);
-        }
+        printChanged(props, prev.current, "");
         prev.current = props;
     });
 }

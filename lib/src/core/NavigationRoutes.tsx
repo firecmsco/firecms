@@ -13,6 +13,8 @@ import {
     useNavigationContext
 } from "../hooks";
 import { toArray } from "./util/arrays";
+import { useTraceUpdate } from "./util/useTraceUpdate";
+import equal from "react-fast-compare"
 
 /**
  * @category Components
@@ -61,20 +63,6 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
          */
         const baseLocation = state && state.base_location ? state.base_location : location;
 
-        const buildCMSViewRoute = (path: string, cmsView: CMSView) => {
-            return <Route
-                key={"navigation_view_" + path}
-                path={path}
-                element={
-                    <BreadcrumbUpdater
-                        path={path}
-                        key={`navigation_${path}`}
-                        title={cmsView.name}>
-                        {cmsView.view}
-                    </BreadcrumbUpdater>}
-            />;
-        };
-
         const cmsViews: React.ReactNode[] = [];
         if (navigation.views) {
             navigation.views.forEach((cmsView) => {
@@ -104,16 +92,17 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                     return <Route path={urlPath + "/*"}
                                   key={`navigation_${collection.alias ?? collection.path}`}
                                   element={
-                                      <BreadcrumbUpdater
+                                      <RouteWrapper
                                           path={urlPath}
-                                          title={collection.name}>
+                                          title={collection.name}
+                                          type={"collection"}>
                                           <EntityCollectionView
                                               key={`collection_view_${collection.alias ?? collection.path}`}
                                               isSubCollection={false}
                                               fullPath={collection.alias ?? collection.path}
                                               {...collection}
                                               Actions={allActions}/>
-                                      </BreadcrumbUpdater>
+                                      </RouteWrapper>
                                   }/>;
                 }
             );
@@ -121,12 +110,13 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         const homeRoute = (
             <Route path={"/"}
                    element={
-                       <BreadcrumbUpdater
+                       <RouteWrapper
                            path={navigation.homeUrl}
                            key={"navigation_home"}
-                           title={"Home"}>
+                           title={"Home"}
+                           type={"home"}>
                            <HomePage/>
-                       </BreadcrumbUpdater>
+                       </RouteWrapper>
                    }/>
         );
 
@@ -152,9 +142,25 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         );
     });
 
-interface BreadcrumbUpdaterProps {
+const buildCMSViewRoute = (path: string, cmsView: CMSView) => {
+    return <Route
+        key={"navigation_view_" + path}
+        path={path}
+        element={
+            <RouteWrapper
+                path={path}
+                key={`navigation_${path}`}
+                title={cmsView.name}
+                type={"view"}>
+                {cmsView.view}
+            </RouteWrapper>}
+    />;
+};
+
+interface RouteWrapperProps {
     title: string;
     path: string;
+    type: "collection" | "view" | "home";
 }
 
 /**
@@ -162,25 +168,30 @@ interface BreadcrumbUpdaterProps {
  * @param children
  * @param title
  * @param path
+ * @param type
  * @constructor
  * @category Components
  */
-function BreadcrumbUpdater({
-                               children,
-                               title,
-                               path
-                           }
-                               : PropsWithChildren<BreadcrumbUpdaterProps>) {
 
-    const breadcrumbsContext = useBreadcrumbsContext();
-    React.useEffect(() => {
-        breadcrumbsContext.set({
-            breadcrumbs: [{
-                title,
-                url: path
-            }]
-        });
-    }, [path, title]);
+export const RouteWrapper = React.memo<PropsWithChildren<RouteWrapperProps>>(
+    function RouteWrapper({
+                              children,
+                              title,
+                              path,
+                              type
+                          }
+                              : PropsWithChildren<RouteWrapperProps>) {
 
-    return <>{children}</>;
-}
+        const breadcrumbsContext = useBreadcrumbsContext();
+
+        React.useEffect(() => {
+            breadcrumbsContext.set({
+                breadcrumbs: [{
+                    title,
+                    url: path
+                }]
+            });
+        }, [path, title]);
+
+        return <>{children}</>;
+    }, equal);

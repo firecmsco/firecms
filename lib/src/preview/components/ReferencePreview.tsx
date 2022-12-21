@@ -26,7 +26,7 @@ import {
     resolveCollection
 } from "../../core";
 import {
-    useEntityFetch,
+    useEntityFetch, useFireCMSContext,
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
@@ -62,6 +62,8 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                          onHover,
                                          onClick
                                      }: ReferencePreviewProps) {
+
+    const context = useFireCMSContext();
 
     const navigationContext = useNavigationContext();
     const sideEntityController = useSideEntityController();
@@ -181,6 +183,10 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                 size={"small"}
                                 onClick={(e) => {
                                     e.stopPropagation();
+                                    context.onAnalyticsEvent?.("entity_click_from_reference", {
+                                        path: entity.path,
+                                        entityId: entity.id
+                                    });
                                     sideEntityController.open({
                                         entityId: entity.id,
                                         path: entity.path,

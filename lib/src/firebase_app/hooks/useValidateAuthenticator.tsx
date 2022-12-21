@@ -35,7 +35,7 @@ export function useValidateAuthenticator({
 
     const authenticationEnabled = Boolean(authentication);
 
-    const [authLoading, setAuthLoading] = useState<boolean>(false);
+    const [authLoading, setAuthLoading] = useState<boolean>(authenticationEnabled);
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
     const [authVerified, setAuthVerified] = useState<boolean>(!authenticationEnabled);
 

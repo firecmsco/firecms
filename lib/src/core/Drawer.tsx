@@ -9,8 +9,8 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import { useNavigationContext } from "../hooks";
-import { TopNavigationResult } from "../types";
+import { useFireCMSContext, useNavigationContext } from "../hooks";
+import { CMSAnalyticsEvent, TopNavigationResult } from "../types";
 import { getIconForView } from "./util";
 import { grey } from "@mui/material/colors";
 
@@ -86,6 +86,7 @@ export function Drawer({
                                 Icon={getIconForView(view.collection ?? view.view)}
                                 tooltipsOpen={tooltipsOpen}
                                 drawerOpen={drawerOpen}
+                                type={view.type}
                                 url={view.url}
                                 name={view.name}/>)}
                 </React.Fragment>
@@ -98,6 +99,7 @@ export function Drawer({
                     key={`navigation_${index}`}
                     Icon={getIconForView(view.collection ?? view.view)}
                     tooltipsOpen={tooltipsOpen}
+                    type={view.type}
                     drawerOpen={drawerOpen}
                     url={view.url}
                     name={view.name}/>)}
@@ -111,14 +113,18 @@ export function DrawerNavigationItem({
                                          Icon,
                                          drawerOpen,
                                          tooltipsOpen,
-                                         url
+                                         url,
+                                         type
                                      }: {
     Icon: React.ComponentType<SvgIconTypeMap["props"]>,
     name: string,
     tooltipsOpen: boolean,
     drawerOpen: boolean,
-    url: string
+    url: string,
+    type: "collection" | "view"
 }) {
+
+    const context = useFireCMSContext();
 
     const icon = <Icon fontSize={"medium"}
                        sx={theme => ({ color: theme.palette.mode === "dark" ? grey[500] : grey[700] })}/>;
@@ -126,7 +132,12 @@ export function DrawerNavigationItem({
         // @ts-ignore
         button
         component={NavLink}
-        // onClick={closeDrawer}
+        onClick={() => {
+            const eventName: CMSAnalyticsEvent = type === "collection"
+                ? "drawer_navigate_to_collection"
+                : (type === "view" ? "drawer_navigate_to_view" : "unmapped_event");
+            context.onAnalyticsEvent?.(eventName, { url });
+        }}
         // @ts-ignore
         style={({ isActive }) => ({
             fontWeight: isActive ? "600" : "500",

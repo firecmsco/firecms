@@ -8,6 +8,7 @@ import React, {
 } from "react";
 import { Box, Button, Grid, Typography } from "@mui/material";
 import {
+    CMSAnalyticsEvent,
     Entity,
     EntityCollection,
     EntityStatus,
@@ -237,32 +238,34 @@ export function EntityForm<M extends Record<string, any>>({
             throw Error("New FormType added, check EntityForm");
         }
 
-        if (onEntitySave) {
-            onEntitySave({
-                collection,
-                path,
-                entityId,
-                values,
-                previousValues: entity?.values,
-                closeAfterSave: closeAfterSaveRef.current
-            })
-                .then(_ => {
-                    setInitialValues(values);
-                    formikActions.resetForm({
-                        values,
-                        submitCount: 0,
-                        touched: {}
-                    });
-                })
-                .catch(e => {
-                    console.error(e);
-                    setSavingError(e);
-                })
-                .finally(() => {
-                    closeAfterSaveRef.current = false;
-                    formikActions.setSubmitting(false);
+        onEntitySave?.({
+            collection,
+            path,
+            entityId,
+            values,
+            previousValues: entity?.values,
+            closeAfterSave: closeAfterSaveRef.current
+        })
+            .then(_ => {
+                const eventName: CMSAnalyticsEvent = status === "new"
+                    ? "new_entity_saved"
+                    : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
+                context.onAnalyticsEvent?.(eventName, { path });
+                setInitialValues(values);
+                formikActions.resetForm({
+                    values,
+                    submitCount: 0,
+                    touched: {}
                 });
-        }
+            })
+            .catch(e => {
+                console.error(e);
+                setSavingError(e);
+            })
+            .finally(() => {
+                closeAfterSaveRef.current = false;
+                formikActions.setSubmitting(false);
+            });
 
     }, [status, path, collection, entity, onEntitySave, mustSetCustomId, entityId]);
 

@@ -10,6 +10,7 @@ import { SnackbarController } from "../hooks";
 import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SideDialogsController } from "./side_dialogs_controller";
 import { FireCMSPlugin } from "./plugins";
+import { CMSAnalyticsEvent } from "./analytics";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -79,20 +80,14 @@ export interface FireCMSContext<UserType extends User = User, AuthControllerType
      */
     userConfigPersistence?: UserConfigurationPersistence;
 
-    // /**
-    //  * Component used to render a collection view.
-    //  * Defaults to {@link EntityCollectionView}
-    //  */
-    // EntityCollectionViewComponent: React.ComponentType<EntityCollectionViewProps<any>>;
-    //
-    // /**
-    //  * Builder for adding extra actions to the entity list.
-    //  * This is useful for adding actions that are not related to the CRUD operations.
-    //  * You can add this general prop to add actions to all the collections, or you can
-    //  * add the {@link EntityCollection.Actions} to add actions to a specific
-    //  * collection.
-    //  */
-    // CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
-
+    /**
+     * Use plugins to modify the behaviour of the CMS.
+     * Currently, in ALPHA, and likely subject to change.
+     */
     plugins?: FireCMSPlugin[];
+
+    /**
+     * Callback used to get analytics events from the CMS
+     */
+    onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
 }

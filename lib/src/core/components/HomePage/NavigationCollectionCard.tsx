@@ -25,6 +25,7 @@ import { getIconForView } from "../../util";
  * @param url
  * @param name
  * @param description
+ * @param onClick
  * @constructor
  */
 export function NavigationCollectionCard({
@@ -33,8 +34,9 @@ export function NavigationCollectionCard({
                                              collection,
                                              url,
                                              name,
-                                             description
-                                         }: TopNavigationEntry) {
+                                             description,
+                                             onClick
+                                         }: TopNavigationEntry & {onClick?: () => void}) {
 
     const CollectionIcon = getIconForView(collection ?? view);
 
@@ -71,6 +73,7 @@ export function NavigationCollectionCard({
                     minHeight: 248
                 }}
                 onClick={() => {
+                    onClick?.();
                     navigate(url);
                 }}
             >

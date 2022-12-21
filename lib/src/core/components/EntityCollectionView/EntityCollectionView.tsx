@@ -34,6 +34,7 @@ import { Markdown, renderSkeletonText } from "../../../preview";
 import {
     useAuthController,
     useDataSource,
+    useFireCMSContext,
     useNavigationContext,
     useSideEntityController
 } from "../../../hooks";
@@ -85,6 +86,7 @@ export const EntityCollectionView = React.memo(
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
+        const context = useFireCMSContext();
 
         const initialCollection = useMemo(() => {
             const userOverride = userConfigPersistence?.getCollectionConfig<M>(fullPath);
@@ -141,10 +143,14 @@ export const EntityCollectionView = React.memo(
             setDeleteEntityClicked(undefined);
         }, [selectedEntities]);
 
-        const onEntityClick = useCallback((entity: Entity<M>) => {
-            setSelectedNavigationEntity(entity);
+        const onEntityClick = useCallback((clickedEntity: Entity<M>) => {
+            setSelectedNavigationEntity(clickedEntity);
+            context.onAnalyticsEvent?.("edit_entity_clicked", {
+                path: clickedEntity.path,
+                entityId: clickedEntity.id
+            });
             return sideEntityController.open({
-                entityId: entity.id,
+                entityId: clickedEntity.id,
                 path: fullPath,
                 collection,
                 updateUrl: true,
@@ -152,23 +158,43 @@ export const EntityCollectionView = React.memo(
             });
         }, [fullPath, collection, sideEntityController]);
 
-        const onNewClick = useCallback(() =>
+        const onNewClick = useCallback(() => {
+            context.onAnalyticsEvent?.("new_entity_click", {
+                path: fullPath
+            });
             sideEntityController.open({
                 path: fullPath,
                 collection,
                 updateUrl: true,
                 onClose: unselectNavigatedEntity
-            }), [fullPath, collection, sideEntityController]);
+            });
+        }, [fullPath, collection, sideEntityController]);
+
+        const onSingleDeleteClick = useCallback((selectedEntity:Entity<any>) => {
+            context.onAnalyticsEvent?.("single_delete_dialog_open", {
+                path: fullPath
+            });
+            setDeleteEntityClicked(selectedEntity);
+        }, []);
 
         const onMultipleDeleteClick = useCallback(() => {
+            context.onAnalyticsEvent?.("multiple_delete_dialog_open", {
+                path: fullPath
+            });
             setDeleteEntityClicked(selectedEntities);
-        }, [selectedEntities]);
+        }, []);
 
         const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {
-            setSelectedEntities(selectedEntities.filter((e) => e.id !== entity.id));
-        }, [selectedEntities, setSelectedEntities]);
+            context.onAnalyticsEvent?.("single_entity_deleted", {
+                path: fullPath
+            });
+            setSelectedEntities((selectedEntities) => selectedEntities.filter((e) => e.id !== entity.id));
+        }, [setSelectedEntities]);
 
         const internalOnMultipleEntitiesDelete = useCallback((_path: string, entities: Entity<M>[]) => {
+            context.onAnalyticsEvent?.("multiple_entities_deleted", {
+                path: fullPath
+            });
             setSelectedEntities([]);
             setDeleteEntityClicked(undefined);
         }, [setSelectedEntities]);
@@ -269,6 +295,10 @@ export const EntityCollectionView = React.memo(
 
         const onCopyClicked = useCallback((clickedEntity: Entity<M>) => {
             setSelectedNavigationEntity(clickedEntity);
+            context.onAnalyticsEvent?.("copy_entity_click", {
+                path: clickedEntity.path,
+                entityId: clickedEntity.id
+            });
             sideEntityController.open({
                 entityId: clickedEntity.id,
                 path: fullPath,
@@ -281,6 +311,10 @@ export const EntityCollectionView = React.memo(
 
         const onEditClicked = useCallback((clickedEntity: Entity<M>) => {
             setSelectedNavigationEntity(clickedEntity);
+            context.onAnalyticsEvent?.("entity_click", {
+                path: clickedEntity.path,
+                entityId: clickedEntity.id
+            });
             sideEntityController.open({
                 entityId: clickedEntity.id,
                 path: fullPath,
@@ -312,7 +346,7 @@ export const EntityCollectionView = React.memo(
                     toggleEntitySelection={toggleEntitySelection}
                     onEditClicked={onEditClicked}
                     onCopyClicked={createEnabled ? onCopyClicked : undefined}
-                    onDeleteClicked={deleteEnabled ? setDeleteEntityClicked : undefined}
+                    onDeleteClicked={deleteEnabled ? onSingleDeleteClick : undefined}
                 />
             );
 

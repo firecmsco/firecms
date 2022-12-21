@@ -19,3 +19,4 @@ export * from "./firecms_context";
 export * from "./entity_callbacks";
 export * from "./local_config_persistence";
 export * from "./plugins";
+export * from "./analytics";

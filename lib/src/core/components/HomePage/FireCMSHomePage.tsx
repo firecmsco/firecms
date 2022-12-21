@@ -91,7 +91,11 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
                                               sm={6}
                                               lg={4}
                                               key={`nav_${entry.group}_${entry.name}`}>
-                                            <NavigationCollectionCard {...entry}/>
+                                            <NavigationCollectionCard {...entry}
+                                                                      onClick={() => {
+                                                                          const event = entry.type === "collection" ? "home_navigate_to_collection" : (entry.type === "view" ? "home_navigate_to_view" : "unmapped_event");
+                                                                          context.onAnalyticsEvent?.(event, { path: entry.path });
+                                                                      }}/>
                                         </Grid>)
                                 }
                                 {AdditionalCards && AdditionalCards.map((AdditionalCard, i) => (

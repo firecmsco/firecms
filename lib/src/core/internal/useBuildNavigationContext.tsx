@@ -63,6 +63,48 @@ export function useBuildNavigationContext<UserType extends User>({
 
     const fullCollectionPath = cleanBasePath ? `/${cleanBasePath}/${cleanBaseCollectionPath}` : `/${cleanBaseCollectionPath}`;
 
+    const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${encodePath(path)}` : `/${encodePath(path)}`,
+        [cleanBasePath]);
+
+    const buildUrlCollectionPath = useCallback((path: string): string => `${removeInitialAndTrailingSlashes(baseCollectionPath)}/${encodePath(path)}`,
+        [baseCollectionPath]);
+
+    const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {
+        // return (collection.editable && resolvePermissions(collection, authController, paths).editCollection) ?? DEFAULT_PERMISSIONS.editCollection;
+        const navigationEntries: TopNavigationEntry[] = [
+            ...(collections ?? []).map(collection => (!collection.hideFromNavigation
+                ? {
+                    url: buildUrlCollectionPath(collection.alias ?? collection.path),
+                    type: "collection",
+                    name: collection.name.trim(),
+                    path: collection.alias ?? collection.path,
+                    collection,
+                    description: collection.description?.trim(),
+                    group: collection.group?.trim()
+                }
+                : undefined))
+                .filter(Boolean) as TopNavigationEntry[],
+            ...(views ?? []).map(view =>
+                !view.hideFromNavigation
+                    ? ({
+                        url: buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
+                        name: view.name.trim(),
+                        type: "view",
+                        view,
+                        description: view.description?.trim(),
+                        group: view.group?.trim()
+                    })
+                    : undefined)
+                .filter(Boolean) as TopNavigationEntry[]
+        ];
+
+        const groups: string[] = Object.values(navigationEntries)
+            .map(e => e.group)
+            .filter(Boolean)
+            .filter((value, index, array) => array.indexOf(value) === index) as string[];
+        return { navigationEntries, groups };
+    }, [buildCMSUrlPath, buildUrlCollectionPath]);
+
     const refreshNavigation = useCallback(async () => {
 
         try {
@@ -82,7 +124,7 @@ export function useBuildNavigationContext<UserType extends User>({
 
         setNavigationLoading(false);
         setInitialised(true);
-    }, [authController, baseViews, dataSource, baseCollections, plugins]);
+    }, [baseCollections, authController.user, dataSource, plugins, baseViews, computeTopNavigation]);
 
     useEffect(() => {
         refreshNavigation();
@@ -153,53 +195,11 @@ export function useBuildNavigationContext<UserType extends User>({
         },
         []);
 
-    const buildUrlCollectionPath = useCallback((path: string): string => `${removeInitialAndTrailingSlashes(baseCollectionPath)}/${encodePath(path)}`,
-        [baseCollectionPath]);
-
-    const buildCMSUrlPath = useCallback((path: string): string => cleanBasePath ? `/${cleanBasePath}/${encodePath(path)}` : `/${encodePath(path)}`,
-        [cleanBasePath]);
-
     const resolveAliasesFrom = useCallback((path: string): string => {
         if (!collections)
             throw Error("Collections have not been initialised yet");
         return resolveCollectionPathAliases(path, collections);
     }, [collections]);
-
-    const computeTopNavigation = useCallback((collections: EntityCollection[], views: CMSView[]): TopNavigationResult => {
-        // return (collection.editable && resolvePermissions(collection, authController, paths).editCollection) ?? DEFAULT_PERMISSIONS.editCollection;
-        const navigationEntries: TopNavigationEntry[] = [
-            ...(collections ?? []).map(collection => (!collection.hideFromNavigation
-                ? {
-                    url: buildUrlCollectionPath(collection.alias ?? collection.path),
-                    type: "collection",
-                    name: collection.name.trim(),
-                    path: collection.alias ?? collection.path,
-                    collection,
-                    description: collection.description?.trim(),
-                    group: collection.group?.trim()
-                }
-                : undefined))
-                .filter(Boolean) as TopNavigationEntry[],
-            ...(views ?? []).map(view =>
-                !view.hideFromNavigation
-                    ? ({
-                        url: buildCMSUrlPath(Array.isArray(view.path) ? view.path[0] : view.path),
-                        name: view.name.trim(),
-                        type: "view",
-                        view,
-                        description: view.description?.trim(),
-                        group: view.group?.trim()
-                    })
-                    : undefined)
-                .filter(Boolean) as TopNavigationEntry[]
-        ];
-
-        const groups: string[] = Object.values(navigationEntries)
-            .map(e => e.group)
-            .filter(Boolean)
-            .filter((value, index, array) => array.indexOf(value) === index) as string[];
-        return { navigationEntries, groups };
-    }, [buildCMSUrlPath, buildUrlCollectionPath]);
 
     const state = location.state as any;
     /**
