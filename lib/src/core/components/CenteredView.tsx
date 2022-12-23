@@ -8,7 +8,7 @@ export function CenteredView({
                                  fullScreen = false
                              }: {
     children: React.ReactNode;
-    maxWidth?: number | string;
+    maxWidth?: number | string | object;
     fullScreen?: boolean
 }) {
 

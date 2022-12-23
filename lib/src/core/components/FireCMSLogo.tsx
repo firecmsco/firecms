@@ -2,12 +2,14 @@ import React from "react";
 
 export function FireCMSLogo({
                                 width,
-                                height
-                            }: { width?: string, height?: string }) {
+                                height,
+                                style
+                            }: { width?: string, height?: string, style?: React.CSSProperties }) {
     return (
         <svg
             width={width ?? "100%"} height={height ?? "100%"}
             viewBox="0 0 599 599" version="1.1"
+            style={style}
             xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <radialGradient cx="28.6213569%" cy="43.1133328%"

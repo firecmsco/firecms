@@ -2,13 +2,15 @@ import React from "react";
 
 export function FirebaseLogo({
                                  width,
-                                 height
-                             }: { width?: string, height?: string }) {
+                                 height,
+                                 style
+                             }: { width?: string, height?: string, style?: React.CSSProperties }) {
     return (
         <svg
             width={width ?? "100%"} height={height ?? "100%"}
             viewBox="0 0 256 351" version="1.1"
             xmlns="http://www.w3.org/2000/svg"
+            style={style}
             preserveAspectRatio="xMidYMid">
             <defs>
                 <path
