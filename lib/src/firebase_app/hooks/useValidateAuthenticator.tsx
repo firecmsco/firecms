@@ -55,10 +55,18 @@ export function useValidateAuthenticator({
     const checkedUserRef = useRef<FirebaseUser | undefined>();
 
     const checkAuthentication = useCallback(async () => {
-        if (authController.initialLoading || !authController.user) {
-            checkedUserRef.current = undefined;
+
+        if (authController.initialLoading) {
             return;
         }
+
+        if (!authController.user) {
+            checkedUserRef.current = undefined;
+            setAuthLoading(false);
+            setAuthVerified(false);
+            return;
+        }
+
         const delegateUser = authController.user;
         if (authentication instanceof Function && delegateUser && !equal(checkedUserRef.current, delegateUser)) {
             setAuthLoading(true);
@@ -80,10 +88,13 @@ export function useValidateAuthenticator({
             setAuthLoading(false);
             setAuthVerified(true);
             checkedUserRef.current = delegateUser;
+        } else {
+            setAuthLoading(false);
         }
 
-        if (!authController.initialLoading && !delegateUser)
+        if (!authController.initialLoading && !delegateUser) {
             setAuthVerified(true);
+        }
 
     }, [authController, authentication, dataSource, storageSource]);
 
@@ -93,7 +104,7 @@ export function useValidateAuthenticator({
 
     return {
         canAccessMainView,
-        authLoading,
+        authLoading: authenticationEnabled && authLoading,
         notAllowedError,
         authVerified
     }

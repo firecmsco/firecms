@@ -177,14 +177,6 @@ export function FirebaseCMSApp({
                     onAnalyticsEvent={onAnalyticsEvent}>
                     {({ context, loading }) => {
 
-                        // eslint-disable-next-line react-hooks/rules-of-hooks
-                        // useTraceUpdate({
-                        //     context,
-                        //     loading,
-                        //     authLoading,
-                        //     canAccessMainView,
-                        //     notAllowedError
-                        // });
                         let component;
                         if (loading || authLoading) {
                             component = <CircularProgressCenter/>;
