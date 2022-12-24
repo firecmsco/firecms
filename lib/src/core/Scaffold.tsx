@@ -344,7 +344,7 @@ function StyledDrawer(props: MuiDrawerProps & {
                 backdropFilter: "blur(8px)"
                 // borderTop: `1px solid ${theme.palette.divider}`
             })}
-                  href={"https://firecms.co?utm_source=demo_drawer"}
+                  href={"https://firecms.co?utm_source=drawer"}
                   onMouseDown={(e: React.MouseEvent) => {
                       e.preventDefault();
                   }}
@@ -360,6 +360,7 @@ function StyledDrawer(props: MuiDrawerProps & {
 
 const openedMixin = (theme: Theme): CSSObject => ({
     willChange: "width",
+    pb: "32px",
     width: DRAWER_WIDTH,
     border: "none",
     transition: theme.transitions.create("width", {

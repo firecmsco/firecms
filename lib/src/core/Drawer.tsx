@@ -10,7 +10,11 @@ import {
     Typography
 } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../hooks";
-import { CMSAnalyticsEvent, TopNavigationResult } from "../types";
+import {
+    CMSAnalyticsEvent,
+    TopNavigationEntry,
+    TopNavigationResult
+} from "../types";
 import { getIconForView } from "./util";
 import { grey } from "@mui/material/colors";
 
@@ -32,6 +36,7 @@ export function Drawer({
                            closeDrawer
                        }: DrawerProps) {
 
+    const context = useFireCMSContext();
     const navigation = useNavigationContext();
 
     const [onHover, setOnHover] = useState(false);
@@ -68,6 +73,13 @@ export function Drawer({
         </Box>;
     }, [drawerOpen]);
 
+    const onClick = (view: TopNavigationEntry) => {
+        const eventName: CMSAnalyticsEvent = view.type === "collection"
+            ? "drawer_navigate_to_collection"
+            : (view.type === "view" ? "drawer_navigate_to_view" : "unmapped_event");
+        context.onAnalyticsEvent?.(eventName, { url: view.url });
+    };
+
     return (
         <List
             onMouseEnter={setOnHoverTrue}
@@ -86,7 +98,7 @@ export function Drawer({
                                 Icon={getIconForView(view.collection ?? view.view)}
                                 tooltipsOpen={tooltipsOpen}
                                 drawerOpen={drawerOpen}
-                                type={view.type}
+                                onClick={() => onClick(view)}
                                 url={view.url}
                                 name={view.name}/>)}
                 </React.Fragment>
@@ -94,15 +106,17 @@ export function Drawer({
 
             {ungroupedNavigationViews.length > 0 && buildGroupHeader()}
 
-            {ungroupedNavigationViews.map((view, index) =>
-                <DrawerNavigationItem
+            {ungroupedNavigationViews.map((view, index) => {
+
+                return <DrawerNavigationItem
                     key={`navigation_${index}`}
                     Icon={getIconForView(view.collection ?? view.view)}
                     tooltipsOpen={tooltipsOpen}
-                    type={view.type}
+                    onClick={() => onClick(view)}
                     drawerOpen={drawerOpen}
                     url={view.url}
-                    name={view.name}/>)}
+                    name={view.name}/>;
+            })}
 
         </List>
     );
@@ -114,17 +128,15 @@ export function DrawerNavigationItem({
                                          drawerOpen,
                                          tooltipsOpen,
                                          url,
-                                         type
+                                         onClick
                                      }: {
     Icon: React.ComponentType<SvgIconTypeMap["props"]>,
     name: string,
     tooltipsOpen: boolean,
     drawerOpen: boolean,
     url: string,
-    type: "collection" | "view"
+    onClick?: () => void,
 }) {
-
-    const context = useFireCMSContext();
 
     const icon = <Icon fontSize={"medium"}
                        sx={theme => ({ color: theme.palette.mode === "dark" ? grey[500] : grey[700] })}/>;
@@ -132,12 +144,7 @@ export function DrawerNavigationItem({
         // @ts-ignore
         button
         component={NavLink}
-        onClick={() => {
-            const eventName: CMSAnalyticsEvent = type === "collection"
-                ? "drawer_navigate_to_collection"
-                : (type === "view" ? "drawer_navigate_to_view" : "unmapped_event");
-            context.onAnalyticsEvent?.(eventName, { url });
-        }}
+        onClick={onClick}
         // @ts-ignore
         style={({ isActive }) => ({
             fontWeight: isActive ? "600" : "500",

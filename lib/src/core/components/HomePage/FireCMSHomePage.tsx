@@ -72,45 +72,37 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
                 }
 
                 return (
-                    <Box mt={6} mb={6} key={`group_${index}`}>
-
-                        <Typography color={"textSecondary"}
-                                    className={"weight-500"}>
-                            {group?.toUpperCase() ?? "Ungrouped views".toUpperCase()}
-                        </Typography>
-
-                        <Divider/>
-
-                        <Box mt={2}>
-                            <Grid container spacing={2}>
-                                {navigationEntries
-                                    .filter((entry) => entry.group === group || (!entry.group && group === undefined)) // so we don't miss empty groups
-                                    .map((entry) =>
-                                        <Grid item
-                                              xs={12}
-                                              sm={6}
-                                              lg={4}
-                                              key={`nav_${entry.group}_${entry.name}`}>
-                                            <NavigationCollectionCard {...entry}
-                                                                      onClick={() => {
-                                                                          const event = entry.type === "collection" ? "home_navigate_to_collection" : (entry.type === "view" ? "home_navigate_to_view" : "unmapped_event");
-                                                                          context.onAnalyticsEvent?.(event, { path: entry.path });
-                                                                      }}/>
-                                        </Grid>)
-                                }
-                                {AdditionalCards && AdditionalCards.map((AdditionalCard, i) => (
+                    <NavigationGroup
+                        group={group}
+                        key={`plugin_section_${group}`}>
+                        <Grid container spacing={2}>
+                            {navigationEntries
+                                .filter((entry) => entry.group === group || (!entry.group && group === undefined)) // so we don't miss empty groups
+                                .map((entry) =>
                                     <Grid item
                                           xs={12}
                                           sm={6}
                                           lg={4}
-                                          key={`nav_${group}_"add_${i}`}>
-                                        <AdditionalCard {...actionProps}/>
-                                    </Grid>
-                                ))}
+                                          key={`nav_${entry.group}_${entry.name}`}>
+                                        <NavigationCollectionCard {...entry}
+                                                                  onClick={() => {
+                                                                      const event = entry.type === "collection" ? "home_navigate_to_collection" : (entry.type === "view" ? "home_navigate_to_view" : "unmapped_event");
+                                                                      context.onAnalyticsEvent?.(event, { path: entry.path });
+                                                                  }}/>
+                                    </Grid>)
+                            }
+                            {AdditionalCards && AdditionalCards.map((AdditionalCard, i) => (
+                                <Grid item
+                                      xs={12}
+                                      sm={6}
+                                      lg={4}
+                                      key={`nav_${group}_"add_${i}`}>
+                                    <AdditionalCard {...actionProps}/>
+                                </Grid>
+                            ))}
 
-                            </Grid>
-                        </Box>
-                    </Box>
+                        </Grid>
+                    </NavigationGroup>
                 );
             })}
 
