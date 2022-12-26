@@ -1,5 +1,4 @@
-import { useContext } from "react";
-import { SnackbarContext } from "../core/contexts/SnackbarContext";
+import { useSnackbar } from "notistack";
 
 /**
  * Possible snackbar types
@@ -12,10 +11,6 @@ export type SnackbarMessageType = "success" | "info" | "warning" | "error";
  * @category Hooks and utilities
  */
 export interface SnackbarController {
-    /**
-     * Is there currently an open snackbar
-     */
-    isOpen: boolean;
 
     /**
      * Close the currently open snackbar
@@ -28,7 +23,7 @@ export interface SnackbarController {
      */
     open: (props: {
         type: SnackbarMessageType;
-        title?: string;
+        // title?: string;
         message: string;
     }) => void;
 }
@@ -42,4 +37,24 @@ export interface SnackbarController {
  * @see SnackbarController
  * @category Hooks and utilities
  */
-export const useSnackbarController = () => useContext<SnackbarController>(SnackbarContext);
+export const useSnackbarController = () => {
+
+    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+
+    const open = (props: {
+        type: SnackbarMessageType;
+        // title?: string;
+        message: string;
+    }) => {
+        const { type, message } = props;
+        enqueueSnackbar(message, {
+            variant: type
+        })
+    };
+
+    return {
+        open,
+        close: closeSnackbar
+    }
+
+};

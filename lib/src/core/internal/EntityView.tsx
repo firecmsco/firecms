@@ -191,20 +191,18 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const onPreSaveHookError = useCallback((e: Error) => {
             snackbarController.open({
                 type: "error",
-                title: "Error before saving",
-                message: e?.message
+                message: "Error before saving: " + e?.message
             });
             console.error(e);
-        }, []);
+        }, [snackbarController]);
 
         const onSaveSuccessHookError = useCallback((e: Error) => {
             snackbarController.open({
                 type: "error",
-                title: `${collection.singularName ?? collection.name}: Error after saving (entity is saved)`,
-                message: e?.message
+                message: "Error after saving (entity is saved): " + e?.message
             });
             console.error(e);
-        }, []);
+        }, [snackbarController]);
 
         const onSaveSuccess = (updatedEntity: Entity<M>, closeAfterSave: boolean) => {
 
@@ -234,13 +232,12 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
             snackbarController.open({
                 type: "error",
-                title: `${collection.singularName ?? collection.name}: Error saving`,
-                message: e?.message
+                message: "Error saving: " + e?.message
             });
 
             console.error("Error saving entity", path, entityId);
             console.error(e);
-        }, []);
+        }, [entityId, path, snackbarController]);
 
         const onEntitySave = useCallback(async ({
                                                     collection,

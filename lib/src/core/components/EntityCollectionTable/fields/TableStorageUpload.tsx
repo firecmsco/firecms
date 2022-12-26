@@ -207,8 +207,7 @@ function StorageUpload({
                     for (const error of fileRejection.errors) {
                         snackbarContext.open({
                             type: "error",
-                            title: "Error uploading file",
-                            message: `File is larger than ${storage.maxSize} bytes`
+                            message: `Error uploading file: File is larger than ${storage.maxSize} bytes`
                         });
                     }
                 }

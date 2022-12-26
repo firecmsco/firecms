@@ -51,8 +51,7 @@ export function StorageUploadProgress({
                 }
                 snackbarController.open({
                     type: "error",
-                    title: "Error uploading file",
-                    message: e.message
+                    message: "Error uploading file: " + e.message
                 });
             });
     }, [entry, metadata, onFileUploadComplete, snackbarController, storage, storagePath]);
@@ -66,7 +65,7 @@ export function StorageUploadProgress({
         };
     }, [entry.file, entry.fileName, upload]);
 
-    if(simple){
+    if (simple) {
         return <Box m={1} sx={{
             width: imageSize,
             height: imageSize
