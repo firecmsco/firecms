@@ -1,6 +1,6 @@
 /**
  * This interface represents a user.
- * It has the some of the same fields as a Firebase User.
+ * It has some of the same fields as a Firebase User.
  * Note that in the default implementation, we simply take the Firebase user
  * and use it as a FireCMS user, so that means that even if they are not mapped
  * in this interface, it contains all the methods of the former, such as `delete`,
