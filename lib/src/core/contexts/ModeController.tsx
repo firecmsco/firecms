@@ -8,4 +8,6 @@ const DEFAULT_MODE_STATE: ModeController = {
     toggleMode: () => {
     }
 };
-export const ModeStateContext = React.createContext<ModeController>(DEFAULT_MODE_STATE);
+export const ModeControllerContext = React.createContext<ModeController>(DEFAULT_MODE_STATE);
+
+export const ModeControllerProvider = ModeControllerContext.Provider;

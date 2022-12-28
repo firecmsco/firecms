@@ -22,7 +22,7 @@ import {
 } from "../types";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
-import { ModeStateContext } from "./contexts/ModeController";
+import { ModeControllerContext } from "./contexts/ModeController";
 import {
     useBuildSideEntityController
 } from "./internal/useBuildSideEntityController";
@@ -33,7 +33,11 @@ import {
     useBuildSideDialogsController
 } from "./internal/useBuildSideDialogsController";
 import { CMSViewsBuilder, EntityCollectionsBuilder } from "../firebase_app";
-import { ModeController, useSnackbarController } from "../hooks";
+import {
+    ModeController,
+    useModeController,
+    useSnackbarController
+} from "../hooks";
 import { CenteredView, ErrorView } from "./components";
 import { useTraceUpdate } from "./util/useTraceUpdate";
 
@@ -136,12 +140,6 @@ export interface FireCMSProps<UserType extends User> {
     userConfigPersistence?: UserConfigurationPersistence;
 
     /**
-     * Controller in charge of switching dark or light mode in the app.
-     * {@link useBuildModeController}
-     */
-    modeController: ModeController;
-
-    /**
      * Use plugins to modify the behaviour of the CMS.
      * Currently, in ALPHA, and likely subject to change.
      */
@@ -163,11 +161,11 @@ export interface FireCMSProps<UserType extends User> {
 
 export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
+    const modeController = useModeController();
     const {
         children,
         collections,
         views,
-        modeController,
         entityLinkBuilder,
         userConfigPersistence,
         dateTimeFormat,
@@ -244,7 +242,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     return (
 
-        <ModeStateContext.Provider value={modeController}>
+        <ModeControllerContext.Provider value={modeController}>
             <FireCMSContextProvider {...context} >
                 <BreadcrumbsProvider>
                     <LocalizationProvider
@@ -257,7 +255,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                     </LocalizationProvider>
                 </BreadcrumbsProvider>
             </FireCMSContextProvider>
-        </ModeStateContext.Provider>
+        </ModeControllerContext.Provider>
     );
 }
 

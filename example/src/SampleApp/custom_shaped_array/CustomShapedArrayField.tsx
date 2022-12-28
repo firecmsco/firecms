@@ -3,10 +3,10 @@ import { Box, FormControl, FormHelperText, Paper } from "@mui/material";
 import {
     FieldDescription,
     FieldProps,
-    PropertyFieldBinding
+    PropertyFieldBinding,
+    PropertyFieldBindingProps
 } from "@camberi/firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
-
 
 export default function CustomShapedArrayField({
                                                    property,
@@ -34,7 +34,7 @@ export default function CustomShapedArrayField({
             <Paper variant={"outlined"}>
                 <Box m={2}>
                     {properties.map((property, index) => {
-                            const fieldProps = {
+                            const fieldProps: PropertyFieldBindingProps<any> = {
                                 propertyKey: `${propertyKey}[${index}]`,
                                 property,
                                 context
@@ -50,11 +50,11 @@ export default function CustomShapedArrayField({
             </Paper>
 
             {includeDescription &&
-            <FieldDescription property={property}/>}
+                <FieldDescription property={property}/>}
 
-            {showError
-            && typeof error === "string"
-            && <FormHelperText>{error}</FormHelperText>}
+            {showError &&
+                typeof error === "string" &&
+                <FormHelperText>{error}</FormHelperText>}
 
         </FormControl>
 

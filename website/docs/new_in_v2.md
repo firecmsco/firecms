@@ -32,7 +32,8 @@ this version:
   which now serves both previous purposes.
 - You can now define a specific logo for dark mode.
 - If you are using `FireCMS` instead of `FirebaseAppCMS`:
-  - You need to add an additional `SnackbarProvider` in your tree.
+  - You need to add an additional `SnackbarProvider` and a `ModeControllerProvider` 
+  in your tree.
   It was provided by `FireCMS` before, but we treat it as a separate component 
   now for better customization.
 - In the collection view, text inputs now save the values onBlur instead of

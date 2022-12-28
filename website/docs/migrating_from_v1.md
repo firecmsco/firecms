@@ -34,6 +34,11 @@ The main navigation has been revamped:
 - Every prop of type `React.ComponentType` is now spelled in uppercase for consistency.
   For example, `icon` is now `Icon`.
   Or `Actions` is now `actions`.
+- If you are using `FireCMS` instead of `FirebaseAppCMS`:
+- You need to add an additional `SnackbarProvider` and a `ModeControllerProvider`
+  in your tree.
+  It was provided by `FireCMS` before, but we treat it as a separate component
+  now for better customization.
 
 ### Collections
 

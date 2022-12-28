@@ -8,6 +8,7 @@ import {
     CircularProgressCenter,
     createCMSDefaultTheme,
     FireCMS,
+    ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
     SideDialogs,
@@ -25,7 +26,6 @@ import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./types/auth";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
 import { useBrowserTitleAndIcon } from "../hooks";
-import { useTraceUpdate } from "../core/util/useTraceUpdate";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID
@@ -160,60 +160,63 @@ export function FirebaseCMSApp({
     return (
         <BrowserRouter basename={basePath}>
             <SnackbarProvider>
-                <FireCMS
-                    collections={collections}
-                    views={views}
-                    authController={authController}
-                    userConfigPersistence={userConfigPersistence}
-                    collectionOverrideHandler={collectionOverrideHandler}
-                    modeController={modeController}
-                    dateTimeFormat={dateTimeFormat}
-                    dataSource={dataSource}
-                    storageSource={storageSource}
-                    entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                    locale={locale}
-                    basePath={basePath}
-                    baseCollectionPath={baseCollectionPath}
-                    onAnalyticsEvent={onAnalyticsEvent}>
-                    {({ context, loading }) => {
+                <ModeControllerProvider
+                    value={modeController}>
+                    <FireCMS
+                        collections={collections}
+                        views={views}
+                        authController={authController}
+                        userConfigPersistence={userConfigPersistence}
+                        collectionOverrideHandler={collectionOverrideHandler}
+                        dateTimeFormat={dateTimeFormat}
+                        dataSource={dataSource}
+                        storageSource={storageSource}
+                        entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
+                        locale={locale}
+                        basePath={basePath}
+                        baseCollectionPath={baseCollectionPath}
+                        onAnalyticsEvent={onAnalyticsEvent}>
+                        {({ context, loading }) => {
 
-                        let component;
-                        if (loading || authLoading) {
-                            component = <CircularProgressCenter/>;
-                        } else {
-                            const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
-                            if (!canAccessMainView) {
-                                const LoginViewUsed = LoginView ?? FirebaseLoginView;
-                                component = (
-                                    <LoginViewUsed
-                                        logo={usedLogo}
-                                        allowSkipLogin={allowSkipLogin}
-                                        signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
-                                        firebaseApp={firebaseApp}
-                                        authController={authController}
-                                        notAllowedError={notAllowedError}/>
-                                );
+                            let component;
+                            if (loading || authLoading) {
+                                component = <CircularProgressCenter/>;
                             } else {
-                                component = (
-                                    <Scaffold
-                                        name={name}
-                                        logo={usedLogo}
-                                        toolbarExtraWidget={toolbarExtraWidget}>
-                                        <NavigationRoutes HomePage={HomePage}/>
-                                        <SideDialogs/>
-                                    </Scaffold>
-                                );
+                                const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
+                                if (!canAccessMainView) {
+                                    const LoginViewUsed = LoginView ?? FirebaseLoginView;
+                                    component = (
+                                        <LoginViewUsed
+                                            logo={usedLogo}
+                                            allowSkipLogin={allowSkipLogin}
+                                            signInOptions={signInOptions ?? DEFAULT_SIGN_IN_OPTIONS}
+                                            firebaseApp={firebaseApp}
+                                            authController={authController}
+                                            notAllowedError={notAllowedError}/>
+                                    );
+                                } else {
+                                    component = (
+                                        <Scaffold
+                                            name={name}
+                                            logo={usedLogo}
+                                            toolbarExtraWidget={toolbarExtraWidget}>
+                                            <NavigationRoutes
+                                                HomePage={HomePage}/>
+                                            <SideDialogs/>
+                                        </Scaffold>
+                                    );
+                                }
                             }
-                        }
 
-                        return (
-                            <ThemeProvider theme={theme}>
-                                <CssBaseline/>
-                                {component}
-                            </ThemeProvider>
-                        );
-                    }}
-                </FireCMS>
+                            return (
+                                <ThemeProvider theme={theme}>
+                                    <CssBaseline/>
+                                    {component}
+                                </ThemeProvider>
+                            );
+                        }}
+                    </FireCMS>
+                </ModeControllerProvider>
             </SnackbarProvider>
         </BrowserRouter>
     );

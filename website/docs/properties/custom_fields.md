@@ -4,6 +4,11 @@ title: Custom fields
 sidebar_label: Custom fields
 ---
 
+Custom fields allow you to customize the field that it is displayed in the 
+form, related to a specific property. These fields use your own logic to 
+render the corresponding view, and are responsible for updating the underlying
+property value.
+
 If you need a custom field for your property you can do it by passing a React
 component to the `Field` prop of a property `config`. The React component must
 accept the props of type [`FieldProps`](../api/interfaces/fieldprops).

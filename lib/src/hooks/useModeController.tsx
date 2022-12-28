@@ -1,4 +1,4 @@
-import { ModeStateContext } from "../core/contexts/ModeController";
+import { ModeControllerContext } from "../core/contexts/ModeController";
 import { useContext } from "react";
 
 /**
@@ -21,4 +21,4 @@ export interface ModeController {
  * @see ModeController
  * @category Hooks and utilities
  */
-export const useModeController = () => useContext(ModeStateContext);
+export const useModeController = () => useContext(ModeControllerContext);
