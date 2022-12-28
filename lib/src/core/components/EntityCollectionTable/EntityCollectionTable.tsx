@@ -15,7 +15,7 @@ import {
     FilterValues,
     FireCMSContext,
     PropertyOrBuilder,
-    ResolvedEntityCollection,
+    ResolvedEntityCollection, ResolvedProperties,
     ResolvedProperty,
     SaveEntityProps,
     User,
@@ -646,46 +646,59 @@ function isFilterCombinationValid<M>(
         ) !== undefined;
 }
 
+function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean) {
+    const propertyKeys = Object.keys(collection.properties);
+
+    if (collection.additionalColumns) {
+        console.warn("`additionalColumns` is deprecated and will be removed in previous versions. Use `additionalFields` instead, with the same structure.");
+    }
+
+    const additionalFields = collection.additionalFields ?? collection.additionalColumns ?? [];
+    const subCollections: EntityCollection[] = collection.subcollections ?? [];
+
+    const columnIds: string[] = [
+        ...propertyKeys,
+        ...additionalFields.map((field) => field.id)
+    ];
+
+    if (includeSubcollections) {
+        const subCollectionIds = subCollections
+            .map((collection) => getSubcollectionColumnId(collection));
+        columnIds.push(...subCollectionIds.filter((subColId) => !columnIds.includes(subColId)));
+    }
+    return hideAndExpandKeys(collection, columnIds);
+}
+
 function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
     return useMemo(() => {
-
         if (collection.propertiesOrder)
-            return collection.propertiesOrder;
-
-        const displayedProperties = getCollectionPropertyIds(collection);
-
-        if (collection.additionalColumns) {
-            console.warn("`additionalColumns` is deprecated and will be removed in previous versions. Use `additionalFields` instead, with the same structure.");
-        }
-
-        const additionalFields = collection.additionalFields ?? collection.additionalColumns ?? [];
-        const subCollections: EntityCollection[] = collection.subcollections ?? [];
-
-        const columnIds: string[] = [
-            ...displayedProperties,
-            ...additionalFields.map((field) => field.id)
-        ];
-
-        if (includeSubcollections) {
-            const subCollectionIds = subCollections
-                .map((collection) => getSubcollectionColumnId(collection));
-            columnIds.push(...subCollectionIds.filter((subColId) => !columnIds.includes(subColId)));
-        }
-        return columnIds;
+            return hideAndExpandKeys(collection, collection.propertiesOrder);
+        return getDefaultColumnKeys(collection, includeSubcollections);
 
     }, [collection, includeSubcollections]);
 }
 
-function getCollectionPropertyIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>) {
-    return Object.entries<ResolvedProperty>(collection.properties)
-        .filter(([_, property]) => !property.hideFromCollection)
-        .filter(([_, property]) => !(property.disabled && typeof property.disabled === "object" && property.disabled.hidden))
-        .flatMap(([key, property]) => {
+function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, keys: string[]): string[] {
+
+    return keys.flatMap((key) => {
+        const property = collection.properties[key];
+        if (property) {
+            if (property.hideFromCollection)
+                return [null];
+            if (property.disabled && typeof property.disabled === "object" && property.disabled.hidden)
+                return [null];
             if (property.dataType === "map" && property.spreadChildren && property.properties) {
                 return Object.keys(property.properties).map(childKey => `${key}.${childKey}`);
             }
             return [key];
-        })
+        }
+        const additionalField = collection.additionalFields?.[key];
+        if (additionalField) {
+            return [key];
+
+        }
+        return [null];
+    }).filter((key) => key !== null) as string[];
 }
 
 const buildFilterableFromProperty = (property: ResolvedProperty,

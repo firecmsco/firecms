@@ -88,20 +88,10 @@ export const EntityCollectionView = React.memo(
         const userConfigPersistence = useUserConfigurationPersistence();
         const context = useFireCMSContext();
 
-        const initialCollection = useMemo(() => {
+        const collection = useMemo(() => {
             const userOverride = userConfigPersistence?.getCollectionConfig<M>(fullPath);
             return userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp;
-        }, [collectionProp]);
-
-        const [collection, setCollection] = useState(initialCollection);
-
-        // useEffect(() => {
-        //     setCollection((current) => {
-        //         if (!equal(current, collectionProp))
-        //             return collectionProp;
-        //         else return current;
-        //     });
-        // }, [collectionProp])
+        }, [collectionProp, fullPath, userConfigPersistence]);
 
         const theme = useTheme();
 
@@ -113,7 +103,7 @@ export const EntityCollectionView = React.memo(
             setTimeout(() => {
                 if (currentSelection === selectedNavigationEntity)
                     setSelectedNavigationEntity(undefined);
-            }, 2000);
+            }, 2400);
         }, [selectedNavigationEntity]);
 
         const checkInlineEditing = useCallback((entity?: Entity<any>): boolean => {
@@ -170,7 +160,7 @@ export const EntityCollectionView = React.memo(
             });
         }, [fullPath, collection, sideEntityController]);
 
-        const onSingleDeleteClick = useCallback((selectedEntity:Entity<any>) => {
+        const onSingleDeleteClick = useCallback((selectedEntity: Entity<any>) => {
             context.onAnalyticsEvent?.("single_delete_dialog_open", {
                 path: fullPath
             });
@@ -215,7 +205,6 @@ export const EntityCollectionView = React.memo(
             if (!collection.properties[key]) return;
             const property: Partial<AnyProperty> = { columnWidth: width };
             const localCollection = { properties: { [key as keyof M]: property } } as PartialEntityCollection<M>;
-            setCollection(mergeDeep(collection, localCollection));
             onCollectionModifiedForUser(fullPath, localCollection);
         }, [collection, onCollectionModifiedForUser, fullPath]);
 
