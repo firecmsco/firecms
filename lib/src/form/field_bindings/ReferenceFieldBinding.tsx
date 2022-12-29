@@ -21,7 +21,7 @@ import {
     FieldProps,
     ResolvedProperty
 } from "../../types";
-import { FieldDescription } from "../index";
+import { FieldDescription, ReadOnlyFieldBinding } from "../index";
 import {
     ErrorBoundary,
     ErrorView,
@@ -45,27 +45,35 @@ import {
  * and tables to the specified properties.
  * @category Form fields
  */
-export function ReferenceFieldBinding<M extends Record<string, any>>({
-                                                                         propertyKey,
-                                                                         value,
-                                                                         setValue,
-                                                                         error,
-                                                                         showError,
-                                                                         disabled,
-                                                                         touched,
-                                                                         autoFocus,
-                                                                         property,
-                                                                         includeDescription,
-                                                                         context,
-                                                                         shouldAlwaysRerender
-                                                                     }: FieldProps<EntityReference>) {
+export function ReferenceFieldBinding<M extends Record<string, any>>(props: FieldProps<EntityReference>) {
 
-    const fireCMSContext = useFireCMSContext();
-
-    if (typeof property.path !== "string") {
-        throw Error("Picked the wrong component ReferenceField");
+    if (typeof props.property.path !== "string") {
+        return <ReadOnlyFieldBinding {...props}/>
     }
 
+    return <ReferenceFieldBindingInternal {...props}/>;
+
+}
+
+function ReferenceFieldBindingInternal<M extends Record<string, any>>({
+                                                                          propertyKey,
+                                                                          value,
+                                                                          setValue,
+                                                                          error,
+                                                                          showError,
+                                                                          disabled,
+                                                                          touched,
+                                                                          autoFocus,
+                                                                          property,
+                                                                          includeDescription,
+                                                                          context,
+                                                                          shouldAlwaysRerender
+                                                                      }: FieldProps<EntityReference>) {
+    if (!property.path) {
+        throw new Error("Property path is required for ReferenceFieldBinding");
+    }
+
+    const fireCMSContext = useFireCMSContext();
     useClearRestoreValue({
         property,
         value,

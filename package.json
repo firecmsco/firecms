@@ -7,6 +7,7 @@
     "workspaces": [
         "lib",
         "example",
+        "example-client-project",
         "saas",
         "collection_editor",
         "user_management"

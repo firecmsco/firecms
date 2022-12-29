@@ -18,7 +18,7 @@ import {
     Locale,
     StorageSource,
     User,
-    UserConfigurationPersistence
+    UserConfigurationPersistence, FieldProps
 } from "../types";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
@@ -149,6 +149,11 @@ export interface FireCMSProps<UserType extends User> {
      * Callback used to get analytics events from the CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+
+    /**
+     * Record of custom form fields to be used in the CMS
+     */
+    customFieldConfigs?: Record<string, React.ComponentType<FieldProps>>;
 }
 
 /**
