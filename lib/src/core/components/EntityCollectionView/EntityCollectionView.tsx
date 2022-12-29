@@ -9,6 +9,7 @@ import {
     Entity,
     EntityCollection,
     PartialEntityCollection,
+    Property,
     SelectionController
 } from "../../../types";
 import {
@@ -165,21 +166,21 @@ export const EntityCollectionView = React.memo(
                 path: fullPath
             });
             setDeleteEntityClicked(selectedEntity);
-        }, []);
+        }, [context, fullPath]);
 
         const onMultipleDeleteClick = useCallback(() => {
             context.onAnalyticsEvent?.("multiple_delete_dialog_open", {
                 path: fullPath
             });
             setDeleteEntityClicked(selectedEntities);
-        }, []);
+        }, [context, fullPath, selectedEntities]);
 
         const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {
             context.onAnalyticsEvent?.("single_entity_deleted", {
                 path: fullPath
             });
             setSelectedEntities((selectedEntities) => selectedEntities.filter((e) => e.id !== entity.id));
-        }, [setSelectedEntities]);
+        }, [context, fullPath, setSelectedEntities]);
 
         const internalOnMultipleEntitiesDelete = useCallback((_path: string, entities: Entity<M>[]) => {
             context.onAnalyticsEvent?.("multiple_entities_deleted", {
@@ -203,7 +204,7 @@ export const EntityCollectionView = React.memo(
                                             }: OnColumnResizeParams) => {
             // Only for property columns
             if (!collection.properties[key]) return;
-            const property: Partial<AnyProperty> = { columnWidth: width };
+            const property: Partial<Property> = { columnWidth: width };
             const localCollection = { properties: { [key as keyof M]: property } } as PartialEntityCollection<M>;
             onCollectionModifiedForUser(fullPath, localCollection);
         }, [collection, onCollectionModifiedForUser, fullPath]);

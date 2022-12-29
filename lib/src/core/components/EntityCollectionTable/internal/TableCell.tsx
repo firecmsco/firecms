@@ -1,5 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import useMeasure from "react-use-measure";
+import { styled } from "@mui/system";
 
 import {
     Box,
@@ -66,6 +67,67 @@ function getBackgroundColor(onHover: any, selectedRow: boolean, disabled: boolea
     }
     return undefined;
 }
+
+type TableCellRootProps = {
+    width: number,
+    padding: string;
+    border: string;
+    justifyContent: string;
+    contain: string,
+    alignItems?: string,
+    backgroundColor?: string
+}
+const TableCellRoot = styled("div", {})<TableCellRootProps>(({
+                                                                 theme,
+                                                                 justifyContent,
+                                                                 padding,
+                                                                 border,
+                                                                 width,
+                                                                 alignItems,
+                                                                 backgroundColor
+                                                             }) => ({
+    width,
+    alignItems,
+    backgroundColor,
+    padding,
+    border,
+    justifyContent,
+    display: "flex",
+    position: "relative",
+    height: "100%",
+    borderRadius: "4px",
+    overflow: "hidden",
+    // contain: "content",
+    contain: "content",
+    transition: "border-color 400ms ease-in-out, background-color 600ms ease"
+}));
+
+type TableCellInnerProps = {
+    justifyContent: string;
+    scrollable: boolean;
+    faded: boolean;
+    fullHeight: boolean;
+
+}
+const TableCellInner = styled("div", {})<TableCellInnerProps>(({
+                                                                   theme,
+                                                                   justifyContent,
+                                                                   scrollable,
+                                                                   faded,
+                                                                   fullHeight
+                                                               }) => ({
+
+    display: "flex",
+    width: "100%",
+    flexDirection: "column",
+    height: fullHeight ? "100%" : undefined,
+    justifyContent,
+    overflow: scrollable ? "auto" : undefined,
+    WebkitMaskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
+    maskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
+    alignItems: faded ? "start" : (scrollable ? "start" : undefined)
+
+}));
 
 export const TableCell = React.memo<TableCellProps>(
     function TableCell({
@@ -207,7 +269,7 @@ export const TableCell = React.memo<TableCellProps>(
         const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
         return (
-            <Box
+            <TableCellRoot
                 tabIndex={selected || disabled ? undefined : 0}
                 ref={ref}
                 onFocus={onFocus}
@@ -215,54 +277,36 @@ export const TableCell = React.memo<TableCellProps>(
                 onMouseEnter={setOnHoverTrue}
                 onMouseMove={setOnHoverTrue}
                 onMouseLeave={setOnHoverFalse}
-                style={{
-                    width,
-                    // color: "#" + randomColor(),
-                    contain: "content",
-                    alignItems: disabled || !isOverflowing ? "center" : undefined,
-                    backgroundColor: getBackgroundColor(onHover, selectedRow, disabled, internalSaved ?? false, theme, isSelected ?? false)
-                }}
-                sx={{
-                    display: "flex",
-                    position: "relative",
-                    height: "100%",
-                    borderRadius: "4px",
-                    overflow: "hidden",
-                    contain: "strict",
-                    padding: p,
-                    border,
-                    justifyContent,
-                    transition: "border-color 400ms ease-in-out, background-color 600ms ease"
-                }}>
+                padding={p}
+                contain={scrollable ? "content" : "size"}
+                border={border}
+                justifyContent={justifyContent}
+                width={width}
+                alignItems={disabled || !isOverflowing ? "center" : undefined}
+                backgroundColor={getBackgroundColor(onHover, selectedRow, disabled, internalSaved ?? false, theme, isSelected ?? false)}
+            >
 
                 <ErrorBoundary>
 
                     {fullHeight && !faded && children}
 
-                    {(!fullHeight || faded) && <Box
-                        sx={{
-                            display: "flex",
-                            width: "100%",
-                            flexDirection: "column",
-                            height: fullHeight ? "100%" : undefined,
-                            justifyContent,
-                            overflow: scrollable ? "auto" : undefined,
-                            WebkitMaskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
-                            maskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
-                            alignItems: faded ? "start" : (scrollable ? "start" : undefined)
-                        }}>
+                    {(!fullHeight || faded) && <TableCellInner
+                        fullHeight={fullHeight ?? false}
+                        justifyContent={justifyContent}
+                        scrollable={scrollable ?? false}
+                        faded={faded}>
 
-                        {!fullHeight && <Box ref={measureRef}
-                                             sx={{
+                        {!fullHeight && <div ref={measureRef}
+                                             style={{
                                                  display: "flex",
                                                  width: "100%",
                                                  justifyContent,
                                                  height: fullHeight ? "100%" : undefined
                                              }}>
                             {children}
-                        </Box>}
+                        </div>}
 
-                    </Box>}
+                    </TableCellInner>}
                 </ErrorBoundary>
 
                 {disabled && onHover && disabledTooltip &&
@@ -319,6 +363,6 @@ export const TableCell = React.memo<TableCellProps>(
                     </Box>
                 }
 
-            </Box>
+            </TableCellRoot>
         );
     }, isEqual) as React.FunctionComponent<TableCellProps>;
