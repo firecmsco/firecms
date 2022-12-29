@@ -27,7 +27,7 @@ import {
 } from "../index";
 import { SvgIconProps } from "@mui/material";
 
-export type Widget = {
+export type FieldConfig = {
     name: string;
     description: string;
     dataType: DataType;
@@ -35,7 +35,7 @@ export type Widget = {
     color: string;
 }
 
-export type WidgetId =
+export type FieldConfigId =
     "text_field" |
     "multiline" |
     "markdown" |
@@ -56,7 +56,7 @@ export type WidgetId =
     "repeat" |
     "block";
 
-export const WIDGETS: Record<WidgetId, Widget> = {
+export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig> = {
     text_field: {
         name: "Text field",
         description: "Simple short text",
@@ -192,12 +192,12 @@ export const WIDGETS: Record<WidgetId, Widget> = {
     }
 };
 
-export function getWidget(property: Property | ResolvedProperty): Widget | undefined {
-    const widgetId = getWidgetId(property);
-    return widgetId ? WIDGETS[widgetId] : undefined;
+export function getFieldConfig(property: Property | ResolvedProperty): FieldConfig | undefined {
+    const fieldId = getFieldId(property);
+    return fieldId ? DEFAULT_FIELD_CONFIGS[fieldId] : undefined;
 }
 
-export function getWidgetId(property: Property | ResolvedProperty): WidgetId | undefined {
+export function getFieldId(property: Property | ResolvedProperty): FieldConfigId | undefined {
     if (property.dataType === "string") {
         if (property.multiline) {
             return "multiline";
@@ -247,6 +247,6 @@ export function getWidgetId(property: Property | ResolvedProperty): WidgetId | u
         return "reference";
     }
 
-    console.error("Unsupported widget mapping", property);
+    console.error("Unsupported field config mapping", property);
     return undefined;
 }

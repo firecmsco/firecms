@@ -8,7 +8,7 @@ import {
     PropertyOrBuilder,
     ResolvedProperty
 } from "../../types";
-import { getWidget, Widget } from "../widgets";
+import { getFieldConfig, FieldConfig } from "../form_field_configs";
 import { Box } from "@mui/material";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
@@ -32,7 +32,7 @@ export function getIdIcon(
     return <AdjustIcon color={color} fontSize={fontSize}/>;
 }
 
-function getIconForWidget(widget: Widget | undefined,
+function getIconForWidget(widget: FieldConfig | undefined,
                           color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error",
                           fontSize: "inherit" | "medium" | "large" | "small" | undefined) {
     const Icon = widget?.Icon ?? Crop75Icon;
@@ -47,13 +47,13 @@ export function getIconForProperty(
     if (isPropertyBuilder(property)) {
         return <FunctionsIcon color={color} fontSize={fontSize}/>;
     } else {
-        const widget = getWidget(property);
+        const widget = getFieldConfig(property);
         return getIconForWidget(widget, color, fontSize);
     }
 }
 
 export function getBadgeForWidget(
-    widget: Widget | undefined,
+    widget: FieldConfig | undefined,
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit"): React.ReactNode {
 
     return <Box sx={{
@@ -73,7 +73,7 @@ export function getColorForProperty(property: PropertyOrBuilder): string {
     if (isPropertyBuilder(property)) {
         return "#888";
     } else {
-        const widget = getWidget(property);
+        const widget = getFieldConfig(property);
         return widget?.color ?? "#666";
     }
 }

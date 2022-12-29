@@ -17,7 +17,7 @@ export * from "./components";
 export * from "./builders";
 export * from "./util";
 
-export * from "./widgets";
+export * from "./form_field_configs";
 
 export * from "./useBuildModeController";
 export * from "./useBuildLocalConfigurationPersistence";
