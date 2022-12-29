@@ -175,6 +175,11 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entities",
     properties: {
+        test_custom: {
+            dataType: "string",
+            name: "Test custom",
+            Field: "test_custom_field"
+        },
         map: {
             dataType: "map",
             properties: {

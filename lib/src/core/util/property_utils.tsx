@@ -4,11 +4,12 @@ import FunctionsIcon from "@mui/icons-material/Functions";
 import Crop75Icon from "@mui/icons-material/Crop75";
 
 import {
+    FieldConfig,
     PropertiesOrBuilders,
     PropertyOrBuilder,
     ResolvedProperty
 } from "../../types";
-import { getFieldConfig, FieldConfig } from "../form_field_configs";
+import { getFieldConfig } from "../form_field_configs";
 import { Box } from "@mui/material";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";

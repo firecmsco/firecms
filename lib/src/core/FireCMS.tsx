@@ -18,7 +18,7 @@ import {
     Locale,
     StorageSource,
     User,
-    UserConfigurationPersistence, FieldProps
+    UserConfigurationPersistence, FieldProps, FieldConfig
 } from "../types";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
@@ -150,10 +150,9 @@ export interface FireCMSProps<UserType extends User> {
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
 
-    /**
-     * Record of custom form fields to be used in the CMS
-     */
-    customFieldConfigs?: Record<string, React.ComponentType<FieldProps>>;
+    customizations?: {
+        customFields?: Record<string, FieldConfig>;
+    }
 }
 
 /**
@@ -182,7 +181,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         basePath,
         baseCollectionPath,
         plugins,
-        onAnalyticsEvent
+        onAnalyticsEvent,
+        customizations
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -242,7 +242,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         snackbarController,
         userConfigPersistence,
         plugins,
-        onAnalyticsEvent
+        onAnalyticsEvent,
+        customizations
     };
 
     return (

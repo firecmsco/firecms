@@ -71,7 +71,8 @@ export function FirebaseCMSApp({
                                    basePath,
                                    baseCollectionPath,
                                    LoginView,
-                                   onAnalyticsEvent
+                                   onAnalyticsEvent,
+                                   customizations
                                }: FirebaseCMSAppProps) {
 
     /**
@@ -175,7 +176,8 @@ export function FirebaseCMSApp({
                         locale={locale}
                         basePath={basePath}
                         baseCollectionPath={baseCollectionPath}
-                        onAnalyticsEvent={onAnalyticsEvent}>
+                        onAnalyticsEvent={onAnalyticsEvent}
+                        customizations={customizations}>
                         {({ context, loading }) => {
 
                             let component;

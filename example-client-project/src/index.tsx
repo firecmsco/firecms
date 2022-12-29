@@ -1,7 +1,7 @@
-import { FieldConfig } from "@camberi/firecms";
+import { FieldConfig, FireCMSCustomization } from "@camberi/firecms";
 import { CustomColorTextField } from "./fields/CustomColorTextField";
 
-export const fields: Record<string, FieldConfig> = {
+const customFields: Record<string, FieldConfig> = {
     "test-field": {
         name: "Test Field",
         description: "Test Field Description",
@@ -10,3 +10,8 @@ export const fields: Record<string, FieldConfig> = {
         Field: CustomColorTextField
     }
 }
+const config: FireCMSCustomization = {
+    customFields
+}
+
+export default config;

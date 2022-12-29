@@ -124,7 +124,7 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * You can customize it by passing custom props that are received
      * in the component.
      */
-    Field?: React.ComponentType<FieldProps<T, CustomProps>>;
+    Field?: React.ComponentType<FieldProps<T, CustomProps>> | string;
 
     /**
      * Configure how a property is displayed as a preview, e.g. in the collection

@@ -22,6 +22,7 @@ import {
     isReadOnly,
     resolveProperty
 } from "../core";
+import { useFireCMSContext } from "../hooks";
 
 /**
  * This component renders a form field creating the corresponding configuration
@@ -49,7 +50,6 @@ import {
  * @param shouldAlwaysRerender
  * @category Form custom fields
  */
-// export const PropertyFieldBinding = React.memo(
 export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = any, M extends Record<string, any> = Record<string, any>>
 ({
      propertyKey,
@@ -64,6 +64,8 @@ export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = 
      shouldAlwaysRerender
  }: PropertyFieldBindingProps<any, M>): ReactElement<PropertyFieldBindingProps<any, M>> {
 
+    const fireCMSContext = useFireCMSContext();
+
     let component: ComponentType<FieldProps> | undefined;
     const resolvedProperty: ResolvedProperty<T> | null = resolveProperty({
         propertyOrBuilder: property,
@@ -76,7 +78,18 @@ export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = 
     } else if (isReadOnly(resolvedProperty)) {
         component = ReadOnlyFieldBinding;
     } else if (resolvedProperty.Field) {
-        component = resolvedProperty.Field;
+        if (typeof resolvedProperty.Field === "function") {
+            component = resolvedProperty.Field;
+        } else if (typeof resolvedProperty.Field === "string") {
+            if (!fireCMSContext.customizations?.customFields) {
+                throw new Error("If you define a custom field as a string, you need to specify the ''customizations.customFields'' property in the FireCMS component");
+            }
+            const customField = fireCMSContext.customizations.customFields[resolvedProperty.Field];
+            if (!customField) {
+                throw new Error(`Custom field ${resolvedProperty.Field} not found in the customFields property of the FireCMS component`);
+            }
+            component = customField?.Field;
+        }
     } else {
         const fieldConfig = getFieldConfig(resolvedProperty);
         if (!fieldConfig) {
@@ -124,9 +137,6 @@ export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = 
         <div>{`Currently the field ${resolvedProperty.dataType} is not supported`}</div>
     );
 }
-
-// ,
-// equal);
 
 function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, any>>
 ({

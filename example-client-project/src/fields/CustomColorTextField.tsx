@@ -19,11 +19,12 @@ export  function CustomColorTextField({
                                              }: FieldProps<string, CustomColorTextFieldProps>) {
 
 
+    const backgroundColor = customProps?.color ?? "#efe8e8";
     return (
         <>
             <TextField required={property.validation?.required}
                        sx={{
-                           backgroundColor: customProps.color
+                           backgroundColor: backgroundColor
                        }}
                        error={!!error}
                        disabled={isSubmitting}

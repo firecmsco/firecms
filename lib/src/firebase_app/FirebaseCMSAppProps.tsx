@@ -9,7 +9,7 @@ import {
     CollectionOverrideHandler, DataSource,
     EntityCollection,
     Locale,
-    User
+    User, FieldConfig
 } from "../types";
 import { FirestoreTextSearchController } from "./types/text_search";
 import {
@@ -184,5 +184,14 @@ export interface FirebaseCMSAppProps {
      * Callback used to get analytics events from the CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+
+    customizations?: {
+        /**
+         * Record of custom form fields to be used in the CMS.
+         * You can use the key to reference the custom field in
+         * the `Field` prop of a property in a collection.
+         */
+        customFields?: Record<string, FieldConfig>;
+    }
 
 }
