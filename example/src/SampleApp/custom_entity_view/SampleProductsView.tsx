@@ -17,7 +17,7 @@ export function SampleProductsView({ entity, modifiedValues }: {
         });
     };
 
-    const values = modifiedValues ? modifiedValues : {};
+    const values = modifiedValues ?? {};
 
     return (
         <Box

@@ -1,20 +1,20 @@
 import { EnumValues } from "@camberi/firecms";
 
 export const locales: EnumValues = {
-    "es": "Spanish",
-    "de": "German",
-    "en": "English",
-    "it": "Italian",
-    "fr": {
+    es: "Spanish",
+    de: "German",
+    en: "English",
+    it: "Italian",
+    fr: {
         id: "fr",
         label: "French",
         disabled: true
     }
 };
 
-export const currencies:EnumValues = [
+export const currencies: EnumValues = [
     { id: "EUR", label: "Euros", color: "blueDark" },
-    { id: "DOL", label: "Dollars", color: "greenLight" },
+    { id: "DOL", label: "Dollars", color: "greenLight" }
 ];
 
 export const categories: EnumValues = {

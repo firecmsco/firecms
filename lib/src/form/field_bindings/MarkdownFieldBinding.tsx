@@ -452,7 +452,7 @@ const StyledFormControl = styled(FormControl)((
     border: 1px solid ${theme.palette.divider}
   }
 
-  .custom-html-style table tr:nth-child(2n) {
+  .custom-html-style table tr:nth-of-type(2n) {
     background-color: transparent
   }
 
@@ -579,7 +579,7 @@ const StyledFormControl = styled(FormControl)((
     cursor: not-allowed
   }
 
-  .rc-md-editor .rc-md-navigation .button-wrap .button:first-child {
+  .rc-md-editor .rc-md-navigation .button-wrap .button:first-of-type {
     margin-left: 0
   }
 

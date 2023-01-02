@@ -112,11 +112,10 @@ export function ExampleCMSView() {
                                 additional view
                             </Typography>
                             <Typography>
-                                {authController.user ?
-                                    <>Logged in
+                                {authController.user
+                                    ? <>Logged in
                                         as {authController.user.displayName}</>
-                                    :
-                                    <>You are not logged in</>}
+                                    : <>You are not logged in</>}
                             </Typography>
                         </Grid>
 
@@ -202,9 +201,9 @@ export function ExampleCMSView() {
                                     overflow: "hidden",
                                     my: 2
                                 }}>
-                                <EntityCollectionView  {...usersCollection}
-                                                       fullPath={"users"}
-                                                       selectionController={selectionController}/>
+                                <EntityCollectionView {...usersCollection}
+                                                      fullPath={"users"}
+                                                      selectionController={selectionController}/>
                             </Paper>
                         </Grid>
 
