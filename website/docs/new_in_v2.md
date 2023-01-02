@@ -79,6 +79,8 @@ this version:
 - Storage fields have been simplified and now the preview type can be inferred
   from the uploaded file.
 - You can now totally customise the colors of enum chips.
+- Totally new markdown field, with a preview and a full screen editor. It is
+  not using `@uiw/react-markdown-editor` anymore, which was not SSR friendly.
 - It should be easier now to create your own custom fields and to reuse the
   internal fields of the CMS, which have been renamed and are now exported as:
   - `ArrayCustomShapedFieldBinding`
