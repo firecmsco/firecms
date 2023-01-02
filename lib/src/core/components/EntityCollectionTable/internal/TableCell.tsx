@@ -86,7 +86,7 @@ const TableCellRoot = styled("div", {})<TableCellRootProps>(({
                                                                  alignItems,
                                                                  backgroundColor
                                                              }) => ({
-    width,
+    width: width ?? "100%",
     alignItems,
     backgroundColor,
     padding,

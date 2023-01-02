@@ -48,34 +48,32 @@ export function TableInput(props: {
     }, [focused, ref]);
 
     return (
-        <div style={{ display: "flex" }}>
-            <TextareaAutosize
-                ref={ref}
-                disabled={disabled}
-                style={{
-                    padding: 0,
-                    margin: 0,
-                    width: "100%",
-                    color: "unset",
-                    fontWeight: "unset",
-                    lineHeight: "unset",
-                    fontSize: "unset",
-                    fontFamily: "unset",
-                    background: "unset",
-                    border: "unset",
-                    resize: "none",
-                    outline: "none"
-                }}
-                value={internalValue ?? ""}
-                onChange={(evt) => {
-                    const newValue = evt.target.value as string;
-                    if (multiline || !newValue.endsWith("\n"))
-                        setInternalValue(newValue);
-                }}
-                onBlur={() => {
-                    doUpdate();
-                }}
-            />
-        </div>
+        <TextareaAutosize
+            ref={ref}
+            disabled={disabled}
+            style={{
+                padding: 0,
+                margin: 0,
+                width: "100%",
+                color: "unset",
+                fontWeight: "unset",
+                lineHeight: "unset",
+                fontSize: "unset",
+                fontFamily: "unset",
+                background: "unset",
+                border: "unset",
+                resize: "none",
+                outline: "none"
+            }}
+            value={internalValue ?? ""}
+            onChange={(evt) => {
+                const newValue = evt.target.value as string;
+                if (multiline || !newValue.endsWith("\n"))
+                    setInternalValue(newValue);
+            }}
+            onBlur={() => {
+                doUpdate();
+            }}
+        />
     );
 }
