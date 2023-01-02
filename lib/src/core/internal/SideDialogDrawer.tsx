@@ -59,6 +59,7 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, SideDialogDrawe
             ref={ref}
             keepMounted={true}
             disableEnforceFocus={true}
+            disableEscapeKeyDown={true}
             sx={{
                 transition: `transform 300ms ${theme.transitions.easing.easeOut}`,
                 transform: `translateX(-${(offsetPosition) * 200}px)`

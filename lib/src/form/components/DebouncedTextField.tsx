@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useDeferredValue, useEffect } from "react";
+import React, { ChangeEvent, useCallback, useDeferredValue, useEffect } from "react";
 import { TextField, TextFieldProps } from "@mui/material";
 
 export function DebouncedTextField(props: TextFieldProps) {
@@ -18,12 +18,13 @@ export function DebouncedTextField(props: TextFieldProps) {
             return;
         if (deferredValue !== props.value && previousEventRef.current && props.onChange)
             props.onChange(previousEventRef.current);
-    }, [deferredValue, props.value]);
+    }, [deferredValue, props.value, props.onChange]);
 
-    const internalOnChange = (event: ChangeEvent<any>) => {
+    const internalOnChange = useCallback((event: ChangeEvent<any>) => {
         previousEventRef.current = event;
         setInternalValue(event.target.value);
-    };
+    }, []);
+
     return <TextField {...props}
                       onChange={internalOnChange}
                       value={internalValue}/>

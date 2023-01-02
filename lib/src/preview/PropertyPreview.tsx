@@ -44,8 +44,6 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
         propertyValue: value
     });
 
-    const fieldProps: PropertyPreviewProps = { ...props };
-
     if (value === undefined || property === null) {
         content = <EmptyValue/>;
     } else if (property.Preview) {
@@ -68,22 +66,22 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
             if (stringProperty.url) {
                 if (typeof stringProperty.url === "boolean")
                     content =
-                        <UrlComponentPreview size={fieldProps.size}
+                        <UrlComponentPreview size={props.size}
                                              url={value}/>;
                 else if (typeof stringProperty.url === "string")
                     content =
-                        <UrlComponentPreview size={fieldProps.size}
+                        <UrlComponentPreview size={props.size}
                                              url={value}
                                              previewType={stringProperty.url}/>;
             } else if (stringProperty.storage) {
                 content = <StorageThumbnail
                     storeUrl={property.storage?.storeUrl ?? false}
-                    size={fieldProps.size}
+                    size={props.size}
                     storagePathOrDownloadUrl={value}/>;
             } else if (stringProperty.markdown) {
                 content = <Markdown source={value}/>;
             } else {
-                content = <StringPropertyPreview {...fieldProps}
+                content = <StringPropertyPreview {...props}
                                                  property={stringProperty}
                                                  value={value}/>;
             }
@@ -99,7 +97,7 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
 
             if (arrayProperty.of) {
                 if (Array.isArray(arrayProperty.of)) {
-                    content = <ArrayPropertyPreview {...fieldProps}
+                    content = <ArrayPropertyPreview {...props}
                                                     value={value}
                                                     property={property as ResolvedArrayProperty}/>;
                 } else if (arrayProperty.of.dataType === "map") {
@@ -112,7 +110,7 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
                         />;
                 } else if (arrayProperty.of.dataType === "reference") {
                     if (typeof arrayProperty.of.path === "string") {
-                        content = <ArrayOfReferencesPreview {...fieldProps}
+                        content = <ArrayOfReferencesPreview {...props}
                                                             value={value}
                                                             property={property as ResolvedArrayProperty}/>;
                     } else {
@@ -121,32 +119,32 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
                 } else if (arrayProperty.of.dataType === "string") {
                     if (arrayProperty.of.enumValues) {
                         content = <ArrayPropertyEnumPreview
-                            {...fieldProps}
+                            {...props}
                             value={value as string[]}
                             property={property as ResolvedArrayProperty}/>;
                     } else if (arrayProperty.of.storage) {
                         content = <ArrayOfStorageComponentsPreview
-                            {...fieldProps}
+                            {...props}
                             value={value}
                             property={property as ResolvedArrayProperty}/>;
                     } else {
                         content = <ArrayOfStringsPreview
-                            {...fieldProps}
+                            {...props}
                             value={value as string[]}
                             property={property as ResolvedArrayProperty}/>;
                     }
                 } else if (arrayProperty.of.dataType === "number" && arrayProperty.of.enumValues) {
                     content = <ArrayPropertyEnumPreview
-                        {...fieldProps}
+                        {...props}
                         value={value as string[]}
                         property={property as ResolvedArrayProperty}/>;
                 } else {
-                    content = <ArrayPropertyPreview {...fieldProps}
+                    content = <ArrayPropertyPreview {...props}
                                                     value={value}
                                                     property={property as ResolvedArrayProperty}/>;
                 }
             } else if (arrayProperty.oneOf) {
-                content = <ArrayOneOfPreview {...fieldProps}
+                content = <ArrayOneOfPreview {...props}
                                              value={value}
                                              property={property as ResolvedArrayProperty}/>;
             }
@@ -156,7 +154,7 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
     } else if (property.dataType === "map") {
         if (typeof value === "object") {
             content =
-                <MapPropertyPreview {...fieldProps}
+                <MapPropertyPreview {...props}
                                     property={property as ResolvedMapProperty}/>;
         } else {
             content = buildWrongValueType(propertyKey, property.dataType, value);
@@ -173,8 +171,8 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
                 content = <ReferencePreview
                     disabled={!property.path}
                     previewProperties={property.previewProperties}
-                    size={fieldProps.size}
-                    onClick={fieldProps.onClick}
+                    size={props.size}
+                    onClick={props.onClick}
                     reference={value as EntityReference}
                 />;
             } else {
@@ -192,7 +190,7 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
         }
     } else if (property.dataType === "number") {
         if (typeof value === "number") {
-            content = <NumberPropertyPreview {...fieldProps}
+            content = <NumberPropertyPreview {...props}
                                              value={value}
                                              property={property as ResolvedNumberProperty}/>;
         } else {
