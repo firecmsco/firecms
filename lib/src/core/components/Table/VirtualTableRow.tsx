@@ -27,7 +27,7 @@ const VirtualTableRowInner = styled("div", {})<VirtualTableRowInnerProps>(({
     cursor,
     flexDirection: "row",
     fontSize: "0.875rem",
-    borderBottom: "1px solid rgba(128, 128, 128, 0.1)",
+    borderBottom: `1px solid ${theme.palette.divider}`,
     backgroundColor: hovered
         ? (theme.palette.mode === "dark"
             ? lighten(theme.palette.background.paper, 0.01)

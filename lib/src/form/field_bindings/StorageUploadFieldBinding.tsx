@@ -30,6 +30,7 @@ import {
 } from "../../core/util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
+import { fieldBackground, fieldBackgroundHover } from "./utils";
 
 const PREFIX = "StorageUploadField";
 
@@ -55,7 +56,7 @@ const StyledBox = styled(Box)(({ theme }:
         outline: 0,
         borderTopLeftRadius: `${theme.shape.borderRadius}px`,
         borderTopRightRadius: `${theme.shape.borderRadius}px`,
-        backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
+        backgroundColor: fieldBackground(theme),
         borderBottom: theme.palette.mode === "light" ? "1px solid rgba(0, 0, 0, 0.42)" : "1px solid rgba(255, 255, 255, 0.7)",
         boxSizing: "border-box",
         transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
@@ -72,7 +73,7 @@ const StyledBox = styled(Box)(({ theme }:
 
     [`&.${classes.nonActiveDrop}`]: {
         "&:hover": {
-            backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
+            backgroundColor: fieldBackgroundHover(theme)
         }
     },
 

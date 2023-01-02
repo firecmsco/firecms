@@ -20,6 +20,7 @@ import { LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
 
 import { useClearRestoreValue } from "../../hooks";
+import { fieldBackground } from "./utils";
 
 const mdParser = new MarkdownIt();
 MdEditor.use(Plugins.AutoResize, {
@@ -52,25 +53,17 @@ export function MarkdownFieldBinding({
 
     const [internalValue, setInternalValue] = React.useState(value);
 
-    const deferredValue = useDeferredValue(internalValue);
+    const deferredInternalValue = useDeferredValue(internalValue);
+    const deferredValue = useDeferredValue(value);
 
     useEffect(() => {
         setInternalValue(value);
     }, [value]);
 
     useEffect(() => {
-        const emptyInitialValue = !value;
-        if (emptyInitialValue && !deferredValue)
-            return;
-        if (deferredValue !== value)
-            setValue(deferredValue);
-    }, [deferredValue, value, setValue]);
-
-    useClearRestoreValue({
-        property,
-        value,
-        setValue
-    });
+        if (deferredInternalValue !== deferredValue)
+            setValue(deferredInternalValue);
+    }, [deferredInternalValue, deferredValue, setValue]);
 
     return (
         <StyledFormControl
@@ -240,7 +233,7 @@ const StyledFormControl = styled(FormControl)((
     -ms-flex-direction: column;
     flex-direction: column;
             border-radius: 6px;
-            background-color: ${theme.palette.mode === "light" ? "rgb(240 240 240)" : "rgb(39 39 41)"};
+            background-color: ${fieldBackground(theme)};
   }
 
   .rc-md-editor.full {
@@ -264,8 +257,7 @@ const StyledFormControl = styled(FormControl)((
     width: 100%;
     min-height: 0;
     position: relative;
-    
-                background-color: ${theme.palette.mode === "light" ? "rgb(240 240 240)" : "rgb(39 39 41)"};
+                background-color: ${fieldBackground(theme)};
 
   }
 
@@ -315,15 +307,15 @@ const StyledFormControl = styled(FormControl)((
     min-height: 0;
     color: inherit;
     font-size: 14px;
-    line-height: 1.7;
-                  background-color: ${theme.palette.mode === "light" ? "rgb(240 240 240)" : "rgb(39 39 41)"};
+    line-height: 1.7;   
+             background-color: ${fieldBackground(theme)};
 
   }
 
   .rc-md-editor .editor-container .sec-html {
     min-height: 0;
-    min-width: 0;
-                background-color: ${theme.palette.mode === "light" ? "rgb(240 240 240)" : "rgb(39 39 41)"};
+    min-width: 0;         
+       background-color: ${fieldBackground(theme)};
 
   }
 
@@ -507,7 +499,6 @@ const StyledFormControl = styled(FormControl)((
     box-sizing: border-box;
     border-bottom: 1px solid ${theme.palette.divider};
     font-size: 16px;
-    background: ${darken(theme.palette.background.default, 0.10)};
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;

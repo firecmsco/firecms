@@ -91,7 +91,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
 }
 
 export function Images({ storagePaths }: { storagePaths: string[] }) {
-    if (!storagePaths)
+    if (!Array.isArray(storagePaths))
         return <></>;
     return <Box display="flex">
         {storagePaths.map((path, index) =>

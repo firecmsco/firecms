@@ -12,6 +12,7 @@ import { FieldProps } from "../../types";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
+import { fieldBackground, fieldBackgroundHover } from "./utils";
 
 type SwitchFieldProps = FieldProps<boolean>;
 
@@ -61,7 +62,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                         position: "relative",
                         display: "inline-flex",
                         alignItems: "center",
-                        backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)",
+                        backgroundColor: fieldBackground(theme),
                         borderTopLeftRadius: `${theme.shape.borderRadius}px`,
                         borderTopRightRadius: `${theme.shape.borderRadius}px`,
                         transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
@@ -93,7 +94,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                             pointerEvents: focus ? "none" : undefined
                         },
                         "&:hover": {
-                            backgroundColor: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
+                            backgroundColor: fieldBackgroundHover(theme)
                         }
                     })}
                     onClick={(e) => setFocus(true)}

@@ -3,11 +3,14 @@ import React, { useCallback, useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
     Box,
+    darken,
+    lighten,
     List,
     ListItem,
     SvgIconTypeMap,
     Tooltip,
-    Typography
+    Typography,
+    useTheme
 } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../hooks";
 import {
@@ -138,6 +141,7 @@ export function DrawerNavigationItem({
     onClick?: () => void,
 }) {
 
+    const theme = useTheme();
     const icon = <Icon fontSize={"medium"}
                        sx={theme => ({ color: theme.palette.mode === "dark" ? grey[500] : grey[700] })}/>;
     const listItem = <ListItem
@@ -148,14 +152,18 @@ export function DrawerNavigationItem({
         // @ts-ignore
         style={({ isActive }) => ({
             fontWeight: isActive ? "600" : "500",
-            background: isActive ? "rgba(128,128,128,0.1)" : "inherit",
+            background: isActive
+                ? (theme.palette.mode === "light"
+                    ? darken(theme.palette.background.default, 0.1)
+                    : lighten(theme.palette.background.default, 0.08))
+                : "inherit",
             minHeight: "48px",
             borderRadius: "0 16px 16px 0"
         })}
-        sx={{
+        sx={theme => ({
             pl: 3,
             alignItems: "center"
-        }}
+        })}
         to={url}
     >
 

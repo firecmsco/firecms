@@ -47,7 +47,7 @@ export function StorageItemPreview({
                             borderRadius: "9999px",
                             top: -8,
                             right: -8,
-                            zIndex: 100,
+                            zIndex: 1,
                             backgroundColor: theme.palette.background.paper
                         })}>
 
