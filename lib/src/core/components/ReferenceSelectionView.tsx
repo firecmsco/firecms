@@ -115,7 +115,6 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
 
     const dataSource = useDataSource();
 
-    // const [selectedEntities, setSelectedEntities] = useState<Entity<any>[] | undefined>();
     const [entitiesDisplayedFirst, setEntitiesDisplayedFirst] = useState<Entity<any>[]>([]);
 
     const selectionController = useSelectionController();
@@ -147,7 +146,7 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
         return () => {
             unmounted = true;
         };
-    }, [dataSource, fullPath, selectedEntityIds, collection, selectionController]);
+    }, [dataSource, fullPath, selectedEntityIds, collection, selectionController.setSelectedEntities]);
 
     const onClear = useCallback(() => {
         context.onAnalyticsEvent?.("reference_selection_clear", {
