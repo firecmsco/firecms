@@ -18,7 +18,8 @@ import {
     Locale,
     StorageSource,
     User,
-    UserConfigurationPersistence, FieldProps, FieldConfig
+    UserConfigurationPersistence,
+    FieldConfig, FireCMSCustomization
 } from "../types";
 import { FireCMSContextProvider } from "./contexts/FireCMSContext";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
@@ -39,7 +40,6 @@ import {
     useSnackbarController
 } from "../hooks";
 import { CenteredView, ErrorView } from "./components";
-import { useTraceUpdate } from "./util/useTraceUpdate";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -150,9 +150,7 @@ export interface FireCMSProps<UserType extends User> {
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
 
-    customizations?: {
-        customFields?: Record<string, FieldConfig>;
-    }
+    customizations?: FireCMSCustomization;
 }
 
 /**
