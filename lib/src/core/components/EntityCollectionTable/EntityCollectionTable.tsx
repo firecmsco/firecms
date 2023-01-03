@@ -692,11 +692,12 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
             }
             return [key];
         }
-        const additionalField = collection.additionalFields?.[key];
+
+        const additionalField = collection.additionalFields?.find(field => field.id === key);
         if (additionalField) {
             return [key];
-
         }
+
         return [null];
     }).filter((key) => key !== null) as string[];
 }
