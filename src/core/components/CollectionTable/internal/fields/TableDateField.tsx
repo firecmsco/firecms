@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Box, TextField as MuiTextField, Theme } from "@mui/material";
 import { TimestampProperty } from "../../../../../models";
-import DateTimePicker from "@mui/lab/DateTimePicker";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 
 
 import createStyles from "@mui/styles/createStyles";
@@ -46,7 +46,6 @@ export function TableDateField(props: {
 
             <DateTimePicker
                 value={internalValue ?? null}
-                clearable
                 disabled={disabled}
                 onChange={(dateValue: Date | null) => {
                     updateValue(dateValue);

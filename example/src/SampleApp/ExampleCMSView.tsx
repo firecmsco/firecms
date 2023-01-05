@@ -80,7 +80,7 @@ export function ExampleCMSView({
                 <Button
                     onClick={() => sideEntityController.open({
                         entityId: "B003WT1622",
-                        path: "/products-test",
+                        path: "/products",
                         schema: customProductSchema,
                         width: 800
                     })}

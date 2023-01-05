@@ -11,6 +11,7 @@
         "@mui/material": "link:../node_modules/@mui/material",
         "@mui/styles": "link:../node_modules/@mui/styles",
         "algoliasearch": "link:../node_modules/algoliasearch",
+        "eslint-config-react-app": "6",
         "firebase": "link:../node_modules/firebase",
         "react": "link:../node_modules/react",
         "react-dom": "link:../node_modules/react-dom",
@@ -52,6 +53,6 @@
         "@vitejs/plugin-react": "link:../node_modules/@vitejs/plugin-react",
         "typescript": "link:../node_modules/typescript",
         "vite": "link:../node_modules/vite",
-        "vite-plugin-fonts": "^0.4.0"
+        "vite-plugin-fonts": "^0.6.0"
     }
 }
