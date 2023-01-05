@@ -5,17 +5,19 @@ import { Box, Fade } from "@mui/material";
 export function CenteredView({
                                  children,
                                  maxWidth,
-                                 fullScreen = false
+                                 fullScreen = false,
+                                 fadeTimeout = 800
                              }: {
     children: React.ReactNode;
     maxWidth?: number | string | object;
-    fullScreen?: boolean
+    fullScreen?: boolean,
+    fadeTimeout?: number
 }) {
 
     return (
         <Fade
             in={true}
-            timeout={500}
+            timeout={fadeTimeout}
             mountOnEnter
             unmountOnExit>
             <Box
