@@ -5,6 +5,7 @@ import { Box, Divider } from "@mui/material";
 import { PreviewSize, PropertyPreview, PropertyPreviewProps } from "../index";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";
+import { useFireCMSContext } from "../../hooks";
 
 /**
  * @category Preview components
@@ -17,9 +18,11 @@ export function ArrayPropertyPreview({
                                          size
                                      }: PropertyPreviewProps<any[]>) {
 
+    const fireCMSContext = useFireCMSContext();
     const property = resolveArrayProperty({
         property: inputProperty,
-        propertyValue: value
+        propertyValue: value,
+        fields: fireCMSContext.fields
     });
 
     if (!property.of) {

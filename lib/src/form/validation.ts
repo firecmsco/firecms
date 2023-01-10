@@ -1,4 +1,5 @@
 import {
+    CMSType,
     EntityReference,
     GeoPoint,
     ResolvedArrayProperty,
@@ -43,7 +44,7 @@ export type CustomFieldValidator = (props: {
     parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
 }) => Promise<boolean>;
 
-interface PropertyContext<T extends any> {
+interface PropertyContext<T extends CMSType> {
     property: ResolvedProperty<T>,
     parentProperty?: ResolvedMapProperty | ResolvedArrayProperty,
     entityId: string,
@@ -68,7 +69,7 @@ export function getYupEntitySchema<M extends Record<string, any>>(
     return yup.object().shape(objectSchema);
 }
 
-export function mapPropertyToYup<T>(propertyContext: PropertyContext<T>): AnySchema<unknown> {
+export function mapPropertyToYup<T extends CMSType>(propertyContext: PropertyContext<T>): AnySchema<unknown> {
 
     const property = propertyContext.property;
     if (isPropertyBuilder(property)) {

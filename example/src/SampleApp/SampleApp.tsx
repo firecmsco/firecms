@@ -2,7 +2,12 @@ import React, { useCallback } from "react";
 
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
-import { Authenticator, CMSView, FirebaseCMSApp } from "@camberi/firecms";
+import {
+    Authenticator,
+    buildFieldConfig,
+    CMSView,
+    FirebaseCMSApp
+} from "@camberi/firecms";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
@@ -25,6 +30,7 @@ import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
+import CustomColorTextField from "./custom_field/CustomColorTextField";
 
 function SampleApp() {
 
@@ -120,6 +126,13 @@ function SampleApp() {
         toolbarExtraWidget={githubLink}
         LoginView={CustomLoginView}
         onAnalyticsEvent={onAnalyticsEvent}
+        fields={{
+            test_custom_field: {
+                name: "Test custom field",
+                dataType: "string",
+                Field: CustomColorTextField
+            }
+        }}
     />;
 
 }

@@ -19,176 +19,190 @@ import EmailIcon from "@mui/icons-material/Email";
 import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
 
 import {
+    ArrayEnumSelectBinding,
+    ArrayOfReferencesFieldBinding,
     ArrayProperty,
-    DataType,
+    BlockFieldBinding,
+    DateTimeFieldBinding,
+    FieldConfig,
+    FieldConfigId,
+    FieldProps,
     isPropertyBuilder,
+    MapFieldBinding,
+    MarkdownFieldBinding,
     Property,
-    ResolvedProperty
+    ReferenceFieldBinding,
+    RepeatFieldBinding,
+    ResolvedProperty,
+    SelectFieldBinding,
+    StorageUploadFieldBinding,
+    SwitchFieldBinding,
+    TextFieldBinding
 } from "../index";
-import { SvgIconProps } from "@mui/material";
+import {
+    ArrayCustomShapedFieldBinding
+} from "../form/field_bindings/ArrayCustomShapedFieldBinding";
 
-export type FieldConfig = {
-    name: string;
-    description: string;
-    dataType: DataType;
-    Icon: React.ComponentType<SvgIconProps>;
-    color: string;
-}
-
-export type FieldConfigId =
-    "text_field" |
-    "multiline" |
-    "markdown" |
-    "url" |
-    "email" |
-    "select" |
-    "multi_select" |
-    "number_input" |
-    "number_select" |
-    "multi_number_select" |
-    "file_upload" |
-    "multi_file_upload" |
-    "group" |
-    "reference" |
-    "multi_references" |
-    "switch" |
-    "date_time" |
-    "repeat" |
-    "block";
-
-export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig> = {
+export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
     text_field: {
         name: "Text field",
         description: "Simple short text",
         dataType: "string",
         Icon: ShortTextIcon,
-        color: "#2d7ff9"
+        color: "#2d7ff9",
+        Field: TextFieldBinding
     },
     multiline: {
         name: "Multiline",
         description: "Text with multiple lines",
         dataType: "string",
         Icon: SubjectIcon,
-        color: "#2d7ff9"
+        color: "#2d7ff9",
+        Field: TextFieldBinding
     },
     markdown: {
         name: "Markdown",
         description: "Text with advanced markdown syntax",
         dataType: "string",
         Icon: FormatQuoteIcon,
-        color: "#2d7ff9"
+        color: "#2d7ff9",
+        Field: MarkdownFieldBinding
     },
     url: {
         name: "Url",
         description: "Text with URL validation",
         dataType: "string",
         Icon: HttpIcon,
-        color: "#154fb3"
+        color: "#154fb3",
+        Field: TextFieldBinding
     },
     email: {
         name: "Email",
         description: "Text with email validation",
         dataType: "string",
         Icon: EmailIcon,
-        color: "#154fb3"
+        color: "#154fb3",
+        Field: TextFieldBinding
     },
     select: {
         name: "Select/enum",
         description: "Select one text value from within an enumeration",
         dataType: "string",
         Icon: ListIcon,
-        color: "#4223c9"
+        color: "#4223c9",
+        Field: SelectFieldBinding
     },
     multi_select: {
         name: "Multi select",
         description: "Select multiple text values from within an enumeration",
         dataType: "array",
         Icon: ListAltIcon,
-        color: "#4223c9"
+        color: "#4223c9",
+        Field: ArrayEnumSelectBinding
     },
     number_input: {
         name: "Number input",
         description: "Simple number field with validation",
         dataType: "number",
         Icon: NumbersIcon,
-        color: "#bec920"
+        color: "#bec920",
+        Field: TextFieldBinding
     },
     number_select: {
         name: "Number select",
         description: "Select a number value from within an enumeration",
         dataType: "number",
         Icon: FormatListNumberedIcon,
-        color: "#bec920"
+        color: "#bec920",
+        Field: SelectFieldBinding
     },
     multi_number_select: {
         name: "Multiple number select",
         description: "Select multiple number values from within an enumeration",
         dataType: "array",
         Icon: FormatListNumberedIcon,
-        color: "#bec920"
+        color: "#bec920",
+        Field: ArrayEnumSelectBinding
     },
     file_upload: {
         name: "File upload",
         description: "Input for uploading single files",
         dataType: "string",
         Icon: UploadFileIcon,
-        color: "#f92d9a"
+        color: "#f92d9a",
+        Field: StorageUploadFieldBinding as React.ComponentType<FieldProps<string>>
     },
     multi_file_upload: {
         name: "Multiple file upload",
         description: "Input for uploading multiple files",
         dataType: "array",
         Icon: DriveFolderUploadIcon,
-        color: "#f92d9a"
+        color: "#f92d9a",
+        Field: StorageUploadFieldBinding
     },
     reference: {
         name: "Reference",
         description: "The value refers to a different collection",
         dataType: "reference",
         Icon: LinkIcon,
-        color: "#ff0042"
+        color: "#ff0042",
+        Field: ReferenceFieldBinding
     },
     multi_references: {
         name: "Multiple references",
         description: "Multiple values that refer to a different collection",
         dataType: "array",
         Icon: AddLinkIcon,
-        color: "#ff0042"
+        color: "#ff0042",
+        Field: ArrayOfReferencesFieldBinding
     },
     switch: {
         name: "Switch",
         description: "True or false field (or yes or no, 0 or 1...)",
         dataType: "boolean",
         Icon: FlagIcon,
-        color: "#20d9d2"
+        color: "#20d9d2",
+        Field: SwitchFieldBinding
     },
     date_time: {
         name: "Date/time",
         description: "A date time select field",
         dataType: "date",
         Icon: ScheduleIcon,
-        color: "#8b46ff"
+        color: "#8b46ff",
+        Field: DateTimeFieldBinding
     },
     group: {
         name: "Group",
         description: "Group of multiple fields",
         dataType: "map",
         Icon: BallotOutlinedIcon,
-        color: "#ff9408"
+        color: "#ff9408",
+        Field: MapFieldBinding
     },
     repeat: {
         name: "Repeat/list",
         description: "A field that gets repeated multiple times (e.g. multiple text fields)",
         dataType: "array",
         Icon: RepeatIcon,
-        color: "#ff9408"
+        color: "#ff9408",
+        Field: RepeatFieldBinding
+    },
+    custom_array: {
+        name: "Custom array",
+        description: "A field that saved its value as an array of custom objects",
+        dataType: "array",
+        Icon: RepeatIcon,
+        color: "#ff9408",
+        Field: ArrayCustomShapedFieldBinding
     },
     block: {
         name: "Block",
         description: "A complex field that allows the user to compose different fields together, with a key->value format",
         dataType: "array",
         Icon: ViewStreamIcon,
-        color: "#ff9408"
+        color: "#ff9408",
+        Field: BlockFieldBinding
     }
 };
 
@@ -224,7 +238,10 @@ export function getFieldId(property: Property | ResolvedProperty): FieldConfigId
             return "group";
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
-        if (Array.isArray(of) || isPropertyBuilder(of)) {
+        const oneOf = (property as ArrayProperty).oneOf;
+        if (Array.isArray(of)) {
+            return "custom_array";
+        } else if (isPropertyBuilder(of)) {
             return "repeat";
         } else if (of?.dataType === "string" && of.enumValues) {
             return "multi_select";
@@ -234,7 +251,7 @@ export function getFieldId(property: Property | ResolvedProperty): FieldConfigId
             return "multi_file_upload";
         } else if (of?.dataType === "reference") {
             return "multi_references";
-        } else if (property.oneOf) {
+        } else if (oneOf) {
             return "block";
         } else {
             return "repeat";

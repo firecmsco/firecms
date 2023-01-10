@@ -7,6 +7,7 @@ import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";
 
 import { Theme } from "@mui/material";
+import { useFireCMSContext } from "../../hooks";
 
 const PREFIX = "ArrayOfStorageComponentsPreview";
 
@@ -41,9 +42,11 @@ export function ArrayOfStorageComponentsPreview({
                                                     size
                                                 }: PropertyPreviewProps<any[]>) {
 
+    const fireCMSContext = useFireCMSContext();
     const property = resolveArrayProperty({
         property: inputProperty,
-        propertyValue: value
+        propertyValue: value,
+        fields: fireCMSContext.fields
     });
 
     if (Array.isArray(property.of)) {

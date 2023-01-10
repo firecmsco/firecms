@@ -135,15 +135,15 @@ module.exports = {
                         },
                         {
                             label: "Privacy policy",
-                            to: "/privacy_policy"
+                            to: "/policy/privacy_policy"
                         },
                         {
                             label: "Terms and conditions",
-                            to: "/terms_conditions"
+                            to: "/policy/terms_conditions"
                         },
                         {
                             label: "Cookies policy",
-                            to: "/cookies_policy"
+                            to: "/policy/cookies_policy"
                         }
                     ]
                 },

@@ -10,7 +10,7 @@ render the corresponding view, and are responsible for updating the underlying
 property value.
 
 If you need a custom field for your property you can do it by passing a React
-component to the `Field` prop of a property `config`. The React component must
+component to the `fieldConfig` prop of a property `config`. The React component must
 accept the props of type [`FieldProps`](../api/interfaces/fieldprops).
 The bare minimum you need to implement
 is a field that displays the received `value` and uses the `setValue` callback.

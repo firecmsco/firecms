@@ -11,6 +11,7 @@ import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SideDialogsController } from "./side_dialogs_controller";
 import { FireCMSPlugin } from "./plugins";
 import { CMSAnalyticsEvent } from "./analytics";
+import { FieldConfig } from "./field_config";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -19,7 +20,7 @@ import { CMSAnalyticsEvent } from "./analytics";
  * @category Hooks and utilities
  * @see useFireCMSContext
  */
-export interface FireCMSContext<UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>> {
+export type FireCMSContext<UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>> = {
 
     /**
      * Format of the dates in the CMS.
@@ -90,4 +91,11 @@ export interface FireCMSContext<UserType extends User = User, AuthControllerType
      * Callback used to get analytics events from the CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
-}
+
+    /**
+     * Record of custom form fields to be used in the CMS.
+     * You can use the key to reference the custom field in
+     * the `fieldConfig` prop of a property in a collection.
+     */
+    fields?: Record<string, FieldConfig>;
+};

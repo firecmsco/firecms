@@ -1969,7 +1969,7 @@ __metadata:
     wait-on: ^6.0.1
     webpack: ^5.73.0
     webpack-bundle-analyzer: ^4.5.0
-    webpack-dev-server: ^4.9.3
+    webpack-dev-server: ^4.9.4
     webpack-merge: ^5.8.0
     webpackbar: ^5.0.2
   peerDependencies:
@@ -11654,7 +11654,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"webpack-dev-server@npm:^4.9.3":
+"webpack-dev-server@npm:^4.9.4":
   version: 4.10.1
   resolution: "webpack-dev-server@npm:4.10.1"
   dependencies:

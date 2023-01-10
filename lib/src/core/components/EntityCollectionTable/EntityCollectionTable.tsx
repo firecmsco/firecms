@@ -136,7 +136,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const resolvedCollection = useMemo(() => resolveCollection<M>({
             collection,
-            path: fullPath
+            path: fullPath,
+            fields: context.fields
         }), [collection, fullPath]);
 
         const [size, setSize] = React.useState<CollectionSize>(resolvedCollection.defaultSize ?? "m");
@@ -322,7 +323,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 path: fullPath,
                 propertyValue: entity.values ? getValueInPath(entity.values, propertyKey) : undefined,
                 values: entity.values,
-                entityId: entity.id
+                entityId: entity.id,
+                fields: context.fields
             });
 
             if (!property) {

@@ -51,7 +51,8 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
 
     const collection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection({
         collection: inputCollection,
-        path
+        path,
+        fields: context.fields
     }), [inputCollection, path]);
 
     const dataRef = useRef<Entity<M>[]>();

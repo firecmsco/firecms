@@ -30,7 +30,7 @@ export type ResolvedEntityCollection<M extends Record<string, any> = any> =
 /**
  * @category Entity properties
  */
-export type ResolvedProperty<T extends any = CMSType> =
+export type ResolvedProperty<T extends CMSType = CMSType> =
     T extends string ? ResolvedStringProperty :
         T extends number ? ResolvedNumberProperty :
             T extends boolean ? ResolvedBooleanProperty :

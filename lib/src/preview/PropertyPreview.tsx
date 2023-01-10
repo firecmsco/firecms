@@ -1,5 +1,6 @@
 import React, { createElement } from "react";
 import {
+    CMSType,
     EntityReference,
     ResolvedArrayProperty,
     ResolvedMapProperty,
@@ -29,19 +30,29 @@ import {
 import { ErrorView, resolveProperty } from "../core";
 
 import { PropertyPreviewProps } from "./PropertyPreviewProps";
+import { useFireCMSContext } from "../hooks";
 
 /**
  * @category Preview components
  */
-export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
+export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
+
+    const fireCMSContext = useFireCMSContext();
     let content: React.ReactNode | any;
     const {
-        property: inputProperty, propertyKey, value, size, height, width, entity
+        property: inputProperty,
+        propertyKey,
+        value,
+        size,
+        height,
+        width,
+        entity
     } = props;
 
     const property = resolveProperty({
         propertyOrBuilder: inputProperty,
-        propertyValue: value
+        propertyValue: value,
+        fields: fireCMSContext.fields
     });
 
     if (value === undefined || property === null) {
@@ -104,7 +115,7 @@ export function PropertyPreview<T extends any>(props: PropertyPreviewProps<T>) {
                     content =
                         <ArrayOfMapsPreview propertyKey={propertyKey}
                                             property={property as ResolvedArrayProperty}
-                                            value={value}
+                                            value={value as Record<string, any>[]} // This might be wrong
                                             entity={entity}
                                             size={size}
                         />;

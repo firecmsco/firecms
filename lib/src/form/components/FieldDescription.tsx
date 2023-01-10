@@ -1,5 +1,5 @@
 import React from "react";
-import { ResolvedProperty } from "../../types";
+import { CMSType, ResolvedProperty } from "../../types";
 
 import {
     Box,
@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
 
-interface FieldDescriptionPopoverProps<T extends any> {
+interface FieldDescriptionPopoverProps<T extends CMSType> {
     property: ResolvedProperty<T>,
 }
 
@@ -18,7 +18,7 @@ interface FieldDescriptionPopoverProps<T extends any> {
  * Render the field description for a property
  * @category Form custom fields
  */
-export function FieldDescription<T extends any>({ property }: FieldDescriptionPopoverProps<T>) {
+export function FieldDescription<T extends CMSType>({ property }: FieldDescriptionPopoverProps<T>) {
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     return (
 

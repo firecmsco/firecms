@@ -2,12 +2,13 @@ import React from "react";
 import { User as FirebaseUser } from "firebase/auth";
 
 import {
-    CMSAnalyticsEvent,
     AuthController,
+    CMSAnalyticsEvent,
     CMSView,
-    CollectionActionsProps,
-    CollectionOverrideHandler, DataSource,
+    CollectionOverrideHandler,
+    DataSource,
     EntityCollection,
+    FieldConfig,
     Locale,
     User
 } from "../types";
@@ -36,7 +37,7 @@ export type CMSViewsBuilder = (params: {
  * Main entry point that defines the CMS configuration
  * @category Firebase
  */
-export interface FirebaseCMSAppProps {
+export type FirebaseCMSAppProps = {
 
     /**
      * Name of the app, displayed as the main title and in the tab title
@@ -67,6 +68,13 @@ export interface FirebaseCMSAppProps {
      * navigation
      */
     views?: CMSView[] | CMSViewsBuilder;
+
+    /**
+     * Record of custom form fields to be used in the CMS.
+     * You can use the key to reference the custom field in
+     * the `fieldConfig` prop of a property in a collection.
+     */
+    fields?: Record<string, FieldConfig>;
 
     /**
      * Do the users need to log in to access the CMS.
@@ -185,4 +193,4 @@ export interface FirebaseCMSAppProps {
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
 
-}
+};

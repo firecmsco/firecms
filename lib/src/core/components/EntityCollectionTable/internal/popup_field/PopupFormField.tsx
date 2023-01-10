@@ -88,7 +88,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             collection: inputCollection,
             path,
             values: internalValue,
-            entityId: entity?.id
+            entityId: entity?.id,
+            fields: context.fields
         })
         : undefined;
 

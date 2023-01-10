@@ -71,7 +71,8 @@ export function FirebaseCMSApp({
                                    basePath,
                                    baseCollectionPath,
                                    LoginView,
-                                   onAnalyticsEvent
+                                   onAnalyticsEvent,
+                                   fields
                                }: FirebaseCMSAppProps) {
 
     /**
@@ -106,7 +107,8 @@ export function FirebaseCMSApp({
      */
     const dataSource = useFirestoreDataSource({
         firebaseApp,
-        textSearchController
+        textSearchController,
+        fields
     });
 
     /**
@@ -175,7 +177,8 @@ export function FirebaseCMSApp({
                         locale={locale}
                         basePath={basePath}
                         baseCollectionPath={baseCollectionPath}
-                        onAnalyticsEvent={onAnalyticsEvent}>
+                        onAnalyticsEvent={onAnalyticsEvent}
+                        fields={fields}>
                         {({ context, loading }) => {
 
                             let component;

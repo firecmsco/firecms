@@ -28,7 +28,7 @@ import { useColorMode } from '@docusaurus/theme-common';
 import SyntaxHighlighter from "react-syntax-highlighter";
 import {
     atomOneLight,
-    vs2015
+    dracula
 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 function Features() {
@@ -120,7 +120,7 @@ function Features() {
                                     className={"border border-solid dark:border-gray-800 border-gray-200"}
                                     language={"typescript"}
                                     showLineNumbers={false}
-                                    style={isDarkTheme ? vs2015 : atomOneLight}
+                                    style={isDarkTheme ? dracula : atomOneLight}
                                 >
                                     {
                                         `const price = buildProperty({
@@ -239,7 +239,7 @@ function Features() {
                                         className={"border border-solid dark:border-gray-800 border-gray-200"}
                                         language={"typescript"}
                                         showLineNumbers={false}
-                                        style={isDarkTheme ? vs2015 : atomOneLight}
+                                        style={isDarkTheme ? dracula : atomOneLight}
                                     >
                                         {`const productCollection = buildCollection({
     name: "Product",

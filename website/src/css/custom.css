@@ -130,8 +130,12 @@
     --docsearch-logo-color: #0070f4;
 }
 
-[data-theme='dark'] {
+html[data-theme='dark'] {
     --ifm-custom-navbar-background-color: rgba(38, 38, 38, 0.33);
+    --ifm-background-color: #131324;
+    --ifm-background-surface-color: #191930;
+    --ifm-color-emphasis-100: #191930;
+    /*--ifm-background-surface-color: #242526;*/
 }
 
 .navbar.navbar--fixed-top {

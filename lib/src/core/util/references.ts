@@ -1,8 +1,10 @@
-import { EntityCollection } from "../../types";
+import { EntityCollection, FieldConfig, FireCMSContext } from "../../types";
 import { isReferenceProperty } from "./property_utils";
 import { isPropertyBuilder } from "./entities";
+import { useFireCMSContext } from "../../hooks";
 
 export function getReferencePreviewKeys(targetCollection: EntityCollection<any>,
+                                        fields?: Record<string, FieldConfig>,
                                         previewProperties?: string[],
                                         limit = 3) {
     const allProperties = Object.keys(targetCollection.properties);
@@ -13,7 +15,7 @@ export function getReferencePreviewKeys(targetCollection: EntityCollection<any>,
         listProperties = allProperties;
         return listProperties.filter(key => {
             const propertyOrBuilder = targetCollection.properties[key];
-            return propertyOrBuilder && !isPropertyBuilder(propertyOrBuilder) && !isReferenceProperty(propertyOrBuilder);
+            return propertyOrBuilder && !isPropertyBuilder(propertyOrBuilder) && !isReferenceProperty(propertyOrBuilder, fields);
         }).slice(0, limit);
     }
 }

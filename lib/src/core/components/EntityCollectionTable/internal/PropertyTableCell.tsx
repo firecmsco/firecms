@@ -7,6 +7,7 @@ import React, {
 } from "react";
 import equal from "react-fast-compare"
 import {
+    CMSType,
     Entity,
     EntityCollection,
     EntityReference,
@@ -39,7 +40,7 @@ import {
 import { TableCell } from "./TableCell";
 import { getRowHeight } from "../../Table/common";
 
-export interface PropertyTableCellProps<T extends any, M extends Record<string, any>> {
+export interface PropertyTableCellProps<T extends CMSType, M extends Record<string, any>> {
     propertyKey: string;
     columnIndex: number;
     align: "right" | "left" | "center";
@@ -70,7 +71,7 @@ function isStorageProperty<T>(property: ResolvedProperty) {
 }
 
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
-    function PropertyTableCell<T extends any, M extends Record<string, any>>({
+    function PropertyTableCell<T extends CMSType, M extends Record<string, any>>({
                                                                                  propertyKey,
                                                                                  columnIndex,
                                                                                  customFieldValidator,

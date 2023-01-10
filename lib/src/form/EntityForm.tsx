@@ -122,7 +122,8 @@ export function EntityForm<M extends Record<string, any>>({
     const initialResolvedCollection = useMemo(() => resolveCollection({
         collection: inputCollection,
         path,
-        values: entity?.values
+        values: entity?.values,
+        fields: context.fields
     }), [entity?.values, inputCollection, path]);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
@@ -172,7 +173,8 @@ export function EntityForm<M extends Record<string, any>>({
         path,
         entityId,
         values: internalValues,
-        previousValues: initialValues
+        previousValues: initialValues,
+        fields: context.fields
     }), [inputCollection, path, entityId, internalValues, initialValues]);
 
     const onIdUpdate = collection.callbacks?.onIdUpdate;

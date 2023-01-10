@@ -3,6 +3,7 @@ import { ResolvedReferenceProperty } from "../../types";
 
 import { Box } from "@mui/material";
 import { resolveArrayProperty } from "../../core";
+import { useFireCMSContext } from "../../hooks";
 
 /**
  * @category Preview components
@@ -14,9 +15,11 @@ export function ArrayOfReferencesPreview({
                                              size
                                          }: PropertyPreviewProps<any[]>) {
 
+    const fireCMSContext = useFireCMSContext();
     const property = resolveArrayProperty({
         property: inputProperty,
-        propertyValue: value
+        propertyValue: value,
+        fields: fireCMSContext.fields
     });
 
     if (Array.isArray(property?.of)) {

@@ -1,26 +1,22 @@
+> All changes related to V2 alpha are currently bundled in these documents:
+> - [What's new in version 2.0.0](https://firecms.co/docs/new_in_v2)
+> - [Migration guide from version 1.x to 2.0.0](https://firecms.co/docs/migrating_from_v1)
 
-## [2.0.0-alpha] - 2021-12-13
 
-### General
-Internally replaced `react-base-table` with a custom implementation of the
-editable table. This means a big enhancement in performance
+## [1.0.3] - 2023-01-05
 
-### Collections
-Collections and entity schemas have been merged into one single concept.
-All the fields related to entity schemas have been moved to the collection level.
-We felt it was redundant and the distribution of logic between those 2 concepts 
-was a bit arbitrary.
+### Changed
+- [BREAKING] Added peer dependency @mui/x-date-pickers. You need to add this dependency
+  if updating from previous versions
+- Updated internal dependencies fix blank initial screen.
+- Backport of MFA from v2
+- Backport of image resizing from v2
 
-### Entities
-Now you don't need to save an entity to use its id (e.g. in storage callbacks).
-The side dialog does not get closed automatically on save.
-
-## [1.0.1] - 2022-06-02
+## [1.0.2] - 2022-07-02
 
 ### Changed
 
 - Fix for bug when saving new entities with React 18.
-
  
 ## [1.0.0] - 2022-05-10
 

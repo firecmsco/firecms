@@ -15,7 +15,11 @@ import {
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { NavLink, useLocation } from "react-router-dom";
 import { useFireCMSContext, useNavigationContext } from "../hooks";
-import { CircularProgressCenter, FireCMSLogo } from "./components";
+import {
+    CircularProgressCenter,
+    ErrorBoundary,
+    FireCMSLogo
+} from "./components";
 import { CSSObject, styled, Theme } from "@mui/material/styles";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import MenuIcon from "@mui/icons-material/Menu";
@@ -145,7 +149,10 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                             overflow: "auto"
                         }}>
 
-                        {children}
+                        <ErrorBoundary>
+                            {children}
+                        </ErrorBoundary>
+
                     </Box>
                 </Box>
             </Box>
@@ -208,7 +215,12 @@ function StyledDrawer(props: MuiDrawerProps & {
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const { open, logo, setDrawerOpen, ...drawerProps } = props;
+    const {
+        open,
+        logo,
+        setDrawerOpen,
+        ...drawerProps
+    } = props;
 
     let logoComponent;
     if (logo) {

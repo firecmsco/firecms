@@ -4,17 +4,22 @@ import FunctionsIcon from "@mui/icons-material/Functions";
 import Crop75Icon from "@mui/icons-material/Crop75";
 
 import {
+    FieldConfig, FireCMSContext,
     PropertiesOrBuilders,
     PropertyOrBuilder,
     ResolvedProperty
 } from "../../types";
-import { getFieldConfig, FieldConfig } from "../form_field_configs";
+import { getFieldConfig } from "../form_field_configs";
 import { Box } from "@mui/material";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
 
-export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder) {
-    const resolvedProperty = resolveProperty({ propertyOrBuilder });
+export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder,
+                                    fields?: Record<string, FieldConfig>) {
+    const resolvedProperty = resolveProperty({
+        propertyOrBuilder,
+        fields
+    });
     if (!resolvedProperty) return null;
     if (resolvedProperty.dataType === "reference") {
         return true;
@@ -99,6 +104,7 @@ export function getPropertyInPath<M extends Record<string, any>>(properties: Pro
     }
     return undefined;
 }
+
 export function getResolvedPropertyInPath(properties: Record<string, ResolvedProperty>, path: string): ResolvedProperty | undefined {
     if (typeof properties === "object") {
         if (path in properties) {

@@ -3,6 +3,8 @@ import { ErrorBoundary, resolveArrayProperty } from "../../core";
 
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { PropertyPreview, PropertyPreviewProps } from "../index";
+import { useFireCMSContext } from "../../hooks";
+import { FieldConfig } from "../../types";
 
 /**
  * @category Preview components
@@ -14,10 +16,12 @@ export function ArrayOfMapsPreview({
                                        size,
                                        entity
                                    }: PropertyPreviewProps<Record<string, any>[]>) {
+    const fireCMSContext = useFireCMSContext();
 
     const property = resolveArrayProperty({
         property: inputProperty,
-        propertyValue: value
+        propertyValue: value,
+        fields: fireCMSContext.fields
     });
 
     if (Array.isArray(property?.of)) {
@@ -65,7 +69,7 @@ export function ArrayOfMapsPreview({
                                         <ErrorBoundary>
                                             <PropertyPreview
                                                 propertyKey={key as string}
-                                                value={(v )[key]}
+                                                value={(v)[key]}
                                                 property={properties[key as string]}
                                                 entity={entity}
                                                 size={"small"}/>

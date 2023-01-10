@@ -9,7 +9,9 @@ export default defineConfig({
         logOverride: { "this-is-undefined-in-esm": "silent" }
     },
     build: {
-        outDir: "./build"
+        outDir: "./build",
+        target: "esnext",
+        sourcemap: true
     },
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [

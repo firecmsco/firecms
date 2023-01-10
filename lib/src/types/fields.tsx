@@ -11,7 +11,7 @@ import {
  *
  * @category Form custom fields
  */
-export interface FieldProps<T extends CMSType = any, CustomProps = any, M extends Record<string, any> = any> {
+export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M extends Record<string, any> = any> {
 
     /**
      * Name of the property

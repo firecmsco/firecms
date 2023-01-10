@@ -97,11 +97,12 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
     const resolvedCollection = useMemo(() => resolveCollection({
         collection,
         path: reference.path,
-        values: entity?.values
+        values: entity?.values,
+        fields: context.fields
     }), [collection]);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, previewProperties, size === "small" || size === "regular" ? 3 : 1),
+    const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, context.fields, previewProperties, size === "small" || size === "regular" ? 3 : 1),
         [previewProperties, resolvedCollection, size]);
 
     let body: React.ReactNode;

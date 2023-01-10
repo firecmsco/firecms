@@ -4,7 +4,7 @@ import {
     EntityCollection,
     EntityValues,
     EnumValueConfig,
-    EnumValues,
+    EnumValues, FieldConfig, FireCMSContext,
     NumberProperty,
     Properties,
     PropertiesOrBuilders,
@@ -31,14 +31,16 @@ export const resolveCollection = <M extends Record<string, any>, >
      entityId,
      values,
      previousValues,
-     userConfigPersistence
+     userConfigPersistence,
+     fields
  }: {
     collection: EntityCollection<M> | ResolvedEntityCollection<M>;
     path: string,
     entityId?: string,
     values?: Partial<EntityValues<M>>,
     previousValues?: Partial<EntityValues<M>>,
-    userConfigPersistence?: UserConfigurationPersistence
+    userConfigPersistence?: UserConfigurationPersistence;
+    fields?: Record<string, FieldConfig>;
 }): ResolvedEntityCollection<M> => {
 
     const collectionOverride = userConfigPersistence?.getCollectionConfig<M>(path);
@@ -56,7 +58,8 @@ export const resolveCollection = <M extends Record<string, any>, >
                 previousValues: usedPreviousValues,
                 path,
                 propertyValue: usedValues ? getIn(usedValues, key) : undefined,
-                entityId
+                entityId,
+                fields
             })
         }))
         .filter((a) => a !== null)
@@ -82,12 +85,12 @@ export const resolveCollection = <M extends Record<string, any>, >
  * @param propertyValue
  * @param values
  */
-export function resolveProperty<T extends CMSType = any, M extends Record<string, any> = any>({
-                                          propertyOrBuilder,
-                                          propertyValue,
-                                          fromBuilder = false,
-                                          ...props
-                                      }: {
+export function resolveProperty<T extends CMSType = CMSType, M extends Record<string, any> = any>({
+                                                                                                      propertyOrBuilder,
+                                                                                                      propertyValue,
+                                                                                                      fromBuilder = false,
+                                                                                                      ...props
+                                                                                                  }: {
     propertyOrBuilder: PropertyOrBuilder<T, M> | ResolvedProperty<T>,
     propertyValue?: unknown,
     values?: Partial<M>,
@@ -95,12 +98,15 @@ export function resolveProperty<T extends CMSType = any, M extends Record<string
     path?: string,
     entityId?: string,
     index?: number,
-    fromBuilder?: boolean
+    fromBuilder?: boolean;
+    fields?: Record<string, FieldConfig<any>>;
 }): ResolvedProperty<T> | null {
 
     if (typeof propertyOrBuilder === "object" && "resolved" in propertyOrBuilder) {
         return propertyOrBuilder as ResolvedProperty<T>;
     }
+
+    let resolvedProperty: ResolvedProperty<T> | null = null;
 
     if (!propertyOrBuilder) {
         return null;
@@ -122,38 +128,67 @@ export function resolveProperty<T extends CMSType = any, M extends Record<string
             return null;
         }
 
-        return resolveProperty({
+        resolvedProperty = resolveProperty({
             ...props,
             propertyOrBuilder: result,
             fromBuilder: true
         });
-    } else if (propertyOrBuilder.dataType === "map" && propertyOrBuilder.properties) {
-        const properties = resolveProperties({
-            ...props,
-            properties: propertyOrBuilder.properties,
-            propertyValue
-        });
-        return {
-            ...propertyOrBuilder,
-            fromBuilder,
-            properties
-        } as ResolvedProperty<T>;
-    } else if (propertyOrBuilder.dataType === "array") {
-        return resolveArrayProperty({
-            property: propertyOrBuilder,
-            propertyValue,
-            fromBuilder,
-            ...props
-        }) as ResolvedProperty<any>;
-    } else if ((propertyOrBuilder.dataType === "string" || propertyOrBuilder.dataType === "number") && propertyOrBuilder.enumValues) {
-        return resolvePropertyEnum(propertyOrBuilder, fromBuilder) as ResolvedProperty<any>;
+    } else {
+        const property = propertyOrBuilder as Property<T>;
+        if (property.dataType === "map" && property.properties) {
+            const properties = resolveProperties({
+                ...props,
+                properties: property.properties,
+                propertyValue
+            });
+            resolvedProperty = {
+                ...property,
+                fromBuilder,
+                properties
+            } as ResolvedProperty<T>;
+        } else if (property.dataType === "array") {
+            resolvedProperty = resolveArrayProperty({
+                property,
+                propertyValue,
+                fromBuilder,
+                ...props
+            }) as ResolvedProperty<any>;
+        } else if ((property.dataType === "string" || property.dataType === "number") && property.enumValues) {
+            resolvedProperty = resolvePropertyEnum(property, fromBuilder) as ResolvedProperty<any>;
+        }
     }
 
-    return {
-        ...propertyOrBuilder,
-        resolved: true,
-        fromBuilder
-    } as ResolvedProperty<T>;
+    if (!resolvedProperty) {
+        resolvedProperty = {
+            ...propertyOrBuilder,
+            resolved: true,
+            fromBuilder
+        } as ResolvedProperty<T>;
+    }
+
+    if (resolvedProperty.fieldConfig) {
+        const cmsFields = props.fields;
+        if (!cmsFields)
+            throw Error("Trying to resolve a property that inherits from a custom field but no custom fields were provided. Use the property `fields` in your top level component to provide them");
+        const customField: FieldConfig<any> = cmsFields[resolvedProperty.fieldConfig];
+        if (!customField)
+            throw Error(`Trying to resolve a property that inherits from a custom field but no custom field with id ${resolvedProperty.fieldConfig} was found. Check the \`fields\` in your top level component`);
+        if (customField.defaultProperty) {
+            const customFieldProperty = resolveProperty<any>({
+                propertyOrBuilder: customField.defaultProperty,
+                propertyValue,
+                ...props
+            });
+            if (customFieldProperty) {
+                resolvedProperty = mergeDeep(customFieldProperty, resolvedProperty);
+            }
+        }
+        if (customField.Field) {
+            resolvedProperty!.Field = customField.Field;
+        }
+    }
+
+    return resolvedProperty;
 }
 
 export function resolveArrayProperty<T extends any[], M>({
@@ -168,7 +203,8 @@ export function resolveArrayProperty<T extends any[], M>({
     path?: string,
     entityId?: string,
     index?: number,
-    fromBuilder?: boolean
+    fromBuilder?: boolean;
+    fields?: Record<string, FieldConfig>;
 }): ResolvedArrayProperty {
 
     if (property.of) {
@@ -257,10 +293,10 @@ export function resolveArrayProperty<T extends any[], M>({
  * @param value
  */
 export function resolveProperties<M extends Record<string, any>>({
-                                         properties,
-                                         propertyValue,
-                                         ...props
-                                     }: {
+                                                                     properties,
+                                                                     propertyValue,
+                                                                     ...props
+                                                                 }: {
     properties: PropertiesOrBuilders<M>,
     propertyValue: unknown,
     values?: Partial<M>,
@@ -268,7 +304,8 @@ export function resolveProperties<M extends Record<string, any>>({
     path?: string,
     entityId?: string,
     index?: number,
-    fromBuilder?: boolean
+    fromBuilder?: boolean;
+    fields?: Record<string, FieldConfig>;
 }): ResolvedProperties<M> {
     return Object.entries<PropertyOrBuilder>(properties as Record<string, PropertyOrBuilder>)
         .map(([key, property]) => {
@@ -304,7 +341,12 @@ export function resolvePropertyEnum(property: StringProperty | NumberProperty, f
 export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefined {
     if (typeof input === "object") {
         return Object.entries(input).map(([id, value]) =>
-            (typeof value === "string" ? { id, label: value } : value));
+            (typeof value === "string"
+                ? {
+                    id,
+                    label: value
+                }
+                : value));
     } else if (Array.isArray(input)) {
         return input as EnumValueConfig[];
     } else {

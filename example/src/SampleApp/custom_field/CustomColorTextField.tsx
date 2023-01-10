@@ -1,6 +1,10 @@
 import React from "react";
 import { TextField } from "@mui/material";
-import { FieldDescription, FieldProps } from "@camberi/firecms";
+import {
+    FieldDescription,
+    FieldProps,
+    useModeController
+} from "@camberi/firecms";
 
 interface CustomColorTextFieldProps {
     color: string
@@ -18,12 +22,13 @@ export default function CustomColorTextField({
                                                  ...props
                                              }: FieldProps<string, CustomColorTextFieldProps>) {
 
-
+    const { mode } = useModeController();
+    const backgroundColor = customProps?.color ?? (mode === "light" ? "#eef4ff" : "#16325f");
     return (
         <>
             <TextField required={property.validation?.required}
                        sx={{
-                           backgroundColor: customProps.color
+                           backgroundColor
                        }}
                        error={!!error}
                        disabled={isSubmitting}

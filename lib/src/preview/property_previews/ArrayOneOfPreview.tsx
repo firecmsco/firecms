@@ -10,6 +10,7 @@ import {
     DEFAULT_ONE_OF_TYPE,
     DEFAULT_ONE_OF_VALUE
 } from "../../core/util/common";
+import { useFireCMSContext } from "../../hooks";
 
 const PREFIX = "ArrayOneOfPreview";
 
@@ -50,9 +51,11 @@ export function ArrayOneOfPreview({
                                       entity
                                   }: PropertyPreviewProps<any[]>) {
 
+    const fireCMSContext = useFireCMSContext();
     const property = resolveArrayProperty({
         property: inputProperty,
-        propertyValue: value
+        propertyValue: value,
+        fields: fireCMSContext.fields
     });
 
     if (property?.dataType !== "array")

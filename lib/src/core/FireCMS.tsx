@@ -6,13 +6,14 @@ import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 
 import {
-    CMSAnalyticsEvent,
     AuthController,
+    CMSAnalyticsEvent,
     CMSView,
     CollectionOverrideHandler,
     DataSource,
     EntityCollection,
     EntityLinkBuilder,
+    FieldConfig,
     FireCMSContext,
     FireCMSPlugin,
     Locale,
@@ -33,20 +34,15 @@ import {
     useBuildSideDialogsController
 } from "./internal/useBuildSideDialogsController";
 import { CMSViewsBuilder, EntityCollectionsBuilder } from "../firebase_app";
-import {
-    ModeController,
-    useModeController,
-    useSnackbarController
-} from "../hooks";
+import { useModeController, useSnackbarController } from "../hooks";
 import { CenteredView, ErrorView } from "./components";
-import { useTraceUpdate } from "./util/useTraceUpdate";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
 /**
  * @category Core
  */
-export interface FireCMSProps<UserType extends User> {
+export type FireCMSProps<UserType extends User> = {
 
     /**
      * Use this function to return the components you want to render under
@@ -79,6 +75,13 @@ export interface FireCMSProps<UserType extends User> {
      * navigation
      */
     views?: CMSView[] | CMSViewsBuilder;
+
+    /**
+     * Record of custom form fields to be used in the CMS.
+     * You can use the key to reference the custom field in
+     * the `fieldConfig` prop of a property in a collection.
+     */
+    fields?: Record<string, FieldConfig>;
 
     /**
      * Used to override collections based on the collection path and entityId.
@@ -149,7 +152,8 @@ export interface FireCMSProps<UserType extends User> {
      * Callback used to get analytics events from the CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
-}
+
+};
 
 /**
  * If you are using independent components of the CMS
@@ -177,7 +181,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         basePath,
         baseCollectionPath,
         plugins,
-        onAnalyticsEvent
+        onAnalyticsEvent,
+        fields
     } = props;
 
     const usedBasePath = basePath ?? "/";
@@ -237,11 +242,11 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         snackbarController,
         userConfigPersistence,
         plugins,
-        onAnalyticsEvent
+        onAnalyticsEvent,
+        fields
     };
 
     return (
-
         <ModeControllerContext.Provider value={modeController}>
             <FireCMSContextProvider {...context} >
                 <BreadcrumbsProvider>

@@ -78,21 +78,21 @@ function Home() {
 
                     <HeroHome/>
 
-                    <Separator/>
+                    {/*<Separator/>*/}
 
                     <Newsletter/>
-                    <Separator/>
+                    {/*<Separator/>*/}
 
                     <FirebaseIntro/>
 
                     <FeaturesHome/>
-                    <Separator/>
+                    {/*<Separator/>*/}
 
                     <FeaturesBlocks/>
-                    <Separator/>
+                    {/*<Separator/>*/}
 
                     <Pricing/>
-                    <Separator/>
+                    {/*<Separator/>*/}
 
 
                     <Testimonials/>

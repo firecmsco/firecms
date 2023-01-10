@@ -6,7 +6,7 @@ import {
     EntityReference,
     EntityValues,
     FetchCollectionProps,
-    FetchEntityProps,
+    FetchEntityProps, FieldConfig,
     FilterValues,
     GeoPoint,
     ListenCollectionProps,
@@ -57,6 +57,7 @@ import { setDateToMidnight } from "../util/dates";
 export interface FirestoreDataSourceProps {
     firebaseApp?: FirebaseApp,
     textSearchController?: FirestoreTextSearchController,
+    fields?: Record<string, FieldConfig>;
 }
 
 /**
@@ -68,7 +69,8 @@ export interface FirestoreDataSourceProps {
  */
 export function useFirestoreDataSource({
                                            firebaseApp,
-                                           textSearchController
+                                           textSearchController,
+                                           fields
                                        }: FirestoreDataSourceProps): DataSource {
 
     const createEntityFromCollection = useCallback(<M extends Record<string, any>>(
@@ -146,7 +148,8 @@ export function useFirestoreDataSource({
                     collection,
                     path,
                     entityId: docSnapshot.id,
-                    values: firestoreToCMSModel(docSnapshot.data())
+                    values: firestoreToCMSModel(docSnapshot.data()),
+                    fields
                 });
                 return createEntityFromCollection(docSnapshot, path, resolvedCollection);
             });
@@ -157,7 +160,10 @@ export function useFirestoreDataSource({
                                                                                 collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M>[]> => {
         if (!textSearchController)
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
-        const ids = await textSearchController({ path, searchString });
+        const ids = await textSearchController({
+            path,
+            searchString
+        });
         if (ids === undefined)
             throw Error("The current path is not supported by the specified FirestoreTextSearchController");
         const promises: Promise<Entity<M> | undefined>[] = ids
@@ -215,7 +221,8 @@ export function useFirestoreDataSource({
                         const resolvedCollection = resolveCollection<M>({
                             collection,
                             path,
-                            values: firestoreToCMSModel(doc.data())
+                            values: firestoreToCMSModel(doc.data()),
+                            fields
                         });
                         return createEntityFromCollection(doc, path, resolvedCollection);
                     }));
@@ -269,7 +276,8 @@ export function useFirestoreDataSource({
 
             const resolvedCollection = resolveCollection<M>({
                 collection,
-                path
+                path,
+                fields
             });
 
             return onSnapshot(query,
@@ -325,7 +333,8 @@ export function useFirestoreDataSource({
                         const resolvedCollection = resolveCollection<M>({
                             collection,
                             path,
-                            entityId: docSnapshot.id
+                            entityId: docSnapshot.id,
+                            fields
                         });
                         onUpdate(createEntityFromCollection(docSnapshot, path, resolvedCollection));
                     },
@@ -361,7 +370,8 @@ export function useFirestoreDataSource({
             const resolvedCollection = resolveCollection<M>({
                 collection,
                 path,
-                entityId
+                entityId,
+                fields
             });
 
             const properties: ResolvedProperties<M> = resolvedCollection.properties;

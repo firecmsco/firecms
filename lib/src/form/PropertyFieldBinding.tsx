@@ -9,37 +9,20 @@ import {
 } from "formik";
 
 import {
-    CMSType,
+    CMSType, FieldConfig,
     FieldProps,
     PropertyFieldBindingProps,
-    ResolvedArrayProperty,
     ResolvedProperty
 } from "../types";
-
-import { SelectFieldBinding } from "./field_bindings/SelectFieldBinding";
-import {
-    ArrayEnumSelectBinding
-} from "./field_bindings/ArrayEnumSelectBinding";
-import {
-    StorageUploadFieldBinding
-} from "./field_bindings/StorageUploadFieldBinding";
-import { TextFieldBinding } from "./field_bindings/TextFieldBinding";
-import { SwitchFieldBinding } from "./field_bindings/SwitchFieldBinding";
-import { DateTimeFieldBinding } from "./field_bindings/DateTimeFieldBinding";
-import { ReferenceFieldBinding } from "./field_bindings/ReferenceFieldBinding";
-import { MapFieldBinding } from "./field_bindings/MapFieldBinding";
-import { RepeatFieldBinding } from "./field_bindings/RepeatFieldBinding";
-import { BlockFieldBinding } from "./field_bindings/BlockFieldBinding";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
-import { MarkdownFieldBinding } from "./field_bindings/MarkdownFieldBinding";
-import {
-    ArrayOfReferencesFieldBinding
-} from "./field_bindings/ArrayOfReferencesFieldBinding";
 
-import { ErrorBoundary, isReadOnly, resolveProperty } from "../core";
 import {
-    ArrayCustomShapedFieldBinding
-} from "./field_bindings/ArrayCustomShapedFieldBinding";
+    ErrorBoundary,
+    getFieldConfig,
+    isReadOnly,
+    resolveProperty
+} from "../core";
+import { useFireCMSContext } from "../hooks";
 
 /**
  * This component renders a form field creating the corresponding configuration
@@ -67,7 +50,6 @@ import {
  * @param shouldAlwaysRerender
  * @category Form custom fields
  */
-// export const PropertyFieldBinding = React.memo(
 export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = any, M extends Record<string, any> = Record<string, any>>
 ({
      propertyKey,
@@ -82,71 +64,30 @@ export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = 
      shouldAlwaysRerender
  }: PropertyFieldBindingProps<any, M>): ReactElement<PropertyFieldBindingProps<any, M>> {
 
+    const fireCMSContext = useFireCMSContext();
+
     let component: ComponentType<FieldProps> | undefined;
     const resolvedProperty: ResolvedProperty<T> | null = resolveProperty({
         propertyOrBuilder: property,
         values: context.values,
         path: context.path,
-        entityId: context.entityId
+        entityId: context.entityId,
+        fields: fireCMSContext.fields
     });
     if (resolvedProperty === null) {
         return <></>;
     } else if (isReadOnly(resolvedProperty)) {
         component = ReadOnlyFieldBinding;
     } else if (resolvedProperty.Field) {
-        component = resolvedProperty.Field;
-    } else if (resolvedProperty.dataType === "array") {
-        const of = (resolvedProperty as ResolvedArrayProperty).of;
-        if (of) {
-            if (Array.isArray(of)) {
-                component = ArrayCustomShapedFieldBinding;
-            } else if ((of.dataType === "string" || of.dataType === "number") && of.enumValues) {
-                component = ArrayEnumSelectBinding;
-            } else if (of.dataType === "string" && of.storage) {
-                component = StorageUploadFieldBinding;
-            } else if (of.dataType === "reference") {
-                component = ArrayOfReferencesFieldBinding;
-            } else {
-                component = RepeatFieldBinding;
-            }
+        if (typeof resolvedProperty.Field === "function") {
+            component = resolvedProperty.Field as ComponentType<FieldProps>;
         }
-        const oneOf = (resolvedProperty as ResolvedArrayProperty).oneOf;
-        if (oneOf) {
-            component = BlockFieldBinding;
+    } else {
+        const fieldConfig = getFieldConfig(resolvedProperty);
+        if (!fieldConfig) {
+            throw new Error(`INTERNAL: Could not find field config for property ${propertyKey}`);
         }
-        if (!of && !oneOf) {
-            throw Error(`You need to specify an 'of' or 'oneOf' prop (or specify a custom field) in your array property ${propertyKey}`);
-        }
-    } else if (resolvedProperty.dataType === "map") {
-        component = MapFieldBinding;
-    } else if (resolvedProperty.dataType === "reference") {
-        if (!resolvedProperty.path)
-            component = ReadOnlyFieldBinding;
-        else {
-            component = ReferenceFieldBinding;
-        }
-    } else if (resolvedProperty.dataType === "date") {
-        component = DateTimeFieldBinding;
-    } else if (resolvedProperty.dataType === "boolean") {
-        component = SwitchFieldBinding;
-    } else if (resolvedProperty.dataType === "number") {
-        if (resolvedProperty.enumValues) {
-            component = SelectFieldBinding;
-        } else {
-            component = TextFieldBinding;
-        }
-    } else if (resolvedProperty.dataType === "string") {
-        if (resolvedProperty.storage) {
-            component = StorageUploadFieldBinding;
-        } else if (resolvedProperty.markdown) {
-            component = MarkdownFieldBinding;
-        } else if (resolvedProperty.email || resolvedProperty.url || resolvedProperty.multiline) {
-            component = TextFieldBinding;
-        } else if (resolvedProperty.enumValues) {
-            component = SelectFieldBinding;
-        } else {
-            component = TextFieldBinding;
-        }
+        component = fieldConfig.Field as ComponentType<FieldProps>;
     }
 
     if (component) {
@@ -175,7 +116,7 @@ export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = 
             >
                 {(fieldProps: FormikFieldProps<T>) => {
                     return <FieldInternal
-                        component={component as ComponentType<FieldProps>}
+                        Component={component as ComponentType<FieldProps>}
                         componentProps={componentProps}
                         fieldProps={fieldProps}/>;
                 }}
@@ -189,12 +130,9 @@ export function PropertyFieldBinding<T extends CMSType = CMSType, CustomProps = 
     );
 }
 
-// ,
-// equal);
-
 function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, any>>
 ({
-     component,
+     Component,
      componentProps: {
          propertyKey,
          property,
@@ -210,7 +148,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
      fieldProps
  }:
      {
-         component: ComponentType<FieldProps>,
+         Component: ComponentType<FieldProps<T, any, M>>,
          componentProps: PropertyFieldBindingProps<T, M>,
          fieldProps: FormikFieldProps<T>
      }) {
@@ -254,7 +192,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
     return (
         <ErrorBoundary>
 
-            {React.createElement(component, cmsFieldProps)}
+            <Component {...cmsFieldProps}/>
 
             {underlyingValueHasChanged && !isSubmitting &&
                 <FormHelperText>

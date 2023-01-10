@@ -6,6 +6,7 @@ import { PropertyPreviewProps } from "../index";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { StringPropertyPreview } from "./StringPropertyPreview";
 import { Theme } from "@mui/material";
+import { useFireCMSContext } from "../../hooks";
 
 const PREFIX = "ArrayOfStringsPreview";
 
@@ -46,9 +47,11 @@ export function ArrayOfStringsPreview({
                                           size
                                       }: PropertyPreviewProps<string[]>) {
 
+    const fireCMSContext = useFireCMSContext();
     const property = resolveArrayProperty({
         property: inputProperty,
-        propertyValue: value
+        propertyValue: value,
+        fields: fireCMSContext.fields
     });
 
     if (Array.isArray(property.of)) {

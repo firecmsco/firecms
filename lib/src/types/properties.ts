@@ -11,6 +11,29 @@ import { FilterValues } from "./collections";
 /**
  * @category Entity properties
  */
+export type DataType<T extends CMSType = CMSType> =
+    T extends string ? "string" :
+        T extends number ? "number" :
+            T extends boolean ? "boolean" :
+                T extends Date ? "date" :
+                    T extends GeoPoint ? "geopoint" :
+                        T extends EntityReference ? "reference" :
+                            T extends Array<CMSType> ? "array" :
+                                T extends Record<string, any> ? "map" : never;
+
+// export type DataType =
+//     | "number"
+//     | "string"
+//     | "boolean"
+//     | "map"
+//     | "array"
+//     | "date"
+//     | "geopoint"
+//     | "reference";
+
+/**
+ * @category Entity properties
+ */
 export type CMSType =
     | string
     | number
@@ -37,7 +60,7 @@ export type AnyProperty =
 /**
  * @category Entity properties
  */
-export type Property<T extends any = CMSType> =
+export type Property<T extends CMSType = CMSType> =
     T extends string ? StringProperty :
         T extends number ? NumberProperty :
             T extends boolean ? BooleanProperty :
@@ -46,19 +69,6 @@ export type Property<T extends any = CMSType> =
                         T extends EntityReference ? ReferenceProperty :
                             T extends Array<CMSType> ? ArrayProperty<T> :
                                 T extends Record<string, any> ? MapProperty<T> : AnyProperty;
-
-/**
- * @category Entity properties
- */
-export type DataType =
-    | "number"
-    | "string"
-    | "boolean"
-    | "map"
-    | "array"
-    | "date"
-    | "geopoint"
-    | "reference";
 
 /**
  * Interface including all common properties of a CMS property
@@ -80,6 +90,14 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * Property description, always displayed under the field
      */
     description?: string;
+
+    /**
+     * You can use this prop to reuse a property that has been defined
+     * in the top level of the CMS in the prop `fields`.
+     * All the configuration will be taken from the inherited config, and
+     * overwritten by the current property config.
+     */
+    fieldConfig?: string;
 
     /**
      * Longer description of a field, displayed under a popover
@@ -266,7 +284,7 @@ export type PropertyBuilderProps<M extends Record<string, any> = any> =
  * current value of the property, as well as the path and entity ID.
  * @category Entity properties
  */
-export type PropertyBuilder<T extends any = any, M extends Record<string, any> = any> =
+export type PropertyBuilder<T extends CMSType = any, M extends Record<string, any> = any> =
     ({
          values,
          previousValues,
@@ -398,7 +416,7 @@ export interface StringProperty extends BaseProperty<string> {
 /**
  * @category Entity properties
  */
-export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = any> extends BaseProperty<T> {
+export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType> extends BaseProperty<T> {
 
     dataType: "array";
 
@@ -408,7 +426,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      * You can leave this field empty only if you are providing a custom field,
      * otherwise an error will be thrown.
      */
-    of?: PropertyOrBuilder<ArrayT> | Property<any>[];
+    of?: PropertyOrBuilder<ArrayT> | Property<ArrayT>[];
 
     /**
      * Use this field if you would like to have an array of properties.
@@ -576,12 +594,12 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
      * The collection of the entity is inferred based on the root navigation, so
      * the filters and search delegate existing there are applied to this view
      * as well.
-     * You can set this prop to `false` if the path is not yet know, e.g.
+     * You can leave this prop undefined if the path is not yet know, e.g.
      * you are using a property builder and the path depends on a different
      * property.
      * Note that you can also use a collection alias.
      */
-    path: string | false;
+    path?: string;
 
     /**
      * Allow selection of entities that pass the given filter only.

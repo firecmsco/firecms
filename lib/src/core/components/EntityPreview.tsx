@@ -83,11 +83,13 @@ export function EntityPreview<M extends Record<string, any>>(
         path
     }: EntityPreviewProps<M>) {
 
+    const context = useFireCMSContext();
     const resolvedCollection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection<M>({
         collection,
         path,
         entityId: entity.id,
-        values: entity.values
+        values: entity.values,
+        fields: context.fields
     }), [collection, path, entity]);
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
