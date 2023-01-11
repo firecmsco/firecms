@@ -4,4 +4,3 @@ node_modules/
 src/test
 .snapshots/
 *.min.js
-babel.config.js
