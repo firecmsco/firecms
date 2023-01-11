@@ -16,10 +16,7 @@ export default defineConfig({
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
         react({
-            jsxImportSource: "@emotion/react",
-            babel: {
-                plugins: ["@emotion/babel-plugin"]
-            }
+            jsxImportSource: "@emotion/react"
         }),
         ViteFonts({
             google: {
