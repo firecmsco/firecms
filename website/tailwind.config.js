@@ -6,16 +6,18 @@ module.exports = {
     theme: {
         extend: {
             colors: {
+                primary: '#0070F4',
+                secondary: '#FF5B79',
                 gray: {
-                    100: '#FBFBFF',
-                    200: '#EAEAFB',
-                    300: '#DFDFEF',
-                    400: '#9999AA',
-                    500: '#7F7F9F',
-                    600: '#666677',
-                    700: '#4C4C5D',
-                    800: '#333344',
-                    900: '#191930'
+                    100: '#FBFBFA',
+                    200: '#EAEAF8',
+                    300: '#DFDFEA',
+                    400: '#9999A7',
+                    500: '#7F7F9B',
+                    600: '#666673',
+                    700: '#4C4C5A',
+                    800: '#333340',
+                    900: '#191926'
                 },
                 blue: {
                     100: '#E6F0FD',
@@ -127,6 +129,7 @@ module.exports = {
     variants: {
         backgroundColor: ['responsive', 'hover', 'dark'],
         textColor: ['responsive', 'hover', 'dark'],
+        outline: ['responsive', 'hover', 'dark'],
         translate: ['responsive', 'hover', 'dark'],
         boxShadow: ['responsive', 'hover', 'focus', 'focus-within', 'dark'],
         opacity: ['responsive', 'hover', 'dark']

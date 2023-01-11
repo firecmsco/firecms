@@ -61,14 +61,10 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
     const wireframe = true;
 
     function buildNightGeometry(radius: number, complexity: number) {
-
         const vertices: { pos: number[], norm: number[], uv: number[] }[] = [];
-
         const dodecahedron = new THREE.DodecahedronGeometry(radius, complexity);
         return dodecahedron;
-
     }
-
 
     function buildMaterial(width: number, height: number, radius: number, displacementRatio: number, displacementArea: number, spread: number) {
 
@@ -481,25 +477,21 @@ function buildVertexShader() {
     
         for (int i = 1; i < u_colors_count; i++) {
         
-        
             float noiseFlow = (1. + float(i)) / 30.;
-            float noiseSpeed = (1. + float(i)) * 0.11;
+            float noiseSpeed = (1. + float(i)) * 0.15;
             float noiseSeed = 13. + float(i) * 7.;
-                // float noiseFlow = (1. + float(i)) / 1.;
-                // float noiseSpeed = (1. + float(i)) * 0.1;
-                // float noiseSeed = 7. + float(i) * 13.;
                 
-                float noise = snoise(
-                    vec3(
-                        st.x * 1.5 + noiseFlow,
-                        st.y * 1.5 + noiseFlow,
-                        u_time * noiseSpeed 
-                    ) + noiseSeed
-                );
-                
-                noise = clamp(minNoise, maxNoise + float(i) * 0.05, noise);
-                vec3 nextColor = u_colors[i];
-                color = mix(color, nextColor, smoothstep(0.0, .5, noise));
+            float noise = snoise(
+                vec3(
+                    st.x * 1.5 + noiseFlow,
+                    st.y * 1.5 + noiseFlow,
+                    u_time * noiseSpeed 
+                ) + noiseSeed
+            );
+            
+            noise = clamp(minNoise, maxNoise + float(i) * 0.05, noise);
+            vec3 nextColor = u_colors[i];
+            color = mix(color, nextColor, smoothstep(0.0, .9, noise));
                
             
         }

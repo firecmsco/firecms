@@ -132,9 +132,9 @@
 
 html[data-theme='dark'] {
     --ifm-custom-navbar-background-color: rgba(38, 38, 38, 0.33);
-    --ifm-background-color: #131324;
-    --ifm-background-surface-color: #191930;
-    --ifm-color-emphasis-100: #191930;
+    --ifm-background-color: #1b1b26;
+    --ifm-background-surface-color: #232328;
+    --ifm-color-emphasis-100: #232328;
     /*--ifm-background-surface-color: #242526;*/
 }
 
