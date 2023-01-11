@@ -19,6 +19,7 @@ import Pricing from "../partials/Pricing";
 import Head from "@docusaurus/Head";
 import { Newsletter } from "../partials/Newsletter";
 import { PagesBackground } from "../partials/PagesBackground";
+import { FireCMSCloudIntro } from "../partials/FireCMSCloudIntro";
 
 // import { Newsletter } from "../partials/Newsletter";
 
@@ -80,7 +81,7 @@ function Home() {
 
                     {/*<Separator/>*/}
 
-                    <Newsletter/>
+                    <FireCMSCloudIntro/>
                     {/*<Separator/>*/}
 
                     <FirebaseIntro/>
@@ -96,6 +97,8 @@ function Home() {
 
 
                     <Testimonials/>
+
+                    <Newsletter/>
 
                 </main>
 

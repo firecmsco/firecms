@@ -22,9 +22,9 @@ function HeroHome({}) {
         // data-aos="fade-up"
         data-aos="fade-left"
         data-aos-delay="400"
-        className="xl:max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4">
+        className="xl:max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4 flex content-center">
         <video
-            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 "}
             width="100%" loop autoPlay muted>
             <source src={darkModeVideo} type="video/mp4"/>
         </video>
@@ -44,7 +44,7 @@ function HeroHome({}) {
                         data-aos-delay="200"
                         style={{
                             // mixBlendMode: "color-dodge",
-                            fontSize: "9rem",
+                            fontSize: "10rem",
                             WebkitBackgroundClip: "text",
                             backgroundClip: "text",
                             backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
@@ -62,7 +62,11 @@ function HeroHome({}) {
 
             </h1>
 
-            <div className="mt-8 mb-16 flex justify-center xl:justify-end">
+            <h2>
+                The missing piece for your project
+            </h2>
+
+            <div className="mt-8 mb-8 flex justify-center xl:justify-end">
                 <HeroButtons/>
             </div>
 
@@ -75,23 +79,13 @@ function HeroHome({}) {
             isolation: "isolate"
         }}>
 
-            {/*<BrowserOnly*/}
-            {/*    fallback={fallback}>*/}
-            {/*    {() => (*/}
-            {/*        <Suspense fallback={fallback}>*/}
-            {/*            <LazyThreeJSAnimationShader/>*/}
-            {/*        </Suspense>*/}
-            {/*    )}*/}
-            {/*</BrowserOnly>*/}
-
-
             <div className="xl:grid xl:grid-cols-12 xl:my-24 md:my-16 my-8">
 
                 <div className={"col-span-7 xl:flex xl:items-center xl:justify-end"}>
                     {titleDiv}
                 </div>
 
-                <div className={"col-span-5 min-h-fit"}>
+                <div className={"col-span-5 xl:flex xl:items-center"}>
                     {video}
                 </div>
 

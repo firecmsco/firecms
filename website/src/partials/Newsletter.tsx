@@ -1,8 +1,5 @@
 import React, { useState } from "react"
 
-// @ts-ignore
-import collectionEditorVideo from "@site/static/img/collection_editor_preview.mp4";
-
 export const Newsletter = () => {
     const [email, setEmail] = useState("");
     const [validEmail, setValidEmail] = useState(false);
@@ -21,7 +18,7 @@ export const Newsletter = () => {
         fetch("https://europe-west3-firecms-demo-27150.cloudfunctions.net/sign_up_newsletter", {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json',
+                "Content-Type": "application/json",
             },
             body: JSON.stringify({
                 "email_address": email,
@@ -53,21 +50,17 @@ export const Newsletter = () => {
                 data-aos-delay="100">
                 <div
                     className="relative flex flex-col items-center px-6 py-20">
-                    <h2 className="h2 mb-8 text-gray-900">
+
+                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-gray-900">
                         Stay in the loop
-                    </h2>
+                    </h4>
 
                     <div
                         className="flex flex-col space-y-2 items-center mb-8 text-lg">
-                        <div>
-                            We are working on a FireCMS <strong>cloud
-                            offering</strong> that will include a state of the
-                            art
-                            collection editor.
+                        <div> Sign up to our newsletter to get the latest news
+                            and updates.
                         </div>
-                        <div> Sign up to be able to try it as soon
-                            as it launches in beta!
-                        </div>
+                        <div> We promise not to spam you.</div>
                     </div>
 
                     <div className="flex flex-wrap">
@@ -104,14 +97,6 @@ export const Newsletter = () => {
                     </div>
 
                 </div>
-            </div>
-            <div
-                className="px-8 sm:px-16 md:px-24 xl:px-4 max-w-6xl mx-auto -translate-y-36">
-                <video
-                    className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
-                    width="100%" loop autoPlay muted>
-                    <source src={collectionEditorVideo} type="video/mp4"/>
-                </video>
             </div>
         </section>
     )
