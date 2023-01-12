@@ -96,7 +96,7 @@ module.exports = {
                 {
                     to: "https://demo.firecms.co",
                     label: "Demo",
-                    className: "btn mr-2 px-6 py-2 text-white font-bold uppercase bg-blue-600 hover:text-white hover:bg-blue-700",
+                    className: "btn mr-2 px-6 py-2 text-white font-bold uppercase bg-primary hover:text-white hover:bg-blue-700",
                     "aria-label": "Open the demo project",
                     position: "right"
                 },
@@ -158,14 +158,6 @@ module.exports = {
                             label: "Github",
                             href: "https://github.com/Camberi/firecms"
                         },
-                        // {
-                        //     label: 'Discord',
-                        //     href: 'https://discordapp.com/invite/docusaurus',
-                        // },
-                        // {
-                        //     label: 'Twitter',
-                        //     href: 'https://twitter.com/docusaurus',
-                        // },
                     ]
                 },
                 {

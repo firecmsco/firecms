@@ -1,16 +1,18 @@
 import React from "react";
 import Layout from "@theme-original/Footer/Layout";
+import { Newsletter } from "../../../partials/Newsletter";
 
 export default function LayoutWrapper(props) {
     return (
-        <>
+        <div className={"mt-16"}>
+            <Newsletter/>
             <section
-                className="relative mt-16">
+                className="relative ">
                 <div
-                    className={"mx-auto px-4 sm:px-6 bg-pink-400 text-white "}>
+                    className={"mx-auto px-4 sm:px-6 bg-primary text-white "}>
                     <div
                         className="relative flex flex-col items-center px-6 py-12">
-                        <h4 className="h2 mb-4 text-gray-900">
+                        <h4 className="h2 mb-4 text-white">
                             Need a hand?
                         </h4>
 
@@ -39,6 +41,6 @@ export default function LayoutWrapper(props) {
                 </div>
             </section>
             <Layout {...props} />
-        </>
+        </div>
     );
 }

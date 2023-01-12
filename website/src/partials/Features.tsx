@@ -23,7 +23,7 @@ import customFieldVideo from "@site/static/img/custom_fields.mp4";
 // @ts-ignore
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 
-import { useColorMode } from '@docusaurus/theme-common';
+import { useColorMode } from "@docusaurus/theme-common";
 
 import SyntaxHighlighter from "react-syntax-highlighter";
 import {
@@ -83,18 +83,19 @@ function Features() {
                             className="max-w-xl md:max-w-none md:w-full mx-auto md:col-span-5 lg:col-span-6 mb-8 md:mb-0 md:order-1"
                             data-aos="fade-left"
                         >
-                            <div className="relative flex flex-col">
-                                <div className={"p-4"}>
-                                    <video
-                                        key={`demo_video_${isDarkTheme}`}
-                                        style={{ maxHeight: 589 }}
-                                        className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
-                                        width="100%" loop autoPlay muted>
-                                        <source
-                                            src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
-                                            type="video/mp4"/>
-                                    </video>
-                                </div>
+                            <div className="relative flex flex-col p-4">
+                                <video
+                                    key={`demo_video_${isDarkTheme}`}
+                                    style={{
+                                        maxHeight: 589,
+                                        aspectRatio: 508 / 589
+                                    }}
+                                    className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
+                                    width="100%" loop autoPlay muted>
+                                    <source
+                                        src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
+                                        type="video/mp4"/>
+                                </video>
 
                             </div>
                         </div>
@@ -286,6 +287,7 @@ const productCallbacks = buildEntityCallbacks({
                             <div className={"p-4"}>
                                 <video
                                     className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
+                                    style={{ aspectRatio: 508 / 559 }}
                                     width="100%" loop autoPlay muted>
                                     <source
                                         src={isDarkTheme ? customFieldDarkVideo : customFieldVideo}
@@ -337,7 +339,6 @@ const productCallbacks = buildEntityCallbacks({
         </section>
     );
 }
-
 
 const lightningIcon = <svg
     className="w-3 h-3 fill-current"

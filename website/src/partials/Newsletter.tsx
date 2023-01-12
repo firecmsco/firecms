@@ -45,22 +45,22 @@ export const Newsletter = () => {
         <section
             className="relative">
             <div
-                className={"mx-auto px-4 sm:px-6 mb-16 bg-pink-400 text-white pb-16"}
-                data-aos="fade-up"
-                data-aos-delay="100">
+                className={"mx-auto px-4 sm:px-6 bg-pink-400 text-white"}
+                // data-aos="fade-up"
+                // data-aos-delay="100"
+            >
                 <div
-                    className="relative flex flex-col items-center px-6 py-20">
+                    className="relative flex flex-col items-center px-6 py-16">
 
-                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-gray-900">
-                        Stay in the loop
-                    </h4>
+                    {/*<h4 className="h2 mb-4 text-gray-900">*/}
+                    {/*    Stay in the loop*/}
+                    {/*</h4>*/}
 
                     <div
-                        className="flex flex-col space-y-2 items-center mb-8 text-lg">
-                        <div> Sign up to our newsletter to get the latest news
-                            and updates.
-                        </div>
-                        <div> We promise not to spam you.</div>
+                        className="flex flex-col space-y-2 items-center mb-4 text-lg">
+                        <strong> Sign up to our newsletter to get the latest news
+                            and updates. No spam!
+                        </strong>
                     </div>
 
                     <div className="flex flex-wrap">
@@ -70,7 +70,7 @@ export const Newsletter = () => {
                                 className="w-full py-2 border-b-2 border-gray-400 flex justify-between gap-2">
                                 <input
                                     disabled={loading || completed}
-                                    className={"appearance-none outline-none text-xl flex-1 px-4 py-4 bg-gray-200 rounded w-full text-gray-700 leading-tight focus:border-blue-600 "
+                                    className={"appearance-none outline-none text-xl flex-1 px-4 py-4 bg-gray-200 rounded w-full text-gray-700 leading-tight focus:border-primary "
                                         + (!validEmail && submitClicked ? "border-solid border-red-600" : "border-none")}
                                     id="email" type="email"
                                     placeholder="Enter your email"
@@ -78,7 +78,7 @@ export const Newsletter = () => {
                                     value={email}/>
                                 <button type="submit"
                                         disabled={loading || completed || !policyAccepted}
-                                        className={"btn px-8 py-4 sm:px-12 sm:py-4 text-white font-bold uppercase w-full w-auto sm:mb-0 sm:ml-2 " + (loading || !policyAccepted ? "bg-gray-200 " : (completed ? "bg-green-600" : "bg-blue-600 hover:bg-blue-700"))}>
+                                        className={"btn px-8 py-4 sm:px-12 sm:py-4 text-white font-bold uppercase w-full w-auto sm:mb-0 sm:ml-2 " + (loading || !policyAccepted ? "bg-gray-200 " : (completed ? "bg-green-600" : "bg-primary hover:bg-blue-700"))}>
                                     {loading ? "Loading" : (completed ? "Signed up!" : "Sign up")}
                                 </button>
                             </div>

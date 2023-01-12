@@ -52,7 +52,7 @@ function Pricing() {
     const advanced = <div
         className="flex flex-col bg-white dark:bg-gray-900 m-4 sm:m-6 lg:m-10 lg:col-span-1 rounded-lg overflow-hidden border border-solid dark:border-gray-800 border-gray-200 ">
         <div
-            className="p-4 bg-blue-600 text-center ">
+            className="p-4 bg-primary text-center ">
             <h3 className="h5 mb-0 text-white ">
                 Advanced
             </h3>

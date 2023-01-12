@@ -3,7 +3,6 @@ import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
-
 import HeroHome from "../partials/HeroHome";
 import FeaturesHome from "../partials/Features";
 import FeaturesBlocks from "../partials/FeaturesBlocks";
@@ -32,39 +31,8 @@ function Home() {
     useEffect(() => {
         if (ExecutionEnvironment.canUseDOM) {
             AOS.init();
-            updateDarkModeClass();
         }
     }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
-
-    function updateDarkModeClass() {
-        if (!document) return;
-        if (document.documentElement?.dataset?.theme === "dark" && !document.documentElement.classList.contains("dark")) {
-            document.documentElement.classList.add("dark");
-        } else {
-            document.documentElement.classList.remove("dark");
-        }
-    }
-
-    useEffect(() => {
-        if (!ExecutionEnvironment.canUseDOM) return;
-        const observer = new MutationObserver((mutations) => {
-            mutations.forEach(function(mutation) {
-                if (mutation.type == "attributes"
-                    && mutation.attributeName === "data-theme") {
-                    updateDarkModeClass();
-                }
-            });
-        });
-        observer.observe(document.documentElement, {
-            attributes: true,
-            childList: false,
-            subtree: false
-        });
-        return () => {
-            observer.disconnect();
-        };
-    }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
-
 
     return (
         <Layout
@@ -79,26 +47,17 @@ function Home() {
 
                     <HeroHome/>
 
-                    {/*<Separator/>*/}
-
-                    <FireCMSCloudIntro/>
-                    {/*<Separator/>*/}
-
                     <FirebaseIntro/>
 
-                    <FeaturesHome/>
-                    {/*<Separator/>*/}
+                    <FireCMSCloudIntro/>
 
                     <FeaturesBlocks/>
-                    {/*<Separator/>*/}
 
                     <Pricing/>
-                    {/*<Separator/>*/}
-
 
                     <Testimonials/>
 
-                    <Newsletter/>
+                    {/*<Newsletter/>*/}
 
                 </main>
 

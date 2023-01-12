@@ -9,23 +9,18 @@ import darkModeVideo from "@site/static/img/dark_mode.mp4";
 
 function HeroHome({}) {
 
-    const fallback = <canvas style={{
-        height: "1000px",
-        width: "100vh",
-        maxHeight: "1000px",
-        position: "fixed",
-        top: 0,
-        zIndex: -10
-    }}/>;
-
     const video = <div
         // data-aos="fade-up"
         data-aos="fade-left"
         data-aos-delay="400"
-        className="xl:max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4 flex content-center">
+        className="max-h-96 xl:max-h-max xl:max-w-3xl px-8 sm:px-16 md:px-24 xl:px-4 flex content-center justify-center">
         <video
-            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 "}
-            width="100%" loop autoPlay muted>
+            style={{
+                aspectRatio: 512 / 384
+            }}
+            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 max-w-lg xl:max-w-none"}
+            width="100%"
+            loop autoPlay muted>
             <source src={darkModeVideo} type="video/mp4"/>
         </video>
     </div>;
@@ -62,7 +57,7 @@ function HeroHome({}) {
 
             </h1>
 
-            <h2>
+            <h2 className={"text-3xl"}>
                 The missing piece for your project
             </h2>
 
@@ -81,7 +76,8 @@ function HeroHome({}) {
 
             <div className="xl:grid xl:grid-cols-12 xl:my-24 md:my-16 my-8">
 
-                <div className={"col-span-7 xl:flex xl:items-center xl:justify-end"}>
+                <div
+                    className={"col-span-7 xl:flex xl:items-center xl:justify-end"}>
                     {titleDiv}
                 </div>
 

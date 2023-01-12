@@ -2,17 +2,19 @@ import React, { Suspense } from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { useEffect } from "react";
+import { useLocation } from "@docusaurus/router";
 
 const LazyThreeJSAnimationShader = React.lazy(() => import("../shape/ThreeJSAnimationShader"));
 
-export function PagesBackground() {
+export function PagesBackground({darkMode}:{darkMode: boolean}) {
 
-    const [showAnimation, setShowAnimation] = React.useState(false);
+    const { pathname } = useLocation();
+    const [showAnimation, setShowAnimation] = React.useState(ExecutionEnvironment.canUseDOM ? document.documentElement.classList.contains("dark") : true);
+
     useEffect(() => {
-        console.log(window.location);
         if (ExecutionEnvironment.canUseDOM
-            && (window.location.pathname === "/"
-             || window.location.pathname.startsWith("/features"))) {
+            && (pathname === "/"
+                || pathname.startsWith("/features"))) {
             setShowAnimation(true);
         }
     }, [ExecutionEnvironment.canUseDOM]);
@@ -22,7 +24,9 @@ export function PagesBackground() {
             fallback={<div/>}>
             {() => (
                 <Suspense fallback={<div/>}>
-                    {showAnimation && <LazyThreeJSAnimationShader/>}
+                    {showAnimation && <LazyThreeJSAnimationShader
+                        opacity={darkMode ? 0.7 : 0.4}
+                        darkMode={darkMode}/>}
                 </Suspense>
             )}
         </BrowserOnly>
