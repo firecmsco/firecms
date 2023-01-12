@@ -3,10 +3,11 @@ import { useLocation } from "react-router-dom";
 
 import {
     AuthController,
-    CMSView,
+    CMSView, CMSViewsBuilder,
     CollectionOverrideHandler,
     DataSource,
     EntityCollection,
+    EntityCollectionsBuilder,
     FireCMSPlugin,
     NavigationContext,
     TopNavigationEntry,
@@ -20,7 +21,6 @@ import {
     removeInitialAndTrailingSlashes,
     resolveCollectionPathAliases
 } from "../util";
-import { CMSViewsBuilder, EntityCollectionsBuilder } from "../../firebase_app";
 
 type BuildNavigationContextProps<UserType extends User> = {
     basePath: string,

@@ -4,7 +4,7 @@ export * from "./hooks/useFirebaseStorageSource";
 export * from "./hooks/useValidateAuthenticator";
 
 export { FirebaseCMSApp } from "./FirebaseCMSApp";
-export type { FirebaseCMSAppProps, EntityCollectionsBuilder, CMSViewsBuilder } from "./FirebaseCMSAppProps";
+export type { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
 
 export type { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 export { FirebaseLoginView, LoginButton } from "./components/FirebaseLoginView";

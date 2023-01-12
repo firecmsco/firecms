@@ -1,6 +1,6 @@
 import { FieldConfig } from "./field_config";
 import { CMSView } from "./navigation";
-import { CMSViewsBuilder } from "../firebase_app";
+import { CMSViewsBuilder } from "./firecms";
 
 export type FireCMSCustomization = {
 
