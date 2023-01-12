@@ -4,9 +4,9 @@ import * as THREE from "three";
 // import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass.js";
 import { EffectComposer, RenderPass } from "postprocessing";
 
-
 // @ts-ignore
 import useThemeContext from "@theme/hooks/useThemeContext";
+import { useCallback } from "react";
 
 // const CAMERA_FACTOR = 60;
 const CAMERA_FACTOR = 180;
@@ -24,7 +24,7 @@ type SceneState = {
     meshes: THREE.Mesh[],
 }
 
-type AnimationProps = {}
+type AnimationProps = { darkMode: boolean, opacity: number };
 
 const red = new THREE.Color(1.0, .2, .2);
 const magenta = new THREE.Color(0xFF5B79);
@@ -35,7 +35,10 @@ const grey = new THREE.Color(.5, .5, .5);
 const black = new THREE.Color(.0, .0, .0);
 const white = new THREE.Color(1.0, 1.0, 1.0);
 
-export default function ThreeJSAnimationShader({}: AnimationProps) {
+export default function ThreeJSAnimationShader({
+                                                   darkMode,
+                                                   opacity
+                                               }: AnimationProps) {
 
     const scrollRef = useRef<number>(0);
 
@@ -71,6 +74,8 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         let colors = [magenta, cyan, yellow, red, blue];
         const uniforms = {
             u_time: { value: 0 },
+            u_opacity: { value: opacity },
+            u_dark_mode: { value: darkMode ? 1.0 : 0.0 },
             u_resolution: { value: new THREE.Vector2(width, height) },
             bright: { value: BRIGHT },
             u_sphere_radius: { value: radius },
@@ -92,25 +97,13 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         return material;
     }
 
-    function createShape(width: number, height: number, radius: number, displacementRatio: number, displacementArea: number, positionX, positionY, spread) {
-        const material = buildMaterial(width, height, radius, displacementRatio, displacementArea, spread);
-        const geometry = buildNightGeometry(radius, radius * 2);
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.initialPositionY = positionY;
-        mesh.position.x = positionX;
-        return mesh;
-    }
-
     function initScene(ref: HTMLCanvasElement, width: number, height: number): SceneState {
 
         const renderer = new THREE.WebGLRenderer({
-            antialias: true,
+            antialias: false,
             alpha: true,
             canvas: ref
         });
-
-        // if (!isDarkTheme)
-        //     renderer.setClearColor(0xffffff);
 
         renderer.setSize(width, height);
         if (typeof window !== "undefined")
@@ -119,7 +112,6 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         const meshes: THREE.Mesh[] = [];
 
         const scene = new THREE.Scene();
-
 
         const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, DISPLACEMENT_AREA, 6.0);
 
@@ -130,26 +122,6 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         scene.add(mesh);
         meshes.push(mesh);
 
-        // const mesh2 = createShape(width, height, 2, 1 / 1.5, 1 / 3, 3, -10, 1.0);
-        // scene.add(mesh2);
-        // meshes.push(mesh2);
-        //
-        // const mesh3 = createShape(width, height, 1.5, 1 / 2, 1 / 2.5, -2, -20, 1.0);
-        // scene.add(mesh3);
-        // meshes.push(mesh3);
-        //
-        // const mesh4 = createShape(width, height, 1.5, 1 / 1.5, 1 / 2, -1, -32, 1.0);
-        // scene.add(mesh4);
-        // meshes.push(mesh4);
-        //
-        // const mesh5 = createShape(width, height, 1, 1 / 1.5, 1 / 2.5, -4.5, -38, 1.0);
-        // scene.add(mesh5);
-        // meshes.push(mesh5);
-        //
-        // const mesh6 = createShape(width, height, 2.5, 1 / 1.5, 1 / 2.5, 6.5, -50, 1.0);
-        // scene.add(mesh6);
-        // meshes.push(mesh6);
-
         const left = width / -CAMERA_FACTOR;
         const right = width / CAMERA_FACTOR;
         const top = height / CAMERA_FACTOR;
@@ -157,6 +129,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         const near = -100;
         const far = 100;
         const camera = new THREE.OrthographicCamera(left, right, top, bottom, near, far);
+        // camera.position.x = 18;
         camera.position.z = 15;
 
         const composer = new EffectComposer(renderer);
@@ -187,6 +160,29 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
         state.camera.updateProjectionMatrix();
     }
 
+    const render = useCallback(() => {
+        if (!sceneStateRef.current) return -1;
+
+        // do not render if offscreen
+        if (scrollRef.current < 1000) {
+            const {
+                composer,
+                meshes
+            } = sceneStateRef.current;
+
+            meshes.forEach((mesh) => {
+                mesh.material.uniforms.u_time.value = clockRef.current.getElapsedTime() * TIME_DILATION;
+                mesh.material.uniforms.u_opacity.value = opacity;
+                mesh.material.uniforms.u_dark_mode.value = darkMode ? 1.0 : 0.0;
+                mesh.position.y = mesh.initialPositionY + scrollRef.current / 100;
+                mesh.rotation.x = scrollRef.current / 1000;
+            });
+
+            composer.render();
+        }
+        return requestAnimationFrame(render);
+    }, [darkMode]);
+
     useEffect(() => {
 
         if (!canvasRef.current)
@@ -197,29 +193,12 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
 
         sceneStateRef.current = initScene(canvasRef.current, width, height);
 
-        const {
-            composer,
-            meshes
-        } = sceneStateRef.current;
-
         //RENDER LOOP
-        render();
-
-        function render() {
-
-            meshes.forEach((mesh) => {
-                mesh.material.uniforms.u_time.value = clockRef.current.getElapsedTime() * TIME_DILATION;
-                mesh.position.y = mesh.initialPositionY + scrollRef.current / 100;
-                mesh.rotation.x = scrollRef.current / 2000;
-            });
-
-            composer.render();
-            requestRef.current = requestAnimationFrame(render);
-        }
+        requestRef.current = render();
 
         return () => cancelAnimationFrame(requestRef.current);
 
-    }, [canvasRef.current, wireframe]);
+    }, [canvasRef.current, render]);
 
     useEffect(() => {
         function handleResize() {
@@ -245,6 +224,7 @@ export default function ThreeJSAnimationShader({}: AnimationProps) {
     return (
         <canvas
             style={{
+                isolation: "isolate",
                 height: "100vh",
                 maxHeight: "900px",
                 width: "100vw",
@@ -267,6 +247,9 @@ function buildVertexShader() {
     precision highp float;
 
     uniform float u_time;
+    
+    uniform float u_opacity;
+    uniform float u_dark_mode;
 
     uniform int u_colors_count;
     uniform vec3 u_colors[5];
@@ -464,6 +447,10 @@ function buildVertexShader() {
 
     vec3 getColor(){
 
+        if (u_dark_mode == 1.0){
+            return vec3(0.0, 0.0, 0.0);
+        }
+
         vec3 st = v_position / u_sphere_radius;
 
         vec3 color;
@@ -492,8 +479,6 @@ function buildVertexShader() {
             noise = clamp(minNoise, maxNoise + float(i) * 0.05, noise);
             vec3 nextColor = u_colors[i];
             color = mix(color, nextColor, smoothstep(0.0, .9, noise));
-               
-            
         }
     
         return color;
@@ -525,6 +510,7 @@ function buildFragmentShader() {
 precision highp float;
 
 uniform float u_time;
+uniform float u_opacity;
 
 varying float v_displacement_amount;
 uniform float u_sphere_radius;
@@ -540,9 +526,9 @@ vec3 czm_saturation(vec3 rgb, float adjustment) {
 void main(){
     vec3 color = v_color;
     color.rgb +=  v_displacement_amount * 0.3;
-    // color.rg -=  (1.0 - v_position.z / u_sphere_radius) * 0.1;
+    color.rg -=  (1.0 - v_position.z / u_sphere_radius) * 0.1;
     color = czm_saturation(color, 1.2);
-    gl_FragColor = vec4(color,1.0);
+    gl_FragColor = vec4(color,.9);
 }
 `;
 }

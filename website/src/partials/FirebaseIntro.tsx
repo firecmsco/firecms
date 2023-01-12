@@ -12,7 +12,7 @@ import { FireCMSLogo } from "./FireCMSLogo";
 
 function FirebaseIntro() {
     return (
-        <section className="relative">
+        <section className="relative py-20">
 
             <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
 

@@ -8,7 +8,7 @@ function FeaturesBlocks() {
     >
         <g fill="none" fillRule="evenodd">
             <rect
-                className="fill-current text-blue-600"
+                className="fill-current text-primary"
                 width="64"
                 height="64"
                 rx="32"
@@ -41,7 +41,7 @@ function FeaturesBlocks() {
     >
         <g fill="none" fillRule="evenodd">
             <rect
-                className="fill-current text-blue-600"
+                className="fill-current text-primary"
                 width="64"
                 height="64"
                 rx="32"
@@ -65,7 +65,7 @@ function FeaturesBlocks() {
     >
         <g fill="none" fillRule="evenodd">
             <rect
-                className="fill-current text-blue-600"
+                className="fill-current text-primary"
                 width="64"
                 height="64"
                 rx="32"
@@ -103,7 +103,7 @@ function FeaturesBlocks() {
     >
         <g fill="none" fillRule="evenodd">
             <rect
-                className="fill-current text-blue-600"
+                className="fill-current text-primary"
                 width="64"
                 height="64"
                 rx="32"
@@ -127,7 +127,7 @@ function FeaturesBlocks() {
     >
         <g fill="none" fillRule="evenodd">
             <rect
-                className="fill-current text-blue-600"
+                className="fill-current text-primary"
                 width="64"
                 height="64"
                 rx="32"
@@ -161,7 +161,7 @@ function FeaturesBlocks() {
     >
         <g fill="none" fillRule="evenodd">
             <rect
-                className="fill-current text-blue-600"
+                className="fill-current text-primary"
                 width="64"
                 height="64"
                 rx="32"
