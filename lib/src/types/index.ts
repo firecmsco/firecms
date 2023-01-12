@@ -21,4 +21,5 @@ export * from "./entity_callbacks";
 export * from "./local_config_persistence";
 export * from "./plugins";
 export * from "./analytics";
+export * from "./firecms";
 export * from "./firecms_external_config";

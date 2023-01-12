@@ -4,10 +4,11 @@ import { User as FirebaseUser } from "firebase/auth";
 import {
     AuthController,
     CMSAnalyticsEvent,
-    CMSView,
+    CMSView, CMSViewsBuilder,
     CollectionOverrideHandler,
     DataSource,
     EntityCollection,
+    EntityCollectionsBuilder,
     FieldConfig,
     Locale,
     User
@@ -20,18 +21,6 @@ import {
 } from "./types/auth";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 import { useNavigationContext } from "../hooks";
-
-export type EntityCollectionsBuilder = (params: {
-    user: User | null,
-    authController: AuthController,
-    dataSource: DataSource
-}) => EntityCollection[] | Promise<EntityCollection[]>;
-
-export type CMSViewsBuilder = (params: {
-    user: User | null,
-    authController: AuthController,
-    dataSource: DataSource
-}) => CMSView[] | Promise<CMSView[]>;
 
 /**
  * Main entry point that defines the CMS configuration
