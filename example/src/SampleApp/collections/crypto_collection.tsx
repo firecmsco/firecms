@@ -1,4 +1,4 @@
-import { buildCollection } from "@camberi/firecms";
+import { buildCollection } from "firecms";
 
 export const cryptoCollection = buildCollection({
     name: "Crypto",

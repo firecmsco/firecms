@@ -10,12 +10,19 @@
 
 <br />
 
+<h2>IMPORTANT, PACKAGE RENAME</h2>
+
+**The FireCMS packaged has been renamed from `@camberi/firecms` to `firecms`.
+Please update your dependencies accordingly.
+From versions 2.0.0-beta.1 versions are released under the new name.**
+
 <p align="center">
     <img src="https://firecms.co/img/dark_mode.webp" alt="Intro video" style="max-width: 100%;">
 </p>
 
+<br />
 
-[![NPM](https://img.shields.io/npm/v/@camberi/firecms.svg)](https://www.npmjs.com/package/@camberi/firecms) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/firecms.svg)](https://www.npmjs.com/package/firecms) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 FireCMS is a headless CMS and admin panel, built by developers for developers.
 
@@ -132,10 +139,6 @@ the user. This allows for advanced cases where you trigger a Cloud
 Function after saving an entity that modifies some values, and you want to get
 real time updates.
 
-You can add your custom logic or validation in multiple points of the user flow.
-There are built-in hooks `onPreSave`, `onSaveSuccess`, `onSaveFailure`,
-`onPreDelete` and `onDelete`.
-
 ### 🗂️ Files storage
 
 FireCMS supports uploading files to Firebase Storage out of the box, and
@@ -144,7 +147,11 @@ allowing for reordering.
 
 You can change the Firebase Storage implementation with your own.
 
-### 🙌 Custom backend
+### 🙌 Your logic
+
+You can add your custom logic or validation in multiple points of the user flow.
+There are built-in hooks `onPreSave`, `onSaveSuccess`, `onSaveFailure`,
+`onPreDelete` and `onDelete`.
 
 FireCMS has a good separation of concerns. All the logic related to
 Firebase/Firestore is abstracted away behind 3 interfaces: `DataSource`,

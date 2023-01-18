@@ -17,7 +17,7 @@ This fields allows reordering of its entries.
 This component can be expanded or collapsed by default.
 
 ```typescript jsx
-import { buildProperty } from "@camberi/firecms";
+import { buildProperty } from "firecms";
 
 buildProperty({
     name: "Content",

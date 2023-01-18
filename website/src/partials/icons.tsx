@@ -1,6 +1,5 @@
 import React from "react";
 
-
 export const lightningIcon = <svg
     className="w-3 h-3 fill-current"
     viewBox="0 0 12 12"

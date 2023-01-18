@@ -8,7 +8,7 @@ import {
     ResolvedProperty,
     SaveEntityProps,
     useFirestoreDataSource
-} from "@camberi/firecms";
+} from "firecms";
 import { FirebaseApp } from "firebase/app";
 
 type CustomDataSourceProps = { firebaseApp?: FirebaseApp };

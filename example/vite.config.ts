@@ -25,7 +25,7 @@ export default defineConfig({
         })],
     resolve: {
         alias: {
-            "@camberi/firecms": path.resolve(__dirname, "../lib/src")
+            firecms: path.resolve(__dirname, "../lib/src")
         }
     }
 })

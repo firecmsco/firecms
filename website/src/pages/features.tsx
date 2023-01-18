@@ -3,7 +3,6 @@ import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
-
 import AOS from "aos";
 import "aos/dist/aos.css";
 import "../css/tailwind.css";

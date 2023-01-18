@@ -9,7 +9,8 @@ import TPALogo from "@site/static/img/logos/the_planet_app_logo.svg";
 import TPALogoDark from "@site/static/img/logos/the_planet_app_logo_dark.svg";
 import SocialIncomeLogo from "@site/static/img/logos/social_income_logo.svg";
 import MindSwitchLogo from "@site/static/img/logos/mindswitch_logo.svg";
-import MindSwitchLogoDark from "@site/static/img/logos/mindswitch_logo_white.svg";
+import MindSwitchLogoDark
+    from "@site/static/img/logos/mindswitch_logo_white.svg";
 
 export function Companies() {
 

@@ -1,6 +1,5 @@
-import React, { Suspense } from "react";
+import React from "react";
 import HeroButtons from "./HeroButtons";
-import BrowserOnly from "@docusaurus/BrowserOnly";
 
 // @ts-ignore
 import darkModeVideo from "@site/static/img/dark_mode.mp4";

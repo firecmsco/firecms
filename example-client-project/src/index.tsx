@@ -1,4 +1,4 @@
-import { FieldConfig, FireCMSCustomization } from "@camberi/firecms";
+import { FieldConfig, FireCMSCustomization } from "firecms";
 import { CustomColorTextField } from "./fields/CustomColorTextField";
 
 const customFields: Record<string, FieldConfig> = {

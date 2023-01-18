@@ -31,7 +31,7 @@ This is an example of a custom TextField that takes the background color as a pr
 
 import React from "react";
 import { TextField } from "@mui/material";
-import { FieldDescription, FieldProps } from "@camberi/firecms";
+import { FieldDescription, FieldProps } from "firecms";
 
 interface CustomColorTextFieldProps {
     color: string

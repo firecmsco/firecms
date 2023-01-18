@@ -23,7 +23,7 @@ import {
     useSelectionController,
     useSideEntityController,
     useSnackbarController
-} from "@camberi/firecms";
+} from "firecms";
 import { Product } from "./types";
 import { usersCollection } from "./collections/users_collection";
 

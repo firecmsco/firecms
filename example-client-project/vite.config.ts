@@ -8,8 +8,8 @@ import { importMaps } from './module-federation/vite-importmap-shim';
 // Is there a better way to do this?
 // const isExternal = (id: string) => {
 //     return [
-//         "@camberi/firecms",
-//         // "@camberi/firecms_collection_editor",
+//         "firecms",
+//         // "firecms_collection_editor",
 //         // "@emotion/react",
 //         // "@emotion/styled",
 //         // "@mui/icons-material",
@@ -84,7 +84,7 @@ export default defineConfig(async ({ command }) => ({
     ],
     resolve: {
         alias: {
-            "@camberi/firecms": path.resolve(__dirname, "../lib/src")
+            "firecms": path.resolve(__dirname, "../lib/src")
         }
     }
 }))

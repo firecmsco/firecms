@@ -17,7 +17,7 @@ import {
     Markdown,
     useDataSource,
     useStorageSource
-} from "@camberi/firecms";
+} from "firecms";
 import { productsCollection } from "./products_collection";
 import { BlogEntry, Product } from "./types";
 

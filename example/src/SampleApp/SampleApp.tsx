@@ -7,7 +7,7 @@ import {
     buildFieldConfig,
     CMSView,
     FirebaseCMSApp
-} from "@camberi/firecms";
+} from "firecms";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";

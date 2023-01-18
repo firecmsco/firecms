@@ -1,4 +1,4 @@
-import { EntityReference } from "@camberi/firecms";
+import { EntityReference } from "firecms";
 
 export type Product = {
     name: string;
@@ -21,7 +21,6 @@ export type Product = {
     uppercase_name: string,
     added_on: Date;
 }
-
 
 export type Locale = {
     name: string,
