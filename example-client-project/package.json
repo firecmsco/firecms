@@ -9,12 +9,12 @@
     "preview": "yarn run build && vite preview --port 4174"
   },
   "dependencies": {
-    "firecms": "workspace:lib",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.16",
     "@mui/lab": "^5.0.0-alpha.111",
     "@mui/material": "^5.10.17",
+    "firecms": "workspace:lib",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

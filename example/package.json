@@ -3,7 +3,6 @@
     "version": "0.1.0",
     "private": true,
     "dependencies": {
-        "firecms": "workspace:lib",
         "@emotion/react": "^11.10.5",
         "@emotion/styled": "^11.10.5",
         "@mui/icons-material": "^5.10.16",
@@ -11,6 +10,7 @@
         "@mui/material": "^5.10.17",
         "algoliasearch": "^4.14.2",
         "firebase": "^9.14.0",
+        "firecms": "workspace:lib",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router": "^6.4.4",
