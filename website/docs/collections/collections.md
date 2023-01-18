@@ -110,6 +110,11 @@ in [Entity collections](../api/interfaces/entitycollection)
   It will still be accessible if you reach the specified path.
   You can also use this collection as a reference target.
 
+:::tip
+You can force the CMS to always open the form when editing a document by
+setting the `inlineEditing` property to `false` in the collection configuration.
+:::
+
 ### Sample collection
 
 :::tip

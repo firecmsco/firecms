@@ -160,7 +160,7 @@ export default function ThreeJSAnimationShader({
         state.camera.updateProjectionMatrix();
     }
 
-    const render = useCallback(() => {
+    const render = () => {
         if (!sceneStateRef.current) return -1;
 
         // do not render if offscreen
@@ -181,7 +181,7 @@ export default function ThreeJSAnimationShader({
             composer.render();
         }
         return requestAnimationFrame(render);
-    }, [darkMode]);
+    };
 
     useEffect(() => {
 
@@ -196,9 +196,11 @@ export default function ThreeJSAnimationShader({
         //RENDER LOOP
         requestRef.current = render();
 
-        return () => cancelAnimationFrame(requestRef.current);
+        return () => {
+            cancelAnimationFrame(requestRef.current);
+        };
 
-    }, [canvasRef.current, render]);
+    }, [canvasRef.current, darkMode]);
 
     useEffect(() => {
         function handleResize() {
@@ -528,7 +530,7 @@ void main(){
     color.rgb +=  v_displacement_amount * 0.3;
     color.rg -=  (1.0 - v_position.z / u_sphere_radius) * 0.1;
     color = czm_saturation(color, 1.2);
-    gl_FragColor = vec4(color,.9);
+    gl_FragColor = vec4(color,.8);
 }
 `;
 }

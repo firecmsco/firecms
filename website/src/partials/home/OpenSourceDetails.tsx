@@ -3,7 +3,7 @@ import HeroButtons from "./HeroButtons";
 // @ts-ignore
 import FireCMSLogo from "@site/static/img/firecms_logo.svg";
 
-function Testimonials() {
+function OpenSourceDetails() {
     return (
         <section className="relative">
 
@@ -19,7 +19,14 @@ function Testimonials() {
                            data-aos="zoom-y-out">
                             Extend the functionality of your admin panel and
                             your complete project with all the capabilities of
-                            Firebase and Google Cloud
+                            Firebase and Google Cloud.
+                        </p>
+                        <p className="text-gray-600 dark:text-gray-200">
+                            Firebase is a powerful backend as a service that
+                            allows you to build apps without having to worry
+                            about the infrastructure.
+                            Use the built-in authentication, storage, hosting,
+                            functions, and more.
                         </p>
                     </div>
 
@@ -33,4 +40,4 @@ function Testimonials() {
     );
 }
 
-export default Testimonials;
+export default OpenSourceDetails;

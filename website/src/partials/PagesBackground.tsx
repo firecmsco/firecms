@@ -6,15 +6,23 @@ import { useLocation } from "@docusaurus/router";
 
 const LazyThreeJSAnimationShader = React.lazy(() => import("../shape/ThreeJSAnimationShader"));
 
-export function PagesBackground({darkMode}:{darkMode: boolean}) {
+function shouldShowAnimation(pathname) {
+    return ExecutionEnvironment.canUseDOM
+        && animationPaths.some((p) => pathname === "/" || pathname.startsWith(p));
+}
+
+const animationPaths = [
+    "/features",
+    "/f/"
+];
+
+export function PagesBackground({ darkMode }: { darkMode: boolean }) {
 
     const { pathname } = useLocation();
-    const [showAnimation, setShowAnimation] = React.useState(ExecutionEnvironment.canUseDOM ? document.documentElement.classList.contains("dark") : true);
+    const [showAnimation, setShowAnimation] = React.useState(shouldShowAnimation(pathname));
 
     useEffect(() => {
-        if (ExecutionEnvironment.canUseDOM
-            && (pathname === "/"
-                || pathname.startsWith("/features"))) {
+        if (shouldShowAnimation(pathname)) {
             setShowAnimation(true);
         }
     }, [ExecutionEnvironment.canUseDOM]);

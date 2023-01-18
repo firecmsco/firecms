@@ -55,19 +55,24 @@ module.exports = {
             },
             items: [
                 {
-                    label: "Features",
+                    label: "Product",
+                    to: "features",
                     items: [
                         {
+                            label: "Features",
+                            to: "/features",
+                        },
+                        {
                             label: "Multiple editing options",
-                            to: "/features/multiple_editing_options",
+                            to: "/f/multiple_editing_options",
                         },
                         {
                             label: "Advanced content editing",
-                            to: "/features/advanced_forms",
+                            to: "/f/advanced_forms",
                         },
                         {
                             label: "The most powerful backend",
-                            to: "/features/backend_extension",
+                            to: "/f/backend_extension",
                         },
                     ],
                     position: "left"
@@ -94,17 +99,24 @@ module.exports = {
                     dropdownActiveClassDisabled: true,
                 },
                 {
+                    href: "https://github.com/Camberi/firecms",
+                    // label: 'GitHub',
+                    className: "header-github-link",
+                    "aria-label": "GitHub repository",
+                    position: "right"
+                },
+                {
                     to: "https://demo.firecms.co",
                     label: "Demo",
-                    className: "btn mr-2 px-6 py-2 text-white font-bold uppercase bg-primary hover:text-white hover:bg-blue-700",
+                    className: "btn shadow-none mr-2 px-6 py-2 font-bold uppercase",
                     "aria-label": "Open the demo project",
                     position: "right"
                 },
                 {
-                    href: "https://github.com/Camberi/firecms",
-                    // label: 'GitHub',
-                    className: "mr-2 header-github-link",
-                    "aria-label": "GitHub repository",
+                    to: "https://app.firecms.co",
+                    label: "Sign in",
+                    className: "btn mr-3 px-6 py-2 text-white font-bold uppercase bg-primary hover:text-white hover:bg-blue-700",
+                    "aria-label": "Go to FireCMS Cloud",
                     position: "right"
                 },
             ]
