@@ -3,7 +3,7 @@ import { Button } from "@mui/material";
 import {
     CollectionActionsProps,
     useSnackbarController
-} from "@camberi/firecms";
+} from "firecms";
 
 export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 

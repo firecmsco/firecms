@@ -2,11 +2,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
 
 import { TypeAnimation } from "react-type-animation";
-import {
-    CTACaret,
-    CTAOutlinedButtonMixin,
-    CTAOutlinedButtonWhiteMixin
-} from "../buttons";
+import { CTACaret, CTAOutlinedButtonWhiteMixin } from "../buttons";
 
 export function ManageYour() {
     return <section

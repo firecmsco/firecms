@@ -9,7 +9,7 @@
     "preview": "yarn run build && vite preview --port 4174"
   },
   "dependencies": {
-    "@camberi/firecms": "workspace:lib",
+    "firecms": "workspace:lib",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@mui/icons-material": "^5.10.16",

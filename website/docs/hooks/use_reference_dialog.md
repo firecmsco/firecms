@@ -53,7 +53,7 @@ Example:
 
 ```tsx
 import React from "react";
-import { useAuthController } from "@camberi/firecms";
+import { useAuthController } from "firecms";
 
 export function ExampleCMSView() {
 

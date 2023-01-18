@@ -6,7 +6,6 @@ import { EffectComposer, RenderPass } from "postprocessing";
 
 // @ts-ignore
 import useThemeContext from "@theme/hooks/useThemeContext";
-import { useCallback } from "react";
 
 // const CAMERA_FACTOR = 60;
 const CAMERA_FACTOR = 180;

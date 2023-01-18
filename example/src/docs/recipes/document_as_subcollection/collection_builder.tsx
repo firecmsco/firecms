@@ -1,4 +1,4 @@
-import { buildCollection, EntityCollectionsBuilder } from "@camberi/firecms";
+import { buildCollection, EntityCollectionsBuilder } from "firecms";
 import { Unit, unitsCollection } from "./unit_collection";
 
 const collectionBuilder: EntityCollectionsBuilder = async ({ dataSource }) => {

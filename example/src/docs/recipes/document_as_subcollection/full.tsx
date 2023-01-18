@@ -3,7 +3,7 @@ import {
     buildCollection,
     EntityCollectionsBuilder,
     FirebaseCMSApp
-} from "@camberi/firecms";
+} from "firecms";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";

@@ -24,13 +24,7 @@ import customFieldVideo from "@site/static/img/custom_fields.mp4";
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 
 import { useColorMode } from "@docusaurus/theme-common";
-
-import SyntaxHighlighter from "react-syntax-highlighter";
-import {
-    atomOneLight,
-    dracula
-} from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { arrowIcon, lightningIcon, settingsIcon, tickIcon } from "./icons";
+import { lightningIcon, settingsIcon } from "./icons";
 
 function Features() {
 

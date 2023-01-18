@@ -3,7 +3,7 @@ import algoliasearch, { SearchClient } from "algoliasearch";
 import {
     FirestoreTextSearchController,
     performAlgoliaTextSearch
-} from "@camberi/firecms";
+} from "firecms";
 
 let client: SearchClient | undefined;
 // process is defined for react-scripts builds

@@ -5,7 +5,7 @@ import {
     FieldProps,
     PropertyFieldBinding,
     PropertyFieldBindingProps
-} from "@camberi/firecms";
+} from "firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 export default function CustomShapedArrayField({

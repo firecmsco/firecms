@@ -9,7 +9,6 @@ import "../../css/custom.css";
 import { useLocation } from "@docusaurus/router";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
-
 export default function LayoutWrapper(props) {
 
     const { pathname } = useLocation();

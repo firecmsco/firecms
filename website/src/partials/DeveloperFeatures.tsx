@@ -30,7 +30,7 @@ import {
     atomOneLight,
     dracula
 } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { arrowIcon, lightningIcon, settingsIcon, tickIcon } from "./icons";
+import { arrowIcon, tickIcon } from "./icons";
 
 export function DeveloperFeatures() {
 

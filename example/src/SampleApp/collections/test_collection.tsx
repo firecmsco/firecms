@@ -9,7 +9,7 @@ import {
     Properties,
     resolveNavigationFrom,
     toSnakeCase
-} from "@camberi/firecms";
+} from "firecms";
 import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
 

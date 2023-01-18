@@ -3,7 +3,7 @@ import {
     buildEntityCallbacks,
     EntityOnDeleteProps,
     EntityOnSaveProps
-} from "@camberi/firecms";
+} from "firecms";
 
 type Product = {
     name: string;
@@ -44,9 +44,8 @@ const productCallbacks = buildEntityCallbacks({
 
     onDelete: (props: EntityOnDeleteProps<Product>) => {
         console.log("onDelete", props);
-    },
+    }
 });
-
 
 const productCollection = buildCollection<Product>({
     name: "Product",

@@ -1,4 +1,4 @@
-import { buildCollection, CollectionActionsProps } from "@camberi/firecms";
+import { buildCollection, CollectionActionsProps } from "firecms";
 import { CopyEntityButton } from "./copy_button";
 import {
     Product,

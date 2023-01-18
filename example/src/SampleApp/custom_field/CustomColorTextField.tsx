@@ -4,7 +4,7 @@ import {
     FieldDescription,
     FieldProps,
     useModeController
-} from "@camberi/firecms";
+} from "firecms";
 
 interface CustomColorTextFieldProps {
     color: string

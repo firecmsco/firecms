@@ -4,7 +4,7 @@ import {
   buildProperty,
   EntityReference,
   FirebaseCMSApp,
-} from '@camberi/firecms';
+} from 'firecms';
 
 import React, { useCallback } from 'react';
 

@@ -27,7 +27,7 @@ them and then build the schema with them.
 import {
     // ...
     EntityCollectionsBuilder,
-} from "@camberi/firecms";
+} from "firecms";
 
 // ...
 
