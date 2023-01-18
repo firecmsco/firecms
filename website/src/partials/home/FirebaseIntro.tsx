@@ -8,11 +8,11 @@ import featuresElement from "@site/static/img/features-element.png";
 import ReactLogo from "@site/static/img/reactjs-icon.svg";
 // @ts-ignore
 import FirebaseLogo from "@site/static/img/firebase.svg";
-import { FireCMSLogo } from "./FireCMSLogo";
+import { FireCMSLogo } from "../FireCMSLogo";
 
 function FirebaseIntro() {
     return (
-        <section className="relative py-20">
+        <section className="relative py-40 md:py-48">
 
             <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
 
@@ -40,10 +40,10 @@ function FirebaseIntro() {
                 </div>
 
                 <div
-                    className="max-w-3xl mx-auto text-center pb-36 md:pb-40"
+                    className="max-w-3xl mx-auto text-center"
                     data-aos="fade-up"
                     data-aos-delay="100">
-                    <h2 className="h2 mb-4">
+                    <h2 className="h1 mb-4">
                         Don't build another admin tool
                     </h2>
                     <p className="text-xl text-gray-600 dark:text-gray-200 dark:text-gray-200">

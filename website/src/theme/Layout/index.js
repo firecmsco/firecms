@@ -9,17 +9,19 @@ import "../../css/custom.css";
 import { useLocation } from "@docusaurus/router";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
+
 export default function LayoutWrapper(props) {
 
     const { pathname } = useLocation();
 
     const documentEnabled = ExecutionEnvironment.canUseDOM ? document : undefined
-    const [darkMode, setDarkMode] = React.useState(false);
+    const [darkMode, setDarkMode] = React.useState(documentEnabled ? document.documentElement.getAttribute("data-theme") === "dark" : true);
 
     useEffect(() => {
         if (ExecutionEnvironment.canUseDOM) {
-            updateDarkModeClass();
-            setDarkMode(document.documentElement.getAttribute("data-theme") === "dark");
+            const mode = document.documentElement.getAttribute("data-theme");
+            updateDarkModeClass(mode);
+            setDarkMode(mode === "dark");
         }
     }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
 
@@ -52,7 +54,6 @@ export default function LayoutWrapper(props) {
             observer.disconnect();
         };
     }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
-
 
     // should show algolia docsearch
     useEffect(() => {

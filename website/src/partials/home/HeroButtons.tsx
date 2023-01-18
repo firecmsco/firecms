@@ -1,6 +1,5 @@
 import React from "react";
-import useBaseUrl from "@docusaurus/useBaseUrl";
-import { CTAButtonMixin, CTAOutlinedButtonMixin } from "./buttons";
+import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../buttons";
 
 function HeroButtons() {
 
@@ -39,6 +38,7 @@ function HeroButtons() {
             href={"https://app.firecms.co"}
         >
             Get started
+            <CTACaret/>
         </a>
     </>;
 }

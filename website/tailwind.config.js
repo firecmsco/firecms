@@ -10,7 +10,7 @@ module.exports = {
                 secondary: '#FF5B79',
                 gray: {
                     100: '#FBFBFA',
-                    200: '#EAEAF8',
+                    200: '#eaeff8',
                     300: '#DFDFEA',
                     400: '#9999A7',
                     500: '#7F7F9B',

@@ -45,7 +45,7 @@ export const Newsletter = () => {
         <section
             className="relative">
             <div
-                className={"mx-auto px-4 sm:px-6 bg-pink-400 text-white"}
+                className={"mx-auto px-4 sm:px-6 bg-gray-200 dark:bg-gray-800 "}
                 // data-aos="fade-up"
                 // data-aos-delay="100"
             >
@@ -70,7 +70,7 @@ export const Newsletter = () => {
                                 className="w-full py-2 border-b-2 border-gray-400 flex justify-between gap-2">
                                 <input
                                     disabled={loading || completed}
-                                    className={"appearance-none outline-none text-xl flex-1 px-4 py-4 bg-gray-200 rounded w-full text-gray-700 leading-tight focus:border-primary "
+                                    className={"appearance-none outline-none text-xl flex-1 px-4 py-4 bg-gray-100 dark:bg-gray-900 rounded w-full leading-tight focus:border-primary "
                                         + (!validEmail && submitClicked ? "border-solid border-red-600" : "border-none")}
                                     id="email" type="email"
                                     placeholder="Enter your email"
@@ -78,7 +78,7 @@ export const Newsletter = () => {
                                     value={email}/>
                                 <button type="submit"
                                         disabled={loading || completed || !policyAccepted}
-                                        className={"btn px-8 py-4 sm:px-12 sm:py-4 text-white font-bold uppercase w-full w-auto sm:mb-0 sm:ml-2 " + (loading || !policyAccepted ? "bg-gray-200 " : (completed ? "bg-green-600" : "bg-primary hover:bg-blue-700"))}>
+                                        className={"btn px-8 py-4 sm:px-12 sm:py-4 font-bold uppercase w-full w-auto sm:mb-0 sm:ml-2 " + (loading || !policyAccepted ? "bg-gray-200 dark:bg-gray-800" : (completed ? "bg-green-600" : "bg-primary hover:bg-blue-700"))}>
                                     {loading ? "Loading" : (completed ? "Signed up!" : "Sign up")}
                                 </button>
                             </div>
@@ -89,7 +89,7 @@ export const Newsletter = () => {
                                        onChange={() => setPolicyAccepted(!policyAccepted)}/>
                                 <span>By subscribing to our newsletter, you acknowledge you have read, and agree to <a
                                     href="/privacy_policy"
-                                    className="underline text-gray-800">our personal data policy</a>.</span>
+                                    className="underline ">our personal data policy</a>.</span>
                             </label>
                         </form>
                         {error && <p className={"text-red-400"}>There was an

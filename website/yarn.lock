@@ -9704,6 +9704,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-type-animation@npm:^2.1.2":
+  version: 2.1.2
+  resolution: "react-type-animation@npm:2.1.2"
+  peerDependencies:
+    prop-types: ^15.5.4
+    react: ">= 15.0.0"
+    react-dom: ">= 15.0.0"
+  checksum: 229467f33b024ccb6c7e796011f62e349ca5bc2fe74f5206132298a49134069580b3a9fbc7f94db4801418b41b07614a759f3ac004fa6713056fba5e46acb0c0
+  languageName: node
+  linkType: hard
+
 "react@npm:^18.2.0":
   version: 18.2.0
   resolution: "react@npm:18.2.0"
@@ -11797,6 +11808,7 @@ __metadata:
     react-dom: ^18.2.0
     react-syntax-highlighter: ^15.5.0
     react-transition-group: ^4.4.5
+    react-type-animation: ^2.1.2
     sass: ^1.56.0
     tailwindcss: ^3.2.2
     three: ^0.146.0
