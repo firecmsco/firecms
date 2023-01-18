@@ -30,9 +30,9 @@ module.exports = {
     themeConfig: {
         image: "img/logo_small.png",
         announcementBar: {
-            id: "star",
+            id: "package_rename",
             content:
-                "You can support FireCMS by giving a ⭐&nbsp;on <strong><a target=\"_blank\" rel=\"noopener noreferrer\" href=\"https://github.com/Camberi/firecms\">GitHub</a></strong> ✨",
+                "The package has been renamed to <code>firecms</code> from <code>@camberi/firecms</code> since version 2.0.0-beta.1",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,
@@ -61,10 +61,6 @@ module.exports = {
                         {
                             label: "Features",
                             to: "/features",
-                        },
-                        {
-                            label: "Multiple editing options",
-                            to: "/f/multiple_editing_options",
                         },
                         {
                             label: "Advanced content editing",
@@ -108,17 +104,18 @@ module.exports = {
                 {
                     to: "https://demo.firecms.co",
                     label: "Demo",
-                    className: "btn shadow-none mr-2 px-6 py-2 font-bold uppercase",
+                    // className: "btn shadow-none mr-2 px-6 py-2 font-bold uppercase",
+                    className: "btn mr-3 px-6 py-2 text-white font-bold uppercase bg-primary hover:text-white hover:bg-blue-700",
                     "aria-label": "Open the demo project",
                     position: "right"
                 },
-                {
-                    to: "https://app.firecms.co",
-                    label: "Sign in",
-                    className: "btn mr-3 px-6 py-2 text-white font-bold uppercase bg-primary hover:text-white hover:bg-blue-700",
-                    "aria-label": "Go to FireCMS Cloud",
-                    position: "right"
-                },
+                // {
+                //     to: "https://app.firecms.co",
+                //     label: "Sign in",
+                //     className: "btn mr-3 px-6 py-2 text-white font-bold uppercase bg-primary hover:text-white hover:bg-blue-700",
+                //     "aria-label": "Go to FireCMS Cloud",
+                //     position: "right"
+                // },
             ]
         },
         footer: {
@@ -210,9 +207,9 @@ module.exports = {
                             path: "1.0.0",
                         },
                         current: {
-                            label: "2.0.0-alpha",
+                            label: "2.0.0-beta",
                             // path: "2.0.0",
-                            banner: "unreleased"
+                            // banner: "unreleased"
                         }
                     },
                 },

@@ -50,7 +50,7 @@ function Home() {
                     {/*<Separator/>*/}
                     <FirebaseIntro/>
 
-                    <FireCMSCloudIntro/>
+                    {/*<FireCMSCloudIntro/>*/}
 
                     <FeaturesPanels/>
 
