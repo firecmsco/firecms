@@ -3,9 +3,9 @@ id: new_in_v2
 title: New and updated features in version 2.0
 ---
 
-:::important 
-FireCMS 2.0 is in alpha and the changes proposed here may break or
-not be relevant in future iterations
+:::important
+The package name has changed from `@camberi/firecms` to `firecms`.
+Please update your dependencies accordingly
 :::
 
 So after than more than 2 years of development of version 1.0 and after taking

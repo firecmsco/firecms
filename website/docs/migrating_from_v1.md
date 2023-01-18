@@ -4,15 +4,15 @@ title: Migrating from version 1.0 to 2.0
 ---
 
 :::important 
-FireCMS 2.0 is in alpha and the changes proposed here may break or
-not be relevant in future iterations
+The package name has change from `@camberi/firecms` to `firecms`. 
+Please update your dependencies accordingly
 :::
 
 In order to update the dependencies to the new version you can run the 
 command
 
 ```
-yarn add firecms@next firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab@^5.0.0-alpha.90 @mui/x-date-pickers@^5.0.0-beta.1 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
+yarn add firecms@^2.0.0 firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab@latest @mui/x-date-pickers@^5.0.0-beta.1 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
 ```
 
 This is a guide on how to migrate FireCMS apps from version 1.0 to 2.0.

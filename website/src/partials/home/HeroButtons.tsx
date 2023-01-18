@@ -1,3 +1,4 @@
+import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
 import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../buttons";
 
@@ -32,10 +33,12 @@ function HeroButtons() {
             target="_blank"
         >
             Demo
+            <CTACaret/>
         </a>
         <a
             className={CTAButtonMixin + "  sm:mb-0 w-full sm:w-auto rounded sm:ml-4 ml-2"}
-            href={"https://app.firecms.co"}
+            // href={"https://app.firecms.co"}
+            href={useBaseUrl("docs/")}
         >
             Get started
             <CTACaret/>

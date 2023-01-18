@@ -1,6 +1,7 @@
 import React from "react"
 
 import collectionEditorVideo
+// @ts-ignore
     from "@site/static/img/collection_editor_preview.mp4";
 
 export const FireCMSCloudIntro = () => {
