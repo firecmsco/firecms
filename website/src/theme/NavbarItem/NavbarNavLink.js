@@ -3,7 +3,6 @@ import { useLocation } from "@docusaurus/router";
 import NavbarNavLink from "@theme-original/NavbarItem/NavbarNavLink";
 
 export default function NavbarNavLinkWrapper(props) {
-    console.log(props);
     const { pathname } = useLocation();
     if (pathname.startsWith("/docs/") && props.label === "Demo") {
         return null;

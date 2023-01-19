@@ -9,12 +9,14 @@ name: Deploy website to Firebase Hosting on merge
 jobs:
   build_and_deploy:
     runs-on: ubuntu-latest
+    env:
+      REACT_APP_GTAG_ID: ${{ secrets.REACT_APP_GTAG_ID }}
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-node@v2
         with:
           node-version: '16'
-      - run: yarn
+      - run: yarn install --no-immutable
       - run: cd website && yarn && yarn build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

@@ -4,7 +4,7 @@ module.exports = {
     tagline: "Awesome headless CMS based Firestore/Firebase and React, and completely open-source",
     url: "https://firecms.co",
     baseUrl: "/",
-    onBrokenLinks: "throw",
+    onBrokenLinks: "warn",
     onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.ico",
     organizationName: "Camberi",

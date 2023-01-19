@@ -16,7 +16,7 @@
         "node": ">=14"
     },
     "dependencies": {
-        "@docsearch/js": "3",
+        "@docsearch/js": "3.3.2",
         "@docusaurus/core": "^2.2.0",
         "@docusaurus/plugin-google-gtag": "^2.2.0",
         "@docusaurus/plugin-sitemap": "^2.2.0",
@@ -24,19 +24,19 @@
         "aos": "^2.3.4",
         "autoprefixer": "^10.4.13",
         "clsx": "^1.2.1",
-        "docusaurus-plugin-sass": "^0.2.2",
-        "docusaurus-plugin-typedoc": "^0.17.5",
+        "docusaurus-plugin-sass": "^0.2.3",
+        "docusaurus-plugin-typedoc": "^0.18.0",
         "dotenv": "^16.0.3",
-        "postprocessing": "^6.29.1",
+        "postprocessing": "^6.29.3",
         "raw-loader": "^4.0.2",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-syntax-highlighter": "^15.5.0",
         "react-transition-group": "^4.4.5",
         "react-type-animation": "^2.1.2",
-        "sass": "^1.56.0",
-        "tailwindcss": "^3.2.2",
-        "three": "^0.146.0"
+        "sass": "^1.57.1",
+        "tailwindcss": "^3.2.4",
+        "three": "^0.148.0"
     },
     "browserslist": {
         "production": [
@@ -53,16 +53,16 @@
     "devDependencies": {
         "@docusaurus/module-type-aliases": "^2.2.0",
         "@tsconfig/docusaurus": "^1.0.6",
-        "@types/react": "^18.0.25",
-        "@types/react-helmet": "^6.1.5",
+        "@types/react": "^18.0.27",
+        "@types/react-helmet": "^6.1.6",
         "@types/react-router-dom": "^5.3.3",
         "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",
-        "postcss": "^8.4.18",
-        "postcss-import": "^15.0.0",
-        "postcss-loader": "^7.0.1",
-        "postcss-preset-env": "^7.8.2",
-        "typedoc": "^0.23.20",
-        "typedoc-plugin-markdown": "^3.13.6",
-        "typescript": "^4.9.0"
+        "postcss": "^8.4.21",
+        "postcss-import": "^15.1.0",
+        "postcss-loader": "^7.0.2",
+        "postcss-preset-env": "^7.8.3",
+        "typedoc": "^0.23.24",
+        "typedoc-plugin-markdown": "^3.14.0",
+        "typescript": "^4.9.4"
     }
 }

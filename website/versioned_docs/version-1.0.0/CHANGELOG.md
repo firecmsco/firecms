@@ -1,3 +1,8 @@
+---
+id: changelog
+title: Changelog
+---
+
 ## [1.0.3] - 2023-01-05
 
 ### Changed
