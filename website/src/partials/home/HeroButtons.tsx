@@ -1,6 +1,6 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
-import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../buttons";
+import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../utils";
 
 function HeroButtons() {
 

@@ -82,6 +82,7 @@ module.exports = {
                 "hooks/use_firecms_context",
                 "hooks/use_data_source",
                 "hooks/use_storage_source",
+                "hooks/use_mode_controller",
             ]
         },
         {

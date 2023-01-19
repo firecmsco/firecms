@@ -16,7 +16,7 @@ import FeaturesPanels from "../partials/home/FeaturesPanels";
 import FirebaseTeaser from "../partials/home/OpenSourceDetails";
 import FirebaseIntro from "../partials/home/FirebaseIntro";
 import { Companies } from "../partials/home/Companies";
-import Features from "../partials/Features";
+import Features from "../partials/home/Features";
 
 // import { Newsletter } from "../partials/Newsletter";
 

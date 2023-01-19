@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Layout from "@theme-original/Layout";
-import { PagesBackground } from "../../partials/PagesBackground";
+import { PagesBackground } from "../../partials/general/PagesBackground";
 import docsearch from "@docsearch/js";
 import siteConfig from "@generated/docusaurus.config";
 

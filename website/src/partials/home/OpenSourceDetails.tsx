@@ -2,12 +2,13 @@ import React from "react";
 import HeroButtons from "./HeroButtons";
 // @ts-ignore
 import FireCMSLogo from "@site/static/img/firecms_logo.svg";
+import { ContainerMixin } from "../utils";
 
 function OpenSourceDetails() {
     return (
         <section className="relative">
 
-            <div className="max-w-6xl mx-auto px-4 sm:px-6 mb-16">
+            <div className={ContainerMixin + " px-4 sm:px-6 mb-16"}>
                 <div className="py-12 md:py-20">
                     <div
                         className="max-w-3xl mx-auto text-center pb-12 md:pb-16">

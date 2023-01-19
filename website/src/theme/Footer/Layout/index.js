@@ -1,6 +1,6 @@
 import React from "react";
 import Layout from "@theme-original/Footer/Layout";
-import { Newsletter } from "../../../partials/Newsletter";
+import { Newsletter } from "../../../partials/general/Newsletter";
 
 export default function LayoutWrapper(props) {
     return (

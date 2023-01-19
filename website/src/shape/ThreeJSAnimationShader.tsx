@@ -199,7 +199,7 @@ export default function ThreeJSAnimationShader({
             cancelAnimationFrame(requestRef.current);
         };
 
-    }, [canvasRef.current, darkMode]);
+    }, [canvasRef.current]);
 
     useEffect(() => {
         function handleResize() {
@@ -229,7 +229,7 @@ export default function ThreeJSAnimationShader({
                 height: "100vh",
                 maxHeight: "900px",
                 width: "100vw",
-                maxWidth: "2000px",
+                // maxWidth: "2000px",
                 position: "fixed",
                 top: `0px`,
                 margin: "auto",

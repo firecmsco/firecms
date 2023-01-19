@@ -7,7 +7,7 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 import "../css/tailwind.css";
 import Head from "@docusaurus/Head";
-import Features from "../partials/Features";
+import Features from "../partials/home/Features";
 
 // import { Newsletter } from "../partials/Newsletter";
 
@@ -25,11 +25,8 @@ function FeaturesPage() {
 
     return (
         <Layout
-            title={"FireCMS"}
-            description="Awesome headless CMS based Firestore/Firebase and React, and completely open-source">
-            <Head>
-                <title>FireCMS - Firestore/Firebase headless CMS</title>
-            </Head>
+            title={"Features - FireCMS"}
+            description="FireCMS includes all the features you need to kickstart your project and all the customization options you may need">
             <div className="flex flex-col min-h-screen overflow-hidden ">
 
                 <main className="flex-grow">

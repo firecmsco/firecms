@@ -1,6 +1,6 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
-import { CTACaret, CTAOutlinedButtonMixin } from "../buttons";
+import { ContainerMixin, CTACaret, CTAOutlinedButtonMixin } from "../utils";
 import { gridIcon, lightningIcon } from "../icons";
 
 // @ts-ignore
@@ -18,7 +18,7 @@ function FeaturesPanels() {
     return (
         <section className={"relative sm:px-6 py-12 md:py-20"}>
 
-            <section className=" max-w-6xl mx-auto px-4">
+            <section className={ContainerMixin + " px-4"}>
 
                     <div
                         className="flex items-center max-w-xl md:max-w-none md:w-full mx-auto mb-4"
@@ -72,7 +72,7 @@ function FeaturesPanels() {
                     {/*</div>*/}
             </section>
 
-            <section className=" max-w-6xl mx-auto px-4 sm:px-6 my-4">
+            <section className={ContainerMixin + " px-4 sm:px-6 my-4"}>
                     <div
                         className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
                         <div

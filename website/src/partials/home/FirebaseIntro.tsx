@@ -9,12 +9,13 @@ import ReactLogo from "@site/static/img/reactjs-icon.svg";
 // @ts-ignore
 import FirebaseLogo from "@site/static/img/firebase.svg";
 import { FireCMSLogo } from "../FireCMSLogo";
+import { ContainerMixin } from "../utils";
 
 function FirebaseIntro() {
     return (
         <section className="relative py-40 md:py-48">
 
-            <div className="relative max-w-6xl mx-auto px-4 sm:px-6">
+            <div className={ContainerMixin + " px-4 sm:px-6"}>
 
                 <div
                     className="relative flex justify-center mb-12"

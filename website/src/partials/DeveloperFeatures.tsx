@@ -31,6 +31,7 @@ import {
     dracula
 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { arrowIcon, tickIcon } from "./icons";
+import { ContainerMixin } from "./utils";
 
 export function DeveloperFeatures() {
 
@@ -40,7 +41,7 @@ export function DeveloperFeatures() {
     return (
         <section className="relative">
 
-            <div className="relative max-w-6xl mx-auto">
+            <div className={ContainerMixin}>
                 <div className="pt-12">
 
                     <div
@@ -133,7 +134,7 @@ export function DeveloperFeatures() {
                 </div>
             </div>
 
-            <div className="relative max-w-6xl mx-auto">
+            <div className={ContainerMixin}>
                 <div className="pt-12">
 
                     <div className="">

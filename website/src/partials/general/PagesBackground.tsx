@@ -3,7 +3,7 @@ import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { useLocation } from "@docusaurus/router";
 
-const LazyThreeJSAnimationShader = React.lazy(() => import("../shape/ThreeJSAnimationShader"));
+const LazyThreeJSAnimationShader = React.lazy(() => import("../../shape/ThreeJSAnimationShader"));
 
 function shouldShowAnimation(pathname) {
     return ExecutionEnvironment.canUseDOM
@@ -12,6 +12,7 @@ function shouldShowAnimation(pathname) {
 
 const animationPaths = [
     "/features",
+    "/enterprise",
     "/f/"
 ];
 
