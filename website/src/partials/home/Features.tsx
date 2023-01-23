@@ -14,6 +14,8 @@ import FirebaseLogo from "@site/static/img/firebase.svg";
 // @ts-ignore
 import pricePreview from "@site/static/img/price.png";
 
+import SettingsIcon from "@site/static/img/icons/settings.svg";
+
 // @ts-ignore
 import editingDemoVideo from "@site/static/img/editing_demo.mp4";
 // @ts-ignore
@@ -24,13 +26,9 @@ import customFieldVideo from "@site/static/img/custom_fields.mp4";
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import { lightningIcon, settingsIcon } from "../icons";
-import { GrayPanel } from "../general/GrayPanel";
-import {
-    ContainerMixin,
-    CTACaret,
-    CTAOutlinedButtonWhiteMixin
-} from "../utils";
+import { lightningIcon } from "../icons";
+import { Panel } from "../general/Panel";
+import { CTACaret, CTAOutlinedButtonMixin } from "../utils";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import { TwoColumns } from "../general/TwoColumns";
 
@@ -119,13 +117,12 @@ function Features() {
                 right={
                     <>
 
-
                         <div
                             className={"flex items-center mb-3"}>
 
                             <div
                                 className="flex items-center justify-center text-white w-8 h-8 bg-gray-800 rounded-full shadow flex-shrink-0 ">
-                                {settingsIcon}
+                               <SettingsIcon/>
                             </div>
                             <h3 className="h3 m-0 ml-3 ">
                                 Easy to customise
@@ -140,7 +137,7 @@ function Features() {
                             new project. We use <b>sensible defaults
                             that can be overridden or extended</b>.
                         </p>
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-base text-gray-600 dark:text-gray-200">
                             Integrate your own custom form fields as
                             React components, as well as preview
                             widgets.
@@ -153,7 +150,7 @@ function Features() {
             />
 
 
-            <GrayPanel includeMargin={true}>
+            <Panel includeMargin={true} color={"gray"}>
                 <p className={"h2"}>
                     FireCMS is used by companies of all sizes
                 </p>
@@ -175,17 +172,15 @@ function Features() {
                     FireCMS does not enforce any data structure on your
                     side, and works out of the box with any project.
                 </p>
-                <div className={ContainerMixin}>
-                    <a
-                        className={CTAOutlinedButtonWhiteMixin}
-                        href={useBaseUrl("enterprise/")}
-                    >
-                        More details
-                        <CTACaret/>
-                    </a>
-                </div>
+                <a
+                    className={CTAOutlinedButtonMixin}
+                    href={useBaseUrl("enterprise/")}
+                >
+                    More details
+                    <CTACaret/>
+                </a>
 
-            </GrayPanel>
+            </Panel>
 
             {/*            <div className="relative max-w-6xl mx-auto p-4">*/}
             {/*                <div className="pt-12 lg:pt-20">*/}

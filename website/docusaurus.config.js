@@ -10,6 +10,7 @@ module.exports = {
     organizationName: "Camberi",
     projectName: "FireCMS",
     customFields: {
+        env: process.env.NODE_ENV,
         docSearchApiKey: process.env.REACT_APP_DOC_SEARCH_KEY,
         docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID,
     },
@@ -80,8 +81,8 @@ module.exports = {
                     position: "left"
                 },
                 {
-                    to: "blog",
-                    label: "Blog",
+                    to: "enterprise",
+                    label: "Enterprise",
                     position: "left"
                 },
                 {
@@ -125,7 +126,7 @@ module.exports = {
                     items: [
                         {
                             label: "Contact",
-                            href: "mailto: hello@camberi.com"
+                            href: "mailto: hello@firecms.co"
                         }
                     ]
                 },
@@ -137,6 +138,10 @@ module.exports = {
                         {
                             label: "Demo",
                             to: "https://demo.firecms.co"
+                        },
+                        {
+                            label: "Blog",
+                            to: "blog",
                         },
                         {
                             label: "Camberi",

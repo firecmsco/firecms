@@ -3,9 +3,6 @@ import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
-import AOS from "aos";
-import "aos/dist/aos.css";
-import "../css/tailwind.css";
 import Head from "@docusaurus/Head";
 
 import { FireCMSCloudIntro } from "../partials/home/FireCMSCloudIntro";
@@ -23,14 +20,6 @@ import Features from "../partials/home/Features";
 function Home() {
     const context = useDocusaurusContext();
     const { siteConfig = {} } = context;
-
-    const documentEnabled = ExecutionEnvironment.canUseDOM ? document : undefined
-
-    useEffect(() => {
-        if (ExecutionEnvironment.canUseDOM) {
-            AOS.init();
-        }
-    }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
 
     return (
         <Layout

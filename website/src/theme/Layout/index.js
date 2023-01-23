@@ -5,7 +5,13 @@ import docsearch from "@docsearch/js";
 import siteConfig from "@generated/docusaurus.config";
 
 import "@docsearch/css";
+
+import AOS from "aos";
+import "aos/dist/aos.css";
+
+import "../../css/tailwind.css";
 import "../../css/custom.css";
+
 import { useLocation } from "@docusaurus/router";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
@@ -15,6 +21,12 @@ export default function LayoutWrapper(props) {
 
     const documentEnabled = ExecutionEnvironment.canUseDOM ? document : undefined
     const [darkMode, setDarkMode] = React.useState(documentEnabled ? document.documentElement.getAttribute("data-theme") === "dark" : true);
+
+    useEffect(() => {
+        if (ExecutionEnvironment.canUseDOM) {
+            AOS.init();
+        }
+    }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
 
     useEffect(() => {
         if (ExecutionEnvironment.canUseDOM) {

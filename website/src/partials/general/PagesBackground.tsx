@@ -2,6 +2,7 @@ import React, { Suspense, useEffect } from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { useLocation } from "@docusaurus/router";
+import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 const LazyThreeJSAnimationShader = React.lazy(() => import("../../shape/ThreeJSAnimationShader"));
 
@@ -17,6 +18,8 @@ const animationPaths = [
 ];
 
 export function PagesBackground({ darkMode }: { darkMode: boolean }) {
+    const { siteConfig } = useDocusaurusContext();
+    console.log("PagesBackground", siteConfig);
 
     const { pathname } = useLocation();
     const [showAnimation, setShowAnimation] = React.useState(shouldShowAnimation(pathname));
@@ -24,6 +27,9 @@ export function PagesBackground({ darkMode }: { darkMode: boolean }) {
     useEffect(() => {
         if (shouldShowAnimation(pathname)) {
             setShowAnimation(true);
+        }
+        if (siteConfig.customFields?.env !== "production") {
+            setShowAnimation(false);
         }
     }, [ExecutionEnvironment.canUseDOM]);
 

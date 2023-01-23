@@ -22,6 +22,8 @@ export function ManageYour() {
                     1000,
                     "Invoices",
                     1000,
+                    "Inventory",
+                    1000,
                     "Podcasts",
                     1000,
                     "Fitness exercises",
