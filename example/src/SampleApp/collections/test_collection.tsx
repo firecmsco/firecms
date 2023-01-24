@@ -175,6 +175,23 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entities",
     properties: {
+
+        specSheet: ({ values, entityId }) => ({
+            name: "Specs sheet",
+            dataType: "array",
+            of: {
+                dataType: "string",
+                storage: {
+                    mediaType: "image",
+                    storagePath: "products/" + entityId + "/pdf",
+                    acceptedFiles: ["application/pdf"],
+                    metadata: {
+                        cacheControl: "max-age=1000000"
+                    }
+                }
+            }
+        }),
+
         test_custom: {
             dataType: "string",
             name: "Test custom",
