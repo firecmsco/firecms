@@ -13,7 +13,7 @@ export function Hero({
     return (
         <section className={ContainerMixin + " my-8 md:my-16"}>
             <div
-                className="mt-10 mx-auto max-w-6xl ">
+                className="mt-10 mx-auto max-w-7xl ">
                 <div className="lg:text-left">
                     <h1 className="text-4xl tracking-tight font-extrabold md:text-6xl">
                         {title}

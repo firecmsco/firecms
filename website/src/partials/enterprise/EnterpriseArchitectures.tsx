@@ -1,9 +1,6 @@
 import React from "react";
-import { ContainerMixin } from "../utils";
 import { TwoColumns } from "../general/TwoColumns";
-import { lightningIcon } from "../icons";
 import { Panel } from "../general/Panel";
-import RecentPatient from "@site/static/img/icons/recent_patient.svg";
 import SimpleArchitecture
     from "@site/static/img/enterprise/simple_architecture.svg";
 import ComplexArchitecture
@@ -28,7 +25,7 @@ export function EnterpriseArchitectures() {
                     </p>
 
                     <p>
-                        At Camberi, we have developed the full stack for multiple
+                        We have developed the full stack for multiple
                         successful companies. We have experience with different
                         architectures and we can help you build a scalable
                         infrastructure.

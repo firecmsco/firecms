@@ -4,7 +4,8 @@ export const CTAOutlinedButtonMixin = "btn px-12 py-4 border-1 border-gray-600 d
 export const CTAOutlinedButtonWhiteMixin = "btn px-12 py-4 border-1 border-white font-bold uppercase rounded border-solid text-white hover:bg-gray-200 hover:border-gray-200";
 export const CTAButtonMixin = "btn px-12 font-bold py-4 text-white bg-primary hover:text-white hover:bg-blue-700 font-bold hover:text-white uppercase border-solid rounded ";
 
-export const ContainerMixin = "relative max-w-6xl mx-auto p-4";
+export const ContainerMixin = "relative max-w-7xl mx-auto p-4";
+export const ContainerSmallMixin = "relative max-w-5xl mx-auto p-4";
 
 export const CTACaret = () => <svg aria-hidden="true"
                                    className="w-5 h-5 ml-2 -mr-1"

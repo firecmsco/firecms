@@ -40,7 +40,7 @@ function Features() {
     return (
         <section className="relative">
 
-            {/*<h1 className={"max-w-6xl mx-auto mb-4"}>*/}
+            {/*<h1 className={"max-w-7xl mx-auto mb-4"}>*/}
             {/*    Batteries included*/}
             {/*</h1>*/}
             <TwoColumns
@@ -86,7 +86,7 @@ function Features() {
                         <video
                             key={`demo_video_${isDarkTheme}`}
                             style={{
-                                maxHeight: 600,
+                                maxWidth: 540,
                                 aspectRatio: 508 / 589
                             }}
                             className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
@@ -182,7 +182,7 @@ function Features() {
 
             </Panel>
 
-            {/*            <div className="relative max-w-6xl mx-auto p-4">*/}
+            {/*            <div className="relative max-w-7xl mx-auto p-4">*/}
             {/*                <div className="pt-12 lg:pt-20">*/}
 
             {/*                    <div*/}
@@ -284,7 +284,7 @@ function Features() {
             {/*                </div>*/}
             {/*            </div>*/}
 
-            {/*            <div className="relative max-w-6xl mx-auto p-4">*/}
+            {/*            <div className="relative max-w-7xl mx-auto p-4">*/}
             {/*                <div className="pt-12 lg:pt-20">*/}
 
             {/*                    <div className="lg:grid lg:grid-cols-12 lg:gap-6">*/}

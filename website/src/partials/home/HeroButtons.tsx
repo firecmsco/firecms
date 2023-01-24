@@ -33,7 +33,6 @@ function HeroButtons() {
             target="_blank"
         >
             Demo
-            <CTACaret/>
         </a>
         <a
             className={CTAButtonMixin + "  sm:mb-0 w-full sm:w-auto rounded sm:ml-4 ml-2"}
