@@ -355,22 +355,14 @@ export const EntityCollectionView = React.memo(
                     selectionController={usedSelectionController}
                     highlightedEntities={selectedNavigationEntity ? [selectedNavigationEntity] : []}
                     {...collection}
-                    ActionsBuilder={({
-                                         loadedEntities,
-                                         path,
-                                         collection,
-                                         selectionController
-                                     }: CollectionActionsProps) => (
-                        <EntityCollectionViewActions
-                            collection={collection}
-                            exportable={exportable}
-                            onMultipleDeleteClick={onMultipleDeleteClick}
-                            onNewClick={onNewClick}
-                            path={path}
-                            loadedEntities={loadedEntities}
-                            selectionController={selectionController}
-                            selectionEnabled={selectionEnabled}/>
-                    )}
+                    actions={<EntityCollectionViewActions
+                        collection={collection}
+                        exportable={exportable}
+                        onMultipleDeleteClick={onMultipleDeleteClick}
+                        onNewClick={onNewClick}
+                        path={fullPath}
+                        selectionController={selectionController}
+                        selectionEnabled={selectionEnabled}/>}
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
                 />

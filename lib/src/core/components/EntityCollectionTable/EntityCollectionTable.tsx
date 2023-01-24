@@ -107,7 +107,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          filterCombinations,
          forceFilter,
          actionsStart,
-         ActionsBuilder,
+         actions,
          title,
          tableRowActionsBuilder,
          entitiesDisplayedFirst,
@@ -521,15 +521,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         onSizeChanged={updateSize}
                         title={title}
                         actionsStart={actionsStart}
-                        actions={ActionsBuilder
-                            ? <ActionsBuilder
-                                path={fullPath}
-                                collection={collection}
-                                context={context}
-                                selectionController={selectionController}
-                                loadedEntities={data}
-                            />
-                            : undefined}
+                        actions={actions}
                         loading={dataLoading}/>
 
                     <Box sx={{ flexGrow: 1 }}>

@@ -28,7 +28,6 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     exportable: boolean | ExportConfig;
     onNewClick: () => void;
     onMultipleDeleteClick: () => void;
-    loadedEntities: Entity<M>[];
     selectionController: SelectionController<M>;
 }
 
@@ -39,7 +38,6 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                                                                                onMultipleDeleteClick,
                                                                                selectionEnabled,
                                                                                path,
-                                                                               loadedEntities,
                                                                                selectionController
                                                                            }: EntityCollectionViewActionsProps<M>) {
 
@@ -102,7 +100,6 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         path,
         collection,
         selectionController,
-        loadedEntities,
         context
     };
 

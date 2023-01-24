@@ -79,5 +79,5 @@ export type EntityCollectionTableProps<M extends Record<string, any>> = Omit<Ent
      * Additional component that renders actions such as buttons in the
      * collection toolbar, displayed on the right side
      */
-    ActionsBuilder?: React.ComponentType<CollectionActionsProps>;
+    actions?: React.ReactNode;
 }

@@ -265,12 +265,12 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
                                            {...collection}
                                            inlineEditing={false}
                                            selectionController={selectionController}
-                                           ActionsBuilder={() =>
-                                               <ReferenceDialogActions
-                                                   collection={collection}
-                                                   path={fullPath}
-                                                   onNewClick={onNewClick}
-                                                   onClear={onClear}/>}
+                                           actions={<ReferenceDialogActions
+                                               collection={collection}
+                                               path={fullPath}
+                                               onNewClick={onNewClick}
+                                               onClear={onClear}/>
+                                           }
                                            entitiesDisplayedFirst={entitiesDisplayedFirst}
                     />}
             </Box>
