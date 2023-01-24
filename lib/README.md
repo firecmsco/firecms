@@ -174,7 +174,7 @@ If you need general support, you can open a GitHub issue.
 
 Do you need consulting setting up your Firestore-based CMS in no time? We are
 happy to help!
-`hello@camberi.com`
+`hello@firecms.co`
 
 ## License
 
