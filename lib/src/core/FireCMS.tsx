@@ -18,7 +18,7 @@ import {
     useBuildSideDialogsController
 } from "./internal/useBuildSideDialogsController";
 import {
-    FireCMSContextInstance,
+    FireCMSContextInstance, useFireCMSContext,
     useModeController,
     useSnackbarController
 } from "../hooks";
@@ -113,18 +113,18 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         );
     }
 
-    const context: FireCMSContext = {
-        authController,
-        sideDialogsController,
-        sideEntityController,
+    const context: Partial<FireCMSContext> = {
+        // authController,
+        // sideDialogsController,
+        // sideEntityController,
+        // navigation,
+        // dataSource,
+        // storageSource,
+        // snackbarController,
+        // userConfigPersistence,
         entityLinkBuilder,
         dateTimeFormat,
         locale,
-        navigation,
-        dataSource,
-        storageSource,
-        snackbarController,
-        userConfigPersistence,
         plugins,
         onAnalyticsEvent,
         fields
@@ -153,7 +153,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                                                     utils={DateFnsUtils}
                                                     locale={dateUtilsLocale}>
                                                     <FireCMSInternal
-                                                        context={context}
                                                         loading={loading}>
                                                         {children}
                                                     </FireCMSInternal>
@@ -172,11 +171,9 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 }
 
 function FireCMSInternal({
-                             context,
                              loading,
                              children
                          }: {
-    context: FireCMSContext;
     loading: boolean;
     children: (props: {
         context: FireCMSContext;
@@ -184,6 +181,7 @@ function FireCMSInternal({
     }) => React.ReactNode;
 }) {
 
+    const context = useFireCMSContext();
     let childrenResult = children({
         context,
         loading

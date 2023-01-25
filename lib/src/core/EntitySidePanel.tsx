@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 
 import { EntitySidePanelProps } from "../types";
 import { FORM_CONTAINER_WIDTH } from "./internal/common";
@@ -58,16 +58,16 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
 
     }, [blocked, collection]);
 
+    const onValuesAreModified = useCallback((modified: boolean) => {
+        setBlocked(modified);
+        setBlockedNavigationMessage(modified
+            ? <> You have unsaved changes in this <b>{collection?.name}</b>.</>
+            : undefined)
+    }, [collection?.name, setBlocked, setBlockedNavigationMessage]);
+
     if (!props || !collection) {
         return <div style={{ width: FORM_CONTAINER_WIDTH }}/>;
     }
-
-    const onValuesAreModified = (modified: boolean) => {
-        setBlocked(modified);
-        setBlockedNavigationMessage(modified
-            ? <> You have unsaved changes in this <b>{collection.name}</b>.</>
-            : undefined)
-    };
 
     return (
         <>

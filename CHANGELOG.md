@@ -8,7 +8,7 @@ provide it.
 - [BREAKING] In the component `EntityCollectionTable`, the prop `ActionsBuilder`
 has been replaced with `actions`.
 - Improved preview of files that are not images, videos, or audio files.
-
+- Form optimizations
 
 ## [2.0.0-beta.1] - 2023-01-18
 

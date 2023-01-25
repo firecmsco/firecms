@@ -98,7 +98,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
         const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
 
-        const [modifiedValues, setModifiedValues] = useState<EntityValues<M> | undefined>();
+        const modifiedValuesRef = useRef<EntityValues<M> | undefined>(undefined);
+        const modifiedValues = modifiedValuesRef.current;
 
         const subcollections = (collection.subcollections ?? []).filter(c => !c.hideFromNavigation);
         const subcollectionsCount = subcollections?.length ?? 0;
@@ -336,7 +337,11 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                     isSubCollection={true}
                                     {...subcollection}/>
                                 : <Box
-                                    sx={{ width: "100%", height: "100%", p: 3 }}
+                                    sx={{
+                                        width: "100%",
+                                        height: "100%",
+                                        p: 3
+                                    }}
                                     display={"flex"}
                                     alignItems={"center"}
                                     justifyContent={"center"}>
@@ -382,6 +387,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         }, [entityId, sideEntityController, path, getSelectedSubPath]);
 
+        const onValuesChanged = useCallback((values?: EntityValues<M>) => {
+            modifiedValuesRef.current = values;
+        }, []);
+
         const form = (readOnly === undefined)
             ? null
             : (!readOnly
@@ -393,9 +402,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         collection={collection}
                         onEntitySave={onEntitySave}
                         onDiscard={onDiscard}
-                        onValuesChanged={setModifiedValues}
+                        onValuesChanged={onValuesChanged}
                         onModified={onValuesAreModified}
-                        entity={usedEntity}/>
+                        entity={usedEntity}
+                    />
                 )
                 : (
                     <EntityPreview

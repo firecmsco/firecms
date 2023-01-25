@@ -92,29 +92,16 @@ export interface EntityFormProps<M extends Record<string, any>> {
 
 }
 
-/**
- * This is the form used internally by the CMS
- * @param status
- * @param path
- * @param collection
- * @param entity
- * @param onEntitySave
- * @param onDiscard
- * @param onModified
- * @param onValuesChanged
- * @constructor
- * @category Components
- */
-export function EntityForm<M extends Record<string, any>>({
-                                                              status,
-                                                              path,
-                                                              collection: inputCollection,
-                                                              entity,
-                                                              onEntitySave,
-                                                              onDiscard,
-                                                              onModified,
-                                                              onValuesChanged
-                                                          }: EntityFormProps<M>) {
+const EntityFormInternal = function EntityForm<M extends Record<string, any>>({
+                                                                                  status,
+                                                                                  path,
+                                                                                  collection: inputCollection,
+                                                                                  entity,
+                                                                                  onEntitySave,
+                                                                                  onDiscard,
+                                                                                  onModified,
+                                                                                  onValuesChanged
+                                                                              }: EntityFormProps<M>) {
 
     const context = useFireCMSContext();
     const dataSource = useDataSource();
@@ -150,7 +137,10 @@ export function EntityForm<M extends Record<string, any>>({
         } else if (status === "new") {
             return getDefaultValuesFor(properties);
         } else {
-            console.error({ status, entity });
+            console.error({
+                status,
+                entity
+            });
             throw new Error("Form has not been initialised with the correct parameters");
         }
     }, [status, initialResolvedCollection, entity]);
@@ -344,7 +334,26 @@ export function EntityForm<M extends Record<string, any>>({
             }}
         </Formik>
     );
-}
+};
+/**
+ * This is the form used internally by the CMS
+ * @param status
+ * @param path
+ * @param collection
+ * @param entity
+ * @param onEntitySave
+ * @param onDiscard
+ * @param onModified
+ * @param onValuesChanged
+ * @constructor
+ * @category Components
+ */
+export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
+    (a: EntityFormProps<any>, b: EntityFormProps<any>) => {
+        return a.status === b.status &&
+            a.path === b.path &&
+            equal(a.entity?.values, b.entity?.values);
+    }) as typeof EntityFormInternal;
 
 function FormInternal<M extends Record<string, any>>({
                                                          initialValues,
