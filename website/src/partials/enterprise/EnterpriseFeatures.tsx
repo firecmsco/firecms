@@ -69,8 +69,10 @@ export function EnterpriseFeatures() {
                 <div className={"text-xl"}>
                     <p>
                         FireCMS was developed in conjunction with <strong>different
-                        companies</strong>, out of the need to have a CMS that could be
-                        used in <strong>different scenarios</strong> and that could be easily
+                        companies</strong>, out of the need to have a CMS that
+                        could be
+                        used in <strong>different scenarios</strong> and that
+                        could be easily
                         customized to fit different needs.
                     </p>
                 </div>
@@ -94,19 +96,73 @@ export function EnterpriseFeatures() {
                     At FireCMS, we believe in <strong>sensible
                     defaults</strong>, but we also
                     believe that you should be able to <strong>customize
-                    your admin</strong>
-                    panel to fit your needs.
+                    your admin</strong> panel to fit your needs.
                 </p>
 
 
-                <div
-                    className={ContainerSmallMixin + ""}>
-                    <video
-                        className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
-                        width="100%" loop autoPlay muted>
-                        <source src="/img/custom_entity_view.mp4" type="video/mp4"/>
-                    </video>
+                <div className="relative mx-auto mt-16">
+                    <div className={"p-4 " + ContainerMixin}>
+                        <div className="md:grid md:grid-cols-12 md:gap-4">
+                            <div
+                                className="max-w-7xl md:max-w-none md:w-full mx-auto md:col-span-9 md:pr-4 md:pr-8 flex justify-center flex-col h-full"
+                                data-aos="fade-right"
+                            >
+                                <video
+                                    style={{
+                                        aspectRatio: 842 / 463,
+                                    }}
+                                    className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+                                    width="100%" loop autoPlay muted>
+                                    <source src="/img/custom_entity_view.mp4"
+                                            type="video/mp4"/>
+                                </video>
+                            </div>
+
+                            <div
+                                className="md:w-full mx-auto md:col-span-3 md:order-1 my-16 md:my-0 flex justify-center flex-col h-full"
+                                data-aos="fade-left"
+                            >
+                                <div className="relative w-72 mx-auto">
+                                    <div
+                                        className="h-6 w-0.5 rounded-l-sm bg-black absolute -left-0.5 top-16"></div>
+                                    <div
+                                        className="h-8 w-0.5 rounded-l-sm bg-black absolute -left-0.5 top-28"></div>
+                                    <div
+                                        className="h-8 w-0.5 rounded-l-sm bg-black absolute -left-0.5 top-40"></div>
+                                    <div
+                                        className="h-auto w-72 bg-black rounded-3xl p-.5 overflow-hidden">
+                                        <div
+                                            className="h-full w-full bg-black rounded-4xl overflow-hidden p-2 relative">
+                                            <div
+                                                className="w-8 h-4 bg-black absolute left-1/2 rounded-b-2xl transform -translate-x-1/2"></div>
+                                            <video
+                                                style={{
+                                                    aspectRatio: 272 / 570,
+                                                    background: "white"
+                                                }}
+                                                className={"max-w-sm rounded-2xl"}
+                                                width="100%" loop autoPlay
+                                                muted>
+                                                <source src="/img/tpa_app.mp4"
+                                                        type="video/mp4"/>
+                                            </video>
+                                        </div>
+                                    </div>
+                                    <div
+                                        className="h-14 w-0.5 rounded-l-sm bg-black absolute -right-0.5 top-32"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+
+                {/*<div*/}
+                {/*    className={ContainerSmallMixin + ""}>*/}
+                {/*    <div className="flex items-center justify-center">*/}
+                {/*        */}
+                {/*    </div>*/}
+
+                {/*</div>*/}
 
             </section>
 
