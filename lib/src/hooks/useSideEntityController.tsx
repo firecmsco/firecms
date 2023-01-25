@@ -1,5 +1,8 @@
 import { AuthController, SideEntityController } from "../types";
-import { useFireCMSContext } from "./useFireCMSContext";
+import { useContext } from "react";
+import {
+    SideEntityControllerContext
+} from "../core/contexts/SideEntityControllerContext";
 
 /**
  * Hook to retrieve the side entity controller.
@@ -10,7 +13,4 @@ import { useFireCMSContext } from "./useFireCMSContext";
  * @see AuthController
  * @category Hooks and utilities
  */
-export function useSideEntityController(): SideEntityController {
-    const context = useFireCMSContext();
-    return context.sideEntityController;
-}
+export const useSideEntityController = (): SideEntityController => useContext(SideEntityControllerContext);

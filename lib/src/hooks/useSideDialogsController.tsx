@@ -1,5 +1,8 @@
 import { SideDialogsController } from "../types";
-import { useFireCMSContext } from "./useFireCMSContext";
+import {
+    SideDialogsControllerContext
+} from "../core/contexts/SideDialogsControllerContext";
+import { useContext } from "react";
 
 /**
  * Hook to retrieve the side dialogs' controller.
@@ -9,7 +12,4 @@ import { useFireCMSContext } from "./useFireCMSContext";
  *
  * @category Hooks and utilities
  */
-export function useSideDialogsController(): SideDialogsController {
-    const context = useFireCMSContext();
-    return context.sideDialogsController;
-}
+export const useSideDialogsController = (): SideDialogsController => useContext(SideDialogsControllerContext);

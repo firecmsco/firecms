@@ -1,6 +1,16 @@
-import { useContext } from "react";
-import { FireCMSContextInstance } from "../core/contexts/FireCMSContext";
+import { createContext, useContext } from "react";
 import { AuthController, FireCMSContext, User } from "../types";
+
+export const FireCMSContextInstance = createContext<FireCMSContext>({
+    sideDialogsController: {} as any,
+    sideEntityController: {} as any,
+    navigation: {} as any,
+    dataSource: {} as any,
+    storageSource: {} as any,
+    authController: {} as any,
+    snackbarController: {} as any,
+    fields: {}
+});
 
 /**
  * Hook to retrieve the {@link FireCMSContext}.

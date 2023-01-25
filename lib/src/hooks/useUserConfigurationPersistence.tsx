@@ -1,13 +1,13 @@
-import { useFireCMSContext } from "./useFireCMSContext";
 import { UserConfigurationPersistence } from "../types";
+import React, { useContext } from "react";
+import {
+    UserConfigurationPersistenceContext
+} from "../core/contexts/UserConfigurationPersistenceContext";
 
 /**
- * Use this controller to access the configuration that is stored extenally,
+ * Use this controller to access the configuration that is stored externally,
  * and not defined in code
  *
  * @category Hooks and utilities
  */
-export function useUserConfigurationPersistence(): UserConfigurationPersistence | undefined {
-    const context = useFireCMSContext();
-    return context.userConfigPersistence;
-}
+export const useUserConfigurationPersistence = (): UserConfigurationPersistence | undefined => useContext(UserConfigurationPersistenceContext);

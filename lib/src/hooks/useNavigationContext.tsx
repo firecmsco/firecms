@@ -1,5 +1,6 @@
 import { NavigationContext } from "../types";
-import { useFireCMSContext } from "./useFireCMSContext";
+import { useContext } from "react";
+import { NavigationContextInstance } from "../core/contexts/NavigationContext";
 
 /**
  * Use this hook to get the navigation of the app.
@@ -8,7 +9,4 @@ import { useFireCMSContext } from "./useFireCMSContext";
  *
  * @category Hooks and utilities
  */
-export function useNavigationContext(): NavigationContext {
-    const context = useFireCMSContext();
-    return context.navigation;
-}
+export const useNavigationContext = (): NavigationContext => useContext(NavigationContextInstance);

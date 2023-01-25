@@ -5,23 +5,7 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 
-import {
-    AuthController,
-    CMSAnalyticsEvent,
-    CMSView,
-    CollectionOverrideHandler,
-    DataSource,
-    EntityCollection,
-    EntityLinkBuilder,
-    FieldConfig,
-    FireCMSContext,
-    FireCMSPlugin, FireCMSProps,
-    Locale,
-    StorageSource,
-    User,
-    UserConfigurationPersistence
-} from "../types";
-import { FireCMSContextProvider } from "./contexts/FireCMSContext";
+import { FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { ModeControllerContext } from "./contexts/ModeController";
 import {
@@ -33,8 +17,25 @@ import {
 import {
     useBuildSideDialogsController
 } from "./internal/useBuildSideDialogsController";
-import { useModeController, useSnackbarController } from "../hooks";
+import {
+    FireCMSContextInstance,
+    useModeController,
+    useSnackbarController
+} from "../hooks";
 import { CenteredView, ErrorView } from "./components";
+import { StorageSourceContext } from "./contexts/StorageSourceContext";
+import {
+    UserConfigurationPersistenceContext
+} from "./contexts/UserConfigurationPersistenceContext";
+import { DataSourceContext } from "./contexts/DataSourceContext";
+import {
+    SideEntityControllerContext
+} from "./contexts/SideEntityControllerContext";
+import { NavigationContextInstance } from "./contexts/NavigationContext";
+import { AuthControllerContext } from "./contexts/AuthControllerContext";
+import {
+    SideDialogsControllerContext
+} from "./contexts/SideDialogsControllerContext";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -131,18 +132,41 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     return (
         <ModeControllerContext.Provider value={modeController}>
-            <FireCMSContextProvider {...context} >
-                <BreadcrumbsProvider>
-                    <LocalizationProvider
-                        dateAdapter={AdapterDateFns}
-                        utils={DateFnsUtils}
-                        locale={dateUtilsLocale}>
-                        <FireCMSInternal context={context} loading={loading}>
-                            {children}
-                        </FireCMSInternal>
-                    </LocalizationProvider>
-                </BreadcrumbsProvider>
-            </FireCMSContextProvider>
+            <FireCMSContextInstance.Provider value={context}>
+                <UserConfigurationPersistenceContext.Provider
+                    value={userConfigPersistence}>
+                    <StorageSourceContext.Provider
+                        value={storageSource}>
+                        <DataSourceContext.Provider
+                            value={dataSource}>
+                            <AuthControllerContext.Provider
+                                value={authController}>
+                                <SideDialogsControllerContext.Provider
+                                    value={sideDialogsController}>
+                                    <SideEntityControllerContext.Provider
+                                        value={sideEntityController}>
+                                        <NavigationContextInstance.Provider
+                                            value={navigation}>
+                                            <BreadcrumbsProvider>
+                                                <LocalizationProvider
+                                                    dateAdapter={AdapterDateFns}
+                                                    utils={DateFnsUtils}
+                                                    locale={dateUtilsLocale}>
+                                                    <FireCMSInternal
+                                                        context={context}
+                                                        loading={loading}>
+                                                        {children}
+                                                    </FireCMSInternal>
+                                                </LocalizationProvider>
+                                            </BreadcrumbsProvider>
+                                        </NavigationContextInstance.Provider>
+                                    </SideEntityControllerContext.Provider>
+                                </SideDialogsControllerContext.Provider>
+                            </AuthControllerContext.Provider>
+                        </DataSourceContext.Provider>
+                    </StorageSourceContext.Provider>
+                </UserConfigurationPersistenceContext.Provider>
+            </FireCMSContextInstance.Provider>
         </ModeControllerContext.Provider>
     );
 }
