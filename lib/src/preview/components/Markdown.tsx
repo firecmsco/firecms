@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useMemo } from "react";
 
 // @ts-ignore
 import MarkdownIt from "markdown-it";

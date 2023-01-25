@@ -20,7 +20,8 @@ import {
 } from "./EntityCollectionTable/internal/EntityCollectionRowActions";
 import {
     useAuthController,
-    useDataSource, useFireCMSContext,
+    useDataSource,
+    useFireCMSContext,
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";

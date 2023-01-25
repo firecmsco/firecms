@@ -3,8 +3,6 @@ import { Box, Popover, Typography, useTheme } from "@mui/material";
 import equal from "react-fast-compare"
 
 import {
-    AnyProperty,
-    CollectionActionsProps,
     CollectionSize,
     Entity,
     EntityCollection,

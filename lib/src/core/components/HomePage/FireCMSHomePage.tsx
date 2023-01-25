@@ -1,4 +1,4 @@
-import { Box, Container, Divider, Grid, Typography } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
 import {
     GenericPluginProps,

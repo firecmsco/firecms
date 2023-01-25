@@ -8,7 +8,6 @@ import {
     useState
 } from "react";
 
-
 export interface UseClipboardProps {
     /**
      * It's callback function that is called after the `copy` command

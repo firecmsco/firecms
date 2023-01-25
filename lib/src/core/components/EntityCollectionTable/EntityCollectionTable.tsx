@@ -15,7 +15,7 @@ import {
     FilterValues,
     FireCMSContext,
     PropertyOrBuilder,
-    ResolvedEntityCollection, ResolvedProperties,
+    ResolvedEntityCollection,
     ResolvedProperty,
     SaveEntityProps,
     User,
@@ -36,7 +36,7 @@ import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import {
     CellRendererParams,
     TableColumn,
-    TableColumnFilter, TableSize,
+    TableColumnFilter,
     VirtualTable
 } from "../Table";
 import {

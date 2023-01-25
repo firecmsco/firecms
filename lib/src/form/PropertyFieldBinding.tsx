@@ -9,7 +9,7 @@ import {
 } from "formik";
 
 import {
-    CMSType, FieldConfig,
+    CMSType,
     FieldProps,
     PropertyFieldBindingProps,
     ResolvedProperty

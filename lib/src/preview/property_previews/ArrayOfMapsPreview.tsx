@@ -4,7 +4,6 @@ import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { PropertyPreview, PropertyPreviewProps } from "../index";
 import { useFireCMSContext } from "../../hooks";
-import { FieldConfig } from "../../types";
 
 /**
  * @category Preview components

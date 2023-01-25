@@ -8,7 +8,6 @@ import {
 } from "../core/util/navigation_from_path";
 import { EntityCollection } from "../types";
 
-
 const collections = siteConfig.collections as EntityCollection[];
 
 it("collection view matches ok", () => {

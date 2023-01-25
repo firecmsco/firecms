@@ -32,7 +32,8 @@ import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
     useClearRestoreValue,
-    useEntityFetch, useFireCMSContext,
+    useEntityFetch,
+    useFireCMSContext,
     useNavigationContext,
     useReferenceDialog,
     useSideEntityController

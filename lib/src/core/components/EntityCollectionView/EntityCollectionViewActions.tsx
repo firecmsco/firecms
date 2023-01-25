@@ -14,7 +14,6 @@ import { canCreateEntity, canDeleteEntity } from "../../util/permissions";
 import { useAuthController, useFireCMSContext } from "../../../hooks";
 import {
     CollectionActionsProps,
-    Entity,
     EntityCollection,
     ExportConfig,
     SelectionController

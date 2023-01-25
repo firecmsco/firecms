@@ -13,7 +13,6 @@ import {
     useNavigationContext
 } from "../hooks";
 import { toArray } from "./util/arrays";
-import { useTraceUpdate } from "./util/useTraceUpdate";
 import equal from "react-fast-compare"
 
 /**

@@ -12,10 +12,9 @@ import { Box, Button, IconButton, Portal, Typography } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import {
-    DataSource,
     Entity,
     EntityCollection,
-    EntityValues, FireCMSContext,
+    EntityValues,
     FormContext,
     PropertyFieldBindingProps,
     ResolvedEntityCollection,

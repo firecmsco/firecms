@@ -1,9 +1,9 @@
 import React from "react";
 import {
-    CollectionActionsProps,
     CollectionSize,
     Entity,
-    EntityCollection, SelectionController
+    EntityCollection,
+    SelectionController
 } from "../../../types";
 
 /**

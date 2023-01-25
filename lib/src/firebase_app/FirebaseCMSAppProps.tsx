@@ -2,16 +2,14 @@ import React from "react";
 import { User as FirebaseUser } from "firebase/auth";
 
 import {
-    AuthController,
     CMSAnalyticsEvent,
-    CMSView, CMSViewsBuilder,
+    CMSView,
+    CMSViewsBuilder,
     CollectionOverrideHandler,
-    DataSource,
     EntityCollection,
     EntityCollectionsBuilder,
     FieldConfig,
-    Locale,
-    User
+    Locale
 } from "../types";
 import { FirestoreTextSearchController } from "./types/text_search";
 import {

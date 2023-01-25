@@ -10,7 +10,11 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import { EntityCollection, EntityReference, ResolvedProperty } from "../../types";
+import {
+    EntityCollection,
+    EntityReference,
+    ResolvedProperty
+} from "../../types";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import {
@@ -26,7 +30,8 @@ import {
     resolveCollection
 } from "../../core";
 import {
-    useEntityFetch, useFireCMSContext,
+    useEntityFetch,
+    useFireCMSContext,
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";

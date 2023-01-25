@@ -4,10 +4,10 @@ import { styled } from "@mui/material/styles";
 
 import {
     Box,
-    lighten,
     darken,
     FormControl,
     FormHelperText,
+    lighten,
     Theme
 } from "@mui/material";
 
@@ -18,8 +18,6 @@ import MdEditor, { Plugins } from "react-markdown-editor-lite";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
-
-import { useClearRestoreValue } from "../../hooks";
 import { fieldBackground } from "./utils";
 
 const mdParser = new MarkdownIt();

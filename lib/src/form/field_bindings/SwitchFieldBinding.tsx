@@ -3,10 +3,8 @@ import {
     FormControl,
     FormControlLabel,
     FormHelperText,
-    Switch,
-    Typography
+    Switch
 } from "@mui/material";
-import clsx from "clsx";
 
 import { FieldProps } from "../../types";
 import { FieldDescription } from "../index";
