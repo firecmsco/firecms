@@ -6,7 +6,7 @@ export function TwoColumns({
                                right
                            }: { left: React.ReactNode, right: React.ReactNode }) {
     return (
-        <div className="relative mx-auto mt-16">
+        <div className="relative mx-auto my-20">
             <div className={"p-4 " +  ContainerMixin} >
                 <div className="lg:grid lg:grid-cols-12 lg:gap-6">
                     <div

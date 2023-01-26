@@ -3,6 +3,7 @@ import HeroButtons from "./HeroButtons";
 
 // @ts-ignore
 import darkModeVideo from "@site/static/img/dark_mode.mp4";
+import { BrowserFrame } from "../BrowserFrame";
 
 // const LazyThreeJSAnimationShader = React.lazy(() => import("../shape/ThreeJSAnimationShader"));
 
@@ -82,7 +83,6 @@ function HeroHome({}) {
                 {video}
             </div>
 
-            {/*</div>*/}
 
         </section>
     );
