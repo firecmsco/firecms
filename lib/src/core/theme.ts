@@ -66,10 +66,13 @@ export const createCMSDefaultTheme = (
                 fontSize: "1.55rem"
             },
             h4: {
-                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif"
+                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontSize: "2rem",
+                fontWeight: 500
             },
             h3: {
-                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif"
+                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontWeight: 600
             },
             h2: {
                 fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
