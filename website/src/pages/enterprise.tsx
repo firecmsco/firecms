@@ -14,8 +14,6 @@ function Enterprise() {
 
                 <main className="flex-grow">
 
-                    <div style={{ height: "350px" }}/>
-
                     <EnterpriseHero/>
                     <EnterpriseFeatures/>
                     <EnterpriseArchitectures/>

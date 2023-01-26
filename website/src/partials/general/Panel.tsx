@@ -21,10 +21,10 @@ export function Panel({
 
     return (
         <section
-            className={"relative py-16 flex flex-col items " + colorClass
+            className={"relative  flex flex-col items " + colorClass
                 + (includeMargin ? " mt-16" : "")}>
             <div className={ContainerMixin
-                + (contained ? " max-w-3xl" : " ")}>
+                + (contained ? " my-16 max-w-3xl" : " my-12")}>
                 {children}
             </div>
         </section>

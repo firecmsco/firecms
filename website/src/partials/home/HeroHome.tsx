@@ -37,12 +37,11 @@ function HeroHome({}) {
                         data-aos-delay="200"
                         style={{
                             // mixBlendMode: "color-dodge",
-                            fontSize: "10rem",
                             WebkitBackgroundClip: "text",
                             backgroundClip: "text",
                             backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
                         }}
-                        className="font-extrabold text-transparent bg-clip-text">CMS</span>
+                        className="font-extrabold text-transparent bg-clip-text text-7xl md:text-8xl">CMS</span>
                 </div>
                 <span
                     data-aos="zoom-y-out"
@@ -50,7 +49,7 @@ function HeroHome({}) {
                 <span
                     data-aos="zoom-y-out"
                     data-aos-delay="400"
-                    className={"block text-5xl md:text-8xl "}
+                    className={"text-5xl md:text-7xl "}
                     style={{ color: "#FFA000" }}>Firebase</span>
 
             </h1>
@@ -71,8 +70,6 @@ function HeroHome({}) {
         <section className="relative my-16" style={{
             isolation: "isolate"
         }}>
-
-            {/*<div className="xl:grid xl:grid-cols-12 xl:my-24 md:my-16 my-8">*/}
 
             <div
                 className={"col-span-7 "}>

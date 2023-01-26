@@ -1,11 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
-import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 
 import Head from "@docusaurus/Head";
-
-import { FireCMSCloudIntro } from "../partials/home/FireCMSCloudIntro";
 import { TechSplash } from "../partials/home/TechSplash";
 import { ManageYour } from "../partials/home/ManageYour";
 import HeroHome from "../partials/home/HeroHome";
@@ -13,9 +10,8 @@ import FeaturesPanels from "../partials/home/FeaturesPanels";
 import FirebaseTeaser from "../partials/home/OpenSourceDetails";
 import FirebaseIntro from "../partials/home/FirebaseIntro";
 import { Companies } from "../partials/home/Companies";
-import Features from "../partials/home/Features";
-
-// import { Newsletter } from "../partials/Newsletter";
+import FeaturesTeaser from "../partials/home/FeaturesTeaser";
+import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
 
 function Home() {
     const context = useDocusaurusContext();
@@ -46,9 +42,10 @@ function Home() {
                     <TechSplash/>
                     <Companies/>
 
-                    <Features/>
-                    <FirebaseTeaser/>
+                    <FeaturesTeaser/>
+                    <EnterpriseTeaser/>
 
+                    <FirebaseTeaser/>
 
                 </main>
 

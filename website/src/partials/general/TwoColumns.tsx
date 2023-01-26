@@ -3,21 +3,34 @@ import { ContainerMixin } from "../utils";
 
 export function TwoColumns({
                                left,
-                               right
-                           }: { left: React.ReactNode, right: React.ReactNode }) {
+                               right,
+                               distribution,
+                               reverseSmall
+                           }: {
+    left: React.ReactNode,
+    right: React.ReactNode,
+    distribution?: "bigLeft" | "bigRight",
+    reverseSmall?: boolean
+}) {
+
+    const leftColumn = distribution === "bigLeft" ? "lg:col-span-7" : (distribution === "bigRight" ? "lg:col-span-5" : "lg:col-span-6");
+    const rightColumn = distribution === "bigLeft" ? "lg:col-span-5" : (distribution === "bigRight" ? "lg:col-span-7" : "lg:col-span-6");
+    const flexDirection = reverseSmall ? "flex-col-reverse" : "flex-col";
+
     return (
-        <div className="relative mx-auto my-20">
-            <div className={"p-4 " +  ContainerMixin} >
-                <div className="lg:grid lg:grid-cols-12 lg:gap-6">
+        <div className="relative mx-auto my-8">
+            <div className={"p-4 " + ContainerMixin}>
+                <div
+                    className={"flex flex-col lg:grid lg:grid-cols-12 lg:gap-10 " + flexDirection}>
                     <div
-                        className="max-w-7xl lg:max-w-none lg:w-full mx-auto lg:col-span-6 lg:pr-4 lg:pr-12 xl:pr-16 flex justify-center flex-col h-full"
+                        className={"max-w-7xl lg:max-w-none lg:w-full mx-auto flex justify-center flex-col h-full my-8 lg:my-0 " + leftColumn}
                         data-aos="fade-right"
                     >
                         {left}
                     </div>
 
                     <div
-                        className="max-w-7xl lg:max-w-none lg:w-full mx-auto  lg:col-span-6 lg:order-1 flex justify-center flex-col h-full"
+                        className={"max-w-7xl lg:max-w-none lg:w-full mx-auto lg:order-1 flex justify-center flex-col h-full my-8 lg:my-0 " + rightColumn}
                         data-aos="fade-left"
                     >
                         {right}
