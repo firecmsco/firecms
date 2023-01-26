@@ -11,7 +11,7 @@ export function Hero({
     cta?: React.ReactNode,
 }) {
     return (
-        <section className={ContainerMixin + " my-8 md:my-16"}>
+        <section className={ContainerMixin + " my-8"}>
             <div style={{height: "200px"}}/>
             <div
                 className="mt-10 mx-auto max-w-7xl ">

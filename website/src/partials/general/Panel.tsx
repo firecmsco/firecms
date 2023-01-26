@@ -21,7 +21,7 @@ export function Panel({
 
     return (
         <section
-            className={"relative  flex flex-col items " + colorClass
+            className={"max-w-full relative flex flex-col items " + colorClass
                 + (includeMargin ? " mt-16" : "")}>
             <div className={ContainerMixin
                 + (contained ? " my-16 max-w-3xl" : " my-12")}>

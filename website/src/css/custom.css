@@ -163,10 +163,6 @@ a.btn {
     text-decoration: none;
 }
 
-.custom-code-block pre {
-    overflow: inherit !important;
-}
-
 /* Tailwind does not compute this properly on buttons */
 .font-bold {
     font-weight: 600 !important;

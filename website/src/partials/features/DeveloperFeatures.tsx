@@ -42,13 +42,15 @@ export function DeveloperFeatures() {
 
             <TwoColumns
                 reverseSmall={true}
+                animation={false}
                 left={<div
-                    className="custom-code-block relative flex-col font-mono">
+                    className=" relative flex-col font-mono">
 
                     <SyntaxHighlighter
-                        className={"border border-solid dark:border-gray-800 border-gray-200"}
+                        className={"max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid dark:border-gray-800 border-gray-200"}
                         language={"typescript"}
                         showLineNumbers={false}
+                        wrapLines={true}
                         style={isDarkTheme ? dracula : atomOneLight}
                     >
                         {
@@ -76,7 +78,7 @@ export function DeveloperFeatures() {
                     </div>
                 </div>
                 }
-                right={<div className="lg:pr-4 lg:pr-12 xl:pr-16 mb-8">
+                right={<div className="lg:pr-4 lg:pr-12 xl:pr-16">
 
                     <div
                         className={"flex items-center mb-3"}>
@@ -122,7 +124,9 @@ export function DeveloperFeatures() {
                 </div>
                 }/>
 
-            <TwoColumns left={
+            <TwoColumns
+                animation={false}
+                left={
                 <>
                     <div className={"flex items-center mb-3"}>
 
@@ -157,9 +161,9 @@ export function DeveloperFeatures() {
             } right={
                 <>
                     <div
-                        className="custom-code-block relative flex-col font-mono">
+                        className="relative flex-col font-mono">
                         <SyntaxHighlighter
-                            className={"border border-solid dark:border-gray-800 border-gray-200"}
+                            className={"max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid dark:border-gray-800 border-gray-200"}
                             language={"typescript"}
                             showLineNumbers={false}
                             style={isDarkTheme ? dracula : atomOneLight}

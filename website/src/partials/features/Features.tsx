@@ -40,9 +40,9 @@ function Features() {
     const isDarkTheme = colorMode === "dark";
 
     return (
-        <section className="relative">
+        <>
             <TwoColumns
-                reverseSmall={false}
+                reverseSmall={true}
                 right={
                     <>
 
@@ -84,7 +84,7 @@ function Features() {
                     </>
                 }
                 left={<>
-                    <div className="relative flex flex-col p-4">
+                    <div className="relative flex flex-col">
                         <video
                             key={`demo_video_${isDarkTheme}`}
                             style={{
@@ -153,7 +153,7 @@ function Features() {
             <TwoColumns
                 reverseSmall={true}
                 left={<>
-                    <div className="relative flex flex-col p-4">
+                    <div className="relative flex flex-col">
                         <video
                             className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                             style={{
@@ -215,7 +215,7 @@ function Features() {
                     </>
                 }
             />
-        </section>
+        </>
     );
 }
 
