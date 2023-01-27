@@ -112,6 +112,7 @@ export function ArrayOfReferencesFieldBinding({
         {collection && <>
 
             <ArrayContainer value={value}
+                            addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
                             name={propertyKey}
                             buildEntry={buildEntry}
                             disabled={isSubmitting}/>

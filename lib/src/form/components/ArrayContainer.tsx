@@ -19,6 +19,7 @@ import { getHashValue } from "../../core";
 interface ArrayContainerProps<T> {
     value: T[];
     name: string;
+    addLabel: string;
     buildEntry: (index: number, internalId: number) => React.ReactNode;
     disabled: boolean;
     small?: boolean;
@@ -31,6 +32,7 @@ interface ArrayContainerProps<T> {
  */
 export function ArrayContainer<T>({
                                       name,
+                                      addLabel,
                                       value,
                                       disabled,
                                       buildEntry,
@@ -169,7 +171,7 @@ export function ArrayContainer<T>({
                                             disabled={disabled}
                                             startIcon={<AddIcon/>}
                                             onClick={insertInEnd}>
-                                        Add to {name}
+                                        {addLabel ?? "Add"}
                                     </Button>
                                 </Box>}
                             </div>

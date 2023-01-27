@@ -66,6 +66,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
     }, [context, disabled, includeDescription, lastAddedId, ofProperty, property.resolvedProperties, propertyKey, underlyingValueHasChanged]);
 
     const arrayContainer = <ArrayContainer value={value}
+                                           addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
                                            name={propertyKey}
                                            buildEntry={buildEntry}
                                            onInternalIdAdded={setLastAddedId}

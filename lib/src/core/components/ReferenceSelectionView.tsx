@@ -153,6 +153,7 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
         context.onAnalyticsEvent?.("reference_selection_clear", {
             path: fullPath
         });
+        selectionController.setSelectedEntities([]);
         if (!multiselect && onSingleEntitySelected) {
             onSingleEntitySelected(null);
         } else if (onMultipleEntitiesSelected) {

@@ -81,6 +81,7 @@ export function BlockFieldBinding<T extends Array<any>>({
 
     const body = <ArrayContainer value={value}
                                  name={propertyKey}
+                                 addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
                                  buildEntry={buildEntry}
                                  onInternalIdAdded={setLastAddedId}
                                  disabled={isSubmitting || Boolean(property.disabled)}
