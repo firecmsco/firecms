@@ -13,7 +13,7 @@ import { useSideDialogContext } from "./SideDialogs";
  * for editing entities. Use the {@link useSideEntityController} to open
  * and control the dialogs.
  * This component needs a parent {@link FireCMS}
- * {@see useSideEntityController}
+ * {@link useSideEntityController}
  * @category Components
  */
 export function EntitySidePanel(props: EntitySidePanelProps) {

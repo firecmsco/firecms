@@ -27,7 +27,6 @@ import { PropertyTableCell } from "./internal/PropertyTableCell";
 import { ErrorBoundary } from "../ErrorBoundary";
 import {
     saveEntityWithCallbacks,
-    useCollectionFetch,
     useDataSource,
     useFireCMSContext,
     useSideEntityController
@@ -62,8 +61,6 @@ import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { setIn } from "formik";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
-import { useDebouncedData } from "../../../firebase_app/hooks/useDebouncedData";
-import { useDataOrder } from "../../../hooks/data/useDataOrder";
 import { TableCell } from "./internal/TableCell";
 
 const DEFAULT_STATE = {} as any;
@@ -110,7 +107,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          actions,
          title,
          tableRowActionsBuilder,
-         entitiesDisplayedFirst,
          selectionController,
          highlightedEntities,
          onEntityClick,
@@ -119,6 +115,25 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          textSearchEnabled = false,
          hoverRow = true,
          inlineEditing = false,
+         tableController:
+             {
+                 data,
+                 dataLoading,
+                 noMoreToLoad,
+                 dataLoadingError,
+                 filterValues,
+                 setFilterValues,
+                 sortBy,
+                 setSortBy,
+                 searchString,
+                 setSearchString,
+                 clearFilter,
+                 itemCount,
+                 setItemCount,
+                 pageSize,
+                 paginationEnabled,
+                 checkFilterCombination
+             },
          ...collection
      }: EntityCollectionTableProps<M>) {
 
@@ -141,26 +156,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         }), [collection, fullPath]);
 
         const [size, setSize] = React.useState<CollectionSize>(resolvedCollection.defaultSize ?? "m");
-
-        const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
-        const pageSize = typeof collection.pagination === "number" ? collection.pagination : DEFAULT_PAGE_SIZE;
-
-        const [searchString, setSearchString] = React.useState<string | undefined>();
-        const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
-
-        const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
-                                                    sortBy?: [string, "asc" | "desc"]) => isFilterCombinationValid(filterValues, filterCombinations, sortBy), [filterCombinations]);
-
-        const initialSortInternal = useMemo(() => {
-            if (initialSort && forceFilter && !checkFilterCombination(forceFilter, initialSort)) {
-                console.warn("Initial sort is not compatible with the force filter. Ignoring initial sort");
-                return undefined;
-            }
-            return initialSort;
-        }, [initialSort, forceFilter]);
-
-        const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? initialFilter ?? undefined);
-        const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortInternal);
 
         const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
         const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
@@ -209,33 +204,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
              }) => dataSource.checkUniqueField(fullPath, name, value, property, entityId),
             [fullPath]);
 
-        const {
-            data: rawData,
-            dataLoading,
-            noMoreToLoad,
-            dataLoadingError
-        } = useCollectionFetch<M, UserType>({
-            path: fullPath,
-            collection,
-            filterValues,
-            sortBy,
-            searchString,
-            itemCount
-        });
-
-        const orderedData = useDataOrder({
-            data: rawData,
-            entitiesDisplayedFirst
-        });
-
-        // hack to fix Firestore listeners firing with incomplete data
-        const data = useDebouncedData(orderedData, {
-            filterValues,
-            sortBy,
-            searchString,
-            itemCount
-        });
-
         const loadNextPage = () => {
             if (!paginationEnabled || dataLoading || noMoreToLoad)
                 return;
@@ -246,8 +214,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const resetPagination = useCallback(() => {
             setItemCount(pageSize);
         }, [pageSize]);
-
-        const clearFilter = useCallback(() => setFilterValues(forceFilter ?? undefined), [forceFilter]);
 
         const onRowClick = useCallback(({ rowData }: { rowData: Entity<M> }) => {
             if (inlineEditing)

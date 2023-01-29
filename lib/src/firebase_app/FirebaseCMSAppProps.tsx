@@ -77,7 +77,7 @@ export type FirebaseCMSAppProps = {
      * view if `authentication` is enabled. You can pass Firebase providers strings,
      * such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or include additional
      * config such as scopes or custom parameters
-     * {@see FirebaseSignInOption}
+     * {@link FirebaseSignInOption}
      * Defaults to Google sign in only.
      */
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;

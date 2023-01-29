@@ -32,6 +32,10 @@ import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 import {
     useSelectionController
 } from "./EntityCollectionView/EntityCollectionView";
+import { useTableController } from "./EntityCollectionTable/useTableController";
+import {
+    isFilterCombinationValidForFirestore
+} from "./EntityCollectionView/isFilterCombinationValidForFirestore";
 
 /**
  * @category Components
@@ -247,6 +251,14 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
 
     }
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const tableController = useTableController<M>({
+        fullPath,
+        collection,
+        entitiesDisplayedFirst,
+        isFilterCombinationValid: isFilterCombinationValidForFirestore
+    });
+
     return (
 
         <Box sx={{
@@ -260,6 +272,7 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
                     <EntityCollectionTable fullPath={fullPath}
                                            onEntityClick={onEntityClick}
                                            forceFilter={forceFilter}
+                                           tableController={tableController}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
                                            title={<Typography variant={"h6"}>
                                                {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
@@ -273,7 +286,6 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
                                                onNewClick={onNewClick}
                                                onClear={onClear}/>
                                            }
-                                           entitiesDisplayedFirst={entitiesDisplayedFirst}
                     />}
             </Box>
             <CustomDialogActions translucent={false}>

@@ -41,6 +41,12 @@ import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
+import {
+    useTableController
+} from "../EntityCollectionTable/useTableController";
+import {
+    isFilterCombinationValidForFirestore
+} from "./isFilterCombinationValidForFirestore";
 
 /**
  * @category Components
@@ -131,6 +137,13 @@ export const EntityCollectionView = React.memo(
         useEffect(() => {
             setDeleteEntityClicked(undefined);
         }, [selectedEntities]);
+
+        const tableController = useTableController<M>({
+            fullPath,
+            collection,
+            entitiesDisplayedFirst: [],
+            isFilterCombinationValid: isFilterCombinationValidForFirestore
+        });
 
         const onEntityClick = useCallback((clickedEntity: Entity<M>) => {
             setSelectedNavigationEntity(clickedEntity);
@@ -341,10 +354,15 @@ export const EntityCollectionView = React.memo(
         }, [isEntitySelected, collection, authController, fullPath, selectionEnabled, toggleEntitySelection, onEditClicked, createEnabled, onCopyClicked]);
 
         return (
-            <Box sx={{ overflow: "hidden", height: "100%", width: "100%" }}>
+            <Box sx={{
+                overflow: "hidden",
+                height: "100%",
+                width: "100%"
+            }}>
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     fullPath={fullPath}
+                    tableController={tableController}
                     onSizeChanged={onSizeChanged}
                     onEntityClick={onEntityClick}
                     onColumnResize={onColumnResize}
@@ -359,6 +377,7 @@ export const EntityCollectionView = React.memo(
                         onMultipleDeleteClick={onMultipleDeleteClick}
                         onNewClick={onNewClick}
                         path={fullPath}
+                        loadedEntities={tableController.data}
                         selectionController={selectionController}
                         selectionEnabled={selectionEnabled}/>}
                     hoverRow={hoverRow}

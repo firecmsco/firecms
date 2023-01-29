@@ -5,28 +5,30 @@ import equal from "react-fast-compare";
  * Hack to prevent data updates for incomplete callbacks from Firestore
  * triggers
  * @param data
- * @param filters
+ * @param deps
  * @param timeoutMs
  */
-export function useDebouncedData<T>(data: T[], filters: any, timeoutMs = 5000) {
+export function useDebouncedData<T>(data: T[], deps: any, timeoutMs = 5000) {
 
     const [deferredData, setDeferredData] = React.useState(data);
     const dataLength = React.useRef(deferredData.length ?? 0);
     const pendingUpdate = React.useRef(false);
-    const currentFilters = React.useRef(filters);
+    const currentDeps = React.useRef(deps);
 
-    const immediateUpdate = data.length >= dataLength.current || !equal(currentFilters.current, filters);
+    const haveDepsChanged = !equal(currentDeps.current, deps);
+    const immediateUpdate = data.length >= dataLength.current || haveDepsChanged;
 
     React.useEffect(() => {
 
         const performUpdate = () => {
-            setDeferredData(data);
+            if (!equal(deferredData, data))
+                setDeferredData(data);
             dataLength.current = data.length;
             pendingUpdate.current = false;
         };
 
         pendingUpdate.current = true;
-        currentFilters.current = filters;
+        currentDeps.current = deps;
 
         let handler: any;
         if (immediateUpdate)
@@ -39,7 +41,7 @@ export function useDebouncedData<T>(data: T[], filters: any, timeoutMs = 5000) {
             if (pendingUpdate.current && immediateUpdate)
                 performUpdate();
         };
-    }, [data, timeoutMs, filters, immediateUpdate]);
+    }, [data, timeoutMs, deps, immediateUpdate]);
 
     return immediateUpdate ? data : deferredData;
 }

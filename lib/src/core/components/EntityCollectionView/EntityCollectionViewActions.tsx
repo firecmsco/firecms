@@ -14,6 +14,7 @@ import { canCreateEntity, canDeleteEntity } from "../../util/permissions";
 import { useAuthController, useFireCMSContext } from "../../../hooks";
 import {
     CollectionActionsProps,
+    Entity,
     EntityCollection,
     ExportConfig,
     SelectionController
@@ -28,6 +29,8 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     onNewClick: () => void;
     onMultipleDeleteClick: () => void;
     selectionController: SelectionController<M>;
+    loadedEntities: Entity<M>[];
+
 }
 
 export function EntityCollectionViewActions<M extends Record<string, any>>({
@@ -37,7 +40,8 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                                                                                onMultipleDeleteClick,
                                                                                selectionEnabled,
                                                                                path,
-                                                                               selectionController
+                                                                               selectionController,
+                                                                               loadedEntities
                                                                            }: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
@@ -99,7 +103,8 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         path,
         collection,
         selectionController,
-        context
+        context,
+        loadedEntities
     };
 
     const actions = collection.Actions
