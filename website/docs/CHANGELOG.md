@@ -13,6 +13,9 @@ provide it.
 has been replaced with `actions`.
 - Improved preview of files that are not images, videos, or audio files.
 - Form optimizations
+- Fix for reference dialog not clearing selection
+- Internal refactoring of the `EntityCollectionTable` component.
+- Fix for multiple error snackbar, when there is an error uploading a file.
 
 ## [2.0.0-beta.1] - 2023-01-18
 

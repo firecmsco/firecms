@@ -12,7 +12,7 @@ export function Hero({
 }) {
     return (
         <section className={ContainerMixin + " my-8"}>
-            <div style={{height: "200px"}}/>
+            <div style={{height: "120px"}}/>
             <div
                 className="mt-10 mx-auto max-w-7xl ">
                 <div className="lg:text-left">
