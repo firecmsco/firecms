@@ -69,8 +69,6 @@ export const EntityCollectionTableContext = React.createContext<EntityCollection
 
 export const useEntityCollectionTableController = () => useContext<EntityCollectionTableController<any>>(EntityCollectionTableContext);
 
-const DEFAULT_PAGE_SIZE = 50;
-
 /**
  * This component is in charge of rendering a collection table with a high
  * degree of customization. It is in charge of fetching data from
@@ -410,7 +408,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             [additionalFields, disabledFilterChange, forceFilter, resolvedCollection.properties]);
 
         const idColumn: TableColumn = useMemo(() => ({
-            key: "id",
+            key: "id_ewcfedcswdf3",
             width: largeLayout ? 160 : 130,
             title: "ID",
             resizable: false,
