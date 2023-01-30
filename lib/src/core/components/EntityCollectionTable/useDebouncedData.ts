@@ -3,7 +3,8 @@ import equal from "react-fast-compare";
 
 /**
  * Hack to prevent data updates for incomplete callbacks from Firestore
- * triggers
+ * triggers.
+ * If any deps change, the update is immediate
  * @param data
  * @param deps
  * @param timeoutMs
@@ -21,14 +22,15 @@ export function useDebouncedData<T>(data: T[], deps: any, timeoutMs = 5000) {
     React.useEffect(() => {
 
         const performUpdate = () => {
-            if (!equal(deferredData, data))
+            if (!equal(deferredData, data)) {
+                currentDeps.current = deps;
+                dataLength.current = data.length;
                 setDeferredData(data);
-            dataLength.current = data.length;
+            }
             pendingUpdate.current = false;
         };
 
         pendingUpdate.current = true;
-        currentDeps.current = deps;
 
         let handler: any;
         if (immediateUpdate)
