@@ -176,6 +176,21 @@ Do you need consulting setting up your Firestore-based CMS in no time? We are
 happy to help!
 `hello@firecms.co`
 
+## Development
+
+If you would like to make changes to the source, feel free to submit a PR!
+
+When developing, the core library can be found under `lib`.
+There is an example project in the folder `example`.
+
+In order to run the project, you need to create a file called `firebase_config.ts`
+in `example/src`.
+
+That file needs to export a valid Firebase config, that you can get
+from your Firebase console when creating a webapp for your project.
+
+Then simply run `yarn` and `yarn dev`
+
 ## License
 
 MIT © [camberi](https://github.com/camberi)

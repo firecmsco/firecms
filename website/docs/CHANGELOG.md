@@ -6,9 +6,6 @@ title: Changelog
 
 ### Changed
 - Fixed bug where collection actions were getting their internal state reset.
-- [BREAKING] Removed the prop `loadedEntities` from `CollectionActionsProps`. If
-this prop was useful to you let us know, so we can look for alternative ways to
-provide it.
 - [BREAKING] In the component `EntityCollectionTable`, the prop `ActionsBuilder`
 has been replaced with `actions`.
 - Improved preview of files that are not images, videos, or audio files.
