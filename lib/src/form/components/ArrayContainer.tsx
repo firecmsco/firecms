@@ -5,6 +5,7 @@ import { Box, Button, IconButton, Tooltip } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
+import CopyIcon from "@mui/icons-material/ContentCopy";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
 import {
@@ -98,6 +99,16 @@ export function ArrayContainer<T>({
                 arrayHelpers.remove(index);
             };
 
+            const copy = (index: number) => {
+                const id = getRandomId();
+                const copyingItem = value[index];
+                const newIds: number[] = [...internalIds, id];
+                if (onInternalIdAdded)
+                    onInternalIdAdded(id);
+                setInternalIds(newIds);
+                arrayHelpers.push(copyingItem);
+            };
+
             const onDragEnd = (result: any) => {
                 // dropped outside the list
                 if (!result.destination) {
@@ -131,6 +142,7 @@ export function ArrayContainer<T>({
                                            disabled={disabled}
                                            buildEntry={buildEntry}
                                            remove={remove}
+                                           copy={copy}
                                        />
                                    );
                                }}
@@ -156,6 +168,7 @@ export function ArrayContainer<T>({
                                                     disabled={disabled}
                                                     buildEntry={buildEntry}
                                                     remove={remove}
+                                                    copy={copy}
                                                 />
                                             )}
                                         </Draggable>);
@@ -191,7 +204,8 @@ type ArrayContainerItemProps = {
     small?: boolean,
     disabled: boolean,
     buildEntry: (index: number, internalId: number) => React.ReactNode,
-    remove: (index: number) => void
+    remove: (index: number) => void,
+    copy: (index: number) => void,
 };
 
 function ArrayContainerItem({
@@ -202,7 +216,8 @@ function ArrayContainerItem({
                                 small,
                                 disabled,
                                 buildEntry,
-                                remove
+                                remove,
+                                copy
                             }: ArrayContainerItemProps) {
     return <Box
         ref={provided.innerRef}
@@ -255,6 +270,17 @@ function ArrayContainerItem({
                         </IconButton>
                     </Tooltip>
                 </div>
+                <Tooltip
+                    title="Copy">
+                    <IconButton
+                        size="small"
+                        aria-label="copy"
+                        disabled={disabled}
+                        onClick={() => copy(index)}>
+                        <CopyIcon
+                            fontSize={"small"}/>
+                    </IconButton>
+                </Tooltip>
             </Box>
         </Box>
     </Box>;
