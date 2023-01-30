@@ -1,4 +1,5 @@
 import { useSnackbar } from "notistack";
+import { useCallback } from "react";
 
 /**
  * Possible snackbar types
@@ -39,18 +40,24 @@ export interface SnackbarController {
  */
 export const useSnackbarController = () => {
 
-    const { enqueueSnackbar, closeSnackbar } = useSnackbar();
+    const {
+        enqueueSnackbar,
+        closeSnackbar
+    } = useSnackbar();
 
-    const open = (props: {
+    const open = useCallback((props: {
         type: SnackbarMessageType;
         // title?: string;
         message: string;
     }) => {
-        const { type, message } = props;
+        const {
+            type,
+            message
+        } = props;
         enqueueSnackbar(message, {
             variant: type
         })
-    };
+    }, []);
 
     return {
         open,

@@ -36,6 +36,7 @@ import { AuthControllerContext } from "./contexts/AuthControllerContext";
 import {
     SideDialogsControllerContext
 } from "./contexts/SideDialogsControllerContext";
+import { useTraceUpdate } from "./util/useTraceUpdate";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -185,7 +186,7 @@ function FireCMSInternal({
     let childrenResult = children({
         context,
         loading
-    })
+    });
 
     const plugins = context.plugins;
     if (!loading && plugins) {

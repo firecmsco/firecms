@@ -27,6 +27,7 @@ import {
 import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { resolveCollection } from "../../../util";
+import { useTraceUpdate } from "../../../util/useTraceUpdate";
 
 interface ExportButtonProps<M extends Record<string, any>, UserType extends User> {
     collection: EntityCollection<M>;
@@ -43,8 +44,8 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                                                                                    }: ExportButtonProps<M, UserType>
 ) {
 
-    const dataSource = useDataSource();
     const context = useFireCMSContext<UserType>();
+    const dataSource = useDataSource();
     const navigationContext = useNavigationContext();
 
     const path = navigationContext.resolveAliasesFrom(inputPath);
@@ -88,67 +89,60 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
         downloadCSV(data, additionalData, collection, path, exportConfig);
     }, []);
 
+    const fetchAdditionalFields = useCallback(async (entities: Entity<M>[]) => {
+
+        if (!exportConfig?.additionalFields) {
+            return;
+        }
+
+        const additionalFields = exportConfig.additionalFields;
+
+        const resolvedColumnsValues: Record<string, any>[] = await Promise.all(entities.map(async (entity) => {
+            return (await Promise.all(additionalFields.map(async (column) => {
+                return {
+                    [column.key]: await column.builder({
+                        entity,
+                        context
+                    })
+                };
+            }))).reduce((a, b) => ({ ...a, ...b }), {});
+        }));
+        return resolvedColumnsValues;
+    }, [exportConfig?.additionalFields]);
+
+    const updateEntities = useCallback(async (entities: Entity<M>[]) => {
+        if (entities.length >= INITIAL_DOCUMENTS_LIMIT) {
+            setHasLargeAmountOfData(true);
+        }
+
+        const pendingDownload = dataRef.current && entities.length > dataRef.current.length && fetchLargeDataAccepted;
+
+        dataRef.current = entities;
+        const additionalFieldsData = await fetchAdditionalFields(entities);
+        additionalDataRef.current = additionalFieldsData;
+        setDataLoadingError(undefined);
+
+        if (pendingDownload) {
+            doDownload(entities, additionalFieldsData, collection, path, exportConfig);
+            handleClose();
+        }
+    }, [collection, doDownload, exportConfig, fetchAdditionalFields, fetchLargeDataAccepted, handleClose, path]);
+
     useEffect(() => {
 
         if (!open) return;
 
         setDataLoading(true);
-
-        const updateEntities = async (entities: Entity<M>[]) => {
-            if (entities.length >= INITIAL_DOCUMENTS_LIMIT) {
-                setHasLargeAmountOfData(true);
-            }
-
-            const pendingDownload = dataRef.current && entities.length > dataRef.current.length && fetchLargeDataAccepted;
-
-            dataRef.current = entities;
-            const additionalFieldsData = await fetchAdditionalFields(entities);
-            additionalDataRef.current = additionalFieldsData;
-            setDataLoading(false);
-            setDataLoadingError(undefined);
-
-            if (pendingDownload) {
-                doDownload(entities, additionalFieldsData, collection, path, exportConfig);
-                handleClose();
-            }
-        };
-
-        const fetchAdditionalFields = async (entities: Entity<M>[]) => {
-
-            if (!exportConfig?.additionalFields) {
-                return;
-            }
-
-            const additionalFields = exportConfig.additionalFields;
-
-            const resolvedColumnsValues: Record<string, any>[] = await Promise.all(entities.map(async (entity) => {
-                return (await Promise.all(additionalFields.map(async (column) => {
-                    return {
-                        [column.key]: await column.builder({
-                            entity,
-                            context
-                        })
-                    };
-                }))).reduce((a, b) => ({ ...a, ...b }), {});
-            }));
-            return resolvedColumnsValues;
-        };
-
-        const onFetchError = (error: Error) => {
-            console.error("ERROR", error);
-            setDataLoading(false);
-            setDataLoadingError(error);
-        };
-
         dataSource.fetchCollection<M>({
             path,
             collection,
             limit: fetchLargeDataAccepted ? undefined : INITIAL_DOCUMENTS_LIMIT
         })
             .then(updateEntities)
-            .catch(onFetchError);
+            .catch(setDataLoadingError)
+            .finally(() => setDataLoading(false));
 
-    }, [path, fetchLargeDataAccepted, collection, open, dataSource, doDownload, exportConfig, handleClose, context]);
+    }, [collection, dataSource, fetchLargeDataAccepted, open, path, updateEntities]);
 
     const needsToAcceptFetchAllData = hasLargeAmountOfData && !fetchLargeDataAccepted;
 
