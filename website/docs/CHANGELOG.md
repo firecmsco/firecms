@@ -2,7 +2,7 @@
 id: changelog
 title: Changelog
 ---
-## [2.0.0-beta.2] - 2023-01-18
+## WIP - [2.0.0-beta.2] - 2023-01-18
 
 ### Changed
 - Fixed bug where collection actions were getting their internal state reset.

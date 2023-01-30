@@ -163,16 +163,11 @@ a.btn {
     text-decoration: none;
 }
 
-/* Tailwind does not compute this properly on buttons */
-.font-bold {
-    font-weight: 600 !important;
-}
-
 h1, h2, h3 {
     font-weight: 700;
 }
 
-h2{
+h2 {
     margin-top: 2rem;
 }
 
