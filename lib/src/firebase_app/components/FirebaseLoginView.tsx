@@ -18,9 +18,9 @@ import {
     Typography
 } from "@mui/material";
 
-import { FirebaseApp, FirebaseError } from "firebase/app";
-import { ErrorView, FireCMSLogo } from "../../core";
-import { useModeController } from "../../hooks";
+import {FirebaseApp, FirebaseError} from "firebase/app";
+import {ErrorView, FireCMSLogo} from "../../core";
+import {useModeController} from "../../hooks";
 import {
     FirebaseAuthController,
     FirebaseSignInOption,
@@ -37,8 +37,8 @@ import {
 import EmailIcon from "@mui/icons-material/Email";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import { Phone } from "@mui/icons-material";
-import { RECAPTCHA_CONTAINER_ID, useRecaptcha } from "../hooks/useRecaptcha";
+import {Phone} from "@mui/icons-material";
+import {RECAPTCHA_CONTAINER_ID, useRecaptcha} from "../hooks/useRecaptcha";
 import {
     getAuth,
     getMultiFactorResolver,
@@ -138,7 +138,7 @@ export function FirebaseLoginView({
 
     const sendMFASms = useCallback(() => {
         const auth = getAuth();
-        const recaptchaVerifier = new RecaptchaVerifier("recaptcha", { size: "invisible" }, auth);
+        const recaptchaVerifier = new RecaptchaVerifier("recaptcha", {size: "invisible"}, auth);
 
         const resolver = getMultiFactorResolver(auth, authController.authProviderError);
 
@@ -174,12 +174,13 @@ export function FirebaseLoginView({
         if (authController.user != null) return errorView; // if the user is logged in via MFA
         const ignoredCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
         if (authController.authProviderError) {
-            if (authController.authProviderError.code === "auth/operation-not-allowed") {
+            if (authController.authProviderError.code === "auth/operation-not-allowed" ||
+                authController.authProviderError.code === "auth/configuration-not-found") {
                 errorView =
                     <div>
                         <Box p={1}>
                             <ErrorView
-                                error={"You need to enable the corresponding login provider in your Firebase project"}/>
+                                error={"You need to enable Firebase auth and the corresponding login provider in your Firebase project"}/>
                         </Box>
                         {firebaseApp &&
                             <Box p={1}>
@@ -413,7 +414,7 @@ function PhoneLoginForm({
                 <Grid item xs={12}>
                     <IconButton
                         onClick={onClose}>
-                        <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
+                        <ArrowBackIcon sx={{width: 20, height: 20}}/>
                     </IconButton>
                 </Grid>
                 <Grid item xs={12} sx={{
@@ -460,7 +461,7 @@ function PhoneLoginForm({
                     }}>
 
                         {authController.authLoading &&
-                            <CircularProgress sx={{ p: 1 }} size={16}
+                            <CircularProgress sx={{p: 1}} size={16}
                                               thickness={8}/>
                         }
 
@@ -569,11 +570,11 @@ function LoginForm({
                 <Grid item xs={12}>
                     <IconButton
                         onClick={onBackPressed}>
-                        <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
+                        <ArrowBackIcon sx={{width: 20, height: 20}}/>
                     </IconButton>
                 </Grid>
 
-                <Grid item xs={12} sx={{ p: 1 }}>
+                <Grid item xs={12} sx={{p: 1}}>
                     <Typography align={"center"} variant={"subtitle2"}>
                         You already have an account
                     </Typography>
@@ -601,7 +602,7 @@ function LoginForm({
                     <Grid item xs={12}>
                         <IconButton
                             onClick={onBackPressed}>
-                            <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
+                            <ArrowBackIcon sx={{width: 20, height: 20}}/>
                         </IconButton>
                     </Grid>
 
@@ -614,7 +615,7 @@ function LoginForm({
                     </Grid>
 
                     <Grid item xs={12}
-                          sx={{ display: shouldShowEmail ? "inherit" : "none" }}>
+                          sx={{display: shouldShowEmail ? "inherit" : "none"}}>
                         <TextField placeholder="Email" fullWidth autoFocus
                                    value={email ?? ""}
                                    disabled={authController.authLoading}
@@ -627,7 +628,7 @@ function LoginForm({
                     </Grid>
 
                     <Grid item xs={12}
-                          sx={{ display: loginMode || (registrationMode && !disableSignupScreen) ? "inherit" : "none" }}>
+                          sx={{display: loginMode || (registrationMode && !disableSignupScreen) ? "inherit" : "none"}}>
                         <TextField placeholder="Password" fullWidth
                                    value={password ?? ""}
                                    disabled={authController.authLoading}
@@ -645,7 +646,7 @@ function LoginForm({
                         }}>
 
                             {authController.authLoading &&
-                                <CircularProgress sx={{ p: 1 }} size={16}
+                                <CircularProgress sx={{p: 1}} size={16}
                                                   thickness={8}/>
                             }
 
