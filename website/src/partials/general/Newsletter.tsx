@@ -78,7 +78,7 @@ export const Newsletter = () => {
                                         className="underline ">our personal data policy</a>.</span>
                                 </label>
                                 <div
-                                    className="w-full py-2 border-b-2 border-gray-400 flex justify-between gap-2">
+                                    className="w-full py-2 flex justify-between gap-2">
                                     <input
                                         disabled={loading || completed}
                                         className={"appearance-none outline-none text-xl flex-1 px-4 py-4 bg-gray-100 dark:bg-gray-900 rounded w-full leading-tight focus:border-primary "
@@ -89,7 +89,7 @@ export const Newsletter = () => {
                                         value={email}/>
                                     <button type="submit"
                                             disabled={loading || completed || !policyAccepted}
-                                            className={"btn px-8 py-4 sm:px-12 sm:py-4 font-bold uppercase w-full w-auto sm:mb-0 sm:ml-2 " + (loading || !policyAccepted ? "bg-gray-200 dark:bg-gray-800" : (completed ? "bg-green-600" : "bg-primary hover:bg-blue-700"))}>
+                                            className={"btn px-8 py-4 sm:px-12 sm:py-4  uppercase w-full w-auto sm:mb-0 sm:ml-2 " + (loading || !policyAccepted ? "bg-gray-200 dark:bg-gray-800" : (completed ? "bg-green-600" : "bg-primary hover:bg-blue-700"))}>
                                         {loading ? "Loading" : (completed ? "Signed up!" : "Sign up")}
                                     </button>
                                 </div>

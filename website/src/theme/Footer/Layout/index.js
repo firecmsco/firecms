@@ -24,7 +24,7 @@ export default function LayoutWrapper(props) {
                             <a href="mailto:hello@firecms.co?subject=FireCMS%20consulting"
                                rel="noopener noreferrer"
                                target="_blank"
-                               className={"btn mx-auto sm:mb-0 font-bold py-4 bg-black text-white font-bold hover:text-white uppercase border border-solid w-full sm:w-auto rounded"}>
+                               className={"btn mx-auto sm:mb-0  py-4 bg-black text-white  hover:text-white uppercase border border-solid w-full sm:w-auto rounded"}>
                                 Get in touch
                             </a>
                         </div>

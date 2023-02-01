@@ -44,18 +44,21 @@ export function EnterpriseArchitectures() {
                     <p>
                         FireCMS is a headless CMS, which means that it can be
                         used
-                        with any frontend framework. Unlike traditional CMSs, it
+                        with <b>any frontend framework</b>. Unlike traditional
+                        CMSs, it
                         is not coupled to the rendering layer.
                     </p>
 
                 </>}
                 right={<>
                     <SimpleArchitecture className={"w-full mt-8"}/>
-                    <label className={"text-sm text-center m-4"}>Simple architecture</label>
+                    <label className={"text-sm text-center m-4"}>Simple
+                        architecture</label>
                     <ComplexArchitecture className={"w-full mt-16"}/>
-                    <label className={"text-sm text-center m-4"}>Architecture using microservices</label>
+                    <label className={"text-sm text-center m-4"}>Architecture
+                        using microservices</label>
                 </>
-                    }/>
+                }/>
 
         </>
     );
