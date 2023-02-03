@@ -1,3 +1,9 @@
+## [WIP - 2.0.0-beta.3] - 2023-01-30
+
+### Changed
+- Fixed bug regarding custom selection controllers.
+- Fix for default value not being set in array properties.
+
 ## [2.0.0-beta.2] - 2023-01-30
 
 ### Changed
