@@ -108,8 +108,7 @@ export function useTableController<M extends Record<string, any> = any, UserType
     const data = useDebouncedData(orderedData, {
         filterValues,
         sortBy,
-        searchString,
-        itemCount
+        searchString
     });
 
     return {

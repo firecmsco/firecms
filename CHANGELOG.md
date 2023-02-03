@@ -1,14 +1,16 @@
-## WIP - [2.0.0-beta.2] - 2023-01-18
+## [2.0.0-beta.2] - 2023-01-30
 
 ### Changed
 - Fixed bug where collection actions were getting their internal state reset.
-- [BREAKING] In the component `EntityCollectionTable`, the prop `ActionsBuilder`
-has been replaced with `actions`.
 - Improved preview of files that are not images, videos, or audio files.
 - Form optimizations
 - Fix for reference dialog not clearing selection
-- Internal refactoring of the `EntityCollectionTable` component.
 - Fix for multiple error snackbar, when there is an error uploading a file.
+- Fix for missing highlight when closing side dialog.
+- Fix for delayed data update when changing filters.
+- Internal refactoring of the `EntityCollectionTable` component.
+- [BREAKING] In the component `EntityCollectionTable`, the prop `ActionsBuilder`
+  has been replaced with `actions`.
 
 ## [2.0.0-beta.1] - 2023-01-18
 
