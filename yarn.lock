@@ -5283,6 +5283,75 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"firecms_collection_editor@workspace:collection_editor":
+  version: 0.0.0-use.local
+  resolution: "firecms_collection_editor@workspace:collection_editor"
+  dependencies:
+    "@emotion/react": ^11.10.5
+    "@emotion/styled": ^11.10.5
+    "@mui/icons-material": ^5.11.0
+    "@mui/lab": ^5.0.0-alpha.117
+    "@mui/material": ^5.11.6
+    "@types/react": ^18.0.27
+    "@types/react-dom": ^18.0.10
+    "@typescript-eslint/eslint-plugin": ^5.49.0
+    "@typescript-eslint/parser": ^5.49.0
+    "@vitejs/plugin-react": ^3.0.1
+    algoliasearch: ^4.14.3
+    eslint: ^8.32.0
+    eslint-config-standard: ^17.0.0
+    eslint-plugin-import: ^2.27.5
+    eslint-plugin-n: ^15.6.1
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-react: ^7.32.1
+    eslint-plugin-react-hooks: ^4.6.0
+    firebase: ^9.16.0
+    firecms: "workspace:lib"
+    flexsearch: 0.7.31
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-router: ^6.7.0
+    react-router-dom: ^6.7.0
+    typescript: ^4.9.4
+    vite: ^4.0.4
+    vite-plugin-fonts: ^0.7.0
+  languageName: unknown
+  linkType: soft
+
+"firecms_user_management@workspace:user_management":
+  version: 0.0.0-use.local
+  resolution: "firecms_user_management@workspace:user_management"
+  dependencies:
+    "@emotion/react": ^11.10.5
+    "@emotion/styled": ^11.10.5
+    "@mui/icons-material": ^5.11.0
+    "@mui/lab": ^5.0.0-alpha.117
+    "@mui/material": ^5.11.6
+    "@types/react": ^18.0.27
+    "@types/react-dom": ^18.0.10
+    "@typescript-eslint/eslint-plugin": ^5.49.0
+    "@typescript-eslint/parser": ^5.49.0
+    "@vitejs/plugin-react": ^3.0.1
+    algoliasearch: ^4.14.3
+    eslint: ^8.32.0
+    eslint-config-standard: ^17.0.0
+    eslint-plugin-import: ^2.27.5
+    eslint-plugin-n: ^15.6.1
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-react: ^7.32.1
+    eslint-plugin-react-hooks: ^4.6.0
+    firebase: ^9.16.0
+    firecms: "workspace:lib"
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-router: ^6.7.0
+    react-router-dom: ^6.7.0
+    typescript: ^4.9.4
+    vite: ^4.0.4
+    vite-plugin-fonts: ^0.7.0
+  languageName: unknown
+  linkType: soft
+
 "flat-cache@npm:^3.0.4":
   version: 3.0.4
   resolution: "flat-cache@npm:3.0.4"
@@ -5297,6 +5366,13 @@ __metadata:
   version: 3.2.7
   resolution: "flatted@npm:3.2.7"
   checksum: 427633049d55bdb80201c68f7eb1cbd533e03eac541f97d3aecab8c5526f12a20ccecaeede08b57503e772c769e7f8680b37e8d482d1e5f8d7e2194687f9ea35
+  languageName: node
+  linkType: hard
+
+"flexsearch@npm:0.7.31":
+  version: 0.7.31
+  resolution: "flexsearch@npm:0.7.31"
+  checksum: 9817d8909a0d07d98e2c31f8a39cbc91be7a900cc3f86d74214ee49d00b6f3b133b883a3a19154de1d2064519494002dcfb1a30fbc65c8ef44259c3655fa8f39
   languageName: node
   linkType: hard
 
@@ -8376,6 +8452,43 @@ __metadata:
   checksum: cb4f97ad25a75ebc11a8ef4e33bb962f8af8516bb2001082ceabd8902e15b98f4b84b4f8a9b222e5d57fc3bd1379c483886ed4619367a7680dad65316993021d
   languageName: node
   linkType: hard
+
+"saas@workspace:saas":
+  version: 0.0.0-use.local
+  resolution: "saas@workspace:saas"
+  dependencies:
+    "@emotion/react": ^11.10.5
+    "@emotion/styled": ^11.10.5
+    "@module-federation/vite": ^0.2.6
+    "@mui/icons-material": ^5.11.0
+    "@mui/lab": ^5.0.0-alpha.117
+    "@mui/material": ^5.11.6
+    "@softarc/native-federation": ^1.1.0
+    "@types/react": ^18.0.27
+    "@types/react-dom": ^18.0.10
+    "@typescript-eslint/eslint-plugin": ^5.49.0
+    "@typescript-eslint/parser": ^5.49.0
+    "@vitejs/plugin-react": ^3.0.1
+    algoliasearch: ^4.14.3
+    eslint: ^8.32.0
+    eslint-config-standard: ^17.0.0
+    eslint-plugin-import: ^2.27.5
+    eslint-plugin-n: ^15.6.1
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-react: ^7.32.1
+    eslint-plugin-react-hooks: ^4.6.0
+    firebase: ^9.16.0
+    firecms: "workspace:lib"
+    firecms_collection_editor: "workspace:collection_editor"
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-router: ^6.7.0
+    react-router-dom: ^6.7.0
+    typescript: ^4.9.4
+    vite: ^4.0.4
+    vite-plugin-fonts: ^0.7.0
+  languageName: unknown
+  linkType: soft
 
 "safe-buffer@npm:>=5.1.0, safe-buffer@npm:~5.2.0":
   version: 5.2.1
