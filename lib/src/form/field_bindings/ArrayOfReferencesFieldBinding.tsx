@@ -27,16 +27,16 @@ type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
  * @category Form fields
  */
 export function ArrayOfReferencesFieldBinding({
-                                           propertyKey,
-                                           value,
-                                           error,
-                                           showError,
-                                           isSubmitting,
-                                           tableMode,
-                                           property,
-                                           includeDescription,
-                                           setValue
-                                       }: ArrayOfReferencesFieldProps) {
+                                                  propertyKey,
+                                                  value,
+                                                  error,
+                                                  showError,
+                                                  isSubmitting,
+                                                  tableMode,
+                                                  property,
+                                                  includeDescription,
+                                                  setValue
+                                              }: ArrayOfReferencesFieldProps) {
 
     const ofProperty = property.of as ResolvedProperty;
     if (ofProperty.dataType !== "reference") {
@@ -115,7 +115,8 @@ export function ArrayOfReferencesFieldBinding({
                             addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
                             name={propertyKey}
                             buildEntry={buildEntry}
-                            disabled={isSubmitting}/>
+                            disabled={isSubmitting}
+                            newDefaultEntry={property.of.defaultValue}/>
 
             <Box p={1}
                  justifyContent="center"

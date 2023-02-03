@@ -25,6 +25,7 @@ interface ArrayContainerProps<T> {
     small?: boolean;
     onInternalIdAdded?: (id: number) => void;
     includeAddButton?: boolean;
+    newDefaultEntry?: T | null;
 }
 
 /**
@@ -38,7 +39,8 @@ export function ArrayContainer<T>({
                                       buildEntry,
                                       small,
                                       onInternalIdAdded,
-                                      includeAddButton
+                                      includeAddButton,
+                                      newDefaultEntry = null
                                   }: ArrayContainerProps<T>) {
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
@@ -88,7 +90,7 @@ export function ArrayContainer<T>({
                 if (onInternalIdAdded)
                     onInternalIdAdded(id);
                 setInternalIds(newIds);
-                arrayHelpers.push(null);
+                arrayHelpers.push(newDefaultEntry);
             };
 
             const remove = (index: number) => {
@@ -158,7 +160,8 @@ export function ArrayContainer<T>({
                                                     remove={remove}
                                                 />
                                             )}
-                                        </Draggable>);
+                                        </Draggable>
+                                    );
                                 })}
 
                                 {droppableProvided.placeholder}
