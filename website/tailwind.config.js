@@ -1,5 +1,5 @@
 module.exports = {
-    darkMode: 'class',
+    darkMode: ['class', '[data-theme="dark"]'],
     content: ['./src/**/*.html', './src/**/*.js', './src/**/*.tsx'],
     // important: '#tailwind',
     corePlugins: { preflight: false },

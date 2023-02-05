@@ -41,6 +41,55 @@ function Features() {
 
     return (
         <>
+
+
+            <section className={ContainerSmallMixin + " my-16"}>
+
+                <div className={"flex items-center mb-3 "}>
+
+                    <div
+                        className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                        <LightingIcon height={12} width={12}/>
+                    </div>
+
+                    <h3 className="h3 m-0">
+                        Inline editing
+                    </h3>
+
+                </div>
+
+                <p className="text-xl text-gray-600 dark:text-gray-200">
+                    FireCMS provides all the flexibility you
+                    need with the best UX.
+                    Edit your collections and entities using
+                    both a <b>spreadsheet
+                    view</b> and <b>powerful forms</b>.
+                </p>
+
+                <p className="text-base text-gray-600 dark:text-gray-200">
+                    Inline editing is very useful when you want to
+                    quickly edit a few fields of a
+                    document. For example, if you have a list of users,
+                    you can quickly edit the
+                    name of the user by clicking on the name and editing
+                    it.
+                </p>
+                <div
+                    className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-4 md:pr-8 flex justify-center flex-col h-full"
+                >
+                    <BrowserFrame>
+                        <video
+                            // style={{
+                            //     aspectRatio: 842 / 463,
+                            // }}
+                            width="100%" loop autoPlay muted>
+                            <source src={inlineEditingVideo}
+                                    type="video/mp4"/>
+                        </video>
+                    </BrowserFrame>
+                </div>
+
+            </section>
             <TwoColumns
                 reverseSmall={true}
                 right={
@@ -102,57 +151,9 @@ function Features() {
                 </>}
             />
 
-            <section className={ContainerSmallMixin + " my-16"}>
-
-                <div className={"flex items-center mb-3 "}>
-
-                    <div
-                        className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
-                        <LightingIcon height={12} width={12}/>
-                    </div>
-
-                    <h3 className="h3 m-0">
-                        Inline editing
-                    </h3>
-
-                </div>
-
-                <p className="text-xl text-gray-600 dark:text-gray-200">
-                    FireCMS provides all the flexibility you
-                    need with the best UX.
-                    Edit your collections and entities using
-                    both a <b>spreadsheet
-                    view</b> and <b>powerful forms</b>.
-                </p>
-
-                <p className="text-base text-gray-600 dark:text-gray-200">
-                    Inline editing is very useful when you want to
-                    quickly edit a few fields of a
-                    document. For example, if you have a list of users,
-                    you can quickly edit the
-                    name of the user by clicking on the name and editing
-                    it.
-                </p>
-                <div
-                    className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-4 md:pr-8 flex justify-center flex-col h-full"
-                >
-                    <BrowserFrame>
-                        <video
-                            // style={{
-                            //     aspectRatio: 842 / 463,
-                            // }}
-                            width="100%" loop autoPlay muted>
-                            <source src={inlineEditingVideo}
-                                    type="video/mp4"/>
-                        </video>
-                    </BrowserFrame>
-                </div>
-
-            </section>
-
             <TwoColumns
-                reverseSmall={true}
-                left={<>
+                reverseSmall={false}
+                right={<>
                     <div className="relative flex flex-col">
                         <video
                             className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
@@ -167,7 +168,7 @@ function Features() {
                         </video>
                     </div>
                 </>}
-                right={
+                left={
                     <>
 
                         <div
