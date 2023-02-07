@@ -36,7 +36,7 @@ export function DeveloperFeatures() {
     const isDarkTheme = colorMode === "dark";
 
     return (
-        <Panel color={"gray"} includeMargin={true}>
+        <Panel color={"gray"} includeMargin={false}>
 
             <p className="text-center text-secondary uppercase font-bold ">
                 For developers

@@ -1,6 +1,11 @@
 import React from "react";
 import { ThreeColumns } from "../general/ThreeColumns";
-import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../utils";
+import {
+    ContainerMixin,
+    CTAButtonMixin,
+    CTACaret,
+    CTAOutlinedButtonMixin
+} from "../utils";
 
 export function FireCMSCloudVersions() {
 
@@ -80,7 +85,7 @@ export function FireCMSCloudVersions() {
             </div>
             <div className={"text-center mt-4 text-primary w-full"}>
                 <a
-                    className={ CTAOutlinedButtonMixin}
+                    className={CTAOutlinedButtonMixin}
                     href="mailto:hello@firecms.co?subject=FireCMS%20Cloud%20Pro"
                     rel="noopener noreferrer"
                     target="_blank"
@@ -92,11 +97,21 @@ export function FireCMSCloudVersions() {
         </div>
     );
 
-    return <section className={"flex flex-col items-center"}>
+    return <section
+        className={ContainerMixin + " flex flex-col items-center my-16 text-lg"}>
 
-        <h2 className={"text-3xl md:text-4xl font-bold mb-2 text-center"}>
-            FireCMS Cloud Versions
+        <h2 className={"text-3xl md:text-4xl font-bold mb-4 text-center"}>
+            Full no-code solution
         </h2>
+
+        <p>
+            <strong>FireCMS Cloud</strong> offers a complete, end-to-end
+            solution for businesses that require the highest level of
+            support and security. With dedicated hosting, advanced features, and
+            expert support, you'll have everything you need to take your project
+            to the next level.
+        </p>
+
         <ThreeColumns
             left={freeTier}
             center={plusTier}
@@ -104,7 +119,7 @@ export function FireCMSCloudVersions() {
         />
 
         <a
-            className={ CTAButtonMixin}
+            className={CTAButtonMixin}
             href="http://app.firecms.co"
             rel="noopener noreferrer"
             target="_blank"

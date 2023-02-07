@@ -12,6 +12,7 @@ import FirebaseIntro from "../partials/home/FirebaseIntro";
 import { Companies } from "../partials/home/Companies";
 import FeaturesTeaser from "../partials/home/FeaturesTeaser";
 import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
+import { FireCMSCloudIntro } from "../partials/home/FireCMSCloudIntro";
 
 function Home() {
     const context = useDocusaurusContext();
@@ -35,7 +36,7 @@ function Home() {
                     {/*<Separator/>*/}
                     <FirebaseIntro/>
 
-                    {/*<FireCMSCloudIntro/>*/}
+                    <FireCMSCloudIntro/>
 
                     <FeaturesPanels/>
 

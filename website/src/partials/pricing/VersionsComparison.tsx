@@ -47,13 +47,7 @@ const data = [{
         cloud: "Yes",
         cloudPlus: "Yes",
         cloudPro: "Yes"
-    }, {
-        feature: "Support",
-        selfHosted: "Enterprise",
-        cloud: "Yes",
-        cloudPlus: "Yes",
-        cloudPro: "Yes"
-    }, {
+    },  {
         feature: "Data export",
         selfHosted: "Yes",
         cloud: "Yes",
@@ -66,6 +60,12 @@ const data = [{
         cloudPlus: "Yes",
         cloudPro: "Yes"
     }, {
+        feature: "Support",
+        selfHosted: "Enterprise",
+        cloud: "No",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
+    },{
         feature: "Text search",
         selfHosted: "Dev managed",
         cloud: "No",
@@ -154,7 +154,7 @@ export function VersionsComparison() {
             <thead
                 className="text-xs text-gray-800 uppercase bg-gray-50 dark:bg-gray-800 dark:text-gray-300 font-bold">
             <tr>
-                <th colSpan={2} scope="col"
+                <th colSpan={1} scope="col"
                     className="border-none rounded-lg md:px-6 md:py-4 invisible">
                 </th>
                 <th scope="col"
@@ -173,10 +173,6 @@ export function VersionsComparison() {
                 </th>
                 <th scope="col"
                     className="border-none rounded-lg text-base md:px-6 md:py-4 text-center ">
-                    Self-hosted
-                </th>
-                <th scope="col"
-                    className="border-none rounded-lg text-base md:px-6 md:py-4 text-center ">
                     Free
                 </th>
                 <th scope="col"
@@ -186,6 +182,10 @@ export function VersionsComparison() {
                 <th scope="col"
                     className="border-none rounded-lg text-base md:px-6 md:py-4 text-center ">
                     Pro
+                </th>
+                <th scope="col"
+                    className="border-none rounded-lg text-base md:px-6 md:py-4 text-center ">
+                    Self-hosted
                 </th>
             </tr>
             </thead>
@@ -198,9 +198,6 @@ export function VersionsComparison() {
                             className="bg-gray-50 mx-2 dark:bg-gray-900 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-300 font-bold">
                             {row.feature}
                         </td>
-                        <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.selfHosted)}>
-                            {getFeatureComponent(row.selfHosted)}
-                        </td>
                         <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.cloud)}>
                             {getFeatureComponent(row.cloud)}
                         </td>
@@ -209,6 +206,9 @@ export function VersionsComparison() {
                         </td>
                         <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.cloudPro)}>
                             {getFeatureComponent(row.cloudPro)}
+                        </td>
+                        <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.selfHosted)}>
+                            {getFeatureComponent(row.selfHosted)}
                         </td>
                     </tr>
                 ))
@@ -221,33 +221,34 @@ export function VersionsComparison() {
                 <th scope="col"
                     className="border-none rounded-lg px-6 py-3 invisible">
                 </th>
+                <th
+                    className={" table-cell p-0 border-none"}
+                    colSpan={3}
+                >
+                    <a className={CTAButtonMixin + " w-full"} href={"https://app.firecms.co"}>
+                    Get started
+                    </a>
+                </th>
                 <a
-                    className={CTAOutlinedButtonMixin + " table-cell"}
+                    className={CTAOutlinedButtonMixin + " table-cell md:px-4"}
                     href={useBaseUrl("docs/")}
                 >
                     More details
                 </a>
-                <th
-                    className={" table-cell p-0 border-none"}
-                >
-                    <a className={CTAButtonMixin + " w-full"} href={"https://app.firecms.co"}>
-                    Get started
-                    </a>
-                </th>
-                <th
-                    className={" table-cell p-0 border-none"}
-                >
-                    <a className={CTAButtonMixin + " w-full"} href={"https://app.firecms.co"}>
-                    Get started
-                    </a>
-                </th>
-                <th
-                    className={" table-cell p-0 border-none"}
-                >
-                    <a className={CTAButtonMixin + " w-full"} href={"https://app.firecms.co"}>
-                    Get started
-                    </a>
-                </th>
+                {/*<th*/}
+                {/*    className={" table-cell p-0 border-none"}*/}
+                {/*>*/}
+                {/*    <a className={CTAButtonMixin + " w-full"} href={"https://app.firecms.co"}>*/}
+                {/*    Get started*/}
+                {/*    </a>*/}
+                {/*</th>*/}
+                {/*<th*/}
+                {/*    className={" table-cell p-0 border-none"}*/}
+                {/*>*/}
+                {/*    <a className={CTAButtonMixin + " w-full"} href={"https://app.firecms.co"}>*/}
+                {/*    Get started*/}
+                {/*    </a>*/}
+                {/*</th>*/}
             </tr>
             </tfoot>
         </table>

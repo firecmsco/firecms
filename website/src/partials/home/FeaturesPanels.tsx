@@ -99,7 +99,7 @@ function FeaturesPanels() {
                             Advanced editing
                         </h4>
                         <p className="text-gray-600 dark:text-gray-200 text-center">
-                            Spreadsheet-like inline editing, powerful
+                            Spreadsheet-like editing, powerful
                             forms, files storage, entity references...
                         </p>
                     </div>
