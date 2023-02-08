@@ -176,7 +176,10 @@ export const testCollection = buildCollection({
     name: "Test entities",
     properties: {
 
-        specSheet: ({ values, entityId }) => ({
+        specSheet: ({
+                        values,
+                        entityId
+                    }) => ({
             name: "Specs sheet",
             dataType: "array",
             of: {
@@ -221,7 +224,11 @@ export const testCollection = buildCollection({
             dataType: "string",
             name: "Currency",
             enumValues: [
-                { id: "EUR", label: "Euros", color: "blueDark" },
+                {
+                    id: "EUR",
+                    label: "Euros",
+                    color: "blueDark"
+                },
                 {
                     id: "DOL",
                     label: "Dollars",
@@ -289,6 +296,36 @@ export const testCollection = buildCollection({
                 }
             }
         },
+        myArray: {
+            name: "some array",
+            dataType: "array",
+            of: {
+                dataType: "map",
+                properties: {
+                    prop1: {
+                        dataType: "string",
+                        name: "prop1"
+                    },
+                    prop2: {
+                        dataType: "number",
+                        name: "prop2"
+                    }
+                },
+                defaultValue: {
+                    // this DOESN'T works as initial value :(
+                    prop1: "hello 2",
+                    prop2: 2
+                }
+            },
+            defaultValue: [
+                // this works as initial value :)
+                {
+                    prop1: "hello 1",
+                    prop2: 1
+                }
+            ]
+        },
+
         // impacts: {
         //     name: "Impacts",
         //     validation: { required: true },

@@ -16,20 +16,20 @@ import { PropertyFieldBinding } from "../PropertyFieldBinding";
  * @category Form fields
  */
 export function RepeatFieldBinding<T extends Array<any>>({
-                                                            propertyKey,
-                                                            value,
-                                                            error,
-                                                            showError,
-                                                            isSubmitting,
-                                                            setValue,
-                                                            tableMode,
-                                                            property,
-                                                            includeDescription,
-                                                            underlyingValueHasChanged,
-                                                            context,
-                                                            disabled,
-                                                            shouldAlwaysRerender
-                                                        }: FieldProps<T>) {
+                                                             propertyKey,
+                                                             value,
+                                                             error,
+                                                             showError,
+                                                             isSubmitting,
+                                                             setValue,
+                                                             tableMode,
+                                                             property,
+                                                             includeDescription,
+                                                             underlyingValueHasChanged,
+                                                             context,
+                                                             disabled,
+                                                             shouldAlwaysRerender
+                                                         }: FieldProps<T>) {
 
     if (!property.of)
         throw Error("RepeatFieldBinding misconfiguration. Property `of` not set");
@@ -71,7 +71,8 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                            buildEntry={buildEntry}
                                            onInternalIdAdded={setLastAddedId}
                                            disabled={isSubmitting || Boolean(property.disabled)}
-                                           includeAddButton={!property.disabled}/>;
+                                           includeAddButton={!property.disabled}
+                                           newDefaultEntry={property.of.defaultValue}/>;
 
     const title = (<LabelWithIcon property={property}/>);
 

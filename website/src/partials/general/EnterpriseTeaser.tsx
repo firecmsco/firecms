@@ -10,7 +10,7 @@ export function EnterpriseTeaser() {
                 className={"mx-auto px-4 sm:px-6 bg-primary text-white "}>
                 <div
                     className="relative flex flex-col items-center px-6 py-12">
-                    <h4 className="h2 mb-4 text-white uppercase">
+                    <h4 className="h2 my-4 text-white uppercase">
                         Enterprise?
                     </h4>
 
