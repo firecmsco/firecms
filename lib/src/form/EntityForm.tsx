@@ -12,7 +12,7 @@ import {
     Entity,
     EntityCollection,
     EntityStatus,
-    EntityValues,
+    EntityValues, FireCMSPlugin,
     FormContext,
     PropertyFieldBindingProps,
     ResolvedEntityCollection,
@@ -315,7 +315,7 @@ const EntityFormInternal = function EntityForm<M extends Record<string, any>>({
                                        error={entityIdError}
                                        entity={entity}/>
 
-                        {entityId && <FormInternal
+                        {entityId && <InnerForm
                             {...props}
                             initialValues={initialValues}
                             onModified={onModified}
@@ -355,7 +355,7 @@ export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
             equal(a.entity?.values, b.entity?.values);
     }) as typeof EntityFormInternal;
 
-function FormInternal<M extends Record<string, any>>({
+function InnerForm<M extends Record<string, any>>({
                                                          initialValues,
                                                          values,
                                                          onModified,
@@ -410,7 +410,7 @@ function FormInternal<M extends Record<string, any>>({
         }
     }, [underlyingChanges, entity, values, touched, setFieldValue]);
 
-    const context: FormContext<M> | undefined = {
+    const formContext: FormContext<M> | undefined = {
         collection,
         entityId,
         values,
@@ -436,7 +436,7 @@ function FormInternal<M extends Record<string, any>>({
                         property,
                         includeDescription: true,
                         underlyingValueHasChanged,
-                        context,
+                        context: formContext,
                         tableMode: false,
                         partOfArray: false,
                         autoFocus: false,

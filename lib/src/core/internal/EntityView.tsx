@@ -16,7 +16,7 @@ import {
     Entity,
     EntityCollection,
     EntityStatus,
-    EntityValues,
+    EntityValues, FireCMSPlugin,
     ResolvedEntityCollection,
     User
 } from "../../types";
@@ -391,22 +391,47 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             modifiedValuesRef.current = values;
         }, []);
 
+        function buildForm() {
+            const plugins = context.plugins;
+            let form = <EntityForm
+                key={`form_${path}_${usedEntity?.id ?? "new"}`}
+                status={status}
+                path={path}
+                collection={collection}
+                onEntitySave={onEntitySave}
+                onDiscard={onDiscard}
+                onValuesChanged={onValuesChanged}
+                onModified={onValuesAreModified}
+                entity={usedEntity}
+            />;
+            if (plugins) {
+                plugins.forEach((plugin: FireCMSPlugin) => {
+                    if (plugin.form?.provider) {
+                        form = (
+                            <plugin.form.provider.Component
+                                status={status}
+                                path={path}
+                                collection={collection}
+                                onEntitySave={onEntitySave}
+                                onDiscard={onDiscard}
+                                onValuesChanged={onValuesChanged}
+                                onModified={onValuesAreModified}
+                                entity={usedEntity}
+                                context={context}
+                                {...plugin.form.provider.props}>
+                                {form}
+                            </plugin.form.provider.Component>
+                        );
+                    }
+                });
+            }
+            return form;
+        }
+
         const form = (readOnly === undefined)
             ? null
             : (!readOnly
-                ? (
-                    <EntityForm
-                        key={`form_${path}_${usedEntity?.id ?? "new"}`}
-                        status={status}
-                        path={path}
-                        collection={collection}
-                        onEntitySave={onEntitySave}
-                        onDiscard={onDiscard}
-                        onValuesChanged={onValuesChanged}
-                        onModified={onValuesAreModified}
-                        entity={usedEntity}
-                    />
-                )
+                ? buildForm()
                 : (
                     <EntityPreview
                         entity={usedEntity as Entity<M>}

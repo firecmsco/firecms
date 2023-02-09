@@ -2,13 +2,17 @@ import { FireCMSContext } from "./firecms_context";
 import { CollectionActionsProps, EntityCollection } from "./collections";
 import { User } from "./user";
 import { PropsWithChildren } from "react";
+import { FieldConfig, FieldConfigId } from "./field_config";
+import { FieldProps } from "./fields";
+import { CMSType } from "./properties";
+import { EntityFormProps } from "../form";
 
 /**
  * Interface used to define plugins for FireCMS.
  * NOTE: This is a work in progress and the API is not stable yet.
  * @category Core
  */
-export type FireCMSPlugin<T = any> = {
+export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
 
     /**
      * Name of the plugin
@@ -40,6 +44,14 @@ export type FireCMSPlugin<T = any> = {
 
     }
 
+    form?: {
+        provider?: {
+            Component: React.ComponentType<PropsWithChildren<FORM_PROPS & { context: FireCMSContext }>>;
+            props?: FORM_PROPS;
+        }
+        fieldBuilder?: <T extends CMSType = CMSType>(id: FieldConfigId, Field?: React.ComponentType<FieldProps<T>>) => React.ComponentType<FieldProps<T>> | null;
+    }
+
     /**
      * You can use this prop to add higher order components to the CMS.
      * The components will be added to the root of the CMS, so any component
@@ -49,9 +61,9 @@ export type FireCMSPlugin<T = any> = {
      * you can use the hooks provided by the CMS.
      * @param props
      */
-    wrapperComponent?: {
-        Component: React.ComponentType<PropsWithChildren<T & { context: FireCMSContext }>>;
-        props?: T;
+    provider?: {
+        Component: React.ComponentType<PropsWithChildren<PROPS & EntityFormProps<any>>>;
+        props?: PROPS;
     };
 
     homePage?: {

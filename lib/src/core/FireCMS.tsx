@@ -115,14 +115,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     }
 
     const context: Partial<FireCMSContext> = {
-        // authController,
-        // sideDialogsController,
-        // sideEntityController,
-        // navigation,
-        // dataSource,
-        // storageSource,
-        // snackbarController,
-        // userConfigPersistence,
         entityLinkBuilder,
         dateTimeFormat,
         locale,
@@ -191,12 +183,12 @@ function FireCMSInternal({
     const plugins = context.plugins;
     if (!loading && plugins) {
         plugins.forEach((plugin: FireCMSPlugin) => {
-            if (plugin.wrapperComponent) {
+            if (plugin.provider) {
                 childrenResult = (
-                    <plugin.wrapperComponent.Component {...plugin.wrapperComponent.props}
-                                                       context={context}>
+                    <plugin.provider.Component {...plugin.provider.props}
+                                               context={context}>
                         {childrenResult}
-                    </plugin.wrapperComponent.Component>
+                    </plugin.provider.Component>
                 );
             }
         });

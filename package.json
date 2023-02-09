@@ -10,7 +10,8 @@
         "example-client-project",
         "saas",
         "collection_editor",
-        "user_management"
+        "user_management",
+        "data_augmentation"
     ],
     "scripts": {
         "dev": "cd example && yarn dev",

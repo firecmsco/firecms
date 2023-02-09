@@ -20,7 +20,7 @@ import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
 import {
     ErrorBoundary,
-    getFieldConfig,
+    getFieldConfig, getFieldId,
     isReadOnly,
     resolveProperty
 } from "../core";
@@ -38,11 +38,11 @@ const PropertyFieldBindingInternal = function PropertyFieldBinding<T extends CMS
      partOfArray,
      autoFocus,
      shouldAlwaysRerender
- }: PropertyFieldBindingProps<any, M>): ReactElement<PropertyFieldBindingProps<any, M>> {
+ }: PropertyFieldBindingProps<any, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
     const fireCMSContext = useFireCMSContext();
 
-    let component: ComponentType<FieldProps> | undefined;
+    let component: ComponentType<FieldProps<T>> | undefined;
     const resolvedProperty: ResolvedProperty<T> | null = resolveProperty({
         propertyOrBuilder: property,
         values: context.values,
@@ -56,14 +56,27 @@ const PropertyFieldBindingInternal = function PropertyFieldBinding<T extends CMS
         component = ReadOnlyFieldBinding;
     } else if (resolvedProperty.Field) {
         if (typeof resolvedProperty.Field === "function") {
-            component = resolvedProperty.Field as ComponentType<FieldProps>;
+            component = resolvedProperty.Field as ComponentType<FieldProps<any>>;
         }
     } else {
         const fieldConfig = getFieldConfig(resolvedProperty);
         if (!fieldConfig) {
             throw new Error(`INTERNAL: Could not find field config for property ${propertyKey}`);
         }
-        component = fieldConfig.Field as ComponentType<FieldProps>;
+        component = fieldConfig.Field as ComponentType<FieldProps<T>>;
+
+    }
+
+    if (fireCMSContext.plugins) {
+        fireCMSContext.plugins.forEach(plugin => {
+            const fieldId = getFieldId(property);
+            if (fieldId && plugin.form?.fieldBuilder) {
+                component = plugin.form.fieldBuilder<T>(fieldId, component) || component;
+            }
+            if (!fieldId) {
+                console.warn("INTERNAL: Field id not found for property", property);
+            }
+        });
     }
 
     if (component) {

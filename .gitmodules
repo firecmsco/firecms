@@ -9,3 +9,7 @@
 [submodule "user_management"]
 	path = user_management
 	url = git@github.com:Camberi/firecms_collection_editor.git
+
+[submodule "data_augmentation"]
+	path = data_augmentation
+	url = git@github.com:Camberi/firecms_data_augmentation.git

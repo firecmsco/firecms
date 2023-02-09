@@ -26,7 +26,7 @@ import {
 
 const NEW_URL_HASH = "new";
 
-export function getEntityViewWidth(props: EntitySidePanelProps<any, any>, small: boolean): string {
+export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: boolean): string {
     if (small) return CONTAINER_FULL_WIDTH;
     const mainViewSelected = !props.selectedSubPath;
     const resolvedWidth: string | undefined = typeof props.width === "number" ? `${props.width}px` : props.width;
@@ -139,7 +139,7 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
     return sidePanels;
 }
 
-const propsToSidePanel = (props: EntitySidePanelProps<any, any>, navigation: NavigationContext, smallLayout: boolean): SideDialogPanelProps => {
+const propsToSidePanel = (props: EntitySidePanelProps<any>, navigation: NavigationContext, smallLayout: boolean): SideDialogPanelProps => {
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
     const newPath = props.entityId
