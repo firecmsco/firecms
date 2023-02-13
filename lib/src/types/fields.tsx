@@ -14,7 +14,8 @@ import {
 export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M extends Record<string, any> = any> {
 
     /**
-     * Name of the property
+     * Key of the property
+     * E.g. "user.name" for a property with path "user.name"
      */
     propertyKey: string;
 

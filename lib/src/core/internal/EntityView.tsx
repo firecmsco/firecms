@@ -575,37 +575,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                         }
                                     }}>
 
-                                    <Box
-                                        sx={(theme) => ({
-                                            width: "100%",
-                                            marginTop: theme.spacing(3),
-                                            paddingLeft: theme.spacing(4),
-                                            paddingRight: theme.spacing(4),
-                                            paddingTop: theme.spacing(3),
-                                            [theme.breakpoints.down("lg")]: {
-                                                marginTop: theme.spacing(2),
-                                                paddingLeft: theme.spacing(2),
-                                                paddingRight: theme.spacing(2),
-                                                paddingTop: theme.spacing(2)
-                                            },
-                                            [theme.breakpoints.down("md")]: {
-                                                marginTop: theme.spacing(1),
-                                                paddingLeft: theme.spacing(2),
-                                                paddingRight: theme.spacing(2),
-                                                paddingTop: theme.spacing(2)
-                                            }
-                                        })}>
-
-                                        <Typography
-                                            sx={{
-                                                marginTop: 4,
-                                                marginBottom: 4
-                                            }}
-                                            variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
-                                        </Typography>
-
-                                    </Box>
-
                                     {loading
                                         ? <CircularProgressCenter/>
                                         : form}

@@ -298,7 +298,8 @@ export type WhereFilterOp =
  * Used to define filters applied in collections
  * @category Models
  */
-export type FilterValues<Key extends string> = Partial<Record<Key, [WhereFilterOp, any]>>;
+export type FilterValues<Key extends string> =
+    Partial<Record<Key, [WhereFilterOp, any]>>;
 
 /**
  * You can use this configuration to add additional fields to the data

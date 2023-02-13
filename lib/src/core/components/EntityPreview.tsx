@@ -36,7 +36,7 @@ const classes = {
 };
 
 const StyledTableContainer = styled(TableContainer)((
-    { theme } : {
+    { theme }: {
         theme: Theme
     }
 ) => ({
@@ -97,82 +97,117 @@ export function EntityPreview<M extends Record<string, any>>(
     const properties: ResolvedProperties = resolvedCollection.properties;
 
     return (
-        <StyledTableContainer>
-            <Table aria-label="entity table">
-                <TableBody>
-                    <TableRow>
-                        <TableCell align="right"
-                                   component="td"
-                                   scope="row"
-                                   className={classes.titleCell}>
-                            <Typography variant={"caption"}
-                                        color={"textSecondary"}>
-                                Id
-                            </Typography>
-                        </TableCell>
-                        <TableCell padding="none"
-                                   className={classes.iconCell}>
-                            {getIdIcon("disabled", "small")}
-                        </TableCell>
-                        <TableCell className={classes.valuePreview}>
-                            <Box display="flex" alignItems="center">
-                                {entity.id}
-                                {appConfig?.entityLinkBuilder &&
-                                    <a href={appConfig.entityLinkBuilder({ entity })}
-                                       rel="noopener noreferrer"
-                                       target="_blank">
-                                        <IconButton
-                                            aria-label="go-to-entity-datasource"
-                                            size="large">
-                                            <OpenInNewIcon
-                                                fontSize={"small"}/>
-                                        </IconButton>
-                                    </a>}
-                            </Box>
-                        </TableCell>
-                    </TableRow>
+        <>
 
-                    {collection && Object.entries(properties)
-                        .map(([key, property]) => {
-                            const value = (entity.values)[key];
-                            return (
-                                <TableRow
-                                    key={"entity_prev" + property.name + key}>
-                                    <TableCell align="right"
-                                               component="td"
-                                               scope="row"
-                                               className={classes.titleCell}>
-                                        <Typography
-                                            sx={{ paddingLeft: 2 }}
-                                            variant={"caption"}
+            <Box
+                sx={(theme) => ({
+                    width: "100%",
+                    marginTop: theme.spacing(3),
+                    paddingLeft: theme.spacing(4),
+                    paddingRight: theme.spacing(4),
+                    paddingTop: theme.spacing(3),
+                    [theme.breakpoints.down("lg")]: {
+                        marginTop: theme.spacing(2),
+                        paddingLeft: theme.spacing(2),
+                        paddingRight: theme.spacing(2),
+                        paddingTop: theme.spacing(2)
+                    },
+                    [theme.breakpoints.down("md")]: {
+                        marginTop: theme.spacing(1),
+                        paddingLeft: theme.spacing(2),
+                        paddingRight: theme.spacing(2),
+                        paddingTop: theme.spacing(2)
+                    }
+                })}>
+
+                <Typography
+                    sx={{
+                        marginTop: 4,
+                        marginBottom: 4
+                    }}
+                    variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
+                </Typography>
+
+            </Box>
+
+            <StyledTableContainer>
+                <Table aria-label="entity table">
+                    <TableBody>
+                        <TableRow>
+                            <TableCell align="right"
+                                       component="td"
+                                       scope="row"
+                                       className={classes.titleCell}>
+                                <Typography variant={"caption"}
                                             color={"textSecondary"}>
-                                            {property.name}
-                                        </Typography>
-                                    </TableCell>
+                                    Id
+                                </Typography>
+                            </TableCell>
+                            <TableCell padding="none"
+                                       className={classes.iconCell}>
+                                {getIdIcon("disabled", "small")}
+                            </TableCell>
+                            <TableCell className={classes.valuePreview}>
+                                <Box display="flex" alignItems="center">
+                                    {entity.id}
+                                    {appConfig?.entityLinkBuilder &&
+                                        <a href={appConfig.entityLinkBuilder({ entity })}
+                                           rel="noopener noreferrer"
+                                           target="_blank">
+                                            <IconButton
+                                                aria-label="go-to-entity-datasource"
+                                                size="large">
+                                                <OpenInNewIcon
+                                                    fontSize={"small"}/>
+                                            </IconButton>
+                                        </a>}
+                                </Box>
+                            </TableCell>
+                        </TableRow>
 
-                                    <TableCell padding="none"
-                                               className={classes.iconCell}>
-                                        {getIconForProperty(property, "disabled", "small")}
-                                    </TableCell>
+                        {collection && Object.entries(properties)
+                            .map(([key, property]) => {
+                                const value = (entity.values)[key];
+                                return (
+                                    <TableRow
+                                        key={"entity_prev" + property.name + key}>
+                                        <TableCell align="right"
+                                                   component="td"
+                                                   scope="row"
+                                                   className={classes.titleCell}>
+                                            <Typography
+                                                sx={{ paddingLeft: 2 }}
+                                                variant={"caption"}
+                                                color={"textSecondary"}>
+                                                {property.name}
+                                            </Typography>
+                                        </TableCell>
 
-                                    <TableCell
-                                        className={classes.valuePreview}>
-                                        <ErrorBoundary>
-                                            <PropertyPreview
-                                                propertyKey={key}
-                                                value={value}
-                                                entity={entity}
-                                                property={property}
-                                                size={"regular"}/>
-                                        </ErrorBoundary>
-                                    </TableCell>
+                                        <TableCell padding="none"
+                                                   className={classes.iconCell}>
+                                            {getIconForProperty(property, "disabled", "small")}
+                                        </TableCell>
 
-                                </TableRow>
-                            );
-                        })}
-                </TableBody>
-            </Table>
-        </StyledTableContainer>
+                                        <TableCell
+                                            className={classes.valuePreview}>
+                                            <ErrorBoundary>
+                                                <PropertyPreview
+                                                    propertyKey={key}
+                                                    value={value}
+                                                    entity={entity}
+                                                    property={property}
+                                                    size={"regular"}/>
+                                            </ErrorBoundary>
+                                        </TableCell>
+
+                                    </TableRow>
+                                );
+                            })}
+                    </TableBody>
+                </Table>
+            </StyledTableContainer>
+
+        </>
     );
 
 }

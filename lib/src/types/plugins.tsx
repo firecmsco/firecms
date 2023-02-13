@@ -4,8 +4,10 @@ import { User } from "./user";
 import { PropsWithChildren } from "react";
 import { FieldConfig, FieldConfigId } from "./field_config";
 import { FieldProps } from "./fields";
-import { CMSType } from "./properties";
+import { CMSType, Property } from "./properties";
 import { EntityFormProps } from "../form";
+import { EntityStatus } from "./entities";
+import { ResolvedProperty } from "./resolved_entities";
 
 /**
  * Interface used to define plugins for FireCMS.
@@ -46,10 +48,15 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
 
     form?: {
         provider?: {
-            Component: React.ComponentType<PropsWithChildren<FORM_PROPS & { context: FireCMSContext }>>;
+            Component: React.ComponentType<PropsWithChildren<FORM_PROPS & EntityFormProps<any>>>;
             props?: FORM_PROPS;
         }
-        fieldBuilder?: <T extends CMSType = CMSType>(id: FieldConfigId, Field?: React.ComponentType<FieldProps<T>>) => React.ComponentType<FieldProps<T>> | null;
+
+        Actions?: React.ComponentType<FormActionProps>;
+
+        fieldBuilder?: <T extends CMSType = CMSType>(props: FieldBuilderParams<T>) =>
+            ((Field: React.ComponentType<FieldProps<T>>)
+                => React.ComponentType<FieldProps<T>>) | null;
     }
 
     /**
@@ -114,6 +121,20 @@ export interface HomePageActionsProps<M extends Record<string, any> = any, UserT
     context: FireCMSContext<UserType>;
 
 }
+
+export interface FormActionProps {
+    entityId?: string;
+    path: string;
+    values: Record<string, any>;
+    status: EntityStatus;
+    collection: EntityCollection;
+}
+
+export type FieldBuilderParams<T extends CMSType = CMSType> = {
+    id: FieldConfigId;
+    dataType: T;
+    property: Property<T> | ResolvedProperty<T>;
+};
 
 export interface GenericPluginProps<UserType extends User = User> {
     context: FireCMSContext<UserType>;

@@ -1,4 +1,4 @@
-import React, { ComponentType, ReactElement } from "react";
+import React, { ComponentType, ReactElement, useMemo } from "react";
 import equal from "react-fast-compare"
 
 import { FormHelperText } from "@mui/material";
@@ -67,18 +67,6 @@ const PropertyFieldBindingInternal = function PropertyFieldBinding<T extends CMS
 
     }
 
-    if (fireCMSContext.plugins) {
-        fireCMSContext.plugins.forEach(plugin => {
-            const fieldId = getFieldId(property);
-            if (fieldId && plugin.form?.fieldBuilder) {
-                component = plugin.form.fieldBuilder<T>(fieldId, component) || component;
-            }
-            if (!fieldId) {
-                console.warn("INTERNAL: Field id not found for property", property);
-            }
-        });
-    }
-
     if (component) {
 
         const componentProps: PropertyFieldBindingProps<T, M> = {
@@ -133,7 +121,7 @@ const PropertyFieldBindingInternal = function PropertyFieldBinding<T extends CMS
  * **validation** passed in the property will have no effect. You need to set
  * the validation in the `EntityCollection` definition.
  *
- * @param name You can use nested names such as `address.street` or `friends[2]`
+ * @param propertyKey You can use nested names such as `address.street` or `friends[2]`
  * @param property
  * @param context
  * @param includeDescription
@@ -174,6 +162,30 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
          fieldProps: FormikFieldProps<T>
      }) {
 
+    let UsedComponent: ComponentType<FieldProps<T, any, M>> = Component;
+    const { plugins } = useFireCMSContext();
+    UsedComponent = useMemo(() => {
+        if (plugins) {
+            plugins.forEach(plugin => {
+                const fieldId = getFieldId(property);
+                if (fieldId && plugin.form?.fieldBuilder) {
+                    const fieldBuilder = plugin.form.fieldBuilder<T>({
+                        id: fieldId,
+                        dataType: property.dataType as T,
+                        property
+                    });
+                    if (fieldBuilder) {
+                        UsedComponent = fieldBuilder(UsedComponent) || UsedComponent;
+                    }
+                }
+                if (!fieldId) {
+                    console.warn("INTERNAL: Field id not found for property", property);
+                }
+            });
+        }
+        return UsedComponent;
+    }, [plugins]);
+
     const customFieldProps: any = property.customProps;
     const value = fieldProps.field.value;
     const initialValue = fieldProps.meta.initialValue;
@@ -213,7 +225,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
     return (
         <ErrorBoundary>
 
-            <Component {...cmsFieldProps}/>
+            <UsedComponent key={propertyKey} {...cmsFieldProps}/>
 
             {underlyingValueHasChanged && !isSubmitting &&
                 <FormHelperText>

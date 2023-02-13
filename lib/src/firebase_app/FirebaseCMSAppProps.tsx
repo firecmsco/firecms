@@ -8,7 +8,7 @@ import {
     CollectionOverrideHandler,
     EntityCollection,
     EntityCollectionsBuilder,
-    FieldConfig,
+    FieldConfig, FireCMSPlugin,
     Locale
 } from "../types";
 import { FirestoreTextSearchController } from "./types/text_search";
@@ -179,5 +179,11 @@ export type FirebaseCMSAppProps = {
      * Callback used to get analytics events from the CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+
+    /**
+     * Use plugins to modify the behaviour of the CMS.
+     * Currently, in ALPHA, and likely subject to change.
+     */
+    plugins?: FireCMSPlugin[];
 
 };
