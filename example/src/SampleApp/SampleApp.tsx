@@ -2,12 +2,9 @@ import React, { useCallback } from "react";
 
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
-import {
-    Authenticator,
-    buildFieldConfig,
-    CMSView,
-    FirebaseCMSApp
-} from "firecms";
+
+import { Authenticator, CMSView, FirebaseCMSApp } from "firecms";
+import { useDataEnhancementPlugin } from "firecms_data_enhancement";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
@@ -101,9 +98,12 @@ function SampleApp() {
         logEvent(analytics, event, data);
     }, []);
 
+    const dataEnhancementPlugin = useDataEnhancementPlugin({});
+
     return <FirebaseCMSApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
+        plugins={[dataEnhancementPlugin]}
         signInOptions={[
             "password",
             "google.com"

@@ -170,6 +170,7 @@ export function ArrayContainer<T>({
                                                           justifyContent="center"
                                                           textAlign={"left"}>
                                     <Button variant="outlined"
+                                            size={"large"}
                                             color="primary"
                                             disabled={disabled}
                                             startIcon={<AddIcon/>}

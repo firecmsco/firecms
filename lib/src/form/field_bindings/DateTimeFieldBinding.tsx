@@ -30,8 +30,7 @@ export function DateTimeFieldBinding({
                                          disabled,
                                          touched,
                                          property,
-                                         includeDescription,
-                                         shouldAlwaysRerender
+                                         includeDescription
                                      }: DateTimeFieldProps) {
 
     const internalValue = value || null;

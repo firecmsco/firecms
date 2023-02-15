@@ -49,6 +49,7 @@ import {
 } from "../../hooks";
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
+import { useLargeSideLayout } from "./useLargeSideLayout";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -83,7 +84,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                                                               }: EntityViewProps<M>) {
 
         const theme = useTheme();
-        const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
+        const largeLayout = useLargeSideLayout();
         const largeLayoutTabSelected = useRef(!largeLayout);
 
         const resolvedFormWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? FORM_CONTAINER_WIDTH;
@@ -96,7 +97,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const authController = useAuthController<UserType>();
 
         const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
-        const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
+        // const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
 
         const modifiedValuesRef = useRef<EntityValues<M> | undefined>(undefined);
         const modifiedValues = modifiedValuesRef.current;
@@ -121,7 +122,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             dataLoadingError
         } = useEntityFetch<M, UserType>({
             path,
-            entityId: currentEntityId,
+            entityId,
             collection,
             useCache: false
         });
@@ -212,7 +213,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 message: `${collection.singularName ?? collection.name}: Saved correctly`
             });
 
-            setCurrentEntityId(updatedEntity.id);
+            // setCurrentEntityId(updatedEntity.id);
             setUsedEntity(updatedEntity);
             setStatus("existing");
 
@@ -391,10 +392,19 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             modifiedValuesRef.current = values;
         }, []);
 
+        const onIdChange = useCallback((id: string) => {
+            return setUsedEntity((value) => value
+                ? {
+                    ...value,
+                    id
+                }
+                : undefined);
+        }, []);
+
         function buildForm() {
             const plugins = context.plugins;
             let form = <EntityForm
-                key={`form_${path}_${usedEntity?.id ?? "new"}`}
+                // key={`form_${path}_${status === "existing" ? usedEntity?.id : "new"}`}
                 status={status}
                 path={path}
                 collection={collection}
@@ -403,6 +413,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 onValuesChanged={onValuesChanged}
                 onModified={onValuesAreModified}
                 entity={usedEntity}
+                onIdChange={onIdChange}
             />;
             if (plugins) {
                 plugins.forEach((plugin: FireCMSPlugin) => {
@@ -418,6 +429,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                 onModified={onValuesAreModified}
                                 entity={usedEntity}
                                 context={context}
+                                entityId={usedEntity?.id}
                                 {...plugin.form.provider.props}>
                                 {form}
                             </plugin.form.provider.Component>
@@ -550,8 +562,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                             height: "100%",
                             width: `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedFormWidth})`,
                             maxWidth: "100%",
-                            [theme.breakpoints.down("sm")]: {
-                                width: CONTAINER_FULL_WIDTH
+                            [`@media (max-width: ${resolvedFormWidth})`]: {
+                                width: resolvedFormWidth
                             },
                             display: "flex",
                             overflow: "auto",
@@ -559,7 +571,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         }}>
 
                             <Box sx={{
-                                position: "relative"
+                                position: "relative",
+                                maxWidth: "100%"
                             }}>
                                 <Box
                                     role="tabpanel"

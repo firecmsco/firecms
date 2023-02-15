@@ -490,7 +490,7 @@ export function useFirestoreDataSource({
  * @category Firestore
  */
 export function firestoreToCMSModel(data: any): any {
-    if (data === null) return data;
+    if (data === null || data === undefined) return null;
     if (serverTimestamp().isEqual(data)) {
         return null;
     }

@@ -23,6 +23,7 @@ import {
     CONTAINER_FULL_WIDTH,
     FORM_CONTAINER_WIDTH
 } from "./common";
+import { useLargeSideLayout } from "./useLargeSideLayout";
 
 const NEW_URL_HASH = "new";
 
@@ -40,7 +41,7 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
     const initialised = useRef<boolean>(false);
 
     const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
+    const largeLayout = useLargeSideLayout();
     const smallLayout: boolean = useMediaQuery(theme.breakpoints.down("sm"));
 
     // only on initialisation, create panels from URL

@@ -11,7 +11,7 @@
         "saas",
         "collection_editor",
         "user_management",
-        "data_augmentation"
+        "data_enhancement"
     ],
     "scripts": {
         "dev": "cd example && yarn dev",

@@ -45,8 +45,7 @@ export function MarkdownFieldBinding({
                                          property,
                                          tableMode,
                                          includeDescription,
-                                         context,
-                                         shouldAlwaysRerender
+                                         context
                                      }: FieldProps<string>) {
 
     const [internalValue, setInternalValue] = React.useState(value);
@@ -73,12 +72,12 @@ export function MarkdownFieldBinding({
                 <LabelWithIcon property={property}/>
             </FormHelperText>}
 
-            <MdEditor value={internalValue ?? ""}
+            <MdEditor value={value ?? ""}
                       readOnly={disabled}
                       renderHTML={text => mdParser.render(text)}
                       view={{ menu: true, md: true, html: false }}
                       onChange={({ html, text }) => {
-                          setInternalValue(text ?? null);
+                          setValue(text ?? null);
                       }}/>
 
             <Box display={"flex"}>

@@ -63,26 +63,6 @@ export const blogCollection = buildCollection<BlogEntry>({
                 }
             }
         }),
-        status: buildProperty(({ values }) => ({
-            name: "Status",
-            validation: { required: true },
-            dataType: "string",
-            columnWidth: 140,
-            enumValues: {
-                published: {
-                    id: "published",
-                    label: "Published",
-                    disabled: !values.header_image
-                },
-                draft: "Draft"
-            },
-            defaultValue: "draft"
-        })),
-        created_on: {
-            name: "Created on",
-            dataType: "date",
-            autoValue: "on_create"
-        },
         content: buildProperty({
             name: "Content",
             description: "Example of a complex array with multiple properties as children",
@@ -125,6 +105,26 @@ export const blogCollection = buildCollection<BlogEntry>({
                 }
             }
         }),
+        created_on: {
+            name: "Created on",
+            dataType: "date",
+            autoValue: "on_create"
+        },
+        status: buildProperty(({ values }) => ({
+            name: "Status",
+            validation: { required: true },
+            dataType: "string",
+            columnWidth: 140,
+            enumValues: {
+                published: {
+                    id: "published",
+                    label: "Published",
+                    disabled: !values.header_image
+                },
+                draft: "Draft"
+            },
+            defaultValue: "draft"
+        })),
         gold_text: buildProperty({
             name: "Gold text",
             description: "This field is a sample that uses a custom component defined by the developer",

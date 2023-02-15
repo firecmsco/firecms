@@ -26,8 +26,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         includeDescription,
                                                                         underlyingValueHasChanged,
                                                                         context,
-                                                                        disabled,
-                                                                        shouldAlwaysRerender
+                                                                        disabled
                                                                     }: FieldProps<T, any, any>) {
 
     if (!Array.isArray(property.resolvedProperties))

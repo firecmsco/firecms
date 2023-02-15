@@ -12,8 +12,9 @@ import {
     Entity,
     EntityCollection,
     EntityStatus,
-    EntityValues, FormActionProps,
-    FormContext, HomePageActionsProps,
+    EntityValues, FireCMSPlugin,
+    FormActionProps,
+    FormContext,
     PropertyFieldBindingProps,
     ResolvedEntityCollection,
     ResolvedProperty
@@ -90,18 +91,45 @@ export interface EntityFormProps<M extends Record<string, any>> {
      */
     onValuesChanged?: (values?: EntityValues<M>) => void;
 
+    /**
+     *
+     * @param id
+     */
+    onIdChange?: (id: string) => void;
+
 }
 
-const EntityFormInternal = function EntityForm<M extends Record<string, any>>({
-                                                                                  status,
-                                                                                  path,
-                                                                                  collection: inputCollection,
-                                                                                  entity,
-                                                                                  onEntitySave,
-                                                                                  onDiscard,
-                                                                                  onModified,
-                                                                                  onValuesChanged
-                                                                              }: EntityFormProps<M>) {
+/**
+ * This is the form used internally by the CMS
+ * @param status
+ * @param path
+ * @param collection
+ * @param entity
+ * @param onEntitySave
+ * @param onDiscard
+ * @param onModified
+ * @param onValuesChanged
+ * @constructor
+ * @category Components
+ */
+export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
+    (a: EntityFormProps<any>, b: EntityFormProps<any>) => {
+        return a.status === b.status &&
+            a.path === b.path &&
+            equal(a.entity?.values, b.entity?.values);
+    }) as typeof EntityFormInternal;
+
+function EntityFormInternal<M extends Record<string, any>>({
+                                                               status,
+                                                               path,
+                                                               collection: inputCollection,
+                                                               entity,
+                                                               onEntitySave,
+                                                               onDiscard,
+                                                               onModified,
+                                                               onValuesChanged,
+                                                               onIdChange
+                                                           }: EntityFormProps<M>) {
 
     const context = useFireCMSContext();
     const dataSource = useDataSource();
@@ -153,11 +181,16 @@ const EntityFormInternal = function EntityForm<M extends Record<string, any>>({
     const [initialValues, setInitialValues] = useState<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
     const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(initialValues);
 
-    const doOnValuesChanges = (values?: EntityValues<M>) => {
+    const doOnValuesChanges = useCallback((values?: EntityValues<M>) => {
         setInternalValues(values);
         if (onValuesChanged)
             onValuesChanged(values);
-    }
+    }, [onValuesChanged]);
+
+    useEffect(() => {
+        if (entityId && onIdChange)
+            onIdChange(entityId);
+    }, [entityId, onIdChange]);
 
     const collection = useMemo(() => resolveCollection<M>({
         collection: inputCollection,
@@ -387,205 +420,174 @@ const EntityFormInternal = function EntityForm<M extends Record<string, any>>({
         </Formik>
     );
 }
-    ;
-    /**
-     * This is the form used internally by the CMS
-     * @param status
-     * @param path
-     * @param collection
-     * @param entity
-     * @param onEntitySave
-     * @param onDiscard
-     * @param onModified
-     * @param onValuesChanged
-     * @constructor
-     * @category Components
-     */
-    export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
-        (a: EntityFormProps<any>, b: EntityFormProps<any>) => {
-            return a.status === b.status &&
-                a.path === b.path &&
-                equal(a.entity?.values, b.entity?.values);
-        }) as typeof EntityFormInternal;
 
-    function InnerForm<M extends Record<string, any>>({
-                                                          initialValues,
-                                                          values,
-                                                          onModified,
-                                                          onValuesChanged,
-                                                          underlyingChanges,
-                                                          entityId,
-                                                          entity,
-                                                          touched,
-                                                          setFieldValue,
-                                                          collection,
-                                                          path,
-                                                          isSubmitting,
-                                                          status,
-                                                          handleSubmit,
-                                                          savingError,
-                                                          dirty,
-                                                          errors,
-                                                          closeAfterSaveRef
-                                                      }: FormikProps<M> & {
-        initialValues: Partial<M>,
-        onModified: ((modified: boolean) => void) | undefined,
-        onValuesChanged?: (changedValues?: EntityValues<M>) => void,
-        underlyingChanges: Partial<M>,
-        path: string
-        entity: Entity<M> | undefined,
-        collection: ResolvedEntityCollection<M>,
-        entityId: string,
-        status: "new" | "existing" | "copy",
-        savingError?: Error,
-        closeAfterSaveRef: MutableRefObject<boolean>,
-    }) {
+function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
+    initialValues: Partial<M>,
+    onModified: ((modified: boolean) => void) | undefined,
+    onValuesChanged?: (changedValues?: EntityValues<M>) => void,
+    underlyingChanges: Partial<M>,
+    path: string
+    entity: Entity<M> | undefined,
+    collection: ResolvedEntityCollection<M>,
+    entityId: string,
+    status: "new" | "existing" | "copy",
+    savingError?: Error,
+    closeAfterSaveRef: MutableRefObject<boolean>,
+}) {
 
-        const modified = dirty;
-        useEffect(() => {
-            if (onModified)
-                onModified(modified);
-            if (onValuesChanged)
-                onValuesChanged(values);
-        }, [modified, values]);
+    const {
+        initialValues,
+        values,
+        onModified,
+        onValuesChanged,
+        underlyingChanges,
+        entityId,
+        entity,
+        touched,
+        setFieldValue,
+        collection,
+        path,
+        isSubmitting,
+        status,
+        handleSubmit,
+        savingError,
+        dirty,
+        errors,
+        closeAfterSaveRef
+    } = props;
 
-        useEffect(() => {
-            if (underlyingChanges && entity) {
-                // we update the form fields from the Firestore data
-                // if they were not touched
-                Object.entries(underlyingChanges).forEach(([key, value]) => {
-                    const formValue = values[key];
-                    if (!equal(value, formValue) && !touched[key]) {
-                        console.debug("Updated value from the datasource:", key, value);
-                        setFieldValue(key, value !== undefined ? value : null);
-                    }
-                });
-            }
-        }, [underlyingChanges, entity, values, touched, setFieldValue]);
+    const modified = dirty;
+    useEffect(() => {
+        if (onModified)
+            onModified(modified);
+        if (onValuesChanged)
+            onValuesChanged(values);
+    }, [modified, values]);
 
-        const formContext: FormContext<M> | undefined = {
-            collection,
-            entityId,
-            values,
-            path
-        };
+    useEffect(() => {
+        if (underlyingChanges && entity) {
+            // we update the form fields from the Firestore data
+            // if they were not touched
+            Object.entries(underlyingChanges).forEach(([key, value]) => {
+                const formValue = values[key];
+                if (!equal(value, formValue) && !touched[key]) {
+                    console.debug("Updated value from the datasource:", key, value);
+                    setFieldValue(key, value !== undefined ? value : null);
+                }
+            });
+        }
+    }, [underlyingChanges, entity, values, touched, setFieldValue]);
 
-        const formFields = (
-            <Grid container spacing={4}>
-                {Object.entries<ResolvedProperty>(collection.properties)
-                    .filter(([key, property]) => !isHidden(property))
-                    .map(([key, property]) => {
+    const formContext: FormContext<M> | undefined = {
+        collection,
+        entityId,
+        values,
+        path
+    };
 
-                        const underlyingValueHasChanged: boolean =
-                            !!underlyingChanges &&
-                            Object.keys(underlyingChanges).includes(key) &&
-                            !!touched[key];
+    const formFields = (
+        <Grid container spacing={6}>
+            {Object.entries<ResolvedProperty>(collection.properties)
+                .filter(([key, property]) => !isHidden(property))
+                .map(([key, property]) => {
 
-                        const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
-                        const shouldAlwaysRerender = shouldPropertyReRender(property);
-                        const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
-                            propertyKey: key,
-                            disabled,
-                            property,
-                            includeDescription: true,
-                            underlyingValueHasChanged,
-                            context: formContext,
-                            tableMode: false,
-                            partOfArray: false,
-                            autoFocus: false,
-                            shouldAlwaysRerender
-                        };
+                    const underlyingValueHasChanged: boolean =
+                        !!underlyingChanges &&
+                        Object.keys(underlyingChanges).includes(key) &&
+                        !!touched[key];
 
-                        return (
-                            <Grid item
-                                  xs={12}
-                                  id={`form_field_${key}`}
-                                  key={`field_${collection.name}_${key}`}>
-                                <PropertyFieldBinding {...cmsFormFieldProps}/>
-                            </Grid>
-                        );
-                    })}
+                    const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
+                    const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
+                        propertyKey: key,
+                        disabled,
+                        property,
+                        includeDescription: true,
+                        underlyingValueHasChanged,
+                        context: formContext,
+                        tableMode: false,
+                        partOfArray: false,
+                        autoFocus: false
+                    };
 
-            </Grid>
-        );
+                    return (
+                        <Grid item
+                              xs={12}
+                              id={`form_field_${key}`}
+                              key={`field_${collection.name}_${key}`}>
+                            <PropertyFieldBinding {...cmsFormFieldProps}/>
+                        </Grid>
+                    );
+                })}
 
-        const disabled = isSubmitting || (!modified && status === "existing");
-        const formRef = React.createRef<HTMLDivElement>();
+        </Grid>
+    );
 
-        return (
+    const disabled = isSubmitting || (!modified && status === "existing");
+    const formRef = React.createRef<HTMLDivElement>();
 
-            <Form onSubmit={handleSubmit}
-                  noValidate>
-                <Box sx={{ mt: 4 }}
-                     ref={formRef}>
+    return (
 
-                    {formFields}
+        <Form onSubmit={handleSubmit}
+              noValidate>
+            <Box sx={{ mt: 6 }}
+                 ref={formRef}>
 
-                    <ErrorFocus containerRef={formRef}/>
+                {formFields}
 
-                </Box>
+                <ErrorFocus containerRef={formRef}/>
 
-                <Box sx={{ height: 56 }}/>
+            </Box>
 
-                <CustomDialogActions position={"absolute"}>
+            <Box sx={{ height: 56 }}/>
 
-                    {savingError &&
-                        <Box textAlign="right">
-                            <Typography color={"error"}>
-                                {savingError.message}
-                            </Typography>
-                        </Box>}
+            <CustomDialogActions position={"absolute"}>
 
-                    {status === "existing" &&
-                        <Button
-                            variant="text"
-                            color="primary"
-                            disabled={disabled}
-                            type="reset"
-                        >
-                            Discard
-                        </Button>}
+                {savingError &&
+                    <Box textAlign="right">
+                        <Typography color={"error"}>
+                            {savingError.message}
+                        </Typography>
+                    </Box>}
 
+                {status === "existing" &&
                     <Button
                         variant="text"
                         color="primary"
-                        type="submit"
                         disabled={disabled}
-                        onClick={() => {
-                            closeAfterSaveRef.current = false;
-                        }}
+                        type="reset"
                     >
-                        {status === "existing" && "Save"}
-                        {status === "copy" && "Create copy"}
-                        {status === "new" && "Create"}
-                    </Button>
+                        Discard
+                    </Button>}
 
-                    <Button
-                        variant="contained"
-                        color="primary"
-                        type="submit"
-                        disabled={disabled}
-                        onClick={() => {
-                            closeAfterSaveRef.current = true;
-                        }}
-                    >
-                        {status === "existing" && "Save and close"}
-                        {status === "copy" && "Create copy and close"}
-                        {status === "new" && "Create and close"}
-                    </Button>
+                <Button
+                    variant="text"
+                    color="primary"
+                    type="submit"
+                    disabled={disabled}
+                    onClick={() => {
+                        closeAfterSaveRef.current = false;
+                    }}
+                >
+                    {status === "existing" && "Save"}
+                    {status === "copy" && "Create copy"}
+                    {status === "new" && "Create"}
+                </Button>
 
-                </CustomDialogActions>
-            </Form>
-        );
-    }
+                <Button
+                    variant="contained"
+                    color="primary"
+                    type="submit"
+                    disabled={disabled}
+                    onClick={() => {
+                        closeAfterSaveRef.current = true;
+                    }}
+                >
+                    {status === "existing" && "Save and close"}
+                    {status === "copy" && "Create copy and close"}
+                    {status === "new" && "Create and close"}
+                </Button>
 
-    const shouldPropertyReRender = (property: ResolvedProperty): boolean => {
-        const rerenderThisProperty = Boolean(property.Field) || property.fromBuilder;
-        if (property.dataType === "map" && property.properties) {
-            return rerenderThisProperty || Object.values(property.properties).some((childProperty) => shouldPropertyReRender(childProperty));
-        } else if (property.dataType === "array" && Array.isArray(property.resolvedProperties)) {
-            return rerenderThisProperty || property.resolvedProperties.some((childProperty) => childProperty && shouldPropertyReRender(childProperty));
-        } else {
-            return rerenderThisProperty;
-        }
-    }
+            </CustomDialogActions>
+        </Form>
+    );
+}

@@ -105,13 +105,6 @@ export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M ex
      */
     disabled: boolean;
 
-    /**
-     * Flag to indicate if this field should rerender on any state change.
-     * This is important for fields that are built from a {@link PropertyBuilder}
-     * where the fields might change based on the values of the form.
-     */
-    shouldAlwaysRerender: boolean;
-
 }
 
 /**
@@ -149,7 +142,7 @@ export interface FormContext<M extends Record<string, any> = any> {
 export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<string, any> = any> {
 
     /**
-     * The name of the property, such as `age`. You can use nested and array
+     * The key/path of the property, such as `age`. You can use nested and array
      * indexed such as `address.street` or `people[3]`
      */
     propertyKey: string;
@@ -196,12 +189,4 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
      * Should this field be disabled
      */
     disabled?: boolean;
-
-    /**
-     * This flag is used to avoid using Formik FastField internally, which
-     * prevents being updated from the values.
-     * Set this value to `true` if you are developing a custom field which
-     * value gets updated dynamically based on others.
-     */
-    shouldAlwaysRerender?: boolean;
 }

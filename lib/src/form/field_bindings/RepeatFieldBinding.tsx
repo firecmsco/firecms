@@ -27,8 +27,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                              includeDescription,
                                                              underlyingValueHasChanged,
                                                              context,
-                                                             disabled,
-                                                             shouldAlwaysRerender
+                                                             disabled
                                                          }: FieldProps<T>) {
 
     if (!property.of)
@@ -51,7 +50,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
     const buildEntry = useCallback((index: number, internalId: number) => {
         const childProperty = property.resolvedProperties[index] ?? ofProperty;
         const fieldProps = {
-            propertyKey: `${propertyKey}[${index}]`,
+            propertyKey: `${propertyKey}.${index}`,
             disabled,
             property: childProperty,
             includeDescription,

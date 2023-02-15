@@ -67,8 +67,7 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
                                                                           autoFocus,
                                                                           property,
                                                                           includeDescription,
-                                                                          context,
-                                                                          shouldAlwaysRerender
+                                                                          context
                                                                       }: FieldProps<EntityReference>) {
     if (!property.path) {
         throw new Error("Property path is required for ReferenceFieldBinding");

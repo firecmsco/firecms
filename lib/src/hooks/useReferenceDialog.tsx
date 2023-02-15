@@ -15,7 +15,7 @@ import { useNavigationContext } from "./useNavigationContext";
  */
 export function useReferenceDialog<M extends Record<string, any>>(referenceDialogProps: Omit<ReferenceDialogProps<M>, "path"> & {
     path?: string | false;
-}) {
+}): { open: () => void; close: () => void } {
 
     const navigation = useNavigationContext();
     const sideDialogsController = useSideDialogsController();

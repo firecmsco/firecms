@@ -45,8 +45,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                                                           includeDescription,
                                                           underlyingValueHasChanged,
                                                           context,
-                                                          disabled,
-                                                          shouldAlwaysRerender
+                                                          disabled
                                                       }: FieldProps<T>) {
 
     if (!property.oneOf)
@@ -64,14 +63,13 @@ export function BlockFieldBinding<T extends Array<any>>({
     const buildEntry = useCallback((index: number, internalId: number) => {
         return <ArrayOneOfEntry
             key={`array_one_of_${index}`}
-            name={`${propertyKey}[${index}]`}
+            name={`${propertyKey}.${index}`}
             index={index}
             value={value[index]}
             typeField={property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE}
             valueField={property.oneOf!.valueField ?? DEFAULT_ONE_OF_VALUE}
             properties={property.oneOf!.properties}
             autoFocus={internalId === lastAddedId}
-            shouldAlwaysRerender={shouldAlwaysRerender}
             context={context}/>;
     }, [context, lastAddedId, property.oneOf, propertyKey, value]);
 
@@ -134,7 +132,6 @@ interface ArrayOneOfEntryProps {
      */
     context: FormContext<any>;
 
-    shouldAlwaysRerender: boolean;
 }
 
 function ArrayOneOfEntry({
@@ -145,7 +142,6 @@ function ArrayOneOfEntry({
                              valueField,
                              properties,
                              autoFocus,
-                             shouldAlwaysRerender,
                              context
                          }: ArrayOneOfEntryProps) {
 
@@ -163,8 +159,8 @@ function ArrayOneOfEntry({
     const enumValuesConfigs: EnumValueConfig[] = Object.entries(properties)
         .map(([key, property]) => ({ id: key, label: property.name ?? key }));
 
-    const typeFieldName = `${name}[${typeField}]`;
-    const valueFieldName = `${name}[${valueField}]`;
+    const typeFieldName = `${name}.${typeField}`;
+    const valueFieldName = `${name}.${valueField}`;
 
     const fieldProps = property
         ? {
@@ -179,7 +175,8 @@ function ArrayOneOfEntry({
     return (
         <Paper sx={(theme) => ({
             padding: theme.spacing(1),
-            mb: 1
+            mb: 1,
+            py: 2
         })} elevation={0}>
 
             <FastField
