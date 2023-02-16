@@ -73,6 +73,11 @@ export const blogCollection = buildCollection<BlogEntry>({
                 typeField: "type",
                 valueField: "value",
                 properties: {
+                    text: {
+                        dataType: "string",
+                        name: "Text",
+                        markdown: true
+                    },
                     images: {
                         name: "Images",
                         dataType: "array",
@@ -87,11 +92,6 @@ export const blogCollection = buildCollection<BlogEntry>({
                             }
                         }),
                         description: "This fields allows uploading multiple images at once and reordering"
-                    },
-                    text: {
-                        dataType: "string",
-                        name: "Text",
-                        markdown: true
                     },
                     products: {
                         name: "Products",

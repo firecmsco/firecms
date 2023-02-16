@@ -7,7 +7,11 @@ import {
     Paper,
     Select
 } from "@mui/material";
-import { FastField, FieldProps as FormikFieldProps } from "formik";
+import {
+    FastField,
+    FieldProps as FormikFieldProps,
+    useFormikContext
+} from "formik";
 
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
@@ -34,19 +38,19 @@ import {
  * @category Form fields
  */
 export function BlockFieldBinding<T extends Array<any>>({
-                                                          propertyKey,
-                                                          value,
-                                                          error,
-                                                          showError,
-                                                          isSubmitting,
-                                                          setValue,
-                                                          tableMode,
-                                                          property,
-                                                          includeDescription,
-                                                          underlyingValueHasChanged,
-                                                          context,
-                                                          disabled
-                                                      }: FieldProps<T>) {
+                                                            propertyKey,
+                                                            value,
+                                                            error,
+                                                            showError,
+                                                            isSubmitting,
+                                                            setValue,
+                                                            tableMode,
+                                                            property,
+                                                            includeDescription,
+                                                            underlyingValueHasChanged,
+                                                            context,
+                                                            disabled
+                                                        }: FieldProps<T>) {
 
     if (!property.oneOf)
         throw Error("ArrayOneOfField misconfiguration. Property `oneOf` not set");
@@ -61,7 +65,7 @@ export function BlockFieldBinding<T extends Array<any>>({
     const [lastAddedId, setLastAddedId] = useState<number | undefined>();
 
     const buildEntry = useCallback((index: number, internalId: number) => {
-        return <ArrayOneOfEntry
+        return <BlockEntry
             key={`array_one_of_${index}`}
             name={`${propertyKey}.${index}`}
             index={index}
@@ -105,7 +109,7 @@ export function BlockFieldBinding<T extends Array<any>>({
     );
 }
 
-interface ArrayOneOfEntryProps {
+interface BlockEntryProps {
     name: string;
     index: number;
     value: any;
@@ -134,19 +138,27 @@ interface ArrayOneOfEntryProps {
 
 }
 
-function ArrayOneOfEntry({
-                             name,
-                             index,
-                             value,
-                             typeField,
-                             valueField,
-                             properties,
-                             autoFocus,
-                             context
-                         }: ArrayOneOfEntryProps) {
+function BlockEntry({
+                        name,
+                        index,
+                        value,
+                        typeField,
+                        valueField,
+                        properties,
+                        autoFocus,
+                        context
+                    }: BlockEntryProps) {
 
     const type = value && value[typeField];
     const [typeInternal, setTypeInternal] = useState<string | undefined>(type ?? undefined);
+
+    const formikContext = useFormikContext();
+
+    useEffect(() => {
+        if (!type) {
+            updateType(Object.keys(properties)[0]);
+        }
+    }, []);
 
     useEffect(() => {
         if (type !== typeInternal) {
@@ -157,7 +169,10 @@ function ArrayOneOfEntry({
     const property = typeInternal ? properties[typeInternal] : undefined;
 
     const enumValuesConfigs: EnumValueConfig[] = Object.entries(properties)
-        .map(([key, property]) => ({ id: key, label: property.name ?? key }));
+        .map(([key, property]) => ({
+            id: key,
+            label: property.name ?? key
+        }));
 
     const typeFieldName = `${name}.${typeField}`;
     const valueFieldName = `${name}.${valueField}`;
@@ -172,6 +187,14 @@ function ArrayOneOfEntry({
             shouldAlwaysRerender: property.fromBuilder
         }
         : undefined;
+
+    const updateType = useCallback((newType: any) => {
+        setTypeInternal(newType);
+        formikContext.setFieldTouched(typeFieldName);
+        formikContext.setFieldValue(typeFieldName, newType);
+        formikContext.setFieldValue(valueFieldName, null);
+    }, [typeFieldName, valueFieldName]);
+
     return (
         <Paper sx={(theme) => ({
             padding: theme.spacing(1),
@@ -197,11 +220,8 @@ function ArrayOneOfEntry({
                                 label={"Type"}
                                 value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}
                                 onChange={(evt: any) => {
-                                    const eventValue = evt.target.value;
-                                    fieldProps.form.setFieldTouched(typeFieldName);
-                                    setTypeInternal(eventValue);
-                                    fieldProps.form.setFieldValue(typeFieldName, eventValue);
-                                    fieldProps.form.setFieldValue(valueFieldName, null);
+                                    const newType = evt.target.value;
+                                    updateType(newType);
                                 }}
                                 renderValue={(enumKey: any) =>
                                     <EnumValuesChip
