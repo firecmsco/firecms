@@ -11,7 +11,7 @@ import {
 } from "formik";
 
 import {
-    CMSType,
+    CMSType, FieldBuilderParams,
     FieldProps, FireCMSPlugin,
     PropertyFieldBindingProps,
     ResolvedProperty
@@ -52,12 +52,12 @@ import { useFireCMSContext } from "../hooks";
  * @param shouldAlwaysRerender
  * @category Form custom fields
  */
-export const PropertyFieldBinding = PropertyFieldBindingInternal;
-// export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a: PropertyFieldBindingProps<any>, b: PropertyFieldBindingProps<any>) => {
-//     return equal(a.context.values, b.context.values) &&
-//         ((typeof a.property === "function" && typeof b.property === "function") || equal(a.property, b.property)) &&
-//         a.disabled === b.disabled
-// }) as typeof PropertyFieldBindingInternal;
+// export const PropertyFieldBinding = PropertyFieldBindingInternal;
+export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a: PropertyFieldBindingProps<any>, b: PropertyFieldBindingProps<any>) => {
+    return equal(a.context.values, b.context.values) &&
+        ((typeof a.property === "function" && typeof b.property === "function") || equal(a.property, b.property)) &&
+        a.disabled === b.disabled
+}) as typeof PropertyFieldBindingInternal;
 
 function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps = any, M extends Record<string, any> = Record<string, any>>
 ({
@@ -116,7 +116,8 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
         const shouldAlwaysRerender = shouldPropertyReRender(property, fireCMSContext.plugins);
         // we use the standard Field for user defined fields, since it rebuilds
         // when there are changes in other values, in contrast to FastField
-        const FieldComponent = shouldAlwaysRerender || resolvedProperty.Field ? Field : FastField;
+        // const FieldComponent = shouldAlwaysRerender || resolvedProperty.Field ? Field : FastField;
+        const FieldComponent = Field;
 
         return (
             <FieldComponent
@@ -161,29 +162,32 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
          fieldProps: FormikFieldProps<T>
      }) {
 
-    let UsedComponent: ComponentType<FieldProps<T, any, M>> = Component;
     const { plugins } = useFireCMSContext();
-    UsedComponent = useMemo(() => {
-        if (plugins) {
-            plugins.forEach(plugin => {
-                const fieldId = getFieldId(property);
-                if (fieldId && plugin.form?.fieldBuilder) {
-                    const fieldBuilder = plugin.form.fieldBuilder<T>({
-                        id: fieldId,
-                        dataType: property.dataType as T,
-                        property
-                    });
-                    if (fieldBuilder) {
-                        UsedComponent = fieldBuilder(UsedComponent) || UsedComponent;
+    const UsedComponent: ComponentType<FieldProps<T, any, M>> =
+        useMemo(() => {
+            let _UsedComponent: ComponentType<FieldProps<T, any, M>> = Component;
+            if (plugins) {
+                plugins.forEach(plugin => {
+                    const fieldId = getFieldId(property);
+                    if (fieldId && plugin.form?.fieldBuilder) {
+                        const props: FieldBuilderParams<T> = {
+                            fieldConfigId: fieldId,
+                            dataType: property.dataType as T,
+                            property,
+                            Field: _UsedComponent
+                        };
+                        const fieldBuilder = plugin.form.fieldBuilder<T>(props);
+                        if (fieldBuilder) {
+                            _UsedComponent = fieldBuilder(props) || _UsedComponent;
+                        }
                     }
-                }
-                if (!fieldId) {
-                    console.warn("INTERNAL: Field id not found for property", property);
-                }
-            });
-        }
-        return UsedComponent;
-    }, [plugins]);
+                    if (!fieldId) {
+                        console.warn("INTERNAL: Field id not found for property", property);
+                    }
+                });
+            }
+            return _UsedComponent;
+        }, [plugins]);
 
     const customFieldProps: any = property.customProps;
     const value = fieldProps.field.value;

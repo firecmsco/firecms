@@ -33,6 +33,7 @@ import {
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
+import { useTraceUpdate } from "../core/util/useTraceUpdate";
 
 /**
  * @category Components
@@ -314,7 +315,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         <Formik
             initialValues={baseDataSourceValues as M}
             onSubmit={saveValues}
-            validateOnMount={true}
+            // validateOnMount={true}
             validationSchema={validationSchema}
             validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}

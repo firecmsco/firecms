@@ -1,4 +1,4 @@
-import React, { useDeferredValue, useEffect } from "react";
+import React, { useDeferredValue, useEffect, useRef } from "react";
 
 import { styled } from "@mui/material/styles";
 
@@ -49,18 +49,19 @@ export function MarkdownFieldBinding({
                                      }: FieldProps<string>) {
 
     const [internalValue, setInternalValue] = React.useState(value);
+    const valueRef = useRef(value);
 
-    const deferredInternalValue = useDeferredValue(internalValue);
-    const deferredValue = useDeferredValue(value);
+    const deferred = useDeferredValue({ internalValue, value });
 
     useEffect(() => {
+        valueRef.current = value;
         setInternalValue(value);
     }, [value]);
 
     useEffect(() => {
-        if (deferredInternalValue !== deferredValue)
-            setValue(deferredInternalValue);
-    }, [deferredInternalValue, deferredValue, setValue]);
+        if (deferred.internalValue !== valueRef.current)
+            setValue(deferred.internalValue);
+    }, [deferred]);
 
     return (
         <StyledFormControl
@@ -72,12 +73,12 @@ export function MarkdownFieldBinding({
                 <LabelWithIcon property={property}/>
             </FormHelperText>}
 
-            <MdEditor value={value ?? ""}
+            <MdEditor value={internalValue ?? ""}
                       readOnly={disabled}
                       renderHTML={text => mdParser.render(text)}
                       view={{ menu: true, md: true, html: false }}
                       onChange={({ html, text }) => {
-                          setValue(text ?? null);
+                          setInternalValue(text ?? null);
                       }}/>
 
             <Box display={"flex"}>
