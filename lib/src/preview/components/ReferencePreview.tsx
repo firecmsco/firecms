@@ -73,13 +73,13 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
     const navigationContext = useNavigationContext();
     const sideEntityController = useSideEntityController();
 
-    if (disabled) {
-        return <ReferencePreviewWrap onClick={onClick}
-                                     onHover={onHover}
-                                     size={size}>
-            Disabled
-        </ReferencePreviewWrap>
-    }
+    // if (disabled) {
+    //     return <ReferencePreviewWrap onClick={onClick}
+    //                                  onHover={onHover}
+    //                                  size={size}>
+    //         Disabled
+    //     </ReferencePreviewWrap>
+    // }
 
     const collection = navigationContext.getCollection<EntityCollection<M>>(reference.path);
     if (!collection) {
@@ -182,7 +182,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                 <Box sx={{
                     my: size === "tiny" ? 0.5 : 1
                 }}>
-                    {entity &&
+                    {!disabled && entity &&
                         <Tooltip title={`See details for ${entity.id}`}>
                             <IconButton
                                 color={"inherit"}
@@ -209,8 +209,8 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
     }
 
     return (
-        <ReferencePreviewWrap onClick={onClick}
-                              onHover={onHover}
+        <ReferencePreviewWrap onClick={disabled ? undefined : onClick}
+                              onHover={disabled ? undefined : onHover}
                               size={size}>
             {body}
         </ReferencePreviewWrap>

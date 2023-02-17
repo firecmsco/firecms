@@ -127,6 +127,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             useCache: false
         });
 
+        const [currentEntityId, setCurrentEntityId] = React.useState<string | undefined>(entityId);
         const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
         const [readOnly, setReadOnly] = useState<boolean | undefined>(undefined);
 
@@ -393,12 +394,13 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         }, []);
 
         const onIdChange = useCallback((id: string) => {
-            return setUsedEntity((value) => value
+             setUsedEntity((value) => value
                 ? {
                     ...value,
                     id
                 }
                 : undefined);
+            setCurrentEntityId(id);
         }, []);
 
         function buildForm() {
@@ -429,7 +431,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                 onModified={onValuesAreModified}
                                 entity={usedEntity}
                                 context={context}
-                                entityId={usedEntity?.id}
+                                currentEntityId={currentEntityId}
                                 {...plugin.form.provider.props}>
                                 {form}
                             </plugin.form.provider.Component>

@@ -98,6 +98,8 @@ export interface EntityFormProps<M extends Record<string, any>> {
      */
     onIdChange?: (id: string) => void;
 
+    currentEntityId?: string;
+
 }
 
 /**
