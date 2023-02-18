@@ -1,0 +1,3 @@
+// Replace with your AppCheck config
+export const publicRecaptchaKey = '';
+export const appCheckDebugToken = '';

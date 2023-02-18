@@ -9,7 +9,8 @@ import {
     EntityCollection,
     EntityCollectionsBuilder,
     FieldConfig,
-    Locale
+    Locale,
+    AppCheckOptions
 } from "../types";
 import { FirestoreTextSearchController } from "./types/text_search";
 import {
@@ -100,6 +101,8 @@ export type FirebaseCMSAppProps = {
      * @param config
      */
     onFirebaseInit?: (config: object) => void;
+
+    appCheckOptions?: AppCheckOptions;
 
     /**
      * Primary color of the theme of the CMS
