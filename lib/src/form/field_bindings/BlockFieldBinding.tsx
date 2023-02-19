@@ -87,7 +87,10 @@ export function BlockFieldBinding<T extends Array<any>>({
                                  buildEntry={buildEntry}
                                  onInternalIdAdded={setLastAddedId}
                                  disabled={isSubmitting || Boolean(property.disabled)}
-                                 includeAddButton={!property.disabled}/>;
+                                 includeAddButton={!property.disabled}
+                                 newDefaultEntry={{
+                                     [property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE]: Object.keys(property.oneOf.properties)[0]
+                                 }}/>;
     return (
 
         <FormControl fullWidth error={showError}>
