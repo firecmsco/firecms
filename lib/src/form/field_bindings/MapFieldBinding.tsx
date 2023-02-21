@@ -107,8 +107,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
                             context,
                             tableMode: false,
                             partOfArray: false,
-                            autoFocus: autoFocus && index === 0,
-                            shouldAlwaysRerender: childProperty.fromBuilder
+                            autoFocus: autoFocus && index === 0
                         };
                         return (
                             <Grid item

@@ -49,7 +49,6 @@ import { useFireCMSContext } from "../hooks";
  * @param tableMode
  * @param partOfArray
  * @param autoFocus
- * @param shouldAlwaysRerender
  * @category Form custom fields
  */
 // export const PropertyFieldBinding = PropertyFieldBindingInternal;
@@ -116,8 +115,8 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
         const shouldAlwaysRerender = shouldPropertyReRender(property, fireCMSContext.plugins);
         // we use the standard Field for user defined fields, since it rebuilds
         // when there are changes in other values, in contrast to FastField
-        // const FieldComponent = shouldAlwaysRerender || resolvedProperty.Field ? Field : FastField;
-        const FieldComponent = Field;
+        const FieldComponent = shouldAlwaysRerender || resolvedProperty.Field ? Field : FastField;
+        // const FieldComponent = Field;
 
         return (
             <FieldComponent

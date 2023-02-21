@@ -186,8 +186,7 @@ function BlockEntry({
             property,
             context,
             autoFocus,
-            tableMode: false,
-            shouldAlwaysRerender: property.fromBuilder
+            tableMode: false
         }
         : undefined;
 

@@ -218,7 +218,7 @@ export function FirebaseCMSApp({
 
                             return (
                                 <ThemeProvider theme={theme}>
-                                    <CssBaseline/>
+                                    <CssBaseline enableColorScheme/>
                                     {component}
                                 </ThemeProvider>
                             );

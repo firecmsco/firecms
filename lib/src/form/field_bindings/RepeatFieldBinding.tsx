@@ -58,8 +58,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
             context,
             tableMode: false,
             partOfArray: true,
-            autoFocus: internalId === lastAddedId,
-            shouldAlwaysRerender: childProperty.fromBuilder
+            autoFocus: internalId === lastAddedId
         };
         return <PropertyFieldBinding {...fieldProps}/>;
     }, [context, disabled, includeDescription, lastAddedId, ofProperty, property.resolvedProperties, propertyKey, underlyingValueHasChanged]);
