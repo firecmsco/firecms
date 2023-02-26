@@ -55,8 +55,12 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
                                 By signing in you agree to our <a
                                 target="_blank"
                                 rel="noopener noreferrer"
-                                href={"https://firecms.co/terms_conditions"}>
-                                Terms and Conditions</a>
+                                href={"https://firecms.co/policy/terms_conditions"}>
+                                Terms and Conditions</a> and our <a
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href={"https://firecms.co/policy/privacy_policy"}>
+                                Privacy policy</a>
                             </Typography>
                         }/>
                 </FormGroup>

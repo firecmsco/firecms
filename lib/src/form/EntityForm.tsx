@@ -12,8 +12,8 @@ import {
     Entity,
     EntityCollection,
     EntityStatus,
-    EntityValues, FireCMSPlugin,
-    FormActionProps,
+    EntityValues,
+    PluginFormActionProps,
     FormContext,
     PropertyFieldBindingProps,
     ResolvedEntityCollection,
@@ -33,7 +33,6 @@ import {
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import { useTraceUpdate } from "../core/util/useTraceUpdate";
 
 /**
  * @category Components
@@ -326,12 +325,14 @@ function EntityFormInternal<M extends Record<string, any>>({
 
                 let actions: React.ReactNode | undefined;
                 if (plugins && collection) {
-                    const actionProps: FormActionProps = {
+                    const actionProps: PluginFormActionProps = {
                         entityId,
                         path,
                         status,
                         values: props.values,
-                        collection
+                        collection,
+                        context,
+                        currentEntityId: entityId
                     };
                     actions = <>
                         {plugins.map((plugin, i) => (

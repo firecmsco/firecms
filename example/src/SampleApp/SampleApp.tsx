@@ -28,6 +28,7 @@ import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
+import { booksCollection } from "./collections/books_collection";
 
 function SampleApp() {
 
@@ -83,6 +84,7 @@ function SampleApp() {
 
     const collections = [
         productsCollection,
+        booksCollection,
         usersCollection,
         blogCollection,
         showcaseCollection,
@@ -98,7 +100,16 @@ function SampleApp() {
         logEvent(analytics, event, data);
     }, []);
 
-    const dataEnhancementPlugin = useDataEnhancementPlugin({});
+    const dataEnhancementPlugin = useDataEnhancementPlugin({
+        model: "davinci",
+        getConfigForPath: ({ path }) => {
+            if (process.env.NODE_ENV !== "production")
+                return true;
+            if (path === "books")
+                return true;
+            return false;
+        }
+    });
 
     return <FirebaseCMSApp
         name={"My Online Shop"}

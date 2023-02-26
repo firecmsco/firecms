@@ -11,7 +11,7 @@ import {
 } from "formik";
 
 import {
-    CMSType, FieldBuilderParams,
+    CMSType, PluginFieldBuilderParams,
     FieldProps, FireCMSPlugin,
     PropertyFieldBindingProps,
     ResolvedProperty
@@ -169,7 +169,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
                 plugins.forEach(plugin => {
                     const fieldId = getFieldId(property);
                     if (fieldId && plugin.form?.fieldBuilder) {
-                        const props: FieldBuilderParams<T> = {
+                        const props: PluginFieldBuilderParams<T> = {
                             fieldConfigId: fieldId,
                             dataType: property.dataType as T,
                             property,

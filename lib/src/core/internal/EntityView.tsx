@@ -8,7 +8,6 @@ import {
     Tab,
     Tabs,
     Typography,
-    useMediaQuery,
     useTheme
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -16,7 +15,8 @@ import {
     Entity,
     EntityCollection,
     EntityStatus,
-    EntityValues, FireCMSPlugin,
+    EntityValues,
+    FireCMSPlugin,
     ResolvedEntityCollection,
     User
 } from "../../types";
@@ -406,7 +406,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         function buildForm() {
             const plugins = context.plugins;
             let form = <EntityForm
-                // key={`form_${path}_${status === "existing" ? usedEntity?.id : "new"}`}
                 status={status}
                 path={path}
                 collection={collection}
