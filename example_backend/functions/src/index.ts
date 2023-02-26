@@ -43,6 +43,15 @@ export const onUsersUpdateIndexAlgolia = functions
         return updateIndex(snap, indexName);
     });
 
+export const onBooksUpdateIndexAlgolia = functions
+    .region("europe-west3")
+    .firestore
+    .document("books/{userId}")
+    .onWrite((snap, context) => {
+        const indexName = "books";
+        return updateIndex(snap, indexName);
+    });
+
 
 /**
  * This function is only used to reset the database daily
