@@ -147,9 +147,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         }, [authController, usedEntity, status]);
 
         useEffect(() => {
-            if (!selectedSubPath)
-                setTabsPosition(-1);
-            else {
+            if (selectedSubPath) {
                 if (customViews) {
                     const index = customViews
                         .map((c) => c.path)
@@ -167,6 +165,11 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 }
             }
         }, [selectedSubPath, customViewsCount, customViews, subcollections]);
+
+        useEffect(() => {
+            if (!selectedSubPath)
+                setTabsPosition(-1);
+        }, [selectedSubPath]);
 
         useEffect(() => {
             if (largeLayoutTabSelected.current === largeLayout)
@@ -394,7 +397,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         }, []);
 
         const onIdChange = useCallback((id: string) => {
-             setUsedEntity((value) => value
+            setUsedEntity((value) => value
                 ? {
                     ...value,
                     id
