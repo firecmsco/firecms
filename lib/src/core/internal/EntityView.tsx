@@ -431,6 +431,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                 entity={usedEntity}
                                 context={context}
                                 currentEntityId={currentEntityId}
+                                values={modifiedValuesRef.current}
                                 {...plugin.form.provider.props}>
                                 {form}
                             </plugin.form.provider.Component>

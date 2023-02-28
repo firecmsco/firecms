@@ -6,7 +6,7 @@ import React, {
     useRef,
     useState
 } from "react";
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Typography, alpha } from "@mui/material";
 import {
     CMSAnalyticsEvent,
     Entity,
@@ -316,7 +316,6 @@ function EntityFormInternal<M extends Record<string, any>>({
         <Formik
             initialValues={baseDataSourceValues as M}
             onSubmit={saveValues}
-            // validateOnMount={true}
             validationSchema={validationSchema}
             validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}
@@ -324,15 +323,16 @@ function EntityFormInternal<M extends Record<string, any>>({
             {(props) => {
 
                 let actions: React.ReactNode | undefined;
+
                 if (plugins && collection) {
-                    const actionProps: PluginFormActionProps = {
+                    const actionProps: PluginFormActionProps & FormikProps<any> = {
                         entityId,
                         path,
                         status,
-                        values: props.values,
                         collection,
                         context,
-                        currentEntityId: entityId
+                        currentEntityId: entityId,
+                        ...props
                     };
                     actions = <>
                         {plugins.map((plugin, i) => (
@@ -367,18 +367,46 @@ function EntityFormInternal<M extends Record<string, any>>({
                         })}
                     >
 
+                        {actions && <Box
+                            sx={(theme) => ({
+                                width: "100%",
+                                display: "flex",
+                                justifyContent: "flex-end",
+                                background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : alpha(theme.palette.background.paper, 0.1),
+                                backdropFilter: "blur(8px)",
+                                borderBottom: `1px solid ${theme.palette.divider}`,
+                                py: 1,
+                                px: 2,
+                                flexDirection: "row",
+                                alignItems: "center",
+                                position: "absolute",
+                                top: 0,
+                                right: 0,
+                                left: 0,
+                                textAlign: "right",
+                                zIndex: 2,
+                                "& > *:not(:last-child)": {
+                                    [theme.breakpoints.down("md")]: {
+                                        mr: theme.spacing(1)
+                                    },
+                                    mr: theme.spacing(2)
+                                }
+                            })}>
+                            {actions}
+                        </Box>}
+
                         <Box
                             sx={(theme) => ({
                                 width: "100%",
-                                marginTop: theme.spacing(4),
+                                marginTop: theme.spacing(4 + (actions ? 4 : 0)),
                                 paddingY: 2,
                                 display: "flex",
                                 alignItems: "center",
                                 [theme.breakpoints.down("lg")]: {
-                                    marginTop: theme.spacing(3)
+                                    marginTop: theme.spacing(3 + (actions ? 4 : 0))
                                 },
                                 [theme.breakpoints.down("md")]: {
-                                    marginTop: theme.spacing(2)
+                                    marginTop: theme.spacing(2 + (actions ? 4 : 0))
                                 }
                             })}>
 
@@ -390,11 +418,6 @@ function EntityFormInternal<M extends Record<string, any>>({
                                 }}
                                 variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
                             </Typography>
-
-                            {actions && <Box>
-                                {actions}
-                            </Box>}
-
                         </Box>
 
                         <CustomIdField customId={collection.customId}
