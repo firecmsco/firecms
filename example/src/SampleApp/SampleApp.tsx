@@ -102,7 +102,7 @@ function SampleApp() {
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
         model: "davinci",
-        getConfigForPath: ({ path }) => {
+        getConfigForPath: async ({ path }) => {
             if (process.env.NODE_ENV !== "production")
                 return true;
             if (path === "books")
