@@ -3,13 +3,20 @@ import React, { useCallback } from "react";
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import { Authenticator, CMSView, FirebaseCMSApp } from "firecms";
+import {
+    AppCheckOptions,
+    Authenticator,
+    buildFieldConfig,
+    CMSView,
+    FirebaseCMSApp
+} from "firecms";
 import { useDataEnhancementPlugin } from "firecms_data_enhancement";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
+import { publicRecaptchaKey, appCheckDebugToken } from "../appcheck_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
 import { testCollection } from "./collections/test_collection";
@@ -31,6 +38,13 @@ import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
 
 function SampleApp() {
+    const appCheckOptions: AppCheckOptions = {
+        providerKey: publicRecaptchaKey,
+        useEnterpriseRecaptcha: false,
+        isTokenAutoRefreshEnabled: true,
+        debugToken: appCheckDebugToken,
+        forceRefresh: false
+    };
 
     const githubLink = (
         <Tooltip
@@ -61,8 +75,27 @@ function SampleApp() {
 
     const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
                                                                                 user,
-                                                                                authController
+                                                                                authController,
+                                                                                getAppCheckToken,
+                                                                                appCheckForceRefresh
                                                                             }) => {
+
+        if (getAppCheckToken) {
+            try {
+                if (!getAppCheckToken) {
+                    console.log("App Check not initialized yet.");
+                    return false;
+                }
+                if (!await getAppCheckToken(appCheckForceRefresh)) {
+                    console.log("App Check failed.");
+                    return false;
+                }
+                console.log("App Check success.");
+            } catch (e) {
+                console.log("App Check failed.");
+                return false;
+            }
+        }
 
         if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");
@@ -113,6 +146,7 @@ function SampleApp() {
 
     return <FirebaseCMSApp
         name={"My Online Shop"}
+        appCheckOptions={appCheckOptions}
         authentication={myAuthenticator}
         plugins={[dataEnhancementPlugin]}
         signInOptions={[

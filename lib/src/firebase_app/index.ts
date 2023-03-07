@@ -11,6 +11,7 @@ export { FirebaseLoginView, LoginButton } from "./components/FirebaseLoginView";
 
 export type { InitialiseFirebaseResult } from "./hooks/useInitialiseFirebase";
 export { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
+export { useInitializeAppCheck } from "./hooks/useInitializeAppCheck";
 
 export * from "./types/auth";
 

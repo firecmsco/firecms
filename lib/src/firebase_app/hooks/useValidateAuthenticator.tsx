@@ -3,7 +3,7 @@ import equal from "react-fast-compare";
 
 import { User as FirebaseUser } from "firebase/auth";
 
-import { DataSource, StorageSource } from "../../types";
+import { AppCheckTokenResult, DataSource, StorageSource } from "../../types";
 import { Authenticator, FirebaseAuthController } from "../types/auth";
 
 /**
@@ -12,18 +12,23 @@ import { Authenticator, FirebaseAuthController } from "../types/auth";
  * building your own custom {@link FireCMS} instance.
  * @param authController
  * @param authentication
+ * @param getAppCheckToken
  * @param storageSource
  * @param dataSource
  */
 export function useValidateAuthenticator({
                                              authController,
                                              authentication,
+                                             getAppCheckToken,
+                                             appCheckForceRefresh = false,
                                              storageSource,
                                              dataSource
                                          }:
                                              {
                                                  authController: FirebaseAuthController,
                                                  authentication?: boolean | Authenticator<FirebaseUser>,
+                                                 getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
+                                                 appCheckForceRefresh: boolean,
                                                  dataSource: DataSource;
                                                  storageSource: StorageSource;
                                              }): {
@@ -74,6 +79,8 @@ export function useValidateAuthenticator({
                 const allowed = await authentication({
                     user: delegateUser,
                     authController,
+                    getAppCheckToken,
+                    appCheckForceRefresh,
                     dataSource,
                     storageSource
                 });
@@ -96,7 +103,7 @@ export function useValidateAuthenticator({
             setAuthVerified(true);
         }
 
-    }, [authController, authentication, dataSource, storageSource]);
+    }, [authController, authentication, getAppCheckToken, appCheckForceRefresh, dataSource, storageSource]);
 
     useEffect(() => {
         checkAuthentication();
