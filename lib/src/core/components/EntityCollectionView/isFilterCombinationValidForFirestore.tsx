@@ -9,7 +9,7 @@ export function isFilterCombinationValidForFirestore<M>(
     const sortKey = sortBy ? sortBy[0] : undefined;
     const sortDirection = sortBy ? sortBy[1] : undefined;
 
-    // Order by clause cannot contain a field with an equality filter available
+    // Order by clause cannot contain a field with an equality filter
     const values: [WhereFilterOp, any][] = Object.values(filterValues) as [WhereFilterOp, any][];
     if (sortKey && values.map((v) => v[0]).includes("==")) {
         return false;

@@ -101,7 +101,7 @@ export function useFirestoreDataSource({
         const firestore = getFirestore(firebaseApp);
         const collectionReference: Query = collectionClause(firestore, path);
 
-        const queryParams:QueryConstraint[] = [];
+        const queryParams: QueryConstraint[] = [];
         if (filter) {
             Object.entries(filter)
                 .filter(([_, entry]) => !!entry)
@@ -261,7 +261,14 @@ export function useFirestoreDataSource({
             }: ListenCollectionProps<M>
         ): () => void => {
 
-            console.debug("Listening collection", path, limit, filter, startAfter, orderBy, order);
+            console.debug("Listening collection", {
+                path,
+                limit,
+                filter,
+                startAfter,
+                orderBy,
+                order
+            });
 
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
 
