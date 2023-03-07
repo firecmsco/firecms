@@ -31,8 +31,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                                                                                    disabled,
                                                                                    touched,
                                                                                    property,
-                                                                                   includeDescription,
-                                                                                   shouldAlwaysRerender
+                                                                                   includeDescription
                                                                                }: SwitchFieldProps, ref) {
 
     useClearRestoreValue({

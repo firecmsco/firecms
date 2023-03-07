@@ -31,7 +31,7 @@ export interface StorageFieldItem {
     size: PreviewSize
 }
 
-export function useStorageUploadController<M>({
+export function useStorageUploadController<M extends object>({
                                                   entityId,
                                                   entityValues,
                                                   path,

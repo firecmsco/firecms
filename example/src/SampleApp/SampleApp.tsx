@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
+
 import {
     AppCheckOptions,
     Authenticator,
@@ -9,6 +10,7 @@ import {
     CMSView,
     FirebaseCMSApp
 } from "firecms";
+import { useDataEnhancementPlugin } from "firecms_data_enhancement";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
@@ -33,6 +35,7 @@ import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
+import { booksCollection } from "./collections/books_collection";
 
 function SampleApp() {
     const appCheckOptions: AppCheckOptions = {
@@ -114,6 +117,7 @@ function SampleApp() {
 
     const collections = [
         productsCollection,
+        booksCollection,
         usersCollection,
         blogCollection,
         showcaseCollection,
@@ -129,10 +133,22 @@ function SampleApp() {
         logEvent(analytics, event, data);
     }, []);
 
+    const dataEnhancementPlugin = useDataEnhancementPlugin({
+        model: "davinci",
+        getConfigForPath: async ({ path }) => {
+            if (process.env.NODE_ENV !== "production")
+                return true;
+            if (path === "books")
+                return true;
+            return false;
+        }
+    });
+
     return <FirebaseCMSApp
         name={"My Online Shop"}
         appCheckOptions={appCheckOptions}
         authentication={myAuthenticator}
+        plugins={[dataEnhancementPlugin]}
         signInOptions={[
             "password",
             "google.com"

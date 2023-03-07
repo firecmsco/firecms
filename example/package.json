@@ -11,6 +11,7 @@
         "algoliasearch": "^4.14.3",
         "firebase": "^9.16.0",
         "firecms": "workspace:lib",
+        "firecms_data_enhancement": "workspace:data_enhancement",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
         "react-router": "^6.7.0",

@@ -25,7 +25,8 @@ export default defineConfig({
         })],
     resolve: {
         alias: {
-            firecms: path.resolve(__dirname, "../lib/src")
+            firecms: path.resolve(__dirname, "../lib/src"),
+            firecms_data_enhancement: path.resolve(__dirname, "../data_enhancement/src")
         }
     }
 })

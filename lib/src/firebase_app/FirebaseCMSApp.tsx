@@ -74,7 +74,8 @@ export function FirebaseCMSApp({
                                    baseCollectionPath,
                                    LoginView,
                                    onAnalyticsEvent,
-                                   fields
+                                   fields,
+                                   plugins
                                }: FirebaseCMSAppProps) {
 
     /**
@@ -190,8 +191,12 @@ export function FirebaseCMSApp({
                         basePath={basePath}
                         baseCollectionPath={baseCollectionPath}
                         onAnalyticsEvent={onAnalyticsEvent}
+                        plugins={plugins}
                         fields={fields}>
-                        {({ context, loading }) => {
+                        {({
+                              context,
+                              loading
+                          }) => {
 
                             let component;
                             if (loading || authLoading) {
@@ -225,7 +230,7 @@ export function FirebaseCMSApp({
 
                             return (
                                 <ThemeProvider theme={theme}>
-                                    <CssBaseline/>
+                                    <CssBaseline enableColorScheme/>
                                     {component}
                                 </ThemeProvider>
                             );

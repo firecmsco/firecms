@@ -144,7 +144,7 @@ export const createCMSDefaultTheme = (
             MuiDialog: {
                 styleOverrides: {
                     paper: {
-                        borderRadius: radius
+                        backgroundImage: "inherit"
                     }
                 }
             },

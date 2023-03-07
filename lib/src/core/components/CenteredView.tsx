@@ -17,6 +17,7 @@ export function CenteredView({
     return (
         <Fade
             in={true}
+            appear={true}
             timeout={fadeTimeout}
             mountOnEnter
             unmountOnExit>

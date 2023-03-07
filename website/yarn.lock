@@ -2614,9 +2614,9 @@ __metadata:
   linkType: hard
 
 "@sideway/formula@npm:^3.0.0":
-  version: 3.0.0
-  resolution: "@sideway/formula@npm:3.0.0"
-  checksum: 8ae26a0ed6bc84f7310be6aae6eb9d81e97f382619fc69025d346871a707eaab0fa38b8c857e3f0c35a19923de129f42d35c50b8010c928d64aab41578580ec4
+  version: 3.0.1
+  resolution: "@sideway/formula@npm:3.0.1"
+  checksum: e4beeebc9dbe2ff4ef0def15cec0165e00d1612e3d7cea0bc9ce5175c3263fc2c818b679bd558957f49400ee7be9d4e5ac90487e1625b4932e15c4aa7919c57a
   languageName: node
   linkType: hard
 
@@ -5127,8 +5127,8 @@ __metadata:
 
 "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader::locator=website%40workspace%3A.":
   version: 0.0.0
-  resolution: "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader#plugins/docusaurus-tailwindcss-loader::hash=1c6fb3&locator=website%40workspace%3A."
-  checksum: cf0d50fc2a953e286c9527bdbabf43d1e366061ce536f4acca3eb3077366fb276ce333fc4104df825f19119468ab6cf477db3c0f06b63427ff28b24bbfa321a9
+  resolution: "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader#plugins/docusaurus-tailwindcss-loader::hash=a832e0&locator=website%40workspace%3A."
+  checksum: 73076ad3001af2bab055c8f2d2b06fab5f7128be9a55f3c064710dd6dd763e894853320ec8e909d7eb39452f7cfad33e1d48c6056397f6a4e6d582109923c367
   languageName: node
   linkType: hard
 

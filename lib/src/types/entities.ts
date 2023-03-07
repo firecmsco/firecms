@@ -8,7 +8,7 @@ export type EntityStatus = "new" | "existing" | "copy";
  * Representation of an entity fetched from the datasource
  * @category Models
  */
-export interface Entity<M> {
+export interface Entity<M extends object> {
 
     /**
      * ID of the entity
@@ -32,7 +32,7 @@ export interface Entity<M> {
  * entity collection.
  * @category Models
  */
-export type EntityValues<M> = M;
+export type EntityValues<M extends object> = M;
 
 /**
  * Class used to create a reference to an entity in a different path

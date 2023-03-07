@@ -8,7 +8,6 @@ import {
     Tab,
     Tabs,
     Typography,
-    useMediaQuery,
     useTheme
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -17,6 +16,7 @@ import {
     EntityCollection,
     EntityStatus,
     EntityValues,
+    FireCMSPlugin,
     ResolvedEntityCollection,
     User
 } from "../../types";
@@ -49,6 +49,7 @@ import {
 } from "../../hooks";
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
+import { useLargeSideLayout } from "./useLargeSideLayout";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -83,7 +84,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                                                               }: EntityViewProps<M>) {
 
         const theme = useTheme();
-        const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
+        const largeLayout = useLargeSideLayout();
         const largeLayoutTabSelected = useRef(!largeLayout);
 
         const resolvedFormWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? FORM_CONTAINER_WIDTH;
@@ -96,7 +97,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const authController = useAuthController<UserType>();
 
         const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
-        const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
+        // const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
 
         const modifiedValuesRef = useRef<EntityValues<M> | undefined>(undefined);
         const modifiedValues = modifiedValuesRef.current;
@@ -121,11 +122,12 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             dataLoadingError
         } = useEntityFetch<M, UserType>({
             path,
-            entityId: currentEntityId,
+            entityId,
             collection,
             useCache: false
         });
 
+        const [currentEntityId, setCurrentEntityId] = React.useState<string | undefined>(entityId);
         const [usedEntity, setUsedEntity] = useState<Entity<M> | undefined>(entity);
         const [readOnly, setReadOnly] = useState<boolean | undefined>(undefined);
 
@@ -212,7 +214,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 message: `${collection.singularName ?? collection.name}: Saved correctly`
             });
 
-            setCurrentEntityId(updatedEntity.id);
+            // setCurrentEntityId(updatedEntity.id);
             setUsedEntity(updatedEntity);
             setStatus("existing");
 
@@ -391,22 +393,59 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             modifiedValuesRef.current = values;
         }, []);
 
+        const onIdChange = useCallback((id: string) => {
+             setUsedEntity((value) => value
+                ? {
+                    ...value,
+                    id
+                }
+                : undefined);
+            setCurrentEntityId(id);
+        }, []);
+
+        function buildForm() {
+            const plugins = context.plugins;
+            let form = <EntityForm
+                status={status}
+                path={path}
+                collection={collection}
+                onEntitySave={onEntitySave}
+                onDiscard={onDiscard}
+                onValuesChanged={onValuesChanged}
+                onModified={onValuesAreModified}
+                entity={usedEntity}
+                onIdChange={onIdChange}
+            />;
+            if (plugins) {
+                plugins.forEach((plugin: FireCMSPlugin) => {
+                    if (plugin.form?.provider) {
+                        form = (
+                            <plugin.form.provider.Component
+                                status={status}
+                                path={path}
+                                collection={collection}
+                                onEntitySave={onEntitySave}
+                                onDiscard={onDiscard}
+                                onValuesChanged={onValuesChanged}
+                                onModified={onValuesAreModified}
+                                entity={usedEntity}
+                                context={context}
+                                currentEntityId={currentEntityId}
+                                values={modifiedValuesRef.current}
+                                {...plugin.form.provider.props}>
+                                {form}
+                            </plugin.form.provider.Component>
+                        );
+                    }
+                });
+            }
+            return form;
+        }
+
         const form = (readOnly === undefined)
             ? null
             : (!readOnly
-                ? (
-                    <EntityForm
-                        key={`form_${path}_${usedEntity?.id ?? "new"}`}
-                        status={status}
-                        path={path}
-                        collection={collection}
-                        onEntitySave={onEntitySave}
-                        onDiscard={onDiscard}
-                        onValuesChanged={onValuesChanged}
-                        onModified={onValuesAreModified}
-                        entity={usedEntity}
-                    />
-                )
+                ? buildForm()
                 : (
                     <EntityPreview
                         entity={usedEntity as Entity<M>}
@@ -525,8 +564,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                             height: "100%",
                             width: `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedFormWidth})`,
                             maxWidth: "100%",
-                            [theme.breakpoints.down("sm")]: {
-                                width: CONTAINER_FULL_WIDTH
+                            [`@media (max-width: ${resolvedFormWidth})`]: {
+                                width: resolvedFormWidth
                             },
                             display: "flex",
                             overflow: "auto",
@@ -534,7 +573,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         }}>
 
                             <Box sx={{
-                                position: "relative"
+                                position: "relative",
+                                maxWidth: "100%"
                             }}>
                                 <Box
                                     role="tabpanel"
@@ -549,37 +589,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                             width: CONTAINER_FULL_WIDTH
                                         }
                                     }}>
-
-                                    <Box
-                                        sx={(theme) => ({
-                                            width: "100%",
-                                            marginTop: theme.spacing(3),
-                                            paddingLeft: theme.spacing(4),
-                                            paddingRight: theme.spacing(4),
-                                            paddingTop: theme.spacing(3),
-                                            [theme.breakpoints.down("lg")]: {
-                                                marginTop: theme.spacing(2),
-                                                paddingLeft: theme.spacing(2),
-                                                paddingRight: theme.spacing(2),
-                                                paddingTop: theme.spacing(2)
-                                            },
-                                            [theme.breakpoints.down("md")]: {
-                                                marginTop: theme.spacing(1),
-                                                paddingLeft: theme.spacing(2),
-                                                paddingRight: theme.spacing(2),
-                                                paddingTop: theme.spacing(2)
-                                            }
-                                        })}>
-
-                                        <Typography
-                                            sx={{
-                                                marginTop: 4,
-                                                marginBottom: 4
-                                            }}
-                                            variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
-                                        </Typography>
-
-                                    </Box>
 
                                     {loading
                                         ? <CircularProgressCenter/>

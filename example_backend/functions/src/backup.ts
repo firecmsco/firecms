@@ -1,4 +1,5 @@
 import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
 
 /**
  * To create a new export:
@@ -6,7 +7,7 @@ import * as functions from "firebase-functions";
  * gcloud firestore export gs://firecms_firestore_backups --project firecms-demo-27150
  * ```
  */
-const bucket = "gs://firecms_firestore_backups/2022-05-14T10:49:17_19732";
+const bucket = "gs://firecms_firestore_backups/2023-02-14T12:16:11_96500";
 
 export function eraseDatabase() {
     const firebase_tools = require("firebase-tools");
@@ -41,12 +42,14 @@ export function importDatabaseBackup() {
         process.env.GCLOUD_PROJECT,
         "(default)"
     );
+    console.log("Cleaning up");
+    cleanup().then();
 
+    console.log("Importing from bucket", bucket);
     return client
         .importDocuments({
             name: databaseName,
-            inputUriPrefix: bucket,
-            collectionIds: []
+            inputUriPrefix: bucket
         })
         .then((responses: any) => {
             const response = responses[0];
@@ -56,5 +59,19 @@ export function importDatabaseBackup() {
         .catch((err: any) => {
             console.error(err);
         });
+}
+
+async function cleanup() {
+    const firestore = admin.firestore();
+    await firestore.collection("/blog")
+        .where("status", "==", "draft")
+        .get()
+        .then((snapshot) =>
+            snapshot.docs.forEach(d => d.ref.delete()));
+    await firestore.collection("/users")
+        .where("__name__", ">", "B07VS1NQYC")
+        .get()
+        .then((snapshot) => snapshot.docs.forEach(d => d.ref.delete()));
+
 }
 

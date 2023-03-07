@@ -25,14 +25,20 @@ else if (import.meta.env) {
 const productsIndex = client && client.initIndex("products");
 const usersIndex = client && client.initIndex("users");
 const blogIndex = client && client.initIndex("blog");
+const booksIndex = client && client.initIndex("books");
 
 export const textSearchController: FirestoreTextSearchController =
-    ({ path, searchString }) => {
+    ({
+         path,
+         searchString
+     }) => {
         if (path === "products")
             return productsIndex && performAlgoliaTextSearch(productsIndex, searchString);
         if (path === "users")
             return usersIndex && performAlgoliaTextSearch(usersIndex, searchString);
         if (path === "blog")
             return blogIndex && performAlgoliaTextSearch(blogIndex, searchString);
+        if (path === "books")
+            return booksIndex && performAlgoliaTextSearch(booksIndex, searchString);
         return undefined;
     };

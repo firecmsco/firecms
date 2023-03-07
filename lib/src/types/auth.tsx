@@ -58,4 +58,9 @@ export type AuthController<UserType extends User = User> = {
      */
     setExtra: (extra: any) => void;
 
+    /**
+     * You can use this method to retrieve the auth token for the current user.
+     */
+    getAuthToken: () => Promise<string>;
+
 };

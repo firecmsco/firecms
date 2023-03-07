@@ -41,6 +41,7 @@ import {
     orderBy as orderByClause,
     Query,
     query,
+    QueryConstraint,
     serverTimestamp,
     setDoc,
     startAfter as startAfterClause,
@@ -100,7 +101,7 @@ export function useFirestoreDataSource({
         const firestore = getFirestore(firebaseApp);
         const collectionReference: Query = collectionClause(firestore, path);
 
-        const queryParams = [];
+        const queryParams:QueryConstraint[] = [];
         if (filter) {
             Object.entries(filter)
                 .filter(([_, entry]) => !!entry)
@@ -490,7 +491,7 @@ export function useFirestoreDataSource({
  * @category Firestore
  */
 export function firestoreToCMSModel(data: any): any {
-    if (data === null) return data;
+    if (data === null || data === undefined) return null;
     if (serverTimestamp().isEqual(data)) {
         return null;
     }
