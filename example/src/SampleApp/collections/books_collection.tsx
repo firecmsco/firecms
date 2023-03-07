@@ -1,4 +1,7 @@
 import { buildCollection } from "firecms";
+import {
+    OpenAIInstructionsActions
+} from "../collection_actions/OpenAIInstructionsActions";
 
 export const booksCollection = buildCollection({
     name: "Books",
@@ -7,6 +10,7 @@ export const booksCollection = buildCollection({
     icon: "MenuBook",
     group: "Main",
     textSearchEnabled: true,
+    Actions: OpenAIInstructionsActions,
     description: "Example of a books collection that allows data enhancement through the use of the **OpenAI plugin**",
     // hideFromNavigation: true,
     properties: {
