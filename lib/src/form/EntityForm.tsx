@@ -33,6 +33,7 @@ import {
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
+import { FormController } from "../types/form";
 
 /**
  * @category Components
@@ -99,6 +100,8 @@ export interface EntityFormProps<M extends Record<string, any>> {
 
     currentEntityId?: string;
 
+    onFormControllerChange?: (formController: FormController<M>) => void;
+
 }
 
 /**
@@ -130,7 +133,8 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                onDiscard,
                                                                onModified,
                                                                onValuesChanged,
-                                                               onIdChange
+                                                               onIdChange,
+                                                               onFormControllerChange
                                                            }: EntityFormProps<M>) {
 
     const context = useFireCMSContext();
@@ -322,33 +326,39 @@ function EntityFormInternal<M extends Record<string, any>>({
         >
             {(props) => {
 
-                let actions: React.ReactNode | undefined;
+                let actions: React.ReactNode[] | undefined;
+
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                const formController: FormController<M> = useMemo(() => ({
+                    setFieldValue: props.setFieldValue,
+                    values: props.values
+                }), [props.setFieldValue, props.values]);
+
+                if (onFormControllerChange) {
+                    onFormControllerChange(formController);
+                }
 
                 if (plugins && collection) {
-                    const actionProps: PluginFormActionProps & FormikProps<any> = {
+                    const actionProps: PluginFormActionProps = {
                         entityId,
                         path,
                         status,
                         collection,
                         context,
                         currentEntityId: entityId,
-                        ...props
+                        formController
                     };
-                    actions = <>
-                        {plugins.map((plugin, i) => (
-                            plugin.form?.Actions
-                                ? <plugin.form.Actions
-                                    key={`actions_${i}`} {...actionProps}/>
-                                : null
-                        ))}
-                    </>
-                    ;
+                    actions = plugins.map((plugin, i) => (
+                        plugin.form?.Actions
+                            ? <plugin.form.Actions
+                                key={`actions_${i}`} {...actionProps}/>
+                            : null
+                    )).filter(Boolean);
                 }
 
                 return <>
 
                     <Box
-
                         sx={(theme) => ({
                             paddingLeft: theme.spacing(4),
                             paddingRight: theme.spacing(4),

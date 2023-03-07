@@ -50,6 +50,7 @@ import {
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 import { useLargeSideLayout } from "./useLargeSideLayout";
+import { FormController } from "../../types/form";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -95,6 +96,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const snackbarController = useSnackbarController();
         const context = useFireCMSContext();
         const authController = useAuthController<UserType>();
+
+        const [formController, setFormController] = useState<FormController<M> | undefined>(undefined);
 
         const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
         // const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
@@ -418,6 +421,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 onModified={onValuesAreModified}
                 entity={usedEntity}
                 onIdChange={onIdChange}
+                onFormControllerChange={setFormController}
             />;
             if (plugins) {
                 plugins.forEach((plugin: FireCMSPlugin) => {
@@ -434,7 +438,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                 entity={usedEntity}
                                 context={context}
                                 currentEntityId={currentEntityId}
-                                values={modifiedValuesRef.current}
+                                formController={formController}
                                 {...plugin.form.provider.props}>
                                 {form}
                             </plugin.form.provider.Component>

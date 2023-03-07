@@ -7,8 +7,7 @@ import { FieldProps } from "./fields";
 import { CMSType, Property } from "./properties";
 import { EntityStatus } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
-// todo: replace formik import with internal form controller
-import { FormikProps } from "formik";
+import { FormController } from "./form";
 
 /**
  * Interface used to define plugins for FireCMS.
@@ -53,7 +52,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
             props?: FORM_PROPS;
         }
 
-        Actions?: React.ComponentType<PluginFormActionProps & FormikProps<any>>;
+        Actions?: React.ComponentType<PluginFormActionProps>;
 
         fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) =>
             ((props: PluginFieldBuilderParams<T>)
@@ -134,9 +133,9 @@ export interface PluginHomePageActionsProps<EP extends object = object, M extend
 export interface PluginFormActionProps<UserType extends User = User> {
     entityId?: string;
     path: string;
-    values: Record<string, any>;
     status: EntityStatus;
     collection: EntityCollection;
+    formController: FormController<any>;
     context: FireCMSContext<UserType>;
     currentEntityId?: string;
 }
