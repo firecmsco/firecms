@@ -42,7 +42,7 @@ function SampleApp() {
         providerKey: publicRecaptchaKey,
         useEnterpriseRecaptcha: false,
         isTokenAutoRefreshEnabled: true,
-        debugToken: appCheckDebugToken,
+        // debugToken: appCheckDebugToken,
         forceRefresh: false
     };
 
@@ -75,27 +75,8 @@ function SampleApp() {
 
     const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
                                                                                 user,
-                                                                                authController,
-                                                                                getAppCheckToken,
-                                                                                appCheckForceRefresh
+                                                                                authController
                                                                             }) => {
-
-        if (getAppCheckToken) {
-            try {
-                if (!getAppCheckToken) {
-                    console.log("App Check not initialized yet.");
-                    return false;
-                }
-                if (!await getAppCheckToken(appCheckForceRefresh)) {
-                    console.log("App Check failed.");
-                    return false;
-                }
-                console.log("App Check success.");
-            } catch (e) {
-                console.log("App Check failed.");
-                return false;
-            }
-        }
 
         if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");
@@ -134,7 +115,6 @@ function SampleApp() {
     }, []);
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
-        model: "davinci",
         getConfigForPath: async ({ path }) => {
             if (process.env.NODE_ENV !== "production")
                 return true;
@@ -146,7 +126,7 @@ function SampleApp() {
 
     return <FirebaseCMSApp
         name={"My Online Shop"}
-        appCheckOptions={appCheckOptions}
+        // appCheckOptions={appCheckOptions}
         authentication={myAuthenticator}
         plugins={[dataEnhancementPlugin]}
         signInOptions={[

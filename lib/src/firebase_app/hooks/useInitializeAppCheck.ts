@@ -1,6 +1,12 @@
 import React, { useCallback, useEffect } from "react";
 
-import { initializeAppCheck, ReCaptchaV3Provider, ReCaptchaEnterpriseProvider, getToken, AppCheck as FirebaseAppCheck } from "firebase/app-check";
+import {
+    initializeAppCheck,
+    ReCaptchaV3Provider,
+    ReCaptchaEnterpriseProvider,
+    getToken,
+    AppCheck as FirebaseAppCheck
+} from "firebase/app-check";
 import { AppCheck, AppCheckOptions, AppCheckTokenResult } from "../../types";
 import { FirebaseApp } from "firebase/app";
 
@@ -13,10 +19,8 @@ export interface InitializeAppCheckProps {
 }
 
 export interface InitializeAppCheckResult {
-    firebaseApp?: FirebaseApp;
     appCheckLoading: boolean;
-    appCheck?: AppCheck;
-    getAppCheckToken: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined;
+    getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined;
 }
 
 /**
@@ -31,7 +35,10 @@ export interface InitializeAppCheckResult {
  * @param firebaseApp
  * @category Firebase
  */
-export function useInitializeAppCheck({ firebaseApp, options }: InitializeAppCheckProps): InitializeAppCheckResult {
+export function useInitializeAppCheck({
+                                          firebaseApp,
+                                          options
+                                      }: InitializeAppCheckProps): InitializeAppCheckResult {
     if (options?.debugToken) {
         Object.assign(window, {
             FIREBASE_APPCHECK_DEBUG_TOKEN: options?.debugToken
@@ -42,9 +49,9 @@ export function useInitializeAppCheck({ firebaseApp, options }: InitializeAppChe
     const [appCheck, setAppCheck] = React.useState<AppCheck | undefined>();
 
     const getAppCheckToken = useCallback((forceRefresh: boolean) => {
-        if (!appCheck) return;
+        if (!appCheck || !options) return;
         return getToken(appCheck as FirebaseAppCheck, forceRefresh);
-    }, [appCheck]);
+    }, [appCheck, options]);
 
     useEffect(() => {
         if (!options) return;
@@ -52,7 +59,11 @@ export function useInitializeAppCheck({ firebaseApp, options }: InitializeAppChe
 
         setAppCheckLoading(true);
 
-        const { providerKey, useEnterpriseRecaptcha, isTokenAutoRefreshEnabled } = options;
+        const {
+            providerKey,
+            useEnterpriseRecaptcha,
+            isTokenAutoRefreshEnabled
+        } = options;
         const appCheck_ = initializeAppCheck(firebaseApp, {
             provider: useEnterpriseRecaptcha ? new ReCaptchaEnterpriseProvider(providerKey) : new ReCaptchaV3Provider(providerKey),
             isTokenAutoRefreshEnabled
@@ -63,9 +74,7 @@ export function useInitializeAppCheck({ firebaseApp, options }: InitializeAppChe
     }, [firebaseApp, options]);
 
     return {
-        firebaseApp,
         appCheckLoading,
-        appCheck,
-        getAppCheckToken
+        getAppCheckToken: options ? getAppCheckToken : undefined
     };
 }

@@ -103,6 +103,9 @@ export type FirebaseCMSAppProps = {
      */
     onFirebaseInit?: (config: object) => void;
 
+    /**
+     * Use this to enable Firebase App Check
+     */
     appCheckOptions?: AppCheckOptions;
 
     /**

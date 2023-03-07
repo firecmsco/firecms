@@ -100,17 +100,4 @@ export type Authenticator<UserType extends User = User> = ({ user }: {
      * Used storage implementation
      */
     storageSource: StorageSource;
-
-    /**
-     * If AppCheck was initialized, this can be used to get and validate an AppCheck token.
-     * 
-     * @param forceRefresh whether we should always force a fresh token instead of taking a cached one
-     * @returns token result or throws error
-     */
-    getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined;
-
-    /**
-     *  For AppCheck, specifies whether we should always force a fresh token instead of taking a cached one
-     */
-    appCheckForceRefresh: boolean;
 }) => boolean | Promise<boolean>;

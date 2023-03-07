@@ -28,7 +28,7 @@ export function useValidateAuthenticator({
                                                  authController: FirebaseAuthController,
                                                  authentication?: boolean | Authenticator<FirebaseUser>,
                                                  getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
-                                                 appCheckForceRefresh: boolean,
+                                                 appCheckForceRefresh?: boolean,
                                                  dataSource: DataSource;
                                                  storageSource: StorageSource;
                                              }): {
@@ -73,14 +73,27 @@ export function useValidateAuthenticator({
         }
 
         const delegateUser = authController.user;
+
+        if (getAppCheckToken) {
+            try {
+                if (!await getAppCheckToken(appCheckForceRefresh)) {
+                    setNotAllowedError("App Check failed.");
+                    authController.signOut();
+                } else {
+                    console.log("App Check success.");
+                }
+            } catch (e: any) {
+                setNotAllowedError(e.message);
+                authController.signOut();
+            }
+        }
+
         if (authentication instanceof Function && delegateUser && !equal(checkedUserRef.current, delegateUser)) {
             setAuthLoading(true);
             try {
                 const allowed = await authentication({
                     user: delegateUser,
                     authController,
-                    getAppCheckToken,
-                    appCheckForceRefresh,
                     dataSource,
                     storageSource
                 });
