@@ -4,7 +4,7 @@ import { Newsletter } from "../../../partials/general/Newsletter";
 
 export default function LayoutWrapper(props) {
     return (
-        <div className={"mt-16"}>
+        <>
             <section
                 className="relative ">
                 <div
@@ -41,6 +41,6 @@ export default function LayoutWrapper(props) {
             </section>
             <Newsletter/>
             <Layout {...props} />
-        </div>
+        </>
     );
 }
