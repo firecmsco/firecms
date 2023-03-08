@@ -19,7 +19,7 @@
     "baseUrl": ".",
     "paths": {
       "firecms": ["../lib/src/index.ts"],
-      "firecms_data_enhancement": ["../data_enhancement/src/index.ts"],
+      "@firecms/data_enhancement": ["../data_enhancement/src/index.ts"],
     }
   },
   "include": ["./src"]

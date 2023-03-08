@@ -6,17 +6,16 @@ import { User as FirebaseUser } from "firebase/auth";
 import {
     AppCheckOptions,
     Authenticator,
-    buildFieldConfig,
     CMSView,
     FirebaseCMSApp
 } from "firecms";
-import { useDataEnhancementPlugin } from "firecms_data_enhancement";
+import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
-import { publicRecaptchaKey, appCheckDebugToken } from "../appcheck_config";
+import { publicRecaptchaKey } from "../appcheck_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
 import { testCollection } from "./collections/test_collection";
