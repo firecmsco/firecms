@@ -28,9 +28,9 @@ export function PagesBackground({ darkMode }: { darkMode: boolean }) {
         if (shouldShowAnimation(pathname)) {
             setShowAnimation(true);
         }
-        if (siteConfig.customFields?.env !== "production") {
-            setShowAnimation(false);
-        }
+        // if (siteConfig.customFields?.env !== "production") {
+        //     setShowAnimation(false);
+        // }
     }, [ExecutionEnvironment.canUseDOM]);
 
     return <>

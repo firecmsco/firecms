@@ -31,7 +31,7 @@ import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 
 import { useColorMode } from "@docusaurus/theme-common";
 import { TwoColumns } from "../general/TwoColumns";
-import { ContainerSmallMixin } from "../utils";
+import { ContainerMixin, ContainerSmallMixin } from "../utils";
 import { BrowserFrame } from "../BrowserFrame";
 
 function Features() {
@@ -43,7 +43,7 @@ function Features() {
         <>
 
 
-            <section className={ContainerSmallMixin + " my-16"}>
+            <section className={ContainerMixin + " my-16"}>
 
                 <div className={"flex items-center mb-3 "}>
 
@@ -75,7 +75,7 @@ function Features() {
                     it.
                 </p>
                 <div
-                    className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-4 md:pr-8 flex justify-center flex-col h-full"
+                    className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-4 md:pr-8 flex justify-center flex-col h-full mt-16"
                 >
                     <BrowserFrame>
                         <video

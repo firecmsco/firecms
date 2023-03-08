@@ -23,9 +23,7 @@ function FeaturesPage() {
                             </>}
                         subtitle={
                             <>
-                                <p>Easily Create, Edit and Publish with
-                                    FireCMS</p>
-                            </>}
+                                <p>Empowering Your Content Management: Easily Create, Edit, and Publish with a CMS that both <b>content managers and developers will love</b></p>                            </>}
                         // cta={<a
                         //     href="mailto:hello@firecms.co?subject=FireCMS%20consulting"
                         //     rel="noopener noreferrer"

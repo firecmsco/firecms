@@ -75,10 +75,15 @@ module.exports = {
                     position: "left"
                 },
                 {
-                    to: "pricing",
-                    label: "Pricing",
+                    to: "enterprise",
+                    label: "Enterprise",
                     position: "left"
                 },
+                // {
+                //     to: "pricing",
+                //     label: "Pricing",
+                //     position: "left"
+                // },
                 {
                     type: "docSidebar",
                     sidebarId: "docsSidebar",

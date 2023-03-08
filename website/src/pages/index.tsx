@@ -33,10 +33,9 @@ function Home() {
 
                     <ManageYour/>
 
-                    {/*<Separator/>*/}
                     <FirebaseIntro/>
 
-                    <FireCMSCloudIntro/>
+                    {/*<FireCMSCloudIntro/>*/}
 
                     <FeaturesPanels/>
 
