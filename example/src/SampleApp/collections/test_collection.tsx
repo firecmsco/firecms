@@ -175,6 +175,26 @@ export const testCollection = buildCollection({
     customId: false,
     name: "Test entities",
     properties: {
+
+        specSheet: ({
+                        values,
+                        entityId
+                    }) => ({
+            name: "Specs sheet",
+            dataType: "array",
+            of: {
+                dataType: "string",
+                storage: {
+                    mediaType: "image",
+                    storagePath: "products/" + entityId + "/pdf",
+                    acceptedFiles: ["application/pdf"],
+                    metadata: {
+                        cacheControl: "max-age=1000000"
+                    }
+                }
+            }
+        }),
+
         test_custom: {
             dataType: "string",
             name: "Test custom",
@@ -204,7 +224,11 @@ export const testCollection = buildCollection({
             dataType: "string",
             name: "Currency",
             enumValues: [
-                { id: "EUR", label: "Euros", color: "blueDark" },
+                {
+                    id: "EUR",
+                    label: "Euros",
+                    color: "blueDark"
+                },
                 {
                     id: "DOL",
                     label: "Dollars",
@@ -272,6 +296,36 @@ export const testCollection = buildCollection({
                 }
             }
         },
+        myArray: {
+            name: "some array",
+            dataType: "array",
+            of: {
+                dataType: "map",
+                properties: {
+                    prop1: {
+                        dataType: "string",
+                        name: "prop1"
+                    },
+                    prop2: {
+                        dataType: "number",
+                        name: "prop2"
+                    }
+                },
+                defaultValue: {
+                    // this DOESN'T works as initial value :(
+                    prop1: "hello 2",
+                    prop2: 2
+                }
+            },
+            defaultValue: [
+                // this works as initial value :)
+                {
+                    prop1: "hello 1",
+                    prop2: 1
+                }
+            ]
+        },
+
         // impacts: {
         //     name: "Impacts",
         //     validation: { required: true },

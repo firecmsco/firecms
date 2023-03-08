@@ -1,5 +1,6 @@
 import { pink, red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material";
+import type {} from "@mui/lab/themeAugmentation";
 
 declare module "@mui/material/styles" {
     interface TypographyVariants {
@@ -37,8 +38,8 @@ export const createCMSDefaultTheme = (
         palette: {
             mode,
             background: {
-                default: mode === "dark" ? "#222224" : "#f8f8fa",
-                paper: mode === "dark" ? "#121214" : "#ffffff"
+                default: mode === "dark" ? "#202024" : "#f8f8fa",
+                paper: mode === "dark" ? "#121215" : "#ffffff"
             },
             primary: {
                 main: primaryColor || "#0070f4"
@@ -66,10 +67,13 @@ export const createCMSDefaultTheme = (
                 fontSize: "1.55rem"
             },
             h4: {
-                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif"
+                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontSize: "2rem",
+                fontWeight: 500
             },
             h3: {
-                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif"
+                fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+                fontWeight: 600
             },
             h2: {
                 fontFamily: headersFontFamily || "'IBM Plex Mono', 'Space Mono', 'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
@@ -96,6 +100,13 @@ export const createCMSDefaultTheme = (
                 }
             },
             MuiButton: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: radius
+                    }
+                }
+            },
+            MuiLoadingButton: {
                 styleOverrides: {
                     root: {
                         borderRadius: radius
@@ -141,7 +152,7 @@ export const createCMSDefaultTheme = (
             MuiDialog: {
                 styleOverrides: {
                     paper: {
-                        borderRadius: radius
+                        backgroundImage: "inherit"
                     }
                 }
             },

@@ -26,8 +26,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         includeDescription,
                                                                         underlyingValueHasChanged,
                                                                         context,
-                                                                        disabled,
-                                                                        shouldAlwaysRerender
+                                                                        disabled
                                                                     }: FieldProps<T, any, any>) {
 
     if (!Array.isArray(property.resolvedProperties))
@@ -53,8 +52,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             context,
             tableMode: false,
             partOfArray: true,
-            autoFocus: false,
-            shouldAlwaysRerender: childProperty.fromBuilder
+            autoFocus: false
         };
         return <Box key={`custom_shaped_array_${index}`} pb={1}>
             <PropertyFieldBinding {...fieldProps}/>

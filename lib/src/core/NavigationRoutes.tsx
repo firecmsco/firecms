@@ -13,7 +13,6 @@ import {
     useNavigationContext
 } from "../hooks";
 import { toArray } from "./util/arrays";
-import { useTraceUpdate } from "./util/useTraceUpdate";
 import equal from "react-fast-compare"
 
 /**
@@ -80,7 +79,7 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         const collectionRoutes = sortedCollections
             .map((collection) => {
                     const urlPath = navigation.buildUrlCollectionPath(collection.alias ?? collection.path);
-                    const allActions = [];
+                    const allActions:React.ComponentType<any>[] = [];
                     if (plugins) {
                         plugins.forEach(plugin => {
                             if (plugin.collections?.CollectionActions) {

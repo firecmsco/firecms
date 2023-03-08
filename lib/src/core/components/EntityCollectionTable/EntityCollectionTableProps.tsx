@@ -1,10 +1,11 @@
 import React from "react";
 import {
-    CollectionActionsProps,
     CollectionSize,
     Entity,
-    EntityCollection, SelectionController
+    EntityCollection,
+    SelectionController
 } from "../../../types";
+import { TableController } from "./useTableController";
 
 /**
  * @category Collection components
@@ -14,18 +15,14 @@ export type OnColumnResizeParams = { width: number, key: string };
 /**
  * @category Collection components
  */
-export type EntityCollectionTableProps<M extends Record<string, any>> = Omit<EntityCollection<M>, "Actions"> & {
+export type EntityCollectionTableProps<M extends Record<string, any>> =
+    EntityCollection<M>
+    & {
 
     /**
      * Absolute collection path
      */
     fullPath: string;
-
-    /**
-     * List of entities that will be displayed on top, no matter the ordering.
-     * This is used for reference fields selection
-     */
-    entitiesDisplayedFirst?: Entity<M>[];
 
     /**
      * Display these entities as selected
@@ -53,7 +50,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>> = Omit<Ent
      * @param entity
      * @param size
      */
-    tableRowActionsBuilder?: (params: { entity: Entity<M>, size: CollectionSize, width: number, frozen?:boolean }) => React.ReactNode;
+    tableRowActionsBuilder?: (params: { entity: Entity<M>, size: CollectionSize, width: number, frozen?: boolean }) => React.ReactNode;
 
     /**
      * Callback when anywhere on the table is clicked
@@ -79,5 +76,12 @@ export type EntityCollectionTableProps<M extends Record<string, any>> = Omit<Ent
      * Additional component that renders actions such as buttons in the
      * collection toolbar, displayed on the right side
      */
-    ActionsBuilder?: React.ComponentType<CollectionActionsProps>;
+    actions?: React.ReactNode;
+
+    /**
+     * Controller holding the logic for the table
+     * {@link useTableController}
+     * {@link TableController}
+     */
+    tableController: TableController<M>;
 }

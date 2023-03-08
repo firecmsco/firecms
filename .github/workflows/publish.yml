@@ -17,20 +17,20 @@ jobs:
               with:
                   node-version: '16.x'
                   registry-url: 'https://registry.npmjs.org'
-            - run: yarn install
+            - run: yarn install --no-immutable
             # Publish to npm
             - run: npm publish --access public
               env:
                   NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
-            # Setup .npmrc file to publish to GitHub Packages
-            - uses: actions/setup-node@v1
-              with:
-                  node-version: '16.x'
-                  registry-url: 'https://npm.pkg.github.com'
-                  scope: '@Camberi'
-            # Publish to GitHub Packages
-            - run: npm publish
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+#            # Setup .npmrc file to publish to GitHub Packages
+#            - uses: actions/setup-node@v1
+#              with:
+#                  node-version: '16.x'
+#                  registry-url: 'https://npm.pkg.github.com'
+#                  scope: '@Camberi'
+#            # Publish to GitHub Packages
+#            - run: npm publish
+#              env:
+#                  NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
             # Create Git version tag
             - run: npm run createTag

@@ -1,16 +1,17 @@
 import { AuthController, SideEntityController } from "../types";
-import { useFireCMSContext } from "./useFireCMSContext";
+import { useContext } from "react";
+import {
+    SideEntityControllerContext
+} from "../core/contexts/SideEntityControllerContext";
 
 /**
- * Hook to retrieve the side entity controller.
+ * Use this hook to retrieve an entity controller that allows you to open
+ * a side dialog to edit an entity.
  *
  * Consider that in order to use this hook you need to have a parent
  * `FireCMS`
  *
- * @see AuthController
+ * @see SideEntityController
  * @category Hooks and utilities
  */
-export function useSideEntityController(): SideEntityController {
-    const context = useFireCMSContext();
-    return context.sideEntityController;
-}
+export const useSideEntityController = (): SideEntityController => useContext(SideEntityControllerContext);

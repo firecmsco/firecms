@@ -20,7 +20,8 @@ import {
 } from "./EntityCollectionTable/internal/EntityCollectionRowActions";
 import {
     useAuthController,
-    useDataSource, useFireCMSContext,
+    useDataSource,
+    useFireCMSContext,
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
@@ -31,6 +32,10 @@ import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 import {
     useSelectionController
 } from "./EntityCollectionView/EntityCollectionView";
+import { useTableController } from "./EntityCollectionTable/useTableController";
+import {
+    isFilterCombinationValidForFirestore
+} from "./EntityCollectionView/isFilterCombinationValidForFirestore";
 
 /**
  * @category Components
@@ -77,15 +82,19 @@ export interface ReferenceDialogProps<M extends Record<string, any>> {
     onMultipleEntitiesSelected?(entities: Entity<any>[]): void;
 
     /**
-     * If the dialog currently open, close it
-     * @callback
-        */
-    onClose?(): void;
-
-    /**
      * Allow selection of entities that pass the given filter only.
      */
     forceFilter?: FilterValues<string>;
+
+    /**
+     * Use this description to indicate the user what to do in this dialog.
+     */
+    description?: React.ReactNode;
+
+    /**
+     * Maximum number of entities that can be selected.
+     */
+    maxSelection?: number;
 
 }
 
@@ -98,12 +107,13 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
     {
         onSingleEntitySelected,
         onMultipleEntitiesSelected,
-        onClose,
         multiselect,
         collection,
         path: pathInput,
         selectedEntityIds,
-        forceFilter
+        description,
+        forceFilter,
+        maxSelection
     }: ReferenceDialogProps<M>) {
 
     const sideDialogContext = useSideDialogContext();
@@ -152,6 +162,7 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
         context.onAnalyticsEvent?.("reference_selection_clear", {
             path: fullPath
         });
+        selectionController.setSelectedEntities([]);
         if (!multiselect && onSingleEntitySelected) {
             onSingleEntitySelected(null);
         } else if (onMultipleEntitiesSelected) {
@@ -168,9 +179,12 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
             entityId: entity.id
         });
         if (selectedEntities) {
+
             if (selectedEntities.map((e) => e.id).indexOf(entity.id) > -1) {
                 newValue = selectedEntities.filter((item: Entity<any>) => item.id !== entity.id);
             } else {
+                if (maxSelection && selectedEntities.length >= maxSelection)
+                    return;
                 newValue = [...selectedEntities, entity];
             }
             selectionController.setSelectedEntities(newValue);
@@ -235,15 +249,20 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
     const onDone = useCallback((event: React.SyntheticEvent) => {
         event.stopPropagation();
         sideDialogContext.close(false);
-        if (onClose)
-            onClose();
-    }, [onClose, sideDialogContext]);
+    }, [sideDialogContext]);
 
     if (!collection) {
         return <ErrorView
             error={"Could not find collection with id " + collection}/>
-
     }
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const tableController = useTableController<M>({
+        fullPath,
+        collection,
+        entitiesDisplayedFirst,
+        isFilterCombinationValid: isFilterCombinationValidForFirestore
+    });
 
     return (
 
@@ -258,6 +277,7 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
                     <EntityCollectionTable fullPath={fullPath}
                                            onEntityClick={onEntityClick}
                                            forceFilter={forceFilter}
+                                           tableController={tableController}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
                                            title={<Typography variant={"h6"}>
                                                {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
@@ -265,16 +285,22 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
                                            {...collection}
                                            inlineEditing={false}
                                            selectionController={selectionController}
-                                           ActionsBuilder={() =>
-                                               <ReferenceDialogActions
-                                                   collection={collection}
-                                                   path={fullPath}
-                                                   onNewClick={onNewClick}
-                                                   onClear={onClear}/>}
-                                           entitiesDisplayedFirst={entitiesDisplayedFirst}
+                                           actions={<ReferenceDialogActions
+                                               collection={collection}
+                                               path={fullPath}
+                                               onNewClick={onNewClick}
+                                               onClear={onClear}/>
+                                           }
                     />}
             </Box>
             <CustomDialogActions translucent={false}>
+                {description &&
+                    <Typography variant={"body2"} sx={{
+                        flexGrow: 1,
+                        textAlign: "left"
+                    }}>
+                        {description}
+                    </Typography>}
                 <Button
                     onClick={onDone}
                     color="primary"

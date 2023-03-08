@@ -3,8 +3,6 @@ import { Box, Popover, Typography, useTheme } from "@mui/material";
 import equal from "react-fast-compare"
 
 import {
-    AnyProperty,
-    CollectionActionsProps,
     CollectionSize,
     Entity,
     EntityCollection,
@@ -43,6 +41,12 @@ import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
+import {
+    useTableController
+} from "../EntityCollectionTable/useTableController";
+import {
+    isFilterCombinationValidForFirestore
+} from "./isFilterCombinationValidForFirestore";
 
 /**
  * @category Components
@@ -133,6 +137,13 @@ export const EntityCollectionView = React.memo(
         useEffect(() => {
             setDeleteEntityClicked(undefined);
         }, [selectedEntities]);
+
+        const tableController = useTableController<M>({
+            fullPath,
+            collection,
+            entitiesDisplayedFirst: [],
+            isFilterCombinationValid: isFilterCombinationValidForFirestore
+        });
 
         const onEntityClick = useCallback((clickedEntity: Entity<M>) => {
             setSelectedNavigationEntity(clickedEntity);
@@ -343,10 +354,15 @@ export const EntityCollectionView = React.memo(
         }, [isEntitySelected, collection, authController, fullPath, selectionEnabled, toggleEntitySelection, onEditClicked, createEnabled, onCopyClicked]);
 
         return (
-            <Box sx={{ overflow: "hidden", height: "100%", width: "100%" }}>
+            <Box sx={{
+                overflow: "hidden",
+                height: "100%",
+                width: "100%"
+            }}>
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     fullPath={fullPath}
+                    tableController={tableController}
                     onSizeChanged={onSizeChanged}
                     onEntityClick={onEntityClick}
                     onColumnResize={onColumnResize}
@@ -355,22 +371,15 @@ export const EntityCollectionView = React.memo(
                     selectionController={usedSelectionController}
                     highlightedEntities={selectedNavigationEntity ? [selectedNavigationEntity] : []}
                     {...collection}
-                    ActionsBuilder={({
-                                         loadedEntities,
-                                         path,
-                                         collection,
-                                         selectionController
-                                     }: CollectionActionsProps) => (
-                        <EntityCollectionViewActions
-                            collection={collection}
-                            exportable={exportable}
-                            onMultipleDeleteClick={onMultipleDeleteClick}
-                            onNewClick={onNewClick}
-                            path={path}
-                            loadedEntities={loadedEntities}
-                            selectionController={selectionController}
-                            selectionEnabled={selectionEnabled}/>
-                    )}
+                    actions={<EntityCollectionViewActions
+                        collection={collection}
+                        exportable={exportable}
+                        onMultipleDeleteClick={onMultipleDeleteClick}
+                        onNewClick={onNewClick}
+                        path={fullPath}
+                        loadedEntities={tableController.data}
+                        selectionController={usedSelectionController}
+                        selectionEnabled={selectionEnabled}/>}
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
                 />

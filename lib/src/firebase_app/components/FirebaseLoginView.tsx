@@ -174,12 +174,13 @@ export function FirebaseLoginView({
         if (authController.user != null) return errorView; // if the user is logged in via MFA
         const ignoredCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
         if (authController.authProviderError) {
-            if (authController.authProviderError.code === "auth/operation-not-allowed") {
+            if (authController.authProviderError.code === "auth/operation-not-allowed" ||
+                authController.authProviderError.code === "auth/configuration-not-found") {
                 errorView =
                     <div>
                         <Box p={1}>
                             <ErrorView
-                                error={"You need to enable the corresponding login provider in your Firebase project"}/>
+                                error={"You need to enable Firebase auth and the corresponding login provider in your Firebase project"}/>
                         </Box>
                         {firebaseApp &&
                             <Box p={1}>
@@ -252,7 +253,7 @@ export function FirebaseLoginView({
                     flexDirection: "column",
                     alignItems: "center",
                     width: "100%",
-                    maxWidth: 380
+                    maxWidth: 480
                 }}>
 
                     <Box m={1} sx={{
@@ -413,7 +414,10 @@ function PhoneLoginForm({
                 <Grid item xs={12}>
                     <IconButton
                         onClick={onClose}>
-                        <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
+                        <ArrowBackIcon sx={{
+                            width: 20,
+                            height: 20
+                        }}/>
                     </IconButton>
                 </Grid>
                 <Grid item xs={12} sx={{
@@ -569,7 +573,10 @@ function LoginForm({
                 <Grid item xs={12}>
                     <IconButton
                         onClick={onBackPressed}>
-                        <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
+                        <ArrowBackIcon sx={{
+                            width: 20,
+                            height: 20
+                        }}/>
                     </IconButton>
                 </Grid>
 
@@ -601,7 +608,10 @@ function LoginForm({
                     <Grid item xs={12}>
                         <IconButton
                             onClick={onBackPressed}>
-                            <ArrowBackIcon sx={{ width: 20, height: 20 }}/>
+                            <ArrowBackIcon sx={{
+                                width: 20,
+                                height: 20
+                            }}/>
                         </IconButton>
                     </Grid>
 

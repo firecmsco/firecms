@@ -1,7 +1,6 @@
-import { EntityCollection, FieldConfig, FireCMSContext } from "../../types";
+import { EntityCollection, FieldConfig } from "../../types";
 import { isReferenceProperty } from "./property_utils";
 import { isPropertyBuilder } from "./entities";
-import { useFireCMSContext } from "../../hooks";
 
 export function getReferencePreviewKeys(targetCollection: EntityCollection<any>,
                                         fields?: Record<string, FieldConfig>,

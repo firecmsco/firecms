@@ -23,7 +23,8 @@ export function ExpandablePanel({
                    expanded={expandedInternal}
                    sx={theme => ({
                        color: theme.palette.text.secondary,
-                       backgroundColor: darken ? undefined : "inherit"
+                       backgroundColor: darken ? undefined : "inherit",
+                       borderRadius: `${theme.shape.borderRadius}px`
                    })}
                    TransitionProps={{ unmountOnExit: true }}
                    onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => setExpandedInternal(expanded), [])}>
@@ -44,7 +45,8 @@ export function ExpandablePanel({
             </AccordionSummary>
 
             <AccordionDetails sx={(theme) => ({
-                padding: typeof padding === "string" ? padding : theme.spacing(padding)
+                padding: typeof padding === "string" ? padding : theme.spacing(padding),
+                py: theme.spacing(2)
             })}>
                 {children}
             </AccordionDetails>

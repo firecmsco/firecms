@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 
 import { Markdown } from "../../../preview";
 import { useFireCMSContext } from "../../../hooks";
-import { HomePageActionsProps, TopNavigationEntry } from "../../../types";
+import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
 
 /**
@@ -36,7 +36,7 @@ export function NavigationCollectionCard({
                                              name,
                                              description,
                                              onClick
-                                         }: TopNavigationEntry & {onClick?: () => void}) {
+                                         }: TopNavigationEntry & { onClick?: () => void }) {
 
     const CollectionIcon = getIconForView(collection ?? view);
 
@@ -45,7 +45,7 @@ export function NavigationCollectionCard({
 
     let actions: React.ReactNode | undefined;
     if (context.plugins && collection) {
-        const actionProps: HomePageActionsProps = {
+        const actionProps: PluginHomePageActionsProps = {
             path,
             collection,
             context
@@ -54,7 +54,10 @@ export function NavigationCollectionCard({
             {context.plugins.map((plugin, i) => (
                 plugin.homePage?.CollectionActions
                     ? <plugin.homePage.CollectionActions
-                        key={`actions_${i}`} {...actionProps}/>
+                        key={`actions_${i}`}
+                        {...actionProps}
+                        extraProps={plugin.homePage.extraProps}
+                    />
                     : null
             ))}
         </>

@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, CardMedia, Link } from "@mui/material";
+import { Box, CardMedia, Link, Tooltip, Typography } from "@mui/material";
 
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -15,8 +15,9 @@ import { PreviewType } from "../../types";
 export function UrlComponentPreview({
                                         url,
                                         previewType,
-                                        size
-                                    }: { url: string, previewType?: PreviewType, size: PreviewSize }): React.ReactElement {
+                                        size,
+                                        hint
+                                    }: { url: string, previewType?: PreviewType, size: PreviewSize, hint?: string }): React.ReactElement {
 
     if (!previewType) {
         return (
@@ -65,12 +66,26 @@ export function UrlComponentPreview({
                 onClick={(e) => e.stopPropagation()}>
                 <Box sx={{
                     display: "flex",
+                    flexDirection: "column",
                     alignItems: "center",
                     justifyContent: "center",
                     width: getThumbnailMeasure(size),
                     height: getThumbnailMeasure(size)
                 }}>
-                    <DescriptionOutlinedIcon/>
+                    <DescriptionOutlinedIcon sx={{ flexGrow: 1 }}/>
+                    {hint &&
+                        <Tooltip title={hint}>
+                            <Typography
+                                sx={{
+                                    maxWidth: "100%",
+                                    whiteSpace: "nowrap",
+                                    overflow: "hidden",
+                                    textOverflow: "ellipsis",
+                                    direction: "rtl",
+                                    textAlign: "left"
+                                }}
+                                variant={"caption"}>{hint}</Typography>
+                        </Tooltip>}
                 </Box>
             </a>
         );

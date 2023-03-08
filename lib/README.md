@@ -1,4 +1,8 @@
 <p align="center">
+    <img src="https://firecms.co/img/dark_mode.webp" alt="Intro video" style="max-width: 100%;">
+</p>
+
+<p align="center">
   <a href="https://firecms.co">
     <img src="https://firecms.co/img/logo_small.png" width="240px" alt="FireCMS logo" />
   </a>
@@ -9,12 +13,6 @@
 <p align="center"><a href="https://demo.firecms.co">Live demo</a></p>
 
 <br />
-
-<h2>IMPORTANT, PACKAGE RENAME</h2>
-
-**The FireCMS packaged has been renamed from `@camberi/firecms` to `firecms`.
-Please update your dependencies accordingly.
-From versions 2.0.0-beta.1 versions are released under the new name.**
 
 <p align="center">
     <img src="https://firecms.co/img/dark_mode.webp" alt="Intro video" style="max-width: 100%;">
@@ -174,7 +172,22 @@ If you need general support, you can open a GitHub issue.
 
 Do you need consulting setting up your Firestore-based CMS in no time? We are
 happy to help!
-`hello@camberi.com`
+`hello@firecms.co`
+
+## Development
+
+If you would like to make changes to the source, feel free to submit a PR!
+
+When developing, the core library can be found under `lib`.
+There is an example project in the folder `example`.
+
+In order to run the project, you need to create a file called `firebase_config.ts`
+in `example/src`.
+
+That file needs to export a valid Firebase config, that you can get
+from your Firebase console when creating a webapp for your project.
+
+Then simply run `yarn` and `yarn dev`
 
 ## License
 

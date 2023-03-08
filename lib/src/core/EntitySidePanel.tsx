@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useCallback, useEffect, useMemo } from "react";
 
 import { EntitySidePanelProps } from "../types";
 import { FORM_CONTAINER_WIDTH } from "./internal/common";
@@ -13,7 +13,7 @@ import { useSideDialogContext } from "./SideDialogs";
  * for editing entities. Use the {@link useSideEntityController} to open
  * and control the dialogs.
  * This component needs a parent {@link FireCMS}
- * {@see useSideEntityController}
+ * {@link useSideEntityController}
  * @category Components
  */
 export function EntitySidePanel(props: EntitySidePanelProps) {
@@ -58,16 +58,16 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
 
     }, [blocked, collection]);
 
+    const onValuesAreModified = useCallback((modified: boolean) => {
+        setBlocked(modified);
+        setBlockedNavigationMessage(modified
+            ? <> You have unsaved changes in this <b>{collection?.name}</b>.</>
+            : undefined)
+    }, [collection?.name, setBlocked, setBlockedNavigationMessage]);
+
     if (!props || !collection) {
         return <div style={{ width: FORM_CONTAINER_WIDTH }}/>;
     }
-
-    const onValuesAreModified = (modified: boolean) => {
-        setBlocked(modified);
-        setBlockedNavigationMessage(modified
-            ? <> You have unsaved changes in this <b>{collection.name}</b>.</>
-            : undefined)
-    };
 
     return (
         <>

@@ -55,7 +55,10 @@ export const localeCollection = buildCollection<Locale>({
 const productAdditionalField: AdditionalFieldDelegate<Product> = {
     id: "spanish_title",
     name: "Spanish title",
-    Builder: ({ entity, context }) =>
+    Builder: ({
+                  entity,
+                  context
+              }) =>
         <AsyncPreviewComponent builder={
             context.dataSource.fetchEntity({
                 path: `${entity.path}/${entity.id}/locales`,
@@ -116,20 +119,35 @@ export const productsCollection = buildCollection<Product>({
         {
             path: "sample_custom_view",
             name: "Custom view",
-            builder: ({ collection, entity, modifiedValues }) =>
+            builder: ({
+                          collection,
+                          entity,
+                          modifiedValues
+                      }) =>
                 <SampleProductsView entity={entity}
                                     modifiedValues={modifiedValues}/>
         }
     ],
     additionalFields: [productAdditionalField],
     // propertiesOrder: ["name", "price", "category", "spanish_title", "currency", "locales"],
-    filterCombinations: [{
-        category: "desc",
-        available: "desc"
-    }, { category: "asc", available: "desc" }, {
-        category: "desc",
-        available: "asc"
-    }, { category: "asc", available: "asc" }],
+    filterCombinations: [
+        {
+            category: "asc",
+            available: "desc"
+        },
+        {
+            category: "asc",
+            available: "asc"
+        },
+        {
+            category: "desc",
+            available: "desc"
+        },
+        {
+            category: "desc",
+            available: "asc"
+        }
+    ],
     properties: {
         name: {
             dataType: "string",

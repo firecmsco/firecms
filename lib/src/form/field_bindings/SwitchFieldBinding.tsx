@@ -3,10 +3,8 @@ import {
     FormControl,
     FormControlLabel,
     FormHelperText,
-    Switch,
-    Typography
+    Switch
 } from "@mui/material";
-import clsx from "clsx";
 
 import { FieldProps } from "../../types";
 import { FieldDescription } from "../index";
@@ -33,8 +31,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                                                                                    disabled,
                                                                                    touched,
                                                                                    property,
-                                                                                   includeDescription,
-                                                                                   shouldAlwaysRerender
+                                                                                   includeDescription
                                                                                }: SwitchFieldProps, ref) {
 
     useClearRestoreValue({

@@ -25,5 +25,6 @@ export * from "./DeleteConfirmationDialog";
 export * from "./FireCMSLogo";
 
 export * from "./CenteredView";
+export * from "./InfoLabel";
 
 export * from "./fields/FilledSelect";

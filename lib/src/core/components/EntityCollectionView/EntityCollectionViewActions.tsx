@@ -28,8 +28,9 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     exportable: boolean | ExportConfig;
     onNewClick: () => void;
     onMultipleDeleteClick: () => void;
-    loadedEntities: Entity<M>[];
     selectionController: SelectionController<M>;
+    loadedEntities: Entity<M>[];
+
 }
 
 export function EntityCollectionViewActions<M extends Record<string, any>>({
@@ -39,8 +40,8 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                                                                                onMultipleDeleteClick,
                                                                                selectionEnabled,
                                                                                path,
-                                                                               loadedEntities,
-                                                                               selectionController
+                                                                               selectionController,
+                                                                               loadedEntities
                                                                            }: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
@@ -54,6 +55,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path), null) &&
         onNewClick && (largeLayout
             ? <Button
+                id={`add_entity_${path}`}
                 onClick={onNewClick}
                 startIcon={<Add/>}
                 size="large"
@@ -62,6 +64,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 Add {collection.singularName ?? collection.name}
             </Button>
             : <Button
+                id={`add_entity_${path}`}
                 onClick={onNewClick}
                 size="medium"
                 variant="contained"
@@ -102,8 +105,8 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         path,
         collection,
         selectionController,
-        loadedEntities,
-        context
+        context,
+        loadedEntities
     };
 
     const actions = collection.Actions

@@ -132,7 +132,7 @@
 
 html[data-theme='dark'] {
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
-    --ifm-background-color: #1b1b26;
+    --ifm-background-color: #1b1b21;
     --ifm-background-surface-color: #232328;
     --ifm-color-emphasis-100: #232328;
     /*--ifm-background-surface-color: #242526;*/
@@ -163,20 +163,11 @@ a.btn {
     text-decoration: none;
 }
 
-.custom-code-block pre {
-    overflow: inherit !important;
-}
-
-/* Tailwind does not compute this properly on buttons */
-.font-bold {
-    font-weight: 600 !important;
-}
-
 h1, h2, h3 {
     font-weight: 700;
 }
 
-h2{
+h2 {
     margin-top: 2rem;
 }
 

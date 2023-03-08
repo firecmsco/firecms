@@ -1,25 +1,8 @@
 import { Entity } from "../../types";
-import { useEffect, useMemo, useState } from "react";
 
 export interface DataOrderProps<M extends Record<string, any>> {
     data: Entity<M>[];
     entitiesDisplayedFirst?: Entity<M>[];
-}
-
-function useDataOrderInternal<M>(entitiesDisplayedFirst: Entity<M>[], data: Entity<M>[]) {
-    const initialEntities = useMemo(() => entitiesDisplayedFirst ? entitiesDisplayedFirst.filter(e => !!e.values) : [], [entitiesDisplayedFirst]);
-    const [result, setResult] = useState<Entity<M>[]>(initialEntities);
-
-    useEffect(() => {
-        if (!initialEntities) {
-            setResult(data);
-        } else {
-            const displayedFirstId = new Set(initialEntities.map((e) => e.id));
-            setResult([...initialEntities, ...data.filter((e) => !displayedFirstId.has(e.id))]);
-        }
-    }, [data, initialEntities]);
-
-    return result;
 }
 
 /**
@@ -36,8 +19,8 @@ export function useDataOrder<M extends Record<string, any>>(
 
     if (!entitiesDisplayedFirst)
         return data;
-    // HACK for performance
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    return useDataOrderInternal(entitiesDisplayedFirst, data);
+
+    const displayedFirstId = new Set(entitiesDisplayedFirst.map((e) => e.id));
+    return [...entitiesDisplayedFirst, ...data.filter((e) => !displayedFirstId.has(e.id))];
 
 }

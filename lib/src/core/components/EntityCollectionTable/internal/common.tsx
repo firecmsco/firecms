@@ -51,7 +51,7 @@ export function getPropertyColumnWidth(property: ResolvedProperty): number {
         if (property.url) {
             return 280;
         } else if (property.storage) {
-            return 220;
+            return 160;
         } else if (property.enumValues) {
             return 200;
         } else if (property.multiline) {

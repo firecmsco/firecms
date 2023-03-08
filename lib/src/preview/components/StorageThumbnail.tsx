@@ -59,12 +59,13 @@ export function StorageThumbnailInternal({
         ? "image"
         : (filetype?.startsWith("video")
             ? "video"
-            : (filetype?.startsWith("audio") ? "audio" : undefined));
+            : (filetype?.startsWith("audio") ? "audio" : "file"));
 
     return downloadConfig
         ? <UrlComponentPreview previewType={previewType}
                                url={downloadConfig.url}
-                               size={size}/>
+                               size={size}
+                               hint={storagePathOrDownloadUrl}/>
         : renderSkeletonImageThumbnail(size);
 }
 

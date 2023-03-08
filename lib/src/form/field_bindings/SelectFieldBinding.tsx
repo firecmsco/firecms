@@ -37,8 +37,7 @@ export function SelectFieldBinding<T extends EnumType>({
                                                            autoFocus,
                                                            touched,
                                                            property,
-                                                           includeDescription,
-                                                           shouldAlwaysRerender
+                                                           includeDescription
                                                        }: SelectProps<T>) {
 
     const enumValues = property.enumValues;

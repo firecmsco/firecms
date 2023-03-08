@@ -12,9 +12,7 @@ const DEFAULT_BREADCRUMBS_CONTROLLER = {
     }
 };
 
-
 export const BreadcrumbContext = React.createContext<BreadcrumbsController>(DEFAULT_BREADCRUMBS_CONTROLLER);
-
 
 interface BreadcrumbsProviderProps {
     children: React.ReactNode;

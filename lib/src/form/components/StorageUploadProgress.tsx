@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import { useSnackbarController, useStorageSource } from "../../hooks";
 import { StorageFieldItem } from "../../core/util/useStorageUploadController";
 import { Box, Paper, Skeleton } from "@mui/material";
+import { ErrorView } from "../../core";
 
 export interface StorageUploadItemProps {
     storagePath: string;
@@ -27,16 +28,24 @@ export function StorageUploadProgress({
 
     const snackbarController = useSnackbarController();
 
-    const [error, setError] = React.useState<string>();
+    const [error, setError] = React.useState<Error | undefined>();
     const [loading, setLoading] = React.useState<boolean>(false);
     const mounted = React.useRef(false);
+    const uploading = React.useRef(false);
 
     const upload = useCallback((file: File, fileName?: string) => {
 
+        if (uploading.current) return;
+        uploading.current = true;
         setError(undefined);
         setLoading(true);
 
-        storage.uploadFile({ file, fileName, path: storagePath, metadata })
+        storage.uploadFile({
+            file,
+            fileName,
+            path: storagePath,
+            metadata
+        })
             .then(async ({ path }) => {
                 console.debug("Upload successful");
                 await onFileUploadComplete(path, entry, metadata);
@@ -46,15 +55,18 @@ export function StorageUploadProgress({
             .catch((e) => {
                 console.error("Upload error", e);
                 if (mounted.current) {
-                    setError(e.message);
+                    setError(e);
                     setLoading(false);
+                    snackbarController.open({
+                        type: "error",
+                        message: "Error uploading file: " + e.message
+                    });
                 }
-                snackbarController.open({
-                    type: "error",
-                    message: "Error uploading file: " + e.message
-                });
+            })
+            .finally(() => {
+                uploading.current = false;
             });
-    }, [entry, metadata, onFileUploadComplete, snackbarController, storage, storagePath]);
+    }, [entry, metadata, onFileUploadComplete, storage, storagePath]);
 
     React.useEffect(() => {
         mounted.current = true;
@@ -76,8 +88,6 @@ export function StorageUploadProgress({
                 height: imageSize
             }}/>}
 
-            {error && <p>Error uploading file: {error}</p>}
-
         </Box>
     }
     return (
@@ -97,7 +107,8 @@ export function StorageUploadProgress({
                     height: "100%"
                 }}/>}
 
-                {error && <p>Error uploading file: {error}</p>}
+                {error && <ErrorView title={"Error uploading file"}
+                                     error={error}/>}
 
             </Paper>
         </Box>

@@ -6,7 +6,8 @@ import {
     EntityReference,
     EntityValues,
     FetchCollectionProps,
-    FetchEntityProps, FieldConfig,
+    FetchEntityProps,
+    FieldConfig,
     FilterValues,
     GeoPoint,
     ListenCollectionProps,
@@ -40,6 +41,7 @@ import {
     orderBy as orderByClause,
     Query,
     query,
+    QueryConstraint,
     serverTimestamp,
     setDoc,
     startAfter as startAfterClause,
@@ -99,7 +101,7 @@ export function useFirestoreDataSource({
         const firestore = getFirestore(firebaseApp);
         const collectionReference: Query = collectionClause(firestore, path);
 
-        const queryParams = [];
+        const queryParams: QueryConstraint[] = [];
         if (filter) {
             Object.entries(filter)
                 .filter(([_, entry]) => !!entry)
@@ -107,14 +109,6 @@ export function useFirestoreDataSource({
                     const [op, value] = filterParameter as [WhereFilterOp, any];
                     queryParams.push(whereClause(key, op, cmsToFirestoreModel(value, firestore)));
                 });
-        }
-
-        if (filter && orderBy && order) {
-            Object.entries(filter).forEach(([key, value]) => {
-                if (key !== orderBy) {
-                    queryParams.push(orderByClause(key, "asc"));
-                }
-            });
         }
 
         if (orderBy && order) {
@@ -259,7 +253,14 @@ export function useFirestoreDataSource({
             }: ListenCollectionProps<M>
         ): () => void => {
 
-            console.debug("Listening collection", path, limit, filter, startAfter, orderBy, order);
+            console.debug("Listening collection", {
+                path,
+                limit,
+                filter,
+                startAfter,
+                orderBy,
+                order
+            });
 
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
 
@@ -489,7 +490,7 @@ export function useFirestoreDataSource({
  * @category Firestore
  */
 export function firestoreToCMSModel(data: any): any {
-    if (data === null) return data;
+    if (data === null || data === undefined) return null;
     if (serverTimestamp().isEqual(data)) {
         return null;
     }

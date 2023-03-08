@@ -4,7 +4,7 @@ import FunctionsIcon from "@mui/icons-material/Functions";
 import Crop75Icon from "@mui/icons-material/Crop75";
 
 import {
-    FieldConfig, FireCMSContext,
+    FieldConfig,
     PropertiesOrBuilders,
     PropertyOrBuilder,
     ResolvedProperty

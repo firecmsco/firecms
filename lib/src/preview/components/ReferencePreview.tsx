@@ -10,7 +10,12 @@ import {
     Tooltip,
     Typography
 } from "@mui/material";
-import { EntityCollection, EntityReference, ResolvedProperty } from "../../types";
+import {
+    Entity,
+    EntityCollection,
+    EntityReference,
+    ResolvedProperty
+} from "../../types";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import {
@@ -26,7 +31,8 @@ import {
     resolveCollection
 } from "../../core";
 import {
-    useEntityFetch, useFireCMSContext,
+    useEntityFetch,
+    useFireCMSContext,
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
@@ -55,26 +61,18 @@ function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewP
 }
 
 function ReferencePreviewInternal<M extends Record<string, any>>({
-                                         disabled,
-                                         reference,
-                                         previewProperties,
-                                         size,
-                                         onHover,
-                                         onClick
-                                     }: ReferencePreviewProps) {
+                                                                     disabled,
+                                                                     reference,
+                                                                     previewProperties,
+                                                                     size,
+                                                                     onHover,
+                                                                     onClick
+                                                                 }: ReferencePreviewProps) {
 
     const context = useFireCMSContext();
 
     const navigationContext = useNavigationContext();
     const sideEntityController = useSideEntityController();
-
-    if (disabled) {
-        return <ReferencePreviewWrap onClick={onClick}
-                                     onHover={onHover}
-                                     size={size}>
-            Disabled
-        </ReferencePreviewWrap>
-    }
 
     const collection = navigationContext.getCollection<EntityCollection<M>>(reference.path);
     if (!collection) {
@@ -85,7 +83,6 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
         entity,
         dataLoading,
         dataLoadingError
-        // eslint-disable-next-line react-hooks/rules-of-hooks
     } = useEntityFetch({
         path: reference.path,
         entityId: reference.id,
@@ -93,23 +90,23 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
         useCache: true
     });
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
+    if (entity) {
+        referencesCache[reference.pathWithId] = entity;
+    }
+
+    const usedEntity = entity ?? referencesCache[reference.pathWithId];
+
     const resolvedCollection = useMemo(() => resolveCollection({
         collection,
         path: reference.path,
-        values: entity?.values,
+        values: usedEntity?.values,
         fields: context.fields
     }), [collection]);
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
     const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, context.fields, previewProperties, size === "small" || size === "regular" ? 3 : 1),
         [previewProperties, resolvedCollection, size]);
 
     let body: React.ReactNode;
-
-    function buildError(error: string, tooltip?: string) {
-        return <ErrorView error={error} tooltip={tooltip}/>;
-    }
 
     if (!resolvedCollection) {
         return <ErrorView
@@ -117,12 +114,14 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
     }
 
     if (!reference) {
-        body = buildError("Reference not set");
+        body = <ErrorView error={"Reference not set"}/>;
     } else if (!(reference instanceof EntityReference)) {
         console.error("Reference preview received value of type", typeof reference);
-        body = buildError("Unexpected value", JSON.stringify(reference));
-    } else if (entity && !entity.values) {
-        body = buildError("Reference does not exist", reference.path);
+        body = <ErrorView error={"Unexpected value"}
+                          tooltip={JSON.stringify(reference)}/>;
+    } else if (usedEntity && !usedEntity.values) {
+        body = <ErrorView error={"Reference does not exist"}
+                          tooltip={reference.path}/>;
     } else {
         body = (
             <>
@@ -158,12 +157,12 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                  sx={{
                                      my: listProperties.length > 1 ? 0.5 : 0
                                  }}>
-                                {entity
+                                {usedEntity
                                     ? <PropertyPreview
                                         propertyKey={key as string}
-                                        value={getValueInPath(entity.values, key)}
+                                        value={getValueInPath(usedEntity.values, key)}
                                         property={childProperty as ResolvedProperty}
-                                        entity={entity}
+                                        entity={usedEntity}
                                         size={"tiny"}/>
                                     : <SkeletonPropertyComponent
                                         property={childProperty as ResolvedProperty}
@@ -177,20 +176,20 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                 <Box sx={{
                     my: size === "tiny" ? 0.5 : 1
                 }}>
-                    {entity &&
-                        <Tooltip title={`See details for ${entity.id}`}>
+                    {!disabled && usedEntity &&
+                        <Tooltip title={`See details for ${usedEntity.id}`}>
                             <IconButton
                                 color={"inherit"}
                                 size={"small"}
                                 onClick={(e) => {
                                     e.stopPropagation();
                                     context.onAnalyticsEvent?.("entity_click_from_reference", {
-                                        path: entity.path,
-                                        entityId: entity.id
+                                        path: usedEntity.path,
+                                        entityId: usedEntity.id
                                     });
                                     sideEntityController.open({
-                                        entityId: entity.id,
-                                        path: entity.path,
+                                        entityId: usedEntity.id,
+                                        path: usedEntity.path,
                                         collection: resolvedCollection,
                                         updateUrl: true
                                     });
@@ -204,15 +203,20 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
     }
 
     return (
-        <ReferencePreviewWrap onClick={onClick}
-                              onHover={onHover}
+        <ReferencePreviewWrap onClick={disabled ? undefined : onClick}
+                              onHover={disabled ? undefined : onHover}
                               size={size}>
             {body}
         </ReferencePreviewWrap>
     );
 }
 
-function ReferencePreviewWrap({ children, onHover, size, onClick }: {
+function ReferencePreviewWrap({
+                                  children,
+                                  onHover,
+                                  size,
+                                  onClick
+                              }: {
     children: React.ReactNode;
     onHover?: boolean;
     size: PreviewSize;
@@ -239,14 +243,16 @@ function ReferencePreviewWrap({ children, onHover, size, onClick }: {
             ...clickableStyles
         });
     }}
-                  onClick={(event) => {
-                      if (onClick) {
-                          event.preventDefault();
-                          onClick();
-                      }
-                  }}>
+                       onClick={(event) => {
+                           if (onClick) {
+                               event.preventDefault();
+                               onClick();
+                           }
+                       }}>
 
         {children}
 
     </Typography>
 }
+
+const referencesCache = new Map<string, Entity<any>>();

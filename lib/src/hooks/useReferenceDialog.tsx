@@ -1,5 +1,5 @@
 import { useSideDialogsController } from "./useSideDialogsController";
-import { ReferenceSelectionView, ReferenceDialogProps } from "../core";
+import { ReferenceDialogProps, ReferenceSelectionView } from "../core";
 import { useCallback } from "react";
 import { useNavigationContext } from "./useNavigationContext";
 
@@ -15,7 +15,8 @@ import { useNavigationContext } from "./useNavigationContext";
  */
 export function useReferenceDialog<M extends Record<string, any>>(referenceDialogProps: Omit<ReferenceDialogProps<M>, "path"> & {
     path?: string | false;
-}) {
+    onClose?: () => void;
+}): { open: () => void; close: () => void } {
 
     const navigation = useNavigationContext();
     const sideDialogsController = useSideDialogsController();
@@ -34,7 +35,10 @@ export function useReferenceDialog<M extends Record<string, any>>(referenceDialo
                     <ReferenceSelectionView
                         {...referenceDialogProps as ReferenceDialogProps<M>}
                         collection={usedCollection}/>,
-                width: "90vw"
+                width: "90vw",
+                onClose: () => {
+                    referenceDialogProps.onClose?.();
+                }
             });
         } else {
             throw Error("useReferenceDialog: You are trying to open a reference dialog, but have not declared the `path`")

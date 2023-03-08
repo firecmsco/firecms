@@ -2,16 +2,16 @@ import React from "react";
 import { User as FirebaseUser } from "firebase/auth";
 
 import {
-    AuthController,
     CMSAnalyticsEvent,
-    CMSView, CMSViewsBuilder,
+    CMSView,
+    CMSViewsBuilder,
     CollectionOverrideHandler,
-    DataSource,
     EntityCollection,
     EntityCollectionsBuilder,
     FieldConfig,
+    FireCMSPlugin,
     Locale,
-    User
+    AppCheckOptions
 } from "../types";
 import { FirestoreTextSearchController } from "./types/text_search";
 import {
@@ -79,7 +79,7 @@ export type FirebaseCMSAppProps = {
      * view if `authentication` is enabled. You can pass Firebase providers strings,
      * such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or include additional
      * config such as scopes or custom parameters
-     * {@see FirebaseSignInOption}
+     * {@link FirebaseSignInOption}
      * Defaults to Google sign in only.
      */
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
@@ -102,6 +102,11 @@ export type FirebaseCMSAppProps = {
      * @param config
      */
     onFirebaseInit?: (config: object) => void;
+
+    /**
+     * Use this to enable Firebase App Check
+     */
+    appCheckOptions?: AppCheckOptions;
 
     /**
      * Primary color of the theme of the CMS
@@ -181,5 +186,11 @@ export type FirebaseCMSAppProps = {
      * Callback used to get analytics events from the CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+
+    /**
+     * Use plugins to modify the behaviour of the CMS.
+     * Currently, in ALPHA, and likely subject to change.
+     */
+    plugins?: FireCMSPlugin[];
 
 };

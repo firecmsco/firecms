@@ -2,13 +2,18 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
 
 import { TypeAnimation } from "react-type-animation";
-import { CTACaret, CTAOutlinedButtonWhiteMixin } from "../buttons";
+import {
+    ContainerMixin,
+    CTACaret,
+    CTAOutlinedButtonWhiteMixin
+} from "../utils";
+import { Panel } from "../general/Panel";
 
 export function ManageYour() {
-    return <section
-        className="relative py-16 md:py-20 bg-primary text-white p-4">
+
+    return <Panel color={"primary"}>
         <div
-            className="max-w-6xl mx-auto h1 relative items-center text-white uppercase ">
+            className={" h1 relative items-center text-white uppercase "}>
             <h4 className="h1 mb-4 text-white uppercase md:inline">
                 Manage your&nbsp;
             </h4>
@@ -17,6 +22,8 @@ export function ManageYour() {
                     "Products",
                     1000,
                     "Invoices",
+                    1000,
+                    "Inventory",
                     1000,
                     "Podcasts",
                     1000,
@@ -36,7 +43,7 @@ export function ManageYour() {
             />
         </div>
 
-        <div className={"max-w-6xl mt-4 mx-auto text-xl"}>
+        <div className={" mt-4 text-xl"}>
             <p>
                 FireCMS is more than a CMS, is a fully extendable app
                 that will become the heart of your project.
@@ -52,8 +59,7 @@ export function ManageYour() {
             </p>
         </div>
 
-
-        <div className={"max-w-6xl mt-4 mx-auto"}>
+        <div className={" mt-4 mx-auto"}>
             <a
                 className={CTAOutlinedButtonWhiteMixin}
                 href={useBaseUrl("features/")}
@@ -62,5 +68,5 @@ export function ManageYour() {
                 <CTACaret/>
             </a>
         </div>
-    </section>;
+    </Panel>;
 }

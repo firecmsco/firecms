@@ -38,8 +38,7 @@ export function TextFieldBinding<T extends string | number>({
                                                                 autoFocus,
                                                                 property,
                                                                 includeDescription,
-                                                                allowInfinity,
-                                                                shouldAlwaysRerender
+                                                                allowInfinity
                                                             }: TextFieldProps<T>) {
 
     let multiline: boolean | undefined;

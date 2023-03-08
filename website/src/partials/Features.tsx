@@ -24,7 +24,9 @@ import customFieldVideo from "@site/static/img/custom_fields.mp4";
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import { lightningIcon, settingsIcon } from "./icons";
+
+import SettingsIcon from "@site/static/img/icons/settings.svg";
+import { lightningIcon } from "./icons";
 
 function Features() {
 
@@ -146,7 +148,7 @@ function Features() {
 
                                 <div
                                     className="flex items-center justify-center text-white w-8 h-8 bg-gray-800 rounded-full shadow flex-shrink-0 ">
-                                    {settingsIcon}
+                                  <SettingsIcon/>
                                 </div>
                                 <h3 className="h3 m-0 ml-3 ">
                                     Easy to customise

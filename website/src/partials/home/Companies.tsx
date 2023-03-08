@@ -11,14 +11,14 @@ import SocialIncomeLogo from "@site/static/img/logos/social_income_logo.svg";
 import MindSwitchLogo from "@site/static/img/logos/mindswitch_logo.svg";
 import MindSwitchLogoDark
     from "@site/static/img/logos/mindswitch_logo_white.svg";
+import { Panel } from "../general/Panel";
 
 export function Companies() {
 
     const { colorMode } = useColorMode();
     const isDarkTheme = colorMode === "dark";
 
-    return <section
-        className="relative bg-gray-200 dark:bg-gray-800 p-16 flex flex-col items">
+    return <Panel color={"gray"}>
 
         <h2 className={"text-2xl text-center p-1 text-gray-500 dark:text-gray-400"}>
             Trusted by
@@ -58,6 +58,6 @@ export function Companies() {
                         className="w-52 h-min aspect-auto m-4"/>}
             </a>
         </div>
-    </section>;
+    </Panel>;
 
 }

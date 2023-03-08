@@ -6,8 +6,9 @@ import { EffectComposer, RenderPass } from "postprocessing";
 
 // @ts-ignore
 import useThemeContext from "@theme/hooks/useThemeContext";
+import { BufferGeometryUtils } from "./BufferGeometryUtils";
 
-// const CAMERA_FACTOR = 60;
+// const CAMERA_FACTOR = 40;
 const CAMERA_FACTOR = 180;
 const TIME_DILATION = 1 / 3;
 const BRIGHT = true;
@@ -65,7 +66,53 @@ export default function ThreeJSAnimationShader({
     function buildNightGeometry(radius: number, complexity: number) {
         const vertices: { pos: number[], norm: number[], uv: number[] }[] = [];
         const dodecahedron = new THREE.DodecahedronGeometry(radius, complexity);
-        return dodecahedron;
+
+        for (let i = 0; i < dodecahedron.attributes.position.count; i++) {
+            const x = dodecahedron.attributes.position.array[i * 3];
+            const y = dodecahedron.attributes.position.array[i * 3 + 1];
+            const z = dodecahedron.attributes.position.array[i * 3 + 2];
+                const pos = [
+                    x,
+                    y,
+                    z
+                ];
+                const norm = [
+                    dodecahedron.attributes.normal.array[i * 3],
+                    dodecahedron.attributes.normal.array[i * 3 + 1],
+                    dodecahedron.attributes.normal.array[i * 3 + 2]
+                ];
+                const uv = [
+                    dodecahedron.attributes.uv.array[i * 2],
+                    dodecahedron.attributes.uv.array[i * 2 + 1]
+                ];
+                vertices.push({
+                    pos,
+                    norm,
+                    uv
+                });
+        }
+
+        const positions: number[] = [];
+        const normals: number[] = [];
+        const uvs: number[] = [];
+    for (const vertex of vertices) {
+            positions.push(...vertex.pos);
+            normals.push(...vertex.norm);
+            uvs.push(...vertex.uv);
+        }
+
+        const geometry = new THREE.BufferGeometry();
+        const positionNumComponents = 3;
+        const normalNumComponents = 3;
+        const uvNumComponents = 2;
+        geometry.setAttribute(
+            "position",
+            new THREE.BufferAttribute(new Float32Array(positions), positionNumComponents));
+
+        const merged = BufferGeometryUtils.mergeVertices(geometry);
+        merged.computeVertexNormals();
+
+        return merged;
     }
 
     function buildMaterial(width: number, height: number, radius: number, displacementRatio: number, displacementArea: number, spread: number) {
@@ -114,7 +161,7 @@ export default function ThreeJSAnimationShader({
 
         const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, DISPLACEMENT_AREA, 6.0);
 
-        const geometry = buildNightGeometry(SPHERE_RADIUS, 20);
+        const geometry = buildNightGeometry(SPHERE_RADIUS, 22);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = .2;
         mesh.initialPositionY = 17;
@@ -229,7 +276,7 @@ export default function ThreeJSAnimationShader({
                 height: "100vh",
                 maxHeight: "900px",
                 width: "100vw",
-                maxWidth: "2000px",
+                // maxWidth: "2000px",
                 position: "fixed",
                 top: `0px`,
                 margin: "auto",
@@ -512,6 +559,7 @@ precision highp float;
 
 uniform float u_time;
 uniform float u_opacity;
+uniform float u_dark_mode;
 
 varying float v_displacement_amount;
 uniform float u_sphere_radius;
@@ -526,10 +574,13 @@ vec3 czm_saturation(vec3 rgb, float adjustment) {
 
 void main(){
     vec3 color = v_color;
-    color.rgb +=  v_displacement_amount * 0.3;
-    color.rg -=  (1.0 - v_position.z / u_sphere_radius) * 0.1;
-    color = czm_saturation(color, 1.2);
-    gl_FragColor = vec4(color,.8);
+    color.rgb +=  v_displacement_amount * 0.2;
+    if(u_dark_mode == 1.0){
+        color.rg -=  (1.0 - v_position.z / u_sphere_radius) * .2;
+    } else {
+    }
+        color = czm_saturation(color, 1.1);
+    gl_FragColor = vec4(color,.9);
 }
 `;
 }

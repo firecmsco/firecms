@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Layout from "@theme/Layout";
 import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
@@ -17,20 +17,13 @@ import FirebaseTeaser from "../partials/home/OpenSourceDetails";
 import FirebaseIntro from "../partials/home/FirebaseIntro";
 import { Companies } from "../partials/home/Companies";
 import Features from "../partials/Features";
+import FeaturesTeaser from "../partials/home/FeaturesTeaser";
+import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
+import { useEffect } from "react";
 
 // import { Newsletter } from "../partials/Newsletter";
 
 function Home() {
-    const context = useDocusaurusContext();
-    const { siteConfig = {} } = context;
-
-    const documentEnabled = ExecutionEnvironment.canUseDOM ? document : undefined
-
-    useEffect(() => {
-        if (ExecutionEnvironment.canUseDOM) {
-            AOS.init();
-        }
-    }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
 
     return (
         <Layout
@@ -57,9 +50,11 @@ function Home() {
                     <TechSplash/>
                     <Companies/>
 
-                    <Features/>
+                    <FeaturesTeaser/>
                     <FirebaseTeaser/>
 
+                    <Features/>
+                    <EnterpriseTeaser/>
 
                 </main>
 

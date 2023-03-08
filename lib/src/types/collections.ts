@@ -74,6 +74,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * If you are specifying your collection as code, the order is the same as the
      * one you define in `properties`. Additional columns are added at the
      * end of the list, if the order is not specified.
+     * You can use this prop to hide some properties from the table view.
      * Note that if you set this prop, other ways to hide fields, like
      * `hidden` in the property definition, will not work.
      */
@@ -297,7 +298,8 @@ export type WhereFilterOp =
  * Used to define filters applied in collections
  * @category Models
  */
-export type FilterValues<Key extends string> = Partial<Record<Key, [WhereFilterOp, any]>>;
+export type FilterValues<Key extends string> =
+    Partial<Record<Key, [WhereFilterOp, any]>>;
 
 /**
  * You can use this configuration to add additional fields to the data

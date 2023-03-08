@@ -1,44 +1,27 @@
-import React, { useCallback, useContext, useEffect, useMemo } from "react";
-import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
+import React, {useCallback, useContext, useEffect, useMemo} from "react";
+import {Box, Button, useMediaQuery, useTheme} from "@mui/material";
 import equal from "react-fast-compare";
-import {
-    getCellAlignment,
-    getPropertyColumnWidth,
-    getSubcollectionColumnId
-} from "./internal/common";
+import {getCellAlignment, getPropertyColumnWidth, getSubcollectionColumnId} from "./internal/common";
 import {
     AdditionalFieldDelegate,
     CollectionSize,
     Entity,
     EntityCollection,
-    FilterCombination,
     FilterValues,
     FireCMSContext,
     PropertyOrBuilder,
-    ResolvedEntityCollection, ResolvedProperties,
+    ResolvedEntityCollection,
     ResolvedProperty,
     SaveEntityProps,
-    User,
-    WhereFilterOp
+    User
 } from "../../../types";
-import { renderSkeletonText } from "../../../preview";
-import { CustomFieldValidator } from "../../../form/validation";
-import { PropertyTableCell } from "./internal/PropertyTableCell";
-import { ErrorBoundary } from "../ErrorBoundary";
-import {
-    saveEntityWithCallbacks,
-    useCollectionFetch,
-    useDataSource,
-    useFireCMSContext,
-    useSideEntityController
-} from "../../../hooks";
-import { PopupFormField } from "./internal/popup_field/PopupFormField";
-import {
-    CellRendererParams,
-    TableColumn,
-    TableColumnFilter, TableSize,
-    VirtualTable
-} from "../Table";
+import {renderSkeletonText} from "../../../preview";
+import {CustomFieldValidator} from "../../../form/validation";
+import {PropertyTableCell} from "./internal/PropertyTableCell";
+import {ErrorBoundary} from "../ErrorBoundary";
+import {saveEntityWithCallbacks, useDataSource, useFireCMSContext, useSideEntityController} from "../../../hooks";
+import {PopupFormField} from "./internal/popup_field/PopupFormField";
+import {CellRendererParams, TableColumn, TableColumnFilter, VirtualTable} from "../Table";
 import {
     getIconForProperty,
     getPropertyInPath,
@@ -48,31 +31,20 @@ import {
     resolveEnumValues,
     resolveProperty
 } from "../../util";
-import { getRowHeight } from "../Table/common";
-import {
-    EntityCollectionRowActions
-} from "./internal/EntityCollectionRowActions";
-import {
-    EntityCollectionTableController,
-    OnCellValueChange,
-    SelectedCellProps,
-    UniqueFieldValidator
-} from "./types";
+import {getRowHeight} from "../Table/common";
+import {EntityCollectionRowActions} from "./internal/EntityCollectionRowActions";
+import {EntityCollectionTableController, OnCellValueChange, SelectedCellProps, UniqueFieldValidator} from "./types";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import { setIn } from "formik";
-import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
-import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
-import { useDebouncedData } from "../../../firebase_app/hooks/useDebouncedData";
-import { useDataOrder } from "../../../hooks/data/useDataOrder";
-import { TableCell } from "./internal/TableCell";
+import {setIn} from "formik";
+import {CollectionTableToolbar} from "./internal/CollectionTableToolbar";
+import {EntityCollectionTableProps} from "./EntityCollectionTableProps";
+import {TableCell} from "./internal/TableCell";
 
 const DEFAULT_STATE = {} as any;
 
 export const EntityCollectionTableContext = React.createContext<EntityCollectionTableController<any>>(DEFAULT_STATE);
 
 export const useEntityCollectionTableController = () => useContext<EntityCollectionTableController<any>>(EntityCollectionTableContext);
-
-const DEFAULT_PAGE_SIZE = 50;
 
 /**
  * This component is in charge of rendering a collection table with a high
@@ -107,10 +79,9 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          filterCombinations,
          forceFilter,
          actionsStart,
-         ActionsBuilder,
+         actions,
          title,
          tableRowActionsBuilder,
-         entitiesDisplayedFirst,
          selectionController,
          highlightedEntities,
          onEntityClick,
@@ -119,13 +90,32 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          textSearchEnabled = false,
          hoverRow = true,
          inlineEditing = false,
+         tableController:
+             {
+                 data,
+                 dataLoading,
+                 noMoreToLoad,
+                 dataLoadingError,
+                 filterValues,
+                 setFilterValues,
+                 sortBy,
+                 setSortBy,
+                 searchString,
+                 setSearchString,
+                 clearFilter,
+                 itemCount,
+                 setItemCount,
+                 pageSize,
+                 paginationEnabled,
+                 checkFilterCombination
+             },
          ...collection
      }: EntityCollectionTableProps<M>) {
 
         const theme = useTheme();
         const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
         const disabledFilterChange = Boolean(forceFilter);
-        const selectedEntities = selectionController?.selectedEntities ?? highlightedEntities;
+        const selectedEntities = selectionController?.selectedEntities?.length > 0 ? selectionController?.selectedEntities : highlightedEntities;
 
         const tableKey = React.useRef<string>(Math.random().toString(36));
 
@@ -142,26 +132,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const [size, setSize] = React.useState<CollectionSize>(resolvedCollection.defaultSize ?? "m");
 
-        const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
-        const pageSize = typeof collection.pagination === "number" ? collection.pagination : DEFAULT_PAGE_SIZE;
-
-        const [searchString, setSearchString] = React.useState<string | undefined>();
-        const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
-
-        const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
-                                                    sortBy?: [string, "asc" | "desc"]) => isFilterCombinationValid(filterValues, filterCombinations, sortBy), [filterCombinations]);
-
-        const initialSortInternal = useMemo(() => {
-            if (initialSort && forceFilter && !checkFilterCombination(forceFilter, initialSort)) {
-                console.warn("Initial sort is not compatible with the force filter. Ignoring initial sort");
-                return undefined;
-            }
-            return initialSort;
-        }, [initialSort, forceFilter]);
-
-        const [filterValues, setFilterValues] = React.useState<FilterValues<Extract<keyof M, string>> | undefined>(forceFilter ?? initialFilter ?? undefined);
-        const [sortBy, setSortBy] = React.useState<[Extract<keyof M, string>, "asc" | "desc"] | undefined>(initialSortInternal);
-
         const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
         const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
         const [focused, setFocused] = React.useState<boolean>(false);
@@ -177,7 +147,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     name: subcollection.name,
                     width: 200,
                     dependencies: [],
-                    Builder: ({ entity }) => (
+                    Builder: ({entity}) => (
                         <Button color={"primary"}
                                 variant={"outlined"}
                                 startIcon={<KeyboardTabIcon
@@ -209,33 +179,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
              }) => dataSource.checkUniqueField(fullPath, name, value, property, entityId),
             [fullPath]);
 
-        const {
-            data: rawData,
-            dataLoading,
-            noMoreToLoad,
-            dataLoadingError
-        } = useCollectionFetch<M, UserType>({
-            path: fullPath,
-            collection,
-            filterValues,
-            sortBy,
-            searchString,
-            itemCount
-        });
-
-        const orderedData = useDataOrder({
-            data: rawData,
-            entitiesDisplayedFirst
-        });
-
-        // hack to fix Firestore listeners firing with incomplete data
-        const data = useDebouncedData(orderedData, {
-            filterValues,
-            sortBy,
-            searchString,
-            itemCount
-        });
-
         const loadNextPage = () => {
             if (!paginationEnabled || dataLoading || noMoreToLoad)
                 return;
@@ -247,9 +190,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             setItemCount(pageSize);
         }, [pageSize]);
 
-        const clearFilter = useCallback(() => setFilterValues(forceFilter ?? undefined), [forceFilter]);
-
-        const onRowClick = useCallback(({ rowData }: { rowData: Entity<M> }) => {
+        const onRowClick = useCallback(({rowData}: { rowData: Entity<M> }) => {
             if (inlineEditing)
                 return;
             return onEntityClick && onEntityClick(rowData);
@@ -266,8 +207,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, string, UserType>> = useMemo(() => {
             return (additionalFields
                 ? additionalFields
-                    .map((aC) => ({ [aC.id]: aC }))
-                    .reduce((a, b) => ({ ...a, ...b }), {})
+                    .map((aC) => ({[aC.id]: aC}))
+                    .reduce((a, b) => ({...a, ...b}), {})
                 : {}) as Record<string, AdditionalFieldDelegate<M, string, UserType>>;
         }, [additionalFields]);
 
@@ -367,7 +308,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             const value = additionalField.dependencies
                 ? Object.entries(entity.values)
                     .filter(([key, value]) => additionalField.dependencies!.includes(key as Extract<keyof M, string>))
-                    .reduce((a, b) => ({ ...a, ...b }), {})
+                    .reduce((a, b) => ({...a, ...b}), {})
                 : entity;
 
             if (additionalField.builder) {
@@ -444,7 +385,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             [additionalFields, disabledFilterChange, forceFilter, resolvedCollection.properties]);
 
         const idColumn: TableColumn = useMemo(() => ({
-            key: "id",
+            key: "id_ewcfedcswdf3",
             width: largeLayout ? 160 : 130,
             title: "ID",
             resizable: false,
@@ -487,7 +428,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         }, [additionalFieldsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
 
         const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
-            setFilterValues({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
+            setFilterValues({...updatedFilterValues, ...forceFilter} as FilterValues<any>);
         }, [forceFilter]);
 
         return (
@@ -521,18 +462,10 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         onSizeChanged={updateSize}
                         title={title}
                         actionsStart={actionsStart}
-                        actions={ActionsBuilder
-                            ? <ActionsBuilder
-                                path={fullPath}
-                                collection={collection}
-                                context={context}
-                                selectionController={selectionController}
-                                loadedEntities={data}
-                            />
-                            : undefined}
+                        actions={actions}
                         loading={dataLoading}/>
 
-                    <Box sx={{ flexGrow: 1 }}>
+                    <Box sx={{flexGrow: 1}}>
                         <VirtualTable
                             data={data}
                             columns={columns}
@@ -589,7 +522,7 @@ const onValueChange: OnCellValueChange<any, any> = ({
                                                         entity
                                                     }) => {
 
-    const updatedValues = setIn({ ...entity.values }, propertyKey, value);
+    const updatedValues = setIn({...entity.values}, propertyKey, value);
 
     const saveProps: SaveEntityProps = {
         path: fullPath,
@@ -614,39 +547,6 @@ const onValueChange: OnCellValueChange<any, any> = ({
     });
 
 };
-
-function isFilterCombinationValid<M>(
-    filterValues: FilterValues<Extract<keyof M, string>>,
-    indexes?: FilterCombination<string>[],
-    sortBy?: [string, "asc" | "desc"]
-): boolean {
-
-    const sortKey = sortBy ? sortBy[0] : undefined;
-    const sortDirection = sortBy ? sortBy[1] : undefined;
-
-    // Order by clause cannot contain a field with an equality filter available
-    const values: [WhereFilterOp, any][] = Object.values(filterValues) as [WhereFilterOp, any][];
-    if (sortKey && values.map((v) => v[0]).includes("==")) {
-        return false;
-    }
-
-    const filterKeys = Object.keys(filterValues);
-    const filtersCount = filterKeys.length;
-
-    if (filtersCount === 1 && (!sortKey || sortKey === filterKeys[0])) {
-        return true;
-    }
-
-    if (!indexes && filtersCount > 1) {
-        return false;
-    }
-
-    return !!indexes && indexes
-        .filter((compositeIndex) => !sortKey || sortKey in compositeIndex)
-        .find((compositeIndex) =>
-            Object.entries(filterValues).every(([key, value]) => compositeIndex[key] !== undefined && (!sortDirection || compositeIndex[key] === sortDirection))
-        ) !== undefined;
-}
 
 function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean) {
     const propertyKeys = Object.keys(collection.properties);

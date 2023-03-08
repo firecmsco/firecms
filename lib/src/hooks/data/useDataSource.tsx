@@ -1,11 +1,9 @@
+import { useContext } from "react";
 import { DataSource } from "../../types";
-import { useFireCMSContext } from "../useFireCMSContext";
+import { DataSourceContext } from "../../core/contexts/DataSourceContext";
 
 /**
  * Use this hook to get the datasource being used
  * @category Hooks and utilities
  */
-export function useDataSource(): DataSource {
-    const context = useFireCMSContext();
-    return context.dataSource;
-}
+export const useDataSource = (): DataSource => useContext(DataSourceContext);

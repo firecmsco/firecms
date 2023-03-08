@@ -823,7 +823,7 @@ export interface UploadedFileContext {
  * Used for previewing urls if the download file is known
  * @category Entity properties
  */
-export type PreviewType = "image" | "video" | "audio";
+export type PreviewType = "image" | "video" | "audio" | "file";
 
 /**
  * MIME types for storage fields

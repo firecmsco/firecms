@@ -12,16 +12,6 @@ import Features from "../partials/Features";
 // import { Newsletter } from "../partials/Newsletter";
 
 function FeaturesPage() {
-    const context = useDocusaurusContext();
-    const { siteConfig = {} } = context;
-
-    const documentEnabled = ExecutionEnvironment.canUseDOM ? document : undefined
-
-    useEffect(() => {
-        if (ExecutionEnvironment.canUseDOM) {
-            AOS.init();
-        }
-    }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
 
     return (
         <Layout

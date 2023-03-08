@@ -12,10 +12,10 @@ import { Box, Button, IconButton, Portal, Typography } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import {
-    DataSource,
     Entity,
     EntityCollection,
-    EntityValues, FireCMSContext,
+    EntityValues,
+    FireCMSPlugin,
     FormContext,
     PropertyFieldBindingProps,
     ResolvedEntityCollection,
@@ -103,7 +103,10 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         containerRef,
         x: popupLocation?.x,
         y: popupLocation?.y,
-        onMove: (x, y) => onMove({ x, y })
+        onMove: (x, y) => onMove({
+            x,
+            y
+        })
     });
 
     useEffect(
@@ -221,7 +224,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     if (!entity)
         return <></>;
 
-    const form = entity && (
+    let form = entity && (
         <Box sx={theme => ({
             overflow: "auto",
             borderRadius: `${theme.shape.borderRadius}px`,
@@ -284,8 +287,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                             context,
                             tableMode: true,
                             partOfArray: false,
-                            autoFocus: open,
-                            shouldAlwaysRerender: true
+                            autoFocus: open
                         }
                         : undefined;
 
@@ -337,6 +339,26 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             }
         </Box>
     );
+
+    const plugins = context.plugins;
+    if (plugins) {
+        plugins.forEach((plugin: FireCMSPlugin) => {
+            if (plugin.form?.provider) {
+                form = (
+                    <plugin.form.provider.Component
+                        status={"existing"}
+                        path={path}
+                        collection={collection}
+                        entity={entity}
+                        context={context}
+                        currentEntityId={entity.id}
+                        {...plugin.form.provider.props}>
+                        {form}
+                    </plugin.form.provider.Component>
+                );
+            }
+        });
+    }
 
     const draggable = (
         <Box
