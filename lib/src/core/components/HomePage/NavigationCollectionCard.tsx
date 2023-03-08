@@ -65,7 +65,9 @@ export function NavigationCollectionCard({
     }
 
     return (
-        <Paper variant={"outlined"}>
+        <Paper variant={"outlined"} sx={{
+            height: "100%"
+        }}>
 
             <CardActionArea
                 component={"div"}
@@ -73,7 +75,8 @@ export function NavigationCollectionCard({
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "flex-start",
-                    minHeight: 248
+                    minHeight: 248,
+                    height: "100%"
                 }}
                 onClick={() => {
                     onClick?.();

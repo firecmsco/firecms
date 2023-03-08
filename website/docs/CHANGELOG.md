@@ -11,6 +11,8 @@ title: Changelog
 - Added copy function to array views. Thanks to @guustmc for the PR!
 - The entity side dialog is now wider by default.
 - Small improvements to block properties. Now the first type is selected by default.
+- Fixed additional ordering added when multiple filter applied, which created a bug. 
+  Thanks to @juanleondev for the PR!
 
 ## [2.0.0-beta.2] - 2023-01-30
 
