@@ -216,12 +216,19 @@ export const useFirebaseAuthController = (
             });
     }, []);
 
+    const getAuthToken = useCallback(async (): Promise<string> => {
+        if (!loggedUser)
+            throw Error("User is not logged in");
+        return loggedUser.getIdToken();
+    }, [loggedUser]);
+
     return {
         user: loggedUser ?? null,
         authError,
         authProviderError,
         authLoading,
         initialLoading,
+        getAuthToken,
         confirmationResult,
         signOut: onSignOut,
         loginSkipped,

@@ -23,10 +23,11 @@ import {
     CONTAINER_FULL_WIDTH,
     FORM_CONTAINER_WIDTH
 } from "./common";
+import { useLargeSideLayout } from "./useLargeSideLayout";
 
 const NEW_URL_HASH = "new";
 
-export function getEntityViewWidth(props: EntitySidePanelProps<any, any>, small: boolean): string {
+export function getEntityViewWidth(props: EntitySidePanelProps<any>, small: boolean): string {
     if (small) return CONTAINER_FULL_WIDTH;
     const mainViewSelected = !props.selectedSubPath;
     const resolvedWidth: string | undefined = typeof props.width === "number" ? `${props.width}px` : props.width;
@@ -40,7 +41,7 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
     const initialised = useRef<boolean>(false);
 
     const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("lg"));
+    const largeLayout = useLargeSideLayout();
     const smallLayout: boolean = useMediaQuery(theme.breakpoints.down("sm"));
 
     // only on initialisation, create panels from URL
@@ -139,7 +140,7 @@ function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], n
     return sidePanels;
 }
 
-const propsToSidePanel = (props: EntitySidePanelProps<any, any>, navigation: NavigationContext, smallLayout: boolean): SideDialogPanelProps => {
+const propsToSidePanel = (props: EntitySidePanelProps<any>, navigation: NavigationContext, smallLayout: boolean): SideDialogPanelProps => {
 
     const collectionPath = removeInitialAndTrailingSlashes(props.path);
     const newPath = props.entityId

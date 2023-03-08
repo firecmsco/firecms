@@ -1,8 +1,8 @@
 import { Container, Grid } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
 import {
-    GenericPluginProps,
-    HomePageAdditionalCardsProps
+    PluginGenericProps,
+    PluginHomePageAdditionalCardsProps
 } from "../../../types";
 import { toArray } from "../../util/arrays";
 import { NavigationGroup } from "./NavigationGroup";
@@ -34,7 +34,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
 
     let additionalSections: React.ReactNode | undefined;
     if (context.plugins) {
-        const sectionProps: GenericPluginProps = {
+        const sectionProps: PluginGenericProps = {
             context
         };
         additionalSections = <>
@@ -57,8 +57,8 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
         <Container>
             {allGroups.map((group, index) => {
 
-                const AdditionalCards: React.ComponentType<HomePageAdditionalCardsProps>[] = [];
-                const actionProps: HomePageAdditionalCardsProps = {
+                const AdditionalCards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] = [];
+                const actionProps: PluginHomePageAdditionalCardsProps = {
                     group,
                     context
                 };

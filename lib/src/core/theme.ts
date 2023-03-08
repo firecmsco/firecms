@@ -1,5 +1,6 @@
 import { pink, red } from "@mui/material/colors";
 import { createTheme, Theme } from "@mui/material";
+import type {} from "@mui/lab/themeAugmentation";
 
 declare module "@mui/material/styles" {
     interface TypographyVariants {
@@ -105,6 +106,13 @@ export const createCMSDefaultTheme = (
                     }
                 }
             },
+            MuiLoadingButton: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: radius
+                    }
+                }
+            },
             MuiTableRow: {
                 styleOverrides: {
                     root: {
@@ -144,7 +152,7 @@ export const createCMSDefaultTheme = (
             MuiDialog: {
                 styleOverrides: {
                     paper: {
-                        borderRadius: radius
+                        backgroundImage: "inherit"
                     }
                 }
             },

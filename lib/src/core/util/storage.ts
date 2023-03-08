@@ -7,7 +7,7 @@ import {
 } from "../../types";
 import { randomString } from "./strings";
 
-export async function resolveFilenameString<M>(
+export async function resolveFilenameString<M extends object>(
     input: string | ((context: UploadedFileContext) => Promise<string> | string),
     storage: StorageConfig,
     values: EntityValues<M>,
@@ -39,7 +39,7 @@ export async function resolveFilenameString<M>(
     return result;
 }
 
-export function resolveStoragePathString<M>(
+export function resolveStoragePathString<M extends object>(
     input: string | ((context: UploadedFileContext) => string),
     storage: StorageConfig,
     values: EntityValues<M>,

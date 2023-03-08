@@ -7,6 +7,10 @@ title: Changelog
 ### Changed
 - Fixed bug regarding custom selection controllers.
 - Fix for default value not being set in array properties.
+- Enabled Firebase App Check. Thanks to @sengerts for the PR!
+- Added copy function to array views. Thanks to @guustmc for the PR!
+- The entity side dialog is now wider by default.
+- Small improvements to block properties. Now the first type is selected by default.
 
 ## [2.0.0-beta.2] - 2023-01-30
 

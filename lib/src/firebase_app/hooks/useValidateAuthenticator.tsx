@@ -3,7 +3,7 @@ import equal from "react-fast-compare";
 
 import { User as FirebaseUser } from "firebase/auth";
 
-import { DataSource, StorageSource } from "../../types";
+import { AppCheckTokenResult, DataSource, StorageSource } from "../../types";
 import { Authenticator, FirebaseAuthController } from "../types/auth";
 
 /**
@@ -12,18 +12,23 @@ import { Authenticator, FirebaseAuthController } from "../types/auth";
  * building your own custom {@link FireCMS} instance.
  * @param authController
  * @param authentication
+ * @param getAppCheckToken
  * @param storageSource
  * @param dataSource
  */
 export function useValidateAuthenticator({
                                              authController,
                                              authentication,
+                                             getAppCheckToken,
+                                             appCheckForceRefresh = false,
                                              storageSource,
                                              dataSource
                                          }:
                                              {
                                                  authController: FirebaseAuthController,
                                                  authentication?: boolean | Authenticator<FirebaseUser>,
+                                                 getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
+                                                 appCheckForceRefresh?: boolean,
                                                  dataSource: DataSource;
                                                  storageSource: StorageSource;
                                              }): {
@@ -68,6 +73,21 @@ export function useValidateAuthenticator({
         }
 
         const delegateUser = authController.user;
+
+        if (getAppCheckToken) {
+            try {
+                if (!await getAppCheckToken(appCheckForceRefresh)) {
+                    setNotAllowedError("App Check failed.");
+                    authController.signOut();
+                } else {
+                    console.log("App Check success.");
+                }
+            } catch (e: any) {
+                setNotAllowedError(e.message);
+                authController.signOut();
+            }
+        }
+
         if (authentication instanceof Function && delegateUser && !equal(checkedUserRef.current, delegateUser)) {
             setAuthLoading(true);
             try {
@@ -96,7 +116,7 @@ export function useValidateAuthenticator({
             setAuthVerified(true);
         }
 
-    }, [authController, authentication, dataSource, storageSource]);
+    }, [authController, authentication, getAppCheckToken, appCheckForceRefresh, dataSource, storageSource]);
 
     useEffect(() => {
         checkAuthentication();

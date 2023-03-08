@@ -2,7 +2,10 @@ import hash from "object-hash";
 import { GeoPoint } from "../../types";
 
 export const pick: <T>(obj: T, ...args: any[]) => T = (obj: any, ...args: any[]) => ({
-    ...args.reduce((res, key) => ({ ...res, [key]: obj[key] }), {})
+    ...args.reduce((res, key) => ({
+        ...res,
+        [key]: obj[key]
+    }), {})
 });
 
 export function isObject(item: any) {
@@ -28,6 +31,7 @@ export function mergeDeep<T extends {}>(target: T, source: any): T {
 }
 
 export function getValueInPath(o: object | undefined, path: string): any {
+    if (!o) return undefined;
     if (typeof o === "object") {
         if (path in o) {
             return (o)[path];
