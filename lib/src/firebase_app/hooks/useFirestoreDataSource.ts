@@ -111,14 +111,6 @@ export function useFirestoreDataSource({
                 });
         }
 
-        if (filter && orderBy && order) {
-            Object.entries(filter).forEach(([key, value]) => {
-                if (key !== orderBy) {
-                    queryParams.push(orderByClause(key, "asc"));
-                }
-            });
-        }
-
         if (orderBy && order) {
             queryParams.push(orderByClause(orderBy, order));
         }
