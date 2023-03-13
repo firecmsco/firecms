@@ -35,6 +35,7 @@ import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
+import { GearSetCollection } from "./collections/bug";
 
 function SampleApp() {
     const appCheckOptions: AppCheckOptions = {

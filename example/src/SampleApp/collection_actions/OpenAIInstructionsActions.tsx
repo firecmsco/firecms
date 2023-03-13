@@ -72,13 +72,11 @@ export function OpenAIInstructionsActions() {
                     </Stepper>
                     <Typography gutterBottom>
                         Try it out by clicking on <b>ADD BOOK</b> and
-                        the clicking on <b>ENHANCE</b>, then type your favourite
-                        book!
+                        then typing the title of your favourite book on the <b>ENHANCE input</b>
                     </Typography>
                     <Typography gutterBottom>
-                        You can also try deleting the <b>description</b> field
-                        of any book and clicking on <b>the magic wand</b> button
-                        of the field.
+                        You can also try finding an empty or incomplete field and clicking on <b>the magic wand</b> button
+                        of the field, to have it autofilled.
                     </Typography>
 
                     <Typography gutterBottom>

@@ -16,6 +16,7 @@ export const booksCollection = buildCollection({
     properties: {
         title: {
             name: "Title",
+            validation: { required: true },
             dataType: "string"
         },
         authors: {
@@ -24,6 +25,11 @@ export const booksCollection = buildCollection({
         },
         description: {
             name: "Description",
+            dataType: "string",
+            multiline: true
+        },
+        spanish_description: {
+            name: "Spanish description",
             dataType: "string",
             multiline: true
         },
@@ -43,6 +49,11 @@ export const booksCollection = buildCollection({
         num_pages: {
             name: "Num pages",
             dataType: "number"
+        },
+        created_at: {
+            name: "Created at",
+            dataType: "date",
+            autoValue: "on_create"
         }
         // isbn10: {
         //     name: "isbn10",
