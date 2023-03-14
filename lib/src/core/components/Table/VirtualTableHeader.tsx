@@ -117,10 +117,13 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                 {column.icon && column.icon(onHover || openFilter)}
                             </Box>
                             <Box sx={{
+                                display: "-webkit-box",
                                 margin: "0px 4px",
                                 overflow: "hidden",
                                 justifyContent: column.align,
-                                flexShrink: 1
+                                "-webkit-line-clamp": "2",
+                                "-webkit-box-orient": "vertical",
+                                textOverflow: "ellipsis"
                             }}>
                                 {column.title}
                             </Box>

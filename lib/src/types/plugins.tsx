@@ -5,7 +5,7 @@ import { PropsWithChildren } from "react";
 import { FieldConfigId } from "./field_config";
 import { FieldProps } from "./fields";
 import { CMSType, Property } from "./properties";
-import { EntityStatus } from "./entities";
+import { EntityStatus, EntityValues } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
 import { FormController } from "./form";
 

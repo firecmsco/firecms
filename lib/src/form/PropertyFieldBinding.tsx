@@ -11,8 +11,10 @@ import {
 } from "formik";
 
 import {
-    CMSType, PluginFieldBuilderParams,
-    FieldProps, FireCMSPlugin,
+    CMSType,
+    FieldProps,
+    FireCMSPlugin,
+    PluginFieldBuilderParams,
     PropertyFieldBindingProps,
     ResolvedProperty
 } from "../types";
@@ -20,7 +22,8 @@ import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
 import {
     ErrorBoundary,
-    getFieldConfig, getFieldId,
+    getFieldConfig,
+    getFieldId,
     isReadOnly,
     resolveProperty
 } from "../core";

@@ -90,8 +90,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             : <IconButton
                 color={"primary"}
                 disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                onClick={onMultipleDeleteClick}
-                size="large">
+                onClick={onMultipleDeleteClick}>
                 <Delete/>
             </IconButton>;
         multipleDeleteButton =

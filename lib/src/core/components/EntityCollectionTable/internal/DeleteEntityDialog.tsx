@@ -31,16 +31,16 @@ export interface DeleteEntityDialogProps<M extends Record<string, any>> {
 }
 
 export function DeleteEntityDialog<M extends Record<string, any>>({
-                                                                         entityOrEntitiesToDelete,
-                                                                         collection,
-                                                                         onClose,
-                                                                         open,
-                                                                         callbacks,
-                                                                         onEntityDelete,
-                                                                         onMultipleEntitiesDelete,
-                                                                         path,
-                                                                         ...other
-                                                                     }: DeleteEntityDialogProps<M>) {
+                                                                      entityOrEntitiesToDelete,
+                                                                      collection,
+                                                                      onClose,
+                                                                      open,
+                                                                      callbacks,
+                                                                      onEntityDelete,
+                                                                      onMultipleEntitiesDelete,
+                                                                      path,
+                                                                      ...other
+                                                                  }: DeleteEntityDialogProps<M>) {
 
     const dataSource = useDataSource();
     const snackbarController = useSnackbarController();
@@ -178,7 +178,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
     const dialogTitle = multipleEntities
         ? `${resolvedCollection.name}: Confirm multiple delete?`
-        : `Would you like to delete this ${resolvedCollection.name}?`;
+        : `Would you like to delete this ${resolvedCollection.singularName ?? resolvedCollection.name}?`;
 
     return (
         <Dialog

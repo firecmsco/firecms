@@ -326,7 +326,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         >
             {(props) => {
 
-                let actions: React.ReactNode[] | undefined;
+                const pluginActions: React.ReactNode[] = [];
 
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 const formController: FormController<M> = useMemo(() => ({
@@ -348,12 +348,12 @@ function EntityFormInternal<M extends Record<string, any>>({
                         currentEntityId: entityId,
                         formController
                     };
-                    actions = plugins.map((plugin, i) => (
+                    pluginActions.push(...plugins.map((plugin, i) => (
                         plugin.form?.Actions
                             ? <plugin.form.Actions
-                                key={`actions_${i}`} {...actionProps}/>
+                                key={`actions_${plugin.name}`} {...actionProps}/>
                             : null
-                    )).filter(Boolean);
+                    )).filter(Boolean));
                 }
 
                 return <>
@@ -377,7 +377,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                         })}
                     >
 
-                        {actions && <Box
+                        {pluginActions.length > 0 && <Box
                             sx={(theme) => ({
                                 width: "100%",
                                 display: "flex",
@@ -385,8 +385,6 @@ function EntityFormInternal<M extends Record<string, any>>({
                                 background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : alpha(theme.palette.background.paper, 0.1),
                                 backdropFilter: "blur(8px)",
                                 borderBottom: `1px solid ${theme.palette.divider}`,
-                                py: 1,
-                                px: 2,
                                 flexDirection: "row",
                                 alignItems: "center",
                                 position: "absolute",
@@ -402,21 +400,21 @@ function EntityFormInternal<M extends Record<string, any>>({
                                     mr: theme.spacing(2)
                                 }
                             })}>
-                            {actions}
+                            {pluginActions}
                         </Box>}
 
                         <Box
                             sx={(theme) => ({
                                 width: "100%",
-                                marginTop: theme.spacing(4 + (actions ? 4 : 0)),
+                                marginTop: theme.spacing(4 + (pluginActions ? 4 : 0)),
                                 paddingY: 2,
                                 display: "flex",
                                 alignItems: "center",
                                 [theme.breakpoints.down("lg")]: {
-                                    marginTop: theme.spacing(3 + (actions ? 4 : 0))
+                                    marginTop: theme.spacing(3 + (pluginActions ? 4 : 0))
                                 },
                                 [theme.breakpoints.down("md")]: {
-                                    marginTop: theme.spacing(2 + (actions ? 4 : 0))
+                                    marginTop: theme.spacing(2 + (pluginActions ? 4 : 0))
                                 }
                             })}>
 
