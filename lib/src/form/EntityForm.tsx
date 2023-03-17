@@ -329,10 +329,10 @@ function EntityFormInternal<M extends Record<string, any>>({
                 const pluginActions: React.ReactNode[] = [];
 
                 // eslint-disable-next-line react-hooks/rules-of-hooks
-                const formController: FormController<M> = useMemo(() => ({
+                const formController: FormController<M> = {
                     setFieldValue: props.setFieldValue,
                     values: props.values
-                }), [props.setFieldValue, props.values]);
+                };
 
                 if (onFormControllerChange) {
                     onFormControllerChange(formController);

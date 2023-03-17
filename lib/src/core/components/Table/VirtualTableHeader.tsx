@@ -121,8 +121,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                 margin: "0px 4px",
                                 overflow: "hidden",
                                 justifyContent: column.align,
-                                "-webkit-line-clamp": "2",
-                                "-webkit-box-orient": "vertical",
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: "vertical",
                                 textOverflow: "ellipsis"
                             }}>
                                 {column.title}
