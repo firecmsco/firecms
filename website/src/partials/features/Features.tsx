@@ -45,6 +45,18 @@ function Features() {
 
             <section className={ContainerMixin + " my-16"}>
 
+                <div
+                    className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-4 md:pr-8 flex justify-center flex-col h-full mb-16"
+                >
+                    <BrowserFrame>
+                        <video
+                            width="100%" loop autoPlay muted>
+                            <source src={inlineEditingVideo}
+                                    type="video/mp4"/>
+                        </video>
+                    </BrowserFrame>
+                </div>
+
                 <div className={"flex items-center mb-3 "}>
 
                     <div
@@ -74,21 +86,6 @@ function Features() {
                     name of the user by clicking on the name and editing
                     it.
                 </p>
-                <div
-                    className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-4 md:pr-8 flex justify-center flex-col h-full mt-16"
-                >
-                    <BrowserFrame>
-                        <video
-                            // style={{
-                            //     aspectRatio: 842 / 463,
-                            // }}
-                            width="100%" loop autoPlay muted>
-                            <source src={inlineEditingVideo}
-                                    type="video/mp4"/>
-                        </video>
-                    </BrowserFrame>
-                </div>
-
             </section>
             <TwoColumns
                 reverseSmall={true}
