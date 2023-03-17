@@ -348,6 +348,7 @@ export const EntityCollectionView = React.memo(
                     onEditClicked={onEditClicked}
                     onCopyClicked={createEnabled ? onCopyClicked : undefined}
                     onDeleteClicked={deleteEnabled ? onSingleDeleteClick : undefined}
+                    hideId={collection?.hideIdFromCollection}
                 />
             );
 

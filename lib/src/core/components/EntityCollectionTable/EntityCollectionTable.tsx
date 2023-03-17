@@ -1,7 +1,7 @@
-import React, {useCallback, useContext, useEffect, useMemo} from "react";
-import {Box, Button, useMediaQuery, useTheme} from "@mui/material";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
+import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import equal from "react-fast-compare";
-import {getCellAlignment, getPropertyColumnWidth, getSubcollectionColumnId} from "./internal/common";
+import { getCellAlignment, getPropertyColumnWidth, getSubcollectionColumnId } from "./internal/common";
 import {
     AdditionalFieldDelegate,
     CollectionSize,
@@ -15,13 +15,13 @@ import {
     SaveEntityProps,
     User
 } from "../../../types";
-import {renderSkeletonText} from "../../../preview";
-import {CustomFieldValidator} from "../../../form/validation";
-import {PropertyTableCell} from "./internal/PropertyTableCell";
-import {ErrorBoundary} from "../ErrorBoundary";
-import {saveEntityWithCallbacks, useDataSource, useFireCMSContext, useSideEntityController} from "../../../hooks";
-import {PopupFormField} from "./internal/popup_field/PopupFormField";
-import {CellRendererParams, TableColumn, TableColumnFilter, VirtualTable} from "../Table";
+import { renderSkeletonText } from "../../../preview";
+import { CustomFieldValidator } from "../../../form/validation";
+import { PropertyTableCell } from "./internal/PropertyTableCell";
+import { ErrorBoundary } from "../ErrorBoundary";
+import { saveEntityWithCallbacks, useDataSource, useFireCMSContext, useSideEntityController } from "../../../hooks";
+import { PopupFormField } from "./internal/popup_field/PopupFormField";
+import { CellRendererParams, TableColumn, TableColumnFilter, VirtualTable } from "../Table";
 import {
     getIconForProperty,
     getPropertyInPath,
@@ -31,14 +31,14 @@ import {
     resolveEnumValues,
     resolveProperty
 } from "../../util";
-import {getRowHeight} from "../Table/common";
-import {EntityCollectionRowActions} from "./internal/EntityCollectionRowActions";
-import {EntityCollectionTableController, OnCellValueChange, SelectedCellProps, UniqueFieldValidator} from "./types";
+import { getRowHeight } from "../Table/common";
+import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
+import { EntityCollectionTableController, OnCellValueChange, SelectedCellProps, UniqueFieldValidator } from "./types";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import {setIn} from "formik";
-import {CollectionTableToolbar} from "./internal/CollectionTableToolbar";
-import {EntityCollectionTableProps} from "./EntityCollectionTableProps";
-import {TableCell} from "./internal/TableCell";
+import { setIn } from "formik";
+import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
+import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
+import { TableCell } from "./internal/TableCell";
 
 const DEFAULT_STATE = {} as any;
 
@@ -147,7 +147,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     name: subcollection.name,
                     width: 200,
                     dependencies: [],
-                    Builder: ({entity}) => (
+                    Builder: ({ entity }) => (
                         <Button color={"primary"}
                                 variant={"outlined"}
                                 startIcon={<KeyboardTabIcon
@@ -190,7 +190,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             setItemCount(pageSize);
         }, [pageSize]);
 
-        const onRowClick = useCallback(({rowData}: { rowData: Entity<M> }) => {
+        const onRowClick = useCallback(({ rowData }: { rowData: Entity<M> }) => {
             if (inlineEditing)
                 return;
             return onEntityClick && onEntityClick(rowData);
@@ -207,8 +207,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, string, UserType>> = useMemo(() => {
             return (additionalFields
                 ? additionalFields
-                    .map((aC) => ({[aC.id]: aC}))
-                    .reduce((a, b) => ({...a, ...b}), {})
+                    .map((aC) => ({ [aC.id]: aC }))
+                    .reduce((a, b) => ({ ...a, ...b }), {})
                 : {}) as Record<string, AdditionalFieldDelegate<M, string, UserType>>;
         }, [additionalFields]);
 
@@ -308,7 +308,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             const value = additionalField.dependencies
                 ? Object.entries(entity.values)
                     .filter(([key, value]) => additionalField.dependencies!.includes(key as Extract<keyof M, string>))
-                    .reduce((a, b) => ({...a, ...b}), {})
+                    .reduce((a, b) => ({ ...a, ...b }), {})
                 : entity;
 
             if (additionalField.builder) {
@@ -428,7 +428,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         }, [additionalFieldsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
 
         const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
-            setFilterValues({...updatedFilterValues, ...forceFilter} as FilterValues<any>);
+            setFilterValues({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
         }, [forceFilter]);
 
         return (
@@ -465,7 +465,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         actions={actions}
                         loading={dataLoading}/>
 
-                    <Box sx={{flexGrow: 1}}>
+                    <Box sx={{ flexGrow: 1 }}>
                         <VirtualTable
                             data={data}
                             columns={columns}
@@ -522,7 +522,7 @@ const onValueChange: OnCellValueChange<any, any> = ({
                                                         entity
                                                     }) => {
 
-    const updatedValues = setIn({...entity.values}, propertyKey, value);
+    const updatedValues = setIn({ ...entity.values }, propertyKey, value);
 
     const saveProps: SaveEntityProps = {
         path: fullPath,

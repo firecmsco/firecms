@@ -44,7 +44,8 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                                                                               toggleEntitySelection,
                                                                               onCopyClicked,
                                                                               onEditClicked,
-                                                                              onDeleteClicked
+                                                                              onDeleteClicked,
+                                                                              hideId
                                                                           }:
                                                                               {
                                                                                   entity: Entity<M>,
@@ -57,6 +58,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                                                                                   onEditClicked?: (selectedEntity: Entity<M>) => void,
                                                                                   onCopyClicked?: (selectedEntity: Entity<M>) => void,
                                                                                   onDeleteClicked?: (selectedEntity: Entity<M>) => void,
+                                                                                  hideId?: boolean
                                                                               }) {
 
     const theme = useTheme();
@@ -184,7 +186,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
 
                 </Box>}
 
-            {size !== "xs" && (
+            {!hideId && size !== "xs" && (
                 <Box sx={{
                     width: 138,
                     textAlign: "center",

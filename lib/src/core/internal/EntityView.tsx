@@ -422,6 +422,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 entity={usedEntity}
                 onIdChange={onIdChange}
                 onFormControllerChange={setFormController}
+                hideId={collection.hideIdFromForm}
             />;
             if (plugins) {
                 plugins.forEach((plugin: FireCMSPlugin) => {

@@ -242,9 +242,10 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
             isSelected={isSelected}
             selectionEnabled={multiselect}
             toggleEntitySelection={toggleEntitySelection}
+            hideId={collection?.hideIdFromCollection}
         />;
 
-    }, [multiselect, selectionController.selectedEntities, toggleEntitySelection]);
+    }, [multiselect, selectionController.selectedEntities, toggleEntitySelection, collection?.hideIdFromCollection]);
 
     const onDone = useCallback((event: React.SyntheticEvent) => {
         event.stopPropagation();

@@ -102,6 +102,8 @@ export interface EntityFormProps<M extends Record<string, any>> {
 
     onFormControllerChange?: (formController: FormController<M>) => void;
 
+    hideId?: boolean;
+
 }
 
 /**
@@ -134,7 +136,8 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                onModified,
                                                                onValuesChanged,
                                                                onIdChange,
-                                                               onFormControllerChange
+                                                               onFormControllerChange,
+                                                               hideId
                                                            }: EntityFormProps<M>) {
 
     const context = useFireCMSContext();
@@ -428,12 +431,13 @@ function EntityFormInternal<M extends Record<string, any>>({
                             </Typography>
                         </Box>
 
-                        <CustomIdField customId={collection.customId}
-                                       entityId={entityId}
-                                       status={status}
-                                       onChange={setEntityId}
-                                       error={entityIdError}
-                                       entity={entity}/>
+                        {!hideId &&
+                            <CustomIdField customId={collection.customId}
+                                           entityId={entityId}
+                                           status={status}
+                                           onChange={setEntityId}
+                                           error={entityIdError}
+                                           entity={entity}/>}
 
                         {entityId && <InnerForm
                             {...props}
@@ -564,7 +568,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
         <Form onSubmit={handleSubmit}
               noValidate>
-            <Box sx={{ mt: 6 }}
+            <Box sx={{ mt: 4 }}
                  ref={formRef}>
 
                 {formFields}

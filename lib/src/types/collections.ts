@@ -222,6 +222,16 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * You can also use this collection as a reference target.
      */
     hideFromNavigation?: boolean;
+
+    /**
+     * Should the ID of this collection be hidden from the form view.
+     */
+    hideIdFromForm?: boolean;
+
+    /**
+     * Should the ID of this collection be hidden from the grid view.
+     */
+    hideIdFromCollection?: boolean;
 }
 
 /**
