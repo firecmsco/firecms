@@ -44,6 +44,7 @@ export type ReferencePreviewProps = {
     previewProperties?: string[];
     onClick?: () => void;
     onHover?: boolean;
+    allowEntityNavigation?: boolean;
 };
 
 /**
@@ -56,7 +57,8 @@ function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewP
         prevProps.size === nextProps.size &&
         prevProps.onHover === nextProps.onHover &&
         prevProps.reference?.id === nextProps.reference?.id &&
-        prevProps.reference?.path === nextProps.reference?.path
+        prevProps.reference?.path === nextProps.reference?.path &&
+        prevProps.allowEntityNavigation === nextProps.allowEntityNavigation
         ;
 }
 
@@ -66,7 +68,8 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                                                      previewProperties,
                                                                      size,
                                                                      onHover,
-                                                                     onClick
+                                                                     onClick,
+                                                                     allowEntityNavigation = true
                                                                  }: ReferencePreviewProps) {
 
     const context = useFireCMSContext();
@@ -176,7 +179,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                 <Box sx={{
                     my: size === "tiny" ? 0.5 : 1
                 }}>
-                    {!disabled && usedEntity &&
+                    {!disabled && usedEntity && allowEntityNavigation &&
                         <Tooltip title={`See details for ${usedEntity.id}`}>
                             <IconButton
                                 color={"inherit"}

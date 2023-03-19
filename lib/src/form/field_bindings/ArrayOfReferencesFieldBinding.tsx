@@ -9,7 +9,12 @@ import {
 } from "../../types";
 import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
-import { ErrorView, ExpandablePanel, getReferenceFrom } from "../../core";
+import {
+    ErrorView,
+    ExpandablePanel,
+    getIconForProperty,
+    getReferenceFrom
+} from "../../core";
 
 import {
     useClearRestoreValue,
@@ -102,7 +107,8 @@ export function ArrayOfReferencesFieldBinding({
     }, [ofProperty.path, ofProperty.previewProperties, onHover, value]);
 
     const title = (
-        <LabelWithIcon property={property}/>
+        <LabelWithIcon icon={getIconForProperty(property)}
+                       title={property.name}/>
     );
 
     const body = <>

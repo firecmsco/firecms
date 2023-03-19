@@ -7,6 +7,7 @@ import {
     TableSize,
     TableWhereFilterOp
 } from "./VirtualTableProps";
+import { FilterFormFieldProps } from "./VirtualTableHeader";
 
 export type VirtualTableRowProps<T> = {
     style: any,
@@ -34,4 +35,5 @@ export type VirtualTableContextProps<T extends any> = {
     sortByProperty?: string;
     customView?: React.ReactNode,
     hoverRow: boolean;
+    createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
 };

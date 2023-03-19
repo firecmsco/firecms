@@ -43,38 +43,42 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
                                                                             ...rest
                                                                         }: InnerElementProps, ref) => {
 
-    return (
-        <VirtualListContext.Consumer>
-            {(virtualTableProps) => {
-                const customView = virtualTableProps.customView;
-                if (customView) {
-                    return <Box sx={{
-                        display: "flex",
-                        height: "100%",
-                        flexDirection: "column",
-                        overflow: "auto"
-                    }}>
-                        <VirtualTableHeaderRow {...virtualTableProps}/>
-                        <Box sx={{
-                            flexGrow: 1,
-                            position: "sticky",
-                            left: 0
-                        }}>
-                            {customView}
-                        </Box>
-                    </Box>
-                }
-                return (
-                    <div ref={ref}
-                         {...rest}>
-                        <VirtualTableHeaderRow {...virtualTableProps}/>
-                        {children}
-                    </div>
-                );
-            }}
-        </VirtualListContext.Consumer>
-    );
-});
+        return (
+            <VirtualListContext.Consumer>
+                {(virtualTableProps) => {
+                    const customView = virtualTableProps.customView;
+                    return (
+                        <>
+                            <div style={{
+                                position: "relative",
+                                height: "100%"
+                            }}>
+                                <div ref={ref}
+                                     {...rest}
+                                     style={{
+                                         ...rest?.style,
+                                         minHeight: "100%",
+                                         position: "relative"
+                                     }}>
+                                    <VirtualTableHeaderRow {...virtualTableProps}/>
+                                    {!customView && children}
+                                </div>
+                            </div>
+                            {customView && <div style={{
+                                position: "sticky",
+                                top: "56px",
+                                flexGrow: 1,
+                                height: "calc(100% - 56px)",
+                                marginTop: "calc(56px - 100vh)",
+                                left: 0
+                            }}>{customView}</div>}
+                        </>
+                    );
+                }}
+            </VirtualListContext.Consumer>
+        );
+    })
+;
 
 /**
  * This is a Table component that allows displaying arbitrary data, not
@@ -84,7 +88,6 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
  *
  * @category Components
  */
-
 export const VirtualTable = React.memo<VirtualTableProps<any>>(
     function VirtualTable<T extends Record<string, any>>({
                                                              data,
@@ -103,7 +106,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              onSortByUpdate,
                                                              loading,
                                                              cellRenderer,
-                                                             hoverRow
+                                                             hoverRow,
+                                                             createFilterField
                                                          }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
@@ -227,11 +231,13 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const buildErrorView = useCallback(() => (
             <Box
                 sx={{
-                    height: "100%",
+                    height: "calc(100% - 64px)",
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    justifyContent: "center"
+                    justifyContent: "center",
+                    position: "sticky",
+                    left: 0
                 }}>
 
                 <Typography variant={"h6"}>
@@ -248,22 +254,19 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const buildEmptyView = useCallback(() => {
             if (loading)
                 return <CircularProgressCenter/>;
-            return (
-                <Box display="flex"
-                     flexDirection={"column"}
-                     alignItems="center"
-                     justifyContent="center"
-                     width={"100%"}
-                     height={"100%"}
-                     padding={2}>
-                    <Box padding={1}>
-                        <AssignmentIcon/>
-                    </Box>
-                    <Typography>
-                        {emptyMessage}
-                    </Typography>
-                </Box>
-            );
+            return <Box sx={{
+                display: "flex",
+                overflow: "auto",
+                alignItems: "center",
+                justifyContent: "center",
+                p: 2,
+                gap: 2
+            }}>
+                <AssignmentIcon/>
+                <Typography>
+                    {emptyMessage}
+                </Typography>
+            </Box>;
         }, [emptyMessage, loading]);
 
         const empty = !loading && (data?.length ?? 0) === 0;
@@ -273,7 +276,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             <Box
                 ref={measureRef}
                 sx={{
-                    height: "100%", width: "100%"
+                    height: "100%",
+                    width: "100%"
                 }}>
                 <VirtualListContext.Provider
                     value={{
@@ -290,7 +294,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                         onColumnSort,
                         onFilterUpdate: onFilterUpdateInternal,
                         sortByProperty,
-                        hoverRow: hoverRow ?? false
+                        hoverRow: hoverRow ?? false,
+                        createFilterField
                     }}>
 
                     <MemoizedList
@@ -329,7 +334,10 @@ function MemoizedList({
     itemSize: number;
 }) {
 
-    const Row = useCallback(({ index, style }: any) => {
+    const Row = useCallback(({
+                                 index,
+                                 style
+                             }: any) => {
         return <VirtualListContext.Consumer>
             {({
                   onRowClick,

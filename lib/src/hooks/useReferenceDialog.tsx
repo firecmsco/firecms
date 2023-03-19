@@ -1,5 +1,5 @@
 import { useSideDialogsController } from "./useSideDialogsController";
-import { ReferenceDialogProps, ReferenceSelectionView } from "../core";
+import { ReferenceSelectionInnerProps, ReferenceSelectionInner } from "../core";
 import { useCallback } from "react";
 import { useNavigationContext } from "./useNavigationContext";
 
@@ -13,7 +13,7 @@ import { useNavigationContext } from "./useNavigationContext";
  * This is the same hook used internally when a reference property is defined.
  * @category Hooks and utilities
  */
-export function useReferenceDialog<M extends Record<string, any>>(referenceDialogProps: Omit<ReferenceDialogProps<M>, "path"> & {
+export function useReferenceDialog<M extends Record<string, any>>(referenceDialogProps: Omit<ReferenceSelectionInnerProps<M>, "path"> & {
     path?: string | false;
     onClose?: () => void;
 }): { open: () => void; close: () => void } {
@@ -32,8 +32,8 @@ export function useReferenceDialog<M extends Record<string, any>>(referenceDialo
             sideDialogsController.open({
                 key: `reference_${referenceDialogProps.path}`,
                 component:
-                    <ReferenceSelectionView
-                        {...referenceDialogProps as ReferenceDialogProps<M>}
+                    <ReferenceSelectionInner
+                        {...referenceDialogProps as ReferenceSelectionInnerProps<M>}
                         collection={usedCollection}/>,
                 width: "90vw",
                 onClose: () => {

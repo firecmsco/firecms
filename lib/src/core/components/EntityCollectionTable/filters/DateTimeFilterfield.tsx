@@ -12,7 +12,7 @@ import Tooltip from "@mui/material/Tooltip/Tooltip";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
-import { TableWhereFilterOp } from "../VirtualTableProps";
+import { TableWhereFilterOp } from "../../Table";
 
 interface DateTimeFilterFieldProps {
     name: string,
@@ -86,7 +86,7 @@ export function DateTimeFilterField({
 
     return (
 
-        <Box display={"flex"} width={340} alignItems={"center"}>
+        <Box display={"flex"} width={440} alignItems={"center"}>
             <Box width={80}>
                 <FormControl fullWidth>
                     <MuiSelect value={operation}

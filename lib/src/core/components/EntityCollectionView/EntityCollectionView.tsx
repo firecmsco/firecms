@@ -103,6 +103,8 @@ export const EntityCollectionView = React.memo(
         const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
+        const [lastDeleteTimestamp, setLastDeleteTimestamp] = React.useState<number>(0);
+
         const unselectNavigatedEntity = useCallback(() => {
             const currentSelection = selectedNavigationEntity;
             setTimeout(() => {
@@ -142,7 +144,8 @@ export const EntityCollectionView = React.memo(
             fullPath,
             collection,
             entitiesDisplayedFirst: [],
-            isFilterCombinationValid: isFilterCombinationValidForFirestore
+            isFilterCombinationValid: isFilterCombinationValidForFirestore,
+            lastDeleteTimestamp
         });
 
         const onEntityClick = useCallback((clickedEntity: Entity<M>) => {
@@ -191,6 +194,7 @@ export const EntityCollectionView = React.memo(
                 path: fullPath
             });
             setSelectedEntities((selectedEntities) => selectedEntities.filter((e) => e.id !== entity.id));
+            setLastDeleteTimestamp(Date.now());
         }, [context, fullPath, setSelectedEntities]);
 
         const internalOnMultipleEntitiesDelete = useCallback((_path: string, entities: Entity<M>[]) => {
@@ -199,6 +203,7 @@ export const EntityCollectionView = React.memo(
             });
             setSelectedEntities([]);
             setDeleteEntityClicked(undefined);
+            setLastDeleteTimestamp(Date.now());
         }, [setSelectedEntities]);
 
         const onCollectionModifiedForUser = useCallback((path: string, partialCollection: PartialEntityCollection<M>) => {
@@ -266,7 +271,7 @@ export const EntityCollectionView = React.memo(
                             id={"info-dialog"}
                             open={open}
                             anchorEl={anchorEl}
-                            elevation={1}
+                            elevation={2}
                             onClose={() => {
                                 setAnchorEl(null);
                             }}

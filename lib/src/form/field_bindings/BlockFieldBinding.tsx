@@ -23,7 +23,7 @@ import {
     FormContext,
     ResolvedProperty
 } from "../../types";
-import { ExpandablePanel } from "../../core";
+import { ExpandablePanel, getIconForProperty } from "../../core";
 import {
     DEFAULT_ONE_OF_TYPE,
     DEFAULT_ONE_OF_VALUE
@@ -78,7 +78,8 @@ export function BlockFieldBinding<T extends Array<any>>({
     }, [context, lastAddedId, property.oneOf, propertyKey, value]);
 
     const title = (
-        <LabelWithIcon property={property}/>
+        <LabelWithIcon icon={getIconForProperty(property)}
+                       title={property.name}/>
     );
 
     const body = <ArrayContainer value={value}

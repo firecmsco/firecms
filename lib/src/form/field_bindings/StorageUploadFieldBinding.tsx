@@ -16,7 +16,7 @@ import { PreviewSize } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 
-import { isReadOnly } from "../../core";
+import { getIconForProperty, isReadOnly } from "../../core";
 import clsx from "clsx";
 import {
     useClearRestoreValue,
@@ -163,7 +163,8 @@ export function StorageUploadFieldBinding({
 
             {!tableMode &&
                 <FormHelperText filled>
-                    <LabelWithIcon property={property}/>
+                    <LabelWithIcon icon={getIconForProperty(property)}
+                                   title={property.name}/>
                 </FormHelperText>}
 
             <StorageUpload
@@ -181,12 +182,12 @@ export function StorageUploadFieldBinding({
                 storage={storage}
                 multipleFilesSupported={multipleFilesSupported}/>
 
-                {includeDescription &&
+            {includeDescription &&
                 <FieldDescription property={property}/>}
 
-                {showError && <FormHelperText>{error}</FormHelperText>}
+            {showError && <FormHelperText>{error}</FormHelperText>}
 
-            </FormControl>
+        </FormControl>
     );
 }
 
@@ -363,7 +364,7 @@ function FileDropComponent({
 
 export interface StorageUploadProps {
     value: StorageFieldItem[];
-    setInternalValue: (v:StorageFieldItem[]) => void;
+    setInternalValue: (v: StorageFieldItem[]) => void;
     name: string;
     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>;
     onChange: (value: string | string[] | null) => void;
@@ -448,7 +449,7 @@ export function StorageUpload({
         ? "Drag 'n' drop some files here, or click to select files"
         : "Drag 'n' drop a file here, or click to select one";
 
-    const renderProperty:ResolvedStringProperty = multipleFilesSupported
+    const renderProperty: ResolvedStringProperty = multipleFilesSupported
         ? (property as ArrayProperty<string[]>).of as ResolvedStringProperty
         : property as ResolvedStringProperty;
 

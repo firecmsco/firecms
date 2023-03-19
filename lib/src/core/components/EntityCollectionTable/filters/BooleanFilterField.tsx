@@ -1,7 +1,7 @@
 import React from "react";
 import { styled } from "@mui/material/styles";
 import { Checkbox, FormControlLabel, Theme } from "@mui/material";
-import { TableWhereFilterOp } from "../VirtualTableProps";
+import { TableWhereFilterOp } from "../../Table";
 
 const PREFIX = "BooleanFilterField";
 
@@ -40,7 +40,6 @@ export function BooleanFilterField({
                                        value,
                                        setValue
                                    }: BooleanFieldProps) {
-
 
     function updateFilter(val?: boolean) {
         if (val !== undefined) {

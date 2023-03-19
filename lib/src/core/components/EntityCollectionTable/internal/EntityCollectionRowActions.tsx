@@ -166,7 +166,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                         anchorEl={anchorEl}
                         open={Boolean(anchorEl)}
                         onClose={closeMenu}
-                        elevation={1}
+                        elevation={2}
                     >
                         {deleteEnabled && <MenuItem onClick={onDeleteClick}>
                             <ListItemIcon>

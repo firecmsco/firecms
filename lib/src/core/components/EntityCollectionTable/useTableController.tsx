@@ -45,6 +45,7 @@ export type TableControllerProps<M extends Record<string, any> = any> = {
         filter: FilterValues<Extract<keyof M, string>>,
         sort?: [string, "asc" | "desc"],
         filterCombinations?: FilterCombination<Extract<keyof M, string>>[]) => boolean;
+    lastDeleteTimestamp?: number;
 }
 
 export function useTableController<M extends Record<string, any> = any, UserType extends User = User>(
@@ -52,7 +53,8 @@ export function useTableController<M extends Record<string, any> = any, UserType
         fullPath,
         collection,
         entitiesDisplayedFirst,
-        isFilterCombinationValid
+        isFilterCombinationValid,
+        lastDeleteTimestamp
     }: TableControllerProps<M>)
     : TableController<M> {
 
@@ -108,7 +110,8 @@ export function useTableController<M extends Record<string, any> = any, UserType
     const data = useDebouncedData(orderedData, {
         filterValues,
         sortBy,
-        searchString
+        searchString,
+        lastDeleteTimestamp
     });
 
     return {

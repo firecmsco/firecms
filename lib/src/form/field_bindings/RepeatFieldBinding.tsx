@@ -6,6 +6,7 @@ import { ArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
+import { getIconForProperty } from "../../core";
 
 /**
  * Generic array field that allows reordering and renders the child property
@@ -72,7 +73,8 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                            includeAddButton={!property.disabled}
                                            newDefaultEntry={property.of.defaultValue}/>;
 
-    const title = (<LabelWithIcon property={property}/>);
+    const title = (<LabelWithIcon icon={getIconForProperty(property)}
+                                 title={property.name}/>);
 
     return (
 

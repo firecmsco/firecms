@@ -431,7 +431,7 @@ function ArrayItemOptions({
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={closeMenu}
-                elevation={1}
+                elevation={2}
             >
 
                 <MenuItem dense onClick={() => remove(index)}>

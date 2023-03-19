@@ -40,7 +40,7 @@ import {
 /**
  * @category Components
  */
-export interface ReferenceDialogProps<M extends Record<string, any>> {
+export interface ReferenceSelectionInnerProps<M extends Record<string, any>> {
 
     /**
      * Allow multiple selection of values
@@ -103,7 +103,7 @@ export interface ReferenceDialogProps<M extends Record<string, any>> {
  * You probably want to open this dialog as a side view using {@link useReferenceDialog}
  * @category Components
  */
-export function ReferenceSelectionView<M extends Record<string, any>>(
+export function ReferenceSelectionInner<M extends Record<string, any>>(
     {
         onSingleEntitySelected,
         onMultipleEntitiesSelected,
@@ -114,7 +114,7 @@ export function ReferenceSelectionView<M extends Record<string, any>>(
         description,
         forceFilter,
         maxSelection
-    }: ReferenceDialogProps<M>) {
+    }: ReferenceSelectionInnerProps<M>) {
 
     const sideDialogContext = useSideDialogContext();
     const sideEntityController = useSideEntityController();

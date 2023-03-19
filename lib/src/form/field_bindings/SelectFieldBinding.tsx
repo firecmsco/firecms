@@ -16,6 +16,7 @@ import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { isEnumValueDisabled } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview";
+import { getIconForProperty } from "../../core";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -70,7 +71,8 @@ export function SelectFieldBinding<T extends EnumType>({
         >
 
             <InputLabel id={`${propertyKey}-select-label`}>
-                <LabelWithIcon property={property}/>
+                <LabelWithIcon icon={getIconForProperty(property)}
+                                 title={property.name}/>
             </InputLabel>
 
             <MuiSelect

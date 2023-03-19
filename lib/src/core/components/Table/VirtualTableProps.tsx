@@ -1,5 +1,6 @@
 import React from "react";
 import { EnumValueConfig, WhereFilterOp } from "../../../types";
+import { FilterFormFieldProps } from "./VirtualTableHeader";
 
 export type OnRowClickParams<T extends Record<string, any>> = { rowData: T; rowIndex: number; event: React.SyntheticEvent };
 
@@ -109,13 +110,15 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      */
     hoverRow?: boolean;
 
+    createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
+
 }
 
 /**
  * @see Table
  * @category Components
  */
-export type TableColumnFilter = {
+export type TableColumnFilter<T> = {
     dataType: "number" | "string" | "boolean" | "date"
     isArray?: boolean;
     title?: string;
@@ -138,7 +141,7 @@ export type CellRendererParams<T extends any> = {
  * @see Table
  * @category Components
  */
-export interface TableColumn {
+export interface TableColumn<CustomProps extends any = any> {
 
     /**
      * Data key for the cell value, could be "a.b.c"
@@ -173,7 +176,7 @@ export interface TableColumn {
     /**
      *
      */
-    filter?: TableColumnFilter;
+    filter?: boolean;
 
     /**
      * Alignment of the column cell
@@ -191,6 +194,7 @@ export interface TableColumn {
      */
     resizable?: boolean;
 
+    custom?: CustomProps;
 }
 
 /**
@@ -225,7 +229,7 @@ export type TableFilterValues<Key extends string> = Partial<Record<Key, [WhereFi
 
 /**
  * Filter conditions in a `Query.where()` clause are specified using the
- * strings '<', '<=', '==', '>=', '>', 'array-contains', 'in', and 'array-contains-any'.
+ * strings '<', '<=', '==', '>=', '>', 'array-contains', 'in', 'not-in', and 'array-contains-any'.
  * @see Table
  * @category Models
  */
@@ -238,4 +242,5 @@ export type TableWhereFilterOp =
     | ">"
     | "array-contains"
     | "in"
+    | "not-in"
     | "array-contains-any";

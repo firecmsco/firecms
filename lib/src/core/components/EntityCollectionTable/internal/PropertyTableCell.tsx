@@ -72,19 +72,19 @@ function isStorageProperty<T>(property: ResolvedProperty) {
 
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
     function PropertyTableCell<T extends CMSType, M extends Record<string, any>>({
-                                                                                 propertyKey,
-                                                                                 columnIndex,
-                                                                                 customFieldValidator,
-                                                                                 value,
-                                                                                 property,
-                                                                                 align,
-                                                                                 width,
-                                                                                 height,
-                                                                                 collection,
-                                                                                 path,
-                                                                                 entity,
-                                                                                 readonly
-                                                                             }: PropertyTableCellProps<T, M>) {
+                                                                                     propertyKey,
+                                                                                     columnIndex,
+                                                                                     customFieldValidator,
+                                                                                     value,
+                                                                                     property,
+                                                                                     align,
+                                                                                     width,
+                                                                                     height,
+                                                                                     collection,
+                                                                                     path,
+                                                                                     entity,
+                                                                                     readonly
+                                                                                 }: PropertyTableCellProps<T, M>) {
 
         const dataSource = useDataSource();
         const context = useFireCMSContext();
@@ -315,8 +315,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                   updateValue={updateValue}
                     />;
                     fullHeight = true;
-                } else if (!stringProperty.storage && !stringProperty.markdown) {
-                    const multiline = !!stringProperty.multiline;
+                } else if (!stringProperty.storage) {
+                    const multiline = Boolean(stringProperty.multiline) || Boolean(stringProperty.markdown);
                     innerComponent = <TableInput error={error}
                                                  disabled={disabled}
                                                  multiline={multiline}

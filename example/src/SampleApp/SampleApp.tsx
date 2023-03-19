@@ -35,7 +35,6 @@ import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
-import { GearSetCollection } from "./collections/bug";
 
 function SampleApp() {
     const appCheckOptions: AppCheckOptions = {
@@ -115,6 +114,7 @@ function SampleApp() {
     }, []);
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
+        apiKey: "AIzaSyDZ8Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7",
         getConfigForPath: async ({ path }) => {
             if (process.env.NODE_ENV !== "production")
                 return true;

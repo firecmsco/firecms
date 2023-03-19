@@ -1,7 +1,11 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import equal from "react-fast-compare";
-import { getCellAlignment, getPropertyColumnWidth, getSubcollectionColumnId } from "./internal/common";
+import {
+    getCellAlignment,
+    getPropertyColumnWidth,
+    getSubcollectionColumnId
+} from "./internal/common";
 import {
     AdditionalFieldDelegate,
     CollectionSize,
@@ -12,6 +16,7 @@ import {
     PropertyOrBuilder,
     ResolvedEntityCollection,
     ResolvedProperty,
+    ResolvedReferenceProperty,
     SaveEntityProps,
     User
 } from "../../../types";
@@ -19,9 +24,19 @@ import { renderSkeletonText } from "../../../preview";
 import { CustomFieldValidator } from "../../../form/validation";
 import { PropertyTableCell } from "./internal/PropertyTableCell";
 import { ErrorBoundary } from "../ErrorBoundary";
-import { saveEntityWithCallbacks, useDataSource, useFireCMSContext, useSideEntityController } from "../../../hooks";
+import {
+    saveEntityWithCallbacks,
+    useDataSource,
+    useFireCMSContext,
+    useSideEntityController
+} from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
-import { CellRendererParams, TableColumn, TableColumnFilter, VirtualTable } from "../Table";
+import {
+    CellRendererParams,
+    TableColumn,
+    TableColumnFilter,
+    VirtualTable
+} from "../Table";
 import {
     getIconForProperty,
     getPropertyInPath,
@@ -32,13 +47,25 @@ import {
     resolveProperty
 } from "../../util";
 import { getRowHeight } from "../Table/common";
-import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
-import { EntityCollectionTableController, OnCellValueChange, SelectedCellProps, UniqueFieldValidator } from "./types";
+import {
+    EntityCollectionRowActions
+} from "./internal/EntityCollectionRowActions";
+import {
+    EntityCollectionTableController,
+    OnCellValueChange,
+    SelectedCellProps,
+    UniqueFieldValidator
+} from "./types";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { setIn } from "formik";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
 import { TableCell } from "./internal/TableCell";
+import { FilterFormFieldProps } from "../Table/VirtualTableHeader";
+import { ReferenceFilterField } from "./filters/ReferenceFilterField";
+import { StringNumberFilterField } from "./filters/StringNumberFilterField";
+import { BooleanFilterField } from "./filters/BooleanFilterField";
+import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 
 const DEFAULT_STATE = {} as any;
 
@@ -358,14 +385,14 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             throw Error("Internal error: no property found in path " + key);
                         return ({
                             key: key as string,
-                            property,
                             align: getCellAlignment(property),
                             icon: (hoverOrOpen) => getIconForProperty(property, hoverOrOpen ? undefined : "disabled", "small"),
                             title: property.name ?? key as string,
                             sortable: forceFilter ? Object.keys(forceFilter).includes(key) : true,
-                            filter: disabledFilterChange ? undefined : buildFilterableFromProperty(property),
+                            filter: !disabledFilterChange && filterableProperty(property),
                             width: getPropertyColumnWidth(property),
-                            resizable: true
+                            resizable: true,
+                            custom: property
                         });
                     });
 
@@ -484,6 +511,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             onSortByUpdate={setSortBy as ((sortBy?: [string, "asc" | "desc"]) => void)}
                             hoverRow={hoverRow}
                             checkFilterCombination={checkFilterCombination}
+                            createFilterField={createFilterField}
                         />
                     </Box>
 
@@ -604,40 +632,63 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
     }).filter((key) => key !== null) as string[];
 }
 
-const buildFilterableFromProperty = (property: ResolvedProperty,
-                                     isArray = false): TableColumnFilter | undefined => {
+function createFilterField({
+                               id,
+                               filterValue,
+                               setFilterValue,
+                               column,
+                               popupOpen,
+                               setPopupOpen
+                           }: FilterFormFieldProps<ResolvedProperty>): React.ReactNode {
+    const property: ResolvedProperty | undefined = column.custom;
+    if (!property) {
+        return null;
+    }
+    const isArray = property?.dataType === "array";
+    const baseProperty: ResolvedProperty = isArray ? property.of : property;
+    if (baseProperty?.dataType === "reference") {
+        return <ReferenceFilterField value={filterValue}
+                                     setValue={setFilterValue}
+                                     name={id as string}
+                                     isArray={isArray}
+                                     path={baseProperty.path}
+                                     title={property?.name}
+                                     previewProperties={baseProperty?.previewProperties}
+                                     popupOpen={popupOpen}
+                                     setPopupOpen={setPopupOpen}/>;
+    }
+    if (baseProperty.dataType === "number" || baseProperty.dataType === "string") {
+        const name = baseProperty.name;
+        const enumValues = baseProperty.enumValues ? resolveEnumValues(baseProperty.enumValues) : undefined;
+        return <StringNumberFilterField value={filterValue}
+                                        setValue={setFilterValue}
+                                        name={id as string}
+                                        dataType={baseProperty.dataType}
+                                        isArray={isArray}
+                                        enumValues={enumValues}
+                                        title={name}/>;
+    } else if (baseProperty.dataType === "boolean") {
+        const name = baseProperty.name;
+        return <BooleanFilterField value={filterValue}
+                                   setValue={setFilterValue}
+                                   name={id as string}
+                                   title={name}/>;
 
-    if (property.dataType === "number" || property.dataType === "string") {
-        const name = property.name;
-        const enumValues = property.enumValues ? resolveEnumValues(property.enumValues) : undefined;
-        return {
-            dataType: property.dataType,
-            isArray,
-            title: name,
-            enumValues
-        };
-    } else if (property.dataType === "array" && property.of) {
-        if (Array.isArray(property.of)) {
-            return undefined;
-        }
-        return buildFilterableFromProperty(property.of, true);
-    } else if (property.dataType === "boolean") {
-        const name = property.name;
-        return {
-            dataType: property.dataType,
-            isArray,
-            title: name
-        };
-    } else if (property.dataType === "date") {
-        const title = property.name;
-        return {
-            dataType: property.dataType,
-            isArray,
-            title,
-            dateMode: property.mode
-        };
+    } else if (baseProperty.dataType === "date") {
+        const title = baseProperty.name;
+        return <DateTimeFilterField value={filterValue}
+                                    setValue={setFilterValue}
+                                    name={id as string}
+                                    mode={baseProperty.mode}
+                                    isArray={isArray}
+                                    title={title}/>;
     }
 
-    return undefined;
+    return (
+        <div>{`Currently the field ${property.dataType} is not supported`}</div>
+    );
+}
 
-};
+function filterableProperty(property: ResolvedProperty) {
+    return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
+}
