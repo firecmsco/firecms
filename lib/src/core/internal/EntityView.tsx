@@ -488,7 +488,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 >
                     <Tab
                         label={collection.singularName ?? collection.name}
-                        disabled={largeLayout || !hasAdditionalViews}
+                        disabled={!hasAdditionalViews}
                         onClick={() => {
                             console.log("click")
                             onSideTabClick(-1);
