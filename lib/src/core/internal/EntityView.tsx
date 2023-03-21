@@ -490,7 +490,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         label={collection.singularName ?? collection.name}
                         disabled={!hasAdditionalViews}
                         onClick={() => {
-                            console.log("click")
                             onSideTabClick(-1);
                         }}
                         sx={{
