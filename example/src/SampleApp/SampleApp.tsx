@@ -114,7 +114,6 @@ function SampleApp() {
     }, []);
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
-        apiKey: "AIzaSyDZ8Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7Z7",
         getConfigForPath: async ({ path }) => {
             if (process.env.NODE_ENV !== "production")
                 return true;

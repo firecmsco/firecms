@@ -176,155 +176,159 @@ export const testCollection = buildCollection({
     name: "Test entities",
     properties: {
 
-        specSheet: ({
-                        values,
-                        entityId
-                    }) => ({
-            name: "Specs sheet",
-            dataType: "array",
-            of: {
-                dataType: "string",
-                storage: {
-                    mediaType: "image",
-                    storagePath: "products/" + entityId + "/pdf",
-                    acceptedFiles: ["application/pdf"],
-                    metadata: {
-                        cacheControl: "max-age=1000000"
-                    }
-                }
-            }
-        }),
+        // specSheet: ({
+        //                 values,
+        //                 entityId
+        //             }) => ({
+        //     name: "Specs sheet",
+        //     dataType: "array",
+        //     of: {
+        //         dataType: "string",
+        //         storage: {
+        //             mediaType: "image",
+        //             storagePath: "products/" + entityId + "/pdf",
+        //             acceptedFiles: ["application/pdf"],
+        //             metadata: {
+        //                 cacheControl: "max-age=1000000"
+        //             }
+        //         }
+        //     }
+        // }),
 
+        test_string: {
+            dataType: "string",
+            name: "Test string"
+        },
         test_custom: {
             dataType: "string",
             name: "Test custom",
             fieldConfig: "test_custom_field"
-        },
-        map: {
-            dataType: "map",
-            properties: {
-                sample: {
-                    name: "Sample",
-                    dataType: "string",
-                    validation: {
-                        required: true
-                    }
-                },
-                num: {
-                    name: "Num",
-                    dataType: "number",
-                    validation: {
-                        required: true,
-                        min: 5
-                    }
-                }
-            }
-        },
-        test_enum: buildProperty({
-            dataType: "string",
-            name: "Currency",
-            enumValues: [
-                {
-                    id: "EUR",
-                    label: "Euros",
-                    color: "blueDark"
-                },
-                {
-                    id: "DOL",
-                    label: "Dollars",
-                    color: {
-                        color: "#FFFFFF",
-                        text: "#333333"
-                    }
-                }
-            ]
-        }),
-        background: {
-            dataType: "number", // NB – this was string” above..
-            name: "Colour",
-            enumValues:
-                [
-                    {
-                        id: 4281080974,
-                        label: " Blue ",
-                        color: "blueDarker"
-                    },
-                    {
-                        id: 4293947270,
-                        label: " Cyan ",
-                        color: "cyanDarker"
-                    }
-                ]
-        },
-
-        test_date: {
-            name: "Test date",
-            dataType: "date",
-            mode: "date"
-        },
-        name: {
-            dataType: "string",
-            name: "Name"
-        },
-        self_ref: {
-            name: "Self ref",
-            dataType: "reference",
-            path: "test_entity"
-        },
-        self_refs: {
-            dataType: "array",
-            of: {
-                dataType: "reference",
-                name: "Self refs",
-                path: "test_entity"
-                // previewProperties: ["name","url_image"]
-            }
-        },
-        url_image: {
-            dataType: "string",
-            name: "URL image",
-            storage: {
-                storagePath: "images",
-                acceptedFiles: ["image/*"],
-                storeUrl: true,
-                fileName: async ({ file }) => {
-                    await new Promise(resolve => setTimeout(resolve, 100));
-                    return file.name;
-                },
-                metadata: {
-                    cacheControl: "max-age=1000000"
-                }
-            }
-        },
-        myArray: {
-            name: "some array",
-            dataType: "array",
-            of: {
-                dataType: "map",
-                properties: {
-                    prop1: {
-                        dataType: "string",
-                        name: "prop1"
-                    },
-                    prop2: {
-                        dataType: "number",
-                        name: "prop2"
-                    }
-                },
-                defaultValue: {
-                    // this DOESN'T works as initial value :(
-                    prop1: "hello 2",
-                    prop2: 2
-                }
-            },
-            defaultValue: [
-                // this works as initial value :)
-                {
-                    prop1: "hello 1",
-                    prop2: 1
-                }
-            ]
-        },
+        }
+        // map: {
+        //     dataType: "map",
+        //     properties: {
+        //         sample: {
+        //             name: "Sample",
+        //             dataType: "string",
+        //             validation: {
+        //                 required: true
+        //             }
+        //         },
+        //         num: {
+        //             name: "Num",
+        //             dataType: "number",
+        //             validation: {
+        //                 required: true,
+        //                 min: 5
+        //             }
+        //         }
+        //     }
+        // },
+        // test_enum: buildProperty({
+        //     dataType: "string",
+        //     name: "Currency",
+        //     enumValues: [
+        //         {
+        //             id: "EUR",
+        //             label: "Euros",
+        //             color: "blueDark"
+        //         },
+        //         {
+        //             id: "DOL",
+        //             label: "Dollars",
+        //             color: {
+        //                 color: "#FFFFFF",
+        //                 text: "#333333"
+        //             }
+        //         }
+        //     ]
+        // }),
+        // background: {
+        //     dataType: "number", // NB – this was string” above..
+        //     name: "Colour",
+        //     enumValues:
+        //         [
+        //             {
+        //                 id: 4281080974,
+        //                 label: " Blue ",
+        //                 color: "blueDarker"
+        //             },
+        //             {
+        //                 id: 4293947270,
+        //                 label: " Cyan ",
+        //                 color: "cyanDarker"
+        //             }
+        //         ]
+        // },
+        //
+        // test_date: {
+        //     name: "Test date",
+        //     dataType: "date",
+        //     mode: "date"
+        // },
+        // name: {
+        //     dataType: "string",
+        //     name: "Name"
+        // },
+        // self_ref: {
+        //     name: "Self ref",
+        //     dataType: "reference",
+        //     path: "test_entity"
+        // },
+        // self_refs: {
+        //     dataType: "array",
+        //     of: {
+        //         dataType: "reference",
+        //         name: "Self refs",
+        //         path: "test_entity"
+        //         // previewProperties: ["name","url_image"]
+        //     }
+        // },
+        // url_image: {
+        //     dataType: "string",
+        //     name: "URL image",
+        //     storage: {
+        //         storagePath: "images",
+        //         acceptedFiles: ["image/*"],
+        //         storeUrl: true,
+        //         fileName: async ({ file }) => {
+        //             await new Promise(resolve => setTimeout(resolve, 100));
+        //             return file.name;
+        //         },
+        //         metadata: {
+        //             cacheControl: "max-age=1000000"
+        //         }
+        //     }
+        // },
+        // myArray: {
+        //     name: "some array",
+        //     dataType: "array",
+        //     of: {
+        //         dataType: "map",
+        //         properties: {
+        //             prop1: {
+        //                 dataType: "string",
+        //                 name: "prop1"
+        //             },
+        //             prop2: {
+        //                 dataType: "number",
+        //                 name: "prop2"
+        //             }
+        //         },
+        //         defaultValue: {
+        //             // this DOESN'T works as initial value :(
+        //             prop1: "hello 2",
+        //             prop2: 2
+        //         }
+        //     },
+        //     defaultValue: [
+        //         // this works as initial value :)
+        //         {
+        //             prop1: "hello 1",
+        //             prop2: 1
+        //         }
+        //     ]
+        // },
 
         // impacts: {
         //     name: "Impacts",
@@ -712,16 +716,16 @@ export const testCollection = buildCollection({
         //         acceptedFiles: ["image/*"]
         //     }
         // },
-        created_on: {
-            name: "Created on",
-            dataType: "date",
-            autoValue: "on_create"
-        },
-        updated_on: {
-            name: "Updated on",
-            dataType: "date",
-            autoValue: "on_update"
-        }
+        // created_on: {
+        //     name: "Created on",
+        //     dataType: "date",
+        //     autoValue: "on_create"
+        // },
+        // updated_on: {
+        //     name: "Updated on",
+        //     dataType: "date",
+        //     autoValue: "on_update"
+        // }
         // description: {
         //     name: "Description",
         //     dataType: "string",

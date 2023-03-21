@@ -1,5 +1,5 @@
 import React from "react";
-import { TextField } from "@mui/material";
+import { Button, TextField } from "@mui/material";
 import {
     FieldDescription,
     FieldProps,
@@ -14,6 +14,7 @@ export default function CustomColorTextField({
                                                  property,
                                                  value,
                                                  setValue,
+                                                 setFieldValue,
                                                  customProps,
                                                  touched,
                                                  error,
