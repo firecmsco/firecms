@@ -96,11 +96,4 @@ export function getFistAdditionalView<M extends Record<string, any>>(collection:
         return { path: collection.defaultAdditionalView }
     else
         return undefined
-
-    const subcollections = collection.subcollections;
-    const subcollectionsCount = subcollections?.length ?? 0;
-    const customViews = collection.views;
-    const customViewsCount = customViews?.length ?? 0;
-    const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
-    return !hasAdditionalViews ? undefined : (customViews && customViews?.length > 0 ? customViews[0] : (subcollections && subcollections?.length > 0 ? subcollections[0] : undefined));
 }
