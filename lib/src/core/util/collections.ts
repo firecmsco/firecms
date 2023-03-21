@@ -91,7 +91,7 @@ export function sortProperties<M extends Record<string, any>>(properties: Proper
     }
 }
 
-export function getFistAdditionalView<M extends Record<string, any>>(collection: EntityCollection<M> | ResolvedEntityCollection<M>) {
+export function getFirstAdditionalView<M extends Record<string, any>>(collection: EntityCollection<M> | ResolvedEntityCollection<M>) {
     if (collection.defaultAdditionalView)
         return { path: collection.defaultAdditionalView }
     else
