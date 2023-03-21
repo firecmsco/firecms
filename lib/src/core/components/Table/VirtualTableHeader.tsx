@@ -116,7 +116,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                         fontWeight: 600,
                         position: column.frozen ? "sticky" : "relative",
                         left: column.frozen ? 0 : undefined,
-                        zIndex: column.frozen ? 1 : 0
+                        zIndex: column.frozen ? 1 : 0,
+                        userSelect: "none"
                     })}
                     ref={ref}
                     wrap={"nowrap"}

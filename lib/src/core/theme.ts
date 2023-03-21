@@ -167,10 +167,16 @@ export const createCMSDefaultTheme = (
     });
 
     return {
-        ...original
-        // shadows: original.shadows.map((value, index) => {
-        //     if (index == 1) return "0 1px 1px 0 rgb(0 0 0 / 16%)";
-        //     else return value;
-        // })
+        ...original,
+        // @ts-ignore
+        shadows: original.shadows.map((shadow, index) => {
+            // if (index === 1) {
+            //     return "0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)";
+            // }
+            if (index === 2) {
+                return "0px 0px 0px 0px rgba(0,0,0,0.18), 0px 0px 10px 0px rgba(0,0,0,0.12), 0px 0px 14px 2px rgba(0,0,0,0.10)"
+            }
+            return shadow;
+        })
     };
 };
