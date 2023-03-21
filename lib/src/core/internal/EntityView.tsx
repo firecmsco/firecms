@@ -170,7 +170,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             if (largeLayoutTabSelected.current === largeLayout)
                 return;
 
-            // open first tab by default in  large layouts
+            // open first tab by default in large layouts
             if (!selectedSubPath && largeLayout && fistAdditionalView)
                 sideEntityController.replace({
                     path,
@@ -489,8 +489,12 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     <Tab
                         label={collection.singularName ?? collection.name}
                         disabled={largeLayout || !hasAdditionalViews}
+                        onClick={() => {
+                            console.log("click")
+                            onSideTabClick(-1);
+                        }}
                         sx={{
-                            display: largeLayout ? "none" : undefined,
+                            display: !hasAdditionalViews ? "none" : undefined,
                             fontSize: "0.875rem",
                             minWidth: "140px"
                         }}

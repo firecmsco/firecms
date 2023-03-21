@@ -92,6 +92,11 @@ export function sortProperties<M extends Record<string, any>>(properties: Proper
 }
 
 export function getFistAdditionalView<M extends Record<string, any>>(collection: EntityCollection<M> | ResolvedEntityCollection<M>) {
+    if (collection.defaultAdditionalView)
+        return { path: collection.defaultAdditionalView }
+    else
+        return undefined
+
     const subcollections = collection.subcollections;
     const subcollectionsCount = subcollections?.length ?? 0;
     const customViews = collection.views;

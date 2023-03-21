@@ -222,6 +222,16 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * You can also use this collection as a reference target.
      */
     hideFromNavigation?: boolean;
+
+    /**
+     * If you want to open custom views or subcollections by default when opening the edit
+     * view of an entity, you can specify the path to the view here.
+     * The path is relative to the current collection. For example if you have a collection
+     * that has a custom view as well as a subcollection that refers to another entity, you can
+     * either specify the path to the custom view or the path to the subcollection.
+     */
+    defaultAdditionalView?: string;
+
 }
 
 /**
