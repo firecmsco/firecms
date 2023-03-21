@@ -2,7 +2,7 @@
 id: changelog
 title: Changelog
 ---
-## [WIP - 2.0.0-beta.3] - 2023-01-30
+## [2.0.0-beta.3] - 2023-03-21
 
 ### Changed
 - Fixed bug regarding custom selection controllers.
@@ -13,6 +13,10 @@ title: Changelog
 - Small improvements to block properties. Now the first type is selected by default.
 - Fixed additional ordering added when multiple filter applied, which created a bug. 
   Thanks to @juanleondev for the PR!
+- Renamed `ReferenceSelectionView` to `ReferenceSelectionInner`
+- Added reference filters
+- Fixed delay of table update when deleting an entity
+- You can now change the value of any property within a custom field.
 
 ## [2.0.0-beta.2] - 2023-01-30
 

@@ -1,4 +1,4 @@
-## [WIP - 2.0.0-beta.3] - 2023-01-30
+## [2.0.0-beta.3] - 2023-03-21
 
 ### Changed
 - Fixed bug regarding custom selection controllers.
@@ -12,6 +12,7 @@
 - Renamed `ReferenceSelectionView` to `ReferenceSelectionInner`
 - Added reference filters
 - Fixed delay of table update when deleting an entity
+- You can now change the value of any property within a custom field.
 
 ## [2.0.0-beta.2] - 2023-01-30
 

@@ -21,7 +21,8 @@ the `customProps` prop.
 If you are developing a custom field and need to access the values of the
 entity, you can use the `context` field in FieldProps.
 
-You can check all the props [`FieldProps`](../api/interfaces/fieldprops)
+You can check all the props [`FieldProps`](../api/interfaces/fieldprops).
+
 
 ## Example
 
@@ -41,6 +42,7 @@ export default function CustomColorTextField({
                                                  property,
                                                  value,
                                                  setValue,
+                                                 setFieldValue, // use this function to update a different field
                                                  customProps,
                                                  touched,
                                                  error,
@@ -48,7 +50,6 @@ export default function CustomColorTextField({
                                                  context, // the rest of the entity values here
                                                  ...props
                                              }: FieldProps<string, CustomColorTextFieldProps>) {
-
 
     return (
         <>
