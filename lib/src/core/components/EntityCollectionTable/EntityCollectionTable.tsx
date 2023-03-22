@@ -383,13 +383,14 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         const property = getResolvedPropertyInPath(resolvedCollection.properties, key);
                         if (!property)
                             throw Error("Internal error: no property found in path " + key);
+                        const filterable = filterableProperty(property);
                         return ({
                             key: key as string,
                             align: getCellAlignment(property),
                             icon: (hoverOrOpen) => getIconForProperty(property, hoverOrOpen ? undefined : "disabled", "small"),
                             title: property.name ?? key as string,
                             sortable: forceFilter ? Object.keys(forceFilter).includes(key) : true,
-                            filter: !disabledFilterChange && filterableProperty(property),
+                            filter: !disabledFilterChange && filterable,
                             width: getPropertyColumnWidth(property),
                             resizable: true,
                             custom: property
@@ -646,7 +647,10 @@ function createFilterField({
     }
     const isArray = property?.dataType === "array";
     const baseProperty: ResolvedProperty = isArray ? property.of : property;
-    if (baseProperty?.dataType === "reference") {
+    if (!baseProperty) {
+        return null;
+    }
+    if (baseProperty.dataType === "reference") {
         return <ReferenceFilterField value={filterValue}
                                      setValue={setFilterValue}
                                      name={id as string}
@@ -656,8 +660,7 @@ function createFilterField({
                                      previewProperties={baseProperty?.previewProperties}
                                      popupOpen={popupOpen}
                                      setPopupOpen={setPopupOpen}/>;
-    }
-    if (baseProperty.dataType === "number" || baseProperty.dataType === "string") {
+    } else if (baseProperty.dataType === "number" || baseProperty.dataType === "string") {
         const name = baseProperty.name;
         const enumValues = baseProperty.enumValues ? resolveEnumValues(baseProperty.enumValues) : undefined;
         return <StringNumberFilterField value={filterValue}
@@ -689,6 +692,15 @@ function createFilterField({
     );
 }
 
-function filterableProperty(property: ResolvedProperty) {
+function filterableProperty(property: ResolvedProperty, partOfArray = false): boolean {
+    if (partOfArray) {
+        return ["string", "number", "date", "reference"].includes(property.dataType);
+    }
+    if (property.dataType === "array") {
+        if (property.of)
+            return filterableProperty(property.of, true);
+        else
+            return false;
+    }
     return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
 }

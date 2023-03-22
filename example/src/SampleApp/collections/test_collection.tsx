@@ -203,7 +203,7 @@ export const testCollection = buildCollection({
             dataType: "string",
             name: "Test custom",
             fieldConfig: "test_custom_field"
-        }
+        },
         // map: {
         //     dataType: "map",
         //     properties: {
@@ -355,11 +355,11 @@ export const testCollection = buildCollection({
         //         }
         //     })
         // },
-        // product: {
-        //     name: "Product",
-        //     dataType: "reference",
-        //     path: "products",
-        // },
+        product: {
+            name: "Product",
+            dataType: "reference",
+            path: "products"
+        }
         // movement: buildProperty(({ values }) => {
         //     return {
         //         name: "Locale",

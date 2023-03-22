@@ -46,6 +46,7 @@
         "@fontsource/ibm-plex-mono": "^4.5.13",
         "@hello-pangea/dnd": "^16.2.0",
         "date-fns": "^2.29.3",
+        "flexsearch": "^0.7.31",
         "formik": "^2.2.9",
         "history": "^5.3.0",
         "markdown-it": "^13.0.1",

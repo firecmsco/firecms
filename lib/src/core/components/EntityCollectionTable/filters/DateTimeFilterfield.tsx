@@ -5,7 +5,8 @@ import {
     IconButton,
     Input,
     MenuItem,
-    Select as MuiSelect
+    Select as MuiSelect,
+    TextField
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
@@ -13,6 +14,8 @@ import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { TableWhereFilterOp } from "../../Table";
+import { LabelWithIcon } from "../../../../form";
+import { getIconForProperty } from "../../../util";
 
 interface DateTimeFilterFieldProps {
     name: string,
@@ -105,35 +108,45 @@ export function DateTimeFilterField({
             </Box>
 
             <Box flexGrow={1} ml={1}>
-
                 <PickerComponent
-                    InputProps={{
-                        // disableUnderline: true,
-                    }}
-                    renderInput={(props) => (
-                        <Input
-                            startAdornment={
-                                <CalendarTodayIcon fontSize={"small"}/>
-                            }
-                        />
-                    )}
                     value={internalValue ?? null}
+                    renderInput={(params) =>
+                        (
+                            <TextField {...params}
+                                   fullWidth
+                                   sx={{
+                                       minHeight: "56px"
+                                   }}
+                                   InputProps={{
+                                       ...params.InputProps,
+                                       sx: {
+                                           minHeight: "56px"
+                                       },
+                                       endAdornment: <Box
+                                           sx={{
+                                               pr: 2,
+                                               gap: 2
+                                           }}>
+                                           <IconButton
+                                               sx={{
+                                                   position: "absolute",
+                                                   right: "56px",
+                                                   top: "12px"
+                                               }}
+                                               onClick={(e) => updateFilter(operation, undefined)}>
+                                               <ClearIcon/>
+                                           </IconButton>
+                                           {params.InputProps?.endAdornment}
+                                       </Box>
+                                   }}
+                                   variant={"outlined"}/>
+                        )}
                     onChange={(dateValue: Date | null) => {
                         updateFilter(operation, dateValue === null ? undefined : dateValue);
                     }}
                 />
 
             </Box>
-
-            {internalValue !== undefined && <Box ml={1}>
-                <IconButton
-                    onClick={(e) => updateFilter(operation, undefined)}
-                    size={"small"}>
-                    <Tooltip title={`Clear ${title}`}>
-                        <ClearIcon fontSize={"small"}/>
-                    </Tooltip>
-                </IconButton>
-            </Box>}
 
         </Box>
     );

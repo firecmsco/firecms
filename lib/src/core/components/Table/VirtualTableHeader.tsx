@@ -216,7 +216,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     />}
                 </Grid>
 
-                {column.sortable && createFilterField &&
+                {column.filter && createFilterField &&
                     <FilterForm column={column}
                                 filter={filter}
                                 onHover={onHover}
@@ -249,6 +249,8 @@ function FilterForm<M>({
         setFilterInternal(filter);
     }, [filter]);
 
+    if (!column.filter) return null;
+
     const submit = () => {
         onFilterUpdate(filterInternal, false);
     };
@@ -259,6 +261,16 @@ function FilterForm<M>({
 
     const filterIsSet = !!filter;
 
+    const filterField = createFilterField({
+        id,
+        filterValue: filterInternal,
+        setFilterValue: setFilterInternal,
+        column,
+        popupOpen,
+        setPopupOpen
+    });
+
+    if (!filterField) return null;
     return (
         <Popover
             id={`popover_${column.key}`}
@@ -287,15 +299,8 @@ function FilterForm<M>({
                     {column.title ?? id}
                 </Box>
                 <Divider/>
-                {column.filter && <Box p={2}>
-                    {createFilterField({
-                        id,
-                        filterValue: filterInternal,
-                        setFilterValue: setFilterInternal,
-                        column,
-                        popupOpen,
-                        setPopupOpen
-                    })}
+                {filterField && <Box p={2}>
+                    {filterField}
                 </Box>}
                 <Box display="flex"
                      justifyContent="flex-end"

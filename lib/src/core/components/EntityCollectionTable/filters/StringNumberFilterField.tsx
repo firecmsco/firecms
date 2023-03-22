@@ -124,6 +124,15 @@ export function StringNumberFilterField({
                                 : evt.target.value;
                             updateFilter(operation, val);
                         }}
+                        endAdornment={internalValue && <IconButton
+                            sx={{
+                                position: "absolute",
+                                right: "12px",
+                                top: "8px"
+                            }}
+                            onClick={(e) => updateFilter(operation, undefined)}>
+                            <ClearIcon/>
+                        </IconButton>}
                     />}
 
                     {enumValues &&
@@ -133,6 +142,15 @@ export function StringNumberFilterField({
                             multiple={multiple}
                             value={internalValue !== undefined ? internalValue : isArray ? [] : ""}
                             onChange={(evt: any) => updateFilter(operation, dataType === "number" ? parseInt(evt.target.value) : evt.target.value)}
+                            endAdornment={internalValue && <IconButton
+                                sx={{
+                                    position: "absolute",
+                                    right: "12px",
+                                    top: "8px"
+                                }}
+                                onClick={(e) => updateFilter(operation, undefined)}>
+                                <ClearIcon/>
+                            </IconButton>}
                             renderValue={multiple
                                 ? (selected: any) =>
                                     (
@@ -162,16 +180,6 @@ export function StringNumberFilterField({
                         </MuiSelect>}
                 </FormControl>
             </Box>
-
-            {internalValue !== undefined && <Box ml={1}>
-                <IconButton
-                    onClick={(e) => updateFilter(operation, undefined)}
-                    size={"small"}>
-                    <Tooltip title={`Clear ${title}`}>
-                        <ClearIcon fontSize={"small"}/>
-                    </Tooltip>
-                </IconButton>
-            </Box>}
 
         </Box>
     );
