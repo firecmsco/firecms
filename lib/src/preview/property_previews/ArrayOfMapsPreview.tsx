@@ -18,6 +18,7 @@ export function ArrayOfMapsPreview({
     const fireCMSContext = useFireCMSContext();
 
     const property = resolveArrayProperty({
+        propertyKey,
         property: inputProperty,
         propertyValue: value,
         fields: fireCMSContext.fields

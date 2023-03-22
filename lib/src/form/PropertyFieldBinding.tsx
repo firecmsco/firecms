@@ -71,19 +71,27 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
      disabled,
      tableMode,
      partOfArray,
-     autoFocus
+     autoFocus,
+     context: {
+         values,
+         path,
+         entityId
+     }
  }: PropertyFieldBindingProps<any, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
     const fireCMSContext = useFireCMSContext();
 
     let component: ComponentType<FieldProps<T>> | undefined;
     const resolvedProperty: ResolvedProperty<T> | null = resolveProperty({
+        propertyKey,
+        propertyValue: getIn(values, propertyKey),
         propertyOrBuilder: property,
         values: context.values,
         path: context.path,
         entityId: context.entityId,
         fields: fireCMSContext.fields
     });
+
     if (resolvedProperty === null) {
         return <></>;
     } else if (isReadOnly(resolvedProperty)) {

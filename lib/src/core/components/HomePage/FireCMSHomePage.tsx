@@ -7,6 +7,7 @@ import {
     PluginGenericProps,
     PluginHomePageAdditionalCardsProps
 } from "../../../types";
+
 import { toArray } from "../../util/arrays";
 import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCollectionCard } from "./NavigationCollectionCard";
@@ -96,7 +97,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
 
             <Box sx={{
                 position: "sticky",
-                paddingTop: 2,
+                py: 2,
                 top: 0,
                 zIndex: 10
             }}>

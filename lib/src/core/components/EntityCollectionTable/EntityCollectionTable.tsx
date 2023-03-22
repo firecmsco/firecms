@@ -287,6 +287,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 return null;
             }
             const property = resolveProperty({
+                propertyKey,
                 propertyOrBuilder,
                 path: fullPath,
                 propertyValue: entity.values ? getValueInPath(entity.values, propertyKey) : undefined,

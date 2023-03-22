@@ -96,7 +96,7 @@ export const EntityCollectionView = React.memo(
         const collection = useMemo(() => {
             const userOverride = userConfigPersistence?.getCollectionConfig<M>(fullPath);
             return userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp;
-        }, [collectionProp, fullPath, userConfigPersistence]);
+        }, [collectionProp, fullPath, userConfigPersistence?.getCollectionConfig]);
 
         const theme = useTheme();
 

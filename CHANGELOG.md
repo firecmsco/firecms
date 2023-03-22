@@ -1,6 +1,13 @@
 ## [2.0.0-beta.3] - 2023-03-21
 
 ### Changed
+- Fixed table header bug
+- Added search bar in home page
+- Fix for some deeply nested property builders in arrays
+
+## [2.0.0-beta.3] - 2023-03-21
+
+### Changed
 - Fixed bug regarding custom selection controllers.
 - Fix for default value not being set in array properties.
 - Enabled Firebase App Check. Thanks to @sengerts for the PR!

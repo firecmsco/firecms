@@ -340,10 +340,12 @@ export function TableStorageItemPreview({
 
             {value &&
                 <ErrorBoundary>
-                    <PropertyPreview value={value}
-                                     property={property}
-                                     entity={entity}
-                                     size={size}/>
+                    <PropertyPreview
+                        propertyKey={"ignore"} // TODO: Fix this
+                        value={value}
+                        property={property}
+                        entity={entity}
+                        size={size}/>
                 </ErrorBoundary>
             }
 

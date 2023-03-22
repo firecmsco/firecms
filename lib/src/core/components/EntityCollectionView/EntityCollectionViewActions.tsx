@@ -126,7 +126,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         <>
             {actions}
             {multipleDeleteButton}
-            {exportButton}
+            {/*{exportButton}*/}
             {addButton}
         </>
     );
