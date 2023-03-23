@@ -210,8 +210,6 @@ function EntityFormInternal<M extends Record<string, any>>({
         fields: context.fields
     }), [inputCollection, path, entityId, internalValues, initialValues]);
 
-    console.log("collection", collection)
-
     const onIdUpdate = collection.callbacks?.onIdUpdate;
     useEffect(() => {
         if (onIdUpdate && internalValues && (status === "new" || status === "copy")) {

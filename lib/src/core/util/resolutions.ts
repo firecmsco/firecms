@@ -327,7 +327,7 @@ export function resolveProperties<M extends Record<string, any>>({
                 [key]: resolveProperty({
                     propertyKey: key,
                     propertyOrBuilder: property,
-                    propertyValue: propertyValue && typeof propertyValue === "object" ? propertyValue[key] : undefined,
+                    propertyValue: propertyValue && typeof propertyValue === "object" ? getValueInPath(propertyValue, key) : undefined,
                     ...props
                 })
             };

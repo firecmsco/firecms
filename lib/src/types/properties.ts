@@ -424,12 +424,12 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
      * The property of this array.
      * You can specify any property (except another Array property)
      * You can leave this field empty only if you are providing a custom field,
-     * otherwise an error will be thrown.
+     * or using the `oneOf` prop, otherwise an error will be thrown.
      */
     of?: PropertyOrBuilder<ArrayT> | Property<ArrayT>[];
 
     /**
-     * Use this field if you would like to have an array of properties.
+     * Use this field if you would like to have an array of typed objects.
      * It is useful if you need to have values of different types in the same
      * array.
      * Each entry of the array is an object with the shape:
