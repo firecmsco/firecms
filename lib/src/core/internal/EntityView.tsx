@@ -285,31 +285,32 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const customViewsView: React.ReactNode[] | undefined = customViews && customViews.map(
             (customView, colIndex) => {
-                return (
-                    <Box
-                        sx={{
-                            width: ADDITIONAL_TAB_WIDTH,
-                            height: "100%",
-                            overflow: "auto",
-                            borderLeft: `1px solid ${theme.palette.divider}`,
-                            [theme.breakpoints.down("lg")]: {
-                                borderLeft: "inherit",
-                                width: CONTAINER_FULL_WIDTH
-                            }
-                        }}
-                        key={`custom_view_${customView.path}_${colIndex}`}
-                        role="tabpanel"
-                        flexGrow={1}
-                        hidden={tabsPosition !== colIndex}>
-                        <ErrorBoundary>
-                            {customView.builder({
-                                collection,
-                                entity: usedEntity,
-                                modifiedValues: modifiedValues ?? usedEntity?.values
-                            })}
-                        </ErrorBoundary>
-                    </Box>
-                );
+                return (tabsPosition === colIndex
+                        ? <Box
+                            sx={{
+                                width: ADDITIONAL_TAB_WIDTH,
+                                height: "100%",
+                                overflow: "auto",
+                                borderLeft: `1px solid ${theme.palette.divider}`,
+                                [theme.breakpoints.down("lg")]: {
+                                    borderLeft: "inherit",
+                                    width: CONTAINER_FULL_WIDTH
+                                }
+                            }}
+                            key={`custom_view_${customView.path}_${colIndex}`}
+                            role="tabpanel"
+                            flexGrow={1}>
+                            <ErrorBoundary>
+                                {customView.builder({
+                                    collection,
+                                    entity: usedEntity,
+                                    modifiedValues: modifiedValues ?? usedEntity?.values
+                                })}
+                            </ErrorBoundary>
+                        </Box>
+                        : null
+                )
+                    ;
             }
         );
 
@@ -318,7 +319,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const subCollectionsViews = subcollections && subcollections.map(
             (subcollection, colIndex) => {
                 const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.alias ?? subcollection.path)}` : undefined;
-
+                if (tabsPosition !== colIndex + customViewsCount)
+                    return null;
                 return (
                     <Box
                         sx={{
@@ -333,8 +335,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         }}
                         key={`subcol_${subcollection.name}_${colIndex}`}
                         role="tabpanel"
-                        flexGrow={1}
-                        hidden={tabsPosition !== colIndex + customViewsCount}>
+                        flexGrow={1}>
 
                         {loading && <CircularProgressCenter/>}
 
