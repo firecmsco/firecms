@@ -3,10 +3,13 @@ import {
     CardActionArea,
     CardActions,
     CardContent,
+    IconButton,
     Paper,
     Typography
 } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
+import StarBorderIcon from "@mui/icons-material/StarBorder";
+import StarIcon from "@mui/icons-material/Star";
 
 import { useNavigate } from "react-router-dom";
 
@@ -14,6 +17,9 @@ import { Markdown } from "../../../preview";
 import { useFireCMSContext } from "../../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
+import {
+    useUserConfigurationPersistence
+} from "../../../hooks/useUserConfigurationPersistence";
 
 /**
  * This is the component used in the home page to render a card for each
@@ -38,10 +44,13 @@ export function NavigationCollectionCard({
                                              onClick
                                          }: TopNavigationEntry & { onClick?: () => void }) {
 
+    const userConfigurationPersistence = useUserConfigurationPersistence();
     const CollectionIcon = getIconForView(collection ?? view);
 
     const navigate = useNavigate();
     const context = useFireCMSContext();
+
+    const favourite = (userConfigurationPersistence?.favouritePaths ?? []).includes(path);
 
     let actions: React.ReactNode | undefined;
     if (context.plugins && collection) {
@@ -81,6 +90,11 @@ export function NavigationCollectionCard({
                 onClick={() => {
                     onClick?.();
                     navigate(url);
+                    if (userConfigurationPersistence) {
+                        userConfigurationPersistence.setRecentlyVisitedPaths(
+                            [path, ...(userConfigurationPersistence.recentlyVisitedPaths ?? []).filter(p => p !== path)]
+                        );
+                    }
                 }}
             >
                 <CardContent
@@ -98,12 +112,38 @@ export function NavigationCollectionCard({
                     }}>
 
                         <CollectionIcon color={"disabled"}/>
-                        <div onClick={(event: React.MouseEvent) => {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }}>
+
+                        <Box
+                            sx={{
+                                display: "flex",
+                                alignItems: "center",
+                                gap: 1
+                            }}
+                            onClick={(event: React.MouseEvent) => {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }}>
                             {actions}
-                        </div>
+                            {userConfigurationPersistence &&
+                                <IconButton size={"small"}
+                                            onClick={(e) => {
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                if (favourite) {
+                                                    userConfigurationPersistence.setFavouritePaths(
+                                                        userConfigurationPersistence.favouritePaths.filter(p => p !== path)
+                                                    );
+                                                } else {
+                                                    userConfigurationPersistence.setFavouritePaths(
+                                                        [...userConfigurationPersistence.favouritePaths, path]
+                                                    );
+                                                }
+                                            }}>
+                                    {favourite
+                                        ? <StarIcon color={"secondary"}/>
+                                        : <StarBorderIcon color={"disabled"}/>}
+                                </IconButton>}
+                        </Box>
 
                     </Box>
 
@@ -128,5 +168,6 @@ export function NavigationCollectionCard({
 
             </CardActionArea>
 
-        </Paper>);
+        </Paper>)
+        ;
 }

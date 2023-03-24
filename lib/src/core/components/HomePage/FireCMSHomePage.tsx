@@ -14,6 +14,10 @@ import { NavigationCollectionCard } from "./NavigationCollectionCard";
 
 import Index from "flexsearch";
 import { SearchBar } from "../EntityCollectionTable/internal/SearchBar";
+import {
+    useUserConfigurationPersistence
+} from "../../../hooks/useUserConfigurationPersistence";
+import { FavouritesView } from "./FavouritesView";
 
 export const searchIndex = new Index(
     // @ts-ignore
@@ -32,6 +36,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
 
     const context = useFireCMSContext();
     const navigationContext = useNavigationContext();
+    const userConfigurationPersistence = useUserConfigurationPersistence();
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
@@ -93,7 +98,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
     }
 
     return (
-        <Container>
+        <Container sx={{ my: 2 }}>
 
             <Box sx={{
                 position: "sticky",
@@ -105,6 +110,8 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
                            placeholder={"Search collections"}
                            large={true}/>
             </Box>
+
+            <FavouritesView/>
 
             {allGroups.map((group, index) => {
 

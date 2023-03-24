@@ -9,13 +9,15 @@ export function ExpandablePanel({
                                     invisible = false,
                                     expanded = true,
                                     padding = 1,
-                                    darken = true
+                                    darken = true,
+                                    onExpandedChange
                                 }: PropsWithChildren<{
     title: React.ReactNode,
     invisible?: boolean,
     expanded?: boolean;
     padding?: number | string;
-    darken?: boolean
+    darken?: boolean,
+    onExpandedChange?: (expanded: boolean) => void
 }>) {
 
     const [expandedInternal, setExpandedInternal] = useState(expanded);
@@ -34,7 +36,10 @@ export function ExpandablePanel({
 
                    })}
                    TransitionProps={{ unmountOnExit: true }}
-                   onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => setExpandedInternal(expanded), [])}>
+                   onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => {
+                       onExpandedChange?.(expanded);
+                       setExpandedInternal(expanded);
+                   }, [onExpandedChange])}>
 
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                               sx={(theme) => ({

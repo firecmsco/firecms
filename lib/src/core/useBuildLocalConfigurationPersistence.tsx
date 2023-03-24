@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
     PartialEntityCollection,
     UserConfigurationPersistence
@@ -32,8 +32,39 @@ export function useBuildLocalConfigurationPersistence(): UserConfigurationPersis
         });
     }, [getCollectionFromStorage]);
 
+    const [recentlyVisitedPaths, _setRecentlyVisitedPaths] = useState<string[]>([]);
+    const [favouritePaths, _setFavouritePaths] = useState<string[]>([]);
+    const [collapsedGroups, _setCollapsedGroups] = useState<string[]>([]);
+
+    useEffect(() => {
+        _setRecentlyVisitedPaths(localStorage.getItem("recently_visited_paths") ? JSON.parse(localStorage.getItem("recently_visited_paths")!) : []);
+        _setFavouritePaths(localStorage.getItem("favourite_paths") ? JSON.parse(localStorage.getItem("favourite_paths")!) : []);
+        _setCollapsedGroups(localStorage.getItem("collapsed_groups") ? JSON.parse(localStorage.getItem("collapsed_groups")!) : []);
+    }, []);
+
+    const setRecentlyVisitedPaths = useCallback((paths: string[]) => {
+        localStorage.setItem("recently_visited_paths", JSON.stringify(paths));
+        _setRecentlyVisitedPaths(paths);
+    }, []);
+
+    const setFavouritePaths = useCallback((paths: string[]) => {
+        localStorage.setItem("favourite_paths", JSON.stringify(paths));
+        _setFavouritePaths(paths);
+    }, []);
+
+    const setCollapsedGroups = useCallback((paths: string[]) => {
+        localStorage.setItem("collapsed_groups", JSON.stringify(paths));
+        _setCollapsedGroups(paths);
+    }, []);
+
     return {
         onCollectionModified,
-        getCollectionConfig
+        getCollectionConfig,
+        recentlyVisitedPaths,
+        setRecentlyVisitedPaths,
+        favouritePaths,
+        setFavouritePaths,
+        collapsedGroups,
+        setCollapsedGroups
     }
 }
