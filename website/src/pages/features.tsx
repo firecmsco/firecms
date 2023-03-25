@@ -10,7 +10,7 @@ function FeaturesPage() {
     return (
         <Layout
             title={"Features - FireCMS"}
-            description="FireCMS includes all the features you need to kickstart your project and all the customization options you may need">
+            description="FireCMS includes all the features you need to kickstart your project and all the customization options you may need.">
 
             <div className="flex flex-col min-h-screen">
 
@@ -18,19 +18,15 @@ function FeaturesPage() {
                     <Hero
                         title={
                             <>
-                                <span
-                                    className="block lg:inline">Features</span>
+                                <span className="block lg:inline">Features</span>
                             </>}
                         subtitle={
                             <>
-                                <p>Empowering Your Content Management: Easily Create, Edit, and Publish with a CMS that both <b>content managers and developers will love</b></p>                            </>}
-                        // cta={<a
-                        //     href="mailto:hello@firecms.co?subject=FireCMS%20consulting"
-                        //     rel="noopener noreferrer"
-                        //     target="_blank"
-                        //     className={CTAButtonMixin}>
-                        //     Get in touch
-                        // </a>}
+                                <p>
+                                    Empowering Your Content Management: Easily Create, Edit, and Publish with a CMS that both <b>content managers and developers will love</b>
+                                </p> 
+                            </>
+                        }
                     />
 
                     <Features/>
