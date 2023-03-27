@@ -115,7 +115,7 @@ export const productsCollection = buildCollection<Product>({
     }),
     Actions: SampleCollectionActions,
     subcollections: [localeCollection],
-    defaultAdditionalView: "locales",
+    // defaultSelectedView: "sample_custom_view",
     views: [
         {
             path: "sample_custom_view",

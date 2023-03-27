@@ -15,7 +15,6 @@ import {
 import { useLocation } from "react-router-dom";
 import { EntitySidePanel } from "../EntitySidePanel";
 import {
-    getFirstAdditionalView,
     removeInitialAndTrailingSlashes
 } from "../util";
 import {
@@ -41,7 +40,6 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
     const initialised = useRef<boolean>(false);
 
     const theme = useTheme();
-    const largeLayout = useLargeSideLayout();
     const smallLayout: boolean = useMediaQuery(theme.breakpoints.down("sm"));
 
     // only on initialisation, create panels from URL
@@ -66,10 +64,10 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
         if (props.copy && !props.entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
-        const firstAdditionalView = largeLayout && props.collection ? getFirstAdditionalView(props.collection) : undefined;
-        sideDialogsController.open(propsToSidePanel({ selectedSubPath: firstAdditionalView?.path, ...props }, navigation, smallLayout));
+        const firstAdditionalView = props.collection ? props.collection.defaultSelectedView : undefined;
+        sideDialogsController.open(propsToSidePanel({ selectedSubPath: firstAdditionalView, ...props }, navigation, smallLayout));
 
-    }, [largeLayout, sideDialogsController, navigation, smallLayout]);
+    }, [sideDialogsController, navigation, smallLayout]);
 
     const replace = useCallback((props: EntitySidePanelProps<any>) => {
 

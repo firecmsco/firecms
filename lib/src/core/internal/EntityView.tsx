@@ -29,7 +29,6 @@ import {
 import {
     canEditEntity,
     fullPathToCollectionSegments,
-    getFirstAdditionalView,
     removeInitialAndTrailingSlashes
 } from "../util";
 
@@ -110,11 +109,30 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const customViews = collection.views;
         const customViewsCount = customViews?.length ?? 0;
 
-        const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
-        const firstAdditionalView = getFirstAdditionalView(collection);
+        const getTabPositionFromPath = useCallback((subPath: string): number => {
+            if (customViews) {
+                const index = customViews
+                    .map((c) => c.path)
+                    .findIndex((p) => p === subPath);
+                if (index !== -1)
+                    return index;
+            }
 
-        const selectFirstTab = !selectedSubPath && largeLayout && firstAdditionalView;
-        const [tabsPosition, setTabsPosition] = React.useState(selectFirstTab ? 0 : -1);
+            if (subcollections) {
+                const index = subcollections
+                    .map((c) => c.path)
+                    .findIndex((p) => p === subPath);
+                if (index !== -1)
+                    return index + customViewsCount;
+            }
+            return -1;
+        }, [customViews, customViewsCount, subcollections]);
+
+        const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
+
+        const defaultSelectedView = selectedSubPath ?? collection.defaultSelectedView;
+
+        const [tabsPosition, setTabsPosition] = React.useState(defaultSelectedView ? getTabPositionFromPath(defaultSelectedView) : -1);
 
         const mainViewVisible = tabsPosition === -1 || largeLayout;
 
@@ -149,53 +167,34 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         }, [authController, usedEntity, status]);
 
-        useEffect(() => {
-            if (selectedSubPath) {
-                if (customViews) {
-                    const index = customViews
-                        .map((c) => c.path)
-                        .findIndex((p) => p === selectedSubPath);
-                    if (index !== -1)
-                        setTabsPosition(index);
-                }
-
-                if (subcollections) {
-                    const index = subcollections
-                        .map((c) => c.path)
-                        .findIndex((p) => p === selectedSubPath);
-                    if (index !== -1)
-                        setTabsPosition(index + customViewsCount);
-                }
-            }
-        }, [selectedSubPath, customViewsCount, customViews, subcollections]);
-
-        useEffect(() => {
-            if (!selectedSubPath)
-                setTabsPosition(-1);
-        }, [selectedSubPath]);
+        // useEffect(() => {
+        //     if (defaultSelectedView) {
+        //         setTabsPosition(getTabPositionFromPath(defaultSelectedView));
+        //     }
+        // }, [getTabPositionFromPath, defaultSelectedView]);
 
         useEffect(() => {
             if (largeLayoutTabSelected.current === largeLayout)
                 return;
 
             // open first tab by default in large layouts
-            if (!selectedSubPath && largeLayout && firstAdditionalView)
+            if (selectedSubPath !== defaultSelectedView)
                 sideEntityController.replace({
                     path,
                     entityId,
-                    selectedSubPath: firstAdditionalView.path,
+                    selectedSubPath: defaultSelectedView,
                     updateUrl: true
                 });
             // set form view by default in small layouts
-            else if (tabsPosition === 0 && !largeLayout && firstAdditionalView)
-                sideEntityController.replace({
-                    path,
-                    entityId,
-                    selectedSubPath: undefined,
-                    updateUrl: true
-                });
+            // else if (tabsPosition === 0 && !largeLayout && defaultSelectedView)
+            //     sideEntityController.replace({
+            //         path,
+            //         entityId,
+            //         selectedSubPath: undefined,
+            //         updateUrl: true
+            //     });
             largeLayoutTabSelected.current = largeLayout;
-        }, [largeLayout, tabsPosition, firstAdditionalView, largeLayoutTabSelected.current, selectedSubPath]);
+        }, [defaultSelectedView, largeLayout, selectedSubPath]);
 
         const onPreSaveHookError = useCallback((e: Error) => {
             snackbarController.open({
