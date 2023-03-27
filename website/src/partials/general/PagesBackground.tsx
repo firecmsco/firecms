@@ -14,12 +14,12 @@ function shouldShowAnimation(pathname) {
 const animationPaths = [
     "/features",
     "/enterprise",
+    "/pricing",
     "/f/"
 ];
 
 export function PagesBackground({ darkMode }: { darkMode: boolean }) {
     const { siteConfig } = useDocusaurusContext();
-    console.log("PagesBackground", siteConfig);
 
     const { pathname } = useLocation();
     const [showAnimation, setShowAnimation] = React.useState(shouldShowAnimation(pathname));
@@ -28,9 +28,9 @@ export function PagesBackground({ darkMode }: { darkMode: boolean }) {
         if (shouldShowAnimation(pathname)) {
             setShowAnimation(true);
         }
-        if (siteConfig.customFields?.env !== "production") {
-            setShowAnimation(false);
-        }
+        // if (siteConfig.customFields?.env !== "production") {
+        //     setShowAnimation(false);
+        // }
     }, [ExecutionEnvironment.canUseDOM]);
 
     return <>

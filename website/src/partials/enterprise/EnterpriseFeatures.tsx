@@ -56,9 +56,6 @@ export function EnterpriseFeatures() {
                         <div className={"flex items-center gap-4"}>
                             <CheckCircleIcon/>Custom integrations
                         </div>
-                        <div className={"flex items-center gap-4"}>
-                            <CheckCircleIcon/>Dedicated support
-                        </div>
 
                     </div>
                 </>}/>

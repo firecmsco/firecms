@@ -7,6 +7,7 @@ import { PropertyPreview } from "../../preview";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/components/ErrorBoundary";
+import { getIconForProperty } from "../../core";
 
 /**
  *
@@ -41,7 +42,8 @@ export function ReadOnlyFieldBinding({
         <FormControl fullWidth error={showError}>
 
             {!tableMode && <FormHelperText filled>
-                <LabelWithIcon property={property}/>
+                <LabelWithIcon icon={getIconForProperty(property)}
+                               title={property.name}/>
             </FormHelperText>}
 
             <Paper

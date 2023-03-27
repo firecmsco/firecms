@@ -51,7 +51,7 @@ export function getPropertyColumnWidth(property: ResolvedProperty): number {
         if (property.url) {
             return 280;
         } else if (property.storage) {
-            return 220;
+            return 160;
         } else if (property.enumValues) {
             return 200;
         } else if (property.multiline) {
@@ -82,7 +82,7 @@ export function getPropertyColumnWidth(property: ResolvedProperty): number {
     } else if (property.dataType === "map") {
         return 360;
     } else if (property.dataType === "date") {
-        return 160;
+        return 200;
     } else if (property.dataType === "reference") {
         return 220;
     } else if (property.dataType === "boolean") {

@@ -9,11 +9,11 @@ import { getColorSchemeForSeed } from "../../core/util/chip_utils";
  * @category Preview components
  */
 export function StringPropertyPreview({
-                                  propertyKey,
-                                  value,
-                                  property,
-                                  size
-                              }: PropertyPreviewProps<string>): React.ReactElement {
+                                          propertyKey,
+                                          value,
+                                          property,
+                                          size
+                                      }: PropertyPreviewProps<string>): React.ReactElement {
 
     if (property.enumValues) {
         const enumKey = value;
@@ -33,10 +33,14 @@ export function StringPropertyPreview({
                 />
             </ErrorBoundary>);
     } else {
+        const lines = value.split("\n");
         return value && value.includes("\n")
             ? <div>
-                {value.split("\n").map((str, index) =>
-                    <div key={`string_preview_${index}`}>{str}</div>)}
+                {lines.map((str, index) =>
+                    <React.Fragment key={`string_preview_${index}`}>
+                        <span>{str}</span>
+                        {index !== lines.length - 1 && <br/>}
+                    </React.Fragment>)}
             </div>
             : <>{value}</>;
     }

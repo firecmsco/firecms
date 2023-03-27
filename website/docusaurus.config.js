@@ -75,14 +75,19 @@ module.exports = {
                     position: "left"
                 },
                 {
+                    to: "enterprise",
+                    label: "Enterprise",
+                    position: "left"
+                },
+                // {
+                //     to: "pricing",
+                //     label: "Pricing",
+                //     position: "left"
+                // },
+                {
                     type: "docSidebar",
                     sidebarId: "docsSidebar",
                     label: "Docs",
-                    position: "left"
-                },
-                {
-                    to: "enterprise",
-                    label: "Enterprise",
                     position: "left"
                 },
                 {
@@ -105,15 +110,15 @@ module.exports = {
                 {
                     to: "https://demo.firecms.co",
                     label: "Demo",
-                    // className: "btn shadow-none mr-2 px-6 py-2 font-bold uppercase",
-                    className: "btn mr-3 px-6 py-2 text-white font-bold uppercase bg-primary hover:text-white hover:bg-blue-700",
+                    // className: "btn shadow-none mr-2 px-6 py-2  uppercase",
+                    className: "btn mr-3 px-6 py-2 text-white  uppercase bg-primary hover:text-white hover:bg-blue-700",
                     "aria-label": "Open the demo project",
                     position: "right"
                 },
                 // {
                 //     to: "https://app.firecms.co",
                 //     label: "Sign in",
-                //     className: "btn mr-3 px-6 py-2 text-white font-bold uppercase bg-primary hover:text-white hover:bg-blue-700",
+                //     className: "btn mr-3 px-6 py-2 text-white  uppercase bg-primary hover:text-white hover:bg-blue-700",
                 //     "aria-label": "Go to FireCMS Cloud",
                 //     position: "right"
                 // },
@@ -135,6 +140,11 @@ module.exports = {
                     // Label of the section of these links
                     title: "Links",
                     items: [
+                        {
+                            to: "enterprise",
+                            label: "Enterprise",
+                            position: "left"
+                        },
                         {
                             label: "Demo",
                             to: "https://demo.firecms.co"

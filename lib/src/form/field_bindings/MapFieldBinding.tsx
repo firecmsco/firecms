@@ -10,7 +10,12 @@ import {
 } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
-import { ExpandablePanel, isHidden, pick } from "../../core";
+import {
+    ExpandablePanel,
+    getIconForProperty,
+    isHidden,
+    pick
+} from "../../core";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
@@ -23,19 +28,18 @@ import { PropertyFieldBinding } from "../PropertyFieldBinding";
  * @category Form fields
  */
 export function MapFieldBinding<T extends Record<string, any>>({
-                                                      propertyKey,
-                                                      value,
-                                                      showError,
-                                                      disabled,
-                                                      property,
-                                                      setValue,
-                                                      tableMode,
-                                                      includeDescription,
-                                                      underlyingValueHasChanged,
-                                                      autoFocus,
-                                                      shouldAlwaysRerender,
-                                                      context
-                                                  }: FieldProps<T>) {
+                                                                   propertyKey,
+                                                                   value,
+                                                                   showError,
+                                                                   disabled,
+                                                                   property,
+                                                                   setValue,
+                                                                   tableMode,
+                                                                   includeDescription,
+                                                                   underlyingValueHasChanged,
+                                                                   autoFocus,
+                                                                   context
+                                                               }: FieldProps<T>) {
 
     const pickOnlySomeKeys = property.pickOnlySomeKeys || false;
     const expanded = (property.expanded === undefined ? true : property.expanded) || autoFocus;
@@ -95,7 +99,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
     }, [disabled, property.properties, setValue, value]);
 
     const mapFormView = <>
-        <Grid container spacing={2}>
+        <Grid container spacing={2} sx={{ py: 1 }}>
             {Object.entries(mapProperties)
                 .filter(([_, property]) => !isHidden(property))
                 .map(([entryKey, childProperty], index) => {
@@ -108,8 +112,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
                             context,
                             tableMode: false,
                             partOfArray: false,
-                            autoFocus: autoFocus && index === 0,
-                            shouldAlwaysRerender: childProperty.fromBuilder
+                            autoFocus: autoFocus && index === 0
                         };
                         return (
                             <Grid item
@@ -127,7 +130,8 @@ export function MapFieldBinding<T extends Record<string, any>>({
 
     </>;
 
-    const title = <LabelWithIcon property={property}/>;
+    const title = <LabelWithIcon icon={getIconForProperty(property)}
+                                 title={property.name}/>;
 
     return (
         <FormControl fullWidth error={showError}>

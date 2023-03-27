@@ -1,23 +1,38 @@
 import { Box, Divider, Typography } from "@mui/material";
 import { PropsWithChildren } from "react";
+import { ExpandablePanel } from "../ExpandablePanel";
+import {
+    useUserConfigurationPersistence
+} from "../../../hooks/useUserConfigurationPersistence";
 
 export function NavigationGroup({
                                     children,
                                     group
                                 }: PropsWithChildren<{ group: string | undefined }>) {
+    const userConfigurationPersistence = useUserConfigurationPersistence();
     return (
-        <Box mt={6} mb={6}>
+        <ExpandablePanel
+            invisible={true}
+            expanded={!(userConfigurationPersistence?.collapsedGroups ?? []).includes(group ?? "ungrouped")}
+            onExpandedChange={expanded => {
+                if (userConfigurationPersistence) {
 
-            <Typography color={"textSecondary"}
-                        className={"weight-500"}>
+                    if (!expanded) {
+                        const paths = (userConfigurationPersistence.collapsedGroups ?? []).concat(group ?? "ungrouped");
+                        userConfigurationPersistence.setCollapsedGroups(paths);
+                    } else {
+                        userConfigurationPersistence.setCollapsedGroups((userConfigurationPersistence.collapsedGroups ?? []).filter(g => g !== (group ?? "ungrouped")));
+                    } }
+            }}
+            title={<Typography color={"textSecondary"}
+                               className={"weight-500"}
+                               sx={{ ml: 1 }}>
                 {group?.toUpperCase() ?? "Ungrouped views".toUpperCase()}
-            </Typography>
+            </Typography>}>
 
-            <Divider/>
-
-            <Box mt={2}>
+            <Box mb={2}>
                 {children}
             </Box>
-        </Box>
+        </ExpandablePanel>
     );
 }

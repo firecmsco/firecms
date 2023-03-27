@@ -21,7 +21,7 @@ export function TwoColumns({
 
     return (
         <div
-            className={ContainerMixin + " relative mx-auto my-8"}>
+            className={ContainerMixin + " relative mx-auto my-8 md:my-12"}>
             <div
                 className={"max-w-full flex flex-col lg:grid lg:grid-cols-12 lg:gap-10 " + flexDirection}>
                 <div

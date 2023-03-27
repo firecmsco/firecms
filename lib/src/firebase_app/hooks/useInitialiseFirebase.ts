@@ -35,11 +35,13 @@ const hostingError = "It seems like the provided Firebase config is not correct.
 export function useInitialiseFirebase({
                                           firebaseConfig,
                                           onFirebaseInit,
-                                          name
+                                          name,
+                                          authDomain
                                       }: {
     onFirebaseInit?: ((config: object) => void) | undefined,
     firebaseConfig: Record<string, unknown> | undefined,
     name?: string;
+    authDomain?: string;
 }): InitialiseFirebaseResult {
 
     const [firebaseApp, setFirebaseApp] = React.useState<FirebaseApp | undefined>();
@@ -72,6 +74,7 @@ export function useInitialiseFirebase({
                     console.debug("Firebase init response", response.status);
                     if (response && response.status < 300) {
                         const config = await response.json();
+                        if (authDomain) config.authDomain = authDomain;
                         initFirebase(config);
                     }
                 })

@@ -9,7 +9,12 @@ import {
 } from "../../types";
 import { ReferencePreview } from "../../preview";
 import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
-import { ErrorView, ExpandablePanel, getReferenceFrom } from "../../core";
+import {
+    ErrorView,
+    ExpandablePanel,
+    getIconForProperty,
+    getReferenceFrom
+} from "../../core";
 
 import {
     useClearRestoreValue,
@@ -27,16 +32,16 @@ type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
  * @category Form fields
  */
 export function ArrayOfReferencesFieldBinding({
-                                           propertyKey,
-                                           value,
-                                           error,
-                                           showError,
-                                           isSubmitting,
-                                           tableMode,
-                                           property,
-                                           includeDescription,
-                                           setValue
-                                       }: ArrayOfReferencesFieldProps) {
+                                                  propertyKey,
+                                                  value,
+                                                  error,
+                                                  showError,
+                                                  isSubmitting,
+                                                  tableMode,
+                                                  property,
+                                                  includeDescription,
+                                                  setValue
+                                              }: ArrayOfReferencesFieldProps) {
 
     const ofProperty = property.of as ResolvedProperty;
     if (ofProperty.dataType !== "reference") {
@@ -102,7 +107,8 @@ export function ArrayOfReferencesFieldBinding({
     }, [ofProperty.path, ofProperty.previewProperties, onHover, value]);
 
     const title = (
-        <LabelWithIcon property={property}/>
+        <LabelWithIcon icon={getIconForProperty(property)}
+                       title={property.name}/>
     );
 
     const body = <>
@@ -115,7 +121,8 @@ export function ArrayOfReferencesFieldBinding({
                             addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
                             name={propertyKey}
                             buildEntry={buildEntry}
-                            disabled={isSubmitting}/>
+                            disabled={isSubmitting}
+                            newDefaultEntry={property.of.defaultValue}/>
 
             <Box p={1}
                  justifyContent="center"

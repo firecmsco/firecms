@@ -24,7 +24,9 @@ import {
     atomOneLight,
     dracula
 } from "react-syntax-highlighter/dist/esm/styles/hljs";
-import { arrowIcon, tickIcon } from "../icons";
+import { arrowIcon } from "../icons";
+
+import TickIcon from "@site/static/img/icons/check.svg";
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
 
@@ -34,7 +36,7 @@ export function DeveloperFeatures() {
     const isDarkTheme = colorMode === "dark";
 
     return (
-        <Panel color={"gray"} includeMargin={true}>
+        <Panel color={"gray"} includeMargin={false}>
 
             <p className="text-center text-secondary uppercase font-bold ">
                 For developers
@@ -118,7 +120,7 @@ export function DeveloperFeatures() {
                     <p className="italic text-base text-gray-600 dark:text-gray-200">
                         * Some features can only be enabled by
                         using the self-hosted version, but will be
-                        available in the cloud version soon.
+                        available in FireCMS Cloud version soon.
                     </p>
 
                 </div>
@@ -127,38 +129,38 @@ export function DeveloperFeatures() {
             <TwoColumns
                 animation={false}
                 left={
-                <>
-                    <div className={"flex items-center mb-3"}>
+                    <>
+                        <div className={"flex items-center mb-3"}>
 
-                        <div
-                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
-                            {tickIcon}
+                            <div
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                                <TickIcon/>
+                            </div>
+
+                            <h3 className="h3 m-0">
+                                Built for every project
+                            </h3>
+
                         </div>
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                            FireCMS is a headless CMS built to work
+                            with every existing Firebase/Firestore
+                            project. It does not
+                            enforce any data structure.
+                        </p>
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                            Use the integrated hooks and callbacks to
+                            integrate your business logic in multiple
+                            ways.
+                        </p>
 
-                        <h3 className="h3 m-0">
-                            Built for every project
-                        </h3>
-
-                    </div>
-                    <p className="text-xl text-gray-600 dark:text-gray-200">
-                        FireCMS is a headless CMS built to work
-                        with every existing Firebase/Firestore
-                        project. It does not
-                        enforce any data structure.
-                    </p>
-                    <p className="text-xl text-gray-600 dark:text-gray-200">
-                        Use the integrated hooks and callbacks to
-                        integrate your business logic in multiple
-                        ways.
-                    </p>
-
-                    <p className="italic text-base text-gray-600 dark:text-gray-200">
-                        * Some features can only be enabled by
-                        using the self-hosted version, but will be
-                        available in the cloud version soon.
-                    </p>
-                </>
-            } right={
+                        <p className="italic text-base text-gray-600 dark:text-gray-200">
+                            * Some features can only be enabled by
+                            using the self-hosted version, but will be
+                            available in the FireCMS Cloud version soon.
+                        </p>
+                    </>
+                } right={
                 <>
                     <div
                         className="relative flex-col font-mono">

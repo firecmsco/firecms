@@ -58,9 +58,7 @@ function HeroHome({}) {
                 The missing piece for your project
             </h2>
 
-            <div className="mt-8 mb-8 flex justify-center">
-                <HeroButtons/>
-            </div>
+            <HeroButtons/>
 
         </div>
 

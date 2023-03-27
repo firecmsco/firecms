@@ -2,17 +2,20 @@ import React, { useCallback } from "react";
 
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
+
 import {
+    AppCheckOptions,
     Authenticator,
-    buildFieldConfig,
     CMSView,
     FirebaseCMSApp
 } from "firecms";
+import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
+import { publicRecaptchaKey } from "../appcheck_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
 import { testCollection } from "./collections/test_collection";
@@ -31,8 +34,16 @@ import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
+import { booksCollection } from "./collections/books_collection";
 
 function SampleApp() {
+    const appCheckOptions: AppCheckOptions = {
+        providerKey: publicRecaptchaKey,
+        useEnterpriseRecaptcha: false,
+        isTokenAutoRefreshEnabled: true,
+        // debugToken: appCheckDebugToken,
+        forceRefresh: false
+    };
 
     const githubLink = (
         <Tooltip
@@ -86,6 +97,7 @@ function SampleApp() {
 
     const collections = [
         productsCollection,
+        booksCollection,
         usersCollection,
         blogCollection,
         showcaseCollection,
@@ -101,9 +113,21 @@ function SampleApp() {
         logEvent(analytics, event, data);
     }, []);
 
+    const dataEnhancementPlugin = useDataEnhancementPlugin({
+        getConfigForPath: async ({ path }) => {
+            if (process.env.NODE_ENV !== "production")
+                return true;
+            if (path === "books")
+                return true;
+            return false;
+        }
+    });
+
     return <FirebaseCMSApp
         name={"My Online Shop"}
+        // appCheckOptions={appCheckOptions}
         authentication={myAuthenticator}
+        plugins={[dataEnhancementPlugin]}
         signInOptions={[
             "password",
             "google.com"

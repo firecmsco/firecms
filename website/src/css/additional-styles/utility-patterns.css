@@ -26,7 +26,7 @@
 
 .btn,
 .btn-sm {
-    @apply font-medium inline-flex items-center justify-center border border-transparent rounded leading-snug transition duration-150 ease-in-out;
+    @apply font-bold inline-flex items-center justify-center border border-transparent rounded leading-snug transition duration-150 ease-in-out;
 }
 
 .btn {

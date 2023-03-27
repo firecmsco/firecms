@@ -32,15 +32,4 @@ export const arrowIcon = <svg
     />
 </svg>;
 
-export const tickIcon = <svg width="16px" height="16px" viewBox="0 0 20 15"
-                      version="1.1" xmlns="http://www.w3.org/2000/svg">
-    <g id="Page-1" stroke="none" strokeWidth="1" fill="none"
-       fillRule="evenodd">
-        <g id="check_black_24dp" transform="translate(-2.000000, -5.000000)">
-            <polygon id="Path" points="0 0 24 0 24 24 0 24"></polygon>
-            <polygon id="Path" fill="#FFFFFF" fillRule="nonzero"
-                     points="9 14.9813787 5.38451728 11.363324 2.88437331 13.9911209 9 20.002627 21.509993 7.55223468 19.0392011 4.9604079"></polygon>
-        </g>
-    </g>
-</svg>;
 

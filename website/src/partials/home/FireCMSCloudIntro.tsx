@@ -3,7 +3,13 @@ import React from "react"
 import collectionEditorVideo
 // @ts-ignore
     from "@site/static/img/collection_editor_preview.mp4";
-import { ContainerMixin } from "../utils";
+import {
+    ContainerMixin,
+    CTAButtonMixin,
+    CTACaret,
+    CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin
+} from "../utils";
+import useBaseUrl from "@docusaurus/useBaseUrl";
 
 export const FireCMSCloudIntro = () => {
 
@@ -14,18 +20,19 @@ export const FireCMSCloudIntro = () => {
                 className={"px-4 sm:px-6 mb-16 bg-pink-400 text-white pb-16"}>
                 <div
                     className={ContainerMixin + " flex flex-col py-20"}>
+
                     <h2 className="h1 mb-4 text-gray-900 uppercase">
-                        New content-schema editor
+                        New No-code FireCMS
                     </h2>
 
                     <div className={"mt-4 mx-auto text-xl"}>
-                        <div>
-                            FireCMS Cloud is a hosted version of FireCMS that
-                            allows you to create your own headless CMS in
-                            minutes. It includes a new content schema editor
-                            that allows you to create your own content models
-                            and collections.
-                        </div>
+                        <p>
+                            <b>FireCMS Cloud</b> is a hosted version of FireCMS
+                            that allows you to create your own headless CMS
+                            in minutes. It includes a new content schema
+                            editor that allows you to create your own
+                            content models and collections.
+                        </p>
                         <p>If you have an <strong>existing Firebase
                             project</strong>, let FireCMS Cloud
                             set-up the collections for you based on your
@@ -36,8 +43,27 @@ export const FireCMSCloudIntro = () => {
                             new ones,
                             since it sets up a complete Google Cloud Project for
                             you.</p>
+
+                        <div >
+                            Note that you can always use the <a
+                            href={useBaseUrl("docs")}>self-hosted version</a> of
+                            FireCMS
+                        </div>
+
                     </div>
 
+
+                    <div className={"my-8"}>
+                        <a
+                            className={CTAOutlinedButtonWhiteMixin}
+                            href="http://app.firecms.co"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            Go to FireCMS Cloud
+                            <CTACaret/>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div
@@ -53,9 +79,4 @@ export const FireCMSCloudIntro = () => {
             </div>
         </section>
     )
-}
-
-function validateEmail(email: string) {
-    const regex = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
-    return regex.test(email);
 }

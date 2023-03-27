@@ -1,4 +1,4 @@
-import React, { useDeferredValue, useEffect } from "react";
+import React, { useDeferredValue, useEffect, useRef } from "react";
 
 import { styled } from "@mui/material/styles";
 
@@ -19,6 +19,7 @@ import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
 import { fieldBackground } from "./utils";
+import { getIconForProperty } from "../../core";
 
 const mdParser = new MarkdownIt();
 MdEditor.use(Plugins.AutoResize, {
@@ -45,23 +46,26 @@ export function MarkdownFieldBinding({
                                          property,
                                          tableMode,
                                          includeDescription,
-                                         context,
-                                         shouldAlwaysRerender
+                                         context
                                      }: FieldProps<string>) {
 
     const [internalValue, setInternalValue] = React.useState(value);
+    const valueRef = useRef(value);
 
-    const deferredInternalValue = useDeferredValue(internalValue);
-    const deferredValue = useDeferredValue(value);
+    const deferred = useDeferredValue({
+        internalValue,
+        value
+    });
 
     useEffect(() => {
+        valueRef.current = value;
         setInternalValue(value);
     }, [value]);
 
     useEffect(() => {
-        if (deferredInternalValue !== deferredValue)
-            setValue(deferredInternalValue);
-    }, [deferredInternalValue, deferredValue, setValue]);
+        if (deferred.internalValue !== valueRef.current)
+            setValue(deferred.internalValue);
+    }, [deferred]);
 
     return (
         <StyledFormControl
@@ -70,14 +74,22 @@ export function MarkdownFieldBinding({
             fullWidth>
 
             {!tableMode && <FormHelperText filled>
-                <LabelWithIcon property={property}/>
+                <LabelWithIcon icon={getIconForProperty(property)}
+                               title={property.name}/>
             </FormHelperText>}
 
             <MdEditor value={internalValue ?? ""}
                       readOnly={disabled}
                       renderHTML={text => mdParser.render(text)}
-                      view={{ menu: true, md: true, html: false }}
-                      onChange={({ html, text }) => {
+                      view={{
+                          menu: true,
+                          md: true,
+                          html: false
+                      }}
+                      onChange={({
+                                     html,
+                                     text
+                                 }) => {
                           setInternalValue(text ?? null);
                       }}/>
 

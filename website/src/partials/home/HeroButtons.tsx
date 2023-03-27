@@ -18,10 +18,10 @@ function HeroButtons() {
         </defs>
     </svg>;
 
-    return <>
+    return <div className="mt-8 mb-8 flex justify-center flex-col md:flex-row">
 
         <a
-            className={"btn shadow-none mb-4 sm:mb-0 font-bold py-4 text-white font-bold dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full sm:w-auto rounded"}
+            className={"btn shadow-none mb-4 sm:mb-0  py-4 text-white  dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full sm:w-auto rounded"}
             href={"https://discord.gg/fxy7xsQm3m"}
         >
             {discordIcon}
@@ -42,7 +42,7 @@ function HeroButtons() {
             Get started
             <CTACaret/>
         </a>
-    </>;
+    </div>;
 }
 
 export default HeroButtons;

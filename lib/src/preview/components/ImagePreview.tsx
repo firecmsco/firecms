@@ -17,7 +17,10 @@ export interface ImagePreviewProps {
 /**
  * @category Preview components
  */
-export function ImagePreview({ size, url }: ImagePreviewProps) {
+export function ImagePreview({
+                                 size,
+                                 url
+                             }: ImagePreviewProps) {
 
     const [onHover, setOnHover] = useState(false);
 

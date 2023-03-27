@@ -11,6 +11,7 @@ import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { fieldBackground, fieldBackgroundHover } from "./utils";
+import { getIconForProperty } from "../../core";
 
 type SwitchFieldProps = FieldProps<boolean>;
 
@@ -31,8 +32,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                                                                                    disabled,
                                                                                    touched,
                                                                                    property,
-                                                                                   includeDescription,
-                                                                                   shouldAlwaysRerender
+                                                                                   includeDescription
                                                                                }: SwitchFieldProps, ref) {
 
     useClearRestoreValue({
@@ -116,8 +116,8 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                     }
                     disabled={disabled}
                     label={
-                        <LabelWithIcon
-                            property={property}/>
+                        <LabelWithIcon icon={getIconForProperty(property)}
+                                       title={property.name}/>
                     }
                 />
 

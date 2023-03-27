@@ -55,6 +55,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path), null) &&
         onNewClick && (largeLayout
             ? <Button
+                id={`add_entity_${path}`}
                 onClick={onNewClick}
                 startIcon={<Add/>}
                 size="large"
@@ -63,6 +64,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 Add {collection.singularName ?? collection.name}
             </Button>
             : <Button
+                id={`add_entity_${path}`}
                 onClick={onNewClick}
                 size="medium"
                 variant="contained"
@@ -88,8 +90,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             : <IconButton
                 color={"primary"}
                 disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                onClick={onMultipleDeleteClick}
-                size="large">
+                onClick={onMultipleDeleteClick}>
                 <Delete/>
             </IconButton>;
         multipleDeleteButton =

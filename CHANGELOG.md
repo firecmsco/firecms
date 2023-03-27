@@ -1,3 +1,26 @@
+## [2.0.0-beta.3] - 2023-03-21
+
+### Changed
+- Fixed table header bug
+- Added search bar in home page
+- Fix for some deeply nested property builders in arrays
+
+## [2.0.0-beta.3] - 2023-03-21
+
+### Changed
+- Fixed bug regarding custom selection controllers.
+- Fix for default value not being set in array properties.
+- Enabled Firebase App Check. Thanks to @sengerts for the PR!
+- Added copy function to array views. Thanks to @guustmc for the PR!
+- The entity side dialog is now wider by default.
+- Small improvements to block properties. Now the first type is selected by default.
+- Fixed additional ordering added when multiple filter applied, which created a bug. 
+  Thanks to @juanleondev for the PR!
+- Renamed `ReferenceSelectionView` to `ReferenceSelectionInner`
+- Added reference filters
+- Fixed delay of table update when deleting an entity
+- You can now change the value of any property within a custom field.
+
 ## [2.0.0-beta.2] - 2023-01-30
 
 ### Changed

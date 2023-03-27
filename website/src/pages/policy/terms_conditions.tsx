@@ -7,7 +7,6 @@ import Head from "@docusaurus/Head";
 function TermsAndConditions() {
     const divRef = useRef<HTMLSpanElement>(null);
     useEffect(() => {
-        console.log(divRef.current);
         if (divRef.current) {
             divRef.current.innerHTML = html;
         }

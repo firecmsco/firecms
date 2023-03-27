@@ -232,6 +232,16 @@ export interface EntityCollection<M extends Record<string, any> = any,
      */
     defaultAdditionalView?: string;
 
+    /**
+     * Should the ID of this collection be hidden from the form view.
+     */
+    hideIdFromForm?: boolean;
+
+    /**
+     * Should the ID of this collection be hidden from the grid view.
+     */
+    hideIdFromCollection?: boolean;
+
 }
 
 /**
@@ -302,13 +312,15 @@ export type WhereFilterOp =
     | ">"
     | "array-contains"
     | "in"
+    | "not-in"
     | "array-contains-any";
 
 /**
  * Used to define filters applied in collections
  * @category Models
  */
-export type FilterValues<Key extends string> = Partial<Record<Key, [WhereFilterOp, any]>>;
+export type FilterValues<Key extends string> =
+    Partial<Record<Key, [WhereFilterOp, any]>>;
 
 /**
  * You can use this configuration to add additional fields to the data

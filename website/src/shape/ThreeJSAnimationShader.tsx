@@ -71,25 +71,25 @@ export default function ThreeJSAnimationShader({
             const x = dodecahedron.attributes.position.array[i * 3];
             const y = dodecahedron.attributes.position.array[i * 3 + 1];
             const z = dodecahedron.attributes.position.array[i * 3 + 2];
-                const pos = [
-                    x,
-                    y,
-                    z
-                ];
-                const norm = [
-                    dodecahedron.attributes.normal.array[i * 3],
-                    dodecahedron.attributes.normal.array[i * 3 + 1],
-                    dodecahedron.attributes.normal.array[i * 3 + 2]
-                ];
-                const uv = [
-                    dodecahedron.attributes.uv.array[i * 2],
-                    dodecahedron.attributes.uv.array[i * 2 + 1]
-                ];
-                vertices.push({
-                    pos,
-                    norm,
-                    uv
-                });
+            const pos = [
+                x,
+                y,
+                z
+            ];
+            const norm = [
+                dodecahedron.attributes.normal.array[i * 3],
+                dodecahedron.attributes.normal.array[i * 3 + 1],
+                dodecahedron.attributes.normal.array[i * 3 + 2]
+            ];
+            const uv = [
+                dodecahedron.attributes.uv.array[i * 2],
+                dodecahedron.attributes.uv.array[i * 2 + 1]
+            ];
+            vertices.push({
+                pos,
+                norm,
+                uv
+            });
         }
 
         const positions: number[] = [];
@@ -495,9 +495,9 @@ function buildVertexShader() {
 
     vec3 getColor(){
 
-        if (u_dark_mode == 1.0){
-            return vec3(0.0, 0.0, 0.0);
-        }
+        // if (u_dark_mode == 1.0){
+        //     return vec3(0.0, 0.0, 0.0);
+        // }
 
         vec3 st = v_position / u_sphere_radius;
 
@@ -576,7 +576,10 @@ void main(){
     vec3 color = v_color;
     color.rgb +=  v_displacement_amount * 0.2;
     if(u_dark_mode == 1.0){
-        color.rg -=  (1.0 - v_position.z / u_sphere_radius) * .2;
+        color.g = color.g * 0.2;
+        color.r =  color.r * 0.4;
+        color.b =  color.b * 0.5;
+        // color.rg -=  (1.0 - v_position.z / u_sphere_radius) * .2;
     } else {
     }
         color = czm_saturation(color, 1.1);

@@ -17,6 +17,7 @@ import { resolveProperty } from "./resolutions";
 export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder,
                                     fields?: Record<string, FieldConfig>) {
     const resolvedProperty = resolveProperty({
+        propertyKey: "ignore", // TODO
         propertyOrBuilder,
         fields
     });
@@ -119,4 +120,10 @@ export function getResolvedPropertyInPath(properties: Record<string, ResolvedPro
         }
     }
     return undefined;
+}
+
+// replace the dot notation with brackets
+// address.street => address[street]
+export function getBracketNotation(path: string): string {
+    return path.replace(/\.([^.]*)/g, "[$1]"); ;
 }

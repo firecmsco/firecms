@@ -1,4 +1,10 @@
-import React, { RefObject, useCallback, useRef, useState } from "react";
+import React, {
+    RefObject,
+    useCallback,
+    useEffect,
+    useRef,
+    useState
+} from "react";
 import equal from "react-fast-compare";
 import {
     Badge,
@@ -17,25 +23,42 @@ import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 
 import {
     TableColumn,
-    TableColumnFilter,
     TableSort,
     TableWhereFilterOp
 } from "./VirtualTableProps";
-import { StringNumberFilterField } from "./filters/StringNumberFilterField";
-import { BooleanFilterField } from "./filters/BooleanFilterField";
-import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 import { ErrorBoundary } from "../ErrorBoundary";
+
+interface FilterFormProps<T> {
+    column: TableColumn<T>;
+    onFilterUpdate: (filter?: [TableWhereFilterOp, any], newOpenFilterState?: boolean) => void;
+    filter?: [TableWhereFilterOp, any];
+    onHover: boolean,
+    createFilterField: (props: FilterFormFieldProps<T>) => React.ReactNode;
+    popupOpen: boolean;
+    setPopupOpen: (open: boolean) => void;
+    anchorEl: RefObject<HTMLDivElement>;
+}
+
+export type FilterFormFieldProps<CustomProps> = {
+    id: React.Key,
+    filterValue: [TableWhereFilterOp, any] | undefined,
+    setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void;
+    column: TableColumn<CustomProps>;
+    popupOpen: boolean;
+    setPopupOpen: (open: boolean) => void;
+};
 
 type VirtualTableHeaderProps<M extends Record<string, any>> = {
     resizeHandleRef: RefObject<HTMLDivElement>;
     columnIndex: number;
     isResizingIndex: number;
-    column: TableColumn;
+    column: TableColumn<any>;
     onColumnSort: (key: Extract<keyof M, string>) => void;
     filter?: [TableWhereFilterOp, any];
     sort: TableSort;
     onFilterUpdate: (column: TableColumn, filterForProperty?: [TableWhereFilterOp, any]) => void;
     onClickResizeColumn?: (columnIndex: number, column: TableColumn) => void;
+    createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
 };
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
@@ -48,7 +71,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                                                    onFilterUpdate,
                                                                    filter,
                                                                    column,
-                                                                   onClickResizeColumn
+                                                                   onClickResizeColumn,
+                                                                   createFilterField
                                                                }: VirtualTableHeaderProps<M>) {
 
         const ref = useRef<HTMLDivElement>(null);
@@ -65,9 +89,10 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
             setOpenFilter(false);
         }, []);
 
-        const update = useCallback((filterForProperty?: [TableWhereFilterOp, any]) => {
+        const update = useCallback((filterForProperty?: [TableWhereFilterOp, any], newOpenFilterState?: boolean) => {
             onFilterUpdate(column, filterForProperty);
-            setOpenFilter(false);
+            if (newOpenFilterState !== undefined)
+                setOpenFilter(newOpenFilterState);
         }, [column, onFilterUpdate]);
 
         const thisColumnIsResizing = isResizingIndex === columnIndex;
@@ -91,7 +116,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                         fontWeight: 600,
                         position: column.frozen ? "sticky" : "relative",
                         left: column.frozen ? 0 : undefined,
-                        zIndex: column.frozen ? 1 : 0
+                        zIndex: column.frozen ? 1 : 0,
+                        userSelect: "none"
                     })}
                     ref={ref}
                     wrap={"nowrap"}
@@ -117,10 +143,13 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                 {column.icon && column.icon(onHover || openFilter)}
                             </Box>
                             <Box sx={{
+                                display: "-webkit-box",
                                 margin: "0px 4px",
                                 overflow: "hidden",
                                 justifyContent: column.align,
-                                flexShrink: 1
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: "vertical",
+                                textOverflow: "ellipsis"
                             }}>
                                 {column.title}
                             </Box>
@@ -187,127 +216,110 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     />}
                 </Grid>
 
-                {column.sortable && ref?.current && <Popover
-                    id={openFilter ? `popover_${column.key}` : undefined}
-                    open={openFilter}
-                    elevation={1}
-                    anchorEl={ref.current}
-                    onClose={handleClose}
-                    anchorOrigin={{
-                        vertical: "bottom",
-                        horizontal: "right"
-                    }}
-                    transformOrigin={{
-                        vertical: "top",
-                        horizontal: "right"
-                    }}
-                >
+                {column.filter && createFilterField &&
                     <FilterForm column={column}
                                 filter={filter}
                                 onHover={onHover}
-                                onFilterUpdate={update}/>
-                </Popover>}
+                                onFilterUpdate={update}
+                                createFilterField={createFilterField}
+                                popupOpen={openFilter}
+                                setPopupOpen={setOpenFilter}
+                                anchorEl={ref}/>}
 
             </ErrorBoundary>
         );
     }, equal) as React.FunctionComponent<VirtualTableHeaderProps<any>>;
 
-interface FilterFormProps<M> {
-    column: TableColumn;
-    onFilterUpdate: (filter?: [TableWhereFilterOp, any]) => void;
-    filter?: [TableWhereFilterOp, any];
-    onHover: boolean
-}
-
 function FilterForm<M>({
                            column,
                            onFilterUpdate,
                            filter,
-                           onHover
+                           onHover,
+                           createFilterField,
+                           popupOpen,
+                           setPopupOpen,
+                           anchorEl
                        }: FilterFormProps<M>) {
 
     const id = column.key;
 
     const [filterInternal, setFilterInternal] = useState<[TableWhereFilterOp, any] | undefined>(filter);
 
-    const submit = (e: any) => {
-        onFilterUpdate(filterInternal);
+    useEffect(() => {
+        setFilterInternal(filter);
+    }, [filter]);
+
+    if (!column.filter) return null;
+
+    const submit = () => {
+        onFilterUpdate(filterInternal, false);
     };
 
     const reset = (e: any) => {
-        onFilterUpdate(undefined);
+        onFilterUpdate(undefined, false);
     };
 
     const filterIsSet = !!filter;
 
+    const filterField = createFilterField({
+        id,
+        filterValue: filterInternal,
+        setFilterValue: setFilterInternal,
+        column,
+        popupOpen,
+        setPopupOpen
+    });
+
+    if (!filterField) return null;
     return (
-        <>
-            <Box p={2} sx={{
-                fontSize: "0.750rem",
-                fontWeight: 600,
-                textTransform: "uppercase"
-            }}>
-                {column.title ?? id}
-            </Box>
-            <Divider/>
-            {column.filter && <Box p={2}>
-                {createFilterField(id, column.filter, filterInternal, setFilterInternal)}
-            </Box>}
-            <Box display="flex"
-                 justifyContent="flex-end"
-                 m={2}>
-                <Box mr={1}>
-                    <Button
-                        disabled={!filterIsSet}
-                        color="primary"
-                        type="reset"
-                        aria-label="filter clear"
-                        onClick={reset}>Clear</Button>
+        <Popover
+            id={`popover_${column.key}`}
+            open={popupOpen}
+            elevation={2}
+            anchorEl={anchorEl.current}
+            onClose={() => setPopupOpen(false)}
+            anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right"
+            }}
+            transformOrigin={{
+                vertical: "top",
+                horizontal: "right"
+            }}
+        >
+            <Box sx={theme => ({
+                // backgroundColor: theme.palette.background.default
+            })}>
+                <Box sx={theme => ({
+                    p: 2,
+                    fontSize: "0.750rem",
+                    fontWeight: 600,
+                    textTransform: "uppercase"
+                })}>
+                    {column.title ?? id}
                 </Box>
-                <Button
-                    variant="outlined"
-                    color="primary"
-                    onClick={submit}>Filter</Button>
+                <Divider/>
+                {filterField && <Box p={2}>
+                    {filterField}
+                </Box>}
+                <Box display="flex"
+                     justifyContent="flex-end"
+                     m={2}>
+                    <Box mr={1}>
+                        <Button
+                            disabled={!filterIsSet}
+                            color="primary"
+                            type="reset"
+                            aria-label="filter clear"
+                            onClick={reset}>Clear</Button>
+                    </Box>
+                    <Button
+                        variant="outlined"
+                        color="primary"
+                        onClick={submit}>Filter</Button>
+                </Box>
             </Box>
-        </>
+        </Popover>
     );
 
-}
-
-function createFilterField(id: React.Key,
-                           filterConfig: TableColumnFilter,
-                           filterValue: [TableWhereFilterOp, any] | undefined,
-                           setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void
-): React.ReactNode {
-
-    if (filterConfig.dataType === "number" || filterConfig.dataType === "string") {
-        const dataType = filterConfig.dataType;
-        const title = filterConfig.title;
-        const enumValues = filterConfig.enumValues;
-        return <StringNumberFilterField value={filterValue}
-                                        setValue={setFilterValue}
-                                        name={id as string}
-                                        dataType={dataType}
-                                        isArray={filterConfig.isArray}
-                                        enumValues={enumValues}
-                                        title={title}/>;
-    } else if (filterConfig.dataType === "boolean") {
-        const title = filterConfig.title;
-        return <BooleanFilterField value={filterValue}
-                                   setValue={setFilterValue}
-                                   name={id as string}
-                                   title={title}/>;
-    } else if (filterConfig.dataType === "date") {
-        const title = filterConfig.title;
-        return <DateTimeFilterField value={filterValue}
-                                    setValue={setFilterValue}
-                                    name={id as string}
-                                    mode={filterConfig.dateMode}
-                                    isArray={filterConfig.isArray}
-                                    title={title}/>;
-    }
-
-    return (
-        <div>{`Currently the field ${filterConfig.dataType} is not supported`}</div>
-    );
 }

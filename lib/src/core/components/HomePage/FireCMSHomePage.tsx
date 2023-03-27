@@ -1,12 +1,30 @@
-import { Container, Grid } from "@mui/material";
+import { useCallback, useEffect, useState } from "react";
+
+import { Box, Container, Grid } from "@mui/material";
+
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
 import {
-    GenericPluginProps,
-    HomePageAdditionalCardsProps
+    PluginGenericProps,
+    PluginHomePageAdditionalCardsProps
 } from "../../../types";
+
 import { toArray } from "../../util/arrays";
 import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCollectionCard } from "./NavigationCollectionCard";
+
+import Index from "flexsearch";
+import { SearchBar } from "../EntityCollectionTable/internal/SearchBar";
+import {
+    useUserConfigurationPersistence
+} from "../../../hooks/useUserConfigurationPersistence";
+import { FavouritesView } from "./FavouritesView";
+
+export const searchIndex = new Index(
+    // @ts-ignore
+    {
+        charset: "latin:advanced",
+        tokenize: "full"
+    });
 
 /**
  * Default entry view for the CMS. This component renders navigation cards
@@ -18,6 +36,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
 
     const context = useFireCMSContext();
     const navigationContext = useNavigationContext();
+    const userConfigurationPersistence = useUserConfigurationPersistence();
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
@@ -27,14 +46,39 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
         groups
     } = navigationContext.topLevelNavigation;
 
+    const [filteredUrls, setFilteredUrls] = useState<string[] | null>(null);
+
+    const filteredNavigationEntries = filteredUrls
+        ? navigationEntries.filter((entry) => filteredUrls.includes(entry.url))
+        : navigationEntries;
+
+    useEffect(() => {
+        filteredNavigationEntries.forEach((entry) => {
+            // @ts-ignore
+            searchIndex.addAsync(entry.url, `${entry.name} ${entry.description} ${entry.group} ${entry.path}`);
+        })
+    }, [navigationEntries]);
+
+    const updateSearchResults = useCallback(
+        (value?: string) => {
+            if (!value || value === "") {
+                setFilteredUrls(null);
+            } else {
+                // @ts-ignore
+                searchIndex.searchAsync(value).then((results) => {
+                    setFilteredUrls(results);
+                });
+            }
+        }, []);
+
     const allGroups: Array<string | undefined> = [...groups];
-    if (navigationEntries.filter(e => !e.group).length > 0 || navigationEntries.length === 0) {
+    if (filteredNavigationEntries.filter(e => !e.group).length > 0 || filteredNavigationEntries.length === 0) {
         allGroups.push(undefined);
     }
 
     let additionalSections: React.ReactNode | undefined;
     if (context.plugins) {
-        const sectionProps: GenericPluginProps = {
+        const sectionProps: PluginGenericProps = {
             context
         };
         additionalSections = <>
@@ -54,11 +98,25 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
     }
 
     return (
-        <Container>
+        <Container sx={{ my: 2 }}>
+
+            <Box sx={{
+                position: "sticky",
+                py: 2,
+                top: 0,
+                zIndex: 10
+            }}>
+                <SearchBar onTextSearch={updateSearchResults}
+                           placeholder={"Search collections"}
+                           large={true}/>
+            </Box>
+
+            <FavouritesView/>
+
             {allGroups.map((group, index) => {
 
-                const AdditionalCards: React.ComponentType<HomePageAdditionalCardsProps>[] = [];
-                const actionProps: HomePageAdditionalCardsProps = {
+                const AdditionalCards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] = [];
+                const actionProps: PluginHomePageAdditionalCardsProps = {
                     group,
                     context
                 };
@@ -71,13 +129,16 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
                     });
                 }
 
+                const thisGroupCollections = filteredNavigationEntries
+                    .filter((entry) => entry.group === group || (!entry.group && group === undefined));
+                if (thisGroupCollections.length === 0 && AdditionalCards.length === 0)
+                    return null;
                 return (
                     <NavigationGroup
                         group={group}
                         key={`plugin_section_${group}`}>
                         <Grid container spacing={2}>
-                            {navigationEntries
-                                .filter((entry) => entry.group === group || (!entry.group && group === undefined)) // so we don't miss empty groups
+                            {thisGroupCollections // so we don't miss empty groups
                                 .map((entry) =>
                                     <Grid item
                                           xs={12}

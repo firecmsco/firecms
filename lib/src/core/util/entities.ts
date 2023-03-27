@@ -39,7 +39,7 @@ export function getDefaultValuesFor<M extends Record<string, any>>(properties: P
     if (!properties) return {};
     return Object.entries(properties)
         .map(([key, property]) => {
-            const value = getDefaultValueFor(property as Property);
+            const value = getDefaultValueFor(property as PropertyOrBuilder);
             return value === undefined ? {} : { [key]: value };
         })
         .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;

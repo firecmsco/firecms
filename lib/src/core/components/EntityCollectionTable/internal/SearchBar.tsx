@@ -8,9 +8,17 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 interface SearchBarProps {
     onTextSearch: (searchString?: string) => void;
+    placeholder?: string;
+    expandable?: boolean;
+    large?: boolean;
 }
 
-export function SearchBar({ onTextSearch }: SearchBarProps) {
+export function SearchBar({
+                              onTextSearch,
+                              placeholder = "Search",
+                              expandable = false,
+                              large = false
+                          }: SearchBarProps) {
 
     const [searchText, setSearchText] = useState<string>("");
     const [active, setActive] = useState<boolean>(false);
@@ -34,70 +42,69 @@ export function SearchBar({ onTextSearch }: SearchBarProps) {
     }, []);
 
     return (
-        <FormControl>
+        <Box sx={theme => ({
+            position: "relative",
+            display: "flex",
+            alignItems: "center",
+            height: large ? 56 : 40,
+            width: expandable ? undefined : "100%",
+            minWidth: "200px",
+            borderRadius: `${theme.shape.borderRadius}px`,
+            backgroundColor: theme.palette.mode === "light" ? darken(theme.palette.background.default, 0.05) : darken(theme.palette.background.default, 0.2),
+            "&:hover": {
+                backgroundColor: theme.palette.mode === "light" ? darken(theme.palette.background.default, 0.08) : darken(theme.palette.background.default, 0.3)
+            },
+            [theme.breakpoints.up("sm")]: {
+                width: "auto"
+            }
+        })}>
             <Box sx={theme => ({
-                position: "relative",
+                padding: theme.spacing(0, 2),
+                height: "100%",
+                position: "absolute",
+                pointerEvents: "none",
                 display: "flex",
                 alignItems: "center",
-                height: 40,
-                minWidth: "200px",
-                borderRadius: `${theme.shape.borderRadius}px`,
-                backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.05) : darken(theme.palette.background.default, 0.2),
-                "&:hover": {
-                    backgroundColor: theme.palette.mode === "light" ? alpha(theme.palette.common.black, 0.10) : darken(theme.palette.background.default, 0.3)
-                },
-                marginLeft: theme.spacing(1),
-                [theme.breakpoints.up("sm")]: {
-                    marginLeft: theme.spacing(1),
-                    width: "auto"
-                }
+                justifyContent: "center"
             })}>
-                <Box sx={theme => ({
-                    padding: theme.spacing(0, 2),
-                    height: "100%",
-                    position: "absolute",
-                    pointerEvents: "none",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center"
-                })}>
-                    <SearchIcon htmlColor={"#888"}/>
-                </Box>
-                <InputBase
-                    placeholder="Search"
-                    value={searchText}
-                    onChange={(event) => {
-                        setSearchText(event.target.value);
-                    }}
-                    onFocus={() => setActive(true)}
-                    onBlur={() => setActive(false)}
-                    sx={{
-                        color: "inherit",
-                        minHeight: "inherit"
-                    }}
-                    inputProps={{
-                        sx: (theme: Theme) => ({
-                            padding: theme.spacing(1, 1, 1, 0),
-                            // vertical padding + font size from searchIcon
-                            paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-                            transition: theme.transitions.create("width"),
-                            width: "100%",
-                            [theme.breakpoints.up("sm")]: {
-                                width: active ? "20ch" : "12ch"
-                            }
-                        }),
-                        "aria-label": "search"
-                    }}
-                    endAdornment={searchText
-                        ? <IconButton
-                            size={"small"}
-                            onClick={clearText}>
-                            <ClearIcon fontSize={"small"}/>
-                        </IconButton>
-                        : <div style={{ width: 26 }}/>
-                    }
-                />
+                <SearchIcon htmlColor={"#888"}/>
             </Box>
-        </FormControl>
+            <InputBase
+                placeholder={placeholder}
+                value={searchText}
+                onChange={(event) => {
+                    setSearchText(event.target.value);
+                }}
+                onFocus={() => setActive(true)}
+                onBlur={() => setActive(false)}
+                sx={{
+                    width: expandable ? undefined : "100%",
+                    color: "inherit",
+                    minHeight: "inherit"
+                }}
+                inputProps={{
+                    sx: (theme: Theme) => ({
+                        padding: theme.spacing(1, 1, 1, 0),
+                        // vertical padding + font size from searchIcon
+                        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                        transition: theme.transitions.create("width"),
+                        width: "100%",
+                        [theme.breakpoints.up("sm")]: {
+                            width: expandable ? active ? "20ch" : "12ch" : "100%"
+                        }
+                    }),
+                    "aria-label": placeholder
+                }}
+                endAdornment={searchText
+                    ? <IconButton
+                        sx={{ mr: large ? 2 : 1 }}
+                        size={"small"}
+                        onClick={clearText}>
+                        <ClearIcon fontSize={"small"}/>
+                    </IconButton>
+                    : <div style={{ width: 26 }}/>
+                }
+            />
+        </Box>
     );
 }

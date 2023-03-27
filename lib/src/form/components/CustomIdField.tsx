@@ -40,11 +40,11 @@ const classes = {
 };
 
 const StyledFormControl = styled(FormControl)((
-   { theme } : {
+    { theme }: {
         theme: Theme
     }
 ) => ({
-
+    marginBottom: "16px",
     [`& .${classes.input}`]: {
         minHeight: "64px"
     },
@@ -55,13 +55,13 @@ const StyledFormControl = styled(FormControl)((
 }));
 
 export function CustomIdField<M extends Record<string, any>, UserType>({
-                                               customId,
-                                               entityId,
-                                               status,
-                                               onChange,
-                                               error,
-                                               entity
-                                           }: {
+                                                                           customId,
+                                                                           entityId,
+                                                                           status,
+                                                                           onChange,
+                                                                           error,
+                                                                           entity
+                                                                       }: {
     customId?: boolean | EnumValues | "optional"
     entityId?: string
     status: EntityStatus,
@@ -139,9 +139,9 @@ export function CustomIdField<M extends Record<string, any>, UserType>({
 
     return (
         <StyledFormControl fullWidth
-                     error={error}
-                     {...fieldProps}
-                     key={"custom-id-field"}>
+                           error={error}
+                           {...fieldProps}
+                           key={"custom-id-field"}>
 
             {enumValues &&
                 <>

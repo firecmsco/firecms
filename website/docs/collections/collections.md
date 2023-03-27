@@ -4,6 +4,11 @@ title: Collections
 sidebar_label: Collections
 ---
 
+:::tip
+You can customize your collections based on the **logged-in user**, by defining 
+them using a callback, as described in [Navigation](../navigation).
+:::
+
 In FireCMS, **collections** represent groups of entities.
 
 You can find collections at the **top level** of the navigation tree (the

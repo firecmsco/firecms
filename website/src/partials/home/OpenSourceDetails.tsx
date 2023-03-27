@@ -31,9 +31,7 @@ function OpenSourceDetails() {
                         </p>
                     </div>
 
-                    <div className="flex justify-center">
-                        <HeroButtons/>
-                    </div>
+                    <HeroButtons/>
 
                 </div>
             </div>

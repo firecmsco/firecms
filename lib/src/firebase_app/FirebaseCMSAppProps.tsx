@@ -9,7 +9,9 @@ import {
     EntityCollection,
     EntityCollectionsBuilder,
     FieldConfig,
-    Locale
+    FireCMSPlugin,
+    Locale,
+    AppCheckOptions
 } from "../types";
 import { FirestoreTextSearchController } from "./types/text_search";
 import {
@@ -102,6 +104,11 @@ export type FirebaseCMSAppProps = {
     onFirebaseInit?: (config: object) => void;
 
     /**
+     * Use this to enable Firebase App Check
+     */
+    appCheckOptions?: AppCheckOptions;
+
+    /**
      * Primary color of the theme of the CMS
      */
     primaryColor?: string;
@@ -179,5 +186,11 @@ export type FirebaseCMSAppProps = {
      * Callback used to get analytics events from the CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+
+    /**
+     * Use plugins to modify the behaviour of the CMS.
+     * Currently, in ALPHA, and likely subject to change.
+     */
+    plugins?: FireCMSPlugin[];
 
 };

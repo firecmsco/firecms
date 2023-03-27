@@ -47,7 +47,10 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
         <FilledSelect
             variant={"standard"}
             value={props.size}
-            sx={{ width: 56, height: 40 }}
+            sx={{
+                width: 56,
+                height: 40
+            }}
             onChange={(evt: any) => props.onSizeChanged(evt.target.value)}
             renderValue={(value: any) => value.toUpperCase()}
         >
@@ -121,7 +124,8 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
                 {props.onTextSearch &&
                     <SearchBar
                         key={"search-bar"}
-                        onTextSearch={props.onTextSearch}/>
+                        onTextSearch={props.onTextSearch}
+                        expandable={true}/>
                 }
 
                 {props.actions}

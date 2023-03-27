@@ -28,7 +28,7 @@ export function performAlgoliaTextSearch(index: SearchIndex, query: string): Pro
             return hits.map((hit: any) => hit.objectID as string);
         })
         .catch((err: any) => {
-            console.log(err);
+            console.error(err);
             return [];
         });
 }

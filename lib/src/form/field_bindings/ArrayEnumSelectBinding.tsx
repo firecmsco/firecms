@@ -21,7 +21,7 @@ import {
     isEnumValueDisabled
 } from "../../core/util/enums";
 import { ArrayEnumPreview, EnumValuesChip } from "../../preview";
-import { ErrorView } from "../../core";
+import { ErrorView, getIconForProperty } from "../../core";
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -93,7 +93,8 @@ export function ArrayEnumSelectBinding({
         >
 
             <InputLabel id={`${propertyKey}-multiselect-label`}>
-                <LabelWithIcon property={property}/>
+                <LabelWithIcon icon={getIconForProperty(property)}
+                               title={property.name}/>
             </InputLabel>
 
             <MuiSelect

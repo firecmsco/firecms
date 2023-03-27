@@ -17,6 +17,7 @@ import { FieldProps } from "../../types";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
+import { getIconForProperty } from "../../core";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -38,8 +39,7 @@ export function TextFieldBinding<T extends string | number>({
                                                                 autoFocus,
                                                                 property,
                                                                 includeDescription,
-                                                                allowInfinity,
-                                                                shouldAlwaysRerender
+                                                                allowInfinity
                                                             }: TextFieldProps<T>) {
 
     let multiline: boolean | undefined;
@@ -101,7 +101,8 @@ export function TextFieldBinding<T extends string | number>({
                 fullWidth>
 
                 <InputLabel sx={{ top: "4px" }}>
-                    <LabelWithIcon property={property}/>
+                    <LabelWithIcon icon={getIconForProperty(property)}
+                                   title={property.name}/>
                 </InputLabel>
 
                 <FilledInput

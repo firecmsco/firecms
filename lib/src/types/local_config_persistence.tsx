@@ -14,4 +14,10 @@ export type PartialEntityCollection<M extends Record<string, any> = any> = Parti
 export interface UserConfigurationPersistence {
     onCollectionModified: <M extends Record<string, any> = any>(path: string, partialCollection: PartialEntityCollection<M>) => void;
     getCollectionConfig: <M extends Record<string, any> = any>(path: string) => PartialEntityCollection<M>;
+    recentlyVisitedPaths: string[];
+    setRecentlyVisitedPaths: (paths: string[]) => void;
+    favouritePaths: string[];
+    setFavouritePaths: (paths: string[]) => void;
+    collapsedGroups: string[];
+    setCollapsedGroups: (paths: string[]) => void;
 }

@@ -22,6 +22,7 @@ import { useFirebaseAuthController } from "./hooks/useFirebaseAuthController";
 import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
+import { useInitializeAppCheck } from "./hooks/useInitializeAppCheck";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./types/auth";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
@@ -62,6 +63,7 @@ export function FirebaseCMSApp({
                                    signInOptions = DEFAULT_SIGN_IN_OPTIONS,
                                    firebaseConfig,
                                    onFirebaseInit,
+                                   appCheckOptions,
                                    primaryColor,
                                    secondaryColor,
                                    fontFamily,
@@ -72,7 +74,8 @@ export function FirebaseCMSApp({
                                    baseCollectionPath,
                                    LoginView,
                                    onAnalyticsEvent,
-                                   fields
+                                   fields,
+                                   plugins
                                }: FirebaseCMSAppProps) {
 
     /**
@@ -87,6 +90,14 @@ export function FirebaseCMSApp({
     } = useInitialiseFirebase({
         onFirebaseInit,
         firebaseConfig
+    });
+
+    const {
+        appCheckLoading,
+        getAppCheckToken
+    } = useInitializeAppCheck({
+        firebaseApp,
+        options: appCheckOptions
     });
 
     /**
@@ -128,6 +139,8 @@ export function FirebaseCMSApp({
     } = useValidateAuthenticator({
         authController,
         authentication,
+        getAppCheckToken,
+        appCheckForceRefresh: (appCheckOptions && appCheckOptions.forceRefresh) ? appCheckOptions.forceRefresh! : false,
         dataSource,
         storageSource
     });
@@ -152,7 +165,7 @@ export function FirebaseCMSApp({
         return <CenteredView fullScreen={true}>{configError}</CenteredView>;
     }
 
-    if (firebaseConfigLoading || !firebaseApp) {
+    if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
         return <>
             <CssBaseline/>
             <CircularProgressCenter/>
@@ -178,8 +191,12 @@ export function FirebaseCMSApp({
                         basePath={basePath}
                         baseCollectionPath={baseCollectionPath}
                         onAnalyticsEvent={onAnalyticsEvent}
+                        plugins={plugins}
                         fields={fields}>
-                        {({ context, loading }) => {
+                        {({
+                              context,
+                              loading
+                          }) => {
 
                             let component;
                             if (loading || authLoading) {
@@ -213,7 +230,7 @@ export function FirebaseCMSApp({
 
                             return (
                                 <ThemeProvider theme={theme}>
-                                    <CssBaseline/>
+                                    <CssBaseline enableColorScheme/>
                                     {component}
                                 </ThemeProvider>
                             );

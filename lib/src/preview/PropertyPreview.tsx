@@ -50,6 +50,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
     } = props;
 
     const property = resolveProperty({
+        propertyKey,
         propertyOrBuilder: inputProperty,
         propertyValue: value,
         fields: fireCMSContext.fields

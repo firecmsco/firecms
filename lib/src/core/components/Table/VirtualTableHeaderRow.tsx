@@ -14,7 +14,8 @@ export const VirtualTableHeaderRow = ({
                                           sortByProperty,
                                           filter,
                                           onColumnResize,
-                                          onColumnResizeEnd
+                                          onColumnResizeEnd,
+                                          createFilterField
                                       }: VirtualTableContextProps<any>) => {
 
     const columnRefs = columns.map(() => createRef<HTMLDivElement>());
@@ -28,7 +29,10 @@ export const VirtualTableHeaderRow = ({
         const params = {
             width: newWidth,
             key: column.key as string,
-            column: { ...column, width: newWidth } as TableColumn
+            column: {
+                ...column,
+                width: newWidth
+            } as TableColumn
         };
         if (!end)
             onColumnResize(params);
@@ -124,7 +128,8 @@ export const VirtualTableHeaderRow = ({
                         sort={sortByProperty === column.key ? currentSort : undefined}
                         onColumnSort={onColumnSort}
                         onClickResizeColumn={onClickResizeColumn}
-                        column={column}/>
+                        column={column}
+                        createFilterField={createFilterField}/>
                 </ErrorBoundary>;
             })}
         </Box>

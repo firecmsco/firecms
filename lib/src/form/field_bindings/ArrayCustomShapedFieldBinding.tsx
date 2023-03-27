@@ -5,7 +5,7 @@ import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { useClearRestoreValue } from "../../hooks";
-import { ExpandablePanel } from "../../core";
+import { ExpandablePanel, getIconForProperty } from "../../core";
 
 /**
  * Array field used for custom
@@ -26,8 +26,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         includeDescription,
                                                                         underlyingValueHasChanged,
                                                                         context,
-                                                                        disabled,
-                                                                        shouldAlwaysRerender
+                                                                        disabled
                                                                     }: FieldProps<T, any, any>) {
 
     if (!Array.isArray(property.resolvedProperties))
@@ -41,7 +40,8 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
         setValue
     });
 
-    const title = <LabelWithIcon property={property}/>;
+    const title = <LabelWithIcon icon={getIconForProperty(property)}
+                                 title={property.name}/>;
 
     const body = property.resolvedProperties.map((childProperty, index) => {
         const fieldProps = {
@@ -53,8 +53,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             context,
             tableMode: false,
             partOfArray: true,
-            autoFocus: false,
-            shouldAlwaysRerender: childProperty.fromBuilder
+            autoFocus: false
         };
         return <Box key={`custom_shaped_array_${index}`} pb={1}>
             <PropertyFieldBinding {...fieldProps}/>

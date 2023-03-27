@@ -1,7 +1,11 @@
-import React, {useCallback, useContext, useEffect, useMemo} from "react";
-import {Box, Button, useMediaQuery, useTheme} from "@mui/material";
+import React, { useCallback, useContext, useEffect, useMemo } from "react";
+import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import equal from "react-fast-compare";
-import {getCellAlignment, getPropertyColumnWidth, getSubcollectionColumnId} from "./internal/common";
+import {
+    getCellAlignment,
+    getPropertyColumnWidth,
+    getSubcollectionColumnId
+} from "./internal/common";
 import {
     AdditionalFieldDelegate,
     CollectionSize,
@@ -12,16 +16,27 @@ import {
     PropertyOrBuilder,
     ResolvedEntityCollection,
     ResolvedProperty,
+    ResolvedReferenceProperty,
     SaveEntityProps,
     User
 } from "../../../types";
-import {renderSkeletonText} from "../../../preview";
-import {CustomFieldValidator} from "../../../form/validation";
-import {PropertyTableCell} from "./internal/PropertyTableCell";
-import {ErrorBoundary} from "../ErrorBoundary";
-import {saveEntityWithCallbacks, useDataSource, useFireCMSContext, useSideEntityController} from "../../../hooks";
-import {PopupFormField} from "./internal/popup_field/PopupFormField";
-import {CellRendererParams, TableColumn, TableColumnFilter, VirtualTable} from "../Table";
+import { renderSkeletonText } from "../../../preview";
+import { CustomFieldValidator } from "../../../form/validation";
+import { PropertyTableCell } from "./internal/PropertyTableCell";
+import { ErrorBoundary } from "../ErrorBoundary";
+import {
+    saveEntityWithCallbacks,
+    useDataSource,
+    useFireCMSContext,
+    useSideEntityController
+} from "../../../hooks";
+import { PopupFormField } from "./internal/popup_field/PopupFormField";
+import {
+    CellRendererParams,
+    TableColumn,
+    TableColumnFilter,
+    VirtualTable
+} from "../Table";
 import {
     getIconForProperty,
     getPropertyInPath,
@@ -31,14 +46,26 @@ import {
     resolveEnumValues,
     resolveProperty
 } from "../../util";
-import {getRowHeight} from "../Table/common";
-import {EntityCollectionRowActions} from "./internal/EntityCollectionRowActions";
-import {EntityCollectionTableController, OnCellValueChange, SelectedCellProps, UniqueFieldValidator} from "./types";
+import { getRowHeight } from "../Table/common";
+import {
+    EntityCollectionRowActions
+} from "./internal/EntityCollectionRowActions";
+import {
+    EntityCollectionTableController,
+    OnCellValueChange,
+    SelectedCellProps,
+    UniqueFieldValidator
+} from "./types";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import {setIn} from "formik";
-import {CollectionTableToolbar} from "./internal/CollectionTableToolbar";
-import {EntityCollectionTableProps} from "./EntityCollectionTableProps";
-import {TableCell} from "./internal/TableCell";
+import { setIn } from "formik";
+import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
+import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
+import { TableCell } from "./internal/TableCell";
+import { FilterFormFieldProps } from "../Table/VirtualTableHeader";
+import { ReferenceFilterField } from "./filters/ReferenceFilterField";
+import { StringNumberFilterField } from "./filters/StringNumberFilterField";
+import { BooleanFilterField } from "./filters/BooleanFilterField";
+import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
 
 const DEFAULT_STATE = {} as any;
 
@@ -147,7 +174,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     name: subcollection.name,
                     width: 200,
                     dependencies: [],
-                    Builder: ({entity}) => (
+                    Builder: ({ entity }) => (
                         <Button color={"primary"}
                                 variant={"outlined"}
                                 startIcon={<KeyboardTabIcon
@@ -190,7 +217,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             setItemCount(pageSize);
         }, [pageSize]);
 
-        const onRowClick = useCallback(({rowData}: { rowData: Entity<M> }) => {
+        const onRowClick = useCallback(({ rowData }: { rowData: Entity<M> }) => {
             if (inlineEditing)
                 return;
             return onEntityClick && onEntityClick(rowData);
@@ -207,8 +234,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, string, UserType>> = useMemo(() => {
             return (additionalFields
                 ? additionalFields
-                    .map((aC) => ({[aC.id]: aC}))
-                    .reduce((a, b) => ({...a, ...b}), {})
+                    .map((aC) => ({ [aC.id]: aC }))
+                    .reduce((a, b) => ({ ...a, ...b }), {})
                 : {}) as Record<string, AdditionalFieldDelegate<M, string, UserType>>;
         }, [additionalFields]);
 
@@ -260,6 +287,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 return null;
             }
             const property = resolveProperty({
+                propertyKey,
                 propertyOrBuilder,
                 path: fullPath,
                 propertyValue: entity.values ? getValueInPath(entity.values, propertyKey) : undefined,
@@ -308,7 +336,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             const value = additionalField.dependencies
                 ? Object.entries(entity.values)
                     .filter(([key, value]) => additionalField.dependencies!.includes(key as Extract<keyof M, string>))
-                    .reduce((a, b) => ({...a, ...b}), {})
+                    .reduce((a, b) => ({ ...a, ...b }), {})
                 : entity;
 
             if (additionalField.builder) {
@@ -356,16 +384,17 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         const property = getResolvedPropertyInPath(resolvedCollection.properties, key);
                         if (!property)
                             throw Error("Internal error: no property found in path " + key);
+                        const filterable = filterableProperty(property);
                         return ({
                             key: key as string,
-                            property,
                             align: getCellAlignment(property),
                             icon: (hoverOrOpen) => getIconForProperty(property, hoverOrOpen ? undefined : "disabled", "small"),
                             title: property.name ?? key as string,
                             sortable: forceFilter ? Object.keys(forceFilter).includes(key) : true,
-                            filter: disabledFilterChange ? undefined : buildFilterableFromProperty(property),
+                            filter: !disabledFilterChange && filterable,
                             width: getPropertyColumnWidth(property),
-                            resizable: true
+                            resizable: true,
+                            custom: property
                         });
                     });
 
@@ -428,7 +457,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         }, [additionalFieldsMap, tableRowActionsBuilder, size, additionalCellRenderer, propertyCellRenderer])
 
         const onFilterUpdate = useCallback((updatedFilterValues?: FilterValues<any>) => {
-            setFilterValues({...updatedFilterValues, ...forceFilter} as FilterValues<any>);
+            setFilterValues({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
         }, [forceFilter]);
 
         return (
@@ -465,7 +494,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         actions={actions}
                         loading={dataLoading}/>
 
-                    <Box sx={{flexGrow: 1}}>
+                    <Box sx={{ flexGrow: 1 }}>
                         <VirtualTable
                             data={data}
                             columns={columns}
@@ -484,6 +513,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             onSortByUpdate={setSortBy as ((sortBy?: [string, "asc" | "desc"]) => void)}
                             hoverRow={hoverRow}
                             checkFilterCombination={checkFilterCombination}
+                            createFilterField={createFilterField}
                         />
                     </Box>
 
@@ -522,7 +552,7 @@ const onValueChange: OnCellValueChange<any, any> = ({
                                                         entity
                                                     }) => {
 
-    const updatedValues = setIn({...entity.values}, propertyKey, value);
+    const updatedValues = setIn({ ...entity.values }, propertyKey, value);
 
     const saveProps: SaveEntityProps = {
         path: fullPath,
@@ -604,40 +634,74 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
     }).filter((key) => key !== null) as string[];
 }
 
-const buildFilterableFromProperty = (property: ResolvedProperty,
-                                     isArray = false): TableColumnFilter | undefined => {
+function createFilterField({
+                               id,
+                               filterValue,
+                               setFilterValue,
+                               column,
+                               popupOpen,
+                               setPopupOpen
+                           }: FilterFormFieldProps<ResolvedProperty>): React.ReactNode {
+    const property: ResolvedProperty | undefined = column.custom;
+    if (!property) {
+        return null;
+    }
+    const isArray = property?.dataType === "array";
+    const baseProperty: ResolvedProperty = isArray ? property.of : property;
+    if (!baseProperty) {
+        return null;
+    }
+    if (baseProperty.dataType === "reference") {
+        return <ReferenceFilterField value={filterValue}
+                                     setValue={setFilterValue}
+                                     name={id as string}
+                                     isArray={isArray}
+                                     path={baseProperty.path}
+                                     title={property?.name}
+                                     previewProperties={baseProperty?.previewProperties}
+                                     popupOpen={popupOpen}
+                                     setPopupOpen={setPopupOpen}/>;
+    } else if (baseProperty.dataType === "number" || baseProperty.dataType === "string") {
+        const name = baseProperty.name;
+        const enumValues = baseProperty.enumValues ? resolveEnumValues(baseProperty.enumValues) : undefined;
+        return <StringNumberFilterField value={filterValue}
+                                        setValue={setFilterValue}
+                                        name={id as string}
+                                        dataType={baseProperty.dataType}
+                                        isArray={isArray}
+                                        enumValues={enumValues}
+                                        title={name}/>;
+    } else if (baseProperty.dataType === "boolean") {
+        const name = baseProperty.name;
+        return <BooleanFilterField value={filterValue}
+                                   setValue={setFilterValue}
+                                   name={id as string}
+                                   title={name}/>;
 
-    if (property.dataType === "number" || property.dataType === "string") {
-        const name = property.name;
-        const enumValues = property.enumValues ? resolveEnumValues(property.enumValues) : undefined;
-        return {
-            dataType: property.dataType,
-            isArray,
-            title: name,
-            enumValues
-        };
-    } else if (property.dataType === "array" && property.of) {
-        if (Array.isArray(property.of)) {
-            return undefined;
-        }
-        return buildFilterableFromProperty(property.of, true);
-    } else if (property.dataType === "boolean") {
-        const name = property.name;
-        return {
-            dataType: property.dataType,
-            isArray,
-            title: name
-        };
-    } else if (property.dataType === "date") {
-        const title = property.name;
-        return {
-            dataType: property.dataType,
-            isArray,
-            title,
-            dateMode: property.mode
-        };
+    } else if (baseProperty.dataType === "date") {
+        const title = baseProperty.name;
+        return <DateTimeFilterField value={filterValue}
+                                    setValue={setFilterValue}
+                                    name={id as string}
+                                    mode={baseProperty.mode}
+                                    isArray={isArray}
+                                    title={title}/>;
     }
 
-    return undefined;
+    return (
+        <div>{`Currently the field ${property.dataType} is not supported`}</div>
+    );
+}
 
-};
+function filterableProperty(property: ResolvedProperty, partOfArray = false): boolean {
+    if (partOfArray) {
+        return ["string", "number", "date", "reference"].includes(property.dataType);
+    }
+    if (property.dataType === "array") {
+        if (property.of)
+            return filterableProperty(property.of, true);
+        else
+            return false;
+    }
+    return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
+}

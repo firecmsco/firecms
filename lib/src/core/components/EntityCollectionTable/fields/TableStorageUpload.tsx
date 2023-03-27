@@ -40,7 +40,9 @@ const dropZoneMixin = (hasValue: boolean) => ({
 });
 
 const activeDropMixin = (theme: Theme) => ({
-    background: "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important",
+    background: theme.palette.mode === "light"
+        ? "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important"
+        : "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important",
     borderRadius: `${theme.shape.borderRadius}px`,
     border: "2px solid",
     borderColor: "transparent"
@@ -49,11 +51,13 @@ const activeDropMixin = (theme: Theme) => ({
 const acceptDropMixin = (theme: Theme) => ({
     background: "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important",
     // background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.09) 10px, rgba(0, 0, 0, 0.12) 10px, rgba(0, 0, 0, 0.12) 20px) !important",
-    borderColor: theme.palette.success.light
+    borderColor: theme.palette.success.light,
+    border: "2px solid"
 });
 
 const rejectDropMixin = (theme: Theme) => ({
-    borderColor: theme.palette.error.light
+    borderColor: theme.palette.error.light,
+    border: "2px solid"
 });
 
 /**
@@ -336,10 +340,12 @@ export function TableStorageItemPreview({
 
             {value &&
                 <ErrorBoundary>
-                    <PropertyPreview value={value}
-                                     property={property}
-                                     entity={entity}
-                                     size={size}/>
+                    <PropertyPreview
+                        propertyKey={"ignore"} // TODO: Fix this
+                        value={value}
+                        property={property}
+                        entity={entity}
+                        size={size}/>
                 </ErrorBoundary>
             }
 

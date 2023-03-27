@@ -52,17 +52,21 @@ export const resolveCollection = <M extends Record<string, any>, >
     const usedPreviousValues = previousValues ?? values ?? defaultValues;
 
     const resolvedProperties = Object.entries(collection.properties)
-        .map(([key, propertyOrBuilder]) => ({
-            [key]: resolveProperty({
-                propertyOrBuilder: propertyOrBuilder as PropertyOrBuilder | ResolvedProperty,
-                values: usedValues,
-                previousValues: usedPreviousValues,
-                path,
-                propertyValue: usedValues ? getIn(usedValues, key) : undefined,
-                entityId,
-                fields
-            })
-        }))
+        .map(([key, propertyOrBuilder]) => {
+            const propertyValue = usedValues ? getIn(usedValues, key) : undefined;
+            return ({
+                [key]: resolveProperty({
+                    propertyKey: key,
+                    propertyOrBuilder: propertyOrBuilder as PropertyOrBuilder | ResolvedProperty,
+                    values: usedValues,
+                    previousValues: usedPreviousValues,
+                    path,
+                    propertyValue,
+                    entityId,
+                    fields
+                })
+            });
+        })
         .filter((a) => a !== null)
         .reduce((a, b) => ({ ...a, ...b }), {}) as ResolvedProperties<M>;
 
@@ -92,6 +96,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
                                                                                                       fromBuilder = false,
                                                                                                       ...props
                                                                                                   }: {
+    propertyKey?: string,
     propertyOrBuilder: PropertyOrBuilder<T, M> | ResolvedProperty<T>,
     propertyValue?: unknown,
     values?: Partial<M>,
@@ -131,6 +136,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
 
         resolvedProperty = resolveProperty({
             ...props,
+            propertyValue,
             propertyOrBuilder: result,
             fromBuilder: true
         });
@@ -193,10 +199,12 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
 }
 
 export function resolveArrayProperty<T extends any[], M>({
+                                                             propertyKey,
                                                              property,
                                                              propertyValue,
                                                              ...props
                                                          }: {
+    propertyKey?: string,
     property: ArrayProperty<T> | ResolvedArrayProperty<T>,
     propertyValue: any,
     values?: Partial<M>,
@@ -216,9 +224,11 @@ export function resolveArrayProperty<T extends any[], M>({
                 fromBuilder: props.fromBuilder,
                 resolvedProperties: property.of.map((p, index) => {
                     return resolveProperty({
+                        propertyKey: `${propertyKey}.${index}`,
                         propertyOrBuilder: p as Property<any>,
                         propertyValue: Array.isArray(propertyValue) ? propertyValue[index] : undefined,
-                        ...props
+                        ...props,
+                        index
                     });
                 })
             } as ResolvedArrayProperty;
@@ -226,13 +236,15 @@ export function resolveArrayProperty<T extends any[], M>({
             const of = property.of;
             const resolvedProperties: ResolvedProperty[] = Array.isArray(propertyValue)
                 ? propertyValue.map((v: any, index: number) => resolveProperty({
+                    propertyKey: `${propertyKey}.${index}`,
                     propertyOrBuilder: of,
                     propertyValue: v,
-                    index,
-                    ...props
+                    ...props,
+                    index
                 })).filter(e => Boolean(e)) as ResolvedProperty[]
                 : [];
             const ofProperty = resolveProperty({
+                propertyKey: `${propertyKey}`,
                 propertyOrBuilder: of,
                 propertyValue: undefined,
                 ...props
@@ -255,6 +267,7 @@ export function resolveArrayProperty<T extends any[], M>({
                 const childProperty = property.oneOf?.properties[type];
                 if (!type || !childProperty) return null;
                 return resolveProperty({
+                    propertyKey: `${propertyKey}.${index}`,
                     propertyOrBuilder: childProperty,
                     propertyValue,
                     ...props
@@ -312,8 +325,9 @@ export function resolveProperties<M extends Record<string, any>>({
         .map(([key, property]) => {
             return {
                 [key]: resolveProperty({
+                    propertyKey: key,
                     propertyOrBuilder: property,
-                    propertyValue: propertyValue && typeof propertyValue === "object" ? propertyValue[key] : undefined,
+                    propertyValue: propertyValue && typeof propertyValue === "object" ? getValueInPath(propertyValue, key) : undefined,
                     ...props
                 })
             };
