@@ -20,9 +20,9 @@ export function Hero({
                         {title}
                     </h1>
                     {subtitle &&
-                        <p className="mt-3 text-xl sm:mt-4 md:text-2xl">
+                        <div className="mt-3 text-xl sm:mt-4 md:text-2xl">
                             {subtitle}
-                        </p>}
+                        </div>}
                     <div
                         className="mt-5 sm:mt-8">
                         {cta}

@@ -1,4 +1,4 @@
-## [2.0.0-beta.3] - 2023-03-21
+## [2.0.0-beta.4] - 2023-03-21
 
 ### Changed
 - Fixed table header bug

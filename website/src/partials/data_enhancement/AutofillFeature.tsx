@@ -12,7 +12,7 @@ export function AutofillFeature() {
             left={<>
 
                 <p className="text-xl text-gray-600 dark:text-gray-200">
-                    Our app includes an autofill feature that saves time and
+                    Our FireCMS OpenAI plugin includes an autofill feature that saves time and
                     increases accuracy.
                 </p>
 
