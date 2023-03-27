@@ -75,7 +75,8 @@ export function FirebaseCMSApp({
                                    LoginView,
                                    onAnalyticsEvent,
                                    fields,
-                                   plugins
+                                   plugins,
+                                   autoOpenDrawer
                                }: FirebaseCMSAppProps) {
 
     /**
@@ -219,7 +220,8 @@ export function FirebaseCMSApp({
                                         <Scaffold
                                             name={name}
                                             logo={usedLogo}
-                                            toolbarExtraWidget={toolbarExtraWidget}>
+                                            toolbarExtraWidget={toolbarExtraWidget}
+                                            autoOpenDrawer={autoOpenDrawer}>
                                             <NavigationRoutes
                                                 HomePage={HomePage}/>
                                             <SideDialogs/>

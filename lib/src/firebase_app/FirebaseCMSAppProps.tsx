@@ -193,4 +193,9 @@ export type FirebaseCMSAppProps = {
      */
     plugins?: FireCMSPlugin[];
 
+    /**
+     * Open the drawer on hover. Defaults to `false`
+     */
+    autoOpenDrawer?: boolean;
+
 };

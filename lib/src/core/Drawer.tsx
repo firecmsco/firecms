@@ -26,6 +26,7 @@ import { grey } from "@mui/material/colors";
  * @category Core
  */
 export type DrawerProps<T = {}> = T & {
+    hovered: boolean,
     drawerOpen: boolean,
     closeDrawer: () => any,
 }
@@ -35,6 +36,7 @@ export type DrawerProps<T = {}> = T & {
  * @category Core
  */
 export function Drawer({
+                           hovered,
                            drawerOpen,
                            closeDrawer
                        }: DrawerProps) {
@@ -42,12 +44,7 @@ export function Drawer({
     const context = useFireCMSContext();
     const navigation = useNavigationContext();
 
-    const [onHover, setOnHover] = useState(false);
-
-    const tooltipsOpen = onHover && !drawerOpen;
-
-    const setOnHoverTrue = useCallback(() => setOnHover(true), []);
-    const setOnHoverFalse = useCallback(() => setOnHover(false), []);
+    const tooltipsOpen = hovered && !drawerOpen;
 
     if (!navigation.topLevelNavigation)
         throw Error("Navigation not ready in Drawer");
@@ -84,10 +81,7 @@ export function Drawer({
     };
 
     return (
-        <List
-            onMouseEnter={setOnHoverTrue}
-            onMouseMove={setOnHoverTrue}
-            onMouseLeave={setOnHoverFalse}>
+        <List>
 
             {groups.map((group) => (
                 <React.Fragment

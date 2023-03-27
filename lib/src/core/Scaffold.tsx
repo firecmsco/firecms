@@ -61,6 +61,11 @@ export interface ScaffoldProps<ExtraDrawerProps = {}> {
      */
     drawerProps?: ExtraDrawerProps;
 
+    /**
+     * Open the drawer on hover
+     */
+    autoOpenDrawer?: boolean;
+
 }
 
 /**
@@ -83,7 +88,8 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             name,
             logo,
             toolbarExtraWidget,
-            Drawer
+            Drawer,
+            autoOpenDrawer
         } = props;
 
         const theme = useTheme();
@@ -93,6 +99,10 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const containerRef = useRestoreScroll();
 
         const [drawerOpen, setDrawerOpen] = React.useState(false);
+        const [onHover, setOnHover] = React.useState(false);
+
+        const setOnHoverTrue = useCallback(() => setOnHover(true), []);
+        const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
         const UsedDrawer = Drawer || FireCMSDrawer;
 
@@ -100,30 +110,37 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             setDrawerOpen(false);
         }, []);
 
+        const computedDrawerOpen:boolean = drawerOpen || Boolean(autoOpenDrawer && onHover);
         return (
-            <Box sx={{
-                display: "flex",
-                height: "100vh",
-                width: "100vw",
-                pt: "env(safe-area-inset-top)",
-                pl: "env(safe-area-inset-left)",
-                pr: "env(safe-area-inset-right)",
-                pb: "env(safe-area-inset-bottom)"
-            }}>
+            <Box
+                sx={{
+                    display: "flex",
+                    height: "100vh",
+                    width: "100vw",
+                    pt: "env(safe-area-inset-top)",
+                    pl: "env(safe-area-inset-left)",
+                    pr: "env(safe-area-inset-right)",
+                    pb: "env(safe-area-inset-bottom)"
+                }}>
 
                 <FireCMSAppBar title={name}
-                               drawerOpen={drawerOpen}
+                               drawerOpen={computedDrawerOpen}
                                toolbarExtraWidget={toolbarExtraWidget}/>
 
                 <StyledDrawer
-                    open={drawerOpen}
+                    onMouseEnter={setOnHoverTrue}
+                    onMouseMove={setOnHoverTrue}
+                    onMouseLeave={setOnHoverFalse}
+                    open={computedDrawerOpen}
                     logo={logo}
+                    hovered={autoOpenDrawer ? onHover : false}
                     setDrawerOpen={setDrawerOpen}>
                     <nav>
                         {navigation.loading
                             ? <CircularProgressCenter/>
                             : <UsedDrawer
-                                drawerOpen={drawerOpen}
+                                hovered={onHover}
+                                drawerOpen={computedDrawerOpen}
                                 closeDrawer={handleDrawerClose}/>}
                     </nav>
                 </StyledDrawer>
@@ -209,6 +226,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 function StyledDrawer(props: MuiDrawerProps & {
     logo?: string,
+    hovered: boolean,
     setDrawerOpen: (open: boolean) => void,
 }) {
     const context = useFireCMSContext();
