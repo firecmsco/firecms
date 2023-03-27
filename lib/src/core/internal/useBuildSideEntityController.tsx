@@ -15,7 +15,7 @@ import {
 import { useLocation } from "react-router-dom";
 import { EntitySidePanel } from "../EntitySidePanel";
 import {
-    getFistAdditionalView,
+    getFirstAdditionalView,
     removeInitialAndTrailingSlashes
 } from "../util";
 import {
@@ -66,8 +66,8 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
         if (props.copy && !props.entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
-        const fistAdditionalView = largeLayout && props.collection ? getFistAdditionalView(props.collection) : undefined;
-        sideDialogsController.open(propsToSidePanel({ selectedSubPath: fistAdditionalView?.path, ...props }, navigation, smallLayout));
+        const firstAdditionalView = largeLayout && props.collection ? getFirstAdditionalView(props.collection) : undefined;
+        sideDialogsController.open(propsToSidePanel({ selectedSubPath: firstAdditionalView?.path, ...props }, navigation, smallLayout));
 
     }, [largeLayout, sideDialogsController, navigation, smallLayout]);
 

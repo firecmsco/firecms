@@ -29,7 +29,7 @@ import {
 import {
     canEditEntity,
     fullPathToCollectionSegments,
-    getFistAdditionalView,
+    getFirstAdditionalView,
     removeInitialAndTrailingSlashes
 } from "../util";
 
@@ -111,9 +111,9 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const customViewsCount = customViews?.length ?? 0;
 
         const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
-        const fistAdditionalView = getFistAdditionalView(collection);
+        const firstAdditionalView = getFirstAdditionalView(collection);
 
-        const selectFirstTab = !selectedSubPath && largeLayout && fistAdditionalView;
+        const selectFirstTab = !selectedSubPath && largeLayout && firstAdditionalView;
         const [tabsPosition, setTabsPosition] = React.useState(selectFirstTab ? 0 : -1);
 
         const mainViewVisible = tabsPosition === -1 || largeLayout;
@@ -178,16 +178,16 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             if (largeLayoutTabSelected.current === largeLayout)
                 return;
 
-            // open first tab by default in  large layouts
-            if (!selectedSubPath && largeLayout && fistAdditionalView)
+            // open first tab by default in large layouts
+            if (!selectedSubPath && largeLayout && firstAdditionalView)
                 sideEntityController.replace({
                     path,
                     entityId,
-                    selectedSubPath: fistAdditionalView.path,
+                    selectedSubPath: firstAdditionalView.path,
                     updateUrl: true
                 });
             // set form view by default in small layouts
-            else if (tabsPosition === 0 && !largeLayout && fistAdditionalView)
+            else if (tabsPosition === 0 && !largeLayout && firstAdditionalView)
                 sideEntityController.replace({
                     path,
                     entityId,
@@ -195,7 +195,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     updateUrl: true
                 });
             largeLayoutTabSelected.current = largeLayout;
-        }, [largeLayout, tabsPosition, fistAdditionalView, largeLayoutTabSelected.current, selectedSubPath]);
+        }, [largeLayout, tabsPosition, firstAdditionalView, largeLayoutTabSelected.current, selectedSubPath]);
 
         const onPreSaveHookError = useCallback((e: Error) => {
             snackbarController.open({
@@ -535,9 +535,12 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 >
                     <Tab
                         label={collection.singularName ?? collection.name}
-                        disabled={largeLayout || !hasAdditionalViews}
+                        disabled={!hasAdditionalViews}
+                        onClick={() => {
+                            onSideTabClick(-1);
+                        }}
                         sx={{
-                            display: largeLayout ? "none" : undefined,
+                            display: !hasAdditionalViews ? "none" : undefined,
                             fontSize: "0.875rem",
                             minWidth: "140px"
                         }}
