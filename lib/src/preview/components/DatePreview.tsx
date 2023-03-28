@@ -14,6 +14,7 @@ export function DatePreview({
                             }: { date: Date }): React.ReactElement {
 
     const appConfig: FireCMSContext<any> | undefined = useFireCMSContext();
+    // @ts-ignore
     const dateUtilsLocale = appConfig?.locale ? locales[appConfig?.locale] : undefined;
     const dateFormat: string = appConfig?.dateTimeFormat ?? defaultDateFormat;
     const formattedDate = date ? format(date, dateFormat, { locale: dateUtilsLocale }) : "";

@@ -73,6 +73,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     const usedBasePath = basePath ?? "/";
     const usedBasedCollectionPath = baseCollectionPath ?? DEFAULT_COLLECTION_PATH;
 
+    // @ts-ignore
     const dateUtilsLocale = locale ? locales[locale] : undefined;
 
     const navigation = useBuildNavigationContext({

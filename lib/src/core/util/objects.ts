@@ -9,19 +9,19 @@ export const pick: <T>(obj: T, ...args: any[]) => T = (obj: any, ...args: any[])
 });
 
 export function isObject(item: any) {
-    return (item && typeof item === "object" && !Array.isArray(item));
+    return item && typeof item === "object" && !Array.isArray(item);
 }
 
-export function mergeDeep<T extends {}>(target: T, source: any): T {
+export function mergeDeep<T extends object>(target: T, source: any): T {
     const targetIsObject = isObject(target);
-    const output: T = targetIsObject ? Object.assign({}, target) : target;
+    const output: T = targetIsObject ? { ...target } : target;
     if (targetIsObject && isObject(source)) {
         Object.keys(source).forEach(key => {
             if (isObject(source[key])) {
                 if (!(key in target))
                     Object.assign(output, { [key]: source[key] });
                 else
-                    (output)[key] = mergeDeep((target)[key], source[key]);
+                    (output as any)[key] = mergeDeep((target as any)[key], source[key]);
             } else {
                 Object.assign(output, { [key]: source[key] });
             }
@@ -34,11 +34,11 @@ export function getValueInPath(o: object | undefined, path: string): any {
     if (!o) return undefined;
     if (typeof o === "object") {
         if (path in o) {
-            return (o)[path];
+            return (o as any)[path];
         }
         if (path.includes(".")) {
             const pathSegments = path.split(".");
-            return getValueInPath((o)[pathSegments[0]], pathSegments.slice(1).join("."))
+            return getValueInPath((o as any)[pathSegments[0]], pathSegments.slice(1).join("."))
         }
     }
     return undefined;
@@ -49,10 +49,10 @@ export function removeInPath(o: object, path: string): object | undefined {
     const parts = path.split(".");
     const last = parts.pop();
     for (const part of parts) {
-        currentObject = currentObject[part]
+        currentObject = (currentObject as any)[part]
     }
     if (last)
-        delete currentObject[last];
+        delete (currentObject as any)[last];
     return currentObject;
 }
 
@@ -98,7 +98,7 @@ export function removeUndefined(value: any): any {
             if (!isEmptyObject(value)) {
                 const childRes = removeUndefined(value[key]);
                 if (childRes !== undefined && !isEmptyObject(childRes))
-                    res[key] = childRes;
+                    (res as any)[key] = childRes;
             }
         });
         return res;
