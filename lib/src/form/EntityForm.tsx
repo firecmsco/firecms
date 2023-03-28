@@ -424,7 +424,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                             <Typography
                                 sx={{
                                     marginTop: 4,
-                                    marginBottom: 4,
+                                    marginBottom: collection.hideIdFromForm ? 0 : 4,
                                     flexGrow: 1
                                 }}
                                 variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
