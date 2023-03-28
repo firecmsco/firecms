@@ -3,6 +3,11 @@ import { BrowserFrame } from "../BrowserFrame";
 import { TwoColumns } from "../general/TwoColumns";
 import { useColorMode } from "@docusaurus/theme-common";
 
+// @ts-ignore
+import demoDark from "@site/static/img/data/product_demo_dark.mp4";
+// @ts-ignore
+import demoLight from "@site/static/img/data/product_demo_light.mp4";
+
 export function AutofillFeature() {
 
     const { colorMode } = useColorMode();
@@ -10,22 +15,6 @@ export function AutofillFeature() {
     return (
         <TwoColumns
             left={<>
-
-                <p className="text-xl text-gray-600 dark:text-gray-200">
-                    Our FireCMS OpenAI plugin includes an autofill feature that saves time and
-                    increases accuracy.
-                </p>
-
-                <p className="text-base text-gray-600 dark:text-gray-200">
-                    With the autofill feature, you can quickly fill in
-                    repetitive or frequently used information, such as your
-                    name, address, or email address, with just a few clicks or
-                    taps. This helps to reduce errors and typos and saves you
-                    time when filling out forms or submitting information.
-                </p>
-            </>}
-            right={<>
-
                 <div
                     style={{
                         aspectRatio: 550 / 750,
@@ -35,28 +24,40 @@ export function AutofillFeature() {
                     data-aos="fade-up"
                     className={" flex content-center justify-center"}>
                     <video
+                        key={isDarkTheme ? "dark" : "light"}
                         className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
                         width="100%"
                         loop autoPlay muted>
                         <source
-                            src={isDarkTheme ? "/img/data/data_enhancement_dark.mp4" : "/img/data/data_enhancement_light.mp4"}
+                            src={isDarkTheme ? demoDark : demoLight}
                             type="video/mp4"/>
                     </video>
                 </div>
 
-                {/*<video*/}
-                {/*    className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}*/}
-                {/*    style={{*/}
-                {/*        aspectRatio: 750 / 551,*/}
-                {/*        minHeight: "700px",*/}
-                {/*        // height: "750px",*/}
-                {/*        maxWidth: "100%"*/}
-                {/*    }}*/}
-                {/*    width="100%" loop autoPlay muted>*/}
-                {/*    <source*/}
-                {/*        src={isDarkTheme ? "/img/data/data_enhancement_dark.mp4": "/img/data/data_enhancement_light.mp4"}*/}
-                {/*        type="video/mp4"/>*/}
-                {/*</video>*/}
+            </>}
+            right={<>
+                <h2 className={"h2"}>Fill in the details of the Nike Air Max
+                    270 </h2>
+                <p className="text-xl text-gray-600 dark:text-gray-200">
+                    Use a prompt to indicate how you would like the autofill
+                    feature to work. Imagine you have an ecommerce store and
+                    you want to add a new product to your catalog.
+                </p>
+                <p>
+                    ...or you are writing an article
+                </p>
+                <p>
+                    ...or creating a course on Sustainability
+                </p>
+                <p>
+                    ...or anything you can think of
+                </p>
+
+                <p className="text-base text-gray-600 dark:text-gray-200">
+                    The OpenAI plugin for FireCMS will use the latest GPT model
+                    from OpenAI to generate the content for you. You can then
+                    edit the generated content and save it to your database.
+                </p>
             </>}/>
     );
 }

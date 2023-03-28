@@ -1,8 +1,6 @@
 import React from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
-
-import { Hero } from "../general/Hero";
 import { CTAButtonMixin } from "../utils";
 import { TwoColumns } from "../general/TwoColumns";
 
@@ -22,16 +20,15 @@ export function DataEnhancementHero() {
                 </h1>
                 <div className="mt-3 text-xl sm:mt-4 md:text-2xl">
                     <p>
-                        Our CMS with OpenAI integration offers a powerful
+                        FireCMS with OpenAI integration offers a powerful
                         autofill
                         feature that can save you time and increase the accuracy
-                        of
-                        your data entry.
+                        of your data entry.
                     </p>
                     <p>
-                        Sign up now and experience the power of OpenAI to
-                        enhance
-                        your data entry and streamline your business processes.
+                        Sign up now and experience the power of the latest GPT
+                        models to enhance your data entry and streamline your
+                        business processes.
                     </p>
                 </div>
 
@@ -57,6 +54,7 @@ export function DataEnhancementHero() {
                 data-aos="fade-up"
                 className={" flex content-center justify-center"}>
                 <video
+                    key={isDarkTheme ? "dark" : "light"}
                     className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
                     width="100%"
                     loop autoPlay muted>
