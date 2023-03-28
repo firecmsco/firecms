@@ -94,10 +94,10 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
     });
 
     if (entity) {
-        referencesCache[reference.pathWithId] = entity;
+        referencesCache.set(reference.pathWithId, entity);
     }
 
-    const usedEntity = entity ?? referencesCache[reference.pathWithId];
+    const usedEntity = entity ?? referencesCache.get(reference.pathWithId);
 
     const resolvedCollection = useMemo(() => resolveCollection({
         collection,

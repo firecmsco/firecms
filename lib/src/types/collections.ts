@@ -5,6 +5,7 @@ import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
 import { EnumValues, PropertiesOrBuilders } from "./properties";
+import * as mui from "@mui/icons-material";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -55,7 +56,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * https://mui.com/material-ui/material-icons/
      * e.g. 'AccountTree' or 'Person'
      */
-    icon?: string;
+    icon?: keyof typeof mui;
 
     /**
      * Optional field used to group top level navigation entries under a~

@@ -489,12 +489,13 @@ export function useFirestoreDataSource({
  * @param data
  * @category Firestore
  */
+export function firestoreToCMSModel(data: any): any
 export function firestoreToCMSModel(data: any): any {
     if (data === null || data === undefined) return null;
     if (serverTimestamp().isEqual(data)) {
         return null;
     }
-    if (data instanceof Timestamp || typeof data.toDate === "function") {
+    if (data instanceof Timestamp || (typeof data.toDate === "function" && data.toDate() instanceof Date)) {
         return data.toDate();
     }
     if (data instanceof Date) {
@@ -510,7 +511,7 @@ export function firestoreToCMSModel(data: any): any {
         return data.map(firestoreToCMSModel);
     }
     if (typeof data === "object") {
-        const result = {}
+        const result: Record<string, any> = {};
         for (const key of Object.keys(data)) {
             result[key] = firestoreToCMSModel(data[key]);
         }
@@ -518,7 +519,6 @@ export function firestoreToCMSModel(data: any): any {
     }
     return data;
 }
-
 export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
     if (Array.isArray(data)) {
         return data.map(v => cmsToFirestoreModel(v, firestore));

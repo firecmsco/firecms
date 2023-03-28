@@ -36,21 +36,22 @@ export function AutofillFeature() {
 
             </>}
             right={<>
-                <h2 className={"h2"}>Fill in the details of the Nike Air Max
-                    270 </h2>
-                <p className="text-xl text-gray-600 dark:text-gray-200">
+                <h2 className={"h2"}>
+                    Fill in the details of the Nike Air Max 90
+                </h2>
+                <p className="text-xl">
                     Use a prompt to indicate how you would like the autofill
                     feature to work. Imagine you have an ecommerce store and
-                    you want to add a new product to your catalog.
+                    you want to add a <b>new product</b> to your catalog.
                 </p>
-                <p>
-                    ...or you are writing an article
+                <p className="text-xl">
+                    ...or you are <b>writing an article</b>
                 </p>
-                <p>
-                    ...or creating a course on Sustainability
+                <p className="text-xl">
+                    ...or creating the content of a <b>course</b>
                 </p>
-                <p>
-                    ...or anything you can think of
+                <p className="text-xl">
+                    ...or <b>anything</b> you can think of
                 </p>
 
                 <p className="text-base text-gray-600 dark:text-gray-200">

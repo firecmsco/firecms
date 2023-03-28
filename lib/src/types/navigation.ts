@@ -1,3 +1,4 @@
+import * as mui from "@mui/icons-material";
 import { EntityCollection } from "./collections";
 
 /**
@@ -50,8 +51,8 @@ export type NavigationContext = {
      * among the
      */
     getCollection: <EC extends EntityCollection = EntityCollection<any>>(pathOrAlias: string,
-                       entityId?: string,
-                       includeUserOverride?: boolean) => EC | undefined;
+                                                                         entityId?: string,
+                                                                         includeUserOverride?: boolean) => EC | undefined;
 
     /**
      * Default path under the navigation routes of the CMS will be created
@@ -78,7 +79,7 @@ export type NavigationContext = {
      */
     buildCMSUrlPath: (path: string) => string;
 
-    buildUrlEditCollectionPath: (props: { path: string}) => string;
+    buildUrlEditCollectionPath: (props: { path: string }) => string;
 
     /**
      * Base url path for the home screen
@@ -146,7 +147,7 @@ export interface CMSView {
      * https://mui.com/material-ui/material-icons/
      * e.g. 'AccountTree' or 'Person'
      */
-    icon?:string;
+    icon?: keyof typeof mui;
 
     /**
      * Should this view be hidden from the main navigation panel.

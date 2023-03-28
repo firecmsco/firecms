@@ -32,27 +32,27 @@ export interface StorageFieldItem {
 }
 
 export function useStorageUploadController<M extends object>({
-                                                  entityId,
-                                                  entityValues,
-                                                  path,
-                                                  value,
-                                                  property,
-                                                  propertyKey,
-                                                  storageSource,
-                                                  disabled,
-                                                  onChange
-                                              }:
-                                                  {
-                                                      entityId: string,
-                                                      entityValues: EntityValues<M>,
-                                                      value: string | string[] | null;
-                                                      path: string,
-                                                      propertyKey: string,
-                                                      property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
-                                                      storageSource: StorageSource,
-                                                      disabled: boolean,
-                                                      onChange: (value: string | string[] | null) => void
-                                                  }) {
+                                                                 entityId,
+                                                                 entityValues,
+                                                                 path,
+                                                                 value,
+                                                                 property,
+                                                                 propertyKey,
+                                                                 storageSource,
+                                                                 disabled,
+                                                                 onChange
+                                                             }:
+                                                                 {
+                                                                     entityId: string,
+                                                                     entityValues: EntityValues<M>,
+                                                                     value: string | string[] | null;
+                                                                     path: string,
+                                                                     propertyKey: string,
+                                                                     property: ResolvedStringProperty | ResolvedArrayProperty<string[]>,
+                                                                     storageSource: StorageSource,
+                                                                     disabled: boolean,
+                                                                     onChange: (value: string | string[] | null) => void
+                                                                 }) {
 
     const storage: StorageConfig | undefined = property.dataType === "string"
         ? property.storage
@@ -208,7 +208,7 @@ function getRandomId() {
     return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
 }
 
-const supportedTypes = {
+const supportedTypes: Record<string, string> = {
     "image/jpeg": "JPEG",
     "image/png": "PNG",
     "image/webp": "WEBP"
@@ -221,11 +221,15 @@ const resizeAndCompressImage = (file: File, compression: ImageCompression) => ne
     const inputQuality = compression.quality === undefined ? defaultQuality : compression.quality;
     const quality = inputQuality >= 0 ? inputQuality <= 100 ? inputQuality : 100 : 100;
 
+    const format = compressionFormat(file);
+    if (!format) {
+        throw Error("resizeAndCompressImage: Unsupported image format");
+    }
     Resizer.imageFileResizer(
         file,
         compression.maxWidth || Number.MAX_VALUE,
         compression.maxHeight || Number.MAX_VALUE,
-        compressionFormat(file),
+        format,
         quality,
         0,
         (file: string | Blob | File | ProgressEvent<FileReader>) => resolve(file as File),

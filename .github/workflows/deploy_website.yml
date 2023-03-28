@@ -14,8 +14,8 @@ jobs:
       REACT_APP_DOC_SEARCH_KEY: ${{ secrets.REACT_APP_DOC_SEARCH_KEY }}
       REACT_APP_DOC_SEARCH_APP_ID: ${{ secrets.REACT_APP_DOC_SEARCH_APP_ID }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v3
         with:
           node-version: '16'
       - run: yarn install --no-immutable
