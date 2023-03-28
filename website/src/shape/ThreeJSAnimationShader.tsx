@@ -12,9 +12,10 @@ import { BufferGeometryUtils } from "./BufferGeometryUtils";
 const CAMERA_FACTOR = 180;
 const TIME_DILATION = 1 / 4;
 const BRIGHT = true;
-const DISPLACEMENT_RADIO = 1.0 / 9.0;
+const DISPLACEMENT_RADIO = 1.0 / 5.0;
 const DISPLACEMENT_AREA = 1.0;
-const SPHERE_RADIUS = 18;
+const CYLINDER_RADIUS = 8;
+const CYLINDER_HEIGHT = 20;
 
 type SceneState = {
     renderer: THREE.WebGLRenderer,
@@ -66,58 +67,59 @@ export default function ThreeJSAnimationShader({
     const clockRef = useRef<THREE.Clock>(new THREE.Clock());
     const requestRef = useRef<number>(-1);
 
-    const wireframe = true;
+    const wireframe = false;
 
-    function buildNightGeometry(radius: number, complexity: number) {
+    function buildNightGeometry(radius: number, height: number) {
         const vertices: { pos: number[], norm: number[], uv: number[] }[] = [];
-        const dodecahedron = new THREE.DodecahedronGeometry(radius, complexity);
-
-        for (let i = 0; i < dodecahedron.attributes.position.count; i++) {
-            const x = dodecahedron.attributes.position.array[i * 3];
-            const y = dodecahedron.attributes.position.array[i * 3 + 1];
-            const z = dodecahedron.attributes.position.array[i * 3 + 2];
-            const pos = [
-                x,
-                y,
-                z
-            ];
-            const norm = [
-                dodecahedron.attributes.normal.array[i * 3],
-                dodecahedron.attributes.normal.array[i * 3 + 1],
-                dodecahedron.attributes.normal.array[i * 3 + 2]
-            ];
-            const uv = [
-                dodecahedron.attributes.uv.array[i * 2],
-                dodecahedron.attributes.uv.array[i * 2 + 1]
-            ];
-            vertices.push({
-                pos,
-                norm,
-                uv
-            });
-        }
-
-        const positions: number[] = [];
-        const normals: number[] = [];
-        const uvs: number[] = [];
-        for (const vertex of vertices) {
-            positions.push(...vertex.pos);
-            normals.push(...vertex.norm);
-            uvs.push(...vertex.uv);
-        }
-
-        const geometry = new THREE.BufferGeometry();
-        const positionNumComponents = 3;
-        const normalNumComponents = 3;
-        const uvNumComponents = 2;
-        geometry.setAttribute(
-            "position",
-            new THREE.BufferAttribute(new Float32Array(positions), positionNumComponents));
-
-        const merged = BufferGeometryUtils.mergeVertices(geometry);
-        merged.computeVertexNormals();
-
-        return merged;
+        const dodecahedron = new THREE.CylinderGeometry(radius, radius, height, 100, 60, 30, true);
+        dodecahedron.rotateZ(Math.PI / 2);
+        return dodecahedron;
+        // for (let i = 0; i < dodecahedron.attributes.position.count; i++) {
+        //     const x = dodecahedron.attributes.position.array[i * 3];
+        //     const y = dodecahedron.attributes.position.array[i * 3 + 1];
+        //     const z = dodecahedron.attributes.position.array[i * 3 + 2];
+        //     const pos = [
+        //         x,
+        //         y,
+        //         z
+        //     ];
+        //     const norm = [
+        //         dodecahedron.attributes.normal.array[i * 3],
+        //         dodecahedron.attributes.normal.array[i * 3 + 1],
+        //         dodecahedron.attributes.normal.array[i * 3 + 2]
+        //     ];
+        //     const uv = [
+        //         dodecahedron.attributes.uv.array[i * 2],
+        //         dodecahedron.attributes.uv.array[i * 2 + 1]
+        //     ];
+        //     vertices.push({
+        //         pos,
+        //         norm,
+        //         uv
+        //     });
+        // }
+        //
+        // const positions: number[] = [];
+        // const normals: number[] = [];
+        // const uvs: number[] = [];
+        // for (const vertex of vertices) {
+        //     positions.push(...vertex.pos);
+        //     normals.push(...vertex.norm);
+        //     uvs.push(...vertex.uv);
+        // }
+        //
+        // const geometry = new THREE.BufferGeometry();
+        // const positionNumComponents = 3;
+        // const normalNumComponents = 3;
+        // const uvNumComponents = 2;
+        // geometry.setAttribute(
+        //     "position",
+        //     new THREE.BufferAttribute(new Float32Array(positions), positionNumComponents));
+        //
+        // const merged = BufferGeometryUtils.mergeVertices(geometry);
+        // merged.computeVertexNormals();
+        //
+        // return merged;
     }
 
     function buildMaterial(width: number, height: number, radius: number, displacementRatio: number, displacementArea: number, spread: number) {
@@ -137,6 +139,10 @@ export default function ThreeJSAnimationShader({
             u_colors_count: { value: colors.length },
             u_color_spread: { value: spread }
         };
+
+        // const material = new THREE.MeshBasicMaterial({
+        //     color: 0x87ceeb,
+        // })
 
         const material = new THREE.ShaderMaterial({
             uniforms: uniforms,
@@ -164,12 +170,12 @@ export default function ThreeJSAnimationShader({
 
         const scene = new THREE.Scene();
 
-        const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, DISPLACEMENT_AREA, 6.0);
+        const material = buildMaterial(width, height, CYLINDER_RADIUS, DISPLACEMENT_RADIO, DISPLACEMENT_AREA, 6.0);
 
-        const geometry = buildNightGeometry(SPHERE_RADIUS, 22);
+        const geometry = buildNightGeometry(CYLINDER_RADIUS, CYLINDER_HEIGHT);
         const mesh = new THREE.Mesh(geometry, material);
-        mesh.rotation.x = .2;
-        mesh.initialPositionY = 17;
+        // mesh.rotation.x = .2;
+        mesh.initialPositionY = CYLINDER_RADIUS;
         scene.add(mesh);
         meshes.push(mesh);
 
@@ -226,7 +232,7 @@ export default function ThreeJSAnimationShader({
                 mesh.material.uniforms.u_opacity.value = opacity;
                 mesh.material.uniforms.u_dark_mode.value = darkMode ? 1.0 : 0.0;
                 mesh.position.y = mesh.initialPositionY + scrollRef.current / 100;
-                mesh.rotation.x = scrollRef.current / 1000;
+                mesh.rotation.x = -scrollRef.current / 1000;
             });
 
             composer.render();
@@ -545,7 +551,14 @@ function buildVertexShader() {
     
         vNormal = normal;
         v_position = position;
-        v_displacement_amount = cnoise(s * normal * u_displacement_area + r) ;
+        
+    // v_displacement_amount = cnoise( vec3(
+    //     .5 * position.x + u_time,
+    //     .5 * position.y + u_time,
+    //     u_time
+    // ));
+    
+        v_displacement_amount = cnoise(s * (normal + position / 18.0) * u_displacement_area + r) ;
     
         vec3 newPosition = position * (v_displacement_amount * u_displacement_ratio + 1.0) ;
     
@@ -582,23 +595,23 @@ void main(){
     vec3 color = v_color;
     color.rgb += v_displacement_amount * 0.4;
     if(u_dark_mode == 1.0){
-        color.g = color.g * 0.15;
-        color.r = color.r * 0.35;
-        color.b = color.b * 0.45;
+        color.g = color.g * 0.25;
+        color.r = color.r * 0.45;
+        color.b = color.b * 0.55;
         // color.rg -=  (1.0 - v_position.z / u_sphere_radius) * .2;
         if(v_position.z < 0.0){
             color.rg /=  (u_sphere_radius - v_position.z) / u_sphere_radius * 1.1;
         }
     } else {
-        color.g = color.g * .95;
-        color.r = color.r * .95;
-        color.b = color.b * 1.05;
+        // color.g = color.g * .95;
+        // color.r = color.r * .95;
+        // color.b = color.b * 1.05;
         // if(v_position.z < .0){
             color.rgb *= 1.0 + ((u_sphere_radius - v_position.z) / u_sphere_radius * .15);
         // }
     }
-    color = czm_saturation(color, 1.1);
-    gl_FragColor = vec4(color,.9);
+    // color = czm_saturation(color, 1.1);
+    gl_FragColor = vec4(color,1.0);
 }
 `;
 }
