@@ -10,7 +10,7 @@ import { BufferGeometryUtils } from "./BufferGeometryUtils";
 
 // const CAMERA_FACTOR = 40;
 const CAMERA_FACTOR = 180;
-const TIME_DILATION = 1 / 3;
+const TIME_DILATION = 1 / 4;
 const BRIGHT = true;
 const DISPLACEMENT_RADIO = 1.0 / 9.0;
 const DISPLACEMENT_AREA = 1.0;
@@ -26,6 +26,11 @@ type SceneState = {
 
 type AnimationProps = { darkMode: boolean, opacity: number };
 
+// const red = new THREE.Color("#ff586b");
+// const magenta = new THREE.Color("#ff56a3");
+// const cyan = new THREE.Color("#3cc7c9");
+// const blue = new THREE.Color("#4479ff");
+// const yellow = new THREE.Color("#ffc857");
 const red = new THREE.Color(1.0, .2, .2);
 const magenta = new THREE.Color(0xFF5B79);
 const cyan = new THREE.Color(.53, .96, 1.);
@@ -492,30 +497,29 @@ function buildVertexShader() {
                         -0.09991, -0.33609, 0.43600,
                         0.615, -0.5586, -0.05639);
 
-
     vec3 getColor(){
-
+    
         // if (u_dark_mode == 1.0){
         //     return vec3(0.0, 0.0, 0.0);
         // }
-
+    
         vec3 st = v_position / u_sphere_radius;
-
+    
         vec3 color;
-
+    
         color = u_colors[0];
-        
+    
         const float minNoise = .0;
         const float maxNoise = .75;
-        
+    
         vec2 color_pressure = vec2(1.3, 1.3);
     
         for (int i = 1; i < u_colors_count; i++) {
-        
+    
             float noiseFlow = (1. + float(i)) / 30.;
             float noiseSpeed = (1. + float(i)) * 0.15;
             float noiseSeed = 13. + float(i) * 7.;
-                
+    
             float noise = snoise(
                 vec3(
                     st.x * 1.5 + noiseFlow,
@@ -523,7 +527,7 @@ function buildVertexShader() {
                     u_time * noiseSpeed 
                 ) + noiseSeed
             );
-            
+    
             noise = clamp(minNoise, maxNoise + float(i) * 0.05, noise);
             vec3 nextColor = u_colors[i];
             color = mix(color, nextColor, smoothstep(0.0, .9, noise));
@@ -533,22 +537,24 @@ function buildVertexShader() {
     }
 
     void main() {
-
+    
         vUv = uv;
-
-        float s = 2.45;
-        float r = u_time * 0.25;
-
+    
+        float s = 2.70;
+        float r = u_time * 0.35;
+    
         vNormal = normal;
         v_position = position;
         v_displacement_amount = cnoise(s * normal * u_displacement_area + r) ;
-
+    
         vec3 newPosition = position * (v_displacement_amount * u_displacement_ratio + 1.0) ;
-
+    
         v_color = getColor();
-
+    
         gl_Position = projectionMatrix * modelViewMatrix * vec4( newPosition, 1.0 );
     }
+
+
 `;
 }
 
@@ -574,15 +580,24 @@ vec3 czm_saturation(vec3 rgb, float adjustment) {
 
 void main(){
     vec3 color = v_color;
-    color.rgb +=  v_displacement_amount * 0.2;
+    color.rgb += v_displacement_amount * 0.4;
     if(u_dark_mode == 1.0){
-        color.g = color.g * 0.2;
-        color.r =  color.r * 0.4;
-        color.b =  color.b * 0.5;
+        color.g = color.g * 0.15;
+        color.r = color.r * 0.35;
+        color.b = color.b * 0.45;
         // color.rg -=  (1.0 - v_position.z / u_sphere_radius) * .2;
+        if(v_position.z < 0.0){
+            color.rg /=  (u_sphere_radius - v_position.z) / u_sphere_radius * 1.1;
+        }
     } else {
+        color.g = color.g * .95;
+        color.r = color.r * .95;
+        color.b = color.b * 1.05;
+        // if(v_position.z < .0){
+            color.rgb *= 1.0 + ((u_sphere_radius - v_position.z) / u_sphere_radius * .15);
+        // }
     }
-        color = czm_saturation(color, 1.1);
+    color = czm_saturation(color, 1.1);
     gl_FragColor = vec4(color,.9);
 }
 `;

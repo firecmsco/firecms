@@ -27,7 +27,7 @@ function HeroHome({}) {
     const titleDiv = <div className="px-16 md:px-32 my-4 ">
 
         <div className="text-center mt-20 lg:mt-40">
-            <h1 className="block tracking-tight text-5xl md:text-6xl font-extrabold tracking-tight leading-none">
+            <h1 className="block tracking-tight text-5xl md:text-6xl font-extrabold tracking-tight leading-none uppercase">
                 <div className={"block"}>
                 <span
                     data-aos="zoom-y-out"
