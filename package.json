@@ -24,12 +24,5 @@
         "deploy:web": "cd website && yarn deploy",
         "build": "cd lib && yarn build"
     },
-    "packageManager": "yarn@3.2.3",
-    "dependencies": {
-        "@docusaurus/core": "latest",
-        "@docusaurus/module-type-aliases": "latest",
-        "@docusaurus/plugin-google-gtag": "latest",
-        "@docusaurus/plugin-sitemap": "latest",
-        "@docusaurus/preset-classic": "latest"
-    }
+    "packageManager": "yarn@3.2.3"
 }
