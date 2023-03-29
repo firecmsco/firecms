@@ -1,4 +1,3 @@
-import * as mui from "@mui/icons-material";
 import { EntityCollection } from "./collections";
 
 /**
@@ -147,7 +146,7 @@ export interface CMSView {
      * https://mui.com/material-ui/material-icons/
      * e.g. 'AccountTree' or 'Person'
      */
-    icon?: keyof typeof mui;
+    icon?: string;
 
     /**
      * Should this view be hidden from the main navigation panel.

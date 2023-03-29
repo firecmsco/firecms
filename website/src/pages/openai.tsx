@@ -15,6 +15,7 @@ import { TwoColumns } from "../partials/general/TwoColumns";
 import {
     DataEnhancementHero
 } from "../partials/data_enhancement/DataEnhancementHero";
+import { BatchProcessing } from "../partials/data_enhancement/BatchProcessing";
 
 function DataEnhancement() {
 
@@ -26,7 +27,7 @@ function DataEnhancement() {
 
             <DataEnhancementUseCases/>
             <AutofillFeature/>
-            {/*<NLPIntegration />*/}
+            <BatchProcessing />
             {/*<CustomizationOptions />*/}
             {/*<Testimonials />*/}
             {/*<Contact />*/}
