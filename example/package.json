@@ -1,61 +1,61 @@
 {
-    "name": "firecms-example",
-    "version": "0.1.0",
-    "private": true,
-    "dependencies": {
-        "@emotion/react": "^11.10.6",
-        "@emotion/styled": "^11.10.6",
-        "@firecms/data_enhancement": "workspace:data_enhancement",
-        "@mui/icons-material": "^5.11.11",
-        "@mui/lab": "^5.0.0-alpha.124",
-        "@mui/material": "^5.11.15",
-        "algoliasearch": "^4.16.0",
-        "firebase": "^9.18.0",
-        "firecms": "workspace:lib",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "react-router": "^6.9.0",
-        "react-router-dom": "^6.9.0"
-    },
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build && tsc",
-        "preview": "vite build && vite preview",
-        "deploy": "vite build && firebase deploy --only hosting"
-    },
-    "eslintConfig": {
-        "extends": [
-            "react-app",
-            "react-app/jest"
-        ]
-    },
-    "browserslist": {
-        "production": [
-            ">0.2%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "@types/react": "^18.0.30",
-        "@types/react-dom": "^18.0.11",
-        "@typescript-eslint/eslint-plugin": "^5.57.0",
-        "@typescript-eslint/parser": "^5.57.0",
-        "@vitejs/plugin-react": "^3.1.0",
-        "eslint": "^8.36.0",
-        "eslint-config-standard": "^17.0.0",
-        "eslint-plugin-import": "^2.27.5",
-        "eslint-plugin-n": "^15.6.1",
-        "eslint-plugin-promise": "^6.1.1",
-        "eslint-plugin-react": "^7.32.2",
-        "eslint-plugin-react-hooks": "^4.6.0",
-        "typescript": "^5.0.2",
-        "vite": "^4.2.1",
-        "vite-plugin-fonts": "^0.7.0"
-    }
+  "name": "firecms-example",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
+    "@firecms/data_enhancement": "0.3.0",
+    "@mui/icons-material": "^5.11.11",
+    "@mui/lab": "^5.0.0-alpha.124",
+    "@mui/material": "^5.11.15",
+    "algoliasearch": "^4.16.0",
+    "firebase": "^9.18.0",
+    "firecms": "workspace:lib",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.9.0",
+    "react-router-dom": "^6.9.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc",
+    "preview": "vite build && vite preview",
+    "deploy": "vite build && firebase deploy --only hosting"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.30",
+    "@types/react-dom": "^18.0.11",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "@vitejs/plugin-react": "^3.1.0",
+    "eslint": "^8.36.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.6.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "^5.0.2",
+    "vite": "^4.2.1",
+    "vite-plugin-fonts": "^0.7.0"
+  }
 }
