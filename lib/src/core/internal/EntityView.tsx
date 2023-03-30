@@ -284,34 +284,40 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const customViewsView: React.ReactNode[] | undefined = customViews && customViews.map(
             (customView, colIndex) => {
-                return (tabsPosition === colIndex
-                        ? <Box
-                            sx={{
-                                width: ADDITIONAL_TAB_WIDTH,
-                                height: "100%",
-                                overflow: "auto",
-                                borderLeft: `1px solid ${theme.palette.divider}`,
-                                [theme.breakpoints.down("lg")]: {
-                                    borderLeft: "inherit",
-                                    width: CONTAINER_FULL_WIDTH
-                                }
-                            }}
-                            key={`custom_view_${customView.path}_${colIndex}`}
-                            role="tabpanel"
-                            flexGrow={1}>
-                            <ErrorBoundary>
-                                {customView.builder({
-                                    collection,
-                                    entity: usedEntity,
-                                    modifiedValues: modifiedValues ?? usedEntity?.values
-                                })}
-                            </ErrorBoundary>
-                        </Box>
-                        : null
-                )
-                    ;
+                if (tabsPosition !== colIndex)
+                    return null;
+                if (customView.Builder) {
+                    console.warn("customView.builder is deprecated, use customView.Builder instead", customView);
+                }
+                const Builder = customView.Builder ?? customView.builder;
+                if (!Builder) {
+                    console.error("customView.Builder is not defined");
+                    return null;
+                }
+                return <Box
+                    sx={{
+                        width: ADDITIONAL_TAB_WIDTH,
+                        height: "100%",
+                        overflow: "auto",
+                        borderLeft: `1px solid ${theme.palette.divider}`,
+                        [theme.breakpoints.down("lg")]: {
+                            borderLeft: "inherit",
+                            width: CONTAINER_FULL_WIDTH
+                        }
+                    }}
+                    key={`custom_view_${customView.path}`}
+                    role="tabpanel"
+                    flexGrow={1}>
+                    <ErrorBoundary>
+                        <Builder
+                            collection={collection}
+                            entity={usedEntity}
+                            modifiedValues={modifiedValues ?? usedEntity?.values}
+                        />
+                    </ErrorBoundary>
+                </Box>;
             }
-        );
+        ).filter(Boolean);
 
         const loading = (dataLoading && !usedEntity) || ((!usedEntity || readOnly === undefined) && (status === "existing" || status === "copy"));
 
@@ -332,7 +338,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                 width: CONTAINER_FULL_WIDTH
                             }
                         }}
-                        key={`subcol_${subcollection.name}_${colIndex}`}
+                        key={`subcol_${subcollection.alias ?? subcollection.path}`}
                         role="tabpanel"
                         flexGrow={1}>
 
@@ -363,7 +369,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     </Box>
                 );
             }
-        );
+        ).filter(Boolean);
 
         const getSelectedSubPath = useCallback((value: number) => {
             if (value === -1) return undefined;
@@ -377,7 +383,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
 
             throw Error("Something is wrong in getSelectedSubPath");
-        }, [customViews, customViewsCount, subcollections]);
+        }, [customViewsCount]);
 
         const onDiscard = useCallback(() => {
             onValuesAreModified(false);
@@ -451,7 +457,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         }
 
         const form = (readOnly === undefined)
-            ? null
+            ? <></>
             : (!readOnly
                 ? buildForm()
                 : (

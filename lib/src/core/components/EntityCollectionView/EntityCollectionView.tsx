@@ -271,7 +271,7 @@ export const EntityCollectionView = React.memo(
                             id={"info-dialog"}
                             open={open}
                             anchorEl={anchorEl}
-                            elevation={2}
+                            elevation={3}
                             onClose={() => {
                                 setAnchorEl(null);
                             }}

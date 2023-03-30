@@ -178,7 +178,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                     <br/>
 
                     {needsToAcceptFetchAllData &&
-                        <Alert elevation={2}
+                        <Alert elevation={3}
                                variant="filled"
                                severity={"warning"}>
                             <div>

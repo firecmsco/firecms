@@ -18,7 +18,7 @@ export const productsCollection = buildCollection({
         {
             path: "custom_view",
             name: "Test custom view",
-            builder: ({}) => undefined
+            Builder: ({}) => null
         }
     ],
     properties: {

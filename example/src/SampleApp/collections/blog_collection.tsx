@@ -44,7 +44,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     views: [{
         path: "preview",
         name: "Preview",
-        builder: (props) => <BlogEntryPreview {...props}/>
+        Builder: BlogEntryPreview
     }],
     properties: {
         name: buildProperty({

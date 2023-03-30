@@ -19,7 +19,7 @@ import { EntityCustomView, buildCollection } from "firecms";
 const sampleView: EntityCustomView = {
     path: "preview",
     name: "Blog entry preview",
-    builder: ({ collection, entity, modifiedValues }) => (
+    Builder: ({ collection, entity, modifiedValues }) => (
         // This is a custom component that you can build as any React component
         <MyBlogPreviewComponent entity={entity}
                                 modifiedValues={modifiedValues}/>

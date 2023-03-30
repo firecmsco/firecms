@@ -275,7 +275,7 @@ function FilterForm<M>({
         <Popover
             id={`popover_${column.key}`}
             open={popupOpen}
-            elevation={2}
+            elevation={3}
             anchorEl={anchorEl.current}
             onClose={() => setPopupOpen(false)}
             anchorOrigin={{

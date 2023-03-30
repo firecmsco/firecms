@@ -120,7 +120,7 @@ export const productsCollection = buildCollection<Product>({
         {
             path: "sample_custom_view",
             name: "Custom view",
-            builder: ({
+            Builder: ({
                           collection,
                           entity,
                           modifiedValues

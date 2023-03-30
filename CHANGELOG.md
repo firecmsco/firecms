@@ -8,6 +8,7 @@
 hovering the menu.
 - Allow choosing which custom view or subcollection is opened by default,
 with the `defaultSelectedView` prop. Thanks to @SeeringPhil for the PR!
+- Renamed `builder` to `Builder` in collection custom views for consistency.
 
 ## [2.0.0-beta.3] - 2023-03-21
 
