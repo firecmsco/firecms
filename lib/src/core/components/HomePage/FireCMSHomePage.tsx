@@ -36,7 +36,6 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
 
     const context = useFireCMSContext();
     const navigationContext = useNavigationContext();
-    const userConfigurationPersistence = useUserConfigurationPersistence();
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");

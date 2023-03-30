@@ -1,12 +1,14 @@
 import { useNavigate } from "react-router-dom";
-import { Box, Chip } from "@mui/material";
-import { useNavigationContext } from "../../../hooks";
+import { Box, Chip, Collapse, Grid } from "@mui/material";
+import { useFireCMSContext, useNavigationContext } from "../../../hooks";
 import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
 import { TopNavigationEntry } from "../../../types";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
+import { NavigationGroup } from "./NavigationGroup";
+import { NavigationCollectionCard } from "./NavigationCollectionCard";
 
 function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
 
@@ -41,6 +43,8 @@ function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
 }
 
 export function FavouritesView() {
+
+    const context = useFireCMSContext();
     const navigationContext = useNavigationContext();
     const userConfigurationPersistence = useUserConfigurationPersistence();
 
@@ -50,23 +54,45 @@ export function FavouritesView() {
     const favouriteCollections = (userConfigurationPersistence?.favouritePaths ?? [])
         .map((path) => navigationContext.topLevelNavigation?.navigationEntries.find((entry) => entry.path === path))
         .filter(Boolean) as TopNavigationEntry[];
-    const favouritePaths = favouriteCollections.map(e => e.path);
+
     const recentCollections = ((userConfigurationPersistence?.recentlyVisitedPaths ?? [])
         .map((path) => navigationContext.topLevelNavigation?.navigationEntries.find((entry) => entry.path === path))
         .filter(Boolean) as TopNavigationEntry[])
-        .filter(entry => !favouritePaths.includes(entry.path))
         .slice(0, 5);
 
-    return <Box sx={{
-        display: "flex",
-        flexDirection: "row",
-        flexWrap: "wrap",
-        gap: 1,
-        pb: 2
-    }}>
-        {favouriteCollections.map((entry) => <NavigationChip key={entry.path}
-                                                             entry={entry}/>)}
-        {recentCollections.map((entry) => <NavigationChip key={entry.path}
-                                                          entry={entry}/>)}
+    const favouritesGroup = <Collapse in={favouriteCollections.length > 0}>
+        <NavigationGroup group={"Favourites"}>
+            <Grid container spacing={2}>
+                {favouriteCollections
+                    .map((entry) =>
+                        <Grid item
+                              xs={12}
+                              sm={6}
+                              lg={4}
+                              key={`nav_${entry.group}_${entry.name}`}>
+                            <NavigationCollectionCard {...entry}
+                                                      onClick={() => {
+                                                          const event = entry.type === "collection" ? "home_favorite_navigate_to_collection" : (entry.type === "view" ? "home_favorite_navigate_to_view" : "unmapped_event");
+                                                          context.onAnalyticsEvent?.(event, { path: entry.path });
+                                                      }}/>
+                        </Grid>)
+                }
+
+            </Grid>
+        </NavigationGroup>
+    </Collapse>;
+
+    return <Box>
+        <Box sx={{
+            display: "flex",
+            flexDirection: "row",
+            flexWrap: "wrap",
+            gap: 1,
+            pb: 2
+        }}>
+            {recentCollections.map((entry) => <NavigationChip key={entry.path}
+                                                              entry={entry}/>)}
+        </Box>
+        {favouritesGroup}
     </Box>;
 }
