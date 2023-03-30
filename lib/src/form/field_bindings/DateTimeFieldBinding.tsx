@@ -60,9 +60,10 @@ export function DateTimeFieldBinding({
                     (
                         <MuiTextField {...params}
                                       fullWidth
-                                      sx={{
-                                          minHeight: "64px"
-                                      }}
+                                      sx={(theme) => ({
+                                          minHeight: "64px",
+                                          borderRadius: `${theme.shape.borderRadius}px`
+                                      })}
                                       label={
                                           <LabelWithIcon
                                               icon={getIconForProperty(property)}
@@ -70,9 +71,11 @@ export function DateTimeFieldBinding({
                                       }
                                       InputProps={{
                                           ...params.InputProps,
-                                          sx: {
-                                              minHeight: "64px"
-                                          },
+                                          sx: (theme) => ({
+                                              minHeight: "64px",
+                                              borderRadius: `${theme.shape.borderRadius}px`
+                                          }),
+                                          disableUnderline: true,
                                           endAdornment: <Box
                                               sx={{
                                                   pr: 2,

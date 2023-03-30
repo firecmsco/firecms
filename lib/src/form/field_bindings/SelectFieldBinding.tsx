@@ -76,14 +76,16 @@ export function SelectFieldBinding<T extends EnumType>({
             </InputLabel>
 
             <MuiSelect
-                sx={{
-                    minHeight: "64px"
-                }}
+                sx={(theme) => ({
+                    minHeight: "64px",
+                    borderRadius: `${theme.shape.borderRadius}px`
+                })}
                 variant={"filled"}
                 labelId={`${propertyKey}-select-label`}
                 autoFocus={autoFocus}
                 value={value ?? ""}
                 disabled={disabled}
+                disableUnderline={true}
                 endAdornment={
                     property.clearable && <IconButton
                         sx={{

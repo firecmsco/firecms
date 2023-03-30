@@ -54,21 +54,19 @@ const StyledBox = styled(Box)(({ theme }:
         border: "2px solid transparent",
         minHeight: "254px",
         outline: 0,
-        borderTopLeftRadius: `${theme.shape.borderRadius}px`,
-        borderTopRightRadius: `${theme.shape.borderRadius}px`,
+        borderRadius: `${theme.shape.borderRadius}px`,
         backgroundColor: fieldBackground(theme),
-        borderBottom: theme.palette.mode === "light" ? "1px solid rgba(0, 0, 0, 0.42)" : "1px solid rgba(255, 255, 255, 0.7)",
         boxSizing: "border-box",
         transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
         "&:focus": {
-            borderBottom: `2px solid ${theme.palette.primary.main}`
+            border: `2px solid ${theme.palette.primary.main}`
         }
     },
 
     [`&.${classes.disabled}`]: {
         backgroundColor: "rgba(0, 0, 0, 0.12)",
         color: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)",
-        borderBottom: `1px dotted ${theme.palette.grey[400]}`
+        border: `1px dotted ${theme.palette.grey[400]}`
     },
 
     [`&.${classes.nonActiveDrop}`]: {

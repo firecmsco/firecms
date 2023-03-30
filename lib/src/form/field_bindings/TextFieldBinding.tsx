@@ -106,12 +106,14 @@ export function TextFieldBinding<T extends string | number>({
                 </InputLabel>
 
                 <FilledInput
-                    sx={{
-                        minHeight: "64px"
-                    }}
+                    sx={(theme) => ({
+                        minHeight: "64px",
+                        borderRadius: `${theme.shape.borderRadius}px`
+                    })}
                     autoFocus={autoFocus}
                     type={inputType}
                     multiline={isMultiline}
+                    disableUnderline={true}
                     inputProps={{
                         rows: 4
                     }}
@@ -166,16 +168,6 @@ export function TextFieldBinding<T extends string | number>({
                 </Box>
 
             </FormControl>
-            {/*{mediaType && internalValue &&*/}
-            {/*<ErrorBoundary>*/}
-            {/*    <Box m={1}>*/}
-            {/*        <PreviewComponent propertyKey={propertyKey}*/}
-            {/*                          value={internalValue}*/}
-            {/*                          property={property}*/}
-            {/*                          size={"regular"}/>*/}
-            {/*    </Box>*/}
-            {/*</ErrorBoundary>*/}
-            {/*}*/}
         </>
     );
 

@@ -61,36 +61,8 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                         display: "inline-flex",
                         alignItems: "center",
                         backgroundColor: fieldBackground(theme),
-                        borderTopLeftRadius: `${theme.shape.borderRadius}px`,
-                        borderTopRightRadius: `${theme.shape.borderRadius}px`,
+                        borderRadius: `${theme.shape.borderRadius}px`,
                         transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-                        "&::before": {
-                            borderBottom: focus
-                                ? (theme.palette.mode === "light"
-                                    ? "1px solid rgba(255, 255, 255, 0.7)"
-                                    : "1px solid rgba(0, 0, 0, 0.87)")
-                                : (theme.palette.mode === "light"
-                                    ? "1px solid rgba(0, 0, 0, 0.42)"
-                                    : "1px solid rgba(255, 255, 255, 0.7)"),
-                            left: 0,
-                            bottom: 0,
-                            content: "\"\\00a0\"",
-                            position: "absolute",
-                            right: 0,
-                            transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-                            pointerEvents: "none"
-                        },
-                        "&::after": {
-                            content: "\"\"",
-                            transition: "transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-                            left: 0,
-                            bottom: 0,
-                            position: "absolute",
-                            right: 0,
-                            transform: focus ? "scaleX(1)" : "scaleX(0)",
-                            borderBottom: `2px solid ${theme.palette.primary.main}`,
-                            pointerEvents: focus ? "none" : undefined
-                        },
                         "&:hover": {
                             backgroundColor: fieldBackgroundHover(theme)
                         }
