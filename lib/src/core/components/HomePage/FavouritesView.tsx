@@ -42,7 +42,7 @@ function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
     />;
 }
 
-export function FavouritesView() {
+export function FavouritesView({ hidden }: { hidden: boolean }) {
 
     const context = useFireCMSContext();
     const navigationContext = useNavigationContext();
@@ -60,7 +60,8 @@ export function FavouritesView() {
         .filter(Boolean) as TopNavigationEntry[])
         .slice(0, 5);
 
-    const favouritesGroup = <Collapse in={favouriteCollections.length > 0}>
+    const favouritesGroup = <Collapse
+        in={!hidden && favouriteCollections.length > 0}>
         <NavigationGroup group={"Favourites"}>
             <Grid container spacing={2}>
                 {favouriteCollections

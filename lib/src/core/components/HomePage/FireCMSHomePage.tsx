@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 
 import { Box, Container, Grid } from "@mui/material";
 
@@ -14,10 +14,8 @@ import { NavigationCollectionCard } from "./NavigationCollectionCard";
 
 import Index from "flexsearch";
 import { SearchBar } from "../EntityCollectionTable/internal/SearchBar";
-import {
-    useUserConfigurationPersistence
-} from "../../../hooks/useUserConfigurationPersistence";
 import { FavouritesView } from "./FavouritesView";
+import { useRestoreScroll } from "../../internal/useRestoreScroll";
 
 export const searchIndex = new Index(
     // @ts-ignore
@@ -39,6 +37,12 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
 
     if (!navigationContext.topLevelNavigation)
         throw Error("Navigation not ready in FireCMSHomePage");
+
+    const {
+        containerRef,
+        scroll,
+        direction
+    } = useRestoreScroll();
 
     const {
         navigationEntries,
@@ -97,20 +101,29 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
     }
 
     return (
-        <Container sx={{ my: 2 }}>
+        <Container
+            ref={containerRef}
+            sx={{
+                py: 2,
+                overflow: "auto",
+                height: "100%",
+                width: "100%"
+            }}
+        >
 
             <Box sx={{
                 position: "sticky",
                 py: 2,
-                top: 0,
+                transition: "top 0.5s ease-in-out",
+                top: direction === "down" ? -84 : 0,
                 zIndex: 10
             }}>
                 <SearchBar onTextSearch={updateSearchResults}
                            placeholder={"Search collections"}
-                           large={true}/>
+                           large={false}/>
             </Box>
 
-            <FavouritesView/>
+            <FavouritesView hidden={Boolean(filteredUrls)}/>
 
             {allGroups.map((group, index) => {
 

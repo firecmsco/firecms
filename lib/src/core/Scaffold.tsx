@@ -27,6 +27,7 @@ import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { FireCMSAppBar } from "./internal/FireCMSAppBar";
+import { useRestoreScroll } from "./internal/useRestoreScroll";
 
 export const DRAWER_WIDTH = 280;
 
@@ -96,7 +97,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
         const navigation = useNavigationContext();
-        const containerRef = useRestoreScroll();
+        const { containerRef } = useRestoreScroll();
 
         const [drawerOpen, setDrawerOpen] = React.useState(false);
         const [onHover, setOnHover] = React.useState(false);
@@ -177,42 +178,6 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
     },
     equal
 )
-
-function useRestoreScroll() {
-
-    const scrollsMap = React.useRef<Record<string, number>>({});
-
-    const location = useLocation();
-
-    const containerRef = React.createRef<HTMLDivElement>();
-
-    const handleScroll = () => {
-        if (!containerRef.current || !location.key) return;
-        scrollsMap.current[location.key] = containerRef.current.scrollTop;
-    };
-
-    useEffect(() => {
-        const container = containerRef.current;
-        if (!container) return;
-        container.addEventListener("scroll", handleScroll, { passive: true });
-
-        return () => {
-            if (container)
-                container.removeEventListener("scroll", handleScroll);
-        };
-    }, [containerRef, location]);
-
-    useEffect(() => {
-        if (!containerRef.current || !scrollsMap.current || !scrollsMap.current[location.key]) return;
-        containerRef.current.scrollTo(
-            {
-                top: scrollsMap.current[location.key],
-                behavior: "auto"
-            });
-    }, [location]);
-
-    return containerRef;
-}
 
 const DrawerHeader = styled("div")(({ theme }) => ({
     display: "flex",
