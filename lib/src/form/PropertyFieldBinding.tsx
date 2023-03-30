@@ -219,7 +219,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
             fieldProps.form.setFieldTouched(propertyKey, true, false);
             fieldProps.form.setFieldValue(propertyKey, value, shouldValidate);
         },
-        setFieldValue: (otherPropertyKey: string, value: T | null, shouldValidate?: boolean) => {
+        setFieldValue: (otherPropertyKey: string, value: CMSType | null, shouldValidate?: boolean) => {
             fieldProps.form.setFieldTouched(propertyKey, true, false);
             fieldProps.form.setFieldValue(otherPropertyKey, value, shouldValidate);
         },

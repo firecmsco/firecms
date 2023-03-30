@@ -40,7 +40,7 @@ export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M ex
      * @param value
      * @param shouldValidate
      */
-    setFieldValue: (propertyKey:string, value: T | null, shouldValidate?: boolean) => void;
+    setFieldValue: (propertyKey:string, value: CMSType | null, shouldValidate?: boolean) => void;
 
     /**
      * Is the form currently submitting
