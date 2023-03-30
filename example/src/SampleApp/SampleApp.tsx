@@ -140,7 +140,6 @@ function SampleApp() {
             // 'apple.com'
         ]}
         textSearchController={textSearchController}
-        allowSkipLogin={true}
         logo={logo}
         collections={(params) => collections}
         views={customViews}

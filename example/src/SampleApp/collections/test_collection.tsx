@@ -4,7 +4,7 @@ import {
     buildProperty,
     EntityCallbacks,
     EntityIdUpdateProps,
-    EntityOnFetchProps,
+    EntityOnFetchProps, EntityReference,
     EnumValues,
     Properties,
     resolveNavigationFrom,
@@ -358,7 +358,8 @@ export const testCollection = buildCollection({
         product: {
             name: "Product",
             dataType: "reference",
-            path: "products"
+            path: "products",
+            defaultValue: new EntityReference("B000P0MDMS", "products")
         }
         // movement: buildProperty(({ values }) => {
         //     return {
