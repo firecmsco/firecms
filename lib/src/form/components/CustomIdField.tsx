@@ -89,9 +89,11 @@ export function CustomIdField<M extends Record<string, any>, UserType>({
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
     const inputProps = {
-        sx: {
-            minHeight: "64px"
-        },
+        sx: (theme:Theme) => ({
+            minHeight: "64px",
+            borderRadius: `${theme.shape.borderRadius}px`
+        }),
+        disableUnderline: true,
         endAdornment: entity
             ? (
                 <InputAdornment position="end">
@@ -134,7 +136,12 @@ export function CustomIdField<M extends Record<string, any>, UserType>({
         name: "id",
         type: null,
         value: (entity && status === "existing" ? entity.id : entityId) ?? "",
-        variant: "filled"
+        variant: "filled",
+        disableUnderline: true,
+        sx: (theme:Theme) => ({
+            minHeight: "64px",
+            borderRadius: `${theme.shape.borderRadius}px`
+        })
     };
 
     return (
@@ -150,6 +157,7 @@ export function CustomIdField<M extends Record<string, any>, UserType>({
                         labelId={"id-label"}
                         fullWidth
                         className={classes.select}
+                        disableUnderline={true}
                         error={error}
                         {...fieldProps}
                         onChange={(event: any) => onChange(event.target.value)}>
