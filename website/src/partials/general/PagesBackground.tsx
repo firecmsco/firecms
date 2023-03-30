@@ -15,6 +15,7 @@ const animationPaths = [
     "/features",
     "/enterprise",
     "/pricing",
+    "/openai",
     "/f/"
 ];
 

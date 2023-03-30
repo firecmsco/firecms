@@ -10,7 +10,7 @@ export function EnterpriseArchitectures() {
     return (
         <>
 
-            <Panel color={"secondary"}>
+            <Panel color={"secondary"} centered={true}>
                 <h4 className="h1 mb-4 uppercase">
                     Open source is the path to success
                 </h4>

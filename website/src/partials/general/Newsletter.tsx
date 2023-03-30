@@ -89,7 +89,7 @@ export const Newsletter = () => {
                                         value={email}/>
                                     <button type="submit"
                                             disabled={loading || completed || !policyAccepted}
-                                            className={"btn px-8 py-4 sm:px-12 sm:py-4  uppercase w-full w-auto sm:mb-0 sm:ml-2 " + (loading || !policyAccepted ? "bg-gray-200 dark:bg-gray-800" : (completed ? "bg-green-600" : "bg-primary hover:bg-blue-700"))}>
+                                            className={"btn px-8 py-4 sm:px-12 sm:py-4 uppercase w-auto sm:mb-0 sm:ml-2 " + (loading || !policyAccepted ? "bg-gray-200 dark:bg-gray-800" : (completed ? "bg-green-600" : "bg-primary hover:bg-blue-700"))}>
                                         {loading ? "Loading" : (completed ? "Signed up!" : "Sign up")}
                                     </button>
                                 </div>

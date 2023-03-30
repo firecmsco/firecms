@@ -23,10 +23,10 @@ export function Panel({
         <section
             className={"max-w-full relative flex flex-col items " + colorClass
                 + (includeMargin ? " my-16" : "")}>
-            <div className={ContainerMixin
-                + (contained ? " my-16 max-w-3xl" : " my-12")
-                + (centered ? " mx-auto flex flex-col items-center" : "")}>
+            <div className={(contained ? " my-16 max-w-3xl" : " my-12")}>
+                <div className={ContainerMixin + (centered ? " flex flex-col items-center" : "")}>
                 {children}
+                </div>
             </div>
         </section>
     );

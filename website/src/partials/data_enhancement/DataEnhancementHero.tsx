@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import { CTAButtonMixin } from "../utils";
+import { CTAButtonMixin, CTAOutlinedButtonMixin } from "../utils";
 import { TwoColumns } from "../general/TwoColumns";
 
 export function DataEnhancementHero() {
@@ -34,11 +34,17 @@ export function DataEnhancementHero() {
 
                 <div
                     className="mt-5 sm:mt-8">
-                    <a href="mailto:hello@firecms.co?subject=FireCMS%20consulting"
+                    <a href="/docs/openai"
                        rel="noopener noreferrer"
                        target="_blank"
                        className={CTAButtonMixin}>
                         Get started
+                    </a>
+                    <a href="https://demo.firecms.co/c/books"
+                       rel="noopener noreferrer"
+                       target="_blank"
+                       className={CTAOutlinedButtonMixin + " sm:ml-4 ml-2"}>
+                        OpenAI Demo
                     </a>
                 </div>
             </div>

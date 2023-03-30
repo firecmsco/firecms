@@ -16,6 +16,7 @@ import {
     DataEnhancementHero
 } from "../partials/data_enhancement/DataEnhancementHero";
 import { BatchProcessing } from "../partials/data_enhancement/BatchProcessing";
+import { Translations } from "../partials/data_enhancement/Translations";
 
 function DataEnhancement() {
 
@@ -27,7 +28,8 @@ function DataEnhancement() {
 
             <DataEnhancementUseCases/>
             <AutofillFeature/>
-            <BatchProcessing />
+            <BatchProcessing/>
+            <Translations/>
             {/*<CustomizationOptions />*/}
             {/*<Testimonials />*/}
             {/*<Contact />*/}
