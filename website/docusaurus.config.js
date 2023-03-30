@@ -145,7 +145,7 @@ module.exports = {
                             label: "Enterprise",
                         },
                         {
-                            to: "https://firecms.co/subscriptions",
+                            to: "https://app.firecms.co/subscriptions",
                             label: "Subscriptions",
                         },
                         {

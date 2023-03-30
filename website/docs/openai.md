@@ -27,7 +27,7 @@ in the website. And that's it!
 
 You will not need to specify a subscription key when configuring the plugin.
 
-<a href="https://firecms.co/subscriptions"
+<a href="https://app.firecms.co/subscriptions"
 rel="noopener noreferrer"
 target="_blank"
 class="btn px-6 my-2 py-2 md:px-12 md:py-4 text-white bg-primary hover:

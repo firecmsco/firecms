@@ -2,16 +2,18 @@
 id: changelog
 title: Changelog
 ---
-## [2.0.0-beta.4] - 2023-03-21
+## [2.0.0-beta.4] - 2023-03-30
 
 ### Changed
 - Fixed table header bug
 - Added search bar in home page
+- Added favourites and recent collections view in home page.
 - Fix for some deeply nested property builders in arrays
 - Added `autoOpenDrawer` prop, allowing to open the drawer automatically when 
 hovering the menu.
 - Allow choosing which custom view or subcollection is opened by default,
 with the `defaultSelectedView` prop. Thanks to @SeeringPhil for the PR!
+- Renamed `builder` to `Builder` in collection custom views for consistency.
 
 ## [2.0.0-beta.3] - 2023-03-21
 
