@@ -101,88 +101,88 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
     }
 
     return (
-        <Container
-            ref={containerRef}
-            sx={{
-                py: 2,
-                overflow: "auto",
-                height: "100%",
-                width: "100%"
-            }}
-        >
+        <Box ref={containerRef}
+             sx={{
+                 py: 2,
+                 overflow: "auto",
+                 height: "100%",
+                 width: "100%"
+             }}>
+            <Container>
 
-            <Box sx={{
-                position: "sticky",
-                py: 2,
-                transition: "top 0.5s ease-in-out",
-                top: direction === "down" ? -84 : 0,
-                zIndex: 10
-            }}>
-                <SearchBar onTextSearch={updateSearchResults}
-                           placeholder={"Search collections"}
-                           large={false}/>
-            </Box>
+                <Box sx={{
+                    position: "sticky",
+                    py: 2,
+                    transition: "top 0.5s ease-in-out",
+                    top: direction === "down" ? -84 : 0,
+                    zIndex: 10
+                }}>
+                    <SearchBar onTextSearch={updateSearchResults}
+                               placeholder={"Search collections"}
+                               large={false}/>
+                </Box>
 
-            <FavouritesView hidden={Boolean(filteredUrls)}/>
+                <FavouritesView hidden={Boolean(filteredUrls)}/>
 
-            {allGroups.map((group, index) => {
+                {allGroups.map((group, index) => {
 
-                const AdditionalCards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] = [];
-                const actionProps: PluginHomePageAdditionalCardsProps = {
-                    group,
-                    context
-                };
+                    const AdditionalCards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] = [];
+                    const actionProps: PluginHomePageAdditionalCardsProps = {
+                        group,
+                        context
+                    };
 
-                if (context.plugins) {
-                    context.plugins.forEach(plugin => {
-                        if (plugin.homePage?.AdditionalCards) {
-                            AdditionalCards.push(...toArray(plugin.homePage?.AdditionalCards));
-                        }
-                    });
-                }
+                    if (context.plugins) {
+                        context.plugins.forEach(plugin => {
+                            if (plugin.homePage?.AdditionalCards) {
+                                AdditionalCards.push(...toArray(plugin.homePage?.AdditionalCards));
+                            }
+                        });
+                    }
 
-                const thisGroupCollections = filteredNavigationEntries
-                    .filter((entry) => entry.group === group || (!entry.group && group === undefined));
-                if (thisGroupCollections.length === 0 && AdditionalCards.length === 0)
-                    return null;
-                return (
-                    <NavigationGroup
-                        group={group}
-                        key={`plugin_section_${group}`}>
-                        <Grid container spacing={2}>
-                            {thisGroupCollections // so we don't miss empty groups
-                                .map((entry) =>
+                    const thisGroupCollections = filteredNavigationEntries
+                        .filter((entry) => entry.group === group || (!entry.group && group === undefined));
+                    if (thisGroupCollections.length === 0 && AdditionalCards.length === 0)
+                        return null;
+                    return (
+                        <NavigationGroup
+                            group={group}
+                            key={`plugin_section_${group}`}>
+                            <Grid container spacing={2}>
+                                {thisGroupCollections // so we don't miss empty groups
+                                    .map((entry) =>
+                                        <Grid item
+                                              xs={12}
+                                              sm={6}
+                                              lg={4}
+                                              key={`nav_${entry.group}_${entry.name}`}>
+                                            <NavigationCollectionCard {...entry}
+                                                                      onClick={() => {
+                                                                          const event = entry.type === "collection" ? "home_navigate_to_collection" : (entry.type === "view" ? "home_navigate_to_view" : "unmapped_event");
+                                                                          context.onAnalyticsEvent?.(event, { path: entry.path });
+                                                                      }}/>
+                                        </Grid>)
+                                }
+                                {AdditionalCards && AdditionalCards.map((AdditionalCard, i) => (
                                     <Grid item
                                           xs={12}
                                           sm={6}
                                           lg={4}
-                                          key={`nav_${entry.group}_${entry.name}`}>
-                                        <NavigationCollectionCard {...entry}
-                                                                  onClick={() => {
-                                                                      const event = entry.type === "collection" ? "home_navigate_to_collection" : (entry.type === "view" ? "home_navigate_to_view" : "unmapped_event");
-                                                                      context.onAnalyticsEvent?.(event, { path: entry.path });
-                                                                  }}/>
-                                    </Grid>)
-                            }
-                            {AdditionalCards && AdditionalCards.map((AdditionalCard, i) => (
-                                <Grid item
-                                      xs={12}
-                                      sm={6}
-                                      lg={4}
-                                      key={`nav_${group}_"add_${i}`}>
-                                    <AdditionalCard {...actionProps}/>
-                                </Grid>
-                            ))}
+                                          key={`nav_${group}_"add_${i}`}>
+                                        <AdditionalCard {...actionProps}/>
+                                    </Grid>
+                                ))}
 
-                        </Grid>
-                    </NavigationGroup>
-                );
-            })}
+                            </Grid>
+                        </NavigationGroup>
+                    );
+                })}
 
-            {additionalSections}
+                {additionalSections}
 
-            {additionalChildren}
+                {additionalChildren}
 
-        </Container>
+            </Container>
+        </Box>
     );
 }
