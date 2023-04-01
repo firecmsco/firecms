@@ -337,9 +337,12 @@ function EntityFormInternal<M extends Record<string, any>>({
                     values: props.values
                 };
 
-                if (onFormControllerChange) {
-                    onFormControllerChange(formController);
-                }
+                // eslint-disable-next-line react-hooks/rules-of-hooks
+                useEffect(() => {
+                    if (onFormControllerChange) {
+                        onFormControllerChange(formController);
+                    }
+                }, [onFormControllerChange, formController]);
 
                 if (plugins && collection) {
                     const actionProps: PluginFormActionProps = {
