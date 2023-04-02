@@ -176,7 +176,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         useEffect(() => {
             if (largeLayoutTabSelected.current === largeLayout)
                 return;
-
             // open first tab by default in large layouts
             if (selectedSubPath !== defaultSelectedView)
                 sideEntityController.replace({
@@ -185,14 +184,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     selectedSubPath: defaultSelectedView,
                     updateUrl: true
                 });
-            // set form view by default in small layouts
-            // else if (tabsPosition === 0 && !largeLayout && defaultSelectedView)
-            //     sideEntityController.replace({
-            //         path,
-            //         entityId,
-            //         selectedSubPath: undefined,
-            //         updateUrl: true
-            //     });
             largeLayoutTabSelected.current = largeLayout;
         }, [defaultSelectedView, largeLayout, selectedSubPath]);
 
@@ -232,6 +223,13 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 sideDialogContext.setBlocked(false);
                 sideDialogContext.close(true);
                 onClose?.();
+            } else {
+                sideEntityController.replace({
+                    path,
+                    entityId: updatedEntity.id,
+                    selectedSubPath,
+                    updateUrl: true
+                });
             }
 
         };

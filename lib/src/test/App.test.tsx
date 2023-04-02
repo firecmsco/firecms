@@ -1,4 +1,6 @@
+// @ts-ignore
 import React from "react";
+// @ts-ignore
 import ReactDOM from "react-dom";
 import { FirebaseCMSApp } from "../firebase_app";
 import { siteConfig } from "./test_site_config";
