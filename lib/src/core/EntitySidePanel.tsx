@@ -8,6 +8,8 @@ import { ErrorBoundary } from "./components";
 import { EntityView } from "./internal/EntityView";
 import { useSideDialogContext } from "./SideDialogs";
 
+import { useTranslation } from "react-i18next";
+
 /**
  * This is the component in charge of rendering the side dialog used
  * for editing entities. Use the {@link useSideEntityController} to open
@@ -17,12 +19,10 @@ import { useSideDialogContext } from "./SideDialogs";
  * @category Components
  */
 export function EntitySidePanel(props: EntitySidePanelProps) {
+    const { t } = useTranslation();
 
-    const {
-        blocked,
-        setBlocked,
-        setBlockedNavigationMessage
-    } = useSideDialogContext();
+    const { blocked, setBlocked, setBlockedNavigationMessage } =
+        useSideDialogContext();
 
     const navigationContext = useNavigationContext();
 
@@ -31,10 +31,26 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         let usedCollection = props.collection;
 
         if (!usedCollection) {
-            usedCollection = !props ? undefined : navigationContext.getCollection(props.path, props.entityId);
+            usedCollection = !props
+                ? undefined
+                : navigationContext.getCollection(props.path, props.entityId);
             if (!usedCollection) {
-                console.error("ERROR: No collection found in path `", props.path, "`. Entity id: ", props.entityId);
-                throw Error("ERROR: No collection found in path `" + props.path + "`. Make sure you have defined a collection for this path in the root navigation.");
+                console.error(
+                    t("ERROR: No collection found in path `") ||
+                        "ERROR: No collection found in path `",
+                    props.path,
+                    t("`. Entity id: ") || "`. Entity id: ",
+                    props.entityId
+                );
+                throw Error(
+                    t("ERROR: No collection found in path `") ||
+                        "ERROR: No collection found in path `" +
+                            props.path +
+                            t(
+                                "`. Make sure you have defined a collection for this path in the root navigation."
+                            ) ||
+                        "`. Make sure you have defined a collection for this path in the root navigation."
+                );
             }
         }
         return usedCollection;
@@ -44,7 +60,11 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         function beforeunload(e: any) {
             if (blocked && collection) {
                 e.preventDefault();
-                e.returnValue = `You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?`;
+                e.returnValue =
+                    t(
+                        `You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?`
+                    ) ||
+                    `You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?`;
             }
         }
 
@@ -55,23 +75,30 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
             if (typeof window !== "undefined")
                 window.removeEventListener("beforeunload", beforeunload);
         };
-
     }, [blocked, collection]);
 
-    const onValuesAreModified = useCallback((modified: boolean) => {
-        setBlocked(modified);
-        setBlockedNavigationMessage(modified
-            ? <> You have unsaved changes in this <b>{collection?.name}</b>.</>
-            : undefined)
-    }, [collection?.name, setBlocked, setBlockedNavigationMessage]);
+    const onValuesAreModified = useCallback(
+        (modified: boolean) => {
+            setBlocked(modified);
+            setBlockedNavigationMessage(
+                modified ? (
+                    <>
+                        {" "}
+                        You have unsaved changes in this{" "}
+                        <b>{collection?.name}</b>.
+                    </>
+                ) : undefined
+            );
+        },
+        [collection?.name, setBlocked, setBlockedNavigationMessage]
+    );
 
     if (!props || !collection) {
-        return <div style={{ width: FORM_CONTAINER_WIDTH }}/>;
+        return <div style={{ width: FORM_CONTAINER_WIDTH }} />;
     }
 
     return (
         <>
-
             <ErrorBoundary>
                 <EntityView
                     {...props}
@@ -80,7 +107,6 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                     onValuesAreModified={onValuesAreModified}
                 />
             </ErrorBoundary>
-
         </>
     );
 }

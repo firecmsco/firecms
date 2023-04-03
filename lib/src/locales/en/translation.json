@@ -1,0 +1,37 @@
+{
+    "hello": "Hello",
+    "`. Entity id: ": "`. Entity id: ",
+    "`. Make sure you have defined a collection for this path in the root navigation.": "`. Make sure you have defined a collection for this path in the root navigation.",
+    "You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?" : "You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?",
+    "No filter": "No filter",
+    "title_is_true": "{{title}} is true",
+    "title_is_false": "{{title}} is false",
+    "operationLabels": {
+        "equal": "==",
+        "notEqual": "!=",
+        "greaterThan": ">",
+        "lessThan": "<",
+        "greaterThanOrEqual": ">=",
+        "lessThanOrEqual": "<=",
+        "in": "In",
+        "notIn": "Not in",
+        "arrayContains": "Contains",
+        "arrayContainsAny": "Contains Any"
+      },
+      "selectReference": {
+        "single": "Select reference",
+        "multiple": "Select references"
+      },
+      "errorMessages": {
+        "Error loading navigation": "Error loading navigation",
+        "Error loading auth": "Error loading auth",
+        "ERROR: No collection found in path `": "ERROR: No collection found in path `",
+        "collectionViewNotFound": "Couldn't find the corresponding collection view for the path: {{path}}",
+        "dataNotReference": "Data is not a reference",
+        "dataNotArrayOfReferences": "Data is not an array of references",
+        "collectionNotExist": "The specified collection does not exist"
+      },
+      "buttonLabels": {
+        "edit": "Edit"
+      }
+}  

@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import {
     Box,
     FormControl,
@@ -11,6 +12,7 @@ import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 import { EnumValuesChip } from "../../../../preview";
 import { TableEnumValues, TableWhereFilterOp } from "../../Table";
+import { t } from "i18next";
 
 interface StringNumberFilterFieldProps {
     name: string,
@@ -23,16 +25,16 @@ interface StringNumberFilterFieldProps {
 }
 
 const operationLabels = {
-    "==": "==",
-    "!=": "!=",
-    ">": ">",
-    "<": "<",
-    ">=": ">=",
-    "<=": "<=",
-    in: "In",
-    "not-in": "Not in",
-    "array-contains": "Contains",
-    "array-contains-any": "Any"
+    "==": t("operationLabels.equal"),
+    "!=": t("operationLabels.notEqual"),
+    ">": t("operationLabels.greaterThan"),
+    "<": t("operationLabels.lessThan"),
+    ">=": t("operationLabels.greaterThanOrEqual"),
+    "<=": t("operationLabels.lessThanOrEqual"),
+    "in": t("operationLabels.in"),
+    "not-in": t("operationLabels.notIn"),
+    "array-contains": t("operationLabels.arrayContains"),
+    "array-contains-any": t("operationLabels.arrayContainsAny")
 };
 
 const multipleSelectOperations = ["array-contains-any", "in", "not-in"];

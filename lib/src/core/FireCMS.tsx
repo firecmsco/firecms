@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
@@ -8,35 +8,27 @@ import * as locales from "date-fns/locale";
 import { FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { ModeControllerContext } from "./contexts/ModeController";
+import { useBuildSideEntityController } from "./internal/useBuildSideEntityController";
+import { useBuildNavigationContext } from "./internal/useBuildNavigationContext";
+import { useBuildSideDialogsController } from "./internal/useBuildSideDialogsController";
 import {
-    useBuildSideEntityController
-} from "./internal/useBuildSideEntityController";
-import {
-    useBuildNavigationContext
-} from "./internal/useBuildNavigationContext";
-import {
-    useBuildSideDialogsController
-} from "./internal/useBuildSideDialogsController";
-import {
-    FireCMSContextInstance, useFireCMSContext,
+    FireCMSContextInstance,
+    useFireCMSContext,
     useModeController,
-    useSnackbarController
+    useSnackbarController,
 } from "../hooks";
 import { CenteredView, ErrorView } from "./components";
 import { StorageSourceContext } from "./contexts/StorageSourceContext";
-import {
-    UserConfigurationPersistenceContext
-} from "./contexts/UserConfigurationPersistenceContext";
+import { UserConfigurationPersistenceContext } from "./contexts/UserConfigurationPersistenceContext";
 import { DataSourceContext } from "./contexts/DataSourceContext";
-import {
-    SideEntityControllerContext
-} from "./contexts/SideEntityControllerContext";
+import { SideEntityControllerContext } from "./contexts/SideEntityControllerContext";
 import { NavigationContextInstance } from "./contexts/NavigationContext";
 import { AuthControllerContext } from "./contexts/AuthControllerContext";
-import {
-    SideDialogsControllerContext
-} from "./contexts/SideDialogsControllerContext";
+import { SideDialogsControllerContext } from "./contexts/SideDialogsControllerContext";
 import { useTraceUpdate } from "./util/useTraceUpdate";
+
+import i18n from "./util/i18n";
+import { useTranslation } from "react-i18next";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -49,7 +41,6 @@ const DEFAULT_COLLECTION_PATH = "/c";
  */
 
 export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
-
     const modeController = useModeController();
     const {
         children,
@@ -67,14 +58,20 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         baseCollectionPath,
         plugins,
         onAnalyticsEvent,
-        fields
+        fields,
     } = props;
 
+    const { t } = useTranslation();
+
     const usedBasePath = basePath ?? "/";
-    const usedBasedCollectionPath = baseCollectionPath ?? DEFAULT_COLLECTION_PATH;
+    const usedBasedCollectionPath =
+        baseCollectionPath ?? DEFAULT_COLLECTION_PATH;
 
     // @ts-ignore
     const dateUtilsLocale = locale ? locales[locale] : undefined;
+    useEffect(() => {
+        i18n.changeLanguage(locale);
+    }, [locale]);
 
     const navigation = useBuildNavigationContext({
         basePath: usedBasePath,
@@ -85,22 +82,32 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         collectionOverrideHandler,
         userConfigPersistence,
         dataSource,
-        plugins
+        plugins,
     });
 
     const sideDialogsController = useBuildSideDialogsController();
-    const sideEntityController = useBuildSideEntityController(navigation, sideDialogsController);
+    const sideEntityController = useBuildSideEntityController(
+        navigation,
+        sideDialogsController
+    );
 
     const snackbarController = useSnackbarController();
 
-    const loading = authController.initialLoading || navigation.loading || (plugins?.some(p => p.loading) ?? false);
+    const loading =
+        authController.initialLoading ||
+        navigation.loading ||
+        (plugins?.some((p) => p.loading) ?? false);
 
     if (navigation.navigationLoadingError) {
         return (
             <CenteredView maxWidth={300} fullScreen={true}>
                 <ErrorView
-                    title={"Error loading navigation"}
-                    error={navigation.navigationLoadingError}/>
+                    title={
+                        t("Error loading navigation") ||
+                        "Error loading navigation"
+                    }
+                    error={navigation.navigationLoadingError}
+                />
             </CenteredView>
         );
     }
@@ -109,8 +116,9 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         return (
             <CenteredView maxWidth={300} fullScreen={true}>
                 <ErrorView
-                    title={"Error loading auth"}
-                    error={authController.authError}/>
+                    title={t("Error loading auth") || "Error loading auth"}
+                    error={authController.authError}
+                />
             </CenteredView>
         );
     }
@@ -121,33 +129,38 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         locale,
         plugins,
         onAnalyticsEvent,
-        fields
+        fields,
     };
 
     return (
         <ModeControllerContext.Provider value={modeController}>
             <FireCMSContextInstance.Provider value={context}>
                 <UserConfigurationPersistenceContext.Provider
-                    value={userConfigPersistence}>
-                    <StorageSourceContext.Provider
-                        value={storageSource}>
-                        <DataSourceContext.Provider
-                            value={dataSource}>
+                    value={userConfigPersistence}
+                >
+                    <StorageSourceContext.Provider value={storageSource}>
+                        <DataSourceContext.Provider value={dataSource}>
                             <AuthControllerContext.Provider
-                                value={authController}>
+                                value={authController}
+                            >
                                 <SideDialogsControllerContext.Provider
-                                    value={sideDialogsController}>
+                                    value={sideDialogsController}
+                                >
                                     <SideEntityControllerContext.Provider
-                                        value={sideEntityController}>
+                                        value={sideEntityController}
+                                    >
                                         <NavigationContextInstance.Provider
-                                            value={navigation}>
+                                            value={navigation}
+                                        >
                                             <BreadcrumbsProvider>
                                                 <LocalizationProvider
                                                     dateAdapter={AdapterDateFns}
                                                     utils={DateFnsUtils}
-                                                    locale={dateUtilsLocale}>
+                                                    locale={dateUtilsLocale}
+                                                >
                                                     <FireCMSInternal
-                                                        loading={loading}>
+                                                        loading={loading}
+                                                    >
                                                         {children}
                                                     </FireCMSInternal>
                                                 </LocalizationProvider>
@@ -165,20 +178,19 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 }
 
 function FireCMSInternal({
-                             loading,
-                             children
-                         }: {
+    loading,
+    children,
+}: {
     loading: boolean;
     children: (props: {
         context: FireCMSContext;
         loading: boolean;
     }) => React.ReactNode;
 }) {
-
     const context = useFireCMSContext();
     let childrenResult = children({
         context,
-        loading
+        loading,
     });
 
     const plugins = context.plugins;
@@ -186,8 +198,10 @@ function FireCMSInternal({
         plugins.forEach((plugin: FireCMSPlugin) => {
             if (plugin.provider) {
                 childrenResult = (
-                    <plugin.provider.Component {...plugin.provider.props}
-                                               context={context}>
+                    <plugin.provider.Component
+                        {...plugin.provider.props}
+                        context={context}
+                    >
                         {childrenResult}
                     </plugin.provider.Component>
                 );

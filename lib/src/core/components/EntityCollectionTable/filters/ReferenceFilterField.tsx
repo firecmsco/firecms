@@ -1,3 +1,4 @@
+/* eslint-disable quote-props */
 import {
     Box,
     Button,
@@ -11,6 +12,7 @@ import { Entity, EntityCollection, EntityReference } from "../../../../types";
 import { ReferencePreview } from "../../../../preview";
 import { getReferenceFrom } from "../../../util";
 import { useNavigationContext, useReferenceDialog } from "../../../../hooks";
+import { t } from "i18next";
 
 interface ReferenceFilterFieldProps {
     name: string,
@@ -25,16 +27,16 @@ interface ReferenceFilterFieldProps {
 }
 
 const operationLabels = {
-    "==": "==",
-    "!=": "!=",
-    ">": ">",
-    "<": "<",
-    ">=": ">=",
-    "<=": "<=",
-    in: "In",
-    "not-in": "Not in",
-    "array-contains": "Contains",
-    "array-contains-any": "Contains Any"
+    "==": t("operationLabels.equal"),
+    "!=": t("operationLabels.notEqual"),
+    ">": t("operationLabels.greaterThan"),
+    "<": t("operationLabels.lessThan"),
+    ">=": t("operationLabels.greaterThanOrEqual"),
+    "<=": t("operationLabels.lessThanOrEqual"),
+    "in": t("operationLabels.in"),
+    "not-in": t("operationLabels.notIn"),
+    "array-contains": t("operationLabels.arrayContains"),
+    "array-contains-any": t("operationLabels.arrayContainsAny")
 };
 
 const multipleSelectOperations = ["array-contains-any", "in", "not-in"];
@@ -184,7 +186,7 @@ export function ReferenceFilterField({
                     {(!internalValue || (Array.isArray(internalValue) && internalValue.length === 0)) &&
                         <Button onClick={doOpenDialog}
                                 sx={{ height: "100%" }}>
-                            {multiple ? "Select references" : "Select reference"}
+                            {multiple ? t("selectReference.multiple") : t("selectReference.single")}
                         </Button>
                     }
                 </FormControl>

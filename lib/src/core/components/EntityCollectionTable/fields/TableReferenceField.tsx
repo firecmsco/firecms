@@ -12,6 +12,7 @@ import {
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { getReferenceFrom } from "../../../util";
 import { useNavigationContext, useReferenceDialog } from "../../../../hooks";
+import { t } from "i18next";
 
 export function TableReferenceField(props: {
     name: string;
@@ -48,7 +49,7 @@ export function TableReferenceField(props: {
 
     const collection = navigationContext.getCollection(path);
     if (!collection) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
+        throw Error(String(t("errorMessages.collectionViewNotFound", { path })));
     }
 
     const onSingleEntitySelected = useCallback((entity: Entity<any>) => {
@@ -95,7 +96,7 @@ export function TableReferenceField(props: {
                 previewProperties={previewProperties}
             />;
         else
-            return <ErrorView error={"Data is not a reference"}/>;
+        return <ErrorView error={String(t("errorMessages.dataNotReference"))} />;
     };
 
     const buildMultipleReferenceField = () => {
@@ -117,31 +118,32 @@ export function TableReferenceField(props: {
                 }
             </>;
         else
-            return <ErrorView error={"Data is not an array of references"}/>;
+        return <ErrorView error={String(t("errorMessages.dataNotArrayOfReferences"))} />;
     };
 
     if (!collection)
-        return <ErrorView error={"The specified collection does not exist"}/>;
-
+        return <ErrorView error={String(t("errorMessages.collectionNotExist"))} />;
     return (
-        <Box sx={{ width: "100%" }}
-             onMouseEnter={hoverTrue}
-             onMouseMove={hoverTrue}
-             onMouseLeave={hoverFalse}>
-
+        <Box
+            sx={{ width: "100%" }}
+            onMouseEnter={hoverTrue}
+            onMouseMove={hoverTrue}
+            onMouseLeave={hoverFalse}
+        >
             {internalValue && !multiselect && buildSingleReferenceField()}
 
             {internalValue && multiselect && buildMultipleReferenceField()}
 
-            {valueNotSet &&
+            {valueNotSet && (
                 <Button
                     onClick={handleOpen}
                     size={"small"}
                     variant="outlined"
-                    color="primary">
-                    Edit {title}
-                </Button>}
-
+                    color="primary"
+                >
+                    {t("buttonLabels.edit")} {title}
+                </Button>
+            )}
         </Box>
     );
 }
