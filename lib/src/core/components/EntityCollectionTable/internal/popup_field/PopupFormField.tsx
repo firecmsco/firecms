@@ -97,11 +97,13 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     const windowSize = useWindowSize();
 
     const containerRef = React.useRef<HTMLDivElement>(null);
+    const innerRef = React.useRef<HTMLDivElement>(null);
 
     const initialPositionSet = React.useRef<boolean>(false);
 
     useDraggable({
         containerRef,
+        innerRef,
         x: popupLocation?.x,
         y: popupLocation?.y,
         onMove: (x, y) => onMove({
@@ -116,13 +118,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         },
         [propertyKey, entity]
     );
-
-    // useEffect(
-    //     () => {
-    //         setInternalValue(entity?.values);
-    //     },
-    //     [entity?.values]
-    // );
 
     const getInitialLocation = useCallback(() => {
         if (!cellRect) throw Error("getInitialLocation error");
@@ -311,8 +306,14 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                     flexDirection: "column",
                                     position: "relative"
                                 }}>
-                                {fieldProps &&
-                                    <PropertyFieldBinding {...fieldProps}/>}
+                                <Box
+                                    ref={innerRef}
+                                    sx={{
+                                        cursor: "auto !important"
+                                    }}>
+                                    {fieldProps &&
+                                        <PropertyFieldBinding {...fieldProps}/>}
+                                </Box>
                             </Box>
 
                             <CustomDialogActions>
