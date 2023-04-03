@@ -37,6 +37,13 @@
         "noCollectionFound": "ERRO: Nenhuma coleção encontrada no caminho `{path}`. Certifique-se de que você definiu uma coleção para este caminho na navegação raiz."
       },
       "buttonLabels": {
-        "edit": "Editar"
+        "edit": "Editar",
+        "save": "Salvar",
+        "createCopy": "Criar cópia",
+        "create": "Criar",
+        "saveAndClose": "Salvar e fechar",
+        "createCopyAndClose": "Criar cópia e fechar",
+        "createAndClose": "Criar e fechar",
+        "discard": "Descartar"
       }
 }

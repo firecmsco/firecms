@@ -36,6 +36,13 @@
         "noCollectionFound": "ERROR: No collection found in path `{path}`. Make sure you have defined a collection for this path in the root navigation."
       },
       "buttonLabels": {
-        "edit": "Edit"
+        "edit": "Edit",
+        "save": "Save",
+        "createCopy": "Create copy",
+        "create": "Create",
+        "saveAndClose": "Save and close",
+        "createCopyAndClose": "Create copy and close",
+        "createAndClose": "Create and close",
+        "discard": "Discard"
       }
 }  

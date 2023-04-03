@@ -34,6 +34,7 @@ import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
 import { FormController } from "../types/form";
+import { useTranslation } from "react-i18next";
 
 /**
  * @category Components
@@ -149,7 +150,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         path,
         values: entity?.values,
         fields: context.fields
-    }), [entity?.values, inputCollection, path]);
+    }), [context.fields, entity?.values, inputCollection, path]);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
         (Boolean(initialResolvedCollection.customId) && initialResolvedCollection.customId !== "optional");
@@ -208,7 +209,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         values: internalValues,
         previousValues: initialValues,
         fields: context.fields
-    }), [inputCollection, path, entityId, internalValues, initialValues]);
+    }), [inputCollection, path, entityId, internalValues, initialValues, context.fields]);
 
     const onIdUpdate = collection.callbacks?.onIdUpdate;
     useEffect(() => {
@@ -227,7 +228,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                 console.error(e);
             }
         }
-    }, [collection, context, entityId, internalValues, path, status]);
+    }, [collection, context, entityId, internalValues, onIdUpdate, path, status]);
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
         if (initialValues && status === "existing") {
@@ -302,7 +303,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                 formikActions.setSubmitting(false);
             });
 
-    }, [status, path, collection, entity, onEntitySave, mustSetCustomId, entityId]);
+    }, [mustSetCustomId, entityId, status, onEntitySave, collection, path, entity?.values, entity?.id, context]);
 
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
                                                                         name,
@@ -317,7 +318,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                 collection.properties,
                 uniqueFieldValidator)
             : undefined,
-        [entityId, collection.properties]);
+        [entityId, collection.properties, uniqueFieldValidator]);
 
     return (
         <Formik
@@ -495,13 +496,14 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
         closeAfterSaveRef
     } = props;
 
+    const { t } = useTranslation();
     const modified = dirty;
     useEffect(() => {
         if (onModified)
             onModified(modified);
         if (onValuesChanged)
             onValuesChanged(values);
-    }, [modified, values]);
+    }, [modified, onModified, onValuesChanged, values]);
 
     useEffect(() => {
         if (underlyingChanges && entity) {
@@ -595,7 +597,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                         disabled={disabled}
                         type="reset"
                     >
-                        Discard
+                          {t("buttonLabels.discard")}
                     </Button>}
 
                 <Button
@@ -607,9 +609,9 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                         closeAfterSaveRef.current = false;
                     }}
                 >
-                    {status === "existing" && "Save"}
-                    {status === "copy" && "Create copy"}
-                    {status === "new" && "Create"}
+                    {status === "existing" && t("buttonLabels.save")}
+                    {status === "copy" && t("buttonLabels.createCopy")}
+                    {status === "new" && t("buttonLabels.create")}
                 </Button>
 
                 <Button
@@ -621,9 +623,9 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                         closeAfterSaveRef.current = true;
                     }}
                 >
-                    {status === "existing" && "Save and close"}
-                    {status === "copy" && "Create copy and close"}
-                    {status === "new" && "Create and close"}
+                    {status === "existing" && t("buttonLabels.saveAndClose")}
+                    {status === "copy" && t("buttonLabels.createCopyAndClose")}
+                    {status === "new" && t("buttonLabels.createAndClose")}
                 </Button>
 
             </CustomDialogActions>
