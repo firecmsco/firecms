@@ -5,6 +5,7 @@ import { Box, FormControl, IconButton } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
+import { useTranslation } from "react-i18next";
 
 interface SearchBarProps {
     onTextSearch: (searchString?: string) => void;
@@ -22,6 +23,8 @@ export function SearchBar({
 
     const [searchText, setSearchText] = useState<string>("");
     const [active, setActive] = useState<boolean>(false);
+    const { t } = useTranslation();
+    placeholder = t(placeholder);
 
     const deferredValues = useDeferredValue(searchText);
 

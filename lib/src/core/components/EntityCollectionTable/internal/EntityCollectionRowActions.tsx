@@ -17,6 +17,7 @@ import {
     useTheme
 } from "@mui/material";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 
 /**
  *
@@ -63,6 +64,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+    const { t } = useTranslation();
 
     const editEnabled = Boolean(onEditClicked);
     const copyEnabled = Boolean(onCopyClicked);
@@ -172,14 +174,14 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                             <ListItemIcon>
                                 <Delete/>
                             </ListItemIcon>
-                            <ListItemText primary={"Delete"}/>
+                            <ListItemText primary={t("buttonLabels.delete")}/>
                         </MenuItem>}
 
                         {copyEnabled && <MenuItem onClick={onCopyClick}>
                             <ListItemIcon>
                                 <FileCopy/>
                             </ListItemIcon>
-                            <ListItemText primary="Copy"/>
+                            <ListItemText primary={t("buttonLabels.copy")}/>
                         </MenuItem>}
 
                     </Menu>}

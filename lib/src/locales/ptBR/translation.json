@@ -44,6 +44,9 @@
         "saveAndClose": "Salvar e fechar",
         "createCopyAndClose": "Criar cópia e fechar",
         "createAndClose": "Criar e fechar",
-        "discard": "Descartar"
-      }
+        "discard": "Descartar",
+        "delete": "Apagar",
+        "copy": "Copiar"
+      },
+      "Search": "Pesquisar"
 }
