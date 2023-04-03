@@ -2,7 +2,6 @@
     "hello": "Hello",
     "`. Entity id: ": "`. Entity id: ",
     "`. Make sure you have defined a collection for this path in the root navigation.": "`. Make sure you have defined a collection for this path in the root navigation.",
-    "You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?" : "You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?",
     "No filter": "No filter",
     "title_is_true": "{{title}} is true",
     "title_is_false": "{{title}} is false",
@@ -22,6 +21,10 @@
         "single": "Select reference",
         "multiple": "Select references"
       },
+      "messages": {
+        "unsavedChanges": "You have unsaved changes in this {collectionName}. Are you sure you want to leave this page?",
+        "unsavedChangesCollection": "You have unsaved changes in this {collectionName}."
+      },
       "errorMessages": {
         "Error loading navigation": "Error loading navigation",
         "Error loading auth": "Error loading auth",
@@ -29,7 +32,8 @@
         "collectionViewNotFound": "Couldn't find the corresponding collection view for the path: {{path}}",
         "dataNotReference": "Data is not a reference",
         "dataNotArrayOfReferences": "Data is not an array of references",
-        "collectionNotExist": "The specified collection does not exist"
+        "collectionNotExist": "The specified collection does not exist",
+        "noCollectionFound": "ERROR: No collection found in path `{path}`. Make sure you have defined a collection for this path in the root navigation."
       },
       "buttonLabels": {
         "edit": "Edit"

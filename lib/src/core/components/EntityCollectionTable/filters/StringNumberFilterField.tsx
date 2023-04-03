@@ -12,7 +12,7 @@ import React, { useState } from "react";
 import Tooltip from "@mui/material/Tooltip/Tooltip";
 import { EnumValuesChip } from "../../../../preview";
 import { TableEnumValues, TableWhereFilterOp } from "../../Table";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface StringNumberFilterFieldProps {
     name: string,
@@ -24,21 +24,6 @@ interface StringNumberFilterFieldProps {
     title?: string;
 }
 
-const operationLabels = {
-    "==": t("operationLabels.equal"),
-    "!=": t("operationLabels.notEqual"),
-    ">": t("operationLabels.greaterThan"),
-    "<": t("operationLabels.lessThan"),
-    ">=": t("operationLabels.greaterThanOrEqual"),
-    "<=": t("operationLabels.lessThanOrEqual"),
-    "in": t("operationLabels.in"),
-    "not-in": t("operationLabels.notIn"),
-    "array-contains": t("operationLabels.arrayContains"),
-    "array-contains-any": t("operationLabels.arrayContainsAny")
-};
-
-const multipleSelectOperations = ["array-contains-any", "in", "not-in"];
-
 export function StringNumberFilterField({
                                             name,
                                             value,
@@ -48,6 +33,22 @@ export function StringNumberFilterField({
                                             enumValues,
                                             title
                                         }: StringNumberFilterFieldProps) {
+
+    const { t } = useTranslation();
+
+    const operationLabels = {
+        "==": t("operationLabels.equal"),
+        "!=": t("operationLabels.notEqual"),
+        ">": t("operationLabels.greaterThan"),
+        "<": t("operationLabels.lessThan"),
+        ">=": t("operationLabels.greaterThanOrEqual"),
+        "<=": t("operationLabels.lessThanOrEqual"),
+        "in": t("operationLabels.in"),
+        "not-in": t("operationLabels.notIn"),
+        "array-contains": t("operationLabels.arrayContains"),
+        "array-contains-any": t("operationLabels.arrayContainsAny")
+    };
+    const multipleSelectOperations = ["array-contains-any", "in", "not-in"];
 
     const possibleOperations: (keyof typeof operationLabels) [] = isArray
         ? ["array-contains"]

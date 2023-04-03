@@ -35,36 +35,17 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                 ? undefined
                 : navigationContext.getCollection(props.path, props.entityId);
             if (!usedCollection) {
-                console.error(
-                    t("ERROR: No collection found in path `") ||
-                        "ERROR: No collection found in path `",
-                    props.path,
-                    t("`. Entity id: ") || "`. Entity id: ",
-                    props.entityId
-                );
-                throw Error(
-                    t("ERROR: No collection found in path `") ||
-                        "ERROR: No collection found in path `" +
-                            props.path +
-                            t(
-                                "`. Make sure you have defined a collection for this path in the root navigation."
-                            ) ||
-                        "`. Make sure you have defined a collection for this path in the root navigation."
-                );
+                throw Error(String(t("errorMessages.noCollectionFound", { path: props.path })));
             }
         }
         return usedCollection;
-    }, [navigationContext, props]);
+    }, [navigationContext, props, t]);
 
     useEffect(() => {
         function beforeunload(e: any) {
             if (blocked && collection) {
                 e.preventDefault();
-                e.returnValue =
-                    t(
-                        `You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?`
-                    ) ||
-                    `You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?`;
+                e.returnValue = t("messages.unsavedChanges", { collectionName: collection.name });
             }
         }
 
@@ -75,22 +56,22 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
             if (typeof window !== "undefined")
                 window.removeEventListener("beforeunload", beforeunload);
         };
-    }, [blocked, collection]);
+    }, [blocked, collection, t]);
 
     const onValuesAreModified = useCallback(
         (modified: boolean) => {
             setBlocked(modified);
             setBlockedNavigationMessage(
-                modified ? (
+                modified
+             ? (
                     <>
-                        {" "}
-                        You have unsaved changes in this{" "}
-                        <b>{collection?.name}</b>.
+                        {t("messages.unsavedChangesCollection", { collectionName: <b>{collection?.name}</b> })}
                     </>
-                ) : undefined
+                )
+: undefined
             );
         },
-        [collection?.name, setBlocked, setBlockedNavigationMessage]
+        [collection?.name, setBlocked, setBlockedNavigationMessage, t]
     );
 
     if (!props || !collection) {

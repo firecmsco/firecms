@@ -2,7 +2,6 @@
     "hello": "Olá",
     "`. Entity id: ": "`. Id da entidade: ",
     "`. Make sure you have defined a collection for this path in the root navigation.": "`. Certifique-se de que você definiu uma coleção para este caminho na navegação raiz.",
-    "You have unsaved changes in this ${collection.name}. Are you sure you want to leave this page?": "Você tem alterações não salvas nesta ${collection.name}. Tem certeza de que deseja sair desta página?",
     "No filter": "Sem filtro",
     "title_is_true": "{{title}} é verdadeiro",
     "title_is_false": "{{title}} é falso",
@@ -22,6 +21,11 @@
         "single": "Selecione uma referência",
         "multiple": "Selecione uma ou mais referências"
       },
+      "messages": {
+        "unsavedChanges": "Você tem alterações não salvas neste {collectionName}. Tem certeza de que deseja sair desta página?",
+        "unsavedChangesCollection": "Você tem alterações não salvas em {collectionName}."
+
+      },
       "errorMessages": {
         "Error loading navigation": "Erro ao carregar a navegação",
         "Error loading auth": "Erro ao carregar a autenticação",
@@ -29,7 +33,8 @@
         "collectionViewNotFound": "Não foi possível encontrar a visualização de coleção correspondente para o caminho: {{path}}",
         "dataNotReference": "Os dados não são uma referência",
         "dataNotArrayOfReferences": "Os dados não são um array de referências",
-        "collectionNotExist": "A coleção especificada não existe"
+        "collectionNotExist": "A coleção especificada não existe",
+        "noCollectionFound": "ERRO: Nenhuma coleção encontrada no caminho `{path}`. Certifique-se de que você definiu uma coleção para este caminho na navegação raiz."
       },
       "buttonLabels": {
         "edit": "Editar"

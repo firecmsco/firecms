@@ -12,7 +12,7 @@ import { Entity, EntityCollection, EntityReference } from "../../../../types";
 import { ReferencePreview } from "../../../../preview";
 import { getReferenceFrom } from "../../../util";
 import { useNavigationContext, useReferenceDialog } from "../../../../hooks";
-import { t } from "i18next";
+import { useTranslation } from "react-i18next";
 
 interface ReferenceFilterFieldProps {
     name: string,
@@ -26,20 +26,7 @@ interface ReferenceFilterFieldProps {
     setPopupOpen: (open: boolean) => void;
 }
 
-const operationLabels = {
-    "==": t("operationLabels.equal"),
-    "!=": t("operationLabels.notEqual"),
-    ">": t("operationLabels.greaterThan"),
-    "<": t("operationLabels.lessThan"),
-    ">=": t("operationLabels.greaterThanOrEqual"),
-    "<=": t("operationLabels.lessThanOrEqual"),
-    "in": t("operationLabels.in"),
-    "not-in": t("operationLabels.notIn"),
-    "array-contains": t("operationLabels.arrayContains"),
-    "array-contains-any": t("operationLabels.arrayContainsAny")
-};
 
-const multipleSelectOperations = ["array-contains-any", "in", "not-in"];
 
 export function ReferenceFilterField({
                                          name,
@@ -51,6 +38,20 @@ export function ReferenceFilterField({
                                          previewProperties,
                                          setPopupOpen
                                      }: ReferenceFilterFieldProps) {
+    const { t } = useTranslation();
+    const operationLabels = {
+        "==": t("operationLabels.equal"),
+        "!=": t("operationLabels.notEqual"),
+        ">": t("operationLabels.greaterThan"),
+        "<": t("operationLabels.lessThan"),
+        ">=": t("operationLabels.greaterThanOrEqual"),
+        "<=": t("operationLabels.lessThanOrEqual"),
+        "in": t("operationLabels.in"),
+        "not-in": t("operationLabels.notIn"),
+        "array-contains": t("operationLabels.arrayContains"),
+        "array-contains-any": t("operationLabels.arrayContainsAny")
+    };
+    const multipleSelectOperations = ["array-contains-any", "in", "not-in"];
 
     const possibleOperations: (keyof typeof operationLabels) [] = isArray
         ? ["array-contains"]
