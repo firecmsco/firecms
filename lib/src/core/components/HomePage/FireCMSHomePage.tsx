@@ -16,6 +16,7 @@ import Index from "flexsearch";
 import { SearchBar } from "../EntityCollectionTable/internal/SearchBar";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
+import { useTranslation } from "react-i18next";
 
 export const searchIndex = new Index(
     // @ts-ignore
@@ -32,11 +33,13 @@ export const searchIndex = new Index(
  */
 export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: React.ReactNode }) {
 
+    const { t } = useTranslation();
     const context = useFireCMSContext();
     const navigationContext = useNavigationContext();
 
     if (!navigationContext.topLevelNavigation)
-        throw Error("Navigation not ready in FireCMSHomePage");
+        throw Error(t("errorMessages.navigationNotReady") || "Navigation not ready");
+
 
     const {
         containerRef,
@@ -119,7 +122,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
                     zIndex: 10
                 }}>
                     <SearchBar onTextSearch={updateSearchResults}
-                               placeholder={"Search collections"}
+                               placeholder={t("searchCollections") || "Search collections"}
                                large={false}/>
                 </Box>
 
