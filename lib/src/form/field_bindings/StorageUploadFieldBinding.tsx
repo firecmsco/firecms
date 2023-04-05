@@ -392,7 +392,9 @@ export function StorageUpload({
                                   entity,
                                   storagePathBuilder
                               }: StorageUploadProps) {
-
+                                  
+    const { t } = useTranslation();
+    
     if (multipleFilesSupported) {
         const arrayProperty = property as ResolvedArrayProperty<string[]>;
         if (arrayProperty.of) {
@@ -406,8 +408,6 @@ export function StorageUpload({
             throw Error(t("errorsMessages.storageArrayMustBeString") || "Storage field using array must be of data type string");
         }
     }
-
-    const { t } = useTranslation();
 
     const metadata: Record<string, unknown> | undefined = storage?.metadata;
     const size = multipleFilesSupported ? "small" : "regular";
