@@ -16,6 +16,7 @@ import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { TableWhereFilterOp } from "../../Table";
 import { LabelWithIcon } from "../../../../form";
 import { getIconForProperty } from "../../../util";
+import { useTranslation } from "react-i18next";
 
 interface DateTimeFilterFieldProps {
     name: string,
@@ -25,18 +26,6 @@ interface DateTimeFilterFieldProps {
     isArray?: boolean;
     title?: string;
 }
-
-const operationLabels = {
-    "==": "==",
-    "!=": "!=",
-    ">": ">",
-    "<": "<",
-    ">=": ">=",
-    "<=": "<=",
-    in: "in",
-    "array-contains": "Contains",
-    "array-contains-any": "Any"
-};
 
 const multipleSelectOperations = ["array-contains-any", "in"];
 
@@ -48,7 +37,20 @@ export function DateTimeFilterField({
                                         setValue,
                                         title
                                     }: DateTimeFilterFieldProps) {
+    const { t } = useTranslation();
 
+    const operationLabels = {
+        "==": t("operationLabels.equal"),
+        "!=": t("operationLabels.notEqual"),
+        ">": t("operationLabels.greaterThan"),
+        "<": t("operationLabels.lessThan"),
+        ">=": t("operationLabels.greaterThanOrEqual"),
+        "<=": t("operationLabels.lessThanOrEqual"),
+        in: t("operationLabels.in"),
+        "not-in": t("operationLabels.notIn"),
+        "array-contains": t("operationLabels.arrayContains"),
+        "array-contains-any": t("operationLabels.arrayContainsAny")
+    };
     const possibleOperations: (keyof typeof operationLabels) [] = isArray
         ? ["array-contains"]
         : ["==", "!=", ">", "<", ">=", "<="];

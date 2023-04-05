@@ -62,5 +62,13 @@
     "delete": "Delete",
     "copy": "Copy"
   },
-  "Search": "Search"
+  "Search": "Search",
+  "clearFilter" : "Clean filter",
+  "size": "Size",
+  "xs" : "XS",
+  "s" : "S",
+  "m" : "M",
+  "l" : "L",
+  "xl" : "XL",
+  "logOut" : "Log out"
 }

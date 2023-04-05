@@ -62,5 +62,13 @@
     "delete": "Apagar",
     "copy": "Copiar"
   },
-  "Search": "Pesquisar"
+  "Search": "Pesquisar",
+  "clearFilter": "Limpar filtro",
+  "size": "Tamanho",
+  "xs" : "Muito Pequeno",
+  "s" : "Pequeno",
+  "m" : "Médio",
+  "l" : "Grande",
+  "xl" : "Extra Grande",
+  "logOut": "Sair"
 }

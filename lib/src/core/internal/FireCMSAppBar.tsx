@@ -25,6 +25,7 @@ import {
     useModeController
 } from "../../hooks";
 import { DRAWER_WIDTH } from "../Scaffold";
+import { useTranslation } from "react-i18next";
 
 interface FireCMSAppBarProps {
     title: string;
@@ -42,6 +43,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                                         drawerOpen
                                                     }: FireCMSAppBarProps) {
 
+    const { t } = useTranslation();
     const breadcrumbsContext = useBreadcrumbsContext();
     const { breadcrumbs } = breadcrumbsContext;
 
@@ -166,7 +168,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                     <Button variant="text"
                             color="inherit"
                             onClick={authController.signOut}>
-                        Log Out
+                        {t("logOut")}
                     </Button>
 
                 </Toolbar>

@@ -13,6 +13,7 @@ import { CollectionSize } from "../../../../types";
 import { SearchBar } from "./SearchBar";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import { FilledMenuItem, FilledSelect } from "../../fields/FilledSelect";
+import { useTranslation } from "react-i18next";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
@@ -31,9 +32,10 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+    const { t } = useTranslation();
 
     const filterView = !props.forceFilter && props.filterIsSet &&
-        <Tooltip title="Clear filter">
+        <Tooltip title={ t("clearFilter") }>
             <IconButton
                 sx={{ height: "fit-content" }}
                 aria-label="filter clear"
@@ -48,16 +50,16 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
             variant={"standard"}
             value={props.size}
             sx={{
-                width: 56,
+                width: "auto",
                 height: 40
             }}
             onChange={(evt: any) => props.onSizeChanged(evt.target.value)}
-            renderValue={(value: any) => value.toUpperCase()}
+            renderValue={(value: any) => t(value) || value.toUpperCase()}
         >
             {["xs", "s", "m", "l", "xl"].map((value) => (
                 <FilledMenuItem
                     key={`size-select-${value}`} value={value}>
-                    {value.toUpperCase()}
+                    {t(value) || value.toUpperCase()}
                 </FilledMenuItem>
             ))}
         </FilledSelect>
