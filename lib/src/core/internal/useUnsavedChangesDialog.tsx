@@ -7,6 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { CustomDialogActions } from "../components";
+import { useTranslation } from "react-i18next";
 
 export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () => void):
     {
@@ -79,6 +80,8 @@ export function UnsavedChangesDialog({
                                          title
                                      }: UnsavedChangesDialogProps) {
 
+    const { t } = useTranslation();
+
     return (
         <Dialog
             keepMounted={false}
@@ -88,14 +91,14 @@ export function UnsavedChangesDialog({
             aria-describedby="alert-dialog-description"
         >
             <DialogTitle >
-                {title ?? "Unsaved changes"}
+                {title ?? t("unsavedChangesTitle")}
             </DialogTitle>
             <DialogContent>
                 {body && <DialogContentText>
                     {body}
                 </DialogContentText>}
                 <DialogContentText >
-                    Are you sure you want to leave this page?
+                {t("messages.leavePageConfirmation")}
                 </DialogContentText>
             </DialogContent>
             <CustomDialogActions>

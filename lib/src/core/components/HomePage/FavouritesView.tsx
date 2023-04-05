@@ -9,6 +9,7 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCollectionCard } from "./NavigationCollectionCard";
+import { useTranslation } from "react-i18next";
 
 function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
 
@@ -47,6 +48,7 @@ export function FavouritesView({ hidden }: { hidden: boolean }) {
     const context = useFireCMSContext();
     const navigationContext = useNavigationContext();
     const userConfigurationPersistence = useUserConfigurationPersistence();
+    const { t } = useTranslation();
 
     if (!userConfigurationPersistence)
         return null;
@@ -62,7 +64,7 @@ export function FavouritesView({ hidden }: { hidden: boolean }) {
 
     const favouritesGroup = <Collapse
         in={!hidden && favouriteCollections.length > 0}>
-        <NavigationGroup group={"Favourites"}>
+        <NavigationGroup group={t("favourites") || "Favourites"}>
             <Grid container spacing={2}>
                 {favouriteCollections
                     .map((entry) =>
