@@ -42,7 +42,7 @@ export function useValidateAuthenticator({
 
     const [authLoading, setAuthLoading] = useState<boolean>(authenticationEnabled);
     const [notAllowedError, setNotAllowedError] = useState<any>(false);
-    const [authVerified, setAuthVerified] = useState<boolean>(!authenticationEnabled);
+    const [authVerified, setAuthVerified] = useState<boolean>(!authenticationEnabled || Boolean(authController.loginSkipped));
 
     const canAccessMainView = (authVerified) &&
         (!authenticationEnabled || Boolean(authController.user) || Boolean(authController.loginSkipped)) &&
@@ -65,7 +65,7 @@ export function useValidateAuthenticator({
             return;
         }
 
-        if (!authController.user) {
+        if (!authController.user && !authController.loginSkipped) {
             checkedUserRef.current = undefined;
             setAuthLoading(false);
             setAuthVerified(false);
