@@ -282,7 +282,9 @@ function StyledDrawer(props: MuiDrawerProps & {
             <Toolbar sx={{
                 position: "absolute",
                 left: open ? "-100%" : 0,
+                right: open ? undefined : 0,
                 opacity: open ? 0.0 : 1.0,
+                backgroundColor: theme.palette.background.default,
                 transition: theme.transitions.create(["left", "opacity"], {
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.enteringScreen
@@ -296,33 +298,36 @@ function StyledDrawer(props: MuiDrawerProps & {
                     : menuIconButton}
             </Toolbar>
 
-            <Link
-                key={"breadcrumb-home"}
-                color="inherit"
-                component={NavLink}
-                to={"."}
-                sx={theme => ({
-                    transition: theme.transitions.create(["padding"], {
-                        easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.enteringScreen
-                    }),
-                    p: theme.spacing(
-                        open ? 4 : 9,
-                        open ? 12 : 2,
-                        0,
-                        open ? 3 : 2)
-                })}>
-                <Tooltip title={"Home"} placement={"right"}>
-                    <div onClick={() => {
-                        context.onAnalyticsEvent?.("drawer_navigate_to_home");
-                    }}>
-                        {logoComponent}
-                    </div>
-                </Tooltip>
 
-            </Link>
+            <Box sx={{ height: "100%", width: "100%", overflow: "auto", }}>
+                <Link
+                    key={"breadcrumb-home"}
+                    color="inherit"
+                    component={NavLink}
+                    to={"."}
+                    sx={theme => ({
+                        display: "block",
+                        transition: theme.transitions.create(["padding"], {
+                            easing: theme.transitions.easing.sharp,
+                            duration: theme.transitions.duration.enteringScreen
+                        }),
+                        p: theme.spacing(
+                            open ? 4 : 9,
+                            open ? 12 : 2,
+                            0,
+                            open ? 3 : 2)
+                    })}>
+                    <Tooltip title={"Home"} placement={"right"}>
+                        <div onClick={() => {
+                            context.onAnalyticsEvent?.("drawer_navigate_to_home");
+                        }}>
+                            {logoComponent}
+                        </div>
+                    </Tooltip>
 
-            {props.children}
+                </Link>
+                {props.children}
+            </Box>
 
             <Link sx={(theme) => ({
                 width: DRAWER_WIDTH,

@@ -150,7 +150,7 @@ function SampleApp() {
         toolbarExtraWidget={githubLink}
         LoginView={CustomLoginView}
         onAnalyticsEvent={onAnalyticsEvent}
-        autoOpenDrawer={true}
+        // autoOpenDrawer={true}
         fields={{
             test_custom_field: {
                 name: "Test custom field",
