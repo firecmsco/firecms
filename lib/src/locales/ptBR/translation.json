@@ -1,54 +1,56 @@
 {
-    "hello": "Olá",
-    "`. Entity id: ": "`. Id da entidade: ",
-    "`. Make sure you have defined a collection for this path in the root navigation.": "`. Certifique-se de que você definiu uma coleção para este caminho na navegação raiz.",
-    "No filter": "Sem filtro",
-    "title_is_true": "{{title}} é verdadeiro",
-    "title_is_false": "{{title}} é falso",
-    "searchCollections": "Procurar coleções",
-    "operationLabels": {
-        "equal": "==",
-        "notEqual": "!=",
-        "greaterThan": ">",
-        "lessThan": "<",
-        "greaterThanOrEqual": ">=",
-        "lessThanOrEqual": "<=",
-        "in": "Em",
-        "notIn": "Não Em",
-        "arrayContains": "Contem",
-        "arrayContainsAny": "Contem qualquer"
-      },
-      "selectReference": {
-        "single": "Selecione uma referência",
-        "multiple": "Selecione uma ou mais referências"
-      },
-      "messages": {
-        "unsavedChanges": "Você tem alterações não salvas neste {collectionName}. Tem certeza de que deseja sair desta página?",
-        "unsavedChangesCollection": "Você tem alterações não salvas em {collectionName}."
-
-      },
-      "errorMessages": {
-        "Error loading navigation": "Erro ao carregar a navegação",
-        "Error loading auth": "Erro ao carregar a autenticação",
-        "ERROR: No collection found in path `": "ERRO: Nenhuma coleção encontrada no caminho `",
-        "collectionViewNotFound": "Não foi possível encontrar a visualização de coleção correspondente para o caminho: {{path}}",
-        "dataNotReference": "Os dados não são uma referência",
-        "dataNotArrayOfReferences": "Os dados não são um array de referências",
-        "collectionNotExist": "A coleção especificada não existe",
-        "noCollectionFound": "ERRO: Nenhuma coleção encontrada no caminho `{path}`. Certifique-se de que você definiu uma coleção para este caminho na navegação raiz.",
-        "navigationNotReady": "A navegação não está pronta. Verifique se você está esperando por `navigation.ready()` antes de renderizar a navegação."
-      },
-      "buttonLabels": {
-        "edit": "Editar",
-        "save": "Salvar",
-        "createCopy": "Criar cópia",
-        "create": "Criar",
-        "saveAndClose": "Salvar e fechar",
-        "createCopyAndClose": "Criar cópia e fechar",
-        "createAndClose": "Criar e fechar",
-        "discard": "Descartar",
-        "delete": "Apagar",
-        "copy": "Copiar"
-      },
-      "Search": "Pesquisar"
+  "hello": "Olá",
+  "`. Entity id: ": "`. Id da entidade: ",
+  "`. Make sure you have defined a collection for this path in the root navigation.": "`. Certifique-se de que você definiu uma coleção para este caminho na navegação raiz.",
+  "No filter": "Sem filtro",
+  "title_is_true": "{{title}} é verdadeiro",
+  "title_is_false": "{{title}} é falso",
+  "searchCollections": "Procurar coleções",
+  "favourites": "Favoritos",
+  "unsavedChangesTitle": "Alterações não salvas",
+  "operationLabels": {
+    "equal": "==",
+    "notEqual": "!=",
+    "greaterThan": ">",
+    "lessThan": "<",
+    "greaterThanOrEqual": ">=",
+    "lessThanOrEqual": "<=",
+    "in": "Em",
+    "notIn": "Não Em",
+    "arrayContains": "Contem",
+    "arrayContainsAny": "Contem qualquer"
+  },
+  "selectReference": {
+    "single": "Selecione uma referência",
+    "multiple": "Selecione uma ou mais referências"
+  },
+  "messages": {
+    "unsavedChanges": "Você tem alterações não salvas neste {collectionName}. Tem certeza de que deseja sair desta página?",
+    "unsavedChangesCollection": "Você tem alterações não salvas em {collectionName}.",
+    "leavePageConfirmation": "Tem certeza de que deseja sair desta página?"
+  },
+  "errorMessages": {
+    "Error loading navigation": "Erro ao carregar a navegação",
+    "Error loading auth": "Erro ao carregar a autenticação",
+    "ERROR: No collection found in path `": "ERRO: Nenhuma coleção encontrada no caminho `",
+    "collectionViewNotFound": "Não foi possível encontrar a visualização de coleção correspondente para o caminho: {{path}}",
+    "dataNotReference": "Os dados não são uma referência",
+    "dataNotArrayOfReferences": "Os dados não são um array de referências",
+    "collectionNotExist": "A coleção especificada não existe",
+    "noCollectionFound": "ERRO: Nenhuma coleção encontrada no caminho `{path}`. Certifique-se de que você definiu uma coleção para este caminho na navegação raiz.",
+    "navigationNotReady": "A navegação não está pronta. Verifique se você está esperando por `navigation.ready()` antes de renderizar a navegação."
+  },
+  "buttonLabels": {
+    "edit": "Editar",
+    "save": "Salvar",
+    "createCopy": "Criar cópia",
+    "create": "Criar",
+    "saveAndClose": "Salvar e fechar",
+    "createCopyAndClose": "Criar cópia e fechar",
+    "createAndClose": "Criar e fechar",
+    "discard": "Descartar",
+    "delete": "Apagar",
+    "copy": "Copiar"
+  },
+  "Search": "Pesquisar"
 }
