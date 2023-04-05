@@ -108,10 +108,11 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const UsedDrawer = Drawer || FireCMSDrawer;
 
         const handleDrawerClose = useCallback(() => {
+            console.log("handleDrawerClose");
             setDrawerOpen(false);
         }, []);
 
-        const computedDrawerOpen:boolean = drawerOpen || Boolean(autoOpenDrawer && onHover);
+        const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
         return (
             <Box
                 sx={{
@@ -202,6 +203,7 @@ function StyledDrawer(props: MuiDrawerProps & {
         open,
         logo,
         setDrawerOpen,
+        hovered,
         ...drawerProps
     } = props;
 
@@ -240,7 +242,9 @@ function StyledDrawer(props: MuiDrawerProps & {
             {...drawerProps}
             variant={largeLayout ? "permanent" : "temporary"}
             open={open}
-            onClose={!largeLayout ? () => setDrawerOpen(false) : undefined}
+            onClose={!largeLayout ? () => {
+                setDrawerOpen(false);
+            } : undefined}
             sx={{
                 width: DRAWER_WIDTH,
                 flexShrink: 0,

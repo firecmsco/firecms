@@ -1,7 +1,10 @@
-## [2.0.0-beta.4] - 2023-03-30
+## WIP [2.0.0-beta.5] - 2023-03-30
 
 ### Changed
+- Updated fields Look and Feel
+- Fixed login view not centered
 - Fixed popup field selection and drag and drop bug
+- Fix for skip login field
 
 ## [2.0.0-beta.4] - 2023-03-30
 
