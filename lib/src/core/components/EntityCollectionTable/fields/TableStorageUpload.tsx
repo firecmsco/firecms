@@ -23,6 +23,7 @@ import {
 import {
     StorageUploadProgress
 } from "../../../../form/components/StorageUploadProgress";
+import { useTranslation } from "react-i18next";
 
 const dropZoneMixin = (hasValue: boolean) => ({
     transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
@@ -171,19 +172,20 @@ function StorageUpload({
                        }: StorageUploadProps) {
 
     const [onHover, setOnHover] = useState(false);
+    const { t } = useTranslation(); 
 
     const previewSize = multipleFilesSupported && previewSizeInput === "regular" ? "small" : previewSizeInput;
     if (multipleFilesSupported) {
         const arrayProperty = property as ResolvedArrayProperty<string[]>;
         if (Array.isArray(arrayProperty.of)) {
-            throw Error("Using array properties instead of single one in `of` in ArrayProperty");
+            throw Error(t("errorMessages.arrayProperty") || "Using array properties instead of single one in `of` in ArrayProperty");
         }
         if (arrayProperty.of) {
             if (arrayProperty.of.dataType !== "string") {
-                throw Error("Storage field using array must be of data type string");
+                throw Error(t("errorsMessages.storageArrayMustBeString") || "Storage field using array must be of data type string");
             }
         } else {
-            throw Error("Storage field using array must be of data type string");
+            throw Error(t("errorsMessages.arrayStorageFieldMustBeString") || "Storage field using array must be of data type string");
         }
     }
 
@@ -211,7 +213,7 @@ function StorageUpload({
                     for (const error of fileRejection.errors) {
                         snackbarContext.open({
                             type: "error",
-                            message: `Error uploading file: File is larger than ${storage.maxSize} bytes`
+                            message: t("messages.fileUploadError", { maxSize: storage.maxSize })
                         });
                     }
                 }
@@ -222,8 +224,8 @@ function StorageUpload({
     const { ...rootProps } = getRootProps();
 
     const helpText = multipleFilesSupported
-        ? "Drag 'n' drop some files here, or click here to edit"
-        : "Drag 'n' drop a file here, or click here edit";
+        ? t("messages.dragDropFielddropFiles") || "Drag 'n' drop some files here, or click here to edit"
+        : t("messages.dropzonedragAndDrop") || "Drag 'n' drop a file here, or click here edit";
 
     const renderProperty = multipleFilesSupported
         ? (property as ResolvedArrayProperty<string[]>).of as ResolvedStringProperty

@@ -27,7 +27,13 @@
   "messages": {
     "unsavedChanges": "You have unsaved changes in this {collectionName}. Are you sure you want to leave this page?",
     "unsavedChangesCollection": "You have unsaved changes in this {collectionName}.",
-    "leavePageConfirmation": "Are you sure you want to leave this page?"
+    "leavePageConfirmation": "Are you sure you want to leave this page?",
+    "fileUploadError": "Error uploading file: File is larger than ${maxSize} bytes",
+    "dragDropFielddropFilesEdit" : "Drag 'n' drop some files here, or click here to edit",
+    "dropzonedragAndDropEdit": "Drag 'n' drop a file here, or click here edit",
+    "dropzonedragAndDrop": "Drag 'n' drop a file here, or click to select one",
+    "dragDropFielddropFiles" : "Drag 'n' drop some files here, or click to select files"
+
   },
   "errorMessages": {
     "Error loading navigation": "Error loading navigation",
@@ -38,7 +44,11 @@
     "dataNotArrayOfReferences": "Data is not an array of references",
     "collectionNotExist": "The specified collection does not exist",
     "noCollectionFound": "ERROR: No collection found in path `{path}`. Make sure you have defined a collection for this path in the root navigation.",
-    "navigationNotReady": "Navigation not ready in FireCMSHomePage"
+    "navigationNotReady": "Navigation not ready in FireCMSHomePage",
+    "arrayProperty": "Using array properties instead of single one in `of` in ArrayProperty",
+    "storageArrayMustBeString": "Storage field using array must be of data type string",
+    "arrayStorageFieldMustBeString": "Storage field using array must be of data type string"
+
   },
   "buttonLabels": {
     "edit": "Edit",

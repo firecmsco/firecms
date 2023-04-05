@@ -31,6 +31,7 @@ import {
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
 import { fieldBackground, fieldBackgroundHover } from "./utils";
+import { useTranslation } from "react-i18next";
 
 const PREFIX = "StorageUploadField";
 
@@ -396,15 +397,17 @@ export function StorageUpload({
         const arrayProperty = property as ResolvedArrayProperty<string[]>;
         if (arrayProperty.of) {
             if (Array.isArray(arrayProperty.of)) {
-                throw Error("Storage field using array must be of data type string");
+                throw Error(t("errorsMessages.storageArrayMustBeString") || "Storage field using array must be of data type string");
             }
             if (arrayProperty.of.dataType !== "string") {
-                throw Error("Storage field using array must be of data type string");
+                throw Error(t("errorsMessages.storageArrayMustBeString") || "Storage field using array must be of data type string");
             }
         } else {
-            throw Error("Storage field using array must be of data type string");
+            throw Error(t("errorsMessages.storageArrayMustBeString") || "Storage field using array must be of data type string");
         }
     }
+
+    const { t } = useTranslation();
 
     const metadata: Record<string, unknown> | undefined = storage?.metadata;
     const size = multipleFilesSupported ? "small" : "regular";
@@ -444,8 +447,8 @@ export function StorageUpload({
     }, [value, multipleFilesSupported, onChange]);
 
     const helpText = multipleFilesSupported
-        ? "Drag 'n' drop some files here, or click to select files"
-        : "Drag 'n' drop a file here, or click to select one";
+        ? t("messages.dragDropFielddropFiles") || "Drag 'n' drop some files here, or click to select files"
+        : t("messages.dropzonedragAndDrop") || "Drag 'n' drop a file here, or click to select one";
 
     const renderProperty: ResolvedStringProperty = multipleFilesSupported
         ? (property as ArrayProperty<string[]>).of as ResolvedStringProperty

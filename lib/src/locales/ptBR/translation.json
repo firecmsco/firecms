@@ -27,7 +27,13 @@
   "messages": {
     "unsavedChanges": "Você tem alterações não salvas neste {collectionName}. Tem certeza de que deseja sair desta página?",
     "unsavedChangesCollection": "Você tem alterações não salvas em {collectionName}.",
-    "leavePageConfirmation": "Tem certeza de que deseja sair desta página?"
+    "leavePageConfirmation": "Tem certeza de que deseja sair desta página?",
+    "fileUploadError": "Erro ao enviar arquivo: arquivo é maior que {maxSize} bytes",
+    "dragDropFielddropFilesEdit": "Arraste e solte alguns arquivos aqui, ou clique aqui para editar",
+    "dropzonedragAndDropEdit": "Arraste e solte um arquivo aqui ou clique aqui para editar",
+    "dropzonedragAndDrop": "Arraste e solte um arquivo aqui ou clique aqui para selecionar",
+    "dragDropFielddropFiles" : "Arraste e solte alguns arquivos aqui, ou clique aqui para selecionar"
+
   },
   "errorMessages": {
     "Error loading navigation": "Erro ao carregar a navegação",
@@ -38,7 +44,11 @@
     "dataNotArrayOfReferences": "Os dados não são um array de referências",
     "collectionNotExist": "A coleção especificada não existe",
     "noCollectionFound": "ERRO: Nenhuma coleção encontrada no caminho `{path}`. Certifique-se de que você definiu uma coleção para este caminho na navegação raiz.",
-    "navigationNotReady": "A navegação não está pronta. Verifique se você está esperando por `navigation.ready()` antes de renderizar a navegação."
+    "navigationNotReady": "A navegação não está pronta. Verifique se você está esperando por `navigation.ready()` antes de renderizar a navegação.",
+    "arrayProperty": "Usando propriedades de matriz em vez de uma única em of na propriedade de matriz",
+    "storageArrayMustBeString": "O campo de armazenamento que utiliza array deve ser do tipo string",
+    "arrayStorageFieldMustBeString": "O campo de armazenamento usando array deve ser do tipo string"
+
   },
   "buttonLabels": {
     "edit": "Editar",
