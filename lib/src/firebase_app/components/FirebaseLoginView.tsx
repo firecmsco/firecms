@@ -245,6 +245,7 @@ export function FirebaseLoginView({
                 justifyContent: "center",
                 alignItems: "center",
                 minHeight: "100vh",
+                minWidth: "100vw",
                 p: 2
             }}>
                 <div id="recaptcha"></div>
