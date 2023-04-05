@@ -5,6 +5,7 @@
     "No filter": "Sem filtro",
     "title_is_true": "{{title}} é verdadeiro",
     "title_is_false": "{{title}} é falso",
+    "searchCollections": "Procurar coleções",
     "operationLabels": {
         "equal": "==",
         "notEqual": "!=",
@@ -34,7 +35,8 @@
         "dataNotReference": "Os dados não são uma referência",
         "dataNotArrayOfReferences": "Os dados não são um array de referências",
         "collectionNotExist": "A coleção especificada não existe",
-        "noCollectionFound": "ERRO: Nenhuma coleção encontrada no caminho `{path}`. Certifique-se de que você definiu uma coleção para este caminho na navegação raiz."
+        "noCollectionFound": "ERRO: Nenhuma coleção encontrada no caminho `{path}`. Certifique-se de que você definiu uma coleção para este caminho na navegação raiz.",
+        "navigationNotReady": "A navegação não está pronta. Verifique se você está esperando por `navigation.ready()` antes de renderizar a navegação."
       },
       "buttonLabels": {
         "edit": "Editar",

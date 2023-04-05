@@ -5,6 +5,7 @@
     "No filter": "No filter",
     "title_is_true": "{{title}} is true",
     "title_is_false": "{{title}} is false",
+    "searchCollections": "Search collections",
     "operationLabels": {
         "equal": "==",
         "notEqual": "!=",
@@ -33,7 +34,8 @@
         "dataNotReference": "Data is not a reference",
         "dataNotArrayOfReferences": "Data is not an array of references",
         "collectionNotExist": "The specified collection does not exist",
-        "noCollectionFound": "ERROR: No collection found in path `{path}`. Make sure you have defined a collection for this path in the root navigation."
+        "noCollectionFound": "ERROR: No collection found in path `{path}`. Make sure you have defined a collection for this path in the root navigation.",
+        "navigationNotReady": "Navigation not ready in FireCMSHomePage"
       },
       "buttonLabels": {
         "edit": "Edit",
