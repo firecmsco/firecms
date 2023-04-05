@@ -21,7 +21,7 @@ import { useSideDialogsController } from "firecms";
  */
 export function OpenAIInstructionsActions() {
 
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(process.env.NODE_ENV === "production");
 
     const sideEntityController = useSideDialogsController();
     useEffect(() => {
@@ -72,10 +72,12 @@ export function OpenAIInstructionsActions() {
                     </Stepper>
                     <Typography gutterBottom>
                         Try it out by clicking on <b>ADD BOOK</b> and
-                        then typing the title of your favourite book on the <b>ENHANCE input</b>
+                        then typing the title of your favourite book on the <b>ENHANCE
+                        input</b>
                     </Typography>
                     <Typography gutterBottom>
-                        You can also try finding an empty or incomplete field and clicking on <b>the magic wand</b> button
+                        You can also try finding an empty or incomplete field
+                        and clicking on <b>the magic wand</b> button
                         of the field, to have it autofilled.
                     </Typography>
 

@@ -113,8 +113,9 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
                 <Box sx={{
                     position: "sticky",
                     py: 2,
-                    transition: "top 0.5s ease-in-out",
-                    top: direction === "down" ? -84 : 0,
+                    transition: "top 0.4s ease-in-out",
+                    top: 0,
+                    // top: direction === "down" ? -84 : 0,
                     zIndex: 10
                 }}>
                     <SearchBar onTextSearch={updateSearchResults}

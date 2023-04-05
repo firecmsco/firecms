@@ -3,6 +3,24 @@ import {
     OpenAIInstructionsActions
 } from "../collection_actions/OpenAIInstructionsActions";
 
+const categories = {
+    fiction: "Fiction",
+    drama: "Drama",
+    "fantasy-fiction": "Fantasy fiction",
+    history: "History",
+    religion: "Religion",
+    "self-help": "Self-Help",
+    "comics-graphic-novels": "Comics & Graphic Novels",
+    "juvenile-fiction": "Juvenile Fiction",
+    philosophy: "Philosophy",
+    fantasy: "Fantasy",
+    education: "Education",
+    science: "Science",
+    medical: "Medical",
+    cooking: "Cooking",
+    travel: "Travel"
+};
+
 export const booksCollection = buildCollection({
     name: "Books",
     singularName: "Book",
@@ -38,9 +56,10 @@ export const booksCollection = buildCollection({
             dataType: "string",
             url: "image"
         },
-        categories: {
-            name: "Categories",
-            dataType: "string"
+        category: {
+            name: "Category",
+            dataType: "string",
+            enumValues: categories
         },
         published_year: {
             name: "Published Year",

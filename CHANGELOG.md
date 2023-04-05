@@ -1,6 +1,11 @@
 ## [2.0.0-beta.4] - 2023-03-30
 
 ### Changed
+- Fixed popup field selection and drag and drop bug
+
+## [2.0.0-beta.4] - 2023-03-30
+
+### Changed
 - Fixed table header bug
 - Added search bar in home page
 - Added favourites and recent collections view in home page.

@@ -151,7 +151,7 @@ function getYupStringSchema({
         collection = collection.oneOf(
             enumToObjectEntries(property.enumValues)
                 .map((enumValueConfig) => enumValueConfig.id)
-        );
+        ).nullable(true);
     }
     if (validation) {
         collection = validation.required
