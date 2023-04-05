@@ -25,6 +25,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon, resolveCollection } from "../util";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
+import { useTranslation } from "react-i18next";
 
 const PREFIX = "EntityPreview";
 
@@ -96,6 +97,8 @@ export function EntityPreview<M extends Record<string, any>>(
 
     const properties: ResolvedProperties = resolvedCollection.properties;
 
+    const { t } = useTranslation();
+
     return (
         <>
 
@@ -125,7 +128,7 @@ export function EntityPreview<M extends Record<string, any>>(
                         marginTop: 4,
                         marginBottom: 4
                     }}
-                    variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
+                    variant={"h4"}>{collection.singularName ?? collection.name + t(" entry")}
                 </Typography>
 
             </Box>

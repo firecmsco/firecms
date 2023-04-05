@@ -70,5 +70,6 @@
   "m" : "Médio",
   "l" : "Grande",
   "xl" : "Extra Grande",
-  "logOut": "Sair"
+  "logOut": "Sair",
+  " entry": ""
 }
