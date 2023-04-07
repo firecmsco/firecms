@@ -245,6 +245,9 @@ export function FirebaseLoginView({
                 justifyContent: "center",
                 alignItems: "center",
                 minHeight: "100vh",
+                "@supports (minHeight: 100dvh)": {
+                    minHeight: "100dvh"
+                },
                 minWidth: "100vw",
                 p: 2
             }}>

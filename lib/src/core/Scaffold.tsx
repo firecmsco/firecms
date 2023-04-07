@@ -118,6 +118,9 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                 sx={{
                     display: "flex",
                     height: "100vh",
+                    "@supports (height: 100dvh)": {
+                        height: "100dvh"
+                    },
                     width: "100vw",
                     pt: "env(safe-area-inset-top)",
                     pl: "env(safe-area-inset-left)",
@@ -242,9 +245,11 @@ function StyledDrawer(props: MuiDrawerProps & {
             {...drawerProps}
             variant={largeLayout ? "permanent" : "temporary"}
             open={open}
-            onClose={!largeLayout ? () => {
-                setDrawerOpen(false);
-            } : undefined}
+            onClose={!largeLayout
+                ? () => {
+                    setDrawerOpen(false);
+                }
+                : undefined}
             sx={{
                 width: DRAWER_WIDTH,
                 flexShrink: 0,
@@ -298,8 +303,7 @@ function StyledDrawer(props: MuiDrawerProps & {
                     : menuIconButton}
             </Toolbar>
 
-
-            <Box sx={{ height: "100%", width: "100%", overflow: "auto", }}>
+            <Box sx={{ height: "100%", width: "100%", overflow: "auto" }}>
                 <Link
                     key={"breadcrumb-home"}
                     color="inherit"
