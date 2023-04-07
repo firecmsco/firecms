@@ -108,15 +108,19 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const UsedDrawer = Drawer || FireCMSDrawer;
 
         const handleDrawerClose = useCallback(() => {
+            console.log("handleDrawerClose");
             setDrawerOpen(false);
         }, []);
 
-        const computedDrawerOpen:boolean = drawerOpen || Boolean(autoOpenDrawer && onHover);
+        const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
         return (
             <Box
                 sx={{
                     display: "flex",
                     height: "100vh",
+                    "@supports (height: 100dvh)": {
+                        height: "100dvh"
+                    },
                     width: "100vw",
                     pt: "env(safe-area-inset-top)",
                     pl: "env(safe-area-inset-left)",
@@ -202,6 +206,7 @@ function StyledDrawer(props: MuiDrawerProps & {
         open,
         logo,
         setDrawerOpen,
+        hovered,
         ...drawerProps
     } = props;
 
@@ -240,7 +245,11 @@ function StyledDrawer(props: MuiDrawerProps & {
             {...drawerProps}
             variant={largeLayout ? "permanent" : "temporary"}
             open={open}
-            onClose={!largeLayout ? () => setDrawerOpen(false) : undefined}
+            onClose={!largeLayout
+                ? () => {
+                    setDrawerOpen(false);
+                }
+                : undefined}
             sx={{
                 width: DRAWER_WIDTH,
                 flexShrink: 0,
@@ -278,7 +287,9 @@ function StyledDrawer(props: MuiDrawerProps & {
             <Toolbar sx={{
                 position: "absolute",
                 left: open ? "-100%" : 0,
+                right: open ? undefined : 0,
                 opacity: open ? 0.0 : 1.0,
+                backgroundColor: theme.palette.background.default,
                 transition: theme.transitions.create(["left", "opacity"], {
                     easing: theme.transitions.easing.sharp,
                     duration: theme.transitions.duration.enteringScreen
@@ -292,33 +303,35 @@ function StyledDrawer(props: MuiDrawerProps & {
                     : menuIconButton}
             </Toolbar>
 
-            <Link
-                key={"breadcrumb-home"}
-                color="inherit"
-                component={NavLink}
-                to={"."}
-                sx={theme => ({
-                    transition: theme.transitions.create(["padding"], {
-                        easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.enteringScreen
-                    }),
-                    p: theme.spacing(
-                        open ? 4 : 9,
-                        open ? 12 : 2,
-                        0,
-                        open ? 3 : 2)
-                })}>
-                <Tooltip title={"Home"} placement={"right"}>
-                    <div onClick={() => {
-                        context.onAnalyticsEvent?.("drawer_navigate_to_home");
-                    }}>
-                        {logoComponent}
-                    </div>
-                </Tooltip>
+            <Box sx={{ height: "100%", width: "100%", overflow: "auto" }}>
+                <Link
+                    key={"breadcrumb-home"}
+                    color="inherit"
+                    component={NavLink}
+                    to={"."}
+                    sx={theme => ({
+                        display: "block",
+                        transition: theme.transitions.create(["padding"], {
+                            easing: theme.transitions.easing.sharp,
+                            duration: theme.transitions.duration.enteringScreen
+                        }),
+                        p: theme.spacing(
+                            open ? 4 : 9,
+                            open ? 12 : 2,
+                            0,
+                            open ? 3 : 2)
+                    })}>
+                    <Tooltip title={"Home"} placement={"right"}>
+                        <div onClick={() => {
+                            context.onAnalyticsEvent?.("drawer_navigate_to_home");
+                        }}>
+                            {logoComponent}
+                        </div>
+                    </Tooltip>
 
-            </Link>
-
-            {props.children}
+                </Link>
+                {props.children}
+            </Box>
 
             <Link sx={(theme) => ({
                 width: DRAWER_WIDTH,

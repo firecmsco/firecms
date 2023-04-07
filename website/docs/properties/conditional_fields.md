@@ -5,9 +5,9 @@ sidebar_label: Conditional fields
 ---
 
 When defining the properties of a collection, you can choose to use a builder
-[`PropertyBuilder`](../api/types/propertybuilder), instead of assigning the
+[`PropertyBuilder`](../api/types/PropertyBuilder), instead of assigning the
 property configuration directly. In the builder you
-receive [`PropertyBuilderProps`](../api/types/propertybuilderprops)
+receive [`PropertyBuilderProps`](../api/types/PropertyBuilderProps)
 and return your property.
 
 This is useful for changing property configurations like available values on the

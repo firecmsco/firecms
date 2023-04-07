@@ -127,6 +127,7 @@ function SampleApp() {
         name={"My Online Shop"}
         // appCheckOptions={appCheckOptions}
         authentication={myAuthenticator}
+        allowSkipLogin={true}
         plugins={[dataEnhancementPlugin]}
         signInOptions={[
             "password",
@@ -149,7 +150,7 @@ function SampleApp() {
         toolbarExtraWidget={githubLink}
         LoginView={CustomLoginView}
         onAnalyticsEvent={onAnalyticsEvent}
-        autoOpenDrawer={true}
+        // autoOpenDrawer={true}
         fields={{
             test_custom_field: {
                 name: "Test custom field",

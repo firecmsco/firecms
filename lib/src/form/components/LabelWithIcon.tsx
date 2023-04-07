@@ -1,6 +1,4 @@
 import React from "react";
-import { Property, ResolvedProperty } from "../../types";
-import { getIconForProperty } from "../../core/util/property_utils";
 import { Box, SxProps, Theme, Typography } from "@mui/material";
 
 interface LabelWithIconProps {
