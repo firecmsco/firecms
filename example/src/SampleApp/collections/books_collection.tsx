@@ -61,6 +61,13 @@ export const booksCollection = buildCollection({
             dataType: "string",
             enumValues: categories
         },
+        tags: {
+            name: "Tags",
+            dataType: "array",
+            of: {
+                dataType: "string"
+            }
+        },
         published_year: {
             name: "Published Year",
             dataType: "number"
@@ -74,9 +81,5 @@ export const booksCollection = buildCollection({
             dataType: "date",
             autoValue: "on_create"
         }
-        // isbn10: {
-        //     name: "isbn10",
-        //     dataType: "number"
-        // }
     }
 });
