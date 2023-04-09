@@ -30,16 +30,10 @@ export function TextInput<T extends string | number>({
     endAdornment?: React.ReactNode
 }) {
 
-    console.log("rendering text input", value, endAdornment);
-
-    const theme = useTheme();
-
     const inputRef = useRef(null);
     const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
 
     const hasValue = value !== undefined && value !== null && value !== "";
-
-    console.log("rendering text input", value, hasValue, focused);
 
     if (disabled) {
         return <DisabledTextField label={label}
@@ -106,11 +100,10 @@ const StyledInput = styled("input")({
     letterSpacing: "inherit",
     color: "currentcolor",
     border: "0px",
-    // boxSizing: "content-box",
     background: "none",
     height: "1.4375em",
     margin: "0px",
-    "-webkit-tap-highlight-color": "transparent",
+    WebkitTapHighlightColor: "transparent",
     display: "block",
     minWidth: "0px",
     animationName: "mui-auto-fill-cancel",
