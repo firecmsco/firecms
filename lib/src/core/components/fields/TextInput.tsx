@@ -7,6 +7,7 @@ import {
     fieldBackgroundDisabled,
     fieldBackgroundHover
 } from "../../../form/field_bindings/utils";
+import TextareaAutosize from "./TextareaAutosize";
 
 export type InputType = "text" | "number";
 
@@ -40,14 +41,23 @@ export function TextInput<T extends string | number>({
                                   value={value}/>
     }
 
-    const input = <StyledInput ref={inputRef}
-                               onFocus={() => setFocused(true)}
-                               onBlur={() => setFocused(false)}
-                               type={multiline ? "textarea" : inputType}
-                               value={value ?? ""}
-                               onChange={(event) => {
-                                   setValue(event.target.value as T);
-                               }}/>;
+    const input = multiline
+        ? <StyledTextArea ref={inputRef}
+                          onFocus={() => setFocused(true)}
+                          onBlur={() => setFocused(false)}
+                          value={value ?? ""}
+                          onChange={(event) => {
+                              setValue(event.target.value as T);
+                          }}/>
+        : <StyledInput ref={inputRef}
+                       onFocus={() => setFocused(true)}
+                       onBlur={() => setFocused(false)}
+                       type={inputType}
+                       value={value ?? ""}
+                       onChange={(event) => {
+                           setValue(event.target.value as T);
+                       }}/>;
+
     const inner = endAdornment
         ? <Box sx={{
             display: "flex",
@@ -93,6 +103,27 @@ export function TextInput<T extends string | number>({
 const StyledInput = styled("input")({
     width: "100%",
     outlineWidth: 0,
+    minHeight: "64px",
+    fontSize: "16px",
+    padding: "32px 12px 8px 12px",
+    font: "inherit",
+    letterSpacing: "inherit",
+    color: "currentcolor",
+    border: "0px",
+    background: "none",
+    height: "1.4375em",
+    margin: "0px",
+    WebkitTapHighlightColor: "transparent",
+    display: "block",
+    minWidth: "0px",
+    animationName: "mui-auto-fill-cancel",
+    animationDuration: "10ms"
+});
+
+const StyledTextArea = styled(TextareaAutosize)({
+    width: "100%",
+    outlineWidth: 0,
+    resize: "none",
     minHeight: "64px",
     fontSize: "16px",
     padding: "32px 12px 8px 12px",
