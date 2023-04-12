@@ -48,6 +48,8 @@ export function TextFieldBinding<T extends string | number>({
         multiline = property.multiline;
     }
 
+    console.log("rendering TextFieldBinding", propertyKey);
+
     useClearRestoreValue({
         property,
         value,
@@ -88,6 +90,7 @@ export function TextFieldBinding<T extends string | number>({
             <TextInput
                 value={value}
                 setValue={setValue}
+                autoFocus={autoFocus}
                 label={<LabelWithIcon icon={getIconForProperty(property)}
                                       title={property.name}/>}
                 inputType={inputType}

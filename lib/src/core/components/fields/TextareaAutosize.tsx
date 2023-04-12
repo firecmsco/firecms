@@ -43,12 +43,14 @@ function isEmpty(obj: State) {
     );
 }
 
-const TextareaAutosize = React.forwardRef(function TextareaAutosize(
+export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
     props: TextareaAutosizeProps,
     ref: React.ForwardedRef<Element>
 ) {
     const {
         onChange,
+        onScroll,
+        onResize,
         maxRows,
         minRows = 1,
         style,
@@ -157,11 +159,14 @@ const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         if (isEmpty(newState)) {
             return;
         }
+        if (onResize) {
+            onResize(newState);
+        }
 
         setState((prevState) => {
             return updateState(prevState, newState);
         });
-    }, [getUpdatedState]);
+    }, [getUpdatedState, onResize]);
 
     const syncHeightWithFlushSync = () => {
         const newState = getUpdatedState();
@@ -236,21 +241,22 @@ const TextareaAutosize = React.forwardRef(function TextareaAutosize(
     return (
         <React.Fragment>
             <textarea
-              value={value}
-              onChange={handleChange}
-              ref={handleRef}
-              onFocus={onFocus}
-              onBlur={onBlur}
-              // Apply the rows prop to get a "correct" first SSR paint
-              rows={minRows as number}
-              style={{
-                  height: state.outerHeightStyle,
-                  // Need a large enough difference to allow scrolling.
-                  // This prevents infinite rendering loop.
-                  overflow: state.overflow ? "hidden" : undefined,
-                  ...style
-              }}
-              {...other}
+                value={value}
+                onChange={handleChange}
+                ref={handleRef}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                // Apply the rows prop to get a "correct" first SSR paint
+                rows={minRows as number}
+                style={{
+                    height: state.outerHeightStyle,
+                    // Need a large enough difference to allow scrolling.
+                    // This prevents infinite rendering loop.
+                    overflow: state.overflow ? "hidden" : undefined,
+                    ...style
+                }}
+                onScroll={onScroll}
+                {...other}
             />
             <textarea
                 aria-hidden
@@ -303,6 +309,10 @@ export interface TextareaAutosizeProps {
      * @ignore
      */
     value?: string[] | number | string;
-};
 
-export default TextareaAutosize;
+    onScroll?: (event: React.UIEvent<HTMLTextAreaElement>) => void;
+
+    onResize?: (state: State) => void;
+
+    autoFocus?: boolean;
+}

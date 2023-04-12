@@ -54,9 +54,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
 
         Actions?: React.ComponentType<PluginFormActionProps>;
 
-        fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) =>
-            ((props: PluginFieldBuilderParams<T>)
-                => React.ComponentType<FieldProps<T>>) | null;
+        fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) => React.ComponentType<FieldProps<T>> | null;
     }
 
     /**
@@ -69,7 +67,9 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
      * @param props
      */
     provider?: {
-        Component: React.ComponentType<PropsWithChildren<PROPS & { context: FireCMSContext }>>;
+        Component: React.ComponentType<PropsWithChildren<PROPS & {
+            context: FireCMSContext
+        }>>;
         props?: PROPS;
     };
 

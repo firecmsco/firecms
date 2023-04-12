@@ -1563,9 +1563,6 @@ __metadata:
     react-dom: ^18.2.0
     react-router: ^6.9.0
     react-router-dom: ^6.9.0
-    slate: ^0.91.4
-    slate-history: ^0.86.0
-    slate-react: ^0.92.0
     ts-jest: ^29.0.5
     typescript: ^5.0.3
     vite: ^4.2.1
