@@ -54,7 +54,8 @@ export function performTypesenseSearch(
     return index
         .documents()
         .search(searchParameters)
-        .then(({ hits }: any) => {
+        .then(({ hits }) => {
+            if (hits === undefined) return [];
             return hits.map((hit: any) => hit.document.id as string);
         })
         .catch((err: any) => {
