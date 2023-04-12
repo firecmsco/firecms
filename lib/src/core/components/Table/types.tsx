@@ -22,6 +22,7 @@ export type VirtualTableRowProps<T> = {
 };
 
 export type VirtualTableContextProps<T extends any> = {
+    entityData: any[] | undefined;
     selectionController: SelectionController;
     data?: T[];
     size?: TableSize,

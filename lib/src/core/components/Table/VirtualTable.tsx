@@ -36,10 +36,11 @@ import { SelectionController } from "../../../types";
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
 
-type InnerElementProps = { selectionController: SelectionController; children?: React.ReactNode, style?: any };
+type InnerElementProps = { entityData: any[] | undefined; selectionController: SelectionController; children?: React.ReactNode, style?: any };
 
 // eslint-disable-next-line react/display-name
 const InnerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
+                                                                            entityData,
                                                                             selectionController,
                                                                             children,
                                                                             ...rest
@@ -62,7 +63,7 @@ const InnerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
                                          minHeight: "100%",
                                          position: "relative"
                                      }}>
-                                    <VirtualTableHeaderRow selectionController={selectionController} {...virtualTableProps}/>
+                                    <VirtualTableHeaderRow {...virtualTableProps} entityData={entityData} selectionController={selectionController} />
                                     {!customView && children}
                                 </div>
                             </div>
@@ -284,6 +285,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                 }}>
                 <VirtualListContext.Provider
                     value={{
+                        selectionController,
                         data,
                         size,
                         cellRenderer,
@@ -302,6 +304,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     }}>
 
                     <MemoizedList
+                        entityData={data}
                         selectionController={selectionController}
                         outerRef={tableRef}
                         key={size}
@@ -319,6 +322,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 );
 
 function MemoizedList({
+                          entityData,
                           selectionController,
                           outerRef,
                           width,
@@ -327,6 +331,7 @@ function MemoizedList({
                           onScroll,
                           itemSize
                       }: {
+    entityData: any[] | undefined;
     selectionController: SelectionController;
     outerRef: RefObject<HTMLDivElement>;
     width: number;
@@ -389,7 +394,7 @@ function MemoizedList({
 
     return <List
         outerRef={outerRef}
-        innerElementType={(props: any) => <InnerElementType selectionController={selectionController} {...props} />}
+        innerElementType={(props: any) => <InnerElementType selectionController={selectionController} entityData={entityData} {...props} />}
         width={width}
         height={height}
         overscanCount={4}

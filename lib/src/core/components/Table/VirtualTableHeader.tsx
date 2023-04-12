@@ -17,6 +17,7 @@ import {
     IconButton,
     lighten,
     Popover,
+    Switch,
     useMediaQuery,
     useTheme
 } from "@mui/material";
@@ -53,6 +54,7 @@ export type FilterFormFieldProps<CustomProps> = {
 };
 
 type VirtualTableHeaderProps<M extends Record<string, any>> = {
+    entityData: any[] | undefined;
     selectionController: SelectionController;
     resizeHandleRef: RefObject<HTMLDivElement>;
     columnIndex: number;
@@ -68,6 +70,7 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
     function VirtualTableHeader<M extends Record<string, any>>({
+                                                                   entityData,
                                                                    selectionController,
                                                                    resizeHandleRef,
                                                                    columnIndex,
@@ -95,21 +98,13 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
             setOpenFilter(true);
         }, []);
 
-        const handleClose = useCallback(() => {
+        const handleClose = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
             setOpenFilter(false);
         }, []);
 
-        const onCheckboxChange = useCallback((event: React.ChangeEvent, checked: boolean) => {
-            setAllSelected(isSelected => !isSelected);
-
-            if (checked) {
-                setAllSelected(true);
-                selectionController.setSelectedEntities([]);
-                console.log(selectionController)
-            } else {
-                setAllSelected(false);
-            }
-        }, []);
+        const onSwitchChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+            selectionController.setSelectedEntities([]);
+        };
 
         const update = useCallback((filterForProperty?: [TableWhereFilterOp, any], newOpenFilterState?: boolean) => {
             onFilterUpdate(column, filterForProperty);
@@ -176,11 +171,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                             }}>
                                 {column.title}
                                 {column.title === "ID" && (
-                                    <Checkbox
-                                        size={largeLayout ? "medium" : "small"}
-                                        checked={allSelected}
-                                        onChange={onCheckboxChange}
-                                    />
+                                    <Switch onChange={onSwitchChange} />
                                 )}
                             </Box>
                         </Box>
