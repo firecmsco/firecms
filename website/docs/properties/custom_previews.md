@@ -14,7 +14,7 @@ views.
 You can build your preview as a React component that takes
 [PropertyPreviewProps](../api/interfaces/PropertyPreviewProps) as props.
 
-`PreviewComponentProps` has two generic types: the first one is the type of the
+`PropertyPreviewProps` has two generic types: the first one is the type of the
 property, such as `string` or `boolean` and the second one (optional) is the
 type for any custom props you would like to pass to the preview, just like
 done when defining custom fields.
@@ -24,14 +24,15 @@ Example of a custom preview for a `boolean` property:
 
 ```tsx
 import React, { ReactElement } from "react";
-import { PreviewComponentProps } from "firecms";
+import { PropertyPreviewProps } from "firecms";
 
 import CheckBoxOutlineBlank from "@mui/icons-material/CheckBoxOutlineBlank";
 import CheckBoxOutlined from "@mui/icons-material/CheckBoxOutlined";
 
 export default function CustomBooleanPreview({
                                                  value, property, size
-                                             }: PreviewComponentProps<boolean>)
+                                             }: PropertyPreviewProps
+                                             <boolean>)
      {
     return (
         value ? <CheckBoxOutlined/> : <CheckBoxOutlineBlank/>
