@@ -1,12 +1,13 @@
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useRef } from "react";
 import { styled } from "@mui/system";
 
-import { Box, InputLabel, Typography, useTheme } from "@mui/material";
+import { Box, InputLabel } from "@mui/material";
 import {
     fieldBackground,
-    fieldBackgroundDisabled,
     fieldBackgroundHover
 } from "../../../form/field_bindings/utils";
+import { TextareaAutosize } from "./TextareaAutosize";
+import { DisabledTextField } from "./DisabledTextField";
 
 export type InputType = "text" | "number";
 
@@ -18,7 +19,8 @@ export function TextInput<T extends string | number>({
                                                          multiline = false,
                                                          disabled,
                                                          error,
-                                                         endAdornment
+                                                         endAdornment,
+                                                         autoFocus
                                                      }: {
     inputType?: InputType,
     value: T,
@@ -27,7 +29,8 @@ export function TextInput<T extends string | number>({
     multiline?: boolean,
     disabled: boolean,
     error: boolean,
-    endAdornment?: React.ReactNode
+    endAdornment?: React.ReactNode,
+    autoFocus?: boolean
 }) {
 
     const inputRef = useRef(null);
@@ -35,19 +38,40 @@ export function TextInput<T extends string | number>({
 
     const hasValue = value !== undefined && value !== null && value !== "";
 
+    const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (inputType === "number") {
+            const numberValue = parseFloat(event.target.value);
+            if (isNaN(numberValue))
+                setValue(null);
+            if (numberValue !== undefined && numberValue !== null)
+                setValue(numberValue as T);
+            else
+                setValue(null);
+        } else {
+            setValue(event.target.value as T);
+        }
+    }, [inputType, setValue]);
+
     if (disabled) {
         return <DisabledTextField label={label}
                                   value={value}/>
     }
 
-    const input = <StyledInput ref={inputRef}
-                               onFocus={() => setFocused(true)}
-                               onBlur={() => setFocused(false)}
-                               type={multiline ? "textarea" : inputType}
-                               value={value ?? ""}
-                               onChange={(event) => {
-                                   setValue(event.target.value as T);
-                               }}/>;
+    const input = multiline
+        ? <StyledTextArea ref={inputRef}
+                          autoFocus={autoFocus}
+                          onFocus={() => setFocused(true)}
+                          onBlur={() => setFocused(false)}
+                          value={value ?? ""}
+                          onChange={onChange}/>
+        : <StyledInput ref={inputRef}
+                       autoFocus={autoFocus}
+                       onFocus={() => setFocused(true)}
+                       onBlur={() => setFocused(false)}
+                       type={inputType}
+                       value={value ?? ""}
+                       onChange={onChange}/>;
+
     const inner = endAdornment
         ? <Box sx={{
             display: "flex",
@@ -90,7 +114,7 @@ export function TextInput<T extends string | number>({
     );
 }
 
-const StyledInput = styled("input")({
+const StyledInput = React.memo(styled("input")({
     width: "100%",
     outlineWidth: 0,
     minHeight: "64px",
@@ -108,36 +132,25 @@ const StyledInput = styled("input")({
     minWidth: "0px",
     animationName: "mui-auto-fill-cancel",
     animationDuration: "10ms"
-});
+}), (prevProps, nextProps) => prevProps.value === nextProps.value);
 
-export function DisabledTextField<T extends string | number>({
-                                                                 label,
-                                                                 value
-                                                             }: {
-    label: React.ReactNode,
-    value: T
-}) {
-    return <Box sx={{
-        position: "relative",
-        background: fieldBackgroundDisabled,
-        borderRadius: "4px",
-        maxWidth: "100%",
-        minHeight: "64px",
-        color: theme => theme.palette.text.disabled
-    }}>
-        <InputLabel
-            shrink={Boolean(value)}
-            sx={{
-                position: "absolute",
-                left: 0,
-                top: "4px",
-                pointerEvents: "none"
-            }}
-            variant={"filled"}>{label}</InputLabel>
-        <Box sx={{
-            padding: "32px 12px 8px 12px"
-        }}>
-            <Typography variant={"body1"}>{value}</Typography>
-        </Box>
-    </Box>;
-}
+const StyledTextArea = styled(TextareaAutosize)({
+    width: "100%",
+    outlineWidth: 0,
+    resize: "none",
+    minHeight: "64px",
+    fontSize: "16px",
+    padding: "32px 12px 8px 12px",
+    font: "inherit",
+    letterSpacing: "inherit",
+    color: "currentcolor",
+    border: "0px",
+    background: "none",
+    height: "1.4375em",
+    margin: "0px",
+    WebkitTapHighlightColor: "transparent",
+    display: "block",
+    minWidth: "0px",
+    animationName: "mui-auto-fill-cancel",
+    animationDuration: "10ms"
+});
