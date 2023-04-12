@@ -8,6 +8,7 @@ import {
     TableWhereFilterOp
 } from "./VirtualTableProps";
 import { FilterFormFieldProps } from "./VirtualTableHeader";
+import { SelectionController } from "../../../types";
 
 export type VirtualTableRowProps<T> = {
     style: any,
@@ -21,6 +22,7 @@ export type VirtualTableRowProps<T> = {
 };
 
 export type VirtualTableContextProps<T extends any> = {
+    selectionController: SelectionController;
     data?: T[];
     size?: TableSize,
     columns: TableColumn[];

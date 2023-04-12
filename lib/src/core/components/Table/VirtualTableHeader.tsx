@@ -10,12 +10,15 @@ import {
     Badge,
     Box,
     Button,
+    Checkbox,
     darken,
     Divider,
     Grid,
     IconButton,
     lighten,
-    Popover
+    Popover,
+    useMediaQuery,
+    useTheme
 } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -27,6 +30,7 @@ import {
     TableWhereFilterOp
 } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
+import { SelectionController } from "../../../types";
 
 interface FilterFormProps<T> {
     column: TableColumn<T>;
@@ -49,6 +53,7 @@ export type FilterFormFieldProps<CustomProps> = {
 };
 
 type VirtualTableHeaderProps<M extends Record<string, any>> = {
+    selectionController: SelectionController;
     resizeHandleRef: RefObject<HTMLDivElement>;
     columnIndex: number;
     isResizingIndex: number;
@@ -63,6 +68,7 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
     function VirtualTableHeader<M extends Record<string, any>>({
+                                                                   selectionController,
                                                                    resizeHandleRef,
                                                                    columnIndex,
                                                                    isResizingIndex,
@@ -72,10 +78,14 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                                                    filter,
                                                                    column,
                                                                    onClickResizeColumn,
-                                                                   createFilterField
+                                                                   createFilterField,
                                                                }: VirtualTableHeaderProps<M>) {
 
+        const muiTheme = useTheme();
+        const largeLayout = useMediaQuery(muiTheme.breakpoints.up("md"));
         const ref = useRef<HTMLDivElement>(null);
+
+        const [allSelected, setAllSelected] = useState(false);
 
         const [onHover, setOnHover] = useState(false);
 
@@ -87,6 +97,18 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
         const handleClose = useCallback(() => {
             setOpenFilter(false);
+        }, []);
+
+        const onCheckboxChange = useCallback((event: React.ChangeEvent, checked: boolean) => {
+            setAllSelected(isSelected => !isSelected);
+
+            if (checked) {
+                setAllSelected(true);
+                selectionController.setSelectedEntities([]);
+                console.log(selectionController)
+            } else {
+                setAllSelected(false);
+            }
         }, []);
 
         const update = useCallback((filterForProperty?: [TableWhereFilterOp, any], newOpenFilterState?: boolean) => {
@@ -145,15 +167,22 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                             <Box sx={{
                                 display: "-webkit-box",
                                 margin: "0px 4px",
+                                marginLeft: column.title === "ID" ? "-8px" : "4px",
                                 overflow: "hidden",
-                                justifyContent: column.align,
+                                justifyContent: column.title === "ID" ? "end" : column.align,
                                 WebkitLineClamp: 2,
                                 WebkitBoxOrient: "vertical",
                                 textOverflow: "ellipsis"
                             }}>
                                 {column.title}
+                                {column.title === "ID" && (
+                                    <Checkbox
+                                        size={largeLayout ? "medium" : "small"}
+                                        checked={allSelected}
+                                        onChange={onCheckboxChange}
+                                    />
+                                )}
                             </Box>
-
                         </Box>
                     </Grid>
 

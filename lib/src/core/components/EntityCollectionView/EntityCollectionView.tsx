@@ -187,6 +187,7 @@ export const EntityCollectionView = React.memo(
                 path: fullPath
             });
             setDeleteEntityClicked(selectedEntities);
+            collectionProp.selectionController?.setSelectedEntities([]);
         }, [context, fullPath, selectedEntities]);
 
         const internalOnEntityDelete = useCallback((_path: string, entity: Entity<M>) => {

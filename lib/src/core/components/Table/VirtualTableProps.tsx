@@ -1,5 +1,5 @@
 import React from "react";
-import { EnumValueConfig, WhereFilterOp } from "../../../types";
+import { EntityCollection, EnumValueConfig, SelectionController, WhereFilterOp } from "../../../types";
 import { FilterFormFieldProps } from "./VirtualTableHeader";
 
 export type OnRowClickParams<T extends Record<string, any>> = { rowData: T; rowIndex: number; event: React.SyntheticEvent };
@@ -9,6 +9,8 @@ export type OnRowClickParams<T extends Record<string, any>> = { rowData: T; rowI
  * @category Components
  */
 export interface VirtualTableProps<T extends Record<string, any>> {
+
+    selectionController: SelectionController<T>;
 
     /**
      * Array of arbitrary data
