@@ -75,7 +75,8 @@
         "react": "^18.0.0",
         "react-dom": "^18.0.0",
         "react-router": "^6.2.0",
-        "react-router-dom": "^6.2.0"
+        "react-router-dom": "^6.2.0",
+        "typesense": "1.5.3"
     },
     "eslintConfig": {
         "extends": [
@@ -120,6 +121,7 @@
         "react-router-dom": "^6.9.0",
         "tsd": "^0.28.1",
         "typescript": "^5.0.2",
+        "typesense": "1.5.3",
         "vite": "^4.2.1"
     },
     "files": [

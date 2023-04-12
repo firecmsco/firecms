@@ -16,4 +16,4 @@ export { useInitializeAppCheck } from "./hooks/useInitializeAppCheck";
 export * from "./types/auth";
 
 export type { FirestoreTextSearchController } from "./types/text_search";
-export { performAlgoliaTextSearch } from "./types/text_search";
+export { performAlgoliaTextSearch, performTypesenseSearch } from "./types/text_search";

@@ -1,4 +1,6 @@
 import { SearchIndex } from "algoliasearch";
+import Collection from "typesense/lib/Typesense/Collection";
+import { SearchParams } from "typesense/lib/Typesense/Documents";
 
 /**
  * Use this controller to return a list of ids from a search index, given a
@@ -10,7 +12,10 @@ import { SearchIndex } from "algoliasearch";
  * @see performAlgoliaTextSearch
  * @category Firebase
  */
-export type FirestoreTextSearchController = (props: { path: string, searchString: string }) => Promise<readonly string[]> | undefined;
+export type FirestoreTextSearchController = (props: {
+    path: string;
+    searchString: string;
+}) => Promise<readonly string[]> | undefined;
 
 /**
  * Utility function to perform a text search in an algolia index,
@@ -19,8 +24,10 @@ export type FirestoreTextSearchController = (props: { path: string, searchString
  * @param query
  * @category Firebase
  */
-export function performAlgoliaTextSearch(index: SearchIndex, query: string): Promise<readonly string[]> {
-
+export function performAlgoliaTextSearch(
+    index: SearchIndex,
+    query: string
+): Promise<readonly string[]> {
     console.debug("Performing Algolia query", index, query);
     return index
         .search(query)
@@ -29,6 +36,29 @@ export function performAlgoliaTextSearch(index: SearchIndex, query: string): Pro
         })
         .catch((err: any) => {
             console.error(err);
+            return [];
+        });
+}
+
+/**
+ * Utility function to perform a text search in an typesense index,
+ * returning the ids of the entities.
+ * @param index
+ * @param query
+ * @category Firebase
+ */
+export function performTypesenseSearch(
+    index: Collection<{}>,
+    searchParameters: SearchParams
+): Promise<readonly string[]> {
+    return index
+        .documents()
+        .search(searchParameters)
+        .then(({ hits }: any) => {
+            return hits.map((hit: any) => hit.document.id as string);
+        })
+        .catch((err: any) => {
+            console.log(err);
             return [];
         });
 }
