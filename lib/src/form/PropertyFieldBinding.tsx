@@ -23,7 +23,7 @@ import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 import {
     ErrorBoundary,
     getFieldConfig,
-    getFieldId,
+    getFieldId, isPropertyBuilder,
     isReadOnly,
     resolveProperty
 } from "../core";
@@ -56,9 +56,20 @@ import { useFireCMSContext } from "../hooks";
  */
 // export const PropertyFieldBinding = PropertyFieldBindingInternal;
 export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a: PropertyFieldBindingProps<any>, b: PropertyFieldBindingProps<any>) => {
-    return equal(a.context.values, b.context.values) &&
-        ((typeof a.property === "function" && typeof b.property === "function") || equal(a.property, b.property)) &&
-        a.disabled === b.disabled
+    const aIsBuilder = isPropertyBuilder(a.property);
+    const bIsBuilder = isPropertyBuilder(a.property);
+
+    const baseCheck = (aIsBuilder === bIsBuilder || equal(a.property, b.property)) &&
+        a.disabled === b.disabled;
+    if (!baseCheck) {
+        return false;
+    }
+
+    if (bIsBuilder) {
+        return equal(a.context.values, b.context.values);
+    }
+
+    return true;
 }) as typeof PropertyFieldBindingInternal;
 
 function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps = any, M extends Record<string, any> = Record<string, any>>
@@ -123,16 +134,15 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
             autoFocus
         };
 
-        const shouldAlwaysRerender = shouldPropertyReRender(property, fireCMSContext.plugins);
+        const shouldAlwaysRerender = shouldPropertyReRender(resolvedProperty, fireCMSContext.plugins);
         // we use the standard Field for user defined fields, since it rebuilds
         // when there are changes in other values, in contrast to FastField
-        const FieldComponent = shouldAlwaysRerender || resolvedProperty.Field ? Field : FastField;
-        // const FieldComponent = Field;
+        const FieldComponent = shouldAlwaysRerender ? Field : FastField;
 
         return (
             <FieldComponent
                 required={resolvedProperty.validation?.required}
-                name={`${propertyKey}`}
+                name={propertyKey}
             >
                 {(fieldProps: FormikFieldProps<T>) => {
                     return <FieldInternal
@@ -173,6 +183,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
      }) {
 
     const { plugins } = useFireCMSContext();
+    // const UsedComponent = Component;
     const UsedComponent: ComponentType<FieldProps<T, any, M>> =
         useMemo(() => {
             let _UsedComponent: ComponentType<FieldProps<T, any, M>> = Component;
@@ -184,9 +195,9 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
                             fieldConfigId: fieldId,
                             dataType: property.dataType as T,
                             property,
-                            Field: _UsedComponent
+                            Field: Component
                         };
-                        const fieldBuilder = plugin.form.fieldBuilder<T>(props);
+                        const fieldBuilder = plugin.form.fieldBuilder<T>;
                         if (fieldBuilder) {
                             _UsedComponent = fieldBuilder(props) || _UsedComponent;
                         }
@@ -253,9 +264,9 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
 }
 
 const shouldPropertyReRender = (property: ResolvedProperty, plugins?: FireCMSPlugin[]): boolean => {
-    if (plugins?.some((plugin) => plugin.form?.fieldBuilder)) {
-        return true;
-    }
+    // if (plugins?.some((plugin) => plugin.form?.fieldBuilder)) {
+    //     return true;
+    // }
     const rerenderThisProperty = Boolean(property.Field) || property.fromBuilder;
     if (property.dataType === "map" && property.properties) {
         return rerenderThisProperty || Object.values(property.properties).some((childProperty) => shouldPropertyReRender(childProperty, plugins));
