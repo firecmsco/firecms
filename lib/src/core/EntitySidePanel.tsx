@@ -35,7 +35,13 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
                 ? undefined
                 : navigationContext.getCollection(props.path, props.entityId);
             if (!usedCollection) {
-                throw Error(String(t("errorMessages.noCollectionFound", { path: props.path })));
+                throw Error(
+                    String(
+                        t("errorMessages.noCollectionFound", {
+                            path: props.path,
+                        })
+                    )
+                );
             }
         }
         return usedCollection;
@@ -45,7 +51,9 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         function beforeunload(e: any) {
             if (blocked && collection) {
                 e.preventDefault();
-                e.returnValue = t("messages.unsavedChanges", { collectionName: collection.name });
+                e.returnValue = t("messages.unsavedChanges", {
+                    collectionName: collection.name,
+                });
             }
         }
 
@@ -63,12 +71,12 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
             setBlocked(modified);
             setBlockedNavigationMessage(
                 modified
-             ? (
-                    <>
-                        {t("messages.unsavedChangesCollection", { collectionName: <b>{collection?.name}</b> })}
-                    </>
-                )
-: undefined
+                    ? (
+                        <>
+                            {t("messages.unsavedChangesCollection", { collectionName: collection?.name })}
+                        </>
+                    )
+                    : undefined
             );
         },
         [collection?.name, setBlocked, setBlockedNavigationMessage, t]

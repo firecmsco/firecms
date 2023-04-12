@@ -25,8 +25,8 @@
     "multiple": "Selecione uma ou mais referências"
   },
   "messages": {
-    "unsavedChanges": "Você tem alterações não salvas neste {collectionName}. Tem certeza de que deseja sair desta página?",
-    "unsavedChangesCollection": "Você tem alterações não salvas em {collectionName}.",
+    "unsavedChanges": "Você tem alterações não salvas neste {{collectionName}}. Tem certeza de que deseja sair desta página?",
+    "unsavedChangesCollection": "Você tem alterações não salvas em {{collectionName}}.",
     "leavePageConfirmation": "Tem certeza de que deseja sair desta página?",
     "fileUploadError": "Erro ao enviar arquivo: arquivo é maior que {maxSize} bytes",
     "dragDropFielddropFilesEdit": "Arraste e solte alguns arquivos aqui, ou clique aqui para editar",

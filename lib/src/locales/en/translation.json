@@ -25,8 +25,8 @@
     "multiple": "Select references"
   },
   "messages": {
-    "unsavedChanges": "You have unsaved changes in this {collectionName}. Are you sure you want to leave this page?",
-    "unsavedChangesCollection": "You have unsaved changes in this {collectionName}.",
+    "unsavedChanges": "You have unsaved changes in this {{collectionName}}. Are you sure you want to leave this page?",
+    "unsavedChangesCollection": "You have unsaved changes in this {{collectionName}}.",
     "leavePageConfirmation": "Are you sure you want to leave this page?",
     "fileUploadError": "Error uploading file: File is larger than ${maxSize} bytes",
     "dragDropFielddropFilesEdit" : "Drag 'n' drop some files here, or click here to edit",
