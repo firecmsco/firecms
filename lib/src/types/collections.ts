@@ -296,6 +296,7 @@ export type SelectionController<M extends Record<string, any> = any> = {
     setSelectedEntities: Dispatch<SetStateAction<Entity<M>[]>>;
     isEntitySelected: (entity: Entity<M>) => boolean;
     toggleEntitySelection: (entity: Entity<M>) => void;
+    hello: () => string;
 }
 
 /**

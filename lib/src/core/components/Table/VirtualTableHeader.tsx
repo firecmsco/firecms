@@ -17,7 +17,6 @@ import {
     IconButton,
     lighten,
     Popover,
-    Switch,
     useMediaQuery,
     useTheme
 } from "@mui/material";
@@ -102,8 +101,29 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
             setOpenFilter(false);
         }, []);
 
-        const onSwitchChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-            selectionController.setSelectedEntities([]);
+        function setSelectedEntities(entityData: any) {
+            console.log(entityData)
+            if (entityData.length === 0) {
+                selectionController.setSelectedEntities([]);
+                setAllSelected(false);
+            } else {
+                    selectionController.setSelectedEntities(entityData);
+                    setAllSelected(false);
+            }
+        }
+
+        const onCheckedChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
+            const selected = (selectionController.isEntitySelected(entityData[0]));
+
+            console.log(event.target.checked)
+
+            if (!selected) {
+                setSelectedEntities(entityData)
+            }
+                else
+            {
+                setSelectedEntities([])
+            }
         };
 
         const update = useCallback((filterForProperty?: [TableWhereFilterOp, any], newOpenFilterState?: boolean) => {
@@ -171,7 +191,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                             }}>
                                 {column.title}
                                 {column.title === "ID" && (
-                                    <Switch onChange={onSwitchChange} />
+                                    <Checkbox onChange={onCheckedChange} checked={allSelected} />
                                 )}
                             </Box>
                         </Box>

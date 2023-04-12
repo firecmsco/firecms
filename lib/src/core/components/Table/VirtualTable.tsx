@@ -285,6 +285,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                 }}>
                 <VirtualListContext.Provider
                     value={{
+                        entityData: data,
                         selectionController,
                         data,
                         size,

@@ -422,11 +422,14 @@ export function useSelectionController<M extends Record<string, any>>(): Selecti
 
     const isEntitySelected = useCallback((entity: Entity<M>) => selectedEntities.map(e => e.id).includes(entity.id), [selectedEntities]);
 
+    const hello = () => "oie";
+
     return {
         selectedEntities,
         setSelectedEntities,
         isEntitySelected,
-        toggleEntitySelection
+        toggleEntitySelection,
+        hello
     };
 }
 
