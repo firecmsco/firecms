@@ -4,6 +4,7 @@ import {
     Checkbox,
     IconButton,
     Tooltip,
+    Typography,
     useMediaQuery,
     useTheme
 } from "@mui/material";
@@ -21,6 +22,7 @@ import {
     SelectionController
 } from "../../../types";
 import { fullPathToCollectionSegments } from "../../util/paths";
+import { Box } from "@mui/system";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -126,7 +128,9 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     return (
         <>
             {actions}
+            <Box display="flex" alignItems="center">
             <Checkbox
+                sx={{ marginBottom: "2px" }}
                 onChange={(_, checked) => {
                     if (checked) {
                         selectionController.setSelectedEntities(loadedEntities);
@@ -135,6 +139,8 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                     }
                 }}
             />
+                <Typography variant="label">Selecionar todos</Typography>
+            </Box>
             {multipleDeleteButton}
             {exportButton}
             {addButton}

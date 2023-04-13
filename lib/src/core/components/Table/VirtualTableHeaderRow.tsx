@@ -7,8 +7,6 @@ import { VirtualTableContextProps } from "./types";
 import { Box } from "@mui/material";
 
 export const VirtualTableHeaderRow = ({
-                                          entityData,
-                                          selectionController,
                                           columns,
                                           currentSort,
                                           onColumnSort,
@@ -122,8 +120,6 @@ export const VirtualTableHeaderRow = ({
                         : undefined;
                 return <ErrorBoundary key={"header_" + column.key}>
                     <VirtualTableHeader
-                        entityData={entityData}
-                        selectionController={selectionController}
                         resizeHandleRef={columnRefs[columnIndex]}
                         columnIndex={columnIndex}
                         isResizingIndex={isResizing}

@@ -53,8 +53,6 @@ export type FilterFormFieldProps<CustomProps> = {
 };
 
 type VirtualTableHeaderProps<M extends Record<string, any>> = {
-    entityData: any[] | undefined;
-    selectionController: SelectionController;
     resizeHandleRef: RefObject<HTMLDivElement>;
     columnIndex: number;
     isResizingIndex: number;
@@ -69,8 +67,6 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
     function VirtualTableHeader<M extends Record<string, any>>({
-                                                                   entityData,
-                                                                   selectionController,
                                                                    resizeHandleRef,
                                                                    columnIndex,
                                                                    isResizingIndex,
@@ -82,9 +78,6 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                                                    onClickResizeColumn,
                                                                    createFilterField,
                                                                }: VirtualTableHeaderProps<M>) {
-
-        const muiTheme = useTheme();
-        const largeLayout = useMediaQuery(muiTheme.breakpoints.up("md"));
         const ref = useRef<HTMLDivElement>(null);
 
         const [allSelected, setAllSelected] = useState(false);
@@ -100,31 +93,6 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
         const handleClose = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
             setOpenFilter(false);
         }, []);
-
-        function setSelectedEntities(entityData: any) {
-            console.log(entityData)
-            if (entityData.length === 0) {
-                selectionController.setSelectedEntities([]);
-                setAllSelected(false);
-            } else {
-                selectionController.setSelectedEntities(entityData);
-                setAllSelected(false);
-            }
-        }
-
-        const onCheckedChange = (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {
-            const selected = (selectionController.isEntitySelected(entityData[0]));
-
-            console.log(event.target.checked)
-
-            if (!selected) {
-                setSelectedEntities(entityData)
-            }
-                else
-            {
-                setSelectedEntities([])
-            }
-        };
 
         const update = useCallback((filterForProperty?: [TableWhereFilterOp, any], newOpenFilterState?: boolean) => {
             onFilterUpdate(column, filterForProperty);
@@ -182,17 +150,13 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                             <Box sx={{
                                 display: "-webkit-box",
                                 margin: "0px 4px",
-                                marginLeft: column.title === "ID" ? "-8px" : "4px",
                                 overflow: "hidden",
-                                justifyContent: column.title === "ID" ? "end" : column.align,
+                                justifyContent: column.align,
                                 WebkitLineClamp: 2,
                                 WebkitBoxOrient: "vertical",
                                 textOverflow: "ellipsis"
                             }}>
                                 {column.title}
-                                {column.title === "ID" && (
-                                    <Checkbox onChange={onCheckedChange} checked={allSelected} />
-                                )}
                             </Box>
                         </Box>
                     </Grid>

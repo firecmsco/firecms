@@ -31,17 +31,14 @@ import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
-import { SelectionController } from "../../../types";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
 
-type InnerElementProps = { entityData: any[] | undefined; selectionController: SelectionController; children?: React.ReactNode, style?: any };
+type InnerElementProps = { children?: React.ReactNode, style?: any };
 
 // eslint-disable-next-line react/display-name
 const InnerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
-                                                                            entityData,
-                                                                            selectionController,
                                                                             children,
                                                                             ...rest
                                                                         }: InnerElementProps, ref) => {
@@ -63,7 +60,7 @@ const InnerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
                                          minHeight: "100%",
                                          position: "relative"
                                      }}>
-                                    <VirtualTableHeaderRow {...virtualTableProps} entityData={entityData} selectionController={selectionController} />
+                                    <VirtualTableHeaderRow {...virtualTableProps} />
                                     {!customView && children}
                                 </div>
                             </div>
@@ -93,7 +90,6 @@ const InnerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
  */
 export const VirtualTable = React.memo<VirtualTableProps<any>>(
     function VirtualTable<T extends Record<string, any>>({
-                                                             selectionController,
                                                              data,
                                                              onResetPagination,
                                                              onEndReached,
@@ -285,8 +281,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                 }}>
                 <VirtualListContext.Provider
                     value={{
-                        entityData: data,
-                        selectionController,
                         data,
                         size,
                         cellRenderer,
@@ -305,8 +299,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     }}>
 
                     <MemoizedList
-                        entityData={data}
-                        selectionController={selectionController}
                         outerRef={tableRef}
                         key={size}
                         width={bounds.width}
@@ -323,8 +315,6 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 );
 
 function MemoizedList({
-                          entityData,
-                          selectionController,
                           outerRef,
                           width,
                           height,
@@ -332,8 +322,6 @@ function MemoizedList({
                           onScroll,
                           itemSize
                       }: {
-    entityData: any[] | undefined;
-    selectionController: SelectionController;
     outerRef: RefObject<HTMLDivElement>;
     width: number;
     height: number;
@@ -395,7 +383,7 @@ function MemoizedList({
 
     return <List
         outerRef={outerRef}
-        innerElementType={(props: any) => <InnerElementType selectionController={selectionController} entityData={entityData} {...props} />}
+        innerElementType={(props: any) => <InnerElementType {...props} />}
         width={width}
         height={height}
         overscanCount={4}

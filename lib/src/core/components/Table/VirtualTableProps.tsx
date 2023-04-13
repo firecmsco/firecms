@@ -10,8 +10,6 @@ export type OnRowClickParams<T extends Record<string, any>> = { rowData: T; rowI
  */
 export interface VirtualTableProps<T extends Record<string, any>> {
 
-    selectionController: SelectionController<T>;
-
     /**
      * Array of arbitrary data
      */

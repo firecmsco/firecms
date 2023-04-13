@@ -495,7 +495,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
                     <Box sx={{ flexGrow: 1 }}>
                         <VirtualTable
-                            selectionController={selectionController}
                             data={data}
                             columns={columns}
                             cellRenderer={cellRenderer}
