@@ -1,6 +1,7 @@
 import React from "react";
 import {
     Button,
+    Checkbox,
     IconButton,
     Tooltip,
     useMediaQuery,
@@ -125,6 +126,15 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     return (
         <>
             {actions}
+            <Checkbox
+                onChange={(_, checked) => {
+                    if (checked) {
+                        selectionController.setSelectedEntities(loadedEntities);
+                    } else {
+                        selectionController.setSelectedEntities([]);
+                    }
+                }}
+            />
             {multipleDeleteButton}
             {exportButton}
             {addButton}

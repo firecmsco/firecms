@@ -107,8 +107,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                 selectionController.setSelectedEntities([]);
                 setAllSelected(false);
             } else {
-                    selectionController.setSelectedEntities(entityData);
-                    setAllSelected(false);
+                selectionController.setSelectedEntities(entityData);
+                setAllSelected(false);
             }
         }
 

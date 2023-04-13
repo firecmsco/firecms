@@ -135,6 +135,7 @@ export const EntityCollectionView = React.memo(
             isEntitySelected,
             setSelectedEntities
         } = usedSelectionController;
+        console.log(selectedEntities);
 
         useEffect(() => {
             setDeleteEntityClicked(undefined);
