@@ -64,7 +64,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
 
         <FormControl fullWidth error={showError}>
 
-            {!tableMode && <ExpandablePanel expanded={expanded} title={title}>
+            {!tableMode && <ExpandablePanel initiallyExpanded={expanded} title={title}>
                 {body}
             </ExpandablePanel>}
 

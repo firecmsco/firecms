@@ -7,32 +7,32 @@ export function ExpandablePanel({
                                     title,
                                     children,
                                     invisible = false,
-                                    expanded = true,
+                                    initiallyExpanded = true,
                                     padding = 1,
                                     darken = true,
                                     onExpandedChange
                                 }: PropsWithChildren<{
     title: React.ReactNode,
     invisible?: boolean,
-    expanded?: boolean;
+    initiallyExpanded?: boolean;
     padding?: number | string;
     darken?: boolean,
     onExpandedChange?: (expanded: boolean) => void
 }>) {
 
-    const [expandedInternal, setExpandedInternal] = useState(expanded);
+    const [expandedInternal, setExpandedInternal] = useState(initiallyExpanded);
     return (
         <Accordion variant={"outlined"}
                    disableGutters
                    expanded={expandedInternal}
                    sx={theme => ({
-                       color: theme.palette.text.secondary,
                        backgroundColor: invisible ? "transparent" : (darken ? undefined : "inherit"),
                        borderRadius: invisible ? 0 : `${theme.shape.borderRadius}px`,
                        border: invisible ? "none" : undefined,
                        "&::before": {
                            display: "none"
-                       }
+                       },
+                       // color: "inherit"
 
                    })}
                    TransitionProps={{ unmountOnExit: true }}
@@ -43,6 +43,7 @@ export function ExpandablePanel({
 
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                               sx={(theme) => ({
+                                  color: theme.palette.text.secondary,
                                   padding: invisible ? 0 : undefined,
                                   minHeight: "56px",
                                   alignItems: "center",
@@ -62,8 +63,8 @@ export function ExpandablePanel({
             <AccordionDetails sx={(theme) => ({
                 padding: invisible ? 0 : typeof padding === "string" ? padding : theme.spacing(padding),
                 py: theme.spacing(2),
-                border: invisible ? "none" : undefined
-
+                border: invisible ? "none" : undefined,
+                color: "inherit"
             })}>
                 {children}
             </AccordionDetails>

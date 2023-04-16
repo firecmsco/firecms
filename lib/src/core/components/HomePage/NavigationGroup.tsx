@@ -1,4 +1,4 @@
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { PropsWithChildren } from "react";
 import { ExpandablePanel } from "../ExpandablePanel";
 import {
@@ -13,7 +13,7 @@ export function NavigationGroup({
     return (
         <ExpandablePanel
             invisible={true}
-            expanded={!(userConfigurationPersistence?.collapsedGroups ?? []).includes(group ?? "ungrouped")}
+            initiallyExpanded={!(userConfigurationPersistence?.collapsedGroups ?? []).includes(group ?? "ungrouped")}
             onExpandedChange={expanded => {
                 if (userConfigurationPersistence) {
 

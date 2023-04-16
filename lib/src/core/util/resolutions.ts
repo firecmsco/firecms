@@ -150,6 +150,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
             });
             resolvedProperty = {
                 ...property,
+                resolved: true,
                 fromBuilder,
                 properties
             } as ResolvedProperty<T>;
@@ -195,7 +196,12 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
         }
     }
 
-    return resolvedProperty;
+    return resolvedProperty
+        ? {
+            ...resolvedProperty,
+            resolved: true
+        }
+        : null;
 }
 
 export function resolveArrayProperty<T extends any[], M>({

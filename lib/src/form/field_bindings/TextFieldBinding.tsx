@@ -48,8 +48,6 @@ export function TextFieldBinding<T extends string | number>({
         multiline = property.multiline;
     }
 
-    console.log("rendering TextFieldBinding", propertyKey);
-
     useClearRestoreValue({
         property,
         value,

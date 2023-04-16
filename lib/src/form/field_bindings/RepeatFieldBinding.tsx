@@ -1,8 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
 import { FormControl, FormHelperText } from "@mui/material";
-import { FieldDescription } from "../index";
-import { ArrayContainer, LabelWithIcon } from "../components";
+import { ArrayContainer, LabelWithIcon, FieldDescription } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
@@ -74,13 +73,13 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                            newDefaultEntry={property.of.defaultValue}/>;
 
     const title = (<LabelWithIcon icon={getIconForProperty(property)}
-                                 title={property.name}/>);
+                                  title={property.name}/>);
 
     return (
 
         <FormControl fullWidth error={showError}>
 
-            {!tableMode && <ExpandablePanel expanded={expanded}
+            {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
                                             title={title}>
                 {arrayContainer}
             </ExpandablePanel>}
@@ -88,11 +87,15 @@ export function RepeatFieldBinding<T extends Array<any>>({
             {tableMode && arrayContainer}
 
             {includeDescription &&
-                <FieldDescription property={property}/>}
+                <FieldDescription property={property}/>
+            }
 
-            {showError && typeof error === "string" &&
-                <FormHelperText>{error}</FormHelperText>}
+            {
+                showError && typeof error === "string" &&
+                <FormHelperText>{error}</FormHelperText>
+            }
 
         </FormControl>
-    );
+    )
+        ;
 }

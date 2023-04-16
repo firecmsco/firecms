@@ -21,7 +21,7 @@ import {
     EnumValueConfig,
     FieldProps,
     FormContext,
-    ResolvedProperty
+    PropertyOrBuilder
 } from "../../types";
 import { ExpandablePanel, getIconForProperty } from "../../core";
 import {
@@ -96,9 +96,10 @@ export function BlockFieldBinding<T extends Array<any>>({
 
         <FormControl fullWidth error={showError}>
 
-            {!tableMode && <ExpandablePanel expanded={expanded} title={title}>
-                {body}
-            </ExpandablePanel>}
+            {!tableMode &&
+                <ExpandablePanel initiallyExpanded={expanded} title={title}>
+                    {body}
+                </ExpandablePanel>}
 
             {tableMode && body}
 
@@ -133,7 +134,7 @@ interface BlockEntryProps {
      * Record of properties, where the key is the `type` and the value
      * is the corresponding property
      */
-    properties: Record<string, ResolvedProperty>;
+    properties: Record<string, PropertyOrBuilder>;
 
     /**
      * Additional values related to the state of the form or the entity

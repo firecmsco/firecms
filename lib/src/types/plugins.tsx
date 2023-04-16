@@ -5,7 +5,7 @@ import { PropsWithChildren } from "react";
 import { FieldConfigId } from "./field_config";
 import { FieldProps } from "./fields";
 import { CMSType, Property } from "./properties";
-import { EntityStatus, EntityValues } from "./entities";
+import { EntityStatus } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
 import { FormController } from "./form";
 
@@ -140,11 +140,10 @@ export interface PluginFormActionProps<UserType extends User = User> {
     currentEntityId?: string;
 }
 
-export type PluginFieldBuilderParams<T extends CMSType = CMSType> = {
+export type PluginFieldBuilderParams<T extends CMSType = CMSType, M extends Record<string, any> = any> = {
     fieldConfigId: FieldConfigId;
-    dataType: T;
     property: Property<T> | ResolvedProperty<T>;
-    Field: React.ComponentType<FieldProps<T>>
+    Field: React.ComponentType<FieldProps<T, any, M>>
 };
 
 export interface PluginGenericProps<UserType extends User = User> {

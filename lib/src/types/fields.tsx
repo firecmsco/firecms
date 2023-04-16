@@ -1,5 +1,5 @@
 import { EntityValues } from "./entities";
-import { CMSType, Property } from "./properties";
+import { CMSType, PropertyOrBuilder } from "./properties";
 import {
     ResolvedEntityCollection,
     ResolvedProperty
@@ -40,7 +40,7 @@ export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M ex
      * @param value
      * @param shouldValidate
      */
-    setFieldValue: (propertyKey:string, value: CMSType | null, shouldValidate?: boolean) => void;
+    setFieldValue: (propertyKey: string, value: CMSType | null, shouldValidate?: boolean) => void;
 
     /**
      * Is the form currently submitting
@@ -158,7 +158,7 @@ export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<s
     /**
      * The CMS property you are binding this field to
      */
-    property: Property<T> | ResolvedProperty<T>;
+    property: PropertyOrBuilder<T> | ResolvedProperty<T>;
 
     /**
      * The context where this field is being rendered. You get a context as a

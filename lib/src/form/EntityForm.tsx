@@ -6,18 +6,17 @@ import React, {
     useRef,
     useState
 } from "react";
-import { Box, Button, Grid, Typography, alpha } from "@mui/material";
+import { alpha, Box, Button, Grid, Typography } from "@mui/material";
 import {
     CMSAnalyticsEvent,
     Entity,
     EntityCollection,
     EntityStatus,
     EntityValues,
-    PluginFormActionProps,
     FormContext,
+    PluginFormActionProps,
     PropertyFieldBindingProps,
-    ResolvedEntityCollection,
-    ResolvedProperty
+    ResolvedEntityCollection
 } from "../types";
 import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { PropertyFieldBinding } from "./PropertyFieldBinding";
@@ -149,7 +148,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         path,
         values: entity?.values,
         fields: context.fields
-    }), [entity?.values, inputCollection, path]);
+    }), [entity?.values, path]);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
         (Boolean(initialResolvedCollection.customId) && initialResolvedCollection.customId !== "optional");
@@ -470,7 +469,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
     underlyingChanges: Partial<M>,
     path: string
     entity: Entity<M> | undefined,
-    collection: ResolvedEntityCollection<M>,
+    collection: EntityCollection<M>,
     entityId: string,
     status: "new" | "existing" | "copy",
     savingError?: Error,
@@ -521,7 +520,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
     }, [underlyingChanges, entity, values, touched, setFieldValue]);
 
     const formContext: FormContext<M> | undefined = {
-        collection,
+        collection: resolveCollection({ collection, path }),
         entityId,
         values,
         path
@@ -529,8 +528,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
     const formFields = (
         <Grid container spacing={6}>
-            {Object.entries<ResolvedProperty>(collection.properties)
-                .filter(([key, property]) => !isHidden(property))
+            {Object.entries(collection.properties)
                 .map(([key, property]) => {
 
                     const underlyingValueHasChanged: boolean =

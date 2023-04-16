@@ -451,7 +451,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     }
                 });
             }
-            return form;
+            return <ErrorBoundary>{form}</ErrorBoundary>;
         }
 
         const form = (readOnly === undefined)

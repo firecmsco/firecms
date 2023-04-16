@@ -40,10 +40,12 @@ export function TextInput<T extends string | number>({
 
     const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (inputType === "number") {
-            const numberValue = parseFloat(event.target.value);
-            if (isNaN(numberValue))
+            const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
+            if (!numberValue)
                 setValue(null);
-            if (numberValue !== undefined && numberValue !== null)
+            else if (isNaN(numberValue))
+                setValue(null);
+            else if (numberValue !== undefined && numberValue !== null)
                 setValue(numberValue as T);
             else
                 setValue(null);

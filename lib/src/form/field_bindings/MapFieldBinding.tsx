@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
 import {
     Box,
@@ -66,38 +66,6 @@ export function MapFieldBinding<T extends Record<string, any>>({
         setValue
     });
 
-    const buildPickKeysSelect = useCallback(() => {
-
-        const keys = Object.keys(property.properties!)
-            .filter((key) => !value || !(key in value));
-
-        const handleAddProperty = (event: SelectChangeEvent) => {
-            setValue({
-                ...value,
-                [event.target.value as string]: null
-            });
-        };
-
-        if (!keys.length) return <></>;
-
-        return <Box m={1}>
-            <FormControl fullWidth>
-                <InputLabel>Add property</InputLabel>
-                <Select
-                    variant={"standard"}
-                    value={""}
-                    disabled={disabled}
-                    onChange={handleAddProperty}>
-                    {keys.map((key) => (
-                        <MenuItem key={key} value={key}>
-                            {(property.properties as Properties)[key].name || key}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
-        </Box>;
-    }, [disabled, property.properties, setValue, value]);
-
     const mapFormView = <>
         <Grid container spacing={2} sx={{ py: 1 }}>
             {Object.entries(mapProperties)
@@ -126,7 +94,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
                 )}
         </Grid>
 
-        {pickOnlySomeKeys && buildPickKeysSelect()}
+        {pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value)}
 
     </>;
 
@@ -136,7 +104,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
     return (
         <FormControl fullWidth error={showError}>
 
-            {!tableMode && <ExpandablePanel expanded={expanded}
+            {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
                                             title={title}>{mapFormView}</ExpandablePanel>}
 
             {tableMode && mapFormView}
@@ -146,3 +114,36 @@ export function MapFieldBinding<T extends Record<string, any>>({
         </FormControl>
     );
 }
+
+const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue: (value: any) => void, value: any) => {
+
+    const keys = Object.keys(properties)
+        .filter((key) => !value || !(key in value));
+
+    const handleAddProperty = (event: SelectChangeEvent) => {
+        setValue({
+            ...value,
+            [event.target.value as string]: null
+        });
+    };
+
+    if (!keys.length) return <></>;
+
+    return <Box m={1}>
+        <FormControl fullWidth>
+            <InputLabel>Add property</InputLabel>
+            <Select
+                variant={"standard"}
+                value={""}
+                disabled={disabled}
+                onChange={handleAddProperty}>
+                {keys.map((key) => (
+                    <MenuItem key={key} value={key}>
+                        {(properties as Properties)[key].name || key}
+                    </MenuItem>
+                ))}
+            </Select>
+        </FormControl>
+    </Box>;
+};
+
