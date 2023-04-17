@@ -2,9 +2,9 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import {
     unstable_debounce as debounce,
-    unstable_useForkRef as useForkRef,
+    unstable_ownerWindow as ownerWindow,
     unstable_useEnhancedEffect as useEnhancedEffect,
-    unstable_ownerWindow as ownerWindow
+    unstable_useForkRef as useForkRef
 } from "@mui/utils";
 
 type State = {

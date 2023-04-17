@@ -36,7 +36,6 @@ import { isReadOnly, resolveCollection } from "../../../../util";
 import { CustomDialogActions } from "../../../CustomDialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
-import { FormController } from "../../../../../types/form";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
@@ -81,7 +80,10 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     const fireCMSContext = useFireCMSContext();
 
     const [savingError, setSavingError] = React.useState<any>();
-    const [popupLocation, setPopupLocation] = useState<{ x: number, y: number }>();
+    const [popupLocation, setPopupLocation] = useState<{
+        x: number,
+        y: number
+    }>();
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
 
     const collection: ResolvedEntityCollection<M> | undefined = inputCollection
@@ -147,7 +149,10 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         };
     }, [windowSize]);
 
-    const updatePopupLocation = useCallback((position?: { x: number, y: number }) => {
+    const updatePopupLocation = useCallback((position?: {
+        x: number,
+        y: number
+    }) => {
 
         const draggableBoundingRect = containerRef.current?.getBoundingClientRect();
         if (!cellRect || !draggableBoundingRect) return;
@@ -264,11 +269,12 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
                     const disabled = isSubmitting;
 
-                    const context: FormContext<M> = {
+                    const formContext: FormContext<M> = {
                         collection,
                         entityId: entity.id,
                         values,
-                        path
+                        path,
+                        setFieldValue
                     };
 
                     const property: ResolvedProperty<any> | undefined = propertyKey && collection.properties[propertyKey];
@@ -280,7 +286,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                             property,
                             includeDescription: false,
                             underlyingValueHasChanged: false,
-                            context,
+                            context: formContext,
                             tableMode: true,
                             partOfArray: false,
                             autoFocus: open
@@ -333,10 +339,10 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
                     const plugins = fireCMSContext.plugins;
                     if (plugins) {
-                        const formController: FormController<M> = {
-                            values,
-                            setFieldValue
-                        }
+                        // const formController: FormContext<M> = {
+                        //     values,
+                        //     setFieldValue
+                        // }
                         plugins.forEach((plugin: FireCMSPlugin) => {
                             if (plugin.form?.provider) {
                                 internalForm = (
@@ -345,9 +351,9 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                         path={path}
                                         collection={collection}
                                         entity={entity}
-                                        context={context}
+                                        context={fireCMSContext}
                                         currentEntityId={entity.id}
-                                        formController={formController}
+                                        formContext={formContext}
                                         {...plugin.form.provider.props}>
                                         {internalForm}
                                     </plugin.form.provider.Component>

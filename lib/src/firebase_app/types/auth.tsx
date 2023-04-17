@@ -4,7 +4,7 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 
-import { AppCheckTokenResult, AuthController, DataSource, StorageSource, User } from "../../types";
+import { AuthController, DataSource, StorageSource, User } from "../../types";
 
 /**
  * @category Firebase

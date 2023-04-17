@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect } from "react";
 
 import {
-    initializeAppCheck,
-    ReCaptchaV3Provider,
-    ReCaptchaEnterpriseProvider,
+    AppCheck as FirebaseAppCheck,
     getToken,
-    AppCheck as FirebaseAppCheck
+    initializeAppCheck,
+    ReCaptchaEnterpriseProvider,
+    ReCaptchaV3Provider
 } from "firebase/app-check";
 import { AppCheck, AppCheckOptions, AppCheckTokenResult } from "../../types";
 import { FirebaseApp } from "firebase/app";

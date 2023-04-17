@@ -3,19 +3,14 @@ import {
     Box,
     FormControl,
     IconButton,
-    Input,
     MenuItem,
     Select as MuiSelect,
     TextField
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
-import Tooltip from "@mui/material/Tooltip/Tooltip";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import CalendarTodayIcon from "@mui/icons-material/CalendarToday";
 import { TableWhereFilterOp } from "../../Table";
-import { LabelWithIcon } from "../../../../form";
-import { getIconForProperty } from "../../../util";
 
 interface DateTimeFilterFieldProps {
     name: string,

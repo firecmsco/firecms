@@ -1,5 +1,4 @@
 import { EntityCollection } from "./collections";
-import { User } from "./user";
 import { ResolvedEntityCollection } from "./resolved_entities";
 import { Entity } from "./entities";
 

@@ -18,7 +18,8 @@ import {
     useBuildSideDialogsController
 } from "./internal/useBuildSideDialogsController";
 import {
-    FireCMSContextInstance, useFireCMSContext,
+    FireCMSContextInstance,
+    useFireCMSContext,
     useModeController,
     useSnackbarController
 } from "../hooks";
@@ -36,7 +37,6 @@ import { AuthControllerContext } from "./contexts/AuthControllerContext";
 import {
     SideDialogsControllerContext
 } from "./contexts/SideDialogsControllerContext";
-import { useTraceUpdate } from "./util/useTraceUpdate";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 

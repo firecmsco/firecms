@@ -8,8 +8,14 @@ import React, {
 import { FieldArray } from "formik";
 
 import {
-    Box, Button, Collapse, IconButton, ListItemIcon,
-    ListItemText, Menu, MenuItem, Tooltip
+    Box,
+    Button,
+    IconButton,
+    ListItemIcon,
+    ListItemText,
+    Menu,
+    MenuItem,
+    Tooltip
 } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";

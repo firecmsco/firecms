@@ -3,11 +3,10 @@ import { CollectionActionsProps, EntityCollection } from "./collections";
 import { User } from "./user";
 import { PropsWithChildren } from "react";
 import { FieldConfigId } from "./field_config";
-import { FieldProps } from "./fields";
+import { FieldProps, FormContext } from "./fields";
 import { CMSType, Property } from "./properties";
 import { EntityStatus } from "./entities";
 import { ResolvedProperty } from "./resolved_entities";
-import { FormController } from "./form";
 
 /**
  * Interface used to define plugins for FireCMS.
@@ -135,7 +134,7 @@ export interface PluginFormActionProps<UserType extends User = User> {
     path: string;
     status: EntityStatus;
     collection: EntityCollection;
-    formController: FormController<any>;
+    formContext: FormContext<any>;
     context: FireCMSContext<UserType>;
     currentEntityId?: string;
 }

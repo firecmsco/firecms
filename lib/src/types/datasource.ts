@@ -1,5 +1,5 @@
 import { Entity, EntityStatus, EntityValues } from "./entities";
-import { EntityCollection, FilterValues, WhereFilterOp } from "./collections";
+import { EntityCollection, FilterValues } from "./collections";
 import {
     ResolvedEntityCollection,
     ResolvedProperty

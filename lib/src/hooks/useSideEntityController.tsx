@@ -1,4 +1,4 @@
-import { AuthController, SideEntityController } from "../types";
+import { SideEntityController } from "../types";
 import { useContext } from "react";
 import {
     SideEntityControllerContext

@@ -8,7 +8,6 @@ import {
 } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
-import Tooltip from "@mui/material/Tooltip/Tooltip";
 import { EnumValuesChip } from "../../../../preview";
 import { TableEnumValues, TableWhereFilterOp } from "../../Table";
 

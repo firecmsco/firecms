@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useCallback, useEffect } from "react";
+import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
 
 import {
@@ -13,7 +13,7 @@ import {
     useTheme
 } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { useFireCMSContext, useNavigationContext } from "../hooks";
 import {
     CircularProgressCenter,

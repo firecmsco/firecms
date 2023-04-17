@@ -134,12 +134,20 @@ export interface FormContext<M extends Record<string, any> = any> {
     /**
      * Entity id, it can be null if it's a new entity
      */
-    entityId: string;
+    entityId?: string;
 
     /**
      * Path this entity is located at
      */
     path: string;
+
+    /**
+     * Update the value of a field
+     * @param key
+     * @param value
+     * @param shouldValidate
+     */
+    setFieldValue: (key: string, value: any, shouldValidate?: boolean) => void;
 }
 
 /**

@@ -1,8 +1,7 @@
 import {
     EntityCollection,
     PropertiesOrBuilders,
-    PropertyOrBuilder,
-    ResolvedEntityCollection
+    PropertyOrBuilder
 } from "../../types";
 import { mergeDeep } from "./objects";
 import { isPropertyBuilder } from "./entities";

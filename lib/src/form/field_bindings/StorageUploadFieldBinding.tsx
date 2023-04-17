@@ -118,6 +118,9 @@ export function StorageUploadFieldBinding({
                                               isSubmitting
                                           }: StorageUploadFieldProps) {
 
+    if (!context.entityId)
+        throw new Error("StorageUploadFieldBinding: Entity id is null");
+
     const storageSource = useStorageSource();
     const disabled = isReadOnly(property) || !!property.disabled || isSubmitting;
 

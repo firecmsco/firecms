@@ -16,7 +16,6 @@ import {
     PropertyOrBuilder,
     ResolvedEntityCollection,
     ResolvedProperty,
-    ResolvedReferenceProperty,
     SaveEntityProps,
     User
 } from "../../../types";
@@ -31,12 +30,7 @@ import {
     useSideEntityController
 } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
-import {
-    CellRendererParams,
-    TableColumn,
-    TableColumnFilter,
-    VirtualTable
-} from "../Table";
+import { CellRendererParams, TableColumn, VirtualTable } from "../Table";
 import {
     getIconForProperty,
     getPropertyInPath,

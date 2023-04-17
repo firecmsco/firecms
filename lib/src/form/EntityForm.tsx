@@ -32,7 +32,6 @@ import {
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import { FormController } from "../types/form";
 
 /**
  * @category Components
@@ -99,7 +98,7 @@ export interface EntityFormProps<M extends Record<string, any>> {
 
     currentEntityId?: string;
 
-    onFormControllerChange?: (formController: FormController<M>) => void;
+    onFormContextChange?: (formContext: FormContext<M>) => void;
 
     hideId?: boolean;
 
@@ -135,7 +134,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                onModified,
                                                                onValuesChanged,
                                                                onIdChange,
-                                                               onFormControllerChange,
+                                                               onFormContextChange,
                                                                hideId
                                                            }: EntityFormProps<M>) {
 
@@ -331,17 +330,20 @@ function EntityFormInternal<M extends Record<string, any>>({
                 const pluginActions: React.ReactNode[] = [];
 
                 // eslint-disable-next-line react-hooks/rules-of-hooks
-                const formController: FormController<M> = {
+                const formContext: FormContext<M> = {
                     setFieldValue: props.setFieldValue,
-                    values: props.values
+                    values: props.values,
+                    collection: resolveCollection({ collection, path }),
+                    entityId,
+                    path
                 };
 
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 useEffect(() => {
-                    if (onFormControllerChange) {
-                        onFormControllerChange(formController);
+                    if (onFormContextChange) {
+                        onFormContextChange(formContext);
                     }
-                }, [onFormControllerChange, formController]);
+                }, [onFormContextChange, formContext]);
 
                 if (plugins && collection) {
                     const actionProps: PluginFormActionProps = {
@@ -351,7 +353,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                         collection,
                         context,
                         currentEntityId: entityId,
-                        formController
+                        formContext
                     };
                     pluginActions.push(...plugins.map((plugin, i) => (
                         plugin.form?.Actions
@@ -451,6 +453,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                             entity={entity}
                             entityId={entityId}
                             collection={collection}
+                            formContext={formContext}
                             status={status}
                             savingError={savingError}
                             closeAfterSaveRef={closeAfterSaveRef}/>}
@@ -471,6 +474,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
     entity: Entity<M> | undefined,
     collection: EntityCollection<M>,
     entityId: string,
+    formContext: FormContext<M>,
     status: "new" | "existing" | "copy",
     savingError?: Error,
     closeAfterSaveRef: MutableRefObject<boolean>,
@@ -483,6 +487,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
         onValuesChanged,
         underlyingChanges,
         entityId,
+        formContext,
         entity,
         touched,
         setFieldValue,
@@ -518,13 +523,6 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
             });
         }
     }, [underlyingChanges, entity, values, touched, setFieldValue]);
-
-    const formContext: FormContext<M> | undefined = {
-        collection: resolveCollection({ collection, path }),
-        entityId,
-        values,
-        path
-    };
 
     const formFields = (
         <Grid container spacing={6}>

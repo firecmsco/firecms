@@ -5,7 +5,7 @@ import {
     MenuItem,
     Select as MuiSelect
 } from "@mui/material";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { TableWhereFilterOp } from "../../Table";
 import { Entity, EntityCollection, EntityReference } from "../../../../types";
 import { ReferencePreview } from "../../../../preview";

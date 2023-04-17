@@ -14,15 +14,12 @@ import {
 } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
 import { EntitySidePanel } from "../EntitySidePanel";
-import {
-    removeInitialAndTrailingSlashes
-} from "../util";
+import { removeInitialAndTrailingSlashes } from "../util";
 import {
     ADDITIONAL_TAB_WIDTH,
     CONTAINER_FULL_WIDTH,
     FORM_CONTAINER_WIDTH
 } from "./common";
-import { useLargeSideLayout } from "./useLargeSideLayout";
 
 const NEW_URL_HASH = "new";
 

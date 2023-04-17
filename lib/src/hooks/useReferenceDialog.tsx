@@ -1,5 +1,5 @@
 import { useSideDialogsController } from "./useSideDialogsController";
-import { ReferenceSelectionInnerProps, ReferenceSelectionInner } from "../core";
+import { ReferenceSelectionInner, ReferenceSelectionInnerProps } from "../core";
 import { useCallback } from "react";
 import { useNavigationContext } from "./useNavigationContext";
 

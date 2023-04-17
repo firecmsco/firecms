@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { TextareaAutosize } from "@mui/material";
 
 import { useDebounce } from "../../../util";
+import { TextareaAutosize } from "../../fields/TextareaAutosize";
 
 export function TableInput(props: {
     error: Error | undefined;
@@ -50,7 +50,6 @@ export function TableInput(props: {
     return (
         <TextareaAutosize
             ref={ref}
-            disabled={disabled}
             style={{
                 padding: 0,
                 margin: 0,
