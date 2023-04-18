@@ -11,7 +11,7 @@ import {
 } from "formik";
 
 import {
-    CMSType,
+    CMSType, EntityCollection,
     FieldProps,
     FireCMSPlugin,
     PluginFieldBuilderParams,
@@ -32,6 +32,7 @@ import {
     resolveProperty
 } from "../core";
 import { useFireCMSContext } from "../hooks";
+import path from "path";
 
 /**
  * This component renders a form field creating the corresponding configuration
@@ -90,6 +91,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
      autoFocus,
      context: {
          values,
+         collection,
          path,
          entityId
      }
@@ -207,7 +209,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
         (fieldProps.form.submitCount > 0 || property.validation?.unique) &&
         (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
 
-    const WrappedComponent: ComponentType<FieldProps<T, any, M>> | null = useWrappedComponent(property, Component, plugins);
+    const WrappedComponent: ComponentType<FieldProps<T, any, M>> | null = useWrappedComponent(context.path, context.collection, property, Component, plugins);
     const UsedComponent: ComponentType<FieldProps<T>> = WrappedComponent ?? Component;
     // const UsedComponent: ComponentType<FieldProps<T>> = Component;
 
@@ -274,6 +276,8 @@ const shouldPropertyReRender = (property: PropertyOrBuilder | ResolvedProperty, 
 }
 
 function useWrappedComponent<T extends CMSType = CMSType, M extends Record<string, any> = any>(
+    path: string,
+    collection: EntityCollection<M>,
     property: ResolvedProperty<T>,
     Component: ComponentType<FieldProps<T, any, M>>,
     plugins?: FireCMSPlugin[]
@@ -285,12 +289,17 @@ function useWrappedComponent<T extends CMSType = CMSType, M extends Record<strin
             plugins.forEach((plugin) => {
                 const fieldId = getFieldId(property);
                 if (fieldId && plugin.form?.fieldBuilder) {
-                    const props: PluginFieldBuilderParams<T> = {
+                    const params: PluginFieldBuilderParams<T> = {
                         fieldConfigId: fieldId,
                         property,
                         Field: Component,
+                        plugin,
+                        path,
+                        collection
                     };
-                    Wrapper = plugin.form.fieldBuilder(props) || Wrapper;
+                    const enabled = plugin.form?.fieldBuilderEnabled?.(params);
+                    if (enabled === undefined || enabled)
+                        Wrapper = plugin.form.fieldBuilder(params) || Wrapper;
                 }
                 if (!fieldId) {
                     console.warn("INTERNAL: Field id not found for property", property);

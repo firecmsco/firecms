@@ -54,6 +54,8 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
         Actions?: React.ComponentType<PluginFormActionProps>;
 
         fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) => React.ComponentType<FieldProps<T>> | null;
+
+        fieldBuilderEnabled?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) => boolean;
     }
 
     /**
@@ -142,7 +144,10 @@ export interface PluginFormActionProps<UserType extends User = User> {
 export type PluginFieldBuilderParams<T extends CMSType = CMSType, M extends Record<string, any> = any> = {
     fieldConfigId: FieldConfigId;
     property: Property<T> | ResolvedProperty<T>;
-    Field: React.ComponentType<FieldProps<T, any, M>>
+    Field: React.ComponentType<FieldProps<T, any, M>>;
+    plugin: FireCMSPlugin;
+    path: string;
+    collection: EntityCollection<M>;
 };
 
 export interface PluginGenericProps<UserType extends User = User> {

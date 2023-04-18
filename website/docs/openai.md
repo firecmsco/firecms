@@ -74,7 +74,7 @@ export default function App() {
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
         // Optional callback for defining which collections should be enhanced
-        getConfigForPath: async ({ path }) => {
+        getConfigForPath: ({ path }) => {
             return true;
         }
     });
