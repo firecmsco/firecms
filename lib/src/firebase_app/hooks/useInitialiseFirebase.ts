@@ -60,7 +60,7 @@ export function useInitialiseFirebase({
             console.error("Error initialising Firebase", e);
             setConfigError(hostingError + "\n" + (e.message ?? JSON.stringify(e)));
         }
-    }, [name, onFirebaseInit]);
+    }, [name]);
 
     useEffect(() => {
 
