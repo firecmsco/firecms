@@ -18,7 +18,7 @@
     "react-router-dom": "^6.9.0"
   },
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --mode development",
     "build": "vite build && tsc",
     "preview": "vite build && vite preview",
     "deploy": "vite build && firebase deploy --only hosting"

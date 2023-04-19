@@ -20,7 +20,9 @@ import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
 import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
-import { productsCollection } from "./collections/products_collection";
+import {
+    productsCollection
+} from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
 import { showcaseCollection } from "./collections/showcase_collection";
 
@@ -114,7 +116,8 @@ function SampleApp() {
     }, []);
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
-        getConfigForPath: async ({ path }) => {
+        apiKey: "fcms-demo-DEwdcn84sF5wDWEDFw2ii0xXWSDC34asfrf54lbkFJBf",
+        getConfigForPath: ({ path }) => {
             if (process.env.NODE_ENV !== "production")
                 return true;
             if (path === "books")

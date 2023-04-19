@@ -306,3 +306,58 @@ export const productsCollection = buildCollection<Product>({
     }
 
 });
+export const productsSimpleCollection = buildCollection<any>({
+    path: "products",
+    name: "Products",
+    singularName: "Product",
+    group: "Main",
+    icon: "ShoppingCart",
+    properties: {
+        name: {
+            dataType: "string",
+            name: "Name",
+            description: "Name of this product",
+            clearable: true,
+            validation: {
+                required: true
+            }
+        },
+        category: {
+            dataType: "string",
+            name: "Category",
+            clearable: true,
+            enumValues: categories
+        },
+        price: {
+            dataType: "number",
+            name: "Price",
+        },
+        brand: {
+            dataType: "string",
+            name: "Brand",
+            validation: {
+                required: true
+            }
+        },
+        description: {
+            dataType: "string",
+            name: "Description",
+            description: "Example of a markdown field",
+            markdown: true
+        },
+        tags: {
+            dataType: "array",
+            name: "Tags",
+            of: {
+                dataType: "string"
+            }
+        },
+        added_on: {
+            dataType: "date",
+            name: "Added on",
+            autoValue: "on_create"
+        }
+
+    }
+
+});
