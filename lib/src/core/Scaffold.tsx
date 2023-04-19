@@ -164,9 +164,9 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         ref={containerRef}
                         sx={{
                             flexGrow: 1,
-                            m: largeLayout ? 2 : 1,
-                            borderRadius: "12px",
-                            border: `1px solid ${theme.palette.divider}`,
+                            m: largeLayout ? 2 : 0,
+                            borderRadius: largeLayout ? "12px" : undefined,
+                            border: largeLayout ? `1px solid ${theme.palette.divider}` : undefined,
                             height: "100%",
                             overflow: "auto"
                         }}>

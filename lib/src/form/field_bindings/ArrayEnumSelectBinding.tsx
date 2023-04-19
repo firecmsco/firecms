@@ -99,14 +99,16 @@ export function ArrayEnumSelectBinding({
 
             <MuiSelect
                 multiple
-                sx={{
-                    minHeight: "64px"
-                }}
+                sx={(theme) => ({
+                    minHeight: "64px",
+                    borderRadius: `${theme.shape.borderRadius}px`
+                })}
                 variant={"filled"}
                 labelId={`${propertyKey}-multiselect-label`}
                 value={validValue ? value.map(v => v.toString()) : []}
                 autoFocus={autoFocus}
                 disabled={disabled}
+                disableUnderline={true}
                 endAdornment={
                     of.clearable && <IconButton
                         sx={{

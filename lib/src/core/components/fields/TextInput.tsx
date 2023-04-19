@@ -20,17 +20,19 @@ export function TextInput<T extends string | number>({
                                                          disabled,
                                                          error,
                                                          endAdornment,
-                                                         autoFocus
+                                                         autoFocus,
+                                                         placeholder
                                                      }: {
     inputType?: InputType,
     value: T,
     setValue: (value: T | null) => void,
-    label: React.ReactNode,
+    label?: React.ReactNode,
     multiline?: boolean,
-    disabled: boolean,
-    error: boolean,
+    disabled?: boolean,
+    error?: boolean,
     endAdornment?: React.ReactNode,
-    autoFocus?: boolean
+    autoFocus?: boolean,
+    placeholder?: string
 }) {
 
     const inputRef = useRef(null);
@@ -61,12 +63,17 @@ export function TextInput<T extends string | number>({
 
     const input = multiline
         ? <StyledTextArea ref={inputRef}
+                          placeholder={placeholder}
                           autoFocus={autoFocus}
                           onFocus={() => setFocused(true)}
                           onBlur={() => setFocused(false)}
                           value={value ?? ""}
                           onChange={onChange}/>
         : <StyledInput ref={inputRef}
+                       sx={{
+                           padding: label ? "32px 12px 8px 12px" : "8px 12px 8px 12px",
+                       }}
+                       placeholder={placeholder}
                        autoFocus={autoFocus}
                        onFocus={() => setFocused(true)}
                        onBlur={() => setFocused(false)}
@@ -116,7 +123,7 @@ export function TextInput<T extends string | number>({
     );
 }
 
-const StyledInput = React.memo(styled("input")({
+const StyledInput = React.memo(styled("input")(() => ({
     width: "100%",
     outlineWidth: 0,
     minHeight: "64px",
@@ -134,7 +141,7 @@ const StyledInput = React.memo(styled("input")({
     minWidth: "0px",
     animationName: "mui-auto-fill-cancel",
     animationDuration: "10ms"
-}), (prevProps, nextProps) => prevProps.value === nextProps.value);
+})), (prevProps, nextProps) => prevProps.value === nextProps.value);
 
 const StyledTextArea = styled(TextareaAutosize)({
     width: "100%",

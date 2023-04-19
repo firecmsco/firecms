@@ -594,6 +594,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                 <Box
                                     role="tabpanel"
                                     hidden={!mainViewVisible}
+                                    id={`form_${path}`}
                                     sx={{
                                         width: resolvedFormWidth,
                                         maxWidth: "100%",

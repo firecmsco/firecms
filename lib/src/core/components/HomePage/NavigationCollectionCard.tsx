@@ -74,7 +74,7 @@ export function NavigationCollectionCard({
     }
 
     return (
-        <Paper variant={"outlined"} sx={{
+        <Paper elevation={0} sx={{
             height: "100%"
         }}>
 

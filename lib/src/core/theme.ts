@@ -156,10 +156,17 @@ export const createCMSDefaultTheme = (
             MuiDialog: {
                 styleOverrides: {
                     paper: {
-                        backgroundImage: "inherit"
+                        backgroundImage: "inherit",
                     }
                 }
             },
+            // MuiPaper: {
+            //     styleOverrides: {
+            //         outlined: {
+            //             border: "none",
+            //         }
+            //     }
+            // },
             MuiCardActionArea: {
                 styleOverrides: {
                     root: {
