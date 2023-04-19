@@ -24,8 +24,7 @@ export interface SnackbarController {
      */
     open: (props: {
         type: SnackbarMessageType;
-        // title?: string;
-        message: string;
+        message: React.ReactNode;
     }) => void;
 }
 
@@ -48,13 +47,14 @@ export const useSnackbarController = () => {
     const open = useCallback((props: {
         type: SnackbarMessageType;
         // title?: string;
-        message: string;
+        message: React.ReactNode;
     }) => {
         const {
             type,
             message
         } = props;
-        enqueueSnackbar(message, {
+        enqueueSnackbar({
+            message,
             variant: type
         })
     }, []);
