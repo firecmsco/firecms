@@ -7,7 +7,7 @@ export interface MarkdownProps {
     source: string
 }
 
-const md = new MarkdownIt();
+const md = new MarkdownIt({ html: true, });
 /**
  * @category Preview components
  */

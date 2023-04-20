@@ -202,7 +202,7 @@ function BlockEntry({
     return (
         <Paper sx={(theme) => ({
             padding: theme.spacing(1),
-            mb: 1,
+            my: 1,
             py: 2
         })} elevation={0}>
 
@@ -212,7 +212,7 @@ function BlockEntry({
             >
                 {(fieldProps: FormikFieldProps) =>
                     (
-                        <FormControl fullWidth>
+                        <FormControl fullWidth size="small">
                             <InputLabel
                                 id={`${name}_${index}_select_label`}>
                                 <span>Type</span>
