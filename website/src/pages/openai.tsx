@@ -17,16 +17,18 @@ import {
 } from "../partials/data_enhancement/DataEnhancementHero";
 import { BatchProcessing } from "../partials/data_enhancement/BatchProcessing";
 import { Translations } from "../partials/data_enhancement/Translations";
+import { DataStructure } from "../partials/data_enhancement/DataStructure";
 
 function DataEnhancement() {
 
     return (
         <Layout
-            title="CMS with OpenAI Integration | Autofill Feature | Natural Language Processing | Customization Options">
+            title="CMS with ChatGPT Integration | Autofill Feature | Natural Language Processing | Customization Options">
 
             <DataEnhancementHero/>
 
             <DataEnhancementUseCases/>
+            <DataStructure/>
             <AutofillFeature/>
             <BatchProcessing/>
             <Translations/>

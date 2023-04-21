@@ -6,7 +6,7 @@ module.exports = {
             id: "intro"
         },
         "quickstart",
-        // "openai",
+        "openai",
         "new_in_v2",
         {
             type: "category",

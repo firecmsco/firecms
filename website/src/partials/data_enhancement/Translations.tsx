@@ -30,7 +30,7 @@ export function Translations() {
             right={<>
                 <div
                     style={{
-                        maxHeight: "750px",
+                        maxHeight: "692px",
                     }}
                     data-aos="fade-up"
                     className={" flex content-center justify-center"}>

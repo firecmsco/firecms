@@ -7,7 +7,7 @@ module.exports = {
     onBrokenLinks: "warn",
     onBrokenMarkdownLinks: "warn",
     favicon: "img/favicon.ico",
-    organizationName: "Camberi",
+    organizationName: "FireCMS",
     projectName: "FireCMS",
     customFields: {
         env: process.env.NODE_ENV,
@@ -31,9 +31,9 @@ module.exports = {
     themeConfig: {
         image: "img/logo_small.png",
         announcementBar: {
-            id: "package_rename",
+            id: "openai",
             content:
-                "The package has been renamed to <code>firecms</code> from <code>@camberi/firecms</code> since version 2.0.0-beta.1",
+                "Be the first to try out <a href='/openai'>ChatGPT content generation integration plugin</a>! 🚀",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,
@@ -77,6 +77,11 @@ module.exports = {
                 {
                     to: "enterprise",
                     label: "Enterprise",
+                    position: "left"
+                },
+                {
+                    to: "openai",
+                    label: "ChatGPT",
                     position: "left"
                 },
                 // {
@@ -146,7 +151,7 @@ module.exports = {
                         },
                         {
                             to: "https://app.firecms.co/subscriptions",
-                            label: "Subscriptions",
+                            label: "Manage subscriptions",
                         },
                         {
                             label: "Demo",
@@ -155,10 +160,6 @@ module.exports = {
                         {
                             label: "Blog",
                             to: "blog",
-                        },
-                        {
-                            label: "Camberi",
-                            to: "https://camberi.com"
                         },
                         {
                             label: "Privacy policy",
@@ -205,7 +206,7 @@ module.exports = {
                     ]
                 }
             ],
-            copyright: `MIT © ${new Date().getFullYear()} - camberi`
+            copyright: `MIT © ${new Date().getFullYear()} - FireCMS S.L.`
         },
         prism: {
             theme: require("prism-react-renderer/themes/vsDark")

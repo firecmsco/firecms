@@ -17,8 +17,8 @@ export function AutofillFeature() {
             left={<>
                 <div
                     style={{
-                        aspectRatio: 550 / 750,
-                        maxHeight: "750px",
+                        aspectRatio: 550 / 692,
+                        maxHeight: "692px",
                         maxWidth: "550px"
                     }}
                     data-aos="fade-up"
@@ -55,7 +55,7 @@ export function AutofillFeature() {
                 </p>
 
                 <p className="text-base text-gray-600 dark:text-gray-200">
-                    The OpenAI plugin for FireCMS will use the latest GPT model
+                    The ChatGPT plugin for FireCMS will use the latest GPT model
                     from OpenAI to generate the content for you. You can then
                     edit the generated content and save it to your database.
                 </p>

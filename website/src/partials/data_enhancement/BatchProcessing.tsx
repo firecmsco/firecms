@@ -3,10 +3,6 @@ import { BrowserFrame } from "../BrowserFrame";
 import { TwoColumns } from "../general/TwoColumns";
 import { useColorMode } from "@docusaurus/theme-common";
 
-// @ts-ignore
-import demoDark from "@site/static/img/data/product_demo_dark.mp4";
-// @ts-ignore
-import demoLight from "@site/static/img/data/product_demo_light.mp4";
 import { Panel } from "../general/Panel";
 import { CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin } from "../utils";
 

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import { CTAButtonMixin, CTAOutlinedButtonMixin } from "../utils";
+import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../utils";
 import { TwoColumns } from "../general/TwoColumns";
 
 export function DataEnhancementHero() {
@@ -14,13 +14,13 @@ export function DataEnhancementHero() {
             <div>
 
                 <h1 className="text-4xl tracking-tight font-extrabold md:text-6xl">
-                    <span className="block">OpenAI</span>
+                    <span className="block">ChatGPT</span>
                     <span
                         className="block text-primary">Integration</span>
                 </h1>
                 <div className="mt-3 text-xl sm:mt-4 md:text-2xl">
                     <p>
-                        FireCMS with OpenAI integration offers a powerful
+                        FireCMS with ChatGPT integration offers a powerful
                         autofill
                         feature that can save you time and increase the accuracy
                         of your data entry.
@@ -39,13 +39,20 @@ export function DataEnhancementHero() {
                        target="_blank"
                        className={CTAButtonMixin}>
                         Get started
+                        <CTACaret/>
                     </a>
-                    <a href="https://demo.firecms.co/c/books"
-                       rel="noopener noreferrer"
-                       target="_blank"
-                       className={CTAOutlinedButtonMixin + " sm:ml-4 ml-2"}>
-                        OpenAI Demo
-                    </a>
+
+                    <p
+                        className={"mt-4"}>
+                        <a
+                            className={" text-inherit"}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            href={"https://app.firecms.co/subscriptions"}
+                        >
+                            Go to subscriptions management
+                        </a>
+                    </p>
                 </div>
             </div>
         }
@@ -53,8 +60,9 @@ export function DataEnhancementHero() {
 
             <div
                 style={{
-                    aspectRatio: 550 / 750,
-                    maxHeight: "750px",
+                    flexDirection: "column",
+                    aspectRatio: 550 / 692,
+                    maxHeight: "692px",
                     maxWidth: "550px"
                 }}
                 data-aos="fade-up"
@@ -65,9 +73,15 @@ export function DataEnhancementHero() {
                     width="100%"
                     loop autoPlay muted>
                     <source
-                        src={isDarkTheme ? "/img/data/data_enhancement_dark.mp4" : "/img/data/data_enhancement_light.mp4"}
+                        src={isDarkTheme ? "/img/data/books_dark.mp4" : "/img/data/books_light.mp4"}
                         type="video/mp4"/>
                 </video>
+
+                <a href="https://demo.firecms.co/c/books"
+                   rel="noopener noreferrer"
+                   target="_blank">
+                    Check this demo online
+                </a>
             </div>
 
 
