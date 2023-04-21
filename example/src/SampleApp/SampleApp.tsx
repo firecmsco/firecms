@@ -116,7 +116,6 @@ function SampleApp() {
     }, []);
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
-        apiKey: "fcms-demo-DEwdcn84sF5wDWEDFw2ii0xXWSDC34asfrf54lbkFJBf",
         getConfigForPath: ({ path }) => {
             if (process.env.NODE_ENV !== "production")
                 return true;

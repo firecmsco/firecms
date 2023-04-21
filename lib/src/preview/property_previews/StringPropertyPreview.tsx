@@ -33,6 +33,7 @@ export function StringPropertyPreview({
                 />
             </ErrorBoundary>);
     } else {
+        if (!value) return <></>;
         const lines = value.split("\n");
         return value && value.includes("\n")
             ? <div>

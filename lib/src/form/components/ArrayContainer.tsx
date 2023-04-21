@@ -337,7 +337,7 @@ function ArrayContainerItem({
             display="flex">
             <Box ref={measureRef}
                  flexGrow={1}
-                 width={"100%"}
+                 width={"calc(100% - 48px)"}
                 // key={`field_${name}_entryValue`}
             >
                 {buildEntry(index, internalId)}
@@ -364,7 +364,12 @@ function ArrayItemOptions({
                               smallContent
                           }: {
     direction?: "row" | "column",
-    smallContent: boolean, disabled: boolean, remove: (index: number) => void, index: number, provided: any, copy: (index: number) => void
+    smallContent: boolean,
+    disabled: boolean,
+    remove: (index: number) => void,
+    index: number,
+    provided: any,
+    copy: (index: number) => void
 }) {
 
     const [anchorEl, setAnchorEl] = React.useState<any | null>(null);

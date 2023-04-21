@@ -57,6 +57,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         value,
         onFocus,
         onBlur,
+        sizeRef,
         ...other
     } = props;
 
@@ -70,6 +71,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
     });
 
     const getUpdatedState = React.useCallback(() => {
+
         const input = inputRef.current!;
 
         const containerWindow = ownerWindow(input);
@@ -82,9 +84,10 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
             };
         }
 
+        const sizeReferenceElement = sizeRef?.current ?? shadowRef.current!;
         const inputShallow = shadowRef.current!;
 
-        inputShallow.style.width = computedStyle.width;
+        sizeReferenceElement.style.width = computedStyle.width;
         inputShallow.value = input.value || props.placeholder || "x";
         if (inputShallow.value.slice(-1) === "\n") {
             // Certain fonts which overflow the line height will cause the textarea
@@ -100,11 +103,11 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
             getStyleValue(computedStyle.borderBottomWidth) + getStyleValue(computedStyle.borderTopWidth);
 
         // The height of the inner content
-        const innerHeight = inputShallow.scrollHeight;
+        const innerHeight = sizeReferenceElement.scrollHeight;
 
         // Measure height of a textarea with a single row
         inputShallow.value = "x";
-        const singleRowHeight = inputShallow.scrollHeight;
+        const singleRowHeight = sizeReferenceElement.scrollHeight;
 
         // The height of the outer content
         let outerHeight = innerHeight;
@@ -309,6 +312,8 @@ export interface TextareaAutosizeProps {
      * @ignore
      */
     value?: string[] | number | string;
+
+    sizeRef?: React.RefObject<HTMLDivElement>;
 
     onScroll?: (event: React.UIEvent<HTMLTextAreaElement>) => void;
 

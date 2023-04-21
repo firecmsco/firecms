@@ -23,7 +23,7 @@ export function LabelWithIcon({
     return (
         <Box sx={{
             display: "inline-flex",
-            paddingBottom: "2px",
+            marginBottom: "2px",
             alignItems: "center",
             gap: small ? 1 : 1.5,
             ...sx

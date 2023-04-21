@@ -109,8 +109,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
     const clearValue = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
         setValue(null);
-        referenceDialogController.close();
-    }, [referenceDialogController, setValue]);
+    }, [setValue]);
 
     const seeEntityDetails = useCallback((e: React.MouseEvent) => {
         e.stopPropagation();
@@ -169,8 +168,8 @@ export function ReferenceWidget<M extends Record<string, any>>({
                             return (
                                 <Box
                                     key={`reference_previews_${key as string}`}
-                                    mt={0.5}
-                                    mb={0.5}>
+                                    mt={0.25}
+                                    mb={0.25}>
                                     <ErrorBoundary>{
                                         entity
                                             ? <PropertyPreview
@@ -217,13 +216,15 @@ export function ReferenceWidget<M extends Record<string, any>>({
                     <Box display={"flex"}
                          flexDirection={"row"}
                          flexGrow={1}>
-
-                        <Box flexGrow={1}>
-                            <LabelWithIcon icon={<LinkIcon color={"inherit"}
-                                                           fontSize={"inherit"}/>}
-                                           title={name}
-                                           small={true}/>
-                        </Box>
+                        <LabelWithIcon icon={<LinkIcon color={"inherit"}
+                                                       fontSize={"inherit"}/>}
+                                       sx={{
+                                           flexGrow: 1,
+                                           color: "text.secondary",
+                                           ml: 1
+                                       }}
+                                       title={name}
+                        />
 
                         {entity &&
                             <Box
@@ -277,32 +278,8 @@ export function ReferenceWidget<M extends Record<string, any>>({
         padding: theme.spacing(1),
         position: "relative",
         transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-        borderTopLeftRadius: `${theme.shape.borderRadius}px`,
-        borderTopRightRadius: `${theme.shape.borderRadius}px`,
+        borderRadius: `${theme.shape.borderRadius}px`,
         backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : (theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)"),
-        // borderBottom: `1px solid ${darken(theme.palette.background.default, 0.1)}`,
-        "&::before": {
-            borderBottom: disabled
-                ? theme.palette.mode === "light" ? "1px dotted rgba(0, 0, 0, 0.42)" : "1px dotted rgba(255, 255, 255, 0.7)"
-                : theme.palette.mode === "light" ? "1px solid rgba(0, 0, 0, 0.42)" : "1px solid rgba(255, 255, 255, 0.7)",
-            left: 0,
-            bottom: 0,
-            content: "\"\\00a0\"",
-            position: "absolute",
-            right: 0,
-            transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-            pointerEvents: "none"
-        },
-        "&::after": {
-            content: "\"\"",
-            transition: "transform 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-            left: 0,
-            bottom: 0,
-            position: "absolute",
-            right: 0,
-            transform: "scaleX(0)",
-            borderBottom: disabled ? `2px dotted ${theme.palette.primary.main}` : `2px solid ${theme.palette.primary.main}`
-        },
         "&:hover": {
             cursor: disabled ? undefined : "pointer",
             backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"

@@ -43,9 +43,7 @@ export function TextInput<T extends string | number>({
     const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (inputType === "number") {
             const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
-            if (!numberValue)
-                setValue(null);
-            else if (isNaN(numberValue))
+            if (numberValue && isNaN(numberValue))
                 setValue(null);
             else if (numberValue !== undefined && numberValue !== null)
                 setValue(numberValue as T);
