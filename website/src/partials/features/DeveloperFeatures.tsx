@@ -95,24 +95,24 @@ export function DeveloperFeatures() {
 
                     </div>
 
-                    <p className="text-xl text-gray-600 dark:text-gray-200">
+                    <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                         Define your schemas and choose from
                         multiple form widgets and validation
                         options.
                     </p>
 
-                    <p className="text-xl text-gray-600 dark:text-gray-200">
+                    <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                         Use advanced features like conditional logic
                         for your fields, references to other
                         collections, markdown or file uploads
                     </p>
 
-                    <p className="text-base text-gray-600 dark:text-gray-200">
+                    <p className="text-xl text-gray-600 dark:text-gray-200">
                         FireCMS provides a powerful schema
                         definition API that allows you to
                         customise your forms and views.
                     </p>
-                    <p className="text-base text-gray-600 dark:text-gray-200">
+                    <p className="text-xl text-gray-600 dark:text-gray-200">
                         You can also use the schema definition
                         API to create custom views and
                         components.
@@ -142,13 +142,13 @@ export function DeveloperFeatures() {
                             </h3>
 
                         </div>
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             FireCMS is a headless CMS built to work
                             with every existing Firebase/Firestore
                             project. It does not
                             enforce any data structure.
                         </p>
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             Use the integrated hooks and callbacks to
                             integrate your business logic in multiple
                             ways.

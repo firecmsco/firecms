@@ -2,31 +2,38 @@ import React from "react";
 import HeroButtons from "./HeroButtons";
 
 // @ts-ignore
-import darkModeVideo from "@site/static/img/dark_mode.mp4";
+import darkModeVideo from "@site/static/img/full_screen_dark.mp4";
+// @ts-ignore
+import lightModeVideo from "@site/static/img/full_screen_light.mp4";
 import { BrowserFrame } from "../BrowserFrame";
+import { useColorMode } from "@docusaurus/theme-common";
+import { ContainerMixin } from "../utils";
 
 // const LazyThreeJSAnimationShader = React.lazy(() => import("../shape/ThreeJSAnimationShader"));
 
 function HeroHome({}) {
 
+    const { colorMode } = useColorMode();
+    const isDarkTheme = colorMode === "dark";
+
     const video = <div
-        // data-aos="fade-up"
-        data-aos="fade-up"
-        className="sm:px-24 md:px-32 flex content-center justify-center">
+        className={ContainerMixin + " flex flex-col items-center px-8 sm:px-16 content-center justify-center"}>
         <video
+            key={isDarkTheme ? "dark" : "light"}
             style={{
-                aspectRatio: 512 / 384
+                aspectRatio: 1440 / 587
             }}
-            className={"max-w-3xl my-16 rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+            className={"my-4 rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
             width="100%"
             loop autoPlay muted>
-            <source src={darkModeVideo} type="video/mp4"/>
+            <source src={isDarkTheme ? darkModeVideo : lightModeVideo}
+                    type="video/mp4"/>
         </video>
     </div>;
 
     const titleDiv = <div className="px-16 md:px-32 my-4 ">
 
-        <div className="text-center mt-20 lg:mt-40">
+        <div className="text-center mt-16 lg:mt-28">
             <h1 className="block tracking-tight text-5xl md:text-6xl font-extrabold tracking-tight leading-none uppercase">
                 <div className={"block"}>
                 <span
@@ -55,7 +62,7 @@ function HeroHome({}) {
             </h1>
 
             <h2 className={"text-3xl"}>
-                The missing piece for your project
+                The AI enabled Content Management System
             </h2>
 
             <HeroButtons/>
@@ -65,19 +72,13 @@ function HeroHome({}) {
     </div>;
 
     return (
-        <section className="relative my-16" style={{
+        <section className="relative my-12 mb-16" style={{
             isolation: "isolate"
         }}>
 
-            <div
-                className={"col-span-7 "}>
-                {titleDiv}
-            </div>
+            {titleDiv}
 
-            <div className={"col-span-5 "}>
-                {video}
-            </div>
-
+            {video}
 
         </section>
     );

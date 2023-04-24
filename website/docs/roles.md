@@ -1,6 +1,6 @@
 ---
 id: roles 
-title: Roles and permissions
+title: Authentication, roles and permissions
 ---
 
 FireCMS provides a role and permissions system used to determine which users can
@@ -21,6 +21,26 @@ const samplePermissions: Permissions = {
     delete: false
 }
 ```
+
+These roles are set at the collection level. Keep in mind that you can also use 
+a `PermissionsBuilder` to modify permissions based on the entity being edited,
+or the logged-in user.
+
+```typescript jsx
+import { PermissionsBuilder } from "firecms";
+
+const samplePermissions: PermissionsBuilder = ({
+                                                   pathSegments,
+                                                   user,
+                                                   collection,
+                                                   authController
+                                               }) => ({
+    edit: true,
+    create: true,
+    delete: Boolean(authController.extra?.roles?.admin)
+})
+```
+
 
 ### Roles config
 

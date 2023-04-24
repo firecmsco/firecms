@@ -42,7 +42,7 @@ function FeaturesTeaser() {
             {/*</h1>*/}
             <TwoColumns
                 left={
-                    <>
+                    <div className={"text-xl"}>
 
                         <div className={"flex items-center mb-3 "}>
 
@@ -57,7 +57,7 @@ function FeaturesTeaser() {
 
                         </div>
 
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             FireCMS provides all the flexibility you
                             need with the best UX.
                             Edit your collections and entities using
@@ -65,18 +65,18 @@ function FeaturesTeaser() {
                             view</b> and <b>powerful forms</b>.
                         </p>
 
-                        <p className="text-base text-gray-600 dark:text-gray-200">
+                        <p className="text-gray-600 dark:text-gray-200">
                             Map your collections and document schemas to
                             beautiful views generated automatically
                         </p>
-                        <p className="text-base text-gray-600 dark:text-gray-200">
+                        <p className="text-gray-600 dark:text-gray-200">
                             FireCMS generates CRUD views based on your
                             configuration. It is
                             easy to set up for the straight forward
                             cases and easy to
                             extend and customise.
                         </p>
-                    </>
+                    </div>
                 }
                 right={<>
                     <div className="relative flex flex-col p-4">
@@ -130,14 +130,14 @@ function FeaturesTeaser() {
 
                         </div>
 
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             FireCMS allows developers to extend it
                             in any way they need, while
                             keeping it extremely simple to kickstart a
                             new project. We use <b>sensible defaults
                             that can be overridden or extended</b>.
                         </p>
-                        <p className="text-base text-gray-600 dark:text-gray-200">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             Integrate your own custom form fields as
                             React components, as well as preview
                             widgets.

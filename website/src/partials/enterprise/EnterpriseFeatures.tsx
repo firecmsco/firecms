@@ -1,7 +1,6 @@
 import React from "react";
 import { ContainerMixin, ContainerSmallMixin } from "../utils";
 import { TwoColumns } from "../general/TwoColumns";
-import { lightningIcon } from "../icons";
 import { Panel } from "../general/Panel";
 import AutoModeIcon from "@site/static/img/icons/auto_mode.svg";
 import SettingsIcon from "@site/static/img/icons/settings.svg";
@@ -32,7 +31,7 @@ export function EnterpriseFeatures() {
                         We have built FireCMS to be flexible and customizable.
                     </p>
 
-                    <p>
+                    <p className={"text-xl "}>
                         Firestore provides a degree of scalability that is hard
                         to find in other platforms. It is a great fit for
                         companies
@@ -61,7 +60,7 @@ export function EnterpriseFeatures() {
                 </>}/>
 
             <Panel color={"gray"} includeMargin={true}>
-                <div className={"text-xl"}>
+                <div className={"max-w-7xl text-2xl md:text-5xl font-bold tracking-tight"}>
                     <p>
                         FireCMS was developed in conjunction with <strong>different
                         companies</strong>, out of the need to have a CMS that

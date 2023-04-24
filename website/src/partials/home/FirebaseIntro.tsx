@@ -41,13 +41,13 @@ function FirebaseIntro() {
                 </div>
 
                 <div
-                    className="max-w-3xl mx-auto text-center"
+                    className="max-w-4xl mx-auto text-center"
                     data-aos="fade-up"
                     data-aos-delay="100">
                     <h2 className="h1 mb-4">
                         Don't build another admin tool
                     </h2>
-                    <p className="text-xl text-gray-600 dark:text-gray-200 dark:text-gray-200">
+                    <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200 dark:text-gray-200">
                         <b>FireCMS</b> is an open source headless CMS built by <b>developers
                         for developers</b>.
                         <br/>

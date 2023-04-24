@@ -16,6 +16,8 @@ import { Panel } from "../general/Panel";
 import { TwoColumns } from "../general/TwoColumns";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
+import MagicIcon from "@site/static/img/icons/magic.svg";
+
 function OpenAITeaser() {
 
     const { colorMode } = useColorMode();
@@ -28,11 +30,24 @@ function OpenAITeaser() {
                 left={
                     <div>
 
-                        <h1 className="text-4xl tracking-tight font-extrabold md:text-5xl">
-                            <span>ChatGPT</span>
-                            <span
-                                className="text-primary">Integration</span>
-                        </h1>
+                        <p className="text-secondary uppercase font-bold ">
+                            Advanced editing
+                        </p>
+
+
+                        <div className={"flex items-center mb-4"}>
+                            <div
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-4">
+                                <MagicIcon/>
+                            </div>
+
+                            <h1 className="h1 m-0">
+                                <span>ChatGPT</span>
+                                <span
+                                    className="text-primary">Integration</span>
+                            </h1>
+                        </div>
+
                         <div className="mt-3 text-xl sm:mt-4 md:text-2xl">
                             <p>
                                 FireCMS with ChatGPT integration offers a
@@ -43,7 +58,8 @@ function OpenAITeaser() {
                                 of your data entry.
                             </p>
                             <p>
-                                Sign up now and experience the power of the
+                                Try it in your project and data <b>for
+                                free</b> and experience the power of the
                                 latest GPT
                                 models to enhance your data entry and streamline
                                 your

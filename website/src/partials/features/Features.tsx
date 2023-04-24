@@ -43,7 +43,7 @@ function Features() {
         <>
 
 
-            <section className={ContainerMixin + " my-16"}>
+            <section className={"relative mx-auto p-4 md:p-8 my-16 max-w-5xl"}>
 
                 <div
                     className="max-w-5xl md:max-w-5xl md:w-full mx-auto md:col-span-9 md:pr-4 md:pr-8 flex justify-center flex-col h-full mb-16"
@@ -57,7 +57,7 @@ function Features() {
                     </BrowserFrame>
                 </div>
 
-                <div className={"flex items-center mb-3 "}>
+                <div className={"flex items-center mb-3 max-w-5xl"}>
 
                     <div
                         className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
@@ -70,7 +70,7 @@ function Features() {
 
                 </div>
 
-                <p className="text-xl text-gray-600 dark:text-gray-200">
+                <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                     FireCMS provides all the flexibility you
                     need with the best UX.
                     Edit your collections and entities using
@@ -78,7 +78,7 @@ function Features() {
                     view</b> and <b>powerful forms</b>.
                 </p>
 
-                <p className="text-base text-gray-600 dark:text-gray-200">
+                <p className="text-xl text-gray-600 dark:text-gray-200">
                     Inline editing is very useful when you want to
                     quickly edit a few fields of a
                     document. For example, if you have a list of users,
@@ -105,7 +105,7 @@ function Features() {
 
                         </div>
 
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             FireCMS offers more than 20 built-in property
                             fields, from basic text fields to
                             complex ones, like multiple file uploads, sortable
@@ -113,13 +113,13 @@ function Features() {
                             other collections, etc.
                         </p>
 
-                        <p className="text-base text-gray-600 dark:text-gray-200">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             The form view opens by default in a convenient side
                             dialog that allows you
                             to maintain the context you are working on, when you
                             are done.
                         </p>
-                        <p className="text-base text-gray-600 dark:text-gray-200">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             FireCMS is a React CMS, and it offers multiple
                             extension points where you can
                             define your custom views. Adding additional custom
@@ -156,7 +156,7 @@ function Features() {
                             className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                             style={{
                                 maxWidth: 540,
-                                aspectRatio: 538 / 592
+                                aspectRatio: 540 / 515
                             }}
                             width="100%" loop autoPlay muted>
                             <source
@@ -181,14 +181,14 @@ function Features() {
 
                         </div>
 
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             FireCMS allows developers to extend it
                             in any way they need, while
                             keeping it extremely simple to kickstart a
                             new project. We use <b>sensible defaults
                             that can be overridden or extended</b>.
                         </p>
-                        <p className="text-base text-gray-600 dark:text-gray-200">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             Integrate your own custom form fields as
                             React components, as well as preview
                             widgets.
@@ -196,7 +196,7 @@ function Features() {
                             to your entities or in the main navigation.
                         </p>
 
-                        <p className="text-base text-gray-600 dark:text-gray-200">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             You could add:
                             <li> A dashboard for your client</li>
                             <li> A preview of the blog article you are

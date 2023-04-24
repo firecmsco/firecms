@@ -17,14 +17,13 @@ function FeaturesPanels() {
 
     return (
         <section
-            className={ContainerMixin + " px-4 relative sm:px-6 py-12 md:py-20"}>
+            className={ContainerMixin + " px-4 relative sm:px-6 py-16 md:py-28"}>
 
-
-                    <div
-                        className="flex items-center max-w-xl md:max-w-none md:w-full mx-auto mb-4"
-                        data-aos="fade-right"
-                    >
-                        <div className="md:pr-4 lg:pr-12 xl:pr-16">
+            <div
+                className="flex items-center max-w-xl md:max-w-none md:w-full mx-auto mb-4"
+                data-aos="fade-right"
+            >
+                <div className="md:pr-4 lg:pr-12 xl:pr-16">
 
                     <div className={"flex items-center mb-4"}>
 
@@ -39,7 +38,7 @@ function FeaturesPanels() {
 
                     </div>
 
-                    <p className="text-xl text-gray-600 dark:text-gray-200">
+                    <p className="text-xl text-gray-600 dark:text-gray-200 text-xl md:text-2xl">
                         FireCMS provides all the flexibility you
                         need with the best UX.
                         Edit your collections and entities using
@@ -72,7 +71,7 @@ function FeaturesPanels() {
             {/*</div>*/}
 
             <div
-                className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none">
+                className="max-w-sm mx-auto grid gap-6 md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none text-xl">
                 <div
                     data-aos="fade-up"
                     data-aos-delay="100">

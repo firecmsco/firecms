@@ -13,7 +13,7 @@ const CAMERA_FACTOR = 180;
 const TIME_DILATION = 1 / 4;
 const BRIGHT = true;
 const DISPLACEMENT_RADIO = 1.0 / 9.0;
-const DISPLACEMENT_AREA = 1.0;
+const DISPLACEMENT_AREA = 1.1;
 const SPHERE_RADIUS = 18;
 
 type SceneState = {
@@ -166,7 +166,7 @@ export default function ThreeJSAnimationShader({
 
         const material = buildMaterial(width, height, SPHERE_RADIUS, DISPLACEMENT_RADIO, DISPLACEMENT_AREA, 6.0);
 
-        const geometry = buildNightGeometry(SPHERE_RADIUS, 22);
+        const geometry = buildNightGeometry(SPHERE_RADIUS, 20);
         const mesh = new THREE.Mesh(geometry, material);
         mesh.rotation.x = .2;
         mesh.initialPositionY = 17;
@@ -226,7 +226,7 @@ export default function ThreeJSAnimationShader({
                 mesh.material.uniforms.u_opacity.value = opacity;
                 mesh.material.uniforms.u_dark_mode.value = darkMode ? 1.0 : 0.0;
                 mesh.position.y = mesh.initialPositionY + scrollRef.current / 100;
-                mesh.rotation.x = scrollRef.current / 1000;
+                mesh.rotation.x = -scrollRef.current / 1000;
             });
 
             composer.render();
@@ -503,7 +503,8 @@ function buildVertexShader() {
         //     return vec3(0.0, 0.0, 0.0);
         // }
     
-        vec3 st = v_position / u_sphere_radius;
+        // vec3 st = v_position / u_sphere_radius + vNormal * .1;
+        vec3 st =  vNormal * 1.1 + v_position / u_sphere_radius / 10.0;
     
         vec3 color;
     
@@ -511,8 +512,6 @@ function buildVertexShader() {
     
         const float minNoise = .0;
         const float maxNoise = .75;
-    
-        vec2 color_pressure = vec2(1.3, 1.3);
     
         for (int i = 1; i < u_colors_count; i++) {
     
@@ -523,14 +522,14 @@ function buildVertexShader() {
             float noise = snoise(
                 vec3(
                     st.x * 1.5 + noiseFlow,
-                    st.y * 1.5 + noiseFlow,
+                    st.y * 2.5 + noiseFlow,
                     u_time * noiseSpeed 
                 ) + noiseSeed
             );
     
             noise = clamp(minNoise, maxNoise + float(i) * 0.05, noise);
             vec3 nextColor = u_colors[i];
-            color = mix(color, nextColor, smoothstep(0.0, .9, noise));
+            color = mix(color, nextColor, smoothstep(0.0, 1.0, noise));
         }
     
         return color;
@@ -540,7 +539,7 @@ function buildVertexShader() {
     
         vUv = uv;
     
-        float s = 2.70;
+        float s = 2.50;
         float r = u_time * 0.35;
     
         vNormal = normal;
@@ -578,27 +577,40 @@ vec3 czm_saturation(vec3 rgb, float adjustment) {
     return mix(intensity, rgb, adjustment);
 }
 
+float Sigmoid (float x) {
+
+//return 1.0 / (1.0 + (exp(-(x * 14.0 - 7.0))));
+    return 1.0 / (1.0 + (exp(-(x - 0.5) * 14.0))); 
+}
+
 void main(){
     vec3 color = v_color;
-    color.rgb += v_displacement_amount * 0.4;
+    color.rgb += v_displacement_amount * 0.3;
+    color = czm_saturation(color, 1.1);
+    
     if(u_dark_mode == 1.0){
         color.g = color.g * 0.15;
         color.r = color.r * 0.35;
         color.b = color.b * 0.45;
-        // color.rg -=  (1.0 - v_position.z / u_sphere_radius) * .2;
         if(v_position.z < 0.0){
             color.rg /=  (u_sphere_radius - v_position.z) / u_sphere_radius * 1.1;
         }
     } else {
-        color.g = color.g * .95;
-        color.r = color.r * .95;
-        color.b = color.b * 1.05;
-        // if(v_position.z < .0){
-            color.rgb *= 1.0 + ((u_sphere_radius - v_position.z) / u_sphere_radius * .15);
-        // }
+        // color.g = color.g * .99;
+        // color.r = color.r * .90;
+        // color.b = color.b * 1.1;
+        
+        if(v_position.z < 0.0){
+            // color.rg *=  (u_sphere_radius - v_position.z) / u_sphere_radius * 1.4;
+        }
     }
-    color = czm_saturation(color, 1.1);
-    gl_FragColor = vec4(color,.9);
+    
+    if (v_position.z < 0.0){
+        gl_FragColor = vec4(color, Sigmoid((u_sphere_radius - v_position.z) / u_sphere_radius ) * .65);
+    } else {
+        gl_FragColor = vec4(color,.8);
+    }
+    // gl_FragColor = vec4(color,(u_sphere_radius - v_position.z) / u_sphere_radius * 1.0);
 }
 `;
 }

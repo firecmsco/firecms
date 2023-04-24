@@ -33,12 +33,12 @@ function EnterpriseTeaser() {
             <p className={"h2"}>
                 FireCMS is used by companies of all sizes
             </p>
-            <p className={"text-xl"}>
+            <p className={"text-xl md:text-2xl"}>
                 It comes with a
                 set of features that will help you build your
                 application <strong>faster</strong>.
             </p>
-            <p className={"text-base"}>
+            <p className={"text-xl"}>
                 FireCMS allows users to
                 manage and publish content to their websites or
                 applications. But not only... it can be used
@@ -47,7 +47,7 @@ function EnterpriseTeaser() {
                 upload and manage media files, and manage users and
                 permissions.
             </p>
-            <p className={"text-base"}>
+            <p className={"text-xl"}>
                 FireCMS does not enforce any data structure on your
                 side, and works out of the box with any project.
             </p>

@@ -17,7 +17,7 @@ export function EnterpriseArchitectures() {
             </Panel>
 
             <TwoColumns
-                left={<>
+                left={<div className={"text-xl "}>
 
                     <h2 className={"h2"}>It fits your architecture</h2>
                     <p className={"text-xl "}>
@@ -49,7 +49,7 @@ export function EnterpriseArchitectures() {
                         is not coupled to the rendering layer.
                     </p>
 
-                </>}
+                </div>}
                 right={<>
                     <SimpleArchitecture className={"w-full mt-8"}/>
                     <label className={"text-sm text-center m-4"}>Simple

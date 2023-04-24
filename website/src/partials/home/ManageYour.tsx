@@ -43,7 +43,7 @@ export function ManageYour() {
             />
         </div>
 
-        <div className={" mt-4 text-xl"}>
+        <div className={" mt-4 text-xl md:text-2xl"}>
             <p>
                 FireCMS is <b>more than a CMS</b>, is a fully extendable app
                 that will become the heart of your project.

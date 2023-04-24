@@ -35,7 +35,7 @@ function HeroButtons() {
             Demo
         </a>
         <a
-            className={CTAButtonMixin + "  sm:mb-0 w-full sm:w-auto rounded sm:ml-4 ml-2"}
+            className={CTAButtonMixin + "  sm:mb-0 w-full md:w-auto rounded md:ml-4 ml-2"}
             // href={"https://app.firecms.co"}
             href={useBaseUrl("docs/")}
         >

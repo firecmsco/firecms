@@ -5,6 +5,7 @@
 - Fixed login view not centered
 - Fixed popup field selection and drag and drop bug
 - Fix for skip login field
+- HTML now rendered correctly in markdown previews
 
 ## [2.0.0-beta.4] - 2023-03-30
 

@@ -14,6 +14,7 @@ import FeaturesTeaser from "../partials/home/FeaturesTeaser";
 import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
 import { FireCMSCloudIntro } from "../partials/home/FireCMSCloudIntro";
 import OpenAITeaser from "../partials/home/OpenAITeaser";
+import { IntroText } from "../partials/home/IntroText";
 
 function Home() {
     const context = useDocusaurusContext();
@@ -26,7 +27,7 @@ function Home() {
             <Head>
                 <title>FireCMS - Firestore/Firebase headless CMS</title>
             </Head>
-            <div className="flex flex-col min-h-screen overflow-hidden ">
+            <div className="flex flex-col min-h-screen overflow-hidden">
 
                 <main className="flex-grow">
 
@@ -37,6 +38,7 @@ function Home() {
                     <FirebaseIntro/>
                     <OpenAITeaser/>
 
+                    <IntroText/>
                     {/*<FireCMSCloudIntro/>*/}
 
                     <FeaturesPanels/>
