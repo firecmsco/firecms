@@ -37,9 +37,6 @@ function FeaturesTeaser() {
     return (
         <section className="relative">
 
-            {/*<h1 className={"max-w-7xl mx-auto mb-4"}>*/}
-            {/*    Batteries included*/}
-            {/*</h1>*/}
             <TwoColumns
                 left={
                     <div className={"text-xl"}>
