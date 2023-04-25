@@ -20,7 +20,8 @@ import {
     getCollectionByPathOrAlias,
     mergeDeep,
     removeInitialAndTrailingSlashes,
-    resolveCollectionPathAliases
+    resolveCollectionPathAliases,
+    resolvePermissions
 } from "../util";
 
 type BuildNavigationContextProps<UserType extends User> = {
@@ -191,7 +192,9 @@ export function useBuildNavigationContext<UserType extends User>({
 
     const buildUrlEditCollectionPath = useCallback(({
                                                         path
-                                                    }: { path: string }): string => {
+                                                    }: {
+            path: string
+        }): string => {
             return `s/edit/${encodePath(path)}`;
         },
         []);
@@ -245,6 +248,22 @@ function encodePath(input: string) {
         .replaceAll("%23", "#");
 }
 
+function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[], authController: AuthController<User>): EntityCollection[] {
+    return resolvedCollections
+        .filter((c) => {
+            if (!c.permissions) return true;
+            const resolvedPermissions = resolvePermissions(c, authController, [c.path], null,)
+            return resolvedPermissions.read !== false;
+        })
+        .map((c) => {
+            if (!c.subcollections) return c;
+            return {
+                ...c,
+                subcollections: filterOutNotAllowedCollections(c.subcollections, authController)
+            }
+        });
+}
+
 async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder, authController: AuthController, dataSource: DataSource, plugins?: FireCMSPlugin[]) {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
@@ -256,6 +275,8 @@ async function resolveCollections(collections: undefined | EntityCollection[] | 
     } else if (Array.isArray(collections)) {
         resolvedCollections = collections;
     }
+
+    resolvedCollections = filterOutNotAllowedCollections(resolvedCollections, authController);
 
     if (plugins) {
         plugins.forEach((plugin: FireCMSPlugin) => {
