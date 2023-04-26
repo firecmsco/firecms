@@ -6,6 +6,7 @@
 - Fixed popup field selection and drag and drop bug
 - Fix for skip login field
 - HTML now rendered correctly in markdown previews
+- Fix for `read` permission not being applied correctly.
 
 ## [2.0.0-beta.4] - 2023-03-30
 

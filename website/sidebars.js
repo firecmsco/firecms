@@ -18,6 +18,7 @@ module.exports = {
                 "collections/permissions",
                 "collections/exporting_data",
                 "collections/text_search",
+                "collections/dynamic_collections",
             ]
         },
         {
