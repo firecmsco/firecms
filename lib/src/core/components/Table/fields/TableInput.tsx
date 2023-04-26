@@ -29,10 +29,9 @@ export function TableInput(props: {
     // update on external value change
     useEffect(
         () => {
-            if (!focused && value !== internalValue)
+            if (value !== internalValue)
                 setInternalValue(value);
-        },
-        [value, focused]
+        }, [value]
     );
 
     const ref = React.createRef<HTMLTextAreaElement>();
