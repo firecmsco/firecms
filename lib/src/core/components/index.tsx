@@ -26,6 +26,7 @@ export * from "./FireCMSLogo";
 
 export * from "./CenteredView";
 export * from "./InfoLabel";
+export * from "./FireCMSAppBar";
 
 export * from "./fields/FilledSelect";
 export * from "./fields/TextInput";

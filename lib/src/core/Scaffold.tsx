@@ -26,7 +26,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { FireCMSAppBar } from "./internal/FireCMSAppBar";
+import { FireCMSAppBar, FireCMSAppBarProps } from "./components/FireCMSAppBar";
 import { useRestoreScroll } from "./internal/useRestoreScroll";
 
 export const DRAWER_WIDTH = 280;
@@ -67,6 +67,12 @@ export interface ScaffoldProps<ExtraDrawerProps = {}> {
      */
     autoOpenDrawer?: boolean;
 
+    /**
+     * A component that gets rendered on the upper side of the main toolbar.
+     * `toolbarExtraWidget` has no effect if this is set.
+     */
+    FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps>;
+
 }
 
 /**
@@ -90,7 +96,8 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             logo,
             toolbarExtraWidget,
             Drawer,
-            autoOpenDrawer
+            autoOpenDrawer,
+            FireCMSAppBarComponent = FireCMSAppBar,
         } = props;
 
         const theme = useTheme();
@@ -128,9 +135,9 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     pb: "env(safe-area-inset-bottom)"
                 }}>
 
-                <FireCMSAppBar title={name}
-                               drawerOpen={computedDrawerOpen}
-                               toolbarExtraWidget={toolbarExtraWidget}/>
+                <FireCMSAppBarComponent title={name}
+                                        drawerOpen={computedDrawerOpen}
+                                        toolbarExtraWidget={toolbarExtraWidget}/>
 
                 <StyledDrawer
                     onMouseEnter={setOnHoverTrue}

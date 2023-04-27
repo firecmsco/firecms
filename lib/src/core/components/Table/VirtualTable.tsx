@@ -260,7 +260,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                 alignItems: "center",
                 justifyContent: "center",
                 p: 2,
-                gap: 2
+                gap: 2,
+                height: "100%"
             }}>
                 <AssignmentIcon/>
                 <Typography>

@@ -26,7 +26,7 @@ import {
 } from "../../hooks";
 import { DRAWER_WIDTH } from "../Scaffold";
 
-interface FireCMSAppBarProps {
+export interface FireCMSAppBarProps {
     title: string;
     /**
      * A component that gets rendered on the upper side of the main toolbar
@@ -36,6 +36,15 @@ interface FireCMSAppBarProps {
     drawerOpen: boolean;
 }
 
+/**
+ * This component renders the main app bar of FireCMS.
+ * You will likely not need to use this component directly.
+ *
+ * @param title
+ * @param toolbarExtraWidget
+ * @param drawerOpen
+ * @constructor
+ */
 export const FireCMSAppBar = function FireCMSAppBar({
                                                         title,
                                                         toolbarExtraWidget,
