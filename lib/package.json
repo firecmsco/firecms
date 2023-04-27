@@ -1,6 +1,6 @@
 {
     "name": "firecms",
-    "version": "2.0.0-beta.5-pre.6",
+    "version": "2.0.0-beta.5",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/Camberi"
