@@ -9,11 +9,11 @@
     "preview": "yarn run build && vite preview --port 4174"
   },
   "dependencies": {
-    "@emotion/react": "^11.10.6",
-    "@emotion/styled": "^11.10.6",
-    "@mui/icons-material": "^5.11.11",
-    "@mui/lab": "^5.0.0-alpha.124",
-    "@mui/material": "^5.11.15",
+    "@emotion/react": "^11.10.8",
+    "@emotion/styled": "^11.10.8",
+    "@mui/icons-material": "^5.11.16",
+    "@mui/lab": "^5.0.0-alpha.128",
+    "@mui/material": "^5.12.2",
     "firecms": "workspace:lib",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
@@ -22,10 +22,10 @@
     "@module-federation/vite": "^0.2.6",
     "@softarc/native-federation": "^1.1.1",
     "@softarc/native-federation-esbuild": "^1.1.1",
-    "@types/react": "^18.0.30",
-    "@types/react-dom": "^18.0.11",
-    "@vitejs/plugin-react": "^3.1.0",
-    "typescript": "^5.0.2",
-    "vite": "^4.2.1"
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.1",
+    "@vitejs/plugin-react": "^4.0.0",
+    "typescript": "^5.0.4",
+    "vite": "^4.3.3"
   }
 }
