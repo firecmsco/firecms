@@ -1,7 +1,8 @@
+import React, { PropsWithChildren } from "react";
+
 import { FireCMSContext } from "./firecms_context";
 import { CollectionActionsProps, EntityCollection } from "./collections";
 import { User } from "./user";
-import { PropsWithChildren } from "react";
 import { FieldConfigId } from "./field_config";
 import { FieldProps, FormContext } from "./fields";
 import { CMSType, Property } from "./properties";
@@ -143,6 +144,7 @@ export interface PluginFormActionProps<UserType extends User = User> {
 
 export type PluginFieldBuilderParams<T extends CMSType = CMSType, M extends Record<string, any> = any> = {
     fieldConfigId: FieldConfigId;
+    propertyKey: string;
     property: Property<T> | ResolvedProperty<T>;
     Field: React.ComponentType<FieldProps<T, any, M>>;
     plugin: FireCMSPlugin;

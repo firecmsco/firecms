@@ -209,7 +209,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
         (fieldProps.form.submitCount > 0 || property.validation?.unique) &&
         (!Array.isArray(error) || !!error.filter((e: any) => !!e).length);
 
-    const WrappedComponent: ComponentType<FieldProps<T, any, M>> | null = useWrappedComponent(context.path, context.collection, property, Component, plugins);
+    const WrappedComponent: ComponentType<FieldProps<T, any, M>> | null = useWrappedComponent(context.path, context.collection, propertyKey, property, Component, plugins);
     const UsedComponent: ComponentType<FieldProps<T>> = WrappedComponent ?? Component;
     // const UsedComponent: ComponentType<FieldProps<T>> = Component;
 
@@ -257,9 +257,9 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
 }
 
 const shouldPropertyReRender = (property: PropertyOrBuilder | ResolvedProperty, plugins?: FireCMSPlugin[]): boolean => {
-    // if (plugins?.some((plugin) => plugin.form?.fieldBuilder)) {
-    //     return true;
-    // }
+    if (plugins?.some((plugin) => plugin.form?.fieldBuilder)) {
+        return true;
+    }
     if (isPropertyBuilder(property)) {
         return true;
     }
@@ -278,6 +278,7 @@ const shouldPropertyReRender = (property: PropertyOrBuilder | ResolvedProperty, 
 function useWrappedComponent<T extends CMSType = CMSType, M extends Record<string, any> = any>(
     path: string,
     collection: EntityCollection<M>,
+    propertyKey: string,
     property: ResolvedProperty<T>,
     Component: ComponentType<FieldProps<T, any, M>>,
     plugins?: FireCMSPlugin[]
@@ -291,6 +292,7 @@ function useWrappedComponent<T extends CMSType = CMSType, M extends Record<strin
                 if (fieldId && plugin.form?.fieldBuilder) {
                     const params: PluginFieldBuilderParams<T> = {
                         fieldConfigId: fieldId,
+                        propertyKey,
                         property,
                         Field: Component,
                         plugin,

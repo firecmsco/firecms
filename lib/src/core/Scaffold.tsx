@@ -18,6 +18,8 @@ import { useFireCMSContext, useNavigationContext } from "../hooks";
 import {
     CircularProgressCenter,
     ErrorBoundary,
+    FireCMSAppBar,
+    FireCMSAppBarProps,
     FireCMSLogo
 } from "./components";
 import { CSSObject, styled, Theme } from "@mui/material/styles";
@@ -26,7 +28,6 @@ import MenuIcon from "@mui/icons-material/Menu";
 import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { FireCMSAppBar, FireCMSAppBarProps } from "./components/FireCMSAppBar";
 import { useRestoreScroll } from "./internal/useRestoreScroll";
 
 export const DRAWER_WIDTH = 280;
@@ -172,6 +173,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                         sx={{
                             flexGrow: 1,
                             m: largeLayout ? 2 : 0,
+                            mt: largeLayout ? 0 : 1,
                             borderRadius: largeLayout ? "12px" : undefined,
                             border: largeLayout ? `1px solid ${theme.palette.divider}` : undefined,
                             height: "100%",
