@@ -20,10 +20,10 @@ export function DataEnhancementHero() {
                 </h1>
                 <div className="mt-3 text-xl sm:mt-4 md:text-2xl">
                     <p>
-                        FireCMS with ChatGPT integration offers a powerful
-                        autofill
-                        feature that can save you time and increase the accuracy
-                        of your data entry.
+                        Discover the power of FireCMS with ChatGPT integration,
+                        now available for you to try out for FREE! Experience a
+                        game-changing autofill feature that not only saves you
+                        time but also increases the accuracy of your data entry.
                     </p>
                     <p>
                         Sign up now and experience the power of the latest GPT

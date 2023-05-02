@@ -10,7 +10,6 @@ import RemoveIcon from "@site/static/img/icons/remove.svg";
 import ScheduleIcon from "@site/static/img/icons/schedule.svg";
 
 
-
 const data = [{
         feature: "Unlimited projects",
         selfHosted: "Yes",
@@ -47,7 +46,7 @@ const data = [{
         cloud: "Yes",
         cloudPlus: "Yes",
         cloudPro: "Yes"
-    },  {
+    }, {
         feature: "Data export",
         selfHosted: "Yes",
         cloud: "Yes",
@@ -60,12 +59,18 @@ const data = [{
         cloudPlus: "Yes",
         cloudPro: "Yes"
     }, {
+        feature: "OpenAI data augmentation",
+        selfHosted: "With subscription",
+        cloud: "No",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
+    }, {
         feature: "Support",
         selfHosted: "Enterprise",
         cloud: "No",
         cloudPlus: "Yes",
         cloudPro: "Yes"
-    },{
+    }, {
         feature: "Text search",
         selfHosted: "Dev managed",
         cloud: "No",
@@ -104,12 +109,6 @@ const data = [{
     }, {
         feature: "Theme and logo customisation",
         selfHosted: "Yes",
-        cloud: "No",
-        cloudPlus: "No",
-        cloudPro: "WIP"
-    }, {
-        feature: "AI data augmentation",
-        selfHosted: "No",
         cloud: "No",
         cloudPlus: "No",
         cloudPro: "WIP"
@@ -225,8 +224,9 @@ export function VersionsComparison() {
                     className={" table-cell p-0 border-none"}
                     colSpan={3}
                 >
-                    <a className={CTAButtonMixin + " w-full"} href={"https://app.firecms.co"}>
-                    Get started
+                    <a className={CTAButtonMixin + " w-full"}
+                       href={"https://app.firecms.co"}>
+                        Get started
                     </a>
                 </th>
                 <a
@@ -263,7 +263,7 @@ function getEntryClass(value: React.ReactNode) {
         return "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100 font-bold";
     if (value === "Plus" || value === "Enterprise")
         return "bg-blue-100 text-blue-900 dark:bg-blue-900 dark:text-blue-100";
-    if(value === "WIP")
+    if (value === "WIP")
         return "bg-yellow-100 text-yellow-900 dark:bg-yellow-900 dark:text-yellow-100";
     return "";
 }

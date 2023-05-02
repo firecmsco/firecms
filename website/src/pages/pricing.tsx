@@ -5,8 +5,11 @@ import { Hero } from "../partials/general/Hero";
 import { VersionsComparison } from "../partials/pricing/VersionsComparison";
 import { SelfHosted } from "../partials/pricing/SelfHosted";
 import { FireCMSCloudVersions } from "../partials/pricing/FireCMSCloudVersions";
+import { VersionsToggle } from "../partials/pricing/VersionsToggle";
 
 function FeaturesPage() {
+
+    const [version, setVersion] = React.useState<"cloud" | "self-hosted">("cloud");
 
     return (
         <Layout
@@ -34,8 +37,10 @@ function FeaturesPage() {
                 // </a>}
             />
 
-            <FireCMSCloudVersions/>
-            <SelfHosted/>
+            <VersionsToggle value={version} onSelect={setVersion}/>
+
+            {version === "cloud" && <FireCMSCloudVersions/>}
+            {version === "self-hosted" && <SelfHosted/>}
             <VersionsComparison/>
 
 

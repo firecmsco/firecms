@@ -11,7 +11,7 @@ export function FireCMSCloudVersions() {
 
     const freeTier = (
         <div
-            className="h-full max-w-sm p-6 bg-gray-50 border border-solid border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col">
+            className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
 
             <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Free
@@ -39,7 +39,7 @@ export function FireCMSCloudVersions() {
 
     const plusTier = (
         <div
-            className="h-full max-w-sm p-6 bg-gray-50 border border-solid border-primary rounded-lg shadow dark:bg-gray-800 flex flex-col">
+            className="h-full max-w-sm p-6 border border-solid border-primary rounded-lg shadow-lg flex flex-col">
 
             <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Plus
@@ -66,7 +66,7 @@ export function FireCMSCloudVersions() {
 
     const proTier = (
         <div
-            className="h-full max-w-sm p-6 bg-gray-50 border border-solid border-gray-200 rounded-lg shadow dark:bg-gray-800 dark:border-gray-700 flex flex-col">
+            className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
 
             <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Pro
@@ -100,6 +100,7 @@ export function FireCMSCloudVersions() {
     return <section
         className={ContainerMixin + " flex flex-col items-center my-16 text-lg"}>
 
+
         <h2 className={"text-3xl md:text-4xl font-bold mb-4 text-center"}>
             Full no-code solution
         </h2>
@@ -111,6 +112,7 @@ export function FireCMSCloudVersions() {
             expert support, you'll have everything you need to take your project
             to the next level.
         </p>
+
 
         <ThreeColumns
             left={freeTier}
@@ -130,3 +132,4 @@ export function FireCMSCloudVersions() {
     </section>;
 
 }
+
