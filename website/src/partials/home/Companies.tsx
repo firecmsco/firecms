@@ -53,10 +53,22 @@ export function Companies() {
                 rel="noopener noreferrer"
                 href={"https://www.mindswitch.me/"}>
                 {isDarkTheme ?
-                    <MindSwitchLogoDark className="w-52 h-min aspect-auto m-4"/> :
+                    <MindSwitchLogoDark
+                        className="w-52 h-min aspect-auto m-4"/> :
                     <MindSwitchLogo
                         className="w-52 h-min aspect-auto m-4"/>}
             </a>
+        </div>
+        <div
+            className={" text-gray-500 dark:text-gray-400 text-center text-sm"}>
+            To get your project featured here, please contact us at <a
+            className={"font-bold text-gray-500 dark:text-gray-400"}
+            href="mailto:hello@firecms.co?subject=FireCMS%20feature%20project"
+            rel="noopener noreferrer"
+            target="_blank"
+        >
+            hello@firecms.co
+        </a>
         </div>
     </Panel>;
 

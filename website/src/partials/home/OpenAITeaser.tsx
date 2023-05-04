@@ -42,7 +42,7 @@ function OpenAITeaser() {
                             </div>
 
                             <h1 className="h1 m-0">
-                                <span>ChatGPT</span>
+                                <span>ChatGPT </span>
                                 <span
                                     className="text-primary">Integration</span>
                             </h1>

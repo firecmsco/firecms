@@ -84,7 +84,6 @@ export function OpenAIInstructionsActions() {
                     <Typography gutterBottom>
                         If you are interested in adding this plugin to your own
                         project, please contact us at <a
-                        className={"btn mx-auto sm:mb-0 font-bold py-4 bg-black text-white font-bold hover:text-white uppercase border border-solid w-full sm:w-auto rounded"}
                         href="mailto:hello@firecms.co?subject=FireCMS%20data%20enhancement%20plugin"
                         rel="noopener noreferrer"
                         target="_blank"
