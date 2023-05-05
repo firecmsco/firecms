@@ -241,7 +241,7 @@ module.exports = {
                 //     ]
                 // },
                 gtag: {
-                    trackingID: process.env.REACT_APP_GTAG_ID
+                    trackingID: process.env.REACT_APP_GTAG_ID ?? "G-D4DQQCW88S"
                 },
                 sitemap: {
                     changefreq: 'weekly',
