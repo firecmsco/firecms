@@ -1,6 +1,6 @@
 {
     "name": "firecms",
-    "version": "2.0.0-beta.5",
+    "version": "2.0.0-beta.6-pre.1",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/Camberi"
@@ -18,7 +18,8 @@
     "exports": {
         ".": {
             "import": "./dist/index.es.js",
-            "require": "./dist/index.umd.js"
+            "require": "./dist/index.umd.js",
+            "types": "./dist/index.d.ts"
         }
     },
     "keywords": [
@@ -45,7 +46,7 @@
         "@date-io/date-fns": "^2.16.0",
         "@fontsource/ibm-plex-mono": "^4.5.13",
         "@hello-pangea/dnd": "^16.2.0",
-        "date-fns": "^2.29.3",
+        "date-fns": "^2.30.0",
         "flexsearch": "^0.7.31",
         "formik": "^2.2.9",
         "history": "^5.3.0",
@@ -87,20 +88,20 @@
         "@emotion/react": "^11.10.8",
         "@emotion/styled": "^11.10.8",
         "@mui/icons-material": "^5.11.16",
-        "@mui/lab": "^5.0.0-alpha.128",
-        "@mui/material": "^5.12.2",
+        "@mui/lab": "^5.0.0-alpha.129",
+        "@mui/material": "^5.12.3",
         "@mui/x-date-pickers": "^5.0.20",
         "@testing-library/jest-dom": "^5.16.5",
         "@testing-library/react": "^14.0.0",
         "@testing-library/user-event": "^14.4.3",
         "@types/jest": "^29.5.1",
-        "@types/node": "^18.16.2",
+        "@types/node": "^18.16.4",
         "@types/object-hash": "^3.0.2",
-        "@types/react": "^18.2.0",
-        "@types/react-dom": "^18.2.1",
+        "@types/react": "^18.2.5",
+        "@types/react-dom": "^18.2.4",
         "@types/react-measure": "^2.0.8",
-        "@typescript-eslint/eslint-plugin": "^5.59.1",
-        "@typescript-eslint/parser": "^5.59.1",
+        "@typescript-eslint/eslint-plugin": "^5.59.2",
+        "@typescript-eslint/parser": "^5.59.2",
         "@vitejs/plugin-react": "^4.0.0",
         "algoliasearch": "^4.17.0",
         "cross-env": "^7.0.3",
@@ -116,11 +117,11 @@
         "npm-run-all": "^4.1.5",
         "react": "^18.2.0",
         "react-dom": "^18.2.0",
-        "react-router": "^6.10.0",
-        "react-router-dom": "^6.10.0",
+        "react-router": "^6.11.1",
+        "react-router-dom": "^6.11.1",
         "tsd": "^0.28.1",
         "typescript": "^5.0.4",
-        "vite": "^4.3.3"
+        "vite": "^4.3.5"
     },
     "files": [
         "dist"
