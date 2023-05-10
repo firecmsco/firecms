@@ -54,30 +54,30 @@ function FirebaseIntro() {
                         Get a back-office app/dashboard for your Firebase project in
                         <b> no time</b>.
                     </p>
-                    <div
-                        className="mt-6 flex justify-center items-center flex-wrap"
-                    >
+                    {/*<div*/}
+                    {/*    className="mt-6 flex justify-center items-center flex-wrap"*/}
+                    {/*>*/}
 
-                        <iframe className="mr-1 mb-2"
-                                style={{transform: "scale(1.3)"}}
-                                src="https://ghbtns.com/github-btn.html?user=Camberi&repo=FireCMS&type=star&count=true&size=large"
-                                frameBorder="0" scrolling="0" width="160"
-                                height="35" title="GitHub"/>
+                    {/*    <iframe className="mr-1 mb-2"*/}
+                    {/*            style={{transform: "scale(1.3)"}}*/}
+                    {/*            src="https://ghbtns.com/github-btn.html?user=Camberi&repo=FireCMS&type=star&count=true&size=large"*/}
+                    {/*            frameBorder="0" scrolling="0" width="160"*/}
+                    {/*            height="35" title="GitHub"/>*/}
 
-                        <a className="ml-1 mb-2"
-                           rel="noopener noreferrer"
-                           href="https://www.producthunt.com/posts/firecms?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-firecms"
-                           target="_blank">
-                            <img
-                                src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=297888&theme=dark"
-                                alt="FireCMS - An open source CMS and admin panel based on Firestore | Product Hunt"
-                                style={{
-                                    width: 190, height: "40px"
-                                }}
-                                width="190"
-                                height="40"/>
-                        </a>
-                    </div>
+                    {/*    <a className="ml-1 mb-2"*/}
+                    {/*       rel="noopener noreferrer"*/}
+                    {/*       href="https://www.producthunt.com/posts/firecms?utm_source=badge-featured&utm_medium=badge&utm_souce=badge-firecms"*/}
+                    {/*       target="_blank">*/}
+                    {/*        <img*/}
+                    {/*            src="https://api.producthunt.com/widgets/embed-image/v1/featured.svg?post_id=297888&theme=dark"*/}
+                    {/*            alt="FireCMS - An open source CMS and admin panel based on Firestore | Product Hunt"*/}
+                    {/*            style={{*/}
+                    {/*                width: 190, height: "40px"*/}
+                    {/*            }}*/}
+                    {/*            width="190"*/}
+                    {/*            height="40"/>*/}
+                    {/*    </a>*/}
+                    {/*</div>*/}
                 </div>
             </div>
         </section>

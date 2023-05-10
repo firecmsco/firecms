@@ -106,12 +106,25 @@ module.exports = {
                     dropdownActiveClassDisabled: true,
                 },
                 {
-                    href: "https://github.com/Camberi/firecms",
-                    // label: 'GitHub',
-                    className: "header-github-link",
-                    "aria-label": "GitHub repository",
-                    position: "right"
+                    type: "html",
+                    position: "right",
+                    value: `
+                    <iframe 
+                    style="    transform: translate(0px, 4px);"
+                                src="https://ghbtns.com/github-btn.html?user=Camberi&repo=FireCMS&type=star&count=true&size=large"
+                                frameBorder="0" scrolling="0"
+                                width="140"
+                                height="32" 
+                                title="GitHub"/>
+                    `
                 },
+                // {
+                //     href: "https://github.com/Camberi/firecms",
+                //     // label: 'GitHub',
+                //     className: "header-github-link",
+                //     "aria-label": "GitHub repository",
+                //     position: "right"
+                // },
                 {
                     to: "https://demo.firecms.co",
                     label: "Demo",
@@ -227,8 +240,6 @@ module.exports = {
                         },
                         current: {
                             label: "2.0.0-beta",
-                            // path: "2.0.0",
-                            // banner: "unreleased"
                         }
                     },
                 },

@@ -18,13 +18,18 @@ function FeaturesPage() {
                     <Hero
                         title={
                             <>
-                                <span className="block lg:inline">Features</span>
+                                <span
+                                    className="block lg:inline">Features</span>
                             </>}
                         subtitle={
                             <>
                                 <p>
-                                    Empowering Your Content Management: Easily Create, Edit, and Publish with a CMS that both <b>content managers and developers will love</b>
-                                </p> 
+                                    Empowering Your Content Management: Easily
+                                    Create, Edit, and Publish with a CMS that
+                                    both <b>content managers and developers will
+                                    love</b>.
+
+                                </p>
                             </>
                         }
                     />

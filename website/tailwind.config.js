@@ -46,7 +46,7 @@ module.exports = {
                 }
             },
             maxWidth: {
-                '7xl': '90rem',
+                '7xl': '85rem',
             },
             boxShadow: {
                 xs: "0 0 0 1px rgba(0, 0, 0, 0.16)",

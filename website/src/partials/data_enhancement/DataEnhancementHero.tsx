@@ -21,7 +21,7 @@ export function DataEnhancementHero() {
                 <div className="mt-3 text-xl sm:mt-4 md:text-2xl">
                     <p>
                         Discover the power of FireCMS with ChatGPT integration,
-                        now available for you to try out for FREE! Experience a
+                        now available for you to try out for <b>FREE</b>! Experience a
                         game-changing autofill feature that not only saves you
                         time but also increases the accuracy of your data entry.
                     </p>

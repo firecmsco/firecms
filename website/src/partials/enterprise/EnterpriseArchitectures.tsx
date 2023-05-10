@@ -17,13 +17,9 @@ export function EnterpriseArchitectures() {
             </Panel>
 
             <TwoColumns
-                left={<div className={"text-xl "}>
+                left={<div className={"text-2xl "}>
 
                     <h2 className={"h2"}>It fits your architecture</h2>
-                    <p className={"text-xl "}>
-                        Every company needs to manage content in different ways.
-                    </p>
-
                     <p>
                         We have developed the full stack for multiple
                         successful companies. We have experience with different

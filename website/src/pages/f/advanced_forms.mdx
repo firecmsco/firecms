@@ -10,13 +10,15 @@ title: Fields and forms customization
 Depending on your business logic, you might be fine with using the default
 fields provided by FireCMS. We include around **20 fields** that should cover most
 of your needs. Ranging from simple text fields or selects to complex ones like
-file uploaders, date pickers or reference fields, we cover all the bases.
+file uploaders, date pickers or reference fields, we cover all the basic use cases.
+We also provide hundreds of validation options and the ability to create
+custom validators.
 
 But sometimes, you might need to create a more complex editing form and create
 specific fields that are not covered by the default ones. In this case, you can
 create your own custom fields and use them in your entity collection.
 
-## Physical exercises
+## Custom fields to fit your needs
 
 [MedicalMotion](https://www.medicalmotion.com/) is a platform that generates
 customised physiotherapy treatments.
@@ -48,9 +50,9 @@ bodyParts: ["shoulder", "elbow"]
 
 This is how the affected body parts of an exercise field works:
 
-<video style={{maxWidth:"100%", margin:"16px 0px 32px", alignSelf:"center"}}
-loop autoPlay muted>
-<source src="/img/custom_fields_dark_wide.mp4" type="video/mp4"/>
+<video style={{maxWidth: "100%", margin: "16px 0px 32px", alignSelf: "center"}}
+       loop autoPlay muted>
+    <source src="/img/custom_fields_dark_wide.mp4" type="video/mp4"/>
 </video>
 
 The field is defined as a Component that receives `FieldProps` as a prop, and
