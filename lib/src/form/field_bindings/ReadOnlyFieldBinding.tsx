@@ -72,7 +72,7 @@ export function ReadOnlyFieldBinding({
 
             {showError &&
                 typeof error === "string" &&
-                <FormHelperText>{error}</FormHelperText>}
+                <FormHelperText error={true}>{error}</FormHelperText>}
 
             {includeDescription &&
                 <FieldDescription property={property}/>}

@@ -74,7 +74,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                 <FieldDescription property={property}/>}
 
             {showError && typeof error === "string" &&
-                <FormHelperText>{error}</FormHelperText>}
+                <FormHelperText error={true}>{error}</FormHelperText>}
 
         </FormControl>
     );

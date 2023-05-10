@@ -97,7 +97,7 @@ export function MarkdownFieldBinding({
                 <Box flexGrow={1}>
                     {showError &&
                         typeof error === "string" &&
-                        <FormHelperText>{error}</FormHelperText>}
+                        <FormHelperText error={true}>{error}</FormHelperText>}
                     {includeDescription &&
                         <FieldDescription property={property}/>}
                 </Box>

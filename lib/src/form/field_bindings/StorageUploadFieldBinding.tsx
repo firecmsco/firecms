@@ -186,7 +186,7 @@ export function StorageUploadFieldBinding({
             {includeDescription &&
                 <FieldDescription property={property}/>}
 
-            {showError && <FormHelperText>{error}</FormHelperText>}
+            {showError && <FormHelperText error={true}>{error}</FormHelperText>}
 
         </FormControl>
     );

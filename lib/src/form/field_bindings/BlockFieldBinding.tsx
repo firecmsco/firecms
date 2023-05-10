@@ -108,7 +108,7 @@ export function BlockFieldBinding<T extends Array<any>>({
 
             {showError &&
                 typeof error === "string" &&
-                <FormHelperText>{error}</FormHelperText>}
+                <FormHelperText error={true}>{error}</FormHelperText>}
 
         </FormControl>
     );

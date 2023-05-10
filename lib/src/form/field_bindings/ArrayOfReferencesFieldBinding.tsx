@@ -153,7 +153,7 @@ export function ArrayOfReferencesFieldBinding({
 
                 {showError &&
                     typeof error === "string" &&
-                    <FormHelperText>{error}</FormHelperText>}
+                    <FormHelperText error={true}>{error}</FormHelperText>}
 
             </FormControl>
         </>

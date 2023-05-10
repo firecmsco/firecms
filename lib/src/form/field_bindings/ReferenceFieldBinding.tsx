@@ -66,7 +66,7 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
             {includeDescription &&
                 <FieldDescription property={property}/>}
 
-            {showError && <FormHelperText>{error}</FormHelperText>}
+            {showError && <FormHelperText error={true}>{error}</FormHelperText>}
 
         </FormControl>
     );

@@ -90,10 +90,8 @@ export function RepeatFieldBinding<T extends Array<any>>({
                 <FieldDescription property={property}/>
             }
 
-            {
-                showError && typeof error === "string" &&
-                <FormHelperText>{error}</FormHelperText>
-            }
+            {showError && typeof error === "string" &&
+                <FormHelperText error={true}>{error}</FormHelperText>}
 
         </FormControl>
     )

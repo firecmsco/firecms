@@ -93,64 +93,11 @@ export function TextFieldBinding<T extends string | number>({
                 disabled={disabled}
                 endAdornment={
                     property.clearable && <IconButton
-                        // sx={{
-                        //     position: "absolute",
-                        //     top: 0,
-                        //     right: "16px"
-                        // }}
                         onClick={handleClearClick}>
                         <ClearIcon/>
                     </IconButton>
                 }
                 error={showError ? error : undefined}/>
-            {/*<FormControl*/}
-            {/*    variant="filled"*/}
-            {/*    error={showError}*/}
-            {/*    disabled={valueIsInfinity}*/}
-            {/*    sx={{*/}
-            {/*        // "& .MuiInputLabel-formControl": {*/}
-            {/*        //     mt: 1 / 2,*/}
-            {/*        //     ml: 1 / 2*/}
-            {/*        // },*/}
-            {/*        "& .MuiInputLabel-shrink": {*/}
-            {/*            mt: -1 / 4*/}
-            {/*        }*/}
-            {/*    }}*/}
-            {/*    fullWidth>*/}
-
-            {/*    <InputLabel sx={{ top: "4px" }}>*/}
-            {/*        <LabelWithIcon icon={getIconForProperty(property)}*/}
-            {/*                       title={property.name}/>*/}
-            {/*    </InputLabel>*/}
-
-            {/*    <FilledInput*/}
-            {/*        sx={(theme) => ({*/}
-            {/*            minHeight: "64px",*/}
-            {/*            borderRadius: `${theme.shape.borderRadius}px`*/}
-            {/*        })}*/}
-            {/*        autoFocus={autoFocus}*/}
-            {/*        type={inputType}*/}
-            {/*        multiline={isMultiline}*/}
-            {/*        disableUnderline={true}*/}
-            {/*        inputProps={{*/}
-            {/*            rows: 4*/}
-            {/*        }}*/}
-            {/*        endAdornment={*/}
-            {/*            property.clearable && <IconButton*/}
-            {/*                sx={{*/}
-            {/*                    position: "absolute",*/}
-            {/*                    right: "16px"*/}
-            {/*                }}*/}
-            {/*                onClick={handleClearClick}>*/}
-            {/*                <ClearIcon/>*/}
-            {/*            </IconButton>*/}
-            {/*        }*/}
-            {/*        value={valueIsInfinity ? "Infinity" : (value ?? "")}*/}
-            {/*        disabled={disabled}*/}
-            {/*        onChange={(evt) => {*/}
-            {/*            updateValue(evt.target.value as T);*/}
-            {/*        }}*/}
-            {/*    />*/}
 
             {(showError || includeDescription || allowInfinity) &&
                 <Box display={"flex"}
@@ -158,7 +105,7 @@ export function TextFieldBinding<T extends string | number>({
                 >
 
                     <Box flexGrow={1}>
-                        {showError && <FormHelperText>{error}</FormHelperText>}
+                        {showError && <FormHelperText error={true}>{error}</FormHelperText>}
 
                         {includeDescription &&
                             <FieldDescription property={property}/>}
