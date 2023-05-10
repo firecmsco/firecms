@@ -16,7 +16,7 @@
     "scripts": {
         "dev": "cd example && yarn dev",
         "saas": "cd saas && yarn dev",
-        "website": "cd website && yarn start",
+        "web": "cd website && yarn start",
         "preview": "cd example && yarn preview",
         "deploy:saas": "cd saas && yarn deploy:staging",
         "deploy:saas:prod": "cd saas && yarn deploy:prod",
