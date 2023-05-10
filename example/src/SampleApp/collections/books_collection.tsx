@@ -70,7 +70,8 @@ export const booksCollection = buildCollection({
         },
         published_year: {
             name: "Published Year",
-            dataType: "number"
+            dataType: "number",
+            validation: { integer: true, min: 0 }
         },
         num_pages: {
             name: "Num pages",
