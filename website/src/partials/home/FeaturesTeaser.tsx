@@ -49,29 +49,28 @@ function FeaturesTeaser() {
                             </div>
 
                             <h3 className="h3 m-0">
-                                Powerful editing
+                                Advanced Editing Features
                             </h3>
 
                         </div>
 
                         <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
-                            FireCMS provides all the flexibility you
-                            need with the best UX.
-                            Edit your collections and entities using
-                            both a <b>spreadsheet
-                            view</b> and <b>powerful forms</b>.
+                            FireCMS offers both flexibility and an excellent
+                            user experience. Edit your collections and entities
+                            using a user-friendly <b>spreadsheet view and
+                            effective
+                            forms</b>.
                         </p>
 
                         <p className="text-gray-600 dark:text-gray-200">
-                            Map your collections and document schemas to
-                            beautiful views generated automatically
+                            Generate Attractive Views from Your Schemas
+                            Automatically
                         </p>
                         <p className="text-gray-600 dark:text-gray-200">
-                            FireCMS generates CRUD views based on your
-                            configuration. It is
-                            easy to set up for the straight forward
-                            cases and easy to
-                            extend and customise.
+                            FireCMS creates CRUD views based on your
+                            configurations with ease. It's simple to set up for
+                            common cases and just as easy to extend and
+                            customize to fit your specific needs.
                         </p>
                     </div>
                 }
@@ -119,27 +118,27 @@ function FeaturesTeaser() {
 
                             <div
                                 className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 ">
-                               <SettingsIcon/>
+                                <SettingsIcon/>
                             </div>
                             <h3 className="h3 m-0 ml-3 ">
-                                Easy to customise
+                                Simple and Flexible Customization
                             </h3>
 
                         </div>
 
                         <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
-                            FireCMS allows developers to extend it
-                            in any way they need, while
-                            keeping it extremely simple to kickstart a
-                            new project. We use <b>sensible defaults
-                            that can be overridden or extended</b>.
+                            FireCMS offers developers an easy way to adapt the
+                            platform to their specific needs while keeping the
+                            <b>initial setup simple</b>. Our practical defaults
+                            can be
+                            conveniently <b>overridden or expanded</b>.
                         </p>
                         <p className="text-xl text-gray-600 dark:text-gray-200">
-                            Integrate your own custom form fields as
-                            React components, as well as preview
-                            widgets.
-                            You can also define complete views related
-                            to your entities or in the main navigation.
+                            Effortlessly integrate your custom form fields as
+                            React components and preview widgets. Moreover, you
+                            can create detailed views related to your entities
+                            or within the main navigation for a truly customized
+                            experience.
                         </p>
 
                     </>

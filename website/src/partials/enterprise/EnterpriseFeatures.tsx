@@ -21,23 +21,24 @@ export function EnterpriseFeatures() {
                             className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
                             <AutoModeIcon width={"20px"} height={"20px"}/>
                         </div>
-                        <h2 className={"h2 m-0"}>Why FireCMS?</h2>
+                        <h2 className={"h2 m-0"}>Why Choose FireCMS?</h2>
 
                     </div>
 
 
                     <p className={"text-2xl "}>
-                        Every company needs to manage content in different ways.
-                        We have built FireCMS to be flexible and customizable.
+                        Every organization has unique content management
+                        requirements. We've designed FireCMS with flexibility
+                        and customization in mind to cater to these diverse
+                        needs.
                     </p>
 
                     <p className={"text-2xl "}>
-                        Firestore provides a degree of scalability that is hard
-                        to find in other platforms. It is a great fit for
-                        companies
-                        that are looking to build a product that can scale to
-                        millions of users. Without the need to worry about the
-                        infrastructure.
+                        Firebase offers exceptional scalability, making it an
+                        ideal choice for companies aiming to build products that
+                        can accommodate millions of users. With Firebase/Firestore, you
+                        can focus on your product without concerns about
+                        infrastructure limitations.
                     </p>
                 </>}
                 right={<>

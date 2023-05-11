@@ -19,30 +19,33 @@ export function EnterpriseArchitectures() {
             <TwoColumns
                 left={<div className={"text-2xl "}>
 
-                    <h2 className={"h2"}>It fits your architecture</h2>
+
+                    <h2 className={"h2"}>Adaptable to Your Architecture</h2>
                     <p>
-                        We have developed the full stack for multiple
-                        successful companies. We have experience with different
-                        architectures and we can help you build a scalable
-                        infrastructure.
+                        Our team has developed comprehensive solutions for
+                        numerous successful companies and gained expertise in
+                        various architectures. We can assist you in building a
+                        scalable infrastructure.
+
                     </p>
                     <p>
-                        You can fit Firebase and FireCMS to your existing
-                        architecture or we can help you build a new one.
+                        Firebase and FireCMS can be integrated into your
+                        existing architecture, or we can help you develop a new
+                        one.
+
                     </p>
                     <p>
-                        All the data and services are hosted in your own
-                        Firebase
-                        project. You can use your own authentication and
-                        authorization system.
+                        Your data and services will be hosted in your own
+                        Firebase project, allowing you to implement your own
+                        authentication and authorization system.
+
                     </p>
 
                     <p>
-                        FireCMS is a headless CMS, which means that it can be
-                        used
-                        with <b>any frontend framework</b>. Unlike traditional
-                        CMSs, it
-                        is not coupled to the rendering layer.
+                        As a headless CMS, FireCMS is compatible with <b>any
+                        frontend framework</b> and is not limited to a specific
+                        rendering layer, unlike traditional CMSs.
+
                     </p>
 
                 </div>}

@@ -182,18 +182,18 @@ function Features() {
                         </div>
 
                         <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
-                            FireCMS allows developers to extend it
-                            in any way they need, while
-                            keeping it extremely simple to kickstart a
-                            new project. We use <b>sensible defaults
-                            that can be overridden or extended</b>.
+                            FireCMS offers developers an easy way to adapt the
+                            platform to their specific needs while keeping the
+                            <b>initial setup simple</b>. Our practical defaults
+                            can be
+                            conveniently <b>overridden or expanded</b>.
                         </p>
                         <p className="text-xl text-gray-600 dark:text-gray-200">
-                            Integrate your own custom form fields as
-                            React components, as well as preview
-                            widgets.
-                            You can also define complete views related
-                            to your entities or in the main navigation.
+                            Effortlessly integrate your custom form fields as
+                            React components and preview widgets. Moreover, you
+                            can create detailed views related to your entities
+                            or within the main navigation for a truly customized
+                            experience.
                         </p>
 
                         <p className="text-xl text-gray-600 dark:text-gray-200">
@@ -203,9 +203,7 @@ function Features() {
                                 writing
                             </li>
                             <li> A representation of how the content is
-                                going to
-                                look like in your
-                                app or website.
+                                going to look like in your app or website.
                             </li>
                             <li> And everything you can imagine.</li>
                         </p>

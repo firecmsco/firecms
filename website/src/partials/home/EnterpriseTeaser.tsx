@@ -34,22 +34,21 @@ function EnterpriseTeaser() {
                 FireCMS is used by companies of all sizes
             </p>
             <p className={"text-xl md:text-2xl"}>
-                It comes with a
-                set of features that will help you build your
-                application <strong>faster</strong>.
+                <b>Boost</b> your app development speed with a suite of helpful
+                features.
+
             </p>
             <p className={"text-xl"}>
-                FireCMS allows users to
-                manage and publish content to their websites or
-                applications. But not only... it can be used
-                internally in teams to manage data and workflows.
-                With FireCMS, users can create and edit documents,
-                upload and manage media files, and manage users and
-                permissions.
+                FireCMS enables users to efficiently manage and publish content
+                for their websites or applications. Additionally, it can be
+                utilized internally by teams for streamlined data management and
+                workflow organization. With FireCMS, users can effortlessly <b>create
+                and edit documents, upload and manage media files, and
+                oversee users and permissions.</b>
             </p>
             <p className={"text-xl"}>
-                FireCMS does not enforce any data structure on your
-                side, and works out of the box with any project.
+                FireCMS imposes no data structure restrictions, allowing
+                seamless integration with any project right from the start.
             </p>
             <a
                 className={CTAOutlinedButtonMixin}

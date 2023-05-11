@@ -79,10 +79,10 @@ function FeaturesPanels() {
                         className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
                         {iconStars}
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                            Data consistency
+                            Consistent Data Management
                         </h4>
                         <p className="text-gray-600 dark:text-gray-200 text-center">
-                            Define schemas for your data types and
+                            Establish schemas for your data types and set
                             validation options
                         </p>
                     </div>
@@ -95,11 +95,11 @@ function FeaturesPanels() {
                         className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
                         {gridIcon}
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                            Advanced editing
+                            Sophisticated Editing Tools
                         </h4>
                         <p className="text-gray-600 dark:text-gray-200 text-center">
-                            Spreadsheet-like editing, powerful
-                            forms, files storage, entity references...
+                            Spreadsheet-style editing, robust forms,
+                            file storage, entity references...
                         </p>
                     </div>
                 </div>
@@ -111,11 +111,11 @@ function FeaturesPanels() {
                         className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
                         {iconDoor}
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                            Role system
+                            Role-Based System
                         </h4>
                         <p className="text-gray-600 dark:text-gray-200 text-center">
-                            Define different app configurations based
-                            on the logged user
+                            Configure app settings according to the logged-in
+                            user
                         </p>
                     </div>
 
@@ -128,12 +128,10 @@ function FeaturesPanels() {
                         className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
                         {iconCards}
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                            Customization
+                            Flexible Customization
                         </h4>
                         <p className="text-gray-600 dark:text-gray-200 text-center">
-                            Custom form fields, hooks and full views
-                            based
-                            on React
+                            Incorporate custom form fields, hooks, and full views based on React
                         </p>
                     </div>
                 </div>
@@ -145,12 +143,10 @@ function FeaturesPanels() {
                         className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
                         {iconArrows}
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                            Subcollection support
+                            Subcollection Compatibility
                         </h4>
                         <p className="text-gray-600 dark:text-gray-200 text-center">
-                            Complete navigation for collections under
-                            other
-                            entities
+                            Seamless navigation for collections within other entities
                         </p>
                     </div>
                 </div>
@@ -163,12 +159,10 @@ function FeaturesPanels() {
                         {iconRadar}
 
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                            Real time support
+                            Real-Time Support
                         </h4>
                         <p className="text-gray-600 dark:text-gray-200 text-center">
-                            In every view of your CMS, ideal for
-                            background
-                            updates
+                            Live updates in every view of your CMS, ideal for background updates
                         </p>
                     </div>
                 </div>

@@ -23,7 +23,7 @@ export function DataStructure() {
             <h2 className="h2 mb-4">
                 AI for your structured data
             </h2>
-            <p className="text-xl">
+            <p className="text-2xl">
                 FireCMS understands your data structure and is able to adapt
                 the outcome of ChatGPT. Improve your data entry with the click
                 of a button. FireCMS will understand the context of your data
