@@ -12,7 +12,9 @@ import { toArray } from "../../util/arrays";
 import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCollectionCard } from "./NavigationCollectionCard";
 
-import Index from "flexsearch";
+// @ts-ignore
+import Index from "flexsearch/dist/module/index.js";
+
 import { SearchBar } from "../EntityCollectionTable/internal/SearchBar";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
