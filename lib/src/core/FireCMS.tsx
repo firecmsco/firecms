@@ -91,8 +91,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     const sideDialogsController = useBuildSideDialogsController();
     const sideEntityController = useBuildSideEntityController(navigation, sideDialogsController);
 
-    const snackbarController = useSnackbarController();
-
     const loading = authController.initialLoading || navigation.loading || (plugins?.some(p => p.loading) ?? false);
 
     if (navigation.navigationLoadingError) {

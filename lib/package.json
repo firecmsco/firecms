@@ -1,6 +1,6 @@
 {
     "name": "firecms",
-    "version": "2.0.0-beta.6-pre.1",
+    "version": "2.0.0-beta.6-pre.2",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/Camberi"
@@ -10,7 +10,7 @@
     "repository": "git@github.com:Camberi/firecms.git",
     "main": "./dist/index.umd.js",
     "module": "./dist/index.es.js",
-    "types": "dist/index.d.ts",
+    "types": "./dist/index.d.ts",
     "source": "src/index.ts",
     "engines": {
         "node": ">=14"
@@ -60,7 +60,6 @@
         "react-transition-group": "^4.4.5",
         "react-use-measure": "^2.1.1",
         "react-window": "^1.8.9",
-        "typeface-roboto": "^1.1.13",
         "typeface-rubik": "^1.1.13",
         "yup": "^0.32.11"
     },
