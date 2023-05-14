@@ -2,12 +2,13 @@
 id: changelog
 title: Changelog
 ---
-## [WIP 2.0.0-beta.6] - 2023-04-28
+## [WIP 2.0.0-beta.6] - 2023-05-11
 
 ### Changed
 - Fix for Typescript types not being exported correctly and giving errors
   when using the library with the quickstart.
 - Fix for error messages not showing up correctly in new text inputs.
+- Fix for flexsearch import causing crash using webpack
 
 ## [2.0.0-beta.5] - 2023-04-28
 

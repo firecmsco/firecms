@@ -10,35 +10,26 @@
 
 <br />
 
-<h2>IMPORTANT, PACKAGE RENAME</h2> 
-
-**The FireCMS packaged has been renamed from `@camberi/firecms` to `firecms`.
-Please update your dependencies accordingly.
-From versions 2.0.0-beta.1 versions are released under the new name.**
-
-<p align="center">
-    <img src="https://firecms.co/img/dark_mode.webp" alt="Intro video" style="max-width: 100%;">
-</p>
-
-<br />
 
 [![NPM](https://img.shields.io/npm/v/firecms.svg)](https://www.npmjs.com/package/firecms) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-FireCMS is a headless CMS and admin panel, built by developers for developers.
+Designed by developers for developers, FireCMS is a headless CMS and admin panel
+that seamlessly integrates with **Firebase and Firestore** by default, but is
+also
+compatible with any backend.
 
-It integrates by default with **Firebase and Firestore** but it can be used with
-any backend.
+Effortlessly generate **CRUD views** based on your configuration. FireCMS is
+simple
+to set up for standard cases and easy to extend and customize for more specific
+needs.
 
-It generates **CRUD views** based on your configuration. It is easy to set up
-for the straight forward cases and easy to extend and customise.
+Built to produce collection and form views that naturally align with the
+collection/document model, FireCMS covers a wide range of basic and advanced use
+cases. With extensibility in mind, it's easy to create your own views or modify
+existing ones.
 
-The goal of this CMS is to generate collection and form views that bind nicely
-to the collection/document model. We have built in many basic (and not so basic)
-use cases; but FireCMS is built with extensibility in mind, so it is easy to
-create your views or override the existing ones.
-
-FireCMS does **not** enforce any data structure on your side, and works out of
-the box with any project.
+FireCMS does **not impose any data structure** restrictions, ensuring a smooth,
+out-of-the-box experience for any project.
 
 ### Core technologies
 
@@ -71,92 +62,75 @@ https://firecms.co/docs/changelog
 
 ## Features
 
-FireCMS has been meticulously built to make it extremely easy for developers to
-build a CMS/admin tool. At the same time it offers the best data editing
-experience and has an extremely thoughtful UX designed to make it super easy to
-use, for marketers and content managers.
+FireCMS has been meticulously crafted to make it incredibly easy for developers
+to build a CMS/admin tool while offering an excellent data editing experience
+and a user-friendly interface for marketers and content managers.
 
-### 🏓 Awesome spreadsheet view
+### 🏓 Exceptional Spreadsheet View
 
-We have developed a super performant windowed **spreadsheet view** for
-collections, where you can do inline editing on most of the common fields, and
-have a popup view in the rest of the cases and your custom field
-implementations.
+We've developed a highly efficient windowed **spreadsheet view** for
+collections, allowing inline editing for most common fields, as well as popup
+views for other cases and your custom field implementations.
 
-It has **real-time** support, making it suitable for apps that need to be always
-updated.
+Featuring **real-time** support, FireCMS is perfect for apps that require
+constant updates. It also supports **text search** (through an external provider
+like Algolia, if using Firestore), **filtering and sorting**, and **exporting**
+data.
 
-It also supports **text search** (through an external provider such as Algolia,
-if you are using Firestore), as well as **filtering and sorting** and
-**exporting** data
-
-### ✨ Powerful forms
+### ✨ Robust Forms
 
 ![fields](https://firecms.co/img/post_editing.png)
 
-When editing an entity, FireCMS offers a nested system of side dialogs that
-allow to navigate through **subcollections** and access custom views (such as a
-custom form, or a blog preview). This functionality can be also accessed
-programmatically though the hook `useSideEntityController`.
+When editing an entity, FireCMS offers a nested system of side dialogs for
+navigating through **subcollections** and accessing custom views (such as custom
+forms or blog previews). This functionality can also be accessed
+programmatically using the `useSideEntityController` hook.
 
-FireCMS includes **more than 15 built-in fields** with hundreds of customization
-and validation options. The components have been meticulously crafted for a
-great user experience, and we include advanced features such as **references**
-to other collections, **markdown** or **arrays reordering**.
+FireCMS includes **over 15 built-in fields** with numerous customization and
+validation options. The components have been carefully designed for an
+outstanding user experience, including advanced features like **references** to
+other collections, **markdown**, and **array reordering**.
 
-If your use case is not supported, you can build your own **custom field**, just
-as any other React component.
+For unsupported use cases, create your own **custom field** as a React
+component.
 
-It also supports **conditional fields** in forms, allowing for declaring rules
-of what fields are active , based on your own logic.
+FireCMS also supports **conditional fields** in forms, allowing you to define
+rules for active fields based on your logic.
 
-### 👮 Authentication, permissions and role system
+### 👮 Authentication, Permissions, and Role System
 
-You will be able to define which navigation views can a user see, and the
-operations (create, edit, delete) that can be executed on them, based on your
-role system. You can even define this configuration on a per-entity or
-collection level.
+Define which navigation views users can see and the operations (create, edit,
+delete) they can perform based on your role system. You can even configure this
+on a per-entity or collection level.
 
-By default, all the authorization mechanisms of Firebase are supported, but you
-are free to implement your own.
+By default, FireCMS supports all Firebase authorization mechanisms, but you can
+implement your own.
 
-### 🏹 Relational support
+### 🏹 Relational Support
 
-You can define references to entities in other collections, and benefit from the
-integrated reference fields and shortcuts included.
+Define references to entities in other collections and benefit from the
+integrated reference fields and shortcuts.
 
-It is also possible to define subcollections at the entity level, so you can
-nest data in a collection/document/collection model
+You can also define subcollections at the entity level for nesting data in a
+collection/document/collection model.
 
-### 🆒 Real time data
+### 🆒 Real-Time Data
 
-Every view in the CMS has real time data support. This makes
-it suitable for displaying data that needs to be always updated.
+Every view in the CMS supports real-time data, making it suitable for displaying
+constantly updated information.
 
-Forms also support this feature, any modified value in the database will be
-updated in any currently open form view, as long as it has not been touched by
-the user. This allows for advanced cases where you trigger a Cloud
-Function after saving an entity that modifies some values, and you want to get
-real time updates.
+Forms also support this feature, with any modified value in the database being
+updated in any open form view as long as it hasn't been touched by the user.
+This enables advanced cases where a Cloud Function is triggered after saving an
+entity, modifying some values, and requiring real-time updates.
 
-### 🗂️ Files storage
+### 🗂️ File Storage
 
-FireCMS supports uploading files to Firebase Storage out of the box, and
-provides specific fields for handling single and multiple file uploads, also
-allowing for reordering.
+FireCMS supports uploading files to Firebase Storage out of the box and provides
+specific fields for handling single and multiple file uploads, as well as
+reordering.
 
-You can change the Firebase Storage implementation with your own.
-
-### 🙌 Your logic
-
-You can add your custom logic or validation in multiple points of the user flow.
-There are built-in hooks `onPreSave`, `onSaveSuccess`, `onSaveFailure`,
-`onPreDelete` and `onDelete`.
-
-FireCMS has a good separation of concerns. All the logic related to
-Firebase/Firestore is abstracted away behind 3 interfaces: `DataSource`,
-`StorageSource` and `AuthController`. This means you can extend or even completely
-replace those 3 implementations with your own.
+You can replace the Firebase Storage implementation with your own.
 
 ## Included example
 
@@ -168,6 +142,14 @@ Keep in mind you need to update the dependencies in that project if you want to
 use it as it is, without linking it to the library source code. More details in
 its README
 
+## 🙌 Custom backend
+
+FireCMS has a good separation of concerns. All the logic related to
+Firebase/Firestore is abstracted away behind 3 interfaces: `DataSource`,
+`StorageSource` and `AuthController`. This means you can extend or even
+completely
+replace those 3 implementations with your own.
+
 ## Contact and support
 
 If you need general support, you can open a GitHub issue.
@@ -175,6 +157,22 @@ If you need general support, you can open a GitHub issue.
 Do you need consulting setting up your Firestore-based CMS in no time? We are
 happy to help!
 `hello@firecms.co`
+
+
+## Development
+
+If you would like to make changes to the source, feel free to submit a PR!
+
+When developing, the core library can be found under `lib`.
+There is an example project in the folder `example`.
+
+In order to run the project, you need to create a file
+called `firebase_config.ts` in `example/src`.
+
+That file needs to export a valid Firebase config, that you can get
+from your Firebase console when creating a webapp for your project.
+
+Then simply run `yarn` and `yarn dev`
 
 ## License
 

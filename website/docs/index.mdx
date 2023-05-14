@@ -137,86 +137,75 @@ More details in [the deployment section](deployment.md)
 
 ## Features
 
-FireCMS has been meticulously built to make it extremely easy for developers to
-build a CMS/admin tool. At the same time it offers the best data editing
-experience and has an extremely thoughtful UX designed to make it super easy to
-use, for marketers and content managers.
+FireCMS has been meticulously crafted to make it incredibly easy for developers
+to build a CMS/admin tool while offering an excellent data editing experience
+and a user-friendly interface for marketers and content managers.
 
-### 🏓 Awesome spreadsheet view
+### 🏓 Exceptional Spreadsheet View
 
-We have developed a super performant windowed **spreadsheet view** for
-collections, where you can do inline editing on most of the common fields, and
-have a popup view in the rest of the cases and your custom field
-implementations.
+We've developed a highly efficient windowed **spreadsheet view** for
+collections, allowing inline editing for most common fields, as well as popup
+views for other cases and your custom field implementations.
 
-It has **real-time** support, making it suitable for apps that need to be always
-updated.
+Featuring **real-time** support, FireCMS is perfect for apps that require
+constant updates. It also supports **text search** (through an external provider
+like Algolia, if using Firestore), **filtering and sorting**, and **exporting**
+data.
 
-It also supports **text search** (through an external provider such as Algolia,
-if you are using Firestore), as well as **filtering and sorting** and
-**exporting** data
+### ✨ Robust Forms
 
-### ✨ Powerful forms
+![fields](https://firecms.co/img/post_editing.png)
 
-![fields](/img/post_editing.png)
+When editing an entity, FireCMS offers a nested system of side dialogs for
+navigating through **subcollections** and accessing custom views (such as custom
+forms or blog previews). This functionality can also be accessed
+programmatically using the `useSideEntityController` hook.
 
-When editing an entity, FireCMS offers a nested system of side dialogs that
-allow to navigate through **subcollections** and access custom views (such as a
-custom form, or a blog preview). This functionality can be also accessed
-programmatically though the hook `useSideEntityController`.
+FireCMS includes **over 15 built-in fields** with numerous customization and
+validation options. The components have been carefully designed for an
+outstanding user experience, including advanced features like **references** to
+other collections, **markdown**, and **array reordering**.
 
-FireCMS includes **more than 15 built-in fields** with hundreds of customization
-and validation options. The components have been meticulously crafted for a
-great user experience, and we include advanced features such as **references**
-to other collections, **markdown** or **arrays reordering**.
+For unsupported use cases, create your own **custom field** as a React
+component.
 
-If your use case is not supported, you can build your own **custom field**, just
-as any other React component.
+FireCMS also supports **conditional fields** in forms, allowing you to define
+rules for active fields based on your logic.
 
-It also supports **conditional fields** in forms, allowing for declaring rules
-of what fields are active , based on your own logic.
+### 👮 Authentication, Permissions, and Role System
 
-### 👮 Authentication, permissions and role system
+Define which navigation views users can see and the operations (create, edit,
+delete) they can perform based on your role system. You can even configure this
+on a per-entity or collection level.
 
-You will be able to define which navigation views can a user see, and the
-operations (create, edit, delete) that can be executed on them, based on your
-role system. You can even define this configuration on a per-entity or
-collection level.
+By default, FireCMS supports all Firebase authorization mechanisms, but you can
+implement your own.
 
-By default, all the authorization mechanisms of Firebase are supported, but you
-are free to implement your own.
+### 🏹 Relational Support
 
-### 🏹 Relational support
+Define references to entities in other collections and benefit from the
+integrated reference fields and shortcuts.
 
-You can define references to entities in other collections, and benefit from the
-integrated reference fields and shortcuts included.
+You can also define subcollections at the entity level for nesting data in a
+collection/document/collection model.
 
-It is also possible to define subcollections at the entity level, so you can
-nest data in a collection/document/collection model
+### 🆒 Real-Time Data
 
-### 🆒 Real time data
+Every view in the CMS supports real-time data, making it suitable for displaying
+constantly updated information.
 
-Every view in the CMS has real time data support. This makes
-it suitable for displaying data that needs to be always updated.
+Forms also support this feature, with any modified value in the database being
+updated in any open form view as long as it hasn't been touched by the user.
+This enables advanced cases where a Cloud Function is triggered after saving an
+entity, modifying some values, and requiring real-time updates.
 
-Forms also support this feature, any modified value in the database will be
-updated in any currently open form view, as long as it has not been touched by
-the user. This allows for advanced cases where you trigger a Cloud
-Function after saving an entity that modifies some values, and you want to get
-real time updates.
+### 🗂️ File Storage
 
-You can add your **custom logic** or validation in multiple points of the user
-flow.
-There are built-in hooks `onPreSave`, `onSaveSuccess`, `onSaveFailure`,
-`onPreDelete` and `onDelete`.
+FireCMS supports uploading files to Firebase Storage out of the box and provides
+specific fields for handling single and multiple file uploads, as well as
+reordering.
 
-### 🗂️ Files storage
-
-FireCMS supports uploading files to Firebase Storage out of the box, and
-provides specific fields for handling single and multiple file uploads, also
-allowing for reordering.
-
-You can change the Firebase Storage implementation with your own.
+You can replace the Firebase Storage implementation with your own.
 
 ### 🙌 Custom backend
 

@@ -20,7 +20,7 @@ to generate the fields in the spreadsheet like collection tables, and the fields
 in the generated forms.
 
 :::note
-FireCMS provides around 15 different fields (such as text fields,
+FireCMS provides around 20 different fields (such as text fields,
 selects, and complex ones like reference or sortable array fields). If your use
 case is not covered by one of the provided fields, you can create your own
 [custom field](../properties/custom_fields.md).
