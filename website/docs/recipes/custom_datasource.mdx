@@ -1,0 +1,58 @@
+---
+id: custom_datasource
+title: Use a custom data source
+sidebar_label: Custom data source
+---
+
+FireCMS is based on the idea of **declarative** data sources. This means that
+you can define your collections and entities in a declarative way, and FireCMS
+will take care of the rest. We provide a default datasource that works with
+Firestore, but you can also use your own data sources.
+
+## Custom data sources
+
+FireCMS allows you to use your own data sources. This is useful if you want to
+use FireCMS with a different database, or if you want to use a different
+Firestore instance.
+
+Data sources are implemented as objects that implement the
+[`DataSource`](./api/interfaces/DataSource) interface.
+
+Since FireCMS is a CMS based on React, you can use the hooks provided by FireCMS to
+develop your own data sources.
+
+The default datasource is implemented in the [`useFirestoreDataSource`](./api/functions/useFirestoreDataSource)
+hook. You can call this hook from your own data source to get the default
+implementation and extend it. When defining your own data source, you need
+to implement all the methods defined in the [`DataSource`](./api/interfaces/DataSource)
+interface.
+
+## Example custom datasource
+
+Let's define a custom data source that will allow us to override the default
+implementation when fetching and saving data for a specific path only:
+
+import CodeBlock from "@theme/CodeBlock";
+import CustomDataSource
+    from "!!raw-loader!firecms-example/src/docs/recipes/custom_datasource/custom_datasource";
+
+<CodeBlock language="tsx">{CustomDataSource}</CodeBlock>
+
+## Using a custom data source
+
+Once you have defined your custom data source, you can use it in your
+custom [`FireCMS`](./api/interfaces/FireCMS) instance (keep in mind that you can't use a
+custom data source with `FirebaseCMSApp`).
+
+You will need to create a custom app, and use your custom data source when
+creating the `FireCMS` instance.
+
+Check the [Custom CMS app](../custom_cms_app) instructions to learn how to create a custom app.
+Replace the `useFirestoreDataSource` hook with your custom data source.
+
+:::tip
+You can also customise in the same way the other components used internally by
+FireCMS.
+:::
+
+

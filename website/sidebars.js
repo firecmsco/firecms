@@ -92,9 +92,9 @@ module.exports = {
             label: "Recipes",
             collapsed: false,
             items: [
-                // 'recipes/recipes_index',
                 "recipes/building_a_blog",
                 "recipes/copy_entity",
+                "recipes/custom_datasource",
                 "recipes/documents_as_subcollections",
             ]
         },
