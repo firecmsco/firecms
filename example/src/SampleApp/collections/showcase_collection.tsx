@@ -13,6 +13,13 @@ export const showcaseCollection = buildCollection({
                 // ...
             }
         }),
+        age: buildProperty({
+            dataType: "number",
+            name: "Age",
+            validation: {
+                // ...
+            }
+        }),
         description: buildProperty({
             dataType: "string",
             name: "Description",

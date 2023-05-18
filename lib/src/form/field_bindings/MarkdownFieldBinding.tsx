@@ -25,6 +25,7 @@ const mdParser = new MarkdownIt();
 MdEditor.use(Plugins.AutoResize, {
     min: 100
 })
+MdEditor.unuse(Plugins.FontUnderline)
 MdEditor.unuse(Plugins.Clear);
 
 /**

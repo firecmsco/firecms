@@ -38,21 +38,40 @@ export function TextInput<T extends string | number>({
     const inputRef = useRef(null);
     const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
 
+    const [internalValue, setInternalValue] = React.useState<string>(value ? value.toString() : "");
+
     const hasValue = value !== undefined && value !== null && value !== "";
 
     const onChange = useCallback((event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         if (inputType === "number") {
-            const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
-            if (numberValue && isNaN(numberValue))
-                setValue(null);
-            else if (numberValue !== undefined && numberValue !== null)
-                setValue(numberValue as T);
-            else
-                setValue(null);
+            if (event.target.value === "-") {
+                setInternalValue("-")
+            } else {
+                const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
+                if (numberValue && isNaN(numberValue)) {
+                    setValue(null);
+                    setInternalValue("");
+                } else if (numberValue !== undefined && numberValue !== null) {
+                    setValue(numberValue as T);
+                    setInternalValue(numberValue.toString());
+                } else {
+                    setValue(null);
+                    setInternalValue("");
+                }
+            }
         } else {
             setValue(event.target.value as T);
+            setInternalValue(event.target.value);
         }
     }, [inputType, setValue]);
+
+    const numberInputOnWheelPreventChange = useCallback((e: any) => {
+        e.target.blur()
+        e.stopPropagation()
+        setTimeout(() => {
+            e.target.focus()
+        }, 0)
+    }, []);
 
     if (disabled) {
         return <DisabledTextField label={label}
@@ -65,9 +84,10 @@ export function TextInput<T extends string | number>({
                           autoFocus={autoFocus}
                           onFocus={() => setFocused(true)}
                           onBlur={() => setFocused(false)}
-                          value={value ?? ""}
+                          value={internalValue}
                           onChange={onChange}/>
         : <StyledInput ref={inputRef}
+                       onWheel={inputType === "number" ? numberInputOnWheelPreventChange : undefined}
                        sx={{
                            padding: label ? "32px 12px 8px 12px" : "8px 12px 8px 12px",
                        }}
@@ -76,7 +96,7 @@ export function TextInput<T extends string | number>({
                        onFocus={() => setFocused(true)}
                        onBlur={() => setFocused(false)}
                        type={inputType}
-                       value={value ?? ""}
+                       value={internalValue}
                        onChange={onChange}/>;
 
     const inner = endAdornment
@@ -138,7 +158,11 @@ const StyledInput = React.memo(styled("input")(() => ({
     display: "block",
     minWidth: "0px",
     animationName: "mui-auto-fill-cancel",
-    animationDuration: "10ms"
+    animationDuration: "10ms",
+    "&::-webkit-inner-spin-button": {
+        "-webkit-appearance": "none",
+        margin: 0
+    }
 })), (prevProps, nextProps) => prevProps.value === nextProps.value);
 
 const StyledTextArea = styled(TextareaAutosize)({
