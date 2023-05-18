@@ -63,7 +63,7 @@ const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
 
     console.log("Allowing access to", user?.email);
     // This is an example of retrieving async data related to the user
-    // and storing it in the user extra field.
+    // and storing it in the controller's extra field.
     const sampleUserRoles = await Promise.resolve(["admin"]);
     authController.setExtra(sampleUserRoles);
 

@@ -1,0 +1,70 @@
+---
+id: nextjs
+title: Using FireCMS with Next.js
+sidebar_label: Using with Next.js
+---
+
+It is perfectly possible to use FireCMS with Next.js. FireCMS is a React library, so you can use it with any React
+framework.
+
+In the case of next.js, you are restricted to running FireCMS in the client side,
+as next.js does not support server side rendering of some of the React components used by FireCMS.
+
+Start by creating your next.js project:
+
+```bash
+npx create-next-app@latest
+```
+
+Then install FireCMS and its dependencies:
+
+```bash
+yarn add firecms@^2.0.0 firebase@^9 @mui/material@^5 @mui/icons-material@^5 @mui/lab@latest @mui/x-date-pickers@^5.0.0-beta.1 @emotion/react @emotion/styled react-router@^6 react-router-dom@^6
+```
+
+## Configuring the App router
+
+Next.js uses a file based router. In this guide, we will be creating the FireCMS
+app in the `/cms` route, but you can customize this to your needs.
+
+FireCMS uses react-router, so we need to configure next.js to delegate
+all the routes starting with `/cms` to FireCMS.
+
+FireCMS does not require tailwind since it relies on Material UI, so you can opt-out of it
+when creating the project.
+
+In our `app` folder, we create a folder called `cms` and inside it another one called
+`[[...any]]`. This will match any route starting with `/cms`.
+
+Then create the file `cms/[[...any]]/page.tsx` with the following content:
+
+```tsx
+import CMS from "@/app/cms/CMS";
+
+export default function Home() {
+    return <CMS/>;
+}
+
+```
+
+## Creating the CMS
+
+You can now create your CMS as you would normally do. Create the file `cms/CMS.tsx` with the following content:
+
+:::important
+If you are not running FireCMS in the root path of you app, you need to set the `basePath` prop to the path where you
+are running it. In this case, we are running it in `/cms`.
+:::
+
+import CodeBlock from "@theme/CodeBlock";
+import MyComponentSource from "!!raw-loader!firecms-example/src/docs/nextjs";
+
+<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+
+## Run
+
+Then simply run:
+
+```
+yarn dev
+```

@@ -98,6 +98,7 @@ module.exports = {
                 "recipes/documents_as_subcollections",
             ]
         },
+        "nextjs",
         "custom_cms_app",
         "migrating_from_v1",
         "changelog",

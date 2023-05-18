@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useCallback } from "react";
 
 import { User as FirebaseUser } from "firebase/auth";
@@ -78,10 +80,10 @@ const productsCollection = buildCollection<Product>({
     singularName: "Product",
     path: "products",
     permissions: ({ authController }) => ({
-        read: true,
         edit: true,
         create: true,
-        delete: true
+        // we have created the roles object in the navigation builder
+        delete: false
     }),
     subcollections: [
         localeCollection
@@ -197,12 +199,12 @@ const productsCollection = buildCollection<Product>({
     }
 });
 
-export default function App() {
+export default function CMS() {
 
     const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
-                                                                    user,
-                                                                    authController
-                                                                }) => {
+                                                                                user,
+                                                                                authController
+                                                                            }) => {
 
         if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");
@@ -219,6 +221,7 @@ export default function App() {
 
     return <FirebaseCMSApp
         name={"My Online Shop"}
+        basePath={"/cms"}
         authentication={myAuthenticator}
         collections={[productsCollection]}
         firebaseConfig={firebaseConfig}
