@@ -489,7 +489,6 @@ export function useFirestoreDataSource({
  * @param data
  * @category Firestore
  */
-export function firestoreToCMSModel(data: any): any
 export function firestoreToCMSModel(data: any): any {
     if (data === null || data === undefined) return null;
     if (serverTimestamp().isEqual(data)) {
@@ -501,7 +500,7 @@ export function firestoreToCMSModel(data: any): any {
     if (data instanceof Date) {
         return data;
     }
-    if (data instanceof GeoPoint) {
+    if (data instanceof FirestoreGeoPoint) {
         return new GeoPoint(data.latitude, data.longitude);
     }
     if (data instanceof DocumentReference) {
