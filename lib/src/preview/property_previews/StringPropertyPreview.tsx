@@ -2,8 +2,9 @@ import React from "react";
 
 import { ErrorBoundary, resolvePropertyEnum } from "../../core";
 import { ColorChip, EnumValuesChip } from "../components/ColorChip";
-import { PropertyPreviewProps } from "../index";
+import { PropertyPreviewProps, UrlComponentPreview } from "../index";
 import { getColorSchemeForSeed } from "../../core/util/chip_utils";
+import { PreviewType } from "../../types";
 
 /**
  * @category Preview components
@@ -32,6 +33,12 @@ export function StringPropertyPreview({
                     small={size !== "regular"}
                 />
             </ErrorBoundary>);
+    } else if (property.url) {
+        return (
+            <UrlComponentPreview size={size}
+                                 url={value}
+                                 previewType={typeof property.url === "string" ? property.url as PreviewType : undefined}/>
+        );
     } else {
         if (!value) return <></>;
         const lines = value.split("\n");

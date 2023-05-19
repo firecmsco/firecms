@@ -5,36 +5,8 @@ import { PropertyPreviewProps } from "../index";
 
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { StringPropertyPreview } from "./StringPropertyPreview";
-import { Theme } from "@mui/material";
+import { Box, Theme } from "@mui/material";
 import { useFireCMSContext } from "../../hooks";
-
-const PREFIX = "ArrayOfStringsPreview";
-
-const classes = {
-    array: `${PREFIX}-array`,
-    arrayWrap: `${PREFIX}-arrayWrap`,
-    arrayItem: `${PREFIX}-arrayItem`
-};
-
-const Root = styled("div")((
-   { theme } : {
-        theme: Theme
-    }
-) => ({
-    [`& .${classes.array}`]: {
-        display: "flex",
-        flexDirection: "column"
-    },
-
-    [`& .${classes.arrayWrap}`]: {
-        display: "flex",
-        flexWrap: "wrap"
-    },
-
-    [`& .${classes.arrayItem}`]: {
-        margin: theme.spacing(0.5)
-    }
-}));
 
 /**
  * @category Preview components
@@ -62,25 +34,28 @@ export function ArrayOfStringsPreview({
         throw Error("Picked wrong preview component ArrayOfStringsPreview");
 
     if (value && !Array.isArray(value)) {
-        return <Root>{`Unexpected value: ${value}`}</Root>;
+        return <div>{`Unexpected value: ${value}`}</div>;
     }
     const stringProperty = property.of as ResolvedStringProperty;
 
     return (
-        <div className={classes.array}>
+        <Box sx={{
+            display: "flex",
+            gap: "2px",
+            flexDirection: "column",
+        }}>
             {value &&
-            value.map((v, index) =>
-                <div className={classes.arrayItem}
-                     key={`preview_array_strings_${propertyKey}_${index}`}>
-                    <ErrorBoundary>
-                        <StringPropertyPreview propertyKey={propertyKey}
-                                               property={stringProperty}
-                                               value={v}
-                                               entity={entity}
-                                               size={size}/>
-                    </ErrorBoundary>
-                </div>
-            )}
-        </div>
+                value.map((v, index) =>
+                    <div key={`preview_array_strings_${propertyKey}_${index}`}>
+                        <ErrorBoundary>
+                            <StringPropertyPreview propertyKey={propertyKey}
+                                                   property={stringProperty}
+                                                   value={v}
+                                                   entity={entity}
+                                                   size={size}/>
+                        </ErrorBoundary>
+                    </div>
+                )}
+        </Box>
     );
 }

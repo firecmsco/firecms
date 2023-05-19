@@ -243,6 +243,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 key={`preview_cell_${propertyKey}_${entity.id}`}
                 value={internalValue}
                 align={align ?? "left"}
+                fullHeight={true}
                 disabledTooltip={disabledTooltip ?? (readOnlyProperty ? "Read only" : undefined)}
                 disabled={true}>
                 <PropertyPreview

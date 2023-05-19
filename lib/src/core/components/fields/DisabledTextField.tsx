@@ -28,7 +28,8 @@ export function DisabledTextField<T extends string | number>({
             }}
             variant={"filled"}>{label}</InputLabel>
         <Box sx={{
-            padding: "32px 12px 8px 12px"
+            padding: "32px 12px 8px 12px",
+            overflow: "auto"
         }}>
             <Typography variant={"body1"}>{value}</Typography>
         </Box>

@@ -1,5 +1,6 @@
 import React, { useCallback } from "react";
 import {
+    Collapse,
     Box,
     FormControlLabel,
     FormHelperText,
@@ -10,12 +11,13 @@ import {
 
 import ClearIcon from "@mui/icons-material/Clear";
 
-import { FieldProps } from "../../types";
+import { FieldProps, PreviewType } from "../../types";
 import { FieldDescription } from "../index";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { TextInput } from "../../core/components/fields/TextInput";
+import { PropertyPreview } from "../../preview";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -41,8 +43,10 @@ export function TextFieldBinding<T extends string | number>({
                                                             }: TextFieldProps<T>) {
 
     let multiline: boolean | undefined;
+    let url: boolean | PreviewType | undefined;
     if (property.dataType === "string") {
         multiline = property.multiline;
+        url = property.url;
     }
 
     useClearRestoreValue({
@@ -105,7 +109,8 @@ export function TextFieldBinding<T extends string | number>({
                 >
 
                     <Box flexGrow={1}>
-                        {showError && <FormHelperText error={true}>{error}</FormHelperText>}
+                        {showError && <FormHelperText
+                            error={true}>{error}</FormHelperText>}
 
                         {includeDescription &&
                             <FieldDescription property={property}/>}
@@ -134,6 +139,15 @@ export function TextFieldBinding<T extends string | number>({
                         />
                     }
                 </Box>}
+
+            {url && <Collapse
+                in={Boolean(value)}
+                appear={true}
+                timeout={500}>
+                <PropertyPreview value={value}
+                                 property={property}
+                                 size={"regular"}/>
+            </Collapse>}
 
             {/*</FormControl>*/}
         </>

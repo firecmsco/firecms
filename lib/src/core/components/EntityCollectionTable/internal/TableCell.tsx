@@ -69,7 +69,6 @@ function getBackgroundColor(onHover: any, selectedRow: boolean, disabled: boolea
 }
 
 type TableCellRootProps = {
-    width: number,
     padding: string;
     border: string;
     justifyContent: string;
@@ -82,11 +81,9 @@ const TableCellRoot = styled("div", {})<TableCellRootProps>(({
                                                                  justifyContent,
                                                                  padding,
                                                                  border,
-                                                                 width,
                                                                  alignItems,
                                                                  backgroundColor
                                                              }) => ({
-    width: width ?? "100%",
     alignItems,
     backgroundColor,
     padding,
@@ -118,6 +115,7 @@ const TableCellInner = styled("div", {})<TableCellInnerProps>(({
                                                                }) => ({
 
     display: "flex",
+    maxHeight: "100%",
     width: "100%",
     flexDirection: "column",
     height: fullHeight ? "100%" : undefined,
@@ -270,6 +268,9 @@ export const TableCell = React.memo<TableCellProps>(
 
         return (
             <TableCellRoot
+                style={{
+                    width: width ?? "100%"
+                }}
                 tabIndex={selected || disabled ? undefined : 0}
                 ref={ref}
                 onFocus={onFocus}
@@ -281,7 +282,6 @@ export const TableCell = React.memo<TableCellProps>(
                 contain={scrollable ? "content" : "size"}
                 border={border}
                 justifyContent={justifyContent}
-                width={width}
                 alignItems={disabled || !isOverflowing ? "center" : undefined}
                 backgroundColor={getBackgroundColor(onHover, selectedRow, disabled, internalSaved ?? false, theme, isSelected ?? false)}
             >

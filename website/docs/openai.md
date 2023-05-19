@@ -87,6 +87,25 @@ const dataEnhancementPlugin = useDataEnhancementPlugin({
 });
 ```
 
+## How does it work?
+
+This plugin is able to understand the structure of your data and generate
+content that fits your schema.
+
+Some tips in order to get the best results:
+
+- Make sure you select the **right data** type for your fields.
+- The **field names** are used to generate the content and are usually enough to
+  generate good results. If you want to get even better results, you can
+  **add a description** to your fields. This will help the plugin understand the
+  context of your data and generate better results.
+- The **collection name** is important as well.
+- You can establish **relations between fields** and the plugin will pick it up.
+  e.g. if you have a field called `author` and another field called `book`, the
+  plugin will understand that the author is related to the book and will
+  generate content accordingly. You can use this for making **summaries, reviews,
+  translations, SEO content**, etc.
+
 ## Pricing and subscriptions
 
 You have a 20 **free weekly usages** of the plugin, **no subscription needed**!

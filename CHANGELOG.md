@@ -1,4 +1,9 @@
-## [WIP 2.0.0-beta.6] - 2023-05-11
+## [WIP 2.0.0-beta.7] - 2023-05-11
+
+### Changed
+- Added string url previews to fields
+
+## [2.0.0-beta.6] - 2023-05-11
 
 ### Changed
 - Fix for Typescript types not being exported correctly and giving errors
