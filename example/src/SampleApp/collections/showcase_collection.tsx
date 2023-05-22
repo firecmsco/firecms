@@ -201,6 +201,32 @@ export const showcaseCollection = buildCollection({
                     }
                 }
             }
-        })
+        }),
+        count: buildProperty({
+            dataType: "number",
+            name: "Count"
+        }),
+
+        // build a dynamic property based on the `count` value
+        dynamic: buildProperty(({ values }) =>
+            ({
+                dataType: "map",
+                name: "Dynamic",
+                description: "Modify the count to update this field",
+                properties: Array(values.count ?? 0)
+                    .fill(0)
+                    .map((_, index) => {
+                        return buildProperty({
+                            dataType: "string",
+                            name: "Dynamic " + index,
+                        });
+                    })
+                    .reduce((acc, property, currentIndex) => {
+                        return {
+                            ...acc,
+                            ["dynamic_" + currentIndex]: property // keep in mind your key can't be just a number
+                        }
+                    }, {})
+            })),
     }
 });
