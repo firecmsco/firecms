@@ -22,6 +22,7 @@ export function DisabledTextField<T extends string | number>({
             shrink={Boolean(value)}
             sx={{
                 position: "absolute",
+                color: theme => theme.palette.text.disabled,
                 left: 0,
                 top: "4px",
                 pointerEvents: "none"

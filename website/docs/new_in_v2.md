@@ -4,7 +4,7 @@ title: New and updated features in version 2.0
 ---
 
 :::important
-The package name has changed from `@camberi/firecms` to `firecms`.
+The package name has changed from `@FireCMSco/firecms` to `firecms`.
 Please update your dependencies accordingly
 :::
 

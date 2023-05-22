@@ -30,7 +30,7 @@ function Pricing() {
                 appreciate it if you would consider becoming a <a
                 rel="noopener noreferrer"
                 target="_blank"
-                href={"https://github.com/sponsors/Camberi"}>sponsor</a>
+                href={"https://github.com/sponsors/FireCMSco"}>sponsor</a>
                 ❤️
             </p>
             <p>

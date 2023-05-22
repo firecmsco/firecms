@@ -139,7 +139,7 @@ You can replace the Firebase Storage implementation with your own.
 ## Included example
 
 You can access the code for the demo project under
-[`example`](https://github.com/Camberi/firecms/tree/master/example). It includes
+[`example`](https://github.com/FireCMSco/firecms/tree/master/example). It includes
 every feature provided by this CMS.
 
 Keep in mind you need to update the dependencies in that project if you want to
@@ -172,4 +172,4 @@ Then simply run `yarn` and `yarn dev`
 
 ## License
 
-MIT © [camberi](https://github.com/camberi)
+MIT © [FireCMS](https://github.com/FireCMSco)

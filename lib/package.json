@@ -3,11 +3,11 @@
     "version": "2.0.0-beta.6",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
-        "url": "https://github.com/sponsors/Camberi"
+        "url": "https://github.com/sponsors/FireCMSco"
     },
-    "author": "camberi",
+    "author": "FireCMS",
     "license": "MIT",
-    "repository": "git@github.com:Camberi/firecms.git",
+    "repository": "git@github.com:FireCMSco/firecms.git",
     "main": "./dist/index.umd.js",
     "module": "./dist/index.es.js",
     "types": "./dist/index.d.ts",

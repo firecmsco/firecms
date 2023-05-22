@@ -43,7 +43,7 @@ documents and collections and subcollections mimics the Firestore data
 structure. What seemed like a limitation has turned out to be an
 opportunity to think of a **great UI**.
 
-At Camberi we have a special passion for **user experience** and believe that
+At FireCMS we have a special passion for **user experience** and believe that
 internal admin tools don't always receive the love they deserve.
 
 In this time, we have developed some high quality components such as the

@@ -1,15 +1,15 @@
 [submodule "saas"]
 	path = saas
-	url = git@github.com:Camberi/firecms_saas.git
+	url = git@github.com:FireCMSco/firecms_saas.git
 
 [submodule "collection_editor"]
 	path = collection_editor
-	url = git@github.com:Camberi/firecms_collection_editor.git
+	url = git@github.com:FireCMSco/firecms_collection_editor.git
 
 [submodule "user_management"]
 	path = user_management
-	url = git@github.com:Camberi/firecms_collection_editor.git
+	url = git@github.com:FireCMSco/firecms_collection_editor.git
 
 [submodule "data_enhancement"]
 	path = data_enhancement
-	url = git@github.com:Camberi/firecms_data_enhancement.git
+	url = git@github.com:FireCMSco/firecms_data_enhancement.git

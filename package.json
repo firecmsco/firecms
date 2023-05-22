@@ -2,7 +2,7 @@
     "name": "firecms-parent",
     "private": true,
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
-    "author": "camberi",
+    "author": "FireCMS",
     "homepage": "https://firecms.co",
     "workspaces": [
         "lib",

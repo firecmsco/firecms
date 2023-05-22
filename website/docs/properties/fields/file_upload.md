@@ -57,7 +57,7 @@ customize the path and name of the file. The available placeholders are:
 - {entityId} - ID of the entity
 - {propertyKey} - ID of this property
 - {path} - Path of this entity
-  :::
+:::
 
 ### Single file upload
 

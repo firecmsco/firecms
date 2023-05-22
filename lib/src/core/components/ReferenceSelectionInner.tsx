@@ -305,7 +305,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
                 <Button
                     onClick={onDone}
                     color="primary"
-                    variant="outlined">
+                    variant="contained">
                     Done
                 </Button>
             </CustomDialogActions>
@@ -333,14 +333,14 @@ function ReferenceDialogActions({
                 onClick={onNewClick}
                 startIcon={<Add/>}
                 size="large"
-                variant="contained"
+                variant="outlined"
                 color="primary">
                 Add {collection.singularName ?? collection.name}
             </Button>
             : <Button
                 onClick={onNewClick}
                 size="medium"
-                variant="contained"
+                variant="outlined"
                 color="primary"
             >
                 <Add/>

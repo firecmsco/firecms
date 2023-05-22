@@ -51,7 +51,7 @@ function SampleApp() {
         <Tooltip
             title="See this project on GitHub. This button is only present in this demo">
             <IconButton
-                href={"https://github.com/Camberi/firecms"}
+                href={"https://github.com/FireCMSco/firecms"}
                 rel="noopener noreferrer"
                 target="_blank"
                 component={"a"}

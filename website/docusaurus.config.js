@@ -111,7 +111,7 @@ module.exports = {
                     value: `
                     <iframe 
                     style="    transform: translate(0px, 4px);"
-                                src="https://ghbtns.com/github-btn.html?user=Camberi&repo=FireCMS&type=star&count=true&size=large"
+                                src="https://ghbtns.com/github-btn.html?user=FireCMSco&repo=FireCMS&type=star&count=true&size=large"
                                 frameBorder="0" scrolling="0"
                                 width="140"
                                 height="32" 
@@ -119,7 +119,7 @@ module.exports = {
                     `
                 },
                 // {
-                //     href: "https://github.com/Camberi/firecms",
+                //     href: "https://github.com/FireCMSco/firecms",
                 //     // label: 'GitHub',
                 //     className: "header-github-link",
                 //     "aria-label": "GitHub repository",
@@ -197,7 +197,7 @@ module.exports = {
                         },
                         {
                             label: "Github",
-                            href: "https://github.com/Camberi/firecms"
+                            href: "https://github.com/FireCMSco/firecms"
                         },
                     ]
                 },
@@ -232,7 +232,7 @@ module.exports = {
                 docs: {
                     sidebarPath: require.resolve("./sidebars.js"),
                     lastVersion: "current",
-                    editUrl: "https://github.com/Camberi/firecms/tree/website/website",
+                    editUrl: "https://github.com/FireCMSco/firecms/tree/website/website",
                     versions: {
                         "1.0.0": {
                             label: "1.0.0",
