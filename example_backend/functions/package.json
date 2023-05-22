@@ -13,6 +13,7 @@
     },
     "main": "lib/index.js",
     "dependencies": {
+        "@elastic/elasticsearch": "^8.7.0",
         "@alpacahq/alpaca-trade-api": "^2.16.1",
         "@google-cloud/firestore": "^6.4.1",
         "algoliasearch": "^4.14.2",
@@ -24,7 +25,9 @@
         "firebase-admin": "^11.5.0",
         "firebase-functions": "^4.2.1",
         "firebase-tools": "^11.23.1",
-        "md5": "^2.3.0"
+        "md5": "^2.3.0",
+        "meilisearch": "^0.32.3",
+        "typesense": "^1.5.3"
     },
     "devDependencies": {
         "typescript": "^4.9.4"
