@@ -101,7 +101,7 @@ export interface DataSource {
     ): Promise<Entity<M>[]>;
 
     /**
-     * Listen to a entities in a given path. If you don't implement this method
+     * Listen to a collection in a given path. If you don't implement this method
      * `fetchCollection` will be used instead, with no real time updates.
      * @param path
      * @param collection
@@ -212,7 +212,9 @@ export interface DataSource {
 
     /**
      * Count the number of entities in a collection
-     * @param path
      */
-    countEntities(path: string): Promise<number>;
+    countEntities(props: {
+        path: string,
+        collection: EntityCollection,
+    }): Promise<number>;
 }

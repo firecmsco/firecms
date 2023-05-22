@@ -42,6 +42,12 @@ export interface EntityCollection<M extends Record<string, any> = any,
     path: string;
 
     /**
+     * If this collection is a top level navigation entry, you can set this
+     * property to `true` to indicate that this collection is a collection group.
+     */
+    collectionGroup?: boolean;
+
+    /**
      * You can set an alias that will be used internally instead of the `path`.
      * The `alias` value will be used to determine the URL of the collection,
      * while `path` will still be used in the datasource.
@@ -339,7 +345,10 @@ export interface ExportMappingFunction<UserType extends User = User> {
     builder: ({
                   entity,
                   context
-              }: { entity: Entity<any>, context: FireCMSContext<UserType> }) => Promise<string> | string;
+              }: {
+        entity: Entity<any>,
+        context: FireCMSContext<UserType>
+    }) => Promise<string> | string;
 }
 
 /**
@@ -361,7 +370,10 @@ export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
  */
 export type AdditionalColumnDelegate = AdditionalFieldDelegate;
 
-export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, UserType extends User = User> = { entity: Entity<M>, context: FireCMSContext<UserType> };
+export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, UserType extends User = User> = {
+    entity: Entity<M>,
+    context: FireCMSContext<UserType>
+};
 
 /**
  * Use this interface for adding additional fields to entity collection views.

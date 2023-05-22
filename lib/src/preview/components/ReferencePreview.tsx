@@ -38,7 +38,7 @@ import {
 } from "../../hooks";
 
 export type ReferencePreviewProps = {
-    disabled: boolean;
+    disabled?: boolean;
     reference: EntityReference,
     size: PreviewSize;
     previewProperties?: string[];
@@ -132,6 +132,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                     display: "flex",
                     flexDirection: "column",
                     flexGrow: 1,
+                    width: "100%",
                     maxWidth: "calc(100% - 52px)",
                     margin: 1
                 }}>

@@ -1,4 +1,5 @@
 import { EntityCollection } from "./collections";
+import { EntityReference } from "./entities";
 
 /**
  * Context that includes the resolved navigation and utility methods and
@@ -116,6 +117,12 @@ export type NavigationContext = {
      * Call this method to recalculate the navigation
      */
     refreshNavigation: () => void;
+
+    /**
+     * Retrieve all the related parent collections for a given path
+     * @param path
+     */
+    getParentReferencesFromPath: (path: string) => EntityReference[];
 }
 
 /**

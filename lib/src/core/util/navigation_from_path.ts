@@ -9,20 +9,20 @@ export type NavigationViewInternal<M extends Record<string, any> = any> =
     | NavigationViewCollectionInternal<M>
     | NavigationViewEntityCustomInternal<M>;
 
-interface NavigationViewEntityInternal<M extends Record<string, any>> {
+export interface NavigationViewEntityInternal<M extends Record<string, any>> {
     type: "entity";
     entityId: string;
     path: string;
     parentCollection: EntityCollection<M>;
 }
 
-interface NavigationViewCollectionInternal<M extends Record<string, any>> {
+export interface NavigationViewCollectionInternal<M extends Record<string, any>> {
     type: "collection";
     path: string;
     collection: EntityCollection<M>;
 }
 
-interface NavigationViewEntityCustomInternal<M extends Record<string, any>> {
+export interface NavigationViewEntityCustomInternal<M extends Record<string, any>> {
     type: "custom_view";
     path: string;
     view: EntityCustomView<M>;

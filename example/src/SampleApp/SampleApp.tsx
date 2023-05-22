@@ -21,6 +21,7 @@ import logo from "./images/demo_logo.png";
 import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
 import {
+    localeCollectionGroup,
     productsCollection
 } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
@@ -99,6 +100,7 @@ function SampleApp() {
 
     const collections = [
         productsCollection,
+        localeCollectionGroup,
         booksCollection,
         usersCollection,
         blogCollection,

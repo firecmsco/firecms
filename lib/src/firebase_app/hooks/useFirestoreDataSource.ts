@@ -24,6 +24,7 @@ import {
     updateDateAutoValues
 } from "../../core";
 import {
+    collectionGroup as collectionGroupClause,
     collection as collectionClause,
     CollectionReference,
     deleteDoc,
@@ -52,6 +53,7 @@ import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../types/text_search";
 import { useCallback } from "react";
 import { setDateToMidnight } from "../util/dates";
+import path from "path";
 
 /**
  * @category Firebase
@@ -94,12 +96,18 @@ export function useFirestoreDataSource({
         };
     }, []);
 
-    const buildQuery = useCallback(<M>(path: string, filter: FilterValues<Extract<keyof M, string>> | undefined, orderBy: string | undefined, order: "desc" | "asc" | undefined, startAfter: any[] | undefined, limit: number | undefined) => {
+    const buildQuery = useCallback(<M>(path: string,
+                                       filter: FilterValues<Extract<keyof M, string>> | undefined,
+                                       orderBy: string | undefined,
+                                       order: "desc" | "asc" | undefined,
+                                       startAfter: any[] | undefined,
+                                       limit: number | undefined,
+                                       collectionGroup = false) => {
 
         if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
         const firestore = getFirestore(firebaseApp);
-        const collectionReference: Query = collectionClause(firestore, path);
+        const collectionReference: Query = collectionGroup ? collectionGroupClause(firestore, path) : collectionClause(firestore, path);
 
         const queryParams: QueryConstraint[] = [];
         if (filter) {
@@ -206,8 +214,18 @@ export function useFirestoreDataSource({
                 return performTextSearch(path, searchString, collection);
             }
 
-            console.debug("Fetching collection", path, limit, filter, startAfter, orderBy, order);
-            const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
+            const collectionGroup = collection.collectionGroup ?? false;
+
+            console.debug("Fetching collection", {
+                path,
+                limit,
+                filter,
+                startAfter,
+                orderBy,
+                order,
+                collectionGroup
+            });
+            const query = buildQuery(path, filter, orderBy, order, startAfter, limit, collectionGroup);
 
             return getDocs(query)
                 .then((snapshot) =>
@@ -249,12 +267,15 @@ export function useFirestoreDataSource({
                 orderBy,
                 order,
                 onUpdate,
-                onError
+                onError,
             }: ListenCollectionProps<M>
         ): () => void => {
 
+            const collectionGroup = collection.collectionGroup ?? false;
+
             console.debug("Listening collection", {
                 path,
+                collectionGroup,
                 limit,
                 filter,
                 startAfter,
@@ -262,7 +283,7 @@ export function useFirestoreDataSource({
                 order
             });
 
-            const query = buildQuery(path, filter, orderBy, order, startAfter, limit);
+            const query = buildQuery(path, filter, orderBy, order, startAfter, limit, collectionGroup);
 
             if (searchString) {
                 performTextSearch<M>(path, searchString, collection)
@@ -467,10 +488,14 @@ export function useFirestoreDataSource({
             return doc(collectionClause(firestore, path)).id;
         }, [firebaseApp]),
 
-        countEntities: useCallback(async (path: string): Promise<number> => {
+        countEntities: useCallback(async (props: {
+            path: string,
+            collection: EntityCollection<any>
+            onCountUpdate?: (count: number) => void
+        }): Promise<number> => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
             const firestore = getFirestore(firebaseApp);
-            const coll = collectionClause(firestore, path);
+            const coll = props.collection.collectionGroup ? collectionGroupClause(firestore, props.path) : collectionClause(firestore, props.path);
             const snapshot = await getCountFromServer(coll);
             return snapshot.data().count;
         }, [firebaseApp])
@@ -518,6 +543,7 @@ export function firestoreToCMSModel(data: any): any {
     }
     return data;
 }
+
 export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
     if (Array.isArray(data)) {
         return data.map(v => cmsToFirestoreModel(v, firestore));

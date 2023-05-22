@@ -264,7 +264,7 @@ export const EntityCollectionView = React.memo(
                     >
                         {`${collection.name}`}
                     </Typography>
-                    <EntitiesCount fullPath={fullPath}/>
+                    <EntitiesCount fullPath={fullPath} collection={collection}/>
 
                     {collection.description &&
                         <Popover
@@ -335,7 +335,12 @@ export const EntityCollectionView = React.memo(
                                                         size,
                                                         width,
                                                         frozen
-                                                    }: { entity: Entity<any>, size: CollectionSize, width: number, frozen?: boolean }) => {
+                                                    }: {
+            entity: Entity<any>,
+            size: CollectionSize,
+            width: number,
+            frozen?: boolean
+        }) => {
 
             const isSelected = isEntitySelected(entity);
 
@@ -429,7 +434,7 @@ export function useSelectionController<M extends Record<string, any>>(): Selecti
     };
 }
 
-function EntitiesCount({ fullPath }: { fullPath: string }) {
+function EntitiesCount({ fullPath, collection }: { fullPath: string, collection:EntityCollection }) {
 
     const dataSource = useDataSource();
     const navigation = useNavigationContext();
@@ -437,7 +442,7 @@ function EntitiesCount({ fullPath }: { fullPath: string }) {
     const [error, setError] = useState<Error | undefined>(undefined);
 
     useEffect(() => {
-        dataSource.countEntities(navigation.resolveAliasesFrom(fullPath)).then(setCount).catch(setError);
+        dataSource.countEntities({ path: navigation.resolveAliasesFrom(fullPath), collection }).then(setCount).catch(setError);
     }, [fullPath, dataSource, navigation]);
 
     if (error) {

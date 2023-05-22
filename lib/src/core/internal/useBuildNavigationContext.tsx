@@ -9,6 +9,7 @@ import {
     DataSource,
     EntityCollection,
     EntityCollectionsBuilder,
+    EntityReference,
     FireCMSPlugin,
     NavigationContext,
     TopNavigationEntry,
@@ -23,6 +24,9 @@ import {
     resolveCollectionPathAliases,
     resolvePermissions
 } from "../util";
+import {
+    getParentReferencesFromPath
+} from "../util/parent_references_from_path";
 
 type BuildNavigationContextProps<UserType extends User> = {
     basePath: string,
@@ -213,6 +217,13 @@ export function useBuildNavigationContext<UserType extends User>({
      */
     const baseLocation = state && state.base_location ? state.base_location : location;
 
+    const getAllParentCollectionsForPath = useCallback((path: string): EntityReference[] => {
+        return getParentReferencesFromPath({
+            path,
+            collections
+        });
+    }, [collections]);
+
     return {
         collections: collections ?? [],
         views: views ?? [],
@@ -231,7 +242,8 @@ export function useBuildNavigationContext<UserType extends User>({
         resolveAliasesFrom,
         topLevelNavigation,
         baseLocation,
-        refreshNavigation
+        refreshNavigation,
+        getParentReferencesFromPath: getAllParentCollectionsForPath
     };
 }
 

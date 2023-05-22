@@ -19,7 +19,7 @@ import {
     SaveEntityProps,
     User
 } from "../../../types";
-import { renderSkeletonText } from "../../../preview";
+import { ReferencePreview, renderSkeletonText } from "../../../preview";
 import { CustomFieldValidator } from "../../../form/validation";
 import { PropertyTableCell } from "./internal/PropertyTableCell";
 import { ErrorBoundary } from "../ErrorBoundary";
@@ -27,6 +27,7 @@ import {
     saveEntityWithCallbacks,
     useDataSource,
     useFireCMSContext,
+    useNavigationContext,
     useSideEntityController
 } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
@@ -66,6 +67,8 @@ const DEFAULT_STATE = {} as any;
 export const EntityCollectionTableContext = React.createContext<EntityCollectionTableController<any>>(DEFAULT_STATE);
 
 export const useEntityCollectionTableController = () => useContext<EntityCollectionTableController<any>>(EntityCollectionTableContext);
+
+const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
 /**
  * This component is in charge of rendering a collection table with a high
@@ -133,6 +136,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          ...collection
      }: EntityCollectionTableProps<M>) {
 
+        const navigation = useNavigationContext();
+
         const theme = useTheme();
         const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
         const disabledFilterChange = Boolean(forceFilter);
@@ -188,7 +193,36 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     )
                 };
             }) ?? [];
-            return [...(collection.additionalFields ?? collection.additionalColumns ?? []), ...subcollectionColumns];
+
+            const collectionGroupParentCollections: AdditionalFieldDelegate<M, any, any>[] = collection.collectionGroup
+                ? [{
+                    id: COLLECTION_GROUP_PARENT_ID,
+                    name: "Parent entities",
+                    width: 260,
+                    dependencies: [],
+                    Builder: ({ entity }) => {
+                        const collectionsWithPath = navigation.getParentReferencesFromPath(entity.path);
+                        return (
+                            <>
+                                {collectionsWithPath.map((reference) => {
+                                    return (
+                                        <ReferencePreview
+                                            key={reference.path + "/" + reference.id}
+                                            reference={reference}
+                                            size={"tiny"}/>
+                                    );
+                                })}
+                            </>
+                        );
+                    }
+                }]
+                : [];
+
+            return [
+                ...(collection.additionalFields ?? collection.additionalColumns ?? []),
+                ...subcollectionColumns,
+                ...collectionGroupParentCollections
+            ];
         }, [collection, fullPath]);
 
         const uniqueFieldValidator: UniqueFieldValidator = useCallback(
@@ -211,7 +245,9 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             setItemCount(pageSize);
         }, [pageSize]);
 
-        const onRowClick = useCallback(({ rowData }: { rowData: Entity<M> }) => {
+        const onRowClick = useCallback(({ rowData }: {
+            rowData: Entity<M>
+        }) => {
             if (inlineEditing)
                 return;
             return onEntityClick && onEntityClick(rowData);
@@ -592,6 +628,11 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: R
             .map((collection) => getSubcollectionColumnId(collection));
         columnIds.push(...subCollectionIds.filter((subColId) => !columnIds.includes(subColId)));
     }
+
+    if (collection.collectionGroup) {
+        columnIds.push(COLLECTION_GROUP_PARENT_ID);
+    }
+
     return hideAndExpandKeys(collection, columnIds);
 }
 
@@ -621,6 +662,10 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
 
         const additionalField = collection.additionalFields?.find(field => field.id === key);
         if (additionalField) {
+            return [key];
+        }
+
+        if (collection.collectionGroup && key === COLLECTION_GROUP_PARENT_ID) {
             return [key];
         }
 

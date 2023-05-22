@@ -15,6 +15,7 @@ import { categories, currencies, locales } from "./enums";
 
 export const localeCollection = buildCollection<Locale>({
     path: "locales",
+    icon: "Translate",
     customId: locales,
     name: "Locales",
     singularName: "Locale",
@@ -51,6 +52,14 @@ export const localeCollection = buildCollection<Locale>({
         }
     }
 });
+
+export const localeCollectionGroup = buildCollection({
+    ...localeCollection,
+    name: "Product locales group",
+    description: "This is a collection group related to the locales subcollection of products",
+    group: "Main",
+    collectionGroup: true
+})
 
 const productAdditionalField: AdditionalFieldDelegate<Product> = {
     id: "spanish_title",
