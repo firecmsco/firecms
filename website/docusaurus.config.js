@@ -31,9 +31,9 @@ module.exports = {
     themeConfig: {
         image: "img/logo_small.png",
         announcementBar: {
-            id: "openai",
+            id: "2-beta7",
             content:
-                "Be the first to try out <a href='/openai'>ChatGPT content generation integration plugin</a>! 🚀",
+                "New version 2.0.0-beta.7 is out! 🎉 Now supporting collection groups!",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,
