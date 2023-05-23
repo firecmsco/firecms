@@ -8,6 +8,7 @@ import {
 } from "./internal/useUnsavedChangesDialog";
 import { Box } from "@mui/material";
 import { SideDialogPanelProps } from "../types";
+import { CONTAINER_FULL_WIDTH } from "./internal/common";
 
 export type SideDialogContextProps = {
     blocked: boolean,
@@ -131,19 +132,23 @@ function SideDialogView({
                 offsetPosition={offsetPosition}
             >
                 {panel &&
-                        <Box
-                            sx={{
-                                display: "flex",
-                                flexDirection: "column",
-                                height: "100%",
-                                transition: "width 250ms ease-in-out",
-                                width: panel.width,
-                                maxWidth: "100vw"
-                            }}>
-                            <ErrorBoundary>
-                                {panel.component}
-                            </ErrorBoundary>
-                        </Box>}
+                    <Box
+                        sx={(theme) => ({
+                            display: "flex",
+                            flexDirection: "column",
+                            height: "100%",
+                            transition: "width 250ms ease-in-out",
+                            width: panel.width,
+                            maxWidth: CONTAINER_FULL_WIDTH,
+                            [theme.breakpoints.up("lg")]: {
+                                maxWidth: "95vw"
+                            }
+
+                        })}>
+                        <ErrorBoundary>
+                            {panel.component}
+                        </ErrorBoundary>
+                    </Box>}
 
                 {!panel && <div style={{ width }}/>}
 
