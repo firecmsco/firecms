@@ -30,6 +30,7 @@ import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
  * @param onCopyClicked
  * @param onEditClicked
  * @param onDeleteClicked
+ * @param hideId
  * @constructor
  *
  * @category Collection components
