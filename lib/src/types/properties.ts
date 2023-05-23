@@ -21,15 +21,6 @@ export type DataType<T extends CMSType = CMSType> =
                             T extends Array<CMSType> ? "array" :
                                 T extends Record<string, any> ? "map" : never;
 
-// export type DataType =
-//     | "number"
-//     | "string"
-//     | "boolean"
-//     | "map"
-//     | "array"
-//     | "date"
-//     | "geopoint"
-//     | "reference";
 
 /**
  * @category Entity properties

@@ -1,0 +1,124 @@
+---
+id: app_config
+title: App Config
+---
+
+When creating a FireCMS app, you will **either** be using the components:
+- `FirebaseCMSApp` Default implementation of FireCMS that uses Firebase Auth, Firestore
+and Firebase Storage.
+- `FireCMSApp` Lower level component that allows you to provide your own implementations
+of the different services and more customization.
+
+### Navigation
+
+FireCMS takes care of the navigation for you, it generates routes and menus based
+on the configuration that you set up.
+
+:::tip
+The collections can be defined asynchronously, so you can fetch data from your backend
+to build them.
+It might be useful if you want to build the collections based on the logged-in user,
+or if you want to fetch some data to build the schema of your collections.
+Check the [dynamic collections](../collections/dynamic_collections.md) section for more information.
+:::
+
+You have two main ways of creating the top level views in FireCMS, either creating entity
+collections that get mapped to CMS views, or create your own top level React views:
+- Check all the possible configurations for defining [collections](../collections/collections.md)
+- Otherwise, you can define your own [custom top level views](./custom_top_level_views.mdx).
+
+
+### Customization
+
+Let's see all the customization options available for `FirebaseCMSApp` (most
+of them are also available for `FireCMSApp`).
+
+* `name`: Name of the app, displayed as the main title and in the tab title
+
+* `logo` Logo to be displayed in the drawer of the CMS.
+If not specified, the FireCMS logo will be used
+
+* `logoDark` Logo used in dark mode. If not specified, `logo` will always be used.
+
+* `collections` List of the mapped collections in the CMS.
+Each entry relates to a collection in the root database.
+Each of the navigation entries in this field
+generates an entry in the main menu.
+You can use a builder to generate the list of collections, based on the logged user
+
+* `views` Custom additional views created by the developer, added to the main
+navigation
+
+* `fields` Record of custom form fields to be used in the CMS.
+You can use the key to reference the custom field in
+the `fieldConfig` prop of a property in a collection.
+
+* `authentication` Do the users need to log in to access the CMS.
+You can specify an Authenticator function to discriminate which users can
+access the CMS or not.
+If not specified, authentication is enabled but no user restrictions
+apply
+
+* `signInOptions` List of sign in options that will be displayed in the login
+view if `authentication` is enabled. You can pass Firebase providers strings,
+such as `firebase.auth.GoogleAuthProvider.PROVIDER_ID` or include additional
+config such as scopes or custom parameters
+{@link FirebaseSignInOption}
+Defaults to Google sign in only.
+
+* `allowSkipLogin` If authentication is enabled, allow the user to access the content
+without login.
+
+* `firebaseConfig` Firebase configuration of the project. If you afe deploying the app to
+Firebase hosting, you don't need to specify this value
+
+* `onFirebaseInit` Optional callback after Firebase has been initialised. Useful for
+using the local emulator or retrieving the used configuration.
+
+* `appCheckOptions`Use this to enable Firebase App Check
+
+* `primaryColor`Primary color of the theme of the CMS
+
+* `secondaryColor` Secondary color of the theme of the CMS
+
+* `fontFamily` Font family string
+e.g.'"Roboto", "Helvetica", "Arial", sans-serif'
+
+* `toolbarExtraWidget` A component that gets rendered on the upper side of the main toolbar
+
+* `dateTimeFormat` Format of the dates in the CMS.
+Defaults to 'MMMM dd, yyyy, HH:mm:ss'
+
+* `locale` Locale of the CMS, currently only affecting dates
+
+* `collectionOverrideHandler`Used to override collections based on the collection path and entityId.
+This resolver allows to override the collection for specific entities, or
+specific collections, app wide. This overrides collections all through the app.
+You can also override collections in place, when using `useSideEntityController`
+
+* `textSearchController` Use this controller to return text search results as document ids, that
+get then fetched from Firestore.
+
+* `basePath` string;
+
+* `baseCollectionPath` Default path under the navigation routes of the CMS will be created
+
+* `HomePage` In case you need to override the home page.
+You may want to use {@link useNavigationContext} in order to get the resolved
+navigation.
+
+* `LoginView` Additional props passed to the login view. You can use this props
+to disable registration in `password` mode, or to set up an additional
+message. Also, to add additional views to the login screen or disable
+the buttons.
+
+* `onAnalyticsEvent` Callback used to get analytics events from the CMS
+
+* `plugins` Use plugins to modify the behaviour of the CMS.
+Currently, in ALPHA, and likely subject to change.
+
+* `autoOpenDrawer`Open the drawer on hover. Defaults to `false`
+
+
+
+

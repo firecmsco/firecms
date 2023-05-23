@@ -1,11 +1,18 @@
-## [WIP 2.0.0-beta.7] - 2023-05-11
+## [2.0.0-beta.7] - 2023-05-23
 
 ### Changed
+
+- Added support for collection groups
+- [BREAKING] The `countEntities` function in the data source not takes an
+  object instead of a string as parameter. This will only affect you if you
+  have built a custom component using that function.
 - Added string url previews to fields
+- Fix for geopoints not being serialized correctly when saving.
 
 ## [2.0.0-beta.6] - 2023-05-11
 
 ### Changed
+
 - Fix for Typescript types not being exported correctly and giving errors
   when using the library with the quickstart.
 - Fix for error messages not showing up correctly in new text inputs.

@@ -19,6 +19,8 @@ module.exports = {
                 "collections/exporting_data",
                 "collections/text_search",
                 "collections/dynamic_collections",
+                "collections/custom_entity_views",
+                "collections/collection_groups",
             ]
         },
         {
@@ -59,18 +61,10 @@ module.exports = {
                 "properties/conditional_fields",
                 "properties/custom_fields",
                 "properties/custom_previews",
-                "properties/custom_schema_views",
             ]
         },
-        {
-            type: "category",
-            label: "Navigation",
-            collapsed: false,
-            items: [
-                "navigation/navigation",
-                "navigation/custom_top_level_views",
-            ]
-        },
+        "navigation/app_config",
+        "navigation/custom_top_level_views",
         "firebase_setup",
         "deployment",
         {

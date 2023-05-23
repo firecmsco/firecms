@@ -62,15 +62,6 @@ const localeCollection = buildCollection({
             name: "Selectable",
             description: "Is this locale selectable",
             dataType: "boolean"
-        },
-        video: {
-            name: "Video",
-            dataType: "string",
-            validation: { required: false },
-            storage: {
-                storagePath: "videos",
-                acceptedFiles: ["video/*"]
-            }
         }
     }
 });

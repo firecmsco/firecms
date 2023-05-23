@@ -5,7 +5,7 @@ sidebar_label: Collections
 ---
 
 :::tip
-You can customize your collections based on the **logged-in user**, by defining 
+You can customize your collections based on the **logged-in user**, by defining
 them using a callback, as described in [Navigation](../navigation).
 :::
 
@@ -34,13 +34,49 @@ in [Entity collections](../api/interfaces/entitycollection)
 
 * `name` The plural name of the collection. E.g. 'Products'.
 
-* `singularName` The singular name of an entry in the collection. E.g. 'Product'.
+* `singularName` The singular name of an entry in the collection. E.g. '
+  Product'.
 
 * `path` Relative Firestore path of this view to its parent. If this view is in
   the root the path, it is equal to the absolute one. This path also determines
   the URL in FireCMS.
 
-* `properties` Object defining the properties for the entity schema.
+* `properties` Object defining the properties for the entity schema. More
+  information in [Properties](../properties/properties_intro.md).
+
+* `propertiesOrder` Order in which the properties are displayed.
+  If you are specifying your collection as code, the order is the same as the
+  one you define in `properties`. Additional columns are added at the
+  end of the list, if the order is not specified.
+    - For properties use the property key.
+    - For additional columns use the column id.
+    - If you have subcollections, you get a column for each subcollection,
+      with the path (or alias) as the subcollection, prefixed with
+      `subcollection:`. e.g. `subcollection:orders`.
+    - If you are using a collection group, you will also have an
+      additional `collectionGroupParent` column.
+
+  You can use this prop to hide some properties from the table view.
+  Note that if you set this prop, other ways to hide fields, like
+  `hidden` in the property definition, will not work.
+
+* `collectionGroup` If this collection is a top level navigation entry, you can
+  set this property to `true` to indicate that this collection is a collection
+  group. From the Firestore documentation: "A collection group consists of all
+  collections with the same ID. By default, queries retrieve results from a
+  single collection in your database. Use a collection group query to retrieve
+  documents from a collection group instead of from a single collection."
+
+* `alias` You can set an alias that will be used internally instead of
+  the `path`.
+  The `alias` value will be used to determine the URL of the collection,
+  while `path` will still be used in the datasource.
+  Note that you can use this value in reference properties too.
+
+* `icon` Icon key to use in this collection.
+  You can use any of the icons in the MUI specs:
+  https://mui.com/material-ui/material-icons/
+  e.g. 'AccountTree' or 'Person'
 
 * `customId` If this prop is not set, the ID of the document will be created by
   the datasource. You can set the value to 'true' to force the users to choose
@@ -103,6 +139,12 @@ in [Entity collections](../api/interfaces/entitycollection)
   ,  
   entities can still be edited in the side panel.
 
+* `selectionEnabled` Are the entities in this collection selectable. Defaults
+  to `true`
+
+* `selectionController` Pass your own selection controller if you want to control selected
+  entities externally. [`useSelectionController`](../api/functions/useSelectionController)
+
 * `exportable` Should the data in this collection view include an export button.
   You can also set an [`ExportConfig`](../api/interfaces/exportconfig)
   configuration object to customize the export and add additional values.
@@ -114,6 +156,14 @@ in [Entity collections](../api/interfaces/entitycollection)
   subcollection.
   It will still be accessible if you reach the specified path.
   You can also use this collection as a reference target.
+
+* `callbacks` This interface defines all the callbacks that can be used when an
+  entity is being created, updated or deleted.
+  Useful for adding your own logic or blocking the execution of the operation.
+
+* `views` Array of builders for rendering additional panels in an entity view.
+  Useful if you need to render custom views for your entities.
+  
 
 :::tip
 You can force the CMS to always open the form when editing a document by

@@ -1,7 +1,7 @@
 ---
-id: custom_schema_views
-title: Custom schema views
-sidebar_label: Custom schema views
+id: custom_entity_views
+title: Custom entity views
+sidebar_label: Custom entity views
 ---
 
 FireCMS offers default form and table fields for common use cases and also allows

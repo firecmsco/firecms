@@ -83,6 +83,13 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * You can use this prop to hide some properties from the table view.
      * Note that if you set this prop, other ways to hide fields, like
      * `hidden` in the property definition, will not work.
+     *     - For properties use the property key.
+     *     - For additional columns use the column id.
+     *     - If you have subcollections, you get a column for each subcollection,
+     *       with the path (or alias) as the subcollection, prefixed with
+     *       `subcollection:`. e.g. `subcollection:orders`.
+     *     - If you are using a collection group, you will also have an
+     *       additional `collectionGroupParent` column.
      */
     propertiesOrder?: Extract<keyof M | AdditionalKey, string>[];
 
@@ -107,7 +114,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
     permissions?: Permissions | PermissionsBuilder<EntityCollection<M>, UserType, M>;
 
     /**
-     * Are the entities in this collection selectable. Defaults to true
+     * Are the entities in this collection selectable. Defaults to `true`
      */
     selectionEnabled?: boolean;
 
