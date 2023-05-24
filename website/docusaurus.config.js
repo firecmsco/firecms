@@ -45,8 +45,8 @@ module.exports = {
             }
         ],
         colorMode: {
-            defaultMode: "dark",
-            respectPrefersColorScheme: false,
+            // defaultMode: "system",
+            respectPrefersColorScheme: true,
         },
         navbar: {
             title: "FireCMS",
