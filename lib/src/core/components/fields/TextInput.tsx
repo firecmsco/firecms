@@ -160,7 +160,7 @@ const StyledInput = React.memo(styled("input")(() => ({
     animationName: "mui-auto-fill-cancel",
     animationDuration: "10ms",
     "&::-webkit-inner-spin-button": {
-        "-webkit-appearance": "none",
+        WebkitAppearance: "none",
         margin: 0
     }
 })), (prevProps, nextProps) => prevProps.value === nextProps.value);

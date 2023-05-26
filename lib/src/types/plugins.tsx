@@ -137,7 +137,7 @@ export interface PluginFormActionProps<UserType extends User = User> {
     path: string;
     status: EntityStatus;
     collection: EntityCollection;
-    formContext: FormContext<any>;
+    formContext?: FormContext<any>;
     context: FireCMSContext<UserType>;
     currentEntityId?: string;
 }
