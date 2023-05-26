@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Input } from "@mui/material";
 import { useDebounce } from "../../../util";
 
@@ -8,13 +8,21 @@ export function NumberTableInput(props: {
     align: "right" | "left" | "center";
     updateValue: (newValue: (number | null)) => void;
     focused: boolean;
+    setFocused: (focused: boolean) => void;
     disabled: boolean;
-    onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }) {
 
-    const { align, value, updateValue, focused, onBlur, disabled } = props;
+    const { align, value, updateValue, focused, disabled } = props;
     const propStringValue = (value && typeof value === "number") ? value.toString() : "";
     const [internalValue, setInternalValue] = useState<string | null>(propStringValue);
+
+    const prevValue = useRef<number | null>(value);
+
+    useEffect(() => {
+        if (prevValue.current !== value && String(value) !== internalValue)
+            setInternalValue(value ? value.toString() : null);
+        prevValue.current = value;
+    }, [value]);
 
     const doUpdate = React.useCallback(() => {
         if (internalValue !== propStringValue) {
@@ -31,7 +39,7 @@ export function NumberTableInput(props: {
 
     }, [internalValue, value]);
 
-    useDebounce(internalValue, doUpdate, 3000);
+    useDebounce(internalValue, doUpdate, !focused, 2000);
 
     useEffect(
         () => {
@@ -77,7 +85,13 @@ export function NumberTableInput(props: {
             disabled={disabled}
             disableUnderline
             value={internalValue ?? ""}
-            onBlur={onBlur}
+            onFocus={() => {
+                props.setFocused(true);
+            }}
+            onBlur={() => {
+                doUpdate();
+                props.setFocused(false);
+            }}
             onChange={(evt) => {
                 const newValue = evt.target.value.replace(",", ".");
                 if (newValue.length === 0)

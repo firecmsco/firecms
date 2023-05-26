@@ -8,33 +8,37 @@ export function TableInput(props: {
     value: string;
     multiline: boolean;
     focused: boolean;
+    setFocused: (focused: boolean) => void;
     disabled: boolean;
     updateValue: (newValue: (string | null)) => void;
 }) {
 
+    const ref = React.createRef<HTMLTextAreaElement>();
+
     const { disabled, value, multiline, updateValue, focused } = props;
+    const prevValue = useRef<string | null>(value);
+
     const [internalValue, setInternalValue] = useState<typeof value>(value);
     const focusedState = useRef<boolean>(false);
+
+    useEffect(() => {
+        if (prevValue.current !== value && value !== internalValue)
+            setInternalValue(value);
+        prevValue.current = value;
+    }, [value]);
 
     const doUpdate = React.useCallback(() => {
         const emptyInitialValue = !value;
         if (emptyInitialValue && !internalValue)
             return;
-        if (internalValue !== value)
+        if (internalValue !== value) {
+            prevValue.current = internalValue;
             updateValue(internalValue);
+        }
     }, [internalValue, value]);
 
-    useDebounce(internalValue, doUpdate, 3000);
+    useDebounce(internalValue, doUpdate, !focused, 2000);
 
-    // update on external value change
-    useEffect(
-        () => {
-            if (value !== internalValue)
-                setInternalValue(value);
-        }, [value]
-    );
-
-    const ref = React.createRef<HTMLTextAreaElement>();
     useEffect(() => {
         if (ref.current && focused && !focusedState.current) {
             focusedState.current = true;
@@ -69,8 +73,14 @@ export function TableInput(props: {
                 if (multiline || !newValue.endsWith("\n"))
                     setInternalValue(newValue);
             }}
+            onFocus={() => {
+                focusedState.current = true;
+                props.setFocused(true);
+            }}
             onBlur={() => {
+                focusedState.current = false;
                 doUpdate();
+                props.setFocused(false);
             }}
         />
     );

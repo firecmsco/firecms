@@ -500,7 +500,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     size,
                     selectedCell,
                     selectedEntityIds,
-                    focused
+                    focused,
+                    setFocused
                 }}
             >
 

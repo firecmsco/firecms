@@ -94,6 +94,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             size,
             selectedCell,
             focused,
+            setFocused,
             select,
             setPopupCell,
             selectedEntityIds
@@ -295,6 +296,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                         align={align}
                         error={error}
                         focused={focused}
+                        setFocused={setFocused}
                         disabled={disabled}
                         value={internalValue as number}
                         updateValue={updateValue}
@@ -321,6 +323,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     innerComponent = <TableInput error={error}
                                                  disabled={disabled}
                                                  multiline={multiline}
+                                                 setFocused={setFocused}
                                                  focused={focused}
                                                  value={internalValue as string}
                                                  updateValue={updateValue}
