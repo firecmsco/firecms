@@ -19,12 +19,12 @@ export function BatchProcessing() {
                 Do you need to create a lot of content?
             </p>
             <p className={"text-xl"}>
-                If you either need to create a lot of new content or you need to
-                enhance the content you already have, we can help you.
+                Whether you need to create new content or enhance your existing
+                material, we've got you covered.
             </p>
             <p className={"text-xl"}>
-                Get in touch with us and we will help you build a custom solution
-                that will save you time and money.
+                Reach out to us for a tailor-made solution that saves you time
+                and money.
             </p>
             <a href="mailto:hello@firecms.co?subject=OpenAI%20Batch%20processing"
                rel="noopener noreferrer"

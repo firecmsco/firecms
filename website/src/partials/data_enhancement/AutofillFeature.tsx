@@ -37,27 +37,28 @@ export function AutofillFeature() {
             </>}
             right={<>
                 <h2 className={"h2"}>
-                    Fill in the details of the Nike Air Max 90
+                    Populate Details for Nike Air Max 90
                 </h2>
                 <p className="text-xl">
-                    Use a prompt to indicate how you would like the autofill
-                    feature to work. Imagine you have an ecommerce store and
-                    you want to add a <b>new product</b> to your catalog.
+                    Define a prompt to guide the autofill feature according to
+                    your needs. Consider scenarios such as adding a <b>new
+                    product</b> to your ecommerce store catalog.
                 </p>
                 <p className="text-xl">
-                    ...or you are <b>writing an article</b>
+                    ...or drafting a <b>compelling article</b>
                 </p>
                 <p className="text-xl">
-                    ...or creating the content of a <b>course</b>
+                    ...or designing the curriculum of a <b>course</b>
                 </p>
                 <p className="text-xl">
-                    ...or <b>anything</b> you can think of
+                    ...or <b>any creative endeavor</b> you can imagine
                 </p>
 
                 <p className="text-base text-gray-600 dark:text-gray-200">
-                    The ChatGPT plugin for FireCMS will use the latest GPT model
-                    from OpenAI to generate the content for you. You can then
-                    edit the generated content and save it to your database.
+                    The ChatGPT plugin for FireCMS leverages OpenAI's
+                    state-of-the-art GPT model to generate content that meets
+                    your requirements. Feel free to edit the generated content
+                    and save it to your database as needed.
                 </p>
             </>}/>
     );
