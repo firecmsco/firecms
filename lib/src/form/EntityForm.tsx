@@ -350,7 +350,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                         entityId,
                         path,
                         status,
-                        collection,
+                        collection: inputCollection,
                         context,
                         currentEntityId: entityId,
                         formContext

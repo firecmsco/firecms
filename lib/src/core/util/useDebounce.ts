@@ -1,6 +1,6 @@
 import React from "react";
 
-export function useDebounce<T>(value: T, callback: () => void, timeoutMs = 300) {
+export function useDebounce<T>(value: T, callback: () => void, immediate: boolean, timeoutMs = 300) {
 
     const pendingUpdate = React.useRef(false);
     const performUpdate = React.useCallback(() => {
@@ -8,16 +8,18 @@ export function useDebounce<T>(value: T, callback: () => void, timeoutMs = 300) 
         pendingUpdate.current = false;
     }, [callback]);
 
+    const handlerRef = React.useRef<number | undefined>(undefined);
+
     React.useEffect(
         () => {
             pendingUpdate.current = true;
-            const handler = setTimeout(performUpdate, timeoutMs);
+            clearTimeout(handlerRef.current);
+            handlerRef.current = setTimeout(performUpdate, timeoutMs) as any;
             return () => {
-                clearTimeout(handler);
-                if (pendingUpdate.current)
+                if (immediate)
                     performUpdate();
             };
         },
-        [value]
+        [immediate, value]
     );
 }
