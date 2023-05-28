@@ -1,10 +1,5 @@
 import React from "react";
 
-// @ts-ignore
-import featuresBg from "@site/static/img/features-bg.png";
-// @ts-ignore
-import featuresElement from "@site/static/img/features-element.png";
-
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 function Pricing() {

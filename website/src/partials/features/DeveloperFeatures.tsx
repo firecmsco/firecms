@@ -1,11 +1,6 @@
 import React from "react";
 
 // @ts-ignore
-import featuresBg from "@site/static/img/features-bg.png";
-// @ts-ignore
-import featuresElement from "@site/static/img/features-element.png";
-
-// @ts-ignore
 import pricePreview from "@site/static/img/price.png";
 
 // @ts-ignore
