@@ -13,8 +13,7 @@ import {
 } from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
-import { FieldDescription } from "../index";
-import { LabelWithIcon } from "../components";
+import { FieldDescription, LabelWithIcon } from "../components";
 
 import { getIconForProperty, isReadOnly } from "../../core";
 import clsx from "clsx";

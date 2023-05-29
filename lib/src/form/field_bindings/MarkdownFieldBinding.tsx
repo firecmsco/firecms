@@ -15,8 +15,7 @@ import {
 import MarkdownIt from "markdown-it";
 import MdEditor, { Plugins } from "react-markdown-editor-lite";
 
-import { FieldDescription } from "../index";
-import { LabelWithIcon } from "../components";
+import { FieldDescription, LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
 import { fieldBackground } from "./utils";
 import { getIconForProperty } from "../../core";

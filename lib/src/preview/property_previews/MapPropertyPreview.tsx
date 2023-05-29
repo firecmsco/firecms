@@ -8,9 +8,10 @@ import {
     Typography
 } from "@mui/material";
 
-import { PropertyPreview, PropertyPreviewProps } from "../index";
 import { ResolvedMapProperty } from "../../types";
 import { ErrorBoundary } from "../../core";
+import { PropertyPreviewProps } from "../PropertyPreviewProps";
+import { PropertyPreview } from "../PropertyPreview";
 
 /**
  * @category Preview components

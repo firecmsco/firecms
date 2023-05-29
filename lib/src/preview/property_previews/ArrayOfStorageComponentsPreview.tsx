@@ -2,12 +2,13 @@ import React from "react";
 
 import { styled } from "@mui/material/styles";
 
-import { PreviewSize, PropertyPreview, PropertyPreviewProps } from "../index";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";
 
 import { Theme } from "@mui/material";
 import { useFireCMSContext } from "../../hooks";
+import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
+import { PropertyPreview } from "../PropertyPreview";
 
 const PREFIX = "ArrayOfStorageComponentsPreview";
 

@@ -1,12 +1,11 @@
 import React from "react";
-import { styled } from "@mui/material/styles";
 import { ResolvedStringProperty } from "../../types";
-import { PropertyPreviewProps } from "../index";
 
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { StringPropertyPreview } from "./StringPropertyPreview";
 import { Box, Theme } from "@mui/material";
 import { useFireCMSContext } from "../../hooks";
+import { PropertyPreviewProps } from "../PropertyPreviewProps";
 
 /**
  * @category Preview components

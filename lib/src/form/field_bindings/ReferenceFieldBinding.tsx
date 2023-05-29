@@ -3,9 +3,10 @@ import React from "react";
 import { FormControl, FormHelperText } from "@mui/material";
 
 import { EntityReference, FieldProps } from "../../types";
-import { FieldDescription, ReadOnlyFieldBinding } from "../index";
 import { useClearRestoreValue } from "../../hooks";
 import { ReferenceWidget } from "../components/ReferenceWidget";
+import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
+import { FieldDescription } from "../components";
 
 /**
  * Field that opens a reference selection dialog.

@@ -7,8 +7,7 @@ import {
 } from "@mui/material";
 
 import { FieldProps } from "../../types";
-import { FieldDescription } from "../index";
-import { LabelWithIcon } from "../components";
+import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { fieldBackground, fieldBackgroundHover } from "./utils";
 import { getIconForProperty } from "../../core";

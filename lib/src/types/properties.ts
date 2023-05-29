@@ -153,12 +153,6 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      */
     defaultValue?: T;
 
-    /**
-     * Should this property be editable in the collection editor.
-     * If the property has been defined in code, it defaults to `false` otherwise,
-     * it defaults to `true`.
-     */
-    editable?: boolean;
 }
 
 /**

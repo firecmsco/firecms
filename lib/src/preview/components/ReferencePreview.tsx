@@ -18,11 +18,6 @@ import {
 } from "../../types";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
-import {
-    PreviewSize,
-    PropertyPreview,
-    SkeletonPropertyComponent
-} from "../index";
 
 import {
     ErrorView,
@@ -36,6 +31,11 @@ import {
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
+import { PropertyPreview } from "../PropertyPreview";
+import { PreviewSize } from "../PropertyPreviewProps";
+import {
+    SkeletonPropertyComponent
+} from "../property_previews/SkeletonPropertyComponent";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -168,6 +168,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                         property={childProperty as ResolvedProperty}
                                         entity={usedEntity}
                                         size={"tiny"}/>
+                                    // eslint-disable-next-line react/jsx-no-undef
                                     : <SkeletonPropertyComponent
                                         property={childProperty as ResolvedProperty}
                                         size={"tiny"}/>

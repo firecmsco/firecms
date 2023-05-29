@@ -19,29 +19,30 @@ import EmailIcon from "@mui/icons-material/Email";
 import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
 
 import {
-    ArrayEnumSelectBinding,
-    ArrayOfReferencesFieldBinding,
+    ArrayCustomShapedFieldBinding
+} from "../form/field_bindings/ArrayCustomShapedFieldBinding";
+import {
     ArrayProperty,
-    BlockFieldBinding,
-    DateTimeFieldBinding,
     FieldConfig,
     FieldConfigId,
     FieldProps,
-    isPropertyBuilder,
+    Property, ResolvedProperty
+} from "../types";
+import {
+    ArrayEnumSelectBinding,
+    ArrayOfReferencesFieldBinding,
+    BlockFieldBinding,
+    DateTimeFieldBinding,
     MapFieldBinding,
     MarkdownFieldBinding,
-    Property,
     ReferenceFieldBinding,
     RepeatFieldBinding,
-    ResolvedProperty,
     SelectFieldBinding,
     StorageUploadFieldBinding,
     SwitchFieldBinding,
     TextFieldBinding
-} from "../index";
-import {
-    ArrayCustomShapedFieldBinding
-} from "../form/field_bindings/ArrayCustomShapedFieldBinding";
+} from "../form";
+import { isPropertyBuilder } from "./util";
 
 export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
     text_field: {

@@ -4,9 +4,9 @@ import {
     renderSkeletonImageThumbnail
 } from "../property_previews/SkeletonPropertyComponent";
 import { UrlComponentPreview } from "./UrlComponentPreview";
-import { PreviewSize } from "../index";
 import { useStorageSource } from "../../hooks";
 import { DownloadConfig, FileType } from "../../types";
+import { PreviewSize } from "../PropertyPreviewProps";
 
 type StorageThumbnailProps = {
     storagePathOrDownloadUrl: string;

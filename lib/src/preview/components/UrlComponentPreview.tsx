@@ -4,10 +4,10 @@ import { Box, CardMedia, Link, Tooltip, Typography } from "@mui/material";
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
-import { PreviewSize } from "../index";
 import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 import { PreviewType } from "../../types";
+import { PreviewSize } from "../PropertyPreviewProps";
 
 /**
  * @category Preview components

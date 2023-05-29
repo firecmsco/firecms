@@ -11,8 +11,7 @@ import {
 import ClearIcon from "@mui/icons-material/Clear";
 
 import { EnumType, FieldProps } from "../../types";
-import { FieldDescription } from "../index";
-import { LabelWithIcon } from "../components";
+import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { isEnumValueDisabled } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview";

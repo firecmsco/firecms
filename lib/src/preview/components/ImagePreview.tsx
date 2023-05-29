@@ -3,8 +3,8 @@ import { Box, IconButton, Tooltip, useTheme } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
-import { PreviewSize } from "../index";
 import { getThumbnailMeasure } from "../util";
+import { PreviewSize } from "../PropertyPreviewProps";
 
 /**
  * @category Preview components

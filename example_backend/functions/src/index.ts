@@ -3,9 +3,9 @@ import * as admin from "firebase-admin";
 import { Change } from "firebase-functions/v1";
 import { DocumentSnapshot } from "firebase-functions/v1/firestore";
 
-import { deleteInAlgolia, indexInAlgolia } from "./indexing/algolia";
 import { importDatabaseBackup } from "./backup";
 import { addUserToMailchimp } from "./mailchimp";
+import { deleteInAlgolia, indexInAlgolia } from "./indexing/algolia";
 
 admin.initializeApp();
 

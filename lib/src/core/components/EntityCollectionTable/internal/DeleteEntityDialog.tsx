@@ -7,7 +7,6 @@ import {
     DialogContent,
     DialogTitle
 } from "@mui/material";
-import { EntityPreview } from "../../index";
 import {
     deleteEntityWithCallbacks,
     useDataSource,
@@ -16,6 +15,7 @@ import {
 } from "../../../../hooks";
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { resolveCollection } from "../../../util/resolutions";
+import EntityPreview from "../../EntityPreview";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],

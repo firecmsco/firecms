@@ -1,6 +1,6 @@
-import { PropertyPreviewProps } from "../index";
 import { ResolvedNumberProperty, ResolvedStringProperty } from "../../types";
 import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
+import { PropertyPreviewProps } from "../PropertyPreviewProps";
 
 /**
  * @category Preview components

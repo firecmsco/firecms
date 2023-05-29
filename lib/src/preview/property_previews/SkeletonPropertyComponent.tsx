@@ -16,8 +16,8 @@ import {
     TableRow,
     Typography
 } from "@mui/material";
-import { PreviewSize } from "../index";
 import { getThumbnailMeasure } from "../util";
+import { PreviewSize } from "../PropertyPreviewProps";
 
 export interface SkeletonPropertyComponentProps {
     property: ResolvedProperty,

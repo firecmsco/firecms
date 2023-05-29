@@ -2,9 +2,10 @@ import React from "react";
 
 import { ErrorBoundary, resolvePropertyEnum } from "../../core";
 import { ColorChip, EnumValuesChip } from "../components/ColorChip";
-import { PropertyPreviewProps, UrlComponentPreview } from "../index";
 import { getColorSchemeForSeed } from "../../core/util/chip_utils";
 import { PreviewType } from "../../types";
+import { UrlComponentPreview } from "../components/UrlComponentPreview";
+import { PropertyPreviewProps } from "../PropertyPreviewProps";
 
 /**
  * @category Preview components

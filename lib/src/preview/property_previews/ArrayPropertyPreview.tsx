@@ -2,10 +2,11 @@ import React from "react";
 
 import { Box, Divider } from "@mui/material";
 
-import { PreviewSize, PropertyPreview, PropertyPreviewProps } from "../index";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";
 import { useFireCMSContext } from "../../hooks";
+import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
+import { PropertyPreview } from "../PropertyPreview";
 
 /**
  * @category Preview components

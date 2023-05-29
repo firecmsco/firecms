@@ -1,8 +1,7 @@
 import React from "react";
 import { FieldProps } from "../../types";
 import { Box, FormControl, FormHelperText } from "@mui/material";
-import { FieldDescription } from "../index";
-import { LabelWithIcon } from "../components";
+import { FieldDescription, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel, getIconForProperty } from "../../core";
