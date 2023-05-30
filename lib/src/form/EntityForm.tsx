@@ -333,7 +333,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                 const formContext: FormContext<M> = {
                     setFieldValue: props.setFieldValue,
                     values: props.values,
-                    collection: resolveCollection({ collection, path }),
+                    collection: resolveCollection({ collection, path, fields: context.fields }),
                     entityId,
                     path
                 };

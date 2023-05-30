@@ -15,7 +15,7 @@ import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
 
 export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder,
-                                    fields?: Record<string, FieldConfig>) {
+                                    fields: Record<string, FieldConfig>) {
     const resolvedProperty = resolveProperty({
         propertyKey: "ignore", // TODO
         propertyOrBuilder,

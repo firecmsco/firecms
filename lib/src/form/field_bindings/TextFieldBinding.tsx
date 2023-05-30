@@ -58,6 +58,21 @@ export function TextFieldBinding<T extends string | number>({
         setValue(null);
     }, [setValue]);
 
+    const onChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        if (inputType === "number") {
+            const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
+            if (numberValue && isNaN(numberValue)) {
+                setValue(null);
+            } else if (numberValue !== undefined && numberValue !== null) {
+                setValue(numberValue as T);
+            } else {
+                setValue(null);
+            }
+        } else {
+            setValue(event.target.value as T);
+        }
+    };
+
     const isMultiline = Boolean(multiline);
 
     const internalValue = value ?? (property.dataType === "string" ? "" : value === 0 ? 0 : "");
@@ -87,7 +102,7 @@ export function TextFieldBinding<T extends string | number>({
         <>
             <TextInput
                 value={value}
-                setValue={setValue}
+                onChange={onChange}
                 autoFocus={autoFocus}
                 label={<LabelWithIcon icon={getIconForProperty(property)}
                                       title={property.name}/>}
@@ -140,6 +155,10 @@ export function TextFieldBinding<T extends string | number>({
                 </Box>}
 
             {url && <Collapse
+                sx={{
+                    marginTop: 1,
+                    marginLeft: 1
+                }}
                 in={Boolean(value)}
                 appear={true}
                 timeout={500}>

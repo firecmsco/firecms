@@ -11,8 +11,7 @@ export const usersCollection = buildCollection({
     properties: {
         first_name: {
             name: "First name",
-            dataType: "string",
-            editable: false
+            dataType: "string"
         },
         last_name: {
             name: "Last name",

@@ -17,8 +17,8 @@ import MdEditor, { Plugins } from "react-markdown-editor-lite";
 
 import { FieldDescription, LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
-import { fieldBackground } from "./utils";
 import { getIconForProperty } from "../../core";
+import { fieldBackground } from "../../core/util/field_colors";
 
 const mdParser = new MarkdownIt();
 MdEditor.use(Plugins.AutoResize, {

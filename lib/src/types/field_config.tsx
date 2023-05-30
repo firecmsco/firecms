@@ -66,6 +66,7 @@ export type FieldConfigId =
     "file_upload" |
     "multi_file_upload" |
     "group" |
+    "key_value" |
     "reference" |
     "multi_references" |
     "switch" |

@@ -17,12 +17,12 @@ import { PropertyPreview } from "../PropertyPreview";
  * @category Preview components
  */
 export function MapPropertyPreview<T extends Record<string, any> = Record<string, any>>({
-                                                         propertyKey,
-                                                         value,
-                                                         property,
-                                                         entity,
-                                                         size
-                                                     }: PropertyPreviewProps<T>) {
+                                                                                            propertyKey,
+                                                                                            value,
+                                                                                            property,
+                                                                                            entity,
+                                                                                            size
+                                                                                        }: PropertyPreviewProps<T>) {
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPropertyPreview");
@@ -30,7 +30,9 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 
     const mapProperty = property as ResolvedMapProperty;
     if (!mapProperty.properties) {
-        throw Error(`You need to specify a 'properties' prop (or specify a custom field) in your map property ${propertyKey}`);
+        return (
+            <KeyValuePreview value={value}/>
+        );
     }
 
     if (!value) return null;
@@ -78,43 +80,84 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
         <Table size="small" key={`map_preview_${propertyKey}`}>
             <TableBody>
                 {mapPropertyKeys &&
-                mapPropertyKeys.map((key, index) => {
-                    return (
-                        <TableRow
-                            key={`map_preview_table_${propertyKey}_${index}`}
-                            sx={{
-                                "&:last-child th, &:last-child td": {
-                                    borderBottom: 0
-                                }
-                            }}>
-                            <TableCell key={`table-cell-title-${propertyKey}-${key}`}
-                                       sx={{
-                                           verticalAlign: "top"
-                                       }}
-                                       width="30%"
-                                       component="th">
-                                <Typography variant={"caption"}
-                                            color={"textSecondary"}>
-                                    {mapProperty.properties![key].name}
-                                </Typography>
-                            </TableCell>
-                            <TableCell key={`table-cell-${propertyKey}-${key}`}
-                                       width="70%"
-                                       component="th">
-                                <ErrorBoundary>
-                                    <PropertyPreview
-                                        propertyKey={key}
-                                        value={(value)[key]}
-                                        property={mapProperty.properties![key]}
-                                        entity={entity}
-                                        size={"small"}/>
-                                </ErrorBoundary>
-                            </TableCell>
-                        </TableRow>
-                    );
-                })}
+                    mapPropertyKeys.map((key, index) => {
+                        return (
+                            <TableRow
+                                key={`map_preview_table_${propertyKey}_${index}`}
+                                sx={{
+                                    "&:last-child th, &:last-child td": {
+                                        borderBottom: 0
+                                    }
+                                }}>
+                                <TableCell
+                                    key={`table-cell-title-${propertyKey}-${key}`}
+                                    sx={{
+                                        verticalAlign: "top"
+                                    }}
+                                    width="30%"
+                                    component="th">
+                                    <Typography variant={"caption"}
+                                                color={"textSecondary"}>
+                                        {mapProperty.properties![key].name}
+                                    </Typography>
+                                </TableCell>
+                                <TableCell
+                                    key={`table-cell-${propertyKey}-${key}`}
+                                    width="70%"
+                                    component="th">
+                                    <ErrorBoundary>
+                                        <PropertyPreview
+                                            propertyKey={key}
+                                            value={(value)[key]}
+                                            property={mapProperty.properties![key]}
+                                            entity={entity}
+                                            size={"small"}/>
+                                    </ErrorBoundary>
+                                </TableCell>
+                            </TableRow>
+                        );
+                    })}
             </TableBody>
         </Table>
     );
 
+}
+
+export function KeyValuePreview({ value }: { value: any }) {
+    if (typeof value !== "object") return null;
+    return <Table size="small">
+        <TableBody>
+            {
+                Object.entries(value).map(([key, childValue]) => (
+                    <TableRow
+                        key={`map_preview_table_${key}}`}
+                        sx={{
+                            "&:last-child th, &:last-child td": {
+                                borderBottom: 0
+                            }
+                        }}>
+                        <TableCell
+                            key={`table-cell-title-${key}-${key}`}
+                            sx={{
+                                verticalAlign: "top"
+                            }}
+                            width="30%"
+                            component="th">
+                            <Typography variant={"caption"}
+                                        color={"textSecondary"}>
+                                {key}
+                            </Typography>
+                        </TableCell>
+                        <TableCell
+                            width="70%"
+                            component="th">
+                            <ErrorBoundary>
+                                {JSON.stringify(childValue)}
+                            </ErrorBoundary>
+                        </TableCell>
+                    </TableRow>
+                ))
+            }
+        </TableBody>
+    </Table>;
 }

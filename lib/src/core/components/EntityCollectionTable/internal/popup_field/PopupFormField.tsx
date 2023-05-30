@@ -256,9 +256,12 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                       isSubmitting
                   }: FormikProps<EntityValues<M>>) => {
 
-                    if (!equal(values, internalValue)) {
-                        setInternalValue(values);
-                    }
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    useEffect(() => {
+                        if (!equal(values, internalValue)) {
+                            setInternalValue(values);
+                        }
+                    }, [values]);
 
                     if (!entity)
                         return <ErrorView

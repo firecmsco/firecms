@@ -43,6 +43,9 @@ import {
     TextFieldBinding
 } from "../form";
 import { isPropertyBuilder } from "./util";
+import {
+    KeyValueFieldBinding
+} from "../form/field_bindings/KeyValueFieldBinding";
 
 export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
     text_field: {
@@ -181,6 +184,14 @@ export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
         color: "#ff9408",
         Field: MapFieldBinding
     },
+    key_value: {
+        name: "Key-value",
+        description: "Flexible field that allows the user to add multiple key-value pairs",
+        dataType: "map",
+        Icon: BallotOutlinedIcon,
+        color: "#ff9408",
+        Field: KeyValueFieldBinding
+    },
     repeat: {
         name: "Repeat/list",
         description: "A field that gets repeated multiple times (e.g. multiple text fields)",
@@ -235,6 +246,8 @@ export function getFieldId(property: Property | ResolvedProperty): FieldConfigId
         }
         return "number_input";
     } else if (property.dataType === "map") {
+        if (property.keyValue)
+            return "key_value";
         if (property.properties)
             return "group";
     } else if (property.dataType === "array") {

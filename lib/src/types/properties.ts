@@ -494,7 +494,7 @@ export interface MapProperty<T extends Record<string, CMSType> = Record<string, 
     validation?: PropertyValidationSchema,
 
     /**
-     * Properties that are displayed when as a preview
+     * Properties that are displayed when rendered as a preview
      */
     previewProperties?: Partial<Extract<keyof T, string>>[];
 
@@ -517,6 +517,13 @@ export interface MapProperty<T extends Record<string, CMSType> = Record<string, 
      * Should the field be initially expanded. Defaults to `true`
      */
     expanded?: boolean;
+
+    /**
+     * Render this map as a key-value table that allows to use
+     * arbitrary keys.
+     */
+    keyValue?: boolean;
+
 }
 
 /**

@@ -13,6 +13,7 @@ import { Authenticator, FirebaseAuthController } from "../types/auth";
  * @param authController
  * @param authentication
  * @param getAppCheckToken
+ * @param appCheckForceRefresh
  * @param storageSource
  * @param dataSource
  */

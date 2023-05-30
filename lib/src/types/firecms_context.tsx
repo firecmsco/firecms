@@ -97,5 +97,5 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
      * You can use the key to reference the custom field in
      * the `fieldConfig` prop of a property in a collection.
      */
-    fields?: Record<string, FieldConfig>;
+    fields: Record<string, FieldConfig>;
 };

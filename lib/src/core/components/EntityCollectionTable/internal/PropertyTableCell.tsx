@@ -102,6 +102,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         const selectedRow = selectedEntityIds?.includes(entity.id) ?? false;
 
         const selected = selectedCell?.columnIndex === columnIndex &&
+            selectedCell?.entity.path === entity.path &&
             selectedCell?.entity.id === entity.id;
 
         const [internalValue, setInternalValue] = useState<any | null>(value);
@@ -241,7 +242,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 focused={focused}
                 saved={saved}
                 selectedRow={selectedRow}
-                key={`preview_cell_${propertyKey}_${entity.id}`}
+                key={`${propertyKey}_${entity.path}_${entity.id}`}
                 value={internalValue}
                 align={align ?? "left"}
                 fullHeight={true}
@@ -428,7 +429,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
 
         return (
             <TableCell
-                key={`table_cell_${entity.id}_${propertyKey}`}
+                key={`cell_${propertyKey}_${entity.path}_${entity.id}`}
                 size={size}
                 width={width}
                 focused={focused}

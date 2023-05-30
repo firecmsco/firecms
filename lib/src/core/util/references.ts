@@ -3,7 +3,7 @@ import { isReferenceProperty } from "./property_utils";
 import { isPropertyBuilder } from "./entities";
 
 export function getReferencePreviewKeys(targetCollection: EntityCollection<any>,
-                                        fields?: Record<string, FieldConfig>,
+                                        fields: Record<string, FieldConfig>,
                                         previewProperties?: string[],
                                         limit = 3) {
     const allProperties = Object.keys(targetCollection.properties);

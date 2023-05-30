@@ -100,7 +100,6 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
     const fireCMSContext = useFireCMSContext();
 
     const shouldAlwaysRerender = shouldPropertyReRender(property, fireCMSContext.plugins);
-    // console.log("shouldAlwaysRerender", shouldAlwaysRerender, propertyKey)
     // we use the standard Field for user defined fields, since it rebuilds
     // when there are changes in other values, in contrast to FastField
     const FieldComponent = shouldAlwaysRerender ? Field : FastField;

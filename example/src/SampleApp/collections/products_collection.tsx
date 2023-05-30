@@ -354,6 +354,12 @@ export const productsSimpleCollection = buildCollection<any>({
             description: "Example of a markdown field",
             markdown: true
         },
+        metadata: {
+            dataType: "map",
+            name: "Metadata",
+            description: "This is a field that allows arbitrary key-value input"
+
+        },
         tags: {
             dataType: "array",
             name: "Tags",

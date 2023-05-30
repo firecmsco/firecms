@@ -194,7 +194,11 @@ export const testCollection = buildCollection({
         //         }
         //     }
         // }),
-
+        key_value: {
+            dataType: "map",
+            name: "Key value",
+            keyValue: true
+        },
         test_string: {
             dataType: "string",
             name: "Test string"

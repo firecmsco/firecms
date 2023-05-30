@@ -116,7 +116,6 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const UsedDrawer = Drawer || FireCMSDrawer;
 
         const handleDrawerClose = useCallback(() => {
-            console.log("handleDrawerClose");
             setDrawerOpen(false);
         }, []);
 

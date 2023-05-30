@@ -38,6 +38,7 @@ import {
     getDocs,
     getFirestore,
     limit as limitClause,
+    deleteField,
     onSnapshot,
     orderBy as orderByClause,
     Query,
@@ -74,7 +75,7 @@ export interface FirestoreDataSourceProps {
 export function useFirestoreDataSource({
                                            firebaseApp,
                                            textSearchController,
-                                           fields
+                                           fields = {}
                                        }: FirestoreDataSourceProps): DataSource {
 
     const createEntityFromCollection = useCallback(<M extends Record<string, any>>(
@@ -545,7 +546,9 @@ export function firestoreToCMSModel(data: any): any {
 }
 
 export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
-    if (Array.isArray(data)) {
+    if (data === undefined) {
+        return deleteField();
+    } else if (Array.isArray(data)) {
         return data.map(v => cmsToFirestoreModel(v, firestore));
     } else if (data instanceof EntityReference) {
         return doc(firestore, data.path, data.id);

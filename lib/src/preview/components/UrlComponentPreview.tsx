@@ -17,13 +17,19 @@ export function UrlComponentPreview({
                                         previewType,
                                         size,
                                         hint
-                                    }: { url: string, previewType?: PreviewType, size: PreviewSize, hint?: string }): React.ReactElement {
+                                    }: {
+    url: string,
+    previewType?: PreviewType,
+    size: PreviewSize,
+    hint?: string
+}): React.ReactElement {
 
     if (!previewType) {
         return (
             <Link sx={(theme) => ({
                 display: "flex",
                 wordBreak: "break-word",
+                alignItems: "center",
                 fontWeight: theme.typography.fontWeightMedium
             })}
                   href={url}
@@ -38,19 +44,16 @@ export function UrlComponentPreview({
     }
 
     if (previewType === "image") {
-        return <ImagePreview key={`image_preview_${url}_${size}`}
-                             url={url}
+        return <ImagePreview url={url}
                              size={size}/>;
     } else if (previewType === "audio") {
         return <audio controls
-                      src={url}
-                      key={`audio_preview_${url}_${size}`}>
+                      src={url}>
             Your browser does not support the
             <code>audio</code> element.
         </audio>;
     } else if (previewType === "video") {
         return <CardMedia
-            key={`video_preview_${url}_${size}`}
             sx={{ maxWidth: size === "small" ? 300 : 500 }}
             component="video"
             controls
@@ -58,13 +61,13 @@ export function UrlComponentPreview({
         />;
     } else {
         return (
-            <a
-                key={`link_preview_${url}_${size}`}
+            <Box
+                component={"a"}
                 href={url}
                 rel="noopener noreferrer"
                 target="_blank"
-                onClick={(e) => e.stopPropagation()}>
-                <Box sx={{
+                onClick={(e) => e.stopPropagation()}
+                sx={{
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
@@ -72,22 +75,21 @@ export function UrlComponentPreview({
                     width: getThumbnailMeasure(size),
                     height: getThumbnailMeasure(size)
                 }}>
-                    <DescriptionOutlinedIcon sx={{ flexGrow: 1 }}/>
-                    {hint &&
-                        <Tooltip title={hint}>
-                            <Typography
-                                sx={{
-                                    maxWidth: "100%",
-                                    whiteSpace: "nowrap",
-                                    overflow: "hidden",
-                                    textOverflow: "ellipsis",
-                                    direction: "rtl",
-                                    textAlign: "left"
-                                }}
-                                variant={"caption"}>{hint}</Typography>
-                        </Tooltip>}
-                </Box>
-            </a>
+                <DescriptionOutlinedIcon sx={{ flexGrow: 1 }}/>
+                {hint &&
+                    <Tooltip title={hint}>
+                        <Typography
+                            sx={{
+                                maxWidth: "100%",
+                                whiteSpace: "nowrap",
+                                overflow: "hidden",
+                                textOverflow: "ellipsis",
+                                direction: "rtl",
+                                textAlign: "left"
+                            }}
+                            variant={"caption"}>{hint}</Typography>
+                    </Tooltip>}
+            </Box>
         );
     }
 }

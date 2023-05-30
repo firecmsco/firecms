@@ -2,7 +2,7 @@ import {
     CMSType,
     DataSource,
     DeleteEntityProps,
-    Entity,
+    Entity, EntityCollection,
     FetchCollectionProps,
     FetchEntityProps,
     ResolvedProperty,
@@ -46,7 +46,10 @@ export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps): Dat
         generateEntityId(path: string) {
             return firestoreDataSource.generateEntityId(path);
         },
-        countEntities(path: string): Promise<number> {
+        countEntities(path: {
+            path: string,
+            collection: EntityCollection,
+        }): Promise<number> {
             return firestoreDataSource.countEntities(path);
         }
     }

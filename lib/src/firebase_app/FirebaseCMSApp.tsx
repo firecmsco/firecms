@@ -74,7 +74,7 @@ export function FirebaseCMSApp({
                                    baseCollectionPath,
                                    LoginView,
                                    onAnalyticsEvent,
-                                   fields,
+                                   fields = {},
                                    plugins,
                                    autoOpenDrawer
                                }: FirebaseCMSAppProps) {

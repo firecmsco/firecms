@@ -49,15 +49,17 @@ export function MapFieldBinding<T extends Record<string, any>>({
     }
 
     let mapProperties: ResolvedProperties;
-    if (!pickOnlySomeKeys) {
-        mapProperties = property.properties;
-    } else if (value) {
-        mapProperties = pick(property.properties,
-            ...Object.keys(value)
-                .filter(key => key in property.properties!)
-        );
+    if (pickOnlySomeKeys) {
+        if (value) {
+            mapProperties = pick(property.properties,
+                ...Object.keys(value)
+                    .filter(key => key in property.properties!)
+            );
+        } else {
+            mapProperties = {};
+        }
     } else {
-        mapProperties = {};
+        mapProperties = property.properties;
     }
 
     useClearRestoreValue({

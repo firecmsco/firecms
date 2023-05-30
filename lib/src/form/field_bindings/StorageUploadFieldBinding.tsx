@@ -29,7 +29,10 @@ import {
 } from "../../core/util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
-import { fieldBackground, fieldBackgroundHover } from "./utils";
+import {
+    fieldBackground,
+    fieldBackgroundHover
+} from "../../core/util/field_colors";
 
 const PREFIX = "StorageUploadField";
 

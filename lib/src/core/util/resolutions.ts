@@ -41,7 +41,7 @@ export const resolveCollection = <M extends Record<string, any>, >
     values?: Partial<EntityValues<M>>,
     previousValues?: Partial<EntityValues<M>>,
     userConfigPersistence?: UserConfigurationPersistence;
-    fields?: Record<string, FieldConfig>;
+    fields: Record<string, FieldConfig>;
 }): ResolvedEntityCollection<M> => {
 
     const collectionOverride = userConfigPersistence?.getCollectionConfig<M>(path);
@@ -105,7 +105,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
     entityId?: string,
     index?: number,
     fromBuilder?: boolean;
-    fields?: Record<string, FieldConfig<any>>;
+    fields: Record<string, FieldConfig<any>>;
 }): ResolvedProperty<T> | null {
 
     if (typeof propertyOrBuilder === "object" && "resolved" in propertyOrBuilder) {
@@ -176,8 +176,9 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
 
     if (resolvedProperty.fieldConfig) {
         const cmsFields = props.fields;
-        if (!cmsFields)
-            throw Error("Trying to resolve a property that inherits from a custom field but no custom fields were provided. Use the property `fields` in your top level component to provide them");
+        if (!cmsFields) {
+            throw Error(`Trying to resolve a property with key ${resolvedProperty.fieldConfig} that inherits from a custom field but no custom fields were provided. Use the property 'fields' in your top level component to provide them`);
+        }
         const customField: FieldConfig<any> = cmsFields[resolvedProperty.fieldConfig];
         if (!customField)
             throw Error(`Trying to resolve a property that inherits from a custom field but no custom field with id ${resolvedProperty.fieldConfig} was found. Check the \`fields\` in your top level component`);
@@ -219,7 +220,7 @@ export function resolveArrayProperty<T extends any[], M>({
     entityId?: string,
     index?: number,
     fromBuilder?: boolean;
-    fields?: Record<string, FieldConfig>;
+    fields: Record<string, FieldConfig>;
 }): ResolvedArrayProperty {
 
     if (property.of) {
@@ -325,7 +326,7 @@ export function resolveProperties<M extends Record<string, any>>({
     entityId?: string,
     index?: number,
     fromBuilder?: boolean;
-    fields?: Record<string, FieldConfig>;
+    fields: Record<string, FieldConfig>;
 }): ResolvedProperties<M> {
     return Object.entries<PropertyOrBuilder>(properties as Record<string, PropertyOrBuilder>)
         .map(([key, property]) => {

@@ -123,7 +123,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         locale,
         plugins,
         onAnalyticsEvent,
-        fields
+        fields: fields ?? {}
     };
 
     return (

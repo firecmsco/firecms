@@ -1,7 +1,7 @@
 import React from "react";
 
 import { Box, InputLabel, Typography } from "@mui/material";
-import { fieldBackgroundDisabled } from "../../../form/field_bindings/utils";
+import { fieldBackgroundDisabled } from "../../util/field_colors";
 
 export function DisabledTextField<T extends string | number>({
                                                                  label,

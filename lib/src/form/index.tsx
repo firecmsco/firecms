@@ -13,6 +13,7 @@ import { SwitchFieldBinding } from "./field_bindings/SwitchFieldBinding";
 import { DateTimeFieldBinding } from "./field_bindings/DateTimeFieldBinding";
 import { ReferenceFieldBinding } from "./field_bindings/ReferenceFieldBinding";
 import { MapFieldBinding } from "./field_bindings/MapFieldBinding";
+import { KeyValueFieldBinding } from "./field_bindings/KeyValueFieldBinding";
 import { RepeatFieldBinding } from "./field_bindings/RepeatFieldBinding";
 import { BlockFieldBinding } from "./field_bindings/BlockFieldBinding";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
@@ -26,6 +27,7 @@ export {
     DateTimeFieldBinding,
     ReadOnlyFieldBinding,
     MapFieldBinding,
+    KeyValueFieldBinding,
     ReferenceFieldBinding,
     SelectFieldBinding,
     StorageUploadFieldBinding,
