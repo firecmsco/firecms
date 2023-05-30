@@ -19,6 +19,7 @@ import AddIcon from "@mui/icons-material/Add";
 import { ExpandablePanel, getIconForProperty, TextInput } from "../../core";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { BooleanSwitch } from "../../core/components/fields/BooleanSwitch";
+import { DateTimeField } from "../../core/components/fields/DateTimeField";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -130,6 +131,15 @@ function KeyValueRow<T>({
                                       });
                                   }
                               }}/>;
+        } else if (dataType === "date") {
+            return <DateTimeField value={entryValue}
+                                  small={true}
+                                  onChange={(date) => {
+                                      setValue({
+                                          ...value,
+                                          [fieldKey]: date
+                                      });
+                                  }}/>;
         } else if (dataType === "boolean") {
             return <BooleanSwitch value={entryValue}
                                   small={true}
@@ -372,7 +382,10 @@ function MapEditView<T extends Record<string, any>>({
                       onClick={() => updateDataType("number")}>number</MenuItem>
             <MenuItem dense
                       onClick={() => updateDataType("boolean")}>boolean</MenuItem>
-            <MenuItem dense onClick={() => updateDataType("map")}>map</MenuItem>
+            <MenuItem dense
+                      onClick={() => updateDataType("map")}>map</MenuItem>
+            <MenuItem dense
+                      onClick={() => updateDataType("date")}>date</MenuItem>
         </Menu>
 
         <Grid item

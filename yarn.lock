@@ -747,30 +747,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@elastic/elasticsearch@npm:^8.7.0":
-  version: 8.7.0
-  resolution: "@elastic/elasticsearch@npm:8.7.0"
-  dependencies:
-    "@elastic/transport": ^8.3.1
-    tslib: ^2.4.0
-  checksum: a28c808f8d3ef7a5d18c7a6e9f35c3e5332ff062abc118d2d33b14a4ed2d181e4e94d26792bcbc7868bcd118e0b491f92baf52aa9a1363c46ac352e044b52b55
-  languageName: node
-  linkType: hard
-
-"@elastic/transport@npm:^8.3.1":
-  version: 8.3.1
-  resolution: "@elastic/transport@npm:8.3.1"
-  dependencies:
-    debug: ^4.3.4
-    hpagent: ^1.0.0
-    ms: ^2.1.3
-    secure-json-parse: ^2.4.0
-    tslib: ^2.4.0
-    undici: ^5.5.1
-  checksum: 7b0c9199dfe5c71db052c877b9eb445c5047e50c69a1f30759a872907693106629dddd978a4bf03401673576a5e09347a99db6818e13f4b7b143b4c967dcc3c4
-  languageName: node
-  linkType: hard
-
 "@emotion/babel-plugin@npm:^11.10.8":
   version: 11.10.8
   resolution: "@emotion/babel-plugin@npm:11.10.8"
@@ -4131,15 +4107,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"busboy@npm:^1.6.0":
-  version: 1.6.0
-  resolution: "busboy@npm:1.6.0"
-  dependencies:
-    streamsearch: ^1.1.0
-  checksum: 32801e2c0164e12106bf236291a00795c3c4e4b709ae02132883fe8478ba2ae23743b11c5735a0aae8afe65ac4b6ca4568b91f0d9fed1fdbc32ede824a73746e
-  languageName: node
-  linkType: hard
-
 "cacache@npm:^16.1.0":
   version: 16.1.3
   resolution: "cacache@npm:16.1.3"
@@ -5776,8 +5743,6 @@ __metadata:
 "firecms-parent@workspace:.":
   version: 0.0.0-use.local
   resolution: "firecms-parent@workspace:."
-  dependencies:
-    "@elastic/elasticsearch": ^8.7.0
   languageName: unknown
   linkType: soft
 
@@ -5847,7 +5812,7 @@ __metadata:
     "@mui/icons-material": ^5.8.4
     "@mui/lab": ^5.0.0-alpha.121
     "@mui/material": ^5.9.0
-    "@mui/x-date-pickers": ^5.0.0-beta.1
+    "@mui/x-date-pickers": ^6.5.0
     algoliasearch: ^4.13.0
     firebase: ^9.0.0
     react: ^18.0.0
@@ -6366,13 +6331,6 @@ __metadata:
   dependencies:
     lru-cache: ^6.0.0
   checksum: c3f87b3c2f7eb8c2748c8f49c0c2517c9a95f35d26f4bf54b2a8cba05d2e668f3753548b6ea366b18ec8dadb4e12066e19fa382a01496b0ffa0497eb23cbe461
-  languageName: node
-  linkType: hard
-
-"hpagent@npm:^1.0.0":
-  version: 1.2.0
-  resolution: "hpagent@npm:1.2.0"
-  checksum: b029da695edae438cee4da2a437386f9db4ac27b3ceb7306d02e1b586c9c194741ed2e943c8a222e0cfefaf27ee3f863aca7ba1721b0950a2a19bf25bc0d85e2
   languageName: node
   linkType: hard
 
@@ -7919,7 +7877,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ms@npm:^2.0.0, ms@npm:^2.1.1, ms@npm:^2.1.3":
+"ms@npm:^2.0.0, ms@npm:^2.1.1":
   version: 2.1.3
   resolution: "ms@npm:2.1.3"
   checksum: aa92de608021b242401676e35cfa5aa42dd70cbdc082b916da7fb925c542173e36bce97ea3e804923fe92c0ad991434e4a38327e15a1b5b5f945d66df615ae6d
@@ -9144,13 +9102,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"secure-json-parse@npm:^2.4.0":
-  version: 2.7.0
-  resolution: "secure-json-parse@npm:2.7.0"
-  checksum: d9d7d5a01fc6db6115744ba23cf9e67ecfe8c524d771537c062ee05ad5c11b64c730bc58c7f33f60bd6877f96b86f0ceb9ea29644e4040cb757f6912d4dd6737
-  languageName: node
-  linkType: hard
-
 "semver@npm:2 || 3 || 4 || 5, semver@npm:^5.5.0":
   version: 5.7.1
   resolution: "semver@npm:5.7.1"
@@ -9389,13 +9340,6 @@ __metadata:
   dependencies:
     internal-slot: ^1.0.4
   checksum: d04173690b2efa40e24ab70e5e51a3ff31d56d699550cfad084104ab3381390daccb36652b25755e420245f3b0737de66c1879eaa2a8d4fc0a78f9bf892fcb42
-  languageName: node
-  linkType: hard
-
-"streamsearch@npm:^1.1.0":
-  version: 1.1.0
-  resolution: "streamsearch@npm:1.1.0"
-  checksum: 1cce16cea8405d7a233d32ca5e00a00169cc0e19fbc02aa839959985f267335d435c07f96e5e0edd0eadc6d39c98d5435fb5bbbdefc62c41834eadc5622ad942
   languageName: node
   linkType: hard
 
@@ -9882,15 +9826,6 @@ __metadata:
     has-symbols: ^1.0.3
     which-boxed-primitive: ^1.0.2
   checksum: b7a1cf5862b5e4b5deb091672ffa579aa274f648410009c81cca63fed3b62b610c4f3b773f912ce545bb4e31edc3138975b5bc777fc6e4817dca51affb6380e9
-  languageName: node
-  linkType: hard
-
-"undici@npm:^5.5.1":
-  version: 5.22.1
-  resolution: "undici@npm:5.22.1"
-  dependencies:
-    busboy: ^1.6.0
-  checksum: 048a3365f622be44fb319316cedfaa241c59cf7f3368ae7667a12323447e1822e8cc3d00f6956c852d1478a6fde1cbbe753f49e05f2fdaed229693e716ebaf35
   languageName: node
   linkType: hard
 

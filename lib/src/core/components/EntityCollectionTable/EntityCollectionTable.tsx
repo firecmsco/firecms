@@ -60,7 +60,7 @@ import { FilterFormFieldProps } from "../Table/VirtualTableHeader";
 import { ReferenceFilterField } from "./filters/ReferenceFilterField";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
-import { DateTimeFilterField } from "./filters/DateTimeFilterfield";
+import { DateTimeFilterField } from "./filters/DateTimeFilterField";
 
 const DEFAULT_STATE = {} as any;
 

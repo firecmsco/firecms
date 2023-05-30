@@ -49,8 +49,6 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                 small={false}
             />
 
-
-
             {(showError || includeDescription) &&
                 <Box display={"flex"}
                      sx={{ marginLeft: "14px" }}

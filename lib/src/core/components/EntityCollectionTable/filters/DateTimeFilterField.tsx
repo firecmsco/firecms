@@ -1,16 +1,7 @@
 import React, { useState } from "react";
-import {
-    Box,
-    FormControl,
-    IconButton,
-    MenuItem,
-    Select as MuiSelect,
-    TextField
-} from "@mui/material";
-import ClearIcon from "@mui/icons-material/Clear";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { Box, FormControl, MenuItem, Select as MuiSelect } from "@mui/material";
 import { TableWhereFilterOp } from "../../Table";
+import { DateTimeField } from "../../fields/DateTimeField";
 
 interface DateTimeFilterFieldProps {
     name: string,
@@ -78,10 +69,6 @@ export function DateTimeFilterField({
         }
     }
 
-    const PickerComponent = mode === undefined || mode === "date_time"
-        ? DateTimePicker
-        : DatePicker;
-
     return (
 
         <Box display={"flex"} width={440} alignItems={"center"}>
@@ -103,42 +90,14 @@ export function DateTimeFilterField({
             </Box>
 
             <Box flexGrow={1} ml={1}>
-                <PickerComponent
-                    value={internalValue ?? null}
-                    renderInput={(params) =>
-                        (
-                            <TextField {...params}
-                                   fullWidth
-                                   sx={{
-                                       minHeight: "56px"
-                                   }}
-                                   InputProps={{
-                                       ...params.InputProps,
-                                       sx: {
-                                           minHeight: "56px"
-                                       },
-                                       endAdornment: <Box
-                                           sx={{
-                                               pr: 2,
-                                               gap: 2
-                                           }}>
-                                           <IconButton
-                                               sx={{
-                                                   position: "absolute",
-                                                   right: "56px",
-                                                   top: "12px"
-                                               }}
-                                               onClick={(e) => updateFilter(operation, undefined)}>
-                                               <ClearIcon/>
-                                           </IconButton>
-                                           {params.InputProps?.endAdornment}
-                                       </Box>
-                                   }}
-                                   variant={"outlined"}/>
-                        )}
+
+                <DateTimeField
+                    mode={mode}
+                    value={internalValue}
                     onChange={(dateValue: Date | null) => {
                         updateFilter(operation, dateValue === null ? undefined : dateValue);
                     }}
+                    clearable={true}
                 />
 
             </Box>

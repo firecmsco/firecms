@@ -60,6 +60,7 @@ export const BooleanSwitch = React.forwardRef(function SwitchFieldBinding({
                     inputRef={ref}
                     control={
                         <Switch
+                            size={small ? "small" : "medium"}
                             type={"checkbox"}
                             color={"secondary"}
                             autoFocus={autoFocus}

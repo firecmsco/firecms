@@ -69,7 +69,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
     });
 
     const mapFormView = <>
-        <Grid container spacing={2} sx={{ py: 1 }}>
+        <Box sx={{ py: 1, display: "flex", flexDirection: "column" }}>
             {Object.entries(mapProperties)
                 .filter(([_, property]) => !isHidden(property))
                 .map(([entryKey, childProperty], index) => {
@@ -85,16 +85,13 @@ export function MapFieldBinding<T extends Record<string, any>>({
                             autoFocus: autoFocus && index === 0
                         };
                         return (
-                            <Grid item
-                                  sm={12}
-                                  xs={12}
-                                  key={`map-${propertyKey}-${index}`}>
-                                <PropertyFieldBinding {...fieldProps}/>
-                            </Grid>
+                            <PropertyFieldBinding
+                                key={`map-${propertyKey}-${index}`}
+                                {...fieldProps}/>
                         );
                     }
                 )}
-        </Grid>
+        </Box>
 
         {pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value)}
 

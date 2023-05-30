@@ -265,11 +265,12 @@ export const testCollection = buildCollection({
         //         ]
         // },
         //
-        // test_date: {
-        //     name: "Test date",
-        //     dataType: "date",
-        //     mode: "date"
-        // },
+        test_date: {
+            name: "Test date",
+            dataType: "date",
+            mode: "date_time",
+            clearable: true
+        },
         // name: {
         //     dataType: "string",
         //     name: "Name"
