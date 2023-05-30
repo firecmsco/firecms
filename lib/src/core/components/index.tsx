@@ -31,4 +31,5 @@ export * from "./FireCMSAppBar";
 export * from "./fields/FilledSelect";
 export * from "./fields/TextInput";
 export * from "./fields/TextareaAutosize";
+export * from "./fields/BooleanSwitch";
 export * from "./fields/DisabledTextField";

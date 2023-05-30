@@ -77,87 +77,100 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
         );
 
     return (
-        <Table size="small" key={`map_preview_${propertyKey}`}>
-            <TableBody>
-                {mapPropertyKeys &&
-                    mapPropertyKeys.map((key, index) => {
-                        return (
-                            <TableRow
-                                key={`map_preview_table_${propertyKey}_${index}`}
+        <Box
+            sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+            {mapPropertyKeys &&
+                mapPropertyKeys.map((key, index) => {
+                    return (
+                        <Box
+                            key={`map_preview_table_${key}}`}
+                            sx={theme => ({
+                                display: "flex",
+                                flexDirection: "row",
+                                pt: 0.5,
+                                "&:not(:last-child)": {
+                                    borderBottom: `1px solid ${theme.palette.divider}`,
+                                    pb: 0.5
+                                }
+                            })}>
+                            <Box
+                                key={`table-cell-title-${key}-${key}`}
                                 sx={{
-                                    "&:last-child th, &:last-child td": {
-                                        borderBottom: 0
-                                    }
+                                    width: "25%",
+                                    verticalAlign: "top",
+                                    pr: 1
                                 }}>
-                                <TableCell
-                                    key={`table-cell-title-${propertyKey}-${key}`}
-                                    sx={{
-                                        verticalAlign: "top"
-                                    }}
-                                    width="30%"
-                                    component="th">
-                                    <Typography variant={"caption"}
-                                                color={"textSecondary"}>
-                                        {mapProperty.properties![key].name}
-                                    </Typography>
-                                </TableCell>
-                                <TableCell
-                                    key={`table-cell-${propertyKey}-${key}`}
-                                    width="70%"
-                                    component="th">
-                                    <ErrorBoundary>
-                                        <PropertyPreview
-                                            propertyKey={key}
-                                            value={(value)[key]}
-                                            property={mapProperty.properties![key]}
-                                            entity={entity}
-                                            size={"small"}/>
-                                    </ErrorBoundary>
-                                </TableCell>
-                            </TableRow>
-                        );
-                    })}
-            </TableBody>
-        </Table>
+                                <Typography variant={"caption"}
+                                            className={"mono"}
+                                            color={"textSecondary"}>
+                                    {mapProperty.properties![key].name}
+                                </Typography>
+                            </Box>
+                            <Box
+                                sx={{
+                                    flexGrow: 1
+                                }}>
+                                <ErrorBoundary>
+                                    <PropertyPreview
+                                        propertyKey={key}
+                                        value={(value)[key]}
+                                        property={mapProperty.properties![key]}
+                                        entity={entity}
+                                        size={"small"}/>
+                                </ErrorBoundary>
+                            </Box>
+                        </Box>
+                    );
+                })}
+        </Box>
     );
 
 }
 
 export function KeyValuePreview({ value }: { value: any }) {
     if (typeof value !== "object") return null;
-    return <Table size="small">
-        <TableBody>
-            {
-                Object.entries(value).map(([key, childValue]) => (
-                    <TableRow
-                        key={`map_preview_table_${key}}`}
+    return <Box
+        sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+        {
+            Object.entries(value).map(([key, childValue]) => (
+                <Box
+                    key={`map_preview_table_${key}}`}
+                    sx={theme => ({
+                        display: "flex",
+                        flexDirection: "row",
+                        pt: 0.5,
+                        "&:not(:last-child)": {
+                            borderBottom: `1px solid ${theme.palette.divider}`,
+                            pb: 0.5
+                        }
+                    })}>
+                    <Box
+                        key={`table-cell-title-${key}-${key}`}
                         sx={{
-                            "&:last-child th, &:last-child td": {
-                                borderBottom: 0
-                            }
+                            width: "25%",
+                            verticalAlign: "top",
+                            pr: 1
                         }}>
-                        <TableCell
-                            key={`table-cell-title-${key}-${key}`}
-                            sx={{
-                                verticalAlign: "top"
-                            }}
-                            width="30%"
-                            component="th">
-                            <Typography variant={"caption"}
-                                        color={"textSecondary"}>
-                                {key}
-                            </Typography>
-                        </TableCell>
-                        <TableCell
-                            width="70%"
-                            component="th">
+                        <Typography variant={"caption"}
+                                    className={"mono"}
+                                    color={"textSecondary"}>
+                            {key}
+                        </Typography>
+                    </Box>
+                    <Box
+                        sx={{
+                            flexGrow: 1
+                        }}>
+                        <Typography
+                            variant={"caption"}
+                            className={"mono"}>
                             <ErrorBoundary>
                                 {JSON.stringify(childValue)}
                             </ErrorBoundary>
-                        </TableCell>
-                    </TableRow>
-                ))
-            }
-        </TableBody>
-    </Table>;
+                        </Typography>
+                    </Box>
+                </Box>
+            ))
+        }
+    </Box>;
 }

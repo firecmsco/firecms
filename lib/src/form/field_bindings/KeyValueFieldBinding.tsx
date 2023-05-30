@@ -165,46 +165,44 @@ function KeyValueRow<T>({
     }
 
     return (<>
-            <Box key={id.toString()}
-                 sx={{
-                     display: "flex",
-                     flexDirection: "row",
-                     gap: 1,
-                     alignItems: "center"
-                 }}>
-                <Box sx={{ width: "200px", maxWidth: "25%" }}>
-                    <Typography
+            <Typography key={id.toString()}
                         component={"div"}
-                        className={"mono"}>
-                        <TextInput
-                            value={fieldKey}
-                            small={true}
-                            onChange={(event) => {
+                        className={"mono"}
+                        sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: 1,
+                            alignItems: "center"
+                        }}>
+                <Box sx={{ width: "200px", maxWidth: "25%" }}>
+                    <TextInput
+                        value={fieldKey}
+                        small={true}
+                        onChange={(event) => {
 
-                                const newKey = event.target.value;
-                                const newValue = { ...value };
-                                if (originalValue.current && fieldKey in originalValue.current) {
-                                    // @ts-ignore
-                                    newValue[fieldKey] = undefined; // set to undefined to remove from the object, the datasource will remove it from the backend
-                                } else {
-                                    // @ts-ignore
-                                    delete newValue[fieldKey];
+                            const newKey = event.target.value;
+                            const newValue = { ...value };
+                            if (originalValue.current && fieldKey in originalValue.current) {
+                                // @ts-ignore
+                                newValue[fieldKey] = undefined; // set to undefined to remove from the object, the datasource will remove it from the backend
+                            } else {
+                                // @ts-ignore
+                                delete newValue[fieldKey];
+                            }
+                            setInternalState(internalState.map((rowId) => {
+                                if (rowId[0] === id) {
+                                    return [id, {
+                                        key: newKey ?? "",
+                                        dataType: rowId[1].dataType
+                                    }];
                                 }
-                                setInternalState(internalState.map((rowId) => {
-                                    if (rowId[0] === id) {
-                                        return [id, {
-                                            key: newKey ?? "",
-                                            dataType: rowId[1].dataType
-                                        }];
-                                    }
-                                    return rowId;
-                                }));
-                                setValue({
-                                    ...newValue,
-                                    [newKey ?? ""]: entryValue
-                                });
-                            }}/>
-                    </Typography>
+                                return rowId;
+                            }));
+                            setValue({
+                                ...newValue,
+                                [newKey ?? ""]: entryValue
+                            });
+                        }}/>
                 </Box>
 
                 <Box sx={{ flexGrow: 1 }}>
@@ -255,7 +253,7 @@ function KeyValueRow<T>({
                     </IconButton>
 
                 </Box>
-            </Box>
+            </Typography>
 
             {dataType === "map" && buildInput(entryValue, fieldKey, dataType)}
         </>
