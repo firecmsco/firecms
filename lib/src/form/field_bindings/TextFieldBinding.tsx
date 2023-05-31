@@ -105,6 +105,7 @@ export function TextFieldBinding<T extends string | number>({
                 onChange={onChange}
                 autoFocus={autoFocus}
                 label={<LabelWithIcon icon={getIconForProperty(property)}
+                                      required={property.validation?.required}
                                       title={property.name}/>}
                 inputType={inputType}
                 multiline={isMultiline}

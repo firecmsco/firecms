@@ -60,6 +60,7 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
 
     const title = <LabelWithIcon
         icon={getIconForProperty(property)}
+        required={property.validation?.required}
         title={property.name}/>;
 
     return (

@@ -55,7 +55,6 @@ export function SelectFieldBinding<T extends EnumType>({
     return (
         <FormControl
             fullWidth
-            required={property.validation?.required}
             error={showError}
             disabled={disabled}
             sx={{
@@ -71,7 +70,8 @@ export function SelectFieldBinding<T extends EnumType>({
 
             <InputLabel id={`${propertyKey}-select-label`}>
                 <LabelWithIcon icon={getIconForProperty(property)}
-                                 title={property.name}/>
+                               required={property.validation?.required}
+                               title={property.name}/>
             </InputLabel>
 
             <MuiSelect

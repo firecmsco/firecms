@@ -333,7 +333,11 @@ function EntityFormInternal<M extends Record<string, any>>({
                 const formContext: FormContext<M> = {
                     setFieldValue: props.setFieldValue,
                     values: props.values,
-                    collection: resolveCollection({ collection, path, fields: context.fields }),
+                    collection: resolveCollection({
+                        collection,
+                        path,
+                        fields: context.fields
+                    }),
                     entityId,
                     path
                 };
@@ -587,15 +591,14 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                         </Typography>
                     </Box>}
 
-                {status === "existing" &&
-                    <Button
-                        variant="text"
-                        color="primary"
-                        disabled={disabled}
-                        type="reset"
-                    >
-                        Discard
-                    </Button>}
+                <Button
+                    variant="text"
+                    color="primary"
+                    disabled={disabled}
+                    type="reset"
+                >
+                    {status === "existing" ? "Discard" : "Clear"}
+                </Button>
 
                 <Button
                     variant="text"

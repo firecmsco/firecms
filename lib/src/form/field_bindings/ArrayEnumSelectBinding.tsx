@@ -93,6 +93,7 @@ export function ArrayEnumSelectBinding({
 
             <InputLabel id={`${propertyKey}-multiselect-label`}>
                 <LabelWithIcon icon={getIconForProperty(property)}
+                               required={property.validation?.required}
                                title={property.name}/>
             </InputLabel>
 

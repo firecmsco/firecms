@@ -40,6 +40,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
     });
 
     const title = <LabelWithIcon icon={getIconForProperty(property)}
+                                 required={property.validation?.required}
                                  title={property.name}/>;
 
     const body = property.resolvedProperties.map((childProperty, index) => {

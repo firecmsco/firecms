@@ -2,23 +2,24 @@ import React from "react";
 import { Box, SxProps, Theme, Typography } from "@mui/material";
 
 interface LabelWithIconProps {
-
     icon: React.ReactNode;
     title?: string;
     small?: boolean;
     sx?: SxProps<Theme>;
+    required?: boolean;
 }
 
 /**
  * Render the label of a form field for a given property, with the corresponding
- * icon
+ * icon.
  * @category Form custom fields
  */
 export function LabelWithIcon({
                                   icon,
                                   title,
                                   small,
-                                  sx
+                                  sx,
+                                  required
                               }: LabelWithIconProps) {
     return (
         <Box sx={{
@@ -36,7 +37,7 @@ export function LabelWithIcon({
                             fontSize: small ? "1rem" : ".85rem",
                             transformOrigin: "left top",
                             transform: small ? "translate(8px, 0px) scale(0.75)" : undefined
-                        }}>{title}</Typography>
+                        }}>{title + (required ? " *" : "")}</Typography>
 
         </Box>
     );

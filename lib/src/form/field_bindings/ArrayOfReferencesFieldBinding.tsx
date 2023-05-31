@@ -108,6 +108,7 @@ export function ArrayOfReferencesFieldBinding({
 
     const title = (
         <LabelWithIcon icon={getIconForProperty(property)}
+                       required={property.validation?.required}
                        title={property.name}/>
     );
 

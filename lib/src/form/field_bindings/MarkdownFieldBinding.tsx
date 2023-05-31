@@ -75,6 +75,7 @@ export function MarkdownFieldBinding({
 
             {!tableMode && <FormHelperText filled>
                 <LabelWithIcon icon={getIconForProperty(property)}
+                               required={property.validation?.required}
                                title={property.name}/>
             </FormHelperText>}
 

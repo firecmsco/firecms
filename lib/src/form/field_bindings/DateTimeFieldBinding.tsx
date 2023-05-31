@@ -66,6 +66,7 @@ export function DateTimeFieldBinding({
                                       label={
                                           <LabelWithIcon
                                               icon={getIconForProperty(property)}
+                                              required={property.validation?.required}
                                               title={property.name}/>
                                       }
                                       InputProps={{

@@ -79,6 +79,7 @@ export function BlockFieldBinding<T extends Array<any>>({
 
     const title = (
         <LabelWithIcon icon={getIconForProperty(property)}
+                       required={property.validation?.required}
                        title={property.name}/>
     );
 

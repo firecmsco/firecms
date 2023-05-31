@@ -43,6 +43,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                 onChange={(e) => setValue(e.target.checked)}
                 error={showError}
                 label={<LabelWithIcon icon={getIconForProperty(property)}
+                                      required={property.validation?.required}
                                       title={property.name}/>}
                 disabled={disabled}
                 autoFocus={autoFocus}
