@@ -1,3 +1,9 @@
+## [2.0.0-rc.1] - 2023-05-31
+
+### Changed
+
+- Added arbitrary key-value fields with the prop `keyValue` in map properties
+ 
 ## [2.0.0-beta.7] - 2023-05-23
 
 ### Changed
