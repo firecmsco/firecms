@@ -1,25 +1,28 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
 import {
     Box,
     Button,
     FormControl,
-    Grid,
-    Typography,
-    IconButton
+    IconButton,
+    Typography
 } from "@mui/material";
 
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-
-import ClearIcon from "@mui/icons-material/Clear";
+import RemoveIcon from "@mui/icons-material/Remove";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import AddIcon from "@mui/icons-material/Add";
 
-import { ExpandablePanel, getIconForProperty, TextInput } from "../../core";
+import {
+    ArrayContainer,
+    BooleanSwitch,
+    DateTimeField,
+    ExpandablePanel,
+    getIconForProperty,
+    TextInput
+} from "../../core";
 import { FieldDescription, LabelWithIcon } from "../components";
-import { BooleanSwitch } from "../../core/components/fields/BooleanSwitch";
-import { DateTimeField } from "../../core/components/fields/DateTimeField";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -73,67 +76,79 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
     );
 }
 
-function KeyValueRow<T>({
-                            id,
-                            fieldKey,
-                            value,
-                            originalValue,
-                            setInternalState,
-                            internalState,
-                            setValue,
-                            entryValue,
-                            dataType,
-                            currentMenuRowId,
-                            openTypeSelectMenu
-                        }: {
-    id: number,
+function MapKeyValueRow<T extends Record<string, any>>({
+                                                           rowId,
+                                                           fieldKey,
+                                                           value,
+                                                           onFieldKeyChange,
+                                                           onDeleteClick,
+                                                           setValue,
+                                                           entryValue,
+                                                           dataType,
+                                                           updateDataType,
+                                                           disabled
+                                                       }: {
+    rowId: number,
     fieldKey: string,
     value: T,
-    originalValue: any,
-    setInternalState: (state: MapEditViewRowState[]) => void,
-    internalState: MapEditViewRowState[],
-    setValue: (value: (T | null), shouldValidate?: boolean) => void,
+    onFieldKeyChange: (newKey: string) => void,
+    onDeleteClick: () => void,
+    setValue: (value: (T | null)) => void,
     entryValue: any,
     dataType: DataType,
     disabled?: boolean,
-    currentMenuRowId: any,
-    openTypeSelectMenu: (event: React.MouseEvent<HTMLButtonElement>) => void
+    updateDataType: (rowId: number, dataType: DataType) => void
 }) {
+
+    const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+    const menuOpen = Boolean(menuAnchorEl);
+
+    const openTypeSelectMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setMenuAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setMenuAnchorEl(null);
+    };
 
     function buildInput(entryValue: any, fieldKey: string, dataType: DataType) {
         if (dataType === "string" || dataType === "number") {
-            return <TextInput value={entryValue}
-                              inputType={dataType === "number" ? "number" : "text"}
-                              small={true}
-                              onChange={(event) => {
-                                  if (dataType === "number") {
-                                      const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
-                                      if (numberValue && isNaN(numberValue)) {
-                                          setValue({
-                                              ...value,
-                                              [fieldKey]: null
-                                          });
-                                      } else if (numberValue !== undefined && numberValue !== null) {
-                                          setValue({
-                                              ...value,
-                                              [fieldKey]: numberValue
-                                          });
-                                      } else {
-                                          setValue({
-                                              ...value,
-                                              [fieldKey]: null
-                                          });
-                                      }
-                                  } else {
-                                      setValue({
-                                          ...value,
-                                          [fieldKey]: event.target.value
-                                      });
-                                  }
-                              }}/>;
+            return <TextInput
+                key={dataType}
+                value={entryValue}
+                inputType={dataType === "number" ? "number" : "text"}
+                small={true}
+                disabled={disabled || !fieldKey}
+                onChange={(event) => {
+                    if (dataType === "number") {
+                        const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
+                        if (numberValue && isNaN(numberValue)) {
+                            setValue({
+                                ...value,
+                                [fieldKey]: null
+                            });
+                        } else if (numberValue !== undefined && numberValue !== null) {
+                            setValue({
+                                ...value,
+                                [fieldKey]: numberValue
+                            });
+                        } else {
+                            setValue({
+                                ...value,
+                                [fieldKey]: null
+                            });
+                        }
+                    } else {
+                        setValue({
+                            ...value,
+                            [fieldKey]: event.target.value
+                        });
+                    }
+                }}/>;
         } else if (dataType === "date") {
             return <DateTimeField value={entryValue}
                                   small={true}
+                                  disabled={disabled || !fieldKey}
                                   onChange={(date) => {
                                       setValue({
                                           ...value,
@@ -144,6 +159,7 @@ function KeyValueRow<T>({
             return <BooleanSwitch value={entryValue}
                                   small={true}
                                   position={"start"}
+                                  disabled={disabled || !fieldKey}
                                   onChange={(event) => {
                                       const newValue = event.target.checked;
                                       setValue({
@@ -151,6 +167,42 @@ function KeyValueRow<T>({
                                           [fieldKey]: newValue
                                       });
                                   }}/>;
+        } else if (dataType === "array") {
+            return <Box sx={theme => ({
+                ml: 1,
+                pl: 1,
+                borderLeft: `1px solid ${theme.palette.divider}`
+            })}>
+                <ArrayContainer value={entryValue}
+                                newDefaultEntry={""}
+                                droppableId={rowId.toString()}
+                                addLabel={fieldKey ? `Add to ${fieldKey}` : "Add"}
+                                small={true}
+                                disabled={disabled || !fieldKey}
+                                includeAddButton={true}
+                                onValueChange={(newValue) => {
+                                    setValue({
+                                        ...value,
+                                        [fieldKey]: newValue
+                                    });
+                                }}
+                                buildEntry={(index, internalId) => {
+                                    return <ArrayKeyValueRow
+                                        index={index}
+                                        id={internalId}
+                                        value={entryValue[index]}
+                                        disabled={disabled || !fieldKey}
+                                        setValue={(newValue) => {
+                                            const newArrayValue = [...entryValue];
+                                            newArrayValue[index] = newValue;
+                                            setValue({
+                                                ...value,
+                                                [fieldKey]: newArrayValue
+                                            });
+                                        }}
+                                    />
+                                }}/>
+            </Box>;
         } else if (dataType === "map") {
             return <Box sx={theme => ({
                 ml: 1,
@@ -174,8 +226,13 @@ function KeyValueRow<T>({
         }
     }
 
+    function doUpdateDataType(dataType: DataType) {
+        updateDataType(rowId, dataType);
+        handleMenuClose();
+    }
+
     return (<>
-            <Typography key={id.toString()}
+            <Typography key={rowId.toString()}
                         component={"div"}
                         className={"mono"}
                         sx={{
@@ -187,85 +244,194 @@ function KeyValueRow<T>({
                 <Box sx={{ width: "200px", maxWidth: "25%" }}>
                     <TextInput
                         value={fieldKey}
+                        disabled={disabled || Boolean(entryValue)}
                         small={true}
                         onChange={(event) => {
-
-                            const newKey = event.target.value;
-                            const newValue = { ...value };
-                            if (originalValue.current && fieldKey in originalValue.current) {
-                                // @ts-ignore
-                                newValue[fieldKey] = undefined; // set to undefined to remove from the object, the datasource will remove it from the backend
-                            } else {
-                                // @ts-ignore
-                                delete newValue[fieldKey];
-                            }
-                            setInternalState(internalState.map((rowId) => {
-                                if (rowId[0] === id) {
-                                    return [id, {
-                                        key: newKey ?? "",
-                                        dataType: rowId[1].dataType
-                                    }];
-                                }
-                                return rowId;
-                            }));
-                            setValue({
-                                ...newValue,
-                                [newKey ?? ""]: entryValue
-                            });
+                            onFieldKeyChange(event.target.value);
                         }}/>
                 </Box>
 
                 <Box sx={{ flexGrow: 1 }}>
-                    {dataType !== "map" && buildInput(entryValue, fieldKey, dataType)}
+                    {(dataType !== "map" && dataType !== "array") && buildInput(entryValue, fieldKey, dataType)}
                 </Box>
 
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "column"
-                }}>
+                <IconButton size={"small"}
+                            sx={theme => ({
+                                background: theme.palette.background.default,
+                                height: "28px",
+                                width: "28px"
+                            })}
+                            onClick={openTypeSelectMenu}>
+                    <ArrowDropDownIcon/>
+                </IconButton>
 
-                    <IconButton aria-label="delete" size={"small"}
-                                onClick={(e) => {
-                                    currentMenuRowId.current = id;
-                                    openTypeSelectMenu(e);
-                                }}
-                                sx={{
-                                    height: "24px",
-                                    width: "24px"
-                                }}>
-                        <ArrowDropDownIcon fontSize={"small"}/>
-                    </IconButton>
-
-                    <IconButton aria-label="delete" size={"small"}
-                                onClick={() => {
-                                    const newValue = { ...value };
-                                    if (originalValue.current && fieldKey in originalValue.current) {
-                                        // @ts-ignore
-                                        newValue[fieldKey] = undefined;
-                                    } else {
-                                        // @ts-ignore
-                                        delete newValue[fieldKey];
-                                    }
-                                    setInternalState(internalState.filter((rowId) => rowId[0] !== id));
-                                    setValue({
-                                        ...newValue
-                                    });
-                                }}
-                                sx={{
-                                    height: "24px",
-                                    width: "24px"
-                                }}>
-                        <ClearIcon fontSize={"small"}
-                                   sx={{
-                                       height: "12px",
-                                       width: "12px"
-                                   }}/>
-                    </IconButton>
-
-                </Box>
+                <IconButton aria-label="delete"
+                            size={"small"}
+                            onClick={onDeleteClick}
+                            sx={{
+                                height: "28px",
+                                width: "28px"
+                            }}>
+                    <RemoveIcon fontSize={"small"}/>
+                </IconButton>
             </Typography>
 
-            {dataType === "map" && buildInput(entryValue, fieldKey, dataType)}
+            {(dataType === "map" || dataType === "array") && buildInput(entryValue, fieldKey, dataType)}
+
+            <Menu
+                anchorEl={menuAnchorEl}
+                open={menuOpen}
+                onClose={handleMenuClose}
+            >
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("string")}>string</MenuItem>
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("number")}>number</MenuItem>
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("date")}>date</MenuItem>
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("map")}>map</MenuItem>
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("array")}>array</MenuItem>
+            </Menu>
+        </>
+
+    );
+}
+
+function ArrayKeyValueRow<T>({
+                                 id,
+                                 index,
+                                 value,
+                                 setValue,
+                             }: {
+    id: number,
+    index: number,
+    value: T,
+    setValue: (value: T | null) => void,
+    disabled?: boolean,
+}) {
+
+    const [selectedDataType, setSelectedDataType] = useState<DataType>(getDataType(value) ?? "string");
+
+    function doUpdateDataType(dataType: DataType) {
+        setSelectedDataType(dataType);
+        handleMenuClose();
+    }
+
+    const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
+    const menuOpen = Boolean(menuAnchorEl);
+
+    const openTypeSelectMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setMenuAnchorEl(event.currentTarget);
+    };
+
+    const handleMenuClose = () => {
+        setMenuAnchorEl(null);
+    };
+
+    function buildInput(entryValue: any, dataType: DataType) {
+        if (dataType === "string" || dataType === "number") {
+            return <TextInput value={entryValue}
+                              inputType={dataType === "number" ? "number" : "text"}
+                              small={true}
+                              onChange={(event) => {
+                                  if (dataType === "number") {
+                                      const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
+                                      if (numberValue && isNaN(numberValue)) {
+                                          setValue(null);
+                                      } else if (numberValue !== undefined && numberValue !== null) {
+                                          setValue(numberValue as T);
+                                      } else {
+                                          setValue(null);
+                                      }
+                                  } else {
+                                      setValue(event.target.value as T);
+                                  }
+                              }}/>;
+        } else if (dataType === "date") {
+            return <DateTimeField value={entryValue}
+                                  small={true}
+                                  onChange={(date) => {
+                                      setValue(date as T);
+                                  }}/>;
+        } else if (dataType === "boolean") {
+            return <BooleanSwitch value={entryValue}
+                                  small={true}
+                                  position={"start"}
+                                  onChange={(event) => {
+                                      setValue(event.target.checked as T);
+                                  }}/>;
+        } else if (dataType === "array") {
+            return <Typography variant={"caption"}>
+                Arrays of arrays are not supported.
+            </Typography>;
+        } else if (dataType === "map") {
+            return <Box sx={theme => ({
+                ml: 1,
+                pl: 1,
+                borderLeft: `1px solid ${theme.palette.divider}`
+            })}>
+                <MapEditView value={entryValue}
+                             setValue={(updatedValue) => {
+                                 setValue(updatedValue);
+                             }}/>
+            </Box>;
+        } else {
+            return <Typography
+                variant={"caption"}>
+                {`Data type ${dataType} not supported yet`}
+            </Typography>;
+        }
+    }
+
+    return (<>
+            <Typography key={id.toString()}
+                        component={"div"}
+                        className={"mono"}
+                        sx={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: 1,
+                            alignItems: "center"
+                        }}>
+
+                <Box sx={{ flexGrow: 1 }}>
+                    {selectedDataType !== "map" && buildInput(value, selectedDataType)}
+                </Box>
+
+                <IconButton size={"small"}
+                            sx={theme => ({
+                                background: theme.palette.background.default,
+                                height: "28px",
+                                width: "28px"
+                            })}
+                            onClick={openTypeSelectMenu}>
+                    <ArrowDropDownIcon/>
+                </IconButton>
+
+            </Typography>
+
+            {selectedDataType === "map" && buildInput(value, selectedDataType)}
+
+            <Menu
+                anchorEl={menuAnchorEl}
+                open={menuOpen}
+                onClose={handleMenuClose}
+            >
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("string")}>string</MenuItem>
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("number")}>number</MenuItem>
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("map")}>map</MenuItem>
+                <MenuItem dense
+                          onClick={() => doUpdateDataType("date")}>date</MenuItem>
+            </Menu>
         </>
 
     );
@@ -273,9 +439,27 @@ function KeyValueRow<T>({
 
 interface MapEditViewParams<T extends Record<string, any>> {
     value: T;
-    setValue: (value: (T | null), shouldValidate?: boolean) => void;
+    setValue: (value: (T | null)) => void;
     fieldName?: string,
     disabled?: boolean
+}
+
+function getDefaultValueFor(dataType: DataType) {
+    if (dataType === "string") {
+        return "";
+    } else if (dataType === "number") {
+        return null;
+    } else if (dataType === "boolean") {
+        return false;
+    } else if (dataType === "date") {
+        return null;
+    } else if (dataType === "array") {
+        return [];
+    } else if (dataType === "map") {
+        return {};
+    } else {
+        return null;
+    }
 }
 
 function MapEditView<T extends Record<string, any>>({
@@ -312,22 +496,9 @@ function MapEditView<T extends Record<string, any>>({
 
     const originalValue = React.useRef<T>(value);
 
-    const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
-    const menuOpen = Boolean(menuAnchorEl);
-
-    const currentMenuRowId = useRef<number | null>(null);
-
-    const openTypeSelectMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setMenuAnchorEl(event.currentTarget);
-    };
-    const handleMenuClose = () => {
-        setMenuAnchorEl(null);
-        currentMenuRowId.current = null;
-    };
-    const updateDataType = (dataType: DataType) => {
-        const rowId = currentMenuRowId.current;
+    const updateDataType = (rowId: number, dataType: DataType) => {
         if (!rowId) {
-            console.warn("No key selected for data type update", currentMenuRowId.current);
+            console.warn("No key selected for data type update");
             return;
         }
         setInternalState(internalState.map((row) => {
@@ -341,9 +512,8 @@ function MapEditView<T extends Record<string, any>>({
         }));
         setValue({
             ...value,
-            [internalState.find((row) => row[0] === rowId)?.[1].key ?? ""]: null
+            [internalState.find((row) => row[0] === rowId)?.[1].key ?? ""]: getDefaultValueFor(dataType)
         })
-        handleMenuClose();
     };
 
     return <Box sx={{
@@ -353,56 +523,89 @@ function MapEditView<T extends Record<string, any>>({
         gap: 1
     }}>
         {internalState
-            .map(([id, { key, dataType }], index) => {
-                    const entryValue = key ? value[key] : "";
-                    return <KeyValueRow id={id}
-                                        key={id}
-                                        fieldKey={key}
-                                        value={value}
-                                        originalValue={originalValue}
-                                        setInternalState={setInternalState}
-                                        internalState={internalState}
-                                        setValue={setValue}
-                                        entryValue={entryValue}
-                                        dataType={dataType}
-                                        disabled={disabled}
-                                        currentMenuRowId={currentMenuRowId}
-                                        openTypeSelectMenu={openTypeSelectMenu}/>;
+            .map(([rowId, { key: fieldKey, dataType }], index) => {
+                    const entryValue = fieldKey ? value[fieldKey] : "";
+                    const onFieldKeyChange = (newKey: string) => {
+
+                        setInternalState(internalState.map((currentRowId) => {
+                            if (currentRowId[0] === rowId) {
+                                return [rowId, {
+                                    key: newKey ?? "",
+                                    dataType: currentRowId[1].dataType
+                                }];
+                            }
+                            return currentRowId;
+                        }));
+
+                        if (typeof value === "object" && newKey in value) {
+                            // if the key is already there, don't delete the previous value
+                            return;
+                        }
+
+                        const newValue = { ...value };
+                        if (originalValue.current && fieldKey in originalValue.current) {
+                            // @ts-ignore
+                            newValue[fieldKey] = undefined; // set to undefined to remove from the object, the datasource will remove it from the backend
+                        } else {
+                            // @ts-ignore
+                            delete newValue[fieldKey];
+                        }
+                        setValue({
+                            ...newValue,
+                            [newKey ?? ""]: entryValue
+                        });
+                    };
+                    return <MapKeyValueRow rowId={rowId}
+                                           key={rowId}
+                                           fieldKey={fieldKey}
+                                           value={value}
+                                           onDeleteClick={() => {
+                                               const newValue = { ...value };
+                                               if (originalValue.current && fieldKey in originalValue.current) {
+                                                   // @ts-ignore
+                                                   newValue[fieldKey] = undefined;
+                                               } else {
+                                                   // @ts-ignore
+                                                   delete newValue[fieldKey];
+                                               }
+                                               console.log("new value", originalValue.current, newValue)
+                                               setInternalState(internalState.filter((currentRowId) => currentRowId[0] !== rowId));
+                                               setValue({
+                                                   ...newValue
+                                               });
+                                           }}
+                                           onFieldKeyChange={onFieldKeyChange}
+                                           setValue={setValue}
+                                           entryValue={entryValue}
+                                           dataType={dataType}
+                                           disabled={disabled}
+                                           updateDataType={updateDataType}/>;
                 }
             )}
 
-        <Menu
-            anchorEl={menuAnchorEl}
-            open={menuOpen}
-            onClose={handleMenuClose}
-        >
-            <MenuItem dense
-                      onClick={() => updateDataType("string")}>string</MenuItem>
-            <MenuItem dense
-                      onClick={() => updateDataType("number")}>number</MenuItem>
-            <MenuItem dense
-                      onClick={() => updateDataType("boolean")}>boolean</MenuItem>
-            <MenuItem dense
-                      onClick={() => updateDataType("map")}>map</MenuItem>
-            <MenuItem dense
-                      onClick={() => updateDataType("date")}>date</MenuItem>
-        </Menu>
-
-        <Grid item
-              xs={12}>
+        <Box p={1}
+             justifyContent="center"
+             textAlign={"left"}>
             <Button variant={"text"}
                     size={"small"}
                     color="primary"
+                    fullWidth={false}
+                    disabled={disabled}
                     startIcon={<AddIcon/>}
-                    onClick={() =>
+                    onClick={() => {
+                        setValue({
+                            ...value,
+                            "": null
+                        });
                         setInternalState([...internalState, [getRandomId(), {
                             key: "",
                             dataType: "string"
-                        }]])
+                        }]]);
+                    }
                     }>
                 {fieldName ? `Add to ${fieldName}` : "Add"}
             </Button>
-        </Grid>
+        </Box>
 
     </Box>;
 }
@@ -419,7 +622,7 @@ function getDataType(value: any): DataType | undefined {
     } else if (typeof value === "boolean") {
         return "boolean";
     } else if (Array.isArray(value)) {
-        return "date";
+        return "array";
     } else if (value instanceof Date) {
         return "date";
     } else if (value instanceof EntityReference) {

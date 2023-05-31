@@ -13,7 +13,7 @@ import {
     useFormikContext
 } from "formik";
 
-import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
+import { FormikArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
@@ -82,14 +82,14 @@ export function BlockFieldBinding<T extends Array<any>>({
                        title={property.name}/>
     );
 
-    const body = <ArrayContainer value={value}
-                                 name={propertyKey}
-                                 addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
-                                 buildEntry={buildEntry}
-                                 onInternalIdAdded={setLastAddedId}
-                                 disabled={isSubmitting || Boolean(property.disabled)}
-                                 includeAddButton={!property.disabled}
-                                 newDefaultEntry={{
+    const body = <FormikArrayContainer value={value}
+                                       name={propertyKey}
+                                       addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
+                                       buildEntry={buildEntry}
+                                       onInternalIdAdded={setLastAddedId}
+                                       disabled={isSubmitting || Boolean(property.disabled)}
+                                       includeAddButton={!property.disabled}
+                                       newDefaultEntry={{
                                      [property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE]: Object.keys(property.oneOf.properties)[0]
                                  }}/>;
     return (

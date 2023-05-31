@@ -28,8 +28,11 @@ export * from "./CenteredView";
 export * from "./InfoLabel";
 export * from "./FireCMSAppBar";
 
+export * from "./ArrayContainer";
+
 export * from "./fields/FilledSelect";
 export * from "./fields/TextInput";
 export * from "./fields/TextareaAutosize";
 export * from "./fields/BooleanSwitch";
+export * from "./fields/DateTimeField";
 export * from "./fields/DisabledTextField";

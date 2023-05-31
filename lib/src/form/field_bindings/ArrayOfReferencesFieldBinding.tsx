@@ -8,7 +8,7 @@ import {
     ResolvedProperty
 } from "../../types";
 import { ReferencePreview } from "../../preview";
-import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
+import { FormikArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import {
     ErrorView,
     ExpandablePanel,
@@ -117,12 +117,12 @@ export function ArrayOfReferencesFieldBinding({
 
         {collection && <>
 
-            <ArrayContainer value={value}
-                            addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
-                            name={propertyKey}
-                            buildEntry={buildEntry}
-                            disabled={isSubmitting}
-                            newDefaultEntry={property.of.defaultValue}/>
+            <FormikArrayContainer value={value}
+                                  addLabel={property.name ? "Add reference to " + property.name : "Add reference"}
+                                  name={propertyKey}
+                                  buildEntry={buildEntry}
+                                  disabled={isSubmitting}
+                                  newDefaultEntry={property.of.defaultValue}/>
 
             <Box p={1}
                  justifyContent="center"

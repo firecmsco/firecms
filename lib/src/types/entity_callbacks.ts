@@ -61,6 +61,7 @@ export interface EntityCallbacks<M extends Record<string, any> = any, UserType e
     /**
      * Callback fired when any value in the form changes. You can use it
      * to define the ID of a `new` entity based on the current values.
+     * The returned string will be used as the ID of the entity.
      *
      * @param idUpdateProps
      */

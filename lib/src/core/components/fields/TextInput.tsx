@@ -49,6 +49,7 @@ export function TextInput<T extends string | number>({
 
     if (disabled) {
         return <DisabledTextField label={label}
+                                  small={small}
                                   value={value}/>
     }
 
@@ -96,9 +97,8 @@ export function TextInput<T extends string | number>({
                 borderRadius: `${theme.shape.borderRadius}px`,
                 maxWidth: "100%",
                 minHeight: small ? "48px" : "64px",
-                backgroundColor: focused ? fieldBackgroundHover(theme) : undefined,
                 "&:hover": {
-                    backgroundColor: focused ? undefined : fieldBackgroundHover(theme)
+                    backgroundColor: fieldBackgroundHover(theme)
                 }
             })}>
             <InputLabel

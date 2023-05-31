@@ -517,6 +517,9 @@ export function useFirestoreDataSource({
  */
 export function firestoreToCMSModel(data: any): any {
     if (data === null || data === undefined) return null;
+    if (deleteField().isEqual(data)) {
+        return undefined;
+    }
     if (serverTimestamp().isEqual(data)) {
         return null;
     }
@@ -533,12 +536,14 @@ export function firestoreToCMSModel(data: any): any {
         return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path));
     }
     if (Array.isArray(data)) {
-        return data.map(firestoreToCMSModel);
+        return data.map(firestoreToCMSModel).filter(v => v !== undefined);
     }
     if (typeof data === "object") {
         const result: Record<string, any> = {};
         for (const key of Object.keys(data)) {
-            result[key] = firestoreToCMSModel(data[key]);
+            const childValue = firestoreToCMSModel(data[key]);
+            if (childValue !== undefined)
+                result[key] = childValue;
         }
         return result;
     }

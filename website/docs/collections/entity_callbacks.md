@@ -10,6 +10,9 @@ after it gets saved or fetched:
 
 These callbacks are defined at the collection level under the prop `callbacks`.
 
+The `onIdUpdate` callback can be used to update the ID of the entity before
+saving it. This is useful if you need to generate the ID from other fields.
+
 This is useful if you need to add some logic or edit some fields or the entity
 IF before/after saving or deleting entities.
 

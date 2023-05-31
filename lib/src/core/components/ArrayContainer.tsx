@@ -5,7 +5,6 @@ import React, {
     useRef,
     useState
 } from "react";
-import { FieldArray } from "formik";
 
 import {
     Box,
@@ -35,30 +34,32 @@ import useMeasure from "react-use-measure";
 import { MoreVert } from "@mui/icons-material";
 
 interface ArrayContainerProps<T> {
+    droppableId: string;
     value: T[];
-    name: string;
     addLabel: string;
     buildEntry: (index: number, internalId: number) => React.ReactNode;
-    disabled: boolean;
+    disabled?: boolean;
     small?: boolean;
     onInternalIdAdded?: (id: number) => void;
     includeAddButton?: boolean;
-    newDefaultEntry?: T | null;
+    newDefaultEntry: T;
+    onValueChange: (value: T[]) => void
 }
 
 /**
  * @category Form custom fields
  */
 export function ArrayContainer<T>({
-                                      name,
+                                      droppableId,
                                       addLabel,
                                       value,
-                                      disabled,
+                                      disabled = false,
                                       buildEntry,
                                       small,
                                       onInternalIdAdded,
                                       includeAddButton,
-                                      newDefaultEntry = null
+                                      newDefaultEntry,
+                                      onValueChange
                                   }: ArrayContainerProps<T>) {
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
@@ -74,7 +75,6 @@ export function ArrayContainer<T>({
         [value, hasValue]);
 
     // Used to track the ids that have displayed the initial show animation
-    const animatedIds = useRef<Set<number>>(new Set(Object.values(internalIdsMap)));
     const internalIdsRef = useRef<Record<string, number>>(internalIdsMap);
 
     const [internalIds, setInternalIds] = useState<number[]>(
@@ -98,83 +98,25 @@ export function ArrayContainer<T>({
         }
     }, [hasValue, internalIds.length, value]);
 
-    return <FieldArray
-        name={name}
-        validateOnChange={true}
-        render={arrayHelpers => {
-            return <ArrayContainerInternal
-                disabled={disabled}
-                internalIds={internalIds}
-                onInternalIdAdded={onInternalIdAdded}
-                setInternalIds={setInternalIds}
-                arrayHelpers={arrayHelpers}
-                newDefaultEntry={newDefaultEntry}
-                value={value}
-                name={name}
-                small={small}
-                buildEntry={buildEntry}
-                hasValue={hasValue}
-                includeAddButton={includeAddButton}
-                addLabel={addLabel}
-                animatedIds={animatedIds}
-            />;
-        }}
-    />;
-}
 
-function ArrayContainerInternal<T>({
-                                       disabled,
-                                       internalIds,
-                                       onInternalIdAdded,
-                                       setInternalIds,
-                                       arrayHelpers,
-                                       newDefaultEntry,
-                                       value,
-                                       name,
-                                       small,
-                                       buildEntry,
-                                       hasValue,
-                                       includeAddButton,
-                                       addLabel,
-                                       animatedIds
-                                   }: {
-    disabled: boolean,
-    internalIds: any,
-    onInternalIdAdded: ((id: number) => void) | undefined,
-    setInternalIds: any,
-    arrayHelpers: any,
-    newDefaultEntry: T | null | undefined,
-    value: T[],
-    name: string,
-    small: boolean | undefined,
-    buildEntry: (index: number, internalId: number) => React.ReactNode,
-    hasValue: boolean,
-    includeAddButton: boolean | undefined,
-    addLabel: string,
-    animatedIds: React.MutableRefObject<Set<number>>,
-}) {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const insertInEnd = useCallback(() => {
+    const insertInEnd = () => {
         if (disabled) return;
         const id = getRandomId();
         const newIds: number[] = [...internalIds, id];
         if (onInternalIdAdded)
             onInternalIdAdded(id);
         setInternalIds(newIds);
-        arrayHelpers.push(newDefaultEntry);
-    }, [arrayHelpers, disabled, internalIds, newDefaultEntry, onInternalIdAdded, setInternalIds]);
+        onValueChange([...(value ?? []), newDefaultEntry]);
+    };
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const remove = useCallback((index: number) => {
+    const remove = (index: number) => {
         const newIds = [...internalIds];
         newIds.splice(index, 1);
         setInternalIds(newIds);
-        animatedIds.current.delete(internalIds[index]);
-        arrayHelpers.remove(index);
-    }, [arrayHelpers, internalIds, setInternalIds]);
+        onValueChange(value.filter((_, i) => i !== index));
+    };
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const copy = useCallback((index: number) => {
+    const copy = (index: number) => {
         const id = getRandomId();
         const copyingItem = value[index];
         const newIds: number[] = [
@@ -184,11 +126,11 @@ function ArrayContainerInternal<T>({
         if (onInternalIdAdded)
             onInternalIdAdded(id);
         setInternalIds(newIds);
-        arrayHelpers.insert(index + 1, copyingItem);
-    }, [arrayHelpers, internalIds, onInternalIdAdded, setInternalIds, value]);
+        // insert value in index + 1
+        onValueChange([...value.slice(0, index + 1), copyingItem, ...value.slice(index + 1)]);
+    };
 
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const onDragEnd = useCallback((result: any) => {
+    const onDragEnd = (result: any) => {
         // dropped outside the list
         if (!result.destination) {
             return;
@@ -202,12 +144,12 @@ function ArrayContainerInternal<T>({
         newIds[destinationIndex] = temp;
         setInternalIds(newIds);
 
-        arrayHelpers.move(sourceIndex, destinationIndex);
-    }, [arrayHelpers, internalIds, setInternalIds]);
+        onValueChange(arrayMove(value, sourceIndex, destinationIndex));
+    };
 
     return (
         <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId={`droppable_${name}`}
+            <Droppable droppableId={droppableId}
                        renderClone={(provided, snapshot, rubric) => {
                            const index = rubric.source.index;
                            const internalId = internalIds[index];
@@ -216,13 +158,11 @@ function ArrayContainerInternal<T>({
                                    provided={provided}
                                    internalId={internalId}
                                    index={index}
-                                   name={name}
                                    small={small}
                                    disabled={disabled}
                                    buildEntry={buildEntry}
                                    remove={remove}
                                    copy={copy}
-                                   animatedIds={animatedIds}
                                />
                            );
                        }}
@@ -234,8 +174,8 @@ function ArrayContainerInternal<T>({
                         {hasValue && internalIds.map((internalId: number, index: number) => {
                             return (
                                 <Draggable
-                                    key={`array_field_${name}_${internalId}`}
-                                    draggableId={`array_field_${name}_${internalId}`}
+                                    key={`array_field_${internalId}`}
+                                    draggableId={`array_field_${internalId}`}
                                     isDragDisabled={disabled}
                                     index={index}>
                                     {(provided, snapshot) => (
@@ -243,13 +183,11 @@ function ArrayContainerInternal<T>({
                                             provided={provided}
                                             internalId={internalId}
                                             index={index}
-                                            name={name}
                                             small={small}
                                             disabled={disabled}
                                             buildEntry={buildEntry}
                                             remove={remove}
                                             copy={copy}
-                                            animatedIds={animatedIds}
                                         />
                                     )}
                                 </Draggable>
@@ -261,12 +199,13 @@ function ArrayContainerInternal<T>({
                         {includeAddButton && <Box p={1}
                                                   justifyContent="center"
                                                   textAlign={"left"}>
-                            <Button variant="outlined"
-                                    size={"large"}
-                                    color="primary"
-                                    disabled={disabled}
-                                    startIcon={<AddIcon/>}
-                                    onClick={insertInEnd}>
+                            <Button
+                                variant={small ? "text" : "outlined"}
+                                size={small ? "small" : "large"}
+                                color="primary"
+                                disabled={disabled}
+                                startIcon={<AddIcon/>}
+                                onClick={insertInEnd}>
                                 {addLabel ?? "Add"}
                             </Button>
                         </Box>}
@@ -280,65 +219,43 @@ function ArrayContainerInternal<T>({
 type ArrayContainerItemProps = {
     provided: DraggableProvided,
     index: number,
-    name: string,
     internalId: number,
     small?: boolean,
     disabled: boolean,
     buildEntry: (index: number, internalId: number) => React.ReactNode,
     remove: (index: number) => void,
     copy: (index: number) => void,
-    animatedIds: React.MutableRefObject<Set<number>>,
 };
 
-function ArrayContainerItem({
-                                provided,
-                                index,
-                                name,
-                                internalId,
-                                small,
-                                disabled,
-                                buildEntry,
-                                remove,
-                                copy,
-                                animatedIds
-                            }: ArrayContainerItemProps) {
+export function ArrayContainerItem({
+                                       provided,
+                                       index,
+                                       internalId,
+                                       small,
+                                       disabled,
+                                       buildEntry,
+                                       remove,
+                                       copy,
+                                   }: ArrayContainerItemProps) {
 
     const [measureRef, bounds] = useMeasure();
-    const smallContent = bounds.height < 100;
-
-    // WIP of animation
-    // const initiallyDisplayed = animatedIds.current.has(internalId);
-    // const [displayed, setDisplayed] = useState(initiallyDisplayed);
-    // useEffect(() => {
-    //     setDisplayed(true);
-    //     animatedIds.current.add(internalId);
-    // }, []);
-    //
-    // console.log(animatedIds.current);
+    const contentOverflow = !small && bounds.height < 100;
 
     return <Box
         ref={provided.innerRef}
         {...provided.draggableProps}
-        style={
-            provided.draggableProps.style
-        }
+        style={provided.draggableProps.style}
         sx={theme => ({
             marginBottom: 1,
             borderRadius: theme.shape.borderRadius,
             opacity: 1
         })}
     >
-        {/*<Collapse*/}
-        {/*    in={displayed}*/}
-        {/*    appear={false}*/}
-        {/*    enter={initiallyDisplayed}*/}
-        {/*    timeout={500}>*/}
         <Box
             display="flex">
             <Box ref={measureRef}
                  flexGrow={1}
                  width={"calc(100% - 48px)"}
-                // key={`field_${name}_entryValue`}
             >
                 {buildEntry(index, internalId)}
             </Box>
@@ -347,24 +264,23 @@ function ArrayContainerItem({
                               remove={remove}
                               index={index}
                               provided={provided}
-                              smallContent={smallContent}
+                              contentOverflow={contentOverflow}
                               copy={copy}/>
         </Box>
-        {/*</Collapse>*/}
     </Box>;
 }
 
-function ArrayItemOptions({
-                              direction,
-                              disabled,
-                              remove,
-                              index,
-                              provided,
-                              copy,
-                              smallContent
-                          }: {
+export function ArrayItemOptions({
+                                     direction,
+                                     disabled,
+                                     remove,
+                                     index,
+                                     provided,
+                                     copy,
+                                     contentOverflow
+                                 }: {
     direction?: "row" | "column",
-    smallContent: boolean,
+    contentOverflow: boolean,
     disabled: boolean,
     remove: (index: number) => void,
     index: number,
@@ -384,7 +300,7 @@ function ArrayItemOptions({
     }, [setAnchorEl]);
 
     return <Box display="flex"
-                flexDirection={direction ?? "column"}
+                flexDirection={direction === "row" ? "row-reverse" : "column"}
                 sx={{
                     pl: 1
                 }}
@@ -405,7 +321,7 @@ function ArrayItemOptions({
             </Tooltip>
         </div>
 
-        {!smallContent && <>
+        {!contentOverflow && <>
             <Tooltip
                 title="Remove"
                 placement={direction === "column" ? "left" : undefined}>
@@ -433,7 +349,7 @@ function ArrayItemOptions({
             </Tooltip>
         </>}
 
-        {smallContent && <>
+        {contentOverflow && <>
             <IconButton onClick={openMenu}
                         size={"small"}>
                 <MoreVert/>
@@ -462,6 +378,13 @@ function ArrayItemOptions({
     </Box>;
 }
 
-function getRandomId() {
+function arrayMove(value: any[], sourceIndex: number, destinationIndex: number) {
+    const result = Array.from(value);
+    const [removed] = result.splice(sourceIndex, 1);
+    result.splice(destinationIndex, 0, removed);
+    return result;
+}
+
+export function getRandomId() {
     return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));
 }

@@ -16,12 +16,14 @@ export type DateTimeFieldProps = {
     mode?: "date" | "date_time";
     clearable?: boolean;
     small?: boolean;
+    disabled?: boolean;
 }
 
 export function DateTimeField({
                                   mode,
                                   value,
                                   onChange,
+                                  disabled,
                                   clearable,
                                   small
                               }: DateTimeFieldProps) {
@@ -32,10 +34,12 @@ export function DateTimeField({
 
     return <PickerComponent
         value={value ?? null}
+        disabled={disabled}
         renderInput={(params) =>
             (
                 <TextField {...params}
                            fullWidth
+                           disabled={disabled}
                            sx={(theme) => ({
                                height: small ? "48px" : "56px",
                                borderRadius: `${theme.shape.borderRadius}px`

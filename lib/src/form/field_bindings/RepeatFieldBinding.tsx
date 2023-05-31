@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
 import { FormControl, FormHelperText } from "@mui/material";
-import { ArrayContainer, FieldDescription, LabelWithIcon } from "../components";
+import { FormikArrayContainer, FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
@@ -63,14 +63,14 @@ export function RepeatFieldBinding<T extends Array<any>>({
         return <PropertyFieldBinding {...fieldProps}/>;
     }, [context, disabled, includeDescription, lastAddedId, ofProperty, property.resolvedProperties, propertyKey, underlyingValueHasChanged]);
 
-    const arrayContainer = <ArrayContainer value={value}
-                                           addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
-                                           name={propertyKey}
-                                           buildEntry={buildEntry}
-                                           onInternalIdAdded={setLastAddedId}
-                                           disabled={isSubmitting || Boolean(property.disabled)}
-                                           includeAddButton={!property.disabled}
-                                           newDefaultEntry={property.of.defaultValue}/>;
+    const arrayContainer = <FormikArrayContainer value={value}
+                                                 addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
+                                                 name={propertyKey}
+                                                 buildEntry={buildEntry}
+                                                 onInternalIdAdded={setLastAddedId}
+                                                 disabled={isSubmitting || Boolean(property.disabled)}
+                                                 includeAddButton={!property.disabled}
+                                                 newDefaultEntry={property.of.defaultValue}/>;
 
     const title = (<LabelWithIcon icon={getIconForProperty(property)}
                                   title={property.name}/>);
