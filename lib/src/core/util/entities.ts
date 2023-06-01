@@ -1,5 +1,5 @@
 import {
-    CMSType,
+    CMSType, DataType,
     Entity,
     EntityReference,
     EntityStatus,
@@ -45,14 +45,34 @@ export function getDefaultValuesFor<M extends Record<string, any>>(properties: P
         .reduce((a, b) => ({ ...a, ...b }), {}) as EntityValues<M>;
 }
 
-function getDefaultValueFor(property: PropertyOrBuilder) {
+export function getDefaultValueFor(property: PropertyOrBuilder) {
     if (isPropertyBuilder(property)) return undefined;
     if (property.dataType === "map" && property.properties) {
         const defaultValuesFor = getDefaultValuesFor(property.properties as Properties);
         if (Object.keys(defaultValuesFor).length === 0) return undefined;
         return defaultValuesFor;
-    } else {
+    } else if (property.defaultValue) {
         return property.defaultValue;
+    } else {
+        return getDefaultValueForDataType(property.dataType);
+    }
+}
+
+export function getDefaultValueForDataType(dataType: DataType) {
+    if (dataType === "string") {
+        return "";
+    } else if (dataType === "number") {
+        return null;
+    } else if (dataType === "boolean") {
+        return false;
+    } else if (dataType === "date") {
+        return null;
+    } else if (dataType === "array") {
+        return [];
+    } else if (dataType === "map") {
+        return {};
+    } else {
+        return null;
     }
 }
 

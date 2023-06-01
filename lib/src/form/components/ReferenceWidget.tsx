@@ -29,6 +29,10 @@ import {
     useReferenceDialog,
     useSideEntityController
 } from "../../hooks";
+import {
+    fieldBackground,
+    fieldBackgroundHover
+} from "../../core/util/field_colors";
 
 /**
  * This field allows selecting reference/s.
@@ -279,10 +283,10 @@ export function ReferenceWidget<M extends Record<string, any>>({
         position: "relative",
         transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
         borderRadius: `${theme.shape.borderRadius}px`,
-        backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : (theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.06)" : "rgba(255, 255, 255, 0.09)"),
+        backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : fieldBackground(theme),
         "&:hover": {
             cursor: disabled ? undefined : "pointer",
-            backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.09)" : "rgba(255, 255, 255, 0.13)"
+            backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : fieldBackgroundHover(theme)
         },
         color: disabled ? (theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)") : undefined,
         fontWeight: theme.typography.fontWeightMedium

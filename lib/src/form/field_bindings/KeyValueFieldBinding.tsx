@@ -18,7 +18,7 @@ import {
     ArrayContainer,
     BooleanSwitch,
     DateTimeField,
-    ExpandablePanel,
+    ExpandablePanel, getDefaultValueForDataType,
     getIconForProperty,
     TextInput
 } from "../../core";
@@ -394,6 +394,7 @@ function ArrayKeyValueRow<T>({
                         className={"mono"}
                         sx={{
                             display: "flex",
+                            minHeight: "48px",
                             flexDirection: "row",
                             gap: 1,
                             alignItems: "center"
@@ -443,24 +444,6 @@ interface MapEditViewParams<T extends Record<string, any>> {
     setValue: (value: (T | null)) => void;
     fieldName?: string,
     disabled?: boolean
-}
-
-function getDefaultValueFor(dataType: DataType) {
-    if (dataType === "string") {
-        return "";
-    } else if (dataType === "number") {
-        return null;
-    } else if (dataType === "boolean") {
-        return false;
-    } else if (dataType === "date") {
-        return null;
-    } else if (dataType === "array") {
-        return [];
-    } else if (dataType === "map") {
-        return {};
-    } else {
-        return null;
-    }
 }
 
 function MapEditView<T extends Record<string, any>>({
@@ -513,7 +496,7 @@ function MapEditView<T extends Record<string, any>>({
         }));
         setValue({
             ...value,
-            [internalState.find((row) => row[0] === rowId)?.[1].key ?? ""]: getDefaultValueFor(dataType)
+            [internalState.find((row) => row[0] === rowId)?.[1].key ?? ""]: getDefaultValueForDataType(dataType)
         })
     };
 

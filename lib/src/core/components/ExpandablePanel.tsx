@@ -1,32 +1,52 @@
-import { PropsWithChildren, useCallback, useState } from "react";
+import React, { PropsWithChildren, useCallback, useState } from "react";
 
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import {
+    Accordion,
+    AccordionDetails,
+    AccordionSummary, darken,
+    lighten
+} from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { fieldBackgroundSubtleHover } from "../util/field_colors";
 
 export function ExpandablePanel({
                                     title,
                                     children,
                                     invisible = false,
                                     initiallyExpanded = true,
+                                    highlightOnHover = false,
                                     padding = 1,
-                                    darken = true,
+                                    dark = true,
                                     onExpandedChange
                                 }: PropsWithChildren<{
     title: React.ReactNode,
     invisible?: boolean,
     initiallyExpanded?: boolean;
     padding?: number | string;
-    darken?: boolean,
+    highlightOnHover?: boolean,
+    dark?: boolean,
     onExpandedChange?: (expanded: boolean) => void
 }>) {
+
+    const [onHover, setOnHover] = React.useState(false);
+    const setOnHoverTrue = useCallback(() => setOnHover(true), []);
+    const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
     const [expandedInternal, setExpandedInternal] = useState(initiallyExpanded);
     return (
         <Accordion variant={"outlined"}
+                   onMouseEnter={setOnHoverTrue}
+                   onMouseMove={setOnHoverTrue}
+                   onMouseLeave={setOnHoverFalse}
                    disableGutters
                    expanded={expandedInternal}
                    sx={theme => ({
-                       backgroundColor: invisible ? "transparent" : (darken ? undefined : "inherit"),
+                       backgroundColor: invisible ? "transparent" : (dark ? (
+                           onHover && highlightOnHover
+                               ? fieldBackgroundSubtleHover(theme)
+                               : "transparent"
+                       ) : "inherit"),
+
                        borderRadius: invisible ? 0 : `${theme.shape.borderRadius}px`,
                        border: invisible ? "none" : undefined,
                        "&::before": {

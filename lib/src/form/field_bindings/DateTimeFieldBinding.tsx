@@ -10,6 +10,10 @@ import { FieldProps } from "../../types";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
+import {
+    fieldBackground,
+    fieldBackgroundHover
+} from "../../core/util/field_colors";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -61,7 +65,11 @@ export function DateTimeFieldBinding({
                                       fullWidth
                                       sx={(theme) => ({
                                           minHeight: "64px",
-                                          borderRadius: `${theme.shape.borderRadius}px`
+                                          borderRadius: `${theme.shape.borderRadius}px`,
+                                          backgroundColor: fieldBackground(theme),
+                                          "&:hover": {
+                                              backgroundColor: fieldBackgroundHover(theme)
+                                          }
                                       })}
                                       label={
                                           <LabelWithIcon
@@ -73,7 +81,11 @@ export function DateTimeFieldBinding({
                                           ...params.InputProps,
                                           sx: (theme) => ({
                                               minHeight: "64px",
-                                              borderRadius: `${theme.shape.borderRadius}px`
+                                              borderRadius: `${theme.shape.borderRadius}px`,
+                                              backgroundColor: fieldBackground(theme),
+                                              "&:hover": {
+                                                  backgroundColor: fieldBackgroundHover(theme)
+                                              }
                                           }),
                                           disableUnderline: true,
                                           endAdornment: <Box

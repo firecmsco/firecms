@@ -201,6 +201,7 @@ function ArrayContainerInternal<T>({
                                    buildEntry={buildEntry}
                                    remove={remove}
                                    copy={copy}
+                                   isDragging={snapshot.isDragging}
                                />
                            );
                        }}
@@ -226,6 +227,7 @@ function ArrayContainerInternal<T>({
                                             buildEntry={buildEntry}
                                             remove={remove}
                                             copy={copy}
+                                            isDragging={snapshot.isDragging}
                                         />
                                     )}
                                 </Draggable>

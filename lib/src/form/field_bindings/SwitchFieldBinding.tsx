@@ -50,7 +50,8 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                 small={false}
             />
 
-            {(showError || includeDescription) &&
+            {((showError && error) ||
+                    (includeDescription && (property.description || property.longDescription))) &&
                 <Box display={"flex"}
                      sx={{ marginLeft: "14px" }}
                 >

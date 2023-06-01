@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import {
-    Collapse,
     Box,
+    Collapse,
     FormControlLabel,
     FormHelperText,
     IconButton,
@@ -118,7 +118,9 @@ export function TextFieldBinding<T extends string | number>({
                 }
                 error={showError ? error : undefined}/>
 
-            {(showError || includeDescription || allowInfinity) &&
+            {((showError && error) ||
+                    (includeDescription && (property.description || property.longDescription)) ||
+                    allowInfinity) &&
                 <Box display={"flex"}
                      sx={{ marginLeft: "14px" }}
                 >
@@ -168,7 +170,6 @@ export function TextFieldBinding<T extends string | number>({
                                  size={"regular"}/>
             </Collapse>}
 
-            {/*</FormControl>*/}
         </>
     );
 

@@ -36,6 +36,10 @@ import { PreviewSize } from "../PropertyPreviewProps";
 import {
     SkeletonPropertyComponent
 } from "../property_previews/SkeletonPropertyComponent";
+import {
+    fieldBackground,
+    fieldBackgroundHover
+} from "../../core/util/field_colors";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -227,27 +231,29 @@ function ReferencePreviewWrap({
     size: PreviewSize;
     onClick?: () => void;
 }) {
-    return <Typography variant={"label"} sx={(theme) => {
-        const clickableStyles = onClick
-            ? {
-                tabindex: 0,
-                backgroundColor: onHover ? (theme.palette.mode === "dark" ? lighten(theme.palette.background.default, 0.1) : darken(theme.palette.background.default, 0.15)) : darken(theme.palette.background.default, 0.1),
-                transition: "background-color 300ms ease, box-shadow 300ms ease",
-                boxShadow: onHover ? "0 0 0 2px rgba(128,128,128,0.05)" : undefined,
-                cursor: onHover ? "pointer" : undefined
-            }
-            : {};
-        return ({
-            width: "100%",
-            display: "flex",
-            backgroundColor: darken(theme.palette.background.default, 0.1),
-            borderRadius: `${theme.shape.borderRadius}px`,
-            overflow: "hidden",
-            padding: size === "regular" ? 1 : 0,
-            itemsAlign: size === "tiny" ? "center" : undefined,
-            ...clickableStyles
-        });
-    }}
+    return <Typography variant={"label"}
+                       sx={(theme) => {
+                           const clickableStyles = onClick
+                               ? {
+                                   tabindex: 0,
+                                   backgroundColor: onHover
+                                       ? fieldBackgroundHover(theme)
+                                       : fieldBackground(theme),
+                                   transition: "background-color 300ms ease, box-shadow 300ms ease",
+                                   boxShadow: onHover ? "0 0 0 2px rgba(128,128,128,0.05)" : undefined,
+                                   cursor: onHover ? "pointer" : undefined
+                               }
+                               : {};
+                           return ({
+                               width: "100%",
+                               display: "flex",
+                               borderRadius: `${theme.shape.borderRadius}px`,
+                               overflow: "hidden",
+                               padding: size === "regular" ? 1 : 0,
+                               itemsAlign: size === "tiny" ? "center" : undefined,
+                               ...clickableStyles
+                           });
+                       }}
                        onClick={(event) => {
                            if (onClick) {
                                event.preventDefault();

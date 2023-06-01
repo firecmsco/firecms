@@ -37,7 +37,7 @@ export function LabelWithIcon({
                             fontSize: small ? "1rem" : ".85rem",
                             transformOrigin: "left top",
                             transform: small ? "translate(8px, 0px) scale(0.75)" : undefined
-                        }}>{title + (required ? " *" : "")}</Typography>
+                        }}>{(title ?? "") + (required ? " *" : "")}</Typography>
 
         </Box>
     );

@@ -2,8 +2,23 @@
 
 ### Changed
 
+- `@mui/x-date-pickers` dependency reverted to `^5.0.0`
+- Assigned default values to every property now, based on the property type.
+e.g. boolean properties will have a default value of `false`, maps to `{}`,
+and most other properties to `null`. 
+
+
+## [2.0.0-rc.1] - 2023-05-31
+
+### Changed
+
 - Added arbitrary key-value fields with the prop `keyValue` in map properties
- 
+- `@mui/x-date-pickers` dependency updated (you may need to bump your version 
+to 6.5.0)
+- Some enhancements to the `EntityCollectionTable` component, referring to 
+values being updated in the background. Also correct debouncing for
+table fields.
+
 ## [2.0.0-beta.7] - 2023-05-23
 
 ### Changed

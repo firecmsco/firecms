@@ -32,6 +32,7 @@ import {
 import { getHashValue } from "../../core";
 import useMeasure from "react-use-measure";
 import { MoreVert } from "@mui/icons-material";
+import { fieldBackgroundSubtleHover } from "../util/field_colors";
 
 interface ArrayContainerProps<T> {
     droppableId: string;
@@ -163,6 +164,7 @@ export function ArrayContainer<T>({
                                    buildEntry={buildEntry}
                                    remove={remove}
                                    copy={copy}
+                                   isDragging={snapshot.isDragging}
                                />
                            );
                        }}
@@ -188,6 +190,7 @@ export function ArrayContainer<T>({
                                             buildEntry={buildEntry}
                                             remove={remove}
                                             copy={copy}
+                                            isDragging={snapshot.isDragging}
                                         />
                                     )}
                                 </Draggable>
@@ -225,6 +228,7 @@ type ArrayContainerItemProps = {
     buildEntry: (index: number, internalId: number) => React.ReactNode,
     remove: (index: number) => void,
     copy: (index: number) => void,
+    isDragging: boolean,
 };
 
 export function ArrayContainerItem({
@@ -236,23 +240,35 @@ export function ArrayContainerItem({
                                        buildEntry,
                                        remove,
                                        copy,
+                                       isDragging
                                    }: ArrayContainerItemProps) {
 
     const [measureRef, bounds] = useMeasure();
-    const contentOverflow = !small && bounds.height < 100;
+    const contentOverflow = !small && bounds.height > 0 && bounds.height < 100;
+
+    const [onHover, setOnHover] = React.useState(false);
+    const setOnHoverTrue = useCallback(() => setOnHover(true), []);
+    const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
     return <Box
+        onMouseEnter={setOnHoverTrue}
+        onMouseMove={setOnHoverTrue}
+        onMouseLeave={setOnHoverFalse}
         ref={provided.innerRef}
         {...provided.draggableProps}
         style={provided.draggableProps.style}
         sx={theme => ({
+            backgroundColor: isDragging || onHover
+                ? fieldBackgroundSubtleHover(theme)
+                : undefined,
             marginBottom: 1,
-            borderRadius: theme.shape.borderRadius,
+            borderRadius: `${theme.shape.borderRadius}px`,
             opacity: 1
         })}
     >
         <Box
-            display="flex">
+            display="flex"
+            alignItems={"start"}>
             <Box ref={measureRef}
                  flexGrow={1}
                  width={"calc(100% - 48px)"}
@@ -302,7 +318,8 @@ export function ArrayItemOptions({
     return <Box display="flex"
                 flexDirection={direction === "row" ? "row-reverse" : "column"}
                 sx={{
-                    pl: 1
+                    pl: 1,
+                    pt: 1
                 }}
                 alignItems="center">
         <div

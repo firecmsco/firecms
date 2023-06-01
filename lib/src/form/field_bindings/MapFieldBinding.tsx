@@ -85,9 +85,10 @@ export function MapFieldBinding<T extends Record<string, any>>({
                             autoFocus: autoFocus && index === 0
                         };
                         return (
-                            <PropertyFieldBinding
-                                key={`map-${propertyKey}-${index}`}
-                                {...fieldProps}/>
+                            <div key={`map-${propertyKey}-${index}`}>
+                                <PropertyFieldBinding
+                                    {...fieldProps}/>
+                            </div>
                         );
                     }
                 )}

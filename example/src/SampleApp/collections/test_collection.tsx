@@ -101,10 +101,12 @@ export const translationProperties: Properties<any> = {
         name: "Vasco"
     }
 };
-const questionProperties = buildProperties({
+
+export const questionProperties = buildProperties({
     id: {
         dataType: "string",
-        name: "ID"
+        name: "ID",
+        validation: { required: true }
     },
     text: {
         dataType: "map",
@@ -116,7 +118,10 @@ const questionProperties = buildProperties({
         name: "Question type",
         enumValues: {
             multiple_choice: "Multiple choice",
-            single_choice: "Single choice"
+            single_choice: "Single choice",
+            integer_input: "Integer input",
+            birth_year: "Birth year",
+            boolean: "Yes/No",
         }
     }
 });
@@ -201,7 +206,10 @@ export const testCollection = buildCollection({
         },
         test_string: {
             dataType: "string",
-            name: "Test string"
+            name: "Test string",
+            validation: {
+                required: true
+            }
         },
         test_custom: {
             dataType: "string",

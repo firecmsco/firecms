@@ -25,7 +25,9 @@ export interface SnackbarController {
     open: (props: {
         type: SnackbarMessageType;
         message: React.ReactNode;
+        autoHideDuration?: number;
     }) => void;
+
 }
 
 /**
@@ -48,14 +50,17 @@ export const useSnackbarController = () => {
         type: SnackbarMessageType;
         // title?: string;
         message: React.ReactNode;
+        autoHideDuration?: number;
     }) => {
         const {
             type,
-            message
+            message,
+            autoHideDuration
         } = props;
         enqueueSnackbar({
             message,
-            variant: type
+            variant: type,
+            autoHideDuration
         })
     }, []);
 

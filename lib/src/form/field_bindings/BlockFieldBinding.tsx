@@ -13,7 +13,11 @@ import {
     useFormikContext
 } from "formik";
 
-import { FormikArrayContainer, FieldDescription, LabelWithIcon } from "../components";
+import {
+    FormikArrayContainer,
+    FieldDescription,
+    LabelWithIcon
+} from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
@@ -23,7 +27,11 @@ import {
     FormContext,
     PropertyOrBuilder
 } from "../../types";
-import { ExpandablePanel, getIconForProperty } from "../../core";
+import {
+    ExpandablePanel,
+    getDefaultValueFor,
+    getIconForProperty
+} from "../../core";
 import {
     DEFAULT_ONE_OF_TYPE,
     DEFAULT_ONE_OF_VALUE
@@ -83,6 +91,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                        title={property.name}/>
     );
 
+    const firstOneOfKey = Object.keys(property.oneOf.properties)[0];
     const body = <FormikArrayContainer value={value}
                                        name={propertyKey}
                                        addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
@@ -91,8 +100,9 @@ export function BlockFieldBinding<T extends Array<any>>({
                                        disabled={isSubmitting || Boolean(property.disabled)}
                                        includeAddButton={!property.disabled}
                                        newDefaultEntry={{
-                                     [property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE]: Object.keys(property.oneOf.properties)[0]
-                                 }}/>;
+                                           [property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE]: firstOneOfKey,
+                                           [property.oneOf!.valueField ?? DEFAULT_ONE_OF_VALUE]: getDefaultValueFor(property.oneOf.properties[firstOneOfKey])
+                                       }}/>;
     return (
 
         <FormControl fullWidth error={showError}>
@@ -157,12 +167,14 @@ function BlockEntry({
 
     const type = value && value[typeField];
     const [typeInternal, setTypeInternal] = useState<string | undefined>(type ?? undefined);
+    console.log("type", value, type);
 
     const formikContext = useFormikContext();
 
     useEffect(() => {
         if (!type) {
             updateType(Object.keys(properties)[0]);
+            console.log("useEffect", Object.keys(properties)[0]);
         }
     }, []);
 
@@ -197,11 +209,13 @@ function BlockEntry({
         setTypeInternal(newType);
         formikContext.setFieldTouched(typeFieldName);
         formikContext.setFieldValue(typeFieldName, newType);
-        formikContext.setFieldValue(valueFieldName, null);
+        console.log("updateType", newType, property ? getDefaultValueFor(property) : null);
+        formikContext.setFieldValue(valueFieldName, property ? getDefaultValueFor(property) : null);
     }, [typeFieldName, valueFieldName]);
 
     return (
         <Paper sx={(theme) => ({
+            background: "transparent",
             padding: theme.spacing(1),
             my: 1,
             py: 2
