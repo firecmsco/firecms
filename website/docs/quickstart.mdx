@@ -4,7 +4,7 @@ title: Quickstart
 sidebar_label: Quickstart
 ---
 
-:::note
+:::important
 Please note that in order to use FireCMS as described in this quickstart guide,
 you need an existing Firebase project with features enabled, such as Firebase
 Auth, Firestore and Firebase storage.
@@ -64,4 +64,14 @@ yarn dev
 ```
 
 You should be able to see your FireCMS instance in your browser, awesome!
+
+:::warning
+Vite uses the default url `http://127.0.0.1:5173` for the development server
+in versions of `node` < 18.0.0.
+If you are using a version of node < 18.0.0, you will need to add this url to
+the authorized domains in the Firebase console.
+Firebase Auth will require to add this url to the authorized domains in the
+Firebase console.
+Alternatively, you can use the url `http://localhost:5173`.
+:::
 

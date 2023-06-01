@@ -81,7 +81,7 @@ export function useValidateAuthenticator({
                     setNotAllowedError("App Check failed.");
                     authController.signOut();
                 } else {
-                    console.log("App Check success.");
+                    console.debug("App Check success.");
                 }
             } catch (e: any) {
                 setNotAllowedError(e.message);

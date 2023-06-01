@@ -8,11 +8,38 @@ In order to run **FireCMS**, you need to create a Firebase project first, with
 some requirements:
 
 ### Firestore
+
 You need to enable **Firestore** in it. You can initialise the security rules
 in test mode to allow reads and writes, but you are encouraged to write rules
 that are suited for your domain.
 
+:::important
+In a default Firestore project, it is likely that your Firestore rules
+will not allow you to read or write to the database.
+For the products demo to work, your rules should look like this:
+
+```
+rules_version = '2';
+service cloud.firestore {
+
+    match /{document=**} {
+      allow read: false;
+      allow write: false;
+    }
+    
+    match /databases/{database}/documents {
+        match /products/{id=**} {
+          allow read: if true;
+          allow write: if request.auth != null;
+        }
+    }
+}
+```
+
+:::
+
 ### Web app
+
 In the project settings, you need to create a **Web app** within your
 project, from which you can get your Firebase config as a Javascript object.
 That is the object that you need to pass to the CMS.
@@ -26,11 +53,18 @@ Firebase Hosting site at a later stage and link it to your webapp.
 :::
 
 ### Authentication
+
 You will most likely want to enable authentication in order to pass the login
 screen
 
-![firebase_setup](/img/firebase_setup_auth.png)
+:::warning
+Vite uses the default url `http://127.0.0.1:5173` for the development server.
+Firebase Auth will require to add this url to the authorized domains in the
+Firebase console.
+Alternatively, you can use the url `http://localhost:5173`.
+:::
 
+![firebase_setup](/img/firebase_setup_auth.png)
 
 ### Storage
 

@@ -552,7 +552,6 @@ function MapEditView<T extends Record<string, any>>({
                                                    // @ts-ignore
                                                    delete newValue[fieldKey];
                                                }
-                                               console.log("new value", originalValue.current, newValue)
                                                setInternalState(internalState.filter((currentRowId) => currentRowId[0] !== rowId));
                                                setValue({
                                                    ...newValue

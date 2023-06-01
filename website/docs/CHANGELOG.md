@@ -2,6 +2,17 @@
 id: changelog
 title: Changelog
 ---
+## [2.0.0-rc.1] - 2023-05-31
+
+### Changed
+
+- Added arbitrary key-value fields with the prop `keyValue` in map properties
+- `@mui/x-date-pickers` dependency updated (you may need to bump your version 
+to 6.5.0)
+- Some enhancements to the `EntityCollectionTable` component, referring to 
+values being updated in the background. Also correct debouncing for
+table fields.
+
 ## [2.0.0-beta.7] - 2023-05-23
 
 ### Changed

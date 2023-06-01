@@ -167,14 +167,12 @@ function BlockEntry({
 
     const type = value && value[typeField];
     const [typeInternal, setTypeInternal] = useState<string | undefined>(type ?? undefined);
-    console.log("type", value, type);
 
     const formikContext = useFormikContext();
 
     useEffect(() => {
         if (!type) {
             updateType(Object.keys(properties)[0]);
-            console.log("useEffect", Object.keys(properties)[0]);
         }
     }, []);
 
@@ -209,7 +207,6 @@ function BlockEntry({
         setTypeInternal(newType);
         formikContext.setFieldTouched(typeFieldName);
         formikContext.setFieldValue(typeFieldName, newType);
-        console.log("updateType", newType, property ? getDefaultValueFor(property) : null);
         formikContext.setFieldValue(valueFieldName, property ? getDefaultValueFor(property) : null);
     }, [typeFieldName, valueFieldName]);
 

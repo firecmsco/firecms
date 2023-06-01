@@ -134,6 +134,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         useEffect(
             () => {
                 if (!equal(value, internalValueRef.current)) {
+                    setError(undefined);
                     setInternalValue(value);
                     internalValueRef.current = value;
                     onValueUpdated();
@@ -170,6 +171,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         useEffect(() => {
             validation
                 .validate(internalValue)
+                .then(() => setError(undefined))
                 .catch((e) => {
                     setError(e);
                 });

@@ -13,7 +13,6 @@ import {
 
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
-import isEqual from "react-fast-compare";
 import { TableSize } from "../../Table";
 import { getRowHeight } from "../../Table/common";
 import { ErrorBoundary } from "../../ErrorBoundary";
@@ -96,7 +95,7 @@ const TableCellRoot = styled("div", {})<TableCellRootProps>(({
     overflow: "hidden",
     // contain: "content",
     contain: "content",
-    transition: "border-color 400ms ease-in-out, background-color 600ms ease"
+    transition: "border-color 200ms ease-in-out, background-color 500ms ease"
 }));
 
 type TableCellInnerProps = {
@@ -173,7 +172,7 @@ export const TableCell = React.memo<TableCellProps>(
             }
             const handler = setTimeout(() => {
                 setInternalSaved(false);
-            }, 500);
+            }, 800);
             return () => {
                 clearTimeout(handler);
             };
@@ -365,4 +364,19 @@ export const TableCell = React.memo<TableCellProps>(
 
             </TableCellRoot>
         );
-    }, isEqual) as React.FunctionComponent<TableCellProps>;
+    }, (a, b) =>
+        a.error === b.error &&
+        a.value === b.value &&
+        a.disabled === b.disabled &&
+        a.saved === b.saved &&
+        a.allowScroll === b.allowScroll &&
+        a.align === b.align &&
+        a.size === b.size &&
+        a.disabledTooltip === b.disabledTooltip &&
+        a.width === b.width &&
+        a.focused === b.focused &&
+        a.showExpandIcon === b.showExpandIcon &&
+        a.removePadding === b.removePadding &&
+        a.fullHeight === b.fullHeight &&
+        a.selected === b.selected &&
+        a.selectedRow === b.selectedRow) as React.FunctionComponent<TableCellProps>;
