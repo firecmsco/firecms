@@ -26,7 +26,7 @@ module.exports = {
         {
             type: "category",
             label: "Properties",
-            collapsed: false,
+            collapsed: true,
             items: [
                 "properties/properties_intro",
                 {
@@ -36,9 +36,11 @@ module.exports = {
                         "properties/fields/text_fields",
                         "properties/fields/selects",
                         "properties/fields/file_upload",
-                        "properties/fields/references",
                         "properties/fields/switch",
                         "properties/fields/date_time",
+                        "properties/fields/references",
+                        "properties/fields/group",
+                        "properties/fields/key_value",
                         "properties/fields/repeat",
                         "properties/fields/block",
                     ]

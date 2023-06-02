@@ -4,6 +4,7 @@ import Layout from "@theme/Layout";
 import Features from "../partials/features/Features";
 import { Hero } from "../partials/general/Hero";
 import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
+import HeroButtons from "../partials/home/HeroButtons";
 
 function FeaturesPage() {
 
@@ -37,6 +38,8 @@ function FeaturesPage() {
                     <Features/>
 
                     <DeveloperFeatures/>
+
+                    <HeroButtons/>
 
                 </main>
             </div>

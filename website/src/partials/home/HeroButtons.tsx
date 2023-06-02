@@ -18,24 +18,23 @@ function HeroButtons() {
         </defs>
     </svg>;
 
-    return <div className="mt-8 mb-8 flex justify-center flex-col md:flex-row">
+    return <div
+        className="mt-8 mb-8 flex justify-center lg:flex-row flex-col-reverse items-center">
 
         <a
-            className={"btn shadow-none mb-4 sm:mb-0  py-4 text-white  dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full sm:w-auto rounded"}
+            className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded my-2 lg:mx-2"}
             href={"https://discord.gg/fxy7xsQm3m"}
         >
             {discordIcon}
         </a>
+
+        <div
+            className={"font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md my-2 lg:mx-2"}>
+            yarn create firecms-app
+        </div>
+
         <a
-            className={CTAOutlinedButtonMixin + " w-full mb-4 sm:w-auto sm:mb-0 sm:ml-4 ml-2"}
-            href="https://demo.firecms.co"
-            rel="noopener noreferrer"
-            target="_blank"
-        >
-            Demo
-        </a>
-        <a
-            className={CTAButtonMixin + "  sm:mb-0 w-full md:w-auto rounded md:ml-4 ml-2"}
+            className={CTAButtonMixin + " w-full lg:w-auto my-2 lg:mx-2"}
             // href={"https://app.firecms.co"}
             href={useBaseUrl("docs/")}
         >

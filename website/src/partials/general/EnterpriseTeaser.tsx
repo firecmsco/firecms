@@ -11,7 +11,7 @@ export function EnterpriseTeaser() {
                 <div
                     className="relative flex flex-col items-center px-6 py-12">
                     <h4 className="h2 my-4 text-white uppercase">
-                        Enterprise?
+                        Enterprise or start-up?
                     </h4>
 
                     <div

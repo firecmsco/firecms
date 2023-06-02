@@ -26,7 +26,11 @@ import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 
 import { useColorMode } from "@docusaurus/theme-common";
 import { TwoColumns } from "../general/TwoColumns";
-import { ContainerMixin, ContainerSmallMixin } from "../utils";
+import {
+    ContainerMixin,
+    ContainerSmallMixin, CTACaret,
+    CTAOutlinedButtonMixin
+} from "../utils";
 import { BrowserFrame } from "../BrowserFrame";
 
 function Features() {
@@ -81,6 +85,16 @@ function Features() {
                     name of the user by clicking on the name and editing
                     it.
                 </p>
+
+                <a
+                    className={CTAOutlinedButtonMixin + " w-fit"}
+                    href="https://demo.firecms.co"
+                    rel="noopener noreferrer"
+                    target="_blank"
+                >
+                    Try the demo
+                    <CTACaret/>
+                </a>
             </section>
             <TwoColumns
                 reverseSmall={true}

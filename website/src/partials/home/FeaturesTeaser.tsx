@@ -23,6 +23,11 @@ import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 import { useColorMode } from "@docusaurus/theme-common";
 import { lightningIcon } from "../icons";
 import { TwoColumns } from "../general/TwoColumns";
+import {
+    CTACaret,
+    CTAOutlinedButtonMixin,
+    CTAOutlinedButtonWhiteMixin
+} from "../utils";
 
 function FeaturesTeaser() {
 
@@ -34,40 +39,55 @@ function FeaturesTeaser() {
 
             <TwoColumns
                 left={
-                    <div className={"text-xl"}>
+                    <>
+                        <div className={"text-xl"}>
 
-                        <div className={"flex items-center mb-3 "}>
+                            <div className={"flex items-center mb-3 "}>
 
-                            <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
-                                {lightningIcon}
+                                <div
+                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                                    {lightningIcon}
+                                </div>
+
+                                <h3 className="h3 m-0">
+                                    Advanced Editing Features
+                                </h3>
+
                             </div>
 
-                            <h3 className="h3 m-0">
-                                Advanced Editing Features
-                            </h3>
+                            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
+                                FireCMS offers both flexibility and an excellent
+                                user experience. Edit your collections and
+                                entities
+                                using a user-friendly <b>spreadsheet view and
+                                effective
+                                forms</b>.
+                            </p>
+
+                            <p className="text-gray-600 dark:text-gray-200">
+                                Generate Attractive Views from Your Schemas
+                                Automatically
+                            </p>
+                            <p className="text-gray-600 dark:text-gray-200">
+                                FireCMS creates CRUD views based on your
+                                configurations with ease. It's simple to set up
+                                for
+                                common cases and just as easy to extend and
+                                customize to fit your specific needs.
+                            </p>
 
                         </div>
 
-                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
-                            FireCMS offers both flexibility and an excellent
-                            user experience. Edit your collections and entities
-                            using a user-friendly <b>spreadsheet view and
-                            effective
-                            forms</b>.
-                        </p>
-
-                        <p className="text-gray-600 dark:text-gray-200">
-                            Generate Attractive Views from Your Schemas
-                            Automatically
-                        </p>
-                        <p className="text-gray-600 dark:text-gray-200">
-                            FireCMS creates CRUD views based on your
-                            configurations with ease. It's simple to set up for
-                            common cases and just as easy to extend and
-                            customize to fit your specific needs.
-                        </p>
-                    </div>
+                        <a
+                            className={CTAOutlinedButtonMixin + " w-fit"}
+                            href="https://demo.firecms.co"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                        >
+                            Try the demo
+                            <CTACaret/>
+                        </a>
+                    </>
                 }
                 right={<>
                     <div className="relative flex flex-col p-4">

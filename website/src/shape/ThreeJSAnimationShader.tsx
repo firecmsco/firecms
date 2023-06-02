@@ -145,6 +145,7 @@ export default function ThreeJSAnimationShader({
         });
 
         material.wireframe = wireframe;
+        material.flatShading   = true;
         return material;
     }
 

@@ -31,7 +31,7 @@ function HeroHome({}) {
         </video>
     </div>;
 
-    const titleDiv = <div className="px-16 md:px-32 my-4 ">
+    const titleDiv = <div className="px-8 md:px-16 my-4 ">
 
         <div className="text-center mt-16 lg:mt-28">
             <h1 className="block tracking-tight text-5xl md:text-6xl font-extrabold tracking-tight leading-none uppercase">
@@ -61,8 +61,8 @@ function HeroHome({}) {
 
             </h1>
 
-            <h2 className={"text-3xl"}>
-                The AI enabled Content Management System
+            <h2 className={"text-xl"}>
+                You are building a great product, you don't need to build a CMS
             </h2>
 
             <HeroButtons/>
@@ -72,7 +72,7 @@ function HeroHome({}) {
     </div>;
 
     return (
-        <section className="relative my-12 mb-16" style={{
+        <section id="hero" className="relative my-32 md:my-48" style={{
             isolation: "isolate"
         }}>
 
