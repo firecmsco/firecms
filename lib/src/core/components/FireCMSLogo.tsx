@@ -4,7 +4,11 @@ export function FireCMSLogo({
                                 width,
                                 height,
                                 style
-                            }: { width?: string, height?: string, style?: React.CSSProperties }) {
+                            }: {
+    width?: string,
+    height?: string,
+    style?: React.CSSProperties
+}) {
     return (
         <svg
             width={width ?? "100%"} height={height ?? "100%"}

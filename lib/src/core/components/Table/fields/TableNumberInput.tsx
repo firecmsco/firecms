@@ -62,21 +62,7 @@ export function NumberTableInput(props: {
     return (
         <Input
             inputRef={ref}
-            sx={{
-                width: "100%",
-                fontSize: "unset",
-                fontFamily: "unset",
-                background: "unset",
-                border: "unset",
-                resize: "none",
-                outline: "none",
-                padding: 0,
-                margin: 0,
-                color: "unset",
-                fontWeight: "unset",
-                lineHeight: "unset",
-                textAlign: "right"
-            }}
+            className="w-full text-right p-0 m-0 bg-transparent border-none resize-none outline-none font-normal leading-normal text-unset"
             inputProps={{
                 style: {
                     textAlign: align

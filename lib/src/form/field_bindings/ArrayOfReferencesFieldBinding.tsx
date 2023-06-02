@@ -8,7 +8,11 @@ import {
     ResolvedProperty
 } from "../../types";
 import { ReferencePreview } from "../../preview";
-import { FormikArrayContainer, FieldDescription, LabelWithIcon } from "../components";
+import {
+    FormikArrayContainer,
+    FieldDescription,
+    LabelWithIcon
+} from "../components";
 import {
     ErrorView,
     ExpandablePanel,

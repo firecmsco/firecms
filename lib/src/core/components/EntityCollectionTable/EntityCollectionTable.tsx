@@ -505,13 +505,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 }}
             >
 
-                <Box sx={(theme) => ({
-                    height: "100%",
-                    width: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    backgroundColor: theme.palette.background.paper
-                })}>
+                <Box className="h-full w-full flex flex-col bg-paper"
+                     style={{ backgroundColor: theme.palette.background.paper }}>
 
                     <CollectionTableToolbar
                         forceFilter={disabledFilterChange}
@@ -525,7 +520,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         actions={actions}
                         loading={dataLoading}/>
 
-                    <Box sx={{ flexGrow: 1 }}>
+                    <Box className="flex-grow">
                         <VirtualTable
                             data={data}
                             columns={columns}

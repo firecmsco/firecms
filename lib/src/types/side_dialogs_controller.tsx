@@ -1,4 +1,3 @@
-
 /**
  * Controller to open the side dialog
  * @category Hooks and utilities

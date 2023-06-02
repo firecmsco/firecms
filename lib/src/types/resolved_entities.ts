@@ -118,8 +118,7 @@ export type ResolvedReferenceProperty =
 /**
  * @category Entity properties
  */
-export type ResolvedArrayProperty
-    <T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType>
+export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType>
     =
     Omit<ArrayProperty, "of" | "oneOf" | "dataType"> &
     {

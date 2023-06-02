@@ -211,12 +211,7 @@ function BlockEntry({
     }, [typeFieldName, valueFieldName]);
 
     return (
-        <Paper sx={(theme) => ({
-            background: "transparent",
-            padding: theme.spacing(1),
-            my: 1,
-            py: 2
-        })} elevation={0}>
+        <Paper className="bg-transparent p-4 my-4 py-8" elevation={0}>
 
             <FastField
                 required={true}
@@ -231,7 +226,7 @@ function BlockEntry({
                             </InputLabel>
                             <Select
                                 fullWidth
-                                sx={{ marginBottom: 2 }}
+                                className="mb-2"
                                 labelId={`${name}_${index}_select_label`}
                                 label={"Type"}
                                 value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}

@@ -17,6 +17,7 @@ import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { TextInput } from "../../core/components/fields/TextInput";
 import { PropertyPreview } from "../../preview";
+import TTypography from "../../migrated/TTypography";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -122,7 +123,7 @@ export function TextFieldBinding<T extends string | number>({
                     (includeDescription && (property.description || property.longDescription)) ||
                     allowInfinity) &&
                 <Box display={"flex"}
-                     sx={{ marginLeft: "14px" }}
+                     className="ml-3.5"
                 >
 
                     <Box flexGrow={1}>
@@ -149,19 +150,16 @@ export function TextFieldBinding<T extends string | number>({
                             }
                             disabled={disabled}
                             label={
-                                <Typography variant={"caption"}>
+                                <TTypography variant={"caption"}>
                                     Set value to Infinity
-                                </Typography>
+                                </TTypography>
                             }
                         />
                     }
                 </Box>}
 
             {url && <Collapse
-                sx={{
-                    marginTop: 1,
-                    marginLeft: 1
-                }}
+                className="mt-1 ml-1"
                 in={Boolean(value)}
                 appear={true}
                 timeout={500}>

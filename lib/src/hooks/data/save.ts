@@ -50,22 +50,22 @@ export type SaveEntityWithCallbacksProps<M extends Record<string, any>> =
  * @category Hooks and utilities
  */
 export async function saveEntityWithCallbacks<M extends Record<string, any>, UserType extends User>({
-                                                               collection,
-                                                               path,
-                                                               entityId,
-                                                               values,
-                                                               previousValues,
-                                                               status,
-                                                               dataSource,
-                                                               context,
-                                                               onSaveSuccess,
-                                                               onSaveFailure,
-                                                               onPreSaveHookError,
-                                                               onSaveSuccessHookError
-                                                           }: SaveEntityWithCallbacksProps<M> & {
-                                                               dataSource: DataSource,
-                                                               context: FireCMSContext<UserType>,
-                                                           }
+                                                                                                        collection,
+                                                                                                        path,
+                                                                                                        entityId,
+                                                                                                        values,
+                                                                                                        previousValues,
+                                                                                                        status,
+                                                                                                        dataSource,
+                                                                                                        context,
+                                                                                                        onSaveSuccess,
+                                                                                                        onSaveFailure,
+                                                                                                        onPreSaveHookError,
+                                                                                                        onSaveSuccessHookError
+                                                                                                    }: SaveEntityWithCallbacksProps<M> & {
+                                                                                                        dataSource: DataSource,
+                                                                                                        context: FireCMSContext<UserType>,
+                                                                                                    }
 ): Promise<void> {
 
     let updatedValues: Partial<EntityValues<M>>;

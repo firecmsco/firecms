@@ -69,7 +69,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
     });
 
     const mapFormView = <>
-        <Box sx={{ py: 1, display: "flex", flexDirection: "column", gap: 2 }}>
+        <Box className="py-1 flex flex-col space-y-2">
             {Object.entries(mapProperties)
                 .filter(([_, property]) => !isHidden(property))
                 .map(([entryKey, childProperty], index) => {

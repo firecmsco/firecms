@@ -23,6 +23,7 @@ import {
 import {
     StorageUploadProgress
 } from "../../../../form/components/StorageUploadProgress";
+import TTypography from "../../../../migrated/TTypography";
 
 const dropZoneMixin = (hasValue: boolean) => ({
     transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
@@ -238,12 +239,11 @@ function StorageUpload({
              onMouseEnter={() => setOnHover(true)}
              onMouseMove={() => setOnHover(true)}
              onMouseLeave={() => setOnHover(false)}
-             sx={{
-                 ...dropZoneMixin(hasValue),
-                 ...(isDragActive ? activeDropMixin(theme) : {}),
-                 ...(isDragAccept ? acceptDropMixin(theme) : {}),
-                 ...(isDragReject ? rejectDropMixin(theme) : {})
-             }}
+             className={`${
+                 dropZoneMixin(hasValue)
+             } ${isDragActive ? activeDropMixin(theme) : ""} ${
+                 isDragAccept ? acceptDropMixin(theme) : ""
+             } ${isDragReject ? rejectDropMixin(theme) : ""}`}
         >
 
             <input autoFocus={autoFocus} {...getInputProps()} />
@@ -278,20 +278,14 @@ function StorageUpload({
             }
 
             {!internalValue && <Box
-                sx={{
-                    flexGrow: 1,
-                    m: 2,
-                    maxWidth: 200
-                }}
+                className="flex-grow m-2 max-w-[200px]"
                 onClick={open}>
-                <Typography
-                    sx={{
-                        color: (theme) => (theme.palette.mode === "light" ? "#999" : "#444")
-                    }}
+                <TTypography
+                    className="text-[#999] dark:text-[#444]"
                     variant={"body2"}
                     align={"center"}>
                     {helpText}
-                </Typography>
+                </TTypography>
             </Box>}
 
             {onHover &&
@@ -299,17 +293,8 @@ function StorageUpload({
                     color={"inherit"}
                     size={"small"}
                     onClick={open}
-                    sx={{
-                        position: "absolute",
-                        bottom: 2,
-                        right: 2
-                    }}>
-                    <EditIcon sx={{
-                        width: 16,
-                        height: 16,
-                        fill: "#888"
-                    }
-                    }/>
+                    className="absolute bottom-2 right-2">
+                    <EditIcon className="w-4 h-4" style={{ fill: "#888" }}/>
                 </IconButton>
             }
 

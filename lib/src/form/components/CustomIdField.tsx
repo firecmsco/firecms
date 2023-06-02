@@ -89,7 +89,7 @@ export function CustomIdField<M extends Record<string, any>, UserType>({
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
     const inputProps = {
-        sx: (theme:Theme) => ({
+        sx: (theme: Theme) => ({
             minHeight: "64px",
             borderRadius: `${theme.shape.borderRadius}px`
         }),
@@ -137,7 +137,7 @@ export function CustomIdField<M extends Record<string, any>, UserType>({
         type: null,
         value: (entity && status === "existing" ? entity.id : entityId) ?? "",
         variant: "filled",
-        sx: (theme:Theme) => ({
+        sx: (theme: Theme) => ({
             minHeight: "64px",
             borderRadius: `${theme.shape.borderRadius}px`
         })

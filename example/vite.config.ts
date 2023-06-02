@@ -19,11 +19,12 @@ export default defineConfig({
         react({
             jsxImportSource: "@emotion/react"
         }),
-        ViteFonts({
-            google: {
-                families: ["Rubik", "Roboto", "Helvetica"]
-            }
-        })],
+        // ViteFonts({
+        //     google: {
+        //         families: ["Rubik", "Roboto", "Helvetica"]
+        //     }
+        // })
+    ],
     resolve: {
         alias: {
             firecms: path.resolve(__dirname, "../lib/src"),

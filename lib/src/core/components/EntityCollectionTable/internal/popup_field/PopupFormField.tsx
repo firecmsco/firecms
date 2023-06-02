@@ -7,7 +7,14 @@ import React, {
 } from "react";
 import equal from "react-fast-compare"
 
-import { Box, Button, IconButton, Portal, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    IconButton,
+    Portal,
+    Typography,
+    useTheme
+} from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -36,6 +43,7 @@ import { isReadOnly, resolveCollection } from "../../../../util";
 import { CustomDialogActions } from "../../../CustomDialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
+import TTypography from "../../../../../migrated/TTypography";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
@@ -76,6 +84,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           onCellValueChange
                                                                       }: PopupFormFieldProps<M>) {
 
+    const theme = useTheme();
     const dataSource = useDataSource();
     const fireCMSContext = useFireCMSContext();
 
@@ -226,13 +235,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         return <></>;
 
     const form = entity && (
-        <Box sx={theme => ({
-            overflow: "auto",
-            borderRadius: `${theme.shape.borderRadius}px`,
-            backgroundColor: theme.palette.background.paper,
-            visibility: !open ? "hidden" : undefined,
-            cursor: "grab"
-        })}>
+        <Box
+            className={`overflow-auto rounded ${theme.shape.borderRadius} bg-${theme.palette.background.paper} ${!open ? 'hidden' : ''} cursor-grab`}>
             <Formik
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
                 validationSchema={validationSchema}
@@ -298,28 +302,17 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
                     let internalForm = <><Box
                         key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
-                        sx={{
-                            width: 520,
-                            maxWidth: "100vw",
-                            maxHeight: "85vh"
-                        }}>
+                        className="w-[520px] max-w-full max-h-[85vh]">
                         <Form
                             onSubmit={handleSubmit}
                             noValidate>
 
                             <Box
-                                sx={{
-                                    mb: 1,
-                                    padding: 2,
-                                    display: "flex",
-                                    flexDirection: "column",
-                                    position: "relative"
-                                }}>
+                                className="mb-1 p-2 flex flex-col relative">
                                 <Box
                                     ref={innerRef}
-                                    sx={{
-                                        cursor: "auto !important"
-                                    }}>
+                                    className="cursor-auto"
+                                    style={{ cursor: "auto !important" }}>
                                     {fieldProps &&
                                         <PropertyFieldBinding {...fieldProps}/>}
                                 </Box>
@@ -369,9 +362,9 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             </Formik>
 
             {savingError &&
-                <Typography color={"error"}>
+                <TTypography color={"error"}>
                     {savingError.message}
-                </Typography>
+                </TTypography>
             }
         </Box>
     );
@@ -379,42 +372,30 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     const draggable = (
         <Box
             key={`draggable_${propertyKey as string}_${entity.id}_${open}`}
-            sx={theme => ({
-                display: "inline-block",
-                // userSelect: "none",
-                position: "fixed",
-                zIndex: 1300,
-                boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
-                backgroundColor: theme.palette.background.paper,
-                borderRadius: `${theme.shape.borderRadius}px`,
-                visibility: !open ? "hidden" : undefined,
-                cursor: "grab"
-            })}
+            className={`inline-block fixed z-50 shadow-outline rounded ${
+                theme.shape.borderRadius
+            } bg-${theme.palette.background.paper} ${
+                !open ? "invisible" : "visible"
+            } cursor-grab`}
             ref={containerRef}>
 
             <ElementResizeListener onResize={adaptResize}/>
 
             <Box
-                sx={{
-                    overflow: "hidden"
-                }}>
+                className="overflow-hidden">
 
                 {form}
 
-                <Box sx={{
-                    position: "absolute",
-                    top: -14,
-                    right: -14,
-                    backgroundColor: "#888",
-                    borderRadius: "32px"
-                }}>
+                <Box
+                    className="absolute -top-3.5 -right-3.5 bg-gray-500 rounded-full"
+                    style={{ width: '32px', height: '32px' }}>
                     <IconButton
                         size={"small"}
                         onClick={(event) => {
                             event.stopPropagation();
                             onClose();
                         }}>
-                        <ClearIcon sx={{ color: "white" }}
+                        <ClearIcon className="text-white"
                                    fontSize={"small"}/>
                     </IconButton>
                 </Box>

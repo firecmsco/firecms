@@ -65,7 +65,7 @@ export const productCollection: EntityCollection = {
                 clearOnDisabled: true,
                 disabledMessage: "You can only set the price on available items"
             },
-                // Preview: PriceTextPreview
+            // Preview: PriceTextPreview
             description: "Price with range validation"
         }),
     }

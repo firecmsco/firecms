@@ -25,6 +25,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon, resolveCollection } from "../util";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
+import TTypography from "../../migrated/TTypography";
 
 const PREFIX = "EntityPreview";
 
@@ -100,33 +101,12 @@ export function EntityPreview<M extends Record<string, any>>(
         <>
 
             <Box
-                sx={(theme) => ({
-                    width: "100%",
-                    marginTop: theme.spacing(3),
-                    paddingLeft: theme.spacing(4),
-                    paddingRight: theme.spacing(4),
-                    paddingTop: theme.spacing(3),
-                    [theme.breakpoints.down("lg")]: {
-                        marginTop: theme.spacing(2),
-                        paddingLeft: theme.spacing(2),
-                        paddingRight: theme.spacing(2),
-                        paddingTop: theme.spacing(2)
-                    },
-                    [theme.breakpoints.down("md")]: {
-                        marginTop: theme.spacing(1),
-                        paddingLeft: theme.spacing(2),
-                        paddingRight: theme.spacing(2),
-                        paddingTop: theme.spacing(2)
-                    }
-                })}>
+                className="w-full mt-12 pl-16 pr-16 pt-12 lg:mt-8 lg:pl-8 lg:pr-8 lg:pt-8 md:mt-4 md:pl-8 md:pr-8 md:pt-8">
 
-                <Typography
-                    sx={{
-                        marginTop: 4,
-                        marginBottom: 4
-                    }}
+                <TTypography
+                    className="mt-4 mb-4"
                     variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
-                </Typography>
+                </TTypography>
 
             </Box>
 
@@ -138,10 +118,10 @@ export function EntityPreview<M extends Record<string, any>>(
                                        component="td"
                                        scope="row"
                                        className={classes.titleCell}>
-                                <Typography variant={"caption"}
-                                            color={"textSecondary"}>
+                                <TTypography variant={"caption"}
+                                             color={"textSecondary"}>
                                     Id
-                                </Typography>
+                                </TTypography>
                             </TableCell>
                             <TableCell padding="none"
                                        className={classes.iconCell}>
@@ -175,12 +155,12 @@ export function EntityPreview<M extends Record<string, any>>(
                                                    component="td"
                                                    scope="row"
                                                    className={classes.titleCell}>
-                                            <Typography
-                                                sx={{ paddingLeft: 2 }}
+                                            <TTypography
+                                                className="pl-2"
                                                 variant={"caption"}
                                                 color={"textSecondary"}>
                                                 {property.name}
-                                            </Typography>
+                                            </TTypography>
                                         </TableCell>
 
                                         <TableCell padding="none"

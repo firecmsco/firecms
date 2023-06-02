@@ -133,18 +133,12 @@ function SideDialogView({
             >
                 {panel &&
                     <Box
-                        sx={(theme) => ({
-                            display: "flex",
-                            flexDirection: "column",
-                            height: "100%",
-                            transition: "width 250ms ease-in-out",
+                        className="flex flex-col h-full transition-width duration-250 ease-in-out"
+                        style={{
                             width: panel.width,
                             maxWidth: CONTAINER_FULL_WIDTH,
-                            [theme.breakpoints.up("lg")]: {
-                                maxWidth: "95vw"
-                            }
-
-                        })}>
+                        }}
+                        lg:max-w-95vw>
                         <ErrorBoundary>
                             {panel.component}
                         </ErrorBoundary>

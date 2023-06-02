@@ -17,6 +17,7 @@ import {
     useTheme
 } from "@mui/material";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
+import TTypography from "../../../../migrated/TTypography";
 
 /**
  *
@@ -109,30 +110,19 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
 
     return (
         <Box
-            style={{
-                width
-            }}
             onClick={onClick}
-            sx={theme => ({
-                height: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                flexDirection: "column",
+            className={`h-full flex items-center justify-center flex-col ${frozen ? 'sticky' : ''} ${frozen ? 'left-0' : ''} bg-opacity-96 z-10`}
+            style={{
+                width,
+                background: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.96) : alpha(theme.palette.background.default, 0.96),
                 position: frozen ? "sticky" : "initial",
                 left: frozen ? 0 : "initial",
-                background: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.96) : alpha(theme.palette.background.default, 0.96),
-                // backdropFilter: frozen ? "blur(8px)" : undefined,
                 contain: "strict",
-                zIndex: 1
-            })}>
+                // backdropFilter: frozen ? "blur(8px)" : undefined,
+            }}>
 
             {(editEnabled || deleteEnabled || selectionEnabled) &&
-                <Box sx={{
-                    minWidth: 138,
-                    display: "flex",
-                    justifyContent: "center"
-                }}>
+                <Box className="w-34 flex justify-center">
                     {editEnabled &&
                         <Tooltip title={`Edit ${entity.id}`}>
                             <IconButton
@@ -188,18 +178,13 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                 </Box>}
 
             {!hideId && size !== "xs" && (
-                <Box sx={{
-                    width: 138,
-                    textAlign: "center",
-                    textOverflow: "ellipsis",
-                    overflow: "hidden"
-                }}>
+                <Box className="w-[138px] text-center overflow-hidden truncate">
 
                     {entity
-                        ? <Typography
-                            className={"mono"}
+                        ? <TTypography
+                            className={"font-mono"}
                             variant={"caption"}
-                            color={"textSecondary"}> {entity.id} </Typography>
+                            color={"textSecondary"}> {entity.id} </TTypography>
                         : <Skeleton variant="text"/>
                     }
                 </Box>

@@ -124,11 +124,7 @@ export function StringNumberFilterField({
                             updateFilter(operation, val);
                         }}
                         endAdornment={internalValue && <IconButton
-                            sx={{
-                                position: "absolute",
-                                right: "12px",
-                                top: "8px"
-                            }}
+                            className="absolute right-3 top-2"
                             onClick={(e) => updateFilter(operation, undefined)}>
                             <ClearIcon/>
                         </IconButton>}
@@ -142,11 +138,7 @@ export function StringNumberFilterField({
                             value={internalValue !== undefined ? internalValue : isArray ? [] : ""}
                             onChange={(evt: any) => updateFilter(operation, dataType === "number" ? parseInt(evt.target.value) : evt.target.value)}
                             endAdornment={internalValue && <IconButton
-                                sx={{
-                                    position: "absolute",
-                                    right: "12px",
-                                    top: "8px"
-                                }}
+                                className="absolute right-3 top-2"
                                 onClick={(e) => updateFilter(operation, undefined)}>
                                 <ClearIcon/>
                             </IconButton>}

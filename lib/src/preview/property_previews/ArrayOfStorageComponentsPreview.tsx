@@ -18,7 +18,7 @@ const classes = {
 };
 
 const Root = styled("div")((
-   { theme } : {
+    { theme }: {
         theme: Theme
     }
 ) => ({
@@ -63,19 +63,19 @@ export function ArrayOfStorageComponentsPreview({
     return (
         <Root className={classes.arrayWrap}>
             {value &&
-            value.map((v, index) =>
-                <div className={classes.arrayItem}
-                     key={`preview_array_storage_${propertyKey}_${index}`}>
-                    <ErrorBoundary>
-                        <PropertyPreview
-                            propertyKey={propertyKey}
-                            value={v}
-                            entity={entity}
-                            property={property.of as ResolvedProperty<string>}
-                            size={childSize}/>
-                    </ErrorBoundary>
-                </div>
-            )}
+                value.map((v, index) =>
+                    <div className={classes.arrayItem}
+                         key={`preview_array_storage_${propertyKey}_${index}`}>
+                        <ErrorBoundary>
+                            <PropertyPreview
+                                propertyKey={propertyKey}
+                                value={v}
+                                entity={entity}
+                                property={property.of as ResolvedProperty<string>}
+                                size={childSize}/>
+                        </ErrorBoundary>
+                    </div>
+                )}
         </Root>
     );
 }

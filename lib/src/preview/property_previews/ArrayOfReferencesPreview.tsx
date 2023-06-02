@@ -34,19 +34,11 @@ export function ArrayOfReferencesPreview({
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
-        <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            width: "100%"
-        }}>
+        <Box className="flex flex-col w-full">
             {value &&
                 value.map((reference, index) => {
                         const ofProperty = property.of as ResolvedReferenceProperty;
-                        return <Box sx={{
-                            marginTop: 0.25,
-                            marginBottom: 0.25,
-                            width: "100%"
-                        }}
+                        return <Box className="mt-1 mb-1 w-full"
                                     key={`preview_array_ref_${propertyKey}_${index}`}>
                             <ReferencePreview
                                 disabled={!ofProperty.path}

@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FormControl, FormControlLabel, Switch } from "@mui/material";
+import { FormControl, FormControlLabel, Switch, useTheme } from "@mui/material";
 import { fieldBackground, fieldBackgroundHover } from "../../util/field_colors";
 
 type BooleanSwitchProps = {
@@ -28,32 +28,30 @@ export const BooleanSwitch = React.forwardRef(function SwitchFieldBinding({
                                                                               small,
                                                                           }: BooleanSwitchProps, ref) {
 
+    const theme = useTheme();
     const [focus, setFocus] = useState<boolean>(autoFocus ?? false);
     return (
         <>
             <FormControl fullWidth>
 
                 <FormControlLabel
-                    sx={theme => ({
-                        color: error ? theme.palette.error.main : (focus ? theme.palette.primary.main : theme.palette.text.secondary),
-                        justifyContent: "space-between",
-                        margin: 0,
-                        width: "100%",
-                        minHeight: small ? "48px" : "64px",
-                        paddingLeft: small ? "8px" : "16px",
-                        paddingRight: small ? "16px" : "24px",
-                        boxSizing: "border-box",
-                        position: "relative",
-                        display: "inline-flex",
-                        alignItems: "center",
-                        flexDirection: position === "end" ? "row-reverse" : "row",
-                        backgroundColor: fieldBackground(theme),
-                        borderRadius: `${theme.shape.borderRadius}px`,
-                        transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-                        "&:hover": {
-                            backgroundColor: fieldBackgroundHover(theme)
-                        }
-                    })}
+                    className={`${
+                        error
+                            ? "text-error-main"
+                            : focus
+                                ? "text-primary-main"
+                                : "text-text-secondary"
+                    } justify-between w-full ${
+                        small ? "min-h-[48px]" : "min-h-[64px]"
+                    } ${
+                        small ? "pl-2" : "pl-4"
+                    } ${
+                        small ? "pr-4" : "pr-6"
+                    } box-border relative inline-flex items-center ${
+                        position === "end" ? "flex-row-reverse" : "flex-row"
+                    } bg-[${fieldBackground(theme)}] rounded-[${theme.shape.borderRadius}px] transition-colors duration-200 ease-in hover:bg-[${fieldBackgroundHover(
+                        theme
+                    )}]`}
                     onClick={(e) => setFocus(true)}
                     labelPlacement={"start"}
                     checked={Boolean(value)}

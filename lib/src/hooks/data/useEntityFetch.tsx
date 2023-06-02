@@ -23,7 +23,7 @@ export interface EntityFetchResult<M extends Record<string, any>> {
     dataLoadingError?: Error
 }
 
-const CACHE:Record<string, Entity<any>| undefined> = {};
+const CACHE: Record<string, Entity<any> | undefined> = {};
 
 /**
  * This hook is used to fetch an entity.

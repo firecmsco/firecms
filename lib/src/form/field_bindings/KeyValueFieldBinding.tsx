@@ -1,15 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
-import {
-    Box,
-    Button,
-    FormControl,
-    IconButton,
-    Typography
-} from "@mui/material";
+import { Box, Button, FormControl, IconButton, MenuItem } from "@mui/material";
 
 import Menu from "@mui/material/Menu";
-import MenuItem from "@mui/material/MenuItem";
 import RemoveIcon from "@mui/icons-material/Remove";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import AddIcon from "@mui/icons-material/Add";
@@ -18,11 +11,13 @@ import {
     ArrayContainer,
     BooleanSwitch,
     DateTimeField,
-    ExpandablePanel, getDefaultValueForDataType,
+    ExpandablePanel,
+    getDefaultValueForDataType,
     getIconForProperty,
     TextInput
 } from "../../core";
 import { FieldDescription, LabelWithIcon } from "../components";
+import TTypography from "../../migrated/TTypography";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -169,11 +164,9 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                       });
                                   }}/>;
         } else if (dataType === "array") {
-            return <Box sx={theme => ({
-                ml: 1,
-                pl: 1,
-                borderLeft: `1px solid ${theme.palette.divider}`
-            })}>
+            return <Box
+                className="ml-1 pl-1 border-l border-solid border-current"
+                style={{ borderWidth: '1px' }}>
                 <ArrayContainer value={entryValue}
                                 newDefaultEntry={""}
                                 droppableId={rowId.toString()}
@@ -205,11 +198,9 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                 }}/>
             </Box>;
         } else if (dataType === "map") {
-            return <Box sx={theme => ({
-                ml: 1,
-                pl: 1,
-                borderLeft: `1px solid ${theme.palette.divider}`
-            })}>
+            return <Box
+                className="ml-1 pl-1 border-l border-solid border-opacity-25"
+                style={{ borderColor: 'currentColor' }}>
                 <MapEditView value={entryValue}
                              fieldName={fieldKey}
                              setValue={(updatedValue) => {
@@ -220,10 +211,10 @@ function MapKeyValueRow<T extends Record<string, any>>({
                              }}/>
             </Box>;
         } else {
-            return <Typography
+            return <TTypography
                 variant={"caption"}>
                 {`Data type ${dataType} not supported yet`}
-            </Typography>;
+            </TTypography>;
         }
     }
 
@@ -233,16 +224,13 @@ function MapKeyValueRow<T extends Record<string, any>>({
     }
 
     return (<>
-            <Typography key={rowId.toString()}
-                        component={"div"}
-                        className={"mono"}
-                        sx={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: 1,
-                            alignItems: "center"
-                        }}>
-                <Box sx={{ width: "200px", maxWidth: "25%" }}>
+            <TTypography key={rowId.toString()}
+                         component={"div"}
+                         className="font-mono flex flex-row space-x-1 items-center">
+                <Box className="w-200px max-w-25percent" style={{
+                    '--tw-w-200px': '200px',
+                    '--tw-max-w-25percent': '25%'
+                }}>
                     <TextInput
                         value={fieldKey}
                         disabled={disabled || Boolean(entryValue)}
@@ -252,16 +240,12 @@ function MapKeyValueRow<T extends Record<string, any>>({
                         }}/>
                 </Box>
 
-                <Box sx={{ flexGrow: 1 }}>
+                <Box className="flex-grow">
                     {(dataType !== "map" && dataType !== "array") && buildInput(entryValue, fieldKey, dataType)}
                 </Box>
 
                 <IconButton size={"small"}
-                            sx={theme => ({
-                                background: theme.palette.background.default,
-                                height: "28px",
-                                width: "28px"
-                            })}
+                            className="bg-background-default h-7 w-7"
                             onClick={openTypeSelectMenu}>
                     <ArrowDropDownIcon/>
                 </IconButton>
@@ -269,13 +253,10 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 <IconButton aria-label="delete"
                             size={"small"}
                             onClick={onDeleteClick}
-                            sx={{
-                                height: "28px",
-                                width: "28px"
-                            }}>
+                            className="h-7 w-7">
                     <RemoveIcon fontSize={"small"}/>
                 </IconButton>
-            </Typography>
+            </TTypography>
 
             {(dataType === "map" || dataType === "array") && buildInput(entryValue, fieldKey, dataType)}
 
@@ -366,55 +347,41 @@ function ArrayKeyValueRow<T>({
                                       setValue(event.target.checked as T);
                                   }}/>;
         } else if (dataType === "array") {
-            return <Typography variant={"caption"}>
+            return <TTypography variant={"caption"}>
                 Arrays of arrays are not supported.
-            </Typography>;
+            </TTypography>;
         } else if (dataType === "map") {
-            return <Box sx={theme => ({
-                ml: 1,
-                pl: 1,
-                borderLeft: `1px solid ${theme.palette.divider}`
-            })}>
+            return <Box className="ml-1 pl-1 border-l border-solid"
+                        style={{ borderColor: 'currentColor' }}>
                 <MapEditView value={entryValue}
                              setValue={(updatedValue) => {
                                  setValue(updatedValue);
                              }}/>
             </Box>;
         } else {
-            return <Typography
+            return <TTypography
                 variant={"caption"}>
                 {`Data type ${dataType} not supported yet`}
-            </Typography>;
+            </TTypography>;
         }
     }
 
     return (<>
-            <Typography key={id.toString()}
-                        component={"div"}
-                        className={"mono"}
-                        sx={{
-                            display: "flex",
-                            minHeight: "48px",
-                            flexDirection: "row",
-                            gap: 1,
-                            alignItems: "center"
-                        }}>
+            <TTypography key={id.toString()}
+                         component={"div"}
+                         className="font-mono flex min-h-12 flex-row space-x-1 items-center">
 
-                <Box sx={{ flexGrow: 1 }}>
+                <Box className="flex-grow">
                     {selectedDataType !== "map" && buildInput(value, selectedDataType)}
                 </Box>
 
                 <IconButton size={"small"}
-                            sx={theme => ({
-                                background: theme.palette.background.default,
-                                height: "28px",
-                                width: "28px"
-                            })}
+                            className="bg-background-default h-7 w-7"
                             onClick={openTypeSelectMenu}>
                     <ArrowDropDownIcon/>
                 </IconButton>
 
-            </Typography>
+            </TTypography>
 
             {selectedDataType === "map" && buildInput(value, selectedDataType)}
 
@@ -500,12 +467,7 @@ function MapEditView<T extends Record<string, any>>({
         })
     };
 
-    return <Box sx={{
-        py: 1,
-        display: "flex",
-        flexDirection: "column",
-        gap: 1
-    }}>
+    return <Box className="py-1 flex flex-col space-y-1">
         {internalState
             .map(([rowId, { key: fieldKey, dataType }], index) => {
                     const entryValue = fieldKey ? value[fieldKey] : "";

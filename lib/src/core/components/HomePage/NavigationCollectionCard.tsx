@@ -20,6 +20,7 @@ import { getIconForView } from "../../util";
 import {
     useUserConfigurationPersistence
 } from "../../../hooks/useUserConfigurationPersistence";
+import TTypography from "../../../migrated/TTypography";
 
 /**
  * This is the component used in the home page to render a card for each
@@ -42,7 +43,9 @@ export function NavigationCollectionCard({
                                              name,
                                              description,
                                              onClick
-                                         }: TopNavigationEntry & { onClick?: () => void }) {
+                                         }: TopNavigationEntry & {
+    onClick?: () => void
+}) {
 
     const userConfigurationPersistence = useUserConfigurationPersistence();
     const CollectionIcon = getIconForView(collection ?? view);
@@ -74,19 +77,11 @@ export function NavigationCollectionCard({
     }
 
     return (
-        <Paper elevation={0} sx={{
-            height: "100%"
-        }}>
+        <Paper elevation={0} className="h-full">
 
             <CardActionArea
                 component={"div"}
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
-                    minHeight: 248,
-                    height: "100%"
-                }}
+                className="flex flex-col items-start min-h-[248px] h-full"
                 onClick={() => {
                     onClick?.();
                     navigate(url);
@@ -98,27 +93,15 @@ export function NavigationCollectionCard({
                 }}
             >
                 <CardContent
-                    sx={{
-                        flexGrow: 1,
-                        width: "100%"
-                    }}>
+                    className="flex-grow w-full">
 
-                    <Box sx={{
-                        height: 40,
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
-                        justifyContent: "space-between"
-                    }}>
+                    <Box
+                        className="h-10 flex items-center w-full justify-between">
 
                         <CollectionIcon color={"disabled"}/>
 
                         <Box
-                            sx={{
-                                display: "flex",
-                                alignItems: "center",
-                                gap: 1
-                            }}
+                            className="flex items-center gap-1"
                             onClick={(event: React.MouseEvent) => {
                                 event.preventDefault();
                                 event.stopPropagation();
@@ -147,16 +130,16 @@ export function NavigationCollectionCard({
 
                     </Box>
 
-                    <Typography gutterBottom variant="h5"
-                                component="h2">
+                    <TTypography gutterBottom variant="h5"
+                                 component="h2">
                         {name}
-                    </Typography>
+                    </TTypography>
 
-                    {description && <Typography variant="body2"
-                                                color="textSecondary"
-                                                component="div">
+                    {description && <TTypography variant="body2"
+                                                 color="textSecondary"
+                                                 component="div">
                         <Markdown source={description}/>
-                    </Typography>}
+                    </TTypography>}
                 </CardContent>
 
                 <CardActions style={{ alignSelf: "flex-end" }}>

@@ -3,7 +3,10 @@ import { Box, useTheme } from "@mui/material";
 export function InfoLabel({
                               children,
                               mode = "info"
-                          }: { children: React.ReactNode, mode?: "info" | "warn" }) {
+                          }: {
+    children: React.ReactNode,
+    mode?: "info" | "warn"
+}) {
 
     const theme = useTheme();
     const background = mode === "info"
@@ -12,13 +15,7 @@ export function InfoLabel({
 
     return (
         <Box
-            sx={(theme) => ({
-                my: 3,
-                py: 1,
-                px: 2,
-                borderRadius: 1,
-                background
-            })}>
+            className="my-3 py-1 px-2 rounded bg-[your_background_value]">
             {children}
         </Box>
     )

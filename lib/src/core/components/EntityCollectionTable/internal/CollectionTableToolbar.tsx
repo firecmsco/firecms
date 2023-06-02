@@ -35,7 +35,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
     const filterView = !props.forceFilter && props.filterIsSet &&
         <Tooltip title="Clear filter">
             <IconButton
-                sx={{ height: "fit-content" }}
+                className="h-fit-content"
                 aria-label="filter clear"
                 onClick={props.clearFilter}
                 size="medium">
@@ -47,10 +47,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
         <FilledSelect
             variant={"standard"}
             value={props.size}
-            sx={{
-                width: 56,
-                height: 40
-            }}
+            className="w-14 h-10"
             onChange={(evt: any) => props.onSizeChanged(evt.target.value)}
             renderValue={(value: any) => value.toUpperCase()}
         >
@@ -65,33 +62,12 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     return (
         <Box
-            sx={{
-                minHeight: 56,
-                overflowX: "auto",
-                [theme.breakpoints.down("sm")]: {
-                    px: theme.spacing(1)
-                },
-                px: theme.spacing(2),
-                backgroundColor: theme.palette.background.default,
-                borderBottom: `1px solid ${theme.palette.divider}`,
-                display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-between",
-                alignItems: "center",
-                width: "100%"
-            }}
+            className="min-h-[56px] overflow-x-auto sm:px-[theme.spacing(1)] px-[theme.spacing(2)] bg-[theme.palette.background.default] border-b border-[theme.palette.divider] flex flex-row justify-between items-center w-full"
         >
 
             <Box display={"flex"}
                  alignItems="center"
-                 sx={{
-                     "& > *": {
-                         [theme.breakpoints.down("md")]: {
-                             marginRight: `${theme.spacing(1)} !important`
-                         },
-                         marginRight: `${theme.spacing(2)} !important`
-                     }
-                 }}>
+                 className="space-x-8 md:space-x-4">
 
                 {props.title && <Hidden lgDown>
                     {props.title}
@@ -105,16 +81,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
             </Box>
 
-            <Box sx={{
-                display: "flex",
-                alignItems: "center",
-                "& > *": {
-                    [theme.breakpoints.down("md")]: {
-                        marginRight: `${theme.spacing(0.5)} !important`
-                    },
-                    marginRight: `${theme.spacing(1)} !important`
-                }
-            }}>
+            <Box className="flex items-center space-x-4 md:space-x-2">
 
                 {largeLayout && <Box width={22}>
                     {props.loading &&

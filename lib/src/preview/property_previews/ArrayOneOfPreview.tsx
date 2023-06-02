@@ -22,7 +22,7 @@ const classes = {
 };
 
 const Root = styled("div")((
-   { theme } : {
+    { theme }: {
         theme: Theme
     }
 ) => ({
@@ -86,16 +86,16 @@ export function ArrayOneOfPreview({
                         <div className={classes.arrayItemBig}>
                             <ErrorBoundary>
                                 {value && <PropertyPreview
-                                propertyKey={propertyKey}
-                                value={value[valueField]}
-                                entity={entity}
-                                property={(property.resolvedProperties[index] ?? properties[value[typeField]]) as ResolvedProperty<any>}
-                                size={childSize}/>}
-                        </ErrorBoundary>
-                    </div>
-                    {index < values.length - 1 && <Divider/>}
-                </React.Fragment>
-            )}
+                                    propertyKey={propertyKey}
+                                    value={value[valueField]}
+                                    entity={entity}
+                                    property={(property.resolvedProperties[index] ?? properties[value[typeField]]) as ResolvedProperty<any>}
+                                    size={childSize}/>}
+                            </ErrorBoundary>
+                        </div>
+                        {index < values.length - 1 && <Divider/>}
+                    </React.Fragment>
+                )}
         </Root>
     );
 }

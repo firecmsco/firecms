@@ -46,6 +46,7 @@ import {
     PhoneMultiFactorGenerator,
     RecaptchaVerifier
 } from "firebase/auth";
+import TTypography from "../../migrated/TTypography";
 
 /**
  * @category Firebase
@@ -248,32 +249,18 @@ export function FirebaseLoginView({
             mountOnEnter
             unmountOnExit>
 
-            <Box sx={{
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "center",
-                alignItems: "center",
-                minHeight: "100vh",
-                "@supports (minHeight: 100dvh)": {
-                    minHeight: "100dvh"
-                },
-                minWidth: "100vw",
-                p: 2
-            }}>
-                <div id="recaptcha"></div>
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    width: "100%",
-                    maxWidth: 480
+            <Box
+                className="flex flex-col items-center justify-center min-h-screen min-w-full p-2"
+                style={{
+                    "@supports (minHeight: 100dvh)": {
+                        minHeight: "100dvh"
+                    }
                 }}>
+                <div id="recaptcha"></div>
+                <Box
+                    className="flex flex-col items-center w-full max-w-[480px]">
 
-                    <Box m={1} sx={{
-                        padding: 1,
-                        width: 260,
-                        height: 260
-                    }}>
+                    <Box m={1} className="p-1 w-64 h-64">
                         {logoComponent}
                     </Box>
 
@@ -348,35 +335,25 @@ export function LoginButton({
                                 onClick,
                                 text,
                                 disabled
-                            }: { icon: React.ReactNode, onClick: () => void, text: string, disabled?: boolean }) {
+                            }: {
+    icon: React.ReactNode,
+    onClick: () => void,
+    text: string,
+    disabled?: boolean
+}) {
     return (
         <Box m={0.5} width={"100%"}>
             <Button fullWidth
                     variant="outlined"
                     disabled={disabled}
                     onClick={onClick}>
-                <Box sx={{
-                    p: "1",
-                    display: "flex",
-                    width: "240px",
-                    height: "32px",
-                    alignItems: "center",
-                    justifyItems: "center"
-                }}>
-                    <Box sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        width: "32px",
-                        alignItems: "center",
-                        justifyItems: "center"
-                    }}>
+                <Box
+                    className="p-1 flex w-48 h-8 items-center justify-items-center">
+                    <Box
+                        className="flex flex-col w-8 items-center justify-items-center">
                         {icon}
                     </Box>
-                    <Box sx={{
-                        flexGrow: 1,
-                        pl: 2,
-                        textAlign: "center"
-                    }}>{text}</Box>
+                    <Box className="flex-grow pl-2 text-center">{text}</Box>
                 </Box>
             </Button>
         </Box>
@@ -427,18 +404,12 @@ function PhoneLoginForm({
                 <Grid item xs={12}>
                     <IconButton
                         onClick={onClose}>
-                        <ArrowBackIcon sx={{
-                            width: 20,
-                            height: 20
-                        }}/>
+                        <ArrowBackIcon className="w-5 h-5"/>
                     </IconButton>
                 </Grid>
-                <Grid item xs={12} sx={{
-                    p: 1,
-                    display: "flex"
-                }}>
-                    <Typography align={"center"}
-                                variant={"subtitle2"}>{"Please enter your phone number"}</Typography>
+                <Grid item xs={12} className="p-1 flex">
+                    <TTypography align={"center"}
+                                 variant={"subtitle2"}>{"Please enter your phone number"}</TTypography>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField placeholder="" fullWidth
@@ -450,13 +421,9 @@ function PhoneLoginForm({
                 </Grid>
                 {Boolean(phone && authController.confirmationResult) &&
                     <>
-                        <Grid item xs={12} sx={{
-                            mt: 2,
-                            p: 1,
-                            display: "flex"
-                        }}>
-                            <Typography align={"center"}
-                                        variant={"subtitle2"}>{"Please enter the confirmation code"}</Typography>
+                        <Grid item xs={12} className="mt-2 p-1 flex">
+                            <TTypography align={"center"}
+                                         variant={"subtitle2"}>{"Please enter the confirmation code"}</TTypography>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField placeholder="" fullWidth
@@ -469,15 +436,10 @@ function PhoneLoginForm({
                 }
 
                 <Grid item xs={12}>
-                    <Box sx={{
-                        display: "flex",
-                        justifyContent: "end",
-                        alignItems: "center",
-                        width: "100%"
-                    }}>
+                    <Box className="flex justify-end items-center w-full">
 
                         {authController.authLoading &&
-                            <CircularProgress sx={{ p: 1 }} size={16}
+                            <CircularProgress className="p-1" size={16}
                                               thickness={8}/>
                         }
 
@@ -586,21 +548,18 @@ function LoginForm({
                 <Grid item xs={12}>
                     <IconButton
                         onClick={onBackPressed}>
-                        <ArrowBackIcon sx={{
-                            width: 20,
-                            height: 20
-                        }}/>
+                        <ArrowBackIcon className="w-5 h-5"/>
                     </IconButton>
                 </Grid>
 
-                <Grid item xs={12} sx={{ p: 1 }}>
-                    <Typography align={"center"} variant={"subtitle2"}>
+                <Grid item xs={12} className="p-1">
+                    <TTypography align={"center"} variant={"subtitle2"}>
                         You already have an account
-                    </Typography>
-                    <Typography align={"center"} variant={"body2"}>
+                    </TTypography>
+                    <TTypography align={"center"} variant={"body2"}>
                         You can use one of these
                         methods to login with {email}
-                    </Typography>
+                    </TTypography>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -621,23 +580,20 @@ function LoginForm({
                     <Grid item xs={12}>
                         <IconButton
                             onClick={onBackPressed}>
-                            <ArrowBackIcon sx={{
-                                width: 20,
-                                height: 20
-                            }}/>
+                            <ArrowBackIcon className="w-5 h-5"/>
                         </IconButton>
                     </Grid>
 
-                    <Grid item xs={12} sx={{
-                        p: 1,
-                        display: (registrationMode && disableSignupScreen) ? "none" : "flex"
-                    }}>
-                        <Typography align={"center"}
-                                    variant={"subtitle2"}>{label}</Typography>
+                    <Grid item xs={12}
+                          className={`p-4 ${registrationMode && disableSignupScreen ? 'hidden' : 'flex'}`}>
+                        <TTypography align={"center"}
+                                     variant={"subtitle2"}>{label}</TTypography>
                     </Grid>
 
                     <Grid item xs={12}
-                          sx={{ display: shouldShowEmail ? "inherit" : "none" }}>
+                          className={`${
+                              shouldShowEmail ? "block" : "hidden"
+                          }`}>
                         <TextField placeholder="Email" fullWidth autoFocus
                                    value={email ?? ""}
                                    disabled={authController.authLoading}
@@ -650,7 +606,7 @@ function LoginForm({
                     </Grid>
 
                     <Grid item xs={12}
-                          sx={{ display: loginMode || (registrationMode && !disableSignupScreen) ? "inherit" : "none" }}>
+                          className={`${loginMode || (registrationMode && !disableSignupScreen) ? 'block' : 'hidden'}`}>
                         <TextField placeholder="Password" fullWidth
                                    value={password ?? ""}
                                    disabled={authController.authLoading}
@@ -660,15 +616,12 @@ function LoginForm({
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box sx={{
-                            display: (registrationMode && disableSignupScreen) ? "none" : "flex",
-                            justifyContent: "end",
-                            alignItems: "center",
-                            width: "100%"
-                        }}>
+                        <Box className={`${
+                            registrationMode && disableSignupScreen ? "hidden" : "flex"
+                        } justify-end items-center w-full`}>
 
                             {authController.authLoading &&
-                                <CircularProgress sx={{ p: 1 }} size={16}
+                                <CircularProgress className="p-1" size={16}
                                                   thickness={8}/>
                             }
 

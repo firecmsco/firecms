@@ -30,7 +30,11 @@ export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () =
         navigate(-1);
     };
 
-    const blocker: Blocker = useCallback(({ action, location: nextLocation, retry }) => {
+    const blocker: Blocker = useCallback(({
+                                              action,
+                                              location: nextLocation,
+                                              retry
+                                          }) => {
         switch (action) {
             case "REPLACE": {
                 retry();
@@ -60,7 +64,11 @@ export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () =
         return unblock;
     }, [navigator, blocker, when, nextLocation]);
 
-    return { navigationWasBlocked: Boolean(nextLocation), handleCancel, handleOk };
+    return {
+        navigationWasBlocked: Boolean(nextLocation),
+        handleCancel,
+        handleOk
+    };
 }
 
 export interface UnsavedChangesDialogProps {
@@ -87,14 +95,14 @@ export function UnsavedChangesDialog({
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
         >
-            <DialogTitle >
+            <DialogTitle>
                 {title ?? "Unsaved changes"}
             </DialogTitle>
             <DialogContent>
                 {body && <DialogContentText>
                     {body}
                 </DialogContentText>}
-                <DialogContentText >
+                <DialogContentText>
                     Are you sure you want to leave this page?
                 </DialogContentText>
             </DialogContent>

@@ -2,6 +2,7 @@ import { alpha, darken, styled } from "@mui/material/styles";
 import Select, { SelectProps } from "@mui/material/Select";
 import InputBase from "@mui/material/InputBase";
 import MenuItem, { MenuItemProps } from "@mui/material/MenuItem";
+import { useTheme } from "@mui/material";
 
 const StyledInput = styled(InputBase)(({ theme }) => ({
     "label + &": {
@@ -41,24 +42,17 @@ export function FilledSelect<T>(props: SelectProps<T>) {
 }
 
 export function FilledMenuItem(props: MenuItemProps) {
+
+    const theme = useTheme();
     return <MenuItem
         {...props}
-        sx={(theme) => ({
-            backgroundColor: theme.palette.background.default,
-            fontSize: 14,
-            fontWeight: theme.typography.fontWeightMedium,
-            paddingTop: theme.spacing(1),
-            paddingBottom: theme.spacing(1),
-            "&:hover": {
-                backgroundColor: darken(theme.palette.background.default, 0.1)
-            },
-            "&:focus": {
-                backgroundColor: darken(theme.palette.background.default, 0.2),
-                "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-                    color: theme.palette.text.primary
-                }
+        className={`bg-${theme.palette.background.default} text-sm font-${theme.typography.fontWeightMedium} pt-${theme.spacing(1)} pb-${theme.spacing(1)} hover:bg-${darken(theme.palette.background.default, 0.1)} focus:bg-${darken(theme.palette.background.default, 0.2)} focus:text-${theme.palette.text.primary}`}
+
+        style={{
+            "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+                color: theme.palette.text.primary
             }
-        })}
+        }}
     >
         {props.children}
     </MenuItem>

@@ -38,24 +38,24 @@ export function TableDateField(props: {
                               fullWidth
                               variant={"standard"}
                               error={Boolean(error)}
-                                  style={{
-                                      height: "100%"
-                                  }}
-                                  InputProps={{
-                                      ...params.InputProps,
-                                      style: { fontSize: 14 },
-                                      disableUnderline: true,
-                                      endAdornment: <Box sx={{ pr: 1 }}>
-                                          {params.InputProps?.endAdornment}
-                                      </Box>
-                                  }}
-                    />}
-                InputAdornmentProps={{
-                    style: {
-                        fontSize: "small",
-                        height: 26
-                    }
-                }}
-            />
+                              style={{
+                                  height: "100%"
+                              }}
+                              InputProps={{
+                                  ...params.InputProps,
+                                  style: { fontSize: 14 },
+                                  disableUnderline: true,
+                                  endAdornment: <Box className="pr-1">
+                                      {params.InputProps?.endAdornment}
+                                  </Box>
+                              }}
+                />}
+            InputAdornmentProps={{
+                style: {
+                    fontSize: "small",
+                    height: 26
+                }
+            }}
+        />
     );
 }

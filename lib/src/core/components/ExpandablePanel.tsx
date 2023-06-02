@@ -4,7 +4,7 @@ import {
     Accordion,
     AccordionDetails,
     AccordionSummary, darken,
-    lighten
+    lighten, useTheme
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { fieldBackgroundSubtleHover } from "../util/field_colors";
@@ -28,6 +28,8 @@ export function ExpandablePanel({
     onExpandedChange?: (expanded: boolean) => void
 }>) {
 
+    const theme = useTheme();
+
     const [onHover, setOnHover] = React.useState(false);
     const setOnHoverTrue = useCallback(() => setOnHover(true), []);
     const setOnHoverFalse = useCallback(() => setOnHover(false), []);
@@ -40,21 +42,23 @@ export function ExpandablePanel({
                    onMouseLeave={setOnHoverFalse}
                    disableGutters
                    expanded={expandedInternal}
-                   sx={theme => ({
-                       backgroundColor: invisible ? "transparent" : (dark ? (
-                           onHover && highlightOnHover
-                               ? fieldBackgroundSubtleHover(theme)
-                               : "transparent"
-                       ) : "inherit"),
+                   className={`${
+                       invisible
+                           ? "bg-transparent"
+                           : dark
+                               ? onHover && highlightOnHover
+                                   ? fieldBackgroundSubtleHover(theme)
+                                   : "bg-transparent"
+                               : "bg-inherit"
+                   } ${
+                       invisible ? "rounded-none" : `rounded-${theme.shape.borderRadius}`
+                   } ${invisible ? "border-none" : ""}`}
 
-                       borderRadius: invisible ? 0 : `${theme.shape.borderRadius}px`,
-                       border: invisible ? "none" : undefined,
+                   style={{
                        "&::before": {
-                           display: "none"
+                           display: "none",
                        },
-                       // color: "inherit"
-
-                   })}
+                   }}
                    TransitionProps={{ unmountOnExit: true }}
                    onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => {
                        onExpandedChange?.(expanded);
@@ -62,30 +66,26 @@ export function ExpandablePanel({
                    }, [onExpandedChange])}>
 
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}
-                              sx={(theme) => ({
-                                  color: theme.palette.text.secondary,
-                                  padding: invisible ? 0 : undefined,
-                                  minHeight: "56px",
-                                  alignItems: "center",
+                              className={`items-center ${invisible ? 'p-0' : ''} min-h-14 border-${invisible ? '0' : ''} ${!expandedInternal && !invisible ? 'rounded-t rounded-bl' : ''}`}
+                              style={{
+                                  color: 'text-secondary',
+                                  minHeight: '56px',
                                   borderTopLeftRadius: `${theme.shape.borderRadius}px`,
                                   borderTopRightRadius: `${theme.shape.borderRadius}px`,
                                   borderBottomLeftRadius: !expandedInternal && !invisible ? `${theme.shape.borderRadius}px` : undefined,
                                   borderBottomRightRadius: !expandedInternal && !invisible ? `${theme.shape.borderRadius}px` : undefined,
-                                  border: invisible ? "none" : undefined,
+                                  border: invisible ? 'none' : undefined,
                                   borderBottom: invisible ? `1px solid ${theme.palette.divider}` : undefined,
-                                  "&.Mui-expanded": {
-                                      borderBottom: `1px solid ${theme.palette.divider}`
-                                  }
-                              })}>
+                              }}
+                              data-classes="Mui-expanded:border-b Mui-expanded:border-solid Mui-expanded:border-divider">
                 {title}
             </AccordionSummary>
 
-            <AccordionDetails sx={(theme) => ({
-                padding: invisible ? 0 : typeof padding === "string" ? padding : theme.spacing(padding),
-                py: theme.spacing(2),
-                border: invisible ? "none" : undefined,
-                color: "inherit"
-            })}>
+            <AccordionDetails className={`${
+                invisible ? 'p-0' : typeof padding === 'string' ? padding : `p-${padding}`
+            } py-2 ${
+                invisible ? 'border-none' : ''
+            } text-current`}>
                 {children}
             </AccordionDetails>
 

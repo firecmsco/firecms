@@ -44,20 +44,20 @@ export type DeleteEntityWithCallbacksProps<M extends Record<string, any>> =
  * @category Hooks and utilities
  */
 export async function deleteEntityWithCallbacks<M extends Record<string, any>, UserType extends User>({
-                                                                 dataSource,
-                                                                 entity,
-                                                                 collection,
-                                                                 callbacks,
-                                                                 onDeleteSuccess,
-                                                                 onDeleteFailure,
-                                                                 onPreDeleteHookError,
-                                                                 onDeleteSuccessHookError,
-                                                                 context
-                                                             }: DeleteEntityWithCallbacksProps<M> & {
-                                                                 collection: ResolvedEntityCollection<M>,
-                                                                 dataSource: DataSource,
-                                                                 context: FireCMSContext<UserType>
-                                                             }
+                                                                                                          dataSource,
+                                                                                                          entity,
+                                                                                                          collection,
+                                                                                                          callbacks,
+                                                                                                          onDeleteSuccess,
+                                                                                                          onDeleteFailure,
+                                                                                                          onPreDeleteHookError,
+                                                                                                          onDeleteSuccessHookError,
+                                                                                                          context
+                                                                                                      }: DeleteEntityWithCallbacksProps<M> & {
+                                                                                                          collection: ResolvedEntityCollection<M>,
+                                                                                                          dataSource: DataSource,
+                                                                                                          context: FireCMSContext<UserType>
+                                                                                                      }
 ): Promise<boolean> {
 
     console.debug("Deleting entity", entity.path, entity.id);

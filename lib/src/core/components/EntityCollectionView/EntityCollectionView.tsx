@@ -47,6 +47,7 @@ import {
 import {
     isFilterCombinationValidForFirestore
 } from "./isFilterCombinationValidForFirestore";
+import TTypography from "../../../migrated/TTypography";
 
 /**
  * @category Components
@@ -233,28 +234,19 @@ export const EntityCollectionView = React.memo(
         const open = anchorEl != null;
 
         const Title = useMemo(() => (
-            <Box sx={{
-                display: "flex",
-                flexDirection: "row",
-                contain: "content",
-                "& > *:not(:last-child)": {
-                    [theme.breakpoints.down("md")]: {
-                        mr: theme.spacing(1)
-                    },
-                    mr: theme.spacing(2)
-                }
-            }}>
+            <Box className="flex flex-row content-center"
+                 style={{
+                     "& > *:not(:last-child)": {
+                         [theme.breakpoints.down("md")]: {
+                             marginRight: theme.spacing(1),
+                         },
+                         marginRight: theme.spacing(2),
+                     },
+                 }}>
                 <Box>
-                    <Typography
+                    <TTypography
                         variant={"h6"}
-                        sx={{
-                            lineHeight: "1.15",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            maxWidth: "164px",
-                            cursor: collection.description ? "pointer" : "inherit"
-                        }}
+                        className={`leading-none truncate w-40 ${collection.description ? 'cursor-pointer' : 'cursor-auto'}`}
                         onClick={collection.description
                             ? (e) => {
                                 setAnchorEl(e.currentTarget);
@@ -263,7 +255,7 @@ export const EntityCollectionView = React.memo(
                             : undefined}
                     >
                         {`${collection.name}`}
-                    </Typography>
+                    </TTypography>
                     <EntitiesCount fullPath={fullPath} collection={collection}/>
 
                     {collection.description &&
@@ -365,11 +357,7 @@ export const EntityCollectionView = React.memo(
         }, [isEntitySelected, collection, authController, fullPath, selectionEnabled, toggleEntitySelection, onEditClicked, createEnabled, onCopyClicked]);
 
         return (
-            <Box sx={{
-                overflow: "hidden",
-                height: "100%",
-                width: "100%"
-            }}>
+            <Box className="overflow-hidden h-full w-full">
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     fullPath={fullPath}
@@ -434,7 +422,10 @@ export function useSelectionController<M extends Record<string, any>>(): Selecti
     };
 }
 
-function EntitiesCount({ fullPath, collection }: { fullPath: string, collection:EntityCollection }) {
+function EntitiesCount({ fullPath, collection }: {
+    fullPath: string,
+    collection: EntityCollection
+}) {
 
     const dataSource = useDataSource();
     const navigation = useNavigationContext();
@@ -442,24 +433,21 @@ function EntitiesCount({ fullPath, collection }: { fullPath: string, collection:
     const [error, setError] = useState<Error | undefined>(undefined);
 
     useEffect(() => {
-        dataSource.countEntities({ path: navigation.resolveAliasesFrom(fullPath), collection }).then(setCount).catch(setError);
+        dataSource.countEntities({
+            path: navigation.resolveAliasesFrom(fullPath),
+            collection
+        }).then(setCount).catch(setError);
     }, [fullPath, dataSource, navigation]);
 
     if (error) {
         return null;
     }
 
-    return <Typography
-        sx={{
-            display: "block",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            overflow: "hidden",
-            maxWidth: "160px",
-            textAlign: "left"
-        }}
+    return <TTypography
+        className="block overflow-hidden whitespace-nowrap max-w-xs text-left"
+        style={{ textOverflow: "ellipsis" }}
         variant={"caption"}
         color={"textSecondary"}>
         {count !== undefined ? `${count} entities` : renderSkeletonText()}
-    </Typography>;
+    </TTypography>;
 }

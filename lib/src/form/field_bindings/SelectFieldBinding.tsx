@@ -5,7 +5,7 @@ import {
     IconButton,
     InputLabel,
     MenuItem,
-    Select as MuiSelect
+    Select as MuiSelect, useTheme
 } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
@@ -40,6 +40,7 @@ export function SelectFieldBinding<T extends EnumType>({
                                                            includeDescription
                                                        }: SelectProps<T>) {
 
+    const theme = useTheme();
     const enumValues = property.enumValues;
 
     useClearRestoreValue({
@@ -57,14 +58,10 @@ export function SelectFieldBinding<T extends EnumType>({
             fullWidth
             error={showError}
             disabled={disabled}
-            sx={{
-                "& .MuiInputLabel-root": {
-                    mt: 1 / 2,
-                    ml: 1 / 2
-                },
-                "& .MuiInputLabel-shrink": {
-                    mt: 2
-                }
+            className="MuiInputLabel-root MuiInputLabel-shrink"
+            style={{
+                marginTop: '0.5rem',
+                marginLeft: '0.5rem',
             }}
         >
 
@@ -75,10 +72,7 @@ export function SelectFieldBinding<T extends EnumType>({
             </InputLabel>
 
             <MuiSelect
-                sx={(theme) => ({
-                    minHeight: "64px",
-                    borderRadius: `${theme.shape.borderRadius}px`
-                })}
+                className={`min-h-[64px] rounded-[${theme.shape.borderRadius + "px"}]`}
                 variant={"filled"}
                 labelId={`${propertyKey}-select-label`}
                 autoFocus={autoFocus}
@@ -87,11 +81,7 @@ export function SelectFieldBinding<T extends EnumType>({
                 disableUnderline={true}
                 endAdornment={
                     property.clearable && <IconButton
-                        sx={{
-                            position: "absolute",
-                            top: "12px",
-                            right: "32px"
-                        }}
+                        className="absolute top-3 right-8"
                         onClick={handleClearClick}>
                         <ClearIcon/>
                     </IconButton>

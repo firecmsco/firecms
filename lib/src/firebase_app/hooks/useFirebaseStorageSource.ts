@@ -54,7 +54,7 @@ export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceP
                 return urlsCache[storagePathOrUrl];
             const fileRef = ref(storage, storagePathOrUrl);
             const [url, metadata] = await Promise.all([getDownloadURL(fileRef), getMetadata(fileRef)]);
-            const result:DownloadConfig = {
+            const result: DownloadConfig = {
                 url, metadata: metadata as DownloadMetadata
             }
             urlsCache[storagePathOrUrl] = result;

@@ -25,6 +25,7 @@ import {
     useModeController
 } from "../../hooks";
 import { DRAWER_WIDTH } from "../Scaffold";
+import TTypography from "../../migrated/TTypography";
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -66,28 +67,28 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
     return (
         <Box
-            sx={{
-                position: "fixed",
+            className={`fixed ${largeLayout ? "z-[calc(" + theme.zIndex.drawer + "+1)]" : ""} transition-all duration-[${theme.transitions.duration.leavingScreen}] ease-[${theme.transitions.easing.sharp}]`}
+            style={{
                 marginLeft: theme.spacing(8),
                 width: `calc(100% - ${theme.spacing(8)})`,
                 zIndex: largeLayout ? theme.zIndex.drawer + 1 : undefined,
                 transition: theme.transitions.create(["width", "margin"], {
                     easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.leavingScreen
+                    duration: theme.transitions.duration.leavingScreen,
                 }),
                 ...(drawerOpen && largeLayout && {
                     marginLeft: `calc(${DRAWER_WIDTH}px - 8px)`,
                     width: `calc(100% - ${DRAWER_WIDTH}px)`,
                     transition: theme.transitions.create(["width", "margin"], {
                         easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.enteringScreen
-                    })
-                })
+                        duration: theme.transitions.duration.enteringScreen,
+                    }),
+                }),
             }}>
 
             <Slide
                 direction="down" in={true} mountOnEnter unmountOnExit>
-                <Toolbar sx={{ gap: 1 }}>
+                <Toolbar className="space-x-1 space-y-1">
 
                     <Hidden lgDown>
                         <Box mr={2}>
@@ -97,11 +98,11 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                 color="inherit"
                                 component={ReactLink}
                                 to={"."}>
-                                <Typography variant="h6"
-                                            noWrap
-                                            className={"weight-500"}>
+                                <TTypography variant="h6"
+                                             noWrap
+                                             className={"weight-500"}>
                                     {title}
-                                </Typography>
+                                </TTypography>
                             </Link>
                         </Box>
                     </Hidden>
@@ -120,20 +121,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                     component={ReactLink}
                                     to={entry.url}>
                                     <Chip
-                                        sx={theme => ({
-                                            backgroundColor: theme.palette.grey[200],
-                                            height: theme.spacing(3),
-                                            color: theme.palette.grey[800],
-                                            fontWeight: theme.typography.fontWeightMedium,
-                                            "&:hover, &:focus": {
-                                                cursor: "pointer",
-                                                backgroundColor: theme.palette.grey[300]
-                                            },
-                                            "&:active": {
-                                                boxShadow: theme.shadows[1],
-                                                backgroundColor: theme.palette.grey[400]
-                                            }
-                                        })}
+                                        className="bg-gray-200 h-12 text-gray-800 font-medium hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 active:shadow-sm cursor-pointer"
                                         label={entry.title}
                                     />
                                 </Link>)

@@ -15,7 +15,7 @@ import {
     Grid,
     IconButton,
     lighten,
-    Popover
+    Popover, useTheme
 } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
@@ -100,25 +100,23 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
         const hovered = !anotherColumnIsResizing && (onHover || thisColumnIsResizing);
 
+        const theme = useTheme();
+
         return (
             <ErrorBoundary>
                 <Grid
-                    sx={theme => ({
-                        width: column.width,
-                        // position: "relative",
-                        padding: "0px 12px",
+                    className={`w-${column.width} py-0 px-3 h-full text-xs uppercase font-semibold relative select-none ${
+                        column.frozen ? "sticky left-0 z-10" : "relative z-0"
+                    }`}
+                    style={{
                         color: hovered ? theme.palette.text.primary : theme.palette.text.secondary,
-                        backgroundColor: hovered ? darken(theme.palette.background.default, 0.05) : theme.palette.background.default,
+                        backgroundColor: hovered
+                            ? darken(theme.palette.background.default, 0.05)
+                            : theme.palette.background.default,
                         transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-                        height: "100%",
                         fontSize: "0.750rem",
-                        textTransform: "uppercase",
-                        fontWeight: 600,
-                        position: column.frozen ? "sticky" : "relative",
                         left: column.frozen ? 0 : undefined,
-                        zIndex: column.frozen ? 1 : 0,
-                        userSelect: "none"
-                    })}
+                    }}
                     ref={ref}
                     wrap={"nowrap"}
                     alignItems={"center"}
@@ -127,30 +125,20 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     onMouseLeave={() => setOnHover(false)}
                     container>
 
-                    <Grid item xs={true} sx={{
-                        overflow: "hidden",
-                        flexShrink: 1
-                    }}>
-                        <Box sx={{
-                            display: "flex",
-                            justifyContent: column.headerAlign,
-                            alignItems: "center",
-                            flexDirection: "row"
-                        }}>
-                            <Box sx={{
-                                paddingTop: "4px"
-                            }}>
+                    <Grid item xs={true}
+                          className="overflow-hidden flex-shrink">
+                        <Box
+                            className="flex items-center justify-{column.headerAlign} flex-row">
+                            <Box className="pt-1">
                                 {column.icon && column.icon(onHover || openFilter)}
                             </Box>
-                            <Box sx={{
-                                display: "-webkit-box",
-                                margin: "0px 4px",
-                                overflow: "hidden",
-                                justifyContent: column.align,
-                                WebkitLineClamp: 2,
-                                WebkitBoxOrient: "vertical",
-                                textOverflow: "ellipsis"
-                            }}>
+                            <Box
+                                className="truncate -webkit-box w-full mx-1 overflow-hidden"
+                                style={{
+                                    WebkitBoxOrient: "vertical",
+                                    WebkitLineClamp: 2,
+                                    justifyContent: column.align,
+                                }}>
                                 {column.title}
                             </Box>
 
@@ -165,9 +153,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                    invisible={!sort}>
                                 <IconButton
                                     size={"small"}
-                                    sx={(theme) => ({
-                                        backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
-                                    })}
+                                    className={`${theme.palette.mode === 'light' ? 'bg-f5f5f5' : 'bg-[defaultBackgroundColor]'}`}
                                     onClick={() => {
                                         onColumnSort(column.key as Extract<keyof M, string>);
                                     }}
@@ -189,9 +175,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                overlap="circular"
                                invisible={!filter}>
                             <IconButton
-                                sx={(theme) => ({
-                                    backgroundColor: theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default
-                                })}
+                                className={`bg-[${theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default}]`}
                                 size={"small"}
                                 onClick={handleSettingsClick}>
                                 <ArrowDropDownCircleIcon fontSize={"small"}
@@ -203,15 +187,13 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     {column.resizable && <Box
                         ref={resizeHandleRef}
-                        sx={(theme) => ({
-                            position: "absolute",
-                            height: "100%",
-                            width: "4px",
-                            top: 0,
-                            right: 0,
-                            cursor: "col-resize",
-                            backgroundColor: hovered ? (theme.palette.mode === "dark" ? lighten(theme.palette.background.default, 0.1) : darken(theme.palette.background.default, 0.15)) : undefined
-                        })}
+                        className={`absolute h-full w-[4px] top-0 right-0 cursor-col-resize ${
+                            hovered
+                                ? theme.palette.mode === "dark"
+                                    ? `bg-${lighten(theme.palette.background.default, 0.1)}`
+                                    : `bg-${darken(theme.palette.background.default, 0.15)}`
+                                : ""
+                        }`}
                         onMouseDown={onClickResizeColumn ? () => onClickResizeColumn(columnIndex, column) : undefined}
                     />}
                 </Grid>
@@ -287,15 +269,8 @@ function FilterForm<M>({
                 horizontal: "right"
             }}
         >
-            <Box sx={theme => ({
-                // backgroundColor: theme.palette.background.default
-            })}>
-                <Box sx={theme => ({
-                    p: 2,
-                    fontSize: "0.750rem",
-                    fontWeight: 600,
-                    textTransform: "uppercase"
-                })}>
+            <Box className="bg-background-default">
+                <Box className="p-2 text-xs font-semibold uppercase">
                     {column.title ?? id}
                 </Box>
                 <Divider/>

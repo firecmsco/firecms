@@ -2,10 +2,8 @@ import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
 
 import {
-    alpha,
     Box,
-    Drawer as MuiDrawer,
-    DrawerProps as MuiDrawerProps,
+    IconButton,
     Link,
     Toolbar,
     Tooltip,
@@ -13,7 +11,6 @@ import {
     useTheme
 } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
-import { NavLink } from "react-router-dom";
 import { useFireCMSContext, useNavigationContext } from "../hooks";
 import {
     CircularProgressCenter,
@@ -22,10 +19,9 @@ import {
     FireCMSAppBarProps,
     FireCMSLogo
 } from "./components";
-import { CSSObject, styled, Theme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import MenuIcon from "@mui/icons-material/Menu";
-import IconButton from "@mui/material/IconButton";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useRestoreScroll } from "./internal/useRestoreScroll";
@@ -98,7 +94,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             toolbarExtraWidget,
             Drawer,
             autoOpenDrawer,
-            FireCMSAppBarComponent = FireCMSAppBar,
+            FireCMSAppBarComponent = FireCMSAppBar
         } = props;
 
         const theme = useTheme();
@@ -122,17 +118,16 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
         return (
             <Box
-                sx={{
-                    display: "flex",
-                    height: "100vh",
-                    "@supports (height: 100dvh)": {
-                        height: "100dvh"
-                    },
-                    width: "100vw",
-                    pt: "env(safe-area-inset-top)",
-                    pl: "env(safe-area-inset-left)",
-                    pr: "env(safe-area-inset-right)",
-                    pb: "env(safe-area-inset-bottom)"
+                className="flex h-screen w-screen"
+                style={{
+                    paddingTop: "env(safe-area-inset-top)",
+                    paddingLeft: "env(safe-area-inset-left)",
+                    paddingRight: "env(safe-area-inset-right)",
+                    paddingBottom: "env(safe-area-inset-bottom)",
+                    height: "100dvh"
+                    // "@supports (height: 100dvh)": {
+                    //     height: "100dvh"
+                    // }
                 }}>
 
                 <FireCMSAppBarComponent title={name}
@@ -158,26 +153,11 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                 </StyledDrawer>
 
                 <Box component={"main"}
-                     sx={{
-                         display: "flex",
-                         flexDirection: "column",
-                         flexGrow: 1,
-                         width: "100%",
-                         height: "100%",
-                         overflow: "auto"
-                     }}>
+                     className="flex flex-col flex-grow h-full overflow-auto">
                     <DrawerHeader/>
                     <Box
                         ref={containerRef}
-                        sx={{
-                            flexGrow: 1,
-                            m: largeLayout ? 2 : 0,
-                            mt: largeLayout ? 0 : 1,
-                            borderRadius: largeLayout ? "12px" : undefined,
-                            border: largeLayout ? `1px solid ${theme.palette.divider}` : undefined,
-                            height: "100%",
-                            overflow: "auto"
-                        }}>
+                        className={`flex-grow overflow-auto ${largeLayout ? "m-0 mx-4 mb-4 rounded-lg border border-solid border-divider-color" : "m-0 mt-1"}`}>
 
                         <ErrorBoundary>
                             {children}
@@ -191,210 +171,111 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
     equal
 )
 
-const DrawerHeader = styled("div")(({ theme }) => ({
-    display: "flex",
-    flexDirection: "column",
-    // alignItems: "center",
-    // justifyContent: "flex-end",
-    // padding: theme.spacing(4, 12, 1, 3),
-    // necessary for content to be below app bar
-    ...theme.mixins.toolbar
-}));
+const DrawerHeader = () => {
+    return (
+        <div className="flex flex-col h-16"></div>
+    );
+};
 
-function StyledDrawer(props: MuiDrawerProps & {
+
+function StyledDrawer(props: {
+    children: React.ReactNode,
+    open: boolean,
     logo?: string,
     hovered: boolean,
     setDrawerOpen: (open: boolean) => void,
 }) {
-    const context = useFireCMSContext();
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
-    const {
-        open,
-        logo,
-        setDrawerOpen,
-        hovered,
-        ...drawerProps
-    } = props;
+    return (
+        <div className="drawer-container relative"
+             style={{
+                 width: props.open ? DRAWER_WIDTH : "72px"
+             }}>
 
-    let logoComponent;
-    if (logo) {
-        logoComponent = <img
-            style={{
-                maxWidth: "100%",
-                maxHeight: "100%"
-            }}
-            src={logo}
-            alt={"Logo"}/>;
-    } else {
-        logoComponent = <FireCMSLogo/>;
-    }
-
-    const menuIconButton = <IconButton
-        color="inherit"
-        aria-label="Open drawer"
-        edge="start"
-        onClick={() => setDrawerOpen(true)}
-        size="large"
-        sx={{
-            position: "absolute",
-            top: 8,
-            left: 24
-        }}>
-        <MenuIcon/>
-    </IconButton>;
-
-    return <>
-
-        {!largeLayout && menuIconButton}
-
-        <MuiDrawer
-            {...drawerProps}
-            variant={largeLayout ? "permanent" : "temporary"}
-            open={open}
-            onClose={!largeLayout
-                ? () => {
-                    setDrawerOpen(false);
-                }
-                : undefined}
-            sx={{
-                width: DRAWER_WIDTH,
-                flexShrink: 0,
-                height: "100%",
-                whiteSpace: "nowrap",
-                boxSizing: "border-box",
-                border: "none",
-                ...(open && {
-                    ...openedMixin(theme),
-                    "& .MuiDrawer-paper": openedMixin(theme)
-                }),
-                ...(!open && {
-                    ...closedMixin(theme, largeLayout),
-                    "& .MuiDrawer-paper": closedMixin(theme, largeLayout)
-                })
-            }}
-        >
-
-            <IconButton onClick={() => setDrawerOpen(false)}
-                        sx={{
-                            position: "absolute",
-                            right: 16,
-                            top: 16,
-                            opacity: open ? 1.0 : 0.0,
-                            transition: theme.transitions.create("opacity", {
-                                easing: theme.transitions.easing.sharp,
-                                duration: theme.transitions.duration.enteringScreen
-                            })
-                        }}>
-                {theme.direction === "rtl"
-                    ? <ChevronRightIcon/>
-                    : <ChevronLeftIcon/>}
-            </IconButton>
-
-            <Toolbar sx={{
-                position: "absolute",
-                left: open ? "-100%" : 0,
-                right: open ? undefined : 0,
-                opacity: open ? 0.0 : 1.0,
-                backgroundColor: theme.palette.background.default,
-                transition: theme.transitions.create(["left", "opacity"], {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.enteringScreen
-                })
-            }}>
-                {!open
-                    ? <Tooltip title={"Open menu"}
-                               placement={"right"}>
-                        {menuIconButton}
-                    </Tooltip>
-                    : menuIconButton}
-            </Toolbar>
-
-            <Box sx={{ height: "100%", width: "100%", overflow: "auto" }}>
-                <Link
-                    key={"breadcrumb-home"}
+            {!largeLayout && (
+                <IconButton
                     color="inherit"
-                    component={NavLink}
-                    to={"."}
-                    sx={theme => ({
-                        display: "block",
-                        transition: theme.transitions.create(["padding"], {
-                            easing: theme.transitions.easing.sharp,
-                            duration: theme.transitions.duration.enteringScreen
-                        }),
-                        p: theme.spacing(
-                            open ? 4 : 9,
-                            open ? 12 : 2,
-                            0,
-                            open ? 3 : 2)
-                    })}>
-                    <Tooltip title={"Home"} placement={"right"}>
-                        <div onClick={() => {
-                            context.onAnalyticsEvent?.("drawer_navigate_to_home");
-                        }}>
-                            {logoComponent}
-                        </div>
-                    </Tooltip>
+                    aria-label="Open drawer"
+                    edge="start"
+                    onClick={() => props.setDrawerOpen(true)}
+                    size="large"
+                    className="absolute top-2 left-6"
+                >
+                    <MenuIcon/>
+                </IconButton>
+            )}
 
+            <div
+                className={"fixed left-0 top-0 transition-all duration-200 ease-in-out"}
+                style={{
+                    width: props.open ? DRAWER_WIDTH : "72px"
+                }}
+            >
+                <div
+                    className={`absolute right-4 top-4 ${
+                        props.open ? "opacity-100" : "opacity-0"
+                    } transition-opacity duration-200 ease-in-out`}>
+                    <IconButton
+                        onClick={() => props.setDrawerOpen(false)}
+                    >
+                        {theme.direction === "rtl"
+                            ? <ChevronRightIcon/>
+                            : <ChevronLeftIcon/>}
+                    </IconButton>
+                </div>
+
+                {!props.open
+                    ? (
+                        <Tooltip title="Open menu" placement="right">
+                            <IconButton
+                                color="inherit"
+                                aria-label="Open drawer"
+                                edge="start"
+                                onClick={() => props.setDrawerOpen(true)}
+                                size="large"
+                                className="absolute top-2 left-6"
+                            >
+                                <MenuIcon/>
+                            </IconButton>
+                        </Tooltip>
+                    )
+                    : (
+                        ""
+                    )}
+
+                <Box>
+                    <div
+                        className={`${
+                            props.open
+                                ? "py-4 pt-8 px-8 pr-24 block transition-padding duration-200 ease-in-out"
+                                : "p-4 mt-2 block transition-padding duration-200 ease-in-out"
+                        }`}>
+                        <Link>
+                            <Tooltip title="Home" placement="right">
+                                {props.logo
+                                    ? <img src={props.logo} alt="Logo"
+                                           className="max-w-full max-h-full"/>
+                                    : <FireCMSLogo/>}
+
+                            </Tooltip>
+                        </Link>
+                    </div>
+                    {props.children}
+                </Box>
+
+                <Link
+                    className={`${
+                        props.open ? "left-0 opacity-100" : "left-full opacity-0"
+                    } fixed bottom-0 w-drawer px-6 py-1 flex items-center font-medium bg-white bg-opacity-60 text-sm transition-all duration-200 ease-in-out`}
+                    onMouseDown={(e) => e.preventDefault()}
+                    target="_blank"
+                >
+                    <OpenInNewIcon fontSize="small"/>
+                    firecms.co
                 </Link>
-                {props.children}
-            </Box>
-
-            <Link sx={(theme) => ({
-                width: DRAWER_WIDTH,
-                position: "fixed",
-                bottom: 0,
-                left: open ? 0 : "-100%",
-                opacity: open ? 1.0 : 0.0,
-                transition: theme.transitions.create(["left", "opacity"], {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.enteringScreen
-                }),
-                px: "24px",
-                py: 1,
-                display: "flex",
-                alignItems: "center",
-                fontWeight: theme.typography.fontWeightMedium,
-                background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : alpha(theme.palette.background.paper, 0.1),
-                backdropFilter: "blur(8px)"
-                // borderTop: `1px solid ${theme.palette.divider}`
-            })}
-                  href={"https://firecms.co?utm_source=drawer"}
-                  onMouseDown={(e: React.MouseEvent) => {
-                      e.preventDefault();
-                  }}
-                  target="_blank">
-                <OpenInNewIcon style={{ marginRight: "24px" }}
-                               fontSize={"small"}/>
-                firecms.co
-            </Link>
-
-        </MuiDrawer>
-    </>;
+            </div>
+        </div>
+    );
 }
-
-const openedMixin = (theme: Theme): CSSObject => ({
-    willChange: "width",
-    pb: "32px",
-    width: DRAWER_WIDTH,
-    border: "none",
-    transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.enteringScreen
-    }),
-    backgroundColor: theme.palette.background.default,
-    overflowX: "hidden"
-});
-
-const closedMixin = (theme: Theme, large: boolean): CSSObject => ({
-    willChange: "width",
-    transition: theme.transitions.create("width", {
-        easing: theme.transitions.easing.sharp,
-        duration: theme.transitions.duration.leavingScreen
-    }),
-    border: "none",
-    overflowX: "hidden",
-    backgroundColor: theme.palette.background.default,
-    width: large ? `calc(${theme.spacing(9)})` : "0px"
-});

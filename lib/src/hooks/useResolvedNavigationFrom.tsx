@@ -64,9 +64,12 @@ interface ResolvedNavigationEntityCustom<M extends Record<string, any>> {
  * @category Hooks and utilities
  */
 export function resolveNavigationFrom<M extends Record<string, any>, UserType extends User>({
-                                             path,
-                                             context
-                                         }: { path: string, context: FireCMSContext<UserType> }): Promise<ResolvedNavigationEntry<M>[]> {
+                                                                                                path,
+                                                                                                context
+                                                                                            }: {
+    path: string,
+    context: FireCMSContext<UserType>
+}): Promise<ResolvedNavigationEntry<M>[]> {
 
     const dataSource = context.dataSource;
     const navigation = context.navigation;

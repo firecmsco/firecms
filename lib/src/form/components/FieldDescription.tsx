@@ -9,6 +9,7 @@ import {
     Typography
 } from "@mui/material";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
+import TTypography from "../../migrated/TTypography";
 
 interface FieldDescriptionPopoverProps<T extends CMSType> {
     property: ResolvedProperty<T>,
@@ -30,23 +31,21 @@ export function FieldDescription<T extends CMSType>({ property }: FieldDescripti
             </Box>
 
             {property.longDescription &&
-            <Tooltip title={
-                <Typography
-                    variant={"caption"}>{property.longDescription}</Typography>
-            }
-                     placement="bottom-start"
-                     arrow>
-                <IconButton
-                    edge={"start"}
-                    size={"small"}
-                    sx={{
-                        alignSelf: "flex-start"
-                    }}>
+                <Tooltip title={
+                    <TTypography
+                        variant={"caption"}>{property.longDescription}</TTypography>
+                }
+                         placement="bottom-start"
+                         arrow>
+                    <IconButton
+                        edge={"start"}
+                        size={"small"}
+                        className="self-start">
 
-                    <InfoIcon color={"disabled"}
-                              fontSize={"small"}/>
-                </IconButton>
-            </Tooltip>}
+                        <InfoIcon color={"disabled"}
+                                  fontSize={"small"}/>
+                    </IconButton>
+                </Tooltip>}
 
         </Box>
     );

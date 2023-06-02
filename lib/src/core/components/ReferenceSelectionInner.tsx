@@ -36,6 +36,7 @@ import { useTableController } from "./EntityCollectionTable/useTableController";
 import {
     isFilterCombinationValidForFirestore
 } from "./EntityCollectionView/isFilterCombinationValidForFirestore";
+import TTypography from "../../migrated/TTypography";
 
 /**
  * @category Components
@@ -231,7 +232,12 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
                                                     size,
                                                     width,
                                                     frozen
-                                                }: { entity: Entity<any>, size: CollectionSize, width: number, frozen?: boolean }) => {
+                                                }: {
+        entity: Entity<any>,
+        size: CollectionSize,
+        width: number,
+        frozen?: boolean
+    }) => {
         const selectedEntities = selectionController.selectedEntities;
         const isSelected = selectedEntities && selectedEntities.map(e => e.id).indexOf(entity.id) > -1;
         return <EntityCollectionRowActions
@@ -267,22 +273,18 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
 
     return (
 
-        <Box sx={{
-            display: "flex",
-            flexDirection: "column",
-            height: "100%"
-        }}>
+        <Box className="flex flex-col h-full">
 
-            <Box sx={{ flexGrow: 1 }}>
+            <Box className="flex-grow">
                 {entitiesDisplayedFirst &&
                     <EntityCollectionTable fullPath={fullPath}
                                            onEntityClick={onEntityClick}
                                            forceFilter={forceFilter}
                                            tableController={tableController}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
-                                           title={<Typography variant={"h6"}>
+                                           title={<TTypography variant={"h6"}>
                                                {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
-                                           </Typography>}
+                                           </TTypography>}
                                            {...collection}
                                            inlineEditing={false}
                                            selectionController={selectionController}
@@ -296,12 +298,10 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
             </Box>
             <CustomDialogActions translucent={false}>
                 {description &&
-                    <Typography variant={"body2"} sx={{
-                        flexGrow: 1,
-                        textAlign: "left"
-                    }}>
+                    <TTypography variant={"body2"}
+                                 className="flex-grow text-left">
                         {description}
-                    </Typography>}
+                    </TTypography>}
                 <Button
                     onClick={onDone}
                     color="primary"
@@ -320,7 +320,12 @@ function ReferenceDialogActions({
                                     path,
                                     onClear,
                                     onNewClick
-                                }: { collection: EntityCollection<any>, path: string, onClear: () => void, onNewClick: () => void }) {
+                                }: {
+    collection: EntityCollection<any>,
+    path: string,
+    onClear: () => void,
+    onNewClick: () => void
+}) {
 
     const authController = useAuthController();
 

@@ -52,16 +52,8 @@ export function ImagePreview({
 
     return (
         <Box
-            sx={{
-                position: "relative",
-                maxWidth: "100%",
-                maxHeight: "100%",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                width: imageSize,
-                height: imageSize
-            }}
+            className="relative flex items-center justify-center max-w-full max-h-full"
+            style={{ width: imageSize, height: imageSize }}
             key={"image_preview_" + url}
             onMouseEnter={() => setOnHover(true)}
             onMouseMove={() => setOnHover(true)}
@@ -73,13 +65,8 @@ export function ImagePreview({
             {onHover && <>
 
                 {navigator && <Tooltip title="Copy url to clipboard">
-                    <Box sx={{
-                        borderRadius: "9999px",
-                        position: "absolute",
-                        bottom: -4,
-                        right: 32,
-                        backgroundColor: theme.palette.background.default
-                    }}>
+                    <Box
+                        className="rounded-full absolute bottom-[-4px] right-8 bg-[theme.palette.background.default]">
                         <IconButton
                             size={"small"}
                             onClick={(e) => {

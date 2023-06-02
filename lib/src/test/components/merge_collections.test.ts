@@ -1,7 +1,7 @@
 import { EntityCollection, PropertyBuilder } from "../../types";
 import { mergeCollections } from "../../core/util/collections";
 
-const priceBuilder:PropertyBuilder = ({ values }: any) => ({
+const priceBuilder: PropertyBuilder = ({ values }: any) => ({
     dataType: "number",
     name: "Price",
     validation: {

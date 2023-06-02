@@ -14,10 +14,11 @@ import {
     TableBody,
     TableCell,
     TableRow,
-    Typography
+    Typography, useTheme
 } from "@mui/material";
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
+import TTypography from "../../migrated/TTypography";
 
 export interface SkeletonPropertyComponentProps {
     property: ResolvedProperty,
@@ -86,6 +87,9 @@ export function SkeletonPropertyComponent({
 
 function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<T>, size: PreviewSize) {
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const theme = useTheme();
+
     if (!property.properties)
         return <></>;
 
@@ -102,22 +106,15 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
 
     if (size !== "regular")
         return (
-            <Box sx={theme => ({
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                "& > *": {
-                    [theme.breakpoints.down("md")]: {
-                        marginBottom: `${theme.spacing(0.5)} !important`
-                    },
-                    marginBottom: `${theme.spacing(1)} !important`
-                }
-            })}>
+            <Box
+                className="w-full flex flex-col space-y-[theme.spacing(1)] md:space-y-[theme.spacing(0.5)]"
+            >
                 {mapPropertyKeys.map((key, index) => (
                     <div key={`map_${key}`}>
-                        {property.properties && property.properties[key] && <SkeletonPropertyComponent
-                            property={property.properties[key]}
-                            size={"small"}/>}
+                        {property.properties && property.properties[key] &&
+                            <SkeletonPropertyComponent
+                                property={property.properties[key]}
+                                size={"small"}/>}
                     </div>
                 ))}
             </Box>
@@ -131,28 +128,23 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
                         return (
                             <TableRow
                                 key={`map_preview_table__${index}`}
-                                sx={{
-                                    "&:last-child th, &:last-child td": {
-                                        borderBottom: 0
-                                    }
-                                }}>
+                                className="last:child-th:last:child-td:border-b-0">
                                 <TableCell key={`table-cell-title--${key}`}
-                                           sx={{
-                                               verticalAlign: "top"
-                                           }}
+                                           className="align-top"
                                            width="30%"
                                            component="th">
-                                    <Typography variant={"caption"}
-                                                color={"textSecondary"}>
+                                    <TTypography variant={"caption"}
+                                                 color={"textSecondary"}>
                                         {property.properties![key].name}
-                                    </Typography>
+                                    </TTypography>
                                 </TableCell>
                                 <TableCell key={`table-cell-${key}`}
                                            width="70%"
                                            component="th">
-                                    {property.properties && property.properties[key] && <SkeletonPropertyComponent
-                                        property={property.properties[key]}
-                                        size={"small"}/>}
+                                    {property.properties && property.properties[key] &&
+                                        <SkeletonPropertyComponent
+                                            property={property.properties[key]}
+                                            size={"small"}/>}
                                 </TableCell>
                             </TableRow>
                         );
@@ -249,12 +241,12 @@ function renderUrlAudioComponent() {
 }
 
 export function renderSkeletonImageThumbnail(size: PreviewSize) {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const theme = useTheme();
     const imageSize = size === "tiny" ? 40 : size === "small" ? 100 : 200;
     return (
         <Skeleton variant="rectangular"
-                  sx={theme => ({
-                      borderRadius: `${theme.shape.borderRadius}px`
-                  })}
+                  className={`rounded-[${theme.shape.borderRadius}px]`}
                   width={imageSize}
                   height={imageSize}/>
     );
@@ -291,10 +283,7 @@ function renderUrlFile(size: PreviewSize) {
 
     return (
         <Box
-            sx={{
-                width: getThumbnailMeasure(size),
-                height: getThumbnailMeasure(size)
-            }}>
+            className={`w-${getThumbnailMeasure(size)} h-${getThumbnailMeasure(size)}`}>
             {renderSkeletonIcon()}
         </Box>
     );

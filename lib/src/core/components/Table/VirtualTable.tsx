@@ -31,6 +31,7 @@ import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
+import TTypography from "../../../migrated/TTypography";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -230,23 +231,15 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const buildErrorView = useCallback(() => (
             <Box
-                sx={{
-                    height: "calc(100% - 64px)",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    position: "sticky",
-                    left: 0
-                }}>
+                className="h-[calc(100%-64px)] flex flex-col items-center justify-center sticky left-0">
 
-                <Typography variant={"h6"}>
+                <TTypography variant={"h6"}>
                     {"Error fetching data from the data source"}
-                </Typography>
+                </TTypography>
 
-                {error?.message && <Typography>
+                {error?.message && <TTypography>
                     {error?.message}
-                </Typography>}
+                </TTypography>}
 
             </Box>
         ), [error?.message]);
@@ -254,19 +247,12 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         const buildEmptyView = useCallback(() => {
             if (loading)
                 return <CircularProgressCenter/>;
-            return <Box sx={{
-                display: "flex",
-                overflow: "auto",
-                alignItems: "center",
-                justifyContent: "center",
-                p: 2,
-                gap: 2,
-                height: "100%"
-            }}>
+            return <Box
+                className="flex overflow-auto items-center justify-center p-2 gap-2 h-full">
                 <AssignmentIcon/>
-                <Typography>
+                <TTypography>
                     {emptyMessage}
-                </Typography>
+                </TTypography>
             </Box>;
         }, [emptyMessage, loading]);
 
@@ -276,10 +262,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         return (
             <Box
                 ref={measureRef}
-                sx={{
-                    height: "100%",
-                    width: "100%"
-                }}>
+                className="h-full w-full">
                 <VirtualListContext.Provider
                     value={{
                         data,

@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, SxProps, Theme, Typography } from "@mui/material";
+import TTypography from "../../migrated/TTypography";
 
 interface LabelWithIconProps {
     icon: React.ReactNode;
@@ -22,22 +23,13 @@ export function LabelWithIcon({
                                   required
                               }: LabelWithIconProps) {
     return (
-        <Box sx={{
-            display: "inline-flex",
-            marginBottom: "2px",
-            alignItems: "center",
-            gap: small ? 1 : 1.5,
-            ...sx
-        }} component={"span"}>
+        <Box
+            className={`inline-flex items-center mb-0.5 ${small ? 'gap-1' : 'gap-1.5'} ${sx}`}
+            component={"span"}>
 
             {icon}
-            <Typography component={"span"}
-                        sx={{
-                            fontWeight: 500,
-                            fontSize: small ? "1rem" : ".85rem",
-                            transformOrigin: "left top",
-                            transform: small ? "translate(8px, 0px) scale(0.75)" : undefined
-                        }}>{(title ?? "") + (required ? " *" : "")}</Typography>
+            <TTypography component={"span"}
+                         className={`font-medium text-${small ? 'base' : 'sm'} origin-top-left transform ${small ? 'translate-x-2 scale-75' : ''}`}>{(title ?? "") + (required ? " *" : "")}</TTypography>
 
         </Box>
     );

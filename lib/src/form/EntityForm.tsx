@@ -6,7 +6,7 @@ import React, {
     useRef,
     useState
 } from "react";
-import { alpha, Box, Button, Grid, Typography } from "@mui/material";
+import { alpha, Box, Button, Grid, Typography, useTheme } from "@mui/material";
 import {
     CMSAnalyticsEvent,
     Entity,
@@ -32,6 +32,7 @@ import {
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
+import TTypography from "../migrated/TTypography";
 
 /**
  * @category Components
@@ -141,6 +142,8 @@ function EntityFormInternal<M extends Record<string, any>>({
     const context = useFireCMSContext();
     const dataSource = useDataSource();
     const plugins = context.plugins;
+
+    const theme = useTheme();
 
     const initialResolvedCollection = useMemo(() => resolveCollection({
         collection: inputCollection,
@@ -370,73 +373,33 @@ function EntityFormInternal<M extends Record<string, any>>({
                 return <>
 
                     <Box
-                        sx={(theme) => ({
-                            paddingLeft: theme.spacing(4),
-                            paddingRight: theme.spacing(4),
-                            paddingTop: theme.spacing(3),
-                            paddingBottom: theme.spacing(4),
-                            marginBottom: theme.spacing(2),
-                            [theme.breakpoints.down("lg")]: {
-                                paddingLeft: theme.spacing(2),
-                                paddingRight: theme.spacing(2),
-                                paddingTop: theme.spacing(2),
-                                paddingBottom: theme.spacing(3)
-                            },
-                            [theme.breakpoints.down("md")]: {
-                                padding: theme.spacing(2)
-                            }
-                        })}
+                        className="pl-16 pr-16 pt-12 pb-16 mb-8 lg:pl-8 lg:pr-8 lg:pt-8 lg:pb-12 md:p-8"
                     >
 
                         {pluginActions.length > 0 && <Box
-                            sx={(theme) => ({
-                                width: "100%",
-                                display: "flex",
-                                justifyContent: "flex-end",
-                                background: theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : alpha(theme.palette.background.paper, 0.1),
-                                backdropFilter: "blur(8px)",
-                                borderBottom: `1px solid ${theme.palette.divider}`,
-                                flexDirection: "row",
-                                alignItems: "center",
-                                position: "absolute",
-                                top: 0,
-                                right: 0,
-                                left: 0,
-                                textAlign: "right",
-                                zIndex: 2,
+                            className={`w-full flex justify-end row items-center absolute top-0 right-0 left-0 text-right z-2 ${
+                                theme.palette.mode === "light"
+                                    ? "bg-opacity-60 bg-white"
+                                    : `bg-opacity-10 bg-${theme.palette.background.paper}`
+                            } backdrop-blur-md border-b border-${theme.palette.divider}`}
+                            style={{
                                 "& > *:not(:last-child)": {
                                     [theme.breakpoints.down("md")]: {
-                                        mr: theme.spacing(1)
+                                        marginRight: theme.spacing(1),
                                     },
-                                    mr: theme.spacing(2)
-                                }
-                            })}>
+                                    marginRight: theme.spacing(2),
+                                },
+                            }}>
                             {pluginActions}
                         </Box>}
 
                         <Box
-                            sx={(theme) => ({
-                                width: "100%",
-                                marginTop: theme.spacing(4 + (pluginActions ? 4 : 0)),
-                                paddingY: 2,
-                                display: "flex",
-                                alignItems: "center",
-                                [theme.breakpoints.down("lg")]: {
-                                    marginTop: theme.spacing(3 + (pluginActions ? 4 : 0))
-                                },
-                                [theme.breakpoints.down("md")]: {
-                                    marginTop: theme.spacing(2 + (pluginActions ? 4 : 0))
-                                }
-                            })}>
+                            className={`w-full mt-${4 + (pluginActions ? 4 : 0)}*4 py-2 flex items-center lg:mt-${3 + (pluginActions ? 4 : 0)}*4 md:mt-${2 + (pluginActions ? 4 : 0)}*4`}>
 
-                            <Typography
-                                sx={{
-                                    marginTop: 4,
-                                    marginBottom: collection.hideIdFromForm ? 0 : 4,
-                                    flexGrow: 1
-                                }}
+                            <TTypography
+                                className="mt-4 mb-[calc(collection.hideIdFromForm ? 0 : 1rem)] flex-grow"
                                 variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
-                            </Typography>
+                            </TTypography>
                         </Box>
 
                         {!hideId &&
@@ -574,7 +537,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
         <Form onSubmit={handleSubmit}
               noValidate>
-            <Box sx={{ mt: 4 }}
+            <Box className="mt-4"
                  ref={formRef}>
 
                 {formFields}
@@ -583,15 +546,15 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
             </Box>
 
-            <Box sx={{ height: 56 }}/>
+            <Box className="h-14"/>
 
             <CustomDialogActions position={"absolute"}>
 
                 {savingError &&
                     <Box textAlign="right">
-                        <Typography color={"error"}>
+                        <TTypography color={"error"}>
                             {savingError.message}
-                        </Typography>
+                        </TTypography>
                     </Box>}
 
                 <Button

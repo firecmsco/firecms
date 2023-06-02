@@ -62,15 +62,9 @@ export function getBadgeForWidget(
     widget: FieldConfig | undefined,
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit"): React.ReactNode {
 
-    return <Box sx={{
-        background: widget?.color ?? "#888",
-        height: "32px",
-        width: "32px",
-        padding: 0.5,
-        borderRadius: "50%",
-        boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)",
-        color: "white"
-    }}>
+    return <Box
+        className="bg-[widget?.color ?? '#888'] h-8 w-8 p-1 rounded-full shadow-md text-white"
+        style={{ boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)" }}>
         {getIconForWidget(widget, color, "medium")}
     </Box>
 }
@@ -125,5 +119,6 @@ export function getResolvedPropertyInPath(properties: Record<string, ResolvedPro
 // replace the dot notation with brackets
 // address.street => address[street]
 export function getBracketNotation(path: string): string {
-    return path.replace(/\.([^.]*)/g, "[$1]"); ;
+    return path.replace(/\.([^.]*)/g, "[$1]");
+    ;
 }

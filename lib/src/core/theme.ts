@@ -36,7 +36,6 @@ export const createCMSDefaultTheme = (
 
     const { palette } = createTheme();
     const { augmentColor } = palette;
-    const createColor = (mainColor: string) => augmentColor({ color: { main: mainColor } });
 
     const original = createTheme({
         palette: {

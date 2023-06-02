@@ -131,7 +131,7 @@ export function ReferenceFilterField({
     const buildEntry = (reference: EntityReference) => {
         return (
             <Box
-                sx={{ mb: 0.5 }}
+                className="mb-0.5"
                 onMouseEnter={() => setOnHover(true)}
                 onMouseMove={() => setOnHover(true)}
                 onMouseLeave={() => setOnHover(false)}>
@@ -174,7 +174,7 @@ export function ReferenceFilterField({
             <Box flexGrow={1} ml={1}>
 
                 <FormControl fullWidth
-                             sx={{ height: "100%" }}>
+                             className="h-full">
                     {internalValue && Array.isArray(internalValue) && <Box>
                         {internalValue.map((ref, index) => buildEntry(ref))}
                     </Box>}
@@ -183,7 +183,7 @@ export function ReferenceFilterField({
                     </Box>}
                     {(!internalValue || (Array.isArray(internalValue) && internalValue.length === 0)) &&
                         <Button onClick={doOpenDialog}
-                                sx={{ height: "100%" }}>
+                                className="h-full">
                             {multiple ? "Select references" : "Select reference"}
                         </Button>
                     }

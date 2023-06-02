@@ -3,7 +3,9 @@ import React, { ErrorInfo, PropsWithChildren } from "react";
 
 import ErrorIcon from "@mui/icons-material/Error";
 
-export class ErrorBoundary extends React.Component<PropsWithChildren<Record<string, unknown>>, { error: Error | null }> {
+export class ErrorBoundary extends React.Component<PropsWithChildren<Record<string, unknown>>, {
+    error: Error | null
+}> {
     constructor(props: any) {
         super(props);
         this.state = { error: null };
@@ -33,9 +35,9 @@ export class ErrorBoundary extends React.Component<PropsWithChildren<Record<stri
                         <ErrorIcon color={"error"} fontSize={"small"}/>
                         <Box marginLeft={1}>Error</Box>
                     </Box>
-                    <Typography variant={"caption"}>
+                    <TTypography variant={"caption"}>
                         {this.state.error?.message ?? "See the error in the console"}
-                    </Typography>
+                    </TTypography>
                 </Box>
             );
         }

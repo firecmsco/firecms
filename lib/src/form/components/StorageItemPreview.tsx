@@ -32,24 +32,12 @@ export function StorageItemPreview({
 
             <Paper
                 elevation={0}
-                sx={{
-                    padding: 1,
-                    boxSizing: "border-box",
-                    minWidth: size === "regular" ? 220 : 118,
-                    minHeight: size === "regular" ? 220 : 118
-                }}
+                className={`p-1 border-box ${size === "regular" ? "min-w-[220px] min-h-[220px]" : "min-w-[118px] min-h-[118px]"}`}
                 variant={"outlined"}>
 
                 {!disabled &&
                     <Box
-                        sx={(theme) => ({
-                            position: "absolute",
-                            borderRadius: "9999px",
-                            top: -8,
-                            right: -8,
-                            zIndex: 1,
-                            backgroundColor: theme.palette.background.paper
-                        })}>
+                        className="absolute rounded-full -top-2 -right-2 z-10 bg-white">
 
                         <Tooltip
                             title="Remove">

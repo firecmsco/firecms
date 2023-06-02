@@ -50,7 +50,12 @@ export type EntityCollectionTableProps<M extends Record<string, any>> =
      * @param entity
      * @param size
      */
-    tableRowActionsBuilder?: (params: { entity: Entity<M>, size: CollectionSize, width: number, frozen?: boolean }) => React.ReactNode;
+    tableRowActionsBuilder?: (params: {
+        entity: Entity<M>,
+        size: CollectionSize,
+        width: number,
+        frozen?: boolean
+    }) => React.ReactNode;
 
     /**
      * Callback when anywhere on the table is clicked

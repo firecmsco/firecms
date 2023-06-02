@@ -1,6 +1,13 @@
 import React, { useCallback, useMemo } from "react";
 
-import { Box, Button, IconButton, Tooltip, Typography } from "@mui/material";
+import {
+    Box,
+    Button,
+    IconButton,
+    Tooltip,
+    Typography,
+    useTheme
+} from "@mui/material";
 
 import LinkIcon from "@mui/icons-material/Link";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -33,6 +40,7 @@ import {
     fieldBackground,
     fieldBackgroundHover
 } from "../../core/util/field_colors";
+import TTypography from "../../migrated/TTypography";
 
 /**
  * This field allows selecting reference/s.
@@ -65,6 +73,8 @@ export function ReferenceWidget<M extends Record<string, any>>({
      */
     forceFilter?: FilterValues<string>;
 }) {
+
+    const theme = useTheme();
 
     const fireCMSContext = useFireCMSContext();
     const navigationContext = useNavigationContext();
@@ -196,10 +206,9 @@ export function ReferenceWidget<M extends Record<string, any>>({
                             onClick={disabled ? undefined : handleClickOpen}
                             justifyContent="center"
                             display="flex">
-                    <Typography variant={"label"} sx={(theme) => ({
-                        flexGrow: 1,
-                        textAlign: "center"
-                    })}>No value set</Typography>
+                    <TTypography variant={"label"}
+                                 className="flex-grow text-center">No value
+                        set</TTypography>
                     {!disabled && <Button variant="outlined"
                                           color="primary">
                         Set
@@ -222,11 +231,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
                          flexGrow={1}>
                         <LabelWithIcon icon={<LinkIcon color={"inherit"}
                                                        fontSize={"inherit"}/>}
-                                       sx={{
-                                           flexGrow: 1,
-                                           color: "text.secondary",
-                                           ml: 1
-                                       }}
+                                       className="flex-grow text-text-secondary ml-1"
                                        title={name}
                         />
 
@@ -235,10 +240,10 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                 alignSelf={"center"}
                                 m={1}>
                                 <Tooltip title={value && value.path}>
-                                    <Typography variant={"caption"}
-                                                className={"mono"}>
+                                    <TTypography variant={"caption"}
+                                                 className={"font-mono"}>
                                         {entity.id}
-                                    </Typography>
+                                    </TTypography>
                                 </Tooltip>
                             </Box>}
 
@@ -276,23 +281,19 @@ export function ReferenceWidget<M extends Record<string, any>>({
         );
     };
 
-    return <Typography variant={"label"} sx={(theme) => ({
-        elevation: 0,
-        width: "100%",
-        padding: theme.spacing(1),
-        position: "relative",
-        transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-        borderRadius: `${theme.shape.borderRadius}px`,
-        backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : fieldBackground(theme),
-        "&:hover": {
-            cursor: disabled ? undefined : "pointer",
-            backgroundColor: disabled ? "rgba(0, 0, 0, 0.12)" : fieldBackgroundHover(theme)
-        },
-        color: disabled ? (theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)") : undefined,
-        fontWeight: theme.typography.fontWeightMedium
-    })}>
+    return <TTypography variant={"label"}
+                        className={`relative w-full transition-colors duration-200 ease-in border rounded ${disabled ? 'bg-opacity-50' : 'hover:bg-opacity-75'} ${disabled ? (theme.palette.mode === 'light' ? 'text-opacity-50' : 'text-white text-opacity-50') : ''} font-medium`}
+                        style={{
+                            padding: theme.spacing(1),
+                            backgroundColor: disabled ? 'rgba(0, 0, 0, 0.12)' : fieldBackground(theme),
+                            borderRadius: `${theme.shape.borderRadius}px`,
+                            '&:hover': {
+                                cursor: disabled ? undefined : 'pointer',
+                                backgroundColor: disabled ? 'rgba(0, 0, 0, 0.12)' : fieldBackgroundHover(theme),
+                            },
+                        }}>
 
         {collection && buildEntityView(collection)}
 
-    </Typography>;
+    </TTypography>;
 }

@@ -15,10 +15,10 @@ interface Header {
 }
 
 export function downloadCSV<M extends Record<string, any>>(data: Entity<M>[],
-                               additionalData: Record<string, any>[] | undefined,
-                               collection: ResolvedEntityCollection<M>,
-                               path: string,
-                               exportConfig: ExportConfig | undefined) {
+                                                           additionalData: Record<string, any>[] | undefined,
+                                                           collection: ResolvedEntityCollection<M>,
+                                                           path: string,
+                                                           exportConfig: ExportConfig | undefined) {
     const properties = collection.properties;
     const headers = getExportHeaders(properties, path, exportConfig);
     const exportableData = getExportableData(data, additionalData, properties, headers);
@@ -45,8 +45,8 @@ export function getExportableData(data: any[],
 }
 
 function getExportHeaders<M extends Record<string, any>, UserType extends User>(properties: ResolvedProperties<M>,
-                                                                      path: string,
-                                                                      exportConfig?: ExportConfig<UserType>): Header[] {
+                                                                                path: string,
+                                                                                exportConfig?: ExportConfig<UserType>): Header[] {
     const headers = [
         { label: "id", key: "id" },
         ...Object.entries(properties)

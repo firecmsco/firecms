@@ -102,7 +102,7 @@ export function TableReferenceField(props: {
         if (Array.isArray(internalValue))
             return <>
                 {internalValue.map((reference, index) =>
-                    <Box sx={{ m: 0.5, width: "100%" }}
+                    <Box className="m-1 w-full"
                          key={`preview_array_ref_${name}_${index}`}>
                         <ReferencePreview
                             onClick={disabled ? undefined : handleOpen}
@@ -124,7 +124,7 @@ export function TableReferenceField(props: {
         return <ErrorView error={"The specified collection does not exist"}/>;
 
     return (
-        <Box sx={{ width: "100%" }}
+        <Box className="w-full"
              onMouseEnter={hoverTrue}
              onMouseMove={hoverTrue}
              onMouseLeave={hoverFalse}>

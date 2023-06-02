@@ -86,9 +86,7 @@ export function TableSelect(props: {
             variant={"standard"}
             key={`table_select_${name}`}
             inputRef={ref}
-            sx={{
-                height: "100%"
-            }}
+            className="h-full"
             open={open}
             disabled={disabled}
             multiple={multiple}

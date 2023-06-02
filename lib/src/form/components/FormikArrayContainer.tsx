@@ -35,16 +35,16 @@ interface ArrayContainerProps<T> {
  * @category Form custom fields
  */
 export function FormikArrayContainer<T>({
-                                      name,
-                                      addLabel,
-                                      value,
-                                      disabled = false,
-                                      buildEntry,
-                                      small,
-                                      onInternalIdAdded,
-                                      includeAddButton,
-                                      newDefaultEntry = null
-                                  }: ArrayContainerProps<T>) {
+                                            name,
+                                            addLabel,
+                                            value,
+                                            disabled = false,
+                                            buildEntry,
+                                            small,
+                                            onInternalIdAdded,
+                                            includeAddButton,
+                                            newDefaultEntry = null
+                                        }: ArrayContainerProps<T>) {
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
     const internalIdsMap: Record<string, number> = useMemo(() =>

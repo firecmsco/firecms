@@ -40,6 +40,7 @@ import {
     fieldBackground,
     fieldBackgroundHover
 } from "../../core/util/field_colors";
+import TTypography from "../../migrated/TTypography";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -132,27 +133,20 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
     } else {
         body = (
             <>
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    flexGrow: 1,
-                    width: "100%",
-                    maxWidth: "calc(100% - 52px)",
-                    margin: 1
-                }}>
+                <Box
+                    className="flex flex-col flex-grow w-full max-w-[calc(100%-52px)] m-1">
 
                     {size !== "tiny" && (
                         reference
-                            ? <Box sx={{
-                                display: size !== "regular" ? "block" : undefined,
-                                whiteSpace: size !== "regular" ? "nowrap" : undefined,
-                                overflow: size !== "regular" ? "hidden" : undefined,
-                                textOverflow: size !== "regular" ? "ellipsis" : undefined
-                            }}>
-                                <Typography variant={"caption"}
-                                            className={"mono"}>
+                            ? <Box className={`${
+                                size !== "regular"
+                                    ? "block whitespace-nowrap overflow-hidden truncate"
+                                    : ""
+                            }`}>
+                                <TTypography variant={"caption"}
+                                             className={"font-mono"}>
                                     {reference.id}
-                                </Typography>
+                                </TTypography>
                             </Box>
                             : <Skeleton variant="text"/>)}
 
@@ -162,9 +156,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
 
                         return (
                             <Box key={"ref_prev_" + (key as string)}
-                                 sx={{
-                                     my: listProperties.length > 1 ? 0.5 : 0
-                                 }}>
+                                 className={`my-${listProperties.length > 1 ? '2' : '0'}`}>
                                 {usedEntity
                                     ? <PropertyPreview
                                         propertyKey={key as string}
@@ -182,9 +174,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                     })}
 
                 </Box>
-                <Box sx={{
-                    my: size === "tiny" ? 0.5 : 1
-                }}>
+                <Box className={`my-${size === "tiny" ? 2 : 4}`}>
                     {!disabled && usedEntity && allowEntityNavigation &&
                         <Tooltip title={`See details for ${usedEntity.id}`}>
                             <IconButton
@@ -231,39 +221,35 @@ function ReferencePreviewWrap({
     size: PreviewSize;
     onClick?: () => void;
 }) {
-    return <Typography variant={"label"}
-                       sx={(theme) => {
-                           const clickableStyles = onClick
-                               ? {
-                                   tabindex: 0,
-                                   backgroundColor: onHover
-                                       ? fieldBackgroundHover(theme)
-                                       : fieldBackground(theme),
-                                   transition: "background-color 300ms ease, box-shadow 300ms ease",
-                                   boxShadow: onHover ? "0 0 0 2px rgba(128,128,128,0.05)" : undefined,
-                                   cursor: onHover ? "pointer" : undefined
-                               }
-                               : {};
-                           return ({
-                               width: "100%",
-                               display: "flex",
-                               borderRadius: `${theme.shape.borderRadius}px`,
-                               overflow: "hidden",
-                               padding: size === "regular" ? 1 : 0,
-                               itemsAlign: size === "tiny" ? "center" : undefined,
-                               ...clickableStyles
-                           });
-                       }}
-                       onClick={(event) => {
-                           if (onClick) {
-                               event.preventDefault();
-                               onClick();
-                           }
-                       }}>
+    return <TTypography variant={"label"}
+                        className={`w-full flex rounded-md overflow-hidden ${size === 'regular' ? 'p-1' : 'p-0'} ${size === 'tiny' ? 'items-center' : ''} ${onClick ? (onHover ? 'cursor-pointer' : '') : ''}`}
+                        style={(theme) => {
+                            const clickableStyles = onClick
+                                ? {
+                                    tabindex: 0,
+                                    backgroundColor: onHover
+                                        ? fieldBackgroundHover(theme)
+                                        : fieldBackground(theme),
+                                    transition: "background-color 300ms ease, box-shadow 300ms ease",
+                                    boxShadow: onHover ? "0 0 0 2px rgba(128,128,128,0.05)" : undefined,
+                                    cursor: onHover ? "pointer" : undefined,
+                                }
+                                : {};
+                            return ({
+                                borderRadius: `${theme.shape.borderRadius}px`,
+                                ...clickableStyles,
+                            });
+                        }}
+                        onClick={(event) => {
+                            if (onClick) {
+                                event.preventDefault();
+                                onClick();
+                            }
+                        }}>
 
         {children}
 
-    </Typography>
+    </TTypography>
 }
 
 const referencesCache = new Map<string, Entity<any>>();

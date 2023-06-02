@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Button, Typography } from "@mui/material";
 import { Link as ReactLink } from "react-router-dom";
+import TTypography from "../../migrated/TTypography";
 
 export function NotFoundPage() {
 
@@ -13,12 +14,13 @@ export function NotFoundPage() {
                  display="flex"
                  alignItems={"center"}
                  flexDirection={"column"}>
-                <Typography variant={"h4"} align={"center"} gutterBottom={true}>
+                <TTypography variant={"h4"} align={"center"}
+                             gutterBottom={true}>
                     Page not found
-                </Typography>
-                <Typography align={"center"} gutterBottom={true}>
+                </TTypography>
+                <TTypography align={"center"} gutterBottom={true}>
                     This page does not exist or you may not have access to it
-                </Typography>
+                </TTypography>
                 <Button
                     component={ReactLink}
                     to={"/"}>Back to home</Button>

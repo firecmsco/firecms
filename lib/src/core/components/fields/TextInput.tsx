@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from "react";
 import { styled } from "@mui/system";
 
-import { Box, InputLabel } from "@mui/material";
+import { Box, InputLabel, useTheme } from "@mui/material";
 import { TextareaAutosize } from "./TextareaAutosize";
 import { DisabledTextField } from "./DisabledTextField";
 import { fieldBackground, fieldBackgroundHover } from "../../util/field_colors";
@@ -34,6 +34,7 @@ export function TextInput<T extends string | number>({
     small?: boolean
 }) {
 
+    const theme = useTheme();
     const inputRef = useRef(null);
     const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
 
@@ -63,9 +64,7 @@ export function TextInput<T extends string | number>({
                           onChange={onChange}/>
         : <StyledInput ref={inputRef}
                        onWheel={inputType === "number" ? numberInputOnWheelPreventChange : undefined}
-                       sx={{
-                           padding: label ? "32px 12px 8px 12px" : "8px 12px 8px 12px",
-                       }}
+                       className={label ? "p-8 pt-32" : "p-2 px-3"}
                        small={small ?? false}
                        placeholder={placeholder}
                        autoFocus={autoFocus}
@@ -76,40 +75,19 @@ export function TextInput<T extends string | number>({
                        onChange={onChange}/>;
 
     const inner = endAdornment
-        ? <Box sx={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between"
-        }}>
+        ? <Box className="flex items-center justify-between">
             {input}
-            <Box sx={{
-                mr: 2,
-                my: 1
-            }}>{endAdornment}</Box>
+            <Box className="mr-2 my-1">{endAdornment}</Box>
         </Box>
         : input;
 
     return (
         <Box
-            sx={theme => ({
-                position: "relative",
-                background: fieldBackground(theme),
-                borderRadius: `${theme.shape.borderRadius}px`,
-                maxWidth: "100%",
-                minHeight: small ? "48px" : "64px",
-                "&:hover": {
-                    backgroundColor: fieldBackgroundHover(theme)
-                }
-            })}>
+            className="relative bg-[fieldBackground(theme)] rounded-[theme.shape.borderRadius] max-w-full min-h-[64px] hover:bg-[fieldBackgroundHover(theme)]"
+            style={{ minHeight: small ? "48px" : "64px" }}>
             <InputLabel
                 shrink={hasValue || focused}
-                sx={{
-                    position: "absolute",
-                    left: 0,
-                    top: "4px",
-                    pointerEvents: "none",
-                    color: theme => (!error ? (focused ? theme.palette.primary.main : undefined) : theme.palette.error.main)
-                }}
+                className={`absolute left-0 top-1 pointer-events-none ${!error ? (focused ? 'text-primary' : '') : 'text-error'}`}
                 variant={"filled"}>{label}</InputLabel>
 
             {inner}

@@ -4,7 +4,7 @@ import { TableColumn, TableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { VirtualTableHeader } from "./VirtualTableHeader";
 import { VirtualTableContextProps } from "./types";
-import { Box } from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 
 export const VirtualTableHeaderRow = ({
                                           columns,
@@ -17,6 +17,8 @@ export const VirtualTableHeaderRow = ({
                                           onColumnResizeEnd,
                                           createFilterField
                                       }: VirtualTableContextProps<any>) => {
+
+    const theme = useTheme();
 
     const columnRefs = columns.map(() => createRef<HTMLDivElement>());
     const [isResizing, setIsResizing] = useState(-1);
@@ -98,19 +100,8 @@ export const VirtualTableHeaderRow = ({
     }, [setCursorDocument]);
 
     return (
-        <Box sx={theme => ({
-            position: "sticky",
-            minWidth: "100%",
-            backgroundColor: theme.palette.background.default,
-            display: "flex",
-            width: "fit-content",
-            flexDirection: "row",
-            top: 0,
-            left: 0,
-            zIndex: 2,
-            height: 50,
-            borderBottom: `1px solid ${theme.palette.divider}`
-        })}>
+        <Box
+            className="sticky min-w-full bg-background-default flex w-fit-content flex-row top-0 left-0 z-2 h-12 border-b border-divider">
             {columns.map((c, columnIndex) => {
                 const column = columns[columnIndex];
 

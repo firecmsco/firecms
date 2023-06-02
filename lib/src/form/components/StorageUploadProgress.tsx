@@ -78,15 +78,10 @@ export function StorageUploadProgress({
     }, [entry.file, entry.fileName, upload]);
 
     if (simple) {
-        return <Box m={1} sx={{
-            width: imageSize,
-            height: imageSize
-        }}>
+        return <Box m={1} className={`w-${imageSize} h-${imageSize}`}>
 
-            {loading && <Skeleton variant="rectangular" sx={{
-                width: imageSize,
-                height: imageSize
-            }}/>}
+            {loading && <Skeleton variant="rectangular"
+                                  className={`w-${imageSize} h-${imageSize}`}/>}
 
         </Box>
     }
@@ -94,18 +89,11 @@ export function StorageUploadProgress({
 
         <Box m={1}>
             <Paper elevation={0}
-                   sx={{
-                       padding: 1,
-                       boxSizing: "border-box",
-                       minWidth: imageSize,
-                       minHeight: imageSize
-                   }}
+                   className="p-1 box-border min-w-[imageSize] min-h-[imageSize]"
                    variant={"outlined"}>
 
-                {loading && <Skeleton variant="rectangular" sx={{
-                    width: "100%",
-                    height: "100%"
-                }}/>}
+                {loading &&
+                    <Skeleton variant="rectangular" className="w-full h-full"/>}
 
                 {error && <ErrorView title={"Error uploading file"}
                                      error={error}/>}

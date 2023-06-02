@@ -10,7 +10,10 @@ import { SearchIndex } from "algoliasearch";
  * @see performAlgoliaTextSearch
  * @category Firebase
  */
-export type FirestoreTextSearchController = (props: { path: string, searchString: string }) => Promise<readonly string[]> | undefined;
+export type FirestoreTextSearchController = (props: {
+    path: string,
+    searchString: string
+}) => Promise<readonly string[]> | undefined;
 
 /**
  * Utility function to perform a text search in an algolia index,

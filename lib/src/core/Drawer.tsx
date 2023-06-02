@@ -20,6 +20,7 @@ import {
 } from "../types";
 import { getIconForView } from "./util";
 import { grey } from "@mui/material/colors";
+import TTypography from "../migrated/TTypography";
 
 /**
  * Props used in case you need to override the default drawer
@@ -57,18 +58,14 @@ export function Drawer({
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
     const buildGroupHeader = useCallback((group?: string) => {
-        if (!drawerOpen) return <Box sx={{ height: 16 }}/>;
-        return <Box pt={2} pl={2} pr={2} pb={0.5} sx={{
-            display: "flex",
-            flexDirection: "row",
-            alignItems: "center"
-        }}>
-            <Typography variant={"caption"}
-                        color={"textSecondary"}
-                        className={"weight-500"}
-                        sx={{ flexGrow: 1 }}>
+        if (!drawerOpen) return <Box className="h-4"/>;
+        return <Box pt={2} pl={2} pr={2} pb={0.5}
+                    className="flex flex-row items-center">
+            <TTypography variant={"caption"}
+                         color={"textSecondary"}
+                         className="weight-500 flex-grow">
                 {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
-            </Typography>
+            </TTypography>
 
         </Box>;
     }, [drawerOpen]);
@@ -137,7 +134,7 @@ export function DrawerNavigationItem({
 
     const theme = useTheme();
     const icon = <Icon fontSize={"medium"}
-                       sx={theme => ({ color: theme.palette.mode === "dark" ? grey[500] : grey[700] })}/>;
+                       className={`text-${theme.palette.mode === 'dark' ? 'gray-500' : 'gray-700'}`}/>;
     const listItem = <ListItem
         // @ts-ignore
         button
@@ -154,25 +151,19 @@ export function DrawerNavigationItem({
             minHeight: "48px",
             borderRadius: "0 16px 16px 0"
         })}
-        sx={theme => ({
-            pl: 3,
-            alignItems: "center"
-        })}
+        className="pl-12 items-center"
         to={url}
     >
 
         {icon}
 
-        <Typography
+        <TTypography
             variant={"subtitle2"}
-            sx={{
-                opacity: drawerOpen ? 1.0 : 0.0,
-                fontWeight: "inherit",
-                ml: 3,
-                p: 0.5
-            }}>
+            className={`${
+                drawerOpen ? "opacity-100" : "opacity-0"
+            } font-inherit ml-3 p-1`}>
             {name.toUpperCase()}
-        </Typography>
+        </TTypography>
     </ListItem>;
 
     if (drawerOpen)

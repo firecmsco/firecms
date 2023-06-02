@@ -50,6 +50,7 @@ import {
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 import { useLargeSideLayout } from "./useLargeSideLayout";
+import TTypography from "../../migrated/TTypography";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -293,16 +294,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     return null;
                 }
                 return <Box
-                    sx={{
-                        width: ADDITIONAL_TAB_WIDTH,
-                        height: "100%",
-                        overflow: "auto",
-                        borderLeft: `1px solid ${theme.palette.divider}`,
-                        [theme.breakpoints.down("lg")]: {
-                            borderLeft: "inherit",
-                            width: CONTAINER_FULL_WIDTH
-                        }
-                    }}
+                    className={`w-[${ADDITIONAL_TAB_WIDTH}] h-full overflow-auto border-l border-${theme.palette.divider} lg:border-l-0 lg:w-[${CONTAINER_FULL_WIDTH}]`}
                     key={`custom_view_${customView.path}`}
                     role="tabpanel"
                     flexGrow={1}>
@@ -326,16 +318,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     return null;
                 return (
                     <Box
-                        sx={{
-                            width: ADDITIONAL_TAB_WIDTH,
-                            height: "100%",
-                            overflow: "auto",
-                            borderLeft: `1px solid ${theme.palette.divider}`,
-                            [theme.breakpoints.down("lg")]: {
-                                borderLeft: "inherit",
-                                width: CONTAINER_FULL_WIDTH
-                            }
-                        }}
+                        className={`h-full overflow-auto border-l border-opacity-50 border-${theme.palette.divider} ${theme.breakpoints.down("lg") ? `border-l-0 w-${CONTAINER_FULL_WIDTH}` : `w-${ADDITIONAL_TAB_WIDTH}`}`}
                         key={`subcol_${subcollection.alias ?? subcollection.path}`}
                         role="tabpanel"
                         flexGrow={1}>
@@ -349,18 +332,14 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                     isSubCollection={true}
                                     {...subcollection}/>
                                 : <Box
-                                    sx={{
-                                        width: "100%",
-                                        height: "100%",
-                                        p: 3
-                                    }}
+                                    className="w-full h-full p-3"
                                     display={"flex"}
                                     alignItems={"center"}
                                     justifyContent={"center"}>
-                                    <Typography variant={"label"}>
+                                    <TTypography variant={"label"}>
                                         You need to save your entity before
                                         adding additional collections
-                                    </Typography>
+                                    </TTypography>
                                 </Box>)
                         }
 
@@ -468,10 +447,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const subcollectionTabs = subcollections && subcollections.map(
             (subcollection) =>
                 <Tab
-                    sx={{
-                        fontSize: "0.875rem",
-                        minWidth: "140px"
-                    }}
+                    className="text-sm min-w-[140px]"
                     wrapped={true}
                     key={`entity_detail_collection_tab_${subcollection.name}`}
                     label={subcollection.name}/>
@@ -480,30 +456,18 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const customViewTabs = customViews && customViews.map(
             (view) =>
                 <Tab
-                    sx={{
-                        fontSize: "0.875rem",
-                        minWidth: "140px"
-                    }}
+                    className="text-sm min-w-[140px]"
                     wrapped={true}
                     key={`entity_detail_custom_tab_${view.name}`}
                     label={view.name}/>
         );
 
         const header = (
-            <Box sx={{
-                paddingLeft: 2,
-                paddingRight: 2,
-                paddingTop: 1,
-                display: "flex",
-                alignItems: "end",
-                backgroundColor: theme.palette.mode === "light" ? theme.palette.background.default : theme.palette.background.paper
-            }}>
+            <Box
+                className={`pl-2 pr-2 pt-1 flex items-end ${theme.palette.mode === "light" ? "bg-" + theme.palette.background.default : "bg-" + theme.palette.background.paper}`}>
 
                 <Box
-                    sx={{
-                        pb: 1,
-                        alignSelf: "center"
-                    }}>
+                    className="pb-1 self-center">
                     <IconButton onClick={() => {
                         onClose?.();
                         return sideDialogContext.close(false);
@@ -516,9 +480,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 <Box flexGrow={1}/>
 
                 {loading && <Box
-                    sx={{
-                        alignSelf: "center"
-                    }}>
+                    className="self-center">
                     <CircularProgress size={16} thickness={8}/>
                 </Box>}
 
@@ -529,11 +491,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     onChange={(ev, value) => {
                         onSideTabClick(value - 1);
                     }}
-                    sx={{
-                        paddingLeft: theme.spacing(1),
-                        paddingRight: theme.spacing(1),
-                        paddingTop: theme.spacing(0)
-                    }}
+                    className="pl-4 pr-4 pt-0"
                     variant="scrollable"
                     scrollButtons="auto"
                 >
@@ -543,11 +501,9 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         onClick={() => {
                             onSideTabClick(-1);
                         }}
-                        sx={{
-                            display: !hasAdditionalViews ? "none" : undefined,
-                            fontSize: "0.875rem",
-                            minWidth: "140px"
-                        }}
+                        className={`${
+                            !hasAdditionalViews ? 'hidden' : ''
+                        } text-sm min-w-[140px]`}
                         wrapped={true}
                     />
                     {customViewTabs}
@@ -560,13 +516,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         return (
             <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                    width: "100%",
-                    transition: "width 250ms ease-in-out"
-                }}>
+                className="flex flex-col h-full w-full transition-width duration-250 ease-in-out">
                 {
                     <>
 
@@ -574,37 +524,26 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
                         <Divider/>
 
-                        <Box sx={{
-                            flexGrow: 1,
-                            height: "100%",
-                            width: `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedFormWidth})`,
-                            maxWidth: "100%",
-                            [`@media (max-width: ${resolvedFormWidth})`]: {
-                                width: resolvedFormWidth
-                            },
-                            display: "flex",
-                            overflow: "auto",
-                            flexDirection: "row"
-                        }}>
-
-                            <Box sx={{
-                                position: "relative",
-                                maxWidth: "100%"
+                        <Box
+                            className="flex-grow h-full flex overflow-auto flex-row"
+                            style={{
+                                width: `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedFormWidth})`,
+                                maxWidth: "100%",
+                                [`@media (max-width: ${resolvedFormWidth})`]: {
+                                    width: resolvedFormWidth
+                                }
                             }}>
+
+                            <Box className="relative max-w-full">
                                 <Box
                                     role="tabpanel"
                                     hidden={!mainViewVisible}
                                     id={`form_${path}`}
-                                    sx={{
-                                        width: resolvedFormWidth,
-                                        maxWidth: "100%",
-                                        height: "100%",
-                                        overflow: "auto",
-                                        [theme.breakpoints.down("sm")]: {
-                                            maxWidth: CONTAINER_FULL_WIDTH,
-                                            width: CONTAINER_FULL_WIDTH
-                                        }
-                                    }}>
+                                    className={`w-${resolvedFormWidth} max-w-full h-full overflow-auto ${
+                                        theme.breakpoints.down('sm')
+                                            ? `max-w-${CONTAINER_FULL_WIDTH} w-${CONTAINER_FULL_WIDTH}`
+                                            : ''
+                                    }`}>
 
                                     {loading
                                         ? <CircularProgressCenter/>

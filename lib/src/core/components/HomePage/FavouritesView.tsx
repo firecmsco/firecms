@@ -84,13 +84,7 @@ export function FavouritesView({ hidden }: { hidden: boolean }) {
     </Collapse>;
 
     return <Box>
-        <Box sx={{
-            display: "flex",
-            flexDirection: "row",
-            flexWrap: "wrap",
-            gap: 1,
-            pb: 2
-        }}>
+        <Box className="flex flex-row flex-wrap gap-1 pb-2">
             {recentCollections.map((entry) => <NavigationChip key={entry.path}
                                                               entry={entry}/>)}
         </Box>

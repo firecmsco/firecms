@@ -1,4 +1,4 @@
-import { alpha, Box, Breakpoint, Container } from "@mui/material";
+import { alpha, Box, Breakpoint, Container, useTheme } from "@mui/material";
 import React from "react";
 
 export function CustomDialogActions({
@@ -12,36 +12,25 @@ export function CustomDialogActions({
     maxWidth?: Breakpoint,
     translucent?: boolean
 }) {
+    const theme = useTheme();
+
     const component = maxWidth
         ? <Container maxWidth={maxWidth}>
             {children}
         </Container>
         : children;
 
-    return <Box sx={(theme) => ({
-        background: translucent ? theme.palette.mode === "light" ? "rgba(255,255,255,0.6)" : alpha(theme.palette.background.paper, 0.1) : undefined,
-        backdropFilter: translucent ? "blur(8px)" : undefined,
-        borderTop: `1px solid ${theme.palette.divider}`,
-        py: 1,
-        px: 2,
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "flex-end",
-        position,
-        bottom: 0,
-        right: 0,
-        left: 0,
-        textAlign: "right",
-        zIndex: 2,
-        "& > *:not(:last-child)": {
-            [theme.breakpoints.down("md")]: {
-                mr: theme.spacing(1)
-            },
-            mr: theme.spacing(2)
-        }
-    })}
-    >
+    return <Box
+        className={`border-t flex flex-row items-center justify-end py-1 px-2 ${position} bottom-0 right-0 left-0 text-right z-2`}
+        style={{
+            background: translucent
+                ? theme.palette.mode === "light"
+                    ? "rgba(255,255,255,0.6)"
+                    : alpha(theme.palette.background.paper, 0.1)
+                : undefined,
+            backdropFilter: translucent ? "blur(8px)" : undefined,
+            borderTopColor: theme.palette.divider,
+        }}>
         {component}
     </Box>;
 }

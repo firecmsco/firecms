@@ -47,23 +47,14 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, SideDialogDrawe
     const theme = useTheme();
     return (
         <Modal
-            BackdropProps={{
-                transitionDuration: defaultTransitionDuration,
-                sx: {
-                    backgroundColor: theme.palette.mode === "dark" ? "rgba(0, 0, 0, 0.85)" : "rgba(0, 0, 0, 0.6)"
-                }
-            }}
-            BackdropComponent={Backdrop}
             open={open}
             onClose={onClose ? () => onClose(false) : undefined}
             ref={ref}
             keepMounted={true}
             disableEnforceFocus={true}
             disableEscapeKeyDown={true}
-            sx={{
-                transition: `transform 300ms ${theme.transitions.easing.easeOut}`,
-                transform: `translateX(-${(offsetPosition) * 200}px)`
-            }}
+            className="transition-transform duration-300 ease-out"
+            style={{ transform: `translateX(-${offsetPosition * 200}px)` }}
         >
             <Slide
                 in={open}
@@ -73,16 +64,8 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, SideDialogDrawe
                 <Paper
                     variant={"outlined"}
                     square
-                    sx={{
-                        height: "100%",
-                        WebkitOverflowScrolling: "touch", // Add iOS momentum scrolling.
-                        position: "fixed",
-                        outline: 0,
-                        left: "auto",
-                        right: 0,
-                        overflow: "hidden",
-                        borderRadius: "16px 0 0 16px"
-                    }}
+                    className="h-full fixed right-0 overflow-hidden rounded-l-lg"
+                    style={{ WebkitOverflowScrolling: 'touch', outline: 0 }}
                 >
                     {children}
                 </Paper>

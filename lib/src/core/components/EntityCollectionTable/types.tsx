@@ -49,7 +49,10 @@ export type EntityCollectionTableProviderProps<M extends Record<string, any>, Ad
     tableRowActionsBuilder?: ({
                                   entity,
                                   size
-                              }: { entity: Entity<M>, size: CollectionSize }) => React.ReactNode;
+                              }: {
+        entity: Entity<M>,
+        size: CollectionSize
+    }) => React.ReactNode;
 };
 
 export type EntityCollectionTableController<M extends Record<string, any>> = {
@@ -97,7 +100,12 @@ export type SelectedCellProps<M extends Record<string, any>> =
 /**
  * @category Collection components
  */
-export type UniqueFieldValidator = (props: { name: string, value: any, property: ResolvedProperty, entityId?: string }) => Promise<boolean>;
+export type UniqueFieldValidator = (props: {
+    name: string,
+    value: any,
+    property: ResolvedProperty,
+    entityId?: string
+}) => Promise<boolean>;
 
 /**
  * Callback when a cell has changed in a table

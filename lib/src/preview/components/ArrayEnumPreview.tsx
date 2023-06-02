@@ -22,11 +22,7 @@ export function ArrayEnumPreview({
 }) {
 
     return (
-        <Box sx={theme => ({
-            display: "flex",
-            flexWrap: "wrap",
-            gap: theme.spacing(0.5)
-        })}>
+        <Box className="flex flex-wrap gap-2">
             {value && value.map((enumKey, index) => {
                     return (
                         <ErrorBoundary
@@ -38,7 +34,7 @@ export function ArrayEnumPreview({
                         </ErrorBoundary>
                     );
                 }
-                )}
+            )}
         </Box>
     );
 }

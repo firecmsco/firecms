@@ -5,13 +5,14 @@ import {
     TableBody,
     TableCell,
     TableRow,
-    Typography
+    Typography, useTheme
 } from "@mui/material";
 
 import { ResolvedMapProperty } from "../../types";
 import { ErrorBoundary } from "../../core";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
+import TTypography from "../../migrated/TTypography";
 
 /**
  * @category Preview components
@@ -23,6 +24,8 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                                                                             entity,
                                                                                             size
                                                                                         }: PropertyPreviewProps<T>) {
+
+    const theme = useTheme();
 
     if (property.dataType !== "map") {
         throw Error("Picked wrong preview component MapPropertyPreview");
@@ -50,17 +53,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 
     if (size !== "regular")
         return (
-            <Box sx={theme => ({
-                width: "100%",
-                display: "flex",
-                flexDirection: "column",
-                "& > *": {
-                    [theme.breakpoints.down("md")]: {
-                        marginBottom: `${theme.spacing(0.5)} !important`
-                    },
-                    marginBottom: `${theme.spacing(1)} !important`
-                }
-            })}>
+            <Box className="w-full flex flex-col space-y-1 md:space-y-2">
                 {mapPropertyKeys.map((key, index) => (
                     <div key={`map_${key}`}>
                         <ErrorBoundary
@@ -78,38 +71,24 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 
     return (
         <Box
-            sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+            className="flex flex-col w-full">
             {mapPropertyKeys &&
                 mapPropertyKeys.map((key, index) => {
                     return (
                         <Box
                             key={`map_preview_table_${key}}`}
-                            sx={theme => ({
-                                display: "flex",
-                                flexDirection: "row",
-                                pt: 0.5,
-                                "&:not(:last-child)": {
-                                    borderBottom: `1px solid ${theme.palette.divider}`,
-                                    pb: 0.5
-                                }
-                            })}>
+                            className="flex flex-row pt-0.5 last:border-b-0 border-b border-opacity-divider pb-0.5">
                             <Box
                                 key={`table-cell-title-${key}-${key}`}
-                                sx={{
-                                    width: "25%",
-                                    verticalAlign: "top",
-                                    pr: 1
-                                }}>
-                                <Typography variant={"caption"}
-                                            className={"mono"}
-                                            color={"textSecondary"}>
+                                className="w-1/4 align-top pr-1">
+                                <TTypography variant={"caption"}
+                                             className={"font-mono"}
+                                             color={"textSecondary"}>
                                     {mapProperty.properties![key].name}
-                                </Typography>
+                                </TTypography>
                             </Box>
                             <Box
-                                sx={{
-                                    flexGrow: 1
-                                }}>
+                                className="flex-grow">
                                 <ErrorBoundary>
                                     <PropertyPreview
                                         propertyKey={key}
@@ -130,44 +109,31 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 export function KeyValuePreview({ value }: { value: any }) {
     if (typeof value !== "object") return null;
     return <Box
-        sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
+        className="flex flex-col w-full">
         {
             Object.entries(value).map(([key, childValue]) => (
                 <Box
                     key={`map_preview_table_${key}}`}
-                    sx={theme => ({
-                        display: "flex",
-                        flexDirection: "row",
-                        pt: 0.5,
-                        "&:not(:last-child)": {
-                            borderBottom: `1px solid ${theme.palette.divider}`,
-                            pb: 0.5
-                        }
-                    })}>
+                    className="flex flex-row pt-0.5 border-b border-opacity-divider last:border-0 last:pb-0 pb-0.5"
+                    style={{ borderColor: theme.palette.divider }}>
                     <Box
                         key={`table-cell-title-${key}-${key}`}
-                        sx={{
-                            width: "25%",
-                            verticalAlign: "top",
-                            pr: 1
-                        }}>
-                        <Typography variant={"caption"}
-                                    className={"mono"}
-                                    color={"textSecondary"}>
+                        className="w-1/4 align-top pr-1">
+                        <TTypography variant={"caption"}
+                                     className={"font-mono"}
+                                     color={"textSecondary"}>
                             {key}
-                        </Typography>
+                        </TTypography>
                     </Box>
                     <Box
-                        sx={{
-                            flexGrow: 1
-                        }}>
-                        <Typography
+                        className="flex-grow">
+                        <TTypography
                             variant={"caption"}
-                            className={"mono"}>
+                            className={"font-mono"}>
                             <ErrorBoundary>
                                 {JSON.stringify(childValue)}
                             </ErrorBoundary>
-                        </Typography>
+                        </TTypography>
                     </Box>
                 </Box>
             ))

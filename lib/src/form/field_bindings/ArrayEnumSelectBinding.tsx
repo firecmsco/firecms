@@ -80,15 +80,7 @@ export function ArrayEnumSelectBinding({
             fullWidth
             required={property.validation?.required}
             error={showError}
-            sx={{
-                "& .MuiInputLabel-root": {
-                    mt: 1 / 2,
-                    ml: 1 / 2
-                },
-                "& .MuiInputLabel-shrink": {
-                    mt: 2
-                }
-            }}
+            className="MuiInputLabel-root mt-0.5 ml-0.5 MuiInputLabel-shrink mt-2"
         >
 
             <InputLabel id={`${propertyKey}-multiselect-label`}>
@@ -99,10 +91,7 @@ export function ArrayEnumSelectBinding({
 
             <MuiSelect
                 multiple
-                sx={(theme) => ({
-                    minHeight: "64px",
-                    borderRadius: `${theme.shape.borderRadius}px`
-                })}
+                className="min-h-[64px] rounded-[var(--rounded)]"
                 variant={"filled"}
                 labelId={`${propertyKey}-multiselect-label`}
                 value={validValue ? value.map(v => v.toString()) : []}
@@ -111,11 +100,7 @@ export function ArrayEnumSelectBinding({
                 disableUnderline={true}
                 endAdornment={
                     of.clearable && <IconButton
-                        sx={{
-                            position: "absolute",
-                            top: "12px",
-                            right: "32px"
-                        }}
+                        className="absolute top-3 right-8"
                         onClick={handleClearClick}>
                         <ClearIcon/>
                     </IconButton>

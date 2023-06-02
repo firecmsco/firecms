@@ -1,7 +1,8 @@
 import React from "react";
 
-import { Box, InputLabel, Typography } from "@mui/material";
+import { Box, InputLabel, Typography, useTheme } from "@mui/material";
 import { fieldBackgroundDisabled } from "../../util/field_colors";
+import TTypography from "../../../migrated/TTypography";
 
 export function DisabledTextField<T extends string | number>({
                                                                  label,
@@ -12,32 +13,19 @@ export function DisabledTextField<T extends string | number>({
     small?: boolean,
     value: T
 }) {
-    return <Box sx={theme => ({
-        position: "relative",
-        background: fieldBackgroundDisabled,
-        borderRadius: `${theme.shape.borderRadius}px`,
-        maxWidth: "100%",
-        minHeight: small ? "48px" : "64px",
-        color: theme.palette.text.disabled
-    })}>
+
+    const theme = useTheme();
+
+    return <Box
+        className={`relative bg-${fieldBackgroundDisabled} rounded-${theme.shape.borderRadius} w-full ${small ? 'h-12' : 'h-16'} text-${theme.palette.text.disabled}`}>
         <InputLabel
             shrink={Boolean(value)}
-            sx={{
-                position: "absolute",
-                color: theme => theme.palette.text.disabled,
-                left: 0,
-                top: "4px",
-                pointerEvents: "none"
-            }}
+            className="absolute text-gray-400 left-0 top-4 pointer-events-none"
             variant={"filled"}>{label}</InputLabel>
-        <Box sx={{
-            padding: label ? "32px 12px 8px 12px" : (small ? "12px" : "8px 12px 8px 12px"),
-            overflow: "auto"
-        }}>
-            <Typography variant={"body1"}
-                        sx={{
-                            fontFamily: "inherit"
-                        }}>{value}</Typography>
+        <Box
+            className={`p-8 overflow-auto ${label ? "pt-8 pb-2" : small ? "p-3" : "px-3"}`}>
+            <TTypography variant={"body1"}
+                         className="font-inherit">{value}</TTypography>
         </Box>
     </Box>;
 }

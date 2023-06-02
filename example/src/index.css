@@ -1,0 +1,13 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer utilities {
+    .bg-default {
+        @apply bg-white dark:bg-gray-800;
+    }
+
+    .bg-paper {
+        @apply bg-gray-100 dark:bg-gray-900;
+    }
+}

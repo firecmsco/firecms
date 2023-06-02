@@ -53,34 +53,30 @@ export function ArrayOfMapsPreview({
         <Table size="small">
             <TableBody>
                 {values &&
-                values.map((v, index) => {
-                    return (
-                        <TableRow key={`table_${v}_${index}`}
-                                  sx={{
-                                      "&:last-child th, &:last-child td": {
-                                          borderBottom: 0
-                                      }
-                                  }}>
-                            {mapProperties && mapProperties.map(
-                                (key) => (
-                                    <TableCell
-                                        key={`table-cell-${key as string}`}
-                                        component="th"
-                                    >
-                                        <ErrorBoundary>
-                                            <PropertyPreview
-                                                propertyKey={key as string}
-                                                value={(v)[key]}
-                                                property={properties[key as string]}
-                                                entity={entity}
-                                                size={"small"}/>
-                                        </ErrorBoundary>
-                                    </TableCell>
-                                )
-                            )}
-                        </TableRow>
-                    );
-                })}
+                    values.map((v, index) => {
+                        return (
+                            <TableRow key={`table_${v}_${index}`}
+                                      className="last:child:th:last:child:td:border-b-0">
+                                {mapProperties && mapProperties.map(
+                                    (key) => (
+                                        <TableCell
+                                            key={`table-cell-${key as string}`}
+                                            component="th"
+                                        >
+                                            <ErrorBoundary>
+                                                <PropertyPreview
+                                                    propertyKey={key as string}
+                                                    value={(v)[key]}
+                                                    property={properties[key as string]}
+                                                    entity={entity}
+                                                    size={"small"}/>
+                                            </ErrorBoundary>
+                                        </TableCell>
+                                    )
+                                )}
+                            </TableRow>
+                        );
+                    })}
             </TableBody>
         </Table>
     );

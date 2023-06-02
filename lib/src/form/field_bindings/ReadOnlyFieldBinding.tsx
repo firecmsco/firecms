@@ -50,14 +50,7 @@ export function ReadOnlyFieldBinding({
             </FormHelperText>}
 
             <Paper
-                sx={(theme) => ({
-                    minHeight: "56px",
-                    elevation: 0,
-                    padding: theme.spacing(2),
-                    [theme.breakpoints.up("md")]: {
-                        padding: theme.spacing(3)
-                    }
-                })}
+                className="min-h-14 py-2 md:py-3 shadow-none"
                 variant={"outlined"}>
 
                 <ErrorBoundary>

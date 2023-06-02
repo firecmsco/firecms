@@ -2,6 +2,7 @@ import React from "react";
 import ErrorIcon from "@mui/icons-material/Error";
 import { Box, Typography } from "@mui/material";
 import { ErrorTooltip } from "./ErrorTooltip";
+import TTypography from "../../migrated/TTypography";
 
 /**
  * @category Components
@@ -30,21 +31,13 @@ export function ErrorView({
 
     const body = (
         <Box
-            sx={{
-                display: "flex",
-                alignItems: "center",
-                margin: 1
-            }}>
+            className="flex items-center m-1">
             <ErrorIcon fontSize={"small"} color={"error"}/>
-            <Box sx={{
-                paddingLeft: 2
-            }}>
-                {title && <Typography
+            <Box className="pl-2">
+                {title && <TTypography
                     variant={"body2"}
-                    sx={{
-                        fontWeight: "500"
-                    }}>{title}</Typography>}
-                <Typography variant={"body2"}>{component}</Typography>
+                    className="font-medium">{title}</TTypography>}
+                <TTypography variant={"body2"}>{component}</TTypography>
             </Box>
         </Box>
     );

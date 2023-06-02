@@ -1,6 +1,11 @@
 import React, { useCallback } from "react";
 
-import { Box, IconButton, TextField as MuiTextField } from "@mui/material";
+import {
+    Box,
+    IconButton,
+    TextField as MuiTextField,
+    useTheme
+} from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -53,6 +58,8 @@ export function DateTimeFieldBinding({
         ? DateTimePicker
         : DatePicker;
 
+    const theme = useTheme();
+
     return (
         <>
 
@@ -63,14 +70,9 @@ export function DateTimeFieldBinding({
                     (
                         <MuiTextField {...params}
                                       fullWidth
-                                      sx={(theme) => ({
-                                          minHeight: "64px",
-                                          borderRadius: `${theme.shape.borderRadius}px`,
-                                          backgroundColor: fieldBackground(theme),
-                                          "&:hover": {
-                                              backgroundColor: fieldBackgroundHover(theme)
-                                          }
-                                      })}
+                                      className={`min-h-[64px] rounded-[${theme.shape.borderRadius}px] ${fieldBackground(
+                                          theme
+                                      )} hover:${fieldBackgroundHover(theme)}`}
                                       label={
                                           <LabelWithIcon
                                               icon={getIconForProperty(property)}
@@ -89,16 +91,9 @@ export function DateTimeFieldBinding({
                                           }),
                                           disableUnderline: true,
                                           endAdornment: <Box
-                                              sx={{
-                                                  pr: 2,
-                                                  gap: 2
-                                              }}>
+                                              className="pr-2 space-x-2">
                                               {property.clearable && <IconButton
-                                                  sx={{
-                                                      position: "absolute",
-                                                      right: "56px",
-                                                      top: "12px"
-                                                  }}
+                                                  className="absolute right-14 top-3"
                                                   onClick={handleClearClick}>
                                                   <ClearIcon/>
                                               </IconButton>}

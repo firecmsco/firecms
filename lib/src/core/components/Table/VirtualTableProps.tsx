@@ -2,7 +2,11 @@ import React from "react";
 import { EnumValueConfig, WhereFilterOp } from "../../../types";
 import { FilterFormFieldProps } from "./VirtualTableHeader";
 
-export type OnRowClickParams<T extends Record<string, any>> = { rowData: T; rowIndex: number; event: React.SyntheticEvent };
+export type OnRowClickParams<T extends Record<string, any>> = {
+    rowData: T;
+    rowIndex: number;
+    event: React.SyntheticEvent
+};
 
 /**
  * @see Table
@@ -201,7 +205,11 @@ export interface TableColumn<CustomProps extends any = any> {
  * @see Table
  * @category Collection components
  */
-export type OnTableColumnResizeParams = { width: number, key: string, column: TableColumn };
+export type OnTableColumnResizeParams = {
+    width: number,
+    key: string,
+    column: TableColumn
+};
 
 /**
  * @see Table

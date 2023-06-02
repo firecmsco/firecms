@@ -22,26 +22,16 @@ export function CenteredView({
             mountOnEnter
             unmountOnExit>
             <Box
-                sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "center",
-                    height: fullScreen ? "100vh" : "100%",
+                className={`flex flex-col items-center ${fullScreen ? 'h-screen' : 'h-full'} ${!maxWidth ? 'justify-center' : ''} max-h-full space-y-2 p-2`}
+                style={{
                     "@supports (height: 100dvh)": {
                         height: fullScreen ? "100dvh" : "100%"
-                    },
-                    justifyContent: !maxWidth ? "center" : undefined,
-                    maxHeight: "100%",
-                    gap: 2,
-                    p: 2
+                    }
                 }}>
-                {maxWidth && <Box sx={{
-                    width: "100%",
-                    margin: "auto",
-                    maxWidth
-                }}>
-                    {children}
-                </Box>}
+                {maxWidth &&
+                    <Box className="w-full mx-auto" style={{ maxWidth }}>
+                        {children}
+                    </Box>}
 
                 {!maxWidth && children}
             </Box>

@@ -60,11 +60,12 @@ export function ColorChip({
     const usedColorScheme = colorScheme ?? getColorSchemeForSeed(label);
     return (
         <Chip
-            sx={{
-                maxWidth: "100%",
-                backgroundColor: error || !usedColorScheme ? "#eee" : usedColorScheme.color,
-                color: error || !usedColorScheme ? "red" : usedColorScheme.text,
-                fontWeight: theme!.typography.fontWeightRegular
+            className={`w-full ${
+                error || !usedColorScheme ? 'bg-gray-200 text-red-500' : ''
+            } font-normal`}
+            style={{
+                backgroundColor: error || !usedColorScheme ? null : usedColorScheme.color,
+                color: error || !usedColorScheme ? null : usedColorScheme.text,
             }}
             size={small ? "small" : "medium"}
             variant={outlined ? "outlined" : "filled"}

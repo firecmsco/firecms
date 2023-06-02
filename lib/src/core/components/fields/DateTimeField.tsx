@@ -3,7 +3,7 @@ import React from "react";
 import {
     Box,
     IconButton,
-    TextField
+    TextField, useTheme
 } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
@@ -28,6 +28,8 @@ export function DateTimeField({
                                   small
                               }: DateTimeFieldProps) {
 
+    const theme = useTheme();
+
     const PickerComponent = mode === undefined || mode === "date_time"
         ? DateTimePicker
         : DatePicker;
@@ -40,13 +42,10 @@ export function DateTimeField({
                 <TextField {...params}
                            fullWidth
                            disabled={disabled}
-                           sx={(theme) => ({
-                               height: small ? "48px" : "56px",
-                               borderRadius: `${theme.shape.borderRadius}px`
-                           })}
+                           className={`h-${small ? '12' : '14'} rounded-${theme.shape.borderRadius}`}
                            InputProps={{
                                ...params.InputProps,
-                               sx: theme => ({
+                               sx: ({
                                    height: small ? "48px" : "56px",
                                    borderRadius: `${theme.shape.borderRadius}px`,
                                    padding: small ? "0 0px" : undefined,
@@ -54,16 +53,9 @@ export function DateTimeField({
                                disableUnderline: true,
                                endAdornment: clearable
                                    ? <Box
-                                       sx={{
-                                           pr: 2,
-                                           gap: 2
-                                       }}>
+                                       className="pr-8 space-x-8">
                                        <IconButton
-                                           sx={{
-                                               position: "absolute",
-                                               right: "56px",
-                                               top: "8px"
-                                           }}
+                                           className="absolute right-14 top-2"
                                            onClick={(e) => onChange?.(null)}>
                                            <ClearIcon/>
                                        </IconButton>

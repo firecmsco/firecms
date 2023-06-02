@@ -1,7 +1,7 @@
 import React, { useCallback, useDeferredValue, useState } from "react";
 import { darken, Theme } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, useTheme } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -19,6 +19,8 @@ export function SearchBar({
                               expandable = false,
                               large = false
                           }: SearchBarProps) {
+
+    const theme = useTheme();
 
     const [searchText, setSearchText] = useState<string>("");
     const [active, setActive] = useState<boolean>(false);
@@ -42,31 +44,19 @@ export function SearchBar({
     }, []);
 
     return (
-        <Box sx={theme => ({
-            position: "relative",
-            display: "flex",
-            alignItems: "center",
-            height: large ? 56 : 40,
-            width: expandable ? undefined : "100%",
-            minWidth: "200px",
-            borderRadius: `${theme.shape.borderRadius}px`,
-            backgroundColor: theme.palette.mode === "light" ? darken(theme.palette.background.default, 0.05) : darken(theme.palette.background.default, 0.2),
-            "&:hover": {
-                backgroundColor: theme.palette.mode === "light" ? darken(theme.palette.background.default, 0.08) : darken(theme.palette.background.default, 0.3)
-            },
-            [theme.breakpoints.up("sm")]: {
-                width: "auto"
-            }
-        })}>
-            <Box sx={theme => ({
-                padding: theme.spacing(0, 2),
-                height: "100%",
-                position: "absolute",
-                pointerEvents: "none",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center"
-            })}>
+        <Box className={`relative flex items-center ${
+            large ? "h-14" : "h-10"
+        } w-full min-w-[200px] rounded ${
+            theme.palette.mode === "light"
+                ? "bg-[darken(theme.palette.background.default, 0.05)]"
+                : "bg-[darken(theme.palette.background.default, 0.2)]"
+        } hover:${
+            theme.palette.mode === "light"
+                ? "bg-[darken(theme.palette.background.default, 0.08)]"
+                : "bg-[darken(theme.palette.background.default, 0.3)]"
+        } sm:w-auto`}>
+            <Box
+                className="p-0 px-8 h-full absolute pointer-events-none flex items-center justify-center">
                 <SearchIcon htmlColor={"#888"}/>
             </Box>
             <InputBase
@@ -77,11 +67,7 @@ export function SearchBar({
                 }}
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)}
-                sx={{
-                    width: expandable ? undefined : "100%",
-                    color: "inherit",
-                    minHeight: "inherit"
-                }}
+                className={`w-full ${expandable ? '' : 'min-h-full'} text-current`}
                 inputProps={{
                     sx: (theme: Theme) => ({
                         padding: theme.spacing(1, 1, 1, 0),
@@ -97,7 +83,7 @@ export function SearchBar({
                 }}
                 endAdornment={searchText
                     ? <IconButton
-                        sx={{ mr: large ? 2 : 1 }}
+                        className={`mr-${large ? 2 : 1}`}
                         size={"small"}
                         onClick={clearText}>
                         <ClearIcon fontSize={"small"}/>

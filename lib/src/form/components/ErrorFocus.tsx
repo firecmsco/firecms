@@ -2,7 +2,9 @@ import React, { useEffect } from "react";
 import { useFormikContext } from "formik";
 
 export const ErrorFocus = ({ containerRef }:
-                               { containerRef?: React.RefObject<HTMLDivElement> }) => {
+                               {
+                                   containerRef?: React.RefObject<HTMLDivElement>
+                               }) => {
     const { isSubmitting, isValidating, errors } = useFormikContext();
 
     useEffect(() => {

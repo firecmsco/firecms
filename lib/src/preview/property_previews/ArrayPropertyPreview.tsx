@@ -41,27 +41,22 @@ export function ArrayPropertyPreview({
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
-        <Box sx={{
-            display: "flex",
-            flexDirection: "column"
-        }}>
+        <Box className="flex flex-col">
             {values &&
                 values.map((value, index) => {
-                    const of:ResolvedProperty = property.resolvedProperties[index] ??
-                        (property.resolvedProperties[index] ?? (Array.isArray(property.of) ? property.of[index] : property.of));
-                    return of
-                        ? <React.Fragment
-                            key={"preview_array_" + value + "_" + index}>
-                            <Box sx={{
-                                margin: 1
-                            }}>
-                                <ErrorBoundary>
-                                    <PropertyPreview
-                                        propertyKey={propertyKey}
-                                        entity={entity}
-                                        value={value}
-                                        property={of}
-                                        size={childSize}/>
+                        const of: ResolvedProperty = property.resolvedProperties[index] ??
+                            (property.resolvedProperties[index] ?? (Array.isArray(property.of) ? property.of[index] : property.of));
+                        return of
+                            ? <React.Fragment
+                                key={"preview_array_" + value + "_" + index}>
+                                <Box className="m-1">
+                                    <ErrorBoundary>
+                                        <PropertyPreview
+                                            propertyKey={propertyKey}
+                                            entity={entity}
+                                            value={value}
+                                            property={of}
+                                            size={childSize}/>
                                     </ErrorBoundary>
                                 </Box>
                                 {index < values.length - 1 && <Divider/>}

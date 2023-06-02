@@ -2,7 +2,13 @@ import React, { useCallback } from "react";
 
 import { styled, Theme } from "@mui/material/styles";
 
-import { Box, FormControl, FormHelperText, Typography } from "@mui/material";
+import {
+    Box,
+    FormControl,
+    FormHelperText,
+    Typography,
+    useTheme
+} from "@mui/material";
 import {
     ArrayProperty,
     Entity,
@@ -33,6 +39,7 @@ import {
     fieldBackground,
     fieldBackgroundHover
 } from "../../core/util/field_colors";
+import TTypography from "../../migrated/TTypography";
 
 const PREFIX = "StorageUploadField";
 
@@ -235,6 +242,8 @@ function FileDropComponent({
 
     const snackbarContext = useSnackbarController();
 
+    const theme = useTheme();
+
     const {
         getRootProps,
         getInputProps,
@@ -263,30 +272,24 @@ function FileDropComponent({
     return (
         <StyledBox
             {...getRootProps()}
-            className={clsx(classes.dropZone, {
-                [classes.nonActiveDrop]: !isDragActive,
-                [classes.activeDrop]: isDragActive,
-                [classes.rejectDrop]: isDragReject,
-                [classes.acceptDrop]: isDragAccept,
-                [classes.disabled]: disabled
-            })}
-            sx={{
-                display: multipleFilesSupported && internalValue.length ? undefined : "flex",
-                alignItems: "center"
-            }}
+            className={clsx(classes.dropZone, "items-center",
+                multipleFilesSupported && internalValue.length ? "" : "flex",
+                {
+                    [classes.nonActiveDrop]: !isDragActive,
+                    [classes.activeDrop]: isDragActive,
+                    [classes.rejectDrop]: isDragReject,
+                    [classes.acceptDrop]: isDragAccept,
+                    [classes.disabled]: disabled,
+                })}
         >
             <Box
                 {...droppableProvided.droppableProps}
                 ref={droppableProvided.innerRef}
-                sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    overflow: multipleFilesSupported && internalValue.length ? "auto" : undefined,
-                    minHeight: multipleFilesSupported && internalValue.length ? 180 : 250,
-                    p: 1,
-                    "&::-webkit-scrollbar": {
-                        display: "none"
-                    }
+                className={`flex items-center ${multipleFilesSupported && internalValue.length ? 'overflow-auto' : ''} ${multipleFilesSupported && internalValue.length ? 'min-h-[180px]' : 'min-h-[250px]'} p-1`}
+                style={{
+                    '&::-webkit-scrollbar': {
+                        display: 'none',
+                    },
                 }}
             >
 
@@ -330,12 +333,11 @@ function FileDropComponent({
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    style={
-                                        provided.draggableProps.style
-                                    }
-                                    sx={theme => ({
-                                        borderRadius: `${theme.shape.borderRadius}px`
-                                    })}
+                                    className="rounded"
+                                    style={{
+                                        borderRadius: theme.shape.borderRadius,
+                                        ...provided.draggableProps.style
+                                    }}
                                 >
                                     {child}
                                 </Box>
@@ -350,16 +352,11 @@ function FileDropComponent({
             </Box>
 
             <Box
-                sx={{
-                    flexGrow: 1,
-                    minHeight: 38,
-                    boxSizing: "border-box",
-                    m: 2
-                }}>
-                <Typography align={"center"}
-                            variant={"label"}>
+                className="flex-grow min-h-[38px] box-border m-2">
+                <TTypography align={"center"}
+                             variant={"label"}>
                     {helpText}
-                </Typography>
+                </TTypography>
             </Box>
 
         </StyledBox>
@@ -472,9 +469,7 @@ export function StorageUpload({
                             style={
                                 provided.draggableProps.style
                             }
-                            sx={theme => ({
-                                borderRadius: theme.shape.borderRadius
-                            })}
+                            className="rounded"
                         >
                             <StorageItemPreview
                                 name={`storage_preview_${entry.storagePathOrDownloadUrl}`}

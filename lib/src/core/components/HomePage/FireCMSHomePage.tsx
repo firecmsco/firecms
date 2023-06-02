@@ -32,7 +32,9 @@ export const searchIndex = new Index(
  * @constructor
  * @category Components
  */
-export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: React.ReactNode }) {
+export function FireCMSHomePage({ additionalChildren }: {
+    additionalChildren?: React.ReactNode
+}) {
 
     const context = useFireCMSContext();
     const navigationContext = useNavigationContext();
@@ -104,22 +106,12 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
 
     return (
         <Box ref={containerRef}
-             sx={{
-                 py: 2,
-                 overflow: "auto",
-                 height: "100%",
-                 width: "100%"
-             }}>
+             className="py-2 overflow-auto h-full w-full">
             <Container>
 
-                <Box sx={{
-                    position: "sticky",
-                    py: 2,
-                    transition: "top 0.4s ease-in-out",
-                    top: 0,
-                    // top: direction === "down" ? -84 : 0,
-                    zIndex: 10
-                }}>
+                <Box
+                    className="sticky py-4 transition-top duration-400 ease-in-out top-0 z-10"
+                    style={{ top: direction === "down" ? -84 : 0 }}>
                     <SearchBar onTextSearch={updateSearchResults}
                                placeholder={"Search collections"}
                                large={false}/>

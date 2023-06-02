@@ -83,7 +83,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 startIcon={<Delete/>}
                 onClick={onMultipleDeleteClick}
                 color={"primary"}
-                sx={{ minWidth: 68 }}
+                className="min-w-17"
             >
                 ({selectedEntities?.length})
             </Button>

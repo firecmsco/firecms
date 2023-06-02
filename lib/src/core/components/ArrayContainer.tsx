@@ -14,7 +14,7 @@ import {
     ListItemText,
     Menu,
     MenuItem,
-    Tooltip
+    Tooltip, useTheme
 } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
@@ -250,6 +250,7 @@ export function ArrayContainerItem({
     const setOnHoverTrue = useCallback(() => setOnHover(true), []);
     const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
+    const theme = useTheme();
     return <Box
         onMouseEnter={setOnHoverTrue}
         onMouseMove={setOnHoverTrue}
@@ -257,14 +258,9 @@ export function ArrayContainerItem({
         ref={provided.innerRef}
         {...provided.draggableProps}
         style={provided.draggableProps.style}
-        sx={theme => ({
-            backgroundColor: isDragging || onHover
-                ? fieldBackgroundSubtleHover(theme)
-                : undefined,
-            marginBottom: 1,
-            borderRadius: `${theme.shape.borderRadius}px`,
-            opacity: 1
-        })}
+        className={`${
+            (isDragging || onHover) ? fieldBackgroundSubtleHover(theme) : ''
+        } mb-1 rounded-${theme.shape.borderRadius} opacity-100`}
     >
         <Box
             display="flex"
@@ -317,10 +313,7 @@ export function ArrayItemOptions({
 
     return <Box display="flex"
                 flexDirection={direction === "row" ? "row-reverse" : "column"}
-                sx={{
-                    pl: 1,
-                    pt: 1
-                }}
+                className="pl-1 pt-1"
                 alignItems="center">
         <div
             {...provided.dragHandleProps}>
@@ -330,7 +323,7 @@ export function ArrayItemOptions({
                 <IconButton
                     size="small"
                     disabled={disabled}
-                    sx={{ cursor: disabled ? "inherit" : "move" }}>
+                    className={`cursor-${disabled ? "inherit" : "move"}`}>
                     <DragHandleIcon
                         fontSize={"small"}
                         color={disabled ? "disabled" : "inherit"}/>

@@ -6,11 +6,6 @@ import { Box } from "@mui/material";
  */
 export function EmptyValue() {
 
-    return <Box sx={{
-        borderRadius: "9999px",
-        backgroundColor: "rgba(128,128,128,0.1)",
-        width: "18px",
-        height: "6px",
-        display: "inline-block"
-    }}/>;
+    return <Box
+        className="rounded-full bg-gray-200 bg-opacity-10 w-4 h-1 inline-block"/>;
 }
