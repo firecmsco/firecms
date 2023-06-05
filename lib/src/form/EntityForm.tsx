@@ -539,6 +539,8 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                         !!touched[key];
 
                     const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
+                    const hidden = isHidden(property);
+                    if (hidden) return null;
                     const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
                         propertyKey: key,
                         disabled,
@@ -559,7 +561,8 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                             <PropertyFieldBinding {...cmsFormFieldProps}/>
                         </Grid>
                     );
-                })}
+                })
+                .filter(Boolean)}
 
         </Grid>
     );

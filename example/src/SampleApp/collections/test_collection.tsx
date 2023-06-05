@@ -207,6 +207,7 @@ export const testCollection = buildCollection({
         test_string: {
             dataType: "string",
             name: "Test string",
+            disabled: { hidden: true },
             validation: {
                 required: true
             }
