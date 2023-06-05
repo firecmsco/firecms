@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect } from "react";
 
 import { FirebaseApp, initializeApp } from "firebase/app";
+import { config } from "react-transition-group";
 
 /**
  * @category Firebase
@@ -30,6 +31,7 @@ const hostingError = "It seems like the provided Firebase config is not correct.
  * @param onFirebaseInit
  * @param firebaseConfig
  * @param name
+ * @param authDomain
  * @category Firebase
  */
 export function useInitialiseFirebase({
@@ -38,7 +40,7 @@ export function useInitialiseFirebase({
                                           name,
                                           authDomain
                                       }: {
-    onFirebaseInit?: ((config: object) => void) | undefined,
+    onFirebaseInit?: ((config: object, firebaseApp: FirebaseApp) => void) | undefined,
     firebaseConfig: Record<string, unknown> | undefined,
     name?: string;
     authDomain?: string;
@@ -53,14 +55,18 @@ export function useInitialiseFirebase({
             const initialisedFirebaseApp = initializeApp(config, name ?? "[DEFAULT]");
             setConfigError(undefined);
             setFirebaseConfigLoading(false);
-            if (onFirebaseInit)
-                onFirebaseInit(config);
             setFirebaseApp(initialisedFirebaseApp);
         } catch (e: any) {
             console.error("Error initialising Firebase", e);
             setConfigError(hostingError + "\n" + (e.message ?? JSON.stringify(e)));
         }
     }, [name]);
+
+    useEffect(() => {
+        if (onFirebaseInit && firebaseConfig && firebaseApp) {
+            onFirebaseInit(firebaseConfig, firebaseApp);
+        }
+    }, [firebaseApp]);
 
     useEffect(() => {
 

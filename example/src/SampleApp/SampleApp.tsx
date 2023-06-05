@@ -38,6 +38,7 @@ import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
 import { booksCollection } from "./collections/books_collection";
+import { FirebaseApp } from "firebase/app";
 
 function SampleApp() {
     const appCheckOptions: AppCheckOptions = {
@@ -70,9 +71,9 @@ function SampleApp() {
         view: <ExampleCMSView/>
     }];
 
-    const onFirebaseInit = (config: object) => {
+    const onFirebaseInit = (config: object, app: FirebaseApp) => {
         // Just calling analytics enables screen tracking
-        getAnalytics();
+        getAnalytics(app);
     };
 
     const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({

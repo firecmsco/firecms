@@ -2,6 +2,7 @@ import React, { useMemo } from "react";
 import { GoogleAuthProvider } from "firebase/auth";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
+import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 
 import {
     CenteredView,
@@ -21,7 +22,6 @@ import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
 import { useFirebaseAuthController } from "./hooks/useFirebaseAuthController";
 import { useFirestoreDataSource } from "./hooks/useFirestoreDataSource";
 import { useFirebaseStorageSource } from "./hooks/useFirebaseStorageSource";
-import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import { useInitializeAppCheck } from "./hooks/useInitializeAppCheck";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./types/auth";
