@@ -21,6 +21,7 @@ import {
 } from "./types/auth";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 import { useNavigationContext } from "../hooks";
+import { FirebaseApp } from "firebase/app";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -101,7 +102,7 @@ export type FirebaseCMSAppProps = {
      * using the local emulator or retrieving the used configuration.
      * @param config
      */
-    onFirebaseInit?: (config: object) => void;
+    onFirebaseInit?: (config: object, app: FirebaseApp) => void;
 
     /**
      * Use this to enable Firebase App Check
