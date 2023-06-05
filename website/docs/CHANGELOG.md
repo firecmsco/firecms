@@ -2,7 +2,7 @@
 id: changelog
 title: Changelog
 ---
-## [2.0.0-rc.1] - 2023-05-31
+## [2.0.0-rc.2] - 2023-06-05
 
 ### Changed
 
@@ -10,6 +10,7 @@ title: Changelog
 - Assigned default values to every property now, based on the property type.
 e.g. boolean properties will have a default value of `false`, maps to `{}`,
 and most other properties to `null`. 
+- Removed empty space for hidden properties in the entity side dialog.
 
 
 ## [2.0.0-rc.1] - 2023-05-31

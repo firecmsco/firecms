@@ -33,7 +33,7 @@ module.exports = {
         announcementBar: {
             id: "2-beta7",
             content:
-                "New version 2.0.0-beta.7 is out! 🎉 Now supporting collection groups!",
+                "New version 2.0.0-rc.2 is out! 🎉 Now supporting collection groups!",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,

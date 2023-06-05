@@ -25,7 +25,7 @@ There is also a Firebase extension for the very same purpose.
 
 :::note 
 Find all the available props
-for `FirebaseCMSApp` [here](../api/functions/firebasecmsapp)
+for `FirebaseCMSApp` [here](../navigation/app_config)
 :::
 
 We provide a utility method for performing searches in
