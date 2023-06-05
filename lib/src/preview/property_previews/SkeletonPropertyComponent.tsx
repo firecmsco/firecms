@@ -134,7 +134,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
                                            width="30%"
                                            component="th">
                                     <TTypography variant={"caption"}
-                                                 color={"textSecondary"}>
+                                                 color={"secondary"}>
                                         {property.properties![key].name}
                                     </TTypography>
                                 </TableCell>

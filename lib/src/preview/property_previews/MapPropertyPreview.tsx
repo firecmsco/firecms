@@ -1,12 +1,5 @@
 import React from "react";
-import {
-    Box,
-    Table,
-    TableBody,
-    TableCell,
-    TableRow,
-    Typography, useTheme
-} from "@mui/material";
+import { Box, useTheme } from "@mui/material";
 
 import { ResolvedMapProperty } from "../../types";
 import { ErrorBoundary } from "../../core";
@@ -83,7 +76,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                 className="w-1/4 align-top pr-1">
                                 <TTypography variant={"caption"}
                                              className={"font-mono"}
-                                             color={"textSecondary"}>
+                                             color={"secondary"}>
                                     {mapProperty.properties![key].name}
                                 </TTypography>
                             </Box>
@@ -107,6 +100,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 }
 
 export function KeyValuePreview({ value }: { value: any }) {
+    const theme = useTheme();
     if (typeof value !== "object") return null;
     return <Box
         className="flex flex-col w-full">
@@ -121,7 +115,7 @@ export function KeyValuePreview({ value }: { value: any }) {
                         className="w-1/4 align-top pr-1">
                         <TTypography variant={"caption"}
                                      className={"font-mono"}
-                                     color={"textSecondary"}>
+                                     color={"secondary"}>
                             {key}
                         </TTypography>
                     </Box>

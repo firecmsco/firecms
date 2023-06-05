@@ -53,12 +53,6 @@ export function ExpandablePanel({
                    } ${
                        invisible ? "rounded-none" : `rounded-${theme.shape.borderRadius}`
                    } ${invisible ? "border-none" : ""}`}
-
-                   style={{
-                       "&::before": {
-                           display: "none",
-                       },
-                   }}
                    TransitionProps={{ unmountOnExit: true }}
                    onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => {
                        onExpandedChange?.(expanded);

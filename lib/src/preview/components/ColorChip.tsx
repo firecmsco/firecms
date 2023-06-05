@@ -1,4 +1,4 @@
-import { Chip, useTheme } from "@mui/material";
+import { Chip } from "@mui/material";
 import React from "react";
 import { ChipColorScheme, EnumValues } from "../../types";
 import {
@@ -55,8 +55,6 @@ export function ColorChip({
                               small
                           }: ColorChipProps) {
 
-    const theme = useTheme();
-
     const usedColorScheme = colorScheme ?? getColorSchemeForSeed(label);
     return (
         <Chip
@@ -64,8 +62,8 @@ export function ColorChip({
                 error || !usedColorScheme ? 'bg-gray-200 text-red-500' : ''
             } font-normal`}
             style={{
-                backgroundColor: error || !usedColorScheme ? null : usedColorScheme.color,
-                color: error || !usedColorScheme ? null : usedColorScheme.text,
+                backgroundColor: error || !usedColorScheme ? undefined : usedColorScheme.color,
+                color: error || !usedColorScheme ? undefined : usedColorScheme.text,
             }}
             size={small ? "small" : "medium"}
             variant={outlined ? "outlined" : "filled"}

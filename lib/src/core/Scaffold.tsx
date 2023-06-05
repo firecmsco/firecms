@@ -152,10 +152,10 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     </nav>
                 </StyledDrawer>
 
-                <Box component={"main"}
-                     className="flex flex-col flex-grow h-full overflow-auto">
+                <main
+                    className="flex flex-col flex-grow overflow-auto">
                     <DrawerHeader/>
-                    <Box
+                    <div
                         ref={containerRef}
                         className={`flex-grow overflow-auto ${largeLayout ? "m-0 mx-4 mb-4 rounded-lg border border-solid border-divider-color" : "m-0 mt-1"}`}>
 
@@ -163,8 +163,8 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                             {children}
                         </ErrorBoundary>
 
-                    </Box>
-                </Box>
+                    </div>
+                </main>
             </Box>
         );
     },
@@ -173,10 +173,9 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
 const DrawerHeader = () => {
     return (
-        <div className="flex flex-col h-16"></div>
+        <div className="flex flex-col min-h-[68px]"></div>
     );
 };
-
 
 function StyledDrawer(props: {
     children: React.ReactNode,
@@ -184,12 +183,18 @@ function StyledDrawer(props: {
     logo?: string,
     hovered: boolean,
     setDrawerOpen: (open: boolean) => void,
+    onMouseEnter: () => void,
+    onMouseMove: () => void,
+    onMouseLeave: () => void
 }) {
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     return (
         <div className="drawer-container relative"
+             onMouseEnter={props.onMouseEnter}
+             onMouseMove={props.onMouseMove}
+             onMouseLeave={props.onMouseLeave}
              style={{
                  width: props.open ? DRAWER_WIDTH : "72px"
              }}>

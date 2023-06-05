@@ -208,7 +208,7 @@ export function ProductPreview({ productValues }: { productValues: EntityValues<
                     </Typography>
 
                     <Typography variant="body2"
-                                color="textSecondary"
+                                color="secondary"
                                 component="div">
                         {productValues.price} Euros
                     </Typography>

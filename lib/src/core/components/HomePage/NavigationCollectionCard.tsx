@@ -136,7 +136,7 @@ export function NavigationCollectionCard({
                     </TTypography>
 
                     {description && <TTypography variant="body2"
-                                                 color="textSecondary"
+                                                 color="secondary"
                                                  component="div">
                         <Markdown source={description}/>
                     </TTypography>}

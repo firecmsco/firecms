@@ -119,7 +119,7 @@ export function EntityPreview<M extends Record<string, any>>(
                                        scope="row"
                                        className={classes.titleCell}>
                                 <TTypography variant={"caption"}
-                                             color={"textSecondary"}>
+                                             color={"secondary"}>
                                     Id
                                 </TTypography>
                             </TableCell>
@@ -158,7 +158,7 @@ export function EntityPreview<M extends Record<string, any>>(
                                             <TTypography
                                                 className="pl-2"
                                                 variant={"caption"}
-                                                color={"textSecondary"}>
+                                                color={"secondary"}>
                                                 {property.name}
                                             </TTypography>
                                         </TableCell>

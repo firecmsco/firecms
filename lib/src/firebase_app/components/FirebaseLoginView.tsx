@@ -250,12 +250,7 @@ export function FirebaseLoginView({
             unmountOnExit>
 
             <Box
-                className="flex flex-col items-center justify-center min-h-screen min-w-full p-2"
-                style={{
-                    "@supports (minHeight: 100dvh)": {
-                        minHeight: "100dvh"
-                    }
-                }}>
+                className="flex flex-col items-center justify-center min-h-screen min-w-full p-2">
                 <div id="recaptcha"></div>
                 <Box
                     className="flex flex-col items-center w-full max-w-[480px]">

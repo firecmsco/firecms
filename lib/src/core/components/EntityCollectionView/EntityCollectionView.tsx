@@ -234,15 +234,7 @@ export const EntityCollectionView = React.memo(
         const open = anchorEl != null;
 
         const Title = useMemo(() => (
-            <Box className="flex flex-row content-center"
-                 style={{
-                     "& > *:not(:last-child)": {
-                         [theme.breakpoints.down("md")]: {
-                             marginRight: theme.spacing(1),
-                         },
-                         marginRight: theme.spacing(2),
-                     },
-                 }}>
+            <Box className="flex flex-row content-center">
                 <Box>
                     <TTypography
                         variant={"h6"}
@@ -444,10 +436,9 @@ function EntitiesCount({ fullPath, collection }: {
     }
 
     return <TTypography
-        className="block overflow-hidden whitespace-nowrap max-w-xs text-left"
-        style={{ textOverflow: "ellipsis" }}
+        className="text-ellipsis block overflow-hidden whitespace-nowrap max-w-xs text-left"
         variant={"caption"}
-        color={"textSecondary"}>
+        color={"secondary"}>
         {count !== undefined ? `${count} entities` : renderSkeletonText()}
     </TTypography>;
 }

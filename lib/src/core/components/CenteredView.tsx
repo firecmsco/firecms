@@ -9,7 +9,7 @@ export function CenteredView({
                                  fadeTimeout = 800
                              }: {
     children: React.ReactNode;
-    maxWidth?: number | string | object;
+    maxWidth?: number | string;
     fullScreen?: boolean,
     fadeTimeout?: number
 }) {
@@ -23,11 +23,7 @@ export function CenteredView({
             unmountOnExit>
             <Box
                 className={`flex flex-col items-center ${fullScreen ? 'h-screen' : 'h-full'} ${!maxWidth ? 'justify-center' : ''} max-h-full space-y-2 p-2`}
-                style={{
-                    "@supports (height: 100dvh)": {
-                        height: fullScreen ? "100dvh" : "100%"
-                    }
-                }}>
+                >
                 {maxWidth &&
                     <Box className="w-full mx-auto" style={{ maxWidth }}>
                         {children}

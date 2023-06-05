@@ -184,7 +184,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                         ? <TTypography
                             className={"font-mono"}
                             variant={"caption"}
-                            color={"textSecondary"}> {entity.id} </TTypography>
+                            color={"secondary"}> {entity.id} </TTypography>
                         : <Skeleton variant="text"/>
                     }
                 </Box>

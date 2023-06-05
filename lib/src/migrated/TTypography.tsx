@@ -1,4 +1,4 @@
-import React, { forwardRef } from "react";
+import React, { forwardRef, ReactEventHandler } from "react";
 import clsx from "clsx";
 
 export interface TypographyProps {
@@ -12,6 +12,7 @@ export interface TypographyProps {
     variant?: keyof typeof defaultVariantMapping;
     variantMapping?: { [key: string]: string };
     color?: "inherit" | "initial" | "primary" | "secondary" | "error";
+    onClick?: ReactEventHandler<HTMLElement>;
 }
 
 const defaultVariantMapping = {
@@ -23,6 +24,7 @@ const defaultVariantMapping = {
     h6: "h6",
     subtitle1: "h6",
     subtitle2: "h6",
+    label: "label",
     body1: "p",
     body2: "p",
     inherit: "p",
@@ -33,7 +35,7 @@ const colorToClasses = {
     inherit: "text-inherit",
     initial: "text-current",
     primary: "text-primary",
-    secondary: "text-secondary",
+    secondary: "text-textSecondary dark:text-textSecondaryDark",
     error: "text-red-600"
 };
 
@@ -48,8 +50,9 @@ const variantToClasses = {
     subtitle2: "text-base",
     body1: "text-base",
     body2: "text-sm",
+    label: "text-sm font-medium text-textLabel",
     inherit: "text-base",
-    caption: "tex-xs"
+    caption: "text-xs"
 };
 
 const TTypography = forwardRef<HTMLSpanElement, TypographyProps>(function Typography(
@@ -63,7 +66,8 @@ const TTypography = forwardRef<HTMLSpanElement, TypographyProps>(function Typogr
         paragraph = false,
         variant = "body1",
         variantMapping = defaultVariantMapping,
-        color
+        color,
+        onClick
     },
     ref
 ) {
@@ -83,7 +87,7 @@ const TTypography = forwardRef<HTMLSpanElement, TypographyProps>(function Typogr
     );
 
     return (
-        <Component ref={ref} className={classes}>
+        <Component ref={ref} className={classes} onClick={onClick}>
             {children}
         </Component>
     );

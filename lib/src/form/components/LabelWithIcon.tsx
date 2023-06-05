@@ -6,7 +6,7 @@ interface LabelWithIconProps {
     icon: React.ReactNode;
     title?: string;
     small?: boolean;
-    sx?: SxProps<Theme>;
+    className?: string;
     required?: boolean;
 }
 
@@ -19,17 +19,17 @@ export function LabelWithIcon({
                                   icon,
                                   title,
                                   small,
-                                  sx,
+                                  className,
                                   required
                               }: LabelWithIconProps) {
     return (
         <Box
-            className={`inline-flex items-center mb-0.5 ${small ? 'gap-1' : 'gap-1.5'} ${sx}`}
+            className={`inline-flex items-center mb-0.5 ${small ? "gap-1" : "gap-1.5"} ${className ?? ""}`}
             component={"span"}>
 
             {icon}
             <TTypography component={"span"}
-                         className={`font-medium text-${small ? 'base' : 'sm'} origin-top-left transform ${small ? 'translate-x-2 scale-75' : ''}`}>{(title ?? "") + (required ? " *" : "")}</TTypography>
+                         className={`font-medium text-${small ? "base" : "sm"} origin-top-left transform ${small ? "translate-x-2 scale-75" : ""}`}>{(title ?? "") + (required ? " *" : "")}</TTypography>
 
         </Box>
     );

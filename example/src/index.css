@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-@layer utilities {
+@layer components {
+
+    /*.paper {*/
+    /*    @apply  dark:bg-gray-900;*/
+    /*}*/
     .bg-default {
         @apply bg-white dark:bg-gray-800;
-    }
-
-    .bg-paper {
-        @apply bg-gray-100 dark:bg-gray-900;
     }
 }

@@ -381,15 +381,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                                 theme.palette.mode === "light"
                                     ? "bg-opacity-60 bg-white"
                                     : `bg-opacity-10 bg-${theme.palette.background.paper}`
-                            } backdrop-blur-md border-b border-${theme.palette.divider}`}
-                            style={{
-                                "& > *:not(:last-child)": {
-                                    [theme.breakpoints.down("md")]: {
-                                        marginRight: theme.spacing(1),
-                                    },
-                                    marginRight: theme.spacing(2),
-                                },
-                            }}>
+                            } backdrop-blur-md border-b border-${theme.palette.divider}`}>
                             {pluginActions}
                         </Box>}
 

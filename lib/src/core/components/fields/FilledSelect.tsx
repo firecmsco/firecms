@@ -47,12 +47,6 @@ export function FilledMenuItem(props: MenuItemProps) {
     return <MenuItem
         {...props}
         className={`bg-${theme.palette.background.default} text-sm font-${theme.typography.fontWeightMedium} pt-${theme.spacing(1)} pb-${theme.spacing(1)} hover:bg-${darken(theme.palette.background.default, 0.1)} focus:bg-${darken(theme.palette.background.default, 0.2)} focus:text-${theme.palette.text.primary}`}
-
-        style={{
-            "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
-                color: theme.palette.text.primary
-            }
-        }}
     >
         {props.children}
     </MenuItem>

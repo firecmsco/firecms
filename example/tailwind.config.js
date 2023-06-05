@@ -1,4 +1,18 @@
 /** @type {import('tailwindcss').Config} */
+const plugin = require("tailwindcss/plugin")
+
+const fireCMSPlugin = function ({addComponents, theme}) {
+    addComponents({
+        ".card": {
+            backgroundColor: theme("colors.white"),
+            borderRadius: theme("borderRadius.lg"),
+            padding: theme("spacing.4"),
+            boxShadow: theme("boxShadow.sm")
+            // '@apply dark:bg-blue-500 dark:hover:text-white': {},
+        }
+    })
+};
+
 export default {
     mode: "jit",
     content: [
@@ -6,7 +20,7 @@ export default {
         "./src/**/*.{js,ts,jsx,tsx}",
         "./node_modules/firecms/src/**/*.{js,ts,jsx,tsx}"
     ],
-    plugins: [require("daisyui")],
+    plugins: [require("daisyui"), fireCMSPlugin],
     theme: {
         fontFamily: {
             sans: ["Rubik", "Roboto", "Helvetica", "Arial", "sans-serif"],
@@ -26,9 +40,6 @@ export default {
                 "monospace"
             ]
         },
-        borderRadius: {
-            DEFAULT: "6px"
-        },
         backgroundColor: {
             "default-dark": "#202024",
             "paper-dark": "#121215",
@@ -39,6 +50,10 @@ export default {
             primary: "#0070F4",
             secondary: "#FF5B79",
             error: "#F44336",
+            white: "#ffffff",
+            textSecondary: "rgba(0, 0, 0, 0.6)",
+            textSecondaryDark: "rgba(255, 255, 255, 0.7)",
+            textLabel: "rgb(131, 131, 131)",
             gray: {
                 100: "#f8f8fa",
                 200: "#eaeff8",
@@ -55,21 +70,16 @@ export default {
             "7xl": "85rem"
         },
         boxShadow: {
-            // xs: "0 0 0 1px rgba(0, 0, 0, 0.16)",
-            // sm: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
-            // default: "0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.03)",
-            // md: "0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
-            // lg: "0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)",
-            // xl: "0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.02)",
-            // "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.20)",
-            // inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)",
-            // outline: "0 0 0 3px rgba(66, 153, 225, 0.5)",
-            // none: "none"
-        },
-        spacing: {
-            "9/16": "56.25%",
-            "3/4": "75%",
-            "1/1": "100%"
+            xs: "0 0 0 1px rgba(0, 0, 0, 0.16)",
+            sm: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
+            default: "0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.03)",
+            md: "0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
+            lg: "0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)",
+            xl: "0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.02)",
+            "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.20)",
+            inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)",
+            outline: "0 0 0 3px rgba(66, 153, 225, 0.5)",
+            none: "none"
         },
         fontWeight: {
             thin: "100",
@@ -95,10 +105,6 @@ export default {
             "6xl": "5.5rem",
             "7xl": "7rem",
             "8xl": "10rem"
-        },
-        inset: {
-            "1/2": "50%",
-            full: "100%"
         },
         letterSpacing: {
             tighter: "-0.02em",

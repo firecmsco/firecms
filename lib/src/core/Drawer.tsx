@@ -62,7 +62,7 @@ export function Drawer({
         return <Box pt={2} pl={2} pr={2} pb={0.5}
                     className="flex flex-row items-center">
             <TTypography variant={"caption"}
-                         color={"textSecondary"}
+                         color={"secondary"}
                          className="weight-500 flex-grow">
                 {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
             </TTypography>
@@ -133,8 +133,10 @@ export function DrawerNavigationItem({
 }) {
 
     const theme = useTheme();
-    const icon = <Icon fontSize={"medium"}
-                       className={`text-${theme.palette.mode === 'dark' ? 'gray-500' : 'gray-700'}`}/>;
+    const icon = <div
+        className={"text-gray-700 dark:text-gray-500"}>
+        <Icon fontSize={"medium"}/>
+    </div>;
     const listItem = <ListItem
         // @ts-ignore
         button

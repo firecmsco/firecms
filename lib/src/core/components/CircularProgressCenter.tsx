@@ -10,12 +10,7 @@ import React from "react";
 export function CircularProgressCenter(props: CircularProgressProps) {
     return (
         <Box
-            className="flex w-full h-screen max-h-full max-w-full"
-            style={{
-                '@supports (height: 100dvh)': {
-                    height: '100dvh',
-                },
-            }}>
+            className="flex w-full h-screen max-h-full max-w-full">
             <Box m="auto">
                 <CircularProgress {...props}/>
             </Box>

@@ -283,15 +283,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
 
     return <TTypography variant={"label"}
                         className={`relative w-full transition-colors duration-200 ease-in border rounded ${disabled ? 'bg-opacity-50' : 'hover:bg-opacity-75'} ${disabled ? (theme.palette.mode === 'light' ? 'text-opacity-50' : 'text-white text-opacity-50') : ''} font-medium`}
-                        style={{
-                            padding: theme.spacing(1),
-                            backgroundColor: disabled ? 'rgba(0, 0, 0, 0.12)' : fieldBackground(theme),
-                            borderRadius: `${theme.shape.borderRadius}px`,
-                            '&:hover': {
-                                cursor: disabled ? undefined : 'pointer',
-                                backgroundColor: disabled ? 'rgba(0, 0, 0, 0.12)' : fieldBackgroundHover(theme),
-                            },
-                        }}>
+                        >
 
         {collection && buildEntityView(collection)}
 

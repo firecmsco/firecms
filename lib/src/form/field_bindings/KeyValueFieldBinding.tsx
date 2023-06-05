@@ -227,10 +227,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
             <TTypography key={rowId.toString()}
                          component={"div"}
                          className="font-mono flex flex-row space-x-1 items-center">
-                <Box className="w-200px max-w-25percent" style={{
-                    '--tw-w-200px': '200px',
-                    '--tw-max-w-25percent': '25%'
-                }}>
+                <Box className="w-[200px] max-w-[25%]">
                     <TextInput
                         value={fieldKey}
                         disabled={disabled || Boolean(entryValue)}
