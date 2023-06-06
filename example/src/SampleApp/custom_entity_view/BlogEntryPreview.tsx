@@ -40,7 +40,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
     }, [storage, modifiedValues?.header_image]);
 
     return (
-        <Box>
+        <div>
 
             {headerUrl && <img
                 alt={"Header"}
@@ -87,7 +87,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
 
             </Container>
 
-        </Box>
+        </div>
     );
 
 }
@@ -95,18 +95,14 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
 export function Images({ storagePaths }: { storagePaths: string[] }) {
     if (!storagePaths)
         return <></>;
-    return <Box display="flex">
+    return <div className="flex">
         {storagePaths.map((path, index) =>
-            <Box p={2} m={1}
-                 key={`images_${index}`}
-                 sx={{
-                     width: 250,
-                     height: 250
-                 }}>
+            <div className="p-8 m-4 w-[250px] h-[250px]"
+                 key={`images_${index}`}>
                 <StorageImage storagePath={path}/>
-            </Box>
+            </div>
         )}
-    </Box>;
+    </div>;
 }
 
 export function StorageImage({ storagePath }: { storagePath: string }) {
@@ -138,9 +134,9 @@ function Text({ markdownText }: { markdownText: string }) {
         return <></>;
 
     return <Container maxWidth={"sm"}>
-        <Box mt={6} mb={6}>
+        <div className="mt-24 mb-24">
             <Markdown source={markdownText}/>
-        </Box>
+        </div>
     </Container>;
 }
 
@@ -170,11 +166,11 @@ function ProductGroupPreview({ references }: { references: EntityReference[] }) 
 
     if (!products) return <CircularProgress/>;
 
-    return <Box>
+    return <div>
         {products.map((p, index) => <ProductPreview
             key={`products_${index}`}
             productValues={p.values as EntityValues<Product>}/>)}
-    </Box>;
+    </div>;
 }
 
 export function ProductPreview({ productValues }: { productValues: EntityValues<Product> }) {
@@ -196,10 +192,9 @@ export function ProductPreview({ productValues }: { productValues: EntityValues<
                     display: "flex",
                     flexDirection: "column"
                 }}>
-                    <Box flexGrow={1} flexShrink={1} flexBasis={296} p={2}
-                         maxHeight={296}>
+                    <div className="flex-grow flex-shrink-1 flex-basis-[296px] p-8 max-h-[296px]">
                         <StorageImage storagePath={productValues.main_image}/>
-                    </Box>
+                    </div>
                     <Typography gutterBottom
                                 variant="h6"
                                 noWrap

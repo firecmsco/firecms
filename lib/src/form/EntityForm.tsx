@@ -372,27 +372,27 @@ function EntityFormInternal<M extends Record<string, any>>({
 
                 return <>
 
-                    <Box
+                    <div
                         className="pl-16 pr-16 pt-12 pb-16 mb-8 lg:pl-8 lg:pr-8 lg:pt-8 lg:pb-12 md:p-8"
                     >
 
-                        {pluginActions.length > 0 && <Box
+                        {pluginActions.length > 0 && <div
                             className={`w-full flex justify-end row items-center absolute top-0 right-0 left-0 text-right z-2 ${
                                 theme.palette.mode === "light"
                                     ? "bg-opacity-60 bg-white"
                                     : `bg-opacity-10 bg-${theme.palette.background.paper}`
                             } backdrop-blur-md border-b border-${theme.palette.divider}`}>
                             {pluginActions}
-                        </Box>}
+                        </div>}
 
-                        <Box
+                        <div
                             className={`w-full mt-${4 + (pluginActions ? 4 : 0)}*4 py-2 flex items-center lg:mt-${3 + (pluginActions ? 4 : 0)}*4 md:mt-${2 + (pluginActions ? 4 : 0)}*4`}>
 
                             <TTypography
                                 className="mt-4 mb-[calc(collection.hideIdFromForm ? 0 : 1rem)] flex-grow"
                                 variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
                             </TTypography>
-                        </Box>
+                        </div>
 
                         {!hideId &&
                             <CustomIdField customId={collection.customId}
@@ -417,7 +417,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                             savingError={savingError}
                             closeAfterSaveRef={closeAfterSaveRef}/>}
 
-                    </Box>
+                    </div>
                 </>
             }}
         </Formik>
@@ -529,25 +529,25 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
         <Form onSubmit={handleSubmit}
               noValidate>
-            <Box className="mt-4"
+            <div className="mt-4"
                  ref={formRef}>
 
                 {formFields}
 
                 <ErrorFocus containerRef={formRef}/>
 
-            </Box>
+            </div>
 
-            <Box className="h-14"/>
+            <div className="h-14"/>
 
             <CustomDialogActions position={"absolute"}>
 
                 {savingError &&
-                    <Box textAlign="right">
+                    <div className="text-right">
                         <TTypography color={"error"}>
                             {savingError.message}
                         </TTypography>
-                    </Box>}
+                    </div>}
 
                 <Button
                     variant="text"

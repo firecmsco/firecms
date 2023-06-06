@@ -61,13 +61,11 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
     );
 
     return (
-        <Box
+        <div
             className="min-h-[56px] overflow-x-auto sm:px-[theme.spacing(1)] px-[theme.spacing(2)] bg-[theme.palette.background.default] border-b border-[theme.palette.divider] flex flex-row justify-between items-center w-full"
         >
 
-            <Box display={"flex"}
-                 alignItems="center"
-                 className="space-x-8 md:space-x-4">
+            <div className="flex items-center space-x-8 md:space-x-4">
 
                 {props.title && <Hidden lgDown>
                     {props.title}
@@ -79,14 +77,14 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
                 {filterView}
 
-            </Box>
+            </div>
 
-            <Box className="flex items-center space-x-4 md:space-x-2">
+            <div className="flex items-center space-x-4 md:space-x-2">
 
-                {largeLayout && <Box width={22}>
+                {largeLayout && <div className="w-[22px]">
                     {props.loading &&
                         <CircularProgress size={16} thickness={8}/>}
-                </Box>}
+                </div>}
 
                 {props.onTextSearch &&
                     <SearchBar
@@ -97,8 +95,8 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
                 {props.actions}
 
-            </Box>
+            </div>
 
-        </Box>
+        </div>
     );
 }

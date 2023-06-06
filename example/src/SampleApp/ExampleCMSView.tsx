@@ -88,16 +88,9 @@ export function ExampleCMSView() {
     );
 
     return (
-        <Box
-            display="flex"
-            width={"100%"}
-            height={"100%"}>
+        <div className="flex w-full h-full">
 
-            <Box m="auto"
-                 display="flex"
-                 flexDirection={"column"}
-                 alignItems={"center"}
-                 justifyItems={"center"}>
+            <div className="m-auto flex flex-col items-center justify-items-center">
 
                 <Container maxWidth={"md"}
                            sx={{
@@ -214,7 +207,7 @@ export function ExampleCMSView() {
                     </Grid>
 
                 </Container>
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 }

@@ -91,8 +91,8 @@ export function StringNumberFilterField({
     const multiple = multipleSelectOperations.includes(operation);
     return (
 
-        <Box display={"flex"} width={440} alignItems={"center"}>
-            <Box width={80}>
+        <div className="flex w-[440px] items-center">
+            <div className={"w-[80px]"}>
                 <FormControl fullWidth>
                     <MuiSelect value={operation}
                                fullWidth
@@ -107,9 +107,9 @@ export function StringNumberFilterField({
 
                     </MuiSelect>
                 </FormControl>
-            </Box>
+            </div>
 
-            <Box flexGrow={1} ml={1}>
+            <div className="flex-grow ml-4">
 
                 <FormControl fullWidth>
                     {!enumValues && <OutlinedInput
@@ -170,9 +170,9 @@ export function StringNumberFilterField({
                             })}
                         </MuiSelect>}
                 </FormControl>
-            </Box>
+            </div>
 
-        </Box>
+        </div>
     );
 
 }

@@ -90,7 +90,7 @@ export function DateTimeFieldBinding({
                                               }
                                           }),
                                           disableUnderline: true,
-                                          endAdornment: <Box
+                                          endAdornment: <div
                                               className="pr-2 space-x-2">
                                               {property.clearable && <IconButton
                                                   className="absolute right-14 top-3"
@@ -98,7 +98,7 @@ export function DateTimeFieldBinding({
                                                   <ClearIcon/>
                                               </IconButton>}
                                               {params.InputProps?.endAdornment}
-                                          </Box>
+                                          </div>
                                       }}
                                       error={showError}
                                       variant={"filled"}

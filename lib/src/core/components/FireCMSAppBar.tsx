@@ -26,6 +26,24 @@ import {
 } from "../../hooks";
 import { DRAWER_WIDTH } from "../Scaffold";
 import TTypography from "../../migrated/TTypography";
+import clsx from "clsx";
+
+function getMainContentClasses(drawerOpen: boolean, largeLayout: boolean) {
+    return clsx({
+        "ml-64": drawerOpen && largeLayout,
+        "ml-16": !(drawerOpen && largeLayout),
+        "h-16": true,
+        "z-[1100]": largeLayout,
+        "transition-all": true,
+        "ease-in": true,
+        "duration-75": true,
+        "w-[calc(100%-64px)]": !(drawerOpen && largeLayout),
+        "w-[calc(100%-256px)]": drawerOpen && largeLayout,
+        "duration-150": drawerOpen && largeLayout,
+        fixed: true
+    });
+}
+
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -64,34 +82,36 @@ export const FireCMSAppBar = function FireCMSAppBar({
     const initial = authController.user?.displayName
         ? authController.user.displayName[0].toUpperCase()
         : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
+    // <Box
+    //     className={`fixed ${largeLayout ? "z-[calc(" + theme.zIndex.drawer + "+1)]" : ""} transition-all duration-[${theme.transitions.duration.leavingScreen}] ease-[${theme.transitions.easing.sharp}]`}
+    //     style={{
+    //         marginLeft: theme.spacing(8),
+    //         width: `calc(100% - ${theme.spacing(8)})`,
+    //         zIndex: largeLayout ? theme.zIndex.drawer + 1 : undefined,
+    //         transition: theme.transitions.create(["width", "margin"], {
+    //             easing: theme.transitions.easing.sharp,
+    //             duration: theme.transitions.duration.leavingScreen,
+    //         }),
+    //         ...(drawerOpen && largeLayout && {
+    //             marginLeft: `calc(${DRAWER_WIDTH}px - 8px)`,
+    //             width: `calc(100% - ${DRAWER_WIDTH}px)`,
+    //             transition: theme.transitions.create(["width", "margin"], {
+    //                 easing: theme.transitions.easing.sharp,
+    //                 duration: theme.transitions.duration.enteringScreen,
+    //             }),
+    //         }),
+    //     }}>
 
     return (
-        <Box
-            className={`fixed ${largeLayout ? "z-[calc(" + theme.zIndex.drawer + "+1)]" : ""} transition-all duration-[${theme.transitions.duration.leavingScreen}] ease-[${theme.transitions.easing.sharp}]`}
-            style={{
-                marginLeft: theme.spacing(8),
-                width: `calc(100% - ${theme.spacing(8)})`,
-                zIndex: largeLayout ? theme.zIndex.drawer + 1 : undefined,
-                transition: theme.transitions.create(["width", "margin"], {
-                    easing: theme.transitions.easing.sharp,
-                    duration: theme.transitions.duration.leavingScreen,
-                }),
-                ...(drawerOpen && largeLayout && {
-                    marginLeft: `calc(${DRAWER_WIDTH}px - 8px)`,
-                    width: `calc(100% - ${DRAWER_WIDTH}px)`,
-                    transition: theme.transitions.create(["width", "margin"], {
-                        easing: theme.transitions.easing.sharp,
-                        duration: theme.transitions.duration.enteringScreen,
-                    }),
-                }),
-            }}>
+        <div
+            className={getMainContentClasses(drawerOpen, largeLayout)}>
 
             <Slide
                 direction="down" in={true} mountOnEnter unmountOnExit>
-                <Toolbar className="space-x-1 space-y-1">
+                <div className="flex flex-row space-x-1 space-y-1 px-4 h-full items-center">
 
                     <Hidden lgDown>
-                        <Box mr={2}>
+                        <div className="mr-8">
                             <Link
                                 underline={"none"}
                                 key={"breadcrumb-home"}
@@ -104,10 +124,10 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                     {title}
                                 </TTypography>
                             </Link>
-                        </Box>
+                        </div>
                     </Hidden>
 
-                    {largeLayout && <Box>
+                    {largeLayout && <div>
                         <Breadcrumbs
                             separator={<NavigateNextIcon
                                 htmlColor={"rgb(0,0,0,0.87)"}
@@ -128,9 +148,9 @@ export const FireCMSAppBar = function FireCMSAppBar({
                             )
                             }
                         </Breadcrumbs>
-                    </Box>}
+                    </div>}
 
-                    <Box flexGrow={1}/>
+                    <div className={"flex-grow"}/>
 
                     {toolbarExtraWidget &&
                         <ErrorBoundary>
@@ -139,7 +159,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                             }
                         </ErrorBoundary>}
 
-                    <Box p={1}>
+                    <div className={"p-4"}>
                         <IconButton
                             color="inherit"
                             aria-label="Open drawer"
@@ -150,15 +170,15 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                 ? <DarkModeOutlinedIcon/>
                                 : <LightModeOutlinedIcon/>}
                         </IconButton>
-                    </Box>
+                    </div>
 
-                    <Box p={1}>
+                    <div className={"p-4"}>
                         {authController.user && authController.user.photoURL
                             ? <Avatar
                                 src={authController.user.photoURL}/>
                             : <Avatar>{initial}</Avatar>
                         }
-                    </Box>
+                    </div>
 
                     <Button variant="text"
                             color="inherit"
@@ -166,8 +186,8 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         Log Out
                     </Button>
 
-                </Toolbar>
+                </div>
             </Slide>
-        </Box>
+        </div>
     );
 }

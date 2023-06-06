@@ -230,7 +230,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [checkFilterCombination, currentSort, onFilterUpdate, resetSort, sortByProperty]);
 
         const buildErrorView = useCallback(() => (
-            <Box
+            <div
                 className="h-[calc(100%-64px)] flex flex-col items-center justify-center sticky left-0">
 
                 <TTypography variant={"h6"}>
@@ -241,26 +241,26 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     {error?.message}
                 </TTypography>}
 
-            </Box>
+            </div>
         ), [error?.message]);
 
         const buildEmptyView = useCallback(() => {
             if (loading)
                 return <CircularProgressCenter/>;
-            return <Box
+            return <div
                 className="flex overflow-auto items-center justify-center p-2 gap-2 h-full">
                 <AssignmentIcon/>
                 <TTypography>
                     {emptyMessage}
                 </TTypography>
-            </Box>;
+            </div>;
         }, [emptyMessage, loading]);
 
         const empty = !loading && (data?.length ?? 0) === 0;
         const customView = error ? buildErrorView() : (empty ? buildEmptyView() : undefined);
 
         return (
-            <Box
+            <div
                 ref={measureRef}
                 className="h-full w-full">
                 <VirtualListContext.Provider
@@ -292,7 +292,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                         itemSize={getRowHeight(size)}/>
 
                 </VirtualListContext.Provider>
-            </Box>
+            </div>
         );
     },
     equal

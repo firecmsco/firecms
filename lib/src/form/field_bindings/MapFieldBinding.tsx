@@ -69,7 +69,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
     });
 
     const mapFormView = <>
-        <Box className="py-1 flex flex-col space-y-2">
+        <div className="py-1 flex flex-col space-y-2">
             {Object.entries(mapProperties)
                 .filter(([_, property]) => !isHidden(property))
                 .map(([entryKey, childProperty], index) => {
@@ -92,7 +92,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
                         );
                     }
                 )}
-        </Box>
+        </div>
 
         {pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value)}
 
@@ -130,7 +130,7 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
 
     if (!keys.length) return <></>;
 
-    return <Box m={1}>
+    return <div className={"m-4"}>
         <FormControl fullWidth>
             <InputLabel>Add property</InputLabel>
             <Select
@@ -145,6 +145,6 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
                 ))}
             </Select>
         </FormControl>
-    </Box>;
+    </div>;
 };
 

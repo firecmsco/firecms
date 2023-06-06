@@ -45,9 +45,9 @@ export function TableDateField(props: {
                                   ...params.InputProps,
                                   style: { fontSize: 14 },
                                   disableUnderline: true,
-                                  endAdornment: <Box className="pr-1">
+                                  endAdornment: <div className="pr-1">
                                       {params.InputProps?.endAdornment}
-                                  </Box>
+                                  </div>
                               }}
                 />}
             InputAdornmentProps={{

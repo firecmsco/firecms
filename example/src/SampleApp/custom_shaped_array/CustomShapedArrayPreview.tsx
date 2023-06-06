@@ -21,12 +21,12 @@ export default function CustomShapedArrayPreview({
 
     return <div>
         {properties.map((property, index) => (
-            <Box m={0.5} key={`custom_shaped_array_${index}`}>
+            <div className="m-2" key={`custom_shaped_array_${index}`}>
                 <PropertyPreview
                     property={property}
                     value={value[index]}
                     size={size}/>
-            </Box>
+            </div>
         ))}
     </div>;
 

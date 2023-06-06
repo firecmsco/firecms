@@ -122,17 +122,15 @@ export function TextFieldBinding<T extends string | number>({
             {((showError && error) ||
                     (includeDescription && (property.description || property.longDescription)) ||
                     allowInfinity) &&
-                <Box display={"flex"}
-                     className="ml-3.5"
-                >
+                <div className={"flex ml-3.5"}>
 
-                    <Box flexGrow={1}>
+                    <div className={"flex-grow"}>
                         {showError && <FormHelperText
                             error={true}>{error}</FormHelperText>}
 
                         {includeDescription &&
                             <FieldDescription property={property}/>}
-                    </Box>
+                    </div>
 
                     {allowInfinity &&
                         <FormControlLabel
@@ -156,7 +154,7 @@ export function TextFieldBinding<T extends string | number>({
                             }
                         />
                     }
-                </Box>}
+                </div>}
 
             {url && <Collapse
                 className="mt-1 ml-1"

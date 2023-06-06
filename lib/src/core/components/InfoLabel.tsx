@@ -14,9 +14,9 @@ export function InfoLabel({
         : (theme.palette.mode === "dark" ? "#4d3800" : "#f9e3b9");
 
     return (
-        <Box
+        <div
             className="my-3 py-1 px-2 rounded bg-[your_background_value]">
             {children}
-        </Box>
+        </div>
     )
 }

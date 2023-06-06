@@ -20,7 +20,7 @@ export function CustomDialogActions({
         </Container>
         : children;
 
-    return <Box
+    return <div
         className={`border-t flex flex-row items-center justify-end py-1 px-2 ${position} bottom-0 right-0 left-0 text-right z-2`}
         style={{
             background: translucent
@@ -32,5 +32,5 @@ export function CustomDialogActions({
             borderTopColor: theme.palette.divider,
         }}>
         {component}
-    </Box>;
+    </div>;
 }

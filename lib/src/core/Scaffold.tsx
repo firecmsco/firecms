@@ -117,7 +117,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
         return (
-            <Box
+            <div
                 className="flex h-screen w-screen"
                 style={{
                     paddingTop: "env(safe-area-inset-top)",
@@ -165,7 +165,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
                     </div>
                 </main>
-            </Box>
+            </div>
         );
     },
     equal
@@ -250,7 +250,7 @@ function StyledDrawer(props: {
                         ""
                     )}
 
-                <Box>
+                <div>
                     <div
                         className={`${
                             props.open
@@ -268,7 +268,7 @@ function StyledDrawer(props: {
                         </Link>
                     </div>
                     {props.children}
-                </Box>
+                </div>
 
                 <Link
                     className={`${

@@ -41,7 +41,7 @@ export function ArrayPropertyPreview({
     const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
 
     return (
-        <Box className="flex flex-col">
+        <div className="flex flex-col">
             {values &&
                 values.map((value, index) => {
                         const of: ResolvedProperty = property.resolvedProperties[index] ??
@@ -49,7 +49,7 @@ export function ArrayPropertyPreview({
                         return of
                             ? <React.Fragment
                                 key={"preview_array_" + value + "_" + index}>
-                                <Box className="m-1">
+                                <div className="m-1">
                                     <ErrorBoundary>
                                         <PropertyPreview
                                             propertyKey={propertyKey}
@@ -58,12 +58,12 @@ export function ArrayPropertyPreview({
                                             property={of}
                                             size={childSize}/>
                                     </ErrorBoundary>
-                                </Box>
+                                </div>
                                 {index < values.length - 1 && <Divider/>}
                             </React.Fragment>
                             : null;
                     }
                 )}
-        </Box>
+        </div>
     );
 }

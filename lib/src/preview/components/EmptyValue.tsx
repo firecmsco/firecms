@@ -6,6 +6,6 @@ import { Box } from "@mui/material";
  */
 export function EmptyValue() {
 
-    return <Box
+    return <div
         className="rounded-full bg-gray-200 bg-opacity-10 w-4 h-1 inline-block"/>;
 }

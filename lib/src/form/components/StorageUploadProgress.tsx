@@ -78,16 +78,16 @@ export function StorageUploadProgress({
     }, [entry.file, entry.fileName, upload]);
 
     if (simple) {
-        return <Box m={1} className={`w-${imageSize} h-${imageSize}`}>
+        return <div className={`m-4 w-${imageSize} h-${imageSize}`}>
 
             {loading && <Skeleton variant="rectangular"
                                   className={`w-${imageSize} h-${imageSize}`}/>}
 
-        </Box>
+        </div>
     }
     return (
 
-        <Box m={1}>
+        <div className={"m-4"}>
             <Paper elevation={0}
                    className="p-1 box-border min-w-[imageSize] min-h-[imageSize]"
                    variant={"outlined"}>
@@ -99,7 +99,7 @@ export function StorageUploadProgress({
                                      error={error}/>}
 
             </Paper>
-        </Box>
+        </div>
 
     );
 

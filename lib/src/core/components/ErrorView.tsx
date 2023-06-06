@@ -30,16 +30,16 @@ export function ErrorView({
     const component = error instanceof Error ? error.message : error;
 
     const body = (
-        <Box
+        <div
             className="flex items-center m-1">
             <ErrorIcon fontSize={"small"} color={"error"}/>
-            <Box className="pl-2">
+            <div className="pl-2">
                 {title && <TTypography
                     variant={"body2"}
                     className="font-medium">{title}</TTypography>}
                 <TTypography variant={"body2"}>{component}</TTypography>
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 
     if (tooltip) {

@@ -41,6 +41,7 @@ import {
     fieldBackgroundHover
 } from "../../core/util/field_colors";
 import TTypography from "../../migrated/TTypography";
+import clsx from "clsx";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -133,12 +134,12 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
     } else {
         body = (
             <>
-                <Box
+                <div
                     className="flex flex-col flex-grow w-full max-w-[calc(100%-52px)] m-1">
 
                     {size !== "tiny" && (
                         reference
-                            ? <Box className={`${
+                            ? <div className={`${
                                 size !== "regular"
                                     ? "block whitespace-nowrap overflow-hidden truncate"
                                     : ""
@@ -147,7 +148,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                              className={"font-mono"}>
                                     {reference.id}
                                 </TTypography>
-                            </Box>
+                            </div>
                             : <Skeleton variant="text"/>)}
 
                     {listProperties && listProperties.map((key) => {
@@ -155,8 +156,8 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                         if (!childProperty) return null;
 
                         return (
-                            <Box key={"ref_prev_" + (key as string)}
-                                 className={`my-${listProperties.length > 1 ? '2' : '0'}`}>
+                            <div key={"ref_prev_" + (key as string)}
+                                 className={`my-${listProperties.length > 1 ? "2" : "0"}`}>
                                 {usedEntity
                                     ? <PropertyPreview
                                         propertyKey={key as string}
@@ -169,12 +170,12 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                         property={childProperty as ResolvedProperty}
                                         size={"tiny"}/>
                                 }
-                            </Box>
+                            </div>
                         );
                     })}
 
-                </Box>
-                <Box className={`my-${size === "tiny" ? 2 : 4}`}>
+                </div>
+                <div className={`my-${size === "tiny" ? 2 : 4}`}>
                     {!disabled && usedEntity && allowEntityNavigation &&
                         <Tooltip title={`See details for ${usedEntity.id}`}>
                             <IconButton
@@ -196,7 +197,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                 <KeyboardTabIcon fontSize={"small"}/>
                             </IconButton>
                         </Tooltip>}
-                </Box>
+                </div>
             </>
         );
     }
@@ -222,23 +223,20 @@ function ReferencePreviewWrap({
     onClick?: () => void;
 }) {
     return <TTypography variant={"label"}
-                        className={`w-full flex rounded-md overflow-hidden ${size === 'regular' ? 'p-1' : 'p-0'} ${size === 'tiny' ? 'items-center' : ''} ${onClick ? (onHover ? 'cursor-pointer' : '') : ''}`}
-                        style={(theme) => {
-                            const clickableStyles = onClick
-                                ? {
-                                    tabindex: 0,
-                                    backgroundColor: onHover
-                                        ? fieldBackgroundHover(theme)
-                                        : fieldBackground(theme),
-                                    transition: "background-color 300ms ease, box-shadow 300ms ease",
-                                    boxShadow: onHover ? "0 0 0 2px rgba(128,128,128,0.05)" : undefined,
-                                    cursor: onHover ? "pointer" : undefined,
-                                }
-                                : {};
-                            return ({
-                                borderRadius: `${theme.shape.borderRadius}px`,
-                                ...clickableStyles,
-                            });
+                        className={clsx("bg-field-dark",
+                            "w-full",
+                            "flex",
+                            "rounded-md",
+                            "overflow-hidden",
+                            onHover ? "hover:bg-field-hover" : "",
+                            size === "regular" ? "p-1" : "p-0",
+                            size === "tiny" ? "items-center" : "",
+                            "transition-colors duration-300 ease-in-out ",
+                            onHover ? "shadow-outline cursor-pointer" : "",
+                            onClick ? (onHover ? "cursor-pointer" : "") : "")}
+                        style={{
+                            // @ts-ignore
+                            tabindex: 0
                         }}
                         onClick={(event) => {
                             if (onClick) {

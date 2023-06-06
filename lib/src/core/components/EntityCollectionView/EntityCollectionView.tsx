@@ -234,8 +234,8 @@ export const EntityCollectionView = React.memo(
         const open = anchorEl != null;
 
         const Title = useMemo(() => (
-            <Box className="flex flex-row content-center">
-                <Box>
+            <div className="flex flex-row content-center">
+                <div>
                     <TTypography
                         variant={"h6"}
                         className={`leading-none truncate w-40 ${collection.description ? 'cursor-pointer' : 'cursor-auto'}`}
@@ -269,16 +269,16 @@ export const EntityCollectionView = React.memo(
                             }}
                         >
 
-                            <Box m={2}>
+                            <div className="m-8">
                                 <Markdown source={collection.description}/>
-                            </Box>
+                            </div>
 
                         </Popover>
                     }
 
-                </Box>
+                </div>
 
-            </Box>
+            </div>
         ), [theme, collection.description, collection.name, fullPath, open, anchorEl]);
 
         const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
@@ -349,7 +349,7 @@ export const EntityCollectionView = React.memo(
         }, [isEntitySelected, collection, authController, fullPath, selectionEnabled, toggleEntitySelection, onEditClicked, createEnabled, onCopyClicked]);
 
         return (
-            <Box className="overflow-hidden h-full w-full">
+            <div className="overflow-hidden h-full w-full">
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     fullPath={fullPath}
@@ -386,7 +386,7 @@ export const EntityCollectionView = React.memo(
                         onMultipleEntitiesDelete={internalOnMultipleEntitiesDelete}
                         onClose={() => setDeleteEntityClicked(undefined)}/>}
 
-            </Box>
+            </div>
         );
     }, equal) as React.FunctionComponent<EntityCollectionViewProps<any>>
 

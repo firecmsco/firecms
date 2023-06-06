@@ -11,13 +11,9 @@ export default function PriceTextPreview({
                                          }: PropertyPreviewProps<number>) {
 
     return (
-        <Box
-            sx={{
-                fontSize: value ? undefined : "small",
-                color: value ? undefined : "#838383"
-            }}>
+        <div className={`${value ? "" : "text-sm text-[#838383]"}`}>
             {value ?? "Not available"}
-        </Box>
+        </div>
     );
 
 };

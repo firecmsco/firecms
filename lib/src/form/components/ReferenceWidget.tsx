@@ -153,15 +153,11 @@ export function ReferenceWidget<M extends Record<string, any>>({
         } else if (missingEntity) {
             body = (
                 <Tooltip title={value && value.path}>
-                    <Box
-                        display={"flex"}
-                        alignItems={"center"}
-                        p={1}
-                        flexGrow={1}>
+                    <div className="flex items-center p-4 flex-grow">
                         <ErrorIcon fontSize={"small"} color={"error"}/>
-                        <Box marginLeft={1}>Missing
-                            reference {entity && entity.id}</Box>
-                    </Box>
+                        <div className="ml-4">Missing
+                            reference {entity && entity.id}</div>
+                    </div>
                 </Tooltip>
             );
         } else {
@@ -170,20 +166,15 @@ export function ReferenceWidget<M extends Record<string, any>>({
                 const listProperties = getReferencePreviewKeys(collection, fireCMSContext.fields, previewProperties, 3);
 
                 body = (
-                    <Box display={"flex"}
-                         flexDirection={"column"}
-                         flexGrow={1}
-                         ml={1}
-                         mr={1}>
+                    <div className="flex flex-col flex-grow ml-4 mr-4">
 
                         {listProperties && listProperties.map((key) => {
                             const property = collection.properties[key as string];
                             if (!property) return null;
                             return (
-                                <Box
+                                <div
                                     key={`reference_previews_${key as string}`}
-                                    mt={0.25}
-                                    mb={0.25}>
+                                    className="mt-1 mb-1">
                                     <ErrorBoundary>{
                                         entity
                                             ? <PropertyPreview
@@ -196,16 +187,14 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                                 property={property as ResolvedProperty}
                                                 size={"tiny"}/>}
                                     </ErrorBoundary>
-                                </Box>
+                                </div>
                             );
                         })}
-                    </Box>
+                    </div>
                 );
             } else {
-                body = <Box p={1}
-                            onClick={disabled ? undefined : handleClickOpen}
-                            justifyContent="center"
-                            display="flex">
+                body = <div className="p-4 flex justify-center"
+                            onClick={disabled ? undefined : handleClickOpen}>
                     <TTypography variant={"label"}
                                  className="flex-grow text-center">No value
                         set</TTypography>
@@ -213,41 +202,35 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                           color="primary">
                         Set
                     </Button>}
-                </Box>;
+                </div>;
             }
         }
 
         return (
-            <Box
+            <div
                 onClick={disabled ? undefined : handleClickOpen}
-                display="flex">
+                className="flex">
 
-                <Box display={"flex"}
-                     flexDirection={"column"}
-                     flexGrow={1}>
+                <div className="flex flex-col flex-grow">
 
-                    <Box display={"flex"}
-                         flexDirection={"row"}
-                         flexGrow={1}>
+                    <div className="flex flex-col flex-grow">
                         <LabelWithIcon icon={<LinkIcon color={"inherit"}
                                                        fontSize={"inherit"}/>}
-                                       className="flex-grow text-text-secondary ml-1"
+                                       className=" flex-grow text-text-secondary ml-1"
                                        title={name}
                         />
 
                         {entity &&
-                            <Box
-                                alignSelf={"center"}
-                                m={1}>
+                            <div className="self-center m-4">
                                 <Tooltip title={value && value.path}>
                                     <TTypography variant={"caption"}
                                                  className={"font-mono"}>
                                         {entity.id}
                                     </TTypography>
                                 </Tooltip>
-                            </Box>}
+                            </div>}
 
-                        {!missingEntity && entity && value && <Box>
+                        {!missingEntity && entity && value && <div>
                             <Tooltip title={`See details for ${entity.id}`}>
                                 <span>
                                 <IconButton
@@ -257,10 +240,10 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                 </IconButton>
                                     </span>
                             </Tooltip>
-                        </Box>}
+                        </div>}
 
-                        {value && <Box>
-                            <Tooltip title="Clear">
+                        {value && <div>
+                            <Tooltip title=" Clear">
                                 <span>
                                 <IconButton
                                     disabled={disabled}
@@ -270,20 +253,20 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                 </IconButton>
                                 </span>
                             </Tooltip>
-                        </Box>}
+                        </div>}
 
-                    </Box>
+                    </div>
 
                     {body}
 
-                </Box>
-            </Box>
+                </div>
+            </div>
         );
     };
 
     return <TTypography variant={"label"}
                         className={`relative w-full transition-colors duration-200 ease-in border rounded ${disabled ? 'bg-opacity-50' : 'hover:bg-opacity-75'} ${disabled ? (theme.palette.mode === 'light' ? 'text-opacity-50' : 'text-white text-opacity-50') : ''} font-medium`}
-                        >
+    >
 
         {collection && buildEntityView(collection)}
 

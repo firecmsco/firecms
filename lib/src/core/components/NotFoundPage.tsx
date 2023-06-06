@@ -6,14 +6,9 @@ import TTypography from "../../migrated/TTypography";
 export function NotFoundPage() {
 
     return (
-        <Box
-            display="flex"
-            width={"100%"}
-            height={"100%"}>
-            <Box m="auto"
-                 display="flex"
-                 alignItems={"center"}
-                 flexDirection={"column"}>
+        <div className="flex w-full h-full">
+            <div className="m-auto flex items-center flex-col"
+            >
                 <TTypography variant={"h4"} align={"center"}
                              gutterBottom={true}>
                     Page not found
@@ -24,7 +19,7 @@ export function NotFoundPage() {
                 <Button
                     component={ReactLink}
                     to={"/"}>Back to home</Button>
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 }

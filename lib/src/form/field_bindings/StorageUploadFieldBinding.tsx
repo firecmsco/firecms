@@ -282,7 +282,7 @@ function FileDropComponent({
                     [classes.disabled]: disabled,
                 })}
         >
-            <Box
+            <div
                 {...droppableProvided.droppableProps}
                 ref={droppableProvided.innerRef}
                 className={`flex items-center ${multipleFilesSupported && internalValue.length ? 'overflow-auto' : ''} ${multipleFilesSupported && internalValue.length ? 'min-h-[180px]' : 'min-h-[250px]'} p-1`}
@@ -329,7 +329,7 @@ function FileDropComponent({
                             draggableId={`array_field_${name}_${entry.id}`}
                             index={index}>
                             {(provided, snapshot) => (
-                                <Box
+                                <div
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
@@ -340,7 +340,7 @@ function FileDropComponent({
                                     }}
                                 >
                                     {child}
-                                </Box>
+                                </div>
                             )}
                         </Draggable>
                     );
@@ -349,15 +349,15 @@ function FileDropComponent({
 
                 {droppableProvided.placeholder}
 
-            </Box>
+            </div>
 
-            <Box
+            <div
                 className="flex-grow min-h-[38px] box-border m-2">
                 <TTypography align={"center"}
                              variant={"label"}>
                     {helpText}
                 </TTypography>
-            </Box>
+            </div>
 
         </StyledBox>
     );
@@ -462,7 +462,7 @@ export function StorageUpload({
                 renderClone={(provided, snapshot, rubric) => {
                     const entry = value[rubric.source.index];
                     return (
-                        <Box
+                        <div
                             ref={provided.innerRef}
                             {...provided.draggableProps}
                             {...provided.dragHandleProps}
@@ -479,7 +479,7 @@ export function StorageUpload({
                                 value={entry.storagePathOrDownloadUrl as string}
                                 onRemove={onClear}
                                 size={entry.size}/>
-                        </Box>
+                        </div>
                     );
                 }}
             >

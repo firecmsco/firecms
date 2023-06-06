@@ -9,11 +9,11 @@ import React from "react";
  */
 export function CircularProgressCenter(props: CircularProgressProps) {
     return (
-        <Box
+        <div
             className="flex w-full h-screen max-h-full max-w-full">
-            <Box m="auto">
+            <div className="m-auto">
                 <CircularProgress {...props}/>
-            </Box>
-        </Box>
+            </div>
+        </div>
     );
 }

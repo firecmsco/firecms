@@ -105,17 +105,17 @@ export function FireCMSHomePage({ additionalChildren }: {
     }
 
     return (
-        <Box ref={containerRef}
+        <div ref={containerRef}
              className="py-2 overflow-auto h-full w-full">
             <Container>
 
-                <Box
+                <div
                     className="sticky py-4 transition-top duration-400 ease-in-out top-0 z-10"
                     style={{ top: direction === "down" ? -84 : 0 }}>
                     <SearchBar onTextSearch={updateSearchResults}
                                placeholder={"Search collections"}
                                large={false}/>
-                </Box>
+                </div>
 
                 <FavouritesView hidden={Boolean(filteredUrls)}/>
 
@@ -178,6 +178,6 @@ export function FireCMSHomePage({ additionalChildren }: {
                 {additionalChildren}
 
             </Container>
-        </Box>
+        </div>
     );
 }

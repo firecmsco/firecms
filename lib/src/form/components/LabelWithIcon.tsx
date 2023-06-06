@@ -23,14 +23,14 @@ export function LabelWithIcon({
                                   required
                               }: LabelWithIconProps) {
     return (
-        <Box
-            className={`inline-flex items-center mb-0.5 ${small ? "gap-1" : "gap-1.5"} ${className ?? ""}`}
-            component={"span"}>
+        <span
+            className={`inline-flex items-center mb-0.5 ${small ? "gap-1" : "gap-1.5"} ${className ?? ""}`}>
 
             {icon}
+
             <TTypography component={"span"}
                          className={`font-medium text-${small ? "base" : "sm"} origin-top-left transform ${small ? "translate-x-2 scale-75" : ""}`}>{(title ?? "") + (required ? " *" : "")}</TTypography>
 
-        </Box>
+        </span>
     );
 }

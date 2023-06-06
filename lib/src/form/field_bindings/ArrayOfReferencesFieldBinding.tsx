@@ -129,16 +129,14 @@ export function ArrayOfReferencesFieldBinding({
                                   disabled={isSubmitting}
                                   newDefaultEntry={property.of.defaultValue}/>
 
-            <Box p={1}
-                 justifyContent="center"
-                 textAlign={"left"}>
+            <div className="p-4 justify-center text-left">
                 <Button variant="outlined"
                         color="primary"
                         disabled={isSubmitting}
                         onClick={onEntryClick}>
                     Edit {property.name}
                 </Button>
-            </Box>
+            </div>
         </>}
     </>;
 

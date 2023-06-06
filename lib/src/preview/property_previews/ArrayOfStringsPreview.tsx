@@ -38,7 +38,7 @@ export function ArrayOfStringsPreview({
     const stringProperty = property.of as ResolvedStringProperty;
 
     return (
-        <Box className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
             {value &&
                 value.map((v, index) =>
                     <div key={`preview_array_strings_${propertyKey}_${index}`}>
@@ -51,6 +51,6 @@ export function ArrayOfStringsPreview({
                         </ErrorBoundary>
                     </div>
                 )}
-        </Box>
+        </div>
     );
 }

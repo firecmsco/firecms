@@ -75,14 +75,14 @@ export function TextInput<T extends string | number>({
                        onChange={onChange}/>;
 
     const inner = endAdornment
-        ? <Box className="flex items-center justify-between">
+        ? <div className="flex items-center justify-between">
             {input}
-            <Box className="mr-2 my-1">{endAdornment}</Box>
-        </Box>
+            <div className="mr-2 my-1">{endAdornment}</div>
+        </div>
         : input;
 
     return (
-        <Box
+        <div
             className="relative bg-[fieldBackground(theme)] rounded-[theme.shape.borderRadius] max-w-full min-h-[64px] hover:bg-[fieldBackgroundHover(theme)]"
             style={{ minHeight: small ? "48px" : "64px" }}>
             <InputLabel
@@ -91,35 +91,53 @@ export function TextInput<T extends string | number>({
                 variant={"filled"}>{label}</InputLabel>
 
             {inner}
-        </Box>
+        </div>
     );
 }
 
-const StyledInput = styled("input")(({ small }: {
-    small: boolean
-}) => ({
-    width: "100%",
-    outlineWidth: 0,
-    minHeight: small ? "48px" : "64px",
-    fontSize: "16px",
-    padding: "32px 12px 8px 12px",
-    font: "inherit",
-    letterSpacing: "inherit",
-    color: "currentcolor",
-    border: "0px",
-    background: "none",
-    height: "1.4375em",
-    margin: "0px",
-    WebkitTapHighlightColor: "transparent",
-    display: "block",
-    minWidth: "0px",
-    animationName: "mui-auto-fill-cancel",
-    animationDuration: "10ms",
-    "&::-webkit-inner-spin-button": {
-        WebkitAppearance: "none",
-        margin: 0
-    }
-}));
+
+function StyledInput({ small, ...props }: {
+    small: boolean,
+    ref: React.Ref<HTMLInputElement>
+} & React.InputHTMLAttributes<HTMLInputElement>) {
+    return (
+        <input
+            {...props}
+            className={`w-full outline-none ${small ? "min-h-12" : "min-h-16"} text-lg 
+      px-3 py-4 font-inherit leading-7 tracking-inherit 
+      text-current border-0 bg-none 
+      m-0 WebkitTapHighlightColor-transparent block min-w-0 
+      animation[:-webkit-auto-fill-cancel(10ms)]
+      focus::-webkit-inner-spin-button(webkit-appearance-none margin-0) ${props.className}`}
+        />
+    );
+}
+
+// const StyledInput = styled("input")(({ small }: {
+//     small: boolean
+// }) => ({
+//     width: "100%",
+//     outlineWidth: 0,
+//     minHeight: small ? "48px" : "64px",
+//     fontSize: "16px",
+//     padding: "32px 12px 8px 12px",
+//     font: "inherit",
+//     letterSpacing: "inherit",
+//     color: "currentcolor",
+//     border: "0px",
+//     background: "none",
+//     height: "1.4375em",
+//     margin: "0px",
+//     WebkitTapHighlightColor: "transparent",
+//     display: "block",
+//     minWidth: "0px",
+//     animationName: "mui-auto-fill-cancel",
+//     animationDuration: "10ms",
+//     "&::-webkit-inner-spin-button": {
+//         WebkitAppearance: "none",
+//         margin: 0
+//     }
+// }));
 
 const StyledTextArea = styled(TextareaAutosize)({
     width: "100%",

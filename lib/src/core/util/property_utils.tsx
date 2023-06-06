@@ -62,11 +62,11 @@ export function getBadgeForWidget(
     widget: FieldConfig | undefined,
     color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit"): React.ReactNode {
 
-    return <Box
+    return <div
         className="bg-[widget?.color ?? '#888'] h-8 w-8 p-1 rounded-full shadow-md text-white"
         style={{ boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)" }}>
         {getIconForWidget(widget, color, "medium")}
-    </Box>
+    </div>
 }
 
 export function getColorForProperty(property: PropertyOrBuilder): string {

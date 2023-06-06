@@ -25,21 +25,15 @@ export class ErrorBoundary extends React.Component<PropsWithChildren<Record<stri
     render() {
         if (this.state.error) {
             return (
-                <Box
-                    display={"flex"}
-                    flexDirection={"column"}
-                    m={0.5}>
-                    <Box
-                        display={"flex"}
-                        alignItems={"center"}
-                        m={0.5}>
+                <div className="flex flex-col m-2">
+                    <div className="flex items-center m-2">
                         <ErrorIcon color={"error"} fontSize={"small"}/>
-                        <Box marginLeft={1}>Error</Box>
-                    </Box>
+                        <div className="ml-4">Error</div>
+                    </div>
                     <TTypography variant={"caption"}>
                         {this.state.error?.message ?? "See the error in the console"}
                     </TTypography>
-                </Box>
+                </div>
             );
         }
 

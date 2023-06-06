@@ -1,3 +1,8 @@
+import {
+    fieldBackgroundDisabled,
+    fieldBackgroundHover
+} from "firecms/core/util/field_colors.js";
+
 /** @type {import('tailwindcss').Config} */
 const plugin = require("tailwindcss/plugin")
 
@@ -54,6 +59,13 @@ export default {
             textSecondary: "rgba(0, 0, 0, 0.6)",
             textSecondaryDark: "rgba(255, 255, 255, 0.7)",
             textLabel: "rgb(131, 131, 131)",
+            field: {
+                DEFAULT: "rgb(238 238 240)",
+                dark: "rgb(39 39 41)",
+                hover: "rgb(232 232 234)",
+                disabled: "rgb(224 224 226)",
+                disabledDark: "rgb(47 47 49)",
+            },
             gray: {
                 100: "#f8f8fa",
                 200: "#eaeff8",

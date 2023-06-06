@@ -236,9 +236,7 @@ function ArrayContainerInternal<T>({
 
                         {droppableProvided.placeholder}
 
-                        {includeAddButton && <Box p={1}
-                                                  justifyContent="center"
-                                                  textAlign={"left"}>
+                        {includeAddButton && <div className="p-4 justify-center text-left">
                             <Button variant="outlined"
                                     size={"large"}
                                     color="primary"
@@ -247,7 +245,7 @@ function ArrayContainerInternal<T>({
                                     onClick={insertInEnd}>
                                 {addLabel ?? "Add"}
                             </Button>
-                        </Box>}
+                        </div>}
                     </div>
                 )}
             </Droppable>

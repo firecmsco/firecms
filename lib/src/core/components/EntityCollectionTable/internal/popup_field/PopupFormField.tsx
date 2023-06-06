@@ -235,7 +235,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         return <></>;
 
     const form = entity && (
-        <Box
+        <div
             className={`overflow-auto rounded ${theme.shape.borderRadius} bg-${theme.palette.background.paper} ${!open ? 'hidden' : ''} cursor-grab`}>
             <Formik
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
@@ -300,23 +300,23 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                         }
                         : undefined;
 
-                    let internalForm = <><Box
+                    let internalForm = <><div
                         key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
                         className="w-[520px] max-w-full max-h-[85vh]">
                         <Form
                             onSubmit={handleSubmit}
                             noValidate>
 
-                            <Box
+                            <div
                                 className="mb-1 p-2 flex flex-col relative">
-                                <Box
+                                <div
                                     ref={innerRef}
                                     className="cursor-auto"
                                     style={{ cursor: "auto !important" }}>
                                     {fieldProps &&
                                         <PropertyFieldBinding {...fieldProps}/>}
-                                </Box>
-                            </Box>
+                                </div>
+                            </div>
 
                             <CustomDialogActions>
                                 <Button
@@ -331,7 +331,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
                         </Form>
 
-                    </Box></>;
+                    </div></>;
 
                     const plugins = fireCMSContext.plugins;
                     if (plugins) {
@@ -366,11 +366,11 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                     {savingError.message}
                 </TTypography>
             }
-        </Box>
+        </div>
     );
 
     const draggable = (
-        <Box
+        <div
             key={`draggable_${propertyKey as string}_${entity.id}_${open}`}
             className={`inline-block fixed z-50 shadow-outline rounded ${
                 theme.shape.borderRadius
@@ -381,12 +381,12 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
             <ElementResizeListener onResize={adaptResize}/>
 
-            <Box
+            <div
                 className="overflow-hidden">
 
                 {form}
 
-                <Box
+                <div
                     className="absolute -top-3.5 -right-3.5 bg-gray-500 rounded-full"
                     style={{ width: '32px', height: '32px' }}>
                     <IconButton
@@ -398,10 +398,10 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                         <ClearIcon className="text-white"
                                    fontSize={"small"}/>
                     </IconButton>
-                </Box>
-            </Box>
+                </div>
+            </div>
 
-        </Box>
+        </div>
     );
 
     return (

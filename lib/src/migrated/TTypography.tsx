@@ -13,6 +13,7 @@ export interface TypographyProps {
     variantMapping?: { [key: string]: string };
     color?: "inherit" | "initial" | "primary" | "secondary" | "error";
     onClick?: ReactEventHandler<HTMLElement>;
+    style?: React.CSSProperties;
 }
 
 const defaultVariantMapping = {
@@ -67,6 +68,7 @@ const TTypography = forwardRef<HTMLSpanElement, TypographyProps>(function Typogr
         variant = "body1",
         variantMapping = defaultVariantMapping,
         color,
+        style,
         onClick
     },
     ref
@@ -87,7 +89,8 @@ const TTypography = forwardRef<HTMLSpanElement, TypographyProps>(function Typogr
     );
 
     return (
-        <Component ref={ref} className={classes} onClick={onClick}>
+        <Component ref={ref} className={classes} onClick={onClick}
+                   style={style}>
             {children}
         </Component>
     );

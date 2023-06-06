@@ -57,8 +57,7 @@ export function UrlComponentPreview({
         />;
     } else {
         return (
-            <Box
-                component={"a"}
+            <a
                 href={url}
                 rel="noopener noreferrer"
                 target="_blank"
@@ -75,7 +74,7 @@ export function UrlComponentPreview({
                             className="max-w-full truncate rtl text-left"
                             variant={"caption"}>{hint}</TTypography>
                     </Tooltip>}
-            </Box>
+            </a>
         );
     }
 }

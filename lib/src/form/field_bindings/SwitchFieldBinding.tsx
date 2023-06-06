@@ -52,15 +52,13 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
 
             {((showError && error) ||
                     (includeDescription && (property.description || property.longDescription))) &&
-                <Box display={"flex"}
-                     className="ml-3.5"
-                >
+                <div className={"flex ml-3.5"}>
                     {includeDescription &&
                         <FieldDescription property={property}/>}
 
                     {showError &&
                         <FormHelperText error={true}>{error}</FormHelperText>}
-                </Box>}
+                </div>}
         </>
 
     );

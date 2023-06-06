@@ -24,11 +24,11 @@ export function FieldDescription<T extends CMSType>({ property }: FieldDescripti
     return (
 
         // <FormHelperText>{disabledTooltip ? disabledTooltip : property.description}</FormHelperText>
-        <Box display="flex">
+        <div className={"flex"}>
 
-            <Box flexGrow={1}>
+            <div className={"flex-grow"}>
                 <FormHelperText>{disabledTooltip || property.description}</FormHelperText>
-            </Box>
+            </div>
 
             {property.longDescription &&
                 <Tooltip title={
@@ -47,6 +47,6 @@ export function FieldDescription<T extends CMSType>({ property }: FieldDescripti
                     </IconButton>
                 </Tooltip>}
 
-        </Box>
+        </div>
     );
 }

@@ -46,7 +46,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 
     if (size !== "regular")
         return (
-            <Box className="w-full flex flex-col space-y-1 md:space-y-2">
+            <div className="w-full flex flex-col space-y-1 md:space-y-2">
                 {mapPropertyKeys.map((key, index) => (
                     <div key={`map_${key}`}>
                         <ErrorBoundary
@@ -59,19 +59,19 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                         </ErrorBoundary>
                     </div>
                 ))}
-            </Box>
+            </div>
         );
 
     return (
-        <Box
+        <div
             className="flex flex-col w-full">
             {mapPropertyKeys &&
                 mapPropertyKeys.map((key, index) => {
                     return (
-                        <Box
+                        <div
                             key={`map_preview_table_${key}}`}
                             className="flex flex-row pt-0.5 last:border-b-0 border-b border-opacity-divider pb-0.5">
-                            <Box
+                            <div
                                 key={`table-cell-title-${key}-${key}`}
                                 className="w-1/4 align-top pr-1">
                                 <TTypography variant={"caption"}
@@ -79,8 +79,8 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                              color={"secondary"}>
                                     {mapProperty.properties![key].name}
                                 </TTypography>
-                            </Box>
-                            <Box
+                            </div>
+                            <div
                                 className="flex-grow">
                                 <ErrorBoundary>
                                     <PropertyPreview
@@ -90,11 +90,11 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                                         entity={entity}
                                         size={"small"}/>
                                 </ErrorBoundary>
-                            </Box>
-                        </Box>
+                            </div>
+                        </div>
                     );
                 })}
-        </Box>
+        </div>
     );
 
 }
@@ -102,15 +102,15 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 export function KeyValuePreview({ value }: { value: any }) {
     const theme = useTheme();
     if (typeof value !== "object") return null;
-    return <Box
+    return <div
         className="flex flex-col w-full">
         {
             Object.entries(value).map(([key, childValue]) => (
-                <Box
+                <div
                     key={`map_preview_table_${key}}`}
                     className="flex flex-row pt-0.5 border-b border-opacity-divider last:border-0 last:pb-0 pb-0.5"
                     style={{ borderColor: theme.palette.divider }}>
-                    <Box
+                    <div
                         key={`table-cell-title-${key}-${key}`}
                         className="w-1/4 align-top pr-1">
                         <TTypography variant={"caption"}
@@ -118,8 +118,8 @@ export function KeyValuePreview({ value }: { value: any }) {
                                      color={"secondary"}>
                             {key}
                         </TTypography>
-                    </Box>
-                    <Box
+                    </div>
+                    <div
                         className="flex-grow">
                         <TTypography
                             variant={"caption"}
@@ -128,9 +128,9 @@ export function KeyValuePreview({ value }: { value: any }) {
                                 {JSON.stringify(childValue)}
                             </ErrorBoundary>
                         </TTypography>
-                    </Box>
-                </Box>
+                    </div>
+                </div>
             ))
         }
-    </Box>;
+    </div>;
 }

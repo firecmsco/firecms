@@ -32,7 +32,7 @@ export default function CustomShapedArrayField({
             <FormHelperText>{property.name ?? propertyKey}</FormHelperText>
 
             <Paper variant={"outlined"}>
-                <Box m={2}>
+                <div className="m-8">
                     {properties.map((property, index) => {
                             const fieldProps: PropertyFieldBindingProps<any> = {
                                 propertyKey: `${propertyKey}[${index}]`,
@@ -46,7 +46,7 @@ export default function CustomShapedArrayField({
                             );
                         }
                     )}
-                </Box>
+                </div>
             </Paper>
 
             {includeDescription &&

@@ -95,12 +95,12 @@ export function NavigationCollectionCard({
                 <CardContent
                     className="flex-grow w-full">
 
-                    <Box
+                    <div
                         className="h-10 flex items-center w-full justify-between">
 
                         <CollectionIcon color={"disabled"}/>
 
-                        <Box
+                        <div
                             className="flex items-center gap-1"
                             onClick={(event: React.MouseEvent) => {
                                 event.preventDefault();
@@ -126,9 +126,9 @@ export function NavigationCollectionCard({
                                         ? <StarIcon color={"secondary"}/>
                                         : <StarBorderIcon color={"disabled"}/>}
                                 </IconButton>}
-                        </Box>
+                        </div>
 
-                    </Box>
+                    </div>
 
                     <TTypography gutterBottom variant="h5"
                                  component="h2">
@@ -144,9 +144,9 @@ export function NavigationCollectionCard({
 
                 <CardActions style={{ alignSelf: "flex-end" }}>
 
-                    <Box p={1}>
+                    <div className={"p-4"}>
                         <ArrowForwardIcon color="primary"/>
-                    </Box>
+                    </div>
                 </CardActions>
 
             </CardActionArea>

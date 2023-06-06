@@ -179,12 +179,12 @@ export function FirebaseLoginView({
                 authController.authProviderError.code === "auth/configuration-not-found") {
                 errorView =
                     <div>
-                        <Box p={1}>
+                        <div className="p-4">
                             <ErrorView
                                 error={"You need to enable Firebase auth and the corresponding login provider in your Firebase project"}/>
-                        </Box>
+                        </div>
                         {firebaseApp &&
-                            <Box p={1}>
+                            <div className="p-4">
                                 <a href={`https://console.firebase.google.com/project/${firebaseApp.options.projectId}/authentication/providers`}
                                    rel="noopener noreferrer"
                                    target="_blank">
@@ -193,25 +193,25 @@ export function FirebaseLoginView({
                                         Open Firebase configuration
                                     </Button>
                                 </a>
-                            </Box>}
+                            </div>}
                     </div>;
             } else if (authController.authProviderError.code === "auth/invalid-api-key") {
                 errorView =
                     <div>
-                        <Box p={1}>
+                        <div className="p-4">
                             <ErrorView
                                 title={"Invalid API key"}
                                 error={"auth/invalid-api-key: Check that your Firebase config is set correctly in your `firebase-config.ts` file"}/>
-                        </Box>
+                        </div>
                     </div>;
             } else if (!ignoredCodes.includes(authController.authProviderError.code)) {
                 if (authController.authProviderError.code === "auth/multi-factor-auth-required") {
                     sendMFASms();
                 }
                 errorView =
-                    <Box p={1}>
+                    <div className="p-4">
                         <ErrorView error={authController.authProviderError}/>
-                    </Box>;
+                    </div>;
             }
         }
         return errorView;
@@ -249,20 +249,20 @@ export function FirebaseLoginView({
             mountOnEnter
             unmountOnExit>
 
-            <Box
+            <div
                 className="flex flex-col items-center justify-center min-h-screen min-w-full p-2">
                 <div id="recaptcha"></div>
-                <Box
+                <div
                     className="flex flex-col items-center w-full max-w-[480px]">
 
-                    <Box m={1} className="p-1 w-64 h-64">
+                    <div className="p-1 w-64 h-64 m-4">
                         {logoComponent}
-                    </Box>
+                    </div>
 
                     {notAllowedMessage &&
-                        <Box p={2}>
+                        <div className="p-8">
                             <ErrorView error={notAllowedMessage}/>
-                        </Box>}
+                        </div>}
 
                     {buildErrorView()}
 
@@ -293,13 +293,13 @@ export function FirebaseLoginView({
                                 onClick={authController.anonymousLogin}/>}
 
                         {allowSkipLogin &&
-                            <Box m={1}>
+                            <div className={"m-4"}>
                                 <Button
                                     disabled={disabled}
                                     onClick={authController.skipLogin}>
                                     Skip login
                                 </Button>
-                            </Box>
+                            </div>
                         }
 
                     </>}
@@ -319,8 +319,8 @@ export function FirebaseLoginView({
 
                     {!passwordLoginSelected && !phoneLoginSelected && additionalComponent}
 
-                </Box>
-            </Box>
+                </div>
+            </div>
         </Fade>
     );
 }
@@ -337,21 +337,21 @@ export function LoginButton({
     disabled?: boolean
 }) {
     return (
-        <Box m={0.5} width={"100%"}>
+        <div className="m-2 w-full">
             <Button fullWidth
                     variant="outlined"
                     disabled={disabled}
                     onClick={onClick}>
-                <Box
+                <div
                     className="p-1 flex w-48 h-8 items-center justify-items-center">
-                    <Box
+                    <div
                         className="flex flex-col w-8 items-center justify-items-center">
                         {icon}
-                    </Box>
-                    <Box className="flex-grow pl-2 text-center">{text}</Box>
-                </Box>
+                    </div>
+                    <div className="flex-grow pl-2 text-center">{text}</div>
+                </div>
             </Button>
-        </Box>
+        </div>
     )
 }
 
@@ -389,9 +389,9 @@ function PhoneLoginForm({
     return (
         <form onSubmit={handleSubmit}>
             {isInvalidCode &&
-                <Box p={2}>
+                <div className="p-8">
                     <ErrorView error={"Invalid confirmation code"}/>
-                </Box>}
+                </div>}
 
             <div id={RECAPTCHA_CONTAINER_ID}/>
 
@@ -431,7 +431,7 @@ function PhoneLoginForm({
                 }
 
                 <Grid item xs={12}>
-                    <Box className="flex justify-end items-center w-full">
+                    <div className="flex justify-end items-center w-full">
 
                         {authController.authLoading &&
                             <CircularProgress className="p-1" size={16}
@@ -441,7 +441,7 @@ function PhoneLoginForm({
                         <Button type="submit">
                             {"Ok"}
                         </Button>
-                    </Box>
+                    </div>
                 </Grid>
 
             </Grid>
@@ -611,7 +611,7 @@ function LoginForm({
                     </Grid>
 
                     <Grid item xs={12}>
-                        <Box className={`${
+                        <div className={`${
                             registrationMode && disableSignupScreen ? "hidden" : "flex"
                         } justify-end items-center w-full`}>
 
@@ -623,7 +623,7 @@ function LoginForm({
                             <Button type="submit">
                                 {button}
                             </Button>
-                        </Box>
+                        </div>
                     </Grid>
                 </Grid>
             </form>

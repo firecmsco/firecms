@@ -273,9 +273,9 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
 
     return (
 
-        <Box className="flex flex-col h-full">
+        <div className="flex flex-col h-full">
 
-            <Box className="flex-grow">
+            <div className="flex-grow">
                 {entitiesDisplayedFirst &&
                     <EntityCollectionTable fullPath={fullPath}
                                            onEntityClick={onEntityClick}
@@ -295,7 +295,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
                                                onClear={onClear}/>
                                            }
                     />}
-            </Box>
+            </div>
             <CustomDialogActions translucent={false}>
                 {description &&
                     <TTypography variant={"body2"}
@@ -309,7 +309,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
                     Done
                 </Button>
             </CustomDialogActions>
-        </Box>
+        </div>
 
     );
 

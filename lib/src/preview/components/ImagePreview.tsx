@@ -51,7 +51,7 @@ export function ImagePreview({
         };
 
     return (
-        <Box
+        <div
             className="relative flex items-center justify-center max-w-full max-h-full"
             style={{ width: imageSize, height: imageSize }}
             key={"image_preview_" + url}
@@ -65,7 +65,7 @@ export function ImagePreview({
             {onHover && <>
 
                 {navigator && <Tooltip title="Copy url to clipboard">
-                    <Box
+                    <div
                         className="rounded-full absolute bottom-[-4px] right-8 bg-[theme.palette.background.default]">
                         <IconButton
                             size={"small"}
@@ -76,7 +76,7 @@ export function ImagePreview({
                             <ContentCopyIcon htmlColor={"#666"}
                                              fontSize={"small"}/>
                         </IconButton>
-                    </Box>
+                    </div>
                 </Tooltip>}
 
                 <Tooltip title="Open image in new tab">
@@ -101,6 +101,6 @@ export function ImagePreview({
                 </Tooltip>
             </>
             }
-        </Box>
+        </div>
     );
 }

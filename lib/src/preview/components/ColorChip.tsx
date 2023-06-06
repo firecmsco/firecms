@@ -58,12 +58,12 @@ export function ColorChip({
     const usedColorScheme = colorScheme ?? getColorSchemeForSeed(label);
     return (
         <Chip
-            className={`w-full ${
-                error || !usedColorScheme ? 'bg-gray-200 text-red-500' : ''
+            className={`w-fit ${
+                error || !usedColorScheme ? "bg-gray-200 text-red-500" : ""
             } font-normal`}
             style={{
                 backgroundColor: error || !usedColorScheme ? undefined : usedColorScheme.color,
-                color: error || !usedColorScheme ? undefined : usedColorScheme.text,
+                color: error || !usedColorScheme ? undefined : usedColorScheme.text
             }}
             size={small ? "small" : "medium"}
             variant={outlined ? "outlined" : "filled"}

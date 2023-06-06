@@ -44,7 +44,7 @@ export function SearchBar({
     }, []);
 
     return (
-        <Box className={`relative flex items-center ${
+        <div className={`relative flex items-center ${
             large ? "h-14" : "h-10"
         } w-full min-w-[200px] rounded ${
             theme.palette.mode === "light"
@@ -55,10 +55,10 @@ export function SearchBar({
                 ? "bg-[darken(theme.palette.background.default, 0.08)]"
                 : "bg-[darken(theme.palette.background.default, 0.3)]"
         } sm:w-auto`}>
-            <Box
+            <div
                 className="p-0 px-8 h-full absolute pointer-events-none flex items-center justify-center">
                 <SearchIcon htmlColor={"#888"}/>
-            </Box>
+            </div>
             <InputBase
                 placeholder={placeholder}
                 value={searchText}
@@ -91,6 +91,6 @@ export function SearchBar({
                     : <div style={{ width: 26 }}/>
                 }
             />
-        </Box>
+        </div>
     );
 }

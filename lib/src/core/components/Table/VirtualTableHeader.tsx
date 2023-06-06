@@ -105,7 +105,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
         return (
             <ErrorBoundary>
                 <Grid
-                    className={`w-${column.width} py-0 px-3 h-full text-xs uppercase font-semibold relative select-none ${
+                    className={`py-0 px-3 h-full text-xs uppercase font-semibold relative select-none ${
                         column.frozen ? "sticky left-0 z-10" : "relative z-0"
                     }`}
                     style={{
@@ -116,6 +116,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                         transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
                         fontSize: "0.750rem",
                         left: column.frozen ? 0 : undefined,
+                        minWidth: column.width,
+                        maxWidth: column.width,
                     }}
                     ref={ref}
                     wrap={"nowrap"}
@@ -127,12 +129,12 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     <Grid item xs={true}
                           className="overflow-hidden flex-shrink">
-                        <Box
-                            className="flex items-center justify-{column.headerAlign} flex-row">
-                            <Box className="pt-1">
+                        <div
+                            className={`flex items-center justify-${column.headerAlign} flex-row`}>
+                            <div className="pt-1">
                                 {column.icon && column.icon(onHover || openFilter)}
-                            </Box>
-                            <Box
+                            </div>
+                            <div
                                 className="truncate -webkit-box w-full mx-1 overflow-hidden"
                                 style={{
                                     WebkitBoxOrient: "vertical",
@@ -140,9 +142,9 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                     justifyContent: column.align,
                                 }}>
                                 {column.title}
-                            </Box>
+                            </div>
 
-                        </Box>
+                        </div>
                     </Grid>
 
                     {column.sortable && (sort || hovered || openFilter) &&
@@ -185,7 +187,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                         </Badge>
                     </Grid>}
 
-                    {column.resizable && <Box
+                    {column.resizable && <div
                         ref={resizeHandleRef}
                         className={`absolute h-full w-[4px] top-0 right-0 cursor-col-resize ${
                             hovered
@@ -269,31 +271,29 @@ function FilterForm<M>({
                 horizontal: "right"
             }}
         >
-            <Box className="bg-background-default">
-                <Box className="p-2 text-xs font-semibold uppercase">
+            <div className="bg-background-default">
+                <div className="p-2 text-xs font-semibold uppercase">
                     {column.title ?? id}
-                </Box>
+                </div>
                 <Divider/>
-                {filterField && <Box p={2}>
+                {filterField && <div className="p-8">
                     {filterField}
-                </Box>}
-                <Box display="flex"
-                     justifyContent="flex-end"
-                     m={2}>
-                    <Box mr={1}>
+                </div>}
+                <div className="flex justify-end m-8">
+                    <div className="mr-4">
                         <Button
                             disabled={!filterIsSet}
                             color="primary"
                             type="reset"
                             aria-label="filter clear"
                             onClick={reset}>Clear</Button>
-                    </Box>
+                    </div>
                     <Button
                         variant="outlined"
                         color="primary"
                         onClick={submit}>Filter</Button>
-                </Box>
-            </Box>
+                </div>
+            </div>
         </Popover>
     );
 

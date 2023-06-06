@@ -199,9 +199,7 @@ export function ArrayContainer<T>({
 
                         {droppableProvided.placeholder}
 
-                        {includeAddButton && <Box p={1}
-                                                  justifyContent="center"
-                                                  textAlign={"left"}>
+                        {includeAddButton && <div className="p-4 justify-center text-left">
                             <Button
                                 variant={small ? "text" : "outlined"}
                                 size={small ? "small" : "large"}
@@ -211,7 +209,7 @@ export function ArrayContainer<T>({
                                 onClick={insertInEnd}>
                                 {addLabel ?? "Add"}
                             </Button>
-                        </Box>}
+                        </div>}
                     </div>
                 )}
             </Droppable>
@@ -251,7 +249,7 @@ export function ArrayContainerItem({
     const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
     const theme = useTheme();
-    return <Box
+    return <div
         onMouseEnter={setOnHoverTrue}
         onMouseMove={setOnHoverTrue}
         onMouseLeave={setOnHoverFalse}
@@ -262,15 +260,13 @@ export function ArrayContainerItem({
             (isDragging || onHover) ? fieldBackgroundSubtleHover(theme) : ''
         } mb-1 rounded-${theme.shape.borderRadius} opacity-100`}
     >
-        <Box
-            display="flex"
-            alignItems={"start"}>
-            <Box ref={measureRef}
-                 flexGrow={1}
-                 width={"calc(100% - 48px)"}
+        <div
+            className="flex items-start">
+            <div ref={measureRef}
+                 className="flex-grow w-[calc(100%-48px)]"
             >
                 {buildEntry(index, internalId)}
-            </Box>
+            </div>
             <ArrayItemOptions direction={small ? "row" : "column"}
                               disabled={disabled}
                               remove={remove}
@@ -278,8 +274,8 @@ export function ArrayContainerItem({
                               provided={provided}
                               contentOverflow={contentOverflow}
                               copy={copy}/>
-        </Box>
-    </Box>;
+        </div>
+    </div>;
 }
 
 export function ArrayItemOptions({
@@ -311,10 +307,7 @@ export function ArrayItemOptions({
         setAnchorEl(null);
     }, [setAnchorEl]);
 
-    return <Box display="flex"
-                flexDirection={direction === "row" ? "row-reverse" : "column"}
-                className="pl-1 pt-1"
-                alignItems="center">
+    return <div className={`pl-1 pt-1 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}>
         <div
             {...provided.dragHandleProps}>
             <Tooltip
@@ -385,7 +378,7 @@ export function ArrayItemOptions({
                 </MenuItem>
 
             </Menu></>}
-    </Box>;
+    </div>;
 }
 
 function arrayMove(value: any[], sourceIndex: number, destinationIndex: number) {

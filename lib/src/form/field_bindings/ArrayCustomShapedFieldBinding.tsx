@@ -55,9 +55,9 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             partOfArray: true,
             autoFocus: false
         };
-        return <Box key={`custom_shaped_array_${index}`} pb={1}>
+        return <div key={`custom_shaped_array_${index}`} className="pb-4">
             <PropertyFieldBinding {...fieldProps}/>
-        </Box>;
+        </div>;
     });
 
     return (

@@ -58,16 +58,16 @@ export function Drawer({
     const ungroupedNavigationViews = Object.values(navigationEntries).filter(e => !e.group);
 
     const buildGroupHeader = useCallback((group?: string) => {
-        if (!drawerOpen) return <Box className="h-4"/>;
-        return <Box pt={2} pl={2} pr={2} pb={0.5}
-                    className="flex flex-row items-center">
+        if (!drawerOpen) return <div className="h-4"/>;
+        return <div
+                    className="pt-8 pl-8 pr-8 pb-2 flex flex-row items-center">
             <TTypography variant={"caption"}
                          color={"secondary"}
                          className="weight-500 flex-grow">
                 {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
             </TTypography>
 
-        </Box>;
+        </div>;
     }, [drawerOpen]);
 
     const onClick = (view: TopNavigationEntry) => {

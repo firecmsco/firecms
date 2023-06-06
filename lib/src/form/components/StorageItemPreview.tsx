@@ -28,7 +28,7 @@ export function StorageItemPreview({
                                    }: StorageItemPreviewProps) {
 
     return (
-        <Box m={1} position={"relative"}>
+        <div className={"relative m-4"}>
 
             <Paper
                 elevation={0}
@@ -36,7 +36,7 @@ export function StorageItemPreview({
                 variant={"outlined"}>
 
                 {!disabled &&
-                    <Box
+                    <div
                         className="absolute rounded-full -top-2 -right-2 z-10 bg-white">
 
                         <Tooltip
@@ -50,7 +50,7 @@ export function StorageItemPreview({
                                 <RemoveIcon fontSize={"small"}/>
                             </IconButton>
                         </Tooltip>
-                    </Box>
+                    </div>
                 }
 
                 {value &&
@@ -65,7 +65,7 @@ export function StorageItemPreview({
 
             </Paper>
 
-        </Box>
+        </div>
     );
 
 }

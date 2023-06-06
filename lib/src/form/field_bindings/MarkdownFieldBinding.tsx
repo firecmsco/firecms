@@ -94,15 +94,15 @@ export function MarkdownFieldBinding({
                           setInternalValue(text ?? null);
                       }}/>
 
-            <Box display={"flex"}>
-                <Box flexGrow={1}>
+            <div className={"flex"}>
+                <div className={"flex-grow"}>
                     {showError &&
                         typeof error === "string" &&
                         <FormHelperText error={true}>{error}</FormHelperText>}
                     {includeDescription &&
                         <FieldDescription property={property}/>}
-                </Box>
-            </Box>
+                </div>
+            </div>
 
         </StyledFormControl>
     );

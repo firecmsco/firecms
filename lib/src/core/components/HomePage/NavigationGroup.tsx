@@ -33,9 +33,9 @@ export function NavigationGroup({
                 {group?.toUpperCase() ?? "Ungrouped views".toUpperCase()}
             </TTypography>}>
 
-            <Box mb={2}>
+            <div className="mb-8">
                 {children}
-            </Box>
+            </div>
         </ExpandablePanel>
     );
 }

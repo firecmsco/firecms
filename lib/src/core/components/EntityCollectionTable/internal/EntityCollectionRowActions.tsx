@@ -109,7 +109,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
     }, [entity, toggleEntitySelection]);
 
     return (
-        <Box
+        <div
             onClick={onClick}
             className={`h-full flex items-center justify-center flex-col ${frozen ? 'sticky' : ''} ${frozen ? 'left-0' : ''} bg-opacity-96 z-10`}
             style={{
@@ -122,7 +122,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
             }}>
 
             {(editEnabled || deleteEnabled || selectionEnabled) &&
-                <Box className="w-34 flex justify-center">
+                <div className="w-34 flex justify-center">
                     {editEnabled &&
                         <Tooltip title={`Edit ${entity.id}`}>
                             <IconButton
@@ -175,10 +175,10 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
 
                     </Menu>}
 
-                </Box>}
+                </div>}
 
             {!hideId && size !== "xs" && (
-                <Box className="w-[138px] text-center overflow-hidden truncate">
+                <div className="w-[138px] text-center overflow-hidden truncate">
 
                     {entity
                         ? <TTypography
@@ -187,10 +187,10 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                             color={"secondary"}> {entity.id} </TTypography>
                         : <Skeleton variant="text"/>
                     }
-                </Box>
+                </div>
             )}
 
-        </Box>
+        </div>
     );
 
 }

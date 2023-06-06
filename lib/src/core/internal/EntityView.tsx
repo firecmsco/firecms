@@ -293,11 +293,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     console.error("customView.Builder is not defined");
                     return null;
                 }
-                return <Box
-                    className={`w-[${ADDITIONAL_TAB_WIDTH}] h-full overflow-auto border-l border-${theme.palette.divider} lg:border-l-0 lg:w-[${CONTAINER_FULL_WIDTH}]`}
+                return <div
+                    className={`w-[${ADDITIONAL_TAB_WIDTH}] flex-grow h-full overflow-auto border-l border-${theme.palette.divider} lg:border-l-0 lg:w-[${CONTAINER_FULL_WIDTH}]`}
                     key={`custom_view_${customView.path}`}
-                    role="tabpanel"
-                    flexGrow={1}>
+                    role="tabpanel">
                     <ErrorBoundary>
                         <Builder
                             collection={collection}
@@ -305,7 +304,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                             modifiedValues={modifiedValues ?? usedEntity?.values}
                         />
                     </ErrorBoundary>
-                </Box>;
+                </div>;
             }
         ).filter(Boolean);
 
@@ -317,11 +316,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 if (tabsPosition !== colIndex + customViewsCount)
                     return null;
                 return (
-                    <Box
-                        className={`h-full overflow-auto border-l border-opacity-50 border-${theme.palette.divider} ${theme.breakpoints.down("lg") ? `border-l-0 w-${CONTAINER_FULL_WIDTH}` : `w-${ADDITIONAL_TAB_WIDTH}`}`}
+                    <div
+                        className={`flex-grow h-full overflow-auto border-l border-opacity-50 border-${theme.palette.divider} ${theme.breakpoints.down("lg") ? `border-l-0 w-${CONTAINER_FULL_WIDTH}` : `w-${ADDITIONAL_TAB_WIDTH}`}`}
                         key={`subcol_${subcollection.alias ?? subcollection.path}`}
-                        role="tabpanel"
-                        flexGrow={1}>
+                        role="tabpanel">
 
                         {loading && <CircularProgressCenter/>}
 
@@ -331,19 +329,16 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                     fullPath={fullPath}
                                     isSubCollection={true}
                                     {...subcollection}/>
-                                : <Box
-                                    className="w-full h-full p-3"
-                                    display={"flex"}
-                                    alignItems={"center"}
-                                    justifyContent={"center"}>
+                                : <div
+                                    className="flex items-center justify-center w-full h-full p-3">
                                     <TTypography variant={"label"}>
                                         You need to save your entity before
                                         adding additional collections
                                     </TTypography>
-                                </Box>)
+                                </div>)
                         }
 
-                    </Box>
+                    </div>
                 );
             }
         ).filter(Boolean);
@@ -463,10 +458,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         );
 
         const header = (
-            <Box
+            <div
                 className={`pl-2 pr-2 pt-1 flex items-end ${theme.palette.mode === "light" ? "bg-" + theme.palette.background.default : "bg-" + theme.palette.background.paper}`}>
 
-                <Box
+                <div
                     className="pb-1 self-center">
                     <IconButton onClick={() => {
                         onClose?.();
@@ -475,14 +470,14 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                 size="large">
                         <CloseIcon/>
                     </IconButton>
-                </Box>
+                </div>
 
-                <Box flexGrow={1}/>
+                <div className={"flex-grow"}/>
 
-                {loading && <Box
+                {loading && <div
                     className="self-center">
                     <CircularProgress size={16} thickness={8}/>
-                </Box>}
+                </div>}
 
                 <Tabs
                     value={tabsPosition + 1}
@@ -510,12 +505,12 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     {subcollectionTabs}
 
                 </Tabs>
-            </Box>
+            </div>
 
         );
 
         return (
-            <Box
+            <div
                 className="flex flex-col h-full w-full transition-width duration-250 ease-in-out">
                 {
                     <>
@@ -524,7 +519,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
                         <Divider/>
 
-                        <Box
+                        <div
                             className="flex-grow h-full flex overflow-auto flex-row"
                             style={{
                                 width: `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedFormWidth})`,
@@ -534,8 +529,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                 }
                             }}>
 
-                            <Box className="relative max-w-full">
-                                <Box
+                            <div className="relative max-w-full">
+                                <div
                                     role="tabpanel"
                                     hidden={!mainViewVisible}
                                     id={`form_${path}`}
@@ -549,19 +544,19 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                         ? <CircularProgressCenter/>
                                         : form}
 
-                                </Box>
-                            </Box>
+                                </div>
+                            </div>
 
                             {customViewsView}
 
                             {subCollectionsViews}
 
-                        </Box>
+                        </div>
 
                     </>
                 }
 
-            </Box>
+            </div>
         );
     },
     equal

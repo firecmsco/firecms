@@ -132,7 +132,7 @@ function SideDialogView({
                 offsetPosition={offsetPosition}
             >
                 {panel &&
-                    <Box
+                    <div
                         className="flex flex-col h-full transition-width duration-250 ease-in-out"
                         style={{
                             width: panel.width,
@@ -142,7 +142,7 @@ function SideDialogView({
                         <ErrorBoundary>
                             {panel.component}
                         </ErrorBoundary>
-                    </Box>}
+                    </div>}
 
                 {!panel && <div style={{ width }}/>}
 

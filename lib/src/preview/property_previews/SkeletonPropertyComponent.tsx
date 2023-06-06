@@ -106,7 +106,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
 
     if (size !== "regular")
         return (
-            <Box
+            <div
                 className="w-full flex flex-col space-y-[theme.spacing(1)] md:space-y-[theme.spacing(0.5)]"
             >
                 {mapPropertyKeys.map((key, index) => (
@@ -117,7 +117,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
                                 size={"small"}/>}
                     </div>
                 ))}
-            </Box>
+            </div>
         );
 
     return (
@@ -282,10 +282,10 @@ function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize 
 function renderUrlFile(size: PreviewSize) {
 
     return (
-        <Box
+        <div
             className={`w-${getThumbnailMeasure(size)} h-${getThumbnailMeasure(size)}`}>
             {renderSkeletonIcon()}
-        </Box>
+        </div>
     );
 }
 

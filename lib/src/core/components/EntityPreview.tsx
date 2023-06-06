@@ -100,7 +100,7 @@ export function EntityPreview<M extends Record<string, any>>(
     return (
         <>
 
-            <Box
+            <div
                 className="w-full mt-12 pl-16 pr-16 pt-12 lg:mt-8 lg:pl-8 lg:pr-8 lg:pt-8 md:mt-4 md:pl-8 md:pr-8 md:pt-8">
 
                 <TTypography
@@ -108,7 +108,7 @@ export function EntityPreview<M extends Record<string, any>>(
                     variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
                 </TTypography>
 
-            </Box>
+            </div>
 
             <StyledTableContainer>
                 <Table aria-label="entity table">
@@ -128,7 +128,7 @@ export function EntityPreview<M extends Record<string, any>>(
                                 {getIdIcon("disabled", "small")}
                             </TableCell>
                             <TableCell className={classes.valuePreview}>
-                                <Box display="flex" alignItems="center">
+                                <div className="flex items-center">
                                     {entity.id}
                                     {appConfig?.entityLinkBuilder &&
                                         <a href={appConfig.entityLinkBuilder({ entity })}
@@ -141,7 +141,7 @@ export function EntityPreview<M extends Record<string, any>>(
                                                     fontSize={"small"}/>
                                             </IconButton>
                                         </a>}
-                                </Box>
+                                </div>
                             </TableCell>
                         </TableRow>
 

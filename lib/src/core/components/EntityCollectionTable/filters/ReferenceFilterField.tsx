@@ -130,7 +130,7 @@ export function ReferenceFilterField({
 
     const buildEntry = (reference: EntityReference) => {
         return (
-            <Box
+            <div
                 className="mb-0.5"
                 onMouseEnter={() => setOnHover(true)}
                 onMouseMove={() => setOnHover(true)}
@@ -144,17 +144,14 @@ export function ReferenceFilterField({
                     onHover={onHover}
                     allowEntityNavigation={false}
                 />
-            </Box>
+            </div>
         );
     };
 
     return (
 
-        <Box
-            display={"flex"}
-            width={440}
-            flexDirection={"row"}>
-            <Box width={120}>
+        <div className="flex w-[440px] flex-row">
+            <div className="w-[120px]">
                 <FormControl fullWidth>
                     <MuiSelect value={operation}
                                fullWidth
@@ -169,18 +166,18 @@ export function ReferenceFilterField({
 
                     </MuiSelect>
                 </FormControl>
-            </Box>
+            </div>
 
-            <Box flexGrow={1} ml={1}>
+            <div className="flex-grow ml-4">
 
                 <FormControl fullWidth
                              className="h-full">
-                    {internalValue && Array.isArray(internalValue) && <Box>
+                    {internalValue && Array.isArray(internalValue) && <div>
                         {internalValue.map((ref, index) => buildEntry(ref))}
-                    </Box>}
-                    {internalValue && !Array.isArray(internalValue) && <Box>
+                    </div>}
+                    {internalValue && !Array.isArray(internalValue) && <div>
                         {buildEntry(internalValue)}
-                    </Box>}
+                    </div>}
                     {(!internalValue || (Array.isArray(internalValue) && internalValue.length === 0)) &&
                         <Button onClick={doOpenDialog}
                                 className="h-full">
@@ -188,9 +185,9 @@ export function ReferenceFilterField({
                         </Button>
                     }
                 </FormControl>
-            </Box>
+            </div>
 
-        </Box>
+        </div>
     );
 
 }

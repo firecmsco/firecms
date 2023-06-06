@@ -164,7 +164,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                       });
                                   }}/>;
         } else if (dataType === "array") {
-            return <Box
+            return <div
                 className="ml-1 pl-1 border-l border-solid border-current"
                 style={{ borderWidth: '1px' }}>
                 <ArrayContainer value={entryValue}
@@ -196,9 +196,9 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                         }}
                                     />
                                 }}/>
-            </Box>;
+            </div>;
         } else if (dataType === "map") {
-            return <Box
+            return <div
                 className="ml-1 pl-1 border-l border-solid border-opacity-25"
                 style={{ borderColor: 'currentColor' }}>
                 <MapEditView value={entryValue}
@@ -209,7 +209,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                      [fieldKey]: updatedValue
                                  });
                              }}/>
-            </Box>;
+            </div>;
         } else {
             return <TTypography
                 variant={"caption"}>
@@ -227,7 +227,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
             <TTypography key={rowId.toString()}
                          component={"div"}
                          className="font-mono flex flex-row space-x-1 items-center">
-                <Box className="w-[200px] max-w-[25%]">
+                <div className="w-[200px] max-w-[25%]">
                     <TextInput
                         value={fieldKey}
                         disabled={disabled || Boolean(entryValue)}
@@ -235,11 +235,11 @@ function MapKeyValueRow<T extends Record<string, any>>({
                         onChange={(event) => {
                             onFieldKeyChange(event.target.value);
                         }}/>
-                </Box>
+                </div>
 
-                <Box className="flex-grow">
+                <div className="flex-grow">
                     {(dataType !== "map" && dataType !== "array") && buildInput(entryValue, fieldKey, dataType)}
-                </Box>
+                </div>
 
                 <IconButton size={"small"}
                             className="bg-background-default h-7 w-7"
@@ -348,13 +348,13 @@ function ArrayKeyValueRow<T>({
                 Arrays of arrays are not supported.
             </TTypography>;
         } else if (dataType === "map") {
-            return <Box className="ml-1 pl-1 border-l border-solid"
+            return <div className="ml-1 pl-1 border-l border-solid"
                         style={{ borderColor: 'currentColor' }}>
                 <MapEditView value={entryValue}
                              setValue={(updatedValue) => {
                                  setValue(updatedValue);
                              }}/>
-            </Box>;
+            </div>;
         } else {
             return <TTypography
                 variant={"caption"}>
@@ -368,9 +368,9 @@ function ArrayKeyValueRow<T>({
                          component={"div"}
                          className="font-mono flex min-h-12 flex-row space-x-1 items-center">
 
-                <Box className="flex-grow">
+                <div className="flex-grow">
                     {selectedDataType !== "map" && buildInput(value, selectedDataType)}
-                </Box>
+                </div>
 
                 <IconButton size={"small"}
                             className="bg-background-default h-7 w-7"
@@ -464,7 +464,7 @@ function MapEditView<T extends Record<string, any>>({
         })
     };
 
-    return <Box className="py-1 flex flex-col space-y-1">
+    return <div className="py-1 flex flex-col space-y-1">
         {internalState
             .map(([rowId, { key: fieldKey, dataType }], index) => {
                     const entryValue = fieldKey ? value[fieldKey] : "";
@@ -525,9 +525,7 @@ function MapEditView<T extends Record<string, any>>({
                 }
             )}
 
-        <Box p={1}
-             justifyContent="center"
-             textAlign={"left"}>
+        <div className="p-4 justify-center text-left">
             <Button variant={"text"}
                     size={"small"}
                     color="primary"
@@ -547,9 +545,9 @@ function MapEditView<T extends Record<string, any>>({
                     }>
                 {fieldName ? `Add to ${fieldName}` : "Add"}
             </Button>
-        </Box>
+        </div>
 
-    </Box>;
+    </div>;
 }
 
 function getRandomId() {

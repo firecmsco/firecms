@@ -235,7 +235,7 @@ function StorageUpload({
     const theme = useTheme();
 
     return (
-        <Box {...rootProps}
+        <div {...rootProps}
              onMouseEnter={() => setOnHover(true)}
              onMouseMove={() => setOnHover(true)}
              onMouseLeave={() => setOnHover(false)}
@@ -277,7 +277,7 @@ function StorageUpload({
             })
             }
 
-            {!internalValue && <Box
+            {!internalValue && <div
                 className="flex-grow m-2 max-w-[200px]"
                 onClick={open}>
                 <TTypography
@@ -286,7 +286,7 @@ function StorageUpload({
                     align={"center"}>
                     {helpText}
                 </TTypography>
-            </Box>}
+            </div>}
 
             {onHover &&
                 <IconButton
@@ -298,7 +298,7 @@ function StorageUpload({
                 </IconButton>
             }
 
-        </Box>
+        </div>
     );
 
 }
@@ -318,9 +318,8 @@ export function TableStorageItemPreview({
                                         }: TableStorageItemPreviewProps) {
 
     return (
-        <Box
-            m={1}
-            position={"relative"}
+        <div
+            className={"relative m-4"}
         >
 
             {value &&
@@ -334,7 +333,7 @@ export function TableStorageItemPreview({
                 </ErrorBoundary>
             }
 
-        </Box>
+        </div>
     );
 
 }

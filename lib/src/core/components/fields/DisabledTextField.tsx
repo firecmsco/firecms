@@ -16,16 +16,16 @@ export function DisabledTextField<T extends string | number>({
 
     const theme = useTheme();
 
-    return <Box
+    return <div
         className={`relative bg-${fieldBackgroundDisabled} rounded-${theme.shape.borderRadius} w-full ${small ? 'h-12' : 'h-16'} text-${theme.palette.text.disabled}`}>
         <InputLabel
             shrink={Boolean(value)}
             className="absolute text-gray-400 left-0 top-4 pointer-events-none"
             variant={"filled"}>{label}</InputLabel>
-        <Box
+        <div
             className={`p-8 overflow-auto ${label ? "pt-8 pb-2" : small ? "p-3" : "px-3"}`}>
             <TTypography variant={"body1"}
                          className="font-inherit">{value}</TTypography>
-        </Box>
-    </Box>;
+        </div>
+    </div>;
 }

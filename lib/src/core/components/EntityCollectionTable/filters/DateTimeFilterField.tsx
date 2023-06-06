@@ -71,8 +71,8 @@ export function DateTimeFilterField({
 
     return (
 
-        <Box display={"flex"} width={440} alignItems={"center"}>
-            <Box width={80}>
+        <div className="flex w-[440px] items-center">
+            <div className="w-[80px]">
                 <FormControl fullWidth>
                     <MuiSelect value={operation}
                                fullWidth
@@ -87,9 +87,9 @@ export function DateTimeFilterField({
 
                     </MuiSelect>
                 </FormControl>
-            </Box>
+            </div>
 
-            <Box flexGrow={1} ml={1}>
+            <div className="flex-grow ml-4">
 
                 <DateTimeField
                     mode={mode}
@@ -100,9 +100,9 @@ export function DateTimeFilterField({
                     clearable={true}
                 />
 
-            </Box>
+            </div>
 
-        </Box>
+        </div>
     );
 
 }

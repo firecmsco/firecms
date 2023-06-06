@@ -52,7 +52,7 @@ export function DateTimeField({
                                }),
                                disableUnderline: true,
                                endAdornment: clearable
-                                   ? <Box
+                                   ? <div
                                        className="pr-8 space-x-8">
                                        <IconButton
                                            className="absolute right-14 top-2"
@@ -60,7 +60,7 @@ export function DateTimeField({
                                            <ClearIcon/>
                                        </IconButton>
                                        {params.InputProps?.endAdornment}
-                                   </Box>
+                                   </div>
                                    : null
                            }}
                            variant={"filled"}/>

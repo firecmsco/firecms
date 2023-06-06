@@ -505,7 +505,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 }}
             >
 
-                <Box className="h-full w-full flex flex-col bg-paper"
+                <div className="h-full w-full flex flex-col bg-paper"
                      style={{ backgroundColor: theme.palette.background.paper }}>
 
                     <CollectionTableToolbar
@@ -520,7 +520,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         actions={actions}
                         loading={dataLoading}/>
 
-                    <Box className="flex-grow">
+                    <div className="flex-grow">
                         <VirtualTable
                             data={data}
                             columns={columns}
@@ -541,7 +541,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             checkFilterCombination={checkFilterCombination}
                             createFilterField={createFilterField}
                         />
-                    </Box>
+                    </div>
 
                     <PopupFormField
                         key={`popup_form_${popupCell?.columnIndex}_${popupCell?.entity?.id}`}
@@ -558,7 +558,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         onCellValueChange={onValueChange}
                     />
 
-                </Box>
+                </div>
             </EntityCollectionTableContext.Provider>
         );
 

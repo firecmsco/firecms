@@ -100,7 +100,7 @@ export const VirtualTableHeaderRow = ({
     }, [setCursorDocument]);
 
     return (
-        <Box
+        <div
             className="sticky min-w-full bg-background-default flex w-fit-content flex-row top-0 left-0 z-2 h-12 border-b border-divider">
             {columns.map((c, columnIndex) => {
                 const column = columns[columnIndex];
@@ -123,6 +123,6 @@ export const VirtualTableHeaderRow = ({
                         createFilterField={createFilterField}/>
                 </ErrorBoundary>;
             })}
-        </Box>
+        </div>
     );
 };

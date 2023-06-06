@@ -309,15 +309,15 @@ export const TableCell = React.memo<TableCellProps>(
                 </ErrorBoundary>
 
                 {disabled && onHover && disabledTooltip &&
-                    <Box className="absolute top-1 right-1 text-xs">
+                    <div className="absolute top-1 right-1 text-xs">
                         <Tooltip title={disabledTooltip}>
                             <RemoveCircleIcon color={"disabled"}
                                               fontSize={"inherit"}/>
                         </Tooltip>
-                    </Box>}
+                    </div>}
 
                 {(showError || showExpandIcon) &&
-                    <Box className="absolute top-0.5 right-0.5">
+                    <div className="absolute top-0.5 right-0.5">
 
                         {selected && !disabled && showExpandIcon &&
                             <IconButton
@@ -350,7 +350,7 @@ export const TableCell = React.memo<TableCellProps>(
                         </ErrorTooltip>
                         }
 
-                    </Box>
+                    </div>
                 }
 
             </TableCellRoot>
