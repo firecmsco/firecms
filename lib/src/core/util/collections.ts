@@ -1,4 +1,5 @@
 import {
+    DefaultSelectedViewBuilder, DefaultSelectedViewParams,
     EntityCollection,
     PropertiesOrBuilders,
     PropertyOrBuilder
@@ -87,5 +88,18 @@ export function sortProperties<M extends Record<string, any>>(properties: Proper
     } catch (e) {
         console.error("Error sorting properties", e);
         return properties;
+    }
+}
+
+export function resolveDefaultSelectedView(
+    defaultSelectedView: string | DefaultSelectedViewBuilder | undefined,
+    params: DefaultSelectedViewParams
+) {
+    if (!defaultSelectedView) {
+        return undefined;
+    } else if (typeof defaultSelectedView === "string") {
+        return defaultSelectedView;
+    } else {
+        return defaultSelectedView(params);
     }
 }

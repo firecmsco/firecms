@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { Entity, EntityValues } from "./entities";
+import { Entity, EntityStatus, EntityValues } from "./entities";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
@@ -243,7 +243,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * that has a custom view as well as a subcollection that refers to another entity, you can
      * either specify the path to the custom view or the path to the subcollection.
      */
-    defaultSelectedView?: string;
+    defaultSelectedView?: string | DefaultSelectedViewBuilder;
 
     /**
      * Should the ID of this collection be hidden from the form view.
@@ -471,3 +471,18 @@ export interface EntityCustomViewParams<M extends Record<string, any> = any> {
 }
 
 export type InferCollectionType<S extends EntityCollection> = S extends EntityCollection<infer M> ? M : never;
+
+/**
+ * Used in the {@link EntityCollection#defaultSelectedView} to define the default
+ * @category Models
+ */
+export type DefaultSelectedViewBuilder = (params: DefaultSelectedViewParams) => string | undefined;
+
+/**
+ * Used in the {@link EntityCollection#defaultSelectedView} to define the default
+ * @category Models
+ */
+export type DefaultSelectedViewParams = {
+    status?: EntityStatus;
+    entityId?: string;
+};

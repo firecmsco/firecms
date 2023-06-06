@@ -30,7 +30,7 @@ import {
 import {
     canEditEntity,
     fullPathToCollectionSegments,
-    removeInitialAndTrailingSlashes
+    removeInitialAndTrailingSlashes, resolveDefaultSelectedView
 } from "../util";
 
 import {
@@ -130,7 +130,13 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
 
-        const defaultSelectedView = selectedSubPath ?? collection.defaultSelectedView;
+        const defaultSelectedView = selectedSubPath ?? resolveDefaultSelectedView(
+            collection ? collection.defaultSelectedView : undefined,
+            {
+                status,
+                entityId
+            }
+        );
 
         const [tabsPosition, setTabsPosition] = React.useState(defaultSelectedView ? getTabPositionFromPath(defaultSelectedView) : -1);
 
@@ -389,14 +395,12 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const onSideTabClick = useCallback((value: number) => {
             setTabsPosition(value);
-            if (entityId) {
-                sideEntityController.replace({
-                    path,
-                    entityId,
-                    selectedSubPath: getSelectedSubPath(value),
-                    updateUrl: true
-                });
-            }
+            sideEntityController.replace({
+                path,
+                entityId,
+                selectedSubPath: getSelectedSubPath(value),
+                updateUrl: true
+            });
         }, [entityId, sideEntityController, path, getSelectedSubPath]);
 
         const onValuesChanged = useCallback((values?: EntityValues<M>) => {
