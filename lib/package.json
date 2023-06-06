@@ -118,7 +118,7 @@
         "react-router-dom": "^6.11.1",
         "tsd": "^0.28.1",
         "typescript": "^5.0.4",
-        "vite": "^4.3.5"
+        "vite": "^4.3.9"
     },
     "files": [
         "dist"

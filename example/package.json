@@ -55,7 +55,7 @@
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "typescript": "^5.0.4",
-    "vite": "^4.3.5",
+    "vite": "^4.3.9",
     "vite-plugin-fonts": "^0.7.0"
   }
 }
