@@ -1,3 +1,10 @@
+## [2.0.0] - 2023-06-07
+
+### Changed
+
+- You can use a callback to define the default view of an entity now.
+- Fix when opening entities from a custom view, that also uses subcollections.
+
 ## [2.0.0-rc.2] - 2023-06-05
 
 ### Changed

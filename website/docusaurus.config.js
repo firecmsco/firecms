@@ -31,9 +31,9 @@ module.exports = {
     themeConfig: {
         image: "img/logo_small.png",
         announcementBar: {
-            id: "2-beta7",
+            id: "2.0.0",
             content:
-                "New version 2.0.0-rc.2 is out! 🎉 Now supporting collection groups!",
+                "Version 2.0.0 is out! 🎉 Now supporting collection groups and much more!",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,
