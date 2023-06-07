@@ -188,7 +188,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     path,
                     entityId,
                     selectedSubPath: defaultSelectedView,
-                    updateUrl: true
+                    updateUrl: true,
+                    collection
                 });
             largeLayoutTabSelected.current = largeLayout;
         }, [defaultSelectedView, largeLayout, selectedSubPath]);
@@ -234,7 +235,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     path,
                     entityId: updatedEntity.id,
                     selectedSubPath,
-                    updateUrl: true
+                    updateUrl: true,
+                    collection
                 });
             }
 
@@ -393,15 +395,16 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             onValuesAreModified(false);
         }, []);
 
-        const onSideTabClick = useCallback((value: number) => {
+        const onSideTabClick = (value: number) => {
             setTabsPosition(value);
             sideEntityController.replace({
                 path,
                 entityId,
                 selectedSubPath: getSelectedSubPath(value),
-                updateUrl: true
+                updateUrl: true,
+                collection
             });
-        }, [entityId, sideEntityController, path, getSelectedSubPath]);
+        };
 
         const onValuesChanged = useCallback((values?: EntityValues<M>) => {
             modifiedValuesRef.current = values;
