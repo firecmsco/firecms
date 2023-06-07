@@ -24,8 +24,6 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         setBlockedNavigationMessage
     } = useSideDialogContext();
 
-    console.log("EntitySidePanel", props);
-
     const navigationContext = useNavigationContext();
 
     const collection = useMemo(() => {

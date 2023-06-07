@@ -88,8 +88,6 @@ export const EntityCollectionView = React.memo(
                                                                  }: EntityCollectionViewProps<M>
     ) {
 
-        console.log("EntityCollectionView", fullPath, isSubCollection, collectionProp)
-
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
