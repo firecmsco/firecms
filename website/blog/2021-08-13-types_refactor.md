@@ -15,7 +15,7 @@ CMS.
 The signature of `EntitySchema<Key extends string = string>` has changed to
 `EntitySchema<M>` where `M` is your model type like:
 ```tsx
-import { buildSchema } from "@FireCMSco/firecms";
+import { buildSchema } from "@camberi/firecms";
 
 type Product = {
     name: string;
@@ -98,7 +98,7 @@ For example, if you had a callback including `EntityValues`, you would know the
 property keys you had defined, but not the types.
 
 ```tsx
-import { buildSchema } from "@FireCMSco/firecms";
+import { buildSchema } from "@camberi/firecms";
 
 type Product = {
     name: string;
@@ -142,7 +142,7 @@ There is a way to get the same type validation without indicating the type
 explicitly. You can wrap each property with `buildProperty` to get the same result
 
 ```tsx
-import { buildSchema, buildProperty } from "@FireCMSco/firecms";
+import { buildSchema, buildProperty } from "@camberi/firecms";
 
 export const productSchema = buildSchema({
     name: "Product",

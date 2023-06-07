@@ -4,7 +4,7 @@ title: New and updated features in version 2.0
 ---
 
 :::important
-The package name has changed from `@FireCMSco/firecms` to `firecms`.
+The package name has changed from `@Camberi/firecms` to `firecms`.
 Please update your dependencies accordingly
 :::
 
@@ -39,9 +39,12 @@ this version:
 - In the collection view, text inputs now save the values onBlur instead of
   onChange, or after pressing enter. This is to avoid saving the value on every
   keystroke, which can be annoying for the user.
+- Enabled Firebase App Check.
+- Revamped home screen with collection search and favorites.
 
 ### Collections and schemas
 
+- Added support for collection groups.
 - There is a completely new `VirtualTable` component used internally,
   replacing `react-base-table`. We have implemented it from scratch to suit our
   needs and have seen a massive increase in **performance**.
@@ -71,6 +74,9 @@ this version:
   values or themselves.
 - You can spread `MapProperty` fields in a collection using the `spreadChildren`
   prop.
+- You can now use the `keyValue` props in `MapProperty` to define the key and
+  value properties of the map. This is useful if you need to input arbitrary
+  data.
 - Date properties: you can now select between date or date/time modes.
 - Enums can be defined now as arrays of objects with multiple configuration
   options such as the color of the tag.
@@ -81,6 +87,8 @@ this version:
 - You can now totally customise the colors of enum chips.
 - Totally new markdown field, with a preview and a full screen editor. It is
   not using `@uiw/react-markdown-editor` anymore, which was not SSR friendly.
+- You are now able to change the value of a property within a different one.
+- You can now copy the values of arrays.
 - It should be easier now to create your own custom fields and to reuse the
   internal fields of the CMS, which have been renamed and are now exported as:
   - `ArrayCustomShapedFieldBinding`
