@@ -8,15 +8,16 @@ The package name has changed from `@Camberi/firecms` to `firecms`.
 Please update your dependencies accordingly
 :::
 
-So after than more than 2 years of development of version 1.0 and after taking
-all your numerous feedback and contributions we are launching the alpha phase of
-version 2.0.
+After than more than 2 years of development of version 1.0 and after taking
+all your numerous feedback and contributions we are launching version 2.0.
 
 We will use this document to list all the changes and new features included in
 this version:
 
 ### General
 
+- **New CLI tool** to create new FireCMS projects `yarn create firecms-app`.
+- New OpenAI integration.
 - More consistent **naming** all through the app.
 - Better documentation.
 - Visual and performance refactor of **forms**, especially in order to support
@@ -41,6 +42,8 @@ this version:
   keystroke, which can be annoying for the user.
 - Enabled Firebase App Check.
 - Revamped home screen with collection search and favorites.
+- Added `autoOpenDrawer` prop, allowing to open the drawer automatically when
+  hovering the menu.
 
 ### Collections and schemas
 
@@ -67,6 +70,7 @@ this version:
 
 ### Properties and builders
 
+- New text fields components give us better performance and more flexibility.
 - **Property builders**: You can now have property builders at any level of your
   property tree (not just in the first level like in version 1.0). You also get
   the local value of the property you are defining in the callback, which

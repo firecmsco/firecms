@@ -239,7 +239,7 @@ module.exports = {
                             path: "1.0.0",
                         },
                         current: {
-                            label: "2.0.0-beta",
+                            label: "2.0.0",
                         }
                     },
                 },
