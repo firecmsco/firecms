@@ -1,9 +1,6 @@
 import { EntityValues } from "./entities";
 import { CMSType, PropertyOrBuilder } from "./properties";
-import {
-    ResolvedEntityCollection,
-    ResolvedProperty
-} from "./resolved_entities";
+import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 
 /**
  * When building a custom field you need to create a React component that takes
@@ -148,6 +145,11 @@ export interface FormContext<M extends Record<string, any> = any> {
      * @param shouldValidate
      */
     setFieldValue: (key: string, value: any, shouldValidate?: boolean) => void;
+
+    /**
+     * Save the entity
+     */
+    save: (values: EntityValues<M>) => void;
 }
 
 /**

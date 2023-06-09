@@ -1,17 +1,13 @@
-import React, { ComponentType, ReactElement, useRef } from "react";
+import React, { ComponentType, ReactElement, useCallback, useRef } from "react";
 import equal from "react-fast-compare"
 
 import { FormHelperText } from "@mui/material";
 
-import {
-    FastField,
-    Field,
-    FieldProps as FormikFieldProps,
-    getIn
-} from "formik";
+import { FastField, Field, FieldProps as FormikFieldProps, getIn } from "formik";
 
 import {
-    CMSType, EntityCollection,
+    CMSType,
+    EntityCollection,
     FieldProps,
     FireCMSPlugin,
     PluginFieldBuilderParams,
@@ -32,7 +28,6 @@ import {
     resolveProperty
 } from "../core";
 import { useFireCMSContext } from "../hooks";
-import path from "path";
 
 /**
  * This component renders a form field creating the corresponding configuration
@@ -214,18 +209,22 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
 
     const isSubmitting = fieldProps.form.isSubmitting;
 
+    const setValue = useCallback((value: T | null, shouldValidate?: boolean) => {
+        fieldProps.form.setFieldTouched(propertyKey, true, false);
+        fieldProps.form.setFieldValue(propertyKey, value, shouldValidate);
+    }, []);
+
+    const setFieldValue = useCallback((otherPropertyKey: string, value: CMSType | null, shouldValidate?: boolean) => {
+        fieldProps.form.setFieldTouched(propertyKey, true, false);
+        fieldProps.form.setFieldValue(otherPropertyKey, value, shouldValidate);
+    }, []);
+
     const cmsFieldProps: FieldProps<T, CustomProps, M> = {
         propertyKey,
         value: value as T,
         initialValue,
-        setValue: (value: T | null, shouldValidate?: boolean) => {
-            fieldProps.form.setFieldTouched(propertyKey, true, false);
-            fieldProps.form.setFieldValue(propertyKey, value, shouldValidate);
-        },
-        setFieldValue: (otherPropertyKey: string, value: CMSType | null, shouldValidate?: boolean) => {
-            fieldProps.form.setFieldTouched(propertyKey, true, false);
-            fieldProps.form.setFieldValue(otherPropertyKey, value, shouldValidate);
-        },
+        setValue,
+        setFieldValue,
         error,
         touched,
         showError,

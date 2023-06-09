@@ -1,15 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
-import {
-    Box,
-    CircularProgress,
-    Divider,
-    IconButton,
-    Tab,
-    Tabs,
-    Typography,
-    useTheme
-} from "@mui/material";
+import { Box, CircularProgress, Divider, IconButton, Tab, Tabs, Typography, useTheme } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {
     Entity,
@@ -21,23 +12,15 @@ import {
     ResolvedEntityCollection,
     User
 } from "../../types";
-import {
-    CircularProgressCenter,
-    EntityCollectionView,
-    EntityPreview,
-    ErrorBoundary
-} from "../components";
+import { CircularProgressCenter, EntityCollectionView, EntityPreview, ErrorBoundary } from "../components";
 import {
     canEditEntity,
     fullPathToCollectionSegments,
-    removeInitialAndTrailingSlashes, resolveDefaultSelectedView
+    removeInitialAndTrailingSlashes,
+    resolveDefaultSelectedView
 } from "../util";
 
-import {
-    ADDITIONAL_TAB_WIDTH,
-    CONTAINER_FULL_WIDTH,
-    FORM_CONTAINER_WIDTH
-} from "./common";
+import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -67,8 +50,7 @@ export interface EntityViewProps<M extends Record<string, any>> {
  * This is the default view that is used as the content of a side panel when
  * an entity is opened.
  * You probably don't want to use this view directly since it is bound to the
- * side panel. Instead, you might want to use {@link EntityForm} or
- * {@link EntityCollectionView}
+ * side panel. Instead, you might want to use {@link EntityForm} or {@link EntityCollectionView}
  */
 export const EntityView = React.memo<EntityViewProps<any>>(
     function EntityView<M extends Record<string, any>, UserType extends User>({
@@ -82,6 +64,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                                                                   onUpdate,
                                                                                   onClose
                                                                               }: EntityViewProps<M>) {
+
+        if (collection.customId && collection.formAutoSave) {
+            console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
+        }
 
         const theme = useTheme();
         const largeLayout = useLargeSideLayout();
@@ -108,6 +94,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const subcollectionsCount = subcollections?.length ?? 0;
         const customViews = collection.views;
         const customViewsCount = customViews?.length ?? 0;
+        const autoSave = collection.formAutoSave && !collection.customId;
 
         const getTabPositionFromPath = useCallback((subPath: string): number => {
             if (customViews) {
@@ -173,12 +160,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         }, [authController, usedEntity, status]);
 
-        // useEffect(() => {
-        //     if (defaultSelectedView) {
-        //         setTabsPosition(getTabPositionFromPath(defaultSelectedView));
-        //     }
-        // }, [getTabPositionFromPath, defaultSelectedView]);
-
         useEffect(() => {
             if (largeLayoutTabSelected.current === largeLayout)
                 return;
@@ -217,7 +198,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 message: `${collection.singularName ?? collection.name}: Saved correctly`
             });
 
-            // setCurrentEntityId(updatedEntity.id);
             setUsedEntity(updatedEntity);
             setStatus("existing");
 
@@ -230,7 +210,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 sideDialogContext.setBlocked(false);
                 sideDialogContext.close(true);
                 onClose?.();
-            } else {
+            } else if (status !== "existing") {
                 sideEntityController.replace({
                     path,
                     entityId: updatedEntity.id,
@@ -292,7 +272,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             (customView, colIndex) => {
                 if (tabsPosition !== colIndex)
                     return null;
-                if (customView.Builder) {
+                if (customView.builder) {
                     console.warn("customView.builder is deprecated, use customView.Builder instead", customView);
                 }
                 const Builder = customView.Builder ?? customView.builder;
@@ -315,11 +295,12 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     role="tabpanel"
                     flexGrow={1}>
                     <ErrorBoundary>
-                        <Builder
+                        {formContext && <Builder
                             collection={collection}
                             entity={usedEntity}
                             modifiedValues={modifiedValues ?? usedEntity?.values}
-                        />
+                            formContext={formContext}
+                        />}
                     </ErrorBoundary>
                 </Box>;
             }
@@ -434,6 +415,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 onIdChange={onIdChange}
                 onFormContextChange={setFormContext}
                 hideId={collection.hideIdFromForm}
+                autoSave={autoSave}
             />;
             if (plugins) {
                 plugins.forEach((plugin: FireCMSPlugin) => {

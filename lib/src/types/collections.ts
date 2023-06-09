@@ -5,6 +5,7 @@ import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
 import { EnumValues, PropertiesOrBuilders } from "./properties";
+import { FormContext } from "./fields";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -255,6 +256,14 @@ export interface EntityCollection<M extends Record<string, any> = any,
      */
     hideIdFromCollection?: boolean;
 
+    /**
+     * If set to true, the form will be autosaved when the user changes
+     * the value of a field.
+     * Defaults to false.
+     * You can't use this prop if you are using a `customId`
+     */
+    formAutoSave?: boolean;
+
 }
 
 /**
@@ -468,6 +477,11 @@ export interface EntityCustomViewParams<M extends Record<string, any> = any> {
      * are the same as in `entity`
      */
     modifiedValues?: EntityValues<M>;
+
+    /**
+     * Use the form context to access the form state and methods
+     */
+    formContext: FormContext;
 }
 
 export type InferCollectionType<S extends EntityCollection> = S extends EntityCollection<infer M> ? M : never;

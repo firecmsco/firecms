@@ -1,10 +1,4 @@
-import React, {
-    useCallback,
-    useEffect,
-    useLayoutEffect,
-    useMemo,
-    useState
-} from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import equal from "react-fast-compare"
 
 import { Box, Button, IconButton, Portal, Typography } from "@mui/material";
@@ -24,10 +18,7 @@ import {
 } from "../../../../../types";
 import { Form, Formik, FormikProps } from "formik";
 import { useDraggable } from "./useDraggable";
-import {
-    CustomFieldValidator,
-    getYupEntitySchema
-} from "../../../../../form/validation";
+import { CustomFieldValidator, getYupEntitySchema } from "../../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../types";
@@ -277,7 +268,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                         entityId: entity.id,
                         values,
                         path,
-                        setFieldValue
+                        setFieldValue,
+                        save: saveValue
                     };
 
                     const property: ResolvedProperty<any> | undefined = propertyKey && collection.properties[propertyKey];
