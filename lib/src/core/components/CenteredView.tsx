@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, Fade } from "@mui/material";
+import { Fade } from "@mui/material";
 
 export function CenteredView({
                                  children,

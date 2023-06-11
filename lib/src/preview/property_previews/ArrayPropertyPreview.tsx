@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, Divider } from "@mui/material";
+import { Divider } from "@mui/material";
 
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";

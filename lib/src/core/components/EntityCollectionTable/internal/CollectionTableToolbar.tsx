@@ -1,13 +1,5 @@
 import React from "react";
-import {
-    Box,
-    CircularProgress,
-    Hidden,
-    IconButton,
-    Tooltip,
-    useMediaQuery,
-    useTheme
-} from "@mui/material";
+import { CircularProgress, Hidden, IconButton, Tooltip, useMediaQuery, useTheme } from "@mui/material";
 
 import { CollectionSize } from "../../../../types";
 import { SearchBar } from "./SearchBar";
@@ -45,11 +37,10 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     const sizeSelect = (
         <FilledSelect
-            variant={"standard"}
             value={props.size}
             className="w-14 h-10"
             onChange={(evt: any) => props.onSizeChanged(evt.target.value)}
-            renderValue={(value: any) => value.toUpperCase()}
+            // renderValue={(value: any) => value.toUpperCase()}
         >
             {["xs", "s", "m", "l", "xl"].map((value) => (
                 <FilledMenuItem
@@ -62,7 +53,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     return (
         <div
-            className="min-h-[56px] overflow-x-auto sm:px-[theme.spacing(1)] px-[theme.spacing(2)] bg-[theme.palette.background.default] border-b border-[theme.palette.divider] flex flex-row justify-between items-center w-full"
+            className="min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-default dark:bg-default-dark border-b border-divider dark:border-divider-dark flex flex-row justify-between items-center w-full"
         >
 
             <div className="flex items-center space-x-8 md:space-x-4">

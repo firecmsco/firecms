@@ -1,9 +1,6 @@
 import { Entity, EntityStatus, EntityValues } from "./entities";
 import { EntityCollection, FilterValues } from "./collections";
-import {
-    ResolvedEntityCollection,
-    ResolvedProperty
-} from "./resolved_entities";
+import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 
 /**
  * @category Datasource

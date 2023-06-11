@@ -1,11 +1,9 @@
-import React, { useState } from "react";
-import { FormControl, FormControlLabel, Switch, useTheme } from "@mui/material";
-import { fieldBackground, fieldBackgroundHover } from "../../util/field_colors";
+import React from "react";
 
 type BooleanSwitchProps = {
     value: boolean,
     position?: "start" | "end",
-    onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void,
+    onValueChange?: (value: boolean) => void,
     label?: React.ReactNode,
     disabled?: boolean,
     error?: boolean,
@@ -17,66 +15,67 @@ type BooleanSwitchProps = {
  * Simple boolean switch.
  *
  */
-export const BooleanSwitch = React.forwardRef(function SwitchFieldBinding({
-                                                                              value,
-                                                                              position = "end",
-                                                                              onChange,
-                                                                              error,
-                                                                              label,
-                                                                              autoFocus,
-                                                                              disabled,
-                                                                              small,
-                                                                          }: BooleanSwitchProps, ref) {
+export const BooleanSwitch = function SwitchFieldBinding({
+                                                             value,
+                                                             position = "end",
+                                                             onValueChange,
+                                                             error,
+                                                             label,
+                                                             autoFocus,
+                                                             disabled,
+                                                             small
+                                                         }: BooleanSwitchProps) {
 
-    const theme = useTheme();
-    const [focus, setFocus] = useState<boolean>(autoFocus ?? false);
+    const refWrap = React.useRef<HTMLDivElement | null>(null);
+    const refInput = React.useRef<HTMLInputElement | null>(null);
+    const [_, setFocused] = React.useState(false)
+    const onFocus = () => setFocused(true)
+    const onBlur = () => setFocused(false)
+
+    const focus = document.activeElement === refInput?.current || document.activeElement === refWrap?.current;
+
     return (
         <>
-            <FormControl fullWidth>
 
-                <FormControlLabel
-                    className={`${
-                        error
-                            ? "text-error-main"
-                            : focus
-                                ? "text-primary-main"
-                                : "text-text-secondary"
-                    } justify-between w-full ${
-                        small ? "min-h-[48px]" : "min-h-[64px]"
-                    } ${
-                        small ? "pl-2" : "pl-4"
-                    } ${
-                        small ? "pr-4" : "pr-6"
-                    } box-border relative inline-flex items-center ${
-                        position === "end" ? "flex-row-reverse" : "flex-row"
-                    } bg-[${fieldBackground(theme)}] rounded-[${theme.shape.borderRadius}px] transition-colors duration-200 ease-in hover:bg-[${fieldBackgroundHover(
-                        theme
-                    )}]`}
-                    onClick={(e) => setFocus(true)}
-                    labelPlacement={"start"}
-                    checked={Boolean(value)}
-                    inputRef={ref}
-                    control={
-                        <Switch
-                            size={small ? "small" : "medium"}
-                            type={"checkbox"}
-                            color={"secondary"}
-                            autoFocus={autoFocus}
-                            disabled={disabled}
-                            onFocus={(e) => setFocus(true)}
-                            onBlur={(e) => setFocus(false)}
-                            onChange={(evt) => {
-                                setFocus(true);
-                                onChange?.(evt);
-                            }}/>
-                    }
-                    disabled={disabled}
-                    label={label}
-                />
+            <div
+                ref={refWrap}
+                onFocus={onFocus}
+                onBlur={onBlur}
+                tabIndex={-1}
+                className={`rounded-md relative cursor-pointer bg-field-default dark:bg-field-dark max-w-full hover:bg-field-hover dark:hover:bg-field-hover-dark
+                    ${error
+                    ? "text-error"
+                    : focus
+                        ? "text-primary"
+                        : "text-text-secondary dark:text-text-secondary-dark"
+                } justify-between w-full ${
+                    small ? "min-h-[48px]" : "min-h-[64px]"
+                } ${
+                    small ? "pl-2" : "pl-4"
+                } ${
+                    small ? "pr-4" : "pr-6"
+                } box-border relative inline-flex items-center ${
+                    position === "end" ? "flex-row-reverse" : "flex-row"
+                }`}
+                onClick={(e) => {
+                    onValueChange?.(!value);
+                    refInput.current?.focus();
+                }}
+            >
+                <input ref={refInput}
+                       onFocus={onFocus}
+                       onBlur={onBlur}
+                       type="checkbox"
+                       className="toggle toggle-secondary"
+                       checked={value}
+                       onChange={(evt) => {
+                           onValueChange?.(evt.target.checked);
+                       }}/>
 
-            </FormControl>
+                {label}
+            </div>
 
         </>
 
     );
-});
+};

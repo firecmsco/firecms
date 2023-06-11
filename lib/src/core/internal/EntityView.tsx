@@ -1,15 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
-import {
-    Box,
-    CircularProgress,
-    Divider,
-    IconButton,
-    Tab,
-    Tabs,
-    Typography,
-    useTheme
-} from "@mui/material";
+import { CircularProgress, Divider, IconButton, Tab, Tabs, useTheme } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import {
     Entity,
@@ -21,23 +12,10 @@ import {
     ResolvedEntityCollection,
     User
 } from "../../types";
-import {
-    CircularProgressCenter,
-    EntityCollectionView,
-    EntityPreview,
-    ErrorBoundary
-} from "../components";
-import {
-    canEditEntity,
-    fullPathToCollectionSegments,
-    removeInitialAndTrailingSlashes
-} from "../util";
+import { CircularProgressCenter, EntityCollectionView, EntityPreview, ErrorBoundary } from "../components";
+import { canEditEntity, fullPathToCollectionSegments, removeInitialAndTrailingSlashes } from "../util";
 
-import {
-    ADDITIONAL_TAB_WIDTH,
-    CONTAINER_FULL_WIDTH,
-    FORM_CONTAINER_WIDTH
-} from "./common";
+import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import {
     saveEntityWithCallbacks,
     useAuthController,

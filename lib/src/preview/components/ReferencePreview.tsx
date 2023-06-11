@@ -1,45 +1,16 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import {
-    Box,
-    darken,
-    IconButton,
-    lighten,
-    Skeleton,
-    Tooltip,
-    Typography
-} from "@mui/material";
-import {
-    Entity,
-    EntityCollection,
-    EntityReference,
-    ResolvedProperty
-} from "../../types";
+import { IconButton, Skeleton, Tooltip } from "@mui/material";
+import { Entity, EntityCollection, EntityReference, ResolvedProperty } from "../../types";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 
-import {
-    ErrorView,
-    getReferencePreviewKeys,
-    getValueInPath,
-    resolveCollection
-} from "../../core";
-import {
-    useEntityFetch,
-    useFireCMSContext,
-    useNavigationContext,
-    useSideEntityController
-} from "../../hooks";
+import { ErrorView, getReferencePreviewKeys, getValueInPath, resolveCollection } from "../../core";
+import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
-import {
-    SkeletonPropertyComponent
-} from "../property_previews/SkeletonPropertyComponent";
-import {
-    fieldBackground,
-    fieldBackgroundHover
-} from "../../core/util/field_colors";
+import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
 import TTypography from "../../migrated/TTypography";
 import clsx from "clsx";
 
@@ -135,7 +106,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
         body = (
             <>
                 <div
-                    className="flex flex-col flex-grow w-full max-w-[calc(100%-52px)] m-1">
+                    className="flex flex-col flex-grow w-full max-w-[calc(100%-52px)] m-1 gap-2">
 
                     {size !== "tiny" && (
                         reference
@@ -223,13 +194,13 @@ function ReferencePreviewWrap({
     onClick?: () => void;
 }) {
     return <TTypography variant={"label"}
-                        className={clsx("bg-field-dark",
+                        className={clsx("bg-field-default dark:bg-field-dark",
                             "w-full",
                             "flex",
                             "rounded-md",
                             "overflow-hidden",
-                            onHover ? "hover:bg-field-hover" : "",
-                            size === "regular" ? "p-1" : "p-0",
+                            onHover ? "hover:bg-field-hover dark:hover:bg-field-hover-dark" : "",
+                            size === "regular" ? "p-2" : "p-1",
                             size === "tiny" ? "items-center" : "",
                             "transition-colors duration-300 ease-in-out ",
                             onHover ? "shadow-outline cursor-pointer" : "",

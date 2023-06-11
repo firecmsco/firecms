@@ -1,11 +1,4 @@
-import {
-    Box,
-    FormControl,
-    IconButton,
-    MenuItem,
-    OutlinedInput,
-    Select as MuiSelect
-} from "@mui/material";
+import { FormControl, IconButton, MenuItem, OutlinedInput, Select as MuiSelect } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
 import { EnumValuesChip } from "../../../../preview";

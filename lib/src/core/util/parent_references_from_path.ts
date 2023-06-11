@@ -1,8 +1,5 @@
 import { EntityCollection, EntityReference } from "../../types";
-import {
-    getCollectionPathsCombinations,
-    removeInitialAndTrailingSlashes
-} from "./navigation_utils";
+import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
 
 export function getParentReferencesFromPath(props: {
     path: string,

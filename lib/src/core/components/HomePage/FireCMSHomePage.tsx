@@ -1,12 +1,9 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { Box, Container, Grid } from "@mui/material";
+import { Container, Grid } from "@mui/material";
 
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
-import {
-    PluginGenericProps,
-    PluginHomePageAdditionalCardsProps
-} from "../../../types";
+import { PluginGenericProps, PluginHomePageAdditionalCardsProps } from "../../../types";
 
 import { toArray } from "../../util/arrays";
 import { NavigationGroup } from "./NavigationGroup";

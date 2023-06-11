@@ -1,7 +1,6 @@
 import React from "react";
 import {
     Avatar,
-    Box,
     Breadcrumbs,
     Button,
     Chip,
@@ -9,8 +8,6 @@ import {
     IconButton,
     Link,
     Slide,
-    Toolbar,
-    Typography,
     useMediaQuery,
     useTheme
 } from "@mui/material";
@@ -19,12 +16,7 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
-import {
-    useAuthController,
-    useBreadcrumbsContext,
-    useModeController
-} from "../../hooks";
-import { DRAWER_WIDTH } from "../Scaffold";
+import { useAuthController, useBreadcrumbsContext, useModeController } from "../../hooks";
 import TTypography from "../../migrated/TTypography";
 import clsx from "clsx";
 

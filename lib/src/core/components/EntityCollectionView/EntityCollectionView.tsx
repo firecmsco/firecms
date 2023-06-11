@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import { Box, Popover, Typography, useTheme } from "@mui/material";
+import { Popover, useTheme } from "@mui/material";
 import equal from "react-fast-compare"
 
 import {
@@ -10,25 +10,12 @@ import {
     Property,
     SelectionController
 } from "../../../types";
-import {
-    EntityCollectionTable,
-    OnColumnResizeParams
-} from "../EntityCollectionTable";
+import { EntityCollectionTable, OnColumnResizeParams } from "../EntityCollectionTable";
 
-import {
-    EntityCollectionRowActions
-} from "../EntityCollectionTable/internal/EntityCollectionRowActions";
-import {
-    DeleteEntityDialog
-} from "../EntityCollectionTable/internal/DeleteEntityDialog";
+import { EntityCollectionRowActions } from "../EntityCollectionTable/internal/EntityCollectionRowActions";
+import { DeleteEntityDialog } from "../EntityCollectionTable/internal/DeleteEntityDialog";
 
-import {
-    canCreateEntity,
-    canDeleteEntity,
-    canEditEntity,
-    fullPathToCollectionSegments,
-    mergeDeep
-} from "../../util";
+import { canCreateEntity, canDeleteEntity, canEditEntity, fullPathToCollectionSegments, mergeDeep } from "../../util";
 import { Markdown, renderSkeletonText } from "../../../preview";
 import {
     useAuthController,
@@ -37,16 +24,10 @@ import {
     useNavigationContext,
     useSideEntityController
 } from "../../../hooks";
-import {
-    useUserConfigurationPersistence
-} from "../../../hooks/useUserConfigurationPersistence";
+import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
-import {
-    useTableController
-} from "../EntityCollectionTable/useTableController";
-import {
-    isFilterCombinationValidForFirestore
-} from "./isFilterCombinationValidForFirestore";
+import { useTableController } from "../EntityCollectionTable/useTableController";
+import { isFilterCombinationValidForFirestore } from "./isFilterCombinationValidForFirestore";
 import TTypography from "../../../migrated/TTypography";
 
 /**

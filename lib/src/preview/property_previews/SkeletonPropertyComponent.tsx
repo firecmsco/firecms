@@ -6,16 +6,7 @@ import {
     ResolvedStringProperty
 } from "../../types";
 import React from "react";
-import {
-    Box,
-    Grid,
-    Skeleton,
-    Table,
-    TableBody,
-    TableCell,
-    TableRow,
-    Typography, useTheme
-} from "@mui/material";
+import { Grid, Skeleton, Table, TableBody, TableCell, TableRow, useTheme } from "@mui/material";
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
 import TTypography from "../../migrated/TTypography";
@@ -107,7 +98,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
     if (size !== "regular")
         return (
             <div
-                className="w-full flex flex-col space-y-[theme.spacing(1)] md:space-y-[theme.spacing(0.5)]"
+                className="w-full flex flex-col space-y-4 md:space-y-[theme.spacing(0.5)]"
             >
                 {mapPropertyKeys.map((key, index) => (
                     <div key={`map_${key}`}>
@@ -246,7 +237,7 @@ export function renderSkeletonImageThumbnail(size: PreviewSize) {
     const imageSize = size === "tiny" ? 40 : size === "small" ? 100 : 200;
     return (
         <Skeleton variant="rectangular"
-                  className={`rounded-[${theme.shape.borderRadius}px]`}
+                  className={`rounded-md`}
                   width={imageSize}
                   height={imageSize}/>
     );

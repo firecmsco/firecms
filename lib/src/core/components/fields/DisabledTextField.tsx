@@ -1,8 +1,6 @@
 import React from "react";
-
-import { Box, InputLabel, Typography, useTheme } from "@mui/material";
-import { fieldBackgroundDisabled } from "../../util/field_colors";
 import TTypography from "../../../migrated/TTypography";
+import TInputLabel from "../../../migrated/TInputLabel";
 
 export function DisabledTextField<T extends string | number>({
                                                                  label,
@@ -14,14 +12,11 @@ export function DisabledTextField<T extends string | number>({
     value: T
 }) {
 
-    const theme = useTheme();
-
     return <div
-        className={`relative bg-${fieldBackgroundDisabled} rounded-${theme.shape.borderRadius} w-full ${small ? 'h-12' : 'h-16'} text-${theme.palette.text.disabled}`}>
-        <InputLabel
+        className={`relative bg-field-disabled dark:bg-field-disabled-dark rounded-md w-full ${small ? 'h-12' : 'h-16'} text-textDisabled dark:text-textDisabledDark`}>
+        <TInputLabel
             shrink={Boolean(value)}
-            className="absolute text-gray-400 left-0 top-4 pointer-events-none"
-            variant={"filled"}>{label}</InputLabel>
+            className="absolute left-0 top-1 pointer-events-none">{label}</TInputLabel>
         <div
             className={`p-8 overflow-auto ${label ? "pt-8 pb-2" : small ? "p-3" : "px-3"}`}>
             <TTypography variant={"body1"}

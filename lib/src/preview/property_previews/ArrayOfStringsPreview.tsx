@@ -3,7 +3,6 @@ import { ResolvedStringProperty } from "../../types";
 
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { StringPropertyPreview } from "./StringPropertyPreview";
-import { Box, Theme } from "@mui/material";
 import { useFireCMSContext } from "../../hooks";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 

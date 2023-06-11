@@ -1,8 +1,4 @@
-import {
-    EntityCollection,
-    PropertiesOrBuilders,
-    PropertyOrBuilder
-} from "../../types";
+import { EntityCollection, PropertiesOrBuilders, PropertyOrBuilder } from "../../types";
 import { mergeDeep } from "./objects";
 import { isPropertyBuilder } from "./entities";
 

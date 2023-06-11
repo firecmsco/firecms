@@ -3,7 +3,6 @@ import { CollectionSize, Entity } from "../../../../types";
 import React, { MouseEvent, useCallback } from "react";
 import {
     alpha,
-    Box,
     Checkbox,
     IconButton,
     ListItemIcon,
@@ -12,7 +11,6 @@ import {
     MenuItem,
     Skeleton,
     Tooltip,
-    Typography,
     useMediaQuery,
     useTheme
 } from "@mui/material";

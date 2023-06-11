@@ -30,9 +30,10 @@ export function useBuildModeController(): ModeController {
         setDocumentMode("light");
     }, []);
 
-    const setDocumentMode = useCallback((mode: "light" | "dark") => {
+    const setDocumentMode = (mode: "light" | "dark") => {
         document.body.style.setProperty("color-scheme", mode);
-    }, [document]);
+        document.documentElement.dataset.theme = mode;
+    };
 
     const toggleMode = useCallback(() => {
 

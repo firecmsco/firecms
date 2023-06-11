@@ -8,15 +8,7 @@ import {
     ResolvedProperty
 } from "../types";
 import * as yup from "yup";
-import {
-    AnySchema,
-    ArraySchema,
-    BooleanSchema,
-    DateSchema,
-    NumberSchema,
-    ObjectSchema,
-    StringSchema
-} from "yup";
+import { AnySchema, ArraySchema, BooleanSchema, DateSchema, NumberSchema, ObjectSchema, StringSchema } from "yup";
 import { enumToObjectEntries } from "../core/util/enums";
 import { getValueInPath, hydrateRegExp, isPropertyBuilder } from "../core";
 

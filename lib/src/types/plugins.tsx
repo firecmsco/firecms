@@ -7,10 +7,7 @@ import { FieldConfigId } from "./field_config";
 import { FieldProps, FormContext } from "./fields";
 import { CMSType, Property } from "./properties";
 import { EntityStatus } from "./entities";
-import {
-    ResolvedEntityCollection,
-    ResolvedProperty
-} from "./resolved_entities";
+import { ResolvedProperty } from "./resolved_entities";
 
 /**
  * Interface used to define plugins for FireCMS.

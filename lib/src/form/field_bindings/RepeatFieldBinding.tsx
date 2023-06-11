@@ -1,11 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
 import { FormControl, FormHelperText } from "@mui/material";
-import {
-    FormikArrayContainer,
-    FieldDescription,
-    LabelWithIcon
-} from "../components";
+import { FieldDescription, FormikArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";

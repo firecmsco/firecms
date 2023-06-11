@@ -1,8 +1,5 @@
 import { Timestamp } from "firebase/firestore";
-import {
-    cmsToFirestoreModel,
-    firestoreToCMSModel
-} from "../firebase_app/hooks/useFirestoreDataSource";
+import { cmsToFirestoreModel, firestoreToCMSModel } from "../firebase_app/hooks/useFirestoreDataSource";
 
 it("cmsToFirestoreModel", () => {
     const inputValues = {

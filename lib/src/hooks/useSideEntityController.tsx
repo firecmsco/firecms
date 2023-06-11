@@ -1,8 +1,6 @@
 import { SideEntityController } from "../types";
 import { useContext } from "react";
-import {
-    SideEntityControllerContext
-} from "../core/contexts/SideEntityControllerContext";
+import { SideEntityControllerContext } from "../core/contexts/SideEntityControllerContext";
 
 /**
  * Use this hook to retrieve an entity controller that allows you to open

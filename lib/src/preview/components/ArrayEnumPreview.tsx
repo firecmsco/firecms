@@ -3,7 +3,6 @@ import React from "react";
 import { EnumValueConfig } from "../../types";
 import { ErrorBoundary } from "../../core";
 import { EnumValuesChip } from "./ColorChip";
-import { Box } from "@mui/material";
 import { PreviewSize } from "../PropertyPreviewProps";
 
 /**

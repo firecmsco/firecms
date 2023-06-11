@@ -1,10 +1,4 @@
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import equal from "react-fast-compare"
 import {
     CMSType,
@@ -27,16 +21,9 @@ import { TableReferenceField } from "../fields/TableReferenceField";
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { isReadOnly } from "../../../util";
 import { TableStorageUpload } from "../fields/TableStorageUpload";
-import {
-    CustomFieldValidator,
-    mapPropertyToYup
-} from "../../../../form/validation";
+import { CustomFieldValidator, mapPropertyToYup } from "../../../../form/validation";
 import { useEntityCollectionTableController } from "../EntityCollectionTable";
-import {
-    useClearRestoreValue,
-    useDataSource,
-    useFireCMSContext
-} from "../../../../hooks";
+import { useClearRestoreValue, useDataSource, useFireCMSContext } from "../../../../hooks";
 import { TableCell } from "./TableCell";
 import { getRowHeight } from "../../Table/common";
 

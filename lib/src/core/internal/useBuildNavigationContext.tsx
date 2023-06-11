@@ -24,9 +24,7 @@ import {
     resolveCollectionPathAliases,
     resolvePermissions
 } from "../util";
-import {
-    getParentReferencesFromPath
-} from "../util/parent_references_from_path";
+import { getParentReferencesFromPath } from "../util/parent_references_from_path";
 
 type BuildNavigationContextProps<UserType extends User> = {
     basePath: string,

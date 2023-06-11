@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { useSnackbarController, useStorageSource } from "../../hooks";
 import { StorageFieldItem } from "../../core/util/useStorageUploadController";
-import { Box, Paper, Skeleton } from "@mui/material";
+import { Paper, Skeleton } from "@mui/material";
 import { ErrorView } from "../../core";
 
 export interface StorageUploadItemProps {

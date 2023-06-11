@@ -1,10 +1,6 @@
 import React from "react";
 
-import {
-    Box,
-    IconButton,
-    TextField, useTheme
-} from "@mui/material";
+import { IconButton, TextField, useTheme } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
@@ -42,7 +38,7 @@ export function DateTimeField({
                 <TextField {...params}
                            fullWidth
                            disabled={disabled}
-                           className={`h-${small ? '12' : '14'} rounded-${theme.shape.borderRadius}`}
+                           className={`h-${small ? '12' : '14'} rounded-md`}
                            InputProps={{
                                ...params.InputProps,
                                sx: ({

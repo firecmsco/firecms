@@ -1,12 +1,7 @@
 import React, { useCallback, useState } from "react";
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 import { ReferencePreview } from "../../../../preview";
-import {
-    CollectionSize,
-    Entity,
-    EntityReference,
-    FilterValues
-} from "../../../../types";
+import { CollectionSize, Entity, EntityReference, FilterValues } from "../../../../types";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { getReferenceFrom } from "../../../util";

@@ -1,8 +1,4 @@
-import {
-    ApplicationVerifier,
-    ConfirmationResult,
-    User as FirebaseUser
-} from "firebase/auth";
+import { ApplicationVerifier, ConfirmationResult, User as FirebaseUser } from "firebase/auth";
 
 import { AuthController, DataSource, StorageSource, User } from "../../types";
 

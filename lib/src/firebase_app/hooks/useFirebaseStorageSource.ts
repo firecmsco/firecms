@@ -1,18 +1,6 @@
 import { FirebaseApp } from "firebase/app";
-import {
-    FirebaseStorage,
-    getDownloadURL,
-    getMetadata,
-    getStorage,
-    ref,
-    uploadBytes
-} from "firebase/storage";
-import {
-    DownloadConfig,
-    DownloadMetadata,
-    StorageSource,
-    UploadFileProps
-} from "../../types";
+import { FirebaseStorage, getDownloadURL, getMetadata, getStorage, ref, uploadBytes } from "firebase/storage";
+import { DownloadConfig, DownloadMetadata, StorageSource, UploadFileProps } from "../../types";
 import { useEffect, useState } from "react";
 
 /**

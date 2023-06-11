@@ -1,6 +1,6 @@
 import React from "react";
 import { FieldProps } from "../../types";
-import { Box, FormControl, FormHelperText } from "@mui/material";
+import { FormControl, FormHelperText } from "@mui/material";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { useClearRestoreValue } from "../../hooks";

@@ -1,23 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-    CollectionSize,
-    Entity,
-    EntityCollection,
-    FilterValues
-} from "../../types";
-import {
-    Box,
-    Button,
-    Typography,
-    useMediaQuery,
-    useTheme
-} from "@mui/material";
+import { CollectionSize, Entity, EntityCollection, FilterValues } from "../../types";
+import { Button, useMediaQuery, useTheme } from "@mui/material";
 import { Add } from "@mui/icons-material";
 
 import { EntityCollectionTable } from "./EntityCollectionTable";
-import {
-    EntityCollectionRowActions
-} from "./EntityCollectionTable/internal/EntityCollectionRowActions";
+import { EntityCollectionRowActions } from "./EntityCollectionTable/internal/EntityCollectionRowActions";
 import {
     useAuthController,
     useDataSource,
@@ -29,13 +16,9 @@ import { ErrorView } from "./ErrorView";
 import { CustomDialogActions } from "./CustomDialogActions";
 import { useSideDialogContext } from "../SideDialogs";
 import { canCreateEntity, fullPathToCollectionSegments } from "../util";
-import {
-    useSelectionController
-} from "./EntityCollectionView/EntityCollectionView";
+import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
 import { useTableController } from "./EntityCollectionTable/useTableController";
-import {
-    isFilterCombinationValidForFirestore
-} from "./EntityCollectionView/isFilterCombinationValidForFirestore";
+import { isFilterCombinationValidForFirestore } from "./EntityCollectionView/isFilterCombinationValidForFirestore";
 import TTypography from "../../migrated/TTypography";
 
 /**

@@ -1,5 +1,5 @@
 import React from "react";
-import { Backdrop, Modal, Paper, Slide, useTheme } from "@mui/material";
+import { Modal, Paper, Slide, useTheme } from "@mui/material";
 
 export interface SideDialogDrawerProps {
 

@@ -1,24 +1,13 @@
 import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
-import {
-    Box,
-    FormControl,
-    Grid,
-    InputLabel,
-    MenuItem,
-    Select
-} from "@mui/material";
+import { FormControl, MenuItem, Select } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
-import {
-    ExpandablePanel,
-    getIconForProperty,
-    isHidden,
-    pick
-} from "../../core";
+import { ExpandablePanel, getIconForProperty, isHidden, pick } from "../../core";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
+import TInputLabel from "../../migrated/TInputLabel";
 
 /**
  * Field that renders the children property fields
@@ -132,7 +121,7 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
 
     return <div className={"m-4"}>
         <FormControl fullWidth>
-            <InputLabel>Add property</InputLabel>
+            <TInputLabel>Add property</TInputLabel>
             <Select
                 variant={"standard"}
                 value={""}

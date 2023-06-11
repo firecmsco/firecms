@@ -1,11 +1,6 @@
-import {
-    getCollectionByPathOrAlias,
-    resolveCollectionPathAliases
-} from "../core/util/navigation_utils";
+import { getCollectionByPathOrAlias, resolveCollectionPathAliases } from "../core/util/navigation_utils";
 import { siteConfig } from "./test_site_config";
-import {
-    getNavigationEntriesFromPathInternal
-} from "../core/util/navigation_from_path";
+import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";
 import { EntityCollection } from "../types";
 
 const collections = siteConfig.collections as EntityCollection[];

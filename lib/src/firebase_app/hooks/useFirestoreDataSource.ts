@@ -18,16 +18,13 @@ import {
     SaveEntityProps,
     WhereFilterOp
 } from "../../types";
+import { resolveCollection, sanitizeData, updateDateAutoValues } from "../../core";
 import {
-    resolveCollection,
-    sanitizeData,
-    updateDateAutoValues
-} from "../../core";
-import {
-    collectionGroup as collectionGroupClause,
     collection as collectionClause,
+    collectionGroup as collectionGroupClause,
     CollectionReference,
     deleteDoc,
+    deleteField,
     doc,
     DocumentReference,
     DocumentSnapshot,
@@ -38,7 +35,6 @@ import {
     getDocs,
     getFirestore,
     limit as limitClause,
-    deleteField,
     onSnapshot,
     orderBy as orderByClause,
     Query,
@@ -54,7 +50,6 @@ import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../types/text_search";
 import { useCallback } from "react";
 import { setDateToMidnight } from "../util/dates";
-import path from "path";
 
 /**
  * @category Firebase

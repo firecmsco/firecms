@@ -1,4 +1,4 @@
-import { alpha, Box, Breakpoint, Container, useTheme } from "@mui/material";
+import { alpha, Breakpoint, Container, useTheme } from "@mui/material";
 import React from "react";
 
 export function CustomDialogActions({

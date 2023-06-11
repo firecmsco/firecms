@@ -8,34 +8,18 @@ import * as locales from "date-fns/locale";
 import { FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { ModeControllerContext } from "./contexts/ModeController";
-import {
-    useBuildSideEntityController
-} from "./internal/useBuildSideEntityController";
-import {
-    useBuildNavigationContext
-} from "./internal/useBuildNavigationContext";
-import {
-    useBuildSideDialogsController
-} from "./internal/useBuildSideDialogsController";
-import {
-    FireCMSContextInstance,
-    useFireCMSContext,
-    useModeController
-} from "../hooks";
+import { useBuildSideEntityController } from "./internal/useBuildSideEntityController";
+import { useBuildNavigationContext } from "./internal/useBuildNavigationContext";
+import { useBuildSideDialogsController } from "./internal/useBuildSideDialogsController";
+import { FireCMSContextInstance, useFireCMSContext, useModeController } from "../hooks";
 import { CenteredView, ErrorView } from "./components";
 import { StorageSourceContext } from "./contexts/StorageSourceContext";
-import {
-    UserConfigurationPersistenceContext
-} from "./contexts/UserConfigurationPersistenceContext";
+import { UserConfigurationPersistenceContext } from "./contexts/UserConfigurationPersistenceContext";
 import { DataSourceContext } from "./contexts/DataSourceContext";
-import {
-    SideEntityControllerContext
-} from "./contexts/SideEntityControllerContext";
+import { SideEntityControllerContext } from "./contexts/SideEntityControllerContext";
 import { NavigationContextInstance } from "./contexts/NavigationContext";
 import { AuthControllerContext } from "./contexts/AuthControllerContext";
-import {
-    SideDialogsControllerContext
-} from "./contexts/SideDialogsControllerContext";
+import { SideDialogsControllerContext } from "./contexts/SideDialogsControllerContext";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 

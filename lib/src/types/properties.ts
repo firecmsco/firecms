@@ -2,10 +2,7 @@ import { FieldProps } from "./fields";
 import { PropertyPreviewProps } from "../preview";
 import { ChipColorKey, ChipColorScheme } from "./colors";
 import { EntityReference, EntityValues, GeoPoint } from "./entities";
-import {
-    ResolvedArrayProperty,
-    ResolvedStringProperty
-} from "./resolved_entities";
+import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entities";
 import { FilterValues } from "./collections";
 
 /**

@@ -1,7 +1,7 @@
 import React, { useCallback, useDeferredValue, useState } from "react";
-import { darken, Theme } from "@mui/material/styles";
+import { Theme } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
-import { Box, IconButton, useTheme } from "@mui/material";
+import { IconButton, useTheme } from "@mui/material";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";

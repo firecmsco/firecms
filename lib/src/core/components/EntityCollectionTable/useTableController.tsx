@@ -2,13 +2,7 @@ import React, { useCallback, useMemo } from "react";
 
 import { useCollectionFetch } from "../../../hooks";
 import { useDataOrder } from "../../../hooks/data/useDataOrder";
-import {
-    Entity,
-    EntityCollection,
-    FilterCombination,
-    FilterValues,
-    User
-} from "../../../types";
+import { Entity, EntityCollection, FilterCombination, FilterValues, User } from "../../../types";
 import { useDebouncedData } from "./useDebouncedData";
 
 const DEFAULT_PAGE_SIZE = 50;

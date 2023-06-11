@@ -1,11 +1,6 @@
 import React, { useCallback } from "react";
 
-import {
-    Box,
-    IconButton,
-    TextField as MuiTextField,
-    useTheme
-} from "@mui/material";
+import { IconButton, TextField as MuiTextField, useTheme } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -15,10 +10,7 @@ import { FieldProps } from "../../types";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
-import {
-    fieldBackground,
-    fieldBackgroundHover
-} from "../../core/util/field_colors";
+import { fieldBackground, fieldBackgroundHover } from "../../core/util/field_colors";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -70,7 +62,7 @@ export function DateTimeFieldBinding({
                     (
                         <MuiTextField {...params}
                                       fullWidth
-                                      className={`min-h-[64px] rounded-[${theme.shape.borderRadius}px] ${fieldBackground(
+                                      className={`min-h-[64px] rounded-md ${fieldBackground(
                                           theme
                                       )} hover:${fieldBackgroundHover(theme)}`}
                                       label={

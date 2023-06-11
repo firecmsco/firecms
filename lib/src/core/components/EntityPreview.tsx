@@ -2,24 +2,8 @@ import * as React from "react";
 
 import { styled } from "@mui/material/styles";
 
-import {
-    Box,
-    IconButton,
-    Table,
-    TableBody,
-    TableCell,
-    TableContainer,
-    TableRow,
-    Theme,
-    Typography
-} from "@mui/material";
-import {
-    Entity,
-    EntityCollection,
-    FireCMSContext,
-    ResolvedEntityCollection,
-    ResolvedProperties
-} from "../../types";
+import { IconButton, Table, TableBody, TableCell, TableContainer, TableRow, Theme } from "@mui/material";
+import { Entity, EntityCollection, FireCMSContext, ResolvedEntityCollection, ResolvedProperties } from "../../types";
 import { PropertyPreview } from "../../preview";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon, resolveCollection } from "../util";

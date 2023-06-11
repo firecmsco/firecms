@@ -1,12 +1,5 @@
 import React, { useCallback } from "react";
-import {
-    FormControl,
-    FormHelperText,
-    IconButton,
-    InputLabel,
-    MenuItem,
-    Select as MuiSelect, useTheme
-} from "@mui/material";
+import { FormControl, FormHelperText, IconButton, MenuItem, Select as MuiSelect, useTheme } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -16,6 +9,7 @@ import { useClearRestoreValue } from "../../hooks";
 import { isEnumValueDisabled } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty } from "../../core";
+import TInputLabel from "../../migrated/TInputLabel";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -65,11 +59,11 @@ export function SelectFieldBinding<T extends EnumType>({
             }}
         >
 
-            <InputLabel id={`${propertyKey}-select-label`}>
+            <TInputLabel id={`${propertyKey}-select-label`}>
                 <LabelWithIcon icon={getIconForProperty(property)}
                                required={property.validation?.required}
                                title={property.name}/>
-            </InputLabel>
+            </TInputLabel>
 
             <MuiSelect
                 className={`min-h-[64px] rounded-[${theme.shape.borderRadius + "px"}]`}

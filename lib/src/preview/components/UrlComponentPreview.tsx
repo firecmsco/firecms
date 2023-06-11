@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, CardMedia, Link, Tooltip, Typography } from "@mui/material";
+import { CardMedia, Link, Tooltip } from "@mui/material";
 
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";

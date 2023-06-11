@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
-import { Box, Button, FormControl, IconButton, MenuItem } from "@mui/material";
+import { Button, FormControl, IconButton, MenuItem } from "@mui/material";
 
 import Menu from "@mui/material/Menu";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -156,8 +156,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                   small={true}
                                   position={"start"}
                                   disabled={disabled || !fieldKey}
-                                  onChange={(event) => {
-                                      const newValue = event.target.checked;
+                                  onValueChange={(newValue) => {
                                       setValue({
                                           ...value,
                                           [fieldKey]: newValue
@@ -166,7 +165,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
         } else if (dataType === "array") {
             return <div
                 className="ml-1 pl-1 border-l border-solid border-current"
-                style={{ borderWidth: '1px' }}>
+                style={{ borderWidth: "1px" }}>
                 <ArrayContainer value={entryValue}
                                 newDefaultEntry={""}
                                 droppableId={rowId.toString()}
@@ -200,7 +199,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
         } else if (dataType === "map") {
             return <div
                 className="ml-1 pl-1 border-l border-solid border-opacity-25"
-                style={{ borderColor: 'currentColor' }}>
+                style={{ borderColor: "currentColor" }}>
                 <MapEditView value={entryValue}
                              fieldName={fieldKey}
                              setValue={(updatedValue) => {
@@ -284,7 +283,7 @@ function ArrayKeyValueRow<T>({
                                  id,
                                  index,
                                  value,
-                                 setValue,
+                                 setValue
                              }: {
     id: number,
     index: number,
@@ -340,8 +339,8 @@ function ArrayKeyValueRow<T>({
             return <BooleanSwitch value={entryValue}
                                   small={true}
                                   position={"start"}
-                                  onChange={(event) => {
-                                      setValue(event.target.checked as T);
+                                  onValueChange={(v) => {
+                                      setValue(v as T);
                                   }}/>;
         } else if (dataType === "array") {
             return <TTypography variant={"caption"}>
@@ -349,7 +348,7 @@ function ArrayKeyValueRow<T>({
             </TTypography>;
         } else if (dataType === "map") {
             return <div className="ml-1 pl-1 border-l border-solid"
-                        style={{ borderColor: 'currentColor' }}>
+                        style={{ borderColor: "currentColor" }}>
                 <MapEditView value={entryValue}
                              setValue={(updatedValue) => {
                                  setValue(updatedValue);

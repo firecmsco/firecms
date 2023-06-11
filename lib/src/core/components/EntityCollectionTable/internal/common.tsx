@@ -1,9 +1,4 @@
-import {
-    EntityCollection,
-    Property,
-    ResolvedArrayProperty,
-    ResolvedProperty
-} from "../../../../types";
+import { EntityCollection, Property, ResolvedArrayProperty, ResolvedProperty } from "../../../../types";
 
 export function getCellAlignment(property: Property | ResolvedProperty): "right" | "left" | "center" {
     if (property.dataType === "boolean") {

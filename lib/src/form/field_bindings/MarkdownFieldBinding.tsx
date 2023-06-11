@@ -2,14 +2,7 @@ import React, { useDeferredValue, useEffect, useRef } from "react";
 
 import { styled } from "@mui/material/styles";
 
-import {
-    Box,
-    darken,
-    FormControl,
-    FormHelperText,
-    lighten,
-    Theme
-} from "@mui/material";
+import { darken, FormControl, FormHelperText, lighten, Theme } from "@mui/material";
 
 // @ts-ignore
 import MarkdownIt from "markdown-it";
@@ -284,7 +277,7 @@ const StyledFormControl = styled(FormControl)((
     -ms-flex-preferred-size: 1px;
     flex-basis: 1px;
     padding: 4px;
-    
+
             border: none
   }
 
@@ -295,7 +288,7 @@ const StyledFormControl = styled(FormControl)((
   .rc-md-editor .editor-container > .section > .section-container {
     padding: 8x 16px 16px
   }
-  
+
   .rc-md-editor .editor-container > .section:last-child {
     border-radius: unset
   }
@@ -318,14 +311,14 @@ const StyledFormControl = styled(FormControl)((
     min-height: 0;
     color: inherit;
     font-size: 14px;
-    line-height: 1.7;   
+    line-height: 1.7;
              background-color: ${fieldBackground(theme)};
 
   }
 
   .rc-md-editor .editor-container .sec-html {
     min-height: 0;
-    min-width: 0;         
+    min-width: 0;
        background-color: ${fieldBackground(theme)};
 
   }
@@ -527,10 +520,10 @@ const StyledFormControl = styled(FormControl)((
     -webkit-justify-content: space-between;
     -ms-flex-pack: justify;
     justify-content: space-between;
-    
+
             color: "inherit",
             background-color: ${theme.palette.mode === "light" ? "rgb(39 39 41)" : "rgb(39 39 41)"};
-        
+
   }
 
   .rc-md-editor .rc-md-navigation.in-visible {

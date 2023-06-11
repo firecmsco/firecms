@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 
 import { ResolvedMapProperty } from "../../types";
 import { ErrorBoundary } from "../../core";

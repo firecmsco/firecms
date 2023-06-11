@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, FormControl, MenuItem, Select as MuiSelect } from "@mui/material";
+import { FormControl, MenuItem, Select as MuiSelect } from "@mui/material";
 import { TableWhereFilterOp } from "../../Table";
 import { DateTimeField } from "../../fields/DateTimeField";
 

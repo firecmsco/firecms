@@ -1,11 +1,5 @@
 import React from "react";
-import {
-    Button,
-    Dialog,
-    DialogContent,
-    DialogContentText,
-    DialogTitle
-} from "@mui/material";
+import { Button, Dialog, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
 
 import { CustomDialogActions } from "./CustomDialogActions";
 import { LoadingButton } from "@mui/lab";

@@ -1,41 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select
-} from "@mui/material";
-import {
-    FastField,
-    FieldProps as FormikFieldProps,
-    useFormikContext
-} from "formik";
+import { FormControl, FormHelperText, MenuItem, Paper, Select } from "@mui/material";
+import { FastField, FieldProps as FormikFieldProps, useFormikContext } from "formik";
 
-import {
-    FormikArrayContainer,
-    FieldDescription,
-    LabelWithIcon
-} from "../components";
+import { FieldDescription, FormikArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
-import {
-    EnumValueConfig,
-    FieldProps,
-    FormContext,
-    PropertyOrBuilder
-} from "../../types";
-import {
-    ExpandablePanel,
-    getDefaultValueFor,
-    getIconForProperty
-} from "../../core";
-import {
-    DEFAULT_ONE_OF_TYPE,
-    DEFAULT_ONE_OF_VALUE
-} from "../../core/util/common";
+import { EnumValueConfig, FieldProps, FormContext, PropertyOrBuilder } from "../../types";
+import { ExpandablePanel, getDefaultValueFor, getIconForProperty } from "../../core";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
+import TInputLabel from "../../migrated/TInputLabel";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -220,10 +194,10 @@ function BlockEntry({
                 {(fieldProps: FormikFieldProps) =>
                     (
                         <FormControl fullWidth size="small">
-                            <InputLabel
+                            <TInputLabel
                                 id={`${name}_${index}_select_label`}>
                                 <span>Type</span>
-                            </InputLabel>
+                            </TInputLabel>
                             <Select
                                 fullWidth
                                 className="mb-2"

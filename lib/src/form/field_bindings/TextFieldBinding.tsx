@@ -1,13 +1,5 @@
 import React, { useCallback } from "react";
-import {
-    Box,
-    Collapse,
-    FormControlLabel,
-    FormHelperText,
-    IconButton,
-    Switch,
-    Typography
-} from "@mui/material";
+import { Collapse, FormControlLabel, FormHelperText, IconButton, Switch } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 

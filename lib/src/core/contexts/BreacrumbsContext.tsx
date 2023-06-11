@@ -1,8 +1,5 @@
 import React, { useState } from "react";
-import {
-    BreadcrumbEntry,
-    BreadcrumbsController
-} from "../../hooks/useBreadcrumbsContext";
+import { BreadcrumbEntry, BreadcrumbsController } from "../../hooks/useBreadcrumbsContext";
 
 const DEFAULT_BREADCRUMBS_CONTROLLER = {
     breadcrumbs: [],

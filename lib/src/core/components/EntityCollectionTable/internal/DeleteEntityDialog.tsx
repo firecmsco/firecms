@@ -1,18 +1,7 @@
 import { Entity, EntityCallbacks, EntityCollection } from "../../../../types";
 import React, { useCallback, useMemo, useState } from "react";
-import {
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogContent,
-    DialogTitle
-} from "@mui/material";
-import {
-    deleteEntityWithCallbacks,
-    useDataSource,
-    useFireCMSContext,
-    useSnackbarController
-} from "../../../../hooks";
+import { Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../../../../hooks";
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { resolveCollection } from "../../../util/resolutions";
 import EntityPreview from "../../EntityPreview";

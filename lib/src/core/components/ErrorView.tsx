@@ -1,6 +1,5 @@
 import React from "react";
 import ErrorIcon from "@mui/icons-material/Error";
-import { Box, Typography } from "@mui/material";
 import { ErrorTooltip } from "./ErrorTooltip";
 import TTypography from "../../migrated/TTypography";
 

@@ -1,5 +1,6 @@
 import {
-    CMSType, DataType,
+    CMSType,
+    DataType,
     Entity,
     EntityReference,
     EntityStatus,

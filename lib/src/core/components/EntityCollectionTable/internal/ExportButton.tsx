@@ -12,18 +12,8 @@ import {
 } from "@mui/material";
 
 import GetAppIcon from "@mui/icons-material/GetApp";
-import {
-    Entity,
-    EntityCollection,
-    ExportConfig,
-    ResolvedEntityCollection,
-    User
-} from "../../../../types";
-import {
-    useDataSource,
-    useFireCMSContext,
-    useNavigationContext
-} from "../../../../hooks";
+import { Entity, EntityCollection, ExportConfig, ResolvedEntityCollection, User } from "../../../../types";
+import { useDataSource, useFireCMSContext, useNavigationContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { resolveCollection } from "../../../util";

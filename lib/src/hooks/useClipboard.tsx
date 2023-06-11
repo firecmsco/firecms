@@ -1,12 +1,6 @@
 // FORKED FROM https://github.com/fayeed/use-clipboard
 
-import {
-    MutableRefObject,
-    useCallback,
-    useEffect,
-    useRef,
-    useState
-} from "react";
+import { MutableRefObject, useCallback, useEffect, useRef, useState } from "react";
 
 export interface UseClipboardProps {
     /**

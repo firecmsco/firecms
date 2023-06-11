@@ -1,13 +1,7 @@
 import React from "react";
 import { CMSType, ResolvedProperty } from "../../types";
 
-import {
-    Box,
-    FormHelperText,
-    IconButton,
-    Tooltip,
-    Typography
-} from "@mui/material";
+import { FormHelperText, IconButton, Tooltip } from "@mui/material";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
 import TTypography from "../../migrated/TTypography";
 

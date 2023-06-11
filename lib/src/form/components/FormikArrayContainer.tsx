@@ -1,23 +1,13 @@
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FieldArray } from "formik";
 
-import { Box, Button } from "@mui/material";
+import { Button } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 
-import { getHashValue } from "../../core";
-import {
-    ArrayContainerItem,
-    getRandomId
-} from "../../core/components/ArrayContainer";
+import { ArrayContainerItem, getHashValue, getRandomId } from "../../core";
 
 interface ArrayContainerProps<T> {
     value: T[];

@@ -1,12 +1,4 @@
-import {
-    Box,
-    CardActionArea,
-    CardActions,
-    CardContent,
-    IconButton,
-    Paper,
-    Typography
-} from "@mui/material";
+import { CardActionArea, CardActions, CardContent, IconButton, Paper } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
@@ -17,9 +9,7 @@ import { Markdown } from "../../../preview";
 import { useFireCMSContext } from "../../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
-import {
-    useUserConfigurationPersistence
-} from "../../../hooks/useUserConfigurationPersistence";
+import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import TTypography from "../../../migrated/TTypography";
 
 /**

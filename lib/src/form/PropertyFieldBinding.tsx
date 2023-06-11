@@ -3,15 +3,11 @@ import equal from "react-fast-compare"
 
 import { FormHelperText } from "@mui/material";
 
-import {
-    FastField,
-    Field,
-    FieldProps as FormikFieldProps,
-    getIn
-} from "formik";
+import { FastField, Field, FieldProps as FormikFieldProps, getIn } from "formik";
 
 import {
-    CMSType, EntityCollection,
+    CMSType,
+    EntityCollection,
     FieldProps,
     FireCMSPlugin,
     PluginFieldBuilderParams,
@@ -32,7 +28,6 @@ import {
     resolveProperty
 } from "../core";
 import { useFireCMSContext } from "../hooks";
-import path from "path";
 
 /**
  * This component renders a form field creating the corresponding configuration

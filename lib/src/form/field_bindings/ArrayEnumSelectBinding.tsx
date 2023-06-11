@@ -4,7 +4,6 @@ import {
     FormControl,
     FormHelperText,
     IconButton,
-    InputLabel,
     ListItemText,
     MenuItem,
     Select as MuiSelect
@@ -15,12 +14,10 @@ import ClearIcon from "@mui/icons-material/Clear";
 import { EnumType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import {
-    enumToObjectEntries,
-    isEnumValueDisabled
-} from "../../core/util/enums";
+import { enumToObjectEntries, isEnumValueDisabled } from "../../core/util/enums";
 import { ArrayEnumPreview, EnumValuesChip } from "../../preview";
 import { ErrorView, getIconForProperty } from "../../core";
+import TInputLabel from "../../migrated/TInputLabel";
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -83,11 +80,11 @@ export function ArrayEnumSelectBinding({
             className="MuiInputLabel-root mt-0.5 ml-0.5 MuiInputLabel-shrink mt-2"
         >
 
-            <InputLabel id={`${propertyKey}-multiselect-label`}>
+            <TInputLabel id={`${propertyKey}-multiselect-label`}>
                 <LabelWithIcon icon={getIconForProperty(property)}
                                required={property.validation?.required}
                                title={property.name}/>
-            </InputLabel>
+            </TInputLabel>
 
             <MuiSelect
                 multiple

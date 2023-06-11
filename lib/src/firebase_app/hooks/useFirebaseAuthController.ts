@@ -22,11 +22,7 @@ import {
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
 import { AuthController } from "../../types";
-import {
-    FirebaseAuthController,
-    FirebaseSignInOption,
-    FirebaseSignInProvider
-} from "../types/auth";
+import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
 
 interface FirebaseAuthHandlerProps {
     firebaseApp?: FirebaseApp;

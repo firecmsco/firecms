@@ -2,11 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks/useSideDialogsController";
 import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { ErrorBoundary } from "./components";
-import {
-    UnsavedChangesDialog,
-    useNavigationUnsavedChangesDialog
-} from "./internal/useUnsavedChangesDialog";
-import { Box } from "@mui/material";
+import { UnsavedChangesDialog, useNavigationUnsavedChangesDialog } from "./internal/useUnsavedChangesDialog";
 import { SideDialogPanelProps } from "../types";
 import { CONTAINER_FULL_WIDTH } from "./internal/common";
 

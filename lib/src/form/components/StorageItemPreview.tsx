@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Box, IconButton, Paper, Tooltip } from "@mui/material";
+import { IconButton, Paper, Tooltip } from "@mui/material";
 import { Entity, ResolvedStringProperty } from "../../types";
 import RemoveIcon from "@mui/icons-material/Remove";
 import { PreviewSize, PropertyPreview } from "../../preview";

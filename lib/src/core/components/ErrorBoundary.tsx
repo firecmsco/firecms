@@ -1,4 +1,3 @@
-import { Box, Typography } from "@mui/material";
 import React, { ErrorInfo, PropsWithChildren } from "react";
 
 import ErrorIcon from "@mui/icons-material/Error";

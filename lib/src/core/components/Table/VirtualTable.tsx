@@ -1,16 +1,6 @@
-import React, {
-    createContext,
-    forwardRef,
-    RefObject,
-    useCallback,
-    useEffect,
-    useRef,
-    useState
-} from "react";
+import React, { createContext, forwardRef, RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import equal from "react-fast-compare"
-
-import { Box, Typography } from "@mui/material";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 
 // @ts-ignore

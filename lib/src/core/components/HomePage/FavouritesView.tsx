@@ -1,9 +1,7 @@
 import { useNavigate } from "react-router-dom";
-import { Box, Chip, Collapse, Grid } from "@mui/material";
+import { Chip, Collapse, Grid } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
-import {
-    useUserConfigurationPersistence
-} from "../../../hooks/useUserConfigurationPersistence";
+import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { TopNavigationEntry } from "../../../types";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";

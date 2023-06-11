@@ -17,19 +17,9 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { ErrorMessage } from "formik";
 
-import {
-    Entity,
-    EntityStatus,
-    EnumValueConfig,
-    EnumValues,
-    FireCMSContext
-} from "../../types";
+import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } from "../../types";
 
-import {
-    useClipboard,
-    useFireCMSContext,
-    useSnackbarController
-} from "../../hooks";
+import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
 import { resolveEnumValues } from "../../core/util/resolutions";
 
 const PREFIX = "CustomIdField";

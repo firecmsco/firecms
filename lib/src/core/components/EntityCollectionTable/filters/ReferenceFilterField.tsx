@@ -1,10 +1,4 @@
-import {
-    Box,
-    Button,
-    FormControl,
-    MenuItem,
-    Select as MuiSelect
-} from "@mui/material";
+import { Button, FormControl, MenuItem, Select as MuiSelect } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { TableWhereFilterOp } from "../../Table";
 import { Entity, EntityCollection, EntityReference } from "../../../../types";

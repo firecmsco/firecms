@@ -2,6 +2,7 @@ import React from "react";
 import { User as FirebaseUser } from "firebase/auth";
 
 import {
+    AppCheckOptions,
     CMSAnalyticsEvent,
     CMSView,
     CMSViewsBuilder,
@@ -10,15 +11,10 @@ import {
     EntityCollectionsBuilder,
     FieldConfig,
     FireCMSPlugin,
-    Locale,
-    AppCheckOptions
+    Locale
 } from "../types";
 import { FirestoreTextSearchController } from "./types/text_search";
-import {
-    Authenticator,
-    FirebaseSignInOption,
-    FirebaseSignInProvider
-} from "./types/auth";
+import { Authenticator, FirebaseSignInOption, FirebaseSignInProvider } from "./types/auth";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 import { useNavigationContext } from "../hooks";
 

@@ -7,9 +7,7 @@ import { useSideEntityController } from "./useSideEntityController";
 import { useDataSource } from "./data/useDataSource";
 import { useStorageSource } from "./useStorageSource";
 import { useSnackbarController } from "./useSnackbarController";
-import {
-    useUserConfigurationPersistence
-} from "./useUserConfigurationPersistence";
+import { useUserConfigurationPersistence } from "./useUserConfigurationPersistence";
 
 export const FireCMSContextInstance = createContext<Partial<FireCMSContext>>({
     sideDialogsController: {} as any,

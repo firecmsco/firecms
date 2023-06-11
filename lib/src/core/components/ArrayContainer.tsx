@@ -1,33 +1,13 @@
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState
-} from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import {
-    Box,
-    Button,
-    IconButton,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Tooltip, useTheme
-} from "@mui/material";
+import { Button, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Tooltip, useTheme } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CopyIcon from "@mui/icons-material/ContentCopy";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
-import {
-    DragDropContext,
-    Draggable,
-    DraggableProvided,
-    Droppable
-} from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello-pangea/dnd";
 
 import { getHashValue } from "../../core";
 import useMeasure from "react-use-measure";
@@ -258,7 +238,7 @@ export function ArrayContainerItem({
         style={provided.draggableProps.style}
         className={`${
             (isDragging || onHover) ? fieldBackgroundSubtleHover(theme) : ''
-        } mb-1 rounded-${theme.shape.borderRadius} opacity-100`}
+        } mb-1 rounded-md opacity-100`}
     >
         <div
             className="flex items-start">

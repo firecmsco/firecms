@@ -1,20 +1,7 @@
-import React, {
-    useCallback,
-    useEffect,
-    useLayoutEffect,
-    useMemo,
-    useState
-} from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import equal from "react-fast-compare"
 
-import {
-    Box,
-    Button,
-    IconButton,
-    Portal,
-    Typography,
-    useTheme
-} from "@mui/material";
+import { Button, IconButton, Portal, } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -31,10 +18,7 @@ import {
 } from "../../../../../types";
 import { Form, Formik, FormikProps } from "formik";
 import { useDraggable } from "./useDraggable";
-import {
-    CustomFieldValidator,
-    getYupEntitySchema
-} from "../../../../../form/validation";
+import { CustomFieldValidator, getYupEntitySchema } from "../../../../../form/validation";
 import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../types";
@@ -84,7 +68,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           onCellValueChange
                                                                       }: PopupFormFieldProps<M>) {
 
-    const theme = useTheme();
     const dataSource = useDataSource();
     const fireCMSContext = useFireCMSContext();
 
@@ -236,7 +219,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const form = entity && (
         <div
-            className={`overflow-auto rounded ${theme.shape.borderRadius} bg-${theme.palette.background.paper} ${!open ? 'hidden' : ''} cursor-grab`}>
+            className={`overflow-auto rounded rounded-md bg-paper dark:bg-paper-dark ${!open ? 'hidden' : ''} cursor-grab`}>
             <Formik
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
                 validationSchema={validationSchema}
@@ -372,9 +355,10 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     const draggable = (
         <div
             key={`draggable_${propertyKey as string}_${entity.id}_${open}`}
-            className={`inline-block fixed z-50 shadow-outline rounded ${
-                theme.shape.borderRadius
-            } bg-${theme.palette.background.paper} ${
+            style={{
+                boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
+            }}
+            className={`z-[1300] inline-block fixed z-50 shadow-outline rounded-md bg-paper dark:bg-paper-dark ${
                 !open ? "invisible" : "visible"
             } cursor-grab`}
             ref={containerRef}>

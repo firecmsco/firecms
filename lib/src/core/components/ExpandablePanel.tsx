@@ -1,11 +1,6 @@
 import React, { PropsWithChildren, useCallback, useState } from "react";
 
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary, darken,
-    lighten, useTheme
-} from "@mui/material";
+import { Accordion, AccordionDetails, AccordionSummary, useTheme } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { fieldBackgroundSubtleHover } from "../util/field_colors";
 
@@ -51,7 +46,7 @@ export function ExpandablePanel({
                                    : "bg-transparent"
                                : "bg-inherit"
                    } ${
-                       invisible ? "rounded-none" : `rounded-${theme.shape.borderRadius}`
+                       invisible ? "rounded-none" : `rounded-md`
                    } ${invisible ? "border-none" : ""}`}
                    TransitionProps={{ unmountOnExit: true }}
                    onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => {
@@ -62,7 +57,6 @@ export function ExpandablePanel({
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}
                               className={`items-center ${invisible ? 'p-0' : ''} min-h-14 border-${invisible ? '0' : ''} ${!expandedInternal && !invisible ? 'rounded-t rounded-bl' : ''}`}
                               style={{
-                                  color: 'text-secondary',
                                   minHeight: '56px',
                                   borderTopLeftRadius: `${theme.shape.borderRadius}px`,
                                   borderTopRightRadius: `${theme.shape.borderRadius}px`,
@@ -70,8 +64,7 @@ export function ExpandablePanel({
                                   borderBottomRightRadius: !expandedInternal && !invisible ? `${theme.shape.borderRadius}px` : undefined,
                                   border: invisible ? 'none' : undefined,
                                   borderBottom: invisible ? `1px solid ${theme.palette.divider}` : undefined,
-                              }}
-                              data-classes="Mui-expanded:border-b Mui-expanded:border-solid Mui-expanded:border-divider">
+                              }}>
                 {title}
             </AccordionSummary>
 

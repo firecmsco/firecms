@@ -1,7 +1,7 @@
 import React from "react";
 
 import { FieldProps } from "formik";
-import { FormControlLabel, Switch, Tooltip, Typography } from "@mui/material";
+import { FormControlLabel, Switch, Tooltip } from "@mui/material";
 import TTypography from "../../migrated/TTypography";
 
 export function SwitchControl({

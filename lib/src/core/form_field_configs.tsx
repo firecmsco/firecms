@@ -18,16 +18,8 @@ import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
 import EmailIcon from "@mui/icons-material/Email";
 import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
 
-import {
-    ArrayCustomShapedFieldBinding
-} from "../form/field_bindings/ArrayCustomShapedFieldBinding";
-import {
-    ArrayProperty,
-    FieldConfig,
-    FieldConfigId,
-    FieldProps,
-    Property, ResolvedProperty
-} from "../types";
+import { ArrayCustomShapedFieldBinding } from "../form/field_bindings/ArrayCustomShapedFieldBinding";
+import { ArrayProperty, FieldConfig, FieldConfigId, FieldProps, Property, ResolvedProperty } from "../types";
 import {
     ArrayEnumSelectBinding,
     ArrayOfReferencesFieldBinding,
@@ -43,9 +35,7 @@ import {
     TextFieldBinding
 } from "../form";
 import { isPropertyBuilder } from "./util";
-import {
-    KeyValueFieldBinding
-} from "../form/field_bindings/KeyValueFieldBinding";
+import { KeyValueFieldBinding } from "../form/field_bindings/KeyValueFieldBinding";
 
 export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
     text_field: {

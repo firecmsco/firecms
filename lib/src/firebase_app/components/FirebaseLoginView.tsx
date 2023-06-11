@@ -1,39 +1,12 @@
-import React, {
-    ReactNode,
-    useCallback,
-    useEffect,
-    useRef,
-    useState
-} from "react";
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
-import {
-    Box,
-    Button,
-    CircularProgress,
-    Fade,
-    Grid,
-    IconButton,
-    Slide,
-    TextField,
-    Typography
-} from "@mui/material";
+import { Button, CircularProgress, Fade, Grid, IconButton, Slide, TextField } from "@mui/material";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
 import { ErrorView, FireCMSLogo } from "../../core";
 import { useModeController } from "../../hooks";
-import {
-    FirebaseAuthController,
-    FirebaseSignInOption,
-    FirebaseSignInProvider
-} from "../types/auth";
-import {
-    appleIcon,
-    facebookIcon,
-    githubIcon,
-    googleIcon,
-    microsoftIcon,
-    twitterIcon
-} from "./social_icons";
+import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
+import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";
 import EmailIcon from "@mui/icons-material/Email";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";

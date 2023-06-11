@@ -16,31 +16,19 @@ import { EmptyValue } from "./components/EmptyValue";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";
 import { StorageThumbnail } from "./components/StorageThumbnail";
 import { Markdown } from "./components/Markdown";
-import {
-    StringPropertyPreview
-} from "./property_previews/StringPropertyPreview";
+import { StringPropertyPreview } from "./property_previews/StringPropertyPreview";
 import { ArrayOfMapsPreview } from "./property_previews/ArrayOfMapsPreview";
 import { ArrayPropertyPreview } from "./property_previews/ArrayPropertyPreview";
-import {
-    ArrayOfReferencesPreview
-} from "./property_previews/ArrayOfReferencesPreview";
-import {
-    ArrayOfStorageComponentsPreview
-} from "./property_previews/ArrayOfStorageComponentsPreview";
-import {
-    ArrayPropertyEnumPreview
-} from "./property_previews/ArrayPropertyEnumPreview";
-import {
-    ArrayOfStringsPreview
-} from "./property_previews/ArrayOfStringsPreview";
+import { ArrayOfReferencesPreview } from "./property_previews/ArrayOfReferencesPreview";
+import { ArrayOfStorageComponentsPreview } from "./property_previews/ArrayOfStorageComponentsPreview";
+import { ArrayPropertyEnumPreview } from "./property_previews/ArrayPropertyEnumPreview";
+import { ArrayOfStringsPreview } from "./property_previews/ArrayOfStringsPreview";
 import { ArrayOneOfPreview } from "./property_previews/ArrayOneOfPreview";
 import { MapPropertyPreview } from "./property_previews/MapPropertyPreview";
 import { ReferencePreview } from "./components/ReferencePreview";
 import { DatePreview } from "./components/DatePreview";
 import { BooleanPreview } from "./components/BooleanPreview";
-import {
-    NumberPropertyPreview
-} from "./property_previews/NumberPropertyPreview";
+import { NumberPropertyPreview } from "./property_previews/NumberPropertyPreview";
 
 /**
  * @category Preview components

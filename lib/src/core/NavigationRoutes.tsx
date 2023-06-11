@@ -2,16 +2,8 @@ import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../types";
-import {
-    EntityCollectionView,
-    FireCMSHomePage,
-    NotFoundPage
-} from "./components";
-import {
-    useBreadcrumbsContext,
-    useFireCMSContext,
-    useNavigationContext
-} from "../hooks";
+import { EntityCollectionView, FireCMSHomePage, NotFoundPage } from "./components";
+import { useBreadcrumbsContext, useFireCMSContext, useNavigationContext } from "../hooks";
 import { toArray } from "./util/arrays";
 import equal from "react-fast-compare"
 

@@ -2,13 +2,7 @@ import React, { useCallback } from "react";
 
 import { styled, Theme } from "@mui/material/styles";
 
-import {
-    Box,
-    FormControl,
-    FormHelperText,
-    Typography,
-    useTheme
-} from "@mui/material";
+import { Box, FormControl, FormHelperText, useTheme } from "@mui/material";
 import {
     ArrayProperty,
     Entity,
@@ -23,86 +17,20 @@ import { FieldDescription, LabelWithIcon } from "../components";
 
 import { getIconForProperty, isReadOnly } from "../../core";
 import clsx from "clsx";
-import {
-    useClearRestoreValue,
-    useSnackbarController,
-    useStorageSource
-} from "../../hooks";
+import { useClearRestoreValue, useSnackbarController, useStorageSource } from "../../hooks";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import {
-    StorageFieldItem,
-    useStorageUploadController
-} from "../../core/util/useStorageUploadController";
+import { StorageFieldItem, useStorageUploadController } from "../../core/util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
-import {
-    fieldBackground,
-    fieldBackgroundHover
-} from "../../core/util/field_colors";
+import { fieldBackground, fieldBackgroundHover } from "../../core/util/field_colors";
 import TTypography from "../../migrated/TTypography";
 
-const PREFIX = "StorageUploadField";
-
-const classes = {
-    dropZone: `${PREFIX}-dropZone`,
-    disabled: `${PREFIX}-disabled`,
-    nonActiveDrop: `${PREFIX}-nonActiveDrop`,
-    activeDrop: `${PREFIX}-activeDrop`,
-    acceptDrop: `${PREFIX}-acceptDrop`,
-    rejectDrop: `${PREFIX}-rejectDrop`
-};
-
-const StyledBox = styled(Box)(({ theme }:
-                                   {
-                                       theme: Theme
-                                   }
-) => ({
-    [`&.${classes.dropZone}`]: {
-        position: "relative",
-        paddingTop: "2px",
-        border: "2px solid transparent",
-        minHeight: "254px",
-        outline: 0,
-        borderRadius: `${theme.shape.borderRadius}px`,
-        backgroundColor: fieldBackground(theme),
-        boxSizing: "border-box",
-        transition: "border-bottom-color 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-        "&:focus": {
-            border: `2px solid ${theme.palette.primary.main}`
-        }
-    },
-
-    [`&.${classes.disabled}`]: {
-        backgroundColor: "rgba(0, 0, 0, 0.12)",
-        color: theme.palette.mode === "light" ? "rgba(0, 0, 0, 0.38)" : "rgba(255, 255, 255, 0.38)",
-        border: `1px dotted ${theme.palette.grey[400]}`
-    },
-
-    [`&.${classes.nonActiveDrop}`]: {
-        "&:hover": {
-            backgroundColor: fieldBackgroundHover(theme)
-        }
-    },
-
-    [`&.${classes.activeDrop}`]: {
-        paddingTop: "0px",
-        boxSizing: "border-box",
-        border: "2px solid"
-    },
-
-    [`&.${classes.acceptDrop}`]: {
-        transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-        background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.09) 10px, rgba(0, 0, 0, 0.12) 10px, rgba(0, 0, 0, 0.12) 20px) !important",
-        border: "2px solid",
-        borderColor: theme.palette.success.light
-    },
-
-    [`&.${classes.rejectDrop}`]: {
-        border: "2px solid",
-        borderColor: theme.palette.error.light
-    }
-
-}));
+const dropZoneClasses = "box-border bg-field-default dark:bg-field-dark relative pt-[2px] items-center border border-transparent fieldBackground min-h-[254px] outline-none rounded-md duration-[200ms] ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
+const disabledClasses = "border-dotted-grey"
+const nonActiveDropClasses = "hover:bg-field-hover dark:hover:bg-field-hover-dark"
+const activeDropClasses = "pt-0 border-2 border-solid"
+const acceptDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-green-500"
+const rejectDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-red-500"
 
 type StorageUploadFieldProps = FieldProps<string | string[]>;
 
@@ -270,16 +198,16 @@ function FileDropComponent({
     );
 
     return (
-        <StyledBox
+        <div
             {...getRootProps()}
-            className={clsx(classes.dropZone, "items-center",
+            className={clsx(dropZoneClasses,
                 multipleFilesSupported && internalValue.length ? "" : "flex",
                 {
-                    [classes.nonActiveDrop]: !isDragActive,
-                    [classes.activeDrop]: isDragActive,
-                    [classes.rejectDrop]: isDragReject,
-                    [classes.acceptDrop]: isDragAccept,
-                    [classes.disabled]: disabled,
+                    [nonActiveDropClasses]: !isDragActive,
+                    [activeDropClasses]: isDragActive,
+                    [rejectDropClasses]: isDragReject,
+                    [acceptDropClasses]: isDragAccept,
+                    [disabledClasses]: disabled,
                 })}
         >
             <div
@@ -352,14 +280,14 @@ function FileDropComponent({
             </div>
 
             <div
-                className="flex-grow min-h-[38px] box-border m-2">
+                className="flex-grow min-h-[38px] box-border m-2 text-center">
                 <TTypography align={"center"}
                              variant={"label"}>
                     {helpText}
                 </TTypography>
             </div>
 
-        </StyledBox>
+        </div>
     );
 }
 

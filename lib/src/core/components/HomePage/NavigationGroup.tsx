@@ -1,9 +1,6 @@
-import { Box, Typography } from "@mui/material";
 import { PropsWithChildren } from "react";
 import { ExpandablePanel } from "../ExpandablePanel";
-import {
-    useUserConfigurationPersistence
-} from "../../../hooks/useUserConfigurationPersistence";
+import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import TTypography from "../../../migrated/TTypography";
 
 export function NavigationGroup({

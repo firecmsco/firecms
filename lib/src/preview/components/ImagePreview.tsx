@@ -1,5 +1,5 @@
 import React, { CSSProperties, useMemo, useState } from "react";
-import { Box, IconButton, Tooltip, useTheme } from "@mui/material";
+import { IconButton, Tooltip, useTheme } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
@@ -66,7 +66,7 @@ export function ImagePreview({
 
                 {navigator && <Tooltip title="Copy url to clipboard">
                     <div
-                        className="rounded-full absolute bottom-[-4px] right-8 bg-[theme.palette.background.default]">
+                        className="rounded-full absolute bottom-[-4px] right-8 bg-default dark:bg-default-dark">
                         <IconButton
                             size={"small"}
                             onClick={(e) => {

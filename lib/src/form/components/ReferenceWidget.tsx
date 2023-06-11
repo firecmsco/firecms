@@ -1,32 +1,14 @@
 import React, { useCallback, useMemo } from "react";
 
-import {
-    Box,
-    Button,
-    IconButton,
-    Tooltip,
-    Typography,
-    useTheme
-} from "@mui/material";
+import { Button, IconButton, Tooltip, useTheme } from "@mui/material";
 
 import LinkIcon from "@mui/icons-material/Link";
 import ErrorIcon from "@mui/icons-material/Error";
 import ClearIcon from "@mui/icons-material/Clear";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 
-import {
-    Entity,
-    EntityCollection,
-    EntityReference,
-    FilterValues,
-    ResolvedProperty
-} from "../../types";
-import {
-    ErrorBoundary,
-    ErrorView,
-    getReferenceFrom,
-    getReferencePreviewKeys
-} from "../../core";
+import { Entity, EntityCollection, EntityReference, FilterValues, ResolvedProperty } from "../../types";
+import { ErrorBoundary, ErrorView, getReferenceFrom, getReferencePreviewKeys } from "../../core";
 import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
@@ -36,10 +18,6 @@ import {
     useReferenceDialog,
     useSideEntityController
 } from "../../hooks";
-import {
-    fieldBackground,
-    fieldBackgroundHover
-} from "../../core/util/field_colors";
 import TTypography from "../../migrated/TTypography";
 
 /**
@@ -216,7 +194,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
                     <div className="flex flex-col flex-grow">
                         <LabelWithIcon icon={<LinkIcon color={"inherit"}
                                                        fontSize={"inherit"}/>}
-                                       className=" flex-grow text-text-secondary ml-1"
+                                       className=" flex-grow text-textSecondary dark:text-textSecondaryDark ml-1"
                                        title={name}
                         />
 

@@ -1,10 +1,4 @@
-import {
-    AuthController,
-    Entity,
-    EntityCollection,
-    Permissions,
-    User
-} from "../../types";
+import { AuthController, Entity, EntityCollection, Permissions, User } from "../../types";
 
 const DEFAULT_PERMISSIONS = {
     read: true,

@@ -1,10 +1,5 @@
 import React from "react";
-import {
-    CollectionSize,
-    Entity,
-    EntityCollection,
-    SelectionController
-} from "../../../types";
+import { CollectionSize, Entity, EntityCollection, SelectionController } from "../../../types";
 import { TableController } from "./useTableController";
 
 /**

@@ -1,6 +1,4 @@
 import { ResolvedReferenceProperty } from "../../types";
-
-import { Box } from "@mui/material";
 import { resolveArrayProperty } from "../../core";
 import { useFireCMSContext } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";

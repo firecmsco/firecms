@@ -1,11 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
-import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
+import { Button, useMediaQuery, useTheme } from "@mui/material";
 import equal from "react-fast-compare";
-import {
-    getCellAlignment,
-    getPropertyColumnWidth,
-    getSubcollectionColumnId
-} from "./internal/common";
+import { getCellAlignment, getPropertyColumnWidth, getSubcollectionColumnId } from "./internal/common";
 import {
     AdditionalFieldDelegate,
     CollectionSize,
@@ -42,15 +38,8 @@ import {
     resolveProperty
 } from "../../util";
 import { getRowHeight } from "../Table/common";
-import {
-    EntityCollectionRowActions
-} from "./internal/EntityCollectionRowActions";
-import {
-    EntityCollectionTableController,
-    OnCellValueChange,
-    SelectedCellProps,
-    UniqueFieldValidator
-} from "./types";
+import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
+import { EntityCollectionTableController, OnCellValueChange, SelectedCellProps, UniqueFieldValidator } from "./types";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { setIn } from "formik";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";

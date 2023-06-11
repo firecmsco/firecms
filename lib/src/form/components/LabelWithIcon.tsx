@@ -1,5 +1,4 @@
 import React from "react";
-import { Box, SxProps, Theme, Typography } from "@mui/material";
 import TTypography from "../../migrated/TTypography";
 
 interface LabelWithIconProps {
@@ -24,7 +23,7 @@ export function LabelWithIcon({
                               }: LabelWithIconProps) {
     return (
         <span
-            className={`inline-flex items-center mb-0.5 ${small ? "gap-1" : "gap-1.5"} ${className ?? ""}`}>
+            className={`text-text-secondary dark:text-text-secondary-dark inline-flex items-center mb-0.5 ${small ? "gap-1" : "gap-1.5"} ${className ?? ""}`}>
 
             {icon}
 

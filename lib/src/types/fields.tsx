@@ -1,9 +1,6 @@
 import { EntityValues } from "./entities";
 import { CMSType, PropertyOrBuilder } from "./properties";
-import {
-    ResolvedEntityCollection,
-    ResolvedProperty
-} from "./resolved_entities";
+import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 
 /**
  * When building a custom field you need to create a React component that takes

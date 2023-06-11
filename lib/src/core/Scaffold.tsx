@@ -1,25 +1,10 @@
 import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
 
-import {
-    Box,
-    IconButton,
-    Link,
-    Toolbar,
-    Tooltip,
-    useMediaQuery,
-    useTheme
-} from "@mui/material";
+import { IconButton, Link, Tooltip, useMediaQuery, useTheme } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
-import { useFireCMSContext, useNavigationContext } from "../hooks";
-import {
-    CircularProgressCenter,
-    ErrorBoundary,
-    FireCMSAppBar,
-    FireCMSAppBarProps,
-    FireCMSLogo
-} from "./components";
-import { styled } from "@mui/material/styles";
+import { useNavigationContext } from "../hooks";
+import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
@@ -157,7 +142,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     <DrawerHeader/>
                     <div
                         ref={containerRef}
-                        className={`flex-grow overflow-auto ${largeLayout ? "m-0 mx-4 mb-4 rounded-lg border border-solid border-divider-color" : "m-0 mt-1"}`}>
+                        className={`flex-grow overflow-auto ${largeLayout ? "m-0 mx-4 mb-4 rounded-lg border border-solid border-divider dark:border-divider-dark " : "m-0 mt-1"}`}>
 
                         <ErrorBoundary>
                             {children}

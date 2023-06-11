@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, FormHelperText } from "@mui/material";
+import { FormHelperText } from "@mui/material";
 
 import { FieldProps } from "../../types";
 import { FieldDescription, LabelWithIcon } from "../components";
@@ -40,7 +40,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
 
             <BooleanSwitch
                 value={value}
-                onChange={(e) => setValue(e.target.checked)}
+                onValueChange={(v) => setValue(v)}
                 error={showError}
                 label={<LabelWithIcon icon={getIconForProperty(property)}
                                       required={property.validation?.required}

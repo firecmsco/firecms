@@ -5,10 +5,7 @@ import { styled } from "@mui/material/styles";
 import { Divider, Theme } from "@mui/material";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";
-import {
-    DEFAULT_ONE_OF_TYPE,
-    DEFAULT_ONE_OF_VALUE
-} from "../../core/util/common";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
 import { useFireCMSContext } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";

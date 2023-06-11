@@ -1,28 +1,18 @@
 import * as React from "react";
 import { useMemo, useState } from "react";
 
-import { Box, IconButton, Theme, Typography, useTheme } from "@mui/material";
+import { IconButton, Theme, useTheme } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 
-import {
-    Entity,
-    ResolvedArrayProperty,
-    ResolvedStringProperty,
-    StorageConfig
-} from "../../../../types";
+import { Entity, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize, PropertyPreview } from "../../../../preview";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { useSnackbarController, useStorageSource } from "../../../../hooks";
 import { getThumbnailMeasure } from "../../../../preview/util";
-import {
-    StorageFieldItem,
-    useStorageUploadController
-} from "../../../util/useStorageUploadController";
-import {
-    StorageUploadProgress
-} from "../../../../form/components/StorageUploadProgress";
+import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
+import { StorageUploadProgress } from "../../../../form/components/StorageUploadProgress";
 import TTypography from "../../../../migrated/TTypography";
 
 const dropZoneMixin = (hasValue: boolean) => ({

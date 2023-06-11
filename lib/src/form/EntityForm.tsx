@@ -1,12 +1,5 @@
-import React, {
-    MutableRefObject,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState
-} from "react";
-import { alpha, Box, Button, Grid, Typography, useTheme } from "@mui/material";
+import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Button, Grid, useTheme } from "@mui/material";
 import {
     CMSAnalyticsEvent,
     Entity,
@@ -22,13 +15,7 @@ import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { PropertyFieldBinding } from "./PropertyFieldBinding";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
-import {
-    CustomDialogActions,
-    getDefaultValuesFor,
-    isHidden,
-    isReadOnly,
-    resolveCollection
-} from "../core";
+import { CustomDialogActions, getDefaultValuesFor, isHidden, isReadOnly, resolveCollection } from "../core";
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
@@ -373,7 +360,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                 return <>
 
                     <div
-                        className="pl-16 pr-16 pt-12 pb-16 mb-8 lg:pl-8 lg:pr-8 lg:pt-8 lg:pb-12 md:p-8"
+                        className="pl-4 pr-4 pt-12 pb-16 md:pl-8 md:pr-8"
                     >
 
                         {pluginActions.length > 0 && <div

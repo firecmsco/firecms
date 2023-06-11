@@ -1,10 +1,8 @@
 import React, { useCallback, useRef } from "react";
-import { styled } from "@mui/system";
 
-import { Box, InputLabel, useTheme } from "@mui/material";
 import { TextareaAutosize } from "./TextareaAutosize";
 import { DisabledTextField } from "./DisabledTextField";
-import { fieldBackground, fieldBackgroundHover } from "../../util/field_colors";
+import TInputLabel from "../../../migrated/TInputLabel";
 
 export type InputType = "text" | "number";
 
@@ -34,10 +32,8 @@ export function TextInput<T extends string | number>({
     small?: boolean
 }) {
 
-    const theme = useTheme();
     const inputRef = useRef(null);
     const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
-
     const hasValue = value !== undefined && value !== null && value !== "";
 
     const numberInputOnWheelPreventChange = useCallback((e: any) => {
@@ -55,24 +51,31 @@ export function TextInput<T extends string | number>({
     }
 
     const input = multiline
-        ? <StyledTextArea ref={inputRef}
-                          placeholder={placeholder}
-                          autoFocus={autoFocus}
-                          onFocus={() => setFocused(true)}
-                          onBlur={() => setFocused(false)}
-                          value={value ?? ""}
-                          onChange={onChange}/>
-        : <StyledInput ref={inputRef}
-                       onWheel={inputType === "number" ? numberInputOnWheelPreventChange : undefined}
-                       className={label ? "p-8 pt-32" : "p-2 px-3"}
-                       small={small ?? false}
-                       placeholder={placeholder}
-                       autoFocus={autoFocus}
-                       onFocus={() => setFocused(true)}
-                       onBlur={() => setFocused(false)}
-                       type={inputType}
-                       value={Number.isNaN(value) ? "" : (value ?? "")}
-                       onChange={onChange}/>;
+        ? <TextareaAutosize
+            ref={inputRef}
+            placeholder={placeholder}
+            autoFocus={autoFocus}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            value={value ?? ""}
+            onChange={onChange}
+            className="rounded-md resize-none w-full outline-none p-[32px] text-base font-medium leading-normal placeholder-[currentColor] bg-transparent min-h-[64px] px-3 pt-[32px] pb-2"
+        />
+        : <input ref={inputRef}
+                 onWheel={inputType === "number" ? numberInputOnWheelPreventChange : undefined}
+                 className={`w-full outline-none ${
+                     small ? "min-h-[48px]" : "min-h-[64px]"
+                 } text-base px-3 ${label ? "pt-[32px] pb-2" : "py-2"} bg-transparent leading-normal ${
+                     error ? "text-error" : focused ? "text-text-primary dark:text-text-primary-dark" : ""
+                 }`}
+                 placeholder={placeholder}
+                 autoFocus={autoFocus}
+                 onFocus={() => setFocused(true)}
+                 onBlur={() => setFocused(false)}
+                 type={inputType}
+                 value={Number.isNaN(value) ? "" : (value ?? "")}
+                 onChange={onChange}
+        />;
 
     const inner = endAdornment
         ? <div className="flex items-center justify-between">
@@ -83,79 +86,21 @@ export function TextInput<T extends string | number>({
 
     return (
         <div
-            className="relative bg-[fieldBackground(theme)] rounded-[theme.shape.borderRadius] max-w-full min-h-[64px] hover:bg-[fieldBackgroundHover(theme)]"
-            style={{ minHeight: small ? "48px" : "64px" }}>
-            <InputLabel
-                shrink={hasValue || focused}
-                className={`absolute left-0 top-1 pointer-events-none ${!error ? (focused ? 'text-primary' : '') : 'text-error'}`}
-                variant={"filled"}>{label}</InputLabel>
+            className={`rounded-md relative bg-field-default dark:bg-field-dark max-w-full min-h-[64px] hover:bg-field-hover dark:hover:bg-field-hover-dark ${
+                small ? "min-h-[48px]" : "min-h-[64px]"
+            }`}>
+            {label && (
+                <TInputLabel
+                    className={`absolute left-0 top-1 pointer-events-none ${
+                        !error ? (focused ? "text-primary" : "text-textSecondary dark:text-textSecondaryDark") : "text-error"
+                    }`}
+                    shrink={hasValue || focused}
+                >
+                    {label}
+                </TInputLabel>
+            )}
 
             {inner}
         </div>
     );
 }
-
-
-function StyledInput({ small, ...props }: {
-    small: boolean,
-    ref: React.Ref<HTMLInputElement>
-} & React.InputHTMLAttributes<HTMLInputElement>) {
-    return (
-        <input
-            {...props}
-            className={`w-full outline-none ${small ? "min-h-12" : "min-h-16"} text-lg 
-      px-3 py-4 font-inherit leading-7 tracking-inherit 
-      text-current border-0 bg-none 
-      m-0 WebkitTapHighlightColor-transparent block min-w-0 
-      animation[:-webkit-auto-fill-cancel(10ms)]
-      focus::-webkit-inner-spin-button(webkit-appearance-none margin-0) ${props.className}`}
-        />
-    );
-}
-
-// const StyledInput = styled("input")(({ small }: {
-//     small: boolean
-// }) => ({
-//     width: "100%",
-//     outlineWidth: 0,
-//     minHeight: small ? "48px" : "64px",
-//     fontSize: "16px",
-//     padding: "32px 12px 8px 12px",
-//     font: "inherit",
-//     letterSpacing: "inherit",
-//     color: "currentcolor",
-//     border: "0px",
-//     background: "none",
-//     height: "1.4375em",
-//     margin: "0px",
-//     WebkitTapHighlightColor: "transparent",
-//     display: "block",
-//     minWidth: "0px",
-//     animationName: "mui-auto-fill-cancel",
-//     animationDuration: "10ms",
-//     "&::-webkit-inner-spin-button": {
-//         WebkitAppearance: "none",
-//         margin: 0
-//     }
-// }));
-
-const StyledTextArea = styled(TextareaAutosize)({
-    width: "100%",
-    outlineWidth: 0,
-    resize: "none",
-    minHeight: "64px",
-    fontSize: "16px",
-    padding: "32px 12px 8px 12px",
-    font: "inherit",
-    letterSpacing: "inherit",
-    color: "currentcolor",
-    border: "0px",
-    background: "none",
-    height: "1.4375em",
-    margin: "0px",
-    WebkitTapHighlightColor: "transparent",
-    display: "block",
-    minWidth: "0px",
-    animationName: "mui-auto-fill-cancel",
-    animationDuration: "10ms"
-});

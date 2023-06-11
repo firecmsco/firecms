@@ -1,8 +1,5 @@
 import { EntityCollection, EntityCustomView } from "../../types";
-import {
-    getCollectionPathsCombinations,
-    removeInitialAndTrailingSlashes
-} from "./navigation_utils";
+import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
 
 export type NavigationViewInternal<M extends Record<string, any> = any> =
     | NavigationViewEntityInternal<M>

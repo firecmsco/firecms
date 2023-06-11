@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { config } from "react-transition-group";
 
 /**
  * @category Firebase

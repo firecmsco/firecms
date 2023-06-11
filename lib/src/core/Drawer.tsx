@@ -1,25 +1,10 @@
 import React, { useCallback } from "react";
 
 import { NavLink } from "react-router-dom";
-import {
-    Box,
-    darken,
-    lighten,
-    List,
-    ListItem,
-    SvgIconTypeMap,
-    Tooltip,
-    Typography,
-    useTheme
-} from "@mui/material";
+import { darken, lighten, List, ListItem, SvgIconTypeMap, Tooltip, useTheme } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../hooks";
-import {
-    CMSAnalyticsEvent,
-    TopNavigationEntry,
-    TopNavigationResult
-} from "../types";
+import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { getIconForView } from "./util";
-import { grey } from "@mui/material/colors";
 import TTypography from "../migrated/TTypography";
 
 /**
