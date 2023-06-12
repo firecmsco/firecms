@@ -1,18 +1,6 @@
 import { FirebaseApp } from "firebase/app";
-import {
-    FirebaseStorage,
-    getDownloadURL,
-    getMetadata,
-    getStorage,
-    ref,
-    uploadBytes
-} from "firebase/storage";
-import {
-    DownloadConfig,
-    DownloadMetadata,
-    StorageSource,
-    UploadFileProps
-} from "../../types";
+import { FirebaseStorage, getDownloadURL, getMetadata, getStorage, ref, uploadBytes } from "firebase/storage";
+import { DownloadConfig, DownloadMetadata, StorageSource, UploadFileProps } from "../../types";
 import { useEffect, useState } from "react";
 
 /**
@@ -48,13 +36,29 @@ export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceP
             }));
         },
 
+        async getFile(path: string): Promise<File | null> {
+            try {
+
+                if (!storage)
+                    throw Error("useFirebaseStorageSource Firebase not initialised");
+                const fileRef = ref(storage, path);
+                const url = await getDownloadURL(fileRef);
+                const response = await fetch(url);
+                const blob = await response.blob();
+                return new File([blob], path);
+            } catch (e: any) {
+                if (e?.code === "storage/object-not-found") return null;
+                throw e;
+            }
+        },
+
         async getDownloadURL(storagePathOrUrl: string): Promise<DownloadConfig> {
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             if (urlsCache[storagePathOrUrl])
                 return urlsCache[storagePathOrUrl];
             const fileRef = ref(storage, storagePathOrUrl);
             const [url, metadata] = await Promise.all([getDownloadURL(fileRef), getMetadata(fileRef)]);
-            const result:DownloadConfig = {
+            const result: DownloadConfig = {
                 url, metadata: metadata as DownloadMetadata
             }
             urlsCache[storagePathOrUrl] = result;

@@ -93,7 +93,7 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
     };
 };
 
-function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): EntitySidePanelProps<any>[] {
+export function buildSidePanelsFromUrl(path: string, collections: EntityCollection[], newFlag: boolean): EntitySidePanelProps<any>[] {
 
     const navigationViewsForPath: NavigationViewInternal<any>[] = getNavigationEntriesFromPathInternal({
         path,

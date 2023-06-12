@@ -83,5 +83,12 @@ export interface StorageSource {
      * Convert a storage path or URL into a download configuration
      * @param path
      */
-    getDownloadURL: (pathOrUrl: string) => Promise<DownloadConfig>
+    getDownloadURL: (pathOrUrl: string) => Promise<DownloadConfig>;
+
+    /**
+     * Get a file from a storage path.
+     * It returns null if the file does not exist.
+     * @param props
+     */
+    getFile: (path:string) => Promise<File | null>;
 }

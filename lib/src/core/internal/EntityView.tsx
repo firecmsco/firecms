@@ -222,7 +222,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 sideEntityController.replace({
                     path,
                     entityId: updatedEntity.id,
-                    selectedSubPath,
+                    selectedSubPath: getSelectedSubPath(tabsPosition),
                     updateUrl: true,
                     collection
                 });
