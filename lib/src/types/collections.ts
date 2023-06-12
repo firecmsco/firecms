@@ -257,7 +257,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
     hideIdFromCollection?: boolean;
 
     /**
-     * If set to true, the form will be autosaved when the user changes
+     * If set to true, the form will be auto-saved when the user changes
      * the value of a field.
      * Defaults to false.
      * You can't use this prop if you are using a `customId`
