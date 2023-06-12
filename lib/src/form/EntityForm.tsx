@@ -22,6 +22,7 @@ import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
 
+
 /**
  * @category Components
  */
@@ -51,16 +52,8 @@ export interface EntityFormProps<M extends Record<string, any>> {
     /**
      * The callback function called when Save is clicked and validation is correct
      */
-    onEntitySave: (
-        props:
-            {
-                collection: ResolvedEntityCollection<M>,
-                path: string,
-                entityId: string | undefined,
-                values: EntityValues<M>,
-                previousValues?: EntityValues<M>,
-                closeAfterSave: boolean
-            }
+    onEntitySaveRequested: (
+        props: EntityFormSaveParams<M>
     ) => Promise<void>;
 
     /**
@@ -95,6 +88,17 @@ export interface EntityFormProps<M extends Record<string, any>> {
 
 }
 
+
+export type EntityFormSaveParams<M extends Record<string, any>> = {
+    collection: ResolvedEntityCollection<M>,
+    path: string,
+    entityId: string | undefined,
+    values: EntityValues<M>,
+    previousValues?: EntityValues<M>,
+    closeAfterSave: boolean,
+    autoSave: boolean
+};
+
 /**
  * This is the form used internally by the CMS
  * @param status
@@ -120,7 +124,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                path,
                                                                collection: inputCollection,
                                                                entity,
-                                                               onEntitySave,
+                                                               onEntitySaveRequested,
                                                                onDiscard,
                                                                onModified,
                                                                onValuesChanged,
@@ -242,13 +246,14 @@ function EntityFormInternal<M extends Record<string, any>>({
     }, [baseDataSourceValues, collection.properties, initialValues, status]);
 
     const save = (values: EntityValues<M>) =>
-        onEntitySave({
+        onEntitySaveRequested({
             collection,
             path,
             entityId,
             values,
             previousValues: entity?.values,
-            closeAfterSave: closeAfterSaveRef.current
+            closeAfterSave: closeAfterSaveRef.current,
+            autoSave: autoSave ?? false,
         }).then(_ => {
             const eventName: CMSAnalyticsEvent = status === "new"
                 ? "new_entity_saved"

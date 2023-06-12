@@ -203,12 +203,13 @@ function BlockEntry({
         }
         : undefined;
 
-    const updateType = useCallback((newType: any) => {
+    const updateType = (newType: any) => {
+        const newSelectedProperty = newType ? properties[newType] : undefined;
         setTypeInternal(newType);
         formikContext.setFieldTouched(typeFieldName);
         formikContext.setFieldValue(typeFieldName, newType);
-        formikContext.setFieldValue(valueFieldName, property ? getDefaultValueFor(property) : null);
-    }, [typeFieldName, valueFieldName]);
+        formikContext.setFieldValue(valueFieldName, newSelectedProperty ? getDefaultValueFor(newSelectedProperty) : null);
+    };
 
     return (
         <Paper sx={(theme) => ({

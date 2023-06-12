@@ -3,10 +3,10 @@ import React from "react";
 export function useDebounce<T>(value: T, callback: () => void, immediate: boolean, timeoutMs = 300) {
 
     const pendingUpdate = React.useRef(false);
-    const performUpdate = React.useCallback(() => {
+    const performUpdate = () => {
         callback();
         pendingUpdate.current = false;
-    }, [callback]);
+    };
 
     const handlerRef = React.useRef<number | undefined>(undefined);
 
