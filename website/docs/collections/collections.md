@@ -60,6 +60,9 @@ in [Entity collections](../api/interfaces/entitycollection)
   Note that if you set this prop, other ways to hide fields, like
   `hidden` in the property definition, will not work.
 
+* `formAutoSave` If set to true, the form will be auto-saved when the user changes
+  the value of a field. Defaults to false. You can't use this prop if you are using a `customId`
+
 * `collectionGroup` If this collection is a top level navigation entry, you can
   set this property to `true` to indicate that this collection is a collection
   group. From the Firestore documentation: "A collection group consists of all
@@ -163,7 +166,6 @@ in [Entity collections](../api/interfaces/entitycollection)
 
 * `views` Array of builders for rendering additional panels in an entity view.
   Useful if you need to render custom views for your entities.
-  
 
 :::tip
 You can force the CMS to always open the form when editing a document by

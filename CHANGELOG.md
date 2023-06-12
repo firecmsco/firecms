@@ -1,3 +1,13 @@
+## [2.0.1] - 2023-06-12
+
+### Changed
+
+- Fix for block entries not generating the correct default value when adding a new entry. This was causing
+a bug when the child property is an array, like in the blog example.
+- Added the `formAutoSave` to collections. This removes the buttons from the form and automatically saves
+the entity when there are changes or the user leaves the form.
+
+
 ## [2.0.0] - 2023-06-07
 
 ### Changed
