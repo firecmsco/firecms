@@ -3,28 +3,24 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Box, Container, Grid } from "@mui/material";
 
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
-import {
-    PluginGenericProps,
-    PluginHomePageAdditionalCardsProps
-} from "../../../types";
+import { PluginGenericProps, PluginHomePageAdditionalCardsProps } from "../../../types";
 
 import { toArray } from "../../util/arrays";
 import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCollectionCard } from "./NavigationCollectionCard";
 
 // @ts-ignore
-import Index from "flexsearch/dist/module/index.js";
+import * as JsSearch from "js-search";
 
 import { SearchBar } from "../EntityCollectionTable/internal/SearchBar";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
 
-export const searchIndex = new Index(
-    // @ts-ignore
-    {
-        charset: "latin:advanced",
-        tokenize: "full"
-    });
+const search = new JsSearch.Search("home");
+search.addIndex("name");
+search.addIndex("description");
+search.addIndex("group");
+search.addIndex("path");
 
 /**
  * Default entry view for the CMS. This component renders navigation cards
@@ -58,10 +54,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
         : navigationEntries;
 
     useEffect(() => {
-        filteredNavigationEntries.forEach((entry) => {
-            // @ts-ignore
-            searchIndex.addAsync(entry.url, `${entry.name} ${entry.description} ${entry.group} ${entry.path}`);
-        })
+        search.addDocuments(filteredNavigationEntries);
     }, [navigationEntries]);
 
     const updateSearchResults = useCallback(
@@ -69,10 +62,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
             if (!value || value === "") {
                 setFilteredUrls(null);
             } else {
-                // @ts-ignore
-                searchIndex.searchAsync(value).then((results) => {
-                    setFilteredUrls(results);
-                });
+                setFilteredUrls(search.search(value).map((e: any) => e.url));
             }
         }, []);
 

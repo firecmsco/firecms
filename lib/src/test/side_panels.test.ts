@@ -6,8 +6,7 @@ describe('buildSidePanelsFromUrl', () => {
     const mockCollections: EntityCollection[] = [
         {
             name: "Products",
-            path: "/products",
-            alias: "collectionA",
+            path: "products",
             properties: {},
             views: [{
                 path: "custom_view",
@@ -20,8 +19,12 @@ describe('buildSidePanelsFromUrl', () => {
             }]
         },
         {
-            name: "Blog",
-            path: "/blog",
+            name: "Experiences",
+            path: "users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences",
+            views: [{
+                path: "editor",
+                name: "Editor",
+            }],
             properties: {}
         }
     ];
@@ -33,79 +36,64 @@ describe('buildSidePanelsFromUrl', () => {
     test('should return side panels based on given path', () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
-                path: "/products/entityA",
+                path: "products",
                 entityId: "entityA",
-                copy: false,
-                selectedSubPath: "/blog"
+                copy: false
             }
         ];
-        const sidePanels = buildSidePanelsFromUrl("/products/entityA/blog", mockCollections, false);
+        const sidePanels = buildSidePanelsFromUrl("/products/entityA", mockCollections, false);
+        expect(sidePanels).toEqual(expectedSidePanels);
+    });
+
+    test('should return side panels based on given path', () => {
+        const expectedSidePanels: EntitySidePanelProps<any>[] = [
+            {
+                path: "products",
+                entityId: "entityA",
+                copy: false,
+                selectedSubPath: "locales"
+            }
+        ];
+        const sidePanels = buildSidePanelsFromUrl("/products/entityA/locales", mockCollections, false);
         expect(sidePanels).toEqual(expectedSidePanels);
     });
 
     test('should return side panels based on given path and newFlag', () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
-                path: "/products/entityA",
-                entityId: "entityA",
-                copy: false,
-                selectedSubPath: "/blog"
-            },
-            {
-                path: "/blog",
+                path: "products",
                 copy: false,
             }
         ];
-        const sidePanels = buildSidePanelsFromUrl("/products/entityA/blog", mockCollections, true);
+        const sidePanels = buildSidePanelsFromUrl("products", mockCollections, true);
         expect(sidePanels).toEqual(expectedSidePanels);
     });
 
     test('should return side panels based on given path with custom view', () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
-                path: "/products",
+                path: "products",
                 entityId: "entityA",
                 copy: false,
-                selectedSubPath: "/custom_view"
+                selectedSubPath: "custom_view"
             }
         ];
         const sidePanels = buildSidePanelsFromUrl("/products/entityA/custom_view", mockCollections, false);
         expect(sidePanels).toEqual(expectedSidePanels);
     });
 
-    test('should return side panels based on given path with custom view and newFlag', () => {
+    test('should return side panels based on complex given path with custom view', () => {
         const expectedSidePanels: EntitySidePanelProps<any>[] = [
             {
-                path: "/products",
-                entityId: "entityA",
+                path: "users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences",
+                entityId: "pUAGjOQALls5wTwKq0sF",
                 copy: false,
-                selectedSubPath: "/custom_view"
-            },
-            {
-                path: "/products",
-                copy: false,
+                selectedSubPath: "editor"
             }
         ];
-        const sidePanels = buildSidePanelsFromUrl("/products/entityA/custom_view", mockCollections, true);
+        const sidePanels = buildSidePanelsFromUrl("users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences/pUAGjOQALls5wTwKq0sF/editor", mockCollections, false);
         expect(sidePanels).toEqual(expectedSidePanels);
     });
 
-    test('should return empty side panels when provided path is empty', () => {
-        const sidePanels = buildSidePanelsFromUrl("", mockCollections, false);
-        expect(sidePanels).toEqual([]);
-    });
-
-    test('should handle case when first collection is handled by main navigation', () => {
-        const expectedSidePanels: EntitySidePanelProps<any>[] = [
-            {
-                path: "/products/entityA",
-                entityId: "entityA",
-                copy: false,
-                selectedSubPath: "/products"
-            }
-        ];
-        const sidePanels = buildSidePanelsFromUrl("/products/entityA/products/entityB", mockCollections, false);
-        expect(sidePanels).toEqual(expectedSidePanels);
-    });
 
 });

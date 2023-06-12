@@ -26,7 +26,6 @@ import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 import { useLargeSideLayout } from "./useLargeSideLayout";
 import { EntityFormSaveParams } from "../../form/EntityForm";
-import { setIn } from "formik";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -100,7 +99,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const customViewsCount = customViews?.length ?? 0;
         const autoSave = collection.formAutoSave && !collection.customId;
 
-        const getTabPositionFromPath = useCallback((subPath: string): number => {
+        const getTabPositionFromPath = (subPath: string): number => {
             if (customViews) {
                 const index = customViews
                     .map((c) => c.path)
@@ -117,7 +116,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     return index + customViewsCount;
             }
             return -1;
-        }, [customViews, customViewsCount, subcollections]);
+        };
 
         const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
 
@@ -129,7 +128,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         );
 
-        const [tabsPosition, setTabsPosition] = React.useState(defaultSelectedView ? getTabPositionFromPath(defaultSelectedView) : -1);
+        const [tabsPosition, setTabsPosition] = React.useState<number>(defaultSelectedView ? getTabPositionFromPath(defaultSelectedView) : -1);
 
         const mainViewVisible = tabsPosition === -1 || largeLayout;
 
@@ -197,6 +196,20 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             console.error(e);
         }, [snackbarController]);
 
+        const getSelectedSubPath = (value: number) => {
+            if (value === -1) return undefined;
+
+            if (customViews && value < customViewsCount) {
+                return customViews[value].path;
+            }
+
+            if (subcollections) {
+                return subcollections[value - customViewsCount].path;
+            }
+
+            throw Error("Something is wrong in getSelectedSubPath");
+        };
+
         const onSaveSuccess = (updatedEntity: Entity<M>, closeAfterSave: boolean) => {
 
             setSaving(false);
@@ -242,11 +255,11 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             console.error(e);
         }, [entityId, path, snackbarController]);
 
-        function saveEntity({ values, previousValues, closeAfterSave }: {
+        const saveEntity = ({ values, previousValues, closeAfterSave }: {
             values: M,
             previousValues?: M,
             closeAfterSave: boolean,
-        }) {
+        }) => {
             setSaving(true);
             saveEntityWithCallbacks({
                 path,
@@ -262,7 +275,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 onPreSaveHookError,
                 onSaveSuccessHookError
             }).then();
-        }
+        };
 
         const onSaveEntityRequest = async ({
                                                values,
@@ -325,6 +338,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const globalLoading = (dataLoading && !usedEntity) ||
             ((!usedEntity || readOnly === undefined) && (status === "existing" || status === "copy"));
+
         const loading = globalLoading || saving;
 
         const subCollectionsViews = subcollections && subcollections.map(
@@ -376,20 +390,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 );
             }
         ).filter(Boolean);
-
-        const getSelectedSubPath = useCallback((value: number) => {
-            if (value === -1) return undefined;
-
-            if (customViews && value < customViewsCount) {
-                return customViews[value].path;
-            }
-
-            if (subcollections) {
-                return subcollections[value - customViewsCount].path;
-            }
-
-            throw Error("Something is wrong in getSelectedSubPath");
-        }, [customViewsCount]);
 
         const onDiscard = useCallback(() => {
             onValuesAreModified(false);
