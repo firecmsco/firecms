@@ -197,14 +197,14 @@ function EntityFormInternal<M extends Record<string, any>>({
             onIdChange(entityId);
     }, [entityId, onIdChange]);
 
-    const collection = useMemo(() => resolveCollection<M>({
+    const collection = resolveCollection<M>({
         collection: inputCollection,
         path,
         entityId,
         values: internalValues,
         previousValues: initialValues,
         fields: context.fields
-    }), [inputCollection, path, entityId, internalValues, initialValues]);
+    });
 
     const onIdUpdate = collection.callbacks?.onIdUpdate;
     useEffect(() => {
@@ -245,8 +245,8 @@ function EntityFormInternal<M extends Record<string, any>>({
         }
     }, [baseDataSourceValues, collection.properties, initialValues, status]);
 
-    const save = (values: EntityValues<M>) =>
-        onEntitySaveRequested({
+    const save = (values: EntityValues<M>) => {
+        return onEntitySaveRequested({
             collection,
             path,
             entityId,
@@ -268,6 +268,7 @@ function EntityFormInternal<M extends Record<string, any>>({
             .finally(() => {
                 closeAfterSaveRef.current = false;
             });
+    };
 
     const saveFormValues = (values: EntityValues<M>, formikActions: FormikHelpers<EntityValues<M>>) => {
 
@@ -524,7 +525,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
     }, [modified, values]);
 
     useEffect(() => {
-        if (underlyingChanges && entity) {
+        if (!autoSave && underlyingChanges && entity) {
             // we update the form fields from the Firestore data
             // if they were not touched
             Object.entries(underlyingChanges).forEach(([key, value]) => {
@@ -535,7 +536,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                 }
             });
         }
-    }, [underlyingChanges, entity, values, touched, setFieldValue]);
+    }, [autoSave, underlyingChanges, entity, values, touched, setFieldValue]);
 
     const formFields = (
         <Grid container spacing={6}>
