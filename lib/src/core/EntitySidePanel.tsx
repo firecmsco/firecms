@@ -31,7 +31,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
         let usedCollection = props.collection;
 
         if (!usedCollection) {
-            usedCollection = !props ? undefined : navigationContext.getCollection(props.path, props.entityId);
+            usedCollection = navigationContext.getCollection(props.path, props.entityId);
             if (!usedCollection) {
                 console.error("ERROR: No collection found in path `", props.path, "`. Entity id: ", props.entityId);
                 throw Error("ERROR: No collection found in path `" + props.path + "`. Make sure you have defined a collection for this path in the root navigation.");

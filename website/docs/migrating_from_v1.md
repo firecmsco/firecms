@@ -4,7 +4,7 @@ title: Migrating from version 1.0 to 2.0
 ---
 
 :::important 
-The package name has change from `@FireCMSco/firecms` to `firecms`. 
+The package name has change from `@Camberi/firecms` to `firecms`. 
 Please update your dependencies accordingly
 :::
 

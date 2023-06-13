@@ -29,7 +29,7 @@ function HeroButtons() {
         </a>
 
         <div
-            className={"font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md my-2 lg:mx-2"}>
+            className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md my-2 lg:mx-2"}>
             yarn create firecms-app
         </div>
 

@@ -2,18 +2,14 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 import { CircularProgress, Divider, IconButton, Tab, Tabs, useTheme } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import {
-    Entity,
-    EntityCollection,
-    EntityStatus,
-    EntityValues,
-    FireCMSPlugin,
-    FormContext,
-    ResolvedEntityCollection,
+import { Entity, EntityCollection, EntityStatus, EntityValues, FireCMSPlugin, FormContext,
     User
 } from "../../types";
 import { CircularProgressCenter, EntityCollectionView, EntityPreview, ErrorBoundary } from "../components";
-import { canEditEntity, fullPathToCollectionSegments, removeInitialAndTrailingSlashes } from "../util";
+import { canEditEntity, fullPathToCollectionSegments, removeInitialAndTrailingSlashes ,
+    resolveDefaultSelectedView,
+    useDebounce
+} from "../util";
 
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import {
@@ -29,6 +25,7 @@ import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 import { useLargeSideLayout } from "./useLargeSideLayout";
 import TTypography from "../../migrated/TTypography";
+import { EntityFormSaveParams } from "../../form/EntityForm";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -46,8 +43,7 @@ export interface EntityViewProps<M extends Record<string, any>> {
  * This is the default view that is used as the content of a side panel when
  * an entity is opened.
  * You probably don't want to use this view directly since it is bound to the
- * side panel. Instead, you might want to use {@link EntityForm} or
- * {@link EntityCollectionView}
+ * side panel. Instead, you might want to use {@link EntityForm} or {@link EntityCollectionView}
  */
 export const EntityView = React.memo<EntityViewProps<any>>(
     function EntityView<M extends Record<string, any>, UserType extends User>({
@@ -61,6 +57,21 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                                                                   onUpdate,
                                                                                   onClose
                                                                               }: EntityViewProps<M>) {
+
+        if (collection.customId && collection.formAutoSave) {
+            console.warn(`The collection ${collection.path} has customId and formAutoSave enabled. This is not supported and formAutoSave will be ignored`);
+        }
+
+        const [saving, setSaving] = useState(false);
+        /**
+         * These are the values that are being saved. They are debounced.
+         * We use this only when autoSave is enabled.
+         */
+        const [valuesToBeSaved, setValuesToBeSaved] = useState<EntityValues<M> | undefined>(undefined);
+        useDebounce(valuesToBeSaved, () => {
+            if (valuesToBeSaved)
+                saveEntity({ values: valuesToBeSaved, closeAfterSave: false });
+        }, false, 2000);
 
         const theme = useTheme();
         const largeLayout = useLargeSideLayout();
@@ -78,7 +89,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const [formContext, setFormContext] = useState<FormContext<M> | undefined>(undefined);
 
         const [status, setStatus] = useState<EntityStatus>(copy ? "copy" : (entityId ? "existing" : "new"));
-        // const [currentEntityId, setCurrentEntityId] = useState<string | undefined>(entityId);
 
         const modifiedValuesRef = useRef<EntityValues<M> | undefined>(undefined);
         const modifiedValues = modifiedValuesRef.current;
@@ -87,6 +97,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const subcollectionsCount = subcollections?.length ?? 0;
         const customViews = collection.views;
         const customViewsCount = customViews?.length ?? 0;
+        const autoSave = collection.formAutoSave && !collection.customId;
 
         const getTabPositionFromPath = useCallback((subPath: string): number => {
             if (customViews) {
@@ -109,7 +120,13 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
 
-        const defaultSelectedView = selectedSubPath ?? collection.defaultSelectedView;
+        const defaultSelectedView = selectedSubPath ?? resolveDefaultSelectedView(
+            collection ? collection.defaultSelectedView : undefined,
+            {
+                status,
+                entityId
+            }
+        );
 
         const [tabsPosition, setTabsPosition] = React.useState(defaultSelectedView ? getTabPositionFromPath(defaultSelectedView) : -1);
 
@@ -146,12 +163,6 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             }
         }, [authController, usedEntity, status]);
 
-        // useEffect(() => {
-        //     if (defaultSelectedView) {
-        //         setTabsPosition(getTabPositionFromPath(defaultSelectedView));
-        //     }
-        // }, [getTabPositionFromPath, defaultSelectedView]);
-
         useEffect(() => {
             if (largeLayoutTabSelected.current === largeLayout)
                 return;
@@ -161,12 +172,14 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     path,
                     entityId,
                     selectedSubPath: defaultSelectedView,
-                    updateUrl: true
+                    updateUrl: true,
+                    collection
                 });
             largeLayoutTabSelected.current = largeLayout;
         }, [defaultSelectedView, largeLayout, selectedSubPath]);
 
         const onPreSaveHookError = useCallback((e: Error) => {
+            setSaving(false);
             snackbarController.open({
                 type: "error",
                 message: "Error before saving: " + e?.message
@@ -175,6 +188,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         }, [snackbarController]);
 
         const onSaveSuccessHookError = useCallback((e: Error) => {
+            setSaving(false);
             snackbarController.open({
                 type: "error",
                 message: "Error after saving (entity is saved): " + e?.message
@@ -184,12 +198,13 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const onSaveSuccess = (updatedEntity: Entity<M>, closeAfterSave: boolean) => {
 
-            snackbarController.open({
-                type: "success",
-                message: `${collection.singularName ?? collection.name}: Saved correctly`
-            });
+            setSaving(false);
+            if (!autoSave)
+                snackbarController.open({
+                    type: "success",
+                    message: `${collection.singularName ?? collection.name}: Saved correctly`
+                });
 
-            // setCurrentEntityId(updatedEntity.id);
             setUsedEntity(updatedEntity);
             setStatus("existing");
 
@@ -202,12 +217,13 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 sideDialogContext.setBlocked(false);
                 sideDialogContext.close(true);
                 onClose?.();
-            } else {
+            } else if (status !== "existing") {
                 sideEntityController.replace({
                     path,
                     entityId: updatedEntity.id,
                     selectedSubPath,
-                    updateUrl: true
+                    updateUrl: true,
+                    collection
                 });
             }
 
@@ -215,6 +231,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
         const onSaveFailure = useCallback((e: Error) => {
 
+            setSaving(false);
             snackbarController.open({
                 type: "error",
                 message: "Error saving: " + e?.message
@@ -224,26 +241,13 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             console.error(e);
         }, [entityId, path, snackbarController]);
 
-        const onEntitySave = useCallback(async ({
-                                                    collection,
-                                                    path,
-                                                    entityId,
-                                                    values,
-                                                    previousValues,
-                                                    closeAfterSave
-                                                }: {
-            collection: ResolvedEntityCollection<M>,
-            path: string,
-            entityId: string | undefined,
-            values: EntityValues<M>,
-            previousValues?: EntityValues<M>,
-            closeAfterSave: boolean
-        }): Promise<void> => {
-
-            if (!status)
-                return;
-
-            return saveEntityWithCallbacks({
+        function saveEntity({ values, previousValues, closeAfterSave }: {
+            values: M,
+            previousValues?: M,
+            closeAfterSave: boolean,
+        }) {
+            setSaving(true);
+            saveEntityWithCallbacks({
                 path,
                 entityId,
                 values,
@@ -256,14 +260,35 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                 onSaveFailure,
                 onPreSaveHookError,
                 onSaveSuccessHookError
-            });
-        }, [status, collection, dataSource, context, onSaveSuccess, onSaveFailure, onPreSaveHookError, onSaveSuccessHookError]);
+            }).then();
+        }
+
+        const onSaveEntityRequest = async ({
+                                               values,
+                                               previousValues,
+                                               closeAfterSave,
+                                               autoSave
+                                           }: EntityFormSaveParams<M>): Promise<void> => {
+
+            if (!status)
+                return;
+
+            if (autoSave) {
+                setValuesToBeSaved(values);
+            } else {
+                saveEntity({
+                    values,
+                    previousValues,
+                    closeAfterSave
+                });
+            }
+        };
 
         const customViewsView: React.ReactNode[] | undefined = customViews && customViews.map(
             (customView, colIndex) => {
                 if (tabsPosition !== colIndex)
                     return null;
-                if (customView.Builder) {
+                if (customView.builder) {
                     console.warn("customView.builder is deprecated, use customView.Builder instead", customView);
                 }
                 const Builder = customView.Builder ?? customView.builder;
@@ -276,17 +301,20 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     key={`custom_view_${customView.path}`}
                     role="tabpanel">
                     <ErrorBoundary>
-                        <Builder
+                        {formContext && <Builder
                             collection={collection}
                             entity={usedEntity}
                             modifiedValues={modifiedValues ?? usedEntity?.values}
-                        />
+                            formContext={formContext}
+                        />}
                     </ErrorBoundary>
                 </div>;
             }
         ).filter(Boolean);
 
-        const loading = (dataLoading && !usedEntity) || ((!usedEntity || readOnly === undefined) && (status === "existing" || status === "copy"));
+        const globalLoading = (dataLoading && !usedEntity) ||
+            ((!usedEntity || readOnly === undefined) && (status === "existing" || status === "copy"));
+        const loading = globalLoading || saving;
 
         const subCollectionsViews = subcollections && subcollections.map(
             (subcollection, colIndex) => {
@@ -301,7 +329,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
                         {loading && <CircularProgressCenter/>}
 
-                        {!loading &&
+                        {!globalLoading &&
                             (usedEntity && fullPath
                                 ? <EntityCollectionView
                                     fullPath={fullPath}
@@ -339,17 +367,16 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             onValuesAreModified(false);
         }, []);
 
-        const onSideTabClick = useCallback((value: number) => {
+        const onSideTabClick = (value: number) => {
             setTabsPosition(value);
-            if (entityId) {
-                sideEntityController.replace({
-                    path,
-                    entityId,
-                    selectedSubPath: getSelectedSubPath(value),
-                    updateUrl: true
-                });
-            }
-        }, [entityId, sideEntityController, path, getSelectedSubPath]);
+            sideEntityController.replace({
+                path,
+                entityId,
+                selectedSubPath: getSelectedSubPath(value),
+                updateUrl: true,
+                collection
+            });
+        };
 
         const onValuesChanged = useCallback((values?: EntityValues<M>) => {
             modifiedValuesRef.current = values;
@@ -365,20 +392,26 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             setCurrentEntityId(id);
         }, []);
 
+        const onModified = (dirty: boolean) => {
+            if (!autoSave)
+                onValuesAreModified(dirty);
+        }
+
         function buildForm() {
             const plugins = context.plugins;
             let form = <EntityForm
                 status={status}
                 path={path}
                 collection={collection}
-                onEntitySave={onEntitySave}
+                onEntitySaveRequested={onSaveEntityRequest}
                 onDiscard={onDiscard}
                 onValuesChanged={onValuesChanged}
-                onModified={onValuesAreModified}
+                onModified={onModified}
                 entity={usedEntity}
                 onIdChange={onIdChange}
                 onFormContextChange={setFormContext}
                 hideId={collection.hideIdFromForm}
+                autoSave={autoSave}
             />;
             if (plugins) {
                 plugins.forEach((plugin: FireCMSPlugin) => {
@@ -388,10 +421,9 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                 status={status}
                                 path={path}
                                 collection={collection}
-                                onEntitySave={onEntitySave}
                                 onDiscard={onDiscard}
                                 onValuesChanged={onValuesChanged}
-                                onModified={onValuesAreModified}
+                                onModified={onModified}
                                 entity={usedEntity}
                                 context={context}
                                 currentEntityId={currentEntityId}
@@ -452,7 +484,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
 
                 <div className={"flex-grow"}/>
 
-                {loading && <div
+                {globalLoading && <div
                     className="self-center">
                     <CircularProgress size={16} thickness={8}/>
                 </div>}
@@ -518,7 +550,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                             : ''
                                     }`}>
 
-                                    {loading
+                                    {globalLoading
                                         ? <CircularProgressCenter/>
                                         : form}
 

@@ -2,6 +2,23 @@
 id: changelog
 title: Changelog
 ---
+## [2.0.1] - 2023-06-12
+
+### Changed
+
+- Fix for block entries not generating the correct default value when adding a new entry. This was causing
+a bug when the child property is an array, like in the blog example.
+- Added the `formAutoSave` to collections. This removes the buttons from the form and automatically saves
+the entity when there are changes or the user leaves the form.
+
+
+## [2.0.0] - 2023-06-07
+
+### Changed
+
+- You can use a callback to define the default view of an entity now.
+- Fix when opening entities from a custom view, that also uses subcollections.
+
 ## [2.0.0-rc.2] - 2023-06-05
 
 ### Changed

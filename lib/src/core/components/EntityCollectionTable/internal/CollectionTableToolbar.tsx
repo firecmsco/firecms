@@ -39,12 +39,13 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
         <FilledSelect
             value={props.size}
             className="w-14 h-10"
-            onChange={(evt: any) => props.onSizeChanged(evt.target.value)}
-            // renderValue={(value: any) => value.toUpperCase()}
+            onChange={props.onSizeChanged}
+            renderValue={(value: any) => value.toUpperCase()}
         >
             {["xs", "s", "m", "l", "xl"].map((value) => (
                 <FilledMenuItem
-                    key={`size-select-${value}`} value={value}>
+                    key={`size-select-${value}`}
+                    value={value}>
                     {value.toUpperCase()}
                 </FilledMenuItem>
             ))}

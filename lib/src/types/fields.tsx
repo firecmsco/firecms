@@ -145,6 +145,11 @@ export interface FormContext<M extends Record<string, any> = any> {
      * @param shouldValidate
      */
     setFieldValue: (key: string, value: any, shouldValidate?: boolean) => void;
+
+    /**
+     * Save the entity
+     */
+    save: (values: EntityValues<M>) => void;
 }
 
 /**

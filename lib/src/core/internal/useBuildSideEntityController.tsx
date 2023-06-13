@@ -11,7 +11,10 @@ import {
 import { getNavigationEntriesFromPathInternal, NavigationViewInternal } from "../util/navigation_from_path";
 import { useLocation } from "react-router-dom";
 import { EntitySidePanel } from "../EntitySidePanel";
-import { removeInitialAndTrailingSlashes } from "../util";
+import {
+    removeInitialAndTrailingSlashes,
+    resolveDefaultSelectedView
+} from "../util";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 
 const NEW_URL_HASH = "new";
@@ -54,8 +57,15 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
         if (props.copy && !props.entityId) {
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
-        const firstAdditionalView = props.collection ? props.collection.defaultSelectedView : undefined;
-        sideDialogsController.open(propsToSidePanel({ selectedSubPath: firstAdditionalView, ...props }, navigation, smallLayout));
+        const defaultSelectedView = resolveDefaultSelectedView(
+            props.collection ? props.collection.defaultSelectedView : undefined,
+            {
+                status: props.copy ? "copy" : (props.entityId ? "existing" : "new"),
+                entityId: props.entityId
+            }
+        );
+
+        sideDialogsController.open(propsToSidePanel({ selectedSubPath: defaultSelectedView, ...props }, navigation, smallLayout));
 
     }, [sideDialogsController, navigation, smallLayout]);
 

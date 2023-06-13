@@ -1,10 +1,11 @@
 import React, { Dispatch, SetStateAction } from "react";
-import { Entity, EntityValues } from "./entities";
+import { Entity, EntityStatus, EntityValues } from "./entities";
 import { User } from "./user";
 import { FireCMSContext } from "./firecms_context";
 import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
 import { EnumValues, PropertiesOrBuilders } from "./properties";
+import { FormContext } from "./fields";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -243,7 +244,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * that has a custom view as well as a subcollection that refers to another entity, you can
      * either specify the path to the custom view or the path to the subcollection.
      */
-    defaultSelectedView?: string;
+    defaultSelectedView?: string | DefaultSelectedViewBuilder;
 
     /**
      * Should the ID of this collection be hidden from the form view.
@@ -254,6 +255,14 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * Should the ID of this collection be hidden from the grid view.
      */
     hideIdFromCollection?: boolean;
+
+    /**
+     * If set to true, the form will be auto-saved when the user changes
+     * the value of a field.
+     * Defaults to false.
+     * You can't use this prop if you are using a `customId`
+     */
+    formAutoSave?: boolean;
 
 }
 
@@ -468,6 +477,26 @@ export interface EntityCustomViewParams<M extends Record<string, any> = any> {
      * are the same as in `entity`
      */
     modifiedValues?: EntityValues<M>;
+
+    /**
+     * Use the form context to access the form state and methods
+     */
+    formContext: FormContext;
 }
 
 export type InferCollectionType<S extends EntityCollection> = S extends EntityCollection<infer M> ? M : never;
+
+/**
+ * Used in the {@link EntityCollection#defaultSelectedView} to define the default
+ * @category Models
+ */
+export type DefaultSelectedViewBuilder = (params: DefaultSelectedViewParams) => string | undefined;
+
+/**
+ * Used in the {@link EntityCollection#defaultSelectedView} to define the default
+ * @category Models
+ */
+export type DefaultSelectedViewParams = {
+    status?: EntityStatus;
+    entityId?: string;
+};

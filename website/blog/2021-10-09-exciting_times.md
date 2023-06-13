@@ -101,7 +101,7 @@ of FireCMS that uses the internal components instead of `FirebaseCMSApp`
 
 :::note How did it go?
 If you have been using FireCMS with a custom backend, we would love to hear your feedback
-either in https://www.reddit.com/r/firecms/ or directly at hello@camberi.com 😊
+either in our Discord channel or directly at hello@firecms.co 😊
 :::
 
 ## Code quality

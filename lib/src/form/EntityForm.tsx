@@ -21,6 +21,7 @@ import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
 import TTypography from "../migrated/TTypography";
 
+
 /**
  * @category Components
  */
@@ -50,16 +51,8 @@ export interface EntityFormProps<M extends Record<string, any>> {
     /**
      * The callback function called when Save is clicked and validation is correct
      */
-    onEntitySave?: (
-        props:
-            {
-                collection: ResolvedEntityCollection<M>,
-                path: string,
-                entityId: string | undefined,
-                values: EntityValues<M>,
-                previousValues?: EntityValues<M>,
-                closeAfterSave: boolean
-            }
+    onEntitySaveRequested: (
+        props: EntityFormSaveParams<M>
     ) => Promise<void>;
 
     /**
@@ -90,7 +83,20 @@ export interface EntityFormProps<M extends Record<string, any>> {
 
     hideId?: boolean;
 
+    autoSave?: boolean;
+
 }
+
+
+export type EntityFormSaveParams<M extends Record<string, any>> = {
+    collection: ResolvedEntityCollection<M>,
+    path: string,
+    entityId: string | undefined,
+    values: EntityValues<M>,
+    previousValues?: EntityValues<M>,
+    closeAfterSave: boolean,
+    autoSave: boolean
+};
 
 /**
  * This is the form used internally by the CMS
@@ -117,15 +123,15 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                path,
                                                                collection: inputCollection,
                                                                entity,
-                                                               onEntitySave,
+                                                               onEntitySaveRequested,
                                                                onDiscard,
                                                                onModified,
                                                                onValuesChanged,
                                                                onIdChange,
                                                                onFormContextChange,
-                                                               hideId
+                                                               hideId,
+                                                               autoSave
                                                            }: EntityFormProps<M>) {
-
     const context = useFireCMSContext();
     const dataSource = useDataSource();
     const plugins = context.plugins;
@@ -178,11 +184,14 @@ function EntityFormInternal<M extends Record<string, any>>({
     const [initialValues, setInitialValues] = useState<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
     const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(initialValues);
 
-    const doOnValuesChanges = useCallback((values?: EntityValues<M>) => {
+    const doOnValuesChanges = (values?: EntityValues<M>) => {
         setInternalValues(values);
         if (onValuesChanged)
             onValuesChanged(values);
-    }, [onValuesChanged]);
+        if (autoSave && values && !equal(values, initialValues)) {
+            save(values);
+        }
+    };
 
     useEffect(() => {
         if (entityId && onIdChange)
@@ -237,7 +246,31 @@ function EntityFormInternal<M extends Record<string, any>>({
         }
     }, [baseDataSourceValues, collection.properties, initialValues, status]);
 
-    const saveValues = useCallback((values: EntityValues<M>, formikActions: FormikHelpers<EntityValues<M>>) => {
+    const save = (values: EntityValues<M>) =>
+        onEntitySaveRequested({
+            collection,
+            path,
+            entityId,
+            values,
+            previousValues: entity?.values,
+            closeAfterSave: closeAfterSaveRef.current,
+            autoSave: autoSave ?? false,
+        }).then(_ => {
+            const eventName: CMSAnalyticsEvent = status === "new"
+                ? "new_entity_saved"
+                : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
+            context.onAnalyticsEvent?.(eventName, { path });
+            setInitialValues(values);
+        })
+            .catch(e => {
+                console.error(e);
+                setSavingError(e);
+            })
+            .finally(() => {
+                closeAfterSaveRef.current = false;
+            });
+
+    const saveFormValues = (values: EntityValues<M>, formikActions: FormikHelpers<EntityValues<M>>) => {
 
         if (mustSetCustomId && !entityId) {
             console.error("Missing custom Id");
@@ -261,36 +294,19 @@ function EntityFormInternal<M extends Record<string, any>>({
             throw Error("New FormType added, check EntityForm");
         }
 
-        onEntitySave?.({
-            collection,
-            path,
-            entityId,
-            values,
-            previousValues: entity?.values,
-            closeAfterSave: closeAfterSaveRef.current
-        })
-            .then(_ => {
-                const eventName: CMSAnalyticsEvent = status === "new"
-                    ? "new_entity_saved"
-                    : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
-                context.onAnalyticsEvent?.(eventName, { path });
-                setInitialValues(values);
+        save(values)
+            ?.then(_ => {
                 formikActions.resetForm({
                     values,
                     submitCount: 0,
                     touched: {}
                 });
             })
-            .catch(e => {
-                console.error(e);
-                setSavingError(e);
-            })
             .finally(() => {
-                closeAfterSaveRef.current = false;
                 formikActions.setSubmitting(false);
             });
 
-    }, [status, path, collection, entity, onEntitySave, mustSetCustomId, entityId]);
+    };
 
     const uniqueFieldValidator: CustomFieldValidator = useCallback(({
                                                                         name,
@@ -310,7 +326,7 @@ function EntityFormInternal<M extends Record<string, any>>({
     return (
         <Formik
             initialValues={baseDataSourceValues as M}
-            onSubmit={saveValues}
+            onSubmit={saveFormValues}
             validationSchema={validationSchema}
             validate={(values) => console.debug("Validating", values)}
             onReset={() => onDiscard && onDiscard()}
@@ -319,7 +335,6 @@ function EntityFormInternal<M extends Record<string, any>>({
 
                 const pluginActions: React.ReactNode[] = [];
 
-                // eslint-disable-next-line react-hooks/rules-of-hooks
                 const formContext: FormContext<M> = {
                     setFieldValue: props.setFieldValue,
                     values: props.values,
@@ -329,7 +344,8 @@ function EntityFormInternal<M extends Record<string, any>>({
                         fields: context.fields
                     }),
                     entityId,
-                    path
+                    path,
+                    save
                 };
 
                 // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -402,7 +418,8 @@ function EntityFormInternal<M extends Record<string, any>>({
                             formContext={formContext}
                             status={status}
                             savingError={savingError}
-                            closeAfterSaveRef={closeAfterSaveRef}/>}
+                            closeAfterSaveRef={closeAfterSaveRef}
+                            autoSave={autoSave}/>}
 
                     </div>
                 </>
@@ -424,6 +441,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
     status: "new" | "existing" | "copy",
     savingError?: Error,
     closeAfterSaveRef: MutableRefObject<boolean>,
+    autoSave?: boolean
 }) {
 
     const {
@@ -445,7 +463,9 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
         savingError,
         dirty,
         errors,
-        closeAfterSaveRef
+        closeAfterSaveRef,
+        autoSave,
+        submitForm,
     } = props;
 
     const modified = dirty;
@@ -480,7 +500,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                         Object.keys(underlyingChanges).includes(key) &&
                         !!touched[key];
 
-                    const disabled = isSubmitting || isReadOnly(property) || Boolean(property.disabled);
+                    const disabled = (!autoSave && isSubmitting) || isReadOnly(property) || Boolean(property.disabled);
                     const hidden = isHidden(property);
                     if (hidden) return null;
                     const cmsFormFieldProps: PropertyFieldBindingProps<any, M> = {
@@ -488,7 +508,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                         disabled,
                         property,
                         includeDescription: true,
-                        underlyingValueHasChanged,
+                        underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
                         context: formContext,
                         tableMode: false,
                         partOfArray: false,
@@ -527,7 +547,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
             <div className="h-14"/>
 
-            <CustomDialogActions position={"absolute"}>
+            {!autoSave && <CustomDialogActions position={"absolute"}>
 
                 {savingError &&
                     <div className="text-right">
@@ -573,7 +593,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                     {status === "new" && "Create and close"}
                 </Button>
 
-            </CustomDialogActions>
+            </CustomDialogActions>}
         </Form>
     );
 }
