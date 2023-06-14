@@ -2,15 +2,23 @@
 id: changelog
 title: Changelog
 ---
+## [2.0.2] - 2023-06-12
+
+### Changed
+
+- Replaced `flexsearch` with `js-search`. Their imports are too messed up.
+- Fix for form assigning wrong ids
+  
 ## [2.0.1] - 2023-06-12
 
 ### Changed
 
 - Fix for block entries not generating the correct default value when adding a new entry. This was causing
-a bug when the child property is an array, like in the blog example.
+  a bug when the child property is an array, like in the blog example.
 - Added the `formAutoSave` to collections. This removes the buttons from the form and automatically saves
-the entity when there are changes or the user leaves the form.
-
+  the entity when there are changes or the user leaves the form.
+- You can now access the `formContext` from collection views, allowing you to access the current entity
+  being edited, modify values and `save`.
 
 ## [2.0.0] - 2023-06-07
 
@@ -25,21 +33,20 @@ the entity when there are changes or the user leaves the form.
 
 - `@mui/x-date-pickers` dependency reverted to `^5.0.0`
 - Assigned default values to every property now, based on the property type.
-e.g. boolean properties will have a default value of `false`, maps to `{}`,
-and most other properties to `null`. 
+  e.g. boolean properties will have a default value of `false`, maps to `{}`,
+  and most other properties to `null`.
 - Removed empty space for hidden properties in the entity side dialog.
-
 
 ## [2.0.0-rc.1] - 2023-05-31
 
 ### Changed
 
 - Added arbitrary key-value fields with the prop `keyValue` in map properties
-- `@mui/x-date-pickers` dependency updated (you may need to bump your version 
-to 6.5.0)
-- Some enhancements to the `EntityCollectionTable` component, referring to 
-values being updated in the background. Also correct debouncing for
-table fields.
+- `@mui/x-date-pickers` dependency updated (you may need to bump your version
+  to 6.5.0)
+- Some enhancements to the `EntityCollectionTable` component, referring to
+  values being updated in the background. Also correct debouncing for
+  table fields.
 
 ## [2.0.0-beta.7] - 2023-05-23
 
