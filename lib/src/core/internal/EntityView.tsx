@@ -132,9 +132,9 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         }
     );
 
-    const [tabsPosition, setTabsPosition] = React.useState<number>(defaultSelectedView ? getTabPositionFromPath(defaultSelectedView) : -1);
+    const tabsPositionRef = useRef<number>(defaultSelectedView ? getTabPositionFromPath(defaultSelectedView) : -1);
 
-    const mainViewVisible = tabsPosition === -1 || largeLayout;
+    const mainViewVisible = tabsPositionRef.current === -1 || largeLayout;
 
     const {
         entity,
@@ -170,7 +170,8 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         if (largeLayoutTabSelected.current === largeLayout)
             return;
         // open first tab by default in large layouts
-        if (selectedSubPath !== defaultSelectedView)
+        if (selectedSubPath !== defaultSelectedView) {
+            console.log("Replacing url 1", defaultSelectedView);
             sideEntityController.replace({
                 path,
                 entityId,
@@ -178,6 +179,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                 updateUrl: true,
                 collection
             });
+        }
         largeLayoutTabSelected.current = largeLayout;
     }, [defaultSelectedView, largeLayout, selectedSubPath]);
 
@@ -235,10 +237,11 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             sideDialogContext.close(true);
             onClose?.();
         } else if (status !== "existing") {
+            console.log("Replacing url 2", tabsPositionRef.current, getSelectedSubPath(tabsPositionRef.current));
             sideEntityController.replace({
                 path,
                 entityId: updatedEntity.id,
-                selectedSubPath: getSelectedSubPath(tabsPosition),
+                selectedSubPath: getSelectedSubPath(tabsPositionRef.current),
                 updateUrl: true,
                 collection
             });
@@ -311,7 +314,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
     const customViewsView: React.ReactNode[] | undefined = customViews && customViews.map(
         (customView, colIndex) => {
-            if (tabsPosition !== colIndex)
+            if (tabsPositionRef.current !== colIndex)
                 return null;
             if (customView.builder) {
                 console.warn("customView.builder is deprecated, use customView.Builder instead", customView);
@@ -355,7 +358,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
     const subCollectionsViews = subcollections && subcollections.map(
         (subcollection, colIndex) => {
             const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.alias ?? subcollection.path)}` : undefined;
-            if (tabsPosition !== colIndex + customViewsCount)
+            if (tabsPositionRef.current !== colIndex + customViewsCount)
                 return null;
             return (
                 <Box
@@ -407,7 +410,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
     }, []);
 
     const onSideTabClick = (value: number) => {
-        setTabsPosition(value);
+        tabsPositionRef.current = value;
         sideEntityController.replace({
             path,
             entityId,
@@ -421,6 +424,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         modifiedValuesRef.current = values;
     }, []);
 
+    // eslint-disable-next-line n/handle-callback-err
     const onIdUpdateError = useCallback((error: any) => {
         snackbarController.open({
             type: "error",
@@ -552,7 +556,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             </Box>}
 
             <Tabs
-                value={tabsPosition + 1}
+                value={tabsPositionRef.current + 1}
                 indicatorColor="secondary"
                 textColor="inherit"
                 onChange={(ev, value) => {

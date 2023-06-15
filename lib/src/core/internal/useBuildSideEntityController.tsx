@@ -82,6 +82,7 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
             throw Error("If you want to copy an entity you need to provide an entityId");
         }
 
+        console.log("Replacing side panel with", props)
         sideDialogsController.replace(propsToSidePanel(props, navigation, smallLayout));
 
     }, [navigation, sideDialogsController, smallLayout]);
