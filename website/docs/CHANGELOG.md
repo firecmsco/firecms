@@ -2,7 +2,13 @@
 id: changelog
 title: Changelog
 ---
-## [2.0.2] - 2023-06-12
+## [2.0.3] - 2023-06-15
+
+### Changed
+
+- Fix for form resetting values when saving.
+
+## [2.0.2] - 2023-06-14
 
 ### Changed
 

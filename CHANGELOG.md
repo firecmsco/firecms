@@ -1,9 +1,17 @@
-## [2.0.2] - 2023-06-12
+## [2.0.3] - 2023-06-15
+
+### Changed
+
+- Fix for form resetting values when saving.
+
+
+## [2.0.2] - 2023-06-14
 
 ### Changed
 
 - Replaced `flexsearch` with `js-search`. Their imports are too messed up.
-  
+- Fix for form assigning wrong ids
+- 
 ## [2.0.1] - 2023-06-12
 
 ### Changed
