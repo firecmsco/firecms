@@ -27,7 +27,7 @@ import { isReadOnly, resolveCollection } from "../../../../util";
 import { CustomDialogActions } from "../../../CustomDialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
-import TTypography from "../../../../../migrated/TTypography";
+import TTypography from "../../../../../components/TTypography";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;

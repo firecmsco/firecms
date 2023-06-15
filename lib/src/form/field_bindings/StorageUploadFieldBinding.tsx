@@ -23,7 +23,7 @@ import { StorageFieldItem, useStorageUploadController } from "../../core/util/us
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
 import { fieldBackground, fieldBackgroundHover } from "../../core/util/field_colors";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 const dropZoneClasses = "box-border bg-field-default dark:bg-field-dark relative pt-[2px] items-center border border-transparent fieldBackground min-h-[254px] outline-none rounded-md duration-[200ms] ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-grey"

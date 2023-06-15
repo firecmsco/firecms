@@ -30,9 +30,9 @@ export * from "./FireCMSAppBar";
 
 export * from "./ArrayContainer";
 
-export * from "./fields/FilledSelect";
-export * from "./fields/TextInput";
-export * from "./fields/TextareaAutosize";
-export * from "./fields/BooleanSwitch";
-export * from "./fields/DateTimeField";
-export * from "./fields/DisabledTextField";
+export * from "../../components/FilledSelect";
+export * from "../../components/TextInput";
+export * from "../../components/TextareaAutosize";
+export * from "../../components/BooleanSwitch";
+export * from "../../components/DateTimeField";
+export * from "../../components/DisabledTextField";

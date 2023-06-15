@@ -28,7 +28,7 @@ import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigura
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { useTableController } from "../EntityCollectionTable/useTableController";
 import { isFilterCombinationValidForFirestore } from "./isFilterCombinationValidForFirestore";
-import TTypography from "../../../migrated/TTypography";
+import TTypography from "../../../components/TTypography";
 
 /**
  * @category Components

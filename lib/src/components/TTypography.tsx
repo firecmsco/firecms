@@ -36,7 +36,7 @@ const colorToClasses = {
     inherit: "text-inherit",
     initial: "text-current",
     primary: "text-primary",
-    secondary: "text-textSecondary dark:text-textSecondaryDark",
+    secondary: "text-text-secondary dark:text-text-secondary-dark",
     error: "text-red-600"
 };
 

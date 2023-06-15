@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 
 import { useDebounce } from "../../../util";
-import { TextareaAutosize } from "../../fields/TextareaAutosize";
+import { TextareaAutosize } from "../../../../components/TextareaAutosize";
 
 export function TableInput(props: {
     error: Error | undefined;

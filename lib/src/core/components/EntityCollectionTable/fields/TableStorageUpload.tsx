@@ -13,7 +13,7 @@ import { useSnackbarController, useStorageSource } from "../../../../hooks";
 import { getThumbnailMeasure } from "../../../../preview/util";
 import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../../../../form/components/StorageUploadProgress";
-import TTypography from "../../../../migrated/TTypography";
+import TTypography from "../../../../components/TTypography";
 
 const dropZoneMixin = (hasValue: boolean) => ({
     transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",

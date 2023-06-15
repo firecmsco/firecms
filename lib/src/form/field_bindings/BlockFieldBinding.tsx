@@ -9,7 +9,7 @@ import { EnumValuesChip } from "../../preview";
 import { EnumValueConfig, FieldProps, FormContext, PropertyOrBuilder } from "../../types";
 import { ExpandablePanel, getDefaultValueFor, getIconForProperty } from "../../core";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
-import TInputLabel from "../../migrated/TInputLabel";
+import TInputLabel from "../../components/TInputLabel";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as

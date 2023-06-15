@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FormControl, MenuItem, Select as MuiSelect } from "@mui/material";
 import { TableWhereFilterOp } from "../../Table";
-import { DateTimeField } from "../../fields/DateTimeField";
+import { DateTimeField } from "../../../../components/DateTimeField";
 
 interface DateTimeFilterFieldProps {
     name: string,

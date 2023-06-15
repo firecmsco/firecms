@@ -15,7 +15,7 @@ import {
     useTheme
 } from "@mui/material";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
-import TTypography from "../../../../migrated/TTypography";
+import TTypography from "../../../../components/TTypography";
 
 /**
  *

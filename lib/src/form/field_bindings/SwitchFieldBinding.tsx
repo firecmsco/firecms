@@ -5,7 +5,7 @@ import { FieldProps } from "../../types";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
-import { BooleanSwitch } from "../../core/components/fields/BooleanSwitch";
+import { BooleanSwitch } from "../../components/BooleanSwitch";
 
 type SwitchFieldProps = FieldProps<boolean>;
 

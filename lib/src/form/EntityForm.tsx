@@ -19,7 +19,7 @@ import { CustomDialogActions, getDefaultValuesFor, isHidden, isReadOnly, resolve
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import TTypography from "../migrated/TTypography";
+import TTypography from "../components/TTypography";
 
 
 /**

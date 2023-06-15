@@ -17,7 +17,7 @@ import { useClearRestoreValue } from "../../hooks";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../core/util/enums";
 import { ArrayEnumPreview, EnumValuesChip } from "../../preview";
 import { ErrorView, getIconForProperty } from "../../core";
-import TInputLabel from "../../migrated/TInputLabel";
+import TInputLabel from "../../components/TInputLabel";
 
 /**
  * This fields renders a dropdown with multiple selection.

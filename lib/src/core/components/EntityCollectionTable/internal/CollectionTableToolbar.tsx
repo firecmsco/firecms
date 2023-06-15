@@ -4,7 +4,7 @@ import { CircularProgress, Hidden, IconButton, Tooltip, useMediaQuery, useTheme 
 import { CollectionSize } from "../../../../types";
 import { SearchBar } from "./SearchBar";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
-import { FilledMenuItem, FilledSelect } from "../../fields/FilledSelect";
+import { FilledSelect } from "../../../../components/FilledSelect";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
@@ -37,19 +37,12 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     const sizeSelect = (
         <FilledSelect
-            value={props.size}
+            value={props.size as string}
             className="w-14 h-10"
-            onChange={props.onSizeChanged}
-            renderValue={(value: any) => value.toUpperCase()}
-        >
-            {["xs", "s", "m", "l", "xl"].map((value) => (
-                <FilledMenuItem
-                    key={`size-select-${value}`}
-                    value={value}>
-                    {value.toUpperCase()}
-                </FilledMenuItem>
-            ))}
-        </FilledSelect>
+            onValueChange={(v) => props.onSizeChanged(v as CollectionSize)}
+            options={["xs", "s", "m", "l", "xl"]}
+            renderOption={(v) => v.toUpperCase()}
+        />
     );
 
     return (

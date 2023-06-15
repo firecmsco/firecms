@@ -3,7 +3,7 @@ import { CMSType, ResolvedProperty } from "../../types";
 
 import { FormHelperText, IconButton, Tooltip } from "@mui/material";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 interface FieldDescriptionPopoverProps<T extends CMSType> {
     property: ResolvedProperty<T>,

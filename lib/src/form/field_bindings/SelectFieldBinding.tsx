@@ -9,7 +9,7 @@ import { useClearRestoreValue } from "../../hooks";
 import { isEnumValueDisabled } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty } from "../../core";
-import TInputLabel from "../../migrated/TInputLabel";
+import TInputLabel from "../../components/TInputLabel";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 

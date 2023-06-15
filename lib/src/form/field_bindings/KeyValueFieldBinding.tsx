@@ -17,7 +17,7 @@ import {
     TextInput
 } from "../../core";
 import { FieldDescription, LabelWithIcon } from "../components";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 type MapEditViewRowState = [number, {
     key: string,

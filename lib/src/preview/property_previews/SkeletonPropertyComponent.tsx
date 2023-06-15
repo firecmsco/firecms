@@ -9,7 +9,7 @@ import React from "react";
 import { Grid, Skeleton, Table, TableBody, TableCell, TableRow, useTheme } from "@mui/material";
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 export interface SkeletonPropertyComponentProps {
     property: ResolvedProperty,

@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from "react";
 
 import { TextareaAutosize } from "./TextareaAutosize";
 import { DisabledTextField } from "./DisabledTextField";
-import TInputLabel from "../../../migrated/TInputLabel";
+import TInputLabel from "./TInputLabel";
 
 export type InputType = "text" | "number";
 
@@ -92,7 +92,7 @@ export function TextInput<T extends string | number>({
             {label && (
                 <TInputLabel
                     className={`absolute left-0 top-1 pointer-events-none ${
-                        !error ? (focused ? "text-primary" : "text-textSecondary dark:text-textSecondaryDark") : "text-error"
+                        !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-error"
                     }`}
                     shrink={hasValue || focused}
                 >

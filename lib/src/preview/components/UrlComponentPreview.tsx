@@ -8,7 +8,7 @@ import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 /**
  * @category Preview components

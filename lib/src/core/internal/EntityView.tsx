@@ -24,7 +24,7 @@ import {
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 import { useLargeSideLayout } from "./useLargeSideLayout";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 import { EntityFormSaveParams } from "../../form/EntityForm";
 
 export interface EntityViewProps<M extends Record<string, any>> {

@@ -17,25 +17,10 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
 import { useAuthController, useBreadcrumbsContext, useModeController } from "../../hooks";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 import clsx from "clsx";
-
-function getMainContentClasses(drawerOpen: boolean, largeLayout: boolean) {
-    return clsx({
-        "ml-64": drawerOpen && largeLayout,
-        "ml-16": !(drawerOpen && largeLayout),
-        "h-16": true,
-        "z-[1100]": largeLayout,
-        "transition-all": true,
-        "ease-in": true,
-        "duration-75": true,
-        "w-[calc(100%-64px)]": !(drawerOpen && largeLayout),
-        "w-[calc(100%-256px)]": drawerOpen && largeLayout,
-        "duration-150": drawerOpen && largeLayout,
-        fixed: true
-    });
-}
-
+import { TIconButton } from "../../components/IconButton";
+import { Sheet, SheetContent } from "../../components/Sheet";
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -66,7 +51,10 @@ export const FireCMSAppBar = function FireCMSAppBar({
     const { breadcrumbs } = breadcrumbsContext;
 
     const authController = useAuthController();
-    const { mode, toggleMode } = useModeController();
+    const {
+        mode,
+        toggleMode
+    } = useModeController();
 
     const theme = useTheme();
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
@@ -74,33 +62,28 @@ export const FireCMSAppBar = function FireCMSAppBar({
     const initial = authController.user?.displayName
         ? authController.user.displayName[0].toUpperCase()
         : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
-    // <Box
-    //     className={`fixed ${largeLayout ? "z-[calc(" + theme.zIndex.drawer + "+1)]" : ""} transition-all duration-[${theme.transitions.duration.leavingScreen}] ease-[${theme.transitions.easing.sharp}]`}
-    //     style={{
-    //         marginLeft: theme.spacing(8),
-    //         width: `calc(100% - ${theme.spacing(8)})`,
-    //         zIndex: largeLayout ? theme.zIndex.drawer + 1 : undefined,
-    //         transition: theme.transitions.create(["width", "margin"], {
-    //             easing: theme.transitions.easing.sharp,
-    //             duration: theme.transitions.duration.leavingScreen,
-    //         }),
-    //         ...(drawerOpen && largeLayout && {
-    //             marginLeft: `calc(${DRAWER_WIDTH}px - 8px)`,
-    //             width: `calc(100% - ${DRAWER_WIDTH}px)`,
-    //             transition: theme.transitions.create(["width", "margin"], {
-    //                 easing: theme.transitions.easing.sharp,
-    //                 duration: theme.transitions.duration.enteringScreen,
-    //             }),
-    //         }),
-    //     }}>
 
     return (
         <div
-            className={getMainContentClasses(drawerOpen, largeLayout)}>
+            className={clsx({
+                "ml-64": drawerOpen && largeLayout,
+                "ml-16": !(drawerOpen && largeLayout),
+                "h-16": true,
+                "z-[1100]": largeLayout,
+                "transition-all": true,
+                "ease-in": true,
+                "duration-75": true,
+                "w-[calc(100%-64px)]": !(drawerOpen && largeLayout),
+                "w-[calc(100%-256px)]": drawerOpen && largeLayout,
+                "duration-150": drawerOpen && largeLayout,
+                fixed: true
+            })}>
 
             <Slide
                 direction="down" in={true} mountOnEnter unmountOnExit>
                 <div className="flex flex-row space-x-1 space-y-1 px-4 h-full items-center">
+
+                    <Test/>
 
                     <Hidden lgDown>
                         <div className="mr-8">
@@ -182,4 +165,23 @@ export const FireCMSAppBar = function FireCMSAppBar({
             </Slide>
         </div>
     );
+}
+
+function Test() {
+    const [open, setOpen] = React.useState(false);
+
+    return <>
+        <TIconButton
+            onClick={() => setOpen(true)}
+        >
+            Open
+        </TIconButton>
+
+            <Sheet open={open} onOpenChange={setOpen}>
+                <div>
+                    This is a test
+                </div>
+            </Sheet>
+    </>
+        ;
 }

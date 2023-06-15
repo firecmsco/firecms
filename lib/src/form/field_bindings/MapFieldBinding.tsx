@@ -7,7 +7,7 @@ import { ExpandablePanel, getIconForProperty, isHidden, pick } from "../../core"
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import TInputLabel from "../../migrated/TInputLabel";
+import TInputLabel from "../../components/TInputLabel";
 
 /**
  * Field that renders the children property fields

@@ -2,7 +2,7 @@ import React from "react";
 
 import { FieldProps } from "formik";
 import { FormControlLabel, Switch, Tooltip } from "@mui/material";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 export function SwitchControl({
                                   field,

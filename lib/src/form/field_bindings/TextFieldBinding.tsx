@@ -7,9 +7,9 @@ import { FieldProps, PreviewType } from "../../types";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
-import { TextInput } from "../../core/components/fields/TextInput";
+import { TextInput } from "../../components/TextInput";
 import { PropertyPreview } from "../../preview";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean

@@ -5,7 +5,7 @@ import { darken, lighten, List, ListItem, SvgIconTypeMap, Tooltip, useTheme } fr
 import { useFireCMSContext, useNavigationContext } from "../hooks";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { getIconForView } from "./util";
-import TTypography from "../migrated/TTypography";
+import TTypography from "../components/TTypography";
 
 /**
  * Props used in case you need to override the default drawer

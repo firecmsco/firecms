@@ -10,7 +10,7 @@ import { useFireCMSContext } from "../../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
-import TTypography from "../../../migrated/TTypography";
+import TTypography from "../../../components/TTypography";
 
 /**
  * This is the component used in the home page to render a card for each

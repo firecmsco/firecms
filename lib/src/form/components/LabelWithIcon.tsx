@@ -1,5 +1,5 @@
 import React from "react";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 interface LabelWithIconProps {
     icon: React.ReactNode;
@@ -23,7 +23,7 @@ export function LabelWithIcon({
                               }: LabelWithIconProps) {
     return (
         <span
-            className={`text-text-secondary dark:text-text-secondary-dark inline-flex items-center mb-0.5 ${small ? "gap-1" : "gap-1.5"} ${className ?? ""}`}>
+            className={`inline-flex items-center mb-0.5 ${small ? "gap-1" : "gap-1.5"} ${className ?? ""}`}>
 
             {icon}
 

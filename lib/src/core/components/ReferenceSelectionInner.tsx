@@ -19,7 +19,7 @@ import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
 import { useTableController } from "./EntityCollectionTable/useTableController";
 import { isFilterCombinationValidForFirestore } from "./EntityCollectionView/isFilterCombinationValidForFirestore";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 /**
  * @category Components

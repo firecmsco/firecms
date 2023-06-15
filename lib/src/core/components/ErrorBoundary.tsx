@@ -1,7 +1,7 @@
 import React, { ErrorInfo, PropsWithChildren } from "react";
 
 import ErrorIcon from "@mui/icons-material/Error";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 export class ErrorBoundary extends React.Component<PropsWithChildren<Record<string, unknown>>, {
     error: Error | null

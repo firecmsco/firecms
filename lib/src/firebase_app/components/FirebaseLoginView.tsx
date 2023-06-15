@@ -19,7 +19,7 @@ import {
     PhoneMultiFactorGenerator,
     RecaptchaVerifier
 } from "firebase/auth";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 /**
  * @category Firebase

@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import { ExpandablePanel } from "../ExpandablePanel";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
-import TTypography from "../../../migrated/TTypography";
+import TTypography from "../../../components/TTypography";
 
 export function NavigationGroup({
                                     children,

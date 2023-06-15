@@ -1,7 +1,7 @@
 import React from "react";
 import { Button } from "@mui/material";
 import { Link as ReactLink } from "react-router-dom";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 
 export function NotFoundPage() {
 

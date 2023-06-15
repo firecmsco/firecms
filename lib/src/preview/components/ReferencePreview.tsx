@@ -11,7 +11,7 @@ import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityC
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
-import TTypography from "../../migrated/TTypography";
+import TTypography from "../../components/TTypography";
 import clsx from "clsx";
 
 export type ReferencePreviewProps = {
