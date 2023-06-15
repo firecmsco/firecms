@@ -292,7 +292,6 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                                            closeAfterSave,
                                            autoSave
                                        }: EntityFormSaveParams<M>): Promise<void> => {
-
         if (!status)
             return;
 
@@ -422,6 +421,13 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         modifiedValuesRef.current = values;
     }, []);
 
+    const onIdUpdateError = useCallback((error: any) => {
+        snackbarController.open({
+            type: "error",
+            message: "Error updating id, check the console"
+        });
+    }, []);
+
     const onIdChange = useCallback((id: string) => {
         setUsedEntity((prevEntity) => prevEntity
             ? {
@@ -451,6 +457,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             onFormContextChange={setFormContext}
             hideId={collection.hideIdFromForm}
             autoSave={autoSave}
+            onIdUpdateError={onIdUpdateError}
         />;
         if (plugins) {
             plugins.forEach((plugin: FireCMSPlugin) => {

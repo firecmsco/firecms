@@ -86,6 +86,8 @@ export interface EntityFormProps<M extends Record<string, any>> {
 
     autoSave?: boolean;
 
+    onIdUpdateError?: (error: any) => void;
+
 }
 
 
@@ -131,7 +133,8 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                onIdChange,
                                                                onFormContextChange,
                                                                hideId,
-                                                               autoSave
+                                                               autoSave,
+                                                               onIdUpdateError
                                                            }: EntityFormProps<M>) {
     const context = useFireCMSContext();
     const dataSource = useDataSource();
@@ -180,7 +183,8 @@ function EntityFormInternal<M extends Record<string, any>>({
     const [entityIdError, setEntityIdError] = React.useState<boolean>(false);
     const [savingError, setSavingError] = React.useState<Error | undefined>();
 
-    const [initialValues, setInitialValues] = useState<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
+    const initialValuesRef = useRef<EntityValues<M>>(entity?.values ?? baseDataSourceValues as EntityValues<M>);
+    const initialValues = initialValuesRef.current;
     const [internalValues, setInternalValues] = useState<EntityValues<M> | undefined>(initialValues);
 
     const doOnValuesChanges = (values?: EntityValues<M>) => {
@@ -210,20 +214,20 @@ function EntityFormInternal<M extends Record<string, any>>({
     useEffect(() => {
         if (onIdUpdate && internalValues && (status === "new" || status === "copy")) {
             try {
-                setEntityId(
-                    onIdUpdate({
-                        collection,
-                        path,
-                        entityId,
-                        values: internalValues,
-                        context
-                    })
-                );
+                const updatedId = onIdUpdate({
+                    collection,
+                    path,
+                    entityId,
+                    values: internalValues,
+                    context
+                });
+                setEntityId(updatedId);
             } catch (e) {
+                onIdUpdateError && onIdUpdateError(e);
                 console.error(e);
             }
         }
-    }, [collection, context, entityId, internalValues, path, status]);
+    }, [entityId, internalValues, status]);
 
     const underlyingChanges: Partial<EntityValues<M>> = useMemo(() => {
         if (initialValues && status === "existing") {
@@ -259,7 +263,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                 ? "new_entity_saved"
                 : (status === "copy" ? "entity_copied" : (status === "existing" ? "entity_edited" : "unmapped_event"));
             context.onAnalyticsEvent?.(eventName, { path });
-            setInitialValues(values);
+            initialValuesRef.current = values;
         })
             .catch(e => {
                 console.error(e);
@@ -459,9 +463,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                             onModified={onModified}
                             onValuesChanged={doOnValuesChanges}
                             underlyingChanges={underlyingChanges}
-                            path={path}
                             entity={entity}
-                            entityId={entityId}
                             collection={collection}
                             formContext={formContext}
                             status={status}
@@ -477,14 +479,11 @@ function EntityFormInternal<M extends Record<string, any>>({
 }
 
 function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
-    initialValues: Partial<M>,
     onModified: ((modified: boolean) => void) | undefined,
     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
     underlyingChanges: Partial<M>,
-    path: string
     entity: Entity<M> | undefined,
     collection: EntityCollection<M>,
-    entityId: string,
     formContext: FormContext<M>,
     status: "new" | "existing" | "copy",
     savingError?: Error,
@@ -493,27 +492,22 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 }) {
 
     const {
-        initialValues,
         values,
         onModified,
         onValuesChanged,
         underlyingChanges,
-        entityId,
         formContext,
         entity,
         touched,
         setFieldValue,
         collection,
-        path,
         isSubmitting,
         status,
         handleSubmit,
         savingError,
         dirty,
-        errors,
         closeAfterSaveRef,
         autoSave,
-        submitForm,
     } = props;
 
     const modified = dirty;
