@@ -1,7 +1,10 @@
-/** @type {import('tailwindcss').Config} */
+/** @type {import("tailwindcss").Config} */
 const plugin = require("tailwindcss/plugin")
 
-const fireCMSPlugin = function ({addComponents, theme}) {
+const fireCMSPlugin = function ({
+                                    addComponents,
+                                    theme
+                                }) {
     addComponents({
         ".card": {
             backgroundColor: theme("colors.white"),
@@ -14,40 +17,16 @@ const fireCMSPlugin = function ({addComponents, theme}) {
 };
 
 export default {
-
-    daisyui: {
-        themes: [
-            {
-                light: {
-                    primary: "#0070F4",
-                    secondary: "#FF5B79",
-                    accent: "#37cdbe",
-                    neutral: "#3d4451",
-                    "base-100": "#ffffff"
-                }
-            },
-            {
-                dark: {
-                    primary: "#0070F4",
-                    secondary: "#FF5B79",
-                    accent: "#37cdbe",
-                    neutral: "#3d4451",
-                    "base-100": "#202024"
-                }
-            }
-        ]
-    },
-    darkMode: ["class", '[data-theme="dark"]'],
+    darkMode: ["class", "[data-theme=\"dark\"]"],
     mode: "jit",
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
         "./node_modules/firecms/src/**/*.{js,ts,jsx,tsx}"
     ],
-    plugins: [require("daisyui"), fireCMSPlugin],
+    plugins: [fireCMSPlugin],
     theme: {
         extend: {
-
             fontFamily: {
                 sans: ["Rubik", "Roboto", "Helvetica", "Arial", "sans-serif"],
                 headers: [
@@ -66,24 +45,11 @@ export default {
                     "monospace"
                 ]
             },
-            backgroundColor: {
-                "default-dark": "#202024",
-                "paper-dark": "#121215",
-                paper: "#ffffff",
-                default: "#f8f8fa"
-            },
             colors: {
                 primary: "#0070F4",
                 secondary: "#FF5B79",
                 error: "#F44336",
-                white: "#ffffff",
-                divider: "#E0E0E0",
-                "divider-dark": "#353535",
                 field: {
-                    default: "rgb(238 238 240)",
-                    dark: "rgb(39 39 41)",
-                    hover: "rgb(232 232 234)",
-                    "hover-dark": "rgb(49,49,50)",
                     disabled: "rgb(224 224 226)",
                     "disabled-dark": "rgb(35 35 37)"
                 },
@@ -94,19 +60,34 @@ export default {
                     "secondary-dark": "rgba(255, 255, 255, 0.7)",
                     disabled: "rgba(0, 0, 0, 0.38)",
                     disabledDark: "rgba(255, 255, 255, 0.5)",
-                    label: "rgb(131, 131, 131)",
+                    label: "rgb(131, 131, 131)"
                 },
                 gray: {
-                    100: "#f8f8fa",
-                    200: "#eaeff8",
-                    300: "#DFDFEA",
-                    400: "#9d9da9",
-                    500: "#87879a",
-                    600: "#6a6a75",
-                    700: "#53535d",
-                    800: "#202024",
-                    900: "#121215"
+                    50: "#F2F2F3",
+                    100: "#E7E7E9",
+                    200: "#CFCFD3",
+                    300: "#B7B7BD",
+                    400: "#A0A0A7",
+                    500: "#878790",
+                    600: "#6C6C75",
+                    700: "#515157",
+                    800: "#36363A",
+                    900: "#1B1B1D",
+                    950: "#0C0C0D"
                 }
+                // gray: {
+                //     50: "#fbfbfd",
+                //     100: "#f8f8fa", // bg light (paper is white)
+                //     200: "#eaeaed",
+                //     300: "#DFDFEA",
+                //     400: "#9d9da9",
+                //     500: "#87879a",
+                //     600: "#6a6a75",
+                //     700: "#53535d",
+                //     800: "#202024", // bg dark
+                //     900: "#19191e",
+                //     950: "#121215" //paper dark
+                // }
             },
             maxWidth: {
                 "7xl": "85rem"
@@ -122,17 +103,6 @@ export default {
                 inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)",
                 outline: "0 0 0 3px rgba(66, 153, 225, 0.5)",
                 none: "none"
-            },
-            fontWeight: {
-                thin: "100",
-                extralight: "200",
-                light: "300",
-                normal: "400",
-                medium: "500",
-                semibold: "600",
-                bold: "700",
-                extrabold: "800",
-                black: "900"
             },
             fontSize: {
                 xs: "0.75rem",

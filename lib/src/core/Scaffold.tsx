@@ -5,7 +5,6 @@ import { IconButton, Link, Tooltip, useMediaQuery, useTheme } from "@mui/materia
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -142,7 +141,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     <DrawerHeader/>
                     <div
                         ref={containerRef}
-                        className={`flex-grow overflow-auto ${largeLayout ? "m-0 mx-4 mb-4 rounded-lg border border-solid border-divider dark:border-divider-dark " : "m-0 mt-1"}`}>
+                        className={`flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid lg:border-gray-100 lg:dark:border-gray-800 m-0 mt-1`}>
 
                         <ErrorBoundary>
                             {children}
@@ -254,17 +253,6 @@ function StyledDrawer(props: {
                     </div>
                     {props.children}
                 </div>
-
-                <Link
-                    className={`${
-                        props.open ? "left-0 opacity-100" : "left-full opacity-0"
-                    } fixed bottom-0 w-drawer px-6 py-1 flex items-center font-medium bg-white bg-opacity-60 text-sm transition-all duration-200 ease-in-out`}
-                    onMouseDown={(e) => e.preventDefault()}
-                    target="_blank"
-                >
-                    <OpenInNewIcon fontSize="small"/>
-                    firecms.co
-                </Link>
             </div>
         </div>
     );

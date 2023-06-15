@@ -22,11 +22,10 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { StorageFieldItem, useStorageUploadController } from "../../core/util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
-import { fieldBackground, fieldBackgroundHover } from "../../core/util/field_colors";
 import TTypography from "../../components/TTypography";
 
-const dropZoneClasses = "box-border bg-field-default dark:bg-field-dark relative pt-[2px] items-center border border-transparent fieldBackground min-h-[254px] outline-none rounded-md duration-[200ms] ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
-const disabledClasses = "border-dotted-grey"
+const dropZoneClasses = "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90 box-border relative pt-[2px] items-center border border-transparent fieldBackground min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
+const disabledClasses = "border-dotted-gray"
 const nonActiveDropClasses = "hover:bg-field-hover dark:hover:bg-field-hover-dark"
 const activeDropClasses = "pt-0 border-2 border-solid"
 const acceptDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-green-500"

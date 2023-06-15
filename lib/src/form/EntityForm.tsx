@@ -384,7 +384,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                                 theme.palette.mode === "light"
                                     ? "bg-opacity-60 bg-white"
                                     : `bg-opacity-10 bg-${theme.palette.background.paper}`
-                            } backdrop-blur-md border-b border-${theme.palette.divider}`}>
+                            } backdrop-blur-md border-b border-gray-100 dark:border-gray-800`}>
                             {pluginActions}
                         </div>}
 

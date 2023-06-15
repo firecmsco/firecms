@@ -494,7 +494,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 }}
             >
 
-                <div className="h-full w-full flex flex-col bg-paper"
+                <div className="h-full w-full flex flex-col bg-white"
                      style={{ backgroundColor: theme.palette.background.paper }}>
 
                     <CollectionTableToolbar

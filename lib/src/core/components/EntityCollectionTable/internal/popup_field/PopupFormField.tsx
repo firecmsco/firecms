@@ -219,7 +219,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const form = entity && (
         <div
-            className={`overflow-auto rounded rounded-md bg-paper dark:bg-paper-dark ${!open ? 'hidden' : ''} cursor-grab`}>
+            className={`overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? 'hidden' : ''} cursor-grab`}>
             <Formik
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
                 validationSchema={validationSchema}
@@ -359,7 +359,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             style={{
                 boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
             }}
-            className={`z-[1300] inline-block fixed z-50 shadow-outline rounded-md bg-paper dark:bg-paper-dark ${
+            className={`z-[1300] inline-block fixed z-50 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
                 !open ? "invisible" : "visible"
             } cursor-grab`}
             ref={containerRef}>

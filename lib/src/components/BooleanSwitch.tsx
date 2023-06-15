@@ -48,7 +48,8 @@ export const BooleanSwitch = function SwitchFieldBinding({
             onBlur={onBlur}
             tabIndex={-1}
             className={clsx(
-                "rounded-md relative cursor-pointer bg-field-default dark:bg-field-dark max-w-full hover:bg-field-hover dark:hover:bg-field-hover-dark justify-between w-full box-border relative inline-flex items-center",
+                "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
+                "rounded-md relative cursor-pointer max-w-full justify-between w-full box-border relative inline-flex items-center",
                 error ? "text-error" : focus ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark",
                 small ? "min-h-[48px]" : "min-h-[64px]",
                 small ? "pl-2" : "pl-4",

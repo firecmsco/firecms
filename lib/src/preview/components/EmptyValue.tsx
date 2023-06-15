@@ -6,5 +6,5 @@ import React from "react";
 export function EmptyValue() {
 
     return <div
-        className="rounded-full bg-gray-200 bg-opacity-10 w-4 h-1 inline-block"/>;
+        className="rounded-full bg-gray-200 bg-opacity-40 dark:bg-opacity-20 w-5 h-2 inline-block"/>;
 }

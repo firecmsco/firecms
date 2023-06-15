@@ -20,10 +20,10 @@ export const Sheet: React.FC<SheetProps> = ({
 
     useEffect(() => {
         if (!open) {
-            const timeout2 = setTimeout(() => {
+            const timeout = setTimeout(() => {
                 setDisplayed(false);
-            }, 200);
-            return () => clearTimeout(timeout2);
+            }, 250);
+            return () => clearTimeout(timeout);
         } else {
             setDisplayed(true);
             return () => {
@@ -38,18 +38,13 @@ export const Sheet: React.FC<SheetProps> = ({
         right: "translate-x-full"
     };
 
-    console.log({
-        displayed,
-        open
-    })
-
     return (
 
         <DialogPrimitive.Root open={displayed || open}
                               onOpenChange={onOpenChange}>
             <DialogPrimitive.Portal>
                 <DialogPrimitive.Overlay
-                    className={`fixed inset-0 transition-opacity duration-200 bg-black bg-opacity-30 ${
+                    className={`fixed inset-0 transition-opacity z-[1200] ease-in-out duration-200 bg-black bg-opacity-50 dark:bg-opacity-60 ${
                         displayed && open ? "opacity-100" : "opacity-0"
                     }`}
                     style={{
@@ -58,8 +53,8 @@ export const Sheet: React.FC<SheetProps> = ({
                 />
                 <DialogPrimitive.Content
                     {...props}
-                    className={`fixed transform bg-white shadow-md z-[1300] transition-transform duration-200 ease-in-out
-                ${side === "top" || side === "bottom" ? "w-full h-80" : "h-full w-64"}
+                    className={`fixed transform shadow-md z-[1200] transition-transform duration-[250ms] ease-in-out
+                ${side === "top" || side === "bottom" ? "w-full" : "h-full"}
                 ${side === "left" || side === "top" ? "left-0 top-0" : "right-0 bottom-0"}
                 ${!displayed || !open ? transformValue[side] : ""}`}
                 >

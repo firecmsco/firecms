@@ -66,7 +66,7 @@ export function ImagePreview({
 
                 {navigator && <Tooltip title="Copy url to clipboard">
                     <div
-                        className="rounded-full absolute bottom-[-4px] right-8 bg-default dark:bg-default-dark">
+                        className="rounded-full absolute bottom-[-4px] right-8 bg-gray-100 dark:bg-gray-800">
                         <IconButton
                             size={"small"}
                             onClick={(e) => {

@@ -47,7 +47,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     return (
         <div
-            className="min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-default dark:bg-default-dark border-b border-divider dark:border-divider-dark flex flex-row justify-between items-center w-full"
+            className="min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-opacity-40 dark:bg-opacity-40 bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800 flex flex-row justify-between items-center w-full"
         >
 
             <div className="flex items-center space-x-8 md:space-x-4">

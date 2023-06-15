@@ -657,7 +657,7 @@ const StyledFormControl = styled(FormControl)((
     color: inherit
   }
 
-  .rc-md-editor .rc-md-divider {
+  .rc-md-editor .rc-md-gray-100 {
     display: block;
     width: 1px;
     background-color: ${darken(theme.palette.background.paper, 0.0)}

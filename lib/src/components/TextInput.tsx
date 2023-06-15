@@ -3,6 +3,7 @@ import React, { useCallback, useRef } from "react";
 import { TextareaAutosize } from "./TextareaAutosize";
 import { DisabledTextField } from "./DisabledTextField";
 import TInputLabel from "./TInputLabel";
+import clsx from "clsx";
 
 export type InputType = "text" | "number";
 
@@ -86,9 +87,13 @@ export function TextInput<T extends string | number>({
 
     return (
         <div
-            className={`rounded-md relative bg-field-default dark:bg-field-dark max-w-full min-h-[64px] hover:bg-field-hover dark:hover:bg-field-hover-dark ${
-                small ? "min-h-[48px]" : "min-h-[64px]"
-            }`}>
+            className={clsx(
+                "rounded-md relative  max-w-full min-h-[64px]",
+                "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
+                {
+                    "min-h-[48px]": small,
+                    "min-h-[64px]": !small
+                })}>
             {label && (
                 <TInputLabel
                     className={`absolute left-0 top-1 pointer-events-none ${

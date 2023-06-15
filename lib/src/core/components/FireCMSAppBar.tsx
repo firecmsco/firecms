@@ -19,8 +19,6 @@ import { ErrorBoundary } from "../components";
 import { useAuthController, useBreadcrumbsContext, useModeController } from "../../hooks";
 import TTypography from "../../components/TTypography";
 import clsx from "clsx";
-import { TIconButton } from "../../components/IconButton";
-import { Sheet, SheetContent } from "../../components/Sheet";
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -82,8 +80,6 @@ export const FireCMSAppBar = function FireCMSAppBar({
             <Slide
                 direction="down" in={true} mountOnEnter unmountOnExit>
                 <div className="flex flex-row space-x-1 space-y-1 px-4 h-full items-center">
-
-                    <Test/>
 
                     <Hidden lgDown>
                         <div className="mr-8">
@@ -165,23 +161,4 @@ export const FireCMSAppBar = function FireCMSAppBar({
             </Slide>
         </div>
     );
-}
-
-function Test() {
-    const [open, setOpen] = React.useState(false);
-
-    return <>
-        <TIconButton
-            onClick={() => setOpen(true)}
-        >
-            Open
-        </TIconButton>
-
-            <Sheet open={open} onOpenChange={setOpen}>
-                <div>
-                    This is a test
-                </div>
-            </Sheet>
-    </>
-        ;
 }

@@ -297,7 +297,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     return null;
                 }
                 return <div
-                    className={`w-[${ADDITIONAL_TAB_WIDTH}] flex-grow h-full overflow-auto border-l border-${theme.palette.divider} lg:border-l-0 lg:w-[${CONTAINER_FULL_WIDTH}]`}
+                    className={`w-[${ADDITIONAL_TAB_WIDTH}] flex-grow h-full overflow-auto border-l border-gray-100 dark:border-gray-800 lg:border-l-0 lg:w-[${CONTAINER_FULL_WIDTH}]`}
                     key={`custom_view_${customView.path}`}
                     role="tabpanel">
                     <ErrorBoundary>
@@ -323,7 +323,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     return null;
                 return (
                     <div
-                        className={`flex-grow h-full overflow-auto border-l border-opacity-50 border-${theme.palette.divider} ${theme.breakpoints.down("lg") ? `border-l-0 w-${CONTAINER_FULL_WIDTH}` : `w-${ADDITIONAL_TAB_WIDTH}`}`}
+                        className={`flex-grow h-full overflow-auto border-l border-opacity-50 border-gray-100 dark:border-gray-800 ${theme.breakpoints.down("lg") ? `border-l-0 w-${CONTAINER_FULL_WIDTH}` : `lg:w-${ADDITIONAL_TAB_WIDTH}`}`}
                         key={`subcol_${subcollection.alias ?? subcollection.path}`}
                         role="tabpanel">
 

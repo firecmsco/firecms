@@ -98,7 +98,7 @@ export const VirtualTableHeaderRow = ({
 
     return (
         <div
-            className="z-10 sticky min-w-full bg-background-default flex w-fit-content flex-row top-0 left-0 z-2 h-12 border-b border-divider dark:border-divider-dark">
+            className="z-10 sticky min-w-full bg-background-default flex w-fit-content flex-row top-0 left-0 z-2 h-12 border-b border-gray-100 dark:border-gray-800">
             {columns.map((c, columnIndex) => {
                 const column = columns[columnIndex];
 

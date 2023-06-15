@@ -1,7 +1,8 @@
 import React, { useCallback, useDeferredValue, useState } from "react";
 import { Theme } from "@mui/material/styles";
 import InputBase from "@mui/material/InputBase";
-import { IconButton, useTheme } from "@mui/material";
+import { IconButton } from "@mui/material";
+import clsx from "clsx";
 
 import SearchIcon from "@mui/icons-material/Search";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -19,8 +20,6 @@ export function SearchBar({
                               expandable = false,
                               large = false
                           }: SearchBarProps) {
-
-    const theme = useTheme();
 
     const [searchText, setSearchText] = useState<string>("");
     const [active, setActive] = useState<boolean>(false);
@@ -44,19 +43,14 @@ export function SearchBar({
     }, []);
 
     return (
-        <div className={`relative flex items-center ${
-            large ? "h-14" : "h-10"
-        } w-full min-w-[200px] rounded ${
-            theme.palette.mode === "light"
-                ? "bg-[darken(theme.palette.background.default, 0.05)]"
-                : "bg-[darken(theme.palette.background.default, 0.2)]"
-        } hover:${
-            theme.palette.mode === "light"
-                ? "bg-[darken(theme.palette.background.default, 0.08)]"
-                : "bg-[darken(theme.palette.background.default, 0.3)]"
-        } sm:w-auto`}>
+        <div className={clsx("relative flex items-center w-full min-w-[200px] rounded sm:w-auto",
+            "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
+            {
+                "h-14": large,
+                "h-10": !large
+            })}>
             <div
-                className="p-0 px-8 h-full absolute pointer-events-none flex items-center justify-center">
+                className="p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center">
                 <SearchIcon htmlColor={"#888"}/>
             </div>
             <InputBase
@@ -67,7 +61,7 @@ export function SearchBar({
                 }}
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)}
-                className={`w-full ${expandable ? '' : 'min-h-full'} text-current`}
+                className={`w-full ${expandable ? "" : "min-h-full"} text-current`}
                 inputProps={{
                     sx: (theme: Theme) => ({
                         padding: theme.spacing(1, 1, 1, 0),

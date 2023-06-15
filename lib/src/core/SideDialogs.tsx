@@ -1,10 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks/useSideDialogsController";
-import { SideDialogDrawer } from "./internal/SideDialogDrawer";
 import { ErrorBoundary } from "./components";
 import { UnsavedChangesDialog, useNavigationUnsavedChangesDialog } from "./internal/useUnsavedChangesDialog";
 import { SideDialogPanelProps } from "../types";
-import { CONTAINER_FULL_WIDTH } from "./internal/common";
+import { Sheet } from "../components/Sheet";
 
 export type SideDialogContextProps = {
     blocked: boolean,
@@ -112,6 +111,8 @@ function SideDialogView({
         }
     };
 
+    // const offsetClass = offsetPosition > 0 ? `transform translate-x-${offsetPosition}` : "";
+
     return (
         <SideDialogContext.Provider
             value={{
@@ -122,19 +123,18 @@ function SideDialogView({
                 close: onCloseRequest
             }}>
 
-            <SideDialogDrawer
+            <Sheet
                 open={Boolean(panel)}
-                onClose={onCloseRequest}
-                offsetPosition={offsetPosition}
+                onOpenChange={(open) => !open && onCloseRequest()}
             >
                 {panel &&
                     <div
-                        className="lg:max-w-[95vw] flex flex-col h-full transition-width duration-250 ease-in-out"
+                        className={"transform max-w-[100vw] lg:max-w-[95vw] flex flex-col h-full transition-all duration-250 ease-in-out bg-white dark:bg-gray-900 "}
                         style={{
                             width: panel.width,
-                            maxWidth: CONTAINER_FULL_WIDTH,
+                            translate: `translateX(${offsetPosition * 200}px)`
                         }}
-                        >
+                    >
                         <ErrorBoundary>
                             {panel.component}
                         </ErrorBoundary>
@@ -142,7 +142,7 @@ function SideDialogView({
 
                 {!panel && <div style={{ width }}/>}
 
-            </SideDialogDrawer>
+            </Sheet>
 
             <UnsavedChangesDialog
                 open={navigationWasBlocked || drawerCloseRequested}

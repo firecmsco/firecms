@@ -28,8 +28,8 @@ export function FilledSelect({
             <Select.Trigger>
                 <div className={clsx(
                     "inline-flex select-none items-center justify-center rounded-md px-4 py-2 text-sm font-medium",
-                    "bg-white text-gray-700 hover:bg-gray-50 dark:bg-gray-800 dark:text-gray-100 dark:hover:bg-gray-900",
-                    "hover:bg-gray-50",
+                    "text-gray-700 dark:text-gray-100",
+                    "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
                     "focus:outline-none focus-visible:ring focus-visible:ring-primary focus-visible:ring-opacity-75",
                     className
                 )}>
@@ -45,14 +45,14 @@ export function FilledSelect({
                         className="flex items-center justify-center text-gray-700 dark:text-gray-300">
                         <ChevronUpIcon/>
                     </Select.ScrollUpButton>
-                    <Select.Viewport className="bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg ">
+                    <Select.Viewport className="bg-white dark:bg-gray-900 p-2 rounded-lg shadow-lg ">
                         <Select.Group>
                             {options.map((option) => (
                                 <Select.Item
                                     key={option}
                                     value={option}
                                     className={clsx(
-                                        "relative flex items-center px-8 py-2 rounded-md text-sm text-gray-700 dark:text-gray-300 font-medium focus:bg-gray-100 dark:focus:bg-gray-900",
+                                        "relative flex items-center px-8 py-2 rounded-md text-sm text-gray-700 dark:text-gray-300 font-medium focus:bg-gray-100 dark:focus:bg-gray-950",
                                         { "focus:outline-none select-none": option !== value },
                                     )}
                                 >

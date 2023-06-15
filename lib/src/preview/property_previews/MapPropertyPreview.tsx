@@ -70,7 +70,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                     return (
                         <div
                             key={`map_preview_table_${key}}`}
-                            className="flex flex-row pt-0.5 last:border-b-0 border-b border-opacity-divider pb-0.5">
+                            className="flex flex-row pt-0.5 last:border-b-0 border-b border-opacity-gray-100 pb-0.5">
                             <div
                                 key={`table-cell-title-${key}-${key}`}
                                 className="w-1/4 align-top pr-1">
@@ -108,7 +108,7 @@ export function KeyValuePreview({ value }: { value: any }) {
             Object.entries(value).map(([key, childValue]) => (
                 <div
                     key={`map_preview_table_${key}}`}
-                    className="flex flex-row pt-0.5 border-b border-opacity-divider last:border-0 last:pb-0 pb-0.5"
+                    className="flex flex-row pt-0.5 border-b border-opacity-gray-100 last:border-0 last:pb-0 pb-0.5"
                     style={{ borderColor: theme.palette.divider }}>
                     <div
                         key={`table-cell-title-${key}-${key}`}

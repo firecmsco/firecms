@@ -194,12 +194,12 @@ function ReferencePreviewWrap({
     onClick?: () => void;
 }) {
     return <TTypography variant={"label"}
-                        className={clsx("bg-field-default dark:bg-field-dark",
+                        className={clsx("bg-opacity-70 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60",
                             "w-full",
                             "flex",
                             "rounded-md",
                             "overflow-hidden",
-                            onHover ? "hover:bg-field-hover dark:hover:bg-field-hover-dark" : "",
+                            onHover ? "hover:bg-opacity-90 dark:hover:bg-opacity-90" : "",
                             size === "regular" ? "p-2" : "p-1",
                             size === "tiny" ? "items-center" : "",
                             "transition-colors duration-300 ease-in-out ",
