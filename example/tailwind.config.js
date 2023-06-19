@@ -63,7 +63,7 @@ export default {
                     label: "rgb(131, 131, 131)"
                 },
                 gray: {
-                    50: "#F2F2F3",
+                    50: "#f8f8fa",
                     100: "#E7E7E9",
                     200: "#CFCFD3",
                     300: "#B7B7BD",
@@ -89,21 +89,21 @@ export default {
                 //     950: "#121215" //paper dark
                 // }
             },
-            maxWidth: {
-                "7xl": "85rem"
+            width: {
+                form: "768px"
             },
-            boxShadow: {
-                xs: "0 0 0 1px rgba(0, 0, 0, 0.16)",
-                sm: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
-                default: "0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.03)",
-                md: "0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
-                lg: "0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)",
-                xl: "0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.02)",
-                "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.20)",
-                inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)",
-                outline: "0 0 0 3px rgba(66, 153, 225, 0.5)",
-                none: "none"
-            },
+            // boxShadow: {
+            //     xs: "0 0 0 1px rgba(0, 0, 0, 0.16)",
+            //     sm: "0 1px 2px 0 rgba(0, 0, 0, 0.16)",
+            //     default: "0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.03)",
+            //     md: "0 4px 6px -1px rgba(0, 0, 0, 0.04), 0 2px 4px -1px rgba(0, 0, 0, 0.03)",
+            //     lg: "0 10px 15px -3px rgba(0, 0, 0, 0.04), 0 4px 6px -2px rgba(0, 0, 0, 0.02)",
+            //     xl: "0 20px 25px -5px rgba(0, 0, 0, 0.12), 0 10px 10px -5px rgba(0, 0, 0, 0.02)",
+            //     "2xl": "0 25px 50px -12px rgba(0, 0, 0, 0.20)",
+            //     inner: "inset 0 2px 4px 0 rgba(0, 0, 0, 0.04)",
+            //     outline: "0 0 0 3px rgba(66, 153, 225, 0.5)",
+            //     none: "none"
+            // },
             fontSize: {
                 xs: "0.75rem",
                 sm: "0.875rem",
