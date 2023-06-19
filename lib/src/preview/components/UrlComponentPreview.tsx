@@ -8,7 +8,7 @@ import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 
 /**
  * @category Preview components
@@ -70,9 +70,9 @@ export function UrlComponentPreview({
                 <DescriptionOutlinedIcon className="flex-grow"/>
                 {hint &&
                     <Tooltip title={hint}>
-                        <TTypography
+                        <Text
                             className="max-w-full truncate rtl text-left"
-                            variant={"caption"}>{hint}</TTypography>
+                            variant={"caption"}>{hint}</Text>
                     </Tooltip>}
             </a>
         );

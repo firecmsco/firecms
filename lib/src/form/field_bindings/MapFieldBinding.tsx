@@ -7,7 +7,7 @@ import { ExpandablePanel, getIconForProperty, isHidden, pick } from "../../core"
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import TInputLabel from "../../components/TInputLabel";
+import InputLabel from "../../components/InputLabel";
 
 /**
  * Field that renders the children property fields
@@ -121,7 +121,7 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
 
     return <div className={"m-4"}>
         <FormControl fullWidth>
-            <TInputLabel>Add property</TInputLabel>
+            <InputLabel>Add property</InputLabel>
             <Select
                 variant={"standard"}
                 value={""}

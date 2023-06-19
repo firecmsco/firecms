@@ -1,11 +1,12 @@
 import React from "react";
 
 import { ErrorBoundary, resolvePropertyEnum } from "../../core";
-import { ColorChip, EnumValuesChip } from "../components/ColorChip";
+import { EnumValuesChip } from "../components/EnumValuesChip";
 import { getColorSchemeForSeed } from "../../core/util/chip_utils";
 import { PreviewType } from "../../types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
+import { Chip } from "../../components/Chip";
 
 /**
  * @category Preview components
@@ -28,10 +29,10 @@ export function StringPropertyPreview({
         const colorScheme = getColorSchemeForSeed(propertyKey ?? "");
         return (
             <ErrorBoundary>
-                <ColorChip
+                <Chip
                     colorScheme={colorScheme}
                     label={value}
-                    small={size !== "regular"}
+                    size={size !== "regular" ? "small" : "medium"}
                 />
             </ErrorBoundary>);
     } else if (property.url) {

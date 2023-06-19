@@ -9,7 +9,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon, resolveCollection } from "../util";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 
 const PREFIX = "EntityPreview";
 
@@ -87,10 +87,10 @@ export function EntityPreview<M extends Record<string, any>>(
             <div
                 className="w-full mt-12 pl-16 pr-16 pt-12 lg:mt-8 lg:pl-8 lg:pr-8 lg:pt-8 md:mt-4 md:pl-8 md:pr-8 md:pt-8">
 
-                <TTypography
+                <Text
                     className="mt-4 mb-4"
                     variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
-                </TTypography>
+                </Text>
 
             </div>
 
@@ -102,10 +102,10 @@ export function EntityPreview<M extends Record<string, any>>(
                                        component="td"
                                        scope="row"
                                        className={classes.titleCell}>
-                                <TTypography variant={"caption"}
+                                <Text variant={"caption"}
                                              color={"secondary"}>
                                     Id
-                                </TTypography>
+                                </Text>
                             </TableCell>
                             <TableCell padding="none"
                                        className={classes.iconCell}>
@@ -139,12 +139,12 @@ export function EntityPreview<M extends Record<string, any>>(
                                                    component="td"
                                                    scope="row"
                                                    className={classes.titleCell}>
-                                            <TTypography
+                                            <Text
                                                 className="pl-2"
                                                 variant={"caption"}
                                                 color={"secondary"}>
                                                 {property.name}
-                                            </TTypography>
+                                            </Text>
                                         </TableCell>
 
                                         <TableCell padding="none"

@@ -11,7 +11,7 @@ import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityC
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 import clsx from "clsx";
 
 export type ReferencePreviewProps = {
@@ -115,10 +115,10 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                     ? "block whitespace-nowrap overflow-hidden truncate"
                                     : ""
                             }`}>
-                                <TTypography variant={"caption"}
-                                             className={"font-mono"}>
+                                <Text variant={"caption"}
+                                      className={"font-mono"}>
                                     {reference.id}
-                                </TTypography>
+                                </Text>
                             </div>
                             : <Skeleton variant="text"/>)}
 
@@ -193,32 +193,32 @@ function ReferencePreviewWrap({
     size: PreviewSize;
     onClick?: () => void;
 }) {
-    return <TTypography variant={"label"}
-                        className={clsx("bg-opacity-70 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60",
-                            "w-full",
-                            "flex",
-                            "rounded-md",
-                            "overflow-hidden",
-                            onHover ? "hover:bg-opacity-90 dark:hover:bg-opacity-90" : "",
-                            size === "regular" ? "p-2" : "p-1",
-                            size === "tiny" ? "items-center" : "",
-                            "transition-colors duration-300 ease-in-out ",
-                            onHover ? "shadow-outline cursor-pointer" : "",
-                            onClick ? (onHover ? "cursor-pointer" : "") : "")}
-                        style={{
-                            // @ts-ignore
-                            tabindex: 0
-                        }}
-                        onClick={(event) => {
-                            if (onClick) {
-                                event.preventDefault();
-                                onClick();
-                            }
-                        }}>
+    return <Text variant={"label"}
+                 className={clsx("bg-opacity-70 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60",
+                     "w-full",
+                     "flex",
+                     "rounded-md",
+                     "overflow-hidden",
+                     onHover ? "hover:bg-opacity-90 dark:hover:bg-opacity-90" : "",
+                     size === "regular" ? "p-2" : "p-1",
+                     size === "tiny" ? "items-center" : "",
+                     "transition-colors duration-300 ease-in-out ",
+                     // onHover ? "shadow-outline" : "",
+                     onClick ? "cursor-pointer" : "")}
+                 style={{
+                     // @ts-ignore
+                     tabindex: 0
+                 }}
+                 onClick={(event) => {
+                     if (onClick) {
+                         event.preventDefault();
+                         onClick();
+                     }
+                 }}>
 
         {children}
 
-    </TTypography>
+    </Text>
 }
 
 const referencesCache = new Map<string, Entity<any>>();

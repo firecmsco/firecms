@@ -9,7 +9,7 @@ import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { TextInput } from "../../components/TextInput";
 import { PropertyPreview } from "../../preview";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -109,7 +109,8 @@ export function TextFieldBinding<T extends string | number>({
                         <ClearIcon/>
                     </IconButton>
                 }
-                error={showError ? error : undefined}/>
+                error={showError ? error : undefined}
+                inputClassName={error ? "text-error" : ""}/>
 
             {((showError && error) ||
                     (includeDescription && (property.description || property.longDescription)) ||
@@ -140,9 +141,9 @@ export function TextFieldBinding<T extends string | number>({
                             }
                             disabled={disabled}
                             label={
-                                <TTypography variant={"caption"}>
+                                <Text variant={"caption"}>
                                     Set value to Infinity
-                                </TTypography>
+                                </Text>
                             }
                         />
                     }

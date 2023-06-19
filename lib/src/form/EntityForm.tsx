@@ -1,5 +1,5 @@
 import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button, Grid, useTheme } from "@mui/material";
+import { Button, useTheme } from "@mui/material";
 import {
     CMSAnalyticsEvent,
     Entity,
@@ -19,8 +19,7 @@ import { CustomDialogActions, getDefaultValuesFor, isHidden, isReadOnly, resolve
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import TTypography from "../components/TTypography";
-
+import Text from "../components/Text";
 
 /**
  * @category Components
@@ -86,7 +85,6 @@ export interface EntityFormProps<M extends Record<string, any>> {
     autoSave?: boolean;
 
 }
-
 
 export type EntityFormSaveParams<M extends Record<string, any>> = {
     collection: ResolvedEntityCollection<M>,
@@ -254,7 +252,7 @@ function EntityFormInternal<M extends Record<string, any>>({
             values,
             previousValues: entity?.values,
             closeAfterSave: closeAfterSaveRef.current,
-            autoSave: autoSave ?? false,
+            autoSave: autoSave ?? false
         }).then(_ => {
             const eventName: CMSAnalyticsEvent = status === "new"
                 ? "new_entity_saved"
@@ -380,21 +378,17 @@ function EntityFormInternal<M extends Record<string, any>>({
                     >
 
                         {pluginActions.length > 0 && <div
-                            className={`w-full flex justify-end row items-center absolute top-0 right-0 left-0 text-right z-2 ${
-                                theme.palette.mode === "light"
-                                    ? "bg-opacity-60 bg-white"
-                                    : `bg-opacity-10 bg-${theme.palette.background.paper}`
-                            } backdrop-blur-md border-b border-gray-100 dark:border-gray-800`}>
+                            className={"w-full flex justify-end row items-center absolute top-0 right-0 left-0 text-right z-2 bg-opacity-60 bg-white dark:bg-opacity-10 dark:bg-gray-800 backdrop-blur-md border-b border-gray-100 dark:border-gray-800"}>
                             {pluginActions}
                         </div>}
 
                         <div
-                            className={`w-full mt-${4 + (pluginActions ? 4 : 0)}*4 py-2 flex items-center lg:mt-${3 + (pluginActions ? 4 : 0)}*4 md:mt-${2 + (pluginActions ? 4 : 0)}*4`}>
+                            className={`w-full py-2 flex items-center mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 
-                            <TTypography
-                                className="mt-4 mb-[calc(collection.hideIdFromForm ? 0 : 1rem)] flex-grow"
-                                variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
-                            </TTypography>
+                            <Text
+                                className={"mt-4 flex-grow " + collection.hideIdFromForm ? "mb-2" : "mb-0"}
+                                variant={"h4"}>{collection.singularName ?? collection.name}
+                            </Text>
                         </div>
 
                         {!hideId &&
@@ -465,7 +459,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
         errors,
         closeAfterSaveRef,
         autoSave,
-        submitForm,
+        submitForm
     } = props;
 
     const modified = dirty;
@@ -491,7 +485,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
     }, [underlyingChanges, entity, values, touched, setFieldValue]);
 
     const formFields = (
-        <Grid container spacing={6}>
+        <div className={"flex flex-col gap-8"}>
             {Object.entries(collection.properties)
                 .map(([key, property]) => {
 
@@ -516,17 +510,15 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                     };
 
                     return (
-                        <Grid item
-                              xs={12}
-                              id={`form_field_${key}`}
-                              key={`field_${collection.name}_${key}`}>
+                        <div id={`form_field_${key}`}
+                             key={`field_${collection.name}_${key}`}>
                             <PropertyFieldBinding {...cmsFormFieldProps}/>
-                        </Grid>
+                        </div>
                     );
                 })
                 .filter(Boolean)}
 
-        </Grid>
+        </div>
     );
 
     const disabled = isSubmitting || (!modified && status === "existing");
@@ -551,9 +543,9 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
                 {savingError &&
                     <div className="text-right">
-                        <TTypography color={"error"}>
+                        <Text color={"error"}>
                             {savingError.message}
-                        </TTypography>
+                        </Text>
                     </div>}
 
                 <Button

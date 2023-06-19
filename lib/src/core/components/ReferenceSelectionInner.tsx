@@ -19,7 +19,7 @@ import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
 import { useTableController } from "./EntityCollectionTable/useTableController";
 import { isFilterCombinationValidForFirestore } from "./EntityCollectionView/isFilterCombinationValidForFirestore";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 
 /**
  * @category Components
@@ -265,9 +265,9 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
                                            forceFilter={forceFilter}
                                            tableController={tableController}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
-                                           title={<TTypography variant={"h6"}>
+                                           title={<Text variant={"h6"}>
                                                {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
-                                           </TTypography>}
+                                           </Text>}
                                            {...collection}
                                            inlineEditing={false}
                                            selectionController={selectionController}
@@ -281,10 +281,10 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
             </div>
             <CustomDialogActions translucent={false}>
                 {description &&
-                    <TTypography variant={"body2"}
+                    <Text variant={"body2"}
                                  className="flex-grow text-left">
                         {description}
-                    </TTypography>}
+                    </Text>}
                 <Button
                     onClick={onDone}
                     color="primary"

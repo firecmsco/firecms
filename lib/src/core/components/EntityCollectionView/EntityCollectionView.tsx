@@ -28,7 +28,7 @@ import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigura
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { useTableController } from "../EntityCollectionTable/useTableController";
 import { isFilterCombinationValidForFirestore } from "./isFilterCombinationValidForFirestore";
-import TTypography from "../../../components/TTypography";
+import Text from "../../../components/Text";
 
 /**
  * @category Components
@@ -217,7 +217,7 @@ export const EntityCollectionView = React.memo(
         const Title = useMemo(() => (
             <div className="flex flex-row content-center">
                 <div>
-                    <TTypography
+                    <Text
                         variant={"h6"}
                         className={`leading-none truncate w-40 ${collection.description ? 'cursor-pointer' : 'cursor-auto'}`}
                         onClick={collection.description
@@ -228,7 +228,7 @@ export const EntityCollectionView = React.memo(
                             : undefined}
                     >
                         {`${collection.name}`}
-                    </TTypography>
+                    </Text>
                     <EntitiesCount fullPath={fullPath} collection={collection}/>
 
                     {collection.description &&
@@ -416,10 +416,10 @@ function EntitiesCount({ fullPath, collection }: {
         return null;
     }
 
-    return <TTypography
+    return <Text
         className="text-ellipsis block overflow-hidden whitespace-nowrap max-w-xs text-left"
         variant={"caption"}
         color={"secondary"}>
         {count !== undefined ? `${count} entities` : renderSkeletonText()}
-    </TTypography>;
+    </Text>;
 }

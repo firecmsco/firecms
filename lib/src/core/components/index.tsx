@@ -30,7 +30,7 @@ export * from "./FireCMSAppBar";
 
 export * from "./ArrayContainer";
 
-export * from "../../components/FilledSelect";
+export * from "../../components/Select";
 export * from "../../components/TextInput";
 export * from "../../components/TextareaAutosize";
 export * from "../../components/BooleanSwitch";

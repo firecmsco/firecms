@@ -2,7 +2,7 @@ import React, { useCallback, useRef } from "react";
 
 import { TextareaAutosize } from "./TextareaAutosize";
 import { DisabledTextField } from "./DisabledTextField";
-import TInputLabel from "./TInputLabel";
+import InputLabel from "./InputLabel";
 import clsx from "clsx";
 
 export type InputType = "text" | "number";
@@ -18,7 +18,8 @@ export function TextInput<T extends string | number>({
                                                          endAdornment,
                                                          autoFocus,
                                                          placeholder,
-                                                         small
+                                                         size = "medium",
+                                                         inputClassName
                                                      }: {
     inputType?: InputType,
     value: T,
@@ -30,7 +31,8 @@ export function TextInput<T extends string | number>({
     endAdornment?: React.ReactNode,
     autoFocus?: boolean,
     placeholder?: string,
-    small?: boolean
+    size?: "small" | "medium",
+    inputClassName?: string
 }) {
 
     const inputRef = useRef(null);
@@ -47,7 +49,7 @@ export function TextInput<T extends string | number>({
 
     if (disabled) {
         return <DisabledTextField label={label}
-                                  small={small}
+                                  size={size}
                                   value={value}/>
     }
 
@@ -60,15 +62,19 @@ export function TextInput<T extends string | number>({
             onBlur={() => setFocused(false)}
             value={value ?? ""}
             onChange={onChange}
-            className="rounded-md resize-none w-full outline-none p-[32px] text-base font-medium leading-normal placeholder-[currentColor] bg-transparent min-h-[64px] px-3 pt-[32px] pb-2"
+            className="rounded-md resize-none w-full outline-none p-[32px] text-base font-medium leading-normal bg-transparent min-h-[64px] px-3 pt-[28px] pb-2"
         />
         : <input ref={inputRef}
                  onWheel={inputType === "number" ? numberInputOnWheelPreventChange : undefined}
-                 className={`w-full outline-none ${
-                     small ? "min-h-[48px]" : "min-h-[64px]"
-                 } text-base px-3 ${label ? "pt-[32px] pb-2" : "py-2"} bg-transparent leading-normal ${
-                     error ? "text-error" : focused ? "text-text-primary dark:text-text-primary-dark" : ""
-                 }`}
+                 className={clsx(
+                     "w-full outline-none bg-transparent leading-normal text-base px-3",
+                     "rounded-md focus:outline-none focus-visible:ring focus-visible:ring-primary focus-visible:ring-opacity-75",
+                     size === "small" ? "min-h-[48px]" : "min-h-[64px]",
+                     label ? "pt-[28px] pb-2" : "py-2",
+                     focused ? "text-text-primary dark:text-text-primary-dark" : "",
+                     endAdornment ? "pr-10" : "pr-3",
+                     inputClassName
+                 )}
                  placeholder={placeholder}
                  autoFocus={autoFocus}
                  onFocus={() => setFocused(true)}
@@ -78,12 +84,6 @@ export function TextInput<T extends string | number>({
                  onChange={onChange}
         />;
 
-    const inner = endAdornment
-        ? <div className="flex items-center justify-between">
-            {input}
-            <div className="mr-2 my-1">{endAdornment}</div>
-        </div>
-        : input;
 
     return (
         <div
@@ -91,21 +91,23 @@ export function TextInput<T extends string | number>({
                 "rounded-md relative  max-w-full min-h-[64px]",
                 "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
                 {
-                    "min-h-[48px]": small,
-                    "min-h-[64px]": !small
+                    "min-h-[48px]": size === "small",
+                    "min-h-[64px]": size === "medium"
                 })}>
             {label && (
-                <TInputLabel
+                <InputLabel
                     className={`absolute left-0 top-1 pointer-events-none ${
                         !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-error"
                     }`}
                     shrink={hasValue || focused}
                 >
                     {label}
-                </TInputLabel>
+                </InputLabel>
             )}
 
-            {inner}
+            {input}
+
+            {endAdornment && <div className="absolute right-0 top-3 mr-3 ">{endAdornment}</div>}
         </div>
     );
 }

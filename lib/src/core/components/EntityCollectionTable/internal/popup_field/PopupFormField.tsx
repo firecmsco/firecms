@@ -27,7 +27,7 @@ import { isReadOnly, resolveCollection } from "../../../../util";
 import { CustomDialogActions } from "../../../CustomDialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
-import TTypography from "../../../../../components/TTypography";
+import Text from "../../../../../components/Text";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
@@ -346,9 +346,9 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             </Formik>
 
             {savingError &&
-                <TTypography color={"error"}>
+                <Text color={"error"}>
                     {savingError.message}
-                </TTypography>
+                </Text>
             }
         </div>
     );
@@ -359,7 +359,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             style={{
                 boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
             }}
-            className={`z-[1300] inline-block fixed z-50 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
+            className={`z-30 inline-block fixed z-50 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
                 !open ? "invisible" : "visible"
             } cursor-grab`}
             ref={containerRef}>

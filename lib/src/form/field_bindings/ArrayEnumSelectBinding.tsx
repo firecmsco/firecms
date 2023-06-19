@@ -17,7 +17,7 @@ import { useClearRestoreValue } from "../../hooks";
 import { enumToObjectEntries, isEnumValueDisabled } from "../../core/util/enums";
 import { ArrayEnumPreview, EnumValuesChip } from "../../preview";
 import { ErrorView, getIconForProperty } from "../../core";
-import TInputLabel from "../../components/TInputLabel";
+import InputLabel from "../../components/InputLabel";
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -80,11 +80,11 @@ export function ArrayEnumSelectBinding({
             className="MuiInputLabel-root mt-0.5 ml-0.5 MuiInputLabel-shrink mt-2"
         >
 
-            <TInputLabel id={`${propertyKey}-multiselect-label`}>
+            <InputLabel id={`${propertyKey}-multiselect-label`}>
                 <LabelWithIcon icon={getIconForProperty(property)}
                                required={property.validation?.required}
                                title={property.name}/>
-            </TInputLabel>
+            </InputLabel>
 
             <MuiSelect
                 multiple

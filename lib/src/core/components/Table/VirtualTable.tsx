@@ -21,7 +21,7 @@ import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
-import TTypography from "../../../components/TTypography";
+import Text from "../../../components/Text";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -223,13 +223,13 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             <div
                 className="h-[calc(100%-64px)] flex flex-col items-center justify-center sticky left-0">
 
-                <TTypography variant={"h6"}>
+                <Text variant={"h6"}>
                     {"Error fetching data from the data source"}
-                </TTypography>
+                </Text>
 
-                {error?.message && <TTypography>
+                {error?.message && <Text>
                     {error?.message}
-                </TTypography>}
+                </Text>}
 
             </div>
         ), [error?.message]);
@@ -240,9 +240,9 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             return <div
                 className="flex overflow-auto items-center justify-center p-2 gap-2 h-full">
                 <AssignmentIcon/>
-                <TTypography>
+                <Text>
                     {emptyMessage}
-                </TTypography>
+                </Text>
             </div>;
         }, [emptyMessage, loading]);
 

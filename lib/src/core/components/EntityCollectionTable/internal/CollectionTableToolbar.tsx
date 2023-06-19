@@ -4,7 +4,7 @@ import { CircularProgress, Hidden, IconButton, Tooltip, useMediaQuery, useTheme 
 import { CollectionSize } from "../../../../types";
 import { SearchBar } from "./SearchBar";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
-import { FilledSelect } from "../../../../components/FilledSelect";
+import { Select } from "../../../../components/Select";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
@@ -36,9 +36,10 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
         </Tooltip>;
 
     const sizeSelect = (
-        <FilledSelect
+        <Select
             value={props.size as string}
             className="w-14 h-10"
+            size={"small"}
             onValueChange={(v) => props.onSizeChanged(v as CollectionSize)}
             options={["xs", "s", "m", "l", "xl"]}
             renderOption={(v) => v.toUpperCase()}
@@ -47,7 +48,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     return (
         <div
-            className="min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-opacity-40 dark:bg-opacity-40 bg-gray-100 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800 flex flex-row justify-between items-center w-full"
+            className="min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800 flex flex-row justify-between items-center w-full"
         >
 
             <div className="flex items-center space-x-8 md:space-x-4">

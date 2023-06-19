@@ -17,7 +17,7 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
 import { useAuthController, useBreadcrumbsContext, useModeController } from "../../hooks";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 import clsx from "clsx";
 
 export interface FireCMSAppBarProps {
@@ -64,15 +64,15 @@ export const FireCMSAppBar = function FireCMSAppBar({
     return (
         <div
             className={clsx({
-                "ml-64": drawerOpen && largeLayout,
+                "ml-[18rem]": drawerOpen && largeLayout,
                 "ml-16": !(drawerOpen && largeLayout),
                 "h-16": true,
-                "z-[1100]": largeLayout,
+                "z-10": largeLayout,
                 "transition-all": true,
                 "ease-in": true,
                 "duration-75": true,
                 "w-[calc(100%-64px)]": !(drawerOpen && largeLayout),
-                "w-[calc(100%-256px)]": drawerOpen && largeLayout,
+                "w-[calc(100%-18rem)]": drawerOpen && largeLayout,
                 "duration-150": drawerOpen && largeLayout,
                 fixed: true
             })}>
@@ -89,11 +89,11 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                 color="inherit"
                                 component={ReactLink}
                                 to={"."}>
-                                <TTypography variant="h6"
+                                <Text variant="h6"
                                              noWrap
                                              className={"weight-500"}>
                                     {title}
-                                </TTypography>
+                                </Text>
                             </Link>
                         </div>
                     </Hidden>

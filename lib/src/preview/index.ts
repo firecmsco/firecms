@@ -21,7 +21,7 @@ export * from "./components/UrlComponentPreview";
 export * from "./components/StorageThumbnail";
 export * from "./components/ArrayEnumPreview";
 export * from "./components/BooleanPreview";
-export * from "./components/ColorChip";
+export * from "./components/EnumValuesChip";
 export * from "./components/Markdown";
 export * from "./components/EmptyValue";
 export * from "./components/ImagePreview";

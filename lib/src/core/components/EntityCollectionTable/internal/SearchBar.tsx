@@ -1,11 +1,7 @@
 import React, { useCallback, useDeferredValue, useState } from "react";
-import { Theme } from "@mui/material/styles";
-import InputBase from "@mui/material/InputBase";
-import { IconButton } from "@mui/material";
 import clsx from "clsx";
 
 import SearchIcon from "@mui/icons-material/Search";
-import ClearIcon from "@mui/icons-material/Clear";
 
 interface SearchBarProps {
     onTextSearch: (searchString?: string) => void;
@@ -43,17 +39,12 @@ export function SearchBar({
     }, []);
 
     return (
-        <div className={clsx("relative flex items-center w-full min-w-[200px] rounded sm:w-auto",
-            "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
-            {
-                "h-14": large,
-                "h-10": !large
-            })}>
+        <div className={clsx("relative", large ? "h-14" : "h-[42px]")}>
             <div
-                className="p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center">
+                className="absolute p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center top-0">
                 <SearchIcon htmlColor={"#888"}/>
             </div>
-            <InputBase
+            <input
                 placeholder={placeholder}
                 value={searchText}
                 onChange={(event) => {
@@ -61,29 +52,36 @@ export function SearchBar({
                 }}
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)}
-                className={`w-full ${expandable ? "" : "min-h-full"} text-current`}
-                inputProps={{
-                    sx: (theme: Theme) => ({
-                        padding: theme.spacing(1, 1, 1, 0),
-                        // vertical padding + font size from searchIcon
-                        paddingLeft: `calc(1em + ${theme.spacing(4)})`,
-                        transition: theme.transitions.create("width"),
-                        width: "100%",
-                        [theme.breakpoints.up("sm")]: {
-                            width: expandable ? active ? "20ch" : "12ch" : "100%"
-                        }
-                    }),
-                    "aria-label": placeholder
-                }}
-                endAdornment={searchText
-                    ? <IconButton
-                        className={`mr-${large ? 2 : 1}`}
-                        size={"small"}
-                        onClick={clearText}>
-                        <ClearIcon fontSize={"small"}/>
-                    </IconButton>
-                    : <div style={{ width: 26 }}/>
-                }
+                className={clsx(
+                    "relative flex items-center w-full rounded sm:w-auto",
+                    "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
+                    "pl-12 h-full text-current ",
+                    active ? "width-[200px]" : "width-[140px]",
+                    "focus:outline-none focus-visible:ring focus-visible:ring-primary focus-visible:ring-opacity-75",
+                    // "bg-transparent outline-none appearance-none border-none",
+                )}
+                // inputProps={{
+                //     sx: (theme: Theme) => ({
+                //         padding: theme.spacing(1, 1, 1, 0),
+                //         // vertical padding + font size from searchIcon
+                //         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+                //         transition: theme.transitions.create("width"),
+                //         width: "100%",
+                //         [theme.breakpoints.up("sm")]: {
+                //             width: expandable ? active ? "20ch" : "12ch" : "100%"
+                //         }
+                //     }),
+                //     "aria-label": placeholder
+                // }}
+                // endAdornment={searchText
+                //     ? <IconButton
+                //         className={`mr-${large ? 2 : 1}`}
+                //         size={"small"}
+                //         onClick={clearText}>
+                //         <ClearIcon fontSize={"small"}/>
+                //     </IconButton>
+                //     : <div style={{ width: 26 }}/>
+                // }
             />
         </div>
     );

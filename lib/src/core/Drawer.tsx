@@ -5,7 +5,7 @@ import { darken, lighten, List, ListItem, SvgIconTypeMap, Tooltip, useTheme } fr
 import { useFireCMSContext, useNavigationContext } from "../hooks";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { getIconForView } from "./util";
-import TTypography from "../components/TTypography";
+import Text from "../components/Text";
 
 /**
  * Props used in case you need to override the default drawer
@@ -46,11 +46,11 @@ export function Drawer({
         if (!drawerOpen) return <div className="h-4"/>;
         return <div
                     className="pt-8 pl-8 pr-8 pb-2 flex flex-row items-center">
-            <TTypography variant={"caption"}
+            <Text variant={"caption"}
                          color={"secondary"}
                          className="weight-500 flex-grow">
                 {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
-            </TTypography>
+            </Text>
 
         </div>;
     }, [drawerOpen]);
@@ -144,13 +144,13 @@ export function DrawerNavigationItem({
 
         {icon}
 
-        <TTypography
+        <Text
             variant={"subtitle2"}
             className={`${
                 drawerOpen ? "opacity-100" : "opacity-0"
             } font-inherit ml-3 p-1`}>
             {name.toUpperCase()}
-        </TTypography>
+        </Text>
     </ListItem>;
 
     if (drawerOpen)

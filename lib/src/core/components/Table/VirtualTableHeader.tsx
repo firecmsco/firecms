@@ -169,13 +169,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     {column.resizable && <div
                         ref={resizeHandleRef}
-                        className={`absolute h-full w-[4px] top-0 right-0 cursor-col-resize ${
-                            hovered
-                                ? theme.palette.mode === "dark"
-                                    ? `bg-${lighten(theme.palette.background.default, 0.1)}`
-                                    : `bg-${darken(theme.palette.background.default, 0.15)}`
-                                : ""
-                        }`}
+                        className={`absolute h-full w-[4px] top-0 right-0 cursor-col-resize`}
                         onMouseDown={onClickResizeColumn ? () => onClickResizeColumn(columnIndex, column) : undefined}
                     />}
                 </Grid>

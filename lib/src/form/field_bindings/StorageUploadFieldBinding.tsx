@@ -22,7 +22,7 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { StorageFieldItem, useStorageUploadController } from "../../core/util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 
 const dropZoneClasses = "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90 box-border relative pt-[2px] items-center border border-transparent fieldBackground min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-gray"
@@ -280,10 +280,10 @@ function FileDropComponent({
 
             <div
                 className="flex-grow min-h-[38px] box-border m-2 text-center">
-                <TTypography align={"center"}
+                <Text align={"center"}
                              variant={"label"}>
                     {helpText}
-                </TTypography>
+                </Text>
             </div>
 
         </div>

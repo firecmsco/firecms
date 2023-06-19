@@ -10,7 +10,7 @@ import { useFireCMSContext } from "../../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
-import TTypography from "../../../components/TTypography";
+import Text from "../../../components/Text";
 
 /**
  * This is the component used in the home page to render a card for each
@@ -120,16 +120,16 @@ export function NavigationCollectionCard({
 
                     </div>
 
-                    <TTypography gutterBottom variant="h5"
+                    <Text gutterBottom variant="h5"
                                  component="h2">
                         {name}
-                    </TTypography>
+                    </Text>
 
-                    {description && <TTypography variant="body2"
+                    {description && <Text variant="body2"
                                                  color="secondary"
                                                  component="div">
                         <Markdown source={description}/>
-                    </TTypography>}
+                    </Text>}
                 </CardContent>
 
                 <CardActions style={{ alignSelf: "flex-end" }}>

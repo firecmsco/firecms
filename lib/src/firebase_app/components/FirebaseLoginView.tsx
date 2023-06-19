@@ -19,7 +19,7 @@ import {
     PhoneMultiFactorGenerator,
     RecaptchaVerifier
 } from "firebase/auth";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 
 /**
  * @category Firebase
@@ -376,8 +376,8 @@ function PhoneLoginForm({
                     </IconButton>
                 </Grid>
                 <Grid item xs={12} className="p-1 flex">
-                    <TTypography align={"center"}
-                                 variant={"subtitle2"}>{"Please enter your phone number"}</TTypography>
+                    <Text align={"center"}
+                                 variant={"subtitle2"}>{"Please enter your phone number"}</Text>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField placeholder="" fullWidth
@@ -390,8 +390,8 @@ function PhoneLoginForm({
                 {Boolean(phone && authController.confirmationResult) &&
                     <>
                         <Grid item xs={12} className="mt-2 p-1 flex">
-                            <TTypography align={"center"}
-                                         variant={"subtitle2"}>{"Please enter the confirmation code"}</TTypography>
+                            <Text align={"center"}
+                                         variant={"subtitle2"}>{"Please enter the confirmation code"}</Text>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField placeholder="" fullWidth
@@ -521,13 +521,13 @@ function LoginForm({
                 </Grid>
 
                 <Grid item xs={12} className="p-1">
-                    <TTypography align={"center"} variant={"subtitle2"}>
+                    <Text align={"center"} variant={"subtitle2"}>
                         You already have an account
-                    </TTypography>
-                    <TTypography align={"center"} variant={"body2"}>
+                    </Text>
+                    <Text align={"center"} variant={"body2"}>
                         You can use one of these
                         methods to login with {email}
-                    </TTypography>
+                    </Text>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -554,8 +554,8 @@ function LoginForm({
 
                     <Grid item xs={12}
                           className={`p-4 ${registrationMode && disableSignupScreen ? 'hidden' : 'flex'}`}>
-                        <TTypography align={"center"}
-                                     variant={"subtitle2"}>{label}</TTypography>
+                        <Text align={"center"}
+                                     variant={"subtitle2"}>{label}</Text>
                     </Grid>
 
                     <Grid item xs={12}

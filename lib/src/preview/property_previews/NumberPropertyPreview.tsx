@@ -1,6 +1,6 @@
 import React from "react";
 
-import { EnumValuesChip } from "../components/ColorChip";
+import { EnumValuesChip } from "../components/EnumValuesChip";
 import { resolveEnumValues } from "../../core";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 

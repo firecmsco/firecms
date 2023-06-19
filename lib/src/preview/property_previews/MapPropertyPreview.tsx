@@ -5,7 +5,7 @@ import { ResolvedMapProperty } from "../../types";
 import { ErrorBoundary } from "../../core";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 
 /**
  * @category Preview components
@@ -74,11 +74,11 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                             <div
                                 key={`table-cell-title-${key}-${key}`}
                                 className="w-1/4 align-top pr-1">
-                                <TTypography variant={"caption"}
+                                <Text variant={"caption"}
                                              className={"font-mono"}
                                              color={"secondary"}>
                                     {mapProperty.properties![key].name}
-                                </TTypography>
+                                </Text>
                             </div>
                             <div
                                 className="flex-grow">
@@ -113,21 +113,21 @@ export function KeyValuePreview({ value }: { value: any }) {
                     <div
                         key={`table-cell-title-${key}-${key}`}
                         className="w-1/4 align-top pr-1">
-                        <TTypography variant={"caption"}
+                        <Text variant={"caption"}
                                      className={"font-mono"}
                                      color={"secondary"}>
                             {key}
-                        </TTypography>
+                        </Text>
                     </div>
                     <div
                         className="flex-grow">
-                        <TTypography
+                        <Text
                             variant={"caption"}
                             className={"font-mono"}>
                             <ErrorBoundary>
                                 {JSON.stringify(childValue)}
                             </ErrorBoundary>
-                        </TTypography>
+                        </Text>
                     </div>
                 </div>
             ))

@@ -2,16 +2,16 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 import { CircularProgress, Divider, IconButton, Tab, Tabs, useTheme } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { Entity, EntityCollection, EntityStatus, EntityValues, FireCMSPlugin, FormContext,
-    User
-} from "../../types";
+import { Entity, EntityCollection, EntityStatus, EntityValues, FireCMSPlugin, FormContext, User } from "../../types";
 import { CircularProgressCenter, EntityCollectionView, EntityPreview, ErrorBoundary } from "../components";
-import { canEditEntity, fullPathToCollectionSegments, removeInitialAndTrailingSlashes ,
+import {
+    canEditEntity,
+    fullPathToCollectionSegments,
+    removeInitialAndTrailingSlashes,
     resolveDefaultSelectedView,
     useDebounce
 } from "../util";
 
-import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -24,8 +24,9 @@ import {
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 import { useLargeSideLayout } from "./useLargeSideLayout";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 import { EntityFormSaveParams } from "../../form/EntityForm";
+import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -70,7 +71,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         const [valuesToBeSaved, setValuesToBeSaved] = useState<EntityValues<M> | undefined>(undefined);
         useDebounce(valuesToBeSaved, () => {
             if (valuesToBeSaved)
-                saveEntity({ values: valuesToBeSaved, closeAfterSave: false });
+                saveEntity({
+                    values: valuesToBeSaved,
+                    closeAfterSave: false
+                });
         }, false, 2000);
 
         const theme = useTheme();
@@ -241,7 +245,11 @@ export const EntityView = React.memo<EntityViewProps<any>>(
             console.error(e);
         }, [entityId, path, snackbarController]);
 
-        function saveEntity({ values, previousValues, closeAfterSave }: {
+        function saveEntity({
+                                values,
+                                previousValues,
+                                closeAfterSave
+                            }: {
             values: M,
             previousValues?: M,
             closeAfterSave: boolean,
@@ -297,7 +305,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     return null;
                 }
                 return <div
-                    className={`w-[${ADDITIONAL_TAB_WIDTH}] flex-grow h-full overflow-auto border-l border-gray-100 dark:border-gray-800 lg:border-l-0 lg:w-[${CONTAINER_FULL_WIDTH}]`}
+                    className={`w-[${ADDITIONAL_TAB_WIDTH}] flex-grow h-full overflow-auto border-l border-gray-100 dark:border-gray-800 xl:border-l-0 xl:w-[${CONTAINER_FULL_WIDTH}]`}
                     key={`custom_view_${customView.path}`}
                     role="tabpanel">
                     <ErrorBoundary>
@@ -323,7 +331,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     return null;
                 return (
                     <div
-                        className={`flex-grow h-full overflow-auto border-l border-opacity-50 border-gray-100 dark:border-gray-800 ${theme.breakpoints.down("lg") ? `border-l-0 w-${CONTAINER_FULL_WIDTH}` : `lg:w-${ADDITIONAL_TAB_WIDTH}`}`}
+                        className={`flex-grow h-full overflow-auto border-l border-opacity-50 border-gray-100 dark:border-gray-800 border-l-0 w-[${CONTAINER_FULL_WIDTH}] xl:border-none xl:w-[${ADDITIONAL_TAB_WIDTH}] ${theme.breakpoints.down("lg") ? `` : ``}`}
                         key={`subcol_${subcollection.alias ?? subcollection.path}`}
                         role="tabpanel">
 
@@ -337,10 +345,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                     {...subcollection}/>
                                 : <div
                                     className="flex items-center justify-center w-full h-full p-3">
-                                    <TTypography variant={"label"}>
+                                    <Text variant={"label"}>
                                         You need to save your entity before
                                         adding additional collections
-                                    </TTypography>
+                                    </Text>
                                 </div>)
                         }
 
@@ -507,7 +515,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                             onSideTabClick(-1);
                         }}
                         className={`${
-                            !hasAdditionalViews ? 'hidden' : ''
+                            !hasAdditionalViews ? "hidden" : ""
                         } text-sm min-w-[140px]`}
                         wrapped={true}
                     />
@@ -530,31 +538,25 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                         <Divider/>
 
                         <div
-                            className="flex-grow h-full flex overflow-auto flex-row"
+                            className="flex-grow h-full flex overflow-auto flex-row w-form xl:w-full"
                             style={{
-                                width: `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedFormWidth})`,
-                                maxWidth: "100%",
-                                [`@media (max-width: ${resolvedFormWidth})`]: {
-                                    width: resolvedFormWidth
-                                }
+                                // width: `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedFormWidth})`,
+                                // maxWidth: "100%",
+                                // [`@media (max-width: ${resolvedFormWidth})`]: {
+                                //     width: resolvedFormWidth
+                                // }
                             }}>
 
-                            <div className="relative max-w-full">
-                                <div
-                                    role="tabpanel"
-                                    hidden={!mainViewVisible}
-                                    id={`form_${path}`}
-                                    className={`w-${resolvedFormWidth} max-w-full h-full overflow-auto ${
-                                        theme.breakpoints.down('sm')
-                                            ? `max-w-${CONTAINER_FULL_WIDTH} w-${CONTAINER_FULL_WIDTH}`
-                                            : ''
-                                    }`}>
+                            <div
+                                role="tabpanel"
+                                hidden={!mainViewVisible}
+                                id={`form_${path}`}
+                                className={`w-full xl:w-[${resolvedFormWidth}] h-full overflow-auto`}>
 
-                                    {globalLoading
-                                        ? <CircularProgressCenter/>
-                                        : form}
+                                {globalLoading
+                                    ? <CircularProgressCenter/>
+                                    : form}
 
-                                </div>
                             </div>
 
                             {customViewsView}

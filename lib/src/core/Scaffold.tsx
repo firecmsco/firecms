@@ -175,7 +175,7 @@ function StyledDrawer(props: {
     const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
 
     return (
-        <div className="drawer-container relative"
+        <div className="transition-all ease-in duration-75 relative"
              onMouseEnter={props.onMouseEnter}
              onMouseMove={props.onMouseMove}
              onMouseLeave={props.onMouseLeave}

@@ -1,7 +1,7 @@
 import React, { forwardRef, ReactEventHandler } from "react";
 import clsx from "clsx";
 
-export interface TypographyProps {
+export interface TextProps {
     align?: "center" | "inherit" | "justify" | "left" | "right";
     children?: React.ReactNode;
     className?: string;
@@ -56,7 +56,7 @@ const variantToClasses = {
     caption: "text-xs"
 };
 
-const TTypography = forwardRef<HTMLSpanElement, TypographyProps>(function Typography(
+const Text = forwardRef<HTMLSpanElement, TextProps>(function Typography(
     {
         align = "inherit",
         children,
@@ -96,4 +96,4 @@ const TTypography = forwardRef<HTMLSpanElement, TypographyProps>(function Typogr
     );
 });
 
-export default TTypography;
+export default Text;

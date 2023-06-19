@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useMemo } from "react";
 
 import { EntitySidePanelProps } from "../types";
-import { FORM_CONTAINER_WIDTH } from "./internal/common";
-import { useNavigationContext, useSideEntityController } from "../hooks";
+import { useNavigationContext } from "../hooks";
 
 import { ErrorBoundary } from "./components";
 import { EntityView } from "./internal/EntityView";
@@ -66,7 +65,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }, [collection?.name, setBlocked, setBlockedNavigationMessage]);
 
     if (!props || !collection) {
-        return <div style={{ width: FORM_CONTAINER_WIDTH }}/>;
+        return <div className={"w-form"}/>;
     }
 
     return (

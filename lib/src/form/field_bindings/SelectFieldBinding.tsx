@@ -1,15 +1,12 @@
 import React, { useCallback } from "react";
-import { FormControl, FormHelperText, IconButton, MenuItem, Select as MuiSelect, useTheme } from "@mui/material";
-
-import ClearIcon from "@mui/icons-material/Clear";
+import { FormHelperText } from "@mui/material";
 
 import { EnumType, FieldProps } from "../../types";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { isEnumValueDisabled } from "../../core/util/enums";
 import { EnumValuesChip } from "../../preview";
-import { getIconForProperty } from "../../core";
-import TInputLabel from "../../components/TInputLabel";
+import { getIconForProperty, Select } from "../../core";
+import InputLabel from "../../components/InputLabel";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -34,7 +31,6 @@ export function SelectFieldBinding<T extends EnumType>({
                                                            includeDescription
                                                        }: SelectProps<T>) {
 
-    const theme = useTheme();
     const enumValues = property.enumValues;
 
     useClearRestoreValue({
@@ -48,73 +44,46 @@ export function SelectFieldBinding<T extends EnumType>({
     }, [setValue]);
 
     return (
-        <FormControl
-            fullWidth
-            error={showError}
-            disabled={disabled}
-            className="MuiInputLabel-root MuiInputLabel-shrink"
-            style={{
-                marginTop: '0.5rem',
-                marginLeft: '0.5rem',
-            }}
-        >
+        <>
 
-            <TInputLabel id={`${propertyKey}-select-label`}>
-                <LabelWithIcon icon={getIconForProperty(property)}
-                               required={property.validation?.required}
-                               title={property.name}/>
-            </TInputLabel>
-
-            <MuiSelect
-                className={`min-h-[64px] rounded-[${theme.shape.borderRadius + "px"}]`}
-                variant={"filled"}
-                labelId={`${propertyKey}-select-label`}
-                autoFocus={autoFocus}
-                value={value ?? ""}
+            <Select
+                value={value ? value.toString() : ""}
                 disabled={disabled}
-                disableUnderline={true}
-                endAdornment={
-                    property.clearable && <IconButton
-                        className="absolute top-3 right-8"
-                        onClick={handleClearClick}>
-                        <ClearIcon/>
-                    </IconButton>
-                }
-                onChange={(evt: any) => {
-                    const eventValue = evt.target.value;
-                    const newValue = eventValue
-                        ? (property.dataType === "number" ? parseFloat(eventValue) : eventValue)
+                position="item-aligned"
+                className={`w-full ${property.clearable ? "pr-10" : ""}`}
+                label={<InputLabel id={`${propertyKey}-select-label`}
+                                   shrink={Boolean(value)}>
+                    <LabelWithIcon icon={getIconForProperty(property)}
+                                   required={property.validation?.required}
+                                   title={property.name}/>
+                </InputLabel>}
+                // endAdornment={
+                //     property.clearable && <IconButton
+                //         className="absolute top-3 right-8"
+                //         onClick={handleClearClick}>
+                //         <ClearIcon/>
+                //     </IconButton>
+                // }
+                onValueChange={(updatedValue: any) => {
+                    const newValue = updatedValue
+                        ? (property.dataType === "number" ? parseFloat(updatedValue) : updatedValue)
                         : null;
-
                     return setValue(newValue);
                 }}
-                renderValue={(enumKey: any) => {
+                renderOption={(enumKey: any) => {
                     return <EnumValuesChip
                         enumKey={enumKey}
                         enumValues={enumValues}
                         small={false}/>;
-                }
-                }>
-
-                {enumValues && enumValues.map((enumConfig) => {
-                    return (
-                        <MenuItem key={`select_${propertyKey}_${enumConfig.id}`}
-                                  value={enumConfig.id}
-                                  disabled={isEnumValueDisabled(enumConfig)}>
-                            <EnumValuesChip
-                                enumKey={enumConfig.id}
-                                enumValues={enumValues}
-                                small={true}/>
-                        </MenuItem>
-                    );
-                })}
-            </MuiSelect>
+                }}
+                options={enumValues?.map((enumConfig) => String(enumConfig.id)) ?? []}
+            />
 
             {includeDescription &&
                 <FieldDescription property={property}/>}
 
             {showError && <FormHelperText error={true}>{error}</FormHelperText>}
 
-        </FormControl>
+        </>
     );
 }

@@ -44,7 +44,7 @@ export const Sheet: React.FC<SheetProps> = ({
                               onOpenChange={onOpenChange}>
             <DialogPrimitive.Portal>
                 <DialogPrimitive.Overlay
-                    className={`fixed inset-0 transition-opacity z-[1200] ease-in-out duration-200 bg-black bg-opacity-50 dark:bg-opacity-60 ${
+                    className={`fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black bg-opacity-50 dark:bg-opacity-60 ${
                         displayed && open ? "opacity-100" : "opacity-0"
                     }`}
                     style={{
@@ -53,7 +53,7 @@ export const Sheet: React.FC<SheetProps> = ({
                 />
                 <DialogPrimitive.Content
                     {...props}
-                    className={`fixed transform shadow-md z-[1200] transition-transform duration-[250ms] ease-in-out
+                    className={`fixed transform shadow-md z-20 transition-transform duration-[250ms] ease-in-out
                 ${side === "top" || side === "bottom" ? "w-full" : "h-full"}
                 ${side === "left" || side === "top" ? "left-0 top-0" : "right-0 bottom-0"}
                 ${!displayed || !open ? transformValue[side] : ""}`}

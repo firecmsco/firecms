@@ -3,7 +3,7 @@ import { CMSType, ResolvedProperty } from "../../types";
 
 import { FormHelperText, IconButton, Tooltip } from "@mui/material";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 
 interface FieldDescriptionPopoverProps<T extends CMSType> {
     property: ResolvedProperty<T>,
@@ -26,8 +26,8 @@ export function FieldDescription<T extends CMSType>({ property }: FieldDescripti
 
             {property.longDescription &&
                 <Tooltip title={
-                    <TTypography
-                        variant={"caption"}>{property.longDescription}</TTypography>
+                    <Text
+                        variant={"caption"}>{property.longDescription}</Text>
                 }
                          placement="bottom-start"
                          arrow>

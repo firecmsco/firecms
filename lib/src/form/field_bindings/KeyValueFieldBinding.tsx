@@ -17,7 +17,7 @@ import {
     TextInput
 } from "../../core";
 import { FieldDescription, LabelWithIcon } from "../components";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -113,7 +113,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 key={dataType}
                 value={entryValue}
                 inputType={dataType === "number" ? "number" : "text"}
-                small={true}
+                size={"small"}
                 disabled={disabled || !fieldKey}
                 onChange={(event) => {
                     if (dataType === "number") {
@@ -210,10 +210,10 @@ function MapKeyValueRow<T extends Record<string, any>>({
                              }}/>
             </div>;
         } else {
-            return <TTypography
+            return <Text
                 variant={"caption"}>
                 {`Data type ${dataType} not supported yet`}
-            </TTypography>;
+            </Text>;
         }
     }
 
@@ -223,14 +223,14 @@ function MapKeyValueRow<T extends Record<string, any>>({
     }
 
     return (<>
-            <TTypography key={rowId.toString()}
+            <Text key={rowId.toString()}
                          component={"div"}
                          className="font-mono flex flex-row space-x-1 items-center">
                 <div className="w-[200px] max-w-[25%]">
                     <TextInput
                         value={fieldKey}
                         disabled={disabled || Boolean(entryValue)}
-                        small={true}
+                        size={"small"}
                         onChange={(event) => {
                             onFieldKeyChange(event.target.value);
                         }}/>
@@ -252,7 +252,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                             className="h-7 w-7">
                     <RemoveIcon fontSize={"small"}/>
                 </IconButton>
-            </TTypography>
+            </Text>
 
             {(dataType === "map" || dataType === "array") && buildInput(entryValue, fieldKey, dataType)}
 
@@ -314,7 +314,7 @@ function ArrayKeyValueRow<T>({
         if (dataType === "string" || dataType === "number") {
             return <TextInput value={entryValue}
                               inputType={dataType === "number" ? "number" : "text"}
-                              small={true}
+                              size={"small"}
                               onChange={(event) => {
                                   if (dataType === "number") {
                                       const numberValue = event.target.value ? parseFloat(event.target.value) : undefined;
@@ -343,9 +343,9 @@ function ArrayKeyValueRow<T>({
                                       setValue(v as T);
                                   }}/>;
         } else if (dataType === "array") {
-            return <TTypography variant={"caption"}>
+            return <Text variant={"caption"}>
                 Arrays of arrays are not supported.
-            </TTypography>;
+            </Text>;
         } else if (dataType === "map") {
             return <div className="ml-1 pl-1 border-l border-solid"
                         style={{ borderColor: "currentColor" }}>
@@ -355,15 +355,15 @@ function ArrayKeyValueRow<T>({
                              }}/>
             </div>;
         } else {
-            return <TTypography
+            return <Text
                 variant={"caption"}>
                 {`Data type ${dataType} not supported yet`}
-            </TTypography>;
+            </Text>;
         }
     }
 
     return (<>
-            <TTypography key={id.toString()}
+            <Text key={id.toString()}
                          component={"div"}
                          className="font-mono flex min-h-12 flex-row space-x-1 items-center">
 
@@ -377,7 +377,7 @@ function ArrayKeyValueRow<T>({
                     <ArrowDropDownIcon/>
                 </IconButton>
 
-            </TTypography>
+            </Text>
 
             {selectedDataType === "map" && buildInput(value, selectedDataType)}
 

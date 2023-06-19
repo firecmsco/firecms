@@ -15,7 +15,7 @@ import {
     useTheme
 } from "@mui/material";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
-import TTypography from "../../../../components/TTypography";
+import Text from "../../../../components/Text";
 
 /**
  *
@@ -179,10 +179,10 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                 <div className="w-[138px] text-center overflow-hidden truncate">
 
                     {entity
-                        ? <TTypography
+                        ? <Text
                             className={"font-mono"}
                             variant={"caption"}
-                            color={"secondary"}> {entity.id} </TTypography>
+                            color={"secondary"}> {entity.id} </Text>
                         : <Skeleton variant="text"/>
                     }
                 </div>

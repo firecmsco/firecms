@@ -1,14 +1,15 @@
 import React, { ButtonHTMLAttributes } from "react";
+import clsx from "clsx";
 
 export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: "regular" | "ghost";
 }
 
-export const TIconButton: React.FC<IconButtonProps> = ({
-                                                   variant = "regular",
-                                                   children,
-                                                   ...props
-                                               }) => {
+export const IconButton: React.FC<IconButtonProps> = ({
+                                                           variant = "regular",
+                                                           children,
+                                                           ...props
+                                                       }) => {
     const buttonClasses =
         variant === "regular"
             ? "bg-blue-500 hover:bg-blue-600 text-white focus:ring-4 focus:ring-blue-400"
@@ -17,7 +18,9 @@ export const TIconButton: React.FC<IconButtonProps> = ({
         "inline-flex items-center justify-center p-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ease-in-out duration-150";
 
     return (
-        <button {...props} className={`${baseClasses} ${buttonClasses}`}>
+        <button {...props}
+                className={clsx("focus:outline-none focus-visible:ring focus-visible:ring-primary focus-visible:ring-opacity-75",
+                    baseClasses, buttonClasses)}>
             {children}
         </button>
     );

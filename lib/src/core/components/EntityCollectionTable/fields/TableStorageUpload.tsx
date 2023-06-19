@@ -13,7 +13,7 @@ import { useSnackbarController, useStorageSource } from "../../../../hooks";
 import { getThumbnailMeasure } from "../../../../preview/util";
 import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../../../../form/components/StorageUploadProgress";
-import TTypography from "../../../../components/TTypography";
+import Text from "../../../../components/Text";
 
 const dropZoneMixin = (hasValue: boolean) => ({
     transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
@@ -270,12 +270,12 @@ function StorageUpload({
             {!internalValue && <div
                 className="flex-grow m-2 max-w-[200px]"
                 onClick={open}>
-                <TTypography
+                <Text
                     className="text-[#999] dark:text-[#444]"
                     variant={"body2"}
                     align={"center"}>
                     {helpText}
-                </TTypography>
+                </Text>
             </div>}
 
             {onHover &&

@@ -9,7 +9,7 @@ import React from "react";
 import { Grid, Skeleton, Table, TableBody, TableCell, TableRow, useTheme } from "@mui/material";
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
-import TTypography from "../../components/TTypography";
+import Text from "../../components/Text";
 
 export interface SkeletonPropertyComponentProps {
     property: ResolvedProperty,
@@ -124,10 +124,10 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
                                            className="align-top"
                                            width="30%"
                                            component="th">
-                                    <TTypography variant={"caption"}
+                                    <Text variant={"caption"}
                                                  color={"secondary"}>
                                         {property.properties![key].name}
-                                    </TTypography>
+                                    </Text>
                                 </TableCell>
                                 <TableCell key={`table-cell-${key}`}
                                            width="70%"
