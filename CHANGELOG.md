@@ -3,6 +3,7 @@
 ### Changed
 
 - Fix for `forceFilter` not being applied correctly in reference views.
+- Fix for nullable enum validation config.
 
 ## [2.0.3] - 2023-06-15
 
