@@ -8,15 +8,7 @@ import {
     ResolvedProperty
 } from "../types";
 import * as yup from "yup";
-import {
-    AnySchema,
-    ArraySchema,
-    BooleanSchema,
-    DateSchema,
-    NumberSchema,
-    ObjectSchema,
-    StringSchema
-} from "yup";
+import { AnySchema, ArraySchema, BooleanSchema, DateSchema, NumberSchema, ObjectSchema, StringSchema } from "yup";
 import { enumToObjectEntries } from "../core/util/enums";
 import { getValueInPath, hydrateRegExp, isPropertyBuilder } from "../core";
 
@@ -148,9 +140,10 @@ function getYupStringSchema({
     if (property.enumValues) {
         if (validation?.required)
             collection = collection.required(validation?.requiredMessage ? validation.requiredMessage : "Required");
+        const entries = enumToObjectEntries(property.enumValues);
         collection = collection.oneOf(
-            enumToObjectEntries(property.enumValues)
-                .map((enumValueConfig) => enumValueConfig.id)
+            (validation?.required ? entries : [...entries, null])
+                .map((enumValueConfig) => enumValueConfig?.id ?? null)
         ).nullable(true);
     }
     if (validation) {

@@ -1,14 +1,10 @@
 import {
     buildCollection,
-    buildProperties,
     buildProperty,
     EntityCallbacks,
-    EntityIdUpdateProps,
-    EntityOnFetchProps, EntityReference,
+    EntityOnFetchProps,
     EnumValues,
-    Properties,
-    resolveNavigationFrom,
-    toSnakeCase
+    resolveNavigationFrom
 } from "firecms";
 import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
@@ -92,7 +88,7 @@ export const testCollection = buildCollection({
     path: "test_entity",
     customId: false,
     name: "Test entities",
-    formAutoSave: true,
+    // formAutoSave: true,
     properties: {
 
         // specSheet: ({
@@ -284,7 +280,17 @@ export const testCollection = buildCollection({
         //         }
         //     })
         // },
-        products: buildProperty(({values}) => ({
+        eeee: {
+            name: "My enum",
+            dataType: "string",
+            enumValues: {
+                value1: "Value 1",
+                value2: "Value 2",
+            },
+            validation: { required: false },
+            clearable: true,
+        },
+        products: buildProperty(({ values }) => ({
             name: "Products",
             dataType: "array",
             of: {
