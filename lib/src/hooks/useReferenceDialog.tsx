@@ -28,13 +28,12 @@ export function useReferenceDialog<M extends Record<string, any>>(referenceDialo
                 usedCollection = navigation.getCollection(referenceDialogProps.path);
             if (!usedCollection)
                 throw Error("Not able to resolve the collection in useReferenceDialog");
-
             sideDialogsController.open({
                 key: `reference_${referenceDialogProps.path}`,
                 component:
                     <ReferenceSelectionInner
-                        {...referenceDialogProps as ReferenceSelectionInnerProps<M>}
-                        collection={usedCollection}/>,
+                        collection={usedCollection}
+                        {...referenceDialogProps as ReferenceSelectionInnerProps<M>}/>,
                 width: "90vw",
                 onClose: () => {
                     referenceDialogProps.onClose?.();

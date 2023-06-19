@@ -46,6 +46,7 @@ export type TableControllerProps<M extends Record<string, any> = any> = {
         sort?: [string, "asc" | "desc"],
         filterCombinations?: FilterCombination<Extract<keyof M, string>>[]) => boolean;
     lastDeleteTimestamp?: number;
+    forceFilter?: FilterValues<string>;
 }
 
 export function useTableController<M extends Record<string, any> = any, UserType extends User = User>(
@@ -54,7 +55,8 @@ export function useTableController<M extends Record<string, any> = any, UserType
         collection,
         entitiesDisplayedFirst,
         isFilterCombinationValid,
-        lastDeleteTimestamp
+        lastDeleteTimestamp,
+        forceFilter: forceFilterFromProps
     }: TableControllerProps<M>)
     : TableController<M> {
 
@@ -62,9 +64,10 @@ export function useTableController<M extends Record<string, any> = any, UserType
         filterCombinations,
         initialFilter,
         initialSort,
-        forceFilter
+        forceFilter: forceFilterFromCollection
     } = collection;
 
+    const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
     const pageSize = typeof collection.pagination === "number" ? collection.pagination : DEFAULT_PAGE_SIZE;
 

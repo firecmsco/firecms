@@ -262,7 +262,8 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         fullPath,
         collection,
         entitiesDisplayedFirst,
-        isFilterCombinationValid: isFilterCombinationValidForFirestore
+        isFilterCombinationValid: isFilterCombinationValidForFirestore,
+        forceFilter,
     });
 
     return (
@@ -277,13 +278,13 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
                 {entitiesDisplayedFirst &&
                     <EntityCollectionTable fullPath={fullPath}
                                            onEntityClick={onEntityClick}
-                                           forceFilter={forceFilter}
                                            tableController={tableController}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
                                            title={<Typography variant={"h6"}>
                                                {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
                                            </Typography>}
                                            {...collection}
+                                           forceFilter={forceFilter}
                                            inlineEditing={false}
                                            selectionController={selectionController}
                                            actions={<ReferenceDialogActions

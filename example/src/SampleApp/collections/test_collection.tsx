@@ -284,11 +284,22 @@ export const testCollection = buildCollection({
         //         }
         //     })
         // },
+        products: buildProperty(({values}) => ({
+            name: "Products",
+            dataType: "array",
+            of: {
+                dataType: "reference",
+                path: "products",
+                forceFilter: {
+                    tags: ["array-contains", "test"]
+                }
+            },
+        })),
         // product: {
         //     name: "Product",
         //     dataType: "reference",
         //     path: "products",
-        //     defaultValue: new EntityReference("B000P0MDMS", "products")
+        //     defaultValue: new EntityReference("B000P0MDMS", "products"),
         // }
         // movement: buildProperty(({ values }) => {
         //     return {

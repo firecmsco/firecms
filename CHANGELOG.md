@@ -1,3 +1,9 @@
+## [2.0.4] - 2023-06-15
+
+### Changed
+
+- Fix for `forceFilter` not being applied correctly in reference views.
+
 ## [2.0.3] - 2023-06-15
 
 ### Changed
