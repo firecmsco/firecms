@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Collapse, FormControlLabel, FormHelperText, IconButton, Switch } from "@mui/material";
+import { Collapse, FormControlLabel, FormHelperText, Switch } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -9,7 +9,8 @@ import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { TextInput } from "../../components/TextInput";
 import { PropertyPreview } from "../../preview";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
+import { IconButton } from "../../components";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -47,7 +48,9 @@ export function TextFieldBinding<T extends string | number>({
         setValue
     });
 
-    const handleClearClick = useCallback(() => {
+    const handleClearClick = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation();
+        e.preventDefault();
         setValue(null);
     }, [setValue]);
 
@@ -141,9 +144,9 @@ export function TextFieldBinding<T extends string | number>({
                             }
                             disabled={disabled}
                             label={
-                                <Text variant={"caption"}>
+                                <Typography variant={"caption"}>
                                     Set value to Infinity
-                                </Text>
+                                </Typography>
                             }
                         />
                     }
@@ -156,7 +159,7 @@ export function TextFieldBinding<T extends string | number>({
                 timeout={500}>
                 <PropertyPreview value={value}
                                  property={property}
-                                 size={"regular"}/>
+                                 size={"medium"}/>
             </Collapse>}
 
         </>

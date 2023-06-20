@@ -1,9 +1,10 @@
 import React from "react";
 import { CMSType, ResolvedProperty } from "../../types";
 
-import { FormHelperText, IconButton, Tooltip } from "@mui/material";
+import { FormHelperText, Tooltip } from "@mui/material";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
+import { IconButton } from "../../components";
 
 interface FieldDescriptionPopoverProps<T extends CMSType> {
     property: ResolvedProperty<T>,
@@ -26,13 +27,12 @@ export function FieldDescription<T extends CMSType>({ property }: FieldDescripti
 
             {property.longDescription &&
                 <Tooltip title={
-                    <Text
-                        variant={"caption"}>{property.longDescription}</Text>
+                    <Typography
+                        variant={"caption"}>{property.longDescription}</Typography>
                 }
                          placement="bottom-start"
                          arrow>
                     <IconButton
-                        edge={"start"}
                         size={"small"}
                         className="self-start">
 

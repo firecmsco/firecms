@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo, useState } from "react";
 
-import { IconButton, Theme, useTheme } from "@mui/material";
+import { Theme, useTheme } from "@mui/material";
 
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -13,7 +13,8 @@ import { useSnackbarController, useStorageSource } from "../../../../hooks";
 import { getThumbnailMeasure } from "../../../../preview/util";
 import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../../../../form/components/StorageUploadProgress";
-import Text from "../../../../components/Text";
+import Typography from "../../../../components/Typography";
+import { IconButton } from "../../../../components";
 
 const dropZoneMixin = (hasValue: boolean) => ({
     transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
@@ -163,7 +164,7 @@ function StorageUpload({
 
     const [onHover, setOnHover] = useState(false);
 
-    const previewSize = multipleFilesSupported && previewSizeInput === "regular" ? "small" : previewSizeInput;
+    const previewSize = multipleFilesSupported && previewSizeInput === "medium" ? "small" : previewSizeInput;
     if (multipleFilesSupported) {
         const arrayProperty = property as ResolvedArrayProperty<string[]>;
         if (Array.isArray(arrayProperty.of)) {
@@ -270,12 +271,12 @@ function StorageUpload({
             {!internalValue && <div
                 className="flex-grow m-2 max-w-[200px]"
                 onClick={open}>
-                <Text
+                <Typography
                     className="text-[#999] dark:text-[#444]"
                     variant={"body2"}
                     align={"center"}>
                     {helpText}
-                </Text>
+                </Typography>
             </div>}
 
             {onHover &&

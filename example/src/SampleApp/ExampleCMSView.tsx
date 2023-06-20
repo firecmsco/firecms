@@ -7,7 +7,6 @@ import {
     CardContent,
     Container,
     Grid,
-    IconButton,
     Paper,
     Tooltip,
     Typography
@@ -17,7 +16,7 @@ import { GitHub } from "@mui/icons-material";
 import {
     buildCollection,
     Entity,
-    EntityCollectionView,
+    EntityCollectionView, IconButton,
     useAuthController,
     useReferenceDialog,
     useSelectionController,

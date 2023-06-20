@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import equal from "react-fast-compare"
 
-import { Button, IconButton, Portal, } from "@mui/material";
+import { Button, Portal, } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -27,7 +27,8 @@ import { isReadOnly, resolveCollection } from "../../../../util";
 import { CustomDialogActions } from "../../../CustomDialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
-import Text from "../../../../../components/Text";
+import Typography from "../../../../../components/Typography";
+import { IconButton } from "../../../../../components";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
@@ -346,9 +347,9 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             </Formik>
 
             {savingError &&
-                <Text color={"error"}>
+                <Typography color={"error"}>
                     {savingError.message}
-                </Text>
+                </Typography>
             }
         </div>
     );

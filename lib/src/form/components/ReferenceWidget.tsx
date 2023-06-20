@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import clsx from "clsx";
-import { Button, Tooltip, useTheme, IconButton } from "@mui/material";
+import { Button, Tooltip, useTheme } from "@mui/material";
 
 import LinkIcon from "@mui/icons-material/Link";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -18,7 +18,8 @@ import {
     useReferenceDialog,
     useSideEntityController
 } from "../../hooks";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
+import { IconButton } from "../../components";
 
 /**
  * This field allows selecting reference/s.
@@ -173,9 +174,9 @@ export function ReferenceWidget<M extends Record<string, any>>({
             } else {
                 body = <div className="p-4 flex justify-center"
                             onClick={disabled ? undefined : handleClickOpen}>
-                    <Text variant={"label"}
-                          className="flex-grow text-center">No value
-                        set</Text>
+                    <Typography variant={"label"}
+                                className="flex-grow text-center">No value
+                        set</Typography>
                     {!disabled && <Button variant="outlined"
                                           color="primary">
                         Set
@@ -201,10 +202,10 @@ export function ReferenceWidget<M extends Record<string, any>>({
                         {entity &&
                             <div className="self-center m-4">
                                 <Tooltip title={value && value.path}>
-                                    <Text variant={"caption"}
-                                          className={"font-mono"}>
+                                    <Typography variant={"caption"}
+                                                className={"font-mono"}>
                                         {entity.id}
-                                    </Text>
+                                    </Typography>
                                 </Tooltip>
                             </div>}
 
@@ -242,13 +243,13 @@ export function ReferenceWidget<M extends Record<string, any>>({
         );
     };
 
-    return <Text variant={"label"}
-                 className={clsx("relative w-full transition-colors duration-200 ease-in border rounded font-medium",
+    return <Typography variant={"label"}
+                       className={clsx("relative w-full transition-colors duration-200 ease-in border rounded font-medium",
                      disabled ? "bg-opacity-50" : "hover:bg-opacity-75",
                      "text-opacity-50 dark:text-white dark:text-opacity-50")}
     >
 
         {collection && buildEntityView(collection)}
 
-    </Text>;
+    </Typography>;
 }

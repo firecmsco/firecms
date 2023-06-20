@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, IconButton, Tooltip, useMediaQuery, useTheme } from "@mui/material";
+import { Button, Tooltip, useMediaQuery, useTheme } from "@mui/material";
 
 import { Add, Delete } from "@mui/icons-material";
 import { ExportButton } from "../EntityCollectionTable/internal/ExportButton";
@@ -8,6 +8,7 @@ import { canCreateEntity, canDeleteEntity } from "../../util/permissions";
 import { useAuthController, useFireCMSContext } from "../../../hooks";
 import { CollectionActionsProps, Entity, EntityCollection, ExportConfig, SelectionController } from "../../../types";
 import { fullPathToCollectionSegments } from "../../util/paths";
+import { IconButton } from "../../../components";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

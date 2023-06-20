@@ -1,8 +1,6 @@
 import React, { useCallback } from "react";
 
-import { styled, Theme } from "@mui/material/styles";
-
-import { Box, FormControl, FormHelperText, useTheme } from "@mui/material";
+import { FormControl, FormHelperText, useTheme } from "@mui/material";
 import {
     ArrayProperty,
     Entity,
@@ -22,7 +20,8 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { StorageFieldItem, useStorageUploadController } from "../../core/util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
+import { focusedMixin } from "../../styles";
 
 const dropZoneClasses = "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90 box-border relative pt-[2px] items-center border border-transparent fieldBackground min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-gray"
@@ -201,22 +200,26 @@ function FileDropComponent({
             {...getRootProps()}
             className={clsx(dropZoneClasses,
                 multipleFilesSupported && internalValue.length ? "" : "flex",
+                focusedMixin,
                 {
                     [nonActiveDropClasses]: !isDragActive,
                     [activeDropClasses]: isDragActive,
                     [rejectDropClasses]: isDragReject,
                     [acceptDropClasses]: isDragAccept,
-                    [disabledClasses]: disabled,
+                    [disabledClasses]: disabled
                 })}
         >
             <div
                 {...droppableProvided.droppableProps}
                 ref={droppableProvided.innerRef}
-                className={`flex items-center ${multipleFilesSupported && internalValue.length ? 'overflow-auto' : ''} ${multipleFilesSupported && internalValue.length ? 'min-h-[180px]' : 'min-h-[250px]'} p-1`}
+                className={clsx("flex items-center p-1",
+                    multipleFilesSupported && internalValue.length ? "overflow-auto" : "",
+                    multipleFilesSupported && internalValue.length ? "min-h-[180px]" : "min-h-[250px]"
+                )}
                 style={{
-                    '&::-webkit-scrollbar': {
-                        display: 'none',
-                    },
+                    "&::-webkit-scrollbar": {
+                        display: "none"
+                    }
                 }}
             >
 
@@ -244,7 +247,7 @@ function FileDropComponent({
                                 metadata={metadata}
                                 storagePath={storagePathBuilder(entry.file)}
                                 onFileUploadComplete={onFileUploadComplete}
-                                imageSize={size === "regular" ? 220 : 118}
+                                imageSize={size === "medium" ? 220 : 118}
                                 simple={false}
                             />
                         );
@@ -257,10 +260,11 @@ function FileDropComponent({
                             index={index}>
                             {(provided, snapshot) => (
                                 <div
+                                    tabIndex={-1}
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    className="rounded"
+                                    className={focusedMixin}
                                     style={{
                                         borderRadius: theme.shape.borderRadius,
                                         ...provided.draggableProps.style
@@ -280,10 +284,10 @@ function FileDropComponent({
 
             <div
                 className="flex-grow min-h-[38px] box-border m-2 text-center">
-                <Text align={"center"}
-                             variant={"label"}>
+                <Typography align={"center"}
+                            variant={"label"}>
                     {helpText}
-                </Text>
+                </Typography>
             </div>
 
         </div>
@@ -337,7 +341,7 @@ export function StorageUpload({
     }
 
     const metadata: Record<string, unknown> | undefined = storage?.metadata;
-    const size = multipleFilesSupported ? "small" : "regular";
+    const size = multipleFilesSupported ? "small" : "medium";
 
     const moveItem = useCallback((fromIndex: number, toIndex: number) => {
         if (!multipleFilesSupported) return;

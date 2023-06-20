@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import { IconButton, Skeleton, Tooltip } from "@mui/material";
+import { Skeleton, Tooltip } from "@mui/material";
 import { Entity, EntityCollection, EntityReference, ResolvedProperty } from "../../types";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
@@ -11,8 +11,9 @@ import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityC
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
 import clsx from "clsx";
+import { IconButton } from "../../components";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -83,7 +84,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
         fields: context.fields
     }), [collection]);
 
-    const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, context.fields, previewProperties, size === "small" || size === "regular" ? 3 : 1),
+    const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, context.fields, previewProperties, size === "small" || size === "medium" ? 3 : 1),
         [previewProperties, resolvedCollection, size]);
 
     let body: React.ReactNode;
@@ -111,14 +112,14 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                     {size !== "tiny" && (
                         reference
                             ? <div className={`${
-                                size !== "regular"
+                                size !== "medium"
                                     ? "block whitespace-nowrap overflow-hidden truncate"
                                     : ""
                             }`}>
-                                <Text variant={"caption"}
-                                      className={"font-mono"}>
+                                <Typography variant={"caption"}
+                                            className={"font-mono"}>
                                     {reference.id}
-                                </Text>
+                                </Typography>
                             </div>
                             : <Skeleton variant="text"/>)}
 
@@ -193,23 +194,23 @@ function ReferencePreviewWrap({
     size: PreviewSize;
     onClick?: () => void;
 }) {
-    return <Text variant={"label"}
-                 className={clsx("bg-opacity-70 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60",
+    return <Typography variant={"label"}
+                       className={clsx("bg-opacity-70 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60",
                      "w-full",
                      "flex",
                      "rounded-md",
                      "overflow-hidden",
                      onHover ? "hover:bg-opacity-90 dark:hover:bg-opacity-90" : "",
-                     size === "regular" ? "p-2" : "p-1",
+                     size === "medium" ? "p-2" : "p-1",
                      size === "tiny" ? "items-center" : "",
                      "transition-colors duration-300 ease-in-out ",
                      // onHover ? "shadow-outline" : "",
                      onClick ? "cursor-pointer" : "")}
-                 style={{
+                       style={{
                      // @ts-ignore
                      tabindex: 0
                  }}
-                 onClick={(event) => {
+                       onClick={(event) => {
                      if (onClick) {
                          event.preventDefault();
                          onClick();
@@ -218,7 +219,7 @@ function ReferencePreviewWrap({
 
         {children}
 
-    </Text>
+    </Typography>
 }
 
 const referencesCache = new Map<string, Entity<any>>();

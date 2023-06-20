@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import useMeasure from "react-use-measure";
 import { styled } from "@mui/system";
 
-import { darken, IconButton, lighten, Tooltip, useTheme } from "@mui/material";
+import { darken, lighten, Tooltip, useTheme } from "@mui/material";
 
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -10,6 +10,7 @@ import { TableSize } from "../../Table";
 import { getRowHeight } from "../../Table/common";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { ErrorTooltip } from "../../ErrorTooltip";
+import { IconButton } from "../../../../components";
 
 interface TableCellProps {
     children: React.ReactNode;

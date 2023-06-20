@@ -4,7 +4,6 @@ import { styled } from "@mui/material/styles";
 
 import {
     FormControl,
-    IconButton,
     InputAdornment,
     InputLabel,
     MenuItem,
@@ -21,6 +20,7 @@ import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } fro
 
 import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
 import { resolveEnumValues } from "../../core/util/resolutions";
+import { IconButton } from "../../components";
 
 const PREFIX = "CustomIdField";
 

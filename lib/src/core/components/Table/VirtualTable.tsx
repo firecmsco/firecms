@@ -21,7 +21,7 @@ import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
-import Text from "../../../components/Text";
+import Typography from "../../../components/Typography";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -223,13 +223,13 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             <div
                 className="h-[calc(100%-64px)] flex flex-col items-center justify-center sticky left-0">
 
-                <Text variant={"h6"}>
+                <Typography variant={"h6"}>
                     {"Error fetching data from the data source"}
-                </Text>
+                </Typography>
 
-                {error?.message && <Text>
+                {error?.message && <Typography>
                     {error?.message}
-                </Text>}
+                </Typography>}
 
             </div>
         ), [error?.message]);
@@ -240,9 +240,9 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             return <div
                 className="flex overflow-auto items-center justify-center p-2 gap-2 h-full">
                 <AssignmentIcon/>
-                <Text>
+                <Typography>
                     {emptyMessage}
-                </Text>
+                </Typography>
             </div>;
         }, [emptyMessage, loading]);
 
@@ -332,7 +332,7 @@ function MemoizedList({
                         hoverRow={hoverRow}
                         style={{
                             ...style,
-                            top: `calc(${style.top}px + 50px)`
+                            top: `calc(${style.top}px + 48px)`
                         }}
                         size={size}>
                         {columns.map((column: TableColumn, columnIndex: number) => {

@@ -19,7 +19,7 @@ import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
 import { useTableController } from "./EntityCollectionTable/useTableController";
 import { isFilterCombinationValidForFirestore } from "./EntityCollectionView/isFilterCombinationValidForFirestore";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
 
 /**
  * @category Components
@@ -265,9 +265,9 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
                                            forceFilter={forceFilter}
                                            tableController={tableController}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
-                                           title={<Text variant={"h6"}>
+                                           title={<Typography variant={"h6"}>
                                                {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
-                                           </Text>}
+                                           </Typography>}
                                            {...collection}
                                            inlineEditing={false}
                                            selectionController={selectionController}
@@ -281,10 +281,10 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
             </div>
             <CustomDialogActions translucent={false}>
                 {description &&
-                    <Text variant={"body2"}
-                                 className="flex-grow text-left">
+                    <Typography variant={"body2"}
+                                className="flex-grow text-left">
                         {description}
-                    </Text>}
+                    </Typography>}
                 <Button
                     onClick={onDone}
                     color="primary"

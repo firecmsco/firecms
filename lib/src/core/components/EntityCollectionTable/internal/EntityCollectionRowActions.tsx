@@ -4,7 +4,6 @@ import React, { MouseEvent, useCallback } from "react";
 import {
     alpha,
     Checkbox,
-    IconButton,
     ListItemIcon,
     ListItemText,
     Menu,
@@ -15,7 +14,8 @@ import {
     useTheme
 } from "@mui/material";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
-import Text from "../../../../components/Text";
+import Typography from "../../../../components/Typography";
+import { IconButton } from "../../../../components";
 
 /**
  *
@@ -179,10 +179,10 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                 <div className="w-[138px] text-center overflow-hidden truncate">
 
                     {entity
-                        ? <Text
+                        ? <Typography
                             className={"font-mono"}
                             variant={"caption"}
-                            color={"secondary"}> {entity.id} </Text>
+                            color={"secondary"}> {entity.id} </Typography>
                         : <Skeleton variant="text"/>
                     }
                 </div>

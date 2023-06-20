@@ -132,7 +132,7 @@ export function ReferenceFilterField({
                 <ReferencePreview
                     disabled={!path}
                     previewProperties={previewProperties}
-                    size={"regular"}
+                    size={"medium"}
                     onClick={doOpenDialog}
                     reference={reference}
                     onHover={onHover}

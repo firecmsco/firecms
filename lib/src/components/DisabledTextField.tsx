@@ -1,5 +1,5 @@
 import React from "react";
-import Text from "./Text";
+import Typography from "./Typography";
 import InputLabel from "./InputLabel";
 
 export function DisabledTextField<T extends string | number>({
@@ -19,8 +19,8 @@ export function DisabledTextField<T extends string | number>({
             className="text-black dark:text-white text-opacity-30 dark:text-opacity-30 absolute left-0 top-1 pointer-events-none">{label}</InputLabel>
         <div
             className={`text-black dark:text-white text-opacity-30 dark:text-opacity-30 p-8 overflow-auto ${label ? "pt-8 pb-2" : size === "small" ? "p-3" : "px-3"}`}>
-            <Text variant={"body1"}
-                  className="font-inherit">{value}</Text>
+            <Typography variant={"body1"}
+                        className="font-inherit">{value}</Typography>
         </div>
     </div>;
 }

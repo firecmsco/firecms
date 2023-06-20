@@ -1,7 +1,8 @@
 import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
+import clsx from "clsx";
 
-import { IconButton, Link, Tooltip, useMediaQuery, useTheme } from "@mui/material";
+import { Link, Tooltip, useMediaQuery, useTheme } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
@@ -9,6 +10,7 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useRestoreScroll } from "./internal/useRestoreScroll";
+import { IconButton } from "../components";
 
 export const DRAWER_WIDTH = 280;
 
@@ -187,7 +189,6 @@ function StyledDrawer(props: {
                 <IconButton
                     color="inherit"
                     aria-label="Open drawer"
-                    edge="start"
                     onClick={() => props.setDrawerOpen(true)}
                     size="large"
                     className="absolute top-2 left-6"
@@ -215,32 +216,27 @@ function StyledDrawer(props: {
                     </IconButton>
                 </div>
 
-                {!props.open
-                    ? (
-                        <Tooltip title="Open menu" placement="right">
-                            <IconButton
-                                color="inherit"
-                                aria-label="Open drawer"
-                                edge="start"
-                                onClick={() => props.setDrawerOpen(true)}
-                                size="large"
-                                className="absolute top-2 left-6"
-                            >
-                                <MenuIcon/>
-                            </IconButton>
-                        </Tooltip>
-                    )
-                    : (
-                        ""
-                    )}
+                {!props.open && (
+                    <Tooltip title="Open menu" placement="right">
+                        <IconButton
+                            color="inherit"
+                            aria-label="Open menu"
+                            onClick={() => props.setDrawerOpen(true)}
+                            size="large"
+                            className="absolute top-2 left-3"
+                        >
+                            <MenuIcon/>
+                        </IconButton>
+                    </Tooltip>
+                )}
 
                 <div>
                     <div
-                        className={`${
+                        className={clsx(`${
                             props.open
                                 ? "py-4 pt-8 px-8 pr-24 block transition-padding duration-200 ease-in-out"
-                                : "p-4 mt-2 block transition-padding duration-200 ease-in-out"
-                        }`}>
+                                : "p-4 pt-16 mt-2 block transition-padding duration-200 ease-in-out"
+                        }`)}>
                         <Link>
                             <Tooltip title="Home" placement="right">
                                 {props.logo

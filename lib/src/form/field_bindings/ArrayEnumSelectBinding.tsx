@@ -3,7 +3,6 @@ import {
     Checkbox,
     FormControl,
     FormHelperText,
-    IconButton,
     ListItemText,
     MenuItem,
     Select as MuiSelect
@@ -18,6 +17,7 @@ import { enumToObjectEntries, isEnumValueDisabled } from "../../core/util/enums"
 import { ArrayEnumPreview, EnumValuesChip } from "../../preview";
 import { ErrorView, getIconForProperty } from "../../core";
 import InputLabel from "../../components/InputLabel";
+import { IconButton } from "../../components";
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -116,7 +116,7 @@ export function ArrayEnumSelectBinding({
                     <ArrayEnumPreview value={selected}
                                       name={propertyKey}
                                       enumValues={enumValues}
-                                      size={"regular"}/>
+                                      size={"medium"}/>
                 )}>
 
                 {enumToObjectEntries(enumValues)

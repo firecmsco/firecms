@@ -73,7 +73,7 @@ export function TableSelect(props: {
             return <ArrayEnumPreview value={enumKey}
                                      name={name}
                                      enumValues={enumValues}
-                                     size={small ? "small" : "regular"}/>;
+                                     size={small ? "small" : "medium"}/>;
         } else {
             return <EnumValuesChip
                 enumKey={enumKey}

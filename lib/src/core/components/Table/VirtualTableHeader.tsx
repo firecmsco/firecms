@@ -1,12 +1,13 @@
 import React, { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
-import { Badge, Button, darken, Divider, Grid, IconButton, lighten, Popover, useTheme } from "@mui/material";
+import { Badge, Button, darken, Divider, Grid, lighten, Popover, useTheme } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 
 import { TableColumn, TableSort, TableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
+import { IconButton } from "../../../components";
 
 interface FilterFormProps<T> {
     column: TableColumn<T>;

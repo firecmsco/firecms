@@ -1,8 +1,11 @@
 import React, { useCallback } from "react";
+import clsx from "clsx";
+
 import { useSnackbarController, useStorageSource } from "../../hooks";
 import { StorageFieldItem } from "../../core/util/useStorageUploadController";
-import { Paper, Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import { ErrorView } from "../../core";
+import { paperMixin } from "../../styles";
 
 export interface StorageUploadItemProps {
     storagePath: string;
@@ -87,18 +90,14 @@ export function StorageUploadProgress({
     }
     return (
 
-        <div className={"m-4"}>
-            <Paper elevation={0}
-                   className="p-1 box-border min-w-[imageSize] min-h-[imageSize]"
-                   variant={"outlined"}>
+        <div className={clsx(paperMixin, "m-4 p-1 box-border min-w-[imageSize] min-h-[imageSize]")}>
 
-                {loading &&
-                    <Skeleton variant="rectangular" className="w-full h-full"/>}
+            {loading &&
+                <Skeleton variant="rectangular" className="w-full h-full"/>}
 
-                {error && <ErrorView title={"Error uploading file"}
-                                     error={error}/>}
+            {error && <ErrorView title={"Error uploading file"}
+                                 error={error}/>}
 
-            </Paper>
         </div>
 
     );

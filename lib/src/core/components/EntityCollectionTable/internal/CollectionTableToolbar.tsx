@@ -1,10 +1,12 @@
 import React from "react";
-import { CircularProgress, Hidden, IconButton, Tooltip, useMediaQuery, useTheme } from "@mui/material";
+import { CircularProgress, Hidden, Tooltip, useMediaQuery, useTheme } from "@mui/material";
 
 import { CollectionSize } from "../../../../types";
 import { SearchBar } from "./SearchBar";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import { Select } from "../../../../components/Select";
+import { IconButton } from "../../../../components";
+import Typography from "../../../../components/Typography";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
@@ -48,13 +50,16 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     return (
         <div
-            className="min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-gray-50 dark:bg-gray-800 border-b border-gray-100 dark:border-gray-800 flex flex-row justify-between items-center w-full"
+            className="min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-gray-50 dark:bg-gray-900 border-b border-gray-100 dark:border-gray-800 flex flex-row justify-between items-center w-full"
         >
 
-            <div className="flex items-center space-x-8 md:space-x-4">
+            <div className="flex items-center space-x-8 md:space-x-4 ">
 
                 {props.title && <Hidden lgDown>
-                    {props.title}
+                    <Typography variant={"h2"}>
+                        {props.title}
+                    </Typography>
+
                 </Hidden>}
 
                 {sizeSelect}

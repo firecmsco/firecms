@@ -1,4 +1,6 @@
-import { CardActionArea, CardActions, CardContent, IconButton, Paper } from "@mui/material";
+import clsx from "clsx";
+
+import { CardActionArea, CardActions, CardContent, Paper } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
@@ -10,7 +12,9 @@ import { useFireCMSContext } from "../../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
-import Text from "../../../components/Text";
+import Typography from "../../../components/Typography";
+import { IconButton } from "../../../components";
+import { paperMixin } from "../../../styles";
 
 /**
  * This is the component used in the home page to render a card for each
@@ -67,7 +71,7 @@ export function NavigationCollectionCard({
     }
 
     return (
-        <Paper elevation={0} className="h-full">
+        <div className={clsx(paperMixin, "h-full")}>
 
             <CardActionArea
                 component={"div"}
@@ -120,16 +124,16 @@ export function NavigationCollectionCard({
 
                     </div>
 
-                    <Text gutterBottom variant="h5"
-                                 component="h2">
+                    <Typography gutterBottom variant="h5"
+                                component="h2">
                         {name}
-                    </Text>
+                    </Typography>
 
-                    {description && <Text variant="body2"
-                                                 color="secondary"
-                                                 component="div">
+                    {description && <Typography variant="body2"
+                                                color="secondary"
+                                                component="div">
                         <Markdown source={description}/>
-                    </Text>}
+                    </Typography>}
                 </CardContent>
 
                 <CardActions style={{ alignSelf: "flex-end" }}>
@@ -141,6 +145,6 @@ export function NavigationCollectionCard({
 
             </CardActionArea>
 
-        </Paper>)
+        </div>)
         ;
 }

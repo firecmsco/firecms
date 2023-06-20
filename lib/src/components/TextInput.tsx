@@ -4,6 +4,7 @@ import { TextareaAutosize } from "./TextareaAutosize";
 import { DisabledTextField } from "./DisabledTextField";
 import InputLabel from "./InputLabel";
 import clsx from "clsx";
+import { focusedMixin } from "../styles";
 
 export type InputType = "text" | "number";
 
@@ -62,13 +63,17 @@ export function TextInput<T extends string | number>({
             onBlur={() => setFocused(false)}
             value={value ?? ""}
             onChange={onChange}
-            className="rounded-md resize-none w-full outline-none p-[32px] text-base font-medium leading-normal bg-transparent min-h-[64px] px-3 pt-[28px] pb-2"
+            className={clsx(
+                focusedMixin,
+                "rounded-md resize-none w-full outline-none p-[32px] text-base leading-normal bg-transparent min-h-[64px] px-3 pt-[28px] pb-2"
+            )}
         />
         : <input ref={inputRef}
                  onWheel={inputType === "number" ? numberInputOnWheelPreventChange : undefined}
                  className={clsx(
                      "w-full outline-none bg-transparent leading-normal text-base px-3",
-                     "rounded-md focus:outline-none focus-visible:ring focus-visible:ring-primary focus-visible:ring-opacity-75",
+                     "rounded-md",
+                     focusedMixin,
                      size === "small" ? "min-h-[48px]" : "min-h-[64px]",
                      label ? "pt-[28px] pb-2" : "py-2",
                      focused ? "text-text-primary dark:text-text-primary-dark" : "",
@@ -83,7 +88,6 @@ export function TextInput<T extends string | number>({
                  value={Number.isNaN(value) ? "" : (value ?? "")}
                  onChange={onChange}
         />;
-
 
     return (
         <div

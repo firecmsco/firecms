@@ -1,10 +1,11 @@
 import React, { CSSProperties, useMemo, useState } from "react";
-import { IconButton, Tooltip, useTheme } from "@mui/material";
+import { Tooltip, useTheme } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
+import { IconButton } from "../../components";
 
 /**
  * @category Preview components

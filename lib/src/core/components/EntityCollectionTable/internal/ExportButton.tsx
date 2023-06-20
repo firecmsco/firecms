@@ -7,7 +7,6 @@ import {
     DialogContent,
     DialogContentText,
     DialogTitle,
-    IconButton,
     Tooltip
 } from "@mui/material";
 
@@ -17,6 +16,7 @@ import { useDataSource, useFireCMSContext, useNavigationContext } from "../../..
 import { downloadCSV } from "../../../util/csv";
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { resolveCollection } from "../../../util";
+import { IconButton } from "../../../../components";
 
 interface ExportButtonProps<M extends Record<string, any>, UserType extends User> {
     collection: EntityCollection<M>;

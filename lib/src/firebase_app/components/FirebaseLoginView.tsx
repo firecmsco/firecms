@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
-import { Button, CircularProgress, Fade, Grid, IconButton, Slide, TextField } from "@mui/material";
+import { Button, CircularProgress, Fade, Grid, Slide, TextField } from "@mui/material";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
 import { ErrorView, FireCMSLogo } from "../../core";
@@ -19,7 +19,8 @@ import {
     PhoneMultiFactorGenerator,
     RecaptchaVerifier
 } from "firebase/auth";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
+import { IconButton } from "../../components";
 
 /**
  * @category Firebase
@@ -376,8 +377,8 @@ function PhoneLoginForm({
                     </IconButton>
                 </Grid>
                 <Grid item xs={12} className="p-1 flex">
-                    <Text align={"center"}
-                                 variant={"subtitle2"}>{"Please enter your phone number"}</Text>
+                    <Typography align={"center"}
+                                variant={"subtitle2"}>{"Please enter your phone number"}</Typography>
                 </Grid>
                 <Grid item xs={12}>
                     <TextField placeholder="" fullWidth
@@ -390,8 +391,8 @@ function PhoneLoginForm({
                 {Boolean(phone && authController.confirmationResult) &&
                     <>
                         <Grid item xs={12} className="mt-2 p-1 flex">
-                            <Text align={"center"}
-                                         variant={"subtitle2"}>{"Please enter the confirmation code"}</Text>
+                            <Typography align={"center"}
+                                        variant={"subtitle2"}>{"Please enter the confirmation code"}</Typography>
                         </Grid>
                         <Grid item xs={12}>
                             <TextField placeholder="" fullWidth
@@ -521,13 +522,13 @@ function LoginForm({
                 </Grid>
 
                 <Grid item xs={12} className="p-1">
-                    <Text align={"center"} variant={"subtitle2"}>
+                    <Typography align={"center"} variant={"subtitle2"}>
                         You already have an account
-                    </Text>
-                    <Text align={"center"} variant={"body2"}>
+                    </Typography>
+                    <Typography align={"center"} variant={"body2"}>
                         You can use one of these
                         methods to login with {email}
-                    </Text>
+                    </Typography>
                 </Grid>
 
                 <Grid item xs={12}>
@@ -554,8 +555,8 @@ function LoginForm({
 
                     <Grid item xs={12}
                           className={`p-4 ${registrationMode && disableSignupScreen ? 'hidden' : 'flex'}`}>
-                        <Text align={"center"}
-                                     variant={"subtitle2"}>{label}</Text>
+                        <Typography align={"center"}
+                                    variant={"subtitle2"}>{label}</Typography>
                     </Grid>
 
                     <Grid item xs={12}

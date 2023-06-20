@@ -1,9 +1,11 @@
 import React from "react";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
+
 import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 
 import clsx from "clsx";
+import { focusedMixin } from "../styles";
 
 export type SelectProps = {
     value: string,
@@ -15,7 +17,8 @@ export type SelectProps = {
     size?: "small" | "medium",
     label?: React.ReactNode,
     disabled?: boolean,
-    position?: "item-aligned" | "popper"
+    position?: "item-aligned" | "popper",
+    endAdornment?: React.ReactNode
 };
 
 export function Select({
@@ -28,39 +31,43 @@ export function Select({
                            label,
                            size = "medium",
                            disabled,
-                           position = "popper"
+                           position = "popper",
+                           endAdornment
                        }: SelectProps) {
 
-    const inputRef = React.useRef(null);
-    // const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
-
-    const focused = document.activeElement === inputRef.current;
     return (
         <SelectPrimitive.Root value={value} onValueChange={onValueChange}>
-            <SelectPrimitive.Trigger className={clsx(
-                "relative flex items-center",
-                size === "small" ? "h-[42px]" : "h-[64px]",
-                label ? "pt-2 pb-2" : "py-2",
-                "focus:text-text-primary dark:focus:text-text-primary-dark",
-                "select-none rounded-md px-4 py-2 text-sm font-medium",
-                "text-gray-700 dark:text-gray-100",
-                "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
-                "focus:outline-none focus-visible:ring focus-visible:ring-primary focus-visible:ring-opacity-75",
-                className
-            )}>
-                {label && <div className={"absolute top-[4px] left-0 w-full"}>
-                    {label}
-                </div>}
-                <div className={clsx("flex-grow w-full",
-                    label ? "mt-5" : "")}>
-                    <SelectPrimitive.Value placeholder={placeholder}/>
-                </div>
-                <SelectPrimitive.Icon className={clsx(
-                    "px-2 h-full flex items-center"
+            <div className={"relative"}>
+                <SelectPrimitive.Trigger className={clsx(
+                    "relative flex items-center",
+                    size === "small" ? "h-[42px]" : "h-[64px]",
+                    label ? "pt-2 pb-2" : "py-2",
+                    "focus:text-text-primary dark:focus:text-text-primary-dark",
+                    "select-none rounded-md px-4 py-2 text-sm font-medium",
+                    "text-gray-700 dark:text-gray-100",
+                    "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
+                    focusedMixin,
+                    className
                 )}>
-                    <ChevronDownIcon/>
-                </SelectPrimitive.Icon>
-            </SelectPrimitive.Trigger>
+                    {label && <div className={"absolute top-[4px] left-0 w-full"}>
+                        {label}
+                    </div>}
+                    <div className={clsx("flex-grow w-full",
+                        label ? "mt-5" : "")}>
+                        <SelectPrimitive.Value placeholder={placeholder}/>
+                    </div>
+                    <SelectPrimitive.Icon className={clsx(
+                        "px-2 h-full flex items-center"
+                    )}>
+                        <ChevronDownIcon/>
+                    </SelectPrimitive.Icon>
+                </SelectPrimitive.Trigger>
+
+                {endAdornment && <div className={"absolute top-0 right-4 h-full flex items-center"}
+                                      onClick={(e) => e.stopPropagation()}>
+                    {endAdornment}
+                </div>}
+            </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
                     className={"z-30 border border-gray-200 dark:border-gray-800 shadow-lg bg-white dark:bg-gray-900 p-2 rounded-lg shadow-lg bg-opacity-80 dark:bg-opacity-80 backdrop-blur"}

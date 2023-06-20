@@ -274,7 +274,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                   disabled={disabled}
                                                   focused={focused}
                                                   valueType={"number"}
-                                                  small={getPreviewSizeFrom(size) !== "regular"}
+                                                  small={getPreviewSizeFrom(size) !== "medium"}
                                                   enumValues={numberProperty.enumValues}
                                                   error={error}
                                                   internalValue={internalValue as string | number}
@@ -301,7 +301,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                   focused={focused}
                                                   disabled={disabled}
                                                   valueType={"string"}
-                                                  small={getPreviewSizeFrom(size) !== "regular"}
+                                                  small={getPreviewSizeFrom(size) !== "medium"}
                                                   enumValues={stringProperty.enumValues}
                                                   error={error}
                                                   internalValue={internalValue as string | number}
@@ -367,7 +367,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                              multiple={true}
                                              disabled={disabled}
                                              focused={focused}
-                                             small={getPreviewSizeFrom(size) !== "regular"}
+                                             small={getPreviewSizeFrom(size) !== "medium"}
                                              valueType={arrayProperty.of.dataType}
                                              enumValues={arrayProperty.of.enumValues}
                                              error={error}

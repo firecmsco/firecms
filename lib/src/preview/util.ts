@@ -10,7 +10,7 @@ export function getThumbnailMeasure(size: PreviewSize): number {
         return TINY_THUMBNAIL;
     else if (size === "small")
         return SMALL_THUMBNAIL;
-    else if (size === "regular")
+    else if (size === "medium")
         return REGULAR_THUMBNAIL;
     else throw Error("Thumbnail size not mapped");
 }
@@ -24,7 +24,7 @@ export function getPreviewSizeFrom(size: CollectionSize): PreviewSize {
             return "small";
         case "l":
         case "xl":
-            return "regular";
+            return "medium";
         default:
             throw Error("Missing mapping value in getPreviewSizeFrom");
     }

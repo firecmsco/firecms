@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { IconButton, TextField as MuiTextField, useTheme } from "@mui/material";
+import { TextField as MuiTextField, useTheme } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import ClearIcon from "@mui/icons-material/Clear";
@@ -11,6 +11,7 @@ import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { fieldBackground, fieldBackgroundHover } from "../../core/util/field_colors";
+import { IconButton } from "../../components";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -85,7 +86,7 @@ export function DateTimeFieldBinding({
                                           endAdornment: <div
                                               className="pr-2 space-x-2">
                                               {property.clearable && <IconButton
-                                                  className="absolute right-14 top-3"
+                                                  className="absolute right-16 top-3"
                                                   onClick={handleClearClick}>
                                                   <ClearIcon/>
                                               </IconButton>}

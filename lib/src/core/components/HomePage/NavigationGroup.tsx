@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
 import { ExpandablePanel } from "../ExpandablePanel";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
-import Text from "../../../components/Text";
+import Typography from "../../../components/Typography";
 
 export function NavigationGroup({
                                     children,
@@ -25,10 +25,10 @@ export function NavigationGroup({
                     }
                 }
             }}
-            title={<Text color={"secondary"}
-                                className="weight-500 ml-1">
+            title={<Typography color={"secondary"}
+                               className="weight-500 ml-1">
                 {group?.toUpperCase() ?? "Ungrouped views".toUpperCase()}
-            </Text>}>
+            </Typography>}>
 
             <div className="mb-8">
                 {children}

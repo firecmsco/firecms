@@ -38,7 +38,7 @@ export function ArrayPropertyPreview({
 
     if (!values) return null;
 
-    const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
+    const childSize: PreviewSize = size === "medium" ? "small" : "tiny";
 
     return (
         <div className="flex flex-col">

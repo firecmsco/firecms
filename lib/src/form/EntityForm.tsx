@@ -19,7 +19,7 @@ import { CustomDialogActions, getDefaultValuesFor, isHidden, isReadOnly, resolve
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import Text from "../components/Text";
+import Typography from "../components/Typography";
 
 /**
  * @category Components
@@ -385,10 +385,10 @@ function EntityFormInternal<M extends Record<string, any>>({
                         <div
                             className={`w-full py-2 flex items-center mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 
-                            <Text
+                            <Typography
                                 className={"mt-4 flex-grow " + collection.hideIdFromForm ? "mb-2" : "mb-0"}
                                 variant={"h4"}>{collection.singularName ?? collection.name}
-                            </Text>
+                            </Typography>
                         </div>
 
                         {!hideId &&
@@ -501,7 +501,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                         propertyKey: key,
                         disabled,
                         property,
-                        includeDescription: true,
+                        includeDescription: property.description || property.longDescription,
                         underlyingValueHasChanged: underlyingValueHasChanged && !autoSave,
                         context: formContext,
                         tableMode: false,
@@ -543,9 +543,9 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
                 {savingError &&
                     <div className="text-right">
-                        <Text color={"error"}>
+                        <Typography color={"error"}>
                             {savingError.message}
-                        </Text>
+                        </Typography>
                     </div>}
 
                 <Button

@@ -67,7 +67,7 @@ export function useStorageUploadController<M extends object>({
         throw Error("Storage meta must be specified");
 
     const metadata: Record<string, any> | undefined = storage?.metadata;
-    const size = multipleFilesSupported ? "small" : "regular";
+    const size = multipleFilesSupported ? "small" : "medium";
 
     const compression: ImageCompression | undefined = storage?.imageCompression;
 

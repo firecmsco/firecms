@@ -5,7 +5,7 @@ import { ResolvedMapProperty } from "../../types";
 import { ErrorBoundary } from "../../core";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
 
 /**
  * @category Preview components
@@ -34,7 +34,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
     if (!value) return null;
 
     let mapPropertyKeys: string[];
-    if (size === "regular") {
+    if (size === "medium") {
         mapPropertyKeys = Object.keys(mapProperty.properties);
     } else {
         mapPropertyKeys = (mapProperty.previewProperties || Object.keys(mapProperty.properties)) as string[];
@@ -44,7 +44,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
             mapPropertyKeys = mapPropertyKeys.slice(0, 1);
     }
 
-    if (size !== "regular")
+    if (size !== "medium")
         return (
             <div className="w-full flex flex-col space-y-1 md:space-y-2">
                 {mapPropertyKeys.map((key, index) => (
@@ -74,11 +74,11 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                             <div
                                 key={`table-cell-title-${key}-${key}`}
                                 className="w-1/4 align-top pr-1">
-                                <Text variant={"caption"}
-                                             className={"font-mono"}
-                                             color={"secondary"}>
+                                <Typography variant={"caption"}
+                                            className={"font-mono"}
+                                            color={"secondary"}>
                                     {mapProperty.properties![key].name}
-                                </Text>
+                                </Typography>
                             </div>
                             <div
                                 className="flex-grow">
@@ -113,21 +113,21 @@ export function KeyValuePreview({ value }: { value: any }) {
                     <div
                         key={`table-cell-title-${key}-${key}`}
                         className="w-1/4 align-top pr-1">
-                        <Text variant={"caption"}
-                                     className={"font-mono"}
-                                     color={"secondary"}>
+                        <Typography variant={"caption"}
+                                    className={"font-mono"}
+                                    color={"secondary"}>
                             {key}
-                        </Text>
+                        </Typography>
                     </div>
                     <div
                         className="flex-grow">
-                        <Text
+                        <Typography
                             variant={"caption"}
                             className={"font-mono"}>
                             <ErrorBoundary>
                                 {JSON.stringify(childValue)}
                             </ErrorBoundary>
-                        </Text>
+                        </Typography>
                     </div>
                 </div>
             ))

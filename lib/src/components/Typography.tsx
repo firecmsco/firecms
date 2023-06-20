@@ -56,7 +56,7 @@ const variantToClasses = {
     caption: "text-xs"
 };
 
-const Text = forwardRef<HTMLSpanElement, TextProps>(function Typography(
+const Typography = forwardRef<HTMLSpanElement, TextProps>(function Typography(
     {
         align = "inherit",
         children,
@@ -96,4 +96,4 @@ const Text = forwardRef<HTMLSpanElement, TextProps>(function Typography(
     );
 });
 
-export default Text;
+export default Typography;

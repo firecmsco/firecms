@@ -82,7 +82,7 @@ export function ArrayOfReferencesFieldBinding({
                 <ReferencePreview
                     disabled={!ofProperty.path}
                     previewProperties={ofProperty.previewProperties}
-                    size={"regular"}
+                    size={"medium"}
                     onClick={onEntryClick}
                     reference={entryValue}
                     onHover={onHover}

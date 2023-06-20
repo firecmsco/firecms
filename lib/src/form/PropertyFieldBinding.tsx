@@ -84,12 +84,6 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
      tableMode,
      partOfArray,
      autoFocus,
-     context: {
-         values,
-         collection,
-         path,
-         entityId
-     }
  }: PropertyFieldBindingProps<T, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
     const fireCMSContext = useFireCMSContext();

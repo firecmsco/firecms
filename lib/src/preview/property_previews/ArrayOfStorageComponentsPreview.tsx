@@ -58,7 +58,7 @@ export function ArrayOfStorageComponentsPreview({
     if (property.dataType !== "array" || !property.of || property.of.dataType !== "string")
         throw Error("Picked wrong preview component ArrayOfStorageComponentsPreview");
 
-    const childSize: PreviewSize = size === "regular" ? "small" : "tiny";
+    const childSize: PreviewSize = size === "medium" ? "small" : "tiny";
 
     return (
         <Root className={classes.arrayWrap}>

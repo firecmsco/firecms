@@ -1,5 +1,8 @@
 import React from "react";
+import clsx from "clsx";
+
 import { Modal, Paper, Slide, useTheme } from "@mui/material";
+import { paperMixin } from "../../styles";
 
 export interface SideDialogDrawerProps {
 
@@ -61,14 +64,12 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, SideDialogDrawe
                 timeout={defaultTransitionDuration}
                 direction={"left"}
             >
-                <Paper
-                    variant={"outlined"}
-                    square
-                    className="h-full fixed right-0 overflow-hidden rounded-l-lg"
+                <div
+                    className={clsx(paperMixin, "h-full fixed right-0 overflow-hidden rounded-l-lg")}
                     style={{ WebkitOverflowScrolling: 'touch', outline: 0 }}
                 >
                     {children}
-                </Paper>
+                </div>
             </Slide>
         </Modal>
     );

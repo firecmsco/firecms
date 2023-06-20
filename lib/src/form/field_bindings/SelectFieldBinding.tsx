@@ -7,6 +7,8 @@ import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty, Select } from "../../core";
 import InputLabel from "../../components/InputLabel";
+import { IconButton } from "../../components";
+import ClearIcon from "@mui/icons-material/Clear";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -39,7 +41,9 @@ export function SelectFieldBinding<T extends EnumType>({
         setValue
     });
 
-    const handleClearClick = useCallback(() => {
+    const handleClearClick = useCallback((e: React.MouseEvent) => {
+        e.stopPropagation();
+        e.preventDefault();
         setValue(null);
     }, [setValue]);
 
@@ -50,20 +54,19 @@ export function SelectFieldBinding<T extends EnumType>({
                 value={value ? value.toString() : ""}
                 disabled={disabled}
                 position="item-aligned"
-                className={`w-full ${property.clearable ? "pr-10" : ""}`}
+                className={`w-full ${property.clearable ? "pr-14" : ""}`}
                 label={<InputLabel id={`${propertyKey}-select-label`}
                                    shrink={Boolean(value)}>
                     <LabelWithIcon icon={getIconForProperty(property)}
                                    required={property.validation?.required}
                                    title={property.name}/>
                 </InputLabel>}
-                // endAdornment={
-                //     property.clearable && <IconButton
-                //         className="absolute top-3 right-8"
-                //         onClick={handleClearClick}>
-                //         <ClearIcon/>
-                //     </IconButton>
-                // }
+                endAdornment={
+                    property.clearable && <IconButton
+                        onClick={handleClearClick}>
+                        <ClearIcon/>
+                    </IconButton>
+                }
                 onValueChange={(updatedValue: any) => {
                     const newValue = updatedValue
                         ? (property.dataType === "number" ? parseFloat(updatedValue) : updatedValue)

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
-import { Button, FormControl, IconButton, MenuItem } from "@mui/material";
+import { Button, FormControl, MenuItem } from "@mui/material";
 
 import Menu from "@mui/material/Menu";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -17,7 +17,8 @@ import {
     TextInput
 } from "../../core";
 import { FieldDescription, LabelWithIcon } from "../components";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
+import { IconButton } from "../../components";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -210,10 +211,10 @@ function MapKeyValueRow<T extends Record<string, any>>({
                              }}/>
             </div>;
         } else {
-            return <Text
+            return <Typography
                 variant={"caption"}>
                 {`Data type ${dataType} not supported yet`}
-            </Text>;
+            </Typography>;
         }
     }
 
@@ -223,9 +224,9 @@ function MapKeyValueRow<T extends Record<string, any>>({
     }
 
     return (<>
-            <Text key={rowId.toString()}
-                         component={"div"}
-                         className="font-mono flex flex-row space-x-1 items-center">
+            <Typography key={rowId.toString()}
+                        component={"div"}
+                        className="font-mono flex flex-row space-x-1 items-center">
                 <div className="w-[200px] max-w-[25%]">
                     <TextInput
                         value={fieldKey}
@@ -252,7 +253,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                             className="h-7 w-7">
                     <RemoveIcon fontSize={"small"}/>
                 </IconButton>
-            </Text>
+            </Typography>
 
             {(dataType === "map" || dataType === "array") && buildInput(entryValue, fieldKey, dataType)}
 
@@ -343,9 +344,9 @@ function ArrayKeyValueRow<T>({
                                       setValue(v as T);
                                   }}/>;
         } else if (dataType === "array") {
-            return <Text variant={"caption"}>
+            return <Typography variant={"caption"}>
                 Arrays of arrays are not supported.
-            </Text>;
+            </Typography>;
         } else if (dataType === "map") {
             return <div className="ml-1 pl-1 border-l border-solid"
                         style={{ borderColor: "currentColor" }}>
@@ -355,17 +356,17 @@ function ArrayKeyValueRow<T>({
                              }}/>
             </div>;
         } else {
-            return <Text
+            return <Typography
                 variant={"caption"}>
                 {`Data type ${dataType} not supported yet`}
-            </Text>;
+            </Typography>;
         }
     }
 
     return (<>
-            <Text key={id.toString()}
-                         component={"div"}
-                         className="font-mono flex min-h-12 flex-row space-x-1 items-center">
+            <Typography key={id.toString()}
+                        component={"div"}
+                        className="font-mono flex min-h-12 flex-row space-x-1 items-center">
 
                 <div className="flex-grow">
                     {selectedDataType !== "map" && buildInput(value, selectedDataType)}
@@ -377,7 +378,7 @@ function ArrayKeyValueRow<T>({
                     <ArrowDropDownIcon/>
                 </IconButton>
 
-            </Text>
+            </Typography>
 
             {selectedDataType === "map" && buildInput(value, selectedDataType)}
 

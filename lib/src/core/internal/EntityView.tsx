@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
-import { CircularProgress, Divider, IconButton, Tab, Tabs, useTheme } from "@mui/material";
+import { CircularProgress, Divider, Tab, Tabs, useTheme } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Entity, EntityCollection, EntityStatus, EntityValues, FireCMSPlugin, FormContext, User } from "../../types";
 import { CircularProgressCenter, EntityCollectionView, EntityPreview, ErrorBoundary } from "../components";
@@ -24,9 +24,10 @@ import {
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 import { useLargeSideLayout } from "./useLargeSideLayout";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
 import { EntityFormSaveParams } from "../../form/EntityForm";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
+import { IconButton } from "../../components";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -345,10 +346,10 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                                     {...subcollection}/>
                                 : <div
                                     className="flex items-center justify-center w-full h-full p-3">
-                                    <Text variant={"label"}>
+                                    <Typography variant={"label"}>
                                         You need to save your entity before
                                         adding additional collections
-                                    </Text>
+                                    </Typography>
                                 </div>)
                         }
 

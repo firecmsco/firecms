@@ -4,7 +4,6 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    IconButton,
     Step,
     StepLabel,
     Stepper,
@@ -12,7 +11,7 @@ import {
 } from "@mui/material";
 
 import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import { useSideDialogsController } from "firecms";
+import { IconButton, useSideDialogsController } from "firecms";
 
 /**
  * This whole component is a big hack used to point the user to the

@@ -1,5 +1,7 @@
 import React from "react";
-import { FormControl, FormHelperText, Paper } from "@mui/material";
+import clsx from "clsx";
+
+import { FormControl, FormHelperText } from "@mui/material";
 
 import { Entity, FieldProps } from "../../types";
 
@@ -7,6 +9,7 @@ import { PropertyPreview } from "../../preview";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 import { getIconForProperty } from "../../core";
+import { paperMixin } from "../../styles";
 
 /**
  *
@@ -19,11 +22,8 @@ import { getIconForProperty } from "../../core";
 export function ReadOnlyFieldBinding({
                                          propertyKey,
                                          value,
-                                         setValue,
                                          error,
                                          showError,
-                                         isSubmitting,
-                                         touched,
                                          tableMode,
                                          property,
                                          includeDescription,
@@ -49,19 +49,18 @@ export function ReadOnlyFieldBinding({
                                title={property.name}/>
             </FormHelperText>}
 
-            <Paper
-                className="min-h-14 py-2 md:py-3 shadow-none"
-                variant={"outlined"}>
+            <div
+                className={clsx(paperMixin, "min-h-14 p-4 md:p-6")}>
 
                 <ErrorBoundary>
                     <PropertyPreview propertyKey={propertyKey}
                                      value={value}
                                      property={property}
                                      entity={entity}
-                                     size={"regular"}/>
+                                     size={"medium"}/>
                 </ErrorBoundary>
 
-            </Paper>
+            </div>
 
             {showError &&
                 typeof error === "string" &&

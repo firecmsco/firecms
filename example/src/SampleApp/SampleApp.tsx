@@ -3,15 +3,10 @@ import React, { useCallback } from "react";
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import {
-    AppCheckOptions,
-    Authenticator,
-    CMSView,
-    FirebaseCMSApp
-} from "firecms";
+import { AppCheckOptions, Authenticator, CMSView, FirebaseCMSApp, IconButton } from "firecms";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
-import { IconButton, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
@@ -20,18 +15,13 @@ import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
 import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
-import {
-    localeCollectionGroup,
-    productsCollection
-} from "./collections/products_collection";
+import { localeCollectionGroup, productsCollection } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
 import { showcaseCollection } from "./collections/showcase_collection";
 
 import { textSearchController } from "./text_search";
 
-import {
-    customCollectionOverrideHandler
-} from "./collections/custom_collection_resolver";
+import { customCollectionOverrideHandler } from "./collections/custom_collection_resolver";
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 import { CustomLoginView } from "./CustomLoginView";
@@ -53,7 +43,7 @@ function SampleApp() {
         <Tooltip
             title="See this project on GitHub. This button is only present in this demo">
             <IconButton
-                href={"https://github.com/FireCMSco/firecms"}
+                href={"https://github.com/firecmsco/firecms"}
                 rel="noopener noreferrer"
                 target="_blank"
                 component={"a"}

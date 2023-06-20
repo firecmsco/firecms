@@ -2,7 +2,7 @@ import React from "react";
 
 import { FieldProps } from "formik";
 import { FormControlLabel, Switch, Tooltip } from "@mui/material";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
 
 export function SwitchControl({
                                   field,
@@ -26,7 +26,7 @@ export function SwitchControl({
                     disabled={disabled}
                     onChange={(e, checked) => form.setFieldValue(field.name, checked)}/>
         }
-        label={<Text variant={"body2"}>{label}</Text>}
+        label={<Typography variant={"body2"}>{label}</Typography>}
     />;
     if (tooltip)
         return (

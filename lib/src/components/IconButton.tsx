@@ -1,27 +1,40 @@
 import React, { ButtonHTMLAttributes } from "react";
 import clsx from "clsx";
+import { focusedMixin } from "../styles";
 
-export interface IconButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-    variant?: "regular" | "ghost";
-}
+export type IconButtonProps<P> = ButtonHTMLAttributes<HTMLButtonElement> & {
+    size?: "medium" | "small" | "large";
+    component?: React.ElementType<P>;
+} & P
 
-export const IconButton: React.FC<IconButtonProps> = ({
-                                                           variant = "regular",
-                                                           children,
-                                                           ...props
-                                                       }) => {
+export function IconButton<P>({
+                                  children,
+                                  className,
+                                  size = "medium",
+                                  component,
+                                  ...props
+                              }: IconButtonProps<P>) {
     const buttonClasses =
-        variant === "regular"
-            ? "bg-blue-500 hover:bg-blue-600 text-white focus:ring-4 focus:ring-blue-400"
-            : "bg-transparent hover:bg-gray-200 text-gray-600 focus:ring-4 focus:ring-gray-400";
+        "rounded-full bg-transparent hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75 text-gray-800 dark:text-gray-200";
     const baseClasses =
-        "inline-flex items-center justify-center p-2 rounded-md text-sm font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 transition-colors ease-in-out duration-150";
+        "inline-flex items-center justify-center p-2 text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150";
+    const sizeClasses = {
+        medium: "w-10 h-10",
+        small: "w-8 h-8",
+        large: "w-12 h-12"
+    }
 
+    const Component:React.ElementType<any> = component || "button";
     return (
-        <button {...props}
-                className={clsx("focus:outline-none focus-visible:ring focus-visible:ring-primary focus-visible:ring-opacity-75",
-                    baseClasses, buttonClasses)}>
+        <Component {...props}
+                   className={clsx(
+                       focusedMixin,
+                       baseClasses,
+                       buttonClasses,
+                       className,
+                       sizeClasses[size]
+                   )}>
             {children}
-        </button>
+        </Component>
     );
 };

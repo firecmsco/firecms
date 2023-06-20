@@ -9,7 +9,7 @@ import React from "react";
 import { Grid, Skeleton, Table, TableBody, TableCell, TableRow, useTheme } from "@mui/material";
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
 
 export interface SkeletonPropertyComponentProps {
     property: ResolvedProperty,
@@ -85,7 +85,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
         return <></>;
 
     let mapPropertyKeys: string[];
-    if (size === "regular") {
+    if (size === "medium") {
         mapPropertyKeys = Object.keys(property.properties);
     } else {
         mapPropertyKeys = (property.previewProperties || Object.keys(property.properties)) as string[];
@@ -95,7 +95,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
             mapPropertyKeys = mapPropertyKeys.slice(0, 1);
     }
 
-    if (size !== "regular")
+    if (size !== "medium")
         return (
             <div
                 className="w-full flex flex-col space-y-4 md:space-y-[theme.spacing(0.5)]"
@@ -124,10 +124,10 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
                                            className="align-top"
                                            width="30%"
                                            component="th">
-                                    <Text variant={"caption"}
-                                                 color={"secondary"}>
+                                    <Typography variant={"caption"}
+                                                color={"secondary"}>
                                         {property.properties![key].name}
-                                    </Text>
+                                    </Typography>
                                 </TableCell>
                                 <TableCell key={`table-cell-${key}`}
                                            width="70%"
@@ -247,8 +247,8 @@ function renderUrlVideo(size: PreviewSize) {
 
     return (
         <Skeleton variant="rectangular"
-                  width={size !== "regular" ? 300 : 500}
-                  height={size !== "regular" ? 200 : 250}/>
+                  width={size !== "medium" ? 300 : 500}
+                  height={size !== "medium" ? 200 : 250}/>
     );
 }
 
@@ -256,7 +256,7 @@ function renderReference() {
     return <Skeleton variant="rectangular" width={200} height={100}/>;
 }
 
-function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize = "regular") {
+function renderUrlComponent(property: ResolvedStringProperty, size: PreviewSize = "medium") {
 
     if (typeof property.url === "boolean") {
         return <div style={{

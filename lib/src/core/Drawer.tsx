@@ -1,11 +1,12 @@
 import React, { useCallback } from "react";
 
 import { NavLink } from "react-router-dom";
-import { darken, lighten, List, ListItem, SvgIconTypeMap, Tooltip, useTheme } from "@mui/material";
+import { List, SvgIconTypeMap, Tooltip } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../hooks";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { getIconForView } from "./util";
-import Text from "../components/Text";
+import Typography from "../components/Typography";
+import clsx from "clsx";
 
 /**
  * Props used in case you need to override the default drawer
@@ -45,12 +46,12 @@ export function Drawer({
     const buildGroupHeader = useCallback((group?: string) => {
         if (!drawerOpen) return <div className="h-4"/>;
         return <div
-                    className="pt-8 pl-8 pr-8 pb-2 flex flex-row items-center">
-            <Text variant={"caption"}
-                         color={"secondary"}
-                         className="weight-500 flex-grow">
+            className="pt-8 pl-6 pr-8 pb-2 flex flex-row items-center">
+            <Typography variant={"caption"}
+                        color={"secondary"}
+                        className="weight-500 flex-grow">
                 {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
-            </Text>
+            </Typography>
 
         </div>;
     }, [drawerOpen]);
@@ -117,42 +118,36 @@ export function DrawerNavigationItem({
     onClick?: () => void,
 }) {
 
-    const theme = useTheme();
     const icon = <div
-        className={"text-gray-700 dark:text-gray-500"}>
+        className={"text-gray-600 dark:text-gray-500"}>
         <Icon fontSize={"medium"}/>
     </div>;
-    const listItem = <ListItem
-        // @ts-ignore
-        button
-        component={NavLink}
+
+    const listItem = <NavLink
         onClick={onClick}
-        // @ts-ignore
-        style={({ isActive }) => ({
-            fontWeight: isActive ? "600" : "500",
-            background: isActive
-                ? (theme.palette.mode === "light"
-                    ? darken(theme.palette.background.default, 0.1)
-                    : lighten(theme.palette.background.default, 0.08))
-                : "inherit",
-            minHeight: "48px",
-            borderRadius: "0 16px 16px 0"
-        })}
-        className="pl-12 items-center"
+        className={({ isActive }: any) => clsx("rounded-r-xl truncate",
+            "hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75 text-gray-800 dark:text-gray-200",
+            "flex flex-row items-center w-full mr-8",
+            drawerOpen ? "pl-8 h-12" : "pl-6 h-11",
+            isActive ? "font-bold" : "font-medium",
+            isActive ? "bg-gray-100 dark:bg-gray-800" : ""
+        )}
         to={url}
     >
 
         {icon}
 
-        <Text
-            variant={"subtitle2"}
-            className={`${
-                drawerOpen ? "opacity-100" : "opacity-0"
-            } font-inherit ml-3 p-1`}>
+        <Typography
+            variant={"label"}
+            className={clsx(
+                drawerOpen ? "opacity-100" : "opacity-0 hidden",
+                "ml-4 font-inherit text-inherit"
+            )}>
             {name.toUpperCase()}
-        </Text>
-    </ListItem>;
+        </Typography>
+    </NavLink>;
 
+    return listItem;
     if (drawerOpen)
         return listItem;
     else

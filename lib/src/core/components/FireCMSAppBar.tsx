@@ -5,7 +5,6 @@ import {
     Button,
     Chip,
     Hidden,
-    IconButton,
     Link,
     Slide,
     useMediaQuery,
@@ -17,8 +16,10 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
 import { useAuthController, useBreadcrumbsContext, useModeController } from "../../hooks";
-import Text from "../../components/Text";
+import Typography from "../../components/Typography";
 import clsx from "clsx";
+import { IconButton } from "../../components";
+import { DialogTest } from "../../components/Dialog";
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -89,11 +90,11 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                 color="inherit"
                                 component={ReactLink}
                                 to={"."}>
-                                <Text variant="h6"
-                                             noWrap
-                                             className={"weight-500"}>
+                                <Typography variant="h6"
+                                            noWrap
+                                            className={"weight-500"}>
                                     {title}
-                                </Text>
+                                </Typography>
                             </Link>
                         </div>
                     </Hidden>
@@ -134,7 +135,6 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         <IconButton
                             color="inherit"
                             aria-label="Open drawer"
-                            edge="start"
                             onClick={() => toggleMode()}
                             size="large">
                             {mode === "dark"
@@ -151,6 +151,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         }
                     </div>
 
+                    <DialogTest/>
                     <Button variant="text"
                             color="inherit"
                             onClick={authController.signOut}>

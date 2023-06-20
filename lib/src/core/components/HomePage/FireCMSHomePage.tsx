@@ -111,7 +111,8 @@ export function FireCMSHomePage({ additionalChildren }: {
                     style={{ top: direction === "down" ? -84 : 0 }}>
                     <SearchBar onTextSearch={updateSearchResults}
                                placeholder={"Search collections"}
-                               large={false}/>
+                               large={false}
+                               className={"w-full"}/>
                 </div>
 
                 <FavouritesView hidden={Boolean(filteredUrls)}/>

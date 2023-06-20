@@ -3,7 +3,7 @@ import { CMSType, Entity, Property, ResolvedProperty } from "../types";
 /**
  * @category Preview components
  */
-export type PreviewSize = "regular" | "small" | "tiny";
+export type PreviewSize = "medium" | "small" | "tiny";
 
 /**
  * @category Preview components
