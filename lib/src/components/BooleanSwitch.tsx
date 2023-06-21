@@ -1,93 +1,44 @@
 import React from "react";
 import clsx from "clsx";
 
-type BooleanSwitchProps = {
-    value: boolean,
-    position?: "start" | "end",
-    onValueChange?: (value: boolean) => void,
-    label?: React.ReactNode,
-    disabled?: boolean,
-    error?: boolean,
-    autoFocus?: boolean,
-    small?: boolean,
-};
+export interface BooleanSwitchProps {
+    value: boolean;
+    onValueChange?: (newValue: boolean) => void;
+    disabled?: boolean;
+    size?: "small" | "medium";
+}
 
-/**
- * Simple boolean switch.
- *
- */
-export const BooleanSwitch = function SwitchFieldBinding({
-                                                             value,
-                                                             position = "end",
-                                                             onValueChange,
-                                                             error,
-                                                             label,
-                                                             autoFocus,
-                                                             disabled,
-                                                             small
-                                                         }: BooleanSwitchProps) {
-
-    const refWrap = React.useRef<HTMLDivElement | null>(null);
-    const refInput = React.useRef<HTMLButtonElement | null>(null);
-    const [_, setFocused] = React.useState(autoFocus)
-    const onFocus = () => setFocused(true);
-    const onBlur = () => setFocused(false);
-
-    React.useEffect(() => {
-        if (autoFocus) {
-            refInput.current?.focus();
-        }
-    }, []);
-
-    const focus = document.activeElement === refInput?.current || document.activeElement === refInput?.current;
-
-    return (
-        <div
-            ref={refWrap}
-            onFocus={onFocus}
-            onBlur={onBlur}
-            tabIndex={-1}
-            className={clsx(
-                "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
-                "rounded-md relative cursor-pointer max-w-full justify-between w-full box-border relative inline-flex items-center",
-                focus ? "ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent" : "",
-                error ? "text-error" : focus ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark",
-                small ? "min-h-[48px]" : "min-h-[64px]",
-                small ? "pl-2" : "pl-4",
-                small ? "pr-4" : "pr-6",
-                position === "end" ? "flex-row-reverse" : "flex-row"
-            )}
-            onClick={(e) => {
-                onValueChange?.(!value);
-                refInput.current?.focus();
-                e.stopPropagation()
-                e.preventDefault()
-            }}
-        >
-            <button
-                ref={refInput}
-                onClick={(e) => {
+export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
+                                                                         value,
+                                                                         onValueChange,
+                                                                         disabled = false,
+                                                                         size = "medium"
+                                                                     }: BooleanSwitchProps, ref: React.Ref<HTMLButtonElement>) {
+        return <button
+            ref={ref}
+            onClick={disabled
+                ? undefined
+                : (e) => {
                     e.preventDefault();
+                    onValueChange?.(!value);
                 }}
-                className={clsx("w-[42px] h-[26px] bg-gray-50 bg-opacity-54 dark:bg-gray-900 rounded-full relative shadow-sm",
-                    "outline-none",
+            className={clsx(
+                size === "small" ? "w-[38px] h-[22px]" : "w-[42px] h-[26px]",
+                "outline-none rounded-full relative shadow-sm",
+                value ? "ring-secondary ring-1 bg-secondary dark:bg-secondary" : "bg-gray-50 bg-opacity-54 dark:bg-gray-900 ring-1 ring-gray-100 dark:ring-gray-700",
+            )}>
+            <div
+                className={clsx(
+                    "block rounded-full transition-transform duration-100 transform will-change-auto",
+                    value ? "bg-white" : disabled ? "bg-gray-400 dark:bg-gray-600" : "bg-gray-600 dark:bg-gray-400",
                     {
-                        "ring-secondary ring-1 bg-secondary dark:bg-secondary": value
-                    })}>
-                <div
-                    className={clsx(
-                        "block w-[21px] h-[21px] rounded-full transition-transform duration-100 transform will-change-auto",
-                        {
-                            "translate-x-[3px] bg-gray-400": !value,
-                            "translate-x-[19px] bg-white": value
-                        }
-                    )}
-                />
-            </button>
-
-            {label}
-
-        </div>
-
-    );
-};
+                        "w-[21px] h-[21px]": size === "medium",
+                        "w-[19px] h-[19px]": size === "small",
+                        [value ? "translate-x-[19px]" : "translate-x-[3px]"]: size === "medium",
+                        [value ? "translate-x-[17px]" : "translate-x-[2px]"]: size === "small"
+                    }
+                )}
+            />
+        </button>;
+    }
+) as React.ForwardRefExoticComponent<BooleanSwitchProps & React.RefAttributes<HTMLButtonElement>>;

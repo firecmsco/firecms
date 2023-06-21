@@ -1,5 +1,6 @@
 import React, { forwardRef, ReactEventHandler } from "react";
 import clsx from "clsx";
+import { focusedMixin } from "../styles";
 
 export interface TextProps {
     align?: "center" | "inherit" | "justify" | "left" | "right";
@@ -79,6 +80,7 @@ const Typography = forwardRef<HTMLSpanElement, TextProps>(function Typography(
         "span";
 
     const classes = clsx(
+        focusedMixin,
         variantToClasses[variant],
         color ? colorToClasses[color] : "",
         align !== "inherit" && `text-${align}`,

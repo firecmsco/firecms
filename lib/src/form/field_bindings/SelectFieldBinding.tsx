@@ -1,4 +1,6 @@
 import React, { useCallback } from "react";
+import clsx from "clsx";
+
 import { FormHelperText } from "@mui/material";
 
 import { EnumType, FieldProps } from "../../types";
@@ -9,6 +11,7 @@ import { getIconForProperty, Select } from "../../core";
 import InputLabel from "../../components/InputLabel";
 import { IconButton } from "../../components";
 import ClearIcon from "@mui/icons-material/Clear";
+import { focusedMixin } from "../../styles";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -54,7 +57,10 @@ export function SelectFieldBinding<T extends EnumType>({
                 value={value ? value.toString() : ""}
                 disabled={disabled}
                 position="item-aligned"
-                className={`w-full ${property.clearable ? "pr-14" : ""}`}
+                inputClassName={clsx(
+                    "w-full",
+                    property.clearable ? "pr-14" : "")}
+
                 label={<InputLabel id={`${propertyKey}-select-label`}
                                    shrink={Boolean(value)}>
                     <LabelWithIcon icon={getIconForProperty(property)}

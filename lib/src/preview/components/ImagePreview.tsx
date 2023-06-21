@@ -54,7 +54,10 @@ export function ImagePreview({
     return (
         <div
             className="relative flex items-center justify-center max-w-full max-h-full"
-            style={{ width: imageSize, height: imageSize }}
+            style={{
+                width: imageSize,
+                height: imageSize
+            }}
             key={"image_preview_" + url}
             onMouseEnter={() => setOnHover(true)}
             onMouseMove={() => setOnHover(true)}
@@ -67,11 +70,13 @@ export function ImagePreview({
 
                 {navigator && <Tooltip title="Copy url to clipboard">
                     <div
-                        className="rounded-full absolute bottom-[-4px] right-8 bg-gray-100 dark:bg-gray-800">
+                        className="rounded-full absolute bottom-[-4px] right-8">
                         <IconButton
+                            variant={"filled"}
                             size={"small"}
                             onClick={(e) => {
                                 e.stopPropagation();
+                                e.preventDefault();
                                 return navigator.clipboard.writeText(url);
                             }}>
                             <ContentCopyIcon htmlColor={"#666"}
@@ -81,24 +86,23 @@ export function ImagePreview({
                 </Tooltip>}
 
                 <Tooltip title="Open image in new tab">
-                    <a
+                    <IconButton
+                        variant={"filled"}
+                        component={"a" as React.ElementType}
                         style={{
-                            borderRadius: "9999px",
                             position: "absolute",
                             bottom: -4,
-                            right: -4,
-                            backgroundColor: theme.palette.background.default
+                            right: -4
                         }}
                         href={url}
                         rel="noopener noreferrer"
-                        target="_blank">
-                        <IconButton
-                            size={"small"}
-                            onClick={(e) => e.stopPropagation()}>
-                            <OpenInNewIcon htmlColor={"#666"}
-                                           fontSize={"small"}/>
-                        </IconButton>
-                    </a>
+                        target="_blank"
+                        size={"small"}
+                        onClick={(e: any) => e.stopPropagation()}
+                    >
+                        <OpenInNewIcon htmlColor={"#666"}
+                                       fontSize={"small"}/>
+                    </IconButton>
                 </Tooltip>
             </>
             }

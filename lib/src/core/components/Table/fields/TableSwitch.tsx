@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Switch } from "@mui/material";
+import { BooleanSwitch } from "../../../../components";
 
 export function TableSwitch(props: {
     error: Error | undefined;
@@ -8,9 +8,13 @@ export function TableSwitch(props: {
     disabled: boolean;
     updateValue: (newValue: (boolean | null)) => void;
 }) {
-    const { disabled, internalValue, updateValue, focused } = props;
+    const {
+        internalValue,
+        updateValue,
+        focused
+    } = props;
+    const ref = React.createRef<HTMLButtonElement>();
 
-    const ref = React.createRef<HTMLTextAreaElement>();
     useEffect(() => {
         if (ref.current && focused) {
             ref.current.focus({ preventScroll: true });
@@ -18,15 +22,11 @@ export function TableSwitch(props: {
     }, [focused, ref]);
 
     return (
-        <Switch
-            inputRef={ref}
-            color={"secondary"}
-            checked={Boolean(internalValue)}
-            disabled={disabled}
-            onChange={(evt) => {
-                const value = evt.target.checked as boolean;
-                updateValue(value);
-            }}
+        <BooleanSwitch
+            ref={ref}
+            size={"small"}
+            value={Boolean(internalValue)}
+            onValueChange={updateValue}
         />
     );
 }

@@ -109,13 +109,13 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
     return (
         <div
             onClick={onClick}
-            className={`h-full flex items-center justify-center flex-col ${frozen ? 'sticky' : ''} ${frozen ? 'left-0' : ''} bg-opacity-96 z-10`}
+            className={`h-full flex items-center justify-center flex-col ${frozen ? "sticky" : ""} ${frozen ? "left-0" : ""} bg-opacity-96 z-10`}
             style={{
                 width,
                 background: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.96) : alpha(theme.palette.background.default, 0.96),
                 position: frozen ? "sticky" : "initial",
                 left: frozen ? 0 : "initial",
-                contain: "strict",
+                contain: "strict"
                 // backdropFilter: frozen ? "blur(8px)" : undefined,
             }}>
 

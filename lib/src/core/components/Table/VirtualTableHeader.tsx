@@ -1,6 +1,6 @@
 import React, { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
-import { Badge, Button, darken, Divider, Grid, lighten, Popover, useTheme } from "@mui/material";
+import { Badge, Button, darken, Popover, useTheme } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
@@ -85,8 +85,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
         return (
             <ErrorBoundary>
-                <Grid
-                    className={`py-0 px-3 h-full text-xs uppercase font-semibold relative select-none ${
+                <div
+                    className={`flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center ${
                         column.frozen ? "sticky left-0 z-10" : "relative z-0"
                     }`}
                     style={{
@@ -101,15 +101,13 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                         maxWidth: column.width,
                     }}
                     ref={ref}
-                    wrap={"nowrap"}
-                    alignItems={"center"}
+                    // wrap={"nowrap"}
                     onMouseEnter={() => setOnHover(true)}
                     onMouseMove={() => setOnHover(true)}
                     onMouseLeave={() => setOnHover(false)}
-                    container>
+                >
 
-                    <Grid item xs={true}
-                          className="overflow-hidden flex-shrink">
+                    <div className="overflow-hidden flex-grow">
                         <div
                             className={`flex items-center justify-${column.headerAlign} flex-row`}>
                             <div className="pt-1">
@@ -126,17 +124,17 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                             </div>
 
                         </div>
-                    </Grid>
+                    </div>
 
                     {column.sortable && (sort || hovered || openFilter) &&
-                        <Grid item>
+                        <div >
                             <Badge color="secondary"
                                    variant="dot"
                                    overlap="circular"
                                    invisible={!sort}>
                                 <IconButton
                                     size={"small"}
-                                    className={`${theme.palette.mode === 'light' ? 'bg-f5f5f5' : 'bg-[defaultBackgroundColor]'}`}
+                                    className={`${theme.palette.mode === "light" ? "bg-f5f5f5" : "bg-[defaultBackgroundColor]"}`}
                                     onClick={() => {
                                         onColumnSort(column.key as Extract<keyof M, string>);
                                     }}
@@ -149,10 +147,10 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                         <ArrowDownwardIcon fontSize={"small"}/>}
                                 </IconButton>
                             </Badge>
-                        </Grid>
+                        </div>
                     }
 
-                    {column.filter && <Grid item>
+                    {column.filter && <div >
                         <Badge color="secondary"
                                variant="dot"
                                overlap="circular"
@@ -166,14 +164,14 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                             </IconButton>
 
                         </Badge>
-                    </Grid>}
+                    </div>}
 
                     {column.resizable && <div
                         ref={resizeHandleRef}
                         className={`absolute h-full w-[4px] top-0 right-0 cursor-col-resize`}
                         onMouseDown={onClickResizeColumn ? () => onClickResizeColumn(columnIndex, column) : undefined}
                     />}
-                </Grid>
+                </div>
 
                 {column.filter && createFilterField &&
                     <FilterForm column={column}
@@ -247,10 +245,9 @@ function FilterForm<M>({
             }}
         >
             <div className="bg-white dark:bg-gray-900">
-                <div className="p-2 text-xs font-semibold uppercase">
+                <div className="p-2 text-xs font-semibold uppercase border-b border-gray-100 dark:border-gray-800">
                     {column.title ?? id}
                 </div>
-                <Divider/>
                 {filterField && <div className="p-8">
                     {filterField}
                 </div>}

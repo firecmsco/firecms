@@ -1,9 +1,7 @@
 import { EnumValueConfig } from "../../../../types";
 import { ArrayEnumPreview, EnumValuesChip } from "../../../../preview";
 import React, { useCallback, useEffect, useState } from "react";
-import { Checkbox, ListItemText, MenuItem, Select } from "@mui/material";
-import { enumToObjectEntries, isEnumValueDisabled } from "../../../util/enums";
-import { SelectChangeEvent } from "@mui/material/Select/SelectInput";
+import { Select } from "../../../../components";
 
 export function TableSelect(props: {
     name: string;
@@ -33,37 +31,30 @@ export function TableSelect(props: {
     } = props;
 
     const [open, setOpen] = useState<boolean>(false);
-    const handleOpen = useCallback(() => {
-        setOpen(true);
-    }, []);
-
-    const handleClose = useCallback(() => {
-        setOpen(false);
-    }, []);
 
     const validValue = (Array.isArray(internalValue) && multiple) ||
         (!Array.isArray(internalValue) && !multiple);
 
-    const ref = React.createRef<HTMLInputElement>();
+    const ref = React.createRef<HTMLButtonElement>();
     useEffect(() => {
         if (ref.current && focused) {
             ref.current?.focus({ preventScroll: true });
         }
     }, [focused, ref]);
 
-    const onChange = useCallback((evt: SelectChangeEvent<any>) => {
+    const onChange = useCallback((updatedValue: string | string[]) => {
         if (valueType === "number") {
             if (multiple) {
-                const newValue = (evt.target.value as string[]).map((v) => parseFloat(v));
+                const newValue = (updatedValue as string[]).map((v) => parseFloat(v));
                 updateValue(newValue);
             } else {
-                updateValue(parseFloat(evt.target.value as string));
+                updateValue(parseFloat(updatedValue as string));
             }
         } else if (valueType === "string") {
-            if (!evt.target.value)
+            if (!updatedValue)
                 updateValue(null)
             else
-                updateValue(evt.target.value);
+                updateValue(updatedValue);
         } else {
             throw Error("Missing mapping in TableSelect");
         }
@@ -83,62 +74,30 @@ export function TableSelect(props: {
     };
     return (
         <Select
-            variant={"standard"}
-            key={`table_select_${name}`}
             inputRef={ref}
-            className="h-full"
-            open={open}
+            className="w-full h-full p-0 bg-transparent"
+            position={"item-aligned"}
             disabled={disabled}
             multiple={multiple}
-            onClose={handleClose}
-            onOpen={handleOpen}
-            fullWidth
-            inputProps={{
-                sx: {
-                    height: "100% !important",
-                    display: "flex",
-                    alignItems: "center",
-                    padding: "0px 0 0px",
-                    background: "transparent !important"
-                }
-            }}
-            disableUnderline
-            error={!!error}
+            padding={false}
+            includeFocusOutline={false}
+            // open={open}
+            // onOpenChange={setOpen}
+            // inputProps={{
+            //     sx: {
+            //         height: "100% !important",
+            //         display: "flex",
+            //         alignItems: "center",
+            //         padding: "0px 0 0px",
+            //         background: "transparent !important"
+            //     }
+            // }}
+            // error={!!error}
             value={validValue
-                ? (multiple ? (internalValue as any[]).map(v => v.toString()) : internalValue)
+                ? (multiple ? (internalValue as any[]).map(v => v.toString()) : internalValue?.toString())
                 : (multiple ? [] : "")}
-            onChange={onChange}
-            renderValue={renderValue}>
-
-            {enumToObjectEntries(enumValues).map((enumValueConfig) => {
-
-                const enumKey = enumValueConfig.id;
-                const chip = <EnumValuesChip
-                    enumKey={enumKey}
-                    enumValues={enumValues}
-                    small={true}/>;
-                if (multiple) {
-                    return (
-                        <MenuItem key={`select-${name}-${enumKey}`}
-                                  value={enumKey}
-                                  disabled={isEnumValueDisabled(enumValueConfig)}
-                                  dense={true}>
-                            <Checkbox
-                                checked={Array.isArray(internalValue) && internalValue.map(v => v.toString()).includes(enumKey.toString())}/>
-                            <ListItemText primary={chip}/>
-                        </MenuItem>
-                    );
-                } else {
-                    return (
-                        <MenuItem key={`select-${name}-${enumKey}`}
-                                  value={enumKey}
-                                  disabled={isEnumValueDisabled(enumValueConfig)}
-                                  dense={true}>
-                            {chip}
-                        </MenuItem>
-                    );
-                }
-            })}
-        </Select>
+            onValueChange={onChange}
+            options={enumValues?.map((enumConfig) => String(enumConfig.id))}
+            renderOption={renderValue}/>
     );
 }

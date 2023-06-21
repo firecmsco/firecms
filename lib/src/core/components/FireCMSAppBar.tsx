@@ -19,7 +19,6 @@ import { useAuthController, useBreadcrumbsContext, useModeController } from "../
 import Typography from "../../components/Typography";
 import clsx from "clsx";
 import { IconButton } from "../../components";
-import { DialogTest } from "../../components/Dialog";
 
 export interface FireCMSAppBarProps {
     title: string;

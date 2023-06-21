@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Input } from "@mui/material";
 import { useDebounce } from "../../../util";
 
 export function NumberTableInput(props: {
@@ -12,7 +11,12 @@ export function NumberTableInput(props: {
     disabled: boolean;
 }) {
 
-    const { align, value, updateValue, focused, disabled } = props;
+    const {
+        align,
+        value,
+        updateValue,
+        focused,
+    } = props;
     const propStringValue = (value && typeof value === "number") ? value.toString() : "";
     const [internalValue, setInternalValue] = useState<string | null>(propStringValue);
 
@@ -60,16 +64,12 @@ export function NumberTableInput(props: {
     const regexp = /^-?[0-9]+[,.]?[0-9]*$/;
 
     return (
-        <Input
-            inputRef={ref}
+        <input
+            ref={ref}
             className="w-full text-right p-0 m-0 bg-transparent border-none resize-none outline-none font-normal leading-normal text-unset"
-            inputProps={{
-                style: {
-                    textAlign: align
-                }
+            style={{
+                textAlign: align
             }}
-            disabled={disabled}
-            disableUnderline
             value={internalValue ?? ""}
             onFocus={() => {
                 props.setFocused(true);

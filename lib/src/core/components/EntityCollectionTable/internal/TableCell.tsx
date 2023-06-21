@@ -1,8 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import useMeasure from "react-use-measure";
-import { styled } from "@mui/system";
+import clsx from "clsx";
 
-import { darken, lighten, Tooltip, useTheme } from "@mui/material";
+import useMeasure from "react-use-measure";
+
+import { Tooltip } from "@mui/material";
 
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
@@ -11,6 +12,7 @@ import { getRowHeight } from "../../Table/common";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { ErrorTooltip } from "../../ErrorTooltip";
 import { IconButton } from "../../../../components";
+import { focusedClasses } from "../../../../styles";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -36,87 +38,43 @@ interface TableCellProps {
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
-function getBackgroundColor(onHover: any, selectedRow: boolean, disabled: boolean, saved: boolean, theme: any, isSelected: boolean) {
-    if (onHover && !disabled) {
-        if (theme.palette.mode === "dark") {
-            return lighten(theme.palette.background.paper, 0.03);
-        } else {
-            return darken(theme.palette.background.default, 0.02);
-        }
-    }
-    if (isSelected) {
-        if (theme.palette.mode === "dark") {
-            return lighten(theme.palette.background.paper, 0.035);
-        } else {
-            return darken(theme.palette.background.default, 0.025);
-        }
-    }
-    if (selectedRow || saved) {
-        if (theme.palette.mode === "dark") {
-            return lighten(theme.palette.background.paper, 0.022);
-        } else {
-            return darken(theme.palette.background.default, 0.008);
-        }
-    }
-    return undefined;
-}
-
-type TableCellRootProps = {
-    padding: string;
-    border: string;
-    justifyContent: string;
-    contain: string,
-    alignItems?: string,
-    backgroundColor?: string
-}
-const TableCellRoot = styled("div", {})<TableCellRootProps>(({
-                                                                 justifyContent,
-                                                                 padding,
-                                                                 border,
-                                                                 alignItems,
-                                                                 backgroundColor
-                                                             }) => ({
-    alignItems,
-    backgroundColor,
-    padding,
-    border,
-    justifyContent,
-    display: "flex",
-    position: "relative",
-    height: "100%",
-    borderRadius: "4px",
-    overflow: "hidden",
-    contain: "content",
-    transition: "border-color 200ms ease-in-out, background-color 500ms ease"
-}));
-
 type TableCellInnerProps = {
     justifyContent: string;
     scrollable: boolean;
     faded: boolean;
     fullHeight: boolean;
-
+    children: React.ReactNode;
 }
-const TableCellInner = styled("div", {})<TableCellInnerProps>(({
-                                                                   theme,
-                                                                   justifyContent,
-                                                                   scrollable,
-                                                                   faded,
-                                                                   fullHeight
-                                                               }) => ({
 
-    display: "flex",
-    maxHeight: "100%",
-    width: "100%",
-    flexDirection: "column",
-    height: fullHeight ? "100%" : undefined,
-    justifyContent,
-    overflow: scrollable ? "auto" : undefined,
-    WebkitMaskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
-    maskImage: faded ? "linear-gradient(to bottom, black 60%, transparent 100%)" : undefined,
-    alignItems: faded ? "start" : (scrollable ? "start" : undefined)
-
-}));
+const TableCellInner = ({
+                            justifyContent,
+                            scrollable,
+                            faded,
+                            fullHeight,
+                            children
+                        }: TableCellInnerProps) => {
+    return (
+        <div
+            className={clsx("flex flex-col max-h-full w-full",
+                {
+                    "items-start": faded || scrollable
+                })}
+            style={{
+                justifyContent,
+                height: fullHeight ? "100%" : undefined,
+                overflow: scrollable ? "auto" : undefined,
+                WebkitMaskImage: faded
+                    ? "linear-gradient(to bottom, black 60%, transparent 100%)"
+                    : undefined,
+                maskImage: faded
+                    ? "linear-gradient(to bottom, black 60%, transparent 100%)"
+                    : undefined
+            }}
+        >
+            {children}
+        </div>
+    );
+};
 
 export const TableCell = React.memo<TableCellProps>(
     function TableCell({
@@ -140,7 +98,6 @@ export const TableCell = React.memo<TableCellProps>(
                        }: TableCellProps) {
 
         const [measureRef, bounds] = useMeasure();
-        const theme = useTheme();
         const ref = React.createRef<HTMLDivElement>();
 
         const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
@@ -170,21 +127,21 @@ export const TableCell = React.memo<TableCellProps>(
             };
         }, [saved]);
 
-        let p = theme.spacing(0);
+        let p = 0;
         if (!removePadding) {
             switch (size) {
                 case "l":
                 case "xl":
-                    p = theme.spacing(2);
+                    p = 4;
                     break;
                 case "m":
-                    p = theme.spacing(1);
+                    p = 3;
                     break;
                 case "s":
-                    p = theme.spacing(0.5);
+                    p = 2;
                     break;
                 default:
-                    p = theme.spacing(0.25);
+                    p = 1;
                     break;
             }
         }
@@ -240,17 +197,6 @@ export const TableCell = React.memo<TableCellProps>(
 
         const isSelected = !showError && selected;
 
-        let border: string;
-        if (internalSaved) {
-            border = `2px solid ${theme.palette.success.light}`;
-        } else if (isSelected) {
-            border = "2px solid #5E9ED6";
-        } else if (showError) {
-            border = `2px solid ${theme.palette.error.light} !important`
-        } else {
-            border = "2px solid transparent"
-        }
-
         const scrollable = !disabled && allowScroll && isOverflowing;
         const faded = !disabled && !allowScroll && isOverflowing;
 
@@ -258,9 +204,21 @@ export const TableCell = React.memo<TableCellProps>(
         const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
         return (
-            <TableCellRoot
+            <div
+                className={clsx(
+                    `flex relative h-full rounded overflow-hidden p-${p}`,
+                    onHover && !disabled ? "bg-gray-50 dark:bg-gray-900" : "",
+                    selectedRow || saved ? "bg-gray-50 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" : "",
+                    isSelected ? "bg-gray-50 dark:bg-gray-900" : "",
+                    isSelected ? focusedClasses : "",
+                    internalSaved ? "ring-1 ring-green-500 ring-opacity-75 ring-offset-1 ring-offset-transparent" : "",
+                    showError ? "ring-1 ring-red-500 ring-opacity-75 ring-offset-1 ring-offset-transparent" : "",
+                )}
                 style={{
-                    width: width ?? "100%"
+                    justifyContent,
+                    alignItems: disabled || !isOverflowing ? "center" : undefined,
+                    width: width ?? "100%",
+                    transition: "border-color 200ms ease-in-out"
                 }}
                 tabIndex={selected || disabled ? undefined : 0}
                 ref={ref}
@@ -269,12 +227,7 @@ export const TableCell = React.memo<TableCellProps>(
                 onMouseEnter={setOnHoverTrue}
                 onMouseMove={setOnHoverTrue}
                 onMouseLeave={setOnHoverFalse}
-                padding={p}
-                contain={scrollable ? "content" : "size"}
-                border={border}
-                justifyContent={justifyContent}
-                alignItems={disabled || !isOverflowing ? "center" : undefined}
-                backgroundColor={getBackgroundColor(onHover, selectedRow, disabled, internalSaved ?? false, theme, isSelected ?? false)}
+                // contain={scrollable ? "content" : "size"}
             >
 
                 <ErrorBoundary>
@@ -345,7 +298,7 @@ export const TableCell = React.memo<TableCellProps>(
                     </div>
                 }
 
-            </TableCellRoot>
+            </div>
         );
     }, (a, b) =>
         a.error === b.error &&

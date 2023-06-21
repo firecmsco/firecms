@@ -5,7 +5,7 @@ import { FieldProps } from "../../types";
 import { FieldDescription, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
-import { BooleanSwitch } from "../../components/BooleanSwitch";
+import { BooleanSwitchWithLabel } from "../../components/BooleanSwitchWithLabel";
 
 type SwitchFieldProps = FieldProps<boolean>;
 
@@ -38,7 +38,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
     return (
         <>
 
-            <BooleanSwitch
+            <BooleanSwitchWithLabel
                 value={value}
                 onValueChange={(v) => setValue(v)}
                 error={showError}

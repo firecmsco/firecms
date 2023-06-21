@@ -12,7 +12,7 @@ export function CustomDialogActions({
 }) {
 
     return <div
-        className={clsx(`border-t border-gray-200 dark:border-gray-800 flex flex-row items-center justify-end py-1 px-2 ${position} bottom-0 right-0 left-0 text-right z-2`,
+        className={clsx(`py-4 px-8 border-t border-gray-100 dark:border-gray-800 flex flex-row items-center justify-end ${position} bottom-0 right-0 left-0 text-right z-2`,
             translucent ? "backdrop-blur-sm" : "")}>
         {children}
     </div>;

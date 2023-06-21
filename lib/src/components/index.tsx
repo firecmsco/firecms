@@ -1,4 +1,5 @@
 export * from "./BooleanSwitch";
+export * from "./BooleanSwitchWithLabel";
 export * from "./Chip";
 export * from "./DateTimeField";
 export * from "./DisabledTextField";

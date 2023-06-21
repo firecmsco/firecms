@@ -9,7 +9,6 @@ import AddIcon from "@mui/icons-material/Add";
 
 import {
     ArrayContainer,
-    BooleanSwitch,
     DateTimeField,
     ExpandablePanel,
     getDefaultValueForDataType,
@@ -18,7 +17,7 @@ import {
 } from "../../core";
 import { FieldDescription, LabelWithIcon } from "../components";
 import Typography from "../../components/Typography";
-import { IconButton } from "../../components";
+import { BooleanSwitchWithLabel, IconButton } from "../../components";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -153,16 +152,16 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                       });
                                   }}/>;
         } else if (dataType === "boolean") {
-            return <BooleanSwitch value={entryValue}
-                                  small={true}
-                                  position={"start"}
-                                  disabled={disabled || !fieldKey}
-                                  onValueChange={(newValue) => {
-                                      setValue({
-                                          ...value,
-                                          [fieldKey]: newValue
-                                      });
-                                  }}/>;
+            return <BooleanSwitchWithLabel value={entryValue}
+                                           small={true}
+                                           position={"start"}
+                                           disabled={disabled || !fieldKey}
+                                           onValueChange={(newValue) => {
+                                               setValue({
+                                                   ...value,
+                                                   [fieldKey]: newValue
+                                               });
+                                           }}/>;
         } else if (dataType === "array") {
             return <div
                 className="ml-1 pl-1 border-l border-solid border-current"
@@ -337,12 +336,12 @@ function ArrayKeyValueRow<T>({
                                       setValue(date as T);
                                   }}/>;
         } else if (dataType === "boolean") {
-            return <BooleanSwitch value={entryValue}
-                                  small={true}
-                                  position={"start"}
-                                  onValueChange={(v) => {
-                                      setValue(v as T);
-                                  }}/>;
+            return <BooleanSwitchWithLabel value={entryValue}
+                                           small={true}
+                                           position={"start"}
+                                           onValueChange={(v) => {
+                                               setValue(v as T);
+                                           }}/>;
         } else if (dataType === "array") {
             return <Typography variant={"caption"}>
                 Arrays of arrays are not supported.
@@ -466,7 +465,10 @@ function MapEditView<T extends Record<string, any>>({
 
     return <div className="py-1 flex flex-col space-y-1">
         {internalState
-            .map(([rowId, { key: fieldKey, dataType }], index) => {
+            .map(([rowId, {
+                    key: fieldKey,
+                    dataType
+                }], index) => {
                     const entryValue = fieldKey ? value[fieldKey] : "";
                     const onFieldKeyChange = (newKey: string) => {
 

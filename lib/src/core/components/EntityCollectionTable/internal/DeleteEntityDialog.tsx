@@ -1,10 +1,11 @@
 import { Entity, EntityCallbacks, EntityCollection } from "../../../../types";
 import React, { useCallback, useMemo, useState } from "react";
-import { Button, CircularProgress, Dialog, DialogContent, DialogTitle } from "@mui/material";
+import { Button, CircularProgress } from "@mui/material";
 import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../../../../hooks";
 import { CustomDialogActions } from "../../CustomDialogActions";
 import { resolveCollection } from "../../../util/resolutions";
 import EntityPreview from "../../EntityPreview";
+import { Dialog } from "../../../../components/Dialog";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
@@ -171,19 +172,16 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
     return (
         <Dialog
-            maxWidth="md"
             aria-labelledby="delete-dialog"
             open={open}
-            onBackdropClick={onClose}
+            onOpenChange={(open) => !open ? onClose() : undefined}
             {...other}
         >
-            <DialogTitle id="delete-dialog-title">
+            <div>
                 {dialogTitle}
-            </DialogTitle>
+            </div>
 
-            {!multipleEntities && <DialogContent dividers>
-                {content}
-            </DialogContent>}
+            {!multipleEntities && content}
 
             <CustomDialogActions>
 
