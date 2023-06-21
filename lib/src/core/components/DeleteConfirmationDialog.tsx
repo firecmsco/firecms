@@ -1,8 +1,9 @@
 import React from "react";
-import { Button, Dialog, DialogContent, DialogContentText, DialogTitle } from "@mui/material";
+import { Button } from "@mui/material";
 
 import { CustomDialogActions } from "./CustomDialogActions";
 import { LoadingButton } from "@mui/lab";
+import { Dialog } from "../../components/Dialog";
 
 export function DeleteConfirmationDialog({
                                              open,
@@ -22,16 +23,13 @@ export function DeleteConfirmationDialog({
     return (
         <Dialog
             open={open}
-            onClose={onCancel}
+            onOpenChange={(open) => !open ? onCancel() : undefined}
         >
-            <DialogTitle>
+            <div>
                 {title}
-            </DialogTitle>
-            {body && <DialogContent>
-                <DialogContentText>
-                    {body}
-                </DialogContentText>
-            </DialogContent>}
+                {body}
+            </div>
+
             <CustomDialogActions>
                 <Button
                     onClick={onCancel}

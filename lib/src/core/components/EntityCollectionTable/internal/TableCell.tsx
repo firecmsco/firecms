@@ -70,7 +70,6 @@ type TableCellRootProps = {
     backgroundColor?: string
 }
 const TableCellRoot = styled("div", {})<TableCellRootProps>(({
-                                                                 theme,
                                                                  justifyContent,
                                                                  padding,
                                                                  border,
@@ -87,7 +86,6 @@ const TableCellRoot = styled("div", {})<TableCellRootProps>(({
     height: "100%",
     borderRadius: "4px",
     overflow: "hidden",
-    // contain: "content",
     contain: "content",
     transition: "border-color 200ms ease-in-out, background-color 500ms ease"
 }));

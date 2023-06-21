@@ -246,7 +246,7 @@ function FilterForm<M>({
                 horizontal: "right"
             }}
         >
-            <div className="bg-background-default">
+            <div className="bg-white dark:bg-gray-900">
                 <div className="p-2 text-xs font-semibold uppercase">
                     {column.title ?? id}
                 </div>

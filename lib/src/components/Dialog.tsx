@@ -1,86 +1,57 @@
-import { MouseEvent, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import clsx from "clsx";
-
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { paperMixin } from "../styles";
-import Typography from "./Typography";
-import { Button } from "./Button";
 
-export const DialogTest = () => {
-    const [isOpened, setIsOpened] = useState(false);
-
-    const onProceed = () => {
-        console.log("Proceed clicked");
-    };
-
-    return (
-        <div>
-            <button onClick={() => setIsOpened(true)}>Open dialog modal</button>
-
-            <Dialog
-                title="Dialog modal example"
-                open={isOpened}
-                onProceed={onProceed}
-                onClose={() => setIsOpened(false)}
-            >
-                <p>To close: click Close, press Escape, or click outside.</p>
-            </Dialog>
-        </div>
-    );
-};
-
-const isClickInsideRectangle = (e: MouseEvent, element: HTMLElement) => {
-    const r = element.getBoundingClientRect();
-
-    return (
-        e.clientX > r.left &&
-        e.clientX < r.right &&
-        e.clientY > r.top &&
-        e.clientY < r.bottom
-    );
-};
-
-type DialogProps = {
-    title: string;
+export type DialogProps = {
     open: boolean;
-    onClose: () => void;
+    onOpenChange: (open: boolean) => void;
     children: React.ReactNode;
 };
 
 export const Dialog = ({
-                           title,
                            open,
-                           onClose,
+                           onOpenChange,
                            children,
+                           ...props
                        }: DialogProps) => {
-    const ref = useRef<HTMLDialogElement>(null);
+    const [displayed, setDisplayed] = useState(false);
 
     useEffect(() => {
-        if (open) {
-            ref.current?.showModal();
+        if (!open) {
+            const timeout = setTimeout(() => {
+                setDisplayed(false);
+            }, 250);
+            return () => clearTimeout(timeout);
         } else {
-            ref.current?.close();
+            setDisplayed(true);
+            return () => {
+            };
         }
     }, [open]);
 
     return (
-        <dialog
-            ref={ref}
-            onCancel={onClose}
-            onClick={(e) =>
-                ref.current && !isClickInsideRectangle(e, ref.current) && onClose()
-            }
-            className={clsx(paperMixin, "w-[400px] shadow-lg")}
-            style={{
-                // "--tw-backdrop-bg-opacity": "0.3",
-                // "backdrop-filter": "brightness(100)",
-                // "background-color": "rgba(0, 0, 0, var(--tw-backdrop-bg-opacity))"
-            }}>
-
-            <Typography variant={"h6"}>{title}</Typography>
-
-            {children}
-
-            <Button onClick={onClose}>Close</Button>
-        </dialog>
+        <DialogPrimitive.Root open={displayed || open}
+                              onOpenChange={onOpenChange}>
+            <DialogPrimitive.Portal>
+                <DialogPrimitive.Overlay
+                    className={`fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black bg-opacity-50 dark:bg-opacity-60 backdrop-blur-sm ${
+                        displayed && open ? "opacity-100" : "opacity-0"
+                    }`}
+                    style={{
+                        pointerEvents: displayed ? "auto" : "none"
+                    }}
+                />
+                <DialogPrimitive.Content
+                    {...props}
+                    className={clsx(paperMixin,
+                        "z-20 shadow-xl fixed top-1/2 left-1/2 transform-gpu -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-lg max-h-screen-90",
+                        displayed && open ? "opacity-100" : "opacity-0"
+                    )}
+                >
+                    {children}
+                </DialogPrimitive.Content>
+            </DialogPrimitive.Portal>
+        </DialogPrimitive.Root>
     );
 };

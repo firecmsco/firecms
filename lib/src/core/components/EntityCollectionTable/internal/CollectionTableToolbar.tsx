@@ -6,7 +6,6 @@ import { SearchBar } from "./SearchBar";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
 import { Select } from "../../../../components/Select";
 import { IconButton } from "../../../../components";
-import Typography from "../../../../components/Typography";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
@@ -40,7 +39,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
     const sizeSelect = (
         <Select
             value={props.size as string}
-            className="w-14 h-10"
+            className="w-16 h-10"
             size={"small"}
             onValueChange={(v) => props.onSizeChanged(v as CollectionSize)}
             options={["xs", "s", "m", "l", "xl"]}
@@ -56,10 +55,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
             <div className="flex items-center space-x-8 md:space-x-4 ">
 
                 {props.title && <Hidden lgDown>
-                    <Typography variant={"h2"}>
-                        {props.title}
-                    </Typography>
-
+                    {props.title}
                 </Hidden>}
 
                 {sizeSelect}

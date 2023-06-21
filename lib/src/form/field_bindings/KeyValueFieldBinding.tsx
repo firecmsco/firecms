@@ -242,7 +242,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 </div>
 
                 <IconButton size={"small"}
-                            className="bg-background-default h-7 w-7"
+                            className="h-7 w-7"
                             onClick={openTypeSelectMenu}>
                     <ArrowDropDownIcon/>
                 </IconButton>
@@ -373,7 +373,7 @@ function ArrayKeyValueRow<T>({
                 </div>
 
                 <IconButton size={"small"}
-                            className="bg-background-default h-7 w-7"
+                            className="h-7 w-7"
                             onClick={openTypeSelectMenu}>
                     <ArrowDropDownIcon/>
                 </IconButton>

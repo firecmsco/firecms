@@ -67,11 +67,13 @@ export function Select({
                                       onClick={(e) => e.stopPropagation()}>
                     {endAdornment}
                 </div>}
+
             </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
-                    className={"z-30 border border-gray-200 dark:border-gray-800 shadow-lg bg-white dark:bg-gray-900 p-2 rounded-lg shadow-lg bg-opacity-80 dark:bg-opacity-80 backdrop-blur"}
-                    position={position} align={"center"}>
+                    className={"z-20 relative border border-gray-200 dark:border-gray-800 shadow-lg bg-white dark:bg-gray-900 p-2 rounded-lg shadow-lg bg-opacity-80 dark:bg-opacity-80 backdrop-blur"}
+                    position={position}
+                    align={"center"}>
                     <SelectPrimitive.Viewport
                         className="">
                         <SelectPrimitive.Group>
@@ -80,8 +82,9 @@ export function Select({
                                     key={option}
                                     value={option}
                                     className={clsx(
-                                        "relative flex items-center px-8 py-2 rounded-md text-sm text-gray-700 dark:text-gray-300 font-medium focus:bg-gray-100 dark:focus:bg-gray-950",
-                                        { "focus:outline-none select-none": option !== value }
+                                        "relative relative flex items-center px-8 py-2 rounded-md text-sm text-gray-700 dark:text-gray-300 font-medium",
+                                        "border-2 border-transparent focus-visible:border-opacity-75 focus:outline-none focus-visible:border-solid focus-visible:border-solid focus-visible:border-primary",
+                                        option === value ? "bg-gray-100 dark:bg-gray-900" : "focus:bg-gray-100 dark:focus:bg-gray-900"
                                     )}
                                 >
                                     <SelectPrimitive.ItemText>{renderOption(option)}</SelectPrimitive.ItemText>

@@ -60,7 +60,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     const onValuesAreModified = useCallback((modified: boolean) => {
         setBlocked(modified);
         setBlockedNavigationMessage(modified
-            ? <> You have unsaved changes in this <b>{collection?.name}</b>.</>
+            ? <> You have unsaved changes in this <b>{collection?.singularName ?? collection?.name}</b>.</>
             : undefined)
     }, [collection?.name, setBlocked, setBlockedNavigationMessage]);
 
