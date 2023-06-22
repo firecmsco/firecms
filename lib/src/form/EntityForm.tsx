@@ -1,5 +1,6 @@
 import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Button, useTheme } from "@mui/material";
+import clsx from "clsx";
+
 import {
     CMSAnalyticsEvent,
     Entity,
@@ -15,11 +16,13 @@ import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { PropertyFieldBinding } from "./PropertyFieldBinding";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
-import { CustomDialogActions, getDefaultValuesFor, isHidden, isReadOnly, resolveCollection } from "../core";
+import { DialogActions, getDefaultValuesFor, isHidden, isReadOnly, resolveCollection } from "../core";
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
 import Typography from "../components/Typography";
+import { defaultBorderMixin } from "../styles";
+import { Button } from "../components/Button";
 
 /**
  * @category Components
@@ -133,8 +136,6 @@ function EntityFormInternal<M extends Record<string, any>>({
     const context = useFireCMSContext();
     const dataSource = useDataSource();
     const plugins = context.plugins;
-
-    const theme = useTheme();
 
     const initialResolvedCollection = useMemo(() => resolveCollection({
         collection: inputCollection,
@@ -378,7 +379,9 @@ function EntityFormInternal<M extends Record<string, any>>({
                     >
 
                         {pluginActions.length > 0 && <div
-                            className={"w-full flex justify-end row items-center absolute top-0 right-0 left-0 text-right z-2 bg-opacity-60 bg-white dark:bg-opacity-10 dark:bg-gray-800 backdrop-blur-md border-b border-gray-100 dark:border-gray-800"}>
+                            className={clsx(
+                                defaultBorderMixin,
+                                "w-full flex justify-end row items-center absolute top-0 right-0 left-0 text-right z-2 bg-opacity-60 bg-white dark:bg-opacity-10 dark:bg-gray-800 backdrop-blur-md border-b border-gray-100 dark:border-gray-800")}>
                             {pluginActions}
                         </div>}
 
@@ -539,7 +542,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
             <div className="h-14"/>
 
-            {!autoSave && <CustomDialogActions position={"absolute"}>
+            {!autoSave && <DialogActions position={"absolute"}>
 
                 {savingError &&
                     <div className="text-right">
@@ -550,7 +553,6 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
                 <Button
                     variant="text"
-                    color="primary"
                     disabled={disabled}
                     type="reset"
                 >
@@ -572,7 +574,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                 </Button>
 
                 <Button
-                    variant="contained"
+                    variant="filled"
                     color="primary"
                     type="submit"
                     disabled={disabled}
@@ -585,7 +587,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                     {status === "new" && "Create and close"}
                 </Button>
 
-            </CustomDialogActions>}
+            </DialogActions>}
         </Form>
     );
 }

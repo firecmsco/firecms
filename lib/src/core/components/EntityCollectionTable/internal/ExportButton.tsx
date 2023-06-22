@@ -1,22 +1,14 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import {
-    Alert,
-    Button,
-    CircularProgress,
-    Dialog,
-    DialogContent,
-    DialogContentText,
-    DialogTitle,
-    Tooltip
-} from "@mui/material";
+import { Alert, CircularProgress, Dialog, DialogContent, DialogContentText, DialogTitle, Tooltip } from "@mui/material";
 
 import GetAppIcon from "@mui/icons-material/GetApp";
 import { Entity, EntityCollection, ExportConfig, ResolvedEntityCollection, User } from "../../../../types";
 import { useDataSource, useFireCMSContext, useNavigationContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
-import { CustomDialogActions } from "../../CustomDialogActions";
+import { DialogActions } from "../../DialogActions";
 import { resolveCollection } from "../../../util";
 import { IconButton } from "../../../../components";
+import { Button } from "../../../../components/Button";
 
 interface ExportButtonProps<M extends Record<string, any>, UserType extends User> {
     collection: EntityCollection<M>;
@@ -162,8 +154,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
             <DialogContent>
                 <DialogContentText>
 
-                    <div>Download the the content of this table as a CSV
-                    </div>
+                    <>Download the the content of this table as a CSV</>
                     <br/>
 
                     {needsToAcceptFetchAllData &&
@@ -184,22 +175,21 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                 </DialogContentText>
             </DialogContent>
 
-            <CustomDialogActions>
+            <DialogActions>
 
                 {dataLoading && <CircularProgress size={16} thickness={8}/>}
 
-                <Button color="primary" onClick={handleClose}>
+                <Button onClick={handleClose}>
                     Cancel
                 </Button>
 
-                <Button color="primary"
-                        variant="contained"
+                <Button variant="filled"
                         disabled={dataLoading}
                         onClick={onOkClicked}>
                     Download
                 </Button>
 
-            </CustomDialogActions>
+            </DialogActions>
 
         </Dialog>
 

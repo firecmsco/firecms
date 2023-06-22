@@ -1,5 +1,4 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
-import { Button, useMediaQuery, useTheme } from "@mui/material";
 import equal from "react-fast-compare";
 import { getCellAlignment, getPropertyColumnWidth, getSubcollectionColumnId } from "./internal/common";
 import {
@@ -50,6 +49,8 @@ import { ReferenceFilterField } from "./filters/ReferenceFilterField";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterField";
+import { useLargeLayout } from "../../../hooks/useLargeLayout";
+import { Button } from "../../../components/Button";
 
 const DEFAULT_STATE = {} as any;
 
@@ -127,8 +128,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const navigation = useNavigationContext();
 
-        const theme = useTheme();
-        const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+        const largeLayout = useLargeLayout();
         const disabledFilterChange = Boolean(forceFilter);
         const selectedEntities = selectionController?.selectedEntities?.length > 0 ? selectionController?.selectedEntities : highlightedEntities;
 
@@ -494,8 +494,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 }}
             >
 
-                <div className="h-full w-full flex flex-col bg-white"
-                     style={{ backgroundColor: theme.palette.background.paper }}>
+                <div className="h-full w-full flex flex-col bg-white dark:bg-gray-950">
 
                     <CollectionTableToolbar
                         forceFilter={disabledFilterChange}

@@ -46,7 +46,7 @@ export function ExpandablePanel({
                                    : "bg-transparent"
                                : "bg-inherit"
                    } ${
-                       invisible ? "rounded-none" : `rounded-md`
+                       invisible ? "rounded-none" : "rounded-md"
                    } ${invisible ? "border-none" : ""}`}
                    TransitionProps={{ unmountOnExit: true }}
                    onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => {
@@ -55,23 +55,23 @@ export function ExpandablePanel({
                    }, [onExpandedChange])}>
 
             <AccordionSummary expandIcon={<ExpandMoreIcon/>}
-                              className={`items-center ${invisible ? 'p-0' : ''} min-h-14 border-${invisible ? '0' : ''} ${!expandedInternal && !invisible ? 'rounded-t rounded-bl' : ''}`}
+                              className={`items-center ${invisible ? "p-0" : ""} min-h-14 border-${invisible ? "0" : ""} ${!expandedInternal && !invisible ? "rounded-t rounded-bl" : ""}`}
                               style={{
-                                  minHeight: '56px',
+                                  minHeight: "56px",
                                   borderTopLeftRadius: `${theme.shape.borderRadius}px`,
                                   borderTopRightRadius: `${theme.shape.borderRadius}px`,
                                   borderBottomLeftRadius: !expandedInternal && !invisible ? `${theme.shape.borderRadius}px` : undefined,
                                   borderBottomRightRadius: !expandedInternal && !invisible ? `${theme.shape.borderRadius}px` : undefined,
-                                  border: invisible ? 'none' : undefined,
-                                  borderBottom: invisible ? `1px solid ${theme.palette.divider}` : undefined,
+                                  border: invisible ? "none" : undefined,
+                                  borderBottom: invisible ? `1px solid ${theme.palette.divider}` : undefined
                               }}>
                 {title}
             </AccordionSummary>
 
             <AccordionDetails className={`${
-                invisible ? 'p-0' : typeof padding === 'string' ? padding : `p-${padding}`
+                invisible ? "p-0" : typeof padding === "string" ? padding : `p-${padding}`
             } py-2 ${
-                invisible ? 'border-none' : ''
+                invisible ? "border-none" : ""
             } text-current`}>
                 {children}
             </AccordionDetails>

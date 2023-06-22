@@ -3,7 +3,7 @@ import clsx from "clsx";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import SearchIcon from "@mui/icons-material/Search";
-import { focusedMixin } from "../../../../styles";
+import { fieldBackgroundMixin, focusedMixin } from "../../../../styles";
 import { IconButton } from "../../../../components";
 
 interface SearchBarProps {
@@ -45,7 +45,8 @@ export function SearchBar({
 
     return (
         <div className={clsx("relative", large ? "h-14" : "h-[42px]",
-            "rounded bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",)}>
+            fieldBackgroundMixin,
+            "rounded",)}>
             <div
                 className="absolute p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center top-0">
                 <SearchIcon htmlColor={"#888"}/>

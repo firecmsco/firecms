@@ -2,15 +2,15 @@ import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
 import clsx from "clsx";
 
-import { Link, Tooltip, useMediaQuery, useTheme } from "@mui/material";
+import { Link, Tooltip } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import { useRestoreScroll } from "./internal/useRestoreScroll";
-import { IconButton } from "../components";
+import { IconButton, Sheet } from "../components";
+import { useLargeLayout } from "../hooks/useLargeLayout";
 
 export const DRAWER_WIDTH = 280;
 
@@ -83,8 +83,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             FireCMSAppBarComponent = FireCMSAppBar
         } = props;
 
-        const theme = useTheme();
-        const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+        const largeLayout = useLargeLayout();
 
         const navigation = useNavigationContext();
         const { containerRef } = useRestoreScroll();
@@ -128,14 +127,12 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     logo={logo}
                     hovered={autoOpenDrawer ? onHover : false}
                     setDrawerOpen={setDrawerOpen}>
-                    <nav>
-                        {navigation.loading
-                            ? <CircularProgressCenter/>
-                            : <UsedDrawer
-                                hovered={onHover}
-                                drawerOpen={computedDrawerOpen}
-                                closeDrawer={handleDrawerClose}/>}
-                    </nav>
+                    {navigation.loading
+                        ? <CircularProgressCenter/>
+                        : <UsedDrawer
+                            hovered={onHover}
+                            drawerOpen={computedDrawerOpen}
+                            closeDrawer={handleDrawerClose}/>}
                 </StyledDrawer>
 
                 <main
@@ -173,8 +170,69 @@ function StyledDrawer(props: {
     onMouseMove: () => void,
     onMouseLeave: () => void
 }) {
-    const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+
+    const innerDrawer = <div
+        className={"fixed relative left-0 top-0 transition-all duration-200 ease-in-out h-full overflow-auto no-scrollbar"}
+        style={{
+            width: props.open ? DRAWER_WIDTH : "72px"
+        }}
+    >
+
+        {!props.open && (
+            <Tooltip title="Open menu" placement="right">
+                <IconButton
+                    color="inherit"
+                    aria-label="Open menu"
+                    onClick={() => props.setDrawerOpen(true)}
+                    size="large"
+                    className="sticky top-2 left-3"
+                >
+                    <MenuIcon/>
+                </IconButton>
+            </Tooltip>
+        )}
+
+        <div
+            className={clsx(`${
+                props.open
+                    ? "py-4 pt-8 px-8 pr-24 block transition-padding duration-200 ease-in-out"
+                    : "p-4 pt-4 mt-2 block transition-padding duration-200 ease-in-out"
+            }`)}>
+            <Link>
+                <Tooltip title="Home" placement="right">
+                    {props.logo
+                        ? <img src={props.logo} alt="Logo"
+                               className="max-w-full max-h-full"/>
+                        : <FireCMSLogo/>}
+
+                </Tooltip>
+            </Link>
+        </div>
+
+        {props.children}
+
+    </div>;
+
+    const largeLayout = useLargeLayout();
+    if (!largeLayout)
+        return <>
+            <IconButton
+                color="inherit"
+                aria-label="Open drawer"
+                onClick={() => props.setDrawerOpen(true)}
+                size="large"
+                className="absolute top-2 left-6"
+            >
+                <MenuIcon/>
+            </IconButton>
+            <Sheet side={"left"}
+                   transparent={true}
+                   open={props.open}
+                   onOpenChange={props.setDrawerOpen}
+            >
+                {innerDrawer}
+            </Sheet>
+        </>;
 
     return (
         <div className="transition-all ease-in duration-75 relative"
@@ -185,71 +243,21 @@ function StyledDrawer(props: {
                  width: props.open ? DRAWER_WIDTH : "72px"
              }}>
 
-            {!largeLayout && (
-                <IconButton
-                    color="inherit"
-                    aria-label="Open drawer"
-                    onClick={() => props.setDrawerOpen(true)}
-                    size="large"
-                    className="absolute top-2 left-6"
-                >
-                    <MenuIcon/>
-                </IconButton>
-            )}
+
+            {innerDrawer}
 
             <div
-                className={"fixed left-0 top-0 transition-all duration-200 ease-in-out"}
-                style={{
-                    width: props.open ? DRAWER_WIDTH : "72px"
-                }}
-            >
-                <div
-                    className={`absolute right-4 top-4 ${
-                        props.open ? "opacity-100" : "opacity-0"
-                    } transition-opacity duration-200 ease-in-out`}>
-                    <IconButton
-                        onClick={() => props.setDrawerOpen(false)}
-                    >
-                        {theme.direction === "rtl"
-                            ? <ChevronRightIcon/>
-                            : <ChevronLeftIcon/>}
-                    </IconButton>
-                </div>
-
-                {!props.open && (
-                    <Tooltip title="Open menu" placement="right">
-                        <IconButton
-                            color="inherit"
-                            aria-label="Open menu"
-                            onClick={() => props.setDrawerOpen(true)}
-                            size="large"
-                            className="absolute top-2 left-3"
-                        >
-                            <MenuIcon/>
-                        </IconButton>
-                    </Tooltip>
-                )}
-
-                <div>
-                    <div
-                        className={clsx(`${
-                            props.open
-                                ? "py-4 pt-8 px-8 pr-24 block transition-padding duration-200 ease-in-out"
-                                : "p-4 pt-16 mt-2 block transition-padding duration-200 ease-in-out"
-                        }`)}>
-                        <Link>
-                            <Tooltip title="Home" placement="right">
-                                {props.logo
-                                    ? <img src={props.logo} alt="Logo"
-                                           className="max-w-full max-h-full"/>
-                                    : <FireCMSLogo/>}
-
-                            </Tooltip>
-                        </Link>
-                    </div>
-                    {props.children}
-                </div>
+                className={`absolute right-4 top-4 ${
+                    props.open ? "opacity-100" : "opacity-0 invisible"
+                } transition-opacity duration-200 ease-in-out`}>
+                <IconButton
+                    aria-label="Close drawer"
+                    onClick={() => props.setDrawerOpen(false)}
+                >
+                    <ChevronLeftIcon/>
+                </IconButton>
             </div>
+
         </div>
     );
 }

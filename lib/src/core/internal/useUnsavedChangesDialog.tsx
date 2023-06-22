@@ -1,10 +1,10 @@
 import React, { useCallback } from "react";
 import { Blocker, Transition } from "history";
 import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
-import Button from "@mui/material/Button";
-import { CustomDialogActions } from "../components";
+import { DialogActions } from "../components";
 import { Dialog } from "../../components/Dialog";
 import { Typography } from "@mui/material";
+import { Button } from "../../components/Button";
 
 export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () => void):
     {
@@ -102,10 +102,10 @@ export function UnsavedChangesDialog({
                 </Typography>
 
             </div>
-            <CustomDialogActions>
+            <DialogActions>
                 <Button onClick={handleCancel} autoFocus> Cancel </Button>
                 <Button onClick={handleOk}> Ok </Button>
-            </CustomDialogActions>
+            </DialogActions>
         </Dialog>
     );
 }

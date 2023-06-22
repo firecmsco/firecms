@@ -42,18 +42,18 @@ const colorToClasses = {
 };
 
 const variantToClasses = {
-    h1: "text-6xl",
-    h2: "text-5xl",
-    h3: "text-4xl",
-    h4: "text-3xl",
-    h5: "text-2xl",
-    h6: "text-xl",
-    subtitle1: "text-lg",
-    subtitle2: "text-base",
+    h1: "text-6xl font-headers font-light",
+    h2: "text-5xl font-headers font-light",
+    h3: "text-4xl font-headers font-normal",
+    h4: "text-3xl font-headers font-normal",
+    h5: "text-2xl font-headers font-normal",
+    h6: "text-xl font-headers font-medium",
+    subtitle1: "text-lg font-headers font-normal",
+    subtitle2: "text-base font-headers font-medium",
     body1: "text-base",
     body2: "text-sm",
     label: "text-sm font-medium text-gray-500",
-    inherit: "text-base",
+    inherit: "text-inherit",
     caption: "text-xs"
 };
 

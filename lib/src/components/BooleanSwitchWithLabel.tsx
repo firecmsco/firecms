@@ -1,6 +1,6 @@
 import React from "react";
 import clsx from "clsx";
-import { focusedClasses } from "../styles";
+import { fieldBackgroundMixin, focusedClasses } from "../styles";
 import { BooleanSwitch } from "./BooleanSwitch";
 
 export type BooleanSwitchWithLabelProps = {
@@ -50,7 +50,7 @@ export const BooleanSwitchWithLabel = function SwitchFieldBinding({
             onBlur={onBlur}
             tabIndex={-1}
             className={clsx(
-                "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
+                fieldBackgroundMixin,
                 "rounded-md relative cursor-pointer max-w-full justify-between w-full box-border relative inline-flex items-center",
                 focus ? focusedClasses : "",
                 error ? "text-error" : focus ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark",

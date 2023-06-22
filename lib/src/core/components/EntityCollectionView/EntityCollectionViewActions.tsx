@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Tooltip, useMediaQuery, useTheme } from "@mui/material";
+import { Tooltip } from "@mui/material";
 
 import { Add, Delete } from "@mui/icons-material";
 import { ExportButton } from "../EntityCollectionTable/internal/ExportButton";
@@ -9,6 +9,8 @@ import { useAuthController, useFireCMSContext } from "../../../hooks";
 import { CollectionActionsProps, Entity, EntityCollection, ExportConfig, SelectionController } from "../../../types";
 import { fullPathToCollectionSegments } from "../../util/paths";
 import { IconButton } from "../../../components";
+import { useLargeLayout } from "../../../hooks/useLargeLayout";
+import { Button } from "../../../components/Button";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -36,8 +38,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     const context = useFireCMSContext();
     const authController = useAuthController();
 
-    const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+    const largeLayout = useLargeLayout();
 
     const selectedEntities = selectionController.selectedEntities;
 
@@ -48,7 +49,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 onClick={onNewClick}
                 startIcon={<Add/>}
                 size="large"
-                variant="contained"
+                variant="filled"
                 color="primary">
                 Add {collection.singularName ?? collection.name}
             </Button>
@@ -56,7 +57,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 id={`add_entity_${path}`}
                 onClick={onNewClick}
                 size="medium"
-                variant="contained"
+                variant="filled"
                 color="primary"
             >
                 <Add/>
@@ -68,11 +69,12 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
     if (selectionEnabled) {
         const button = largeLayout
             ? <Button
+                variant={"text"}
                 disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
                 startIcon={<Delete/>}
                 onClick={onMultipleDeleteClick}
                 color={"primary"}
-                className="min-w-17"
+                className="lg:w-20"
             >
                 ({selectedEntities?.length})
             </Button>

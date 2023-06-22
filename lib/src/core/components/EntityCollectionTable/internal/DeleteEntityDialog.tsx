@@ -1,11 +1,12 @@
 import { Entity, EntityCallbacks, EntityCollection } from "../../../../types";
 import React, { useCallback, useMemo, useState } from "react";
-import { Button, CircularProgress } from "@mui/material";
+import { CircularProgress } from "@mui/material";
 import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../../../../hooks";
-import { CustomDialogActions } from "../../CustomDialogActions";
+import { DialogActions } from "../../DialogActions";
 import { resolveCollection } from "../../../util/resolutions";
 import EntityPreview from "../../EntityPreview";
 import { Dialog } from "../../../../components/Dialog";
+import { Button } from "../../../../components/Button";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
@@ -155,7 +156,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
     let content: React.ReactNode;
     if (entityOrEntities && multipleEntities) {
-        content = <div>Multiple entities</div>;
+        content = <>Multiple entities</>;
     } else {
         const entity = entityOrEntities as Entity<M> | undefined;
         content = entity
@@ -183,12 +184,13 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
             {!multipleEntities && content}
 
-            <CustomDialogActions>
+            <DialogActions>
 
                 {loading && <CircularProgress size={16} thickness={8}/>}
 
                 <Button onClick={handleCancel}
                         disabled={loading}
+                        variant="text"
                         color="primary">
                     Cancel
                 </Button>
@@ -196,11 +198,11 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
                     autoFocus
                     disabled={loading}
                     onClick={handleOk}
-                    variant="contained"
+                    variant="filled"
                     color="primary">
                     Ok
                 </Button>
-            </CustomDialogActions>
+            </DialogActions>
 
         </Dialog>
     );

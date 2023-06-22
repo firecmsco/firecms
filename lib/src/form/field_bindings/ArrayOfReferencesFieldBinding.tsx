@@ -1,11 +1,12 @@
 import React, { useCallback, useMemo } from "react";
-import { Button, FormControl, FormHelperText } from "@mui/material";
+import {  FormControl, FormHelperText } from "@mui/material";
 import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "../../types";
 import { ReferencePreview } from "../../preview";
 import { FieldDescription, FormikArrayContainer, LabelWithIcon } from "../components";
 import { ErrorView, ExpandablePanel, getIconForProperty, getReferenceFrom } from "../../core";
 
 import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
+import { Button } from "../../components/Button";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 

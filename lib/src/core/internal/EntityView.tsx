@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
+import clsx from "clsx";
+
 import equal from "react-fast-compare";
 import { CircularProgress, Divider, Tab, Tabs, useTheme } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -23,11 +25,12 @@ import {
 } from "../../hooks";
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
-import { useLargeSideLayout } from "./useLargeSideLayout";
 import Typography from "../../components/Typography";
 import { EntityFormSaveParams } from "../../form/EntityForm";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import { IconButton } from "../../components";
+import { useLargeLayout } from "../../hooks/useLargeLayout";
+import { defaultBorderMixin } from "../../styles";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -79,7 +82,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
         }, false, 2000);
 
         const theme = useTheme();
-        const largeLayout = useLargeSideLayout();
+        const largeLayout = useLargeLayout();
         const largeLayoutTabSelected = useRef(!largeLayout);
 
         const resolvedFormWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? FORM_CONTAINER_WIDTH;
@@ -306,7 +309,8 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     return null;
                 }
                 return <div
-                    className={`w-[${ADDITIONAL_TAB_WIDTH}] flex-grow h-full overflow-auto border-l border-gray-100 dark:border-gray-800 xl:border-l-0 xl:w-[${CONTAINER_FULL_WIDTH}]`}
+                    className={clsx(defaultBorderMixin,
+                        `w-[${ADDITIONAL_TAB_WIDTH}] flex-grow h-full overflow-auto border-l xl:border-l-0 xl:w-[${CONTAINER_FULL_WIDTH}]`)}
                     key={`custom_view_${customView.path}`}
                     role="tabpanel">
                     <ErrorBoundary>
@@ -332,7 +336,7 @@ export const EntityView = React.memo<EntityViewProps<any>>(
                     return null;
                 return (
                     <div
-                        className={`flex-grow h-full overflow-auto border-l border-opacity-50 border-gray-100 dark:border-gray-800 border-l-0 w-[${CONTAINER_FULL_WIDTH}] xl:border-none xl:w-[${ADDITIONAL_TAB_WIDTH}] ${theme.breakpoints.down("lg") ? `` : ``}`}
+                        className={`flex-grow h-full overflow-auto border-l border-opacity-50 border-l-0 w-[${CONTAINER_FULL_WIDTH}] xl:border-none xl:w-[${ADDITIONAL_TAB_WIDTH}] ${theme.breakpoints.down("lg") ? `` : ``}`}
                         key={`subcol_${subcollection.alias ?? subcollection.path}`}
                         role="tabpanel">
 

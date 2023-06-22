@@ -22,16 +22,21 @@ export default {
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
-        "./node_modules/firecms/src/**/*.{js,ts,jsx,tsx}"
+        "../node_modules/firecms/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
     ],
     plugins: [fireCMSPlugin],
     theme: {
         extend: {
             fontFamily: {
-                sans: ["Rubik", "Roboto", "Helvetica", "Arial", "sans-serif"],
+                sans: [
+                    "Poppins",
+                    "Rubik",
+                    "Roboto",
+                    "Helvetica",
+                    "Arial",
+                    "sans-serif"
+                ],
                 headers: [
-                    "IBM Plex Mono",
-                    "Space Mono",
                     "Rubik",
                     "Roboto",
                     "Helvetica",

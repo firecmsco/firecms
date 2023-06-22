@@ -16,6 +16,7 @@ import {
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
 import Typography from "../../../../components/Typography";
 import { IconButton } from "../../../../components";
+import { useLargeLayout } from "../../../../hooks/useLargeLayout";
 
 /**
  *
@@ -62,7 +63,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                                                                               }) {
 
     const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+    const largeLayout = useLargeLayout();
 
     const editEnabled = Boolean(onEditClicked);
     const copyEnabled = Boolean(onCopyClicked);

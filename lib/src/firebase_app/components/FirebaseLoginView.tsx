@@ -1,6 +1,6 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
-import { Button, CircularProgress, Fade, Grid, Slide, TextField } from "@mui/material";
+import { CircularProgress, Fade, Grid, Slide, TextField } from "@mui/material";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
 import { ErrorView, FireCMSLogo } from "../../core";
@@ -21,6 +21,7 @@ import {
 } from "firebase/auth";
 import Typography from "../../components/Typography";
 import { IconButton } from "../../components";
+import { Button } from "../../components/Button";
 
 /**
  * @category Firebase
@@ -152,7 +153,7 @@ export function FirebaseLoginView({
             if (authController.authProviderError.code === "auth/operation-not-allowed" ||
                 authController.authProviderError.code === "auth/configuration-not-found") {
                 errorView =
-                    <div>
+                    <>
                         <div className="p-4">
                             <ErrorView
                                 error={"You need to enable Firebase auth and the corresponding login provider in your Firebase project"}/>
@@ -168,16 +169,13 @@ export function FirebaseLoginView({
                                     </Button>
                                 </a>
                             </div>}
-                    </div>;
+                    </>;
             } else if (authController.authProviderError.code === "auth/invalid-api-key") {
-                errorView =
-                    <div>
-                        <div className="p-4">
-                            <ErrorView
-                                title={"Invalid API key"}
-                                error={"auth/invalid-api-key: Check that your Firebase config is set correctly in your `firebase-config.ts` file"}/>
-                        </div>
-                    </div>;
+                errorView = <div className="p-4">
+                    <ErrorView
+                        title={"Invalid API key"}
+                        error={"auth/invalid-api-key: Check that your Firebase config is set correctly in your `firebase-config.ts` file"}/>
+                </div>;
             } else if (!ignoredCodes.includes(authController.authProviderError.code)) {
                 if (authController.authProviderError.code === "auth/multi-factor-auth-required") {
                     sendMFASms();
@@ -269,6 +267,7 @@ export function FirebaseLoginView({
                         {allowSkipLogin &&
                             <div className={"m-4"}>
                                 <Button
+                                    variant={"text"}
                                     disabled={disabled}
                                     onClick={authController.skipLogin}>
                                     Skip login
@@ -312,12 +311,13 @@ export function LoginButton({
 }) {
     return (
         <div className="m-2 w-full">
-            <Button fullWidth
+            <Button
+                    className="w-full"
                     variant="outlined"
                     disabled={disabled}
                     onClick={onClick}>
                 <div
-                    className="p-1 flex w-48 h-8 items-center justify-items-center">
+                    className="p-1 flex h-8 items-center justify-items-center">
                     <div
                         className="flex flex-col w-8 items-center justify-items-center">
                         {icon}
@@ -554,7 +554,7 @@ function LoginForm({
                     </Grid>
 
                     <Grid item xs={12}
-                          className={`p-4 ${registrationMode && disableSignupScreen ? 'hidden' : 'flex'}`}>
+                          className={`p-4 ${registrationMode && disableSignupScreen ? "hidden" : "flex"}`}>
                         <Typography align={"center"}
                                     variant={"subtitle2"}>{label}</Typography>
                     </Grid>
@@ -575,7 +575,7 @@ function LoginForm({
                     </Grid>
 
                     <Grid item xs={12}
-                          className={`${loginMode || (registrationMode && !disableSignupScreen) ? 'block' : 'hidden'}`}>
+                          className={`${loginMode || (registrationMode && !disableSignupScreen) ? "block" : "hidden"}`}>
                         <TextField placeholder="Password" fullWidth
                                    value={password ?? ""}
                                    disabled={authController.authLoading}

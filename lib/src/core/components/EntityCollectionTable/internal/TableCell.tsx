@@ -12,7 +12,6 @@ import { getRowHeight } from "../../Table/common";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { ErrorTooltip } from "../../ErrorTooltip";
 import { IconButton } from "../../../../components";
-import { focusedClasses } from "../../../../styles";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -206,19 +205,21 @@ export const TableCell = React.memo<TableCellProps>(
         return (
             <div
                 className={clsx(
-                    `flex relative h-full rounded overflow-hidden p-${p}`,
+                    "transition-colors duration-200 ease-in-out",
+                    `flex relative h-full rounded-md overflow-hidden p-${p} border border-4  border-opacity-75`,
                     onHover && !disabled ? "bg-gray-50 dark:bg-gray-900" : "",
                     selectedRow || saved ? "bg-gray-50 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" : "",
+                    !isSelected && !internalSaved && !showError ? "border-transparent" : "",
                     isSelected ? "bg-gray-50 dark:bg-gray-900" : "",
-                    isSelected ? focusedClasses : "",
-                    internalSaved ? "ring-1 ring-green-500 ring-opacity-75 ring-offset-1 ring-offset-transparent" : "",
-                    showError ? "ring-1 ring-red-500 ring-opacity-75 ring-offset-1 ring-offset-transparent" : "",
+                    isSelected && !internalSaved ? "border-primary" : "",
+                    internalSaved ? "border-green-500 " : "",
+                    showError ? "border-red-500" : "",
                 )}
                 style={{
                     justifyContent,
                     alignItems: disabled || !isOverflowing ? "center" : undefined,
                     width: width ?? "100%",
-                    transition: "border-color 200ms ease-in-out"
+                    // transition: "border-color 200ms ease-in-out"
                 }}
                 tabIndex={selected || disabled ? undefined : 0}
                 ref={ref}

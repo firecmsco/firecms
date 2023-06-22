@@ -5,7 +5,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
 
 import clsx from "clsx";
-import { focusedMixin } from "../styles";
+import { fieldBackgroundMixin, focusedMixin } from "../styles";
 
 export type SelectProps = {
     open?: boolean,
@@ -70,7 +70,7 @@ export function Select({
             <div className={clsx(
                 size === "small" ? "h-[42px]" : "h-[64px]",
                 "select-none rounded-md text-sm",
-                "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
+                fieldBackgroundMixin,
                 "relative flex items-center font-medium",
                 className)}>
 
@@ -119,7 +119,7 @@ export function Select({
             </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
-                    className={"z-20 relative border border-gray-200 dark:border-gray-800 shadow-lg bg-white dark:bg-gray-900 p-2 rounded-lg shadow-lg bg-opacity-80 dark:bg-opacity-80 backdrop-blur"}
+                    className={"z-20 relative border border-gray-200 dark:border-gray-800 shadow-lg bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg bg-opacity-80 dark:bg-opacity-90 backdrop-blur"}
                     position={position}
                     align={"center"}>
                     <SelectPrimitive.Viewport
@@ -134,7 +134,7 @@ export function Select({
                                         className={clsx(
                                             "relative relative flex items-center px-6 py-2 rounded-md text-sm text-gray-700 dark:text-gray-300 font-medium",
                                             "border-2 border-transparent focus-visible:border-opacity-75 focus:outline-none focus-visible:border-solid focus-visible:border-solid focus-visible:border-primary",
-                                            selected ? "bg-gray-50 dark:bg-gray-900" : "focus:bg-gray-100 dark:focus:bg-gray-800"
+                                            selected ? "bg-gray-50 dark:bg-gray-950" : "focus:bg-gray-100 dark:focus:bg-gray-700"
                                         )}
                                     >
                                         <SelectPrimitive.ItemText>{renderOption(option)}</SelectPrimitive.ItemText>

@@ -21,7 +21,7 @@ export function ArrayEnumPreview({
 }) {
 
     return (
-        <div className="flex flex-wrap gap-2">
+        <div className="flex flex-wrap gap-1.5">
             {value && value.map((enumKey, index) => {
                     return (
                         <ErrorBoundary

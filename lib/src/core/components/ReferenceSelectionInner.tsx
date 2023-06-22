@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { CollectionSize, Entity, EntityCollection, FilterValues } from "../../types";
-import { Button, useMediaQuery, useTheme } from "@mui/material";
 import { Add } from "@mui/icons-material";
 
 import { EntityCollectionTable } from "./EntityCollectionTable";
@@ -13,13 +12,15 @@ import {
     useSideEntityController
 } from "../../hooks";
 import { ErrorView } from "./ErrorView";
-import { CustomDialogActions } from "./CustomDialogActions";
+import { DialogActions } from "./DialogActions";
 import { useSideDialogContext } from "../SideDialogs";
 import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
 import { useTableController } from "./EntityCollectionTable/useTableController";
 import { isFilterCombinationValidForFirestore } from "./EntityCollectionView/isFilterCombinationValidForFirestore";
 import Typography from "../../components/Typography";
+import { useLargeLayout } from "../../hooks/useLargeLayout";
+import { Button } from "../../components/Button";
 
 /**
  * @category Components
@@ -279,7 +280,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
                                            }
                     />}
             </div>
-            <CustomDialogActions translucent={false}>
+            <DialogActions translucent={false}>
                 {description &&
                     <Typography variant={"body2"}
                                 className="flex-grow text-left">
@@ -288,10 +289,10 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
                 <Button
                     onClick={onDone}
                     color="primary"
-                    variant="contained">
+                    variant="filled">
                     Done
                 </Button>
-            </CustomDialogActions>
+            </DialogActions>
         </div>
 
     );
@@ -312,15 +313,13 @@ function ReferenceDialogActions({
 
     const authController = useAuthController();
 
-    const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+    const largeLayout = useLargeLayout();
 
     const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path), null) &&
         onNewClick && (largeLayout
             ? <Button
                 onClick={onNewClick}
                 startIcon={<Add/>}
-                size="large"
                 variant="outlined"
                 color="primary">
                 Add {collection.singularName ?? collection.name}
@@ -337,6 +336,7 @@ function ReferenceDialogActions({
     return (
         <>
             <Button onClick={onClear}
+                    variant={"text"}
                     color="primary">
                 Clear
             </Button>

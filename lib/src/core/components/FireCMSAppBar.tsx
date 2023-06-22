@@ -1,15 +1,5 @@
 import React from "react";
-import {
-    Avatar,
-    Breadcrumbs,
-    Button,
-    Chip,
-    Hidden,
-    Link,
-    Slide,
-    useMediaQuery,
-    useTheme
-} from "@mui/material";
+import { Avatar, Breadcrumbs, Chip, Hidden, Link, Slide } from "@mui/material";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
@@ -19,6 +9,8 @@ import { useAuthController, useBreadcrumbsContext, useModeController } from "../
 import Typography from "../../components/Typography";
 import clsx from "clsx";
 import { IconButton } from "../../components";
+import { useLargeLayout } from "../../hooks/useLargeLayout";
+import { Button } from "../../components/Button";
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -54,8 +46,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
         toggleMode
     } = useModeController();
 
-    const theme = useTheme();
-    const largeLayout = useMediaQuery(theme.breakpoints.up("md"));
+    const largeLayout = useLargeLayout();
 
     const initial = authController.user?.displayName
         ? authController.user.displayName[0].toUpperCase()
@@ -98,28 +89,26 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         </div>
                     </Hidden>
 
-                    {largeLayout && <div>
-                        <Breadcrumbs
-                            separator={<NavigateNextIcon
-                                htmlColor={"rgb(0,0,0,0.87)"}
-                                fontSize="small"/>}
-                            aria-label="breadcrumb">
-                            {breadcrumbs.map((entry, index) => (
-                                <Link
-                                    underline={"none"}
-                                    key={`breadcrumb-${index}`}
-                                    color="inherit"
-                                    component={ReactLink}
-                                    to={entry.url}>
-                                    <Chip
-                                        className="bg-gray-200 h-12 text-gray-800 font-medium hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 active:shadow-sm cursor-pointer"
-                                        label={entry.title}
-                                    />
-                                </Link>)
-                            )
-                            }
-                        </Breadcrumbs>
-                    </div>}
+                    {largeLayout && <Breadcrumbs
+                        separator={<NavigateNextIcon
+                            htmlColor={"rgb(0,0,0,0.87)"}
+                            fontSize="small"/>}
+                        aria-label="breadcrumb">
+                        {breadcrumbs.map((entry, index) => (
+                            <Link
+                                underline={"none"}
+                                key={`breadcrumb-${index}`}
+                                color="inherit"
+                                component={ReactLink}
+                                to={entry.url}>
+                                <Chip
+                                    className="bg-gray-200 h-12 text-gray-800 font-medium hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 active:shadow-sm cursor-pointer"
+                                    label={entry.title}
+                                />
+                            </Link>)
+                        )
+                        }
+                    </Breadcrumbs>}
 
                     <div className={"flex-grow"}/>
 

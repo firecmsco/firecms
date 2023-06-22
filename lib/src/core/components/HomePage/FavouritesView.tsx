@@ -81,11 +81,11 @@ export function FavouritesView({ hidden }: { hidden: boolean }) {
         </NavigationGroup>
     </Collapse>;
 
-    return <div>
+    return <>
         <div className="flex flex-row flex-wrap gap-1 pb-2">
             {recentCollections.map((entry) => <NavigationChip key={entry.path}
                                                               entry={entry}/>)}
         </div>
         {favouritesGroup}
-    </div>;
+    </>;
 }

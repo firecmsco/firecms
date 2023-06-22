@@ -4,7 +4,7 @@ import { TextareaAutosize } from "./TextareaAutosize";
 import { DisabledTextField } from "./DisabledTextField";
 import InputLabel from "./InputLabel";
 import clsx from "clsx";
-import { focusedMixin } from "../styles";
+import { fieldBackgroundMixin, focusedMixin } from "../styles";
 
 export type InputType = "text" | "number";
 
@@ -93,7 +93,7 @@ export function TextInput<T extends string | number>({
         <div
             className={clsx(
                 "rounded-md relative  max-w-full min-h-[64px]",
-                "bg-opacity-70 hover:bg-opacity-90 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60 dark:hover:bg-opacity-90",
+                fieldBackgroundMixin,
                 {
                     "min-h-[48px]": size === "small",
                     "min-h-[64px]": size === "medium"

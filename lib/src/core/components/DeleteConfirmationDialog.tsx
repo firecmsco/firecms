@@ -1,9 +1,9 @@
 import React from "react";
-import { Button } from "@mui/material";
 
-import { CustomDialogActions } from "./CustomDialogActions";
+import { DialogActions } from "./DialogActions";
 import { LoadingButton } from "@mui/lab";
 import { Dialog } from "../../components/Dialog";
+import { Button } from "../../components/Button";
 
 export function DeleteConfirmationDialog({
                                              open,
@@ -25,12 +25,10 @@ export function DeleteConfirmationDialog({
             open={open}
             onOpenChange={(open) => !open ? onCancel() : undefined}
         >
-            <div>
-                {title}
-                {body}
-            </div>
+            {title}
+            {body}
 
-            <CustomDialogActions>
+            <DialogActions>
                 <Button
                     onClick={onCancel}
                     autoFocus>Cancel</Button>
@@ -44,7 +42,7 @@ export function DeleteConfirmationDialog({
                 >
                     Ok
                 </LoadingButton>
-            </CustomDialogActions>
+            </DialogActions>
         </Dialog>
     );
 }

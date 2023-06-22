@@ -16,6 +16,7 @@ import {
     resolveDefaultSelectedView
 } from "../util";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
+import { useLargeLayout } from "../../hooks/useLargeLayout";
 
 const NEW_URL_HASH = "new";
 
@@ -32,8 +33,7 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
     const location = useLocation();
     const initialised = useRef<boolean>(false);
 
-    const theme = useTheme();
-    const smallLayout: boolean = useMediaQuery(theme.breakpoints.down("sm"));
+    const smallLayout = !useLargeLayout();
 
     // only on initialisation, create panels from URL
     useEffect(() => {

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
-import { Button, FormControl, MenuItem } from "@mui/material";
+import { FormControl, MenuItem } from "@mui/material";
 
 import Menu from "@mui/material/Menu";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -18,6 +18,7 @@ import {
 import { FieldDescription, LabelWithIcon } from "../components";
 import Typography from "../../components/Typography";
 import { BooleanSwitchWithLabel, IconButton } from "../../components";
+import { Button } from "../../components/Button";
 
 type MapEditViewRowState = [number, {
     key: string,

@@ -1,9 +1,11 @@
 import React, { createRef, useCallback, useEffect, useState } from "react";
+import clsx from "clsx";
 
 import { TableColumn, TableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { VirtualTableHeader } from "./VirtualTableHeader";
 import { VirtualTableContextProps } from "./types";
+import { defaultBorderMixin } from "../../../styles";
 
 export const VirtualTableHeaderRow = ({
                                           columns,
@@ -98,7 +100,7 @@ export const VirtualTableHeaderRow = ({
 
     return (
         <div
-            className="z-40 sticky min-w-full flex w-fit-content flex-row top-0 left-0 z-2 h-12 border-b border-gray-100 dark:border-gray-800">
+            className={clsx(defaultBorderMixin, "z-40 sticky min-w-full flex w-fit-content flex-row top-0 left-0 z-2 h-12 border-b")}>
             {columns.map((c, columnIndex) => {
                 const column = columns[columnIndex];
 

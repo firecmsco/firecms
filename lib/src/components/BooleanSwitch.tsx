@@ -25,7 +25,7 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
             className={clsx(
                 size === "small" ? "w-[38px] h-[22px]" : "w-[42px] h-[26px]",
                 "outline-none rounded-full relative shadow-sm",
-                value ? "ring-secondary ring-1 bg-secondary dark:bg-secondary" : "bg-gray-50 bg-opacity-54 dark:bg-gray-900 ring-1 ring-gray-100 dark:ring-gray-700",
+                value ? "ring-secondary ring-1 bg-secondary dark:bg-secondary" : "bg-white bg-opacity-54 dark:bg-gray-900 ring-1 ring-gray-100 dark:ring-gray-700",
             )}>
             <div
                 className={clsx(

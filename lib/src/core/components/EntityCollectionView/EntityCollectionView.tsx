@@ -215,49 +215,46 @@ export const EntityCollectionView = React.memo(
         const open = anchorEl != null;
 
         const Title = useMemo(() => (
-            <div className="flex flex-row content-center">
-                <div>
-                    <Typography
-                        variant={"h6"}
-                        className={`leading-none truncate w-40 ${collection.description ? 'cursor-pointer' : 'cursor-auto'}`}
-                        onClick={collection.description
-                            ? (e) => {
-                                setAnchorEl(e.currentTarget);
-                                e.stopPropagation();
-                            }
-                            : undefined}
+            <div className="flex flex-col content-center">
+                <Typography
+                    variant={"subtitle1"}
+                    className={`leading-none truncate max-w-[160px] lg:max-w-[240px] ${collection.description ? "cursor-pointer" : "cursor-auto"}`}
+                    onClick={collection.description
+                        ? (e) => {
+                            setAnchorEl(e.currentTarget);
+                            e.stopPropagation();
+                        }
+                        : undefined}
+                >
+                    {`${collection.name}`}
+                </Typography>
+                <EntitiesCount fullPath={fullPath} collection={collection}/>
+
+                {collection.description &&
+                    <Popover
+                        id={"info-dialog"}
+                        open={open}
+                        anchorEl={anchorEl}
+                        elevation={3}
+                        onClose={() => {
+                            setAnchorEl(null);
+                        }}
+                        anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "center"
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "center"
+                        }}
                     >
-                        {`${collection.name}`}
-                    </Typography>
-                    <EntitiesCount fullPath={fullPath} collection={collection}/>
 
-                    {collection.description &&
-                        <Popover
-                            id={"info-dialog"}
-                            open={open}
-                            anchorEl={anchorEl}
-                            elevation={3}
-                            onClose={() => {
-                                setAnchorEl(null);
-                            }}
-                            anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "center"
-                            }}
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "center"
-                            }}
-                        >
+                        <div className="m-8">
+                            <Markdown source={collection.description}/>
+                        </div>
 
-                            <div className="m-8">
-                                <Markdown source={collection.description}/>
-                            </div>
-
-                        </Popover>
-                    }
-
-                </div>
+                    </Popover>
+                }
 
             </div>
         ), [theme, collection.description, collection.name, fullPath, open, anchorEl]);
@@ -395,7 +392,10 @@ export function useSelectionController<M extends Record<string, any>>(): Selecti
     };
 }
 
-function EntitiesCount({ fullPath, collection }: {
+function EntitiesCount({
+                           fullPath,
+                           collection
+                       }: {
     fullPath: string,
     collection: EntityCollection
 }) {

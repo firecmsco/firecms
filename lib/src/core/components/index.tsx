@@ -13,7 +13,7 @@ export * from "./HomePage";
 export * from "./EntityCollectionView/EntityCollectionView";
 
 export * from "./EntityCollectionTable";
-export * from "./CustomDialogActions";
+export * from "./DialogActions";
 export * from "./BreadcrumbUpdater";
 export * from "./NotFoundPage";
 

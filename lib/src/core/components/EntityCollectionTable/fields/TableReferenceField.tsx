@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from "react";
-import { Button } from "@mui/material";
 import { ReferencePreview } from "../../../../preview";
 import { CollectionSize, Entity, EntityReference, FilterValues } from "../../../../types";
 
@@ -7,6 +6,7 @@ import { getPreviewSizeFrom } from "../../../../preview/util";
 import { getReferenceFrom } from "../../../util";
 import { useNavigationContext, useReferenceDialog } from "../../../../hooks";
 import { ErrorView } from "../../ErrorView";
+import { Button } from "../../../../components/Button";
 
 export function TableReferenceField(props: {
     name: string;

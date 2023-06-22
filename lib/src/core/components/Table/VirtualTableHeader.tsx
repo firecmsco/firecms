@@ -1,6 +1,8 @@
 import React, { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
-import { Badge, Button, darken, Popover, useTheme } from "@mui/material";
+import clsx from "clsx";
+
+import { Badge, darken, Popover, useTheme } from "@mui/material";
 import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
 import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
 import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
@@ -8,6 +10,8 @@ import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
 import { TableColumn, TableSort, TableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { IconButton } from "../../../components";
+import { defaultBorderMixin } from "../../../styles";
+import { Button } from "../../../components/Button";
 
 interface FilterFormProps<T> {
     column: TableColumn<T>;
@@ -127,30 +131,28 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     </div>
 
                     {column.sortable && (sort || hovered || openFilter) &&
-                        <div >
-                            <Badge color="secondary"
-                                   variant="dot"
-                                   overlap="circular"
-                                   invisible={!sort}>
-                                <IconButton
-                                    size={"small"}
-                                    className={`${theme.palette.mode === "light" ? "bg-f5f5f5" : "bg-[defaultBackgroundColor]"}`}
-                                    onClick={() => {
-                                        onColumnSort(column.key as Extract<keyof M, string>);
-                                    }}
-                                >
-                                    {!sort &&
-                                        <ArrowUpwardIcon fontSize={"small"}/>}
-                                    {sort === "asc" &&
-                                        <ArrowUpwardIcon fontSize={"small"}/>}
-                                    {sort === "desc" &&
-                                        <ArrowDownwardIcon fontSize={"small"}/>}
-                                </IconButton>
-                            </Badge>
-                        </div>
+                        <Badge color="secondary"
+                               variant="dot"
+                               overlap="circular"
+                               invisible={!sort}>
+                            <IconButton
+                                size={"small"}
+                                className={`${theme.palette.mode === "light" ? "bg-f5f5f5" : "bg-[defaultBackgroundColor]"}`}
+                                onClick={() => {
+                                    onColumnSort(column.key as Extract<keyof M, string>);
+                                }}
+                            >
+                                {!sort &&
+                                    <ArrowUpwardIcon fontSize={"small"}/>}
+                                {sort === "asc" &&
+                                    <ArrowUpwardIcon fontSize={"small"}/>}
+                                {sort === "desc" &&
+                                    <ArrowDownwardIcon fontSize={"small"}/>}
+                            </IconButton>
+                        </Badge>
                     }
 
-                    {column.filter && <div >
+                    {column.filter && <div>
                         <Badge color="secondary"
                                variant="dot"
                                overlap="circular"
@@ -245,7 +247,8 @@ function FilterForm<M>({
             }}
         >
             <div className="bg-white dark:bg-gray-900">
-                <div className="p-2 text-xs font-semibold uppercase border-b border-gray-100 dark:border-gray-800">
+                <div
+                    className={clsx(defaultBorderMixin, "p-2 text-xs font-semibold uppercase border-b border-gray-100 dark:border-gray-800")}>
                     {column.title ?? id}
                 </div>
                 {filterField && <div className="p-8">

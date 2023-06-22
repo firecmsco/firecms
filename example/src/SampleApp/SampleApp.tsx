@@ -23,7 +23,9 @@ import { textSearchController } from "./text_search";
 
 import { customCollectionOverrideHandler } from "./collections/custom_collection_resolver";
 import "typeface-rubik";
+import "typeface-open-sans";
 import "@fontsource/ibm-plex-mono";
+
 import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";

@@ -1,10 +1,11 @@
-import { Button, FormControl, MenuItem, Select as MuiSelect } from "@mui/material";
+import { FormControl, MenuItem, Select as MuiSelect } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { TableWhereFilterOp } from "../../Table";
 import { Entity, EntityCollection, EntityReference } from "../../../../types";
 import { ReferencePreview } from "../../../../preview";
 import { getReferenceFrom } from "../../../util";
 import { useNavigationContext, useReferenceDialog } from "../../../../hooks";
+import { Button } from "../../../../components/Button";
 
 interface ReferenceFilterFieldProps {
     name: string,

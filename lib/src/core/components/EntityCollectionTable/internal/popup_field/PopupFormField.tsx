@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import equal from "react-fast-compare"
 
-import { Button, Portal, } from "@mui/material";
+import { Portal, } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -24,11 +24,12 @@ import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../types";
 import { ErrorView } from "../../../ErrorView";
 import { isReadOnly, resolveCollection } from "../../../../util";
-import { CustomDialogActions } from "../../../CustomDialogActions";
+import { DialogActions } from "../../../DialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
 import Typography from "../../../../../components/Typography";
 import { IconButton } from "../../../../../components";
+import { Button } from "../../../../../components/Button";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
@@ -303,16 +304,16 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                 </div>
                             </div>
 
-                            <CustomDialogActions>
+                            <DialogActions>
                                 <Button
-                                    variant="contained"
+                                    variant="filled"
                                     color="primary"
                                     type="submit"
                                     disabled={disabled}
                                 >
                                     Save
                                 </Button>
-                            </CustomDialogActions>
+                            </DialogActions>
 
                         </Form>
 

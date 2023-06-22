@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import clsx from "clsx";
-import { Button, Tooltip, useTheme } from "@mui/material";
+import { Tooltip, useTheme } from "@mui/material";
 
 import LinkIcon from "@mui/icons-material/Link";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -20,6 +20,7 @@ import {
 } from "../../hooks";
 import Typography from "../../components/Typography";
 import { IconButton } from "../../components";
+import { Button } from "../../components/Button";
 
 /**
  * This field allows selecting reference/s.
@@ -209,7 +210,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                 </Tooltip>
                             </div>}
 
-                        {!missingEntity && entity && value && <div>
+                        {!missingEntity && entity && value &&
                             <Tooltip title={`See details for ${entity.id}`}>
                                 <span>
                                 <IconButton
@@ -218,8 +219,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
                                     <KeyboardTabIcon/>
                                 </IconButton>
                                     </span>
-                            </Tooltip>
-                        </div>}
+                            </Tooltip>}
 
                         {value && <div>
                             <Tooltip title=" Clear">

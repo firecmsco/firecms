@@ -58,7 +58,7 @@ export const createCMSDefaultTheme = (
             borderRadius: radius
         },
         typography: {
-            fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
+            fontFamily: fontFamily || "'Open Sans', 'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
             fontWeightMedium: 500,
             h6: {
                 fontFamily: fontFamily || "'Rubik', 'Roboto', 'Helvetica', 'Arial', sans-serif",
