@@ -1,12 +1,10 @@
 import React from "react";
 
-import { FormControl, FormHelperText } from "@mui/material";
-
 import { EntityReference, FieldProps } from "../../types";
 import { useClearRestoreValue } from "../../hooks";
 import { ReferenceWidget } from "../components/ReferenceWidget";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
-import { FieldDescription } from "../components";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 /**
  * Field that opens a reference selection dialog.
@@ -52,7 +50,7 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
     const path = validValue ? value.path : property.path;
 
     return (
-        <FormControl error={showError} fullWidth>
+        <>
 
             <ReferenceWidget
                 name={property.name}
@@ -64,11 +62,11 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
                 setValue={setValue}
             />
 
-            {includeDescription &&
-                <FieldDescription property={property}/>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-            {showError && <FormHelperText error={true}>{error}</FormHelperText>}
-
-        </FormControl>
+        </>
     );
 }

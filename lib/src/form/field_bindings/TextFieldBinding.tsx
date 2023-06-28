@@ -1,16 +1,16 @@
 import React, { useCallback } from "react";
-import { Collapse, FormControlLabel, FormHelperText, Switch } from "@mui/material";
+import { Collapse } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
 import { FieldProps, PreviewType } from "../../types";
-import { FieldDescription, LabelWithIcon } from "../components";
+import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { TextInput } from "../../components/TextInput";
 import { PropertyPreview } from "../../preview";
-import Typography from "../../components/Typography";
 import { IconButton } from "../../components";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -32,7 +32,6 @@ export function TextFieldBinding<T extends string | number>({
                                                                 autoFocus,
                                                                 property,
                                                                 includeDescription,
-                                                                allowInfinity
                                                             }: TextFieldProps<T>) {
 
     let multiline: boolean | undefined;
@@ -71,28 +70,7 @@ export function TextFieldBinding<T extends string | number>({
 
     const isMultiline = Boolean(multiline);
 
-    const internalValue = value ?? (property.dataType === "string" ? "" : value === 0 ? 0 : "");
-
-    const valueIsInfinity = internalValue === Infinity;
-    const inputType = !valueIsInfinity && property.dataType === "number" ? "number" : undefined;
-
-    const updateValue = useCallback((newValue: typeof internalValue | undefined) => {
-
-        if (!newValue) {
-            setValue(
-                null
-            );
-        } else if (inputType === "number") {
-            const numValue = parseFloat(newValue as string);
-            setValue(
-                numValue as T
-            );
-        } else {
-            setValue(
-                newValue
-            );
-        }
-    }, [inputType, setValue]);
+    const inputType = property.dataType === "number" ? "number" : undefined;
 
     return (
         <>
@@ -115,42 +93,10 @@ export function TextFieldBinding<T extends string | number>({
                 error={showError ? error : undefined}
                 inputClassName={error ? "text-error" : ""}/>
 
-            {((showError && error) ||
-                    (includeDescription && (property.description || property.longDescription)) ||
-                    allowInfinity) &&
-                <div className={"flex ml-3.5"}>
-
-                    <div className={"flex-grow"}>
-                        {showError && <FormHelperText
-                            error={true}>{error}</FormHelperText>}
-
-                        {includeDescription &&
-                            <FieldDescription property={property}/>}
-                    </div>
-
-                    {allowInfinity &&
-                        <FormControlLabel
-                            checked={valueIsInfinity}
-                            style={{ marginRight: 0 }}
-                            labelPlacement={"start"}
-                            control={
-                                <Switch
-                                    size={"small"}
-                                    type={"checkbox"}
-                                    onChange={(evt) => {
-                                        updateValue(
-                                            evt.target.checked ? Infinity as T : undefined);
-                                    }}/>
-                            }
-                            disabled={disabled}
-                            label={
-                                <Typography variant={"caption"}>
-                                    Set value to Infinity
-                                </Typography>
-                            }
-                        />
-                    }
-                </div>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
             {url && <Collapse
                 className="mt-1 ml-1"

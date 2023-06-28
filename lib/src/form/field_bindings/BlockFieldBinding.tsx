@@ -1,18 +1,18 @@
 import React, { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 
-import { FormControl, FormHelperText, MenuItem, Paper, Select } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
 import { FastField, FieldProps as FormikFieldProps, useFormikContext } from "formik";
 
-import { FieldDescription, FormikArrayContainer, LabelWithIcon } from "../components";
+import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 import { EnumValueConfig, FieldProps, FormContext, PropertyOrBuilder } from "../../types";
 import { ExpandablePanel, getDefaultValueFor, getIconForProperty } from "../../core";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
-import InputLabel from "../../components/InputLabel";
 import { paperMixin } from "../../styles";
+import { InputLabel } from "../../components";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -65,7 +65,8 @@ export function BlockFieldBinding<T extends Array<any>>({
     const title = (
         <LabelWithIcon icon={getIconForProperty(property)}
                        required={property.validation?.required}
-                       title={property.name}/>
+                       title={property.name}
+                       className={"ml-3.5"}/>
     );
 
     const firstOneOfKey = Object.keys(property.oneOf.properties)[0];
@@ -82,7 +83,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                                        }}/>;
     return (
 
-        <FormControl fullWidth error={showError}>
+        <>
 
             {!tableMode &&
                 <ExpandablePanel initiallyExpanded={expanded} title={title}>
@@ -91,14 +92,12 @@ export function BlockFieldBinding<T extends Array<any>>({
 
             {tableMode && body}
 
-            {includeDescription &&
-                <FieldDescription property={property}/>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-            {showError &&
-                typeof error === "string" &&
-                <FormHelperText error={true}>{error}</FormHelperText>}
-
-        </FormControl>
+        </>
     );
 }
 
@@ -189,7 +188,7 @@ function BlockEntry({
     };
 
     return (
-        <div className={clsx(paperMixin,"bg-transparent p-4 my-4 py-8")}>
+        <div className={clsx(paperMixin, "bg-transparent p-4 my-4 py-8")}>
 
             <FastField
                 required={true}
@@ -197,7 +196,7 @@ function BlockEntry({
             >
                 {(fieldProps: FormikFieldProps) =>
                     (
-                        <FormControl fullWidth size="small">
+                        <>
                             <InputLabel
                                 id={`${name}_${index}_select_label`}>
                                 <span>Type</span>
@@ -233,16 +232,13 @@ function BlockEntry({
                                         );
                                     })}
                             </Select>
-                        </FormControl>
+                        </>
                     )
                 }
             </FastField>
 
             {fieldProps && (
-                <FormControl fullWidth
-                             key={`form_control_${name}_${typeInternal}`}>
-                    <PropertyFieldBinding {...fieldProps}/>
-                </FormControl>
+                <PropertyFieldBinding {...fieldProps}/>
             )}
 
         </div>

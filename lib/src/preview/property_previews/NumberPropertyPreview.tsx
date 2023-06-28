@@ -1,8 +1,8 @@
 import React from "react";
 
 import { EnumValuesChip } from "../components/EnumValuesChip";
-import { resolveEnumValues } from "../../core";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
+import { enumToObjectEntries } from "../../core";
 
 /**
  * @category Preview components
@@ -15,7 +15,7 @@ export function NumberPropertyPreview({
 
     if (property.enumValues) {
         const enumKey = value;
-        const enumValues = resolveEnumValues(property.enumValues);
+        const enumValues = enumToObjectEntries(property.enumValues);
         if (!enumValues)
             return <>{value}</>;
         return <EnumValuesChip

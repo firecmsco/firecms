@@ -1,15 +1,16 @@
 import React from "react";
 import clsx from "clsx";
 
-import { FormControl, FormHelperText } from "@mui/material";
+import { FormHelperText } from "@mui/material";
 
 import { Entity, FieldProps } from "../../types";
 
 import { PropertyPreview } from "../../preview";
-import { FieldDescription, LabelWithIcon } from "../components";
+import { LabelWithIcon } from "../components";
 import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 import { getIconForProperty } from "../../core";
 import { paperMixin } from "../../styles";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 /**
  *
@@ -41,12 +42,13 @@ export function ReadOnlyFieldBinding({
 
     return (
 
-        <FormControl fullWidth error={showError}>
+        <>
 
             {!tableMode && <FormHelperText filled>
                 <LabelWithIcon icon={getIconForProperty(property)}
                                required={property.validation?.required}
-                               title={property.name}/>
+                               title={property.name}
+                               className={"ml-3.5"}/>
             </FormHelperText>}
 
             <div
@@ -62,13 +64,12 @@ export function ReadOnlyFieldBinding({
 
             </div>
 
-            {showError &&
-                typeof error === "string" &&
-                <FormHelperText error={true}>{error}</FormHelperText>}
 
-            {includeDescription &&
-                <FieldDescription property={property}/>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-        </FormControl>
+        </>
     );
 }

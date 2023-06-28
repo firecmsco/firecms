@@ -103,7 +103,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
         return (
             <div
-                className="flex h-screen w-screen"
+                className="flex h-screen w-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white "
                 style={{
                     paddingTop: "env(safe-area-inset-top)",
                     paddingLeft: "env(safe-area-inset-left)",

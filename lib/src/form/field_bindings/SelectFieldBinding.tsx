@@ -1,17 +1,14 @@
 import React, { useCallback } from "react";
 import clsx from "clsx";
 
-import { FormHelperText } from "@mui/material";
-
 import { EnumType, FieldProps } from "../../types";
-import { FieldDescription, LabelWithIcon } from "../components";
+import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty, Select } from "../../core";
-import InputLabel from "../../components/InputLabel";
-import { IconButton } from "../../components";
+import { IconButton, InputLabel } from "../../components";
 import ClearIcon from "@mui/icons-material/Clear";
-import { focusedMixin } from "../../styles";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -88,10 +85,10 @@ export function SelectFieldBinding<T extends EnumType>({
                 options={enumValues?.map((enumConfig) => String(enumConfig.id)) ?? []}
             />
 
-            {includeDescription &&
-                <FieldDescription property={property}/>}
-
-            {showError && <FormHelperText error={true}>{error}</FormHelperText>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
         </>
     );

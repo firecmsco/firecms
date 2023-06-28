@@ -32,7 +32,6 @@ interface TableCellProps {
     removePadding?: boolean;
     fullHeight?: boolean;
     selected?: boolean;
-    selectedRow: boolean;
     onSelect?: (cellRect: DOMRect | undefined) => void;
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
@@ -84,7 +83,6 @@ export const TableCell = React.memo<TableCellProps>(
                            disabled,
                            disabledTooltip,
                            saved,
-                           selectedRow,
                            error,
                            align,
                            allowScroll,
@@ -163,7 +161,7 @@ export const TableCell = React.memo<TableCellProps>(
                 const cellRect = ref && ref?.current?.getBoundingClientRect();
                 openPopup(cellRect);
             }
-        }, [ref]);
+        }, []);
 
         const onClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
             if (event.detail === 3) {
@@ -205,15 +203,15 @@ export const TableCell = React.memo<TableCellProps>(
         return (
             <div
                 className={clsx(
-                    "transition-colors duration-200 ease-in-out",
+                    "transition-colors duration-100 ease-in-out",
                     `flex relative h-full rounded-md overflow-hidden p-${p} border border-4  border-opacity-75`,
                     onHover && !disabled ? "bg-gray-50 dark:bg-gray-900" : "",
-                    selectedRow || saved ? "bg-gray-50 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75" : "",
+                    saved ? "bg-gray-100 bg-opacity-75 dark:bg-gray-800 dark:bg-opacity-75" : "",
                     !isSelected && !internalSaved && !showError ? "border-transparent" : "",
                     isSelected ? "bg-gray-50 dark:bg-gray-900" : "",
                     isSelected && !internalSaved ? "border-primary" : "",
                     internalSaved ? "border-green-500 " : "",
-                    showError ? "border-red-500" : "",
+                    showError ? "border-red-500" : ""
                 )}
                 style={{
                     justifyContent,
@@ -315,5 +313,4 @@ export const TableCell = React.memo<TableCellProps>(
         a.showExpandIcon === b.showExpandIcon &&
         a.removePadding === b.removePadding &&
         a.fullHeight === b.fullHeight &&
-        a.selected === b.selected &&
-        a.selectedRow === b.selectedRow) as React.FunctionComponent<TableCellProps>;
+        a.selected === b.selected) as React.FunctionComponent<TableCellProps>;

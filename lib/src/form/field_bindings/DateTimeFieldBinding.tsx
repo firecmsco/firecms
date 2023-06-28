@@ -7,11 +7,12 @@ import ClearIcon from "@mui/icons-material/Clear";
 
 import { FieldProps } from "../../types";
 
-import { FieldDescription, LabelWithIcon } from "../components";
+import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { fieldBackground, fieldBackgroundHover } from "../../core/util/field_colors";
 import { IconButton } from "../../components";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -101,8 +102,10 @@ export function DateTimeFieldBinding({
                 onChange={(dateValue) => setValue(dateValue)}
             />
 
-            {includeDescription &&
-                <FieldDescription property={property}/>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
         </>
     );

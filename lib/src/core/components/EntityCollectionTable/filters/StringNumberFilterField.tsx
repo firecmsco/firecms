@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, OutlinedInput, Select as MuiSelect } from "@mui/material";
+import { MenuItem, OutlinedInput, Select as MuiSelect } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
 import { EnumValuesChip } from "../../../../preview";
@@ -87,7 +87,6 @@ export function StringNumberFilterField({
 
         <div className="flex w-[440px] items-center">
             <div className={"w-[80px]"}>
-                <FormControl fullWidth>
                     <MuiSelect value={operation}
                                fullWidth
                                onChange={(evt: any) => {
@@ -100,12 +99,10 @@ export function StringNumberFilterField({
                         )}
 
                     </MuiSelect>
-                </FormControl>
             </div>
 
             <div className="flex-grow ml-4">
 
-                <FormControl fullWidth>
                     {!enumValues && <OutlinedInput
                         fullWidth
                         key={`filter_${name}`}
@@ -163,7 +160,6 @@ export function StringNumberFilterField({
                                 );
                             })}
                         </MuiSelect>}
-                </FormControl>
             </div>
 
         </div>

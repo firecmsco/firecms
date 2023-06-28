@@ -1,11 +1,6 @@
 import React from "react";
-import { Box, FormControl, FormHelperText, Paper } from "@mui/material";
-import {
-    FieldDescription,
-    FieldProps,
-    PropertyFieldBinding,
-    PropertyFieldBindingProps
-} from "firecms";
+import { FormControl, FormHelperText, Paper } from "@mui/material";
+import { FieldProps, PropertyFieldBinding, PropertyFieldBindingProps, FieldHelperText } from "firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 export default function CustomShapedArrayField({
@@ -49,12 +44,10 @@ export default function CustomShapedArrayField({
                 </div>
             </Paper>
 
-            {includeDescription &&
-                <FieldDescription property={property}/>}
-
-            {showError &&
-                typeof error === "string" &&
-                <FormHelperText>{error}</FormHelperText>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
         </FormControl>
 

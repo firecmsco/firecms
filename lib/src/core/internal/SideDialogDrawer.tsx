@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 
-import { Modal, Paper, Slide, useTheme } from "@mui/material";
+import { Modal, Slide, useTheme } from "@mui/material";
 import { paperMixin } from "../../styles";
 
 export interface SideDialogDrawerProps {

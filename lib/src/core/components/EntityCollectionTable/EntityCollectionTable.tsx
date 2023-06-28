@@ -28,12 +28,12 @@ import {
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
 import { CellRendererParams, TableColumn, VirtualTable } from "../Table";
 import {
+    enumToObjectEntries,
     getIconForProperty,
     getPropertyInPath,
     getResolvedPropertyInPath,
     getValueInPath,
     resolveCollection,
-    resolveEnumValues,
     resolveProperty
 } from "../../util";
 import { getRowHeight } from "../Table/common";
@@ -375,7 +375,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     focused={focused}
                     value={value}
                     selected={false}
-                    selectedRow={selectedEntityIds?.includes(entity.id) ?? false}
                     disabled={true}
                     align={"left"}
                     allowScroll={false}
@@ -407,7 +406,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         return ({
                             key: key as string,
                             align: getCellAlignment(property),
-                            icon: (hoverOrOpen) => getIconForProperty(property, hoverOrOpen ? undefined : "disabled", "small"),
+                            icon: (hoverOrOpen) => getIconForProperty(property, "small"),
                             title: property.name ?? key as string,
                             sortable: forceFilter ? Object.keys(forceFilter).includes(key) : true,
                             filter: !disabledFilterChange && filterable,
@@ -465,6 +464,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     return <EntityCollectionRowActions entity={props.rowData}
                                                        width={column.width}
                                                        frozen={column.frozen}
+                                                       isSelected={false}
                                                        size={size}/>;
             } else if (additionalFieldsMap[columnKey]) {
                 return additionalCellRenderer(props);
@@ -528,6 +528,9 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             hoverRow={hoverRow}
                             checkFilterCombination={checkFilterCombination}
                             createFilterField={createFilterField}
+                            rowClassName={useCallback((entity: Entity<M>) => {
+                                return selectedEntityIds?.includes(entity.id) ? "bg-gray-100 bg-opacity-75 dark:bg-gray-800 dark:bg-opacity-75" : "";
+                            }, [selectedEntityIds])}
                         />
                     </div>
 
@@ -686,7 +689,7 @@ function createFilterField({
                                      setPopupOpen={setPopupOpen}/>;
     } else if (baseProperty.dataType === "number" || baseProperty.dataType === "string") {
         const name = baseProperty.name;
-        const enumValues = baseProperty.enumValues ? resolveEnumValues(baseProperty.enumValues) : undefined;
+        const enumValues = baseProperty.enumValues ? enumToObjectEntries(baseProperty.enumValues) : undefined;
         return <StringNumberFilterField value={filterValue}
                                         setValue={setFilterValue}
                                         name={id as string}

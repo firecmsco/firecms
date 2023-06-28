@@ -1,31 +1,7 @@
+
 import React from "react";
-import { styled } from "@mui/material/styles";
-import { Checkbox, FormControlLabel, Theme } from "@mui/material";
 import { TableWhereFilterOp } from "../../Table";
-
-const PREFIX = "BooleanFilterField";
-
-const classes = {
-    formControl: `${PREFIX}-formControl`,
-    label: `${PREFIX}-label`
-};
-
-const Root = styled(
-    "div"
-)((
-    { theme }: {
-        theme: Theme
-    }
-) => ({
-    [`& .${classes.formControl}`]: {
-        width: "200px"
-    },
-
-    [`& .${classes.label}`]: {
-        width: "100%",
-        height: "100%"
-    }
-}));
+import { Checkbox } from "../../../../components/Checkbox";
 
 interface BooleanFieldProps {
     name: string,
@@ -57,28 +33,30 @@ export function BooleanFilterField({
     const valueSet = !!value;
 
     return (
-        <Root>
-            <FormControlLabel
-                className={classes.formControl}
-                labelPlacement={"end"}
-                checked={valueSet && valueSetToTrue}
-                control={
-                    <Checkbox
-                        key={`filter-${name}`}
-                        indeterminate={!valueSet}
-                        onChange={(evt) => {
-                            if (valueSetToTrue) {
-                                updateFilter(false);
-                            } else if (!valueSet) {
-                                updateFilter(true);
-                            } else {
-                                updateFilter(undefined);
-                            }
-                        }}
-                    />
-                }
-                label={!valueSet ? "No filter" : (valueSetToTrue ? `${title} is true` : `${title} is false`)}
-            />
-        </Root>
+        <div className="w-200px">
+            <label htmlFor={`filter-${name}`} className="flex justify-center items-center space-x-4">
+                <span className="text-sm">
+                    {!valueSet
+                        ? "No filter"
+                        : valueSetToTrue
+                            ? `${title} is true`
+                            : `${title} is false`}
+                </span>
+                <Checkbox
+                    key={`filter-${name}`}
+                    checked={valueSet && valueSetToTrue}
+                    indeterminate={!valueSet}
+                    onCheckedChange={(checked) => {
+                        if (valueSetToTrue) {
+                            updateFilter(false);
+                        } else if (!valueSet) {
+                            updateFilter(true);
+                        } else {
+                            updateFilter(undefined);
+                        }
+                    }}
+                />
+            </label>
+        </div>
     );
 }

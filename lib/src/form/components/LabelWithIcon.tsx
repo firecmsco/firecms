@@ -23,7 +23,7 @@ export function LabelWithIcon({
                               }: LabelWithIconProps) {
     return (
         <span
-            className={`inline-flex items-center mb-0.5 ${small ? "gap-1" : "gap-1.5"} ${className ?? ""}`}>
+            className={`inline-flex items-center my-0.5  ${small ? "gap-1" : "gap-1.5"} ${className ?? ""}`}>
 
             {icon}
 

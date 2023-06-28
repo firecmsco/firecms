@@ -1,5 +1,10 @@
 import React, { useCallback } from "react";
 
+import "typeface-rubik";
+// import "@fontsource/ibm-plex-sans";
+import "@fontsource/ibm-plex-mono";
+import "@fontsource/roboto"
+
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
@@ -22,9 +27,6 @@ import { showcaseCollection } from "./collections/showcase_collection";
 import { textSearchController } from "./text_search";
 
 import { customCollectionOverrideHandler } from "./collections/custom_collection_resolver";
-import "typeface-rubik";
-import "typeface-open-sans";
-import "@fontsource/ibm-plex-mono";
 
 import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";

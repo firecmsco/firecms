@@ -1,4 +1,10 @@
-import {DefaultSelectedViewBuilder, DefaultSelectedViewParams, EntityCollection, PropertiesOrBuilders, PropertyOrBuilder } from "../../types";
+import {
+    DefaultSelectedViewBuilder,
+    DefaultSelectedViewParams,
+    EntityCollection,
+    PropertiesOrBuilders,
+    PropertyOrBuilder
+} from "../../types";
 import { mergeDeep } from "./objects";
 import { isPropertyBuilder } from "./entities";
 

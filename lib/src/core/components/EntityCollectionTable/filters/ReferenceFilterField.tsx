@@ -1,4 +1,4 @@
-import { FormControl, MenuItem, Select as MuiSelect } from "@mui/material";
+import { MenuItem, Select as MuiSelect } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { TableWhereFilterOp } from "../../Table";
 import { Entity, EntityCollection, EntityReference } from "../../../../types";
@@ -147,39 +147,34 @@ export function ReferenceFilterField({
 
         <div className="flex w-[440px] flex-row">
             <div className="w-[120px]">
-                <FormControl fullWidth>
-                    <MuiSelect value={operation}
-                               fullWidth
-                               onChange={(evt: any) => {
-                                   updateFilter(evt.target.value, internalValue);
-                               }}>
-                        {possibleOperations.map((op) =>
-                            <MenuItem
-                                key={`filter_op_${name}_${op}`}
-                                value={op}>{operationLabels[op]}</MenuItem>
-                        )}
+                <MuiSelect value={operation}
+                           fullWidth
+                           onChange={(evt: any) => {
+                               updateFilter(evt.target.value, internalValue);
+                           }}>
+                    {possibleOperations.map((op) =>
+                        <MenuItem
+                            key={`filter_op_${name}_${op}`}
+                            value={op}>{operationLabels[op]}</MenuItem>
+                    )}
 
-                    </MuiSelect>
-                </FormControl>
+                </MuiSelect>
             </div>
 
-            <div className="flex-grow ml-4">
+            <div className="flex-grow ml-4 h-full">
 
-                <FormControl fullWidth
-                             className="h-full">
-                    {internalValue && Array.isArray(internalValue) && <div>
-                        {internalValue.map((ref, index) => buildEntry(ref))}
-                    </div>}
-                    {internalValue && !Array.isArray(internalValue) && <div>
-                        {buildEntry(internalValue)}
-                    </div>}
-                    {(!internalValue || (Array.isArray(internalValue) && internalValue.length === 0)) &&
-                        <Button onClick={doOpenDialog}
-                                className="h-full">
-                            {multiple ? "Select references" : "Select reference"}
-                        </Button>
-                    }
-                </FormControl>
+                {internalValue && Array.isArray(internalValue) && <div>
+                    {internalValue.map((ref, index) => buildEntry(ref))}
+                </div>}
+                {internalValue && !Array.isArray(internalValue) && <div>
+                    {buildEntry(internalValue)}
+                </div>}
+                {(!internalValue || (Array.isArray(internalValue) && internalValue.length === 0)) &&
+                    <Button onClick={doOpenDialog}
+                            className="h-full">
+                        {multiple ? "Select references" : "Select reference"}
+                    </Button>
+                }
             </div>
 
         </div>

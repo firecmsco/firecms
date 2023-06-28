@@ -1,11 +1,11 @@
 import React, { useCallback, useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
-import { FormControl, FormHelperText } from "@mui/material";
-import { FieldDescription, FormikArrayContainer, LabelWithIcon } from "../components";
+import { FormikArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel } from "../../core/components/ExpandablePanel";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { getIconForProperty } from "../../core";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 /**
  * Generic array field that allows reordering and renders the child property
@@ -74,11 +74,12 @@ export function RepeatFieldBinding<T extends Array<any>>({
 
     const title = (<LabelWithIcon icon={getIconForProperty(property)}
                                   required={property.validation?.required}
-                                  title={property.name}/>);
+                                  title={property.name}
+                                  className={"ml-3.5"}/>);
 
     return (
 
-        <FormControl fullWidth error={showError}>
+        <>
 
             {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
                                             title={title}>
@@ -87,14 +88,11 @@ export function RepeatFieldBinding<T extends Array<any>>({
 
             {tableMode && arrayContainer}
 
-            {includeDescription &&
-                <FieldDescription property={property}/>
-            }
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-            {showError && typeof error === "string" &&
-                <FormHelperText error={true}>{error}</FormHelperText>}
-
-        </FormControl>
-    )
-        ;
+        </>
+    );
 }

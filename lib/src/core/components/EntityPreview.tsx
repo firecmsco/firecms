@@ -150,7 +150,7 @@ export function EntityPreview<M extends Record<string, any>>(
 
                                         <TableCell padding="none"
                                                    className={classes.iconCell}>
-                                            {getIconForProperty(property, "disabled", "small")}
+                                            {getIconForProperty(property, "small")}
                                         </TableCell>
 
                                         <TableCell

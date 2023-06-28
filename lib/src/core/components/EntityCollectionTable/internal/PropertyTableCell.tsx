@@ -84,9 +84,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             setFocused,
             select,
             setPopupCell,
-            selectedEntityIds
         } = useEntityCollectionTableController();
-        const selectedRow = selectedEntityIds?.includes(entity.id) ?? false;
 
         const selected = selectedCell?.columnIndex === columnIndex &&
             selectedCell?.entity.path === entity.path &&
@@ -230,7 +228,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 width={width}
                 focused={focused}
                 saved={saved}
-                selectedRow={selectedRow}
                 key={`${propertyKey}_${entity.path}_${entity.id}`}
                 value={internalValue}
                 align={align ?? "left"}
@@ -424,7 +421,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 focused={focused}
                 onSelect={onSelect}
                 selected={selected}
-                selectedRow={selectedRow}
                 disabled={disabled || readOnlyProperty}
                 disabledTooltip={disabledTooltip ?? "Disabled"}
                 removePadding={removePadding}

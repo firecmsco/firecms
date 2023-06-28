@@ -103,7 +103,7 @@ export function UnsavedChangesDialog({
 
             </div>
             <DialogActions>
-                <Button onClick={handleCancel} autoFocus> Cancel </Button>
+                <Button variant="text" onClick={handleCancel} autoFocus> Cancel </Button>
                 <Button onClick={handleOk}> Ok </Button>
             </DialogActions>
         </Dialog>

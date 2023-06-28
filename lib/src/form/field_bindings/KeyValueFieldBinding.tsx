@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
-import { FormControl, MenuItem } from "@mui/material";
+import { MenuItem } from "@mui/material";
 
 import Menu from "@mui/material/Menu";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -15,10 +15,11 @@ import {
     getIconForProperty,
     TextInput
 } from "../../core";
-import { FieldDescription, LabelWithIcon } from "../components";
+import { LabelWithIcon } from "../components";
 import Typography from "../../components/Typography";
 import { BooleanSwitchWithLabel, IconButton } from "../../components";
 import { Button } from "../../components/Button";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -34,6 +35,7 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
                                                                         propertyKey,
                                                                         value,
                                                                         showError,
+                                                                        error,
                                                                         disabled,
                                                                         property,
                                                                         setValue,
@@ -43,6 +45,8 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
                                                                         autoFocus,
                                                                         context
                                                                     }: FieldProps<T>) {
+
+    console.log("KeyValueFieldBinding", propertyKey, value);
 
     const expanded = (property.expanded === undefined ? true : property.expanded) || autoFocus;
 
@@ -57,19 +61,24 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
     const title = <LabelWithIcon
         icon={getIconForProperty(property)}
         required={property.validation?.required}
-        title={property.name}/>;
+        title={property.name}
+        className={"ml-3.5"}/>;
 
     return (
-        <FormControl fullWidth error={showError}>
+        <>
 
             {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
-                                            title={title}>{mapFormView}</ExpandablePanel>}
+                                            title={title}
+                                            contentClassName={"p-2"}>{mapFormView}</ExpandablePanel>}
 
             {tableMode && mapFormView}
 
-            {includeDescription && <FieldDescription property={property}/>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-        </FormControl>
+        </>
     );
 }
 
@@ -422,6 +431,7 @@ function MapEditView<T extends Record<string, any>>({
             dataType: getDataType(value[key]) ?? "string"
         }])
     );
+    console.log(internalState);
 
     useEffect(() => {
         const currentKeys = internalState.map(([id, { key }]) => key);
@@ -532,7 +542,7 @@ function MapEditView<T extends Record<string, any>>({
             <Button variant={"text"}
                     size={"small"}
                     color="primary"
-                    fullWidth={false}
+                    className="w-full"
                     disabled={disabled}
                     startIcon={<AddIcon/>}
                     onClick={() => {
@@ -558,7 +568,7 @@ function getRandomId() {
 }
 
 function getDataType(value: any): DataType | undefined {
-    if (typeof value === "string") {
+    if (typeof value === "string" || value === null) {
         return "string";
     } else if (typeof value === "number") {
         return "number";

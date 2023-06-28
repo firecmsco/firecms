@@ -1,11 +1,6 @@
 import React, { useEffect } from "react";
-import { FormControl, FormHelperText, Paper } from "@mui/material";
-import {
-    buildProperty,
-    FieldDescription,
-    FieldProps,
-    PropertyFieldBinding
-} from "firecms";
+import { FormControl, Paper } from "@mui/material";
+import { buildProperty, FieldProps, PropertyFieldBinding, FieldHelperText } from "firecms";
 
 /**
  * Simple map field to test validation of custom fields
@@ -43,11 +38,11 @@ export const CustomField = ({
                 <PropertyFieldBinding {...fieldProps}/>
             </Paper>
 
-            {includeDescription && <FieldDescription property={property} />}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-            {showError && typeof error === "string" && (
-                <FormHelperText>{error}</FormHelperText>
-            )}
         </FormControl>
     );
 };

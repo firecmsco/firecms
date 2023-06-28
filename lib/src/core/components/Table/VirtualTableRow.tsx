@@ -14,7 +14,8 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
                                     onRowClick,
                                     size,
                                     style,
-                                    hoverRow
+                                    hoverRow,
+                                    rowClassName
                                 }: VirtualTableRowProps<T>) {
 
         const onClick = useCallback((event: React.SyntheticEvent) => onRowClick
@@ -25,11 +26,11 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
             })
             : undefined, [onRowClick, rowData, rowIndex]);
 
-
         return (
             <div
                 className={clsx(
                     "flex min-w-full text-sm border-b border-gray-200 dark:border-gray-800 border-opacity-40 dark:border-opacity-40",
+                    rowClassName ? rowClassName(rowData) : "",
                     {
                         "hover:bg-opacity-95": hoverRow,
                         "cursor-pointer": onRowClick
@@ -41,9 +42,6 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
                     height: getRowHeight(size),
                     width: "fit-content"
                 }}
-                // onMouseEnter={setOnHoverTrue}
-                // onMouseMove={setOnHoverTrue}
-                // onMouseLeave={setOnHoverFalse}
             >
                 {children}
             </div>

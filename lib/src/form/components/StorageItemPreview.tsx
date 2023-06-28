@@ -8,7 +8,7 @@ import { PreviewSize, PropertyPreview } from "../../preview";
 
 import { ErrorBoundary } from "../../core";
 import { IconButton } from "../../components";
-import { focusedMixin, paperMixin } from "../../styles";
+import { paperMixin } from "../../styles";
 
 interface StorageItemPreviewProps {
     name: string;
@@ -37,7 +37,7 @@ export function StorageItemPreview({
 
             {!disabled &&
                 <div
-                    className="absolute rounded-full -top-2 -right-2 z-10 bg-white">
+                    className="absolute rounded-full -top-2 -right-2 z-10 bg-white dark:bg-gray-900">
 
                     <Tooltip
                         title="Remove">

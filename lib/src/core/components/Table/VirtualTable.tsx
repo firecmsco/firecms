@@ -98,7 +98,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              loading,
                                                              cellRenderer,
                                                              hoverRow,
-                                                             createFilterField
+                                                             createFilterField,
+                                                             rowClassName
                                                          }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
@@ -269,7 +270,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                         onFilterUpdate: onFilterUpdateInternal,
                         sortByProperty,
                         hoverRow: hoverRow ?? false,
-                        createFilterField
+                        createFilterField,
+                        rowClassName
                     }}>
 
                     <MemoizedList
@@ -319,7 +321,8 @@ function MemoizedList({
                   columns,
                   size = "m",
                   cellRenderer,
-                  hoverRow
+                  hoverRow,
+                  rowClassName
               }) => {
                 const rowData = data && data[index];
                 return (
@@ -330,6 +333,7 @@ function MemoizedList({
                         onRowClick={onRowClick}
                         columns={columns}
                         hoverRow={hoverRow}
+                        rowClassName={rowClassName}
                         style={{
                             ...style,
                             top: `calc(${style.top}px + 48px)`

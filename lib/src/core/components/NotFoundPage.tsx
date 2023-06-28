@@ -17,6 +17,7 @@ export function NotFoundPage() {
                     This page does not exist or you may not have access to it
                 </Typography>
                 <Button
+                    variant={"text"}
                     component={ReactLink}
                     to={"/"}>Back to home</Button>
             </div>

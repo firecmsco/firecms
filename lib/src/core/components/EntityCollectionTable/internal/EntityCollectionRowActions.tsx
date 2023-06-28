@@ -1,22 +1,13 @@
-import { CollectionSize, Entity } from "../../../../types";
-
 import React, { MouseEvent, useCallback } from "react";
-import {
-    alpha,
-    Checkbox,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Skeleton,
-    Tooltip,
-    useMediaQuery,
-    useTheme
-} from "@mui/material";
+import clsx from "clsx";
+
+import { CollectionSize, Entity } from "../../../../types";
+import { ListItemIcon, ListItemText, Menu, MenuItem, Skeleton, Tooltip, useTheme } from "@mui/material";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
 import Typography from "../../../../components/Typography";
 import { IconButton } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
+import { Checkbox } from "../../../../components/Checkbox";
 
 /**
  *
@@ -53,7 +44,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                                                                                   width: number,
                                                                                   frozen?: boolean,
                                                                                   size: CollectionSize,
-                                                                                  isSelected?: boolean,
+                                                                                  isSelected: boolean,
                                                                                   selectionEnabled?: boolean,
                                                                                   toggleEntitySelection?: (selectedEntity: Entity<M>) => void
                                                                                   onEditClicked?: (selectedEntity: Entity<M>) => void,
@@ -80,11 +71,9 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
         setAnchorEl(null);
     }, [setAnchorEl]);
 
-    const onCheckboxChange = useCallback((event: React.ChangeEvent) => {
+    const onCheckedChange = useCallback((checked: boolean) => {
         if (toggleEntitySelection)
             toggleEntitySelection(entity);
-        event.preventDefault();
-        event.stopPropagation();
     }, [entity, toggleEntitySelection]);
 
     const onDeleteClick = useCallback((event: MouseEvent) => {
@@ -110,14 +99,15 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
     return (
         <div
             onClick={onClick}
-            className={`h-full flex items-center justify-center flex-col ${frozen ? "sticky" : ""} ${frozen ? "left-0" : ""} bg-opacity-96 z-10`}
+            className={clsx(
+                "h-full flex items-center justify-center flex-col bg-gray-50 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 z-10",
+                frozen ? "sticky left-0" : "",
+            )}
             style={{
                 width,
-                background: theme.palette.mode === "dark" ? alpha(theme.palette.background.default, 0.96) : alpha(theme.palette.background.default, 0.96),
                 position: frozen ? "sticky" : "initial",
                 left: frozen ? 0 : "initial",
                 contain: "strict"
-                // backdropFilter: frozen ? "blur(8px)" : undefined,
             }}>
 
             {(editEnabled || deleteEnabled || selectionEnabled) &&
@@ -141,7 +131,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                             <Checkbox
                                 size={largeLayout ? "medium" : "small"}
                                 checked={isSelected}
-                                onChange={onCheckboxChange}
+                                onCheckedChange={onCheckedChange}
                             />
                         </Tooltip>}
 

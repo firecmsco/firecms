@@ -168,7 +168,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     }
 
     const dialogTitle = multipleEntities
-        ? `${resolvedCollection.name}: Confirm multiple delete?`
+        ? <><b>{resolvedCollection.name}</b>: Confirm multiple delete?</>
         : `Would you like to delete this ${resolvedCollection.singularName ?? resolvedCollection.name}?`;
 
     return (
@@ -178,7 +178,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
             onOpenChange={(open) => !open ? onClose() : undefined}
             {...other}
         >
-            <div>
+            <div className={"p-8"}>
                 {dialogTitle}
             </div>
 

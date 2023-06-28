@@ -1,23 +1,14 @@
 import React, { useCallback } from "react";
-import {
-    Checkbox,
-    FormControl,
-    FormHelperText,
-    ListItemText,
-    MenuItem,
-    Select as MuiSelect
-} from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
 import { EnumType, FieldProps, ResolvedProperty } from "../../types";
-import { FieldDescription, LabelWithIcon } from "../components";
+import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { enumToObjectEntries, isEnumValueDisabled } from "../../core/util/enums";
-import { ArrayEnumPreview, EnumValuesChip } from "../../preview";
-import { ErrorView, getIconForProperty } from "../../core";
-import InputLabel from "../../components/InputLabel";
-import { IconButton } from "../../components";
+import { EnumValuesChip } from "../../preview";
+import { enumToObjectEntries, getIconForProperty, Select } from "../../core";
+import { IconButton, InputLabel } from "../../components";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -38,7 +29,7 @@ export function ArrayEnumSelectBinding({
                                            autoFocus
                                        }: FieldProps<EnumType[], any, any>) {
 
-    const of = property.of;
+    const of: ResolvedProperty<any> | ResolvedProperty<any>[] = property.of;
     if (!of) {
         throw Error("Using wrong component ArrayEnumSelect");
     }
@@ -51,7 +42,7 @@ export function ArrayEnumSelectBinding({
         throw Error("Field misconfiguration: array field of type string or number");
     }
 
-    const enumValues = of.enumValues;
+    const enumValues = enumToObjectEntries(of.enumValues);
     if (!enumValues) {
         console.error(property);
         throw Error("Field misconfiguration: array field of type string or number needs to have enumValues");
@@ -67,85 +58,114 @@ export function ArrayEnumSelectBinding({
         setValue(null);
     }, [setValue]);
 
-    if (enumValues instanceof Error) {
-        return <ErrorView error={enumValues.message}/>;
-    }
-
     const validValue = !!value && Array.isArray(value);
+
+    console.log("ddd", value);
     return (
-        <FormControl
-            fullWidth
-            required={property.validation?.required}
-            error={showError}
-            className="MuiInputLabel-root mt-0.5 ml-0.5 MuiInputLabel-shrink mt-2"
-        >
+        <div className="mt-0.5 ml-0.5  mt-2">
 
             <InputLabel id={`${propertyKey}-multiselect-label`}>
                 <LabelWithIcon icon={getIconForProperty(property)}
                                required={property.validation?.required}
-                               title={property.name}/>
+                               title={property.name}
+                               className={"ml-3.5"}/>
             </InputLabel>
 
-            <MuiSelect
+            <Select
                 multiple
-                className="min-h-[64px] rounded-[var(--rounded)]"
-                variant={"filled"}
-                labelId={`${propertyKey}-multiselect-label`}
-                value={validValue ? value.map(v => v.toString()) : []}
-                autoFocus={autoFocus}
+                // className="min-h-[64px] rounded-[var(--rounded)]"
+                value={validValue ? value.map((v) => v.toString()) : []}
                 disabled={disabled}
-                disableUnderline={true}
                 endAdornment={
-                    of.clearable && <IconButton
-                        className="absolute top-3 right-8"
-                        onClick={handleClearClick}>
-                        <ClearIcon/>
-                    </IconButton>
+                    of.clearable ? (
+                        <IconButton className="absolute top-3 right-8" onClick={handleClearClick}>
+                            <ClearIcon/>
+                        </IconButton>
+                    ) : null
                 }
-                onChange={(evt: any) => {
-                    let newValue;
-                    if ((of as ResolvedProperty)?.dataType === "number")
-                        newValue = evt.target.value ? evt.target.value.map((e: any) => parseFloat(e)) : [];
-                    else
-                        newValue = evt.target.value;
-                    return setValue(
-                        newValue
-                    );
+                onValueChange={(updatedValue: string | string[]) => {
+                    let newValue: EnumType[] | null;
+                    if (typeof updatedValue === "string") {
+                        throw Error("Unexpected string value in ArrayEnumSelectBinding, should be an array");
+                    }
+                    if (of && (of as ResolvedProperty)?.dataType === "number") {
+                        newValue = updatedValue ? (updatedValue as string[]).map((e) => parseFloat(e)) : [];
+                    } else {
+                        newValue = updatedValue;
+                    }
+                    console.log("updatedValue", updatedValue, newValue)
+                    return setValue(newValue);
                 }}
-                renderValue={(selected: any) => (
-                    <ArrayEnumPreview value={selected}
-                                      name={propertyKey}
-                                      enumValues={enumValues}
-                                      size={"medium"}/>
-                )}>
+                placeholder={`${propertyKey}-multiselect-label`}
+                options={enumValues.map((enumValue) => enumValue.id.toString())}
+                renderOption={(option: string) => (
+                    <EnumValuesChip
+                        enumKey={option}
+                        enumValues={enumValues}
+                        small={false}/>
+                )}
+            />
 
-                {enumToObjectEntries(enumValues)
-                    .map((enumConfig) => {
-                        const enumKey = enumConfig.id;
-                        const checked = validValue && value.map(v => v.toString()).includes(enumKey.toString());
-                        return (
-                            <MenuItem
-                                key={`form-select-${propertyKey}-${enumKey}`}
-                                value={enumKey}
-                                disabled={isEnumValueDisabled(enumConfig)}
-                                dense={true}>
-                                <Checkbox checked={checked}/>
-                                <ListItemText primary={
-                                    <EnumValuesChip
-                                        enumKey={enumKey}
-                                        enumValues={enumValues}
-                                        small={true}/>
-                                }/>
-                            </MenuItem>
-                        );
-                    })}
-            </MuiSelect>
+            {/*<MuiSelect*/}
+            {/*    multiple*/}
+            {/*    className="min-h-[64px] rounded-[var(--rounded)]"*/}
+            {/*    variant={"filled"}*/}
+            {/*    labelId={`${propertyKey}-multiselect-label`}*/}
+            {/*    value={validValue ? value.map(v => v.toString()) : []}*/}
+            {/*    autoFocus={autoFocus}*/}
+            {/*    disabled={disabled}*/}
+            {/*    disableUnderline={true}*/}
+            {/*    endAdornment={*/}
+            {/*        of.clearable && <IconButton*/}
+            {/*            className="absolute top-3 right-8"*/}
+            {/*            onClick={handleClearClick}>*/}
+            {/*            <ClearIcon/>*/}
+            {/*        </IconButton>*/}
+            {/*    }*/}
+            {/*    onChange={(evt: any) => {*/}
+            {/*        let newValue;*/}
+            {/*        if ((of as ResolvedProperty)?.dataType === "number")*/}
+            {/*            newValue = evt.target.value ? evt.target.value.map((e: any) => parseFloat(e)) : [];*/}
+            {/*        else*/}
+            {/*            newValue = evt.target.value;*/}
+            {/*        return setValue(*/}
+            {/*            newValue*/}
+            {/*        );*/}
+            {/*    }}*/}
+            {/*    renderValue={(selected: any) => (*/}
+            {/*        <ArrayEnumPreview value={selected}*/}
+            {/*                          name={propertyKey}*/}
+            {/*                          enumValues={enumValues}*/}
+            {/*                          size={"medium"}/>*/}
+            {/*    )}>*/}
 
-            {includeDescription &&
-                <FieldDescription property={property}/>}
+            {/*    {enumToObjectEntries(enumValues)*/}
+            {/*        .map((enumConfig) => {*/}
+            {/*            const enumKey = enumConfig.id;*/}
+            {/*            const checked = validValue && value.map(v => v.toString()).includes(enumKey.toString());*/}
+            {/*            return (*/}
+            {/*                <MenuItem*/}
+            {/*                    key={`form-select-${propertyKey}-${enumKey}`}*/}
+            {/*                    value={enumKey}*/}
+            {/*                    disabled={isEnumValueDisabled(enumConfig)}*/}
+            {/*                    dense={true}>*/}
+            {/*                    <Checkbox checked={checked}/>*/}
+            {/*                    <ListItemText primary={*/}
+            {/*                        <EnumValuesChip*/}
+            {/*                            enumKey={enumKey}*/}
+            {/*                            enumValues={enumValues}*/}
+            {/*                            small={true}/>*/}
+            {/*                    }/>*/}
+            {/*                </MenuItem>*/}
+            {/*            );*/}
+            {/*        })}*/}
+            {/*</MuiSelect>*/}
 
-            {showError && <FormHelperText error={true}>{error}</FormHelperText>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-        </FormControl>
+        </div>
     );
 }

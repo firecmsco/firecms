@@ -1,11 +1,11 @@
 import React from "react";
-import { FormHelperText } from "@mui/material";
 
 import { FieldProps } from "../../types";
-import { FieldDescription, LabelWithIcon } from "../components";
+import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { BooleanSwitchWithLabel } from "../../components/BooleanSwitchWithLabel";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 type SwitchFieldProps = FieldProps<boolean>;
 
@@ -50,15 +50,10 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                 small={false}
             />
 
-            {((showError && error) ||
-                    (includeDescription && (property.description || property.longDescription))) &&
-                <div className={"flex ml-3.5"}>
-                    {includeDescription &&
-                        <FieldDescription property={property}/>}
-
-                    {showError &&
-                        <FormHelperText error={true}>{error}</FormHelperText>}
-                </div>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
         </>
 
     );

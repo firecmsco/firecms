@@ -1,6 +1,6 @@
 import React, { useCallback } from "react";
 
-import { FormControl, FormHelperText, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import {
     ArrayProperty,
     Entity,
@@ -11,7 +11,7 @@ import {
 } from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
-import { FieldDescription, LabelWithIcon } from "../components";
+import { LabelWithIcon } from "../components";
 
 import { getIconForProperty, isReadOnly } from "../../core";
 import clsx from "clsx";
@@ -21,7 +21,13 @@ import { StorageFieldItem, useStorageUploadController } from "../../core/util/us
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
 import Typography from "../../components/Typography";
-import { fieldBackgroundMixin, focusedMixin } from "../../styles";
+import {
+    fieldBackgroundDisabledMixin,
+    fieldBackgroundHoverMixin,
+    fieldBackgroundMixin,
+    focusedMixin
+} from "../../styles";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent fieldBackground min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-gray"
@@ -93,16 +99,13 @@ export function StorageUploadFieldBinding({
 
     return (
 
-        <FormControl fullWidth
-                     required={property.validation?.required}
-                     error={showError}>
+        <>
 
             {!tableMode &&
-                <FormHelperText filled>
-                    <LabelWithIcon icon={getIconForProperty(property)}
-                                   required={property.validation?.required}
-                                   title={property.name}/>
-                </FormHelperText>}
+                <LabelWithIcon icon={getIconForProperty(property)}
+                               required={property.validation?.required}
+                               title={property.name}
+                               className={"ml-3.5"}/>}
 
             <StorageUpload
                 value={internalValue}
@@ -119,12 +122,12 @@ export function StorageUploadFieldBinding({
                 storage={storage}
                 multipleFilesSupported={multipleFilesSupported}/>
 
-            {includeDescription &&
-                <FieldDescription property={property}/>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-            {showError && <FormHelperText error={true}>{error}</FormHelperText>}
-
-        </FormControl>
+        </>
     );
 }
 
@@ -200,6 +203,7 @@ function FileDropComponent({
             {...getRootProps()}
             className={clsx(
                 fieldBackgroundMixin,
+                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 dropZoneClasses,
                 multipleFilesSupported && internalValue.length ? "" : "flex",
                 focusedMixin,

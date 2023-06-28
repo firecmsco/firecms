@@ -1,10 +1,6 @@
 import React from "react";
-import { Button, TextField } from "@mui/material";
-import {
-    FieldDescription,
-    FieldProps,
-    useModeController
-} from "firecms";
+import { TextField } from "@mui/material";
+import { FieldProps, FieldHelperText, useModeController } from "firecms";
 
 interface CustomColorTextFieldProps {
     color: string
@@ -17,6 +13,8 @@ export default function CustomColorTextField({
                                                  setFieldValue,
                                                  customProps,
                                                  touched,
+                                                 includeDescription,
+                                                 showError,
                                                  error,
                                                  isSubmitting,
                                                  context, // the rest of the entity values here
@@ -44,7 +42,10 @@ export default function CustomColorTextField({
                        fullWidth
                        variant={"filled"}/>
 
-            <FieldDescription property={property}/>
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
         </>
 
     );

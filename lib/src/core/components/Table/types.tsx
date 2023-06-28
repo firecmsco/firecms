@@ -18,6 +18,7 @@ export type VirtualTableRowProps<T> = {
     children: React.ReactNode[];
     columns: TableColumn[];
     hoverRow?: boolean;
+    rowClassName?: (rowData: T) => string | undefined;
 };
 
 export type VirtualTableContextProps<T extends any> = {
@@ -36,4 +37,5 @@ export type VirtualTableContextProps<T extends any> = {
     customView?: React.ReactNode,
     hoverRow: boolean;
     createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
+    rowClassName?: (rowData: T) => string | undefined;
 };

@@ -45,6 +45,7 @@ export const Dialog = ({
                 <DialogPrimitive.Content
                     {...props}
                     className={clsx(paperMixin,
+                        "text-gray-900 dark:text-white",
                         "max-h-[80vh] z-20 shadow-xl fixed top-1/2 left-1/2 transform-gpu -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-lg max-h-screen-90",
                         "overflow-y-auto ease-in-out duration-200",
                         displayed && open ? "opacity-100" : "opacity-0"

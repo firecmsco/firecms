@@ -2,10 +2,10 @@ import React from "react";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
 
-import { CheckIcon, ChevronDownIcon } from "@radix-ui/react-icons";
+import { Check, ChevronDown } from "lucide-react";
 
 import clsx from "clsx";
-import { fieldBackgroundMixin, focusedMixin } from "../styles";
+import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
 
 export type SelectProps = {
     open?: boolean,
@@ -59,11 +59,11 @@ export function Select({
         } else {
             onValueChange(newValue);
         }
-    }, [value, onValueChange]);
+    }, [multiple, value, onValueChange]);
 
     return (
         <SelectPrimitive.Root
-            value={Array.isArray(value) ? value[0] : value}
+            value={Array.isArray(value) ? undefined : value}
             onValueChange={onValueChangeInternal}
             open={open}
             onOpenChange={onOpenChange}>
@@ -71,6 +71,7 @@ export function Select({
                 size === "small" ? "h-[42px]" : "h-[64px]",
                 "select-none rounded-md text-sm",
                 fieldBackgroundMixin,
+                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 "relative flex items-center font-medium",
                 className)}>
 
@@ -93,21 +94,21 @@ export function Select({
                         inputClassName,
                     )}>
 
-                    <div className={clsx("flex-grow w-full",
-                        label ? "mt-5" : "")}>
-                        <SelectPrimitive.Value>
+                    <SelectPrimitive.Value asChild>
+                        <div className={clsx("flex-grow w-full max-w-full flex flex-row gap-2 items-center",
+                            label ? "mt-5" : "")}>
                             {value && Array.isArray(value)
                                 ? value.map((v) => (
-                                    <div key={v} className={"flex items-center gap-1"}>
+                                    <div key={v} className={"flex items-center gap-1 max-w-full"}>
                                         {renderOption(v)}
                                     </div>))
                                 : (value ? renderOption(value) : placeholder)}
-                        </SelectPrimitive.Value>
-                    </div>
+                        </div>
+                    </SelectPrimitive.Value>
                     <SelectPrimitive.Icon className={clsx(
                         "px-2 h-full flex items-center"
                     )}>
-                        <ChevronDownIcon/>
+                        <ChevronDown size={"16px"} className={clsx("transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
                 </SelectPrimitive.Trigger>
 
@@ -139,8 +140,8 @@ export function Select({
                                     >
                                         <SelectPrimitive.ItemText>{renderOption(option)}</SelectPrimitive.ItemText>
                                         {selected && <div
-                                            className="absolute left-2 inline-flex items-center">
-                                            <CheckIcon/>
+                                            className="absolute left-1">
+                                            <Check size={"16px"}/>
                                         </div>}
                                     </SelectPrimitive.Item>
                                 );

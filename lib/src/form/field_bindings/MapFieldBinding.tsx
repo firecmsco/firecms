@@ -1,13 +1,14 @@
 import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
-import { FormControl, MenuItem, Select } from "@mui/material";
+import { MenuItem, Select } from "@mui/material";
 import { SelectChangeEvent } from "@mui/material/Select";
 
 import { ExpandablePanel, getIconForProperty, isHidden, pick } from "../../core";
-import { FieldDescription, LabelWithIcon } from "../components";
+import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import InputLabel from "../../components/InputLabel";
+import { InputLabel } from "../../components";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 /**
  * Field that renders the children property fields
@@ -20,6 +21,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
                                                                    propertyKey,
                                                                    value,
                                                                    showError,
+                                                                   error,
                                                                    disabled,
                                                                    property,
                                                                    setValue,
@@ -89,19 +91,23 @@ export function MapFieldBinding<T extends Record<string, any>>({
 
     const title = <LabelWithIcon icon={getIconForProperty(property)}
                                  required={property.validation?.required}
-                                 title={property.name}/>;
+                                 title={property.name}
+                                 className={"ml-3.5"}/>;
 
     return (
-        <FormControl fullWidth error={showError}>
+        <>
 
             {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
                                             title={title}>{mapFormView}</ExpandablePanel>}
 
             {tableMode && mapFormView}
 
-            {includeDescription && <FieldDescription property={property}/>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-        </FormControl>
+        </>
     );
 }
 
@@ -120,7 +126,7 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
     if (!keys.length) return <></>;
 
     return <div className={"m-4"}>
-        <FormControl fullWidth>
+        <>
             <InputLabel>Add property</InputLabel>
             <Select
                 variant={"standard"}
@@ -133,7 +139,7 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
                     </MenuItem>
                 ))}
             </Select>
-        </FormControl>
+        </>
     </div>;
 };
 

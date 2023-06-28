@@ -1,7 +1,7 @@
 import React from "react";
 import { CMSType, ResolvedProperty } from "../../types";
 
-import { FormHelperText, Tooltip } from "@mui/material";
+import { Tooltip } from "@mui/material";
 import InfoIcon from "@mui/icons-material/InfoOutlined";
 import Typography from "../../components/Typography";
 import { IconButton } from "../../components";
@@ -17,18 +17,15 @@ interface FieldDescriptionPopoverProps<T extends CMSType> {
 export function FieldDescription<T extends CMSType>({ property }: FieldDescriptionPopoverProps<T>) {
     const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
     return (
-
-        // <FormHelperText>{disabledTooltip ? disabledTooltip : property.description}</FormHelperText>
         <div className={"flex"}>
-
-            <div className={"flex-grow"}>
-                <FormHelperText>{disabledTooltip || property.description}</FormHelperText>
-            </div>
+            <Typography variant={"caption"}
+                        className={"flex-grow"}>
+                {disabledTooltip || property.description}
+            </Typography>
 
             {property.longDescription &&
                 <Tooltip title={
-                    <Typography
-                        variant={"caption"}>{property.longDescription}</Typography>
+                    <Typography variant={"caption"}>{property.longDescription}</Typography>
                 }
                          placement="bottom-start"
                          arrow>

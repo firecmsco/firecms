@@ -134,7 +134,7 @@ export function DrawerNavigationItem({
             "hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75 text-gray-800 dark:text-gray-200",
             "flex flex-row items-center w-full mr-8",
             drawerOpen ? "pl-8 h-12" : "pl-6 h-11",
-            "font-bold text-sm",
+            "font-medium text-sm",
             isActive ? "bg-gray-100 dark:bg-gray-800" : ""
         )}
         to={url}

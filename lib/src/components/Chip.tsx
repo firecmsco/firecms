@@ -26,7 +26,8 @@ export function Chip({
     const usedColorScheme = colorScheme ?? getColorSchemeForSeed(label);
     return (
         <div
-            className={clsx("rounded-full w-fit h-fit bg-gray-200 dark:bg-gray-800 font-normal",
+            className={clsx("rounded-full w-fit h-fit bg-gray-200 dark:bg-gray-800 font-medium",
+                "truncate",
                 size === "small" ? "text-xs" : "text-sm",
                 size === "small" ? "px-3 py-1" : "px-4 py-1",
                 error || !usedColorScheme ? "bg-gray-200 dark:bg-gray-800 text-red-500" : "",

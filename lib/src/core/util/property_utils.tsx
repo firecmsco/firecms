@@ -33,33 +33,31 @@ export function getIdIcon(
 }
 
 function getIconForWidget(widget: FieldConfig | undefined,
-                          color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error",
                           fontSize: "inherit" | "medium" | "large" | "small" | undefined) {
     const Icon = widget?.Icon ?? Crop75Icon;
-    return <Icon color={color} fontSize={fontSize}/>;
+    return <Icon fontSize={fontSize}/>;
 }
 
 export function getIconForProperty(
     property: PropertyOrBuilder | ResolvedProperty,
-    color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
-    fontSize: "inherit" | "medium" | "large" | "small" | undefined = "inherit"): React.ReactNode {
+    fontSize: "inherit" | "medium" | "large" | "small" | undefined = "inherit"
+): React.ReactNode {
 
     if (isPropertyBuilder(property)) {
-        return <FunctionsIcon color={color} fontSize={fontSize}/>;
+        return <FunctionsIcon fontSize={fontSize}/>;
     } else {
         const widget = getFieldConfig(property);
-        return getIconForWidget(widget, color, fontSize);
+        return getIconForWidget(widget, fontSize);
     }
 }
 
 export function getBadgeForWidget(
-    widget: FieldConfig | undefined,
-    color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit"): React.ReactNode {
+    widget: FieldConfig | undefined): React.ReactNode {
 
     return <div
         className="bg-[widget?.color ?? '#888'] h-8 w-8 p-1 rounded-full shadow-md text-white"
         style={{ boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)" }}>
-        {getIconForWidget(widget, color, "medium")}
+        {getIconForWidget(widget, "medium")}
     </div>
 }
 

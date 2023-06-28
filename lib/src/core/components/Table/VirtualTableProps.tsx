@@ -114,21 +114,16 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      */
     hoverRow?: boolean;
 
+    /**
+     * Apply a custom class name to the row
+     * @param rowData
+     */
+    rowClassName?: (rowData: T) => string | undefined;
+
     createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
 
 }
 
-/**
- * @see Table
- * @category Components
- */
-export type TableColumnFilter<T> = {
-    dataType: "number" | "string" | "boolean" | "date"
-    isArray?: boolean;
-    title?: string;
-    dateMode?: "date" | "date_time";
-    enumValues?: TableEnumValues;
-};
 
 export type CellRendererParams<T extends any> = {
     cellData?: any;

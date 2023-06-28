@@ -13,6 +13,7 @@ export function NavigationGroup({
     return (
         <ExpandablePanel
             invisible={true}
+            className={"font-medium text-sm text-gray-600 dark:text-gray-400"}
             initiallyExpanded={!(userConfigurationPersistence?.collapsedGroups ?? []).includes(group ?? "ungrouped")}
             onExpandedChange={expanded => {
                 if (userConfigurationPersistence) {

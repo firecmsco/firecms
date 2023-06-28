@@ -196,7 +196,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
                     <div className="flex flex-col flex-grow">
                         <LabelWithIcon icon={<LinkIcon color={"inherit"}
                                                        fontSize={"inherit"}/>}
-                                       className=" flex-grow text-text-secondary dark:text-text-secondary-dark ml-1"
+                                       className=" flex-grow text-text-secondary dark:text-text-secondary-dark ml-3.5"
                                        title={name}
                         />
 

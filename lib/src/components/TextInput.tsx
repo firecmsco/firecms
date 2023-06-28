@@ -1,10 +1,9 @@
 import React, { useCallback, useRef } from "react";
 
 import { TextareaAutosize } from "./TextareaAutosize";
-import { DisabledTextField } from "./DisabledTextField";
-import InputLabel from "./InputLabel";
 import clsx from "clsx";
-import { fieldBackgroundMixin, focusedMixin } from "../styles";
+import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
+import { InputLabel } from "./InputLabel";
 
 export type InputType = "text" | "number";
 
@@ -48,12 +47,6 @@ export function TextInput<T extends string | number>({
         }, 0)
     }, []);
 
-    if (disabled) {
-        return <DisabledTextField label={label}
-                                  size={size}
-                                  value={value}/>
-    }
-
     const input = multiline
         ? <TextareaAutosize
             ref={inputRef}
@@ -65,11 +58,13 @@ export function TextInput<T extends string | number>({
             onChange={onChange}
             className={clsx(
                 focusedMixin,
-                "rounded-md resize-none w-full outline-none p-[32px] text-base leading-normal bg-transparent min-h-[64px] px-3 pt-[28px] pb-2"
+                "rounded-md resize-none w-full outline-none p-[32px] text-base leading-normal bg-transparent min-h-[64px] px-3 pt-[28px] pb-2",
+                disabled && "border border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500"
             )}
         />
         : <input ref={inputRef}
                  onWheel={inputType === "number" ? numberInputOnWheelPreventChange : undefined}
+                 disabled={disabled}
                  className={clsx(
                      "w-full outline-none bg-transparent leading-normal text-base px-3",
                      "rounded-md",
@@ -78,7 +73,8 @@ export function TextInput<T extends string | number>({
                      label ? "pt-[28px] pb-2" : "py-2",
                      focused ? "text-text-primary dark:text-text-primary-dark" : "",
                      endAdornment ? "pr-10" : "pr-3",
-                     inputClassName
+                     inputClassName,
+                     disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-600 dark:text-gray-500"
                  )}
                  placeholder={placeholder}
                  autoFocus={autoFocus}
@@ -92,15 +88,17 @@ export function TextInput<T extends string | number>({
     return (
         <div
             className={clsx(
-                "rounded-md relative  max-w-full min-h-[64px]",
+                "rounded-md relative max-w-full",
                 fieldBackgroundMixin,
+                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 {
-                    "min-h-[48px]": size === "small",
-                    "min-h-[64px]": size === "medium"
+                    "h-[48px]": size === "small",
+                    "h-[64px]": size === "medium"
                 })}>
+
             {label && (
                 <InputLabel
-                    className={`absolute left-0 top-1 pointer-events-none ${
+                    className={`absolute left-2 top-1 pointer-events-none ${
                         !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-error"
                     }`}
                     shrink={hasValue || focused}

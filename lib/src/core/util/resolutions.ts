@@ -3,8 +3,6 @@ import {
     CMSType,
     EntityCollection,
     EntityValues,
-    EnumValueConfig,
-    EnumValues,
     FieldConfig,
     NumberProperty,
     Properties,
@@ -24,6 +22,7 @@ import { getValueInPath, mergeDeep } from "./objects";
 import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
 import { getIn } from "formik";
+import { enumToObjectEntries } from "./enums";
 
 export const resolveCollection = <M extends Record<string, any>, >
 ({
@@ -353,25 +352,9 @@ export function resolvePropertyEnum(property: StringProperty | NumberProperty, f
         return {
             ...property,
             resolved: true,
-            enumValues: resolveEnumValues(property.enumValues)?.filter((value) => value && value.id && value.label) ?? [],
+            enumValues: enumToObjectEntries(property.enumValues)?.filter((value) => value && value.id && value.label) ?? [],
             fromBuilder: fromBuilder ?? false
         }
     }
     return property as ResolvedStringProperty | ResolvedNumberProperty;
-}
-
-export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefined {
-    if (typeof input === "object") {
-        return Object.entries(input).map(([id, value]) =>
-            (typeof value === "string"
-                ? {
-                    id,
-                    label: value
-                }
-                : value));
-    } else if (Array.isArray(input)) {
-        return input as EnumValueConfig[];
-    } else {
-        return undefined;
-    }
 }

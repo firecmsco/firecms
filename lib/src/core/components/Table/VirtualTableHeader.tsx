@@ -2,15 +2,14 @@ import React, { RefObject, useCallback, useEffect, useRef, useState } from "reac
 import equal from "react-fast-compare";
 import clsx from "clsx";
 
-import { Badge, darken, Popover, useTheme } from "@mui/material";
-import ArrowUpwardIcon from "@mui/icons-material/ArrowUpward";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import ArrowDropDownCircleIcon from "@mui/icons-material/ArrowDropDownCircle";
+import { ArrowUp, ChevronDown } from "lucide-react";
+
+import { Badge, Popover } from "@mui/material";
 
 import { TableColumn, TableSort, TableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { IconButton } from "../../../components";
-import { defaultBorderMixin } from "../../../styles";
+import { defaultBorderMixin, paperMixin } from "../../../styles";
 import { Button } from "../../../components/Button";
 
 interface FilterFormProps<T> {
@@ -85,27 +84,21 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
         const hovered = !anotherColumnIsResizing && (onHover || thisColumnIsResizing);
 
-        const theme = useTheme();
-
         return (
             <ErrorBoundary>
                 <div
-                    className={`flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center ${
+                    className={clsx("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center bg-gray-50 dark:bg-gray-900",
+                        "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 ",
                         column.frozen ? "sticky left-0 z-10" : "relative z-0"
-                    }`}
+                    )}
                     style={{
-                        color: hovered ? theme.palette.text.primary : theme.palette.text.secondary,
-                        backgroundColor: hovered
-                            ? darken(theme.palette.background.default, 0.05)
-                            : theme.palette.background.default,
-                        transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
-                        fontSize: "0.750rem",
+                        // transition: "color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
+                        // fontSize: "0.750rem",
                         left: column.frozen ? 0 : undefined,
                         minWidth: column.width,
-                        maxWidth: column.width,
+                        maxWidth: column.width
                     }}
                     ref={ref}
-                    // wrap={"nowrap"}
                     onMouseEnter={() => setOnHover(true)}
                     onMouseMove={() => setOnHover(true)}
                     onMouseLeave={() => setOnHover(false)}
@@ -114,15 +107,15 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     <div className="overflow-hidden flex-grow">
                         <div
                             className={`flex items-center justify-${column.headerAlign} flex-row`}>
-                            <div className="pt-1">
-                                {column.icon && column.icon(onHover || openFilter)}
-                            </div>
+
+                            {column.icon && column.icon(onHover || openFilter)}
+
                             <div
                                 className="truncate -webkit-box w-full mx-1 overflow-hidden"
                                 style={{
                                     WebkitBoxOrient: "vertical",
                                     WebkitLineClamp: 2,
-                                    justifyContent: column.align,
+                                    justifyContent: column.align
                                 }}>
                                 {column.title}
                             </div>
@@ -137,17 +130,17 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                invisible={!sort}>
                             <IconButton
                                 size={"small"}
-                                className={`${theme.palette.mode === "light" ? "bg-f5f5f5" : "bg-[defaultBackgroundColor]"}`}
+                                className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
                                 onClick={() => {
                                     onColumnSort(column.key as Extract<keyof M, string>);
                                 }}
                             >
                                 {!sort &&
-                                    <ArrowUpwardIcon fontSize={"small"}/>}
+                                    <ArrowUp />}
                                 {sort === "asc" &&
-                                    <ArrowUpwardIcon fontSize={"small"}/>}
+                                    <ArrowUp />}
                                 {sort === "desc" &&
-                                    <ArrowDownwardIcon fontSize={"small"}/>}
+                                    <ArrowUp className={"rotate-180"}/>}
                             </IconButton>
                         </Badge>
                     }
@@ -158,11 +151,11 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                overlap="circular"
                                invisible={!filter}>
                             <IconButton
-                                className={`bg-[${theme.palette.mode === "light" ? "#f5f5f5" : theme.palette.background.default}]`}
+                                className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
                                 size={"small"}
                                 onClick={handleSettingsClick}>
-                                <ArrowDropDownCircleIcon fontSize={"small"}
-                                                         color={onHover || openFilter ? undefined : "disabled"}/>
+                                <ChevronDown strokeWidth={3}/>
+                                {/*<ArrowDropDownCircleIcon fontSize={"small"}/>*/}
                             </IconButton>
 
                         </Badge>
@@ -170,7 +163,10 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     {column.resizable && <div
                         ref={resizeHandleRef}
-                        className={`absolute h-full w-[4px] top-0 right-0 cursor-col-resize`}
+                        className={clsx(
+                            "absolute h-full w-[6px] top-0 right-0 cursor-col-resize",
+                            hovered && "bg-gray-300 dark:bg-gray-700"
+                        )}
                         onMouseDown={onClickResizeColumn ? () => onClickResizeColumn(columnIndex, column) : undefined}
                     />}
                 </div>
@@ -246,12 +242,16 @@ function FilterForm<M>({
                 horizontal: "right"
             }}
         >
-            <div className="bg-white dark:bg-gray-900">
+            <div className={
+                clsx(paperMixin,
+                    "text-gray-900 dark:text-white",
+                )
+            }>
                 <div
-                    className={clsx(defaultBorderMixin, "p-2 text-xs font-semibold uppercase border-b border-gray-100 dark:border-gray-800")}>
+                    className={clsx(defaultBorderMixin, "p-2 text-xs font-semibold uppercase border-b")}>
                     {column.title ?? id}
                 </div>
-                {filterField && <div className="p-8">
+                {filterField && <div className="p-12">
                     {filterField}
                 </div>}
                 <div className="flex justify-end m-8">

@@ -1,12 +1,12 @@
 import React, { useCallback, useMemo } from "react";
-import {  FormControl, FormHelperText } from "@mui/material";
 import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "../../types";
 import { ReferencePreview } from "../../preview";
-import { FieldDescription, FormikArrayContainer, LabelWithIcon } from "../components";
+import { FormikArrayContainer, LabelWithIcon } from "../components";
 import { ErrorView, ExpandablePanel, getIconForProperty, getReferenceFrom } from "../../core";
 
 import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
 import { Button } from "../../components/Button";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 
@@ -95,7 +95,8 @@ export function ArrayOfReferencesFieldBinding({
     const title = (
         <LabelWithIcon icon={getIconForProperty(property)}
                        required={property.validation?.required}
-                       title={property.name}/>
+                       title={property.name}
+                       className={"ml-3.5"}/>
     );
 
     const body = <>
@@ -124,23 +125,19 @@ export function ArrayOfReferencesFieldBinding({
 
     return (
         <>
-            <FormControl fullWidth error={showError}>
 
-                {!tableMode &&
-                    <ExpandablePanel initiallyExpanded={expanded} title={title}>
-                        {body}
-                    </ExpandablePanel>}
+            {!tableMode &&
+                <ExpandablePanel initiallyExpanded={expanded} title={title}>
+                    {body}
+                </ExpandablePanel>}
 
-                {tableMode && body}
+            {tableMode && body}
 
-                {includeDescription &&
-                    <FieldDescription property={property}/>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-                {showError &&
-                    typeof error === "string" &&
-                    <FormHelperText error={true}>{error}</FormHelperText>}
-
-            </FormControl>
         </>
     );
 }

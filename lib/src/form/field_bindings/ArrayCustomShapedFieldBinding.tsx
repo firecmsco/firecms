@@ -1,10 +1,10 @@
 import React from "react";
 import { FieldProps } from "../../types";
-import { FormControl, FormHelperText } from "@mui/material";
-import { FieldDescription, LabelWithIcon } from "../components";
+import { LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel, getIconForProperty } from "../../core";
+import { FieldHelperText } from "../components/FieldHelperText";
 
 /**
  * Array field used for custom
@@ -62,7 +62,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
 
     return (
 
-        <FormControl fullWidth error={showError}>
+        <>
 
             {!tableMode &&
                 <ExpandablePanel initiallyExpanded={expanded} title={title}>
@@ -71,12 +71,11 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
 
             {tableMode && body}
 
-            {includeDescription &&
-                <FieldDescription property={property}/>}
+            <FieldHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
 
-            {showError && typeof error === "string" &&
-                <FormHelperText error={true}>{error}</FormHelperText>}
-
-        </FormControl>
+        </>
     );
 }

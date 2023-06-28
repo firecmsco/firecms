@@ -1,81 +1,88 @@
-import React, { PropsWithChildren, useCallback, useState } from "react";
+import React, { PropsWithChildren, useState } from "react";
+import clsx from "clsx";
 
-import { Accordion, AccordionDetails, AccordionSummary, useTheme } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { fieldBackgroundSubtleHover } from "../util/field_colors";
+import * as Collapsible from "@radix-ui/react-collapsible";
+import { ChevronDown } from "lucide-react";
+import { defaultBorderMixin, focusedMixin, paperMixin } from "../../styles";
 
 export function ExpandablePanel({
                                     title,
                                     children,
                                     invisible = false,
-                                    initiallyExpanded = true,
-                                    highlightOnHover = false,
-                                    padding = 1,
-                                    dark = true,
-                                    onExpandedChange
+                                    initiallyExpanded: initiallyOpen = true,
+                                    onExpandedChange,
+                                    className,
+                                    contentClassName
                                 }: PropsWithChildren<{
     title: React.ReactNode,
     invisible?: boolean,
     initiallyExpanded?: boolean;
     padding?: number | string;
-    highlightOnHover?: boolean,
-    dark?: boolean,
-    onExpandedChange?: (expanded: boolean) => void
+    onExpandedChange?: (expanded: boolean) => void,
+    className?: string,
+    contentClassName?: string
 }>) {
 
-    const theme = useTheme();
+    const [open, setOpen] = useState(initiallyOpen);
+    return (<>
+            <style>
+                {`
+.CollapsibleContent {
+  overflow: hidden;
+}
+.CollapsibleContent[data-state='open'] {
+  animation: slideDown 220ms ease-in;
+}
+.CollapsibleContent[data-state='closed'] {
+  animation: slideUp 220ms ease-in;
+}
 
-    const [onHover, setOnHover] = React.useState(false);
-    const setOnHoverTrue = useCallback(() => setOnHover(true), []);
-    const setOnHoverFalse = useCallback(() => setOnHover(false), []);
+@keyframes slideDown {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-collapsible-content-height);
+  }
+}
 
-    const [expandedInternal, setExpandedInternal] = useState(initiallyExpanded);
-    return (
-        <Accordion variant={"outlined"}
-                   onMouseEnter={setOnHoverTrue}
-                   onMouseMove={setOnHoverTrue}
-                   onMouseLeave={setOnHoverFalse}
-                   disableGutters
-                   expanded={expandedInternal}
-                   className={`${
-                       invisible
-                           ? "bg-transparent"
-                           : dark
-                               ? onHover && highlightOnHover
-                                   ? fieldBackgroundSubtleHover(theme)
-                                   : "bg-transparent"
-                               : "bg-inherit"
-                   } ${
-                       invisible ? "rounded-none" : "rounded-md"
-                   } ${invisible ? "border-none" : ""}`}
-                   TransitionProps={{ unmountOnExit: true }}
-                   onChange={useCallback((event: React.SyntheticEvent, expanded: boolean) => {
-                       onExpandedChange?.(expanded);
-                       setExpandedInternal(expanded);
-                   }, [onExpandedChange])}>
+@keyframes slideUp {
+  from {
+    height: var(--radix-collapsible-content-height);
+  }
+  to {
+    height: 0;
+  }
+}`}
+            </style>
+            <Collapsible.Root
+                className={clsx(
+                    !invisible && paperMixin,
+                )}
+                open={open}
+                onOpenChange={(updatedOpen: boolean) => {
+                    onExpandedChange?.(updatedOpen);
+                    setOpen(updatedOpen);
+                }}>
 
-            <AccordionSummary expandIcon={<ExpandMoreIcon/>}
-                              className={`items-center ${invisible ? "p-0" : ""} min-h-14 border-${invisible ? "0" : ""} ${!expandedInternal && !invisible ? "rounded-t rounded-bl" : ""}`}
-                              style={{
-                                  minHeight: "56px",
-                                  borderTopLeftRadius: `${theme.shape.borderRadius}px`,
-                                  borderTopRightRadius: `${theme.shape.borderRadius}px`,
-                                  borderBottomLeftRadius: !expandedInternal && !invisible ? `${theme.shape.borderRadius}px` : undefined,
-                                  borderBottomRightRadius: !expandedInternal && !invisible ? `${theme.shape.borderRadius}px` : undefined,
-                                  border: invisible ? "none" : undefined,
-                                  borderBottom: invisible ? `1px solid ${theme.palette.divider}` : undefined
-                              }}>
-                {title}
-            </AccordionSummary>
+                <Collapsible.Trigger
+                    className={clsx(focusedMixin,
+                        "rounded flex items-center justify-between w-full p-4",
+                        invisible && "border-b",
+                        invisible && defaultBorderMixin,
+                        className
+                    )}
+                >
+                    {title}
+                    <ChevronDown strokeWidth={2} className={clsx("transition", open ? "rotate-180" : "")}/>
+                </Collapsible.Trigger>
 
-            <AccordionDetails className={`${
-                invisible ? "p-0" : typeof padding === "string" ? padding : `p-${padding}`
-            } py-2 ${
-                invisible ? "border-none" : ""
-            } text-current`}>
-                {children}
-            </AccordionDetails>
-
-        </Accordion>
+                <Collapsible.Content
+                    className={clsx("CollapsibleContent", contentClassName)}
+                >
+                    {children}
+                </Collapsible.Content>
+            </Collapsible.Root>
+        </>
     )
 }

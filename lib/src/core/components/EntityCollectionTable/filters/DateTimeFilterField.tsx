@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FormControl, MenuItem, Select as MuiSelect } from "@mui/material";
+import { MenuItem, Select as MuiSelect } from "@mui/material";
 import { TableWhereFilterOp } from "../../Table";
 import { DateTimeField } from "../../../../components/DateTimeField";
 
@@ -73,20 +73,18 @@ export function DateTimeFilterField({
 
         <div className="flex w-[440px] items-center">
             <div className="w-[80px]">
-                <FormControl fullWidth>
-                    <MuiSelect value={operation}
-                               fullWidth
-                               onChange={(evt: any) => {
-                                   updateFilter(evt.target.value, internalValue);
-                               }}>
-                        {possibleOperations.map((op) =>
-                            <MenuItem
-                                key={`filter_op_${name}_${op}`}
-                                value={op}>{operationLabels[op]}</MenuItem>
-                        )}
+                <MuiSelect value={operation}
+                           fullWidth
+                           onChange={(evt: any) => {
+                               updateFilter(evt.target.value, internalValue);
+                           }}>
+                    {possibleOperations.map((op) =>
+                        <MenuItem
+                            key={`filter_op_${name}_${op}`}
+                            value={op}>{operationLabels[op]}</MenuItem>
+                    )}
 
-                    </MuiSelect>
-                </FormControl>
+                </MuiSelect>
             </div>
 
             <div className="flex-grow ml-4">

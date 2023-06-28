@@ -1,6 +1,6 @@
 import clsx from "clsx";
 
-import { CardActionArea, CardActions, CardContent, Paper } from "@mui/material";
+import { CardActionArea, CardActions, CardContent } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";

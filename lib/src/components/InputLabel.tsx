@@ -7,7 +7,7 @@ export type InputLabelProps = {
     shrink?: boolean;
 } & React.LabelHTMLAttributes<HTMLLabelElement>;
 
-const InputLabel = React.forwardRef<HTMLLabelElement, InputLabelProps>(function InputLabel(inProps, ref) {
+export const InputLabel = React.forwardRef<HTMLLabelElement, InputLabelProps>(function InputLabel(inProps, ref) {
     const {
         shrink,
         className,
@@ -16,8 +16,8 @@ const InputLabel = React.forwardRef<HTMLLabelElement, InputLabelProps>(function 
 
     const defaultClasses = {
         root: "absolute transition-transform block whitespace-nowrap overflow-hidden text-overflow-ellipsis max-w-full",
-        shrink: "transform translate-y-[2px] scale-75 translate-x-[4px]",
-        expanded: "absolute translate-x-[14px] top-0 transform translate-y-[16px] scale-100"
+        shrink: "transform translate-y-[2px] scale-75 translate-x-[-2px]",
+        expanded: "absolute translate-x-[10px] top-0 transform translate-y-[16px] scale-100"
     };
 
     const computedClassName = clsx(defaultClasses.root,
@@ -35,5 +35,3 @@ const InputLabel = React.forwardRef<HTMLLabelElement, InputLabelProps>(function 
         />
     );
 });
-
-export default InputLabel;

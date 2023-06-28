@@ -32,7 +32,7 @@ This is an example of a custom TextField that takes the background color as a pr
 
 import React from "react";
 import { TextField } from "@mui/material";
-import { FieldDescription, FieldProps } from "firecms";
+import { FieldProps } from "firecms";
 
 interface CustomColorTextFieldProps {
     color: string
@@ -70,7 +70,11 @@ export default function CustomColorTextField({
                        fullWidth
                        variant={"filled"}/>
 
-            <FieldDescription property={property}/>
+
+            <TFormHelperText includeDescription={includeDescription}
+                             showError={showError}
+                             error={error}
+                             property={property}/>
         </>
 
     );
