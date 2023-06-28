@@ -28,7 +28,7 @@ search.addIndex("path");
  * @constructor
  * @category Components
  */
-export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: React.ReactNode }) {
+export function FireCMSHomePage({ additionalChildrenStart, additionalChildrenEnd }: { additionalChildrenStart?: React.ReactNode, additionalChildrenEnd?: React.ReactNode }) {
 
     const context = useFireCMSContext();
     const navigationContext = useNavigationContext();
@@ -117,6 +117,8 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
 
                 <FavouritesView hidden={Boolean(filteredUrls)}/>
 
+                {additionalChildrenStart}
+
                 {allGroups.map((group, index) => {
 
                     const AdditionalCards: React.ComponentType<PluginHomePageAdditionalCardsProps>[] = [];
@@ -173,7 +175,7 @@ export function FireCMSHomePage({ additionalChildren }: { additionalChildren?: R
 
                 {additionalSections}
 
-                {additionalChildren}
+                {additionalChildrenEnd}
 
             </Container>
         </Box>
