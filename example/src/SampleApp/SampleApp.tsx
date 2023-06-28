@@ -1,14 +1,13 @@
 import React, { useCallback } from "react";
 
+import "typeface-rubik";
+import "@fontsource/ibm-plex-mono";
+
+
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import {
-    AppCheckOptions,
-    Authenticator,
-    CMSView,
-    FirebaseCMSApp
-} from "firecms";
+import { AppCheckOptions, Authenticator, CMSView, FirebaseCMSApp } from "firecms";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import { IconButton, Tooltip } from "@mui/material";
@@ -20,20 +19,13 @@ import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
 import { testCollection } from "./collections/test_collection";
 import { usersCollection } from "./collections/users_collection";
-import {
-    localeCollectionGroup,
-    productsCollection
-} from "./collections/products_collection";
+import { localeCollectionGroup, productsCollection } from "./collections/products_collection";
 import { blogCollection } from "./collections/blog_collection";
 import { showcaseCollection } from "./collections/showcase_collection";
 
 import { textSearchController } from "./text_search";
 
-import {
-    customCollectionOverrideHandler
-} from "./collections/custom_collection_resolver";
-import "typeface-rubik";
-import "@fontsource/ibm-plex-mono";
+import { customCollectionOverrideHandler } from "./collections/custom_collection_resolver";
 import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";

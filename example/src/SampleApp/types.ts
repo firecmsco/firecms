@@ -12,6 +12,7 @@ export type Product = {
     description: string;
     amazon_link: string;
     images: string[];
+    tags: string[];
     related_products: EntityReference[];
     publisher: {
         name: string;

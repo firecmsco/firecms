@@ -50,14 +50,17 @@ export function FireCMSCloudVersions() {
                 </p>
                 <ul>
                     <li>Everything in the free tier</li>
-                    <li>Text search</li>
+                    {/*<li>Text search</li>*/}
+                    <li>Unlimited users and roles</li>
+                    <li>Theme and logo customization</li>
                     <li>Custom user roles</li>
-                    <li>Custom fields</li>
+                    <li>AI content generation</li>
+                    {/*<li>Custom fields</li>*/}
                 </ul>
             </div>
             <div className={"text-center mt-4  w-full"}>
                 <span className={"text-sm block"}>All the features in the Plus tier are <b>free</b> during the beta phase</span>
-                <span className={"text-2xl block font-bold line-through"}>€12 user/month</span>
+                <span className={"text-2xl block font-bold line-through"}>€11.99 user/month</span>
                 <span className={"text-2xl font-bold text-primary"}>€0 user/month</span>
             </div>
 
@@ -80,7 +83,8 @@ export function FireCMSCloudVersions() {
                     <li>SAML SSO</li>
                     <li>AI content generation</li>
                     <li>Custom domain</li>
-                    <li>Theme and logo customization</li>
+                    <li>Priority support</li>
+                    <li>Roadmap prioritization</li>
                 </ul>
             </div>
             <div className={"text-center mt-4 text-primary w-full"}>
