@@ -80,24 +80,6 @@ export function TextFieldBinding<T extends string | number>({
     const valueIsInfinity = internalValue === Infinity;
     const inputType = !valueIsInfinity && property.dataType === "number" ? "number" : undefined;
 
-    const updateValue = useCallback((newValue: typeof internalValue | undefined) => {
-
-        if (!newValue) {
-            setValue(
-                null
-            );
-        } else if (inputType === "number") {
-            const numValue = parseFloat(newValue as string);
-            setValue(
-                numValue as T
-            );
-        } else {
-            setValue(
-                newValue
-            );
-        }
-    }, [inputType, setValue]);
-
     return (
         <>
             <TextInput
@@ -132,29 +114,6 @@ export function TextFieldBinding<T extends string | number>({
                         {includeDescription &&
                             <FieldDescription property={property}/>}
                     </Box>
-
-                    {allowInfinity &&
-                        <FormControlLabel
-                            checked={valueIsInfinity}
-                            style={{ marginRight: 0 }}
-                            labelPlacement={"start"}
-                            control={
-                                <Switch
-                                    size={"small"}
-                                    type={"checkbox"}
-                                    onChange={(evt) => {
-                                        updateValue(
-                                            evt.target.checked ? Infinity as T : undefined);
-                                    }}/>
-                            }
-                            disabled={disabled}
-                            label={
-                                <Typography variant={"caption"}>
-                                    Set value to Infinity
-                                </Typography>
-                            }
-                        />
-                    }
                 </Box>}
 
             {url && <Collapse

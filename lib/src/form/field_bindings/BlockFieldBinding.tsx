@@ -1,41 +1,14 @@
 import React, { useCallback, useEffect, useState } from "react";
-import {
-    FormControl,
-    FormHelperText,
-    InputLabel,
-    MenuItem,
-    Paper,
-    Select
-} from "@mui/material";
-import {
-    FastField,
-    FieldProps as FormikFieldProps,
-    useFormikContext
-} from "formik";
+import { FormControl, FormHelperText, InputLabel, MenuItem, Paper, Select } from "@mui/material";
+import { FastField, FieldProps as FormikFieldProps, useFormikContext } from "formik";
 
-import {
-    FormikArrayContainer,
-    FieldDescription,
-    LabelWithIcon
-} from "../components";
+import { FieldDescription, FormikArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
-import {
-    EnumValueConfig,
-    FieldProps,
-    FormContext,
-    PropertyOrBuilder
-} from "../../types";
-import {
-    ExpandablePanel,
-    getDefaultValueFor,
-    getIconForProperty
-} from "../../core";
-import {
-    DEFAULT_ONE_OF_TYPE,
-    DEFAULT_ONE_OF_VALUE
-} from "../../core/util/common";
+import { EnumValueConfig, FieldProps, FormContext, PropertyOrBuilder } from "../../types";
+import { ExpandablePanel, getDefaultValueFor, getIconForProperty } from "../../core";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -52,6 +25,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                                                             showError,
                                                             isSubmitting,
                                                             setValue,
+                                                            setFieldValue,
                                                             tableMode,
                                                             property,
                                                             includeDescription,
@@ -99,6 +73,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                                        onInternalIdAdded={setLastAddedId}
                                        disabled={isSubmitting || Boolean(property.disabled)}
                                        includeAddButton={!property.disabled}
+                                       setFieldValue={setFieldValue}
                                        newDefaultEntry={{
                                            [property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE]: firstOneOfKey,
                                            [property.oneOf!.valueField ?? DEFAULT_ONE_OF_VALUE]: getDefaultValueFor(property.oneOf.properties[firstOneOfKey])

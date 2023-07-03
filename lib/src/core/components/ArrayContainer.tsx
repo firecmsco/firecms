@@ -1,35 +1,15 @@
-import React, {
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState
-} from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import {
-    Box,
-    Button,
-    IconButton,
-    ListItemIcon,
-    ListItemText,
-    Menu,
-    MenuItem,
-    Tooltip
-} from "@mui/material";
+import { Box, Button, IconButton, ListItemIcon, ListItemText, Menu, MenuItem, Tooltip } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
 import CopyIcon from "@mui/icons-material/ContentCopy";
 import DragHandleIcon from "@mui/icons-material/DragHandle";
 
-import {
-    DragDropContext,
-    Draggable,
-    DraggableProvided,
-    Droppable
-} from "@hello-pangea/dnd";
+import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello-pangea/dnd";
 
-import { getHashValue } from "../../core";
+import { getHashValue } from "../util";
 import useMeasure from "react-use-measure";
 import { MoreVert } from "@mui/icons-material";
 import { fieldBackgroundSubtleHover } from "../util/field_colors";
@@ -46,6 +26,16 @@ interface ArrayContainerProps<T> {
     newDefaultEntry: T;
     onValueChange: (value: T[]) => void
 }
+
+const buildIdsMap = (value: any[]) =>
+    value && Array.isArray(value) && value.length > 0
+        ? value.map((v, index) => {
+            if (!v) return {};
+            return ({
+                [getHashValue(v) + index]: getRandomId()
+            });
+        }).reduce((a, b) => ({ ...a, ...b }), {})
+        : {}
 
 /**
  * @category Form custom fields
@@ -64,19 +54,9 @@ export function ArrayContainer<T>({
                                   }: ArrayContainerProps<T>) {
 
     const hasValue = value && Array.isArray(value) && value.length > 0;
-    const internalIdsMap: Record<string, number> = useMemo(() =>
-            hasValue
-                ? value.map((v, index) => {
-                    if (!v) return {};
-                    return ({
-                        [getHashValue(v) + index]: getRandomId()
-                    });
-                }).reduce((a, b) => ({ ...a, ...b }), {})
-                : {},
-        [value, hasValue]);
 
     // Used to track the ids that have displayed the initial show animation
-    const internalIdsRef = useRef<Record<string, number>>(internalIdsMap);
+    const internalIdsRef = useRef<Record<string, number>>(buildIdsMap(value));
 
     const [internalIds, setInternalIds] = useState<number[]>(
         hasValue
@@ -98,7 +78,6 @@ export function ArrayContainer<T>({
             setInternalIds(newInternalIds);
         }
     }, [hasValue, internalIds.length, value]);
-
 
     const insertInEnd = () => {
         if (disabled) return;
@@ -244,7 +223,7 @@ export function ArrayContainerItem({
                                    }: ArrayContainerItemProps) {
 
     const [measureRef, bounds] = useMeasure();
-    const contentOverflow = !small && bounds.height > 0 && bounds.height < 100;
+    const menuOverflow = !small && bounds.height > 0 && bounds.height < 100;
 
     const [onHover, setOnHover] = React.useState(false);
     const setOnHoverTrue = useCallback(() => setOnHover(true), []);
@@ -280,7 +259,7 @@ export function ArrayContainerItem({
                               remove={remove}
                               index={index}
                               provided={provided}
-                              contentOverflow={contentOverflow}
+                              contentOverflow={menuOverflow}
                               copy={copy}/>
         </Box>
     </Box>;
@@ -306,14 +285,14 @@ export function ArrayItemOptions({
 
     const [anchorEl, setAnchorEl] = React.useState<any | null>(null);
 
-    const openMenu = useCallback((event: React.MouseEvent) => {
+    const openMenu = (event: React.MouseEvent) => {
         setAnchorEl(event.currentTarget);
         event.stopPropagation();
-    }, [setAnchorEl]);
+    };
 
-    const closeMenu = useCallback(() => {
+    const closeMenu = () => {
         setAnchorEl(null);
-    }, [setAnchorEl]);
+    };
 
     return <Box display="flex"
                 flexDirection={direction === "row" ? "row-reverse" : "column"}
