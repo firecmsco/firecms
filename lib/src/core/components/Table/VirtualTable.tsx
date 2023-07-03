@@ -1,12 +1,4 @@
-import React, {
-    createContext,
-    forwardRef,
-    RefObject,
-    useCallback,
-    useEffect,
-    useRef,
-    useState
-} from "react";
+import React, { createContext, forwardRef, RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import equal from "react-fast-compare"
 
@@ -49,17 +41,20 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
                     const customView = virtualTableProps.customView;
                     return (
                         <>
-                            <div style={{
-                                position: "relative",
-                                height: "100%"
-                            }}>
-                                <div ref={ref}
-                                     {...rest}
-                                     style={{
-                                         ...rest?.style,
-                                         minHeight: "100%",
-                                         position: "relative"
-                                     }}>
+                            <div
+                                id={"virtual-table"}
+                                style={{
+                                    position: "relative",
+                                    height: "100%"
+                                }}>
+                                <div
+                                    ref={ref}
+                                    {...rest}
+                                    style={{
+                                        ...rest?.style,
+                                        minHeight: "100%",
+                                        position: "relative"
+                                    }}>
                                     <VirtualTableHeaderRow {...virtualTableProps}/>
                                     {!customView && children}
                                 </div>
