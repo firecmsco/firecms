@@ -11,7 +11,6 @@ const fireCMSPlugin = function ({
             borderRadius: theme("borderRadius.lg"),
             padding: theme("spacing.4"),
             boxShadow: theme("boxShadow.sm")
-            // '@apply dark:bg-blue-500 dark:hover:text-white': {},
         }
     })
 };

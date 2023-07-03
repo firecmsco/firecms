@@ -21,7 +21,7 @@ import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
-import Typography from "../../../components/Typography";
+import { Typography } from "../../../components/Typography";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
@@ -40,10 +40,12 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
                     const customView = virtualTableProps.customView;
                     return (
                         <>
-                            <div style={{
-                                position: "relative",
-                                height: "100%"
-                            }}>
+                            <div
+                                id={"virtual-table"}
+                                style={{
+                                    position: "relative",
+                                    height: "100%"
+                                }}>
                                 <div ref={ref}
                                      {...rest}
                                      style={{
@@ -228,7 +230,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     {"Error fetching data from the data source"}
                 </Typography>
 
-                {error?.message && <Typography>
+                {error?.message && <Typography className={"p-8 break-all"}>
                     {error?.message}
                 </Typography>}
 

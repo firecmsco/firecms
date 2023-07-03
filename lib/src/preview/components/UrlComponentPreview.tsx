@@ -1,5 +1,5 @@
 import React from "react";
-import { CardMedia, Link, Tooltip } from "@mui/material";
+import { CardMedia, Link } from "@mui/material";
 
 import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
@@ -8,7 +8,8 @@ import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
+import { Tooltip } from "../../components/Tooltip";
 
 /**
  * @category Preview components

@@ -92,12 +92,13 @@ export function MapFieldBinding<T extends Record<string, any>>({
     const title = <LabelWithIcon icon={getIconForProperty(property)}
                                  required={property.validation?.required}
                                  title={property.name}
-                                 className={"ml-3.5"}/>;
+                                 className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>;
 
     return (
         <>
 
             {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
+                                            contentClassName={"p-2"}
                                             title={title}>{mapFormView}</ExpandablePanel>}
 
             {tableMode && mapFormView}
@@ -126,20 +127,18 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
     if (!keys.length) return <></>;
 
     return <div className={"m-4"}>
-        <>
-            <InputLabel>Add property</InputLabel>
-            <Select
-                variant={"standard"}
-                value={""}
-                disabled={disabled}
-                onChange={handleAddProperty}>
-                {keys.map((key) => (
-                    <MenuItem key={key} value={key}>
-                        {(properties as Properties)[key].name || key}
-                    </MenuItem>
-                ))}
-            </Select>
-        </>
+        <InputLabel>Add property</InputLabel>
+        <Select
+            variant={"standard"}
+            value={""}
+            disabled={disabled}
+            onChange={handleAddProperty}>
+            {keys.map((key) => (
+                <MenuItem key={key} value={key}>
+                    {(properties as Properties)[key].name || key}
+                </MenuItem>
+            ))}
+        </Select>
     </div>;
 };
 

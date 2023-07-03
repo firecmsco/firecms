@@ -13,7 +13,7 @@ import { useSnackbarController, useStorageSource } from "../../../../hooks";
 import { getThumbnailMeasure } from "../../../../preview/util";
 import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../../../../form/components/StorageUploadProgress";
-import Typography from "../../../../components/Typography";
+import { Typography } from "../../../../components/Typography";
 import { IconButton } from "../../../../components";
 
 const dropZoneMixin = (hasValue: boolean) => ({

@@ -96,7 +96,7 @@ export function ArrayOfReferencesFieldBinding({
         <LabelWithIcon icon={getIconForProperty(property)}
                        required={property.validation?.required}
                        title={property.name}
-                       className={"ml-3.5"}/>
+                       className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
     );
 
     const body = <>
@@ -127,7 +127,10 @@ export function ArrayOfReferencesFieldBinding({
         <>
 
             {!tableMode &&
-                <ExpandablePanel initiallyExpanded={expanded} title={title}>
+                <ExpandablePanel
+                    contentClassName={"p-2"}
+                    initiallyExpanded={expanded}
+                    title={title}>
                     {body}
                 </ExpandablePanel>}
 

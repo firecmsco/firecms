@@ -7,7 +7,7 @@ import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries, getIconForProperty, Select } from "../../core";
-import { IconButton, InputLabel } from "../../components";
+import { IconButton } from "../../components";
 import { FieldHelperText } from "../components/FieldHelperText";
 
 /**
@@ -64,18 +64,15 @@ export function ArrayEnumSelectBinding({
     return (
         <div className="mt-0.5 ml-0.5  mt-2">
 
-            <InputLabel id={`${propertyKey}-multiselect-label`}>
-                <LabelWithIcon icon={getIconForProperty(property)}
-                               required={property.validation?.required}
-                               title={property.name}
-                               className={"ml-3.5"}/>
-            </InputLabel>
 
             <Select
                 multiple
-                // className="min-h-[64px] rounded-[var(--rounded)]"
                 value={validValue ? value.map((v) => v.toString()) : []}
                 disabled={disabled}
+                label={<LabelWithIcon icon={getIconForProperty(property)}
+                                      required={property.validation?.required}
+                                      title={property.name}
+                                      className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
                 endAdornment={
                     of.clearable ? (
                         <IconButton className="absolute top-3 right-8" onClick={handleClearClick}>
@@ -102,7 +99,7 @@ export function ArrayEnumSelectBinding({
                     <EnumValuesChip
                         enumKey={option}
                         enumValues={enumValues}
-                        small={false}/>
+                        size={"medium"}/>
                 )}
             />
 
@@ -154,7 +151,7 @@ export function ArrayEnumSelectBinding({
             {/*                        <EnumValuesChip*/}
             {/*                            enumKey={enumKey}*/}
             {/*                            enumValues={enumValues}*/}
-            {/*                            small={true}/>*/}
+            {/*                            size={"small"}/>*/}
             {/*                    }/>*/}
             {/*                </MenuItem>*/}
             {/*            );*/}

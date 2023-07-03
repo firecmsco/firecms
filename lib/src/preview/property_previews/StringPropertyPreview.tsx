@@ -24,7 +24,7 @@ export function StringPropertyPreview({
         return <EnumValuesChip
             enumKey={enumKey}
             enumValues={resolvedProperty.enumValues}
-            small={size !== "medium"}/>;
+            size={size !== "medium" ? "small" : "medium"}/>;
     } else if (property.previewAsTag) {
         const colorScheme = getColorSchemeForSeed(propertyKey ?? "");
         return (

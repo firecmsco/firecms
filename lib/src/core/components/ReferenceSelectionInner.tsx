@@ -18,7 +18,7 @@ import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
 import { useTableController } from "./EntityCollectionTable/useTableController";
 import { isFilterCombinationValidForFirestore } from "./EntityCollectionView/isFilterCombinationValidForFirestore";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
 import { useLargeLayout } from "../../hooks/useLargeLayout";
 import { Button } from "../../components/Button";
 

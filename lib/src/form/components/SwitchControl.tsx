@@ -1,8 +1,7 @@
 import React from "react";
 
 import { FieldProps } from "formik";
-import { FormControlLabel, Switch, Tooltip } from "@mui/material";
-import Typography from "../../components/Typography";
+import { BooleanSwitchWithLabel, Tooltip } from "../../components";
 
 export function SwitchControl({
                                   field,
@@ -17,17 +16,14 @@ export function SwitchControl({
     disabled?: boolean,
     size: "small" | "medium"
 }) {
-    const formControlLabel = <FormControlLabel
-        checked={field.value ?? false}
-        className="ml-0"
-        disabled={disabled}
-        control={
-            <Switch size={size}
-                    disabled={disabled}
-                    onChange={(e, checked) => form.setFieldValue(field.name, checked)}/>
-        }
-        label={<Typography variant={"body2"}>{label}</Typography>}
-    />;
+
+
+    const formControlLabel = <BooleanSwitchWithLabel label={label}
+                                   size={size}
+                                   value={field.value}
+                                   disabled={disabled}
+                                   onValueChange={(checked) => form.setFieldValue(field.name, checked)}/>;
+
     if (tooltip)
         return (
             <Tooltip

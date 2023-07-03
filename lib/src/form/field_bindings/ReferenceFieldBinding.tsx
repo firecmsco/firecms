@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useCallback, useMemo } from "react";
 
-import { EntityReference, FieldProps } from "../../types";
-import { useClearRestoreValue } from "../../hooks";
-import { ReferenceWidget } from "../components/ReferenceWidget";
+import { Entity, EntityCollection, EntityReference, FieldProps } from "../../types";
+import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText } from "../components/FieldHelperText";
+import { ReferencePreview } from "../../preview";
+import { Button, ErrorView, getIconForProperty, getReferenceFrom } from "../../core";
+import { LabelWithIcon } from "../components";
 
 /**
  * Field that opens a reference selection dialog.
@@ -24,11 +26,11 @@ export function ReferenceFieldBinding<M extends Record<string, any>>(props: Fiel
 }
 
 function ReferenceFieldBindingInternal<M extends Record<string, any>>({
-                                                                          propertyKey,
                                                                           value,
                                                                           setValue,
                                                                           error,
                                                                           showError,
+                                                                          isSubmitting,
                                                                           disabled,
                                                                           touched,
                                                                           autoFocus,
@@ -47,20 +49,63 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
     });
 
     const validValue = value && value instanceof EntityReference;
-    const path = validValue ? value.path : property.path;
+
+    const navigationContext = useNavigationContext();
+    const collection: EntityCollection | undefined = useMemo(() => {
+        return property.path ? navigationContext.getCollection(property.path) : undefined;
+    }, [property.path]);
+
+    if (!collection) {
+        throw Error(`Couldn't find the corresponding collection for the path: ${property.path}`);
+    }
+
+    const onSingleEntitySelected = useCallback((e: Entity<any>) => {
+        setValue(getReferenceFrom(e));
+    }, [setValue]);
+
+    const referenceDialogController = useReferenceDialog({
+            multiselect: false,
+            path: property.path,
+            collection,
+            onSingleEntitySelected,
+            selectedEntityIds: validValue ? [value.id] : undefined,
+            forceFilter: property.forceFilter
+        }
+    );
+
+    const onEntryClick = useCallback(() => {
+        referenceDialogController.open();
+    }, [referenceDialogController]);
 
     return (
         <>
+            <LabelWithIcon icon={getIconForProperty(property)}
+                           required={property.validation?.required}
+                           title={property.name}
+                           className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
 
-            <ReferenceWidget
-                name={property.name}
-                path={path}
-                forceFilter={property.forceFilter}
-                previewProperties={property.previewProperties}
-                value={value}
-                disabled={Boolean(property.disabled)}
-                setValue={setValue}
-            />
+            {!collection && <ErrorView
+                error={"The specified collection does not exist. Check console"}/>}
+
+            {collection && <>
+
+                {value && <ReferencePreview
+                    disabled={!property.path}
+                    previewProperties={property.previewProperties}
+                    size={"medium"}
+                    onClick={disabled || isSubmitting ? undefined : onEntryClick}
+                    reference={value}
+                />}
+
+                {!value && <div className="p-4 justify-center text-left">
+                    <Button variant="outlined"
+                            color="primary"
+                            disabled={disabled || isSubmitting}
+                            onClick={onEntryClick}>
+                        Edit {property.name}
+                    </Button>
+                </div>}
+            </>}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
@@ -69,4 +114,5 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
 
         </>
     );
+
 }

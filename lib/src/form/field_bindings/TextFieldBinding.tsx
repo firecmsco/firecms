@@ -4,13 +4,11 @@ import { Collapse } from "@mui/material";
 import ClearIcon from "@mui/icons-material/Clear";
 
 import { FieldProps, PreviewType } from "../../types";
-import { LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
-import { TextInput } from "../../components/TextInput";
+import { IconButton, TextInput } from "../../components";
 import { PropertyPreview } from "../../preview";
-import { IconButton } from "../../components";
-import { FieldHelperText } from "../components/FieldHelperText";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean

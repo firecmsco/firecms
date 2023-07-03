@@ -6,7 +6,7 @@ import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
 import { useAuthController, useBreadcrumbsContext, useModeController } from "../../hooks";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
 import clsx from "clsx";
 import { IconButton } from "../../components";
 import { useLargeLayout } from "../../hooks/useLargeLayout";

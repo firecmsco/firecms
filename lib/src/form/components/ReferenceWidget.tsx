@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import clsx from "clsx";
-import { Tooltip, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 
 import LinkIcon from "@mui/icons-material/Link";
 import ErrorIcon from "@mui/icons-material/Error";
@@ -18,9 +18,10 @@ import {
     useReferenceDialog,
     useSideEntityController
 } from "../../hooks";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
 import { IconButton } from "../../components";
 import { Button } from "../../components/Button";
+import { Tooltip } from "../../components/Tooltip";
 
 /**
  * This field allows selecting reference/s.
@@ -53,8 +54,6 @@ export function ReferenceWidget<M extends Record<string, any>>({
      */
     forceFilter?: FilterValues<string>;
 }) {
-
-    const theme = useTheme();
 
     const fireCMSContext = useFireCMSContext();
     const navigationContext = useNavigationContext();
@@ -196,7 +195,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
                     <div className="flex flex-col flex-grow">
                         <LabelWithIcon icon={<LinkIcon color={"inherit"}
                                                        fontSize={"inherit"}/>}
-                                       className=" flex-grow text-text-secondary dark:text-text-secondary-dark ml-3.5"
+                                       className="text-text-secondary dark:text-text-secondary-dark ml-3.5"
                                        title={name}
                         />
 

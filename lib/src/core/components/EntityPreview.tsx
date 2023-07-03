@@ -9,7 +9,7 @@ import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import { getIconForProperty, getIdIcon, resolveCollection } from "../util";
 import { ErrorBoundary } from "./ErrorBoundary";
 import { useFireCMSContext } from "../../hooks";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
 import { IconButton } from "../../components";
 
 const PREFIX = "EntityPreview";

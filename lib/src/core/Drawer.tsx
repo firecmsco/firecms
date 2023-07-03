@@ -1,14 +1,15 @@
 import React, { useCallback } from "react";
+import clsx from "clsx";
 
 import { useLargeLayout } from "../hooks/useLargeLayout";
 
 import { NavLink } from "react-router-dom";
-import { SvgIconTypeMap, Tooltip } from "@mui/material";
+import { SvgIconTypeMap } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../hooks";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { getIconForView } from "./util";
-import Typography from "../components/Typography";
-import clsx from "clsx";
+import { Typography } from "../components/Typography";
+import { Tooltip } from "../components/Tooltip";
 
 /**
  * Props used in case you need to override the default drawer
@@ -143,7 +144,6 @@ export function DrawerNavigationItem({
         {icon}
 
         <div
-            // variant={"inherit"}
             className={clsx(
                 drawerOpen ? "opacity-100" : "opacity-0 hidden",
                 "ml-4 font-inherit text-inherit"
@@ -152,7 +152,7 @@ export function DrawerNavigationItem({
         </div>
     </NavLink>;
 
-    return listItem;
+    // return listItem;
     if (drawerOpen)
         return listItem;
     else

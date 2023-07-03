@@ -12,7 +12,7 @@ import { useFireCMSContext } from "../../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
-import Typography from "../../../components/Typography";
+import { Typography } from "../../../components/Typography";
 import { IconButton } from "../../../components";
 import { paperMixin } from "../../../styles";
 

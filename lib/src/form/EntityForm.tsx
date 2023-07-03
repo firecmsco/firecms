@@ -20,7 +20,7 @@ import { DialogActions, getDefaultValuesFor, isHidden, isReadOnly, resolveCollec
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import Typography from "../components/Typography";
+import { Typography } from "../components";
 import { defaultBorderMixin } from "../styles";
 import { Button } from "../components/Button";
 

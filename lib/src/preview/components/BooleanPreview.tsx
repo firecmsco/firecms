@@ -1,5 +1,5 @@
 import React from "react";
-import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
+import { Checkbox } from "../../components/Checkbox";
 
 /**
  * @category Preview components
@@ -7,7 +7,5 @@ import { CheckBox, CheckBoxOutlineBlank } from "@mui/icons-material";
 export function BooleanPreview({ value }: {
     value: boolean
 }): React.ReactElement {
-    return value
-        ? <CheckBox color="secondary"/>
-        : <CheckBoxOutlineBlank color="disabled"/>;
+    return <Checkbox checked={value}/>;
 }

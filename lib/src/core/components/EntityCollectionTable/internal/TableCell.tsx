@@ -3,8 +3,6 @@ import clsx from "clsx";
 
 import useMeasure from "react-use-measure";
 
-import { Tooltip } from "@mui/material";
-
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { TableSize } from "../../Table";
@@ -12,6 +10,7 @@ import { getRowHeight } from "../../Table/common";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { ErrorTooltip } from "../../ErrorTooltip";
 import { IconButton } from "../../../../components";
+import { Tooltip } from "../../../../components/Tooltip";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -217,6 +216,7 @@ export const TableCell = React.memo<TableCellProps>(
                     justifyContent,
                     alignItems: disabled || !isOverflowing ? "center" : undefined,
                     width: width ?? "100%",
+                    textAlign: align,
                     // transition: "border-color 200ms ease-in-out"
                 }}
                 tabIndex={selected || disabled ? undefined : 0}
@@ -260,7 +260,7 @@ export const TableCell = React.memo<TableCellProps>(
                         </Tooltip>
                     </div>}
 
-                {(showError || showExpandIcon) &&
+                {(showError || (!disabled && showExpandIcon)) &&
                     <div className="absolute top-0.5 right-0.5">
 
                         {selected && !disabled && showExpandIcon &&
@@ -284,7 +284,6 @@ export const TableCell = React.memo<TableCellProps>(
                         }
 
                         {showError && <ErrorTooltip
-                            arrow
                             placement={"left"}
                             title={showError.message}>
                             <ErrorOutlineIcon

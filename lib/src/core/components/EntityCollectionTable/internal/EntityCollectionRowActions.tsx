@@ -2,12 +2,13 @@ import React, { MouseEvent, useCallback } from "react";
 import clsx from "clsx";
 
 import { CollectionSize, Entity } from "../../../../types";
-import { ListItemIcon, ListItemText, Menu, MenuItem, Skeleton, Tooltip, useTheme } from "@mui/material";
+import { ListItemIcon, ListItemText, Menu, MenuItem, Skeleton, useTheme } from "@mui/material";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
-import Typography from "../../../../components/Typography";
+import { Typography } from "../../../../components/Typography";
 import { IconButton } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
 import { Checkbox } from "../../../../components/Checkbox";
+import { Tooltip } from "../../../../components/Tooltip";
 
 /**
  *

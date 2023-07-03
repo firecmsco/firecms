@@ -5,7 +5,7 @@ import { ResolvedMapProperty } from "../../types";
 import { ErrorBoundary } from "../../core";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
 
 /**
  * @category Preview components

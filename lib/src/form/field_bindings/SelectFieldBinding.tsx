@@ -6,7 +6,7 @@ import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty, Select } from "../../core";
-import { IconButton, InputLabel } from "../../components";
+import { IconButton } from "../../components";
 import ClearIcon from "@mui/icons-material/Clear";
 import { FieldHelperText } from "../components/FieldHelperText";
 
@@ -58,12 +58,11 @@ export function SelectFieldBinding<T extends EnumType>({
                     "w-full",
                     property.clearable ? "pr-14" : "")}
 
-                label={<InputLabel id={`${propertyKey}-select-label`}
-                                   shrink={Boolean(value)}>
-                    <LabelWithIcon icon={getIconForProperty(property)}
-                                   required={property.validation?.required}
-                                   title={property.name}/>
-                </InputLabel>}
+                label={<LabelWithIcon icon={getIconForProperty(property)}
+                                      required={property.validation?.required}
+                                      title={property.name}
+                                      className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}
+                />}
                 endAdornment={
                     property.clearable && <IconButton
                         onClick={handleClearClick}>
@@ -80,7 +79,7 @@ export function SelectFieldBinding<T extends EnumType>({
                     return <EnumValuesChip
                         enumKey={enumKey}
                         enumValues={enumValues}
-                        small={false}/>;
+                        size={"medium"}/>;
                 }}
                 options={enumValues?.map((enumConfig) => String(enumConfig.id)) ?? []}
             />

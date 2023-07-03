@@ -1,6 +1,6 @@
 import React from "react";
 import { Link as ReactLink } from "react-router-dom";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components";
 import { Button } from "../../components/Button";
 
 export function NotFoundPage() {

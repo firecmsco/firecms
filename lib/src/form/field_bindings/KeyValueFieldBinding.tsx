@@ -16,7 +16,7 @@ import {
     TextInput
 } from "../../core";
 import { LabelWithIcon } from "../components";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
 import { BooleanSwitchWithLabel, IconButton } from "../../components";
 import { Button } from "../../components/Button";
 import { FieldHelperText } from "../components/FieldHelperText";
@@ -62,7 +62,7 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
         icon={getIconForProperty(property)}
         required={property.validation?.required}
         title={property.name}
-        className={"ml-3.5"}/>;
+        className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>;
 
     return (
         <>
@@ -163,7 +163,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                   }}/>;
         } else if (dataType === "boolean") {
             return <BooleanSwitchWithLabel value={entryValue}
-                                           small={true}
+                                           size={"small"}
                                            position={"start"}
                                            disabled={disabled || !fieldKey}
                                            onValueChange={(newValue) => {
@@ -180,7 +180,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                 newDefaultEntry={""}
                                 droppableId={rowId.toString()}
                                 addLabel={fieldKey ? `Add to ${fieldKey}` : "Add"}
-                                small={true}
+                                size={"small"}
                                 disabled={disabled || !fieldKey}
                                 includeAddButton={true}
                                 onValueChange={(newValue) => {
@@ -347,7 +347,7 @@ function ArrayKeyValueRow<T>({
                                   }}/>;
         } else if (dataType === "boolean") {
             return <BooleanSwitchWithLabel value={entryValue}
-                                           small={true}
+                                           size={"small"}
                                            position={"start"}
                                            onValueChange={(v) => {
                                                setValue(v as T);

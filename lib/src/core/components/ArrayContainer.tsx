@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 
-import { ListItemIcon, ListItemText, Menu, MenuItem, Tooltip, useTheme } from "@mui/material";
+import { ListItemIcon, ListItemText, Menu, MenuItem, useTheme } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -15,6 +15,7 @@ import { MoreVert } from "@mui/icons-material";
 import { fieldBackgroundSubtleHover } from "../util/field_colors";
 import { IconButton } from "../../components";
 import { Button } from "../../components/Button";
+import { Tooltip } from "../../components/Tooltip";
 
 interface ArrayContainerProps<T> {
     droppableId: string;
@@ -22,7 +23,7 @@ interface ArrayContainerProps<T> {
     addLabel: string;
     buildEntry: (index: number, internalId: number) => React.ReactNode;
     disabled?: boolean;
-    small?: boolean;
+    size?: "small" | "medium";
     onInternalIdAdded?: (id: number) => void;
     includeAddButton?: boolean;
     newDefaultEntry: T;
@@ -38,7 +39,7 @@ export function ArrayContainer<T>({
                                       value,
                                       disabled = false,
                                       buildEntry,
-                                      small,
+                                      size,
                                       onInternalIdAdded,
                                       includeAddButton,
                                       newDefaultEntry,
@@ -80,7 +81,6 @@ export function ArrayContainer<T>({
             setInternalIds(newInternalIds);
         }
     }, [hasValue, internalIds.length, value]);
-
 
     const insertInEnd = () => {
         if (disabled) return;
@@ -141,7 +141,7 @@ export function ArrayContainer<T>({
                                    provided={provided}
                                    internalId={internalId}
                                    index={index}
-                                   small={small}
+                                   size={size}
                                    disabled={disabled}
                                    buildEntry={buildEntry}
                                    remove={remove}
@@ -167,7 +167,7 @@ export function ArrayContainer<T>({
                                             provided={provided}
                                             internalId={internalId}
                                             index={index}
-                                            small={small}
+                                            size={size}
                                             disabled={disabled}
                                             buildEntry={buildEntry}
                                             remove={remove}
@@ -183,8 +183,8 @@ export function ArrayContainer<T>({
 
                         {includeAddButton && <div className="p-4 justify-center text-left">
                             <Button
-                                variant={small ? "text" : "outlined"}
-                                size={small ? "small" : "large"}
+                                variant={size === "small" ? "text" : "outlined"}
+                                size={size === "small" ? "small" : "medium"}
                                 color="primary"
                                 disabled={disabled}
                                 startIcon={<AddIcon/>}
@@ -203,7 +203,7 @@ type ArrayContainerItemProps = {
     provided: DraggableProvided,
     index: number,
     internalId: number,
-    small?: boolean,
+    size?: "small" | "medium",
     disabled: boolean,
     buildEntry: (index: number, internalId: number) => React.ReactNode,
     remove: (index: number) => void,
@@ -215,7 +215,7 @@ export function ArrayContainerItem({
                                        provided,
                                        index,
                                        internalId,
-                                       small,
+                                       size,
                                        disabled,
                                        buildEntry,
                                        remove,
@@ -224,7 +224,7 @@ export function ArrayContainerItem({
                                    }: ArrayContainerItemProps) {
 
     const [measureRef, bounds] = useMeasure();
-    const contentOverflow = !small && bounds.height > 0 && bounds.height < 100;
+    const contentOverflow = size !== "small" && bounds.height > 0 && bounds.height < 100;
 
     const [onHover, setOnHover] = React.useState(false);
     const setOnHoverTrue = useCallback(() => setOnHover(true), []);
@@ -239,7 +239,7 @@ export function ArrayContainerItem({
         {...provided.draggableProps}
         style={provided.draggableProps.style}
         className={`${
-            (isDragging || onHover) ? fieldBackgroundSubtleHover(theme) : ''
+            (isDragging || onHover) ? fieldBackgroundSubtleHover(theme) : ""
         } mb-1 rounded-md opacity-100`}
     >
         <div
@@ -249,7 +249,7 @@ export function ArrayContainerItem({
             >
                 {buildEntry(index, internalId)}
             </div>
-            <ArrayItemOptions direction={small ? "row" : "column"}
+            <ArrayItemOptions direction={size === "small" ? "row" : "column"}
                               disabled={disabled}
                               remove={remove}
                               index={index}

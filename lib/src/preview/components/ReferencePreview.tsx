@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import { Skeleton, Tooltip } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import { Entity, EntityCollection, EntityReference, ResolvedProperty } from "../../types";
 
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
@@ -11,9 +11,10 @@ import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityC
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
 import clsx from "clsx";
 import { IconButton } from "../../components";
+import { Tooltip } from "../../components/Tooltip";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
