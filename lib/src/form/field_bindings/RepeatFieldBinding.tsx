@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
@@ -20,6 +20,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                              showError,
                                                              isSubmitting,
                                                              setValue,
+                                                             setFieldValue,
                                                              tableMode,
                                                              property,
                                                              includeDescription,
@@ -45,8 +46,9 @@ export function RepeatFieldBinding<T extends Array<any>>({
         setValue
     });
 
-    const buildEntry = useCallback((index: number, internalId: number) => {
+    const buildEntry = (index: number, internalId: number) => {
         const childProperty = property.resolvedProperties[index] ?? ofProperty;
+        console.log("childProperty", `${propertyKey}.${index}`, value[index])
         const fieldProps = {
             propertyKey: `${propertyKey}.${index}`,
             disabled,
@@ -59,11 +61,12 @@ export function RepeatFieldBinding<T extends Array<any>>({
             autoFocus: internalId === lastAddedId
         };
         return <PropertyFieldBinding {...fieldProps}/>;
-    }, [context, disabled, includeDescription, lastAddedId, ofProperty, property.resolvedProperties, propertyKey, underlyingValueHasChanged]);
+    };
 
     const arrayContainer = <FormikArrayContainer value={value}
                                                  addLabel={property.name ? "Add entry to " + property.name : "Add entry"}
                                                  name={propertyKey}
+                                                 setFieldValue={setFieldValue}
                                                  buildEntry={buildEntry}
                                                  onInternalIdAdded={setLastAddedId}
                                                  disabled={isSubmitting || Boolean(property.disabled)}

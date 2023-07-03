@@ -111,6 +111,9 @@ export function useBuildNavigationContext<UserType extends User>({
 
     const refreshNavigation = useCallback(async () => {
 
+        if (authController.initialLoading)
+            return;
+
         try {
             const [resolvedCollections = [], resolvedViews = []] = await Promise.all([
                     resolveCollections(baseCollections, authController, dataSource, plugins),
@@ -128,7 +131,7 @@ export function useBuildNavigationContext<UserType extends User>({
 
         setNavigationLoading(false);
         setInitialised(true);
-    }, [baseCollections, authController.user, dataSource, plugins, baseViews, computeTopNavigation]);
+    }, [baseCollections, authController.user, authController.initialLoading, dataSource, plugins, baseViews, computeTopNavigation]);
 
     useEffect(() => {
         refreshNavigation();

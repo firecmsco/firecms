@@ -56,7 +56,9 @@ import { useFireCMSContext } from "../hooks";
  */
 // export const PropertyFieldBinding = PropertyFieldBindingInternal;
 export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a: PropertyFieldBindingProps<any>, b: PropertyFieldBindingProps<any>) => {
-
+    if (a.propertyKey !== b.propertyKey) {
+        return false;
+    }
     const aIsBuilder = isPropertyBuilder(a.property) || a.property.fromBuilder;
     const bIsBuilder = isPropertyBuilder(b.property) || b.property.fromBuilder;
 

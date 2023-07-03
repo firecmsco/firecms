@@ -29,6 +29,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                                                             showError,
                                                             isSubmitting,
                                                             setValue,
+                                                            setFieldValue,
                                                             tableMode,
                                                             property,
                                                             includeDescription,
@@ -77,6 +78,7 @@ export function BlockFieldBinding<T extends Array<any>>({
                                        onInternalIdAdded={setLastAddedId}
                                        disabled={isSubmitting || Boolean(property.disabled)}
                                        includeAddButton={!property.disabled}
+                                       setFieldValue={setFieldValue}
                                        newDefaultEntry={{
                                            [property.oneOf!.typeField ?? DEFAULT_ONE_OF_TYPE]: firstOneOfKey,
                                            [property.oneOf!.valueField ?? DEFAULT_ONE_OF_VALUE]: getDefaultValueFor(property.oneOf.properties[firstOneOfKey])

@@ -185,7 +185,7 @@ module.exports = {
                         {
                             label: "Cookies policy",
                             to: "/policy/cookies_policy"
-                        }
+                        },
                     ]
                 },
                 {
@@ -199,6 +199,10 @@ module.exports = {
                             label: "Github",
                             href: "https://github.com/FireCMSco/firecms"
                         },
+                        {
+                            html: `<iframe src="https://github.com/sponsors/firecmsco/button" title="Sponsor firecmsco" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
+                                `,
+                        }
                     ]
                 },
                 {

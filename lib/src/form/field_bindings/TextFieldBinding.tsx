@@ -69,7 +69,6 @@ export function TextFieldBinding<T extends string | number>({
     const isMultiline = Boolean(multiline);
 
     const inputType = property.dataType === "number" ? "number" : undefined;
-
     return (
         <>
             <TextInput

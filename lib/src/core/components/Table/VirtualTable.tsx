@@ -46,13 +46,14 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
                                     position: "relative",
                                     height: "100%"
                                 }}>
-                                <div ref={ref}
-                                     {...rest}
-                                     style={{
-                                         ...rest?.style,
-                                         minHeight: "100%",
-                                         position: "relative"
-                                     }}>
+                                <div
+                                    ref={ref}
+                                    {...rest}
+                                    style={{
+                                        ...rest?.style,
+                                        minHeight: "100%",
+                                        position: "relative"
+                                    }}>
                                     <VirtualTableHeaderRow {...virtualTableProps}/>
                                     {!customView && children}
                                 </div>

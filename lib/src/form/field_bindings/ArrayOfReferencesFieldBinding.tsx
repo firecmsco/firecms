@@ -26,7 +26,8 @@ export function ArrayOfReferencesFieldBinding({
                                                   tableMode,
                                                   property,
                                                   includeDescription,
-                                                  setValue
+                                                  setValue,
+                                                  setFieldValue
                                               }: ArrayOfReferencesFieldProps) {
 
     const ofProperty = property.of as ResolvedProperty;
@@ -110,6 +111,7 @@ export function ArrayOfReferencesFieldBinding({
                                   name={propertyKey}
                                   buildEntry={buildEntry}
                                   disabled={isSubmitting}
+                                  setFieldValue={setFieldValue}
                                   newDefaultEntry={property.of.defaultValue}/>
 
             <div className="p-4 justify-center text-left">

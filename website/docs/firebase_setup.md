@@ -71,3 +71,19 @@ Alternatively, you can use the url `http://localhost:5173`.
 In case you want to use the different storage fields provided by the CMS, you
 need to enable **Firebase Storage**. The default bucket will be used to
 save your stored files.
+
+:::note
+If you are experiencing any CORS issues, you can enable CORS in your bucket
+settings as specified in: https://firebase.google.com/docs/storage/web/download-files#cors_configuration 
+Create a file with the content: 
+```
+[
+  {
+    "origin": ["*"],
+    "method": ["GET"],
+    "maxAgeSeconds": 3600
+  }
+]
+```
+and upload it with: `gsutil cors set cors.json gs://<your-cloud-storage-bucket>`.
+:::

@@ -1,14 +1,10 @@
 import {
     buildCollection,
-    buildProperties,
     buildProperty,
     EntityCallbacks,
-    EntityIdUpdateProps,
-    EntityOnFetchProps, EntityReference,
+    EntityOnFetchProps,
     EnumValues,
-    Properties,
-    resolveNavigationFrom,
-    toSnakeCase
+    resolveNavigationFrom
 } from "firecms";
 import { CustomField } from "../custom_field/SubPropertyField";
 import { usersCollection } from "./users_collection";
@@ -47,15 +43,15 @@ export const testCallbacks: EntityCallbacks = {
         // values.name = "Forced name";
         return entity;
     },
-    onIdUpdate({
-                   collection,
-                   context,
-                   entityId,
-                   path,
-                   values
-               }: EntityIdUpdateProps): string {
-        return toSnakeCase(values?.name)
-    },
+    // onIdUpdate({
+    //                collection,
+    //                context,
+    //                entityId,
+    //                path,
+    //                values
+    //            }: EntityIdUpdateProps): string {
+    //     return toSnakeCase(values?.name)
+    // },
 
     onPreSave: ({
                     collection,
@@ -87,98 +83,12 @@ const validatedCustom = buildProperty({
     Field: CustomField
 });
 
-export const translationProperties: Properties<any> = {
-    en: {
-        dataType: "string",
-        name: "English"
-    },
-    es: {
-        dataType: "string",
-        name: "Español"
-    },
-    eu: {
-        dataType: "string",
-        name: "Vasco"
-    }
-};
-
-export const questionProperties = buildProperties({
-    id: {
-        dataType: "string",
-        name: "ID",
-        validation: { required: true }
-    },
-    text: {
-        dataType: "map",
-        name: "Text",
-        properties: translationProperties
-    },
-    question_type: {
-        dataType: "string",
-        name: "Question type",
-        enumValues: {
-            multiple_choice: "Multiple choice",
-            single_choice: "Single choice",
-            integer_input: "Integer input",
-            birth_year: "Birth year",
-            boolean: "Yes/No",
-        }
-    }
-});
-
-const answersProperties = buildProperties({
-    answers: {
-        dataType: "array",
-        name: "Answers",
-        of: {
-            dataType: "map",
-            name: "Flow",
-            properties: {
-                id: {
-                    dataType: "string",
-                    name: "ID"
-                },
-                text: {
-                    dataType: "map",
-                    name: "Text",
-                    properties: translationProperties
-                }
-            }
-        }
-    }
-});
-
-export const formPropertyEntry = buildProperty(({ propertyValue }) => {
-
-    const questionMode = propertyValue?.type === "question";
-    const additionalProperties = questionMode ? questionProperties : {};
-    const questionType = propertyValue?.question_type;
-    const questionAdditionalProperties = questionMode && (questionType === "multiple_choice" || questionType === "single_choice") ? answersProperties : {};
-
-    const name = propertyValue?.text?.en ?? "Form entry";
-    return {
-        dataType: "map",
-        name,
-        expanded: false,
-        properties: {
-            type: {
-                dataType: "string",
-                enumValues: {
-                    question: "Question",
-                    category: "Category"
-                }
-            },
-            ...additionalProperties,
-            ...questionAdditionalProperties
-        }
-    };
-});
-
 export const testCollection = buildCollection({
     callbacks: testCallbacks,
     path: "test_entity",
     customId: false,
     name: "Test entities",
+    // formAutoSave: true,
     properties: {
 
         tags: {
@@ -206,24 +116,29 @@ export const testCollection = buildCollection({
         //         }
         //     }
         // }),
-        key_value: {
-            dataType: "map",
-            name: "Key value",
-            keyValue: true
-        },
-        test_string: {
+
+        name: {
             dataType: "string",
-            name: "Test string",
-            disabled: { hidden: true },
-            validation: {
-                required: true
-            }
+            name: "Name"
         },
-        test_custom: {
-            dataType: "string",
-            name: "Test custom",
-            fieldConfig: "test_custom_field"
-        },
+        // key_value: {
+        //     dataType: "map",
+        //     name: "Key value",
+        //     keyValue: true
+        // },
+        // test_string: {
+        //     dataType: "string",
+        //     name: "Test string",
+        //     disabled: { hidden: true },
+        //     validation: {
+        //         required: true
+        //     }
+        // },
+        // test_custom: {
+        //     dataType: "string",
+        //     name: "Test custom",
+        //     fieldConfig: "test_custom_field"
+        // },
         // map: {
         //     dataType: "map",
         //     properties: {
@@ -281,15 +196,12 @@ export const testCollection = buildCollection({
         //         ]
         // },
         //
-        test_date: {
-            name: "Test date",
-            dataType: "date",
-            mode: "date_time",
-            clearable: true
-        },
-        // name: {
-        //     dataType: "string",
-        //     name: "Name"
+        // test_date: {
+        //     name: "Test date",
+        //     dataType: "date",
+        //     mode: "date_time",
+        //     autoValue: "on_create",
+        //     clearable: true
         // },
         // self_ref: {
         //     name: "Self ref",
@@ -350,7 +262,6 @@ export const testCollection = buildCollection({
         //         }
         //     ]
         // },
-
         // impacts: {
         //     name: "Impacts",
         //     validation: { required: true },
@@ -376,12 +287,33 @@ export const testCollection = buildCollection({
         //         }
         //     })
         // },
-        product: {
-            name: "Product",
-            dataType: "reference",
-            path: "products",
-            defaultValue: new EntityReference("B000P0MDMS", "products")
-        }
+        eeee: {
+            name: "My enum",
+            dataType: "string",
+            enumValues: {
+                value1: "Value 1",
+                value2: "Value 2",
+            },
+            validation: { required: false },
+            clearable: true,
+        },
+        products: buildProperty(({ values }) => ({
+            name: "Products",
+            dataType: "array",
+            of: {
+                dataType: "reference",
+                path: "products",
+                forceFilter: {
+                    tags: ["array-contains", "test"]
+                }
+            },
+        })),
+        // product: {
+        //     name: "Product",
+        //     dataType: "reference",
+        //     path: "products",
+        //     defaultValue: new EntityReference("B000P0MDMS", "products"),
+        // }
         // movement: buildProperty(({ values }) => {
         //     return {
         //         name: "Locale",
