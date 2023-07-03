@@ -1,6 +1,8 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 /src/firebase_config.ts
 /src/appcheck_config.ts
+/src/SampleApp/SampleApp.tsx
+
 .firebaserc
 .firebase
 
@@ -11,6 +13,7 @@
 
 # testing
 /coverage
+
 
 .DS_Store
 dist

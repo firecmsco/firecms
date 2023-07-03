@@ -8,7 +8,7 @@ import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
 import { AppCheckOptions, Authenticator, CMSView, FirebaseCMSApp } from "firecms";
-import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
+// import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
@@ -110,22 +110,22 @@ function SampleApp() {
         logEvent(analytics, event, data);
     }, []);
 
-    const dataEnhancementPlugin = useDataEnhancementPlugin({
-        getConfigForPath: ({ path }) => {
-            if (process.env.NODE_ENV !== "production")
-                return true;
-            if (path === "books")
-                return true;
-            return false;
-        }
-    });
+    // const dataEnhancementPlugin = useDataEnhancementPlugin({
+    //     getConfigForPath: ({ path }) => {
+    //         if (process.env.NODE_ENV !== "production")
+    //             return true;
+    //         if (path === "books")
+    //             return true;
+    //         return false;
+    //     }
+    // });
 
     return <FirebaseCMSApp
         name={"My Online Shop"}
         // appCheckOptions={appCheckOptions}
         authentication={myAuthenticator}
         allowSkipLogin={true}
-        plugins={[dataEnhancementPlugin]}
+        // plugins={[dataEnhancementPlugin]}
         signInOptions={[
             "password",
             "google.com"
