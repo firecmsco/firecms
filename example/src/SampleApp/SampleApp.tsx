@@ -14,7 +14,7 @@ import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
-import { publicRecaptchaKey } from "../appcheck_config";
+// import { publicRecaptchaKey } from "../appcheck_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
 import { testCollection } from "./collections/test_collection";
@@ -33,13 +33,13 @@ import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "firebase/app";
 
 function SampleApp() {
-    const appCheckOptions: AppCheckOptions = {
-        providerKey: publicRecaptchaKey,
-        useEnterpriseRecaptcha: false,
-        isTokenAutoRefreshEnabled: true,
-        // debugToken: appCheckDebugToken,
-        forceRefresh: false
-    };
+    // const appCheckOptions: AppCheckOptions = {
+    //     providerKey: publicRecaptchaKey,
+    //     useEnterpriseRecaptcha: false,
+    //     isTokenAutoRefreshEnabled: true,
+    //     // debugToken: appCheckDebugToken,
+    //     forceRefresh: false
+    // };
 
     const githubLink = (
         <Tooltip

@@ -159,20 +159,10 @@ happy to help!
 `hello@firecms.co`
 
 
-## Development
+## Contributing
 
-If you would like to make changes to the source, feel free to submit a PR!
-
-When developing, the core library can be found under `lib`.
-There is an example project in the folder `example`.
-
-In order to run the project, you need to create a file
-called `firebase_config.ts` in `example/src`.
-
-That file needs to export a valid Firebase config, that you can get
-from your Firebase console when creating a webapp for your project.
-
-Then simply run `yarn` and `yarn dev`
+Check the [Contributing Guidelines](CONTRIBUTING.md)
+TLDR: Simply run `yarn` and `yarn dev`
 
 ## License
 
