@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
 import clsx from "clsx";
 
-import { Link, Tooltip } from "@mui/material";
+import { Link } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
@@ -11,6 +11,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useRestoreScroll } from "./internal/useRestoreScroll";
 import { IconButton, Sheet } from "../components";
 import { useLargeLayout } from "../hooks/useLargeLayout";
+import { Tooltip } from "../components/Tooltip";
 
 export const DRAWER_WIDTH = 280;
 
@@ -179,13 +180,16 @@ function StyledDrawer(props: {
     >
 
         {!props.open && (
-            <Tooltip title="Open menu" placement="right">
+            <Tooltip title="Open menu"
+                     placement="right"
+                     className="sticky top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit"
+            >
                 <IconButton
                     color="inherit"
                     aria-label="Open menu"
+                    className="sticky top-2 left-3 "
                     onClick={() => props.setDrawerOpen(true)}
                     size="large"
-                    className="sticky top-2 left-3"
                 >
                     <MenuIcon/>
                 </IconButton>

@@ -142,7 +142,7 @@ export function StringNumberFilterField({
                                                     key={`select_value_${name}_${enumKey}`}
                                                     enumKey={enumKey}
                                                     enumValues={enumValues}
-                                                    small={true}/>;
+                                                    size={"small"}/>;
                                             })}
                                         </>
                                     )
@@ -155,7 +155,7 @@ export function StringNumberFilterField({
                                         <EnumValuesChip
                                             enumKey={enumConfig.id}
                                             enumValues={enumValues}
-                                            small={true}/>
+                                            size={"small"}/>
                                     </MenuItem>
                                 );
                             })}

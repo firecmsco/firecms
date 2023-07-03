@@ -1,8 +1,5 @@
 import React, { useMemo } from "react";
 
-import { styled } from "@mui/material/styles";
-
-import { FormControl, InputAdornment, MenuItem, Theme, Tooltip } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { ErrorMessage } from "formik";
@@ -12,37 +9,17 @@ import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } fro
 import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
 import { enumToObjectEntries, Select, TextInput } from "../../core";
 import { IconButton } from "../../components";
-
-const PREFIX = "CustomIdField";
-
-const classes = {
-    input: `${PREFIX}-input`,
-    select: `${PREFIX}-select`
-};
-
-const StyledFormControl = styled(FormControl)((
-    { theme }: {
-        theme: Theme
-    }
-) => ({
-    marginBottom: "16px",
-    [`& .${classes.input}`]: {
-        minHeight: "64px"
-    },
-
-    [`& .${classes.select}`]: {
-        paddingTop: theme.spacing(1 / 2)
-    }
-}));
+import { Tooltip } from "../../components/Tooltip";
+import { MenuItem } from "@mui/material";
 
 export function CustomIdField<M extends Record<string, any>>({
-                                                                           customId,
-                                                                           entityId,
-                                                                           status,
-                                                                           onChange,
-                                                                           error,
-                                                                           entity
-                                                                       }: {
+                                                                 customId,
+                                                                 entityId,
+                                                                 status,
+                                                                 onChange,
+                                                                 error,
+                                                                 entity
+                                                             }: {
     customId?: boolean | EnumValues | "optional"
     entityId?: string
     status: EntityStatus,
@@ -69,50 +46,44 @@ export function CustomIdField<M extends Record<string, any>>({
     });
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
-    const inputProps = {
-        endAdornment: entity
-            ? (
-                <InputAdornment position="end">
-
-                    <IconButton onClick={(e) => copy(entity.id)}
-                                aria-label="copy-id"
-                                size="large">
-                        <Tooltip title={"Copy"}>
-                            <svg
-                                className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
-                                fill={"currentColor"}
-                                width="20" height="20" viewBox="0 0 24 24">
-                                <path
-                                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                            </svg>
-                        </Tooltip>
-                    </IconButton>
-
-                    {appConfig?.entityLinkBuilder &&
-                        <a href={appConfig.entityLinkBuilder({ entity })}
-                           rel="noopener noreferrer"
-                           target="_blank">
-                            <IconButton onClick={(e) => e.stopPropagation()}
-                                        aria-label="go-to-datasource"
-                                        size="large">
-                                <Tooltip title={"Open in the console"}>
-                                    <OpenInNewIcon fontSize={"small"}/>
-                                </Tooltip>
-                            </IconButton>
-                        </a>}
-
-                </InputAdornment>
-            )
-            : undefined
-    };
 
     const fieldProps: any = {
         label: idSetAutomatically ? "ID is set automatically" : "ID",
         disabled,
         name: "id",
-        type: null,
         value: (entity && status === "existing" ? entity.id : entityId) ?? "",
-        variant: "filled"
+        endAdornment: entity
+            ? (
+                <>
+
+                    <Tooltip title={"Copy"}>
+                        <IconButton onClick={(e) => copy(entity.id)}
+                                    aria-label="copy-id">
+                            <svg
+                                fill={"currentColor"}
+                                width="20" height="20" viewBox="0 0 24 24">
+                                <path
+                                    d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                            </svg>
+                        </IconButton>
+                    </Tooltip>
+
+                    {appConfig?.entityLinkBuilder &&
+                        <Tooltip title={"Open in the console"}>
+                            <IconButton component={"a"}
+                                        href={appConfig.entityLinkBuilder({ entity })}
+                                        rel="noopener noreferrer"
+                                        target="_blank"
+                                        onClick={(e) => e.stopPropagation()}
+                                        aria-label="go-to-datasource">
+                                <OpenInNewIcon fontSize={"small"}/>
+                            </IconButton>
+                        </Tooltip>}
+
+                </>
+            )
+            : undefined
+
     };
 
     return (
@@ -121,7 +92,6 @@ export function CustomIdField<M extends Record<string, any>>({
             {enumValues &&
                 <Select
                     fullWidth
-                    className={classes.select}
                     disableUnderline={true}
                     error={error}
                     {...fieldProps}
@@ -137,8 +107,7 @@ export function CustomIdField<M extends Record<string, any>>({
             {!enumValues &&
                 <TextInput {...fieldProps}
                            error={error}
-                           InputProps={inputProps}
-                           helperText={customId === "optional" ? "Autogenerated ID, it can be manually changed" : (status === "new" || status === "copy" ? "ID of the new document" : "ID of the document")}
+                           placeholder={customId === "optional" ? "Autogenerated ID, it can be manually changed" : (status === "new" || status === "copy" ? "ID of the new document" : "ID of the document")}
                            onChange={(event) => {
                                let value = event.target.value;
                                if (value) value = value.trim();

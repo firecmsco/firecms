@@ -3,7 +3,8 @@ import clsx from "clsx";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { ChevronDown } from "lucide-react";
-import { defaultBorderMixin, focusedMixin, paperMixin } from "../../styles";
+import { defaultBorderMixin, focusedMixin, paperMixin } from "../styles";
+import { useInjectStyles } from "./util/useInjectStyles";
 
 export function ExpandablePanel({
                                     title,
@@ -23,15 +24,12 @@ export function ExpandablePanel({
     contentClassName?: string
 }>) {
 
-    const [open, setOpen] = useState(initiallyOpen);
-    return (<>
-            <style>
-                {`
+    useInjectStyles("ExpandablePanel", `
 .CollapsibleContent {
   overflow: hidden;
 }
 .CollapsibleContent[data-state='open'] {
-  animation: slideDown 220ms ease-in;
+  animation: slideDown 220ms ease-out;
 }
 .CollapsibleContent[data-state='closed'] {
   animation: slideUp 220ms ease-in;
@@ -53,8 +51,10 @@ export function ExpandablePanel({
   to {
     height: 0;
   }
-}`}
-            </style>
+}`);
+
+    const [open, setOpen] = useState(initiallyOpen);
+    return (<>
             <Collapsible.Root
                 className={clsx(
                     !invisible && paperMixin,
@@ -67,7 +67,7 @@ export function ExpandablePanel({
 
                 <Collapsible.Trigger
                     className={clsx(focusedMixin,
-                        "rounded flex items-center justify-between w-full p-4",
+                        "rounded flex items-center justify-between w-full p-4 min-h-[64px]",
                         invisible && "border-b",
                         invisible && defaultBorderMixin,
                         className
@@ -78,6 +78,7 @@ export function ExpandablePanel({
                 </Collapsible.Trigger>
 
                 <Collapsible.Content
+                    forceMount
                     className={clsx("CollapsibleContent", contentClassName)}
                 >
                     {children}

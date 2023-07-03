@@ -27,7 +27,7 @@ import { isReadOnly, resolveCollection } from "../../../../util";
 import { DialogActions } from "../../../DialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
-import Typography from "../../../../../components/Typography";
+import { Typography } from "../../../../../components/Typography";
 import { IconButton } from "../../../../../components";
 import { Button } from "../../../../../components/Button";
 

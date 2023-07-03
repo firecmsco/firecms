@@ -1,5 +1,5 @@
 import React from "react";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
 
 interface LabelWithIconProps {
     icon: React.ReactNode;

@@ -19,7 +19,7 @@ export * from "./NotFoundPage";
 
 export * from "./Table";
 export * from "./ErrorBoundary";
-export * from "./ExpandablePanel";
+export * from "../../components/ExpandablePanel";
 export * from "./DeleteConfirmationDialog";
 
 export * from "./FireCMSLogo";
@@ -30,9 +30,4 @@ export * from "./FireCMSAppBar";
 
 export * from "./ArrayContainer";
 
-export * from "../../components/Select";
-export * from "../../components/TextInput";
-export * from "../../components/TextareaAutosize";
-export * from "../../components/BooleanSwitch";
-export * from "../../components/DateTimeField";
-export * from "../../components/DisabledTextField";
+export * from "../../components";

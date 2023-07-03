@@ -69,7 +69,7 @@ export function MarkdownFieldBinding({
                 <LabelWithIcon icon={getIconForProperty(property)}
                                required={property.validation?.required}
                                title={property.name}
-                               className={"ml-3.5"}/>
+                               className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
             </FormHelperText>}
 
             <MdEditor value={internalValue ?? ""}
@@ -304,7 +304,6 @@ const StyledFormControl = styled("div")(() => (`
     outline: none;
     min-height: 0;
     color: inherit;
-    font-size: 14px;
     line-height: 1.7;
 
   }
@@ -353,7 +352,7 @@ const StyledFormControl = styled("div")(() => (`
   }
 
   .custom-html-style p {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.7;
     margin: 8px 0
   }
@@ -370,7 +369,7 @@ const StyledFormControl = styled("div")(() => (`
   }
 
   .custom-html-style ol, .custom-html-style ul {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 28px;
     padding-left: 36px
   }
@@ -394,7 +393,7 @@ const StyledFormControl = styled("div")(() => (`
   }
 
   .custom-html-style code, .custom-html-style pre {
-    font-size: 14px;
+    font-size: 16px;
     border-radius: 0;
     overflow-x: auto
   }
@@ -424,7 +423,7 @@ const StyledFormControl = styled("div")(() => (`
   }
 
   .custom-html-style table {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 1.7;
     max-width: 100%;
     overflow: auto;
@@ -522,7 +521,7 @@ const StyledFormControl = styled("div")(() => (`
     -webkit-justify-content: center;
     -ms-flex-pack: center;
     justify-content: center;
-    font-size: 14px;
+    font-size: 16px;
   }
 
   .rc-md-editor .rc-md-navigation .button-wrap, .rc-md-editor .rc-md-navigation .navigation-nav {
@@ -606,7 +605,7 @@ const StyledFormControl = styled("div")(() => (`
   }
 
   .rc-md-editor .rc-md-navigation h5 {
-    font-size: 14px
+    font-size: 16px
   }
 
   .rc-md-editor .rc-md-navigation h6 {
@@ -626,7 +625,7 @@ const StyledFormControl = styled("div")(() => (`
     margin-right: 5px;
     display: inline-block;
     cursor: pointer;
-    font-size: 14px;
+    font-size: 16px;
     line-height: 28px;
     text-align: center;
     color: #999

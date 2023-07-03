@@ -181,6 +181,13 @@ export const testCollection = buildCollection({
     name: "Test entities",
     properties: {
 
+        tags: {
+            name: "Tags",
+            dataType: "array",
+            of: {
+                dataType: "string"
+            }
+        },
         // specSheet: ({
         //                 values,
         //                 entityId
@@ -697,13 +704,6 @@ export const testCollection = buildCollection({
         //     name: "Status",
         //     dataType: "number",
         //     enumValues: relaxedStatus
-        // },
-        // tags: {
-        //     name: "Tags",
-        //     dataType: "array",
-        //     of: {
-        //         dataType: "string"
-        //     }
         // },
         // available_dates: {
         //     dataType: "array",

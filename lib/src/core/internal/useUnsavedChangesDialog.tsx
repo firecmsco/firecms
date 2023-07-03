@@ -3,8 +3,8 @@ import { Blocker, Transition } from "history";
 import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
 import { DialogActions } from "../components";
 import { Dialog } from "../../components/Dialog";
-import { Typography } from "@mui/material";
 import { Button } from "../../components/Button";
+import { Typography } from "../../components";
 
 export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () => void):
     {

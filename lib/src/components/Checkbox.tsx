@@ -47,8 +47,9 @@ export const Checkbox = ({
     return (
         <div className={clsx(
             outerSizeClasses[size],
-            "rounded-full hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75",
-            "inline-flex items-center justify-center p-2 text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150"
+            "inline-flex items-center justify-center p-2 text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
+            onCheckedChange ? "rounded-full hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75" : "",
+            onCheckedChange ? "cursor-pointer" : "cursor-default"
         )}>
             <CheckboxPrimitive.Root
                 className={clsx(

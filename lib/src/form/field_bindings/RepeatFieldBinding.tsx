@@ -1,11 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
-import { FormikArrayContainer, LabelWithIcon } from "../components";
+import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { ExpandablePanel } from "../../core/components/ExpandablePanel";
+import { ExpandablePanel, getIconForProperty } from "../../core";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { getIconForProperty } from "../../core";
-import { FieldHelperText } from "../components/FieldHelperText";
 
 /**
  * Generic array field that allows reordering and renders the child property
@@ -75,13 +73,15 @@ export function RepeatFieldBinding<T extends Array<any>>({
     const title = (<LabelWithIcon icon={getIconForProperty(property)}
                                   required={property.validation?.required}
                                   title={property.name}
-                                  className={"ml-3.5"}/>);
+                                  className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>);
 
     return (
 
         <>
 
+            {arrayContainer}
             {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
+                                            contentClassName={"p-2"}
                                             title={title}>
                 {arrayContainer}
             </ExpandablePanel>}

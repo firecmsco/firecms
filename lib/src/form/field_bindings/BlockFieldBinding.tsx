@@ -66,7 +66,7 @@ export function BlockFieldBinding<T extends Array<any>>({
         <LabelWithIcon icon={getIconForProperty(property)}
                        required={property.validation?.required}
                        title={property.name}
-                       className={"ml-3.5"}/>
+                       className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
     );
 
     const firstOneOfKey = Object.keys(property.oneOf.properties)[0];
@@ -86,7 +86,10 @@ export function BlockFieldBinding<T extends Array<any>>({
         <>
 
             {!tableMode &&
-                <ExpandablePanel initiallyExpanded={expanded} title={title}>
+                <ExpandablePanel
+                    contentClassName={"p-2"}
+                    initiallyExpanded={expanded}
+                    title={title}>
                     {body}
                 </ExpandablePanel>}
 
@@ -215,7 +218,7 @@ function BlockEntry({
                                     <EnumValuesChip
                                         enumKey={enumKey}
                                         enumValues={enumValuesConfigs}
-                                        small={true}/>
+                                        size={"small"}/>
                                 }>
                                 {enumValuesConfigs
                                     .map((enumValueConfig) => {
@@ -227,7 +230,7 @@ function BlockEntry({
                                                 <EnumValuesChip
                                                     enumKey={enumKey}
                                                     enumValues={enumValuesConfigs}
-                                                    small={true}/>
+                                                    size={"small"}/>
                                             </MenuItem>
                                         );
                                     })}

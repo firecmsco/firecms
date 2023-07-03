@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 
-import { useTheme } from "@mui/material";
 import {
     ArrayProperty,
     Entity,
@@ -11,7 +10,7 @@ import {
 } from "../../types";
 import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
-import { LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 
 import { getIconForProperty, isReadOnly } from "../../core";
 import clsx from "clsx";
@@ -20,14 +19,13 @@ import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { StorageFieldItem, useStorageUploadController } from "../../core/util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components";
 import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
     fieldBackgroundMixin,
     focusedMixin
 } from "../../styles";
-import { FieldHelperText } from "../components/FieldHelperText";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent fieldBackground min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-gray"
@@ -105,7 +103,7 @@ export function StorageUploadFieldBinding({
                 <LabelWithIcon icon={getIconForProperty(property)}
                                required={property.validation?.required}
                                title={property.name}
-                               className={"ml-3.5"}/>}
+                               className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
 
             <StorageUpload
                 value={internalValue}
@@ -170,8 +168,6 @@ function FileDropComponent({
 }) {
 
     const snackbarContext = useSnackbarController();
-
-    const theme = useTheme();
 
     const {
         getRootProps,
@@ -270,9 +266,8 @@ function FileDropComponent({
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    className={focusedMixin}
+                                    className={clsx(focusedMixin, "rounded-md")}
                                     style={{
-                                        borderRadius: theme.shape.borderRadius,
                                         ...provided.draggableProps.style
                                     }}
                                 >

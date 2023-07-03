@@ -25,7 +25,7 @@ import {
 } from "../../hooks";
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
 import { EntityFormSaveParams } from "../../form/EntityForm";
 import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
 import { IconButton } from "../../components";

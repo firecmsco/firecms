@@ -15,9 +15,9 @@ export const InputLabel = React.forwardRef<HTMLLabelElement, InputLabelProps>(fu
     } = inProps;
 
     const defaultClasses = {
-        root: "absolute transition-transform block whitespace-nowrap overflow-hidden text-overflow-ellipsis max-w-full",
-        shrink: "transform translate-y-[2px] scale-75 translate-x-[-2px]",
-        expanded: "absolute translate-x-[10px] top-0 transform translate-y-[16px] scale-100"
+        root: "origin-left transition-transform block whitespace-nowrap overflow-hidden text-overflow-ellipsis max-w-full",
+        shrink: "transform translate-y-[2px] scale-75 translate-x-[12px]",
+        expanded: "translate-x-[16px] top-0 transform translate-y-[16px] scale-100"
     };
 
     const computedClassName = clsx(defaultClasses.root,

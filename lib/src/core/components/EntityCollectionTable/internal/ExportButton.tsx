@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useRef } from "react";
-import { Alert, CircularProgress, Dialog, DialogContent, DialogContentText, DialogTitle, Tooltip } from "@mui/material";
 
 import GetAppIcon from "@mui/icons-material/GetApp";
 import { Entity, EntityCollection, ExportConfig, ResolvedEntityCollection, User } from "../../../../types";
@@ -9,6 +8,11 @@ import { DialogActions } from "../../DialogActions";
 import { resolveCollection } from "../../../util";
 import { IconButton } from "../../../../components";
 import { Button } from "../../../../components/Button";
+import { CircularProgress } from "@mui/material";
+import { Dialog } from "../../../../components/Dialog";
+import { Alert } from "@mui/lab";
+import { Typography } from "../../../../components/Typography";
+import { Tooltip } from "../../../../components/Tooltip";
 
 interface ExportButtonProps<M extends Record<string, any>, UserType extends User> {
     collection: EntityCollection<M>;
@@ -145,41 +149,37 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
         </Tooltip>
 
         <Dialog
-            keepMounted={false}
             open={open}
-            onClose={handleClose}
+            onOpenChange={setOpen}
         >
-            <DialogTitle>Export data</DialogTitle>
+            <div className={"p-4"}>
 
-            <DialogContent>
-                <DialogContentText>
+                <Typography variant={"h6"}>Export data</Typography>
 
-                    <>Download the the content of this table as a CSV</>
-                    <br/>
+                <>Download the the content of this table as a CSV</>
+                <br/>
 
-                    {needsToAcceptFetchAllData &&
-                        <Alert elevation={3}
-                               variant="filled"
-                               severity={"warning"}>
-                            <div>
-                                This collections has a large number
-                                of documents (more
-                                than {INITIAL_DOCUMENTS_LIMIT}).
-                            </div>
-                            <div>
-                                Would you like to proceed?
-                            </div>
+                {needsToAcceptFetchAllData &&
+                    <Alert elevation={3}
+                           variant="filled"
+                           severity={"warning"}>
+                        <div>
+                            This collections has a large number
+                            of documents (more
+                            than {INITIAL_DOCUMENTS_LIMIT}).
+                        </div>
+                        <div>
+                            Would you like to proceed?
+                        </div>
 
-                        </Alert>}
-
-                </DialogContentText>
-            </DialogContent>
+                    </Alert>}
+            </div>
 
             <DialogActions>
 
                 {dataLoading && <CircularProgress size={16} thickness={8}/>}
 
-                <Button onClick={handleClose}>
+                <Button onClick={handleClose} variant={"text"}>
                     Cancel
                 </Button>
 

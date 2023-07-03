@@ -58,7 +58,7 @@ export function TextInput<T extends string | number>({
             onChange={onChange}
             className={clsx(
                 focusedMixin,
-                "rounded-md resize-none w-full outline-none p-[32px] text-base leading-normal bg-transparent min-h-[64px] px-3 pt-[28px] pb-2",
+                "rounded-md resize-none w-full outline-none p-[32px] text-base leading-normal bg-transparent min-h-[64px] px-3 pt-[28px]",
                 disabled && "border border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500"
             )}
         />
@@ -92,15 +92,15 @@ export function TextInput<T extends string | number>({
                 fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 {
-                    "h-[48px]": size === "small",
-                    "h-[64px]": size === "medium"
+                    "min-h-[48px]": size === "small",
+                    "min-h-[64px]": size === "medium"
                 })}>
 
             {label && (
                 <InputLabel
-                    className={`absolute left-2 top-1 pointer-events-none ${
-                        !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-error"
-                    }`}
+                    className={clsx("absolute top-1 pointer-events-none",
+                        !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-error",
+                        disabled ? "opacity-50" : "")}
                     shrink={hasValue || focused}
                 >
                     {label}
@@ -109,7 +109,7 @@ export function TextInput<T extends string | number>({
 
             {input}
 
-            {endAdornment && <div className="absolute right-0 top-3 mr-3 ">{endAdornment}</div>}
+            {endAdornment && <div className="flex absolute right-0 top-3 mr-3 ">{endAdornment}</div>}
         </div>
     );
 }

@@ -1,14 +1,14 @@
 import React from "react";
 import clsx from "clsx";
-import { CircularProgress, Hidden, Tooltip } from "@mui/material";
+import { CircularProgress, Hidden } from "@mui/material";
 
 import { CollectionSize } from "../../../../types";
 import { SearchBar } from "./SearchBar";
 import FilterListOffIcon from "@mui/icons-material/FilterListOff";
-import { Select } from "../../../../components/Select";
-import { IconButton } from "../../../../components";
+import { IconButton, Select } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
 import { defaultBorderMixin } from "../../../../styles";
+import { Tooltip } from "../../../../components/Tooltip";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
@@ -51,7 +51,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     return (
         <div
-            className={clsx(defaultBorderMixin,"min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}
+            className={clsx(defaultBorderMixin, "min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}
         >
 
             <div className="flex items-center space-x-8 md:space-x-4 ">

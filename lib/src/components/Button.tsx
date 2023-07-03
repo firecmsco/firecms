@@ -21,14 +21,14 @@ export function Button<P>({
                               ...props
                           }: ButtonProps<P>) {
     const baseClasses =
-        "font-headers uppercase inline-flex items-center justify-center p-2 px-4 text-sm font-medium focus:outline-none transition-all ease-in-out duration-100";
+        "rounded-md border font-headers uppercase inline-flex items-center justify-center p-2 px-4 text-sm font-medium focus:outline-none transition ease-in-out duration-150";
 
     const buttonClasses = clsx(
         {
-            "rounded-md border border-transparent bg-primary hover:bg-blue-600 focus:ring-blue-400 text-white shadow hover:ring-1 hover:ring-primary": variant === "filled" && !disabled,
-            "rounded-md border border-primary text-primary hover:bg-primary hover:bg-opacity-10 hover:border-blue-600 hover:text-blue-600 focus:ring-blue-400 hover:ring-1 hover:ring-primary": variant === "outlined" && !disabled,
-            "rounded-md border border-transparent text-primary hover:text-blue-600 hover:bg-primary hover:bg-opacity-10 focus:ring-blue-400 hover:ring-1 hover:ring-primary": variant === "text" && !disabled,
-            "border border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500": disabled
+            "border-transparent bg-primary hover:bg-blue-600 focus:ring-blue-400 text-white shadow hover:ring-1 hover:ring-primary": variant === "filled" && !disabled,
+            "border-primary text-primary hover:bg-primary hover:bg-opacity-10 hover:border-blue-600 hover:text-blue-600 focus:ring-blue-400 hover:ring-1 hover:ring-primary": variant === "outlined" && !disabled,
+            "border-transparent text-primary hover:text-blue-600 hover:bg-primary hover:bg-opacity-10": variant === "text" && !disabled,
+            "border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500": disabled
         }
     );
 

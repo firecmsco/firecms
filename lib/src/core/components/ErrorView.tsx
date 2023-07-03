@@ -1,7 +1,7 @@
 import React from "react";
 import ErrorIcon from "@mui/icons-material/Error";
 import { ErrorTooltip } from "./ErrorTooltip";
-import Typography from "../../components/Typography";
+import { Typography } from "../../components/Typography";
 
 /**
  * @category Components

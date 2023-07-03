@@ -69,7 +69,7 @@ export function TableSelect(props: {
             return <EnumValuesChip
                 enumKey={enumKey}
                 enumValues={enumValues}
-                small={small}/>;
+                size={small ? "small" : "medium"}/>;
         }
     };
     return (

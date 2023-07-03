@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
 
@@ -49,6 +49,11 @@ export function Select({
                            multiple
                        }: SelectProps) {
 
+    const [openInternal, setOpenInternal] = React.useState(open);
+    useEffect(() => {
+        setOpenInternal(open);
+    }, [open]);
+
     const onValueChangeInternal = React.useCallback((newValue: string) => {
         if (multiple) {
             if (Array.isArray(value) && value.includes(newValue)) {
@@ -64,39 +69,43 @@ export function Select({
     return (
         <SelectPrimitive.Root
             value={Array.isArray(value) ? undefined : value}
+            open={openInternal}
             onValueChange={onValueChangeInternal}
-            open={open}
-            onOpenChange={onOpenChange}>
+            onOpenChange={(open) => {
+                onOpenChange?.(open);
+                setOpenInternal(open);
+            }}>
+
+            {label}
+
             <div className={clsx(
-                size === "small" ? "h-[42px]" : "h-[64px]",
+                size === "small" ? "min-h-[42px]" : "min-h-[64px]",
                 "select-none rounded-md text-sm",
                 fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 "relative flex items-center font-medium",
                 className)}>
 
-                {label && <div className={"absolute top-[4px] left-0 w-full"}>
-                    {label}
-                </div>}
-
                 <SelectPrimitive.Trigger
                     ref={inputRef}
                     className={clsx(
                         "w-full h-full",
                         size === "small" ? "h-[42px]" : "h-[64px]",
-                        padding ? "px-4 py-2 " : "",
+                        padding ? "px-4 " : "",
                         "outline-none focus:outline-none",
                         "select-none rounded-md text-sm",
                         "focus:text-text-primary dark:focus:text-text-primary-dark",
                         "text-gray-700 dark:text-gray-100",
                         "relative flex items-center",
                         includeFocusOutline ? focusedMixin : "",
-                        inputClassName,
+                        inputClassName
                     )}>
 
                     <SelectPrimitive.Value asChild>
-                        <div className={clsx("flex-grow w-full max-w-full flex flex-row gap-2 items-center",
-                            label ? "mt-5" : "")}>
+                        <div className={clsx(
+                            "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
+                            size === "small" ? "h-[42px]" : "h-[64px]",
+                        )}>
                             {value && Array.isArray(value)
                                 ? value.map((v) => (
                                     <div key={v} className={"flex items-center gap-1 max-w-full"}>
@@ -105,11 +114,13 @@ export function Select({
                                 : (value ? renderOption(value) : placeholder)}
                         </div>
                     </SelectPrimitive.Value>
+
                     <SelectPrimitive.Icon className={clsx(
                         "px-2 h-full flex items-center"
                     )}>
                         <ChevronDown size={"16px"} className={clsx("transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
+
                 </SelectPrimitive.Trigger>
 
                 {endAdornment && <div className={"absolute top-0 right-4 h-full flex items-center"}
@@ -133,7 +144,7 @@ export function Select({
                                         key={option}
                                         value={option}
                                         className={clsx(
-                                            "relative relative flex items-center px-6 py-2 rounded-md text-sm text-gray-700 dark:text-gray-300 font-medium",
+                                            "relative relative flex items-center px-6 py-1 rounded-md text-sm text-gray-700 dark:text-gray-300 font-medium",
                                             "border-2 border-transparent focus-visible:border-opacity-75 focus:outline-none focus-visible:border-solid focus-visible:border-solid focus-visible:border-primary",
                                             selected ? "bg-gray-50 dark:bg-gray-950" : "focus:bg-gray-100 dark:focus:bg-gray-700"
                                         )}

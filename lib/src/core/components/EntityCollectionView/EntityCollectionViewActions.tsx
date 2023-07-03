@@ -1,5 +1,4 @@
 import React from "react";
-import { Tooltip } from "@mui/material";
 
 import { Add, Delete } from "@mui/icons-material";
 import { ExportButton } from "../EntityCollectionTable/internal/ExportButton";
@@ -11,6 +10,7 @@ import { fullPathToCollectionSegments } from "../../util/paths";
 import { IconButton } from "../../../components";
 import { useLargeLayout } from "../../../hooks/useLargeLayout";
 import { Button } from "../../../components/Button";
+import { Tooltip } from "../../../components/Tooltip";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

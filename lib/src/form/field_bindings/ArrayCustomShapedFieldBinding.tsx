@@ -41,6 +41,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
 
     const title = <LabelWithIcon icon={getIconForProperty(property)}
                                  required={property.validation?.required}
+                                 className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}
                                  title={property.name}/>;
 
     const body = property.resolvedProperties.map((childProperty, index) => {
@@ -65,7 +66,9 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
         <>
 
             {!tableMode &&
-                <ExpandablePanel initiallyExpanded={expanded} title={title}>
+                <ExpandablePanel initiallyExpanded={expanded}
+                                 title={title}
+                                 contentClassName={"p-2"}>
                     {body}
                 </ExpandablePanel>}
 

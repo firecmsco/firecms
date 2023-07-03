@@ -1,7 +1,7 @@
 import { PropsWithChildren } from "react";
-import { ExpandablePanel } from "../ExpandablePanel";
+import { ExpandablePanel } from "../../../components/ExpandablePanel";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
-import Typography from "../../../components/Typography";
+import { Typography } from "../../../components/Typography";
 
 export function NavigationGroup({
                                     children,
@@ -14,6 +14,7 @@ export function NavigationGroup({
         <ExpandablePanel
             invisible={true}
             className={"font-medium text-sm text-gray-600 dark:text-gray-400"}
+            contentClassName={"py-4"}
             initiallyExpanded={!(userConfigurationPersistence?.collapsedGroups ?? []).includes(group ?? "ungrouped")}
             onExpandedChange={expanded => {
                 if (userConfigurationPersistence) {

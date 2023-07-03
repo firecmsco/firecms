@@ -21,7 +21,7 @@ export function NumberPropertyPreview({
         return <EnumValuesChip
             enumKey={enumKey}
             enumValues={enumValues}
-            small={size !== "medium"}/>;
+            size={size !== "medium" ? "small" : "medium"}/>;
     } else {
         return <>{value}</>;
     }
