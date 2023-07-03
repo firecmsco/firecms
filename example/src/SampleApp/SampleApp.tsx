@@ -9,13 +9,13 @@ import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
 import { AppCheckOptions, Authenticator, CMSView, FirebaseCMSApp, IconButton } from "firecms";
-import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
+// import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import { Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
-import { publicRecaptchaKey } from "../appcheck_config";
+// import { publicRecaptchaKey } from "../appcheck_config";
 import { ExampleCMSView } from "./ExampleCMSView";
 import logo from "./images/demo_logo.png";
 import { testCollection } from "./collections/test_collection";
@@ -34,13 +34,13 @@ import { booksCollection } from "./collections/books_collection";
 import { FirebaseApp } from "firebase/app";
 
 function SampleApp() {
-    const appCheckOptions: AppCheckOptions = {
-        providerKey: publicRecaptchaKey,
-        useEnterpriseRecaptcha: false,
-        isTokenAutoRefreshEnabled: true,
-        // debugToken: appCheckDebugToken,
-        forceRefresh: false
-    };
+    // const appCheckOptions: AppCheckOptions = {
+    //     providerKey: publicRecaptchaKey,
+    //     useEnterpriseRecaptcha: false,
+    //     isTokenAutoRefreshEnabled: true,
+    //     // debugToken: appCheckDebugToken,
+    //     forceRefresh: false
+    // };
 
     const githubLink = (
         <Tooltip
@@ -111,15 +111,15 @@ function SampleApp() {
         logEvent(analytics, event, data);
     }, []);
 
-    const dataEnhancementPlugin = useDataEnhancementPlugin({
-        getConfigForPath: ({ path }) => {
-            if (process.env.NODE_ENV !== "production")
-                return true;
-            if (path === "books")
-                return true;
-            return false;
-        }
-    });
+    // const dataEnhancementPlugin = useDataEnhancementPlugin({
+    //     getConfigForPath: ({ path }) => {
+    //         if (process.env.NODE_ENV !== "production")
+    //             return true;
+    //         if (path === "books")
+    //             return true;
+    //         return false;
+    //     }
+    // });
 
     return <FirebaseCMSApp
         name={"My Online Shop"}

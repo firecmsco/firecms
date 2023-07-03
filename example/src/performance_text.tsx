@@ -22,7 +22,7 @@ const dod = () => {
         } else {
             onFinished();
         }
-    }, 2);
+    }, 1);
 }
 
 const measurements: number[] = []
@@ -32,8 +32,7 @@ function onFinished() {
     //print average measurement
     const sum = measurements.reduce((a, b) => a + b, 0);
     const avg = (sum / measurements.length) || 0;
-    console.log("avg", avg);
-    console.log("count", measurements.length);
+    alert(`"finished, avg: ${avg}, count: ${measurements.length}`);
 }
 
 
