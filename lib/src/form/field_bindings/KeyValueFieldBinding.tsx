@@ -69,7 +69,7 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
 
             {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
                                             title={title}
-                                            contentClassName={"p-2"}>{mapFormView}</ExpandablePanel>}
+                                            contentClassName={"p-2 md:p-4"}>{mapFormView}</ExpandablePanel>}
 
             {tableMode && mapFormView}
 
@@ -545,7 +545,8 @@ function MapEditView<T extends Record<string, any>>({
                     className="w-full"
                     disabled={disabled}
                     startIcon={<AddIcon/>}
-                    onClick={() => {
+                    onClick={(e) => {
+                        e.preventDefault();
                         setValue({
                             ...value,
                             "": null

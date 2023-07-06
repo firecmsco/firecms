@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { MouseEventHandler, useCallback, useEffect, useState } from "react";
 import { CollectionSize, Entity, EntityCollection, FilterValues } from "../../types";
 import { Add } from "@mui/icons-material";
 
@@ -253,7 +253,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         collection,
         entitiesDisplayedFirst,
         isFilterCombinationValid: isFilterCombinationValidForFirestore,
-        forceFilter,
+        forceFilter
     });
 
     return (
@@ -316,17 +316,23 @@ function ReferenceDialogActions({
 
     const largeLayout = useLargeLayout();
 
+    const onClick: MouseEventHandler<HTMLButtonElement> | undefined = onNewClick
+        ? (e) => {
+            e.preventDefault();
+            onNewClick();
+        }
+        : undefined;
     const addButton = canCreateEntity(collection, authController, fullPathToCollectionSegments(path), null) &&
-        onNewClick && (largeLayout
+        onClick && (largeLayout
             ? <Button
-                onClick={onNewClick}
+                onClick={onClick}
                 startIcon={<Add/>}
                 variant="outlined"
                 color="primary">
                 Add {collection.singularName ?? collection.name}
             </Button>
             : <Button
-                onClick={onNewClick}
+                onClick={onClick}
                 size="medium"
                 variant="outlined"
                 color="primary"

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Chip, Collapse, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { TopNavigationEntry } from "../../../types";
@@ -7,6 +7,8 @@ import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
 import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCollectionCard } from "./NavigationCollectionCard";
+import { Chip } from "../../../components";
+import { Collapse } from "../../../components/Collapse";
 
 function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
 
@@ -17,26 +19,26 @@ function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
         return null;
 
     const favourite = userConfigurationPersistence.favouritePaths.includes(entry.path);
+    const onIconClick = (e: React.SyntheticEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        if (favourite) {
+            userConfigurationPersistence.setFavouritePaths(
+                userConfigurationPersistence.favouritePaths.filter(p => p !== entry.path)
+            );
+        } else {
+            userConfigurationPersistence.setFavouritePaths(
+                [...userConfigurationPersistence.favouritePaths, entry.path]
+            );
+        }
+    };
     return <Chip
         key={entry.path}
         label={entry.name}
         onClick={() => navigate(entry.url)}
-        onDelete={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            if (favourite) {
-                userConfigurationPersistence.setFavouritePaths(
-                    userConfigurationPersistence.favouritePaths.filter(p => p !== entry.path)
-                );
-            } else {
-                userConfigurationPersistence.setFavouritePaths(
-                    [...userConfigurationPersistence.favouritePaths, entry.path]
-                );
-            }
-        }}
-        deleteIcon={favourite
-            ? <StarIcon color={"secondary"}/>
-            : <StarBorderIcon color={"disabled"}/>}
+        icon={favourite
+            ? <StarIcon color={"secondary"} onClick={onIconClick}/>
+            : <StarBorderIcon color={"disabled"} onClick={onIconClick}/>}
     />;
 }
 

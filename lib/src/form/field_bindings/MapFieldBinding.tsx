@@ -98,7 +98,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
         <>
 
             {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
-                                            contentClassName={"p-2"}
+                                            contentClassName={"p-2 md:p-4"}
                                             title={title}>{mapFormView}</ExpandablePanel>}
 
             {tableMode && mapFormView}

@@ -68,7 +68,8 @@ export function ArrayOfReferencesFieldBinding({
         }
     );
 
-    const onEntryClick = useCallback(() => {
+    const onEntryClick = useCallback((e: React.SyntheticEvent) => {
+        e.preventDefault();
         referenceDialogController.open();
     }, [referenceDialogController]);
 
@@ -114,14 +115,14 @@ export function ArrayOfReferencesFieldBinding({
                                   setFieldValue={setFieldValue}
                                   newDefaultEntry={property.of.defaultValue}/>
 
-            <div className="p-4 justify-center text-left">
-                <Button variant="outlined"
-                        color="primary"
-                        disabled={isSubmitting}
-                        onClick={onEntryClick}>
-                    Edit {property.name}
-                </Button>
-            </div>
+            <Button
+                className="my-4 justify-center text-left"
+                variant="outlined"
+                color="primary"
+                disabled={isSubmitting}
+                onClick={onEntryClick}>
+                Edit {property.name}
+            </Button>
         </>}
     </>;
 
@@ -130,7 +131,7 @@ export function ArrayOfReferencesFieldBinding({
 
             {!tableMode &&
                 <ExpandablePanel
-                    contentClassName={"p-2"}
+                    contentClassName={"p-2 md:p-4"}
                     initiallyExpanded={expanded}
                     title={title}>
                     {body}

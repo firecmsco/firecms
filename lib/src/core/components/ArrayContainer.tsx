@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect,  useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 
 import { ListItemIcon, ListItemText, Menu, MenuItem, useTheme } from "@mui/material";
 
@@ -82,7 +82,8 @@ export function ArrayContainer<T>({
         }
     }, [hasValue, internalIds.length, value]);
 
-    const insertInEnd = () => {
+    const insertInEnd = (e: React.SyntheticEvent) => {
+        e.preventDefault();
         if (disabled) return;
         const id = getRandomId();
         const newIds: number[] = [...internalIds, id];
@@ -283,6 +284,7 @@ export function ArrayItemOptions({
     const openMenu = (event: React.MouseEvent) => {
         setAnchorEl(event.currentTarget);
         event.stopPropagation();
+        event.preventDefault();
     };
 
     const closeMenu = () => {

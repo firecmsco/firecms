@@ -1,16 +1,15 @@
 import React from "react";
-import { Avatar, Breadcrumbs, Chip, Hidden, Link, Slide } from "@mui/material";
+import clsx from "clsx";
+
+import { Avatar, Breadcrumbs, Chip, Hidden, Slide } from "@mui/material";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary } from "../components";
-import { useAuthController, useBreadcrumbsContext, useModeController } from "../../hooks";
-import { Typography } from "../../components/Typography";
-import clsx from "clsx";
-import { IconButton } from "../../components";
+import { useAuthController, useBreadcrumbsContext, useModeController, useNavigationContext } from "../../hooks";
+import { Button, IconButton, Typography } from "../../components";
 import { useLargeLayout } from "../../hooks/useLargeLayout";
-import { Button } from "../../components/Button";
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -39,6 +38,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
     const breadcrumbsContext = useBreadcrumbsContext();
     const { breadcrumbs } = breadcrumbsContext;
+    const navigation = useNavigationContext();
 
     const authController = useAuthController();
     const {
@@ -74,18 +74,14 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
                     <Hidden lgDown>
                         <div className="mr-8">
-                            <Link
-                                underline={"none"}
-                                key={"breadcrumb-home"}
-                                color="inherit"
-                                component={ReactLink}
-                                to={"."}>
-                                <Typography variant="h6"
+                            <ReactLink
+                                to={navigation.basePath}>
+                                <Typography variant="subtitle1"
                                             noWrap
-                                            className={"weight-500"}>
+                                            className={"ml-2 !font-medium"}>
                                     {title}
                                 </Typography>
-                            </Link>
+                            </ReactLink>
                         </div>
                     </Hidden>
 
@@ -95,17 +91,15 @@ export const FireCMSAppBar = function FireCMSAppBar({
                             fontSize="small"/>}
                         aria-label="breadcrumb">
                         {breadcrumbs.map((entry, index) => (
-                            <Link
-                                underline={"none"}
+                            <ReactLink
                                 key={`breadcrumb-${index}`}
                                 color="inherit"
-                                component={ReactLink}
                                 to={entry.url}>
                                 <Chip
                                     className="bg-gray-200 h-12 text-gray-800 font-medium hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 active:shadow-sm cursor-pointer"
                                     label={entry.title}
                                 />
-                            </Link>)
+                            </ReactLink>)
                         )
                         }
                     </Breadcrumbs>}

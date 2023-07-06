@@ -8,8 +8,7 @@ import { SvgIconTypeMap } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../hooks";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { getIconForView } from "./util";
-import { Typography } from "../components/Typography";
-import { Tooltip } from "../components/Tooltip";
+import { Tooltip, Typography } from "../components";
 
 /**
  * Props used in case you need to override the default drawer
@@ -53,7 +52,7 @@ export function Drawer({
             className="pt-8 pl-6 pr-8 pb-2 flex flex-row items-center">
             <Typography variant={"caption"}
                         color={"secondary"}
-                        className="weight-500 flex-grow">
+                        className="font-medium flex-grow">
                 {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
             </Typography>
 

@@ -21,7 +21,7 @@ export type ReferencePreviewProps = {
     reference: EntityReference,
     size: PreviewSize;
     previewProperties?: string[];
-    onClick?: () => void;
+    onClick?: (e:React.SyntheticEvent) => void;
     onHover?: boolean;
     allowEntityNavigation?: boolean;
 };
@@ -108,7 +108,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
         body = (
             <>
                 <div
-                    className="flex flex-col flex-grow w-full max-w-[calc(100%-52px)] m-1 gap-2">
+                    className="flex flex-col flex-grow w-full max-w-[calc(100%-52px)] m-1">
 
                     {size !== "tiny" && (
                         reference
@@ -130,7 +130,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
 
                         return (
                             <div key={"ref_prev_" + (key as string)}
-                                 className={`my-${listProperties.length > 1 ? "2" : "0"}`}>
+                                 className={listProperties.length > 1 ? "my-1" : "my-0"}>
                                 {usedEntity
                                     ? <PropertyPreview
                                         propertyKey={key as string}
@@ -193,7 +193,7 @@ function ReferencePreviewWrap({
     children: React.ReactNode;
     onHover?: boolean;
     size: PreviewSize;
-    onClick?: () => void;
+    onClick?: (e:React.SyntheticEvent) => void;
 }) {
     return <Typography variant={"label"}
                        className={clsx("bg-opacity-70 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60",
@@ -214,7 +214,7 @@ function ReferencePreviewWrap({
                        onClick={(event) => {
                      if (onClick) {
                          event.preventDefault();
-                         onClick();
+                         onClick(event);
                      }
                  }}>
 

@@ -2,7 +2,6 @@ import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
 import clsx from "clsx";
 
-import { Link } from "@mui/material";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
@@ -12,6 +11,7 @@ import { useRestoreScroll } from "./internal/useRestoreScroll";
 import { IconButton, Sheet } from "../components";
 import { useLargeLayout } from "../hooks/useLargeLayout";
 import { Tooltip } from "../components/Tooltip";
+import { Link } from "react-router-dom";
 
 export const DRAWER_WIDTH = 280;
 
@@ -172,6 +172,8 @@ function StyledDrawer(props: {
     onMouseLeave: () => void
 }) {
 
+    const navigation = useNavigationContext();
+
     const innerDrawer = <div
         className={"fixed relative left-0 top-0 transition-all duration-200 ease-in-out h-full overflow-auto no-scrollbar"}
         style={{
@@ -196,22 +198,25 @@ function StyledDrawer(props: {
             </Tooltip>
         )}
 
-        <div
-            className={clsx(`${
-                props.open
-                    ? "py-4 pt-8 px-8 pr-24 block transition-padding duration-200 ease-in-out"
-                    : "p-4 pt-4 mt-2 block transition-padding duration-200 ease-in-out"
-            }`)}>
-            <Link>
-                <Tooltip title="Home" placement="right">
+        <Tooltip title={props.open ? "" : "Home"} placement="right">
+            <Link
+                to={navigation.basePath}>
+                <div
+                    className={clsx(`${
+                            props.open
+                                ? "py-4 pt-8 px-8 pr-24 block transition-padding duration-200 ease-in-out"
+                                : "p-4 pt-4 mt-2 block transition-padding duration-200 ease-in-out"
+                        }`,
+                        "cursor-pointer")}>
                     {props.logo
                         ? <img src={props.logo} alt="Logo"
                                className="max-w-full max-h-full"/>
                         : <FireCMSLogo/>}
 
-                </Tooltip>
+                </div>
             </Link>
-        </div>
+
+        </Tooltip>
 
         {props.children}
 

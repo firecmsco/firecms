@@ -25,9 +25,8 @@ import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
 import { Typography } from "../../components/Typography";
 import { EntityFormSaveParams } from "../../form/EntityForm";
-import { ADDITIONAL_TAB_WIDTH, CONTAINER_FULL_WIDTH, FORM_CONTAINER_WIDTH } from "./common";
+import { FORM_CONTAINER_WIDTH } from "./common";
 import { IconButton } from "../../components";
-import { useLargeLayout } from "../../hooks/useLargeLayout";
 import { defaultBorderMixin } from "../../styles";
 
 export interface EntityViewProps<M extends Record<string, any>> {
@@ -40,6 +39,12 @@ export interface EntityViewProps<M extends Record<string, any>> {
     onValuesAreModified: (modified: boolean) => void;
     onUpdate?: (params: { entity: Entity<any> }) => void;
     onClose?: () => void;
+}
+
+type EntityViewView = {
+    label: string;
+    component: React.ReactNode;
+    size: "full" | "half";
 }
 
 /**
@@ -82,8 +87,8 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
     }, false, 2000);
 
     const theme = useTheme();
-    const largeLayout = useLargeLayout();
-    const largeLayoutTabSelected = useRef(!largeLayout);
+    // const largeLayout = useLargeLayout();
+    // const largeLayoutTabSelected = useRef(!largeLayout);
 
     const resolvedFormWidth: string = typeof formWidth === "number" ? `${formWidth}px` : formWidth ?? FORM_CONTAINER_WIDTH;
 
@@ -138,7 +143,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
     const tabsPositionRef = useRef<number>(defaultSelectedView ? getTabPositionFromPath(defaultSelectedView) : -1);
 
-    const mainViewVisible = tabsPositionRef.current === -1 || largeLayout;
+    const mainViewVisible = tabsPositionRef.current === -1;
 
     const {
         entity,
@@ -170,22 +175,22 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         }
     }, [authController, usedEntity, status]);
 
-    useEffect(() => {
-        if (largeLayoutTabSelected.current === largeLayout)
-            return;
-        // open first tab by default in large layouts
-        if (selectedSubPath !== defaultSelectedView) {
-            console.log("Replacing url 1", defaultSelectedView);
-            sideEntityController.replace({
-                path,
-                entityId,
-                selectedSubPath: defaultSelectedView,
-                updateUrl: true,
-                collection
-            });
-        }
-        largeLayoutTabSelected.current = largeLayout;
-    }, [defaultSelectedView, largeLayout, selectedSubPath]);
+    // useEffect(() => {
+    //     if (largeLayoutTabSelected.current === largeLayout)
+    //         return;
+    //     // open first tab by default in large layouts
+    //     if (selectedSubPath !== defaultSelectedView) {
+    //         console.log("Replacing url 1", defaultSelectedView);
+    //         sideEntityController.replace({
+    //             path,
+    //             entityId,
+    //             selectedSubPath: defaultSelectedView,
+    //             updateUrl: true,
+    //             collection
+    //         });
+    //     }
+    //     largeLayoutTabSelected.current = largeLayout;
+    // }, [defaultSelectedView, largeLayout, selectedSubPath]);
 
     const onPreSaveHookError = useCallback((e: Error) => {
         setSaving(false);
@@ -337,7 +342,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             }
             return <div
                 className={clsx(defaultBorderMixin,
-                    `w-[${ADDITIONAL_TAB_WIDTH}] flex-grow h-full overflow-auto border-l xl:border-l-0 xl:w-[${CONTAINER_FULL_WIDTH}]`)}
+                    "relative flex-grow w-full h-full overflow-auto ")}
                 key={`custom_view_${customView.path}`}
                 role="tabpanel">
                 <ErrorBoundary>
@@ -364,7 +369,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                 return null;
             return (
                 <div
-                    className={`flex-grow h-full overflow-auto border-l border-opacity-50 border-l-0 w-[${CONTAINER_FULL_WIDTH}] xl:border-none xl:w-[${ADDITIONAL_TAB_WIDTH}] ${theme.breakpoints.down("lg") ? `` : ``}`}
+                    className={`relative flex-grow h-full overflow-auto w-full`}
                     key={`subcol_${subcollection.alias ?? subcollection.path}`}
                     role="tabpanel">
 
@@ -564,7 +569,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                     <Divider/>
 
                     <div
-                        className="flex-grow h-full flex overflow-auto flex-row w-form xl:w-full"
+                        className={`flex-grow h-full flex overflow-auto flex-row w-full `}
                         style={{
                             // width: `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedFormWidth})`,
                             // maxWidth: "100%",
@@ -577,7 +582,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                             role="tabpanel"
                             hidden={!mainViewVisible}
                             id={`form_${path}`}
-                            className={`w-full xl:w-[${resolvedFormWidth}] h-full overflow-auto`}>
+                            className={"relative w-full"}>
 
                             {globalLoading
                                 ? <CircularProgressCenter/>

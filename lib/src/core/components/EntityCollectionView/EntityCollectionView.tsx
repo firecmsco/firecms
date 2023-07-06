@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
+import clsx from "clsx";
+
 import { Popover, useTheme } from "@mui/material";
 import equal from "react-fast-compare"
 
@@ -36,6 +38,7 @@ import { Typography } from "../../../components/Typography";
 export type EntityCollectionViewProps<M extends Record<string, any>> = {
     fullPath: string;
     isSubCollection?: boolean;
+    className?: string;
 } & EntityCollection<M>;
 
 /**
@@ -66,6 +69,7 @@ export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
                                                                      fullPath,
                                                                      isSubCollection,
+                                                                     className,
                                                                      ...collectionProp
                                                                  }: EntityCollectionViewProps<M>
     ) {
@@ -327,7 +331,7 @@ export const EntityCollectionView = React.memo(
         }, [isEntitySelected, collection, authController, fullPath, selectionEnabled, toggleEntitySelection, onEditClicked, createEnabled, onCopyClicked]);
 
         return (
-            <div className="overflow-hidden h-full w-full">
+            <div className={clsx("overflow-hidden h-full w-full", className)}>
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     fullPath={fullPath}

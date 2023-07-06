@@ -28,7 +28,7 @@ export function NavigationGroup({
                 }
             }}
             title={<Typography color={"secondary"}
-                               className="weight-500 ml-1">
+                               className="font-medium ml-1">
                 {group?.toUpperCase() ?? "Ungrouped views".toUpperCase()}
             </Typography>}>
 

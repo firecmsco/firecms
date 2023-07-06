@@ -82,9 +82,8 @@ export function RepeatFieldBinding<T extends Array<any>>({
 
         <>
 
-            {arrayContainer}
             {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
-                                            contentClassName={"p-2"}
+                                            contentClassName={"p-2 md:p-4"}
                                             title={title}>
                 {arrayContainer}
             </ExpandablePanel>}

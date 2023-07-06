@@ -5,4 +5,5 @@ export const fieldBackgroundMixin = "bg-opacity-70 bg-gray-100 dark:bg-gray-800 
 export const fieldBackgroundDisabledMixin = "bg-opacity-40 dark:bg-opacity-40";
 export const fieldBackgroundHoverMixin = "hover:bg-opacity-90 dark:hover:bg-opacity-90";
 export const defaultBorderMixin = "border-gray-100 dark:border-gray-800";
-export const paperMixin = "bg-white shadow-sm rounded-md dark:bg-gray-950 dark:shadow-none border dark:border-gray-800 border-gray-100";
+export const paperMixin = "bg-white rounded-md dark:bg-gray-950 border dark:border-gray-800 dark:border-opacity-50 border-gray-100";
+export const cardMixin = "bg-white rounded-md dark:bg-gray-950 dark:border-gray-800 dark:border-opacity-50 hover:shadow-sm hover:bg-gray-100 dark:hover:bg-gray-900 transition duration-200 ease-in-out";

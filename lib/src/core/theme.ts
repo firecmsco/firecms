@@ -129,7 +129,7 @@ export const createCMSDefaultTheme = (
         //                 "&.mono": {
         //                     fontFamily: "'IBM Plex Mono', 'Space Mono', monospace, 'Lucida Console'"
         //                 },
-        //                 "&.weight-500": {
+        //                 "&.font-medium": {
         //                     fontWeight: 500
         //                 }
         //             }

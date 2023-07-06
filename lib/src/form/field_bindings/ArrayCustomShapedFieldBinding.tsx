@@ -68,7 +68,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             {!tableMode &&
                 <ExpandablePanel initiallyExpanded={expanded}
                                  title={title}
-                                 contentClassName={"p-2"}>
+                                 contentClassName={"p-2 md:p-4"}>
                     {body}
                 </ExpandablePanel>}
 

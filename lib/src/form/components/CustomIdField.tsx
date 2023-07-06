@@ -8,8 +8,7 @@ import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } fro
 
 import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
 import { enumToObjectEntries, Select, TextInput } from "../../core";
-import { IconButton } from "../../components";
-import { Tooltip } from "../../components/Tooltip";
+import { IconButton, Tooltip } from "../../components";
 import { MenuItem } from "@mui/material";
 
 export function CustomIdField<M extends Record<string, any>>({

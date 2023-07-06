@@ -161,15 +161,6 @@ export const productsCollection = buildCollection<Product>({
                 required: true
             }
         },
-        tags: {
-            dataType: "array",
-            name: "Tags",
-            of: {
-                dataType: "string",
-
-            }
-
-        },
         main_image: {
             dataType: "string",
             name: "Image",
@@ -312,8 +303,15 @@ export const productsCollection = buildCollection<Product>({
             dataType: "date",
             name: "Added on",
             autoValue: "on_create"
-        }
+        },
+        tags: {
+            dataType: "array",
+            name: "Tags",
+            of: {
+                dataType: "string",
 
+            }
+        }
     }
 
 });

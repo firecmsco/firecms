@@ -1,18 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
 import clsx from "clsx";
 
-import { MenuItem, Select } from "@mui/material";
 import { FastField, FieldProps as FormikFieldProps, useFormikContext } from "formik";
 
 import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
-import { EnumValueConfig, FieldProps, FormContext, PropertyOrBuilder } from "../../types";
-import { ExpandablePanel, getDefaultValueFor, getIconForProperty } from "../../core";
+import { FieldProps, FormContext, PropertyOrBuilder } from "../../types";
+import { ExpandablePanel, getDefaultValueFor, getIconForProperty, Select, Typography } from "../../core";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
 import { paperMixin } from "../../styles";
-import { InputLabel } from "../../components";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -89,7 +87,7 @@ export function BlockFieldBinding<T extends Array<any>>({
 
             {!tableMode &&
                 <ExpandablePanel
-                    contentClassName={"p-2"}
+                    contentClassName={"p-2 md:p-4"}
                     initiallyExpanded={expanded}
                     title={title}>
                     {body}
@@ -165,7 +163,7 @@ function BlockEntry({
 
     const property = typeInternal ? properties[typeInternal] : undefined;
 
-    const enumValuesConfigs: EnumValueConfig[] = Object.entries(properties)
+    const enumValuesConfigs = Object.entries(properties)
         .map(([key, property]) => ({
             id: key,
             label: property.name ?? key
@@ -202,41 +200,22 @@ function BlockEntry({
                 {(fieldProps: FormikFieldProps) =>
                     (
                         <>
-                            <InputLabel
-                                id={`${name}_${index}_select_label`}>
-                                <span>Type</span>
-                            </InputLabel>
                             <Select
-                                fullWidth
                                 className="mb-2"
-                                labelId={`${name}_${index}_select_label`}
-                                label={"Type"}
+                                label={<Typography variant={"caption"}
+                                                   className={"px-4 py-2 font-medium"}>Type</Typography>}
+                                size={"small"}
                                 value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}
-                                onChange={(evt: any) => {
-                                    const newType = evt.target.value;
-                                    updateType(newType);
-                                }}
-                                renderValue={(enumKey: any) =>
+                                renderOption={(enumKey: any) =>
                                     <EnumValuesChip
                                         enumKey={enumKey}
                                         enumValues={enumValuesConfigs}
                                         size={"small"}/>
-                                }>
-                                {enumValuesConfigs
-                                    .map((enumValueConfig) => {
-                                        const enumKey = enumValueConfig.id;
-                                        return (
-                                            <MenuItem
-                                                key={`select_${name}_${index}_${enumKey}`}
-                                                value={enumKey}>
-                                                <EnumValuesChip
-                                                    enumKey={enumKey}
-                                                    enumValues={enumValuesConfigs}
-                                                    size={"small"}/>
-                                            </MenuItem>
-                                        );
-                                    })}
-                            </Select>
+                                }
+                                onValueChange={(value) => {
+                                    updateType(value);
+                                }}
+                                options={enumValuesConfigs.map(e => e.id)}/>
                         </>
                     )
                 }

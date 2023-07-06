@@ -1,6 +1,7 @@
 {
     "hosting": {
         "public": "build",
+        "site": "firecms-demo-tailwind",
         "ignore": [
             "firebase.json",
             "**/.*",

@@ -29,7 +29,7 @@ export function ExpandablePanel({
   overflow: hidden;
 }
 .CollapsibleContent[data-state='open'] {
-  animation: slideDown 220ms ease-out;
+  animation: slideDown 220ms ease-in;
 }
 .CollapsibleContent[data-state='closed'] {
   animation: slideUp 220ms ease-in;
@@ -67,8 +67,8 @@ export function ExpandablePanel({
 
                 <Collapsible.Trigger
                     className={clsx(focusedMixin,
-                        "rounded flex items-center justify-between w-full p-4 min-h-[64px]",
-                        invisible && "border-b",
+                        "rounded flex items-center justify-between w-full min-h-[64px]",
+                        invisible ? "border-b px-2" : "p-4",
                         invisible && defaultBorderMixin,
                         className
                     )}
@@ -78,7 +78,6 @@ export function ExpandablePanel({
                 </Collapsible.Trigger>
 
                 <Collapsible.Content
-                    forceMount
                     className={clsx("CollapsibleContent", contentClassName)}
                 >
                     {children}

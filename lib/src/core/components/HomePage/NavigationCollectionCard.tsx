@@ -1,20 +1,17 @@
 import clsx from "clsx";
+import { useNavigate } from "react-router-dom";
 
-import { CardActionArea, CardActions, CardContent } from "@mui/material";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import StarBorderIcon from "@mui/icons-material/StarBorder";
 import StarIcon from "@mui/icons-material/Star";
-
-import { useNavigate } from "react-router-dom";
 
 import { Markdown } from "../../../preview";
 import { useFireCMSContext } from "../../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
-import { Typography } from "../../../components/Typography";
-import { IconButton } from "../../../components";
-import { paperMixin } from "../../../styles";
+import { IconButton, Typography } from "../../../components";
+import { cardMixin } from "../../../styles";
 
 /**
  * This is the component used in the home page to render a card for each
@@ -71,10 +68,9 @@ export function NavigationCollectionCard({
     }
 
     return (
-        <div className={clsx(paperMixin, "h-full")}>
+        <div className={clsx(cardMixin, "h-full p-4 cursor-pointer")}>
 
-            <CardActionArea
-                component={"div"}
+            <div
                 className="flex flex-col items-start min-h-[248px] h-full"
                 onClick={() => {
                     onClick?.();
@@ -86,7 +82,7 @@ export function NavigationCollectionCard({
                     }
                 }}
             >
-                <CardContent
+                <div
                     className="flex-grow w-full">
 
                     <div
@@ -134,16 +130,16 @@ export function NavigationCollectionCard({
                                                 component="div">
                         <Markdown source={description}/>
                     </Typography>}
-                </CardContent>
+                </div>
 
-                <CardActions style={{ alignSelf: "flex-end" }}>
+                <div style={{ alignSelf: "flex-end" }}>
 
                     <div className={"p-4"}>
                         <ArrowForwardIcon color="primary"/>
                     </div>
-                </CardActions>
+                </div>
 
-            </CardActionArea>
+            </div>
 
         </div>)
         ;

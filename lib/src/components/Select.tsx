@@ -83,7 +83,7 @@ export function Select({
                 "select-none rounded-md text-sm",
                 fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                "relative flex items-center font-medium",
+                "relative flex items-center",
                 className)}>
 
                 <SelectPrimitive.Trigger
@@ -144,7 +144,7 @@ export function Select({
                                         key={option}
                                         value={option}
                                         className={clsx(
-                                            "relative relative flex items-center px-6 py-1 rounded-md text-sm text-gray-700 dark:text-gray-300 font-medium",
+                                            "relative relative flex items-center px-6 py-1 rounded-md text-sm text-gray-700 dark:text-gray-300",
                                             "border-2 border-transparent focus-visible:border-opacity-75 focus:outline-none focus-visible:border-solid focus-visible:border-solid focus-visible:border-primary",
                                             selected ? "bg-gray-50 dark:bg-gray-950" : "focus:bg-gray-100 dark:focus:bg-gray-700"
                                         )}

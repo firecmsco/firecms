@@ -1,22 +1,14 @@
 import React from "react";
-import {
-    Box,
-    Button,
-    Card,
-    CardActions,
-    CardContent,
-    Container,
-    Grid,
-    Paper,
-    Tooltip,
-    Typography
-} from "@mui/material";
 import { GitHub } from "@mui/icons-material";
 
 import {
     buildCollection,
+    Button,
     Entity,
-    EntityCollectionView, IconButton,
+    EntityCollectionView,
+    IconButton,
+    Paper,
+    Tooltip,
     useAuthController,
     useReferenceDialog,
     useSelectionController,
@@ -87,125 +79,79 @@ export function ExampleCMSView() {
     );
 
     return (
-        <div className="flex w-full h-full">
+        <div className="flex h-full">
+            <div className="m-auto flex flex-col items-center max-w-4xl">
 
-            <div className="m-auto flex flex-col items-center justify-items-center">
+                <div className="flex flex-col gap-12 items-start">
 
-                <Container maxWidth={"md"}
-                           sx={{
-                               my: 4
-                           }}>
+                    <div className="mt-24">
+                        <h4 className="font-bold text-xl mb-4">
+                            This is an example of an additional view
+                        </h4>
+                        <p>
+                            {authController.user
+                                ? <>Logged in as {authController.user.displayName}</>
+                                : <>You are not logged in</>}
+                        </p>
+                    </div>
 
-                    <Grid container rowSpacing={5} columnSpacing={2}>
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                        <Paper className={"w-full  p-4"}>
+                            <p className="mb-4">
+                                Use this button to select an entity under the path `products` programmatically
+                            </p>
+                            <Button
+                                onClick={referenceDialog.open}>
+                                Test reference dialog
+                            </Button>
+                        </Paper>
 
-                        <Grid item xs={12}>
-                            <Typography variant={"h4"}>
-                                This is an example of an
-                                additional view
-                            </Typography>
-                            <Typography>
-                                {authController.user
-                                    ? <>Logged in
-                                        as {authController.user.displayName}</>
-                                    : <>You are not logged in</>}
-                            </Typography>
-                        </Grid>
+                        <Paper className="w-full   p-4">
+                            <p className="mb-4">
+                                Use this button to open a snackbar
+                            </p>
+                            <Button
+                                onClick={() => snackbarController.open({
+                                    type: "success",
+                                    message: "This is pretty cool"
+                                })}>
+                                Test snackbar
+                            </Button>
+                        </Paper>
 
-                        <Grid item xs={12} sm={4}>
-                            <Card variant="outlined" sx={{ height: "100%" }}>
-                                <CardContent>
-                                    <Typography>
-                                        Use this button to select an entity
-                                        under
-                                        the path `products` programmatically
-                                    </Typography>
-                                </CardContent>
-                                <CardActions>
-                                    <Button
-                                        onClick={referenceDialog.open}
-                                        color="primary">
-                                        Test reference dialog
-                                    </Button>
-                                </CardActions>
-                            </Card>
-                        </Grid>
+                        <Paper className="w-full   p-4">
+                            <p className="mb-4">
+                                Use this button to open an entity in a custom path with a custom schema
+                            </p>
+                            <Button
+                                onClick={() => sideEntityController.open({
+                                    entityId: "B003WT1622",
+                                    path: "/products-test",
+                                    collection: customProductCollection,
+                                    width: 1000
+                                })}>
+                                Open custom entity
+                            </Button>
+                        </Paper>
+                    </div>
 
-                        <Grid item xs={12} sm={4}>
-                            <Card variant="outlined" sx={{
-                                height: "100%",
-                                display: "flex",
-                                flexDirection: "column"
-                            }}>
-                                <CardContent sx={{ flexGrow: 1 }}>
-                                    <Typography>
-                                        Use this button to open a snackbar
-                                    </Typography>
-                                </CardContent>
+                    <div className="w-full">
+                        <p className="mb-4">
+                            You can include full entity collections in your views:
+                        </p>
+                        <Paper
+                            className={"h-[400px]"}>
+                            <EntityCollectionView {...usersCollection}
+                                                  fullPath={"users"}
+                                                  selectionController={selectionController}/>
+                        </Paper>
+                    </div>
 
-                                <CardActions>
-                                    <Button
-                                        onClick={() => snackbarController.open({
-                                            type: "success",
-                                            message: "This is pretty cool"
-                                        })}
-                                        color="primary">
-                                        Test snackbar
-                                    </Button>
-                                </CardActions>
-                            </Card>
-                        </Grid>
+                    <div className="mt-auto">
+                        {githubLink}
+                    </div>
 
-                        <Grid item xs={12} sm={4}>
-                            <Card variant="outlined" sx={{ height: "100%" }}>
-                                <CardContent>
-                                    <Typography>
-                                        Use this button to open an entity in a
-                                        custom path with a custom schema
-                                    </Typography>
-                                </CardContent>
-
-                                <CardActions>
-                                    <Button
-                                        onClick={() => sideEntityController.open({
-                                            entityId: "B003WT1622",
-                                            path: "/products-test", // this path is not mapped in our collections
-                                            collection: customProductCollection,
-                                            width: 800
-                                        })}
-                                        color="primary">
-                                        Open custom entity
-                                    </Button>
-                                </CardActions>
-                            </Card>
-                        </Grid>
-
-                        <Grid item xs={12} sx={{ mt: 3 }}>
-                            <Typography>
-                                You can include full entity collections in
-                                your views:
-                            </Typography>
-
-                            <Paper
-                                variant={"outlined"}
-                                sx={{
-                                    // width: 800,
-                                    height: 400,
-                                    overflow: "hidden",
-                                    my: 2
-                                }}>
-                                <EntityCollectionView {...usersCollection}
-                                                      fullPath={"users"}
-                                                      selectionController={selectionController}/>
-                            </Paper>
-                        </Grid>
-
-                        <Grid item xs={12}>
-                            {githubLink}
-                        </Grid>
-
-                    </Grid>
-
-                </Container>
+                </div>
             </div>
         </div>
     );

@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
-    Box,
-    CardActionArea,
-    CardContent,
     CircularProgress,
     Container,
-    Paper,
-    Typography
-} from "@mui/material";
-import {
+    Card,
     Entity,
     EntityCustomViewParams,
     EntityReference,
     EntityValues,
     ErrorView,
     Markdown,
+    Typography,
     useDataSource,
     useStorageSource
 } from "firecms";
@@ -50,17 +45,8 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
                 src={headerUrl}
             />}
 
-            <Container maxWidth={"md"}
-                       sx={{
-                           alignItems: "center",
-                           justifyItems: "center",
-                           display: "flex",
-                           flexDirection: "column"
-                       }}>
-                {modifiedValues?.name && <Typography variant={"h3"} sx={{
-                    marginTop: "40px",
-                    marginBottom: "20px"
-                }}>
+            <Container>
+                {modifiedValues?.name && <Typography variant={"h3"} className="mt-16 mb-12">
                     {modifiedValues.name}
                 </Typography>}
 
@@ -181,39 +167,25 @@ export function ProductPreview({ productValues }: {
         return <></>;
 
     return (
-        <Paper sx={{
-            width: "400px",
-            height: "400px",
-            margin: "16px",
-            boxShadow: "rgb(0 0 0 / 8%) 0px 8px 12px -4px"
-        }}
-               variant={"outlined"}>
-            <CardActionArea>
-                <CardContent sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column"
-                }}>
-                    <div className={"flex-grow flex-shrink-1 flex-basis-[296px] p-8 max-h-[296px]"} >
-                        <StorageImage storagePath={productValues.main_image}/>
-                    </div>
-                    <Typography gutterBottom
-                                variant="h6"
-                                noWrap
-                                style={{
-                                    marginTop: "16px"
-                                }}>
-                        {productValues.name}
-                    </Typography>
+        <Card className={"m-4 width-[400px] height-[400px]"}>
+            <div className={"flex-grow flex-shrink-1 flex-basis-[296px] p-8 max-h-[296px]"}>
+                <StorageImage storagePath={productValues.main_image}/>
+            </div>
+            <Typography gutterBottom
+                        variant="h6"
+                        noWrap
+                        style={{
+                            marginTop: "16px"
+                        }}>
+                {productValues.name}
+            </Typography>
 
-                    <Typography variant="body2"
-                                color="secondary"
-                                component="div">
-                        {productValues.price} Euros
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Paper>
+            <Typography variant="body2"
+                        color="secondary"
+                        component="div">
+                {productValues.price} Euros
+            </Typography>
+        </Card>
     );
 
 }

@@ -1,20 +1,15 @@
 import React, { useEffect, useState } from "react";
 import {
-    Box,
-    CardActionArea,
-    CardContent,
     CircularProgress,
     Container,
-    Paper,
-    Typography
-} from "@mui/material";
-import {
+    Card,
     Entity,
     EntityCustomViewParams,
     EntityReference,
     EntityValues,
     ErrorView,
     Markdown,
+    Typography,
     useDataSource,
     useStorageSource
 } from "firecms";
@@ -25,7 +20,6 @@ import { BlogEntry } from "../collections/blog_collection";
 /**
  * This is a sample view used to render the content of a blog entry.
  * It is bound to the data that is modified in the form.
- * @constructor
  */
 export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<BlogEntry>) {
 
@@ -52,17 +46,8 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
                 src={headerUrl}
             />}
 
-            <Container maxWidth={"md"}
-                       sx={{
-                           alignItems: "center",
-                           justifyItems: "center",
-                           display: "flex",
-                           flexDirection: "column"
-                       }}>
-                {modifiedValues?.name && <Typography variant={"h3"} sx={{
-                    marginTop: "40px",
-                    marginBottom: "20px"
-                }}>
+            <Container className={"mb-16"}>
+                {modifiedValues?.name && <Typography variant={"h3"} className="mt-16 mb-12 ml-16">
                     {modifiedValues.name}
                 </Typography>}
 
@@ -93,12 +78,12 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
 }
 
 export function Images({ storagePaths }: { storagePaths: string[] }) {
-    if (!storagePaths)
+    if (!Array.isArray(storagePaths))
         return <></>;
-    return <div className="flex">
+    return <div className="flex justify-center">
         {storagePaths.map((path, index) =>
-            <div className="p-8 m-4 w-[250px] h-[250px]"
-                 key={`images_${index}`}>
+            <div key={`images_${index}`}
+                 className="m-4 p-8 w-[350px] h-[350px]">
                 <StorageImage storagePath={path}/>
             </div>
         )}
@@ -133,14 +118,16 @@ function Text({ markdownText }: { markdownText: string }) {
     if (!markdownText)
         return <></>;
 
-    return <Container maxWidth={"sm"}>
-        <div className="mt-24 mb-24">
+    return <Container>
+        <div className="mt-12 mb-12 px-12">
             <Markdown source={markdownText}/>
         </div>
     </Container>;
 }
 
-function ProductGroupPreview({ references }: { references: EntityReference[] }) {
+function ProductGroupPreview({ references }: {
+    references: EntityReference[]
+}) {
 
     const [products, setProducts] = useState<Entity<Product>[] | undefined>();
     const dataSource = useDataSource();
@@ -166,51 +153,40 @@ function ProductGroupPreview({ references }: { references: EntityReference[] }) 
 
     if (!products) return <CircularProgress/>;
 
-    return <div>
+    return <div className={"flex gap-2 flex-wrap items-center justify-center"}>
         {products.map((p, index) => <ProductPreview
             key={`products_${index}`}
             productValues={p.values as EntityValues<Product>}/>)}
     </div>;
 }
 
-export function ProductPreview({ productValues }: { productValues: EntityValues<Product> }) {
+export function ProductPreview({ productValues }: {
+    productValues: EntityValues<Product>
+}) {
 
     if (!productValues)
         return <></>;
 
     return (
-        <Paper sx={{
-            width: "400px",
-            height: "400px",
-            margin: "16px",
-            boxShadow: "rgb(0 0 0 / 8%) 0px 8px 12px -4px"
-        }}
-               variant={"outlined"}>
-            <CardActionArea>
-                <CardContent sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column"
-                }}>
-                    <div className="flex-grow flex-shrink-1 flex-basis-[296px] p-8 max-h-[296px]">
-                        <StorageImage storagePath={productValues.main_image}/>
-                    </div>
-                    <Typography gutterBottom
-                                variant="h6"
-                                noWrap
-                                style={{
-                                    marginTop: "16px"
-                                }}>
-                        {productValues.name}
-                    </Typography>
+        <Card className={"m-4 max-w-[340px] p-8 border"}>
+            <div className={"flex-grow flex-shrink-1 flex-basis-[296px] p-8 max-h-[296px]"}>
+                <StorageImage storagePath={productValues.main_image}/>
+            </div>
+            <Typography gutterBottom
+                        variant="h6"
+                        noWrap
+                        style={{
+                            marginTop: "16px"
+                        }}>
+                {productValues.name}
+            </Typography>
 
-                    <Typography variant="body2"
-                                color="secondary"
-                                component="div">
-                        {productValues.price} {productValues.currency}
-                    </Typography>
-                </CardContent>
-            </CardActionArea>
-        </Paper>);
+            <Typography variant="body2"
+                        color="secondary"
+                        component="div">
+                {productValues.price} Euros
+            </Typography>
+        </Card>
+    );
 
 }

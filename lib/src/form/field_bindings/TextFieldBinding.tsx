@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { Collapse } from "@mui/material";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -9,6 +8,7 @@ import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { IconButton, TextInput } from "../../components";
 import { PropertyPreview } from "../../preview";
+import { Collapse } from "../../components/Collapse";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -97,9 +97,7 @@ export function TextFieldBinding<T extends string | number>({
 
             {url && <Collapse
                 className="mt-1 ml-1"
-                in={Boolean(value)}
-                appear={true}
-                timeout={500}>
+                in={Boolean(value)}>
                 <PropertyPreview value={value}
                                  property={property}
                                  size={"medium"}/>

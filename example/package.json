@@ -22,7 +22,7 @@
     "dev": "vite --mode development",
     "build": "vite build && tsc",
     "preview": "vite build && vite preview",
-    "deploy": "vite build && firebase deploy --only hosting "
+    "deploy": "vite build && firebase deploy --only hosting:firecms-demo-tailwind"
   },
   "eslintConfig": {
     "extends": [

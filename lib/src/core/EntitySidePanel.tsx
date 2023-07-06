@@ -65,7 +65,7 @@ export function EntitySidePanel(props: EntitySidePanelProps) {
     }, [collection?.name, setBlocked, setBlockedNavigationMessage]);
 
     if (!props || !collection) {
-        return <div className={"w-form"}/>;
+        return <div className={"w-full"}/>;
     }
 
     return (

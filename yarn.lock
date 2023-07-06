@@ -1035,27 +1035,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@emotion/react@npm:^11.11.0":
-  version: 11.11.0
-  resolution: "@emotion/react@npm:11.11.0"
-  dependencies:
-    "@babel/runtime": ^7.18.3
-    "@emotion/babel-plugin": ^11.11.0
-    "@emotion/cache": ^11.11.0
-    "@emotion/serialize": ^1.1.2
-    "@emotion/use-insertion-effect-with-fallbacks": ^1.0.1
-    "@emotion/utils": ^1.2.1
-    "@emotion/weak-memoize": ^0.3.1
-    hoist-non-react-statics: ^3.3.1
-  peerDependencies:
-    react: ">=16.8.0"
-  peerDependenciesMeta:
-    "@types/react":
-      optional: true
-  checksum: 2653e7c3de7b6fd5b0e18dea15621a9886104cc7c8cd5522ca69e52bd547ef6f13644193f8e0a906eea1e29a4f1d8167cdfa4667572fb7fafe0c62ab30fbaab6
-  languageName: node
-  linkType: hard
-
 "@emotion/react@npm:^11.11.1":
   version: 11.11.1
   resolution: "@emotion/react@npm:11.11.1"
@@ -1944,47 +1923,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/data_enhancement@^1.0.0, @firecms/data_enhancement@workspace:data_enhancement":
-  version: 0.0.0-use.local
-  resolution: "@firecms/data_enhancement@workspace:data_enhancement"
+"@firecms/data_enhancement@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@firecms/data_enhancement@npm:1.0.0"
   dependencies:
     "@emotion/react": ^11.11.1
     "@emotion/styled": ^11.11.0
     "@mui/icons-material": ^5.11.16
     "@mui/lab": ^5.0.0-alpha.133
     "@mui/material": ^5.13.4
-    "@testing-library/jest-dom": ^5.16.5
-    "@types/jest": ^29.5.2
-    "@types/react": ^18.2.8
-    "@types/react-dom": ^18.2.4
-    "@typescript-eslint/eslint-plugin": ^5.59.9
-    "@typescript-eslint/parser": ^5.59.9
-    "@vitejs/plugin-react": ^4.0.0
     algoliasearch: ^4.17.1
-    babel-jest: ^29.5.0
-    eslint: ^8.42.0
-    eslint-config-standard: ^17.1.0
-    eslint-plugin-import: ^2.27.5
-    eslint-plugin-n: ^15.7.0
-    eslint-plugin-promise: ^6.1.1
-    eslint-plugin-react: ^7.32.2
-    eslint-plugin-react-hooks: ^4.6.0
     firebase: ^9.22.1
     firecms: 2.0.0
     flexsearch: 0.7.31
-    jest: ^29.5.0
     react: ^18.2.0
     react-dom: ^18.2.0
     react-router: ^6.12.0
     react-router-dom: ^6.12.0
-    ts-jest: ^29.1.0
-    typescript: ^5.1.3
-    vite: ^4.3.9
-    vite-plugin-fonts: ^0.7.0
   peerDependencies:
     firecms: ^2.0.0
-  languageName: unknown
-  linkType: soft
+  checksum: 68843d361832d9667a40062fcf1810a17eadd39e129121c81ff80e1ab7858377d5621aebdbffe9501d91b79334489e326494082d20ec1c4e3be0a17e65cbcced
+  languageName: node
+  linkType: hard
 
 "@floating-ui/core@npm:^1.3.0":
   version: 1.3.0
@@ -2018,13 +1978,6 @@ __metadata:
   version: 4.5.13
   resolution: "@fontsource/ibm-plex-mono@npm:4.5.13"
   checksum: f9276195578ba8f90f10499c9430e1fee9bd6b101b55fdb3a6f23e57ada8a290f363ec450c1966d0413e9111b2b6e081f58e3428dd764f2a9ccb81648ffbbc85
-  languageName: node
-  linkType: hard
-
-"@fontsource/roboto@npm:^4.5.8":
-  version: 4.5.8
-  resolution: "@fontsource/roboto@npm:4.5.8"
-  checksum: 460b6de2c9f7a172192c3f5bdd3aa11f78f0b6660dca9dc2b9d8207272b50c55b5a8f2da68e11e7fbaf44c7d3cf4191030eecce9def79fab75d4cc1de39754e2
   languageName: node
   linkType: hard
 
@@ -2452,15 +2405,6 @@ __metadata:
     "@jridgewell/resolve-uri": 3.1.0
     "@jridgewell/sourcemap-codec": 1.4.14
   checksum: 9d703b859cff5cd83b7308fd457a431387db5db96bd781a63bf48e183418dd9d3d44e76b9e4ae13237f6abeeb25d739ec9215c1d5bfdd08f66f750a50074a339
-  languageName: node
-  linkType: hard
-
-"@module-federation/vite@npm:^0.2.6":
-  version: 0.2.6
-  resolution: "@module-federation/vite@npm:0.2.6"
-  peerDependencies:
-    "@softarc/native-federation": ^1.0.0-beta.2
-  checksum: 83a1eb8bc86aa1083c64a3c0b22f76c824c3aef6f355cf7738a00db14a4b15c17782140733fb576b4ec3a0656ab0a38f8e030ff42ccd70c3979bd25c5537a6e0
   languageName: node
   linkType: hard
 
@@ -3658,95 +3602,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry-internal/tracing@npm:7.55.0":
-  version: 7.55.0
-  resolution: "@sentry-internal/tracing@npm:7.55.0"
-  dependencies:
-    "@sentry/core": 7.55.0
-    "@sentry/types": 7.55.0
-    "@sentry/utils": 7.55.0
-    tslib: ^1.9.3
-  checksum: 2600089c1eb6fe473e59eacaccc5d28d050431355564f6d6408e9efdb5511420b23d2500c80e45e783e04b1fdb6ef82bf9296c44f2b752ab86d93a760ace3bf8
-  languageName: node
-  linkType: hard
-
-"@sentry/browser@npm:7.55.0":
-  version: 7.55.0
-  resolution: "@sentry/browser@npm:7.55.0"
-  dependencies:
-    "@sentry-internal/tracing": 7.55.0
-    "@sentry/core": 7.55.0
-    "@sentry/replay": 7.55.0
-    "@sentry/types": 7.55.0
-    "@sentry/utils": 7.55.0
-    tslib: ^1.9.3
-  checksum: f1631c0b2ce897cd4cf59bd50adfe636ff5e1644dbf431f740066cb381cd97ed1057f108af70b0421c97d0499626b2bdc2ca8f181f0ea0ac8b2f1094614ca01c
-  languageName: node
-  linkType: hard
-
-"@sentry/core@npm:7.55.0":
-  version: 7.55.0
-  resolution: "@sentry/core@npm:7.55.0"
-  dependencies:
-    "@sentry/types": 7.55.0
-    "@sentry/utils": 7.55.0
-    tslib: ^1.9.3
-  checksum: eab1b40aa50314af87cb04491ca43cee967d89b36a27fff9c8bd3bacae7273b90bafd1c97f3e3d3e3de7d43e29fe77abbdeb843cfa4e75bf66b5dcc6351fdafa
-  languageName: node
-  linkType: hard
-
-"@sentry/react@npm:^7.51.0":
-  version: 7.55.0
-  resolution: "@sentry/react@npm:7.55.0"
-  dependencies:
-    "@sentry/browser": 7.55.0
-    "@sentry/types": 7.55.0
-    "@sentry/utils": 7.55.0
-    hoist-non-react-statics: ^3.3.2
-    tslib: ^1.9.3
-  peerDependencies:
-    react: 15.x || 16.x || 17.x || 18.x
-  checksum: baeb98dbaaee8a3b2eeb702f76fe161e94be0829466719b7d19a56c25804294313179bb1d17582eeb0ce31b9b6c6ee1dcd0dc86a60e2d45aa8b6f7d674372b4c
-  languageName: node
-  linkType: hard
-
-"@sentry/replay@npm:7.55.0":
-  version: 7.55.0
-  resolution: "@sentry/replay@npm:7.55.0"
-  dependencies:
-    "@sentry/core": 7.55.0
-    "@sentry/types": 7.55.0
-    "@sentry/utils": 7.55.0
-  checksum: b4d62a7702f5c41f5c278970fd03cd990e5dd76fde5bb2d0a13e23503b6e58fae0d65e7fcf5b4d404375c602094313f23cb008e6d7f66817f2e7650e0beda2fd
-  languageName: node
-  linkType: hard
-
-"@sentry/tracing@npm:^7.51.0":
-  version: 7.55.0
-  resolution: "@sentry/tracing@npm:7.55.0"
-  dependencies:
-    "@sentry-internal/tracing": 7.55.0
-  checksum: fa2f17af28e152f775ee1ef41ee094553a967f3c1f1b608844a4ee1e0937cd7527cdafc3d3b371774d4a7b9ef23d1c96efce389c81b0c614307451e9cf1c23fd
-  languageName: node
-  linkType: hard
-
-"@sentry/types@npm:7.55.0":
-  version: 7.55.0
-  resolution: "@sentry/types@npm:7.55.0"
-  checksum: e966cb054de931630d8e7a37c8b29d22f65fea169d65769695b4b25b5a7a994231605ccd0cd6d14f7f9210350b6fa713fd5a32a48dd368dcdd06debb4b5f386a
-  languageName: node
-  linkType: hard
-
-"@sentry/utils@npm:7.55.0":
-  version: 7.55.0
-  resolution: "@sentry/utils@npm:7.55.0"
-  dependencies:
-    "@sentry/types": 7.55.0
-    tslib: ^1.9.3
-  checksum: 35a3f4b2fe11cce60ee9640def0cfab6d0f4a46d497e186a13f3dad5dfd226c7486eb6eeb391dfda8ebfe836e3c5dc0bc1dc4f3c2568b944ff91b0e8934f3495
-  languageName: node
-  linkType: hard
-
 "@sinclair/typebox@npm:^0.25.16":
   version: 0.25.24
   resolution: "@sinclair/typebox@npm:0.25.24"
@@ -3769,26 +3624,6 @@ __metadata:
   dependencies:
     "@sinonjs/commons": ^2.0.0
   checksum: c62aa98e7cefda8dedc101ce227abc888dc46b8ff9706c5f0a8dfd9c3ada97d0a5611384738d9ba0b26b59f99c2ba24efece8e779bb08329e9e87358fa309824
-  languageName: node
-  linkType: hard
-
-"@softarc/native-federation-runtime@npm:1.1.1":
-  version: 1.1.1
-  resolution: "@softarc/native-federation-runtime@npm:1.1.1"
-  dependencies:
-    tslib: ^2.3.0
-  checksum: d6e5e386162ce3856c9051dc27b910094e13b11b9e691771fbf355e0290762ef319afe3adb3591817da0715f9af94170ed07e121c95e031dcaa25a3a8923f0f8
-  languageName: node
-  linkType: hard
-
-"@softarc/native-federation@npm:^1.1.1":
-  version: 1.1.1
-  resolution: "@softarc/native-federation@npm:1.1.1"
-  dependencies:
-    "@softarc/native-federation-runtime": 1.1.1
-    json5: ^2.2.0
-    npmlog: ^6.0.2
-  checksum: 62fbf55a49a1804e68ab116bbffc1d2a1502d3d7ce8a0c8a57d07b0af383e97ec2674d701a0146b7d14d8bbeab5a048f164590c46491082eb8692e2f4d293013
   languageName: node
   linkType: hard
 
@@ -6656,10 +6491,10 @@ __metadata:
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
     firebase: ^9.21.0
-    flexsearch: ^0.7.31
     formik: ^2.4.1
     history: ^5.3.0
     jest: ^29.5.0
+    js-search: ^2.0.1
     lucide-react: ^0.252.0
     markdown-it: ^13.0.1
     notistack: ^3.0.1
@@ -6676,6 +6511,7 @@ __metadata:
     react-transition-group: ^4.4.5
     react-use-measure: ^2.1.1
     react-window: ^1.8.9
+    ts-jest: ^29.1.0
     ts-node: ^10.9.1
     tsd: ^0.28.1
     typeface-open-sans: ^1.1.13
@@ -6697,41 +6533,6 @@ __metadata:
     react-dom: ^18.0.0
     react-router: ^6.2.0
     react-router-dom: ^6.2.0
-  languageName: unknown
-  linkType: soft
-
-"firecms_collection_editor@workspace:collection_editor":
-  version: 0.0.0-use.local
-  resolution: "firecms_collection_editor@workspace:collection_editor"
-  dependencies:
-    "@emotion/react": ^11.11.0
-    "@emotion/styled": ^11.11.0
-    "@mui/icons-material": ^5.11.16
-    "@mui/lab": ^5.0.0-alpha.133
-    "@mui/material": ^5.13.4
-    "@types/react": ^18.2.8
-    "@types/react-dom": ^18.2.4
-    "@typescript-eslint/eslint-plugin": ^5.59.9
-    "@typescript-eslint/parser": ^5.59.9
-    "@vitejs/plugin-react": ^4.0.0
-    algoliasearch: ^4.17.1
-    eslint: ^8.42.0
-    eslint-config-standard: ^17.1.0
-    eslint-plugin-import: ^2.27.5
-    eslint-plugin-n: ^15.7.0
-    eslint-plugin-promise: ^6.1.1
-    eslint-plugin-react: ^7.32.2
-    eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.22.1
-    firecms: "workspace:lib"
-    flexsearch: 0.7.31
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-router: ^6.12.0
-    react-router-dom: ^6.12.0
-    typescript: ^5.1.3
-    vite: ^4.3.9
-    vite-plugin-fonts: ^0.7.0
   languageName: unknown
   linkType: soft
 
@@ -8180,6 +7981,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"js-search@npm:^2.0.1":
+  version: 2.0.1
+  resolution: "js-search@npm:2.0.1"
+  checksum: 09bd837b83adaa5d29a1fd80d2324b1af4117b4d4d97013e6be6f043ea636b2c5e6f271e634ec68e7d9411b8b76f625b55c4b41ae66fb19d7164a43c47899ca3
+  languageName: node
+  linkType: hard
+
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -8258,7 +8066,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"json5@npm:^2.2.0, json5@npm:^2.2.2, json5@npm:^2.2.3":
+"json5@npm:^2.2.2, json5@npm:^2.2.3":
   version: 2.2.3
   resolution: "json5@npm:2.2.3"
   bin:
@@ -8976,7 +8784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"npmlog@npm:^6.0.0, npmlog@npm:^6.0.2":
+"npmlog@npm:^6.0.0":
   version: 6.0.2
   resolution: "npmlog@npm:6.0.2"
   dependencies:
@@ -10102,46 +9910,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"saas@workspace:saas":
-  version: 0.0.0-use.local
-  resolution: "saas@workspace:saas"
-  dependencies:
-    "@emotion/react": ^11.10.8
-    "@emotion/styled": ^11.10.8
-    "@fontsource/roboto": ^4.5.8
-    "@module-federation/vite": ^0.2.6
-    "@mui/icons-material": ^5.11.16
-    "@mui/lab": ^5.0.0-alpha.129
-    "@mui/material": ^5.12.3
-    "@sentry/react": ^7.51.0
-    "@sentry/tracing": ^7.51.0
-    "@softarc/native-federation": ^1.1.1
-    "@types/react": ^18.2.5
-    "@types/react-dom": ^18.2.4
-    "@typescript-eslint/eslint-plugin": ^5.59.2
-    "@typescript-eslint/parser": ^5.59.2
-    "@vitejs/plugin-react": ^4.0.0
-    algoliasearch: ^4.17.0
-    eslint: ^8.39.0
-    eslint-config-standard: ^17.0.0
-    eslint-plugin-import: ^2.27.5
-    eslint-plugin-n: ^15.7.0
-    eslint-plugin-promise: ^6.1.1
-    eslint-plugin-react: ^7.32.2
-    eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.21.0
-    firecms: "workspace:lib"
-    firecms_collection_editor: "workspace:collection_editor"
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-router: ^6.11.1
-    react-router-dom: ^6.11.1
-    typescript: ^5.0.4
-    vite: ^4.3.5
-    vite-plugin-fonts: ^0.7.0
-  languageName: unknown
-  linkType: soft
-
 "safe-buffer@npm:>=5.1.0, safe-buffer@npm:~5.2.0":
   version: 5.2.1
   resolution: "safe-buffer@npm:5.2.1"
@@ -10871,7 +10639,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^1.10.0, tslib@npm:^1.8.1, tslib@npm:^1.9.3":
+"tslib@npm:^1.10.0, tslib@npm:^1.8.1":
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
@@ -10885,7 +10653,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tslib@npm:^2.1.0, tslib@npm:^2.3.0, tslib@npm:^2.4.0":
+"tslib@npm:^2.1.0, tslib@npm:^2.4.0":
   version: 2.5.0
   resolution: "tslib@npm:2.5.0"
   checksum: ae3ed5f9ce29932d049908ebfdf21b3a003a85653a9a140d614da6b767a93ef94f460e52c3d787f0e4f383546981713f165037dc2274df212ea9f8a4541004e1

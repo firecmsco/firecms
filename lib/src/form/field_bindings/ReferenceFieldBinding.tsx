@@ -73,7 +73,8 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
         }
     );
 
-    const onEntryClick = useCallback(() => {
+    const onEntryClick = useCallback((e:React.SyntheticEvent) => {
+        e.preventDefault();
         referenceDialogController.open();
     }, [referenceDialogController]);
 
@@ -97,7 +98,7 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
                     reference={value}
                 />}
 
-                {!value && <div className="p-4 justify-center text-left">
+                {!value && <div className="justify-center text-left">
                     <Button variant="outlined"
                             color="primary"
                             disabled={disabled || isSubmitting}
