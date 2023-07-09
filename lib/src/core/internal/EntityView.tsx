@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { CircularProgress, Divider, Tab, Tabs, useTheme } from "@mui/material";
+import { CircularProgress, Divider, Tab, Tabs } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Entity, EntityCollection, EntityStatus, EntityValues, FireCMSPlugin, FormContext, User } from "../../types";
 import { CircularProgressCenter, EntityCollectionView, EntityPreview, ErrorBoundary } from "../components";
@@ -27,7 +27,7 @@ import { Typography } from "../../components/Typography";
 import { EntityFormSaveParams } from "../../form/EntityForm";
 import { FORM_CONTAINER_WIDTH } from "./common";
 import { IconButton } from "../../components";
-import { defaultBorderMixin } from "../../styles";
+import { defaultBorderMixin, paperMixin } from "../../styles";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -86,7 +86,6 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             });
     }, false, 2000);
 
-    const theme = useTheme();
     // const largeLayout = useLargeLayout();
     // const largeLayoutTabSelected = useRef(!largeLayout);
 
@@ -369,7 +368,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                 return null;
             return (
                 <div
-                    className={`relative flex-grow h-full overflow-auto w-full`}
+                    className={"relative flex-grow h-full overflow-auto w-full"}
                     key={`subcol_${subcollection.alias ?? subcollection.path}`}
                     role="tabpanel">
 
@@ -482,10 +481,17 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         : (!readOnly
             ? buildForm()
             : (
-                <EntityPreview
-                    entity={usedEntity as Entity<M>}
-                    path={path}
-                    collection={collection}/>
+                <>
+                    <Typography
+                        className={"mt-16 mb-8 mx-8"}
+                        variant={"h4"}>{collection.singularName ?? collection.name}
+                    </Typography>
+                    <EntityPreview
+                        className={"px-12"}
+                        entity={usedEntity as Entity<M>}
+                        path={path}
+                        collection={collection}/>
+                </>
             ));
 
     const subcollectionTabs = subcollections && subcollections.map(
@@ -508,7 +514,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
     const header = (
         <div
-            className={`pl-2 pr-2 pt-1 flex items-end ${theme.palette.mode === "light" ? "bg-" + theme.palette.background.default : "bg-" + theme.palette.background.paper}`}>
+            className={paperMixin + " pl-2 pr-2 pt-1 flex items-end"}>
 
             <div
                 className="pb-1 self-center">
@@ -569,7 +575,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                     <Divider/>
 
                     <div
-                        className={`flex-grow h-full flex overflow-auto flex-row w-full `}
+                        className={"flex-grow h-full flex overflow-auto flex-row w-full "}
                         style={{
                             // width: `calc(${ADDITIONAL_TAB_WIDTH} + ${resolvedFormWidth})`,
                             // maxWidth: "100%",

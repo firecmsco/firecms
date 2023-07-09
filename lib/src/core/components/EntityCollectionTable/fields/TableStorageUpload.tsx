@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useMemo, useState } from "react";
-
-import { Theme, useTheme } from "@mui/material";
+import clsx from "clsx";
 
 import EditIcon from "@mui/icons-material/Edit";
 
@@ -13,44 +12,12 @@ import { useSnackbarController, useStorageSource } from "../../../../hooks";
 import { getThumbnailMeasure } from "../../../../preview/util";
 import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../../../../form/components/StorageUploadProgress";
-import { Typography } from "../../../../components/Typography";
-import { IconButton } from "../../../../components";
+import { IconButton, Typography } from "../../../../components";
 
-const dropZoneMixin = (hasValue: boolean) => ({
-    transition: "background-color 200ms cubic-bezier(0.0, 0, 0.2, 1) 0ms",
-    position: "relative",
-    height: "100%",
-    width: "100%",
-    outline: 0,
-    display: "flex",
-    flexDirection: "row",
-    flexWrap: "wrap",
-    justifyContent: hasValue ? "start" : "center",
-    alignItems: "center",
-    border: "2px solid",
-    borderColor: "transparent"
-});
-
-const activeDropMixin = (theme: Theme) => ({
-    background: theme.palette.mode === "light"
-        ? "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important"
-        : "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important",
-    borderRadius: `${theme.shape.borderRadius}px`,
-    border: "2px solid",
-    borderColor: "transparent"
-});
-
-const acceptDropMixin = (theme: Theme) => ({
-    background: "repeating-linear-gradient( 45deg, rgba(128, 128, 128, 0.2), rgba(128, 128, 128, 0.2) 10px, rgba(128, 128, 128, 0.25) 10px, rgba(128, 128, 128, 0.25) 20px) !important",
-    // background: "repeating-linear-gradient( 45deg, rgba(0, 0, 0, 0.09), rgba(0, 0, 0, 0.09) 10px, rgba(0, 0, 0, 0.12) 10px, rgba(0, 0, 0, 0.12) 20px) !important",
-    borderColor: theme.palette.success.light,
-    border: "2px solid"
-});
-
-const rejectDropMixin = (theme: Theme) => ({
-    borderColor: theme.palette.error.light,
-    border: "2px solid"
-});
+const dropZoneClasses = "max-w-full box-border relative pt-[2px] items-center border border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
+const activeDropClasses = "pt-0 border-2 border-solid"
+const acceptDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-green-500 bg-green-50 dark:bg-green-900"
+const rejectDropClasses = "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-2 border-solid border-red-500 bg-red-50 dark:bg-red-900"
 
 /**
  * Field that allows to upload files to Google Cloud Storage.
@@ -223,18 +190,17 @@ function StorageUpload({
 
     const imageSize = useMemo(() => getThumbnailMeasure(previewSize), [previewSize]);
 
-    const theme = useTheme();
-
     return (
         <div {...rootProps}
              onMouseEnter={() => setOnHover(true)}
              onMouseMove={() => setOnHover(true)}
              onMouseLeave={() => setOnHover(false)}
-             className={`${
-                 dropZoneMixin(hasValue)
-             } ${isDragActive ? activeDropMixin(theme) : ""} ${
-                 isDragAccept ? acceptDropMixin(theme) : ""
-             } ${isDragReject ? rejectDropMixin(theme) : ""}`}
+             className={clsx(dropZoneClasses,
+                 `justify-${hasValue ? "start" : "center"}`,
+                 isDragActive ? activeDropClasses : "",
+                 isDragAccept ? acceptDropClasses : "",
+                 isDragReject ? rejectDropClasses : ""
+             )}
         >
 
             <input autoFocus={autoFocus} {...getInputProps()} />
@@ -310,7 +276,7 @@ export function TableStorageItemPreview({
 
     return (
         <div
-            className={"relative m-4"}
+            className={"relative m-2"}
         >
 
             {value &&

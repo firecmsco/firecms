@@ -2,7 +2,7 @@ import React, { MouseEvent, useCallback } from "react";
 import clsx from "clsx";
 
 import { CollectionSize, Entity } from "../../../../types";
-import { ListItemIcon, ListItemText, Menu, MenuItem, Skeleton, useTheme } from "@mui/material";
+import { ListItemIcon, ListItemText, Menu, MenuItem, Skeleton } from "@mui/material";
 import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
 import { Typography } from "../../../../components/Typography";
 import { IconButton } from "../../../../components";
@@ -54,7 +54,6 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                                                                                   hideId?: boolean
                                                                               }) {
 
-    const theme = useTheme();
     const largeLayout = useLargeLayout();
 
     const editEnabled = Boolean(onEditClicked);

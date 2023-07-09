@@ -6,7 +6,7 @@ import {
     ResolvedStringProperty
 } from "../../types";
 import React from "react";
-import { Grid, Skeleton, Table, TableBody, TableCell, TableRow, useTheme } from "@mui/material";
+import { Grid, Skeleton, Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { Typography } from "../../components/Typography";
@@ -77,9 +77,6 @@ export function SkeletonPropertyComponent({
 }
 
 function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<T>, size: PreviewSize) {
-
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const theme = useTheme();
 
     if (!property.properties)
         return <></>;
@@ -233,7 +230,6 @@ function renderUrlAudioComponent() {
 
 export function renderSkeletonImageThumbnail(size: PreviewSize) {
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const theme = useTheme();
     const imageSize = size === "tiny" ? 40 : size === "small" ? 100 : 200;
     return (
         <Skeleton variant="rectangular"

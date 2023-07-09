@@ -13,7 +13,7 @@ export function TableSwitch(props: {
         updateValue,
         focused
     } = props;
-    const ref = React.createRef<HTMLButtonElement>();
+    const ref = React.useRef<HTMLButtonElement>(null);
 
     useEffect(() => {
         if (ref.current && focused) {

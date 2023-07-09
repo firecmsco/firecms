@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { ListItemIcon, ListItemText, Menu, MenuItem, useTheme } from "@mui/material";
+import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
 
 import AddIcon from "@mui/icons-material/Add";
 import RemoveIcon from "@mui/icons-material/Remove";
@@ -16,6 +16,7 @@ import { fieldBackgroundSubtleHover } from "../util/field_colors";
 import { IconButton } from "../../components";
 import { Button } from "../../components/Button";
 import { Tooltip } from "../../components/Tooltip";
+import { fieldBackgroundHoverMixin } from "../../styles";
 
 interface ArrayContainerProps<T> {
     droppableId: string;
@@ -231,7 +232,6 @@ export function ArrayContainerItem({
     const setOnHoverTrue = useCallback(() => setOnHover(true), []);
     const setOnHoverFalse = useCallback(() => setOnHover(false), []);
 
-    const theme = useTheme();
     return <div
         onMouseEnter={setOnHoverTrue}
         onMouseMove={setOnHoverTrue}
@@ -240,7 +240,7 @@ export function ArrayContainerItem({
         {...provided.draggableProps}
         style={provided.draggableProps.style}
         className={`${
-            (isDragging || onHover) ? fieldBackgroundSubtleHover(theme) : ""
+            (isDragging || onHover) ? fieldBackgroundHoverMixin : ""
         } mb-1 rounded-md opacity-100`}
     >
         <div

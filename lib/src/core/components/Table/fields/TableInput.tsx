@@ -13,9 +13,15 @@ export function TableInput(props: {
     updateValue: (newValue: (string | null)) => void;
 }) {
 
-    const ref = React.createRef<HTMLTextAreaElement>();
+    const ref = React.useRef<HTMLTextAreaElement>(null);
 
-    const { disabled, value, multiline, updateValue, focused } = props;
+    const {
+        disabled,
+        value,
+        multiline,
+        updateValue,
+        focused
+    } = props;
     const prevValue = useRef<string | null>(value);
 
     const [internalValue, setInternalValue] = useState<typeof value>(value);

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import equal from "react-fast-compare"
 
-import { Portal, } from "@mui/material";
+import * as Portal from "@radix-ui/react-portal";
 
 import ClearIcon from "@mui/icons-material/Clear";
 
@@ -27,9 +27,7 @@ import { isReadOnly, resolveCollection } from "../../../../util";
 import { DialogActions } from "../../../DialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
-import { Typography } from "../../../../../components/Typography";
-import { IconButton } from "../../../../../components";
-import { Button } from "../../../../../components/Button";
+import { Button, IconButton, Typography } from "../../../../../components";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
@@ -221,7 +219,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const form = entity && (
         <div
-            className={`overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? 'hidden' : ''} cursor-grab`}>
+            className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab`}>
             <Formik
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
                 validationSchema={validationSchema}
@@ -286,38 +284,40 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                         }
                         : undefined;
 
-                    let internalForm = <><div
-                        key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
-                        className="w-[520px] max-w-full max-h-[85vh]">
-                        <Form
-                            onSubmit={handleSubmit}
-                            noValidate>
+                    let internalForm = <>
+                        <div
+                            key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
+                            className="w-[520px] max-w-full max-h-[85vh]">
+                            <Form
+                                onSubmit={handleSubmit}
+                                noValidate>
 
-                            <div
-                                className="mb-1 p-2 flex flex-col relative">
                                 <div
-                                    ref={innerRef}
-                                    className="cursor-auto"
-                                    style={{ cursor: "auto !important" }}>
-                                    {fieldProps &&
-                                        <PropertyFieldBinding {...fieldProps}/>}
+                                    className="mb-1 p-4 flex flex-col relative">
+                                    <div
+                                        ref={innerRef}
+                                        className="cursor-auto"
+                                        style={{ cursor: "auto !important" }}>
+                                        {fieldProps &&
+                                            <PropertyFieldBinding {...fieldProps}/>}
+                                    </div>
                                 </div>
-                            </div>
 
-                            <DialogActions>
-                                <Button
-                                    variant="filled"
-                                    color="primary"
-                                    type="submit"
-                                    disabled={disabled}
-                                >
-                                    Save
-                                </Button>
-                            </DialogActions>
+                                <DialogActions>
+                                    <Button
+                                        variant="filled"
+                                        color="primary"
+                                        type="submit"
+                                        disabled={disabled}
+                                    >
+                                        Save
+                                    </Button>
+                                </DialogActions>
 
-                        </Form>
+                            </Form>
 
-                    </div></>;
+                        </div>
+                    </>;
 
                     const plugins = fireCMSContext.plugins;
                     if (plugins) {
@@ -375,7 +375,10 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
                 <div
                     className="absolute -top-3.5 -right-3.5 bg-gray-500 rounded-full"
-                    style={{ width: '32px', height: '32px' }}>
+                    style={{
+                        width: "32px",
+                        height: "32px"
+                    }}>
                     <IconButton
                         size={"small"}
                         onClick={(event) => {
@@ -392,9 +395,9 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     );
 
     return (
-        <Portal container={document.body}>
+        <Portal.Root>
             {draggable}
-        </Portal>
+        </Portal.Root>
     );
 
 }

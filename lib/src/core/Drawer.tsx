@@ -4,7 +4,6 @@ import clsx from "clsx";
 import { useLargeLayout } from "../hooks/useLargeLayout";
 
 import { NavLink } from "react-router-dom";
-import { SvgIconTypeMap } from "@mui/material";
 import { useFireCMSContext, useNavigationContext } from "../hooks";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { getIconForView } from "./util";
@@ -80,7 +79,7 @@ export function Drawer({
                         .map((view, index) =>
                             <DrawerNavigationItem
                                 key={`navigation_${index}`}
-                                Icon={getIconForView(view.collection ?? view.view)}
+                                icon={getIconForView(view.collection ?? view.view)}
                                 tooltipsOpen={tooltipsOpen}
                                 drawerOpen={drawerOpen}
                                 onClick={() => onClick(view)}
@@ -95,7 +94,7 @@ export function Drawer({
 
                 return <DrawerNavigationItem
                     key={`navigation_${index}`}
-                    Icon={getIconForView(view.collection ?? view.view)}
+                    icon={getIconForView(view.collection ?? view.view)}
                     tooltipsOpen={tooltipsOpen}
                     onClick={() => onClick(view)}
                     drawerOpen={drawerOpen}
@@ -109,13 +108,13 @@ export function Drawer({
 
 export function DrawerNavigationItem({
                                          name,
-                                         Icon,
+                                         icon,
                                          drawerOpen,
                                          tooltipsOpen,
                                          url,
                                          onClick
                                      }: {
-    Icon: React.ComponentType<SvgIconTypeMap["props"]>,
+    icon: React.ReactElement,
     name: string,
     tooltipsOpen: boolean,
     drawerOpen: boolean,
@@ -123,9 +122,9 @@ export function DrawerNavigationItem({
     onClick?: () => void,
 }) {
 
-    const icon = <div
+    const iconWrap = <div
         className={"text-gray-600 dark:text-gray-500"}>
-        <Icon fontSize={"medium"}/>
+        {icon}
     </div>;
 
     const listItem = <NavLink
@@ -140,7 +139,7 @@ export function DrawerNavigationItem({
         to={url}
     >
 
-        {icon}
+        {iconWrap}
 
         <div
             className={clsx(

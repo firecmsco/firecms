@@ -200,7 +200,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             }
         }, [collection, columnIndex, entity, height, propertyKey, select, width]);
 
-        const openPopup = useCallback((cellRect: DOMRect | undefined) => {
+        const openPopup = (cellRect: DOMRect | undefined) => {
             if (!cellRect) {
                 setPopupCell(undefined);
             } else {
@@ -214,7 +214,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     collection
                 });
             }
-        }, [collection, columnIndex, entity, height, propertyKey, width]);
+        };
 
         let innerComponent: React.ReactNode | undefined;
         let allowScroll = false;

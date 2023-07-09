@@ -20,6 +20,11 @@
             "import": "./dist/index.es.js",
             "require": "./dist/index.umd.js",
             "types": "./dist/index.d.ts"
+        },
+        "./components": {
+            "import": "./dist/components/index.es.js",
+            "require": "./dist/components/index.umd.js",
+            "types": "./dist/components/index.d.ts"
         }
     },
     "keywords": [
@@ -35,7 +40,7 @@
     ],
     "scripts": {
         "watch": "vite build --watch",
-        "build": "vite build && tsc --emitDeclarationOnly",
+        "build": "vite build",
         "prepublishOnly": "run-s build",
         "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
         "test:lint": "eslint \"src/**\" --quiet",
@@ -49,6 +54,7 @@
         "@radix-ui/react-checkbox": "^1.0.4",
         "@radix-ui/react-collapsible": "^1.0.3",
         "@radix-ui/react-dialog": "^1.0.4",
+        "@radix-ui/react-portal": "^1.0.3",
         "@radix-ui/react-select": "^1.2.2",
         "@radix-ui/react-switch": "^1.0.3",
         "@radix-ui/react-tooltip": "^1.0.6",

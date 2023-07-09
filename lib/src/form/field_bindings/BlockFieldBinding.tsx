@@ -202,7 +202,7 @@ function BlockEntry({
                         <>
                             <Select
                                 className="mb-2"
-                                label={<Typography variant={"caption"}
+                                placeholder={<Typography variant={"caption"}
                                                    className={"px-4 py-2 font-medium"}>Type</Typography>}
                                 size={"small"}
                                 value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}

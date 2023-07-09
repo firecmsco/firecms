@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo } from "react";
 import clsx from "clsx";
-import { useTheme } from "@mui/material";
 
 import LinkIcon from "@mui/icons-material/Link";
 import ErrorIcon from "@mui/icons-material/Error";

@@ -53,7 +53,7 @@ export function NumberTableInput(props: {
         [value, focused]
     );
 
-    const ref = React.createRef<HTMLInputElement>();
+    const ref = React.useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         if (ref.current && focused) {

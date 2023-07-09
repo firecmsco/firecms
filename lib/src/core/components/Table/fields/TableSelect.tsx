@@ -35,7 +35,7 @@ export function TableSelect(props: {
     const validValue = (Array.isArray(internalValue) && multiple) ||
         (!Array.isArray(internalValue) && !multiple);
 
-    const ref = React.createRef<HTMLButtonElement>();
+    const ref = React.useRef<HTMLButtonElement>(null);
     useEffect(() => {
         if (ref.current && focused) {
             ref.current?.focus({ preventScroll: true });

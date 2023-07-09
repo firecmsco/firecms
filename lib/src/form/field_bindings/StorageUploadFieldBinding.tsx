@@ -27,7 +27,7 @@ import {
     focusedMixin
 } from "../../styles";
 
-const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent fieldBackground min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
+const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-gray"
 const nonActiveDropClasses = "hover:bg-field-hover dark:hover:bg-field-hover-dark"
 const activeDropClasses = "pt-0 border-2 border-solid"

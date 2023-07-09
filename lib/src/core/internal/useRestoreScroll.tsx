@@ -7,7 +7,7 @@ export function useRestoreScroll() {
 
     const location = useLocation();
 
-    const containerRef = React.createRef<HTMLDivElement>();
+    const containerRef = React.useRef<HTMLDivElement>(null);
     const [scroll, setScroll] = React.useState(0);
     const [direction, setDirection] = React.useState<"up" | "down">("down");
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import {
+    Card,
     CircularProgress,
     Container,
-    Card,
     Entity,
     EntityCustomViewParams,
     EntityReference,
@@ -117,7 +117,7 @@ function Text({ markdownText }: { markdownText: string }) {
     if (!markdownText)
         return <></>;
 
-    return <Container maxWidth={"sm"}>
+    return <Container>
         <div className="mt-24 mb-24">
             <Markdown source={markdownText}/>
         </div>

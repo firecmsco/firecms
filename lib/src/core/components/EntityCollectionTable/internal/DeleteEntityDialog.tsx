@@ -3,10 +3,9 @@ import React, { useCallback, useMemo, useState } from "react";
 import { CircularProgress } from "@mui/material";
 import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../../../../hooks";
 import { DialogActions } from "../../DialogActions";
-import { resolveCollection } from "../../../util/resolutions";
-import EntityPreview from "../../EntityPreview";
-import { Dialog } from "../../../../components/Dialog";
-import { Button } from "../../../../components/Button";
+import { resolveCollection } from "../../../util";
+import { EntityPreview } from "../../EntityPreview";
+import { Button, Dialog, Typography } from "../../../../components";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
@@ -161,6 +160,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
         const entity = entityOrEntities as Entity<M> | undefined;
         content = entity
             ? <EntityPreview
+                className={"p-8"}
                 entity={entity}
                 collection={collection}
                 path={path}/>
@@ -178,9 +178,9 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
             onOpenChange={(open) => !open ? onClose() : undefined}
             {...other}
         >
-            <div className={"p-8"}>
+            <Typography variant={"subtitle2"} className={"p-8"}>
                 {dialogTitle}
-            </div>
+            </Typography>
 
             {!multipleEntities && content}
 

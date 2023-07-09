@@ -1,5 +1,4 @@
 import React, { CSSProperties, useMemo, useState } from "react";
-import { useTheme } from "@mui/material";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
@@ -28,18 +27,17 @@ export function ImagePreview({
 
     const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
 
-    const theme = useTheme();
 
     if (size === "tiny") {
         return (
             <img src={url}
+                 className={"rounded-md"}
                  key={"tiny_image_preview_" + url}
                  style={{
                      position: "relative",
                      objectFit: "cover",
                      width: imageSize,
                      height: imageSize,
-                     borderRadius: theme.shape.borderRadius,
                      maxHeight: "100%"
                  }}/>
         );
@@ -49,7 +47,6 @@ export function ImagePreview({
         {
             maxWidth: "100%",
             maxHeight: "100%",
-            borderRadius: theme.shape.borderRadius
         };
 
     return (
@@ -65,6 +62,7 @@ export function ImagePreview({
             onMouseLeave={() => setOnHover(false)}>
 
             <img src={url}
+                 className={"rounded-md"}
                  style={imageStyle}/>
 
             {onHover && <>

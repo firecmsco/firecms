@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import clsx from "clsx";
 
 import useMeasure from "react-use-measure";
@@ -94,7 +94,7 @@ export const TableCell = React.memo<TableCellProps>(
                        }: TableCellProps) {
 
         const [measureRef, bounds] = useMeasure();
-        const ref = React.createRef<HTMLDivElement>();
+        const ref = useRef<HTMLDivElement>(null);
 
         const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
         const maxHeight = useMemo(() => getRowHeight(size), [size]);
@@ -104,7 +104,7 @@ export const TableCell = React.memo<TableCellProps>(
 
         const showError = !disabled && error;
 
-        const iconRef = React.createRef<HTMLButtonElement>();
+        const iconRef = useRef<HTMLButtonElement>();
         useEffect(() => {
             if (iconRef.current && focused) {
                 iconRef.current.focus({ preventScroll: true });
@@ -201,6 +201,7 @@ export const TableCell = React.memo<TableCellProps>(
 
         return (
             <div
+                ref={ref}
                 className={clsx(
                     "transition-colors duration-100 ease-in-out",
                     `flex relative h-full rounded-md overflow-hidden p-${p} border border-4  border-opacity-75`,
@@ -220,7 +221,6 @@ export const TableCell = React.memo<TableCellProps>(
                     // transition: "border-color 200ms ease-in-out"
                 }}
                 tabIndex={selected || disabled ? undefined : 0}
-                ref={ref}
                 onFocus={onFocus}
                 onClick={onClick}
                 onMouseEnter={setOnHoverTrue}

@@ -14,7 +14,7 @@ export type SelectProps = {
     className?: string,
     inputClassName?: string,
     onValueChange: (updatedValue: string | string[]) => void,
-    placeholder?: string,
+    placeholder?: React.ReactNode,
     options: string[],
     renderOption: (option: string) => React.ReactNode,
     size?: "small" | "medium",

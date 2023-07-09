@@ -517,7 +517,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
     );
 
     const disabled = isSubmitting || (!modified && status === "existing");
-    const formRef = React.createRef<HTMLDivElement>();
+    const formRef = React.useRef<HTMLDivElement>(null);
 
     return (
 

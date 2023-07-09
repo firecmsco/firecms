@@ -1,6 +1,7 @@
 export * from "./BooleanSwitch";
 export * from "./BooleanSwitchWithLabel";
 export * from "./Button";
+export * from "./Card";
 export * from "./Container";
 export * from "./CircularProgress";
 export * from "./Checkbox";
@@ -9,7 +10,7 @@ export * from "./DateTimeField";
 export * from "./Dialog";
 export * from "./IconButton";
 export * from "./InputLabel";
-export * from "./Card";
+export * from "./Markdown";
 export * from "./Paper";
 export * from "./Select";
 export * from "./Sheet";

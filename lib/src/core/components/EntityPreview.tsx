@@ -1,49 +1,12 @@
-import * as React from "react";
-
-import { styled } from "@mui/material/styles";
-
-import { Table, TableBody, TableCell, TableContainer, TableRow, Theme } from "@mui/material";
-import { Entity, EntityCollection, FireCMSContext, ResolvedEntityCollection, ResolvedProperties } from "../../types";
-import { PropertyPreview } from "../../preview";
+import React, { useMemo } from "react";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import { getIconForProperty, getIdIcon, resolveCollection } from "../util";
-import { ErrorBoundary } from "./ErrorBoundary";
+import clsx from "clsx";
+import { PropertyPreview } from "../../preview";
+import { Entity, EntityCollection, FireCMSContext, ResolvedEntityCollection, ResolvedProperties } from "../../types";
+import { resolveCollection } from "../util";
 import { useFireCMSContext } from "../../hooks";
-import { Typography } from "../../components/Typography";
+import { defaultBorderMixin } from "../../styles";
 import { IconButton } from "../../components";
-
-const PREFIX = "EntityPreview";
-
-const classes = {
-    property: `${PREFIX}-property`,
-    valuePreview: `${PREFIX}-valuePreview`,
-    iconCell: `${PREFIX}-iconCell`,
-    titleCell: `${PREFIX}-titleCell`
-};
-
-const StyledTableContainer = styled(TableContainer)((
-    { theme }: {
-        theme: Theme
-    }
-) => ({
-    [`& .${classes.property}`]: {
-        display: "flex"
-    },
-
-    [`& .${classes.valuePreview}`]: {
-        height: "72px",
-        padding: theme.spacing(2, 3)
-    },
-
-    [`& .${classes.iconCell}`]: {
-        paddingTop: theme.spacing(1)
-    },
-
-    [`& .${classes.titleCell}`]: {
-        width: "25%",
-        padding: theme.spacing(1)
-    }
-}));
 
 /**
  * @category Components
@@ -52,25 +15,19 @@ export interface EntityPreviewProps<M extends Record<string, any>> {
     entity: Entity<M>;
     collection: EntityCollection<M>;
     path: string;
+    className?: string;
 }
 
-/**
- * Use this component to render a preview of a property values
- * @param entity
- * @param collection
- * @param path
- * @constructor
- * @category Components
- */
 export function EntityPreview<M extends Record<string, any>>(
     {
         entity,
         collection,
-        path
+        path,
+        className
     }: EntityPreviewProps<M>) {
 
     const context = useFireCMSContext();
-    const resolvedCollection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection<M>({
+    const resolvedCollection: ResolvedEntityCollection<M> = useMemo(() => resolveCollection<M>({
         collection,
         path,
         entityId: entity.id,
@@ -83,98 +40,47 @@ export function EntityPreview<M extends Record<string, any>>(
     const properties: ResolvedProperties = resolvedCollection.properties;
 
     return (
-        <>
-
-            <div
-                className="w-full mt-12 pl-16 pr-16 pt-12 lg:mt-8 lg:pl-8 lg:pr-8 lg:pt-8 md:mt-4 md:pl-8 md:pr-8 md:pt-8">
-
-                <Typography
-                    className="mt-4 mb-4"
-                    variant={"h4"}>{collection.singularName ?? collection.name + " entry"}
-                </Typography>
-
-            </div>
-
-            <StyledTableContainer>
-                <Table aria-label="entity table">
-                    <TableBody>
-                        <TableRow>
-                            <TableCell align="right"
-                                       component="td"
-                                       scope="row"
-                                       className={classes.titleCell}>
-                                <Typography variant={"caption"}
-                                            color={"secondary"}>
-                                    Id
-                                </Typography>
-                            </TableCell>
-                            <TableCell padding="none"
-                                       className={classes.iconCell}>
-                                {getIdIcon("disabled", "small")}
-                            </TableCell>
-                            <TableCell className={classes.valuePreview}>
-                                <div className="flex items-center">
-                                    {entity.id}
-                                    {appConfig?.entityLinkBuilder &&
-                                        <a href={appConfig.entityLinkBuilder({ entity })}
-                                           rel="noopener noreferrer"
-                                           target="_blank">
-                                            <IconButton
-                                                aria-label="go-to-entity-datasource"
-                                                size="large">
-                                                <OpenInNewIcon
-                                                    fontSize={"small"}/>
-                                            </IconButton>
-                                        </a>}
+        <div className={"w-full " + className}>
+            <div className={"w-full mb-4"}>
+                <div className={clsx(defaultBorderMixin, "flex justify-between py-2 border-b last:border-b-0")}>
+                    <div className="flex items-center w-1/4">
+                        <span className="pl-2 text-sm text-gray-600">Id</span>
+                    </div>
+                    <div className="flex-grow p-2 ml-2 w-3/4 text-gray-900 dark:text-white min-h-[56px] flex items-center">
+                        <span className="flex-grow mr-2">{entity.id}</span>
+                        {appConfig?.entityLinkBuilder &&
+                            <a href={appConfig.entityLinkBuilder({ entity })}
+                               rel="noopener noreferrer"
+                               target="_blank">
+                                <IconButton>
+                                    <OpenInNewIcon
+                                        fontSize={"small"}/>
+                                </IconButton>
+                            </a>}
+                    </div>
+                </div>
+                {Object.entries(properties)
+                    .map(([key, property]) => {
+                        const value = (entity.values)[key];
+                        return (
+                            <div
+                                key={`reference_previews_${key}`}
+                                className={clsx(defaultBorderMixin, "flex justify-between py-2 border-b last:border-b-0")}>
+                                <div className="flex items-center w-1/4">
+                                    <span className="pl-2 text-sm text-gray-600">{property.name}</span>
                                 </div>
-                            </TableCell>
-                        </TableRow>
-
-                        {collection && Object.entries(properties)
-                            .map(([key, property]) => {
-                                const value = (entity.values)[key];
-                                return (
-                                    <TableRow
-                                        key={"entity_prev" + property.name + key}>
-                                        <TableCell align="right"
-                                                   component="td"
-                                                   scope="row"
-                                                   className={classes.titleCell}>
-                                            <Typography
-                                                className="pl-2"
-                                                variant={"caption"}
-                                                color={"secondary"}>
-                                                {property.name}
-                                            </Typography>
-                                        </TableCell>
-
-                                        <TableCell padding="none"
-                                                   className={classes.iconCell}>
-                                            {getIconForProperty(property, "small")}
-                                        </TableCell>
-
-                                        <TableCell
-                                            className={classes.valuePreview}>
-                                            <ErrorBoundary>
-                                                <PropertyPreview
-                                                    propertyKey={key}
-                                                    value={value}
-                                                    entity={entity}
-                                                    property={property}
-                                                    size={"medium"}/>
-                                            </ErrorBoundary>
-                                        </TableCell>
-
-                                    </TableRow>
-                                );
-                            })}
-                    </TableBody>
-                </Table>
-            </StyledTableContainer>
-
-        </>
+                                <div className="flex-grow p-2 ml-2 w-3/4 text-gray-900 dark:text-white min-h-[56px] flex items-center">
+                                    <PropertyPreview
+                                        propertyKey={key}
+                                        value={value}
+                                        entity={entity}
+                                        property={property}
+                                        size={"medium"}/>
+                                </div>
+                            </div>
+                        )
+                    })}
+            </div>
+        </div>
     );
-
 }
-
-export default EntityPreview;

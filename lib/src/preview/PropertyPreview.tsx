@@ -15,7 +15,7 @@ import { useFireCMSContext } from "../hooks";
 import { EmptyValue } from "./components/EmptyValue";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";
 import { StorageThumbnail } from "./components/StorageThumbnail";
-import { Markdown } from "./components/Markdown";
+import { Markdown } from "../components";
 import { StringPropertyPreview } from "./property_previews/StringPropertyPreview";
 import { ArrayOfMapsPreview } from "./property_previews/ArrayOfMapsPreview";
 import { ArrayPropertyPreview } from "./property_previews/ArrayPropertyPreview";

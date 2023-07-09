@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 
-import { Modal, Slide, useTheme } from "@mui/material";
+import { Modal, Slide } from "@mui/material";
 import { paperMixin } from "../../styles";
 
 export interface SideDialogDrawerProps {
@@ -47,7 +47,6 @@ export const SideDialogDrawer = React.forwardRef<HTMLDivElement, SideDialogDrawe
         offsetPosition
     } = props;
 
-    const theme = useTheme();
     return (
         <Modal
             open={open}

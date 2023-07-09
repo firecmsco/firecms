@@ -39,7 +39,7 @@ export function NavigationCollectionCard({
 }) {
 
     const userConfigurationPersistence = useUserConfigurationPersistence();
-    const CollectionIcon = getIconForView(collection ?? view);
+    const collectionIcon = getIconForView(collection ?? view, { color: "disabled" });
 
     const navigate = useNavigate();
     const context = useFireCMSContext();
@@ -88,7 +88,7 @@ export function NavigationCollectionCard({
                     <div
                         className="h-10 flex items-center w-full justify-between">
 
-                        <CollectionIcon color={"disabled"}/>
+                        {collectionIcon}
 
                         <div
                             className="flex items-center gap-1"
