@@ -479,8 +479,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             setFilterValues({ ...updatedFilterValues, ...forceFilter } as FilterValues<any>);
         }, [forceFilter]);
 
-        console.log("popup", popupCell);
-
         return (
 
             <EntityCollectionTableContext.Provider

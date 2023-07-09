@@ -9,8 +9,8 @@ import { TableSize } from "../../Table";
 import { getRowHeight } from "../../Table/common";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { ErrorTooltip } from "../../ErrorTooltip";
-import { IconButton } from "../../../../components";
-import { Tooltip } from "../../../../components/Tooltip";
+import { IconButton, Tooltip } from "../../../../components";
+import { useOutsideAlerter } from "../../../internal/useOutsideAlerter";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -95,6 +95,11 @@ export const TableCell = React.memo<TableCellProps>(
 
         const [measureRef, bounds] = useMeasure();
         const ref = useRef<HTMLDivElement>(null);
+        useOutsideAlerter(ref, () => {
+            if (selected && onSelect) {
+                onSelect(undefined);
+            }
+        });
 
         const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
         const maxHeight = useMemo(() => getRowHeight(size), [size]);
@@ -217,8 +222,7 @@ export const TableCell = React.memo<TableCellProps>(
                     justifyContent,
                     alignItems: disabled || !isOverflowing ? "center" : undefined,
                     width: width ?? "100%",
-                    textAlign: align,
-                    // transition: "border-color 200ms ease-in-out"
+                    textAlign: align
                 }}
                 tabIndex={selected || disabled ? undefined : 0}
                 onFocus={onFocus}

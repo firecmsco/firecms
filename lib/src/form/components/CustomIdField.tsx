@@ -9,7 +9,6 @@ import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } fro
 import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
 import { enumToObjectEntries, Select, TextInput } from "../../core";
 import { IconButton, Tooltip } from "../../components";
-import { MenuItem } from "@mui/material";
 
 export function CustomIdField<M extends Record<string, any>>({
                                                                  customId,
@@ -46,7 +45,7 @@ export function CustomIdField<M extends Record<string, any>>({
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();
 
-    const fieldProps: any = {
+    const fieldProps = {
         label: idSetAutomatically ? "ID is set automatically" : "ID",
         disabled,
         name: "id",
@@ -90,18 +89,16 @@ export function CustomIdField<M extends Record<string, any>>({
 
             {enumValues &&
                 <Select
-                    fullWidth
-                    disableUnderline={true}
                     error={error}
+                    onValueChange={(v) => onChange(v as string)}
+                    options={enumValues.map((enumConfig) => enumConfig.id as string)}
                     {...fieldProps}
-                    onChange={(event: any) => onChange(event.target.value)}>
-                    {enumValues.map((enumConfig) =>
-                        <MenuItem
-                            key={`custom-id-item-${enumConfig.id}`}
-                            value={enumConfig.id}>
-                            {`${enumConfig.id} - ${enumConfig.label}`}
-                        </MenuItem>)}
-                </Select>}
+                    renderOption={(option) => {
+                        const enumConfig = enumValues.find(e => e.id === option);
+                        if (!enumConfig) return option;
+                        return `${enumConfig.id} - ${enumConfig.label}`;
+                    }}
+                />}
 
             {!enumValues &&
                 <TextInput {...fieldProps}

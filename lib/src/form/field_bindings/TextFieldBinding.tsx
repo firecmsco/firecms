@@ -88,7 +88,7 @@ export function TextFieldBinding<T extends string | number>({
                     </IconButton>
                 }
                 error={showError ? error : undefined}
-                inputClassName={error ? "text-error" : ""}/>
+                inputClassName={error ? "text-red-500 dark:text-red-600" : ""}/>
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

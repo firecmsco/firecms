@@ -1,10 +1,9 @@
 import { useNavigate } from "react-router-dom";
-import { Grid } from "@mui/material";
+import { Star } from "lucide-react";
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { TopNavigationEntry } from "../../../types";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import StarIcon from "@mui/icons-material/Star";
+
 import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCollectionCard } from "./NavigationCollectionCard";
 import { Chip } from "../../../components";
@@ -36,9 +35,11 @@ function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
         key={entry.path}
         label={entry.name}
         onClick={() => navigate(entry.url)}
-        icon={favourite
-            ? <StarIcon color={"secondary"} onClick={onIconClick}/>
-            : <StarBorderIcon color={"disabled"} onClick={onIconClick}/>}
+        icon={
+            <Star strokeWidth={favourite ? 2 : 2}
+                  onClick={onIconClick}
+                  size={18}
+                  className={favourite ? "text-secondary" : "text-gray-400 dark:text-gray-500"}/>}
     />;
 }
 
@@ -63,23 +64,24 @@ export function FavouritesView({ hidden }: { hidden: boolean }) {
     const favouritesGroup = <Collapse
         in={!hidden && favouriteCollections.length > 0}>
         <NavigationGroup group={"Favourites"}>
-            <Grid container spacing={2}>
-                {favouriteCollections
-                    .map((entry) =>
-                        <Grid item
-                              xs={12}
-                              sm={6}
-                              lg={4}
-                              key={`nav_${entry.group}_${entry.name}`}>
-                            <NavigationCollectionCard {...entry}
-                                                      onClick={() => {
-                                                          const event = entry.type === "collection" ? "home_favorite_navigate_to_collection" : (entry.type === "view" ? "home_favorite_navigate_to_view" : "unmapped_event");
-                                                          context.onAnalyticsEvent?.(event, { path: entry.path });
-                                                      }}/>
-                        </Grid>)
-                }
-
-            </Grid>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {favouriteCollections.map((entry) => (
+                    <div key={`nav_${entry.group}_${entry.name}`} className="col-span-1">
+                        <NavigationCollectionCard
+                            {...entry}
+                            onClick={() => {
+                                const event =
+                                    entry.type === "collection"
+                                        ? "home_favorite_navigate_to_collection"
+                                        : entry.type === "view"
+                                            ? "home_favorite_navigate_to_view"
+                                            : "unmapped_event";
+                                context.onAnalyticsEvent?.(event, { path: entry.path });
+                            }}
+                        />
+                    </div>
+                ))}
+            </div>
         </NavigationGroup>
     </Collapse>;
 

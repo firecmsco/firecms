@@ -1,6 +1,6 @@
 import { ResolvedProperty } from "../../types";
 import { FieldDescription } from "./FieldDescription";
-import { Typography } from "@mui/material";
+import { Typography } from "../../components";
 
 /**
  * Component in charge of rendering the description of a field

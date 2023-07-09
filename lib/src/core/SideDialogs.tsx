@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useSideDialogsController } from "../hooks/useSideDialogsController";
+import { useSideDialogsController } from "../hooks";
 import { ErrorBoundary } from "./components";
 import { UnsavedChangesDialog, useNavigationUnsavedChangesDialog } from "./internal/useUnsavedChangesDialog";
 import { SideDialogPanelProps } from "../types";
-import { Sheet } from "../components/Sheet";
+import { Sheet } from "../components";
 
 export type SideDialogContextProps = {
     blocked: boolean,
@@ -132,7 +132,7 @@ function SideDialogView({
                         className={"transform max-w-[100vw] lg:max-w-[95vw] flex flex-col h-full transition-all duration-250 ease-in-out bg-white dark:bg-gray-900 "}
                         style={{
                             width: panel.width,
-                            translate: `translateX(${offsetPosition * 200}px)`
+                            transform: `translateX(-${offsetPosition * 200}px)`
                         }}
                     >
                         <ErrorBoundary>

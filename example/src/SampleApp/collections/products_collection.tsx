@@ -109,7 +109,7 @@ export const productsCollection = buildCollection<Product>({
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
     permissions: ({ authController }) => ({
-        edit: false,
+        edit: true,
         create: true,
         // we use some custom logic by storing user data in the `extra`
         // field of the user

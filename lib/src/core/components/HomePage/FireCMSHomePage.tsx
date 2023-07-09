@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { Container, Grid } from "@mui/material";
+import { Container } from "@mui/material";
 
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
 import { PluginGenericProps, PluginHomePageAdditionalCardsProps } from "../../../types";
@@ -28,7 +28,11 @@ search.addIndex("path");
  * @constructor
  * @category Components
  */
-export function FireCMSHomePage({ additionalChildrenStart, additionalChildrenEnd }: { additionalChildrenStart?: React.ReactNode, additionalChildrenEnd?: React.ReactNode
+export function FireCMSHomePage({
+                                    additionalChildrenStart,
+                                    additionalChildrenEnd
+                                }: {
+    additionalChildrenStart?: React.ReactNode, additionalChildrenEnd?: React.ReactNode
 }) {
 
     const context = useFireCMSContext();
@@ -135,32 +139,31 @@ export function FireCMSHomePage({ additionalChildrenStart, additionalChildrenEnd
                         <NavigationGroup
                             group={group}
                             key={`plugin_section_${group}`}>
-                            <Grid container spacing={2}>
-                                {thisGroupCollections // so we don't miss empty groups
-                                    .map((entry) =>
-                                        <Grid item
-                                              xs={12}
-                                              sm={6}
-                                              lg={4}
-                                              key={`nav_${entry.group}_${entry.name}`}>
-                                            <NavigationCollectionCard {...entry}
-                                                                      onClick={() => {
-                                                                          const event = entry.type === "collection" ? "home_navigate_to_collection" : (entry.type === "view" ? "home_navigate_to_view" : "unmapped_event");
-                                                                          context.onAnalyticsEvent?.(event, { path: entry.path });
-                                                                      }}/>
-                                        </Grid>)
-                                }
-                                {AdditionalCards && AdditionalCards.map((AdditionalCard, i) => (
-                                    <Grid item
-                                          xs={12}
-                                          sm={6}
-                                          lg={4}
-                                          key={`nav_${group}_"add_${i}`}>
-                                        <AdditionalCard {...actionProps}/>
-                                    </Grid>
-                                ))}
 
-                            </Grid>
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                                {thisGroupCollections.map((entry) => (
+                                    <div key={`nav_${entry.group}_${entry.name}`} className="col-span-1">
+                                        <NavigationCollectionCard
+                                            {...entry}
+                                            onClick={() => {
+                                                const event =
+                                                    entry.type === "collection"
+                                                        ? "home_navigate_to_collection"
+                                                        : entry.type === "view"
+                                                            ? "home_navigate_to_view"
+                                                            : "unmapped_event";
+                                                context.onAnalyticsEvent?.(event, { path: entry.path });
+                                            }}
+                                        />
+                                    </div>
+                                ))}
+                                {AdditionalCards &&
+                                    AdditionalCards.map((AdditionalCard, i) => (
+                                        <div key={`nav_${group}_add_${i}`}>
+                                            <AdditionalCard {...actionProps} />
+                                        </div>
+                                    ))}
+                            </div>
                         </NavigationGroup>
                     );
                 })}

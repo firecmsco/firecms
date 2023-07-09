@@ -2,8 +2,7 @@ import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import StarBorderIcon from "@mui/icons-material/StarBorder";
-import StarIcon from "@mui/icons-material/Star";
+import { Star } from "lucide-react";
 
 import { Markdown } from "../../../preview";
 import { useFireCMSContext } from "../../../hooks";
@@ -39,7 +38,7 @@ export function NavigationCollectionCard({
 }) {
 
     const userConfigurationPersistence = useUserConfigurationPersistence();
-    const collectionIcon = getIconForView(collection ?? view, { color: "disabled" });
+    const collectionIcon = getIconForView(collection ?? view,);
 
     const navigate = useNavigate();
     const context = useFireCMSContext();
@@ -68,10 +67,10 @@ export function NavigationCollectionCard({
     }
 
     return (
-        <div className={clsx(cardMixin, "h-full p-4 cursor-pointer")}>
+        <div className={clsx(cardMixin, "h-full p-4 cursor-pointer min-h-[230px]")}>
 
             <div
-                className="flex flex-col items-start min-h-[248px] h-full"
+                className="flex flex-col items-start h-full"
                 onClick={() => {
                     onClick?.();
                     navigate(url);
@@ -86,7 +85,7 @@ export function NavigationCollectionCard({
                     className="flex-grow w-full">
 
                     <div
-                        className="h-10 flex items-center w-full justify-between">
+                        className="h-10 flex items-center w-full justify-between text-gray-300 dark:text-gray-600">
 
                         {collectionIcon}
 
@@ -96,26 +95,29 @@ export function NavigationCollectionCard({
                                 event.preventDefault();
                                 event.stopPropagation();
                             }}>
+
                             {actions}
+
                             {userConfigurationPersistence &&
-                                <IconButton size={"small"}
-                                            onClick={(e) => {
-                                                e.preventDefault();
-                                                e.stopPropagation();
-                                                if (favourite) {
-                                                    userConfigurationPersistence.setFavouritePaths(
-                                                        userConfigurationPersistence.favouritePaths.filter(p => p !== path)
-                                                    );
-                                                } else {
-                                                    userConfigurationPersistence.setFavouritePaths(
-                                                        [...userConfigurationPersistence.favouritePaths, path]
-                                                    );
-                                                }
-                                            }}>
-                                    {favourite
-                                        ? <StarIcon color={"secondary"}/>
-                                        : <StarBorderIcon color={"disabled"}/>}
+                                <IconButton
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        if (favourite) {
+                                            userConfigurationPersistence.setFavouritePaths(
+                                                userConfigurationPersistence.favouritePaths.filter(p => p !== path)
+                                            );
+                                        } else {
+                                            userConfigurationPersistence.setFavouritePaths(
+                                                [...userConfigurationPersistence.favouritePaths, path]
+                                            );
+                                        }
+                                    }}>
+                                    <Star strokeWidth={favourite ? 2 : 2}
+                                          size={18}
+                                          className={favourite ? "text-secondary" : "text-gray-400 dark:text-gray-500"}/>
                                 </IconButton>}
+
                         </div>
 
                     </div>
@@ -135,7 +137,7 @@ export function NavigationCollectionCard({
                 <div style={{ alignSelf: "flex-end" }}>
 
                     <div className={"p-4"}>
-                        <ArrowForwardIcon color="primary"/>
+                        <ArrowForwardIcon className="text-primary"/>
                     </div>
                 </div>
 

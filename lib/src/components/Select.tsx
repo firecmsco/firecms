@@ -20,6 +20,7 @@ export type SelectProps = {
     size?: "small" | "medium",
     label?: React.ReactNode,
     disabled?: boolean,
+    error?: boolean,
     position?: "item-aligned" | "popper",
     endAdornment?: React.ReactNode,
     multiple?: boolean,
@@ -42,6 +43,7 @@ export function Select({
                            label,
                            size = "medium",
                            includeFocusOutline = true,
+                           error,
                            disabled,
                            padding = true,
                            position = "popper",
@@ -70,6 +72,7 @@ export function Select({
         <SelectPrimitive.Root
             value={Array.isArray(value) ? undefined : value}
             open={openInternal}
+            disabled={disabled}
             onValueChange={onValueChangeInternal}
             onOpenChange={(open) => {
                 onOpenChange?.(open);
@@ -78,13 +81,14 @@ export function Select({
 
             {label}
 
-            <div className={clsx(
-                size === "small" ? "min-h-[42px]" : "min-h-[64px]",
-                "select-none rounded-md text-sm",
-                fieldBackgroundMixin,
-                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                "relative flex items-center",
-                className)}>
+            <div
+                className={clsx(
+                    size === "small" ? "min-h-[42px]" : "min-h-[64px]",
+                    "select-none rounded-md text-sm",
+                    fieldBackgroundMixin,
+                    disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
+                    "relative flex items-center",
+                    className)}>
 
                 <SelectPrimitive.Trigger
                     ref={inputRef}
@@ -94,7 +98,7 @@ export function Select({
                         padding ? "px-4 " : "",
                         "outline-none focus:outline-none",
                         "select-none rounded-md text-sm",
-                        "focus:text-text-primary dark:focus:text-text-primary-dark",
+                        error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
                         "text-gray-700 dark:text-gray-100",
                         "relative flex items-center",
                         includeFocusOutline ? focusedMixin : "",

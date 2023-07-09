@@ -22,6 +22,7 @@ export function TableInput(props: {
         updateValue,
         focused
     } = props;
+
     const prevValue = useRef<string | null>(value);
 
     const [internalValue, setInternalValue] = useState<typeof value>(value);
@@ -41,7 +42,7 @@ export function TableInput(props: {
             prevValue.current = internalValue;
             updateValue(internalValue);
         }
-    }, [internalValue, value]);
+    }, [internalValue, updateValue, value]);
 
     useDebounce(internalValue, doUpdate, !focused, 2000);
 
