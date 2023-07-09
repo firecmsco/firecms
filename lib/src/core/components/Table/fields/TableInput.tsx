@@ -8,7 +8,6 @@ export function TableInput(props: {
     value: string;
     multiline: boolean;
     focused: boolean;
-    setFocused: (focused: boolean) => void;
     disabled: boolean;
     updateValue: (newValue: (string | null)) => void;
 }) {
@@ -82,12 +81,10 @@ export function TableInput(props: {
             }}
             onFocus={() => {
                 focusedState.current = true;
-                props.setFocused(true);
             }}
             onBlur={() => {
                 focusedState.current = false;
                 doUpdate();
-                props.setFocused(false);
             }}
         />
     );

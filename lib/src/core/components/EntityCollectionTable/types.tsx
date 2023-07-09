@@ -58,8 +58,6 @@ export type EntityCollectionTableProviderProps<M extends Record<string, any>, Ad
 export type EntityCollectionTableController<M extends Record<string, any>> = {
 
     selectedCell?: SelectedCellProps<any>;
-    focused: boolean;
-    setFocused: (focused: boolean) => void;
     select: (cell?: SelectedCellProps<M>) => void;
     setPopupCell: (cell?: SelectedCellProps<M>) => void;
     onValueChange?: (params: OnCellValueChangeParams<any, M>) => void;

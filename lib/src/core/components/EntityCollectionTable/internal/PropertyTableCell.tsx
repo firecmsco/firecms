@@ -35,7 +35,6 @@ export interface PropertyTableCellProps<T extends CMSType, M extends Record<stri
     value: T;
     readonly: boolean;
     collection: EntityCollection<M>;
-    setFocused: (value: boolean) => void;
     property: ResolvedProperty<T>;
     height: number;
     width: number;
@@ -80,8 +79,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             onValueChange,
             size,
             selectedCell,
-            focused,
-            setFocused,
             select,
             setPopupCell,
         } = useEntityCollectionTableController();
@@ -226,7 +223,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             return <TableCell
                 size={size}
                 width={width}
-                focused={focused}
                 saved={saved}
                 key={`${propertyKey}_${entity.path}_${entity.id}`}
                 value={internalValue}
@@ -251,7 +247,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             if (isAStorageProperty) {
                 innerComponent = <TableStorageUpload error={error}
                                                      disabled={disabled}
-                                                     focused={focused}
+                                                     focused={selected}
                                                      property={property as ResolvedStringProperty | ResolvedArrayProperty<string[]>}
                                                      entity={entity}
                                                      path={path}
@@ -269,7 +265,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     innerComponent = <TableSelect name={propertyKey as string}
                                                   multiple={false}
                                                   disabled={disabled}
-                                                  focused={focused}
+                                                  focused={selected}
                                                   valueType={"number"}
                                                   small={getPreviewSizeFrom(size) !== "medium"}
                                                   enumValues={numberProperty.enumValues}
@@ -282,8 +278,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     innerComponent = <NumberTableInput
                         align={align}
                         error={error}
-                        focused={focused}
-                        setFocused={setFocused}
+                        focused={selected}
                         disabled={disabled}
                         value={internalValue as number}
                         updateValue={updateValue}
@@ -295,7 +290,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 if (stringProperty.enumValues) {
                     innerComponent = <TableSelect name={propertyKey as string}
                                                   multiple={false}
-                                                  focused={focused}
+                                                  focused={selected}
                                                   disabled={disabled}
                                                   valueType={"string"}
                                                   small={getPreviewSizeFrom(size) !== "medium"}
@@ -310,8 +305,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     innerComponent = <TableInput error={error}
                                                  disabled={disabled}
                                                  multiline={multiline}
-                                                 setFocused={setFocused}
-                                                 focused={focused}
+                                                 focused={selected}
                                                  value={internalValue as string}
                                                  updateValue={updateValue}
                     />;
@@ -320,7 +314,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             } else if (property.dataType === "boolean") {
                 innerComponent = <TableSwitch error={error}
                                               disabled={disabled}
-                                              focused={focused && selected}
+                                              focused={selected}
                                               internalValue={internalValue as boolean}
                                               updateValue={updateValue}
                 />;
@@ -329,7 +323,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                  error={error}
                                                  disabled={disabled}
                                                  mode={property.mode}
-                                                 focused={focused}
+                                                 focused={selected}
                                                  internalValue={internalValue as Date}
                                                  updateValue={updateValue}
                 />;
@@ -363,7 +357,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                 <TableSelect name={propertyKey as string}
                                              multiple={true}
                                              disabled={disabled}
-                                             focused={focused}
+                                             focused={selected}
                                              small={getPreviewSizeFrom(size) !== "medium"}
                                              valueType={arrayProperty.of.dataType}
                                              enumValues={arrayProperty.of.enumValues}
@@ -418,7 +412,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 key={`cell_${propertyKey}_${entity.path}_${entity.id}`}
                 size={size}
                 width={width}
-                focused={focused}
                 onSelect={onSelect}
                 selected={selected}
                 disabled={disabled || readOnlyProperty}

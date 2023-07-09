@@ -7,7 +7,6 @@ export function NumberTableInput(props: {
     align: "right" | "left" | "center";
     updateValue: (newValue: (number | null)) => void;
     focused: boolean;
-    setFocused: (focused: boolean) => void;
     disabled: boolean;
 }) {
 
@@ -71,13 +70,6 @@ export function NumberTableInput(props: {
                 textAlign: align
             }}
             value={internalValue ?? ""}
-            onFocus={() => {
-                props.setFocused(true);
-            }}
-            onBlur={() => {
-                doUpdate();
-                props.setFocused(false);
-            }}
             onChange={(evt) => {
                 const newValue = evt.target.value.replace(",", ".");
                 if (newValue.length === 0)

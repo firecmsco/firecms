@@ -26,7 +26,6 @@ interface TableCellProps {
     size: TableSize;
     disabledTooltip?: string;
     width: number;
-    focused: boolean;
     showExpandIcon?: boolean;
     removePadding?: boolean;
     fullHeight?: boolean;
@@ -76,7 +75,6 @@ const TableCellInner = ({
 export const TableCell = React.memo<TableCellProps>(
     function TableCell({
                            children,
-                           focused,
                            size,
                            selected,
                            disabled,
@@ -111,10 +109,10 @@ export const TableCell = React.memo<TableCellProps>(
 
         const iconRef = useRef<HTMLButtonElement>();
         useEffect(() => {
-            if (iconRef.current && focused) {
+            if (iconRef.current && selected) {
                 iconRef.current.focus({ preventScroll: true });
             }
-        }, [focused]);
+        }, [selected]);
 
         useEffect(() => {
             if (saved) {
@@ -312,7 +310,6 @@ export const TableCell = React.memo<TableCellProps>(
         a.size === b.size &&
         a.disabledTooltip === b.disabledTooltip &&
         a.width === b.width &&
-        a.focused === b.focused &&
         a.showExpandIcon === b.showExpandIcon &&
         a.removePadding === b.removePadding &&
         a.fullHeight === b.fullHeight &&

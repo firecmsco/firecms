@@ -149,7 +149,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const [selectedCell, setSelectedCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
         const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
-        const [focused, setFocused] = React.useState<boolean>(false);
 
         const selectedEntityIds = selectedEntities?.map(e => e.id);
 
@@ -273,17 +272,14 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const select = useCallback((cell?: SelectedCellProps<M>) => {
             setSelectedCell(cell);
-            setFocused(true);
         }, []);
 
         const unselect = useCallback(() => {
             setSelectedCell(undefined);
-            setFocused(false);
         }, []);
 
         const onPopupClose = useCallback(() => {
             setPopupCell(undefined);
-            setFocused(true);
         }, []);
 
         const displayedColumnIds = useColumnIds<M>(resolvedCollection, true);
@@ -328,7 +324,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             align={column.align ?? "left"}
                             propertyKey={propertyKey as string}
                             property={property}
-                            setFocused={setFocused}
                             value={entity?.values ? getValueInPath(entity.values, propertyKey) : undefined}
                             collection={collection}
                             customFieldValidator={customFieldValidator}
@@ -372,7 +367,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     key={`additional_table_cell_${entity.id}_${column.key}`}
                     width={width}
                     size={size}
-                    focused={focused}
                     value={value}
                     selected={false}
                     disabled={true}
@@ -489,8 +483,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     size,
                     selectedCell,
                     selectedEntityIds,
-                    focused,
-                    setFocused
                 }}
             >
 
