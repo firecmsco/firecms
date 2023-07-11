@@ -325,7 +325,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                 collection.properties,
                 uniqueFieldValidator)
             : undefined,
-        [entityId, collection.properties]);
+        [entityId, collection.properties, uniqueFieldValidator]);
 
     return (
         <Formik

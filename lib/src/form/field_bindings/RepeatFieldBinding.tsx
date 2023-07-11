@@ -50,7 +50,6 @@ export function RepeatFieldBinding<T extends Array<any>>({
 
     const buildEntry = (index: number, internalId: number) => {
         const childProperty = property.resolvedProperties[index] ?? ofProperty;
-        console.log("childProperty", `${propertyKey}.${index}`, value[index])
         const fieldProps = {
             propertyKey: `${propertyKey}.${index}`,
             disabled,

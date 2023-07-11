@@ -171,7 +171,6 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             return;
         // open first tab by default in large layouts
         if (selectedSubPath !== defaultSelectedView) {
-            console.log("Replacing url 1", defaultSelectedView);
             sideEntityController.replace({
                 path,
                 entityId,
@@ -237,7 +236,6 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             sideDialogContext.close(true);
             onClose?.();
         } else if (status !== "existing") {
-            console.log("Replacing url 2", tabsPositionRef.current, getSelectedSubPath(tabsPositionRef.current));
             sideEntityController.replace({
                 path,
                 entityId: updatedEntity.id,
