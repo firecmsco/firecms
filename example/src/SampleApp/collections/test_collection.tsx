@@ -90,14 +90,28 @@ export const testCollection = buildCollection({
     name: "Test entities",
     // formAutoSave: true,
     properties: {
-
-        tags: {
-            name: "Tags",
-            dataType: "array",
-            of: {
-                dataType: "string"
-            }
+        title: {
+            name: "Title",
+            dataType: "string",
+            validation: { min: 2, trim: true },
+            clearable: true,
         },
+        // product: {
+        //     name: "Product unique",
+        //     dataType: "reference",
+        //     path: "products",
+        //     validation: {
+        //         required: true,
+        //         unique: true
+        //     }
+        // },
+        // tags: {
+        //     name: "Tags",
+        //     dataType: "array",
+        //     of: {
+        //         dataType: "string"
+        //     }
+        // },
         // specSheet: ({
         //                 values,
         //                 entityId
@@ -116,11 +130,10 @@ export const testCollection = buildCollection({
         //         }
         //     }
         // }),
-
-        name: {
-            dataType: "string",
-            name: "Name"
-        },
+        // name: {
+        //     dataType: "string",
+        //     name: "Name"
+        // },
         // key_value: {
         //     dataType: "map",
         //     name: "Key value",
@@ -287,27 +300,27 @@ export const testCollection = buildCollection({
         //         }
         //     })
         // },
-        eeee: {
-            name: "My enum",
-            dataType: "string",
-            enumValues: {
-                value1: "Value 1",
-                value2: "Value 2",
-            },
-            validation: { required: false },
-            clearable: true,
-        },
-        products: buildProperty(({ values }) => ({
-            name: "Products",
-            dataType: "array",
-            of: {
-                dataType: "reference",
-                path: "products",
-                forceFilter: {
-                    tags: ["array-contains", "test"]
-                }
-            },
-        })),
+        // eeee: {
+        //     name: "My enum",
+        //     dataType: "string",
+        //     enumValues: {
+        //         value1: "Value 1",
+        //         value2: "Value 2",
+        //     },
+        //     validation: { required: false },
+        //     clearable: true,
+        // },
+        // products: buildProperty(({ values }) => ({
+        //     name: "Products",
+        //     dataType: "array",
+        //     of: {
+        //         dataType: "reference",
+        //         path: "products",
+        //         forceFilter: {
+        //             tags: ["array-contains", "test"]
+        //         }
+        //     },
+        // })),
         // product: {
         //     name: "Product",
         //     dataType: "reference",

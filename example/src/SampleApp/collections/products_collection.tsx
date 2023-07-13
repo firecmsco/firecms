@@ -5,6 +5,7 @@ import { SampleCollectionActions } from "../collection_actions/SampleCollectionA
 import { SampleProductsView } from "../custom_entity_view/SampleProductsView";
 import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";
+import CustomColorTextField from "../custom_field/CustomColorTextField";
 
 export const localeCollection = buildCollection<Locale>({
     path: "locales",
@@ -235,6 +236,11 @@ export const productsCollection = buildCollection<Product>({
             name: "Brand",
             validation: {
                 required: true
+            },
+            description: "This field uses a custom component defined by the developer",
+            Field: CustomColorTextField,
+            customProps: {
+                color: "gold"
             }
         },
         description: {

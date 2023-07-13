@@ -10,7 +10,6 @@ export type BlogEntry = {
     name: string,
     header_image: string,
     content: any[],
-    gold_text: string,
     created_on: Date,
     publish_date: Date,
     reviewed: boolean,
@@ -38,7 +37,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     exportable: {
         additionalFields: [sampleAdditionalExportColumn]
     },
-    description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
+    description: "A blog entry with around 500 words and a quirky humorist tone",
     textSearchEnabled: true,
     defaultSize: "l",
     views: [{
@@ -125,15 +124,6 @@ export const blogCollection = buildCollection<BlogEntry>({
             },
             defaultValue: "draft"
         })),
-        gold_text: buildProperty({
-            name: "Gold text",
-            description: "This field is a sample that uses a custom component defined by the developer",
-            dataType: "string",
-            Field: CustomColorTextField,
-            customProps: {
-                color: "gold"
-            }
-        }),
         publish_date: buildProperty({
             name: "Publish date",
             dataType: "date",

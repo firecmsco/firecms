@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-    Box,
-    CardActionArea,
-    CardContent,
-    CircularProgress,
-    Container,
-    Paper,
-    Typography
-} from "@mui/material";
+import { Box, CardActionArea, CardContent, CircularProgress, Container, Paper, Typography } from "@mui/material";
 import {
     Entity,
     EntityCustomViewParams,
@@ -52,7 +44,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
                 src={headerUrl}
             />}
 
-            <Container maxWidth={"md"}
+            <Container maxWidth={"sm"}
                        sx={{
                            alignItems: "center",
                            justifyItems: "center",
@@ -66,26 +58,27 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
                     {modifiedValues.name}
                 </Typography>}
 
-                {modifiedValues?.content && modifiedValues.content
-                    .filter((e: any) => !!e)
-                    .map(
-                        (entry: any, index: number) => {
-                            if (entry.type === "text")
-                                return <Text key={`preview_text_${index}`}
-                                             markdownText={entry.value}/>;
-                            if (entry.type === "images")
-                                return <Images key={`preview_images_${index}`}
-                                               storagePaths={entry.value}/>;
-                            if (entry.type === "products")
-                                return <ProductGroupPreview
-                                    key={`preview_products_${index}`}
-                                    references={entry.value}/>;
-                            return <ErrorView key={`preview_images_${index}`}
-                                              error={"Unexpected value in blog entry"}/>
-                        }
-                    )}
-
             </Container>
+
+            {modifiedValues?.content && modifiedValues.content
+                .filter((e: any) => !!e)
+                .map(
+                    (entry: any, index: number) => {
+                        if (entry.type === "text")
+                            return <Text key={`preview_text_${index}`}
+                                         markdownText={entry.value}/>;
+                        if (entry.type === "images")
+                            return <Images key={`preview_images_${index}`}
+                                           storagePaths={entry.value}/>;
+                        if (entry.type === "products")
+                            return <ProductGroupPreview
+                                key={`preview_products_${index}`}
+                                references={entry.value}/>;
+                        return <ErrorView key={`preview_images_${index}`}
+                                          error={"Unexpected value in blog entry"}/>
+                    }
+                )}
+
 
         </Box>
     );
@@ -95,18 +88,20 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
 export function Images({ storagePaths }: { storagePaths: string[] }) {
     if (!storagePaths)
         return <></>;
-    return <Box display="flex">
-        {storagePaths.map((path, index) =>
-            <Box p={2} m={1}
-                 key={`images_${index}`}
-                 sx={{
-                     width: 250,
-                     height: 250
-                 }}>
-                <StorageImage storagePath={path}/>
-            </Box>
-        )}
-    </Box>;
+    return <Container maxWidth={"md"} sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
+        <Box display="flex">
+            {storagePaths.map((path, index) =>
+                <Box p={2} m={1}
+                     key={`images_${index}`}
+                     sx={{
+                         width: 300,
+                         height: 300
+                     }}>
+                    <StorageImage storagePath={path}/>
+                </Box>
+            )}
+        </Box>
+    </Container>;
 }
 
 export function StorageImage({ storagePath }: { storagePath: string }) {
@@ -123,13 +118,15 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
     if (!storagePath)
         return <></>;
 
-    return (<img
-        alt={"Generic"}
-        style={{
-            objectFit: "contain",
-            width: "100%",
-            height: "100%"
-        }} src={url}/>);
+    return (
+        <img
+            alt={"Generic"}
+            style={{
+                objectFit: "contain",
+                width: "100%",
+                height: "100%"
+            }} src={url}/>
+    );
 }
 
 function Text({ markdownText }: { markdownText: string }) {
@@ -170,11 +167,11 @@ function ProductGroupPreview({ references }: { references: EntityReference[] }) 
 
     if (!products) return <CircularProgress/>;
 
-    return <Box>
+    return <Container maxWidth={"lg"} sx={{ display: "flex", flexWrap: "wrap", justifyContent: "center" }}>
         {products.map((p, index) => <ProductPreview
             key={`products_${index}`}
             productValues={p.values as EntityValues<Product>}/>)}
-    </Box>;
+    </Container>;
 }
 
 export function ProductPreview({ productValues }: { productValues: EntityValues<Product> }) {
@@ -184,8 +181,8 @@ export function ProductPreview({ productValues }: { productValues: EntityValues<
 
     return (
         <Paper sx={{
-            width: "400px",
-            height: "400px",
+            width: "300px",
+            // height: "300px",
             margin: "16px",
             boxShadow: "rgb(0 0 0 / 8%) 0px 8px 12px -4px"
         }}
@@ -216,6 +213,7 @@ export function ProductPreview({ productValues }: { productValues: EntityValues<
                     </Typography>
                 </CardContent>
             </CardActionArea>
-        </Paper>);
+        </Paper>
+    );
 
 }
