@@ -19,7 +19,10 @@ export function TextInput<T extends string | number>({
                                                          autoFocus,
                                                          placeholder,
                                                          size = "medium",
-                                                         inputClassName
+                                                         className,
+                                                         style,
+                                                         inputClassName,
+                                                         inputStyle
                                                      }: {
     inputType?: InputType,
     value: T,
@@ -32,7 +35,10 @@ export function TextInput<T extends string | number>({
     autoFocus?: boolean,
     placeholder?: string,
     size?: "small" | "medium",
-    inputClassName?: string
+    className?: string,
+    style?: React.CSSProperties,
+    inputClassName?: string,
+    inputStyle?: React.CSSProperties
 }) {
 
     const inputRef = useRef(null);
@@ -56,6 +62,7 @@ export function TextInput<T extends string | number>({
             onBlur={() => setFocused(false)}
             value={value ?? ""}
             onChange={onChange}
+            style={inputStyle}
             className={clsx(
                 focusedMixin,
                 "rounded-md resize-none w-full outline-none p-[32px] text-base leading-normal bg-transparent min-h-[64px] px-3 pt-[28px]",
@@ -65,6 +72,7 @@ export function TextInput<T extends string | number>({
         : <input ref={inputRef}
                  onWheel={inputType === "number" ? numberInputOnWheelPreventChange : undefined}
                  disabled={disabled}
+                 style={inputStyle}
                  className={clsx(
                      "w-full outline-none bg-transparent leading-normal text-base px-3",
                      "rounded-md",
@@ -94,7 +102,9 @@ export function TextInput<T extends string | number>({
                 {
                     "min-h-[48px]": size === "small",
                     "min-h-[64px]": size === "medium"
-                })}>
+                },
+                className)}
+            style={style}>
 
             {label && (
                 <InputLabel

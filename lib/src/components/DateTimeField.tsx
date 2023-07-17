@@ -2,10 +2,10 @@ import React from "react";
 
 import { TextField, useTheme } from "@mui/material";
 
-import ClearIcon from "@mui/icons-material/Clear";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { IconButton } from "./IconButton";
+import { ClearIcon } from "../icons/ClearIcon";
 
 export type DateTimeFieldProps = {
     value?: Date;

@@ -1,11 +1,11 @@
 import React, { CSSProperties, useMemo, useState } from "react";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { IconButton } from "../../components";
 import { Tooltip } from "../../components/Tooltip";
+import { ContentCopyIcon } from "../../icons/ContentCopyIcon";
+import { OpenInNewIcon } from "../../icons/OpenInNewIcon";
 
 /**
  * @category Preview components
@@ -26,7 +26,6 @@ export function ImagePreview({
     const [onHover, setOnHover] = useState(false);
 
     const imageSize = useMemo(() => getThumbnailMeasure(size), [size]);
-
 
     if (size === "tiny") {
         return (
@@ -78,8 +77,8 @@ export function ImagePreview({
                                 e.preventDefault();
                                 return navigator.clipboard.writeText(url);
                             }}>
-                            <ContentCopyIcon htmlColor={"#666"}
-                                             fontSize={"small"}/>
+                            <ContentCopyIcon className={"text-gray-500"}
+                                             size={"small"}/>
                         </IconButton>
                     </div>
                 </Tooltip>}
@@ -99,8 +98,8 @@ export function ImagePreview({
                         size={"small"}
                         onClick={(e: any) => e.stopPropagation()}
                     >
-                        <OpenInNewIcon htmlColor={"#666"}
-                                       fontSize={"small"}/>
+                        <OpenInNewIcon className={"text-gray-500"}
+                                       size={"small"}/>
                     </IconButton>
                 </Tooltip>
             </>

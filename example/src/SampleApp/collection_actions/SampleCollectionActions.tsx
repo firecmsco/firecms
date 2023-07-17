@@ -1,6 +1,6 @@
 import React from "react";
-import { Button } from "@mui/material";
 import {
+    Button,
     CollectionActionsProps,
     useSnackbarController
 } from "firecms";

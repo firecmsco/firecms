@@ -2,9 +2,9 @@
 import path from "path";
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
-import ViteFonts from "vite-plugin-fonts"
 
-// https://vitejs.dev/config/
+import svgr from "vite-plugin-svgr";
+
 export default defineConfig({
     esbuild: {
         logOverride: { "this-is-undefined-in-esm": "silent" }
@@ -16,14 +16,10 @@ export default defineConfig({
     },
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
+        svgr(),
         react({
             jsxImportSource: "@emotion/react"
-        }),
-        // ViteFonts({
-        //     google: {
-        //         families: ["Rubik", "Roboto", "Helvetica"]
-        //     }
-        // })
+        })
     ],
     resolve: {
         alias: {

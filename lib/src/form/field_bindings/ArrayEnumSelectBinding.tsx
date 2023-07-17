@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 
-import ClearIcon from "@mui/icons-material/Clear";
 
 import { EnumType, FieldProps, ResolvedProperty } from "../../types";
 import { LabelWithIcon } from "../components";
@@ -9,6 +8,7 @@ import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries, getIconForProperty, Select } from "../../core";
 import { IconButton } from "../../components";
 import { FieldHelperText } from "../components/FieldHelperText";
+import { ClearIcon } from "../../icons/ClearIcon";
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -116,7 +116,7 @@ export function ArrayEnumSelectBinding({
             {/*        of.clearable && <IconButton*/}
             {/*            className="absolute top-3 right-8"*/}
             {/*            onClick={handleClearClick}>*/}
-            {/*            <ClearIcon/>*/}
+            {/*            <Clear/>*/}
             {/*        </IconButton>*/}
             {/*    }*/}
             {/*    onChange={(evt: any) => {*/}
@@ -161,6 +161,7 @@ export function ArrayEnumSelectBinding({
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
+                             disabled={disabled}
                              property={property}/>
 
         </div>

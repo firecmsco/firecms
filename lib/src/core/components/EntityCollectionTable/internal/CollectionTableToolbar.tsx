@@ -1,14 +1,12 @@
 import React from "react";
 import clsx from "clsx";
-import { CircularProgress, Hidden } from "@mui/material";
 
 import { CollectionSize } from "../../../../types";
 import { SearchBar } from "./SearchBar";
-import FilterListOffIcon from "@mui/icons-material/FilterListOff";
-import { IconButton, Select } from "../../../../components";
+import { CircularProgress, IconButton, Select, Tooltip } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
 import { defaultBorderMixin } from "../../../../styles";
-import { Tooltip } from "../../../../components/Tooltip";
+import { FilterListOffIcon } from "../../../../icons/FilterListOffIcon";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
@@ -45,7 +43,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
             size={"small"}
             onValueChange={(v) => props.onSizeChanged(v as CollectionSize)}
             options={["xs", "s", "m", "l", "xl"]}
-            renderOption={(v) => v.toUpperCase()}
+            renderOption={(v) => <div className={"font-medium"}>{v.toUpperCase()}</div>}
         />
     );
 
@@ -56,9 +54,9 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
             <div className="flex items-center space-x-8 md:space-x-4 ">
 
-                {props.title && <Hidden lgDown>
+                {props.title && <div className={"invisible lg:visible"}>
                     {props.title}
-                </Hidden>}
+                </div>}
 
                 {sizeSelect}
 
@@ -72,7 +70,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
                 {largeLayout && <div className="w-[22px]">
                     {props.loading &&
-                        <CircularProgress size={16} thickness={8}/>}
+                        <CircularProgress size={"small"}/>}
                 </div>}
 
                 {props.onTextSearch &&

@@ -1,7 +1,6 @@
 import React, { createContext, forwardRef, RefObject, useCallback, useEffect, useRef, useState } from "react";
 
 import equal from "react-fast-compare"
-import AssignmentIcon from "@mui/icons-material/Assignment";
 
 // @ts-ignore
 import { FixedSizeList as List } from "react-window";
@@ -22,6 +21,7 @@ import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
 import { Typography } from "../../../components/Typography";
+import { AssignmentIcon } from "../../../icons";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";

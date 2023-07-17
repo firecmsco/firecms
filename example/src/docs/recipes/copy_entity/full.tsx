@@ -1,4 +1,5 @@
 import {
+    Button,
     buildCollection,
     buildProperties,
     CollectionActionsProps,
@@ -8,7 +9,6 @@ import {
     useReferenceDialog,
     useSnackbarController
 } from "firecms";
-import { Button } from "@mui/material";
 import { useCallback } from "react";
 
 type Product = {

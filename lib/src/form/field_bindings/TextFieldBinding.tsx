@@ -1,6 +1,5 @@
 import React, { useCallback } from "react";
 
-import ClearIcon from "@mui/icons-material/Clear";
 
 import { FieldProps, PreviewType } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
@@ -9,6 +8,7 @@ import { getIconForProperty } from "../../core";
 import { IconButton, TextInput } from "../../components";
 import { PropertyPreview } from "../../preview";
 import { Collapse } from "../../components/Collapse";
+import { ClearIcon } from "../../icons/ClearIcon";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean
@@ -93,6 +93,7 @@ export function TextFieldBinding<T extends string | number>({
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
+                             disabled={disabled}
                              property={property}/>
 
             {url && <Collapse

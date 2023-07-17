@@ -5,7 +5,6 @@ import {
     PropertyPreviewProps
 } from "firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
-import { Box } from "@mui/material";
 
 export default function CustomShapedArrayPreview({
                                                      value,

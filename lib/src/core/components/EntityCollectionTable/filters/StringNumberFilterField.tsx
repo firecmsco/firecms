@@ -1,9 +1,9 @@
 import { MenuItem, OutlinedInput, Select as MuiSelect } from "@mui/material";
-import ClearIcon from "@mui/icons-material/Clear";
 import React, { useState } from "react";
 import { EnumValuesChip } from "../../../../preview";
 import { TableEnumValues, TableWhereFilterOp } from "../../Table";
 import { IconButton } from "../../../../components";
+import { ClearIcon } from "../../../../icons/ClearIcon";
 
 interface StringNumberFilterFieldProps {
     name: string,

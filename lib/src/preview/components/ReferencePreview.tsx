@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { Skeleton } from "@mui/material";
 import { Entity, EntityCollection, EntityReference, ResolvedProperty } from "../../types";
 
-import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 
 import { ErrorView, getReferencePreviewKeys, getValueInPath, resolveCollection } from "../../core";
 import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityController } from "../../hooks";
@@ -15,6 +14,7 @@ import { Typography } from "../../components/Typography";
 import clsx from "clsx";
 import { IconButton } from "../../components";
 import { Tooltip } from "../../components/Tooltip";
+import { KeyboardTabIcon } from "../../icons/KeyboardTabIcon";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -167,7 +167,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                         updateUrl: true
                                     });
                                 }}>
-                                <KeyboardTabIcon fontSize={"small"}/>
+                                <KeyboardTabIcon size={"small"}/>
                             </IconButton>
                         </Tooltip>}
                 </div>

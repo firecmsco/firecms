@@ -9,7 +9,8 @@ export type TooltipProps = {
     title?: string,
     className?: string,
     tooltipClassName?: string,
-    children: React.ReactNode
+    children: React.ReactNode,
+    style?: React.CSSProperties
 };
 
 export const Tooltip = ({
@@ -17,6 +18,7 @@ export const Tooltip = ({
                             placement = "bottom",
                             title,
                             className,
+                            style,
                             tooltipClassName,
                             children
                         }: TooltipProps) => {
@@ -30,7 +32,7 @@ export const Tooltip = ({
         <TooltipPrimitive.Provider delayDuration={250}>
             <TooltipPrimitive.Root open={open}>
                 <TooltipPrimitive.Trigger asChild>
-                    <div className={className}>
+                    <div className={className} style={style}>
                         {children}
                     </div>
                 </TooltipPrimitive.Trigger>

@@ -1,17 +1,13 @@
 import React, { useEffect } from "react";
 import {
+    AutoFixHighIcon,
     Button,
     Dialog,
     DialogActions,
-    DialogContent,
-    Step,
-    StepLabel,
-    Stepper,
-    Typography
-} from "@mui/material";
-
-import AutoFixHighIcon from "@mui/icons-material/AutoFixHigh";
-import { IconButton, useSideDialogsController } from "firecms";
+    IconButton,
+    Typography,
+    useSideDialogsController
+} from "firecms";
 
 /**
  * This whole component is a big hack used to point the user to the
@@ -46,29 +42,24 @@ export function OpenAIInstructionsActions() {
             </IconButton>
             <Dialog
                 open={open}
-                onClose={handleClose}
+                onOpenChange={setOpen}
             >
-                <DialogContent sx={{
-                    p: 4,
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: 1
-                }}>
+                <div className="p-8 flex flex-col space-y-2">
                     <Typography variant={"h5"} gutterBottom>
                         OpenAI data enhancement DEMO
                     </Typography>
-                    <Stepper activeStep={0} alternativeLabel sx={{ p: 4 }}>
-                        <Step>
-                            <StepLabel>+ ADD BOOK</StepLabel>
-                        </Step>
+                    {/*<Stepper activeStep={0} alternativeLabel sx={{ p: 4 }}>*/}
+                    {/*    <Step>*/}
+                    {/*        <StepLabel>+ ADD BOOK</StepLabel>*/}
+                    {/*    </Step>*/}
 
-                        <Step>
-                            <StepLabel>ENHANCE</StepLabel>
-                        </Step>
-                        <Step>
-                            <StepLabel>Type in any book!</StepLabel>
-                        </Step>
-                    </Stepper>
+                    {/*    <Step>*/}
+                    {/*        <StepLabel>ENHANCE</StepLabel>*/}
+                    {/*    </Step>*/}
+                    {/*    <Step>*/}
+                    {/*        <StepLabel>Type in any book!</StepLabel>*/}
+                    {/*    </Step>*/}
+                    {/*</Stepper>*/}
                     <Typography gutterBottom>
                         Try it out by clicking on <b>ADD BOOK</b> and
                         then typing the title of your favourite book on the <b>ENHANCE
@@ -80,20 +71,10 @@ export function OpenAIInstructionsActions() {
                         of the field, to have it autofilled.
                     </Typography>
 
-                    <Typography gutterBottom>
-                        If you are interested in adding this plugin to your own
-                        project, please contact us at <a
-                        href="mailto:hello@firecms.co?subject=FireCMS%20data%20enhancement%20plugin"
-                        rel="noopener noreferrer"
-                        target="_blank"
-                    >
-                        hello@firecms.co
-                    </a>
-                    </Typography>
-                </DialogContent>
+                </div>
                 <DialogActions>
-                    <Button onClick={handleClose} autoFocus
-                            variant={"contained"}>
+                    <Button onClick={handleClose}
+                            variant={"filled"}>
                         Got it!
                     </Button>
                 </DialogActions>

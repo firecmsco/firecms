@@ -25,3 +25,27 @@ export function randomString(strLength = 5) {
 export function randomColor() {
     return Math.floor(Math.random() * 16777215).toString(16);
 }
+
+export function slugify(text?: string, separator = "_", lowercase = true) {
+    if (!text) return "";
+    const from = "ãàáäâẽèéëêìíïîõòóöôùúüûñç·/_,:;-"
+    const to = `aaaaaeeeeeiiiiooooouuuunc${separator}${separator}${separator}${separator}${separator}${separator}${separator}`;
+
+    for (let i = 0, l = from.length; i < l; i++) {
+        text = text.replace(new RegExp(from.charAt(i), "g"), to.charAt(i));
+    }
+
+    text = text
+        .toString() // Cast to string
+        .replace(/\s+/g, separator) // Replace spaces with separator
+        .replace(/&/g, separator) // Replace & with separator
+        .replace(/[^\w\\-]+/g, "") // Remove all non-word chars
+        .replace(new RegExp("\\" + separator + "\\" + separator + "+", "g"),
+            separator) // Replace multiple separators with single one
+        .trim() // Remove whitespace from both sides of a string
+        .replace(/^\s+|\s+$/g, "");
+
+    return lowercase
+        ? text.toLowerCase() // Convert the string to lowercase letters
+        : text;
+}

@@ -1,10 +1,9 @@
 import React, { useCallback, useDeferredValue, useState } from "react";
 import clsx from "clsx";
-import ClearIcon from "@mui/icons-material/Clear";
 
-import SearchIcon from "@mui/icons-material/Search";
 import { fieldBackgroundMixin, focusedMixin } from "../../../../styles";
 import { IconButton } from "../../../../components";
+import { ClearIcon, SearchIcon } from "../../../../icons";
 
 interface SearchBarProps {
     onTextSearch: (searchString?: string) => void;
@@ -72,7 +71,7 @@ export function SearchBar({
                     className={`mr-${large ? 2 : 1} absolute right-0 top-1`}
                     // size={"small"}
                     onClick={clearText}>
-                    <ClearIcon fontSize={"small"}/>
+                    <ClearIcon size={"small"}/>
                 </IconButton>
                 : <div style={{ width: 26 }}/>
             }

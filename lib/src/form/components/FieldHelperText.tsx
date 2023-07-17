@@ -1,27 +1,24 @@
 import { ResolvedProperty } from "../../types";
-import { FieldDescription } from "./FieldDescription";
-import { Typography } from "../../components";
+import { IconButton, Tooltip, Typography } from "../../components";
+
+import { InfoIcon } from "../../icons";
 
 /**
  * Component in charge of rendering the description of a field
  * as well as the error message if any.
- *
- * @param error
- * @param showError
- * @param property
- * @param includeDescription
- * @constructor
  */
 export function FieldHelperText({
                                     error,
                                     showError,
                                     property,
-                                    includeDescription = true
+                                    includeDescription = true,
+                                    disabled
                                 }: {
                                     error: string,
                                     showError: boolean,
                                     property: ResolvedProperty,
-                                    includeDescription?: boolean
+                                    includeDescription?: boolean,
+                                    disabled?: boolean,
                                 }
 ) {
 
@@ -37,8 +34,27 @@ export function FieldHelperText({
         </Typography>
     }
 
-    return <div className={"ml-3.5 mt-1"}>
-        {includeDescription && hasDescription &&
-            <FieldDescription property={property}/>}
+    const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
+
+    return <div className={"flex ml-3.5 mt-1"}>
+        <Typography variant={"caption"}
+                    color={disabled ? "disabled" : "secondary"}
+                    className={"flex-grow"}>
+            {disabledTooltip || property.description}
+        </Typography>
+
+        {property.longDescription &&
+            <Tooltip title={property.longDescription}
+                     placement="bottom"
+            >
+                <IconButton
+                    size={"small"}
+                    className="self-start">
+
+                    <InfoIcon color={"disabled"}
+                              size={"small"}/>
+                </IconButton>
+            </Tooltip>}
+
     </div>
 }

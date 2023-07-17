@@ -1,16 +1,12 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
-import { CircularProgress, Fade, Grid, Slide, TextField } from "@mui/material";
+import { Fade, Grid, Slide, TextField } from "@mui/material";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
-import { ErrorView, FireCMSLogo } from "../../core";
+import { CircularProgress, ErrorView, FireCMSLogo } from "../../core";
 import { useModeController } from "../../hooks";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
 import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";
-import EmailIcon from "@mui/icons-material/Email";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
-import { Phone } from "@mui/icons-material";
 import { RECAPTCHA_CONTAINER_ID, useRecaptcha } from "../hooks/useRecaptcha";
 import {
     getAuth,
@@ -22,6 +18,10 @@ import {
 import { Typography } from "../../components/Typography";
 import { IconButton } from "../../components";
 import { Button } from "../../components/Button";
+import { EmailIcon } from "../../icons/EmailIcon";
+import { PhoneIcon } from "../../icons/PhoneIcon";
+import { PersonOutlineIcon } from "../../icons/PersonOutlineIcon";
+import { ArrowBackIcon } from "../../icons/ArrowBackIcon";
 
 /**
  * @category Firebase
@@ -246,14 +246,14 @@ export function FirebaseLoginView({
                             <LoginButton
                                 disabled={disabled}
                                 text={"Email/password"}
-                                icon={<EmailIcon fontSize={"large"}/>}
+                                icon={<EmailIcon size={28}/>}
                                 onClick={() => setPasswordLoginSelected(true)}/>}
 
                         {resolvedSignInOptions.includes("phone") &&
                             <LoginButton
                                 disabled={disabled}
                                 text={"Phone number"}
-                                icon={<Phone fontSize={"large"}/>}
+                                icon={<PhoneIcon size={28}/>}
                                 onClick={() => setPhoneLoginSelected(true)}/>}
 
                         {resolvedSignInOptions.includes("anonymous") &&
@@ -261,7 +261,7 @@ export function FirebaseLoginView({
                                 disabled={disabled}
                                 text={"Log in anonymously"}
                                 icon={<PersonOutlineIcon
-                                    fontSize={"large"}/>}
+                                    size={28}/>}
                                 onClick={authController.anonymousLogin}/>}
 
                         {allowSkipLogin &&
@@ -312,10 +312,10 @@ export function LoginButton({
     return (
         <div className="m-2 w-full">
             <Button
-                    className="w-full"
-                    variant="outlined"
-                    disabled={disabled}
-                    onClick={onClick}>
+                className="w-full"
+                variant="outlined"
+                disabled={disabled}
+                onClick={onClick}>
                 <div
                     className="p-1 flex h-8 items-center justify-items-center">
                     <div
@@ -408,8 +408,7 @@ function PhoneLoginForm({
                     <div className="flex justify-end items-center w-full">
 
                         {authController.authLoading &&
-                            <CircularProgress className="p-1" size={16}
-                                              thickness={8}/>
+                            <CircularProgress className="p-1" size={"small"}/>
                         }
 
                         <Button type="submit">
@@ -590,8 +589,7 @@ function LoginForm({
                         } justify-end items-center w-full`}>
 
                             {authController.authLoading &&
-                                <CircularProgress className="p-1" size={16}
-                                                  thickness={8}/>
+                                <CircularProgress className="p-1" size={"small"}/>
                             }
 
                             <Button type="submit">

@@ -1,4 +1,3 @@
-import { SvgIconProps } from "@mui/material/SvgIcon";
 import { CMSType, DataType, PropertyOrBuilder } from "./properties";
 import { FieldProps } from "./fields";
 
@@ -37,7 +36,7 @@ export type FieldConfig<T extends CMSType = any> = {
      */
     defaultProperty?: PropertyOrBuilder<T>;
 
-    Icon?: React.ComponentType<SvgIconProps>;
+    Icon?: React.ComponentType;
 
     /**
      * CSS color, used only in some plugins like the field selector.

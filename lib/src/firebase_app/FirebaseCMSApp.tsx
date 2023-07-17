@@ -198,10 +198,9 @@ export function FirebaseCMSApp({
                               context,
                               loading
                           }) => {
-
                             let component;
                             if (loading || authLoading) {
-                                component = <CircularProgressCenter/>;
+                                component = <CircularProgressCenter size={"large"}/>;
                             } else {
                                 const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
                                 if (!canAccessMainView) {

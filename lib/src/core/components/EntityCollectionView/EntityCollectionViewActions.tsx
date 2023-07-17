@@ -1,16 +1,14 @@
 import React from "react";
 
-import { Add, Delete } from "@mui/icons-material";
 import { ExportButton } from "../EntityCollectionTable/internal/ExportButton";
 
-import { canCreateEntity, canDeleteEntity } from "../../util/permissions";
+import { canCreateEntity, canDeleteEntity, fullPathToCollectionSegments } from "../../util";
 import { useAuthController, useFireCMSContext } from "../../../hooks";
 import { CollectionActionsProps, Entity, EntityCollection, ExportConfig, SelectionController } from "../../../types";
-import { fullPathToCollectionSegments } from "../../util/paths";
-import { IconButton } from "../../../components";
+import { Button, IconButton, Tooltip } from "../../../components";
 import { useLargeLayout } from "../../../hooks/useLargeLayout";
-import { Button } from "../../../components/Button";
-import { Tooltip } from "../../../components/Tooltip";
+import { AddIcon } from "../../../icons/AddIcon";
+import { DeleteIcon } from "../../../icons/DeleteIcon";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -47,7 +45,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             ? <Button
                 id={`add_entity_${path}`}
                 onClick={onNewClick}
-                startIcon={<Add/>}
+                startIcon={<AddIcon/>}
                 size="large"
                 variant="filled"
                 color="primary">
@@ -60,7 +58,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 variant="filled"
                 color="primary"
             >
-                <Add/>
+                <AddIcon/>
             </Button>);
 
     const multipleDeleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(path), null);
@@ -71,7 +69,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
             ? <Button
                 variant={"text"}
                 disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
-                startIcon={<Delete/>}
+                startIcon={<DeleteIcon/>}
                 onClick={onMultipleDeleteClick}
                 color={"primary"}
                 className="lg:w-20"
@@ -82,7 +80,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                 color={"primary"}
                 disabled={!(selectedEntities?.length) || !multipleDeleteEnabled}
                 onClick={onMultipleDeleteClick}>
-                <Delete/>
+                <DeleteIcon/>
             </IconButton>;
         multipleDeleteButton =
             <Tooltip

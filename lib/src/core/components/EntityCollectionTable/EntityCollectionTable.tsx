@@ -39,7 +39,6 @@ import {
 import { getRowHeight } from "../Table/common";
 import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
 import { EntityCollectionTableController, OnCellValueChange, SelectedCellProps, UniqueFieldValidator } from "./types";
-import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { setIn } from "formik";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
@@ -51,6 +50,7 @@ import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterField";
 import { useLargeLayout } from "../../../hooks/useLargeLayout";
 import { Button } from "../../../components/Button";
+import { KeyboardTabIcon } from "../../../icons/KeyboardTabIcon";
 
 const DEFAULT_STATE = {} as any;
 
@@ -164,8 +164,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     Builder: ({ entity }) => (
                         <Button color={"primary"}
                                 variant={"outlined"}
-                                startIcon={<KeyboardTabIcon
-                                    fontSize={"small"}/>}
+                                startIcon={<KeyboardTabIcon size={"small"}/>}
                                 onClick={(event) => {
                                     event.stopPropagation();
                                     sideEntityController.open({

@@ -1,10 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import clsx from "clsx";
 
-import LinkIcon from "@mui/icons-material/Link";
-import ErrorIcon from "@mui/icons-material/Error";
-import ClearIcon from "@mui/icons-material/Clear";
-import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 
 import { Entity, EntityCollection, EntityReference, FilterValues, ResolvedProperty } from "../../types";
 import { ErrorBoundary, ErrorView, getReferenceFrom, getReferencePreviewKeys } from "../../core";
@@ -21,6 +17,10 @@ import { Typography } from "../../components/Typography";
 import { IconButton } from "../../components";
 import { Button } from "../../components/Button";
 import { Tooltip } from "../../components/Tooltip";
+import { ErrorIcon } from "../../icons/ErrorIcon";
+import { LinkIcon } from "../../icons/LinkIcon";
+import { KeyboardTabIcon } from "../../icons/KeyboardTabIcon";
+import { ClearIcon } from "../../icons/ClearIcon";
 
 /**
  * This field allows selecting reference/s.
@@ -132,7 +132,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
             body = (
                 <Tooltip title={value && value.path}>
                     <div className="flex items-center p-4 flex-grow">
-                        <ErrorIcon fontSize={"small"} color={"error"}/>
+                        <ErrorIcon size={"small"} color={"error"}/>
                         <div className="ml-4">Missing
                             reference {entity && entity.id}</div>
                     </div>
@@ -193,7 +193,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
 
                     <div className="flex flex-col flex-grow">
                         <LabelWithIcon icon={<LinkIcon color={"inherit"}
-                                                       fontSize={"inherit"}/>}
+                                                       />}
                                        className="text-text-secondary dark:text-text-secondary-dark ml-3.5"
                                        title={name}
                         />

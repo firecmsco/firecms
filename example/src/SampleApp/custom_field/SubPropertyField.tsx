@@ -1,21 +1,20 @@
 import React, { useEffect } from "react";
-import { FormControl, Paper } from "@mui/material";
-import { buildProperty, FieldProps, PropertyFieldBinding, FieldHelperText } from "firecms";
+import { buildProperty, FieldHelperText, FieldProps, Paper, PropertyFieldBinding } from "firecms";
 
 /**
  * Simple map field to test validation of custom fields
  */
 export const CustomField = ({
-                         property,
-                         value,
-                         propertyKey,
-                         tableMode,
-                         error,
-                         showError,
-                         includeDescription,
-                         context,
-                         setValue
-                     }: FieldProps<Record<string, any>>) => {
+                                property,
+                                value,
+                                propertyKey,
+                                tableMode,
+                                error,
+                                showError,
+                                includeDescription,
+                                context,
+                                setValue
+                            }: FieldProps<Record<string, any>>) => {
     useEffect(() => {
         if (!value) setValue({});
     }, [value, setValue]);
@@ -33,8 +32,8 @@ export const CustomField = ({
     };
 
     return (
-        <FormControl fullWidth error={showError}>
-            <Paper elevation={0}>
+        <>
+            <Paper>
                 <PropertyFieldBinding {...fieldProps}/>
             </Paper>
 
@@ -43,6 +42,6 @@ export const CustomField = ({
                              error={error}
                              property={property}/>
 
-        </FormControl>
+        </>
     );
 };

@@ -64,7 +64,6 @@ export function ReadOnlyFieldBinding({
 
             </div>
 
-
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}

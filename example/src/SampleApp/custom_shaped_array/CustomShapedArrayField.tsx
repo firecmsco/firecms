@@ -1,6 +1,12 @@
 import React from "react";
-import { FormControl, FormHelperText, Paper } from "@mui/material";
-import { FieldProps, PropertyFieldBinding, PropertyFieldBindingProps, FieldHelperText } from "firecms";
+import {
+    FieldProps,
+    PropertyFieldBinding,
+    PropertyFieldBindingProps,
+    FieldHelperText,
+    Paper,
+    Typography
+} from "firecms";
 import { CustomShapedArrayProps } from "./CustomShapedArrayProps";
 
 export default function CustomShapedArrayField({
@@ -22,11 +28,11 @@ export default function CustomShapedArrayField({
     const properties = customProps.properties;
 
     return (
-        <FormControl fullWidth error={showError}>
+        <>
 
-            <FormHelperText>{property.name ?? propertyKey}</FormHelperText>
+            <Typography>{property.name ?? propertyKey}</Typography>
 
-            <Paper variant={"outlined"}>
+            <Paper>
                 <div className="m-8">
                     {properties.map((property, index) => {
                             const fieldProps: PropertyFieldBindingProps<any> = {
@@ -49,7 +55,7 @@ export default function CustomShapedArrayField({
                              error={error}
                              property={property}/>
 
-        </FormControl>
+        </>
 
     );
 

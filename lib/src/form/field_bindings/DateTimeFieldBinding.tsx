@@ -3,7 +3,6 @@ import React, { useCallback } from "react";
 import { TextField as MuiTextField, useTheme } from "@mui/material";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import ClearIcon from "@mui/icons-material/Clear";
 
 import { FieldProps } from "../../types";
 
@@ -13,6 +12,7 @@ import { getIconForProperty } from "../../core";
 import { fieldBackground, fieldBackgroundHover } from "../../core/util/field_colors";
 import { IconButton } from "../../components";
 import { FieldHelperText } from "../components/FieldHelperText";
+import { ClearIcon } from "../../icons/ClearIcon";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -106,6 +106,7 @@ export function DateTimeFieldBinding({
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
+                             disabled={disabled}
                              property={property}/>
 
         </>

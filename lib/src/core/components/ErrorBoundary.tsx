@@ -1,6 +1,6 @@
 import React, { ErrorInfo, PropsWithChildren } from "react";
 
-import ErrorIcon from "@mui/icons-material/Error";
+import { ErrorIcon } from "../../icons/ErrorIcon";
 import { Typography } from "../../components/Typography";
 
 export class ErrorBoundary extends React.Component<PropsWithChildren<Record<string, unknown>>, {
@@ -26,7 +26,7 @@ export class ErrorBoundary extends React.Component<PropsWithChildren<Record<stri
             return (
                 <div className="flex flex-col m-2">
                     <div className="flex items-center m-2">
-                        <ErrorIcon color={"error"} fontSize={"small"}/>
+                        <ErrorIcon color={"error"} size={"small"}/>
                         <div className="ml-4">Error</div>
                     </div>
                     <Typography variant={"caption"}>

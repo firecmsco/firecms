@@ -1,15 +1,13 @@
 import React from "react";
-import { CardMedia, Link } from "@mui/material";
 
-import DescriptionOutlinedIcon from "@mui/icons-material/DescriptionOutlined";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 
 import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
-import { Typography } from "../../components/Typography";
-import { Tooltip } from "../../components/Tooltip";
+import { Tooltip, Typography } from "../../components";
+import { OpenInNewIcon } from "../../icons/OpenInNewIcon";
+import { DescriptionOutlinedIcon } from "../../icons/DescriptionOutlinedIcon";
 
 /**
  * @category Preview components
@@ -28,15 +26,16 @@ export function UrlComponentPreview({
 
     if (!previewType) {
         return (
-            <Link className="flex break-words items-center font-medium"
-                  href={url}
-                  onMouseDown={(e: React.MouseEvent) => {
-                      e.preventDefault();
-                  }}
-                  target="_blank">
-                <OpenInNewIcon style={{ marginRight: 8 }} fontSize={"small"}/>
+            <a className="flex break-words items-center font-medium"
+               href={url}
+               rel="noopener noreferrer"
+               onMouseDown={(e: React.MouseEvent) => {
+                   e.preventDefault();
+               }}
+               target="_blank">
+                <OpenInNewIcon style={{ marginRight: 8 }} size={"small"}/>
                 {url}
-            </Link>
+            </a>
         );
     }
 
@@ -50,12 +49,12 @@ export function UrlComponentPreview({
             <code>audio</code> element.
         </audio>;
     } else if (previewType === "video") {
-        return <CardMedia
+        return <video
             className={`max-w-${size === "small" ? "sm" : "md"}`}
-            component="video"
             controls
-            image={url}
-        />;
+        >
+            <source src={url}/>
+        </video>;
     } else {
         return (
             <a

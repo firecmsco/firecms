@@ -12,7 +12,7 @@ export interface TextProps {
     paragraph?: boolean;
     variant?: keyof typeof defaultVariantMapping;
     variantMapping?: { [key: string]: string };
-    color?: "inherit" | "initial" | "primary" | "secondary" | "error";
+    color?: "inherit" | "initial" | "primary" | "secondary" | "disabled" | "error";
     onClick?: ReactEventHandler<HTMLElement>;
     style?: React.CSSProperties;
 }
@@ -36,9 +36,10 @@ const defaultVariantMapping = {
 const colorToClasses = {
     inherit: "text-inherit",
     initial: "text-current",
-    primary: "text-primary",
+    primary: "text-text-primary dark:text-text-primary-dark",
     secondary: "text-text-secondary dark:text-text-secondary-dark",
-    error: "text-red-600"
+    disabled: "text-text-disabled dark:text-text-disabled-dark",
+    error: "text-red-600 dark:text-red-500"
 };
 
 const variantToClasses = {

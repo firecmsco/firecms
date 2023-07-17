@@ -1,11 +1,11 @@
 import React from "react";
-import { GitHub } from "@mui/icons-material";
 
 import {
     buildCollection,
     Button,
     Entity,
     EntityCollectionView,
+    GitHubIcon,
     IconButton,
     Paper,
     Tooltip,
@@ -73,7 +73,7 @@ export function ExampleCMSView() {
                 target="_blank"
                 component={"a"}
                 size="large">
-                <GitHub/>
+                <GitHubIcon/>
             </IconButton>
         </Tooltip>
     );

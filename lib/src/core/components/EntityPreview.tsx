@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import clsx from "clsx";
 import { PropertyPreview } from "../../preview";
 import { Entity, EntityCollection, FireCMSContext, ResolvedEntityCollection, ResolvedProperties } from "../../types";
@@ -7,6 +6,7 @@ import { resolveCollection } from "../util";
 import { useFireCMSContext } from "../../hooks";
 import { defaultBorderMixin } from "../../styles";
 import { IconButton } from "../../components";
+import { OpenInNewIcon } from "../../icons/OpenInNewIcon";
 
 /**
  * @category Components
@@ -54,7 +54,7 @@ export function EntityPreview<M extends Record<string, any>>(
                                target="_blank">
                                 <IconButton>
                                     <OpenInNewIcon
-                                        fontSize={"small"}/>
+                                        size={"small"}/>
                                 </IconButton>
                             </a>}
                     </div>

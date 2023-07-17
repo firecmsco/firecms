@@ -7,8 +7,8 @@ import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty, Select } from "../../core";
 import { IconButton } from "../../components";
-import ClearIcon from "@mui/icons-material/Clear";
 import { FieldHelperText } from "../components/FieldHelperText";
+import { ClearIcon } from "../../icons/ClearIcon";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -87,6 +87,7 @@ export function SelectFieldBinding<T extends EnumType>({
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
+                             disabled={disabled}
                              property={property}/>
 
         </>

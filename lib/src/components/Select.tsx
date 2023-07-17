@@ -2,10 +2,10 @@ import React, { useEffect } from "react";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
 
-import { Check, ChevronDown } from "lucide-react";
-
 import clsx from "clsx";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
+import { ChevronDownIcon } from "../icons/ChevronDownIcon";
+import { CheckIcon } from "../icons/CheckIcon";
 
 export type SelectProps = {
     open?: boolean,
@@ -122,7 +122,7 @@ export function Select({
                     <SelectPrimitive.Icon className={clsx(
                         "px-2 h-full flex items-center"
                     )}>
-                        <ChevronDown size={"16px"} className={clsx("transition", open ? "rotate-180" : "")}/>
+                        <ChevronDownIcon size={16} className={clsx("transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
 
                 </SelectPrimitive.Trigger>
@@ -156,7 +156,7 @@ export function Select({
                                         <SelectPrimitive.ItemText>{renderOption(option)}</SelectPrimitive.ItemText>
                                         {selected && <div
                                             className="absolute left-1">
-                                            <Check size={"16px"}/>
+                                            <CheckIcon size={16}/>
                                         </div>}
                                     </SelectPrimitive.Item>
                                 );

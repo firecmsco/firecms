@@ -1,8 +1,6 @@
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
-import { Star } from "lucide-react";
 
 import { Markdown } from "../../../preview";
 import { useFireCMSContext } from "../../../hooks";
@@ -11,6 +9,9 @@ import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { IconButton, Typography } from "../../../components";
 import { cardMixin } from "../../../styles";
+import { StarIcon } from "../../../icons/StarIcon";
+import { StarBorderIcon } from "../../../icons/StarBorderIcon";
+import { ArrowForwardIcon } from "../../../icons/ArrowForwardIcon";
 
 /**
  * This is the component used in the home page to render a card for each
@@ -113,9 +114,14 @@ export function NavigationCollectionCard({
                                             );
                                         }
                                     }}>
-                                    <Star strokeWidth={favourite ? 2 : 2}
-                                          size={18}
-                                          className={favourite ? "text-secondary" : "text-gray-400 dark:text-gray-500"}/>
+                                    {
+                                        favourite
+                                            ? <StarIcon
+                                                size={18}
+                                                className={"text-secondary"}/>
+                                            : <StarBorderIcon
+                                                size={18}
+                                                className={"text-gray-400 dark:text-gray-500"}/>}
                                 </IconButton>}
 
                         </div>

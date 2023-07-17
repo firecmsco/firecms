@@ -3,8 +3,6 @@ import equal from "react-fast-compare"
 
 import * as Portal from "@radix-ui/react-portal";
 
-import ClearIcon from "@mui/icons-material/Clear";
-
 import {
     Entity,
     EntityCollection,
@@ -28,6 +26,7 @@ import { DialogActions } from "../../../DialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
 import { Button, IconButton, Typography } from "../../../../../components";
+import { ClearIcon } from "../../../../../icons/ClearIcon";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;
@@ -386,7 +385,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                             onClose();
                         }}>
                         <ClearIcon className="text-white"
-                                   fontSize={"small"}/>
+                                   size={"small"}/>
                     </IconButton>
                 </div>
             </div>

@@ -1,12 +1,10 @@
 import React from "react";
-import AdjustIcon from "@mui/icons-material/Adjust";
-import FunctionsIcon from "@mui/icons-material/Functions";
-import Crop75Icon from "@mui/icons-material/Crop75";
 
 import { FieldConfig, PropertiesOrBuilders, PropertyOrBuilder, ResolvedProperty } from "../../types";
 import { getFieldConfig } from "../form_field_configs";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
+import { CircleIcon, FunctionsIcon } from "../../icons";
 
 export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder,
                                     fields: Record<string, FieldConfig>) {
@@ -27,38 +25,27 @@ export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder,
 }
 
 export function getIdIcon(
-    color: "inherit" | "primary" | "secondary" | "action" | "disabled" | "error" = "inherit",
-    fontSize: "inherit" | "medium" | "large" | "small" | undefined = "inherit"): React.ReactNode {
-    return <AdjustIcon color={color} fontSize={fontSize}/>;
+    size: number): React.ReactNode {
+    return <CircleIcon size={size}/>;
 }
 
 function getIconForWidget(widget: FieldConfig | undefined,
-                          fontSize: "inherit" | "medium" | "large" | "small" | undefined) {
-    const Icon = widget?.Icon ?? Crop75Icon;
-    return <Icon fontSize={fontSize}/>;
+                          size: "small" | "medium" | "large") {
+    const Icon = widget?.Icon ?? CircleIcon;
+    return <Icon size={size}/>;
 }
 
 export function getIconForProperty(
     property: PropertyOrBuilder | ResolvedProperty,
-    fontSize: "inherit" | "medium" | "large" | "small" | undefined = "inherit"
+    size: "small" | "medium" | "large" = "small"
 ): React.ReactNode {
 
     if (isPropertyBuilder(property)) {
-        return <FunctionsIcon fontSize={fontSize}/>;
+        return <FunctionsIcon size={size}/>;
     } else {
         const widget = getFieldConfig(property);
-        return getIconForWidget(widget, fontSize);
+        return getIconForWidget(widget, size);
     }
-}
-
-export function getBadgeForWidget(
-    widget: FieldConfig | undefined): React.ReactNode {
-
-    return <div
-        className="bg-[widget?.color ?? '#888'] h-8 w-8 p-1 rounded-full shadow-md text-white"
-        style={{ boxShadow: "0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)" }}>
-        {getIconForWidget(widget, "medium")}
-    </div>
 }
 
 export function getColorForProperty(property: PropertyOrBuilder): string {
@@ -112,5 +99,4 @@ export function getResolvedPropertyInPath(properties: Record<string, ResolvedPro
 // address.street => address[street]
 export function getBracketNotation(path: string): string {
     return path.replace(/\.([^.]*)/g, "[$1]");
-    ;
 }

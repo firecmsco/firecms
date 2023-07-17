@@ -2,13 +2,13 @@ import React from "react";
 import clsx from "clsx";
 
 import { Entity, ResolvedStringProperty } from "../../types";
-import RemoveIcon from "@mui/icons-material/Remove";
 import { PreviewSize, PropertyPreview } from "../../preview";
 
 import { ErrorBoundary } from "../../core";
 import { IconButton } from "../../components";
 import { paperMixin } from "../../styles";
 import { Tooltip } from "../../components/Tooltip";
+import { RemoveIcon } from "../../icons/RemoveIcon";
 
 interface StorageItemPreviewProps {
     name: string;
@@ -47,7 +47,7 @@ export function StorageItemPreview({
                                 event.stopPropagation();
                                 onRemove(value);
                             }}>
-                            <RemoveIcon fontSize={"small"}/>
+                            <RemoveIcon size={"small"}/>
                         </IconButton>
                     </Tooltip>
                 </div>

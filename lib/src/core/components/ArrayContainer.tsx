@@ -1,22 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { ListItemIcon, ListItemText, Menu, MenuItem } from "@mui/material";
-
-import AddIcon from "@mui/icons-material/Add";
-import RemoveIcon from "@mui/icons-material/Remove";
-import CopyIcon from "@mui/icons-material/ContentCopy";
-import DragHandleIcon from "@mui/icons-material/DragHandle";
+import { ListItemText, Menu, MenuItem } from "@mui/material";
 
 import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello-pangea/dnd";
 
 import { getHashValue } from "../util";
 import useMeasure from "react-use-measure";
-import { MoreVert } from "@mui/icons-material";
-import { fieldBackgroundSubtleHover } from "../util/field_colors";
-import { IconButton } from "../../components";
-import { Button } from "../../components/Button";
-import { Tooltip } from "../../components/Tooltip";
+import { Button, IconButton, Tooltip } from "../../components";
 import { fieldBackgroundHoverMixin } from "../../styles";
+import { AddIcon, CopyIcon, DragHandleIcon, MoreVertIcon, RemoveIcon } from "../../icons";
 
 interface ArrayContainerProps<T> {
     droppableId: string;
@@ -302,7 +294,7 @@ export function ArrayItemOptions({
                     disabled={disabled}
                     className={`cursor-${disabled ? "inherit" : "move"}`}>
                     <DragHandleIcon
-                        fontSize={"small"}
+                        size={"small"}
                         color={disabled ? "disabled" : "inherit"}/>
                 </IconButton>
             </Tooltip>
@@ -318,7 +310,7 @@ export function ArrayItemOptions({
                     disabled={disabled}
                     onClick={() => remove(index)}>
                     <RemoveIcon
-                        fontSize={"small"}/>
+                        size={"small"}/>
                 </IconButton>
             </Tooltip>
 
@@ -331,7 +323,7 @@ export function ArrayItemOptions({
                     disabled={disabled}
                     onClick={() => copy(index)}>
                     <CopyIcon
-                        fontSize={"small"}/>
+                        size={"small"}/>
                 </IconButton>
             </Tooltip>
         </>}
@@ -339,7 +331,7 @@ export function ArrayItemOptions({
         {contentOverflow && <>
             <IconButton onClick={openMenu}
                         size={"small"}>
-                <MoreVert/>
+                <MoreVertIcon/>
             </IconButton>
             <Menu
                 anchorEl={anchorEl}
@@ -349,19 +341,16 @@ export function ArrayItemOptions({
             >
 
                 <MenuItem dense onClick={() => remove(index)}>
-                    <ListItemIcon>
-                        <RemoveIcon/>
-                    </ListItemIcon>
+                    <RemoveIcon/>
                     <ListItemText primary="Remove"/>
                 </MenuItem>
                 <MenuItem dense onClick={() => copy(index)}>
-                    <ListItemIcon>
-                        <CopyIcon/>
-                    </ListItemIcon>
+                    <CopyIcon/>
                     <ListItemText primary={"Copy"}/>
                 </MenuItem>
 
-            </Menu></>}
+            </Menu>
+        </>}
     </div>;
 }
 

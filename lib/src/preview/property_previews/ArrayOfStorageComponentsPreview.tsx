@@ -1,36 +1,11 @@
 import React from "react";
 
-import { styled } from "@mui/material/styles";
-
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";
 
-import { Theme } from "@mui/material";
 import { useFireCMSContext } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
-
-const PREFIX = "ArrayOfStorageComponentsPreview";
-
-const classes = {
-    arrayWrap: `${PREFIX}-arrayWrap`,
-    arrayItem: `${PREFIX}-arrayItem`
-};
-
-const Root = styled("div")((
-    { theme }: {
-        theme: Theme
-    }
-) => ({
-    [`&.${classes.arrayWrap}`]: {
-        display: "flex",
-        flexWrap: "wrap"
-    },
-
-    [`& .${classes.arrayItem}`]: {
-        margin: theme.spacing(0.5)
-    }
-}));
 
 /**
  * @category Preview components
@@ -61,10 +36,10 @@ export function ArrayOfStorageComponentsPreview({
     const childSize: PreviewSize = size === "medium" ? "small" : "tiny";
 
     return (
-        <Root className={classes.arrayWrap}>
+        <div className={"flex flex-wrap"}>
             {value &&
                 value.map((v, index) =>
-                    <div className={classes.arrayItem}
+                    <div className={"m-2"}
                          key={`preview_array_storage_${propertyKey}_${index}`}>
                         <ErrorBoundary>
                             <PropertyPreview
@@ -76,6 +51,6 @@ export function ArrayOfStorageComponentsPreview({
                         </ErrorBoundary>
                     </div>
                 )}
-        </Root>
+        </div>
     );
 }

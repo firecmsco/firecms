@@ -105,7 +105,7 @@ export const productsCollection = buildCollection<Product>({
     name: "Products",
     singularName: "Product",
     group: "Main",
-    icon: "ShoppingCart",
+    icon: "shopping_cart",
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
     permissions: ({ authController }) => ({

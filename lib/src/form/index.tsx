@@ -12,8 +12,10 @@ import { RepeatFieldBinding } from "./field_bindings/RepeatFieldBinding";
 import { BlockFieldBinding } from "./field_bindings/BlockFieldBinding";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 import { MarkdownFieldBinding } from "./field_bindings/MarkdownFieldBinding";
+import { ArrayCustomShapedFieldBinding } from "./field_bindings/ArrayCustomShapedFieldBinding";
 
 export {
+    ArrayCustomShapedFieldBinding,
     RepeatFieldBinding,
     ArrayEnumSelectBinding,
     ArrayOfReferencesFieldBinding,

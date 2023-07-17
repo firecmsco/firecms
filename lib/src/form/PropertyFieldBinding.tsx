@@ -1,8 +1,6 @@
 import React, { ComponentType, ReactElement, useCallback, useRef } from "react";
 import equal from "react-fast-compare"
 
-import { FormHelperText } from "@mui/material";
-
 import { FastField, Field, FieldProps as FormikFieldProps, getIn } from "formik";
 
 import {
@@ -25,7 +23,8 @@ import {
     isHidden,
     isPropertyBuilder,
     isReadOnly,
-    resolveProperty
+    resolveProperty,
+    Typography
 } from "../core";
 import { useFireCMSContext } from "../hooks";
 
@@ -158,7 +157,6 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
 
 }
 
-
 type ResolvedPropertyFieldBindingProps<T extends CMSType = CMSType, M extends Record<string, any> = Record<string, any>> =
     Omit<PropertyFieldBindingProps<T, M>, "property">
     & {
@@ -242,9 +240,9 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
             <UsedComponent {...cmsFieldProps}/>
 
             {underlyingValueHasChanged && !isSubmitting &&
-                <FormHelperText>
+                <Typography variant={"caption"} className={"ml-3.5"}>
                     This value has been updated elsewhere
-                </FormHelperText>}
+                </Typography>}
 
         </ErrorBoundary>);
 

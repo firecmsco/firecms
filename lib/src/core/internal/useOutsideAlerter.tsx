@@ -1,15 +1,17 @@
 import React, { RefObject, useEffect } from "react";
 
 /**
- * Hook that alerts clicks outside of the passed ref
+ * Hook that alerts clicks outside the passed ref
  */
-export function useOutsideAlerter(ref: RefObject<HTMLElement>, onOutsideClick: () => void): void {
+export function useOutsideAlerter(ref: RefObject<HTMLElement>, onOutsideClick: () => void, active: boolean): void {
     useEffect(() => {
+        if (!active)
+            return;
+
         /**
          * Alert if clicked on outside of element
          */
         function handleClickOutside(event: Event) {
-            console.log("handleClickOutside", event.target);
             if (isInPresentationLayer(event.target as Node)) {
                 return;
             }
@@ -25,7 +27,7 @@ export function useOutsideAlerter(ref: RefObject<HTMLElement>, onOutsideClick: (
             // Unbind the event listener on clean up
             document.removeEventListener("mousedown", handleClickOutside);
         };
-    }, [ref, onOutsideClick]);
+    }, [ref, active, onOutsideClick]);
 }
 
 /**

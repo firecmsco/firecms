@@ -1,11 +1,10 @@
 import { Entity, EntityCallbacks, EntityCollection } from "../../../../types";
 import React, { useCallback, useMemo, useState } from "react";
-import { CircularProgress } from "@mui/material";
 import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../../../../hooks";
 import { DialogActions } from "../../DialogActions";
 import { resolveCollection } from "../../../util";
 import { EntityPreview } from "../../EntityPreview";
-import { Button, Dialog, Typography } from "../../../../components";
+import { Button, CircularProgress, Dialog, Typography } from "../../../../components";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
@@ -186,7 +185,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
             <DialogActions>
 
-                {loading && <CircularProgress size={16} thickness={8}/>}
+                {loading && <CircularProgress size={"small"}/>}
 
                 <Button onClick={handleCancel}
                         disabled={loading}

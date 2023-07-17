@@ -3,12 +3,15 @@ import clsx from "clsx";
 
 import { CollectionSize, Entity } from "../../../../types";
 import { ListItemIcon, ListItemText, Menu, MenuItem, Skeleton } from "@mui/material";
-import { Delete, FileCopy, KeyboardTab, MoreVert } from "@mui/icons-material";
 import { Typography } from "../../../../components/Typography";
 import { IconButton } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
 import { Checkbox } from "../../../../components/Checkbox";
 import { Tooltip } from "../../../../components/Tooltip";
+import { KeyboardTabIcon } from "../../../../icons/KeyboardTabIcon";
+import { MoreVertIcon } from "../../../../icons/MoreVertIcon";
+import { DeleteIcon } from "../../../../icons/DeleteIcon";
+import { FileCopyIcon } from "../../../../icons/FileCopyIcon";
 
 /**
  *
@@ -121,7 +124,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                                         onEditClicked(entity);
                                 }}
                                 size={largeLayout ? "medium" : "small"}>
-                                <KeyboardTab/>
+                                <KeyboardTabIcon/>
                             </IconButton>
                         </Tooltip>
                     }
@@ -138,7 +141,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                     {(copyEnabled || deleteEnabled) &&
                         <IconButton onClick={openMenu}
                                     size={largeLayout ? "medium" : "small"}>
-                            <MoreVert/>
+                            <MoreVertIcon/>
                         </IconButton>
                     }
 
@@ -150,14 +153,14 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                     >
                         {deleteEnabled && <MenuItem onClick={onDeleteClick}>
                             <ListItemIcon>
-                                <Delete/>
+                                <DeleteIcon/>
                             </ListItemIcon>
                             <ListItemText primary={"Delete"}/>
                         </MenuItem>}
 
                         {copyEnabled && <MenuItem onClick={onCopyClick}>
                             <ListItemIcon>
-                                <FileCopy/>
+                                <FileCopyIcon/>
                             </ListItemIcon>
                             <ListItemText primary="Copy"/>
                         </MenuItem>}

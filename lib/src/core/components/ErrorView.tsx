@@ -1,7 +1,7 @@
 import React from "react";
-import ErrorIcon from "@mui/icons-material/Error";
 import { ErrorTooltip } from "./ErrorTooltip";
 import { Typography } from "../../components/Typography";
+import { ErrorIcon } from "../../icons/ErrorIcon";
 
 /**
  * @category Components
@@ -31,7 +31,7 @@ export function ErrorView({
     const body = (
         <div
             className="flex items-center m-1">
-            <ErrorIcon fontSize={"small"} color={"error"}/>
+            <ErrorIcon size={"small"} color={"error"}/>
             <div className="pl-2">
                 {title && <Typography
                     variant={"body2"}

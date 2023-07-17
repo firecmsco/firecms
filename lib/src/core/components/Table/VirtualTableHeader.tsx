@@ -2,14 +2,14 @@ import React, { RefObject, useCallback, useEffect, useRef, useState } from "reac
 import equal from "react-fast-compare";
 import clsx from "clsx";
 
-import { ArrowUp, ChevronDown } from "lucide-react";
-
 import { Badge, Popover } from "@mui/material";
 
 import { TableColumn, TableSort, TableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { IconButton , Button } from "../../../components";
 import { defaultBorderMixin, paperMixin } from "../../../styles";
+import { ArrowUpwardIcon } from "../../../icons/ArrowUpwardIcon";
+import { ChevronDownIcon } from "../../../icons/ChevronDownIcon";
 
 interface FilterFormProps<T> {
     column: TableColumn<T>;
@@ -136,11 +136,11 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                 }}
                             >
                                 {!sort &&
-                                    <ArrowUp />}
+                                    <ArrowUpwardIcon />}
                                 {sort === "asc" &&
-                                    <ArrowUp />}
+                                    <ArrowUpwardIcon />}
                                 {sort === "desc" &&
-                                    <ArrowUp className={"rotate-180"}/>}
+                                    <ArrowUpwardIcon className={"rotate-180"}/>}
                             </IconButton>
                         </Badge>
                     }
@@ -154,8 +154,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                 className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
                                 size={"small"}
                                 onClick={handleSettingsClick}>
-                                <ChevronDown strokeWidth={3}/>
-                                {/*<ArrowDropDownCircleIcon fontSize={"small"}/>*/}
+                                <ChevronDownIcon/>
+                                {/*<ArrowDropDownCircleIcon size={"small"}/>*/}
                             </IconButton>
 
                         </Badge>

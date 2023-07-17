@@ -1,30 +1,13 @@
 import React from "react";
-import ShortTextIcon from "@mui/icons-material/ShortText";
-import SubjectIcon from "@mui/icons-material/Subject";
-import AddLinkIcon from "@mui/icons-material/AddLink";
-import ListIcon from "@mui/icons-material/List";
-import ScheduleIcon from "@mui/icons-material/Schedule";
-import UploadFileIcon from "@mui/icons-material/UploadFile";
-import DriveFolderUploadIcon from "@mui/icons-material/DriveFolderUpload";
-import RepeatIcon from "@mui/icons-material/Repeat";
-import ViewStreamIcon from "@mui/icons-material/ViewStream";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import LinkIcon from "@mui/icons-material/Link";
-import HttpIcon from "@mui/icons-material/Http";
-import FlagIcon from "@mui/icons-material/Flag";
-import NumbersIcon from "@mui/icons-material/Numbers";
-import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
-import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
-import EmailIcon from "@mui/icons-material/Email";
-import BallotOutlinedIcon from "@mui/icons-material/BallotOutlined";
 
-import { ArrayCustomShapedFieldBinding } from "../form/field_bindings/ArrayCustomShapedFieldBinding";
 import { ArrayProperty, FieldConfig, FieldConfigId, FieldProps, Property, ResolvedProperty } from "../types";
 import {
+    ArrayCustomShapedFieldBinding,
     ArrayEnumSelectBinding,
     ArrayOfReferencesFieldBinding,
     BlockFieldBinding,
     DateTimeFieldBinding,
+    KeyValueFieldBinding,
     MapFieldBinding,
     MarkdownFieldBinding,
     ReferenceFieldBinding,
@@ -35,7 +18,27 @@ import {
     TextFieldBinding
 } from "../form";
 import { isPropertyBuilder } from "./util";
-import { KeyValueFieldBinding } from "../form/field_bindings/KeyValueFieldBinding";
+
+import {
+    AddLinkIcon,
+    BallotOutlinedIcon,
+    DriveFolderUploadIcon,
+    EmailIcon,
+    FlagIcon,
+    FormatListNumberedIcon,
+    FormatQuoteIcon,
+    HttpIcon,
+    LinkIcon,
+    ListAltIcon,
+    ListIcon,
+    NumbersIcon,
+    RepeatIcon,
+    ScheduleIcon,
+    ShortTextIcon,
+    SubjectIcon,
+    UploadFileIcon,
+    ViewStreamIcon
+} from "../icons";
 
 export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
     text_field: {

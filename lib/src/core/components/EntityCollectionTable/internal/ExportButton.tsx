@@ -1,18 +1,13 @@
 import React, { useCallback, useEffect, useRef } from "react";
 
-import GetAppIcon from "@mui/icons-material/GetApp";
 import { Entity, EntityCollection, ExportConfig, ResolvedEntityCollection, User } from "../../../../types";
 import { useDataSource, useFireCMSContext, useNavigationContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
 import { DialogActions } from "../../DialogActions";
 import { resolveCollection } from "../../../util";
-import { IconButton } from "../../../../components";
-import { Button } from "../../../../components/Button";
-import { CircularProgress } from "@mui/material";
-import { Dialog } from "../../../../components/Dialog";
+import { Button, CircularProgress, Dialog, IconButton, Tooltip, Typography } from "../../../../components";
 import { Alert } from "@mui/lab";
-import { Typography } from "../../../../components/Typography";
-import { Tooltip } from "../../../../components/Tooltip";
+import { GetAppIcon } from "../../../../icons";
 
 interface ExportButtonProps<M extends Record<string, any>, UserType extends User> {
     collection: EntityCollection<M>;
@@ -177,7 +172,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
 
             <DialogActions>
 
-                {dataLoading && <CircularProgress size={16} thickness={8}/>}
+                {dataLoading && <CircularProgress size={"small"}/>}
 
                 <Button onClick={handleClose} variant={"text"}>
                     Cancel

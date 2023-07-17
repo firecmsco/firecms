@@ -1,12 +1,12 @@
 import React from "react";
-
-import { Divider } from "@mui/material";
+import clsx from "clsx";
 
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";
 import { useFireCMSContext } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
+import { defaultBorderMixin } from "../../styles";
 
 /**
  * @category Preview components
@@ -48,8 +48,8 @@ export function ArrayPropertyPreview({
                             (property.resolvedProperties[index] ?? (Array.isArray(property.of) ? property.of[index] : property.of));
                         return of
                             ? <React.Fragment
-                                key={"preview_array_" + value + "_" + index}>
-                                <div className="m-1">
+                                key={"preview_array_" + index}>
+                                <div className={clsx(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
                                     <ErrorBoundary>
                                         <PropertyPreview
                                             propertyKey={propertyKey}
@@ -59,7 +59,6 @@ export function ArrayPropertyPreview({
                                             size={childSize}/>
                                     </ErrorBoundary>
                                 </div>
-                                {index < values.length - 1 && <Divider/>}
                             </React.Fragment>
                             : null;
                     }

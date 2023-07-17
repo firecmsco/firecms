@@ -1,10 +1,9 @@
 import React from "react";
 import { FieldProps } from "../../types";
-import { LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { useClearRestoreValue } from "../../hooks";
 import { ExpandablePanel, getIconForProperty } from "../../core";
-import { FieldHelperText } from "../components/FieldHelperText";
 
 /**
  * Array field used for custom
@@ -77,6 +76,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
+                             disabled={disabled}
                              property={property}/>
 
         </>

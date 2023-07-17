@@ -8,11 +8,9 @@ import "@fontsource/roboto"
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import { AppCheckOptions, Authenticator, CMSView, FirebaseCMSApp, IconButton } from "firecms";
+import { AppCheckOptions, Authenticator, CMSView, FirebaseCMSApp, GitHubIcon, IconButton, Tooltip } from "firecms";
 // import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
-import { Tooltip } from "@mui/material";
-import { GitHub } from "@mui/icons-material";
 
 import { firebaseConfig } from "../firebase_config";
 // import { publicRecaptchaKey } from "../appcheck_config";
@@ -51,7 +49,7 @@ function SampleApp() {
                 target="_blank"
                 component={"a"}
                 size="large">
-                <GitHub/>
+                <GitHubIcon/>
             </IconButton>
         </Tooltip>
     );

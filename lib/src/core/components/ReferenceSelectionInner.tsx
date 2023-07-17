@@ -1,6 +1,5 @@
 import React, { MouseEventHandler, useCallback, useEffect, useState } from "react";
 import { CollectionSize, Entity, EntityCollection, FilterValues } from "../../types";
-import { Add } from "@mui/icons-material";
 
 import { EntityCollectionTable } from "./EntityCollectionTable";
 import { EntityCollectionRowActions } from "./EntityCollectionTable/internal/EntityCollectionRowActions";
@@ -21,6 +20,7 @@ import { isFilterCombinationValidForFirestore } from "./EntityCollectionView/isF
 import { Typography } from "../../components/Typography";
 import { useLargeLayout } from "../../hooks/useLargeLayout";
 import { Button } from "../../components/Button";
+import { AddIcon } from "../../icons/AddIcon";
 
 /**
  * @category Components
@@ -326,7 +326,7 @@ function ReferenceDialogActions({
         onClick && (largeLayout
             ? <Button
                 onClick={onClick}
-                startIcon={<Add/>}
+                startIcon={<AddIcon/>}
                 variant="outlined"
                 color="primary">
                 Add {collection.singularName ?? collection.name}
@@ -337,7 +337,7 @@ function ReferenceDialogActions({
                 variant="outlined"
                 color="primary"
             >
-                <Add/>
+                <AddIcon/>
             </Button>);
 
     return (

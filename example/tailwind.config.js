@@ -63,7 +63,7 @@ export default {
                     secondary: "rgba(0, 0, 0, 0.6)",
                     "secondary-dark": "rgba(255, 255, 255, 0.7)",
                     disabled: "rgba(0, 0, 0, 0.38)",
-                    disabledDark: "rgba(255, 255, 255, 0.5)",
+                    "disabled-dark": "rgba(255, 255, 255, 0.5)",
                     label: "rgb(131, 131, 131)"
                 },
                 gray: {

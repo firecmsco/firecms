@@ -1,5 +1,4 @@
 import { useNavigate } from "react-router-dom";
-import { Star } from "lucide-react";
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { TopNavigationEntry } from "../../../types";
@@ -8,6 +7,8 @@ import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCollectionCard } from "./NavigationCollectionCard";
 import { Chip } from "../../../components";
 import { Collapse } from "../../../components/Collapse";
+import { StarIcon } from "../../../icons/StarIcon";
+import { StarBorderIcon } from "../../../icons/StarBorderIcon";
 
 function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
 
@@ -36,10 +37,15 @@ function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
         label={entry.name}
         onClick={() => navigate(entry.url)}
         icon={
-            <Star strokeWidth={favourite ? 2 : 2}
-                  onClick={onIconClick}
-                  size={18}
-                  className={favourite ? "text-secondary" : "text-gray-400 dark:text-gray-500"}/>}
+            favourite
+                ? <StarIcon
+                    onClick={onIconClick}
+                    size={18}
+                    className={"text-secondary"}/>
+                : <StarBorderIcon
+                    onClick={onIconClick}
+                    size={18}
+                    className={"text-gray-400 dark:text-gray-500"}/>}
     />;
 }
 
@@ -64,7 +70,7 @@ export function FavouritesView({ hidden }: { hidden: boolean }) {
     const favouritesGroup = <Collapse
         in={!hidden && favouriteCollections.length > 0}>
         <NavigationGroup group={"Favourites"}>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {favouriteCollections.map((entry) => (
                     <div key={`nav_${entry.group}_${entry.name}`} className="col-span-1">
                         <NavigationCollectionCard

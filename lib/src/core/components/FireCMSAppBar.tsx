@@ -1,15 +1,15 @@
 import React from "react";
 import clsx from "clsx";
 
-import { Avatar, Breadcrumbs, Chip, Hidden, Slide } from "@mui/material";
-import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
-import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import { Avatar, Breadcrumbs, Slide } from "@mui/material";
+
 import { Link as ReactLink } from "react-router-dom";
-import { ErrorBoundary } from "../components";
+import { Chip, ErrorBoundary } from "../components";
 import { useAuthController, useBreadcrumbsContext, useModeController, useNavigationContext } from "../../hooks";
 import { Button, IconButton, Typography } from "../../components";
 import { useLargeLayout } from "../../hooks/useLargeLayout";
+import { DarkModeIcon } from "../../icons/DarkModeIcon";
+import { LightModeIcon } from "../../icons/LightModeIcon";
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -72,23 +72,18 @@ export const FireCMSAppBar = function FireCMSAppBar({
                 direction="down" in={true} mountOnEnter unmountOnExit>
                 <div className="flex flex-row space-x-1 space-y-1 px-4 h-full items-center">
 
-                    <Hidden lgDown>
-                        <div className="mr-8">
-                            <ReactLink
-                                to={navigation.basePath}>
-                                <Typography variant="subtitle1"
-                                            noWrap
-                                            className={"ml-2 !font-medium"}>
-                                    {title}
-                                </Typography>
-                            </ReactLink>
-                        </div>
-                    </Hidden>
+                    <div className="mr-8 invisible lg:visible">
+                        <ReactLink
+                            to={navigation.basePath}>
+                            <Typography variant="subtitle1"
+                                        noWrap
+                                        className={"ml-2 !font-medium"}>
+                                {title}
+                            </Typography>
+                        </ReactLink>
+                    </div>
 
                     {largeLayout && <Breadcrumbs
-                        separator={<NavigateNextIcon
-                            htmlColor={"rgb(0,0,0,0.87)"}
-                            fontSize="small"/>}
                         aria-label="breadcrumb">
                         {breadcrumbs.map((entry, index) => (
                             <ReactLink
@@ -96,7 +91,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                 color="inherit"
                                 to={entry.url}>
                                 <Chip
-                                    className="bg-gray-200 h-12 text-gray-800 font-medium hover:bg-gray-300 focus:bg-gray-300 active:bg-gray-400 active:shadow-sm cursor-pointer"
+                                    className=" h-12 font-medium active:bg-gray-400 active:shadow-sm cursor-pointer"
                                     label={entry.title}
                                 />
                             </ReactLink>)
@@ -108,24 +103,22 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
                     {toolbarExtraWidget &&
                         <ErrorBoundary>
-                            {
-                                toolbarExtraWidget
-                            }
+                            {toolbarExtraWidget}
                         </ErrorBoundary>}
 
-                    <div className={"p-4"}>
+                    <div className={"p-2"}>
                         <IconButton
                             color="inherit"
                             aria-label="Open drawer"
                             onClick={() => toggleMode()}
                             size="large">
                             {mode === "dark"
-                                ? <DarkModeOutlinedIcon/>
-                                : <LightModeOutlinedIcon/>}
+                                ? <DarkModeIcon/>
+                                : <LightModeIcon/>}
                         </IconButton>
                     </div>
 
-                    <div className={"p-4"}>
+                    <div className={"p-2"}>
                         {authController.user && authController.user.photoURL
                             ? <Avatar
                                 src={authController.user.photoURL}/>

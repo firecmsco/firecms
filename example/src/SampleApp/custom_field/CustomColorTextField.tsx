@@ -1,6 +1,5 @@
 import React from "react";
-import { TextField } from "@mui/material";
-import { FieldProps, FieldHelperText, useModeController } from "firecms";
+import { FieldHelperText, FieldProps, TextInput, useModeController } from "firecms";
 
 interface CustomColorTextFieldProps {
     color: string
@@ -25,22 +24,19 @@ export default function CustomColorTextField({
     const backgroundColor = customProps?.color ?? (mode === "light" ? "#eef4ff" : "#16325f");
     return (
         <>
-            <TextField required={property.validation?.required}
-                       sx={{
-                           backgroundColor
-                       }}
-                       error={!!error}
-                       disabled={isSubmitting}
-                       label={property.name}
-                       value={value ?? ""}
-                       onChange={(evt: any) => {
-                           setValue(
-                               evt.target.value
-                           );
-                       }}
-                       helperText={error}
-                       fullWidth
-                       variant={"filled"}/>
+            <TextInput
+                inputStyle={{
+                    backgroundColor
+                }}
+                error={!!error}
+                disabled={isSubmitting}
+                label={error ?? property.name}
+                value={value ?? ""}
+                onChange={(evt: any) => {
+                    setValue(
+                        evt.target.value
+                    );
+                }}/>
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

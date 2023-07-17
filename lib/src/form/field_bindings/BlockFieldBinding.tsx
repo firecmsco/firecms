@@ -98,6 +98,7 @@ export function BlockFieldBinding<T extends Array<any>>({
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
+                             disabled={disabled}
                              property={property}/>
 
         </>

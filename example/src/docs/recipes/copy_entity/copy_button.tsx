@@ -1,11 +1,11 @@
 import {
+    Button,
     Entity,
     EntityCollection,
     useDataSource,
     useReferenceDialog,
     useSnackbarController
 } from "firecms";
-import { Button } from "@mui/material";
 import { useCallback } from "react";
 
 export type CopyEntityButtonProps = {

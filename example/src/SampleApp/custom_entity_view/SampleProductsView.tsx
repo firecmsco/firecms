@@ -1,6 +1,5 @@
 import React from "react";
-import { Box, Button } from "@mui/material";
-import { Entity, EntityValues, useSnackbarController } from "firecms";
+import { Button, Entity, EntityValues, useSnackbarController } from "firecms";
 import { Product } from "../types";
 
 export function SampleProductsView({ entity, modifiedValues }: {

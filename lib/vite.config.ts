@@ -22,7 +22,9 @@ export default defineConfig(() => ({
             external: isExternal
         }
     },
-    plugins: [react({
-        jsxImportSource: "@emotion/react"
-    })]
+    plugins: [
+        react({
+            jsxImportSource: "@emotion/react"
+        })
+    ]
 }));

@@ -1,8 +1,9 @@
+/// <reference types="vite-plugin-svgr/client" />
 import React from "react";
 import clsx from "clsx";
 
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { Check } from "lucide-react";
+import { Icon } from "../icons/Icon";
 
 interface CheckboxProps {
     checked: boolean;
@@ -14,7 +15,7 @@ interface CheckboxProps {
 const sizeClasses = {
     large: "w-6 h-6 rounded flex items-center justify-center",
     medium: "w-5 h-5 rounded flex items-center justify-center",
-    small: "w-4 h-4 rounded flex items-center justify-center",
+    small: "w-4 h-4 rounded flex items-center justify-center"
 };
 
 const outerSizeClasses = {
@@ -52,24 +53,27 @@ export const Checkbox = ({
             onCheckedChange ? "cursor-pointer" : "cursor-default"
         )}>
             <CheckboxPrimitive.Root
-                className={clsx(
-                    "border-2",
-                    sizeClasses[size],
-                    isChecked ? "bg-primary text-gray-100 dark:text-gray-900" : "bg-white dark:bg-gray-900",
-                    isChecked ? "border-transparent" : "border-gray-700 dark:border-gray-100"
-                )}
+                asChild
                 checked={isChecked}
                 onCheckedChange={onCheckedChange}>
-                <CheckboxPrimitive.Indicator>
-                    {indeterminate
-                        ? (
-                            <div className="w-full h-[1px] bg-currentColor"/>
-                        ) : (
-                            <Check color={"currentColor"}
-                                   size={checkboxSize[size]}
-                                   strokeWidth={strokeWidth[size]}/>
-                        )}
-                </CheckboxPrimitive.Indicator>
+                <div
+                    className={clsx(
+                        "border-2 relative transition-colors ease-in-out duration-150",
+                        sizeClasses[size],
+                        isChecked ? "bg-primary text-gray-100 dark:text-gray-900" : "bg-white dark:bg-gray-900",
+                        isChecked ? "border-transparent" : "border-gray-700 dark:border-gray-100"
+                    )}>
+                    <CheckboxPrimitive.Indicator asChild>
+                        {indeterminate
+                            ? (
+                                <div className="w-full h-[1px] bg-currentColor"/>
+                            )
+                            : (
+
+                                <Icon iconKey={"check"} size={10} className={"absolute"}/>
+                            )}
+                    </CheckboxPrimitive.Indicator>
+                </div>
             </CheckboxPrimitive.Root>
         </div>
     );

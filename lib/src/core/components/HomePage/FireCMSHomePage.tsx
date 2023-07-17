@@ -140,7 +140,7 @@ export function FireCMSHomePage({
                             group={group}
                             key={`plugin_section_${group}`}>
 
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                                 {thisGroupCollections.map((entry) => (
                                     <div key={`nav_${entry.group}_${entry.name}`} className="col-span-1">
                                         <NavigationCollectionCard

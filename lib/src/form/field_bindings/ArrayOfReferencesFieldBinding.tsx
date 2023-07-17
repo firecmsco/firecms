@@ -22,6 +22,7 @@ export function ArrayOfReferencesFieldBinding({
                                                   value,
                                                   error,
                                                   showError,
+                                                  disabled,
                                                   isSubmitting,
                                                   tableMode,
                                                   property,
@@ -142,6 +143,7 @@ export function ArrayOfReferencesFieldBinding({
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
+                             disabled={disabled}
                              property={property}/>
 
         </>

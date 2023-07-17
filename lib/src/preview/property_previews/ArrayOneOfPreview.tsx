@@ -1,42 +1,12 @@
 import React from "react";
-
-import { styled } from "@mui/material/styles";
-
-import { Divider, Theme } from "@mui/material";
+import clsx from "clsx";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
 import { useFireCMSContext } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
-
-const PREFIX = "ArrayOneOfPreview";
-
-const classes = {
-    array: `${PREFIX}-array`,
-    arrayWrap: `${PREFIX}-arrayWrap`,
-    arrayItemBig: `${PREFIX}-arrayItemBig`
-};
-
-const Root = styled("div")((
-    { theme }: {
-        theme: Theme
-    }
-) => ({
-    [`&.${classes.array}`]: {
-        display: "flex",
-        flexDirection: "column"
-    },
-
-    [`& .${classes.arrayWrap}`]: {
-        display: "flex",
-        flexWrap: "wrap"
-    },
-
-    [`& .${classes.arrayItemBig}`]: {
-        margin: theme.spacing(1)
-    }
-}));
+import { defaultBorderMixin } from "../../styles";
 
 /**
  * @category Preview components
@@ -75,12 +45,12 @@ export function ArrayOneOfPreview({
     const properties = property.oneOf.properties;
 
     return (
-        <Root className={classes.array}>
+        <div className={"flex flex-col"}>
             {values &&
                 values.map((value, index) =>
                     <React.Fragment
                         key={"preview_array_" + value + "_" + index}>
-                        <div className={classes.arrayItemBig}>
+                        <div className={clsx(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
                             <ErrorBoundary>
                                 {value && <PropertyPreview
                                     propertyKey={propertyKey}
@@ -90,9 +60,8 @@ export function ArrayOneOfPreview({
                                     size={childSize}/>}
                             </ErrorBoundary>
                         </div>
-                        {index < values.length - 1 && <Divider/>}
                     </React.Fragment>
                 )}
-        </Root>
+        </div>
     );
 }

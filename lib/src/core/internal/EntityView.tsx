@@ -1,9 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { CircularProgress, Divider, Tab, Tabs } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+import { Divider, Tab, Tabs } from "@mui/material";
 import { Entity, EntityCollection, EntityStatus, EntityValues, FireCMSPlugin, FormContext, User } from "../../types";
-import { CircularProgressCenter, EntityCollectionView, EntityPreview, ErrorBoundary } from "../components";
+import {
+    CircularProgress,
+    CircularProgressCenter,
+    EntityCollectionView,
+    EntityPreview,
+    ErrorBoundary
+} from "../components";
 import {
     canEditEntity,
     fullPathToCollectionSegments,
@@ -28,6 +33,7 @@ import { EntityFormSaveParams } from "../../form/EntityForm";
 import { FORM_CONTAINER_WIDTH } from "./common";
 import { IconButton } from "../../components";
 import { defaultBorderMixin, paperMixin } from "../../styles";
+import { CloseIcon } from "../../icons/CloseIcon";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -531,7 +537,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
             {globalLoading && <div
                 className="self-center">
-                <CircularProgress size={16} thickness={8}/>
+                <CircularProgress size={"small"}/>
             </div>}
 
             <Tabs

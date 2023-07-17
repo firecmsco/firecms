@@ -1,6 +1,5 @@
 import React from "react";
 import { PropertyPreviewProps } from "firecms";
-import Box from "@mui/material/Box";
 
 export default function PriceTextPreview({
                                              value,

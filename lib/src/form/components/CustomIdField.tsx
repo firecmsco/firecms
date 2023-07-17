@@ -1,7 +1,5 @@
 import React, { useMemo } from "react";
 
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
-
 import { ErrorMessage } from "formik";
 
 import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } from "../../types";
@@ -9,6 +7,7 @@ import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } fro
 import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
 import { enumToObjectEntries, Select, TextInput } from "../../core";
 import { IconButton, Tooltip } from "../../components";
+import { OpenInNewIcon } from "../../icons/OpenInNewIcon";
 
 export function CustomIdField<M extends Record<string, any>>({
                                                                  customId,
@@ -74,7 +73,7 @@ export function CustomIdField<M extends Record<string, any>>({
                                         target="_blank"
                                         onClick={(e) => e.stopPropagation()}
                                         aria-label="go-to-datasource">
-                                <OpenInNewIcon fontSize={"small"}/>
+                                <OpenInNewIcon size={"small"}/>
                             </IconButton>
                         </Tooltip>}
 

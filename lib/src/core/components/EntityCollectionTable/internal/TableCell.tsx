@@ -3,14 +3,13 @@ import clsx from "clsx";
 
 import useMeasure from "react-use-measure";
 
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
-import RemoveCircleIcon from "@mui/icons-material/RemoveCircle";
 import { TableSize } from "../../Table";
 import { getRowHeight } from "../../Table/common";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { ErrorTooltip } from "../../ErrorTooltip";
 import { IconButton, Tooltip } from "../../../../components";
 import { useOutsideAlerter } from "../../../internal/useOutsideAlerter";
+import { ErrorOutlineIcon, RemoveCircleIcon } from "../../../../icons";
 
 interface TableCellProps {
     children: React.ReactNode;
@@ -97,7 +96,7 @@ export const TableCell = React.memo<TableCellProps>(
             if (selected && onSelect) {
                 onSelect(undefined);
             }
-        });
+        }, Boolean(selected && onSelect));
 
         const [isOverflowing, setIsOverflowing] = useState<boolean>(false);
         const maxHeight = useMemo(() => getRowHeight(size), [size]);
@@ -134,11 +133,9 @@ export const TableCell = React.memo<TableCellProps>(
                     p = 4;
                     break;
                 case "m":
-                    p = 3;
-                    break;
-                case "s":
                     p = 2;
                     break;
+                case "s":
                 default:
                     p = 1;
                     break;
@@ -257,8 +254,7 @@ export const TableCell = React.memo<TableCellProps>(
                 {disabled && onHover && disabledTooltip &&
                     <div className="absolute top-1 right-1 text-xs">
                         <Tooltip title={disabledTooltip}>
-                            <RemoveCircleIcon color={"disabled"}
-                                              fontSize={"inherit"}/>
+                            <RemoveCircleIcon color={"disabled"}/>
                         </Tooltip>
                     </div>}
 
@@ -289,7 +285,7 @@ export const TableCell = React.memo<TableCellProps>(
                             placement={"left"}
                             title={showError.message}>
                             <ErrorOutlineIcon
-                                fontSize={"inherit"}
+                                size={"small"}
                                 color={"error"}
                             />
                         </ErrorTooltip>

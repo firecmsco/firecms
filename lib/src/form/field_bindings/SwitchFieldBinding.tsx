@@ -53,6 +53,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
+                             disabled={disabled}
                              property={property}/>
         </>
 

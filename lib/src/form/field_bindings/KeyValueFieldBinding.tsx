@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
-import { MenuItem } from "@mui/material";
-
-import Menu from "@mui/material/Menu";
-import RemoveIcon from "@mui/icons-material/Remove";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
-import AddIcon from "@mui/icons-material/Add";
+import { Menu, MenuItem } from "@mui/material";
 
 import {
     ArrayContainer,
@@ -20,6 +15,9 @@ import { Typography } from "../../components/Typography";
 import { BooleanSwitchWithLabel, IconButton } from "../../components";
 import { Button } from "../../components/Button";
 import { FieldHelperText } from "../components/FieldHelperText";
+import { ArrowDropDownIcon } from "../../icons/ArrowDropDownIcon";
+import { RemoveIcon } from "../../icons/RemoveIcon";
+import { AddIcon } from "../../icons/AddIcon";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -76,6 +74,7 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}
                              error={error}
+                             disabled={disabled}
                              property={property}/>
 
         </>
@@ -260,7 +259,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                             size={"small"}
                             onClick={onDeleteClick}
                             className="h-7 w-7">
-                    <RemoveIcon fontSize={"small"}/>
+                    <RemoveIcon size={"small"}/>
                 </IconButton>
             </Typography>
 

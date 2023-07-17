@@ -1,17 +1,16 @@
 import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
+import { Link } from "react-router-dom";
 import clsx from "clsx";
 
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
-import MenuIcon from "@mui/icons-material/Menu";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import { useRestoreScroll } from "./internal/useRestoreScroll";
-import { IconButton, Sheet } from "../components";
+import { IconButton, Sheet, Tooltip } from "../components";
 import { useLargeLayout } from "../hooks/useLargeLayout";
-import { Tooltip } from "../components/Tooltip";
-import { Link } from "react-router-dom";
+import { MenuIcon } from "../icons/MenuIcon";
+import { ChevronLeftIcon } from "../icons/ChevronLeftIcon";
 
 export const DRAWER_WIDTH = 280;
 
@@ -70,7 +69,6 @@ export interface ScaffoldProps<ExtraDrawerProps = {}> {
  * @constructor
  * @category Core
  */
-
 export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
     function Scaffold(props: PropsWithChildren<ScaffoldProps>) {
 
@@ -141,7 +139,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     <DrawerHeader/>
                     <div
                         ref={containerRef}
-                        className={`flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid lg:border-gray-100 lg:dark:border-gray-800 m-0 mt-1`}>
+                        className={"flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid lg:border-gray-100 lg:dark:border-gray-800 m-0 mt-1"}>
 
                         <ErrorBoundary>
                             {children}
@@ -175,16 +173,17 @@ function StyledDrawer(props: {
     const navigation = useNavigationContext();
 
     const innerDrawer = <div
-        className={"fixed relative left-0 top-0 transition-all duration-200 ease-in-out h-full overflow-auto no-scrollbar"}
+        className={"relative left-0 top-0 h-full overflow-auto no-scrollbar"}
         style={{
-            width: props.open ? DRAWER_WIDTH : "72px"
+            width: props.open ? DRAWER_WIDTH : "72px",
+            transition: "left 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
         }}
     >
 
         {!props.open && (
             <Tooltip title="Open menu"
                      placement="right"
-                     className="sticky top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit"
+                     className="absolute top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit"
             >
                 <IconButton
                     color="inherit"
@@ -198,25 +197,26 @@ function StyledDrawer(props: {
             </Tooltip>
         )}
 
-        <Tooltip title={props.open ? "" : "Home"} placement="right">
-            <Link
-                to={navigation.basePath}>
-                <div
-                    className={clsx(`${
-                            props.open
-                                ? "py-4 pt-8 px-8 pr-24 block transition-padding duration-200 ease-in-out"
-                                : "p-4 pt-4 mt-2 block transition-padding duration-200 ease-in-out"
-                        }`,
-                        "cursor-pointer")}>
+        <div
+            style={{
+                transition: "padding 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
+                padding: props.open ? "32px 96px 0px 24px" : "72px 16px 0px"
+            }}
+            className={clsx("cursor-pointer")}>
+
+            <Tooltip title={props.open ? "" : "Home"} placement="right">
+                <Link
+                    to={navigation.basePath}>
                     {props.logo
-                        ? <img src={props.logo} alt="Logo"
+                        ? <img src={props.logo}
+                               alt="Logo"
                                className="max-w-full max-h-full"/>
                         : <FireCMSLogo/>}
 
-                </div>
-            </Link>
+                </Link>
+            </Tooltip>
+        </div>
 
-        </Tooltip>
 
         {props.children}
 
@@ -244,21 +244,21 @@ function StyledDrawer(props: {
         </>;
 
     return (
-        <div className="transition-all ease-in duration-75 relative"
-             onMouseEnter={props.onMouseEnter}
-             onMouseMove={props.onMouseMove}
-             onMouseLeave={props.onMouseLeave}
-             style={{
-                 width: props.open ? DRAWER_WIDTH : "72px"
-             }}>
-
+        <div
+            className="relative"
+            onMouseEnter={props.onMouseEnter}
+            onMouseMove={props.onMouseMove}
+            onMouseLeave={props.onMouseLeave}
+            style={{
+                width: props.open ? DRAWER_WIDTH : "72px"
+            }}>
 
             {innerDrawer}
 
             <div
                 className={`absolute right-4 top-4 ${
                     props.open ? "opacity-100" : "opacity-0 invisible"
-                } transition-opacity duration-200 ease-in-out`}>
+                } transition-opacity duration-1000 ease-in-out`}>
                 <IconButton
                     aria-label="Close drawer"
                     onClick={() => props.setDrawerOpen(false)}
