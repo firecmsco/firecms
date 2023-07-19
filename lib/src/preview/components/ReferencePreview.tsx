@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { Skeleton } from "@mui/material";
 import { Entity, EntityCollection, EntityReference, ResolvedProperty } from "../../types";
 
-
 import { ErrorView, getReferencePreviewKeys, getValueInPath, resolveCollection } from "../../core";
 import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
@@ -21,7 +20,7 @@ export type ReferencePreviewProps = {
     reference: EntityReference,
     size: PreviewSize;
     previewProperties?: string[];
-    onClick?: (e:React.SyntheticEvent) => void;
+    onClick?: (e: React.SyntheticEvent) => void;
     onHover?: boolean;
     allowEntityNavigation?: boolean;
 };
@@ -131,17 +130,17 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                         return (
                             <div key={"ref_prev_" + (key as string)}
                                  className={listProperties.length > 1 ? "my-1" : "my-0"}>
-                                {usedEntity
-                                    ? <PropertyPreview
-                                        propertyKey={key as string}
-                                        value={getValueInPath(usedEntity.values, key)}
-                                        property={childProperty as ResolvedProperty}
-                                        entity={usedEntity}
-                                        size={"tiny"}/>
-                                    // eslint-disable-next-line react/jsx-no-undef
-                                    : <SkeletonPropertyComponent
-                                        property={childProperty as ResolvedProperty}
-                                        size={"tiny"}/>
+                                {
+                                    usedEntity
+                                        ? <PropertyPreview
+                                            propertyKey={key as string}
+                                            value={getValueInPath(usedEntity.values, key)}
+                                            property={childProperty as ResolvedProperty}
+                                            entity={usedEntity}
+                                            size={"tiny"}/>
+                                        : <SkeletonPropertyComponent
+                                            property={childProperty as ResolvedProperty}
+                                            size={"tiny"}/>
                                 }
                             </div>
                         );
@@ -193,30 +192,30 @@ function ReferencePreviewWrap({
     children: React.ReactNode;
     onHover?: boolean;
     size: PreviewSize;
-    onClick?: (e:React.SyntheticEvent) => void;
+    onClick?: (e: React.SyntheticEvent) => void;
 }) {
     return <Typography variant={"label"}
                        className={clsx("bg-opacity-70 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60",
-                     "w-full",
-                     "flex",
-                     "rounded-md",
-                     "overflow-hidden",
-                     onHover ? "hover:bg-opacity-90 dark:hover:bg-opacity-90" : "",
-                     size === "medium" ? "p-2" : "p-1",
-                     size === "tiny" ? "items-center" : "",
-                     "transition-colors duration-300 ease-in-out ",
-                     // onHover ? "shadow-outline" : "",
-                     onClick ? "cursor-pointer" : "")}
+                           "w-full",
+                           "flex",
+                           "rounded-md",
+                           "overflow-hidden",
+                           onHover ? "hover:bg-opacity-90 dark:hover:bg-opacity-90" : "",
+                           size === "medium" ? "p-2" : "p-1",
+                           size === "tiny" ? "items-center" : "",
+                           "transition-colors duration-300 ease-in-out ",
+                           // onHover ? "shadow-outline" : "",
+                           onClick ? "cursor-pointer" : "")}
                        style={{
-                     // @ts-ignore
-                     tabindex: 0
-                 }}
+                           // @ts-ignore
+                           tabindex: 0
+                       }}
                        onClick={(event) => {
-                     if (onClick) {
-                         event.preventDefault();
-                         onClick(event);
-                     }
-                 }}>
+                           if (onClick) {
+                               event.preventDefault();
+                               onClick(event);
+                           }
+                       }}>
 
         {children}
 

@@ -6,8 +6,9 @@ import { getHashValue } from "../util";
 import useMeasure from "react-use-measure";
 import { Button, IconButton, Tooltip } from "../../components";
 import { fieldBackgroundHoverMixin } from "../../styles";
-import { AddIcon, ContentCopyIcon, DragHandleIcon, MoreVertIcon, RemoveIcon } from "../../icons";
+
 import { Menu, MenuItem } from "../../components/Menu";
+import { AddIcon, ContentCopyIcon, DragHandleIcon, MoreVertIcon, RemoveIcon } from "../../icons";
 
 interface ArrayContainerProps<T> {
     droppableId: string;
@@ -270,19 +271,26 @@ export function ArrayItemOptions({
     copy: (index: number) => void
 }) {
 
-    return <div className={`pl-1 pt-1 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}
-
-                {...provided.dragHandleProps}>
+    return <div className={`pl-1 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}
+>
         <Tooltip
             placement={direction === "column" ? "left" : undefined}
             title="Move">
             <IconButton
+                {...provided.dragHandleProps}
                 size="small"
                 disabled={disabled}
                 className={`cursor-${disabled ? "inherit" : "grab"}`}>
-                <DragHandleIcon
-                    size={"small"}
-                    color={disabled ? "disabled" : "inherit"}/>
+                {/* TODO: for some reason, the icon as a span does not work with Drag and Drop
+                */}
+                <svg focusable="false"
+                     fill={"currentColor"}
+                     aria-hidden="true" viewBox="0 0 24 24">
+                    <path d="M20 9H4v2h16V9zM4 15h16v-2H4v2z"></path>
+                </svg>
+                {/*<DragHandleIcon*/}
+                {/*    size={"small"}*/}
+                {/*    color={disabled ? "disabled" : "inherit"}/>*/}
             </IconButton>
         </Tooltip>
 
@@ -324,11 +332,11 @@ export function ArrayItemOptions({
             >
 
                 <MenuItem dense onClick={() => remove(index)}>
-                    <RemoveIcon/>
+                    <RemoveIcon size={"small"}/>
                     Remove
                 </MenuItem>
                 <MenuItem dense onClick={() => copy(index)}>
-                    <ContentCopyIcon/>
+                    <ContentCopyIcon size={"small"}/>
                     Copy
                 </MenuItem>
 

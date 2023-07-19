@@ -594,7 +594,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                             role="tabpanel"
                             hidden={!mainViewVisible}
                             id={`form_${path}`}
-                            className={"relative w-full"}>
+                            className={" w-full"}>
 
                             {globalLoading
                                 ? <CircularProgressCenter/>

@@ -122,7 +122,8 @@ export function Select({
                     <SelectPrimitive.Icon className={clsx(
                         "px-2 h-full flex items-center"
                     )}>
-                        <ChevronDownIcon size={16} className={clsx("transition", open ? "rotate-180" : "")}/>
+                        <ChevronDownIcon size={"small"}
+                                         className={clsx("transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
 
                 </SelectPrimitive.Trigger>

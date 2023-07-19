@@ -25,7 +25,6 @@ export function IconButton<C extends React.ElementType>({
                                                             size = "medium",
                                                             variant = "ghost",
                                                             component,
-                                                            onClick,
                                                             ...props
                                                         }: IconButtonProps<C>) {
 

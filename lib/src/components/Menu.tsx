@@ -15,7 +15,7 @@ export function Menu({
     return (
         <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
-                <div>
+                <div tabIndex={-1}>
                     {trigger}
                 </div>
             </DropdownMenu.Trigger>

@@ -5,7 +5,7 @@ import "@material-design-icons/font/filled.css";
 
 export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error";
 export type IconProps = {
-    size?: "smallest" | "small" | "medium" | "large" | number,
+    size?: "smallest" |"small" | "medium" | "large" | number,
     color?: IconColor,
     className?: string,
     onClick?: (e: React.SyntheticEvent) => void,
