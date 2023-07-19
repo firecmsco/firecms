@@ -25,29 +25,25 @@ export function IconButton<C extends React.ElementType>({
                                                             size = "medium",
                                                             variant = "ghost",
                                                             component,
+                                                            onClick,
                                                             ...props
                                                         }: IconButtonProps<C>) {
 
     const bgClasses = variant === "ghost" ? "bg-transparent" : "bg-gray-50 dark:bg-gray-950";
     const Component: React.ElementType<any> = component || "button";
     return (
-        <Component {...props}
-                   onClick={props.onClick
-                       ? (e: React.MouseEvent<any>) => {
-                           if (!component)
-                               e.preventDefault();
-                           props?.onClick?.(e);
-                       }
-                       : undefined}
-                   className={clsx(
-                       focusedMixin,
-                       colorClasses,
-                       bgClasses,
-                       baseClasses,
-                       buttonClasses,
-                       sizeClasses[size],
-                       className
-                   )}>
+        <Component
+            type="button"
+            {...props}
+            className={clsx(
+                focusedMixin,
+                colorClasses,
+                bgClasses,
+                baseClasses,
+                buttonClasses,
+                sizeClasses[size],
+                className
+            )}>
             {children}
         </Component>
     );

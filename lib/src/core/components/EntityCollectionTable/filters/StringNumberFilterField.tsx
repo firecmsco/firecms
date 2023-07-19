@@ -1,8 +1,7 @@
-import { MenuItem, OutlinedInput, Select as MuiSelect } from "@mui/material";
 import React, { useState } from "react";
 import { EnumValuesChip } from "../../../../preview";
 import { TableEnumValues, TableWhereFilterOp } from "../../Table";
-import { IconButton } from "../../../../components";
+import { IconButton, Select, TextInput } from "../../../../components";
 import { ClearIcon } from "../../../../icons/ClearIcon";
 
 interface StringNumberFilterFieldProps {
@@ -87,79 +86,55 @@ export function StringNumberFilterField({
 
         <div className="flex w-[440px] items-center">
             <div className={"w-[80px]"}>
-                    <MuiSelect value={operation}
-                               fullWidth
-                               onChange={(evt: any) => {
-                                   updateFilter(evt.target.value, internalValue);
-                               }}>
-                        {possibleOperations.map((op) =>
-                            <MenuItem
-                                key={`filter_op_${name}_${op}`}
-                                value={op}>{operationLabels[op]}</MenuItem>
-                        )}
-
-                    </MuiSelect>
+                <Select value={operation}
+                        onValueChange={(value) => {
+                            updateFilter(value as TableWhereFilterOp, internalValue);
+                        }}
+                        options={possibleOperations}
+                        renderOption={(op) => operationLabels[op as TableWhereFilterOp]}/>
             </div>
 
             <div className="flex-grow ml-4">
 
-                    {!enumValues && <OutlinedInput
-                        fullWidth
-                        key={`filter_${name}`}
-                        type={dataType === "number" ? "number" : undefined}
-                        value={internalValue !== undefined ? internalValue : ""}
-                        onChange={(evt) => {
-                            const val = dataType === "number"
-                                ? parseFloat(evt.target.value)
-                                : evt.target.value;
-                            updateFilter(operation, val);
+                {!enumValues && <TextInput
+                    type={dataType === "number" ? "number" : undefined}
+                    value={internalValue !== undefined ? String(internalValue) : ""}
+                    onChange={(evt) => {
+                        const val = dataType === "number"
+                            ? parseFloat(evt.target.value)
+                            : evt.target.value;
+                        updateFilter(operation, val);
+                    }}
+                    endAdornment={internalValue && <IconButton
+                        className="absolute right-3 top-2"
+                        onClick={(e) => updateFilter(operation, undefined)}>
+                        <ClearIcon/>
+                    </IconButton>}
+                />}
+
+                {enumValues &&
+
+                    <Select
+                        value={internalValue !== undefined
+                            ? (Array.isArray(internalValue) ? internalValue.map(e => String(e)) : String(internalValue))
+                            : isArray ? [] : ""}
+                        onValueChange={(value) => {
+                            updateFilter(operation, dataType === "number" ? parseInt(value as string) : value as string)
                         }}
+                        multiple={multiple}
                         endAdornment={internalValue && <IconButton
                             className="absolute right-3 top-2"
                             onClick={(e) => updateFilter(operation, undefined)}>
                             <ClearIcon/>
                         </IconButton>}
-                    />}
+                        options={enumValues.map((enumConfig) => String(enumConfig.id))}
+                        renderOption={(enumKey) => <EnumValuesChip
+                            key={`select_value_${name}_${enumKey}`}
+                            enumKey={enumKey}
+                            enumValues={enumValues}
+                            size={"small"}/>}/>
+                }
 
-                    {enumValues &&
-                        <MuiSelect
-                            fullWidth
-                            key={`filter-select-${multiple}-${name}`}
-                            multiple={multiple}
-                            value={internalValue !== undefined ? internalValue : isArray ? [] : ""}
-                            onChange={(evt: any) => updateFilter(operation, dataType === "number" ? parseInt(evt.target.value) : evt.target.value)}
-                            endAdornment={internalValue && <IconButton
-                                className="absolute right-3 top-2"
-                                onClick={(e) => updateFilter(operation, undefined)}>
-                                <ClearIcon/>
-                            </IconButton>}
-                            renderValue={multiple
-                                ? (selected: any) =>
-                                    (
-                                        <>
-                                            {selected.map((enumKey: any) => {
-                                                return <EnumValuesChip
-                                                    key={`select_value_${name}_${enumKey}`}
-                                                    enumKey={enumKey}
-                                                    enumValues={enumValues}
-                                                    size={"small"}/>;
-                                            })}
-                                        </>
-                                    )
-                                : undefined}>
-                            {enumValues.map((enumConfig) => {
-                                return (
-                                    <MenuItem
-                                        key={`select_${name}_${enumConfig.id}`}
-                                        value={enumConfig.id}>
-                                        <EnumValuesChip
-                                            enumKey={enumConfig.id}
-                                            enumValues={enumValues}
-                                            size={"small"}/>
-                                    </MenuItem>
-                                );
-                            })}
-                        </MuiSelect>}
             </div>
 
         </div>

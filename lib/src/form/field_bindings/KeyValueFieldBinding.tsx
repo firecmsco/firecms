@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
-import { Menu, MenuItem } from "@mui/material";
 
 import {
     ArrayContainer,
@@ -18,6 +17,7 @@ import { FieldHelperText } from "../components/FieldHelperText";
 import { ArrowDropDownIcon } from "../../icons/ArrowDropDownIcon";
 import { RemoveIcon } from "../../icons/RemoveIcon";
 import { AddIcon } from "../../icons/AddIcon";
+import { Menu, MenuItem } from "../../components/Menu";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -60,7 +60,7 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
         icon={getIconForProperty(property)}
         required={property.validation?.required}
         title={property.name}
-        className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>;
+        className={"text-text-secondary dark:text-text-secondary-dark"}/>;
 
     return (
         <>
@@ -105,23 +105,12 @@ function MapKeyValueRow<T extends Record<string, any>>({
     updateDataType: (rowId: number, dataType: DataType) => void
 }) {
 
-    const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
-    const menuOpen = Boolean(menuAnchorEl);
-
-    const openTypeSelectMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setMenuAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setMenuAnchorEl(null);
-    };
-
     function buildInput(entryValue: any, fieldKey: string, dataType: DataType) {
         if (dataType === "string" || dataType === "number") {
             return <TextInput
                 key={dataType}
                 value={entryValue}
-                inputType={dataType === "number" ? "number" : "text"}
+                type={dataType === "number" ? "number" : "text"}
                 size={"small"}
                 disabled={disabled || !fieldKey}
                 onChange={(event) => {
@@ -228,7 +217,6 @@ function MapKeyValueRow<T extends Record<string, any>>({
 
     function doUpdateDataType(dataType: DataType) {
         updateDataType(rowId, dataType);
-        handleMenuClose();
     }
 
     return (<>
@@ -248,12 +236,26 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 <div className="flex-grow">
                     {(dataType !== "map" && dataType !== "array") && buildInput(entryValue, fieldKey, dataType)}
                 </div>
+                <Menu
+                    trigger={<IconButton size={"small"}
+                                         className="h-7 w-7">
+                        <ArrowDropDownIcon/>
+                    </IconButton>}
+                >
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("string")}>string</MenuItem>
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("number")}>number</MenuItem>
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("date")}>date</MenuItem>
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("map")}>map</MenuItem>
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("array")}>array</MenuItem>
+                </Menu>
 
-                <IconButton size={"small"}
-                            className="h-7 w-7"
-                            onClick={openTypeSelectMenu}>
-                    <ArrowDropDownIcon/>
-                </IconButton>
 
                 <IconButton aria-label="delete"
                             size={"small"}
@@ -265,24 +267,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
 
             {(dataType === "map" || dataType === "array") && buildInput(entryValue, fieldKey, dataType)}
 
-            <Menu
-                anchorEl={menuAnchorEl}
-                open={menuOpen}
-                onClose={handleMenuClose}
-            >
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("string")}>string</MenuItem>
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("number")}>number</MenuItem>
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("date")}>date</MenuItem>
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("map")}>map</MenuItem>
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("array")}>array</MenuItem>
-            </Menu>
+
         </>
 
     );
@@ -305,24 +290,12 @@ function ArrayKeyValueRow<T>({
 
     function doUpdateDataType(dataType: DataType) {
         setSelectedDataType(dataType);
-        handleMenuClose();
     }
-
-    const [menuAnchorEl, setMenuAnchorEl] = React.useState<null | HTMLElement>(null);
-    const menuOpen = Boolean(menuAnchorEl);
-
-    const openTypeSelectMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-        setMenuAnchorEl(event.currentTarget);
-    };
-
-    const handleMenuClose = () => {
-        setMenuAnchorEl(null);
-    };
 
     function buildInput(entryValue: any, dataType: DataType) {
         if (dataType === "string" || dataType === "number") {
             return <TextInput value={entryValue}
-                              inputType={dataType === "number" ? "number" : "text"}
+                              type={dataType === "number" ? "number" : "text"}
                               size={"small"}
                               onChange={(event) => {
                                   if (dataType === "number") {
@@ -380,32 +353,29 @@ function ArrayKeyValueRow<T>({
                     {selectedDataType !== "map" && buildInput(value, selectedDataType)}
                 </div>
 
-                <IconButton size={"small"}
-                            className="h-7 w-7"
-                            onClick={openTypeSelectMenu}>
-                    <ArrowDropDownIcon/>
-                </IconButton>
+                <Menu
+                    trigger={<IconButton size={"small"}
+                                         className="h-7 w-7">
+                        <ArrowDropDownIcon/>
+                    </IconButton>}
+                >
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("string")}>string</MenuItem>
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("number")}>number</MenuItem>
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("map")}>map</MenuItem>
+                    <MenuItem dense
+                              onClick={() => doUpdateDataType("date")}>date</MenuItem>
+                </Menu>
+
 
             </Typography>
 
             {selectedDataType === "map" && buildInput(value, selectedDataType)}
 
-            <Menu
-                anchorEl={menuAnchorEl}
-                open={menuOpen}
-                onClose={handleMenuClose}
-            >
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("string")}>string</MenuItem>
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("number")}>number</MenuItem>
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("boolean")}>boolean</MenuItem>
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("map")}>map</MenuItem>
-                <MenuItem dense
-                          onClick={() => doUpdateDataType("date")}>date</MenuItem>
-            </Menu>
         </>
 
     );

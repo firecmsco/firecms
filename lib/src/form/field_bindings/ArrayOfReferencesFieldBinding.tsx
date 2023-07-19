@@ -99,7 +99,7 @@ export function ArrayOfReferencesFieldBinding({
         <LabelWithIcon icon={getIconForProperty(property)}
                        required={property.validation?.required}
                        title={property.name}
-                       className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+                       className={"text-text-secondary dark:text-text-secondary-dark"}/>
     );
 
     const body = <>

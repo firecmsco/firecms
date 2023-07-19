@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { MenuItem, Select as MuiSelect } from "@mui/material";
 import { TableWhereFilterOp } from "../../Table";
 import { DateTimeField } from "../../../../components/DateTimeField";
+import { Select } from "../../../../components";
 
 interface DateTimeFilterFieldProps {
     name: string,
@@ -12,13 +12,14 @@ interface DateTimeFilterFieldProps {
     title?: string;
 }
 
-const operationLabels = {
+const operationLabels: Record<TableWhereFilterOp, string> = {
     "==": "==",
     "!=": "!=",
     ">": ">",
     "<": "<",
     ">=": ">=",
     "<=": "<=",
+    "not-in": "not in",
     in: "in",
     "array-contains": "Contains",
     "array-contains-any": "Any"
@@ -73,18 +74,12 @@ export function DateTimeFilterField({
 
         <div className="flex w-[440px] items-center">
             <div className="w-[80px]">
-                <MuiSelect value={operation}
-                           fullWidth
-                           onChange={(evt: any) => {
-                               updateFilter(evt.target.value, internalValue);
-                           }}>
-                    {possibleOperations.map((op) =>
-                        <MenuItem
-                            key={`filter_op_${name}_${op}`}
-                            value={op}>{operationLabels[op]}</MenuItem>
-                    )}
-
-                </MuiSelect>
+                <Select value={operation}
+                        onValueChange={(value) => {
+                            updateFilter(value as TableWhereFilterOp, internalValue);
+                        }}
+                        options={possibleOperations}
+                        renderOption={(op) => operationLabels[op as TableWhereFilterOp]}/>
             </div>
 
             <div className="flex-grow ml-4">

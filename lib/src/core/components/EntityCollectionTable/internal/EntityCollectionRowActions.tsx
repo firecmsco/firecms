@@ -2,7 +2,7 @@ import React, { MouseEvent, useCallback } from "react";
 import clsx from "clsx";
 
 import { CollectionSize, Entity } from "../../../../types";
-import { ListItemIcon, ListItemText, Menu, MenuItem, Skeleton } from "@mui/material";
+import { Skeleton } from "@mui/material";
 import { Typography } from "../../../../components/Typography";
 import { IconButton } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
@@ -12,6 +12,7 @@ import { KeyboardTabIcon } from "../../../../icons/KeyboardTabIcon";
 import { MoreVertIcon } from "../../../../icons/MoreVertIcon";
 import { DeleteIcon } from "../../../../icons/DeleteIcon";
 import { FileCopyIcon } from "../../../../icons/FileCopyIcon";
+import { Menu, MenuItem } from "../../../../components/Menu";
 
 /**
  *
@@ -63,17 +64,6 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
     const copyEnabled = Boolean(onCopyClicked);
     const deleteEnabled = Boolean(onDeleteClicked);
 
-    const [anchorEl, setAnchorEl] = React.useState<any | null>(null);
-
-    const openMenu = useCallback((event: React.MouseEvent) => {
-        setAnchorEl(event.currentTarget);
-        event.stopPropagation();
-    }, [setAnchorEl]);
-
-    const closeMenu = useCallback(() => {
-        setAnchorEl(null);
-    }, [setAnchorEl]);
-
     const onCheckedChange = useCallback((checked: boolean) => {
         if (toggleEntitySelection)
             toggleEntitySelection(entity);
@@ -83,15 +73,13 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
         event.stopPropagation();
         if (onDeleteClicked)
             onDeleteClicked(entity);
-        setAnchorEl(null);
-    }, [entity, onDeleteClicked, setAnchorEl]);
+    }, [entity, onDeleteClicked]);
 
     const onCopyClick = useCallback((event: MouseEvent) => {
         event.stopPropagation();
         if (onCopyClicked)
             onCopyClicked(entity);
-        setAnchorEl(null);
-    }, [entity, onCopyClicked, setAnchorEl]);
+    }, [entity, onCopyClicked]);
 
     const onClick = useCallback((event: MouseEvent) => {
         event.stopPropagation();
@@ -139,33 +127,21 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                         </Tooltip>}
 
                     {(copyEnabled || deleteEnabled) &&
-                        <IconButton onClick={openMenu}
-                                    size={largeLayout ? "medium" : "small"}>
+                        <Menu trigger={<IconButton
+                            size={largeLayout ? "medium" : "small"}>
                             <MoreVertIcon/>
-                        </IconButton>
-                    }
-
-                    {(copyEnabled || deleteEnabled) && <Menu
-                        anchorEl={anchorEl}
-                        open={Boolean(anchorEl)}
-                        onClose={closeMenu}
-                        elevation={3}
-                    >
-                        {deleteEnabled && <MenuItem onClick={onDeleteClick}>
-                            <ListItemIcon>
+                        </IconButton>}>
+                            {deleteEnabled && <MenuItem onClick={onDeleteClick}>
                                 <DeleteIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary={"Delete"}/>
-                        </MenuItem>}
+                                Delete
+                            </MenuItem>}
 
-                        {copyEnabled && <MenuItem onClick={onCopyClick}>
-                            <ListItemIcon>
+                            {copyEnabled && <MenuItem onClick={onCopyClick}>
                                 <FileCopyIcon/>
-                            </ListItemIcon>
-                            <ListItemText primary="Copy"/>
-                        </MenuItem>}
-
-                    </Menu>}
+                                Copy
+                            </MenuItem>}
+                        </Menu>
+                    }
 
                 </div>}
 

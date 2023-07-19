@@ -1,14 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 
-import { ListItemText, Menu, MenuItem } from "@mui/material";
-
 import { DragDropContext, Draggable, DraggableProvided, Droppable } from "@hello-pangea/dnd";
 
 import { getHashValue } from "../util";
 import useMeasure from "react-use-measure";
 import { Button, IconButton, Tooltip } from "../../components";
 import { fieldBackgroundHoverMixin } from "../../styles";
-import { AddIcon, CopyIcon, DragHandleIcon, MoreVertIcon, RemoveIcon } from "../../icons";
+import { AddIcon, ContentCopyIcon, DragHandleIcon, MoreVertIcon, RemoveIcon } from "../../icons";
+import { Menu, MenuItem } from "../../components/Menu";
 
 interface ArrayContainerProps<T> {
     droppableId: string;
@@ -271,34 +270,21 @@ export function ArrayItemOptions({
     copy: (index: number) => void
 }) {
 
-    const [anchorEl, setAnchorEl] = React.useState<any | null>(null);
+    return <div className={`pl-1 pt-1 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}
 
-    const openMenu = (event: React.MouseEvent) => {
-        setAnchorEl(event.currentTarget);
-        event.stopPropagation();
-        event.preventDefault();
-    };
-
-    const closeMenu = () => {
-        setAnchorEl(null);
-    };
-
-    return <div className={`pl-1 pt-1 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}>
-        <div
-            {...provided.dragHandleProps}>
-            <Tooltip
-                placement={direction === "column" ? "left" : undefined}
-                title="Move">
-                <IconButton
-                    size="small"
-                    disabled={disabled}
-                    className={`cursor-${disabled ? "inherit" : "move"}`}>
-                    <DragHandleIcon
-                        size={"small"}
-                        color={disabled ? "disabled" : "inherit"}/>
-                </IconButton>
-            </Tooltip>
-        </div>
+                {...provided.dragHandleProps}>
+        <Tooltip
+            placement={direction === "column" ? "left" : undefined}
+            title="Move">
+            <IconButton
+                size="small"
+                disabled={disabled}
+                className={`cursor-${disabled ? "inherit" : "grab"}`}>
+                <DragHandleIcon
+                    size={"small"}
+                    color={disabled ? "disabled" : "inherit"}/>
+            </IconButton>
+        </Tooltip>
 
         {!contentOverflow && <>
             <Tooltip
@@ -322,31 +308,28 @@ export function ArrayItemOptions({
                     aria-label="copy"
                     disabled={disabled}
                     onClick={() => copy(index)}>
-                    <CopyIcon
+                    <ContentCopyIcon
                         size={"small"}/>
                 </IconButton>
             </Tooltip>
         </>}
 
         {contentOverflow && <>
-            <IconButton onClick={openMenu}
-                        size={"small"}>
-                <MoreVertIcon/>
-            </IconButton>
+
             <Menu
-                anchorEl={anchorEl}
-                open={Boolean(anchorEl)}
-                onClose={closeMenu}
-                elevation={3}
+                trigger={<IconButton size={"small"}>
+                    <MoreVertIcon
+                        size={"small"}/>
+                </IconButton>}
             >
 
                 <MenuItem dense onClick={() => remove(index)}>
                     <RemoveIcon/>
-                    <ListItemText primary="Remove"/>
+                    Remove
                 </MenuItem>
                 <MenuItem dense onClick={() => copy(index)}>
-                    <CopyIcon/>
-                    <ListItemText primary={"Copy"}/>
+                    <ContentCopyIcon/>
+                    Copy
                 </MenuItem>
 
             </Menu>

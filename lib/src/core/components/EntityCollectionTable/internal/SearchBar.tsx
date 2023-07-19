@@ -48,7 +48,7 @@ export function SearchBar({
             "rounded",)}>
             <div
                 className="absolute p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center top-0">
-                <SearchIcon htmlColor={"#888"}/>
+                <SearchIcon className={"text-gray-500"}/>
             </div>
             <input
                 placeholder={placeholder}

@@ -1,4 +1,4 @@
-import { MenuItem, Select as MuiSelect } from "@mui/material";
+import { MenuItem } from "@mui/material";
 import React, { useMemo, useState } from "react";
 import { TableWhereFilterOp } from "../../Table";
 import { Entity, EntityCollection, EntityReference } from "../../../../types";
@@ -6,6 +6,7 @@ import { ReferencePreview } from "../../../../preview";
 import { getReferenceFrom } from "../../../util";
 import { useNavigationContext, useReferenceDialog } from "../../../../hooks";
 import { Button } from "../../../../components/Button";
+import { Select } from "../../../../components";
 
 interface ReferenceFilterFieldProps {
     name: string,
@@ -147,18 +148,13 @@ export function ReferenceFilterField({
 
         <div className="flex w-[440px] flex-row">
             <div className="w-[120px]">
-                <MuiSelect value={operation}
-                           fullWidth
-                           onChange={(evt: any) => {
-                               updateFilter(evt.target.value, internalValue);
-                           }}>
-                    {possibleOperations.map((op) =>
-                        <MenuItem
-                            key={`filter_op_${name}_${op}`}
-                            value={op}>{operationLabels[op]}</MenuItem>
-                    )}
 
-                </MuiSelect>
+                <Select value={operation}
+                        onValueChange={(value) => {
+                            updateFilter(value as TableWhereFilterOp, internalValue);
+                        }}
+                        options={possibleOperations}
+                        renderOption={(op) => operationLabels[op as TableWhereFilterOp]}/>
             </div>
 
             <div className="flex-grow ml-4 h-full">

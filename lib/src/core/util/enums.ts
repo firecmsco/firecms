@@ -23,7 +23,7 @@ export function enumToObjectEntries(enumValues: EnumValues): EnumValueConfig[] {
 
 export function getLabelOrConfigFrom(enumValues: EnumValueConfig[], key?: string | number): EnumValueConfig | undefined {
     if (!key) return undefined;
-    return enumValues.find((entry) => entry.id === key);
+    return enumValues.find((entry) => String(entry.id) === String(key));
 }
 
 export function getColorScheme(enumValues: EnumValueConfig[], key: string | number): ChipColorScheme | undefined {

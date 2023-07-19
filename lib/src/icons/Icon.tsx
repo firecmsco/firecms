@@ -5,7 +5,7 @@ import "@material-design-icons/font/filled.css";
 
 export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error";
 export type IconProps = {
-    size?: "small" | "medium" | "large" | number,
+    size?: "smallest" | "small" | "medium" | "large" | number,
     color?: IconColor,
     className?: string,
     onClick?: (e: React.SyntheticEvent) => void,
@@ -30,14 +30,17 @@ export function Icon({
                      }: IconProps & { iconKey: string }) {
     let sizeInPx: number;
     switch (size) {
-        case "small":
+        case "smallest":
             sizeInPx = 16;
+            break;
+        case "small":
+            sizeInPx = 20;
             break;
         case "medium":
             sizeInPx = 24;
             break;
         case "large":
-            sizeInPx = 32;
+            sizeInPx = 28;
             break
         default:
             sizeInPx = size;

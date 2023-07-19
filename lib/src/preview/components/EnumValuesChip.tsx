@@ -5,7 +5,7 @@ import { Chip } from "../../components/Chip";
 
 export interface EnumValuesChipProps {
     enumValues?: EnumValues;
-    enumKey: any;
+    enumKey: string | number;
     size: "small" | "medium";
     className?: string;
 }
@@ -27,7 +27,7 @@ export function EnumValuesChip({
     return <Chip
         className={className}
         colorScheme={colorScheme}
-        label={label !== undefined ? label : enumKey}
+        label={label !== undefined ? label : String(enumKey)}
         error={!label}
         outlined={false}
         size={size}/>;

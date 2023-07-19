@@ -65,7 +65,7 @@ export function BlockFieldBinding<T extends Array<any>>({
         <LabelWithIcon icon={getIconForProperty(property)}
                        required={property.validation?.required}
                        title={property.name}
-                       className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+                       className={"text-text-secondary dark:text-text-secondary-dark"}/>
     );
 
     const firstOneOfKey = Object.keys(property.oneOf.properties)[0];

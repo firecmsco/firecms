@@ -1,14 +1,11 @@
 import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
-import { MenuItem, Select } from "@mui/material";
-import { SelectChangeEvent } from "@mui/material/Select";
 
-import { ExpandablePanel, getIconForProperty, isHidden, pick } from "../../core";
-import { LabelWithIcon } from "../components";
+import { ExpandablePanel, getIconForProperty, isHidden, pick, Select } from "../../core";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { InputLabel } from "../../components";
-import { FieldHelperText } from "../components/FieldHelperText";
 
 /**
  * Field that renders the children property fields
@@ -92,7 +89,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
     const title = <LabelWithIcon icon={getIconForProperty(property)}
                                  required={property.validation?.required}
                                  title={property.name}
-                                 className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>;
+                                 className={"text-text-secondary dark:text-text-secondary-dark"}/>;
 
     return (
         <>
@@ -118,10 +115,10 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
     const keys = Object.keys(properties)
         .filter((key) => !value || !(key in value));
 
-    const handleAddProperty = (event: SelectChangeEvent) => {
+    const handleAddProperty = (updatedValue: string | string[]) => {
         setValue({
             ...value,
-            [event.target.value as string]: null
+            [updatedValue as string]: null
         });
     };
 
@@ -130,16 +127,10 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
     return <div className={"m-4"}>
         <InputLabel>Add property</InputLabel>
         <Select
-            variant={"standard"}
             value={""}
             disabled={disabled}
-            onChange={handleAddProperty}>
-            {keys.map((key) => (
-                <MenuItem key={key} value={key}>
-                    {(properties as Properties)[key].name || key}
-                </MenuItem>
-            ))}
-        </Select>
+            onValueChange={handleAddProperty}
+            options={keys}
+            renderOption={(key) => (properties as Properties)[key].name || key}/>
     </div>;
 };
-

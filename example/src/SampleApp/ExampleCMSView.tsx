@@ -96,21 +96,25 @@ export function ExampleCMSView() {
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <Paper className={"w-full  p-4"}>
-                            <p className="mb-4">
+                        <Paper className={"w-full flex flex-col p-4 items-start"}>
+                            <p className="mb-4 flex-grow">
                                 Use this button to select an entity under the path `products` programmatically
                             </p>
                             <Button
+                                variant={"outlined"}
+                                size={"small"}
                                 onClick={referenceDialog.open}>
                                 Test reference dialog
                             </Button>
                         </Paper>
 
-                        <Paper className="w-full   p-4">
-                            <p className="mb-4">
+                        <Paper className="w-full flex flex-col p-4 items-start">
+                            <p className="mb-4 flex-grow">
                                 Use this button to open a snackbar
                             </p>
                             <Button
+                                variant={"outlined"}
+                                size={"small"}
                                 onClick={() => snackbarController.open({
                                     type: "success",
                                     message: "This is pretty cool"
@@ -119,11 +123,13 @@ export function ExampleCMSView() {
                             </Button>
                         </Paper>
 
-                        <Paper className="w-full   p-4">
-                            <p className="mb-4">
+                        <Paper className="w-full flex flex-col p-4 items-start">
+                            <p className="mb-4 flex-grow">
                                 Use this button to open an entity in a custom path with a custom schema
                             </p>
                             <Button
+                                variant={"outlined"}
+                                size={"small"}
                                 onClick={() => sideEntityController.open({
                                     entityId: "B003WT1622",
                                     path: "/products-test",

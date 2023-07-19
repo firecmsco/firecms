@@ -1,9 +1,5 @@
 import React from "react";
-import {
-    Button,
-    CollectionActionsProps,
-    useSnackbarController
-} from "firecms";
+import { Button, CollectionActionsProps, useSnackbarController } from "firecms";
 
 export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 
@@ -19,7 +15,9 @@ export function SampleCollectionActions({ selectionController }: CollectionActio
     };
 
     return (
-        <Button onClick={onClick} color="primary">
+        <Button onClick={onClick}
+                color="primary"
+                variant={"text"}>
             Extra action
         </Button>
     );

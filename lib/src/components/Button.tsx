@@ -41,6 +41,7 @@ export function Button<P>({
     );
 
     return (<button
+            type="button"
             {...props}
             className={clsx(focusedMixin,
                 baseClasses,

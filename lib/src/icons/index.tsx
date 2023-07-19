@@ -17,7 +17,6 @@ export { CloseIcon } from "./CloseIcon";
 export { CloudUploadIcon } from "./CloudUploadIcon";
 export { CodeIcon } from "./CodeIcon";
 export { ContentCopyIcon } from "./ContentCopyIcon";
-export { CopyIcon } from "./CopyIcon";
 export { DarkModeIcon } from "./DarkModeIcon";
 export { DeleteIcon } from "./DeleteIcon";
 export { DescriptionOutlinedIcon } from "./DescriptionOutlinedIcon";

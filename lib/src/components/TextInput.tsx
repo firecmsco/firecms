@@ -11,7 +11,7 @@ export function TextInput<T extends string | number>({
                                                          value,
                                                          onChange,
                                                          label,
-                                                         inputType = "text",
+                                                         type = "text",
                                                          multiline = false,
                                                          disabled,
                                                          error,
@@ -24,7 +24,7 @@ export function TextInput<T extends string | number>({
                                                          inputClassName,
                                                          inputStyle
                                                      }: {
-    inputType?: InputType,
+    type?: InputType,
     value: T,
     onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
     label?: React.ReactNode,
@@ -38,7 +38,7 @@ export function TextInput<T extends string | number>({
     className?: string,
     style?: React.CSSProperties,
     inputClassName?: string,
-    inputStyle?: React.CSSProperties
+    inputStyle?: React.CSSProperties,
 }) {
 
     const inputRef = useRef(null);
@@ -70,7 +70,7 @@ export function TextInput<T extends string | number>({
             )}
         />
         : <input ref={inputRef}
-                 onWheel={inputType === "number" ? numberInputOnWheelPreventChange : undefined}
+                 onWheel={type === "number" ? numberInputOnWheelPreventChange : undefined}
                  disabled={disabled}
                  style={inputStyle}
                  className={clsx(
@@ -88,7 +88,7 @@ export function TextInput<T extends string | number>({
                  autoFocus={autoFocus}
                  onFocus={() => setFocused(true)}
                  onBlur={() => setFocused(false)}
-                 type={inputType}
+                 type={type}
                  value={Number.isNaN(value) ? "" : (value ?? "")}
                  onChange={onChange}
         />;

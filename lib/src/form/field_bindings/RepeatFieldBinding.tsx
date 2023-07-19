@@ -48,7 +48,6 @@ export function RepeatFieldBinding<T extends Array<any>>({
 
     const buildEntry = (index: number, internalId: number) => {
         const childProperty = property.resolvedProperties[index] ?? ofProperty;
-        console.log("childProperty", `${propertyKey}.${index}`, value[index])
         const fieldProps = {
             propertyKey: `${propertyKey}.${index}`,
             disabled,
@@ -76,7 +75,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
     const title = (<LabelWithIcon icon={getIconForProperty(property)}
                                   required={property.validation?.required}
                                   title={property.name}
-                                  className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>);
+                                  className={"text-text-secondary dark:text-text-secondary-dark"}/>);
 
     return (
 
