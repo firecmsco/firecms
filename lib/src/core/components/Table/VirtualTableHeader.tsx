@@ -1,15 +1,14 @@
-import React, { RefObject, useCallback, useEffect, useRef, useState } from "react";
+import React, { RefObject, useCallback, useEffect, useState } from "react";
 import equal from "react-fast-compare";
 import clsx from "clsx";
 
-import { Badge, Popover } from "@mui/material";
-
 import { TableColumn, TableSort, TableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
-import { IconButton , Button } from "../../../components";
-import { defaultBorderMixin, paperMixin } from "../../../styles";
-import { ArrowUpwardIcon } from "../../../icons/ArrowUpwardIcon";
-import { ChevronDownIcon } from "../../../icons/ChevronDownIcon";
+import { Button, IconButton } from "../../../components";
+import { defaultBorderMixin } from "../../../styles";
+import { ArrowUpwardIcon, ChevronDownIcon } from "../../../icons";
+import { Popover } from "../../../components/Popover";
+import { Badge } from "../../../components/Badge";
 
 interface FilterFormProps<T> {
     column: TableColumn<T>;
@@ -19,7 +18,6 @@ interface FilterFormProps<T> {
     createFilterField: (props: FilterFormFieldProps<T>) => React.ReactNode;
     popupOpen: boolean;
     setPopupOpen: (open: boolean) => void;
-    anchorEl: RefObject<HTMLDivElement>;
 }
 
 export type FilterFormFieldProps<CustomProps> = {
@@ -57,8 +55,6 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                                                    onClickResizeColumn,
                                                                    createFilterField
                                                                }: VirtualTableHeaderProps<M>) {
-
-        const ref = useRef<HTMLDivElement>(null);
 
         const [onHover, setOnHover] = useState(false);
 
@@ -98,7 +94,6 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                         minWidth: column.width,
                         maxWidth: column.width
                     }}
-                    ref={ref}
                     onMouseEnter={() => setOnHover(true)}
                     onMouseMove={() => setOnHover(true)}
                     onMouseLeave={() => setOnHover(false)}
@@ -125,8 +120,6 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     {column.sortable && (sort || hovered || openFilter) &&
                         <Badge color="secondary"
-                               variant="dot"
-                               overlap="circular"
                                invisible={!sort}>
                             <IconButton
                                 size={"small"}
@@ -136,9 +129,9 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                 }}
                             >
                                 {!sort &&
-                                    <ArrowUpwardIcon />}
+                                    <ArrowUpwardIcon/>}
                                 {sort === "asc" &&
-                                    <ArrowUpwardIcon />}
+                                    <ArrowUpwardIcon/>}
                                 {sort === "desc" &&
                                     <ArrowUpwardIcon className={"rotate-180"}/>}
                             </IconButton>
@@ -147,16 +140,36 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     {column.filter && <div>
                         <Badge color="secondary"
-                               variant="dot"
-                               overlap="circular"
                                invisible={!filter}>
-                            <IconButton
-                                className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
-                                size={"small"}
-                                onClick={handleSettingsClick}>
-                                <ChevronDownIcon/>
-                                {/*<ArrowDropDownCircleIcon size={"small"}/>*/}
-                            </IconButton>
+
+                            <Popover
+                                open={openFilter}
+                                onOpenChange={setOpenFilter}
+                                trigger={
+                                    <IconButton
+                                        className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
+                                        size={"small"}
+                                        onClick={handleSettingsClick}>
+                                        <ChevronDownIcon/>
+                                    </IconButton>}
+                                // anchorOrigin={{
+                                //     vertical: "bottom",
+                                //     horizontal: "right"
+                                // }}
+                                // transformOrigin={{
+                                //     vertical: "top",
+                                //     horizontal: "right"
+                                // }}
+                            >
+                                {column.filter && createFilterField &&
+                                    <FilterForm column={column}
+                                                filter={filter}
+                                                onHover={onHover}
+                                                onFilterUpdate={update}
+                                                createFilterField={createFilterField}
+                                                popupOpen={openFilter}
+                                                setPopupOpen={setOpenFilter}/>}
+                            </Popover>
 
                         </Badge>
                     </div>}
@@ -171,15 +184,6 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     />}
                 </div>
 
-                {column.filter && createFilterField &&
-                    <FilterForm column={column}
-                                filter={filter}
-                                onHover={onHover}
-                                onFilterUpdate={update}
-                                createFilterField={createFilterField}
-                                popupOpen={openFilter}
-                                setPopupOpen={setOpenFilter}
-                                anchorEl={ref}/>}
 
             </ErrorBoundary>
         );
@@ -193,7 +197,6 @@ function FilterForm<M>({
                            createFilterField,
                            popupOpen,
                            setPopupOpen,
-                           anchorEl
                        }: FilterFormProps<M>) {
 
     const id = column.key;
@@ -227,49 +230,32 @@ function FilterForm<M>({
 
     if (!filterField) return null;
     return (
-        <Popover
-            id={`popover_${column.key}`}
-            open={popupOpen}
-            elevation={3}
-            anchorEl={anchorEl.current}
-            onClose={() => setPopupOpen(false)}
-            anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "right"
-            }}
-            transformOrigin={{
-                vertical: "top",
-                horizontal: "right"
-            }}
-        >
-            <div className={
-                clsx(paperMixin,
-                    "text-gray-900 dark:text-white",
-                )
-            }>
-                <div
-                    className={clsx(defaultBorderMixin, "p-2 text-xs font-semibold uppercase border-b")}>
-                    {column.title ?? id}
-                </div>
-                {filterField && <div className="p-12">
-                    {filterField}
-                </div>}
-                <div className="flex justify-end m-8">
-                    <div className="mr-4">
-                        <Button
-                            disabled={!filterIsSet}
-                            color="primary"
-                            type="reset"
-                            aria-label="filter clear"
-                            onClick={reset}>Clear</Button>
-                    </div>
-                    <Button
-                        variant="outlined"
-                        color="primary"
-                        onClick={submit}>Filter</Button>
-                </div>
+        <div className={
+            clsx(
+                "text-gray-900 dark:text-white",
+            )
+        }>
+            <div
+                className={clsx(defaultBorderMixin, "py-4 px-6 text-xs font-semibold uppercase border-b")}>
+                {column.title ?? id}
             </div>
-        </Popover>
+            {filterField && <div className="m-6">
+                {filterField}
+            </div>}
+            <div className="flex justify-end m-6">
+                <Button
+                    className="mr-4"
+                    disabled={!filterIsSet}
+                    color="primary"
+                    type="reset"
+                    aria-label="filter clear"
+                    onClick={reset}>Clear</Button>
+                <Button
+                    variant="outlined"
+                    color="primary"
+                    onClick={submit}>Filter</Button>
+            </div>
+        </div>
     );
 
 }

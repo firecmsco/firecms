@@ -23,7 +23,7 @@ export function SampleProductsView({ entity, modifiedValues }: {
 
             <div className="m-auto flex flex-col items-center justify-items-center">
 
-                <div className="p-16">
+                <div className="p-8 md:p-16">
                     <p>
                         This is an example of a custom view added
                         as a panel to an entity collection.

@@ -1,9 +1,8 @@
-/// <reference types="vite-plugin-svgr/client" />
 import React from "react";
 import clsx from "clsx";
-
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
-import { Icon } from "../icons/Icon";
+
+import { Icon } from "../icons";
 
 interface CheckboxProps {
     checked: boolean;
@@ -23,18 +22,6 @@ const outerSizeClasses = {
     small: "w-8 h-8",
     large: "w-12 h-12"
 }
-
-const checkboxSize = {
-    large: "18px",
-    medium: "16px",
-    small: "14px"
-};
-
-const strokeWidth = {
-    large: 4,
-    medium: 3,
-    small: 2
-};
 
 export const Checkbox = ({
                              checked,
@@ -70,7 +57,7 @@ export const Checkbox = ({
                             )
                             : (
 
-                                <Icon iconKey={"check"} size={10} className={"absolute"}/>
+                                <Icon iconKey={"check"} size={18} className={"absolute"}/>
                             )}
                     </CheckboxPrimitive.Indicator>
                 </div>

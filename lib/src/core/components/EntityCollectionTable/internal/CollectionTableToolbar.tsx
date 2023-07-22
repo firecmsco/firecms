@@ -49,7 +49,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     return (
         <div
-            className={clsx(defaultBorderMixin, "min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}
+            className={clsx(defaultBorderMixin, "no-scrollbar min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}
         >
 
             <div className="flex items-center gap-8 md:gap-4 ">

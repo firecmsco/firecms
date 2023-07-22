@@ -259,7 +259,7 @@ export const TableCell = React.memo<TableCellProps>(
                     </div>}
 
                 {(showError || (!disabled && showExpandIcon)) &&
-                    <div className="absolute top-0.5 right-0.5">
+                    <div className="absolute top-0.5 right-0.5 flex items-center">
 
                         {selected && !disabled && showExpandIcon &&
                             <IconButton

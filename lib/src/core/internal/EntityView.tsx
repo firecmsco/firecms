@@ -512,7 +512,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                 <>
 
                     <div
-                        className={clsx(defaultBorderMixin, "border-b pl-2 pr-2 pt-1 flex items-end")}>
+                        className={clsx(defaultBorderMixin, "no-scrollbar border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll")}>
 
                         <div
                             className="pb-1 self-center">
