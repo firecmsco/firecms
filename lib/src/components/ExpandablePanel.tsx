@@ -4,7 +4,7 @@ import clsx from "clsx";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { defaultBorderMixin, focusedMixin, paperMixin } from "../styles";
 import { useInjectStyles } from "./util/useInjectStyles";
-import { ChevronDownIcon } from "../icons/ChevronDownIcon";
+import { ChevronDownIcon } from "../icons";
 
 export function ExpandablePanel({
                                     title,
@@ -57,7 +57,8 @@ export function ExpandablePanel({
     return (<>
             <Collapsible.Root
                 className={clsx(
-                    !invisible && paperMixin,
+                    !invisible && defaultBorderMixin + " border",
+                    "rounded-md"
                 )}
                 open={open}
                 onOpenChange={(updatedOpen: boolean) => {

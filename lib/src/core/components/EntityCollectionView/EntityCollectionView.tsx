@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import clsx from "clsx";
 
-import { Popover, useTheme } from "@mui/material";
 import equal from "react-fast-compare"
 
 import {
@@ -31,6 +30,7 @@ import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { useTableController } from "../EntityCollectionTable/useTableController";
 import { isFilterCombinationValidForFirestore } from "./isFilterCombinationValidForFirestore";
 import { Typography } from "../../../components/Typography";
+import { Popover } from "../../../components/Popover";
 
 /**
  * @category Components
@@ -84,8 +84,6 @@ export const EntityCollectionView = React.memo(
             return userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp;
         }, [collectionProp, fullPath, userConfigPersistence?.getCollectionConfig]);
 
-        const theme = useTheme();
-
         const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
@@ -111,7 +109,7 @@ export const EntityCollectionView = React.memo(
         const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
         const hoverRow = !checkInlineEditing();
 
-        const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+        const [popOverOpen, setPopOverOpen] = useState(false);
 
         const selectionController = useSelectionController<M>();
         const usedSelectionController = collection.selectionController ?? selectionController;
@@ -216,53 +214,6 @@ export const EntityCollectionView = React.memo(
                 onCollectionModifiedForUser(fullPath, { defaultSize: size })
         }, [onCollectionModifiedForUser, fullPath, userConfigPersistence]);
 
-        const open = anchorEl != null;
-
-        const Title = useMemo(() => (
-            <div className="flex flex-col content-center">
-                <Typography
-                    variant={"subtitle1"}
-                    className={`leading-none truncate max-w-[160px] lg:max-w-[240px] ${collection.description ? "cursor-pointer" : "cursor-auto"}`}
-                    onClick={collection.description
-                        ? (e) => {
-                            setAnchorEl(e.currentTarget);
-                            e.stopPropagation();
-                        }
-                        : undefined}
-                >
-                    {`${collection.name}`}
-                </Typography>
-                <EntitiesCount fullPath={fullPath} collection={collection}/>
-
-                {collection.description &&
-                    <Popover
-                        id={"info-dialog"}
-                        open={open}
-                        anchorEl={anchorEl}
-                        elevation={3}
-                        onClose={() => {
-                            setAnchorEl(null);
-                        }}
-                        anchorOrigin={{
-                            vertical: "bottom",
-                            horizontal: "center"
-                        }}
-                        transformOrigin={{
-                            vertical: "top",
-                            horizontal: "center"
-                        }}
-                    >
-
-                        <div className="m-8">
-                            <Markdown source={collection.description}/>
-                        </div>
-
-                    </Popover>
-                }
-
-            </div>
-        ), [theme, collection.description, collection.name, fullPath, open, anchorEl]);
-
         const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
 
         const onCopyClicked = useCallback((clickedEntity: Entity<M>) => {
@@ -330,6 +281,35 @@ export const EntityCollectionView = React.memo(
 
         }, [isEntitySelected, collection, authController, fullPath, selectionEnabled, toggleEntitySelection, onEditClicked, createEnabled, onCopyClicked]);
 
+        const title = <Popover
+            open={popOverOpen}
+            onOpenChange={setPopOverOpen}
+            enabled={Boolean(collection.description)}
+            trigger={<div className="flex flex-col content-center">
+                <Typography
+                    variant={"subtitle1"}
+                    className={`leading-none truncate max-w-[160px] lg:max-w-[240px] ${collection.description ? "cursor-pointer" : "cursor-auto"}`}
+                    onClick={collection.description
+                        ? (e) => {
+                            setPopOverOpen(true);
+                            e.stopPropagation();
+                        }
+                        : undefined}
+                >
+                    {`${collection.name}`}
+                </Typography>
+
+                <EntitiesCount fullPath={fullPath} collection={collection}/>
+
+            </div>}
+        >
+
+            {collection.description && <div className="m-4 text-gray-900 dark:text-white">
+                <Markdown source={collection.description}/>
+            </div>}
+
+        </Popover>;
+
         return (
             <div className={clsx("overflow-hidden h-full w-full", className)}>
                 <EntityCollectionTable
@@ -340,7 +320,7 @@ export const EntityCollectionView = React.memo(
                     onEntityClick={onEntityClick}
                     onColumnResize={onColumnResize}
                     tableRowActionsBuilder={tableRowActionsBuilder}
-                    title={Title}
+                    title={title}
                     selectionController={usedSelectionController}
                     highlightedEntities={selectedNavigationEntity ? [selectedNavigationEntity] : []}
                     {...collection}

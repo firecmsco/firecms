@@ -152,14 +152,6 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                         onClick={handleSettingsClick}>
                                         <ChevronDownIcon/>
                                     </IconButton>}
-                                // anchorOrigin={{
-                                //     vertical: "bottom",
-                                //     horizontal: "right"
-                                // }}
-                                // transformOrigin={{
-                                //     vertical: "top",
-                                //     horizontal: "right"
-                                // }}
                             >
                                 {column.filter && createFilterField &&
                                     <FilterForm column={column}

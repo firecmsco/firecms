@@ -5,7 +5,7 @@ import { TextField, useTheme } from "@mui/material";
 import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { IconButton } from "./IconButton";
-import { ClearIcon } from "../icons/ClearIcon";
+import { ClearIcon } from "../icons";
 
 export type DateTimeFieldProps = {
     value?: Date;
@@ -39,7 +39,7 @@ export function DateTimeField({
                 <TextField {...params}
                            fullWidth
                            disabled={disabled}
-                           className={`h-${small ? '12' : '14'} rounded-md`}
+                           className={`h-${small ? "12" : "14"} rounded-md`}
                            InputProps={{
                                ...params.InputProps,
                                sx: ({

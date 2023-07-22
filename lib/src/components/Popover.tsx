@@ -20,6 +20,7 @@ export interface PopoverProps {
     sticky?: "partial" | "always";
     hideWhenDetached?: boolean;
     avoidCollisions?: boolean;
+    enabled?: boolean;
 }
 
 export function Popover({
@@ -35,9 +36,13 @@ export function Popover({
                             sticky,
                             hideWhenDetached,
                             avoidCollisions,
+                            enabled = true
                         }: PopoverProps) {
 
-    // useInjectStyles("Popover", popoverStyles);
+    useInjectStyles("Popover", popoverStyles);
+
+    if (!enabled)
+        return trigger;
 
     return <PopoverPrimitive.Root open={open} onOpenChange={onOpenChange}>
         <PopoverPrimitive.Trigger>
@@ -64,7 +69,7 @@ export function Popover({
 const popoverStyles = `
 
 .PopoverContent {
-  animation-duration: 1400ms;
+  animation-duration: 400ms;
   animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
   will-change: transform, opacity;
 }
