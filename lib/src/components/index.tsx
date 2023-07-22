@@ -19,3 +19,4 @@ export * from "./TextareaAutosize";
 export * from "./TextInput";
 export * from "./Tooltip";
 export * from "./Typography";
+export * from "./Tabs";

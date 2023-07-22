@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
-import { Divider, Tab, Tabs } from "@mui/material";
 import { Entity, EntityCollection, EntityStatus, EntityValues, FireCMSPlugin, FormContext, User } from "../../types";
 import {
     CircularProgress,
     CircularProgressCenter,
     EntityCollectionView,
     EntityPreview,
-    ErrorBoundary
+    ErrorBoundary,
+    Tab,
+    Tabs
 } from "../components";
 import {
     canEditEntity,
@@ -32,8 +33,10 @@ import { Typography } from "../../components/Typography";
 import { EntityFormSaveParams } from "../../form/EntityForm";
 import { FORM_CONTAINER_WIDTH } from "./common";
 import { IconButton } from "../../components";
-import { defaultBorderMixin, paperMixin } from "../../styles";
+import { defaultBorderMixin } from "../../styles";
 import { CloseIcon } from "../../icons/CloseIcon";
+
+const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
 
 export interface EntityViewProps<M extends Record<string, any>> {
     path: string;
@@ -117,25 +120,6 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
     const customViewsCount = customViews?.length ?? 0;
     const autoSave = collection.formAutoSave && !collection.customId;
 
-    const getTabPositionFromPath = (subPath: string): number => {
-        if (customViews) {
-            const index = customViews
-                .map((c) => c.path)
-                .findIndex((p) => p === subPath);
-            if (index !== -1)
-                return index;
-        }
-
-        if (subcollections) {
-            const index = subcollections
-                .map((c) => c.path)
-                .findIndex((p) => p === subPath);
-            if (index !== -1)
-                return index + customViewsCount;
-        }
-        return -1;
-    };
-
     const hasAdditionalViews = customViewsCount > 0 || subcollectionsCount > 0;
 
     const defaultSelectedView = selectedSubPath ?? resolveDefaultSelectedView(
@@ -146,9 +130,9 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         }
     );
 
-    const tabsPositionRef = useRef<number>(defaultSelectedView ? getTabPositionFromPath(defaultSelectedView) : -1);
+    const selectedTabRef = useRef<string>(defaultSelectedView ?? MAIN_TAB_VALUE);
 
-    const mainViewVisible = tabsPositionRef.current === -1;
+    const mainViewVisible = selectedTabRef.current === MAIN_TAB_VALUE;
 
     const {
         entity,
@@ -251,11 +235,10 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             sideDialogContext.close(true);
             onClose?.();
         } else if (status !== "existing") {
-            console.log("Replacing url 2", tabsPositionRef.current, getSelectedSubPath(tabsPositionRef.current));
             sideEntityController.replace({
                 path,
                 entityId: updatedEntity.id,
-                selectedSubPath: getSelectedSubPath(tabsPositionRef.current),
+                selectedSubPath: selectedTabRef.current,
                 updateUrl: true,
                 collection
             });
@@ -335,7 +318,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
     const customViewsView: React.ReactNode[] | undefined = customViews && customViews.map(
         (customView, colIndex) => {
-            if (tabsPositionRef.current !== colIndex)
+            if (selectedTabRef.current !== customView.path)
                 return null;
             if (customView.builder) {
                 console.warn("customView.builder is deprecated, use customView.Builder instead", customView);
@@ -369,13 +352,14 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
     const subCollectionsViews = subcollections && subcollections.map(
         (subcollection, colIndex) => {
-            const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollection.alias ?? subcollection.path)}` : undefined;
-            if (tabsPositionRef.current !== colIndex + customViewsCount)
+            const subcollectionId = subcollection.alias ?? subcollection.path;
+            const fullPath = usedEntity ? `${path}/${usedEntity?.id}/${removeInitialAndTrailingSlashes(subcollectionId)}` : undefined;
+            if (selectedTabRef.current !== subcollectionId)
                 return null;
             return (
                 <div
                     className={"relative flex-grow h-full overflow-auto w-full"}
-                    key={`subcol_${subcollection.alias ?? subcollection.path}`}
+                    key={`subcol_${subcollectionId}`}
                     role="tabpanel">
 
                     {loading && <CircularProgressCenter/>}
@@ -404,12 +388,12 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         onValuesAreModified(false);
     }, []);
 
-    const onSideTabClick = (value: number) => {
-        tabsPositionRef.current = value;
+    const onSideTabClick = (value: string) => {
+        selectedTabRef.current = value;
         sideEntityController.replace({
             path,
             entityId,
-            selectedSubPath: getSelectedSubPath(value),
+            selectedSubPath: value === MAIN_TAB_VALUE ? undefined : value,
             updateUrl: true,
             collection
         });
@@ -504,70 +488,21 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         (subcollection) =>
             <Tab
                 className="text-sm min-w-[140px]"
-                wrapped={true}
-                key={`entity_detail_collection_tab_${subcollection.name}`}
-                label={subcollection.name}/>
+                value={subcollection.path}
+                key={`entity_detail_collection_tab_${subcollection.name}`}>
+                {subcollection.name}
+            </Tab>
     );
 
     const customViewTabs = customViews && customViews.map(
         (view) =>
+
             <Tab
                 className="text-sm min-w-[140px]"
-                wrapped={true}
-                key={`entity_detail_custom_tab_${view.name}`}
-                label={view.name}/>
-    );
-
-    const header = (
-        <div
-            className={paperMixin + " pl-2 pr-2 pt-1 flex items-end"}>
-
-            <div
-                className="pb-1 self-center">
-                <IconButton onClick={() => {
-                    onClose?.();
-                    return sideDialogContext.close(false);
-                }}
-                            size="large">
-                    <CloseIcon/>
-                </IconButton>
-            </div>
-
-            <div className={"flex-grow"}/>
-
-            {globalLoading && <div
-                className="self-center">
-                <CircularProgress size={"small"}/>
-            </div>}
-
-            <Tabs
-                value={tabsPositionRef.current + 1}
-                indicatorColor="secondary"
-                textColor="inherit"
-                onChange={(ev, value) => {
-                    onSideTabClick(value - 1);
-                }}
-                className="pl-4 pr-4 pt-0"
-                variant="scrollable"
-                scrollButtons="auto"
-            >
-                <Tab
-                    label={collection.singularName ?? collection.name}
-                    disabled={!hasAdditionalViews}
-                    onClick={() => {
-                        onSideTabClick(-1);
-                    }}
-                    className={`${
-                        !hasAdditionalViews ? "hidden" : ""
-                    } text-sm min-w-[140px]`}
-                    wrapped={true}
-                />
-                {customViewTabs}
-                {subcollectionTabs}
-
-            </Tabs>
-        </div>
-
+                value={view.path}
+                key={`entity_detail_collection_tab_${view.name}`}>
+                {view.name}
+            </Tab>
     );
 
     return (
@@ -576,9 +511,52 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             {
                 <>
 
-                    {header}
+                    <div
+                        className={clsx(defaultBorderMixin, "border-b pl-2 pr-2 pt-1 flex items-end")}>
 
-                    <Divider/>
+                        <div
+                            className="pb-1 self-center">
+                            <IconButton onClick={() => {
+                                onClose?.();
+                                return sideDialogContext.close(false);
+                            }}
+                                        size="large">
+                                <CloseIcon/>
+                            </IconButton>
+                        </div>
+
+                        <div className={"flex-grow"}/>
+
+                        {globalLoading && <div
+                            className="self-center">
+                            <CircularProgress size={"small"}/>
+                        </div>}
+
+                        <Tabs
+                            value={selectedTabRef.current}
+                            onValueChange={(value) => {
+                                console.log("onValueChange", value);
+                                onSideTabClick(value);
+                            }}
+                            className="pl-4 pr-4 pt-0"
+                            tabs={<>
+                                <Tab
+                                    disabled={!hasAdditionalViews}
+                                    // onClick={() => {
+                                    //     onSideTabClick(-1);
+                                    // }}
+                                    value={MAIN_TAB_VALUE}
+                                    className={`${
+                                        !hasAdditionalViews ? "hidden" : ""
+                                    } text-sm min-w-[140px]`}
+                                >{collection.singularName ?? collection.name}</Tab>
+                                {customViewTabs}
+                                {subcollectionTabs}
+                            </>}>
+
+                        </Tabs>
+
+                    </div>
 
                     <div
                         className={"flex-grow h-full flex overflow-auto flex-row w-full "}

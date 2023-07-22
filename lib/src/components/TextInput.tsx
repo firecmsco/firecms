@@ -7,6 +7,24 @@ import { InputLabel } from "./InputLabel";
 
 export type InputType = "text" | "number";
 
+export type TextInputProps<T extends string | number> = {
+    type?: InputType,
+    value: T,
+    onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
+    label?: React.ReactNode,
+    multiline?: boolean,
+    disabled?: boolean,
+    error?: boolean,
+    endAdornment?: React.ReactNode,
+    autoFocus?: boolean,
+    placeholder?: string,
+    size?: "small" | "medium",
+    className?: string,
+    style?: React.CSSProperties,
+    inputClassName?: string,
+    inputStyle?: React.CSSProperties,
+};
+
 export function TextInput<T extends string | number>({
                                                          value,
                                                          onChange,
@@ -23,23 +41,7 @@ export function TextInput<T extends string | number>({
                                                          style,
                                                          inputClassName,
                                                          inputStyle
-                                                     }: {
-    type?: InputType,
-    value: T,
-    onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
-    label?: React.ReactNode,
-    multiline?: boolean,
-    disabled?: boolean,
-    error?: boolean,
-    endAdornment?: React.ReactNode,
-    autoFocus?: boolean,
-    placeholder?: string,
-    size?: "small" | "medium",
-    className?: string,
-    style?: React.CSSProperties,
-    inputClassName?: string,
-    inputStyle?: React.CSSProperties,
-}) {
+                                                     }: TextInputProps<T>) {
 
     const inputRef = useRef(null);
     const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);

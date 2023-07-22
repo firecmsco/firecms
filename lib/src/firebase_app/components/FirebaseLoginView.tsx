@@ -15,13 +15,8 @@ import {
     PhoneMultiFactorGenerator,
     RecaptchaVerifier
 } from "firebase/auth";
-import { Typography } from "../../components/Typography";
-import { IconButton } from "../../components";
-import { Button } from "../../components/Button";
-import { EmailIcon } from "../../icons/EmailIcon";
-import { PhoneIcon } from "../../icons/PhoneIcon";
-import { PersonOutlineIcon } from "../../icons/PersonOutlineIcon";
-import { ArrowBackIcon } from "../../icons/ArrowBackIcon";
+import { Button, IconButton, Typography } from "../../components";
+import { ArrowBackIcon, EmailIcon, PersonOutlineIcon, PhoneIcon } from "../../icons";
 
 /**
  * @category Firebase

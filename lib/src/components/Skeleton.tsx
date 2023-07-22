@@ -1,20 +1,24 @@
 import clsx from "clsx";
 
 export type SkeletonProps = {
-    width?: number ;
-    height?: number ;
+    width?: number;
+    height?: number;
+    className?: string;
 }
 
 export function Skeleton({
                              width,
-                             height
+                             height,
+                             className
                          }: SkeletonProps) {
-    return <div className={
+    return <span className={
         clsx(
+            "block",
             "bg-gray-200 dark:bg-gray-800 rounded",
             "animate-pulse",
             width ? `w-[${width}px]` : "w-full",
             height ? `h-[${height}px]` : "h-3",
-            "max-w-full max-h-full")
+            "max-w-full max-h-full",
+            className)
     }/>;
 }

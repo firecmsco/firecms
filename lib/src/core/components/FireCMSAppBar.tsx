@@ -70,9 +70,9 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
             <Slide
                 direction="down" in={true} mountOnEnter unmountOnExit>
-                <div className="flex flex-row space-x-1 space-y-1 px-4 h-full items-center">
+                <div className="flex flex-row gap-1 space-y-1 px-4 h-full items-center">
 
-                    <div className="mr-8 invisible lg:visible">
+                    <div className="mr-8 hidden lg:block">
                         <ReactLink
                             to={navigation.basePath}>
                             <Typography variant="subtitle1"

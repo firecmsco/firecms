@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useCallback, useDeferredValue, useEffect } from "react";
-import { TextField, TextFieldProps } from "@mui/material";
+import { TextInput, TextInputProps } from "./index";
 
-export function DebouncedTextField(props: TextFieldProps) {
+export function DebouncedTextField<T extends string | number>(props: TextInputProps<T>) {
 
     const previousEventRef = React.useRef<ChangeEvent<any>>();
     const [internalValue, setInternalValue] = React.useState(props.value);
@@ -25,7 +25,7 @@ export function DebouncedTextField(props: TextFieldProps) {
         setInternalValue(event.target.value);
     }, []);
 
-    return <TextField {...props}
+    return <TextInput {...props}
                       onChange={internalOnChange}
                       value={internalValue}/>
 }

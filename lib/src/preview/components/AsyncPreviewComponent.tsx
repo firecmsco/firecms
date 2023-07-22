@@ -1,6 +1,6 @@
-import { Skeleton } from "@mui/material";
 import * as React from "react";
 import { useEffect, useState } from "react";
+import { Skeleton } from "../../components/Skeleton";
 
 export interface AsyncPreviewComponentProps {
     builder: Promise<React.ReactNode>;
@@ -39,7 +39,7 @@ export const AsyncPreviewComponent = React.memo(function AsyncPreviewComponentIn
         }, [builder]);
 
         if (loading)
-            return <Skeleton variant="text"/>;
+            return <Skeleton/>;
 
         return <React.Fragment>{result}</React.Fragment>;
 

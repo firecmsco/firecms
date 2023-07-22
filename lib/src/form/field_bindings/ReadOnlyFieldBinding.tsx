@@ -1,8 +1,6 @@
 import React from "react";
 import clsx from "clsx";
 
-import { FormHelperText } from "@mui/material";
-
 import { Entity, FieldProps } from "../../types";
 
 import { PropertyPreview } from "../../preview";
@@ -44,12 +42,11 @@ export function ReadOnlyFieldBinding({
 
         <>
 
-            {!tableMode && <FormHelperText filled>
-                <LabelWithIcon icon={getIconForProperty(property)}
-                               required={property.validation?.required}
-                               title={property.name}
-                               className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
-            </FormHelperText>}
+            {!tableMode && <LabelWithIcon icon={getIconForProperty(property)}
+                                          required={property.validation?.required}
+                                          title={property.name}
+                                          className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>
+            }
 
             <div
                 className={clsx(paperMixin, "min-h-14 p-4 md:p-6")}>

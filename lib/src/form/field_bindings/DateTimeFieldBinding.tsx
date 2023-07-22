@@ -86,7 +86,7 @@ export function DateTimeFieldBinding({
                                           }),
                                           disableUnderline: true,
                                           endAdornment: <div
-                                              className="pr-2 space-x-2">
+                                              className="pr-2 gap-2">
                                               {property.clearable && <IconButton
                                                   className="absolute right-16 top-3"
                                                   onClick={handleClearClick}>

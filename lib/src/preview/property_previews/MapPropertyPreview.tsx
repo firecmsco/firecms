@@ -106,7 +106,7 @@ export function KeyValuePreview({ value }: { value: any }) {
             Object.entries(value).map(([key, childValue]) => (
                 <div
                     key={`map_preview_table_${key}}`}
-                    className={clsx(defaultBorderMixin, "flex flex-row pt-0.5 border-b border-opacity-gray-100 last:border-0 last:pb-0 pb-0.5")}>
+                    className={clsx(defaultBorderMixin, "flex flex-row pt-0.5 border-b border-opacity-100 last:border-0 last:pb-0 pb-0.5")}>
                     <div
                         key={`table-cell-title-${key}-${key}`}
                         className="w-1/4 align-top pr-1">

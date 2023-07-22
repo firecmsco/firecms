@@ -6,7 +6,7 @@ import { SearchBar } from "./SearchBar";
 import { CircularProgress, IconButton, Select, Tooltip } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
 import { defaultBorderMixin } from "../../../../styles";
-import { FilterListOffIcon } from "../../../../icons/FilterListOffIcon";
+import { FilterListOffIcon } from "../../../../icons";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
@@ -52,9 +52,9 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
             className={clsx(defaultBorderMixin, "min-h-[56px] overflow-x-auto sm:px-4 px-8 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}
         >
 
-            <div className="flex items-center space-x-8 md:space-x-4 ">
+            <div className="flex items-center gap-8 md:gap-4 ">
 
-                {props.title && <div className={"invisible lg:visible"}>
+                {props.title && <div className={"hidden lg:block"}>
                     {props.title}
                 </div>}
 
@@ -66,7 +66,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
             </div>
 
-            <div className="flex items-center space-x-4 md:space-x-2">
+            <div className="flex items-center gap-4 md:gap-2">
 
                 {largeLayout && <div className="w-[22px]">
                     {props.loading &&

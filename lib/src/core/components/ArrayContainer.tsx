@@ -8,7 +8,7 @@ import { Button, IconButton, Tooltip } from "../../components";
 import { fieldBackgroundHoverMixin } from "../../styles";
 
 import { Menu, MenuItem } from "../../components/Menu";
-import { AddIcon, ContentCopyIcon, DragHandleIcon, MoreVertIcon, RemoveIcon } from "../../icons";
+import { AddIcon, ContentCopyIcon, MoreVertIcon, RemoveIcon } from "../../icons";
 
 interface ArrayContainerProps<T> {
     droppableId: string;
@@ -218,7 +218,9 @@ export function ArrayContainerItem({
                                    }: ArrayContainerItemProps) {
 
     const [measureRef, bounds] = useMeasure();
-    const menuOverflow = size !== "small" && bounds.height > 0 && bounds.height < 100;
+
+    const measuring = size !== "small" && bounds.height === 0;
+    const menuOverflow = size !== "small" && bounds.height < 100;
 
     const [onHover, setOnHover] = React.useState(false);
     const setOnHoverTrue = useCallback(() => setOnHover(true), []);
@@ -238,7 +240,7 @@ export function ArrayContainerItem({
         <div
             className="flex items-start">
             <div ref={measureRef}
-                 className="flex-grow w-[calc(100%-48px)]"
+                 className="flex-grow w-[calc(100%-48px)] text-text-primary dark:text-text-primary-dark"
             >
                 {buildEntry(index, internalId)}
             </div>
@@ -247,6 +249,7 @@ export function ArrayContainerItem({
                               remove={remove}
                               index={index}
                               provided={provided}
+                              measuring={measuring}
                               contentOverflow={menuOverflow}
                               copy={copy}/>
         </div>
@@ -260,10 +263,12 @@ export function ArrayItemOptions({
                                      index,
                                      provided,
                                      copy,
-                                     contentOverflow
+                                     contentOverflow,
+                                     measuring
                                  }: {
     direction?: "row" | "column",
     contentOverflow: boolean,
+    measuring: boolean,
     disabled: boolean,
     remove: (index: number) => void,
     index: number,
@@ -271,13 +276,13 @@ export function ArrayItemOptions({
     copy: (index: number) => void
 }) {
 
-    return <div className={`pl-1 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}
->
+    return <div className={`p-1 flex ${direction === "row" ? "flex-row-reverse" : "flex-col"} items-center`}
+                {...provided.dragHandleProps}
+    >
         <Tooltip
             placement={direction === "column" ? "left" : undefined}
             title="Move">
             <IconButton
-                {...provided.dragHandleProps}
                 size="small"
                 disabled={disabled}
                 className={`cursor-${disabled ? "inherit" : "grab"}`}>
@@ -294,7 +299,7 @@ export function ArrayItemOptions({
             </IconButton>
         </Tooltip>
 
-        {!contentOverflow && <>
+        {!measuring && !contentOverflow && <>
             <Tooltip
                 title="Remove"
                 placement={direction === "column" ? "left" : undefined}>
@@ -322,7 +327,7 @@ export function ArrayItemOptions({
             </Tooltip>
         </>}
 
-        {contentOverflow && <>
+        {!measuring && contentOverflow && <>
 
             <Menu
                 trigger={<IconButton size={"small"}>

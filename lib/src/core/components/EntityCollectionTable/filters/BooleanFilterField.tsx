@@ -34,7 +34,7 @@ export function BooleanFilterField({
 
     return (
         <div className="w-200px">
-            <label htmlFor={`filter-${name}`} className="flex justify-center items-center space-x-4">
+            <label htmlFor={`filter-${name}`} className="flex justify-center items-center gap-4">
                 <span className="text-sm">
                     {!valueSet
                         ? "No filter"

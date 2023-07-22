@@ -222,7 +222,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
     return (<>
             <Typography key={rowId.toString()}
                         component={"div"}
-                        className="font-mono flex flex-row space-x-1 items-center">
+                        className="font-mono flex flex-row gap-1 items-center">
                 <div className="w-[200px] max-w-[25%]">
                     <TextInput
                         value={fieldKey}
@@ -347,7 +347,7 @@ function ArrayKeyValueRow<T>({
     return (<>
             <Typography key={id.toString()}
                         component={"div"}
-                        className="font-mono flex min-h-12 flex-row space-x-1 items-center">
+                        className="font-mono flex min-h-12 flex-row gap-1 items-center">
 
                 <div className="flex-grow">
                     {selectedDataType !== "map" && buildInput(value, selectedDataType)}

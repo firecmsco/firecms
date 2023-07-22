@@ -50,7 +50,7 @@ export function DateTimeField({
                                disableUnderline: true,
                                endAdornment: clearable
                                    ? <div
-                                       className="pr-8 space-x-8">
+                                       className="pr-8 gap-8">
                                        <IconButton
                                            className="absolute right-14 top-2"
                                            onClick={(e) => onChange?.(null)}>

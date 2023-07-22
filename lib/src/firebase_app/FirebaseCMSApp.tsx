@@ -1,6 +1,5 @@
 import React, { useMemo } from "react";
 import { GoogleAuthProvider } from "firebase/auth";
-import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 
@@ -151,24 +150,12 @@ export function FirebaseCMSApp({
      */
     const modeController = useBuildModeController();
 
-    /**
-     * It is important to memoize the theme, otherwise the app will re-render
-     * whenever there is a state change in the CMS.
-     */
-    const theme = useMemo(() => createCMSDefaultTheme({
-        mode: modeController.mode,
-        primaryColor,
-        secondaryColor,
-        fontFamily
-    }), [fontFamily, modeController.mode, primaryColor, secondaryColor]);
-
     if (configError) {
         return <CenteredView fullScreen={true}>{configError}</CenteredView>;
     }
 
     if (firebaseConfigLoading || !firebaseApp || appCheckLoading) {
         return <>
-            <CssBaseline/>
             <CircularProgressCenter/>
         </>;
     }
@@ -229,12 +216,7 @@ export function FirebaseCMSApp({
                                 }
                             }
 
-                            return (
-                                <ThemeProvider theme={theme}>
-                                    <CssBaseline enableColorScheme/>
-                                    {component}
-                                </ThemeProvider>
-                            );
+                            return component;
                         }}
                     </FireCMS>
                 </ModeControllerProvider>

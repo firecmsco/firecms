@@ -59,7 +59,7 @@ export function TableSelect(props: {
             throw Error("Missing mapping in TableSelect");
         }
     }, [multiple, updateValue, valueType]);
-    const renderValue = (enumKey: unknown) => {
+    const renderValue = (enumKey: string | number) => {
         if (multiple && Array.isArray(enumKey)) {
             return <ArrayEnumPreview value={enumKey}
                                      name={name}

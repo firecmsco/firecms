@@ -2,7 +2,6 @@ import React, { MouseEvent, useCallback } from "react";
 import clsx from "clsx";
 
 import { CollectionSize, Entity } from "../../../../types";
-import { Skeleton } from "@mui/material";
 import { Typography } from "../../../../components/Typography";
 import { IconButton } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
@@ -13,6 +12,7 @@ import { MoreVertIcon } from "../../../../icons/MoreVertIcon";
 import { DeleteIcon } from "../../../../icons/DeleteIcon";
 import { FileCopyIcon } from "../../../../icons/FileCopyIcon";
 import { Menu, MenuItem } from "../../../../components/Menu";
+import { Skeleton } from "../../../../components/Skeleton";
 
 /**
  *
@@ -153,7 +153,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                             className={"font-mono"}
                             variant={"caption"}
                             color={"secondary"}> {entity.id} </Typography>
-                        : <Skeleton variant="text"/>
+                        : <Skeleton/>
                     }
                 </div>
             )}

@@ -18,7 +18,7 @@ function FirebaseIntro() {
                     data-aos-delay="150"
                 >
                     <div
-                        className="flex flex-row space-x-2 md:space-x-8 justify-center items-center">
+                        className="flex flex-row gap-2 md:gap-8 justify-center items-center">
                         <ReactLogo
                             style={{
                                 width: 150,

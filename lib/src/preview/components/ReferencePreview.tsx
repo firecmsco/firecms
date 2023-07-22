@@ -1,7 +1,6 @@
 import * as React from "react";
 import { useMemo } from "react";
 
-import { Skeleton } from "@mui/material";
 import { Entity, EntityCollection, EntityReference, ResolvedProperty } from "../../types";
 
 import { ErrorView, getReferencePreviewKeys, getValueInPath, resolveCollection } from "../../core";
@@ -14,6 +13,7 @@ import clsx from "clsx";
 import { IconButton } from "../../components";
 import { Tooltip } from "../../components/Tooltip";
 import { KeyboardTabIcon } from "../../icons/KeyboardTabIcon";
+import { Skeleton } from "../../components/Skeleton";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -121,7 +121,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                     {reference.id}
                                 </Typography>
                             </div>
-                            : <Skeleton variant="text"/>)}
+                            : <Skeleton/>)}
 
                     {listProperties && listProperties.map((key) => {
                         const childProperty = resolvedCollection.properties[key as string];

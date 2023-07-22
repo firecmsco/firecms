@@ -3,9 +3,9 @@ import clsx from "clsx";
 
 import { useSnackbarController, useStorageSource } from "../../hooks";
 import { StorageFieldItem } from "../../core/util/useStorageUploadController";
-import { Skeleton } from "@mui/material";
 import { ErrorView } from "../../core";
 import { paperMixin } from "../../styles";
+import { Skeleton } from "../../components/Skeleton";
 
 export interface StorageUploadItemProps {
     storagePath: string;
@@ -83,8 +83,7 @@ export function StorageUploadProgress({
     if (simple) {
         return <div className={`m-4 w-${imageSize} h-${imageSize}`}>
 
-            {loading && <Skeleton variant="rectangular"
-                                  className={`w-${imageSize} h-${imageSize}`}/>}
+            {loading && <Skeleton className={`w-${imageSize} h-${imageSize}`}/>}
 
         </div>
     }
@@ -93,7 +92,7 @@ export function StorageUploadProgress({
         <div className={clsx(paperMixin, "m-4 p-1 box-border min-w-[imageSize] min-h-[imageSize]")}>
 
             {loading &&
-                <Skeleton variant="rectangular" className="w-full h-full"/>}
+                <Skeleton className="w-full h-full"/>}
 
             {error && <ErrorView title={"Error uploading file"}
                                  error={error}/>}
