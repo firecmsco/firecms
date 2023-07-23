@@ -90,7 +90,12 @@ export const testCollection = buildCollection({
     name: "Test entities",
     // formAutoSave: true,
     properties: {
-
+        test_date: {
+            name: "Test date",
+            dataType: "date",
+            mode: "date_time",
+            clearable: true
+        },
         tags: {
             name: "Tags",
             dataType: "array",
@@ -194,14 +199,6 @@ export const testCollection = buildCollection({
         //                 color: "cyanDarker"
         //             }
         //         ]
-        // },
-        //
-        // test_date: {
-        //     name: "Test date",
-        //     dataType: "date",
-        //     mode: "date_time",
-        //     autoValue: "on_create",
-        //     clearable: true
         // },
         // self_ref: {
         //     name: "Self ref",

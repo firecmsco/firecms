@@ -1,7 +1,5 @@
 import React from "react";
-import { TextField as MuiTextField } from "@mui/material";
-import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { DateTimeField } from "../../../../components";
 
 export function TableDateField(props: {
     name: string;
@@ -22,40 +20,15 @@ export function TableDateField(props: {
         updateValue
     } = props;
 
-    const PickerComponent = mode === undefined || mode === "date_time"
-        ? DateTimePicker
-        : DatePicker;
-
     return (
-        <PickerComponent
-            value={internalValue ?? null}
-            disabled={disabled}
-            onChange={(dateValue: Date | null) => {
-                updateValue(dateValue);
-            }}
-            renderInput={(params) =>
-                <MuiTextField {...params}
-                              fullWidth
-                              variant={"standard"}
-                              error={Boolean(error)}
-                              style={{
-                                  height: "100%"
-                              }}
-                              InputProps={{
-                                  ...params.InputProps,
-                                  style: { fontSize: 14 },
-                                  disableUnderline: true,
-                                  endAdornment: <div className="pr-1">
-                                      {params.InputProps?.endAdornment}
-                                  </div>
-                              }}
-                />}
-            InputAdornmentProps={{
-                style: {
-                    fontSize: "small",
-                    height: 26
-                }
-            }}
+        <DateTimeField
+            value={internalValue ?? undefined}
+            onChange={(dateValue) => updateValue(dateValue)}
+            size={"medium"}
+            invisible={true}
+            className={"w-full h-full"}
+            inputClassName={"w-full h-full"}
+            mode={mode}
         />
     );
 }

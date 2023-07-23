@@ -69,6 +69,7 @@
         "markdown-it": "^13.0.1",
         "notistack": "^3.0.1",
         "object-hash": "^3.0.0",
+        "react-datepicker": "^4.16.0",
         "react-dropzone": "^14.2.3",
         "react-fast-compare": "^3.2.2",
         "react-image-file-resizer": "^0.4.8",

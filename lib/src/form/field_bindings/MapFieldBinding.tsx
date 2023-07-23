@@ -86,16 +86,18 @@ export function MapFieldBinding<T extends Record<string, any>>({
 
     </>;
 
-    const title = <LabelWithIcon icon={getIconForProperty(property)}
-                                 required={property.validation?.required}
-                                 title={property.name}
-                                 className={"text-text-secondary dark:text-text-secondary-dark"}/>;
+    const title = (
+        <LabelWithIcon icon={getIconForProperty(property)}
+                       required={property.validation?.required}
+                       title={property.name}
+                       className={"text-text-secondary dark:text-text-secondary-dark"}/>
+    );
 
     return (
         <>
 
             {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
-                                            contentClassName={"p-2 md:p-4"}
+                                            contentClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
                                             title={title}>{mapFormView}</ExpandablePanel>}
 
             {tableMode && mapFormView}

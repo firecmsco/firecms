@@ -216,6 +216,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         let innerComponent: React.ReactNode | undefined;
         let allowScroll = false;
         let showExpandIcon = false;
+        let hideOverflow = true;
         let removePadding = false;
         let fullHeight = false;
 
@@ -327,7 +328,9 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                  internalValue={internalValue as Date}
                                                  updateValue={updateValue}
                 />;
-                allowScroll = true;
+                fullHeight = true;
+                hideOverflow = false;
+                allowScroll = false;
             } else if (property.dataType === "reference") {
                 if (typeof property.path === "string") {
                     innerComponent =
@@ -425,6 +428,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 showExpandIcon={showExpandIcon}
                 openPopup={!disabled ? openPopup : undefined}
                 value={internalValue}
+                hideOverflow={hideOverflow}
             >
 
                 {innerComponent}

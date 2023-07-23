@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useState } from "react";
 import clsx from "clsx";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
-import { defaultBorderMixin, focusedMixin, paperMixin } from "../styles";
+import { defaultBorderMixin, focusedMixin } from "../styles";
 import { useInjectStyles } from "./util/useInjectStyles";
 import { ChevronDownIcon } from "../icons";
 
@@ -29,10 +29,10 @@ export function ExpandablePanel({
   overflow: hidden;
 }
 .CollapsibleContent[data-state='open'] {
-  animation: slideDown 220ms ease-in;
+  animation: slideDown 220ms ease-out
 }
 .CollapsibleContent[data-state='closed'] {
-  animation: slideUp 220ms ease-in;
+  animation: slideUp 220ms ease-out;
 }
 
 @keyframes slideDown {
@@ -79,9 +79,11 @@ export function ExpandablePanel({
                 </Collapsible.Trigger>
 
                 <Collapsible.Content
-                    className={clsx("CollapsibleContent", contentClassName)}
+                    className={clsx("CollapsibleContent")}
                 >
-                    {children}
+                    <div className={contentClassName}>
+                        {children}
+                    </div>
                 </Collapsible.Content>
             </Collapsible.Root>
         </>

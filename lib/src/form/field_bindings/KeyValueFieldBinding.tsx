@@ -67,7 +67,7 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
 
             {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
                                             title={title}
-                                            contentClassName={"p-2 md:p-4"}>{mapFormView}</ExpandablePanel>}
+                                            contentClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}>{mapFormView}</ExpandablePanel>}
 
             {tableMode && mapFormView}
 
@@ -141,7 +141,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 }}/>;
         } else if (dataType === "date") {
             return <DateTimeField value={entryValue}
-                                  small={true}
+                                  size={"small"}
                                   disabled={disabled || !fieldKey}
                                   onChange={(date) => {
                                       setValue({
@@ -313,7 +313,7 @@ function ArrayKeyValueRow<T>({
                               }}/>;
         } else if (dataType === "date") {
             return <DateTimeField value={entryValue}
-                                  small={true}
+                                  size={"small"}
                                   onChange={(date) => {
                                       setValue(date as T);
                                   }}/>;

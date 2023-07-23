@@ -31,6 +31,7 @@ export function Chip({
         <div
             className={clsx("rounded-full w-fit h-fit font-regular flex items-center justify-center gap-1",
                 "truncate",
+                "font-medium",
                 onClick ? "cursor-pointer hover:bg-gray-300 hover:dark:bg-gray-700" : "",
                 size === "small" ? "text-xs" : "text-sm",
                 size === "small" ? "px-3 py-1" : "px-4 py-1.5",

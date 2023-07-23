@@ -21,7 +21,7 @@ import { isPropertyBuilder } from "./util";
 
 import {
     AddLinkIcon,
-    BallotOutlinedIcon,
+    BallotIcon,
     DriveFolderUploadIcon,
     EmailIcon,
     FlagIcon,
@@ -173,7 +173,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
         name: "Group",
         description: "Group of multiple fields",
         dataType: "map",
-        Icon: BallotOutlinedIcon,
+        Icon: BallotIcon,
         color: "#ff9408",
         Field: MapFieldBinding
     },
@@ -181,7 +181,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
         name: "Key-value",
         description: "Flexible field that allows the user to add multiple key-value pairs",
         dataType: "map",
-        Icon: BallotOutlinedIcon,
+        Icon: BallotIcon,
         color: "#ff9408",
         Field: KeyValueFieldBinding
     },

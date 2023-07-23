@@ -2,15 +2,9 @@ import React, { MouseEvent, useCallback } from "react";
 import clsx from "clsx";
 
 import { CollectionSize, Entity } from "../../../../types";
-import { Typography } from "../../../../components/Typography";
-import { IconButton } from "../../../../components";
+import { Checkbox, IconButton, Tooltip, Typography } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
-import { Checkbox } from "../../../../components/Checkbox";
-import { Tooltip } from "../../../../components/Tooltip";
-import { KeyboardTabIcon } from "../../../../icons/KeyboardTabIcon";
-import { MoreVertIcon } from "../../../../icons/MoreVertIcon";
-import { DeleteIcon } from "../../../../icons/DeleteIcon";
-import { FileCopyIcon } from "../../../../icons/FileCopyIcon";
+import { DeleteIcon, FileCopyIcon, KeyboardTabIcon, MoreVertIcon } from "../../../../icons";
 import { Menu, MenuItem } from "../../../../components/Menu";
 import { Skeleton } from "../../../../components/Skeleton";
 
@@ -92,7 +86,7 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
             onClick={onClick}
             className={clsx(
                 "h-full flex items-center justify-center flex-col bg-gray-50 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 z-10",
-                frozen ? "sticky left-0" : "",
+                frozen ? "sticky left-0" : ""
             )}
             style={{
                 width,

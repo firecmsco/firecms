@@ -1,15 +1,12 @@
 import React from "react";
 import clsx from "clsx";
 
-import { Avatar, Breadcrumbs, Slide } from "@mui/material";
-
 import { Link as ReactLink } from "react-router-dom";
-import { Chip, ErrorBoundary } from "../components";
+import { Avatar, Chip, ErrorBoundary } from "../components";
 import { useAuthController, useBreadcrumbsContext, useModeController, useNavigationContext } from "../../hooks";
 import { Button, IconButton, Typography } from "../../components";
 import { useLargeLayout } from "../../hooks/useLargeLayout";
-import { DarkModeIcon } from "../../icons/DarkModeIcon";
-import { LightModeIcon } from "../../icons/LightModeIcon";
+import { DarkModeIcon, LightModeIcon } from "../../icons";
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -68,72 +65,68 @@ export const FireCMSAppBar = function FireCMSAppBar({
                 fixed: true
             })}>
 
-            <Slide
-                direction="down" in={true} mountOnEnter unmountOnExit>
-                <div className="flex flex-row gap-1 space-y-1 px-4 h-full items-center">
+            <div className="flex flex-row gap-1 space-y-1 px-4 h-full items-center">
 
-                    <div className="mr-8 hidden lg:block">
-                        <ReactLink
-                            to={navigation.basePath}>
-                            <Typography variant="subtitle1"
-                                        noWrap
-                                        className={"ml-2 !font-medium"}>
-                                {title}
-                            </Typography>
-                        </ReactLink>
-                    </div>
-
-                    {largeLayout && <Breadcrumbs
-                        aria-label="breadcrumb">
-                        {breadcrumbs.map((entry, index) => (
-                            <ReactLink
-                                key={`breadcrumb-${index}`}
-                                color="inherit"
-                                to={entry.url}>
-                                <Chip
-                                    className=" h-12 font-medium active:bg-gray-400 active:shadow-sm cursor-pointer"
-                                    label={entry.title}
-                                />
-                            </ReactLink>)
-                        )
-                        }
-                    </Breadcrumbs>}
-
-                    <div className={"flex-grow"}/>
-
-                    {toolbarExtraWidget &&
-                        <ErrorBoundary>
-                            {toolbarExtraWidget}
-                        </ErrorBoundary>}
-
-                    <div className={"p-2"}>
-                        <IconButton
-                            color="inherit"
-                            aria-label="Open drawer"
-                            onClick={() => toggleMode()}
-                            size="large">
-                            {mode === "dark"
-                                ? <DarkModeIcon/>
-                                : <LightModeIcon/>}
-                        </IconButton>
-                    </div>
-
-                    <div className={"p-2"}>
-                        {authController.user && authController.user.photoURL
-                            ? <Avatar
-                                src={authController.user.photoURL}/>
-                            : <Avatar>{initial}</Avatar>
-                        }
-                    </div>
-
-                    <Button variant="text"
-                            color="inherit"
-                            onClick={authController.signOut}>
-                        Log Out
-                    </Button>
-
+                <div className="mr-8 hidden lg:block">
+                    <ReactLink
+                        to={navigation.basePath}>
+                        <Typography variant="subtitle1"
+                                    noWrap
+                                    className={"ml-2 !font-medium"}>
+                            {title}
+                        </Typography>
+                    </ReactLink>
                 </div>
-            </Slide>
+
+                {largeLayout && <div className="flex gap-1 flex-grow">
+                    {breadcrumbs.map((entry, index) => (
+                        <ReactLink
+                            key={`breadcrumb-${index}`}
+                            color="inherit"
+                            to={entry.url}>
+                            <Chip
+                                className=" h-12 font-medium active:bg-gray-400 active:shadow-sm cursor-pointer"
+                                label={entry.title}
+                            />
+                        </ReactLink>)
+                    )
+                    }
+                </div>}
+
+                <div className={"flex-grow"}/>
+
+                {toolbarExtraWidget &&
+                    <ErrorBoundary>
+                        {toolbarExtraWidget}
+                    </ErrorBoundary>}
+
+                <div className={"p-1"}>
+                    <IconButton
+                        color="inherit"
+                        aria-label="Open drawer"
+                        onClick={() => toggleMode()}
+                        size="large">
+                        {mode === "dark"
+                            ? <DarkModeIcon/>
+                            : <LightModeIcon/>}
+                    </IconButton>
+                </div>
+
+                <div className={"p-1"}>
+                    {authController.user && authController.user.photoURL
+                        ? <Avatar
+                            src={authController.user.photoURL}/>
+                        : <Avatar>{initial}</Avatar>
+                    }
+                </div>
+
+                <Button variant="text"
+                        color="inherit"
+                        onClick={authController.signOut}>
+                    Log Out
+                </Button>
+
+            </div>
         </div>
     );
 }

@@ -128,7 +128,8 @@ export function Select({
 
                 </SelectPrimitive.Trigger>
 
-                {endAdornment && <div className={"absolute top-0 right-4 h-full flex items-center"}
+                {endAdornment && <div className={clsx("absolute top-1 right-10 h-full flex items-center",
+                    size === "small" ? "top-0" : "top-1")}
                                       onClick={(e) => e.stopPropagation()}>
                     {endAdornment}
                 </div>}
@@ -136,7 +137,7 @@ export function Select({
             </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
-                    className={"z-20 relative border border-gray-200 dark:border-gray-800 shadow-lg bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg bg-opacity-80 dark:bg-opacity-90 backdrop-blur"}
+                    className={"z-50 relative border border-gray-200 dark:border-gray-800 shadow-lg bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg bg-opacity-80 dark:bg-opacity-90 backdrop-blur"}
                     position={position}
                     align={"center"}>
                     <SelectPrimitive.Viewport

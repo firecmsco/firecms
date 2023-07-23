@@ -86,6 +86,7 @@ export function DateTimeFilterField({
 
                 <DateTimeField
                     mode={mode}
+                    size={"medium"}
                     value={internalValue}
                     onChange={(dateValue: Date | null) => {
                         updateFilter(operation, dateValue === null ? undefined : dateValue);

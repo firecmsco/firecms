@@ -20,6 +20,7 @@ import { SideEntityControllerContext } from "./contexts/SideEntityControllerCont
 import { NavigationContextInstance } from "./contexts/NavigationContext";
 import { AuthControllerContext } from "./contexts/AuthControllerContext";
 import { SideDialogsControllerContext } from "./contexts/SideDialogsControllerContext";
+import { useLocaleConfig } from "./internal/useLocaleConfig";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -61,6 +62,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
     const usedBasePath = basePath ?? "/";
     const usedBasedCollectionPath = baseCollectionPath ?? DEFAULT_COLLECTION_PATH;
 
+    useLocaleConfig(locale);
     // @ts-ignore
     const dateUtilsLocale = locale ? locales[locale] : undefined;
 

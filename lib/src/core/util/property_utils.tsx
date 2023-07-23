@@ -24,8 +24,7 @@ export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder,
     return false;
 }
 
-export function getIdIcon(
-    size: number): React.ReactNode {
+export function getIdIcon(size: "small" | "medium" | "large"): React.ReactNode {
     return <CircleIcon size={size}/>;
 }
 

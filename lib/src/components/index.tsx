@@ -1,3 +1,4 @@
+export * from "./Avatar";
 export * from "./BooleanSwitch";
 export * from "./BooleanSwitchWithLabel";
 export * from "./Button";

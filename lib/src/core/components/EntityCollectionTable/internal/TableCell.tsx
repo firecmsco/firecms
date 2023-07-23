@@ -29,6 +29,7 @@ interface TableCellProps {
     removePadding?: boolean;
     fullHeight?: boolean;
     selected?: boolean;
+    hideOverflow?: boolean;
     onSelect?: (cellRect: DOMRect | undefined) => void;
     openPopup?: (cellRect: DOMRect | undefined) => void;
 }
@@ -87,6 +88,7 @@ export const TableCell = React.memo<TableCellProps>(
                            fullHeight,
                            onSelect,
                            width,
+                           hideOverflow = true,
                            showExpandIcon = true
                        }: TableCellProps) {
 
@@ -204,10 +206,11 @@ export const TableCell = React.memo<TableCellProps>(
                 ref={ref}
                 className={clsx(
                     "transition-colors duration-100 ease-in-out",
-                    `flex relative h-full rounded-md overflow-hidden p-${p} border border-4  border-opacity-75`,
+                    `flex relative h-full rounded-md p-${p} border border-4  border-opacity-75`,
                     onHover && !disabled ? "bg-gray-50 dark:bg-gray-900" : "",
                     saved ? "bg-gray-100 bg-opacity-75 dark:bg-gray-800 dark:bg-opacity-75" : "",
                     !isSelected && !internalSaved && !showError ? "border-transparent" : "",
+                    hideOverflow ? "overflow-hidden" : "",
                     isSelected ? "bg-gray-50 dark:bg-gray-900" : "",
                     isSelected && !internalSaved ? "border-primary" : "",
                     internalSaved ? "border-green-500 " : "",

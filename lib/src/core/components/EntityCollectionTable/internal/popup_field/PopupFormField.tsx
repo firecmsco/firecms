@@ -362,7 +362,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             }}
             className={`z-30 inline-block fixed z-50 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
                 !open ? "invisible" : "visible"
-            } cursor-grab`}
+            } cursor-grab overflow-visible`}
             ref={containerRef}>
 
             <ElementResizeListener onResize={adaptResize}/>

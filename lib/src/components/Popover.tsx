@@ -49,7 +49,7 @@ export function Popover({
             {trigger}
         </PopoverPrimitive.Trigger>
         <PopoverPrimitive.Portal>
-            <PopoverPrimitive.Content className={clsx(paperMixin, "PopoverContent shadow")}
+            <PopoverPrimitive.Content className={clsx(paperMixin, "PopoverContent shadow z-50")}
                                       side={side}
                                       sideOffset={sideOffset}
                                       align={align}

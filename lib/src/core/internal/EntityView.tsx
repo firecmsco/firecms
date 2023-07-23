@@ -512,7 +512,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                 <>
 
                     <div
-                        className={clsx(defaultBorderMixin, "no-scrollbar border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll")}>
+                        className={clsx(defaultBorderMixin, "no-scrollbar border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll bg-gray-50 dark:bg-gray-900")}>
 
                         <div
                             className="pb-1 self-center">
@@ -538,22 +538,22 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                                 console.log("onValueChange", value);
                                 onSideTabClick(value);
                             }}
-                            className="pl-4 pr-4 pt-0"
-                            tabs={<>
-                                <Tab
-                                    disabled={!hasAdditionalViews}
-                                    // onClick={() => {
-                                    //     onSideTabClick(-1);
-                                    // }}
-                                    value={MAIN_TAB_VALUE}
-                                    className={`${
-                                        !hasAdditionalViews ? "hidden" : ""
-                                    } text-sm min-w-[140px]`}
-                                >{collection.singularName ?? collection.name}</Tab>
-                                {customViewTabs}
-                                {subcollectionTabs}
-                            </>}>
+                            className="pl-4 pr-4 pt-0">
 
+                            <Tab
+                                disabled={!hasAdditionalViews}
+                                // onClick={() => {
+                                //     onSideTabClick(-1);
+                                // }}
+                                value={MAIN_TAB_VALUE}
+                                className={`${
+                                    !hasAdditionalViews ? "hidden" : ""
+                                } text-sm min-w-[140px]`}
+                            >{collection.singularName ?? collection.name}</Tab>
+
+                            {customViewTabs}
+
+                            {subcollectionTabs}
                         </Tabs>
 
                     </div>
