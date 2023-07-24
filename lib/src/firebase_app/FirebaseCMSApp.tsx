@@ -6,7 +6,6 @@ import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 import {
     CenteredView,
     CircularProgressCenter,
-    createCMSDefaultTheme,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,

@@ -1,7 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 
-import { Container } from "@mui/material";
-
 import { useFireCMSContext, useNavigationContext } from "../../../hooks";
 import { PluginGenericProps, PluginHomePageAdditionalCardsProps } from "../../../types";
 
@@ -15,6 +13,7 @@ import * as JsSearch from "js-search";
 import { SearchBar } from "../EntityCollectionTable/internal/SearchBar";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
+import { Container } from "../../../components";
 
 const search = new JsSearch.Search("home");
 search.addIndex("name");

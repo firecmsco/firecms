@@ -5,7 +5,20 @@ import clsx from "clsx";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
 import { InputLabel } from "./InputLabel";
 
-export type InputType = "text" | "number";
+export type InputType =
+    "text"
+    | "number"
+    | "phone"
+    | "email"
+    | "password"
+    | "search"
+    | "url"
+    | "date"
+    | "time"
+    | "datetime-local"
+    | "month"
+    | "week"
+    | "color";
 
 export type TextInputProps<T extends string | number> = {
     type?: InputType,
@@ -23,6 +36,7 @@ export type TextInputProps<T extends string | number> = {
     style?: React.CSSProperties,
     inputClassName?: string,
     inputStyle?: React.CSSProperties,
+    inputRef?: React.Ref<any>
 };
 
 export function TextInput<T extends string | number>({
@@ -40,10 +54,13 @@ export function TextInput<T extends string | number>({
                                                          className,
                                                          style,
                                                          inputClassName,
-                                                         inputStyle
+                                                         inputStyle,
+                                                         inputRef: inputRefProp
                                                      }: TextInputProps<T>) {
 
-    const inputRef = useRef(null);
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const inputRef = inputRefProp ?? useRef(null);
+    // @ts-ignore
     const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
     const hasValue = value !== undefined && value !== null && value !== "";
 

@@ -1,7 +1,5 @@
 import React from "react";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
-
-import { Table, TableBody, TableCell, TableRow } from "@mui/material";
 import { useFireCMSContext } from "../../hooks";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
@@ -50,18 +48,18 @@ export function ArrayOfMapsPreview({
     }
 
     return (
-        <Table size="small">
-            <TableBody>
+        <div className="table-auto text-xs">
+            <div>
                 {values &&
                     values.map((v, index) => {
                         return (
-                            <TableRow key={`table_${v}_${index}`}
-                                      className="last:child:th:last:child:td:border-b-0">
+                            <div key={`table_${v}_${index}`}
+                                 className="border-b last:border-b-0">
                                 {mapProperties && mapProperties.map(
                                     (key) => (
-                                        <TableCell
+                                        <div
                                             key={`table-cell-${key as string}`}
-                                            component="th"
+                                            className="table-cell"
                                         >
                                             <ErrorBoundary>
                                                 <PropertyPreview
@@ -71,13 +69,13 @@ export function ArrayOfMapsPreview({
                                                     entity={entity}
                                                     size={"small"}/>
                                             </ErrorBoundary>
-                                        </TableCell>
+                                        </div>
                                     )
                                 )}
-                            </TableRow>
+                            </div>
                         );
                     })}
-            </TableBody>
-        </Table>
+            </div>
+        </div>
     );
 }

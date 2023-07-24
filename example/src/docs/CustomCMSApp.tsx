@@ -1,7 +1,6 @@
-import React, { useMemo } from "react";
+import React from "react";
 
 import { GoogleAuthProvider } from "firebase/auth";
-import { CssBaseline, ThemeProvider } from "@mui/material";
 import { BrowserRouter as Router } from "react-router-dom";
 
 import "typeface-rubik";
@@ -10,7 +9,6 @@ import "@fontsource/ibm-plex-mono";
 import {
     buildCollection,
     CircularProgressCenter,
-    createCMSDefaultTheme,
     FirebaseAuthController,
     FirebaseLoginView,
     FireCMS,
@@ -101,7 +99,6 @@ export function CustomCMSApp() {
     const storageSource = useFirebaseStorageSource({ firebaseApp });
 
     const modeController = useBuildModeController();
-    const theme = useMemo(() => createCMSDefaultTheme({ mode: modeController.mode }), []);
 
     const {
         authLoading,
@@ -167,12 +164,7 @@ export function CustomCMSApp() {
                                 );
                             }
 
-                            return (
-                                <ThemeProvider theme={theme}>
-                                    <CssBaseline/>
-                                    {component}
-                                </ThemeProvider>
-                            );
+                            return component;
                         }}
                     </FireCMS>
                 </ModeControllerProvider>

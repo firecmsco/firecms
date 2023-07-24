@@ -6,8 +6,6 @@ export { Scaffold } from "./Scaffold";
 export type { DrawerProps } from "./Drawer";
 export { Drawer, DrawerNavigationItem } from "./Drawer";
 
-export { createCMSDefaultTheme } from "./theme";
-
 export * from "./SideDialogs";
 export * from "./NavigationRoutes";
 

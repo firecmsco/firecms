@@ -1,9 +1,7 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
-import { Fade, Grid, Slide, TextField } from "@mui/material";
-
 import { FirebaseApp, FirebaseError } from "firebase/app";
-import { CircularProgress, ErrorView, FireCMSLogo } from "../../core";
+import { CircularProgress, ErrorView, FireCMSLogo, TextInput } from "../../core";
 import { useModeController } from "../../hooks";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
 import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";
@@ -210,86 +208,78 @@ export function FirebaseLoginView({
 
     return (
 
-        <Fade
-            in={true}
-            timeout={800}
-            mountOnEnter
-            unmountOnExit>
-
+        <div
+            className="flex flex-col items-center justify-center min-h-screen min-w-full p-2">
+            <div id="recaptcha"></div>
             <div
-                className="flex flex-col items-center justify-center min-h-screen min-w-full p-2">
-                <div id="recaptcha"></div>
-                <div
-                    className="flex flex-col items-center w-full max-w-[480px]">
+                className="flex flex-col items-center w-full max-w-[480px]">
 
-                    <div className="p-1 w-64 h-64 m-4">
-                        {logoComponent}
-                    </div>
-
-                    {notAllowedMessage &&
-                        <div className="p-8">
-                            <ErrorView error={notAllowedMessage}/>
-                        </div>}
-
-                    {buildErrorView()}
-
-                    {(!passwordLoginSelected && !phoneLoginSelected) && <>
-
-                        {buildOauthLoginButtons(authController, resolvedSignInOptions, modeState.mode, disabled)}
-
-                        {resolvedSignInOptions.includes("password") &&
-                            <LoginButton
-                                disabled={disabled}
-                                text={"Email/password"}
-                                icon={<EmailIcon size={28}/>}
-                                onClick={() => setPasswordLoginSelected(true)}/>}
-
-                        {resolvedSignInOptions.includes("phone") &&
-                            <LoginButton
-                                disabled={disabled}
-                                text={"Phone number"}
-                                icon={<PhoneIcon size={28}/>}
-                                onClick={() => setPhoneLoginSelected(true)}/>}
-
-                        {resolvedSignInOptions.includes("anonymous") &&
-                            <LoginButton
-                                disabled={disabled}
-                                text={"Log in anonymously"}
-                                icon={<PersonOutlineIcon
-                                    size={28}/>}
-                                onClick={authController.anonymousLogin}/>}
-
-                        {allowSkipLogin &&
-                            <div className={"m-4"}>
-                                <Button
-                                    variant={"text"}
-                                    disabled={disabled}
-                                    onClick={authController.skipLogin}>
-                                    Skip login
-                                </Button>
-                            </div>
-                        }
-
-                    </>}
-
-                    {passwordLoginSelected && <LoginForm
-                        authController={authController}
-                        onClose={() => setPasswordLoginSelected(false)}
-                        mode={modeState.mode}
-                        noUserComponent={noUserComponent}
-                        disableSignupScreen={disableSignupScreen}
-                    />}
-
-                    {phoneLoginSelected && <PhoneLoginForm
-                        authController={authController}
-                        onClose={() => setPhoneLoginSelected(false)}
-                    />}
-
-                    {!passwordLoginSelected && !phoneLoginSelected && additionalComponent}
-
+                <div className="p-1 w-64 h-64 m-4">
+                    {logoComponent}
                 </div>
+
+                {notAllowedMessage &&
+                    <div className="p-8">
+                        <ErrorView error={notAllowedMessage}/>
+                    </div>}
+
+                {buildErrorView()}
+
+                {(!passwordLoginSelected && !phoneLoginSelected) && <>
+
+                    {buildOauthLoginButtons(authController, resolvedSignInOptions, modeState.mode, disabled)}
+
+                    {resolvedSignInOptions.includes("password") &&
+                        <LoginButton
+                            disabled={disabled}
+                            text={"Email/password"}
+                            icon={<EmailIcon size={28}/>}
+                            onClick={() => setPasswordLoginSelected(true)}/>}
+
+                    {resolvedSignInOptions.includes("phone") &&
+                        <LoginButton
+                            disabled={disabled}
+                            text={"Phone number"}
+                            icon={<PhoneIcon size={28}/>}
+                            onClick={() => setPhoneLoginSelected(true)}/>}
+
+                    {resolvedSignInOptions.includes("anonymous") &&
+                        <LoginButton
+                            disabled={disabled}
+                            text={"Log in anonymously"}
+                            icon={<PersonOutlineIcon
+                                size={28}/>}
+                            onClick={authController.anonymousLogin}/>}
+
+                    {allowSkipLogin &&
+                            <Button
+                                className={"m-1 mb-4"}
+                                variant={"text"}
+                                disabled={disabled}
+                                onClick={authController.skipLogin}>
+                                Skip login
+                            </Button>
+                    }
+
+                </>}
+
+                {passwordLoginSelected && <LoginForm
+                    authController={authController}
+                    onClose={() => setPasswordLoginSelected(false)}
+                    mode={modeState.mode}
+                    noUserComponent={noUserComponent}
+                    disableSignupScreen={disableSignupScreen}
+                />}
+
+                {phoneLoginSelected && <PhoneLoginForm
+                    authController={authController}
+                    onClose={() => setPhoneLoginSelected(false)}
+                />}
+
+                {!passwordLoginSelected && !phoneLoginSelected && additionalComponent}
+
             </div>
-        </Fade>
+        </div>
     );
 }
 
@@ -305,7 +295,7 @@ export function LoginButton({
     disabled?: boolean
 }) {
     return (
-        <div className="m-2 w-full">
+        <div className="m-1 w-full">
             <Button
                 className="w-full"
                 variant="outlined"
@@ -364,55 +354,45 @@ function PhoneLoginForm({
 
             <div id={RECAPTCHA_CONTAINER_ID}/>
 
-            <Grid container spacing={1}>
-                <Grid item xs={12}>
-                    <IconButton
-                        onClick={onClose}>
-                        <ArrowBackIcon className="w-5 h-5"/>
-                    </IconButton>
-                </Grid>
-                <Grid item xs={12} className="p-1 flex">
+            <div className={"flex flex-col gap-1"}>
+                <IconButton
+                    onClick={onClose}>
+                    <ArrowBackIcon className="w-5 h-5"/>
+                </IconButton>
+                <div className="p-1 flex">
                     <Typography align={"center"}
                                 variant={"subtitle2"}>{"Please enter your phone number"}</Typography>
-                </Grid>
-                <Grid item xs={12}>
-                    <TextField placeholder="" fullWidth
-                               value={phone}
-                               disabled={Boolean(phone && (authController.authLoading || authController.confirmationResult))}
-                               type="phone"
-                               required
-                               onChange={(event) => setPhone(event.target.value)}/>
-                </Grid>
+                </div>
+                <TextInput placeholder=""
+                           value={phone ?? ""}
+                           disabled={Boolean(phone && (authController.authLoading || authController.confirmationResult))}
+                           type="phone"
+                           onChange={(event) => setPhone(event.target.value)}/>
                 {Boolean(phone && authController.confirmationResult) &&
                     <>
-                        <Grid item xs={12} className="mt-2 p-1 flex">
+                        <div className="mt-2 p-1 flex">
                             <Typography align={"center"}
                                         variant={"subtitle2"}>{"Please enter the confirmation code"}</Typography>
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField placeholder="" fullWidth
-                                       value={code}
-                                       type="text"
-                                       required
-                                       onChange={(event) => setCode(event.target.value)}/>
-                        </Grid>
+                        </div>
+                        <TextInput placeholder=""
+                                   value={code ?? ""}
+                                   type="text"
+                                   onChange={(event) => setCode(event.target.value)}/>
                     </>
                 }
 
-                <Grid item xs={12}>
-                    <div className="flex justify-end items-center w-full">
+                <div className="flex justify-end items-center w-full">
 
-                        {authController.authLoading &&
-                            <CircularProgress className="p-1" size={"small"}/>
-                        }
+                    {authController.authLoading &&
+                        <CircularProgress className="p-1" size={"small"}/>
+                    }
 
-                        <Button type="submit">
-                            {"Ok"}
-                        </Button>
-                    </div>
-                </Grid>
+                    <Button type="submit">
+                        {"Ok"}
+                    </Button>
+                </div>
 
-            </Grid>
+            </div>
         </form>
     );
 }
@@ -507,15 +487,13 @@ function LoginForm({
 
     if (otherProvidersMode) {
         return (
-            <Grid container spacing={1}>
-                <Grid item xs={12}>
-                    <IconButton
-                        onClick={onBackPressed}>
-                        <ArrowBackIcon className="w-5 h-5"/>
-                    </IconButton>
-                </Grid>
+            <div className={"flex flex-col gap-1"}>
+                <IconButton
+                    onClick={onBackPressed}>
+                    <ArrowBackIcon className="w-5 h-5"/>
+                </IconButton>
 
-                <Grid item xs={12} className="p-1">
+                <div className="p-1">
                     <Typography align={"center"} variant={"subtitle2"}>
                         You already have an account
                     </Typography>
@@ -523,78 +501,65 @@ function LoginForm({
                         You can use one of these
                         methods to login with {email}
                     </Typography>
-                </Grid>
+                </div>
 
-                <Grid item xs={12}>
-                    {availableProviders && buildOauthLoginButtons(authController, availableProviders, mode, false)}
-                </Grid>
-            </Grid>
+                {availableProviders && buildOauthLoginButtons(authController, availableProviders, mode, false)}
+            </div>
         );
     }
 
     return (
-        <Slide
-            direction="up"
-            in={true}
-            mountOnEnter
-            unmountOnExit>
-            <form onSubmit={handleSubmit}>
-                <Grid container spacing={1}>
-                    <Grid item xs={12}>
-                        <IconButton
-                            onClick={onBackPressed}>
-                            <ArrowBackIcon className="w-5 h-5"/>
-                        </IconButton>
-                    </Grid>
+        <form onSubmit={handleSubmit}>
 
-                    <Grid item xs={12}
-                          className={`p-4 ${registrationMode && disableSignupScreen ? "hidden" : "flex"}`}>
-                        <Typography align={"center"}
-                                    variant={"subtitle2"}>{label}</Typography>
-                    </Grid>
+            <div className={"flex flex-col gap-1"}>
+                <IconButton
+                    onClick={onBackPressed}>
+                    <ArrowBackIcon className="w-5 h-5"/>
+                </IconButton>
 
-                    <Grid item xs={12}
-                          className={`${
-                              shouldShowEmail ? "block" : "hidden"
-                          }`}>
-                        <TextField placeholder="Email" fullWidth autoFocus
-                                   value={email ?? ""}
-                                   disabled={authController.authLoading}
-                                   type="email"
-                                   onChange={(event) => setEmail(event.target.value)}/>
-                    </Grid>
+                <div
+                    className={`p-4 ${registrationMode && disableSignupScreen ? "hidden" : "flex"}`}>
+                    <Typography align={"center"}
+                                variant={"subtitle2"}>{label}</Typography>
+                </div>
 
-                    <Grid item xs={12}>
-                        {registrationMode && noUserComponent}
-                    </Grid>
+                <div
+                    className={`${
+                        shouldShowEmail ? "block" : "hidden"
+                    }`}>
+                    <TextInput placeholder="Email"
+                               value={email ?? ""}
+                               disabled={authController.authLoading}
+                               type="email"
+                               onChange={(event) => setEmail(event.target.value)}/>
+                </div>
 
-                    <Grid item xs={12}
-                          className={`${loginMode || (registrationMode && !disableSignupScreen) ? "block" : "hidden"}`}>
-                        <TextField placeholder="Password" fullWidth
-                                   value={password ?? ""}
-                                   disabled={authController.authLoading}
-                                   inputRef={passwordRef}
-                                   type="password"
-                                   onChange={(event) => setPassword(event.target.value)}/>
-                    </Grid>
+                {registrationMode && noUserComponent}
 
-                    <Grid item xs={12}>
-                        <div className={`${
-                            registrationMode && disableSignupScreen ? "hidden" : "flex"
-                        } justify-end items-center w-full`}>
+                <div
+                    className={`${loginMode || (registrationMode && !disableSignupScreen) ? "block" : "hidden"}`}>
+                    <TextInput placeholder="Password"
+                               value={password ?? ""}
+                               disabled={authController.authLoading}
+                               inputRef={passwordRef}
+                               type="password"
+                               onChange={(event) => setPassword(event.target.value)}/>
+                </div>
 
-                            {authController.authLoading &&
-                                <CircularProgress className="p-1" size={"small"}/>
-                            }
+                <div className={`${
+                    registrationMode && disableSignupScreen ? "hidden" : "flex"
+                } justify-end items-center w-full`}>
 
-                            <Button type="submit">
-                                {button}
-                            </Button>
-                        </div>
-                    </Grid>
-                </Grid>
-            </form>
-        </Slide>
+                    {authController.authLoading &&
+                        <CircularProgress className="p-1" size={"small"}/>
+                    }
+
+                    <Button type="submit">
+                        {button}
+                    </Button>
+                </div>
+            </div>
+        </form>
     );
 
 }

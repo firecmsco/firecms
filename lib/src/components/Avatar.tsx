@@ -14,7 +14,8 @@ export const Avatar: React.FC<AvatarProps> = ({
                                                   className
                                               }) => {
     return (
-        <div className={`flex items-center justify-center overflow-hidden rounded-full ${className} bg-primary w-10 h-10`}>
+        <div
+            className={`flex items-center justify-center overflow-hidden rounded-full ${className} bg-gray-100 dark:bg-gray-900 w-10 h-10`}>
             {src
                 ? (
                     <img className="object-cover w-full h-full" src={src} alt={alt}/>

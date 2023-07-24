@@ -1,5 +1,6 @@
 import React, { ButtonHTMLAttributes } from "react";
 import clsx from "clsx";
+
 import { focusedMixin } from "../styles";
 
 export type ButtonProps<P> = ButtonHTMLAttributes<HTMLButtonElement> & {

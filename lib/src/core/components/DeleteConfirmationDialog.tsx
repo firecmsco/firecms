@@ -1,9 +1,8 @@
 import React from "react";
 
 import { DialogActions } from "./DialogActions";
-import { LoadingButton } from "@mui/lab";
-import { Dialog } from "../../components/Dialog";
-import { Button } from "../../components/Button";
+import { Dialog, Button } from "../../components";
+import { LoadingButton } from "../../components/LoadingButton";
 
 export function DeleteConfirmationDialog({
                                              open,
@@ -34,7 +33,6 @@ export function DeleteConfirmationDialog({
                     autoFocus>Cancel</Button>
 
                 <LoadingButton
-                    variant="contained"
                     color="primary"
                     type="submit"
                     loading={loading}

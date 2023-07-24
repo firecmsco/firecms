@@ -1,11 +1,6 @@
 import * as React from "react";
+import { useLayoutEffect } from "react";
 import * as ReactDOM from "react-dom";
-import {
-    unstable_debounce as debounce,
-    unstable_ownerWindow as ownerWindow,
-    unstable_useEnhancedEffect as useEnhancedEffect,
-    unstable_useForkRef as useForkRef
-} from "@mui/utils";
 
 type State = {
     outerHeightStyle: number;
@@ -73,8 +68,13 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
     const getUpdatedState = React.useCallback(() => {
 
         const input = inputRef.current!;
+        if (typeof window === "undefined") {
+            return {
+                outerHeightStyle: 0
+            };
+        }
 
-        const containerWindow = ownerWindow(input);
+        const containerWindow = window;
         const computedStyle = containerWindow.getComputedStyle(input);
 
         // If input's width is shrunk and it's not visible, don't sync height.
@@ -124,11 +124,17 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         const outerHeightStyle = outerHeight + (boxSizing === "border-box" ? padding + border : 0);
         const overflow = Math.abs(outerHeight - innerHeight) <= 1;
 
-        return { outerHeightStyle, overflow };
+        return {
+            outerHeightStyle,
+            overflow
+        };
     }, [maxRows, minRows, props.placeholder]);
 
     const updateState = (prevState: State, newState: State) => {
-        const { outerHeightStyle, overflow } = newState;
+        const {
+            outerHeightStyle,
+            overflow
+        } = newState;
         // Need a large enough difference to update the height.
         // This prevents infinite rendering loop.
         if (
@@ -203,7 +209,10 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         let resizeObserver: ResizeObserver;
 
         const input = inputRef.current!;
-        const containerWindow = ownerWindow(input);
+        const containerWindow = window;
+        if (typeof window === "undefined") {
+            return;
+        }
 
         containerWindow.addEventListener("resize", handleResize);
 
@@ -221,7 +230,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         };
     });
 
-    useEnhancedEffect(() => {
+    useLayoutEffect(() => {
         syncHeight();
     });
 
@@ -320,4 +329,62 @@ export interface TextareaAutosizeProps {
     onResize?: (state: State) => void;
 
     autoFocus?: boolean;
+}
+
+export interface Cancelable {
+    clear(): void;
+}
+
+// Corresponds to 10 frames at 60 Hz.
+// A few bytes payload overhead when lodash/debounce is ~3 kB and debounce ~300 B.
+export default function debounce<T extends (...args: any[]) => any>(func: T, wait = 166) {
+    let timeout: ReturnType<typeof setTimeout>;
+
+    function debounced(...args: Parameters<T>) {
+        const later = () => {
+            // @ts-ignore
+            func.apply(this, args);
+        };
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+    }
+
+    debounced.clear = () => {
+        clearTimeout(timeout);
+    };
+
+    return debounced as T & Cancelable;
+}
+
+function useForkRef<Instance>(
+    ...refs: Array<React.Ref<Instance> | undefined>
+): React.RefCallback<Instance> | null {
+    /**
+     * This will create a new function if the refs passed to this hook change and are all defined.
+     * This means react will call the old forkRef with `null` and the new forkRef
+     * with the ref. Cleanup naturally emerges from this behavior.
+     */
+    return React.useMemo(() => {
+        if (refs.every((ref) => ref == null)) {
+            return null;
+        }
+
+        return (instance) => {
+            refs.forEach((ref) => {
+                setRef(ref, instance);
+            });
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, refs);
+}
+
+function setRef<T>(
+    ref: React.MutableRefObject<T | null> | ((instance: T | null) => void) | null | undefined,
+    value: T | null,
+): void {
+    if (typeof ref === "function") {
+        ref(value);
+    } else if (ref) {
+        ref.current = value;
+    }
 }

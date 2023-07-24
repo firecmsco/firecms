@@ -5,11 +5,10 @@ import clsx from "clsx";
 import MarkdownIt from "markdown-it";
 import MdEditor, { Plugins } from "react-markdown-editor-lite";
 
-import { LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
 import { getIconForProperty, Typography } from "../../core";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "../../styles";
-import { FieldHelperText } from "../components/FieldHelperText";
 import { useInjectStyles } from "../../components/util/useInjectStyles";
 
 const mdParser = new MarkdownIt();
@@ -287,7 +286,8 @@ const markdownCss = `
 
   .rc-md-editor .editor-container .sec-md {
     min-height: 0;
-    min-width: 0
+    min-width: 0;
+    overflow: hidden;
   }
 
   .rc-md-editor .editor-container .sec-md .input {

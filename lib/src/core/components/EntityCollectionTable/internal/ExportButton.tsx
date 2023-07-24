@@ -6,8 +6,8 @@ import { downloadCSV } from "../../../util/csv";
 import { DialogActions } from "../../DialogActions";
 import { resolveCollection } from "../../../util";
 import { Button, CircularProgress, Dialog, IconButton, Tooltip, Typography } from "../../../../components";
-import { Alert } from "@mui/lab";
 import { GetAppIcon } from "../../../../icons";
+import { Alert } from "../../../../components/Alert";
 
 interface ExportButtonProps<M extends Record<string, any>, UserType extends User> {
     collection: EntityCollection<M>;
@@ -147,7 +147,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
             open={open}
             onOpenChange={setOpen}
         >
-            <div className={"p-4"}>
+            <div className={"p-4 flex flex-col gap-2"}>
 
                 <Typography variant={"h6"}>Export data</Typography>
 
@@ -155,9 +155,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                 <br/>
 
                 {needsToAcceptFetchAllData &&
-                    <Alert elevation={3}
-                           variant="filled"
-                           severity={"warning"}>
+                    <Alert severity={"warning"}>
                         <div>
                             This collections has a large number
                             of documents (more

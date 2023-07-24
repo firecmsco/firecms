@@ -1,7 +1,5 @@
 import React from "react";
 
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 
@@ -130,15 +128,10 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                                         <NavigationContextInstance.Provider
                                             value={navigation}>
                                             <BreadcrumbsProvider>
-                                                <LocalizationProvider
-                                                    dateAdapter={AdapterDateFns}
-                                                    utils={DateFnsUtils}
-                                                    locale={dateUtilsLocale}>
-                                                    <FireCMSInternal
-                                                        loading={loading}>
-                                                        {children}
-                                                    </FireCMSInternal>
-                                                </LocalizationProvider>
+                                                <FireCMSInternal
+                                                    loading={loading}>
+                                                    {children}
+                                                </FireCMSInternal>
                                             </BreadcrumbsProvider>
                                         </NavigationContextInstance.Provider>
                                     </SideEntityControllerContext.Provider>
