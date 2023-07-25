@@ -176,7 +176,7 @@ export function useFirestoreDataSource({
             );
         return Promise.all(promises)
             .then((res) => res.filter((e) => e !== undefined && e.values) as Entity<M>[]);
-    }, [getAndBuildEntity]);
+    }, [getAndBuildEntity, textSearchController]);
 
     return {
 
@@ -470,7 +470,7 @@ export function useFirestoreDataSource({
             if (value === undefined || value === null) {
                 return Promise.resolve(true);
             }
-            const q = query(collectionClause(firestore, path), whereClause(name, "==", value));
+            const q = query(collectionClause(firestore, path), whereClause(name, "==", cmsToFirestoreModel(value, firestore)));
             return getDocs(q)
                 .then((snapshots) =>
                     snapshots.docs.filter(doc => doc.id !== entityId).length === 0

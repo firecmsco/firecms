@@ -61,7 +61,7 @@ export function getDefaultValueFor(property: PropertyOrBuilder) {
 
 export function getDefaultValueForDataType(dataType: DataType) {
     if (dataType === "string") {
-        return "";
+        return null;
     } else if (dataType === "number") {
         return null;
     } else if (dataType === "boolean") {

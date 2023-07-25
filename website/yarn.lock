@@ -5345,8 +5345,8 @@ __metadata:
 
 "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader::locator=website%40workspace%3A.":
   version: 0.0.0
-  resolution: "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader#plugins/docusaurus-tailwindcss-loader::hash=1c6fb3&locator=website%40workspace%3A."
-  checksum: cf0d50fc2a953e286c9527bdbabf43d1e366061ce536f4acca3eb3077366fb276ce333fc4104df825f19119468ab6cf477db3c0f06b63427ff28b24bbfa321a9
+  resolution: "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader#plugins/docusaurus-tailwindcss-loader::hash=a832e0&locator=website%40workspace%3A."
+  checksum: 73076ad3001af2bab055c8f2d2b06fab5f7128be9a55f3c064710dd6dd763e894853320ec8e909d7eb39452f7cfad33e1d48c6056397f6a4e6d582109923c367
   languageName: node
   linkType: hard
 
@@ -10575,11 +10575,11 @@ __metadata:
   linkType: hard
 
 "semver@npm:^5.4.1":
-  version: 5.7.1
-  resolution: "semver@npm:5.7.1"
+  version: 5.7.2
+  resolution: "semver@npm:5.7.2"
   bin:
-    semver: ./bin/semver
-  checksum: 57fd0acfd0bac382ee87cd52cd0aaa5af086a7dc8d60379dfe65fea491fb2489b6016400813930ecd61fd0952dae75c115287a1b16c234b1550887117744dfaf
+    semver: bin/semver
+  checksum: fb4ab5e0dd1c22ce0c937ea390b4a822147a9c53dbd2a9a0132f12fe382902beef4fbf12cf51bb955248d8d15874ce8cd89532569756384f994309825f10b686
   languageName: node
   linkType: hard
 

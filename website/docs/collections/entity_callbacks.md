@@ -24,13 +24,7 @@ containing a `string` and an error snackbar will be displayed.
 :::
 
 ```tsx
-import {
-    toSnakeCase,
-    buildCollection,
-    buildEntityCallbacks,
-    EntityOnDeleteProps,
-    EntityOnSaveProps
-} from "firecms";
+import { buildCollection, buildEntityCallbacks, EntityOnDeleteProps, EntityOnSaveProps, toSnakeCase } from "firecms";
 
 type Product = {
     name: string;
@@ -43,6 +37,7 @@ const productCallbacks = buildEntityCallbacks({
                     path,
                     entityId,
                     values,
+                    previousValues,
                     status
                 }) => {
         // return the updated values
@@ -126,6 +121,8 @@ const productCollection = buildCollection<Product>({
 * `entityId`: string ID of the entity
 
 * `values`: EntityValues Values being saved
+
+* `previousValues`: EntityValues Previous values of the entity
 
 * `status`: EntityStatus New or existing entity
 

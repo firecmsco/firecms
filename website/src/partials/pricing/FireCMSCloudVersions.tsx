@@ -54,7 +54,7 @@ export function FireCMSCloudVersions() {
                     <li>Unlimited users and roles</li>
                     <li>Theme and logo customization</li>
                     <li>Custom user roles</li>
-                    <li>AI content generation</li>
+                    <li>GPT-4 content generation</li>
                     {/*<li>Custom fields</li>*/}
                 </ul>
             </div>
@@ -81,7 +81,7 @@ export function FireCMSCloudVersions() {
                 <ul>
                     <li>Everything in PLUS</li>
                     <li>SAML SSO</li>
-                    <li>AI content generation</li>
+                    <li>GPT-4 content generation</li>
                     <li>Custom domain</li>
                     <li>Priority support</li>
                     <li>Roadmap prioritization</li>
