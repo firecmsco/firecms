@@ -285,7 +285,7 @@ export const EntityCollectionView = React.memo(
             open={popOverOpen}
             onOpenChange={setPopOverOpen}
             enabled={Boolean(collection.description)}
-            trigger={<div className="flex flex-col content-center">
+            trigger={<div className="flex flex-col items-start">
                 <Typography
                     variant={"subtitle1"}
                     className={`leading-none truncate max-w-[160px] lg:max-w-[240px] ${collection.description ? "cursor-pointer" : "cursor-auto"}`}

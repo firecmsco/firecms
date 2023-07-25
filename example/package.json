@@ -4,12 +4,7 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@emotion/react": "^11.11.1",
-    "@emotion/styled": "^11.11.0",
     "@firecms/data_enhancement": "^1.0.0",
-    "@mui/icons-material": "^5.11.16",
-    "@mui/lab": "^5.0.0-alpha.133",
-    "@mui/material": "^5.13.4",
     "algoliasearch": "^4.17.1",
     "firebase": "^9.22.1",
     "firecms": "workspace:lib",

@@ -12,7 +12,7 @@ import { getThumbnailMeasure } from "../../../../preview/util";
 import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../../../../form/components/StorageUploadProgress";
 import { IconButton, Typography } from "../../../../components";
-import { EditIcon } from "../../../../icons/EditIcon";
+import { EditIcon } from "../../../../icons";
 
 const dropZoneClasses = "max-w-full box-border relative pt-[2px] items-center border border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const activeDropClasses = "pt-0 border-2 border-solid"
@@ -196,6 +196,7 @@ function StorageUpload({
              onMouseMove={() => setOnHover(true)}
              onMouseLeave={() => setOnHover(false)}
              className={clsx(dropZoneClasses,
+                 "relative w-full h-full",
                  `justify-${hasValue ? "start" : "center"}`,
                  isDragActive ? activeDropClasses : "",
                  isDragAccept ? acceptDropClasses : "",
@@ -250,8 +251,8 @@ function StorageUpload({
                     color={"inherit"}
                     size={"small"}
                     onClick={open}
-                    className="absolute bottom-2 right-2">
-                    <EditIcon className="w-4 h-4" style={{ fill: "#888" }}/>
+                    className="absolute bottom-0 right-0">
+                    <EditIcon size={"small"} className={"text-gray-500"}/>
                 </IconButton>
             }
 

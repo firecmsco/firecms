@@ -43,13 +43,17 @@ export function Tab({
                                   disabled={disabled}
                                   className={clsx(focusedMixin,
                                       "border-b-2 border-transparent",
-                                      "data-[state=active]:border-primary",
-                                      // "hover:text-gray-600 dark:hover:text-gray-300",
-                                      disabled ? "text-gray-400 dark:text-gray-500" : "data-[state=active]:text-primary",
+                                      "data-[state=active]:border-secondary",
+                                      disabled
+                                          ? "text-gray-400 dark:text-gray-500"
+                                          : clsx("text-gray-700 dark:text-gray-300",
+                                              "data-[state=active]:text-gray-900 data-[state=active]:dark:text-gray-100",
+                                              "hover:text-gray-800 dark:hover:text-gray-200"),
+                                      // disabled ? "text-gray-400 dark:text-gray-500" : "data-[state=active]:text-primary",
                                       // "data-[state=active]:bg-gray-50 data-[state=active]:dark:bg-gray-800",
                                       className)}>
         <div className={clsx("uppercase inline-block p-2 px-4 m-2 rounded",
-            "hover:bg-gray-100 dark:hover:bg-gray-800",)}>
+            "hover:bg-gray-100 dark:hover:bg-gray-800")}>
             {children}
         </div>
     </TabsPrimitive.Trigger>;

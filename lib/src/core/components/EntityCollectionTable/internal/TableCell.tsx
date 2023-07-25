@@ -271,7 +271,6 @@ export const TableCell = React.memo<TableCellProps>(
                                 size={"small"}
                                 onClick={doOpenPopup}>
                                 <svg
-                                    className={"MuiSvgIcon-root MuiSvgIcon-fontSizeSmall"}
                                     fill={"#888"}
                                     width="20"
                                     height="20"
