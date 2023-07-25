@@ -535,7 +535,6 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                         <Tabs
                             value={selectedTabRef.current}
                             onValueChange={(value) => {
-                                console.log("onValueChange", value);
                                 onSideTabClick(value);
                             }}
                             className="pl-4 pr-4 pt-0">

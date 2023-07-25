@@ -257,7 +257,7 @@ export const TableCell = React.memo<TableCellProps>(
                 {disabled && onHover && disabledTooltip &&
                     <div className="absolute top-1 right-1 text-xs">
                         <Tooltip title={disabledTooltip}>
-                            <RemoveCircleIcon color={"disabled"}/>
+                            <RemoveCircleIcon size={"smallest"} color={"disabled"} className={"text-gray-500"}/>
                         </Tooltip>
                     </div>}
 

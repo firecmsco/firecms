@@ -3,6 +3,7 @@ import clsx from "clsx";
 
 export interface BooleanSwitchProps {
     value: boolean;
+    className?: string;
     onValueChange?: (newValue: boolean) => void;
     disabled?: boolean;
     size?: "small" | "medium";
@@ -10,6 +11,7 @@ export interface BooleanSwitchProps {
 
 export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                                                                          value,
+                                                                         className,
                                                                          onValueChange,
                                                                          disabled = false,
                                                                          size = "medium"
@@ -23,9 +25,10 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                     onValueChange?.(!value);
                 }}
             className={clsx(
-                size === "small" ? "w-[38px] h-[22px]" : "w-[42px] h-[26px]",
+                size === "small" ? "w-[38px] h-[22px] min-w-[38px] min-h-[22px]" : "w-[42px] h-[26px] min-w-[42px] min-h-[26px]",
                 "outline-none rounded-full relative shadow-sm",
                 value ? "ring-secondary ring-1 bg-secondary dark:bg-secondary" : "bg-white bg-opacity-54 dark:bg-gray-900 ring-1 ring-gray-100 dark:ring-gray-700",
+                className
             )}>
             <div
                 className={clsx(

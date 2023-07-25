@@ -11,6 +11,7 @@ import { BooleanSwitch } from "./BooleanSwitch";
 export type BooleanSwitchWithLabelProps = {
     value: boolean,
     position?: "start" | "end",
+    invisible?: boolean,
     onValueChange?: (value: boolean) => void,
     label?: React.ReactNode,
     disabled?: boolean,
@@ -26,6 +27,7 @@ export type BooleanSwitchWithLabelProps = {
 export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                                                                           value,
                                                                           position = "end",
+                                                                          invisible,
                                                                           onValueChange,
                                                                           error,
                                                                           label,
@@ -55,12 +57,12 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
             onBlur={onBlur}
             tabIndex={-1}
             className={clsx(
-                fieldBackgroundMixin,
-                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
+                !invisible && fieldBackgroundMixin,
+                !invisible && (disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin),
                 "rounded-md relative cursor-pointer max-w-full justify-between w-full box-border relative inline-flex items-center",
-                focus ? focusedClasses : "",
-                error ? "text-red-500 dark:text-red-600" : focus ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark",
-                size === "small" ? "min-h-[48px]" : "min-h-[64px]",
+                !invisible && focus ? focusedClasses : "",
+                error ? "text-red-500 dark:text-red-600" : !invisible && focus ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark",
+                size === "small" ? "min-h-[40px]" : "min-h-[64px]",
                 size === "small" ? "pl-2" : "pl-4",
                 size === "small" ? "pr-4" : "pr-6",
                 position === "end" ? "flex-row-reverse" : "flex-row"
@@ -73,9 +75,15 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
             }}
         >
 
-            <BooleanSwitch value={value} ref={refInput}/>
+            <BooleanSwitch
+                value={value}
+                ref={refInput}
+                size={size}
+                className={invisible && focus ? focusedClasses : ""}/>
 
-            {label}
+            <div className={clsx("flex-grow", position === "end" ? "mr-4" : "ml-4")}>
+                {label}
+            </div>
 
         </div>
 

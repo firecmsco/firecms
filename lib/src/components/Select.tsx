@@ -128,8 +128,8 @@ export function Select({
 
                 </SelectPrimitive.Trigger>
 
-                {endAdornment && <div className={clsx("absolute top-1 right-10 h-full flex items-center",
-                    size === "small" ? "top-0" : "top-1")}
+                {endAdornment && <div className={clsx("absolute h-full flex items-center",
+                    size === "small" ? "right-10" : "right-14")}
                                       onClick={(e) => e.stopPropagation()}>
                     {endAdornment}
                 </div>}

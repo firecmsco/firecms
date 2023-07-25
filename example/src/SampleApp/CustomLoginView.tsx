@@ -27,17 +27,20 @@ export function CustomLoginView(props: FirebaseLoginViewProps) {
             additionalComponent={
                 <>
                     <BooleanSwitchWithLabel size="small"
+                                            invisible={true}
                                             value={newsletterSubscribed}
                                             onValueChange={setNewsletterSubscribed}
-
+                                            position={"start"}
                                             label={
                                                 <Typography variant={"caption"}>
                                                     Join our newsletter. No spam, only important
                                                     updates!
                                                 </Typography>}/>
                     <BooleanSwitchWithLabel size="small"
+                                            invisible={true}
                                             value={termsAccepted}
                                             onValueChange={setTermsAccepted}
+                                            position={"start"}
                                             label={
                                                 <Typography variant={"caption"}>
                                                     By signing in you agree to our <a

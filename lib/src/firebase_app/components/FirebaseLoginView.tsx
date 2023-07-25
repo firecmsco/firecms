@@ -212,7 +212,7 @@ export function FirebaseLoginView({
             className="flex flex-col items-center justify-center min-h-screen min-w-full p-2">
             <div id="recaptcha"></div>
             <div
-                className="flex flex-col items-center w-full max-w-[480px]">
+                className="flex flex-col items-center w-full max-w-[500px]">
 
                 <div className="p-1 w-64 h-64 m-4">
                     {logoComponent}

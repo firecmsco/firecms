@@ -121,7 +121,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                 </div>
 
                 <Button variant="text"
-                        color="inherit"
+                        className={"!text-gray-800 dark:!text-gray-200"}
                         onClick={authController.signOut}>
                     Log Out
                 </Button>

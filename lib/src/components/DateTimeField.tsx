@@ -125,7 +125,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
             {clearable && value && (
                 <IconButton
                     onClick={handleClear}
-                    className="absolute right-12 top-1/2 transform -translate-y-1/2 text-gray-400 ">
+                    className="absolute right-14 top-1/2 transform -translate-y-1/2 text-gray-400 ">
                     <ClearIcon/>
                 </IconButton>
             )}
