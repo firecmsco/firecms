@@ -1,9 +1,4 @@
-import CustomColorTextField from "../custom_field/CustomColorTextField";
-import {
-    buildCollection,
-    buildProperty,
-    ExportMappingFunction
-} from "firecms";
+import { buildCollection, buildProperty, ExportMappingFunction } from "firecms";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
 
 export type BlogEntry = {
@@ -37,7 +32,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     exportable: {
         additionalFields: [sampleAdditionalExportColumn]
     },
-    description: "A blog entry with around 500 words and a quirky humorist tone",
+    description: "A blog entry with a quirky humorist tone. Each entry should have at least 5 text pieces of around 100 words each and a quote at least. The quote can be anywhere.",
     textSearchEnabled: true,
     defaultSize: "l",
     views: [{
@@ -76,6 +71,11 @@ export const blogCollection = buildCollection<BlogEntry>({
                         dataType: "string",
                         name: "Text",
                         markdown: true
+                    },
+                    quote: {
+                        dataType: "string",
+                        name: "Quote",
+                        multiline: true
                     },
                     images: {
                         name: "Images",

@@ -46,7 +46,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
 
             <Container maxWidth={"sm"}
                        sx={{
-                           alignItems: "center",
+                           mt: 4,
                            justifyItems: "center",
                            display: "flex",
                            flexDirection: "column"
@@ -74,11 +74,13 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
                             return <ProductGroupPreview
                                 key={`preview_products_${index}`}
                                 references={entry.value}/>;
+                        if (entry.type === "quote")
+                            return <Quote key={`preview_quote_${index}`}
+                                          quoteText={entry.value}/>;
                         return <ErrorView key={`preview_images_${index}`}
                                           error={"Unexpected value in blog entry"}/>
                     }
                 )}
-
 
         </Box>
     );
@@ -216,4 +218,18 @@ export function ProductPreview({ productValues }: { productValues: EntityValues<
         </Paper>
     );
 
+}
+
+function Quote({ quoteText }: { quoteText: string }) {
+
+    if (!quoteText)
+        return <></>;
+
+    return <Container maxWidth={"sm"} sx={{ borderLeft: "2px solid gray" }}>
+        <Box mt={6} mb={6}>
+            <Typography variant="h5" sx={{ fontStyle: "italic" }}>
+                {quoteText}
+            </Typography>
+        </Box>
+    </Container>;
 }

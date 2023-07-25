@@ -101,7 +101,6 @@ export const productCallbacks: EntityCallbacks<Product> = {
 export const productsCollection = buildCollection<Product>({
     path: "products",
     alias: "ppp",
-    // inlineEditing: false,
     callbacks: productCallbacks,
     name: "Products",
     singularName: "Product",
