@@ -5,6 +5,7 @@ import { useInjectStyles } from "./util/useInjectStyles";
 
 export type TooltipProps = {
     open?: boolean,
+    onOpenChange?: (open: boolean) => void,
     placement?: "top" | "bottom" | "left" | "right",
     title?: string,
     className?: string,
@@ -16,6 +17,7 @@ export type TooltipProps = {
 export const Tooltip = ({
                             open,
                             placement = "bottom",
+                            onOpenChange,
                             title,
                             className,
                             style,
@@ -30,7 +32,7 @@ export const Tooltip = ({
 
     return (
         <TooltipPrimitive.Provider delayDuration={250}>
-            <TooltipPrimitive.Root open={open}>
+            <TooltipPrimitive.Root open={open} onOpenChange={onOpenChange}>
                 <TooltipPrimitive.Trigger asChild>
                     <div className={className} style={style}>
                         {children}

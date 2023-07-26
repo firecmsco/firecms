@@ -12,25 +12,20 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: 'FireCMS',
+            name: "FireCMS",
             fileName: (format) => `index.${format}.js`,
         },
         collection_editor: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: 'FireCMS',
-            fileName: (format:string) => `index.${format}.js`,
+            name: "FireCMS",
+            fileName: (format: string) => `index.${format}.js`,
         },
-        target: 'esnext',
+        target: "esnext",
         sourcemap: true,
         rollupOptions: {
             external: isExternal,
         },
     },
     plugins: [
-        react({
-            jsxImportSource: "@emotion/react",
-            babel: {
-                plugins: ["@emotion/babel-plugin"],
-            },
-        })],
+        react({})],
 }));

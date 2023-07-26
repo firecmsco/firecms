@@ -21,7 +21,6 @@ import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
 import { Typography } from "../components";
-import { defaultBorderMixin } from "../styles";
 import { Button } from "../components/Button";
 
 /**
@@ -378,47 +377,49 @@ function EntityFormInternal<M extends Record<string, any>>({
                 }
 
                 return <div
-                    className="pl-4 pr-4 pt-12 pb-16 md:pl-8 md:pr-8 h-full overflow-auto"
+                    className="h-full overflow-auto"
                 >
 
                     {pluginActions.length > 0 && <div
-                        className={clsx(
-                            defaultBorderMixin,
-                            "w-full flex justify-end row items-center absolute top-0 right-0 left-0 text-right z-2 bg-opacity-60 bg-white dark:bg-opacity-10 dark:bg-gray-800 backdrop-blur-md border-b border-gray-100 dark:border-gray-800")}>
+                        className={clsx("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-slate-200 dark:bg-opacity-60 dark:bg-slate-800 backdrop-blur-md")}>
                         {pluginActions}
                     </div>}
 
                     <div
-                        className={`w-full py-2 flex items-center mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
+                        className="pl-4 pr-4 pt-12 pb-16 md:pl-8"
+                    >
+                        <div
+                            className={`w-full py-2 flex items-center mt-${4 + (pluginActions ? 8 : 0)} lg:mt-${8 + (pluginActions ? 8 : 0)} mb-8`}>
 
-                        <Typography
-                            className={"mt-4 flex-grow " + collection.hideIdFromForm ? "mb-2" : "mb-0"}
-                            variant={"h4"}>{collection.singularName ?? collection.name}
-                        </Typography>
+                            <Typography
+                                className={"mt-4 flex-grow " + collection.hideIdFromForm ? "mb-2" : "mb-0"}
+                                variant={"h4"}>{collection.singularName ?? collection.name}
+                            </Typography>
+                        </div>
+
+                        {!hideId &&
+                            <CustomIdField customId={collection.customId}
+                                           entityId={entityId}
+                                           status={status}
+                                           onChange={setEntityId}
+                                           error={entityIdError}
+                                           entity={entity}/>}
+
+                        {entityId && <InnerForm
+                            {...props}
+                            initialValues={initialValues}
+                            onModified={onModified}
+                            onValuesChanged={doOnValuesChanges}
+                            underlyingChanges={underlyingChanges}
+                            entity={entity}
+                            collection={collection}
+                            formContext={formContext}
+                            status={status}
+                            savingError={savingError}
+                            closeAfterSaveRef={closeAfterSaveRef}
+                            autoSave={autoSave}/>}
+
                     </div>
-
-                    {!hideId &&
-                        <CustomIdField customId={collection.customId}
-                                       entityId={entityId}
-                                       status={status}
-                                       onChange={setEntityId}
-                                       error={entityIdError}
-                                       entity={entity}/>}
-
-                    {entityId && <InnerForm
-                        {...props}
-                        initialValues={initialValues}
-                        onModified={onModified}
-                        onValuesChanged={doOnValuesChanges}
-                        underlyingChanges={underlyingChanges}
-                        entity={entity}
-                        collection={collection}
-                        formContext={formContext}
-                        status={status}
-                        savingError={savingError}
-                        closeAfterSaveRef={closeAfterSaveRef}
-                        autoSave={autoSave}/>}
-
                 </div>
             }}
         </Formik>

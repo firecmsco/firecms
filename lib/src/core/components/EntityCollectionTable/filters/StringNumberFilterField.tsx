@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { EnumValuesChip } from "../../../../preview";
 import { TableEnumValues, TableWhereFilterOp } from "../../Table";
-import { IconButton, Select, TextInput } from "../../../../components";
+import { IconButton, Select, TextField } from "../../../../components";
 import { ClearIcon } from "../../../../icons/ClearIcon";
 
 interface StringNumberFilterFieldProps {
@@ -96,7 +96,7 @@ export function StringNumberFilterField({
 
             <div className="flex-grow ml-4">
 
-                {!enumValues && <TextInput
+                {!enumValues && <TextField
                     type={dataType === "number" ? "number" : undefined}
                     value={internalValue !== undefined ? String(internalValue) : ""}
                     onChange={(evt) => {

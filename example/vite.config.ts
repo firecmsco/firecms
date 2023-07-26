@@ -17,9 +17,7 @@ export default defineConfig({
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
         svgr(),
-        react({
-            jsxImportSource: "@emotion/react"
-        })
+        react({})
     ],
     resolve: {
         alias: {

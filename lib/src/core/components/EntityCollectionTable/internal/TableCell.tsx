@@ -8,7 +8,7 @@ import { getRowHeight } from "../../Table/common";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { ErrorTooltip } from "../../ErrorTooltip";
 import { IconButton, Tooltip } from "../../../../components";
-import { useOutsideAlerter } from "../../../internal/useOutsideAlerter";
+import { useOutsideAlerter } from "../../../useOutsideAlerter";
 import { ErrorOutlineIcon, RemoveCircleIcon } from "../../../../icons";
 
 interface TableCellProps {

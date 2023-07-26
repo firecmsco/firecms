@@ -17,6 +17,7 @@ export * from "./util";
 export * from "./form_field_configs";
 
 export * from "./useBuildModeController";
+export * from "./useOutsideAlerter";
 export * from "./useBuildLocalConfigurationPersistence";
 
 export { SnackbarProvider } from "./contexts/SnackbarContext";

@@ -20,7 +20,7 @@ export type InputType =
     | "week"
     | "color";
 
-export type TextInputProps<T extends string | number> = {
+export type TextFieldProps<T extends string | number> = {
     type?: InputType,
     value: T,
     onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
@@ -37,9 +37,9 @@ export type TextInputProps<T extends string | number> = {
     inputClassName?: string,
     inputStyle?: React.CSSProperties,
     inputRef?: React.Ref<any>
-};
+} & Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">;
 
-export function TextInput<T extends string | number>({
+export function TextField<T extends string | number>({
                                                          value,
                                                          onChange,
                                                          label,
@@ -55,8 +55,9 @@ export function TextInput<T extends string | number>({
                                                          style,
                                                          inputClassName,
                                                          inputStyle,
-                                                         inputRef: inputRefProp
-                                                     }: TextInputProps<T>) {
+                                                         inputRef: inputRefProp,
+                                                         ...inputProps
+                                                     }: TextFieldProps<T>) {
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const inputRef = inputRefProp ?? useRef(null);
@@ -74,11 +75,12 @@ export function TextInput<T extends string | number>({
 
     const input = multiline
         ? <TextareaAutosize
+            {...inputProps as any}
             ref={inputRef}
             placeholder={placeholder}
             autoFocus={autoFocus}
-            onFocus={() => setFocused(true)}
-            onBlur={() => setFocused(false)}
+            // onFocus={() => setFocused(true)}
+            // onBlur={() => setFocused(false)}
             value={value ?? ""}
             onChange={onChange}
             style={inputStyle}
@@ -88,28 +90,30 @@ export function TextInput<T extends string | number>({
                 disabled && "border border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500"
             )}
         />
-        : <input ref={inputRef}
-                 onWheel={type === "number" ? numberInputOnWheelPreventChange : undefined}
-                 disabled={disabled}
-                 style={inputStyle}
-                 className={clsx(
-                     "w-full outline-none bg-transparent leading-normal text-base px-3",
-                     "rounded-md",
-                     focusedMixin,
-                     size === "small" ? "min-h-[48px]" : "min-h-[64px]",
-                     label ? "pt-[28px] pb-2" : "py-2",
-                     focused ? "text-text-primary dark:text-text-primary-dark" : "",
-                     endAdornment ? "pr-10" : "pr-3",
-                     inputClassName,
-                     disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-600 dark:text-gray-500"
-                 )}
-                 placeholder={placeholder}
-                 autoFocus={autoFocus}
-                 onFocus={() => setFocused(true)}
-                 onBlur={() => setFocused(false)}
-                 type={type}
-                 value={Number.isNaN(value) ? "" : (value ?? "")}
-                 onChange={onChange}
+        : <input
+            {...inputProps}
+            ref={inputRef}
+            onWheel={type === "number" ? numberInputOnWheelPreventChange : undefined}
+            disabled={disabled}
+            style={inputStyle}
+            className={clsx(
+                "w-full outline-none bg-transparent leading-normal text-base px-3",
+                "rounded-md",
+                focusedMixin,
+                size === "small" ? "min-h-[48px]" : "min-h-[64px]",
+                label ? "pt-[28px] pb-2" : "py-2",
+                focused ? "text-text-primary dark:text-text-primary-dark" : "",
+                endAdornment ? "pr-10" : "pr-3",
+                inputClassName,
+                disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-600 dark:text-gray-500"
+            )}
+            placeholder={placeholder}
+            autoFocus={autoFocus}
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            type={type}
+            value={Number.isNaN(value) ? "" : (value ?? "")}
+            onChange={onChange}
         />;
 
     return (

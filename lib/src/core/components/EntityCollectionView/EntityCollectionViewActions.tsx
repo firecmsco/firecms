@@ -85,7 +85,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         multipleDeleteButton =
             <Tooltip
                 title={multipleDeleteEnabled ? "Delete" : "You have selected at least one entity you cannot delete"}>
-                <span>{button}</span>
+                {button}
             </Tooltip>
     }
 

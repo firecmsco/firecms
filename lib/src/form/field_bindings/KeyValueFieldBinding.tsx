@@ -7,7 +7,7 @@ import {
     ExpandablePanel,
     getDefaultValueForDataType,
     getIconForProperty,
-    TextInput
+    TextField
 } from "../../core";
 import { LabelWithIcon } from "../components";
 import { Typography } from "../../components/Typography";
@@ -107,7 +107,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
 
     function buildInput(entryValue: any, fieldKey: string, dataType: DataType) {
         if (dataType === "string" || dataType === "number") {
-            return <TextInput
+            return <TextField
                 key={dataType}
                 value={entryValue}
                 type={dataType === "number" ? "number" : "text"}
@@ -224,7 +224,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                         component={"div"}
                         className="font-mono flex flex-row gap-1 items-center">
                 <div className="w-[200px] max-w-[25%]">
-                    <TextInput
+                    <TextField
                         value={fieldKey}
                         disabled={disabled || Boolean(entryValue)}
                         size={"small"}
@@ -294,7 +294,7 @@ function ArrayKeyValueRow<T>({
 
     function buildInput(entryValue: any, dataType: DataType) {
         if (dataType === "string" || dataType === "number") {
-            return <TextInput value={entryValue}
+            return <TextField value={entryValue}
                               type={dataType === "number" ? "number" : "text"}
                               size={"small"}
                               onChange={(event) => {
@@ -357,8 +357,7 @@ function ArrayKeyValueRow<T>({
                     trigger={<IconButton size={"small"}
                                          className="h-7 w-7">
                         <ArrowDropDownIcon/>
-                    </IconButton>}
-                >
+                    </IconButton>}>
                     <MenuItem dense
                               onClick={() => doUpdateDataType("string")}>string</MenuItem>
                     <MenuItem dense
@@ -370,7 +369,6 @@ function ArrayKeyValueRow<T>({
                     <MenuItem dense
                               onClick={() => doUpdateDataType("date")}>date</MenuItem>
                 </Menu>
-
 
             </Typography>
 

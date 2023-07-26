@@ -24,7 +24,7 @@ export function FieldHelperText({
 
     const hasDescription = property.description || property.longDescription;
 
-    if (!error && (!includeDescription || !hasDescription))
+    if (!(showError && error) && (!includeDescription || !hasDescription))
         return null;
 
     if (showError && error) {

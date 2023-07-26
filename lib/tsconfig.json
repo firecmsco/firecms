@@ -25,7 +25,6 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "jsxImportSource": "@emotion/react",
         "types": ["vite/client", "node", "jest"]
     },
     "include": [

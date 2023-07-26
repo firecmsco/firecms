@@ -13,7 +13,7 @@ export function CircularProgress({
 
     let sizeClasses = "";
     if (size === "small") {
-        sizeClasses = "w-5 h-5";
+        sizeClasses = "w-4 h-4";
     } else if (size === "medium") {
         sizeClasses = "w-8 h-8";
     } else {

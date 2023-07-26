@@ -5,7 +5,7 @@ import { FieldProps, PreviewType } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
-import { IconButton, TextInput } from "../../components";
+import { IconButton, TextField } from "../../components";
 import { PropertyPreview } from "../../preview";
 import { Collapse } from "../../components/Collapse";
 import { ClearIcon } from "../../icons/ClearIcon";
@@ -71,7 +71,7 @@ export function TextFieldBinding<T extends string | number>({
     const inputType = property.dataType === "number" ? "number" : undefined;
     return (
         <>
-            <TextInput
+            <TextField
                 value={value}
                 onChange={onChange}
                 autoFocus={autoFocus}

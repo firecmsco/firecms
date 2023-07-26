@@ -255,6 +255,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
             <textarea
                 value={value}
                 onChange={handleChange}
+                className={props.className}
                 ref={handleRef}
                 onFocus={onFocus}
                 onBlur={onBlur}
@@ -272,7 +273,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
             />
             <textarea
                 aria-hidden
-                className={props.className}
+                className={props.shadowClassName}
                 readOnly
                 ref={shadowRef}
                 tabIndex={-1}
@@ -286,15 +287,11 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
     );
 });
 
-export interface TextareaAutosizeProps {
-    /**
-     * @ignore
-     */
+export type TextareaAutosizeProps = Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, "onResize"> & {
+
     className?: string;
 
-    onFocus?: React.FocusEventHandler<HTMLTextAreaElement>;
-
-    onBlur?: React.FocusEventHandler<HTMLTextAreaElement>;
+    shadowClassName?: string;
 
     /**
      * Maximum number of rows to display.

@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
-import { CircularProgress, ErrorView, FireCMSLogo, TextInput } from "../../core";
+import { CircularProgress, ErrorView, FireCMSLogo, TextField } from "../../core";
 import { useModeController } from "../../hooks";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
 import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";
@@ -363,7 +363,7 @@ function PhoneLoginForm({
                     <Typography align={"center"}
                                 variant={"subtitle2"}>{"Please enter your phone number"}</Typography>
                 </div>
-                <TextInput placeholder=""
+                <TextField placeholder=""
                            value={phone ?? ""}
                            disabled={Boolean(phone && (authController.authLoading || authController.confirmationResult))}
                            type="phone"
@@ -374,7 +374,7 @@ function PhoneLoginForm({
                             <Typography align={"center"}
                                         variant={"subtitle2"}>{"Please enter the confirmation code"}</Typography>
                         </div>
-                        <TextInput placeholder=""
+                        <TextField placeholder=""
                                    value={code ?? ""}
                                    type="text"
                                    onChange={(event) => setCode(event.target.value)}/>
@@ -527,7 +527,7 @@ function LoginForm({
                     className={`${
                         shouldShowEmail ? "block" : "hidden"
                     }`}>
-                    <TextInput placeholder="Email"
+                    <TextField placeholder="Email"
                                value={email ?? ""}
                                disabled={authController.authLoading}
                                type="email"
@@ -538,7 +538,7 @@ function LoginForm({
 
                 <div
                     className={`${loginMode || (registrationMode && !disableSignupScreen) ? "block" : "hidden"}`}>
-                    <TextInput placeholder="Password"
+                    <TextField placeholder="Password"
                                value={password ?? ""}
                                disabled={authController.authLoading}
                                inputRef={passwordRef}

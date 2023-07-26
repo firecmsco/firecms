@@ -1,5 +1,5 @@
 import React from "react";
-import { FieldHelperText, FieldProps, TextInput, useModeController } from "firecms";
+import { FieldHelperText, FieldProps, TextField, useModeController } from "firecms";
 
 interface CustomColorTextFieldProps {
     color: string
@@ -24,7 +24,7 @@ export default function CustomColorTextField({
     const backgroundColor = customProps?.color ?? (mode === "light" ? "#eef4ff" : "#16325f");
     return (
         <>
-            <TextInput
+            <TextField
                 inputStyle={{
                     backgroundColor
                 }}

@@ -147,7 +147,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
             open={open}
             onOpenChange={setOpen}
         >
-            <div className={"p-4 flex flex-col gap-2"}>
+            <div className={"p-4 flex flex-col gap-2 my-4"}>
 
                 <Typography variant={"h6"}>Export data</Typography>
 

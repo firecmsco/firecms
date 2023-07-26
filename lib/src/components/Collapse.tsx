@@ -8,23 +8,25 @@ interface CollapseProps {
     children?: React.ReactNode;
     className?: string;
     in?: boolean;
+    duration?: number;
 }
 
 export function Collapse({
                              children,
                              className,
-                             in: isOpen = false
+                             in: isOpen = false,
+                             duration = 220
                          }: CollapseProps) {
 
-    useInjectStyles("Collapse", `
-.CollapseContent {
+    useInjectStyles(`Collapse-${duration}`, `
+.CollapseContent-${duration} {
   overflow: hidden;
 }
-.CollapseContent[data-state='open'] {
-  animation: slideDown 220ms ease-out;
+.CollapseContent-${duration}[data-state='open'] {
+  animation: slideDown ${duration}ms ease-out;
 }
-.CollapseContent[data-state='closed'] {
-  animation: slideUp 220ms ease-in;
+.CollapseContent-${duration}[data-state='closed'] {
+  animation: slideUp ${duration}ms ease-in;
 }
 
 @keyframes slideDown {
@@ -48,10 +50,11 @@ export function Collapse({
 
     return (
         <Collapsible.Root
-            open={isOpen}>
+            open={isOpen}
+            className={className}>
 
             <Collapsible.Content
-                className={clsx("CollapseContent", className)}
+                className={clsx(`CollapseContent-${duration}`)}
             >
                 {children}
             </Collapsible.Content>
