@@ -6,6 +6,7 @@ import { Icon } from "../icons";
 
 interface CheckboxProps {
     checked: boolean;
+    disabled?: boolean;
     indeterminate?: boolean;
     onCheckedChange?: (checked: boolean) => void;
     size?: "small" | "medium" | "large";
@@ -26,6 +27,7 @@ const outerSizeClasses = {
 export const Checkbox = ({
                              checked,
                              indeterminate = false,
+                             disabled,
                              size = "medium",
                              onCheckedChange
                          }: CheckboxProps) => {
@@ -42,6 +44,7 @@ export const Checkbox = ({
             <CheckboxPrimitive.Root
                 asChild
                 checked={isChecked}
+                disabled={disabled}
                 onCheckedChange={onCheckedChange}>
                 <div
                     className={clsx(

@@ -3,7 +3,7 @@ import clsx from "clsx";
 
 import { CollectionSize } from "../../../../types";
 import { SearchBar } from "./SearchBar";
-import { CircularProgress, IconButton, Select, Tooltip } from "../../../../components";
+import { CircularProgress, IconButton, Select, SelectItem, Tooltip } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
 import { defaultBorderMixin } from "../../../../styles";
 import { FilterListOffIcon } from "../../../../icons";
@@ -42,9 +42,14 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
             className="w-16 h-10"
             size={"small"}
             onValueChange={(v) => props.onSizeChanged(v as CollectionSize)}
-            options={["xs", "s", "m", "l", "xl"]}
-            renderOption={(v) => <div className={"font-medium"}>{v.toUpperCase()}</div>}
-        />
+            renderValue={(v) => <div className={"font-medium"}>{v.toUpperCase()}</div>}
+        >
+            {["xs", "s", "m", "l", "xl"].map((size) => (
+                <SelectItem key={size} value={size}>
+                    {size.toUpperCase()}
+                </SelectItem>
+            ))}
+        </Select>
     );
 
     return (

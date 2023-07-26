@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { TableWhereFilterOp } from "../../Table";
 import { DateTimeField } from "../../../../components/DateTimeField";
-import { Select } from "../../../../components";
+import { Select, SelectItem } from "../../../../components";
 
 interface DateTimeFilterFieldProps {
     name: string,
@@ -78,8 +78,13 @@ export function DateTimeFilterField({
                         onValueChange={(value) => {
                             updateFilter(value as TableWhereFilterOp, internalValue);
                         }}
-                        options={possibleOperations}
-                        renderOption={(op) => operationLabels[op as TableWhereFilterOp]}/>
+                        renderValue={(op) => operationLabels[op as TableWhereFilterOp]}>
+                    {possibleOperations.map((op) => (
+                        <SelectItem key={op} value={op}>
+                            {operationLabels[op]}
+                        </SelectItem>
+                    ))}
+                </Select>
             </div>
 
             <div className="flex-grow ml-4">

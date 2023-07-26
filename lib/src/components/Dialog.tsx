@@ -8,6 +8,7 @@ export type DialogProps = {
     onOpenChange: (open: boolean) => void;
     children: React.ReactNode;
     className?: string;
+    maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl";
 };
 
 export const Dialog = ({
@@ -15,6 +16,7 @@ export const Dialog = ({
                            onOpenChange,
                            children,
                            className,
+                           maxWidth,
                            ...props
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
@@ -48,10 +50,11 @@ export const Dialog = ({
                     {...props}
                     className={clsx(paperMixin,
                         "text-gray-900 dark:text-white",
-                        "max-h-[80vh] z-20 shadow-xl fixed top-1/2 left-1/2 transform-gpu -translate-x-1/2 -translate-y-1/2 w-11/12 max-w-lg max-h-screen-90",
+                        "max-h-[80vh] z-20 shadow-xl fixed top-1/2 left-1/2 transform-gpu -translate-x-1/2 -translate-y-1/2 w-11/12 max-h-screen-90",
                         "overflow-y-auto ease-in-out duration-200",
                         displayed && open ? "opacity-100" : "opacity-0",
-                        className
+                        className,
+                        maxWidth ? `max-w-${maxWidth}` : "max-w-lg"
                     )}
                 >
                     {children}

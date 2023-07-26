@@ -163,7 +163,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     dependencies: [],
                     Builder: ({ entity }) => (
                         <Button color={"primary"}
-                                variant={"outlined"}
+
                                 startIcon={<KeyboardTabIcon size={"small"}/>}
                                 onClick={(event) => {
                                     event.stopPropagation();

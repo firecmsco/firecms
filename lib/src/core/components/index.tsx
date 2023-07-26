@@ -19,12 +19,10 @@ export * from "./NotFoundPage";
 
 export * from "./Table";
 export * from "./ErrorBoundary";
-export * from "../../components/ExpandablePanel";
 export * from "./DeleteConfirmationDialog";
 
 export * from "./FireCMSLogo";
 
-export * from "./CenteredView";
 export * from "./InfoLabel";
 export * from "./FireCMSAppBar";
 

@@ -5,7 +5,7 @@ import { EnumType, FieldProps, ResolvedProperty } from "../../types";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
-import { enumToObjectEntries, getIconForProperty, Select } from "../../core";
+import { enumToObjectEntries, getIconForProperty, Select, SelectItem } from "../../core";
 import { IconButton } from "../../components";
 import { FieldHelperText } from "../components/FieldHelperText";
 import { ClearIcon } from "../../icons/ClearIcon";
@@ -94,14 +94,24 @@ export function ArrayEnumSelectBinding({
                     return setValue(newValue);
                 }}
                 placeholder={`${propertyKey}-multiselect-label`}
-                options={enumValues.map((enumValue) => enumValue.id.toString())}
-                renderOption={(option: string) => (
+                renderValue={(option: string) => (
                     <EnumValuesChip
                         enumKey={option}
                         enumValues={enumValues}
                         size={"medium"}/>
                 )}
-            />
+            >
+                {enumValues.map((enumConfig) => (
+                    <SelectItem
+                        key={enumConfig.id}
+                        value={String(enumConfig.id)}>
+                        <EnumValuesChip
+                            enumKey={enumConfig.id}
+                            enumValues={enumValues}
+                            size={"medium"}/>
+                    </SelectItem>)
+                )}
+            </Select>
 
             {/*<MuiSelect*/}
             {/*    multiple*/}

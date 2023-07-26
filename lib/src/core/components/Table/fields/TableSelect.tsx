@@ -1,7 +1,7 @@
 import { EnumValueConfig } from "../../../../types";
 import { ArrayEnumPreview, EnumValuesChip } from "../../../../preview";
 import React, { useCallback, useEffect, useState } from "react";
-import { Select } from "../../../../components";
+import { Select, SelectItem } from "../../../../components";
 
 export function TableSelect(props: {
     name: string;
@@ -81,23 +81,21 @@ export function TableSelect(props: {
             multiple={multiple}
             padding={false}
             includeFocusOutline={false}
-            // open={open}
-            // onOpenChange={setOpen}
-            // inputProps={{
-            //     sx: {
-            //         height: "100% !important",
-            //         display: "flex",
-            //         alignItems: "center",
-            //         padding: "0px 0 0px",
-            //         background: "transparent !important"
-            //     }
-            // }}
-            // error={!!error}
             value={validValue
                 ? (multiple ? (internalValue as any[]).map(v => v.toString()) : internalValue?.toString())
                 : (multiple ? [] : "")}
             onValueChange={onChange}
-            options={enumValues?.map((enumConfig) => String(enumConfig.id))}
-            renderOption={renderValue}/>
+            renderValue={renderValue}>
+            {enumValues?.map((enumConfig) => (
+                <SelectItem
+                    key={enumConfig.id}
+                    value={String(enumConfig.id)}>
+                    <EnumValuesChip
+                        enumKey={enumConfig.id}
+                        enumValues={enumValues}
+                        size={small ? "small" : "medium"}/>
+                </SelectItem>
+            ))}
+        </Select>
     );
 }

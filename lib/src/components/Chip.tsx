@@ -1,11 +1,12 @@
-import { ChipColorScheme } from "../types";
+import { ChipColorKey, ChipColorScheme } from "../types";
 import clsx from "clsx";
+import { getColorSchemeForKey } from "../core/util/chip_utils";
 
 export interface ChipProps {
     className?: string;
     label: string;
     size?: "small" | "medium";
-    colorScheme?: ChipColorScheme;
+    colorScheme?: ChipColorScheme | ChipColorKey;
     error?: boolean;
     outlined?: boolean;
     onClick?: () => void;
@@ -26,7 +27,7 @@ export function Chip({
                          className
                      }: ChipProps) {
 
-    const usedColorScheme = colorScheme ?? undefined;
+    const usedColorScheme = typeof colorScheme === "string" ? getColorSchemeForKey(colorScheme) : colorScheme;
     return (
         <div
             className={clsx("rounded-full w-fit h-fit font-regular flex items-center justify-center gap-1",

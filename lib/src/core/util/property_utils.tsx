@@ -28,8 +28,8 @@ export function getIdIcon(size: "small" | "medium" | "large"): React.ReactNode {
     return <CircleIcon size={size}/>;
 }
 
-function getIconForWidget(widget: FieldConfig | undefined,
-                          size: "small" | "medium" | "large") {
+export function getIconForWidget(widget: FieldConfig | undefined,
+                                 size: "small" | "medium" | "large") {
     const Icon = widget?.Icon ?? CircleIcon;
     return <Icon size={size}/>;
 }

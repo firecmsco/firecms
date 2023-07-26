@@ -1,7 +1,7 @@
 import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
 
-import { ExpandablePanel, getIconForProperty, isHidden, pick, Select } from "../../core";
+import { ExpandablePanel, getIconForProperty, isHidden, pick, Select, SelectItem } from "../../core";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
@@ -132,7 +132,9 @@ const buildPickKeysSelect = (disabled: boolean, properties: Properties, setValue
             value={""}
             disabled={disabled}
             onValueChange={handleAddProperty}
-            options={keys}
-            renderOption={(key) => (properties as Properties)[key].name || key}/>
+            renderValue={(key) => (properties as Properties)[key].name || key}>
+            {keys.map((key) => <SelectItem key={key}
+                                           value={key}>{(properties as Properties)[key].name || key}</SelectItem>)}
+        </Select>
     </div>;
 };

@@ -4,8 +4,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 
 import clsx from "clsx";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
-import { ChevronDownIcon } from "../icons/ChevronDownIcon";
-import { CheckIcon } from "../icons/CheckIcon";
+import { CheckIcon, ChevronDownIcon } from "../icons";
 
 export type SelectProps = {
     open?: boolean,
@@ -13,10 +12,9 @@ export type SelectProps = {
     value?: string | string[],
     className?: string,
     inputClassName?: string,
-    onValueChange: (updatedValue: string | string[]) => void,
+    onValueChange?: (updatedValue: string | string[]) => void,
     placeholder?: React.ReactNode,
-    options: string[],
-    renderOption: (option: string) => React.ReactNode,
+    renderValue: (option: string) => React.ReactNode,
     size?: "small" | "medium",
     label?: React.ReactNode,
     disabled?: boolean,
@@ -26,7 +24,8 @@ export type SelectProps = {
     multiple?: boolean,
     inputRef?: React.RefObject<HTMLButtonElement>,
     padding?: boolean,
-    includeFocusOutline?: boolean
+    includeFocusOutline?: boolean,
+    children?: React.ReactNode
 };
 
 export function Select({
@@ -38,8 +37,7 @@ export function Select({
                            className,
                            inputClassName,
                            placeholder,
-                           options,
-                           renderOption,
+                           renderValue,
                            label,
                            size = "medium",
                            includeFocusOutline = true,
@@ -48,7 +46,8 @@ export function Select({
                            padding = true,
                            position = "popper",
                            endAdornment,
-                           multiple
+                           multiple,
+                           children
                        }: SelectProps) {
 
     const [openInternal, setOpenInternal] = React.useState(open);
@@ -59,12 +58,12 @@ export function Select({
     const onValueChangeInternal = React.useCallback((newValue: string) => {
         if (multiple) {
             if (Array.isArray(value) && value.includes(newValue)) {
-                onValueChange(value.filter(v => v !== newValue));
+                onValueChange?.(value.filter(v => v !== newValue));
             } else {
-                onValueChange([...(value ?? []), newValue]);
+                onValueChange?.([...(value ?? []), newValue]);
             }
         } else {
-            onValueChange(newValue);
+            onValueChange?.(newValue);
         }
     }, [multiple, value, onValueChange]);
 
@@ -108,14 +107,14 @@ export function Select({
                     <SelectPrimitive.Value asChild>
                         <div className={clsx(
                             "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
-                            size === "small" ? "h-[42px]" : "h-[64px]",
+                            size === "small" ? "h-[42px]" : "h-[64px]"
                         )}>
                             {value && Array.isArray(value)
                                 ? value.map((v) => (
                                     <div key={v} className={"flex items-center gap-1 max-w-full"}>
-                                        {renderOption(v)}
+                                        {renderValue(v)}
                                     </div>))
-                                : (value ? renderOption(value) : placeholder)}
+                                : (value ? renderValue(value) : placeholder)}
                         </div>
                     </SelectPrimitive.Value>
 
@@ -143,30 +142,42 @@ export function Select({
                     <SelectPrimitive.Viewport
                         className="">
                         <SelectPrimitive.Group>
-                            {options.map((option) => {
-                                const selected = Array.isArray(value) ? value.includes(option) : option === value;
-                                return (
-                                    <SelectPrimitive.Item
-                                        key={option}
-                                        value={option}
-                                        className={clsx(
-                                            "relative relative flex items-center px-6 py-1 rounded-md text-sm text-gray-700 dark:text-gray-300",
-                                            "border-2 border-transparent focus-visible:border-opacity-75 focus:outline-none focus-visible:border-solid focus-visible:border-solid focus-visible:border-primary",
-                                            selected ? "bg-gray-50 dark:bg-gray-950" : "focus:bg-gray-100 dark:focus:bg-gray-700"
-                                        )}
-                                    >
-                                        <SelectPrimitive.ItemText>{renderOption(option)}</SelectPrimitive.ItemText>
-                                        {selected && <div
-                                            className="absolute left-1">
-                                            <CheckIcon size={16}/>
-                                        </div>}
-                                    </SelectPrimitive.Item>
-                                );
-                            })}
+                            {children}
                         </SelectPrimitive.Group>
                     </SelectPrimitive.Viewport>
                 </SelectPrimitive.Content>
             </SelectPrimitive.Portal>
         </SelectPrimitive.Root>
     );
+}
+
+export type SelectItemProps = {
+    value: string,
+    selected?: boolean,
+    children?: React.ReactNode,
+    disabled?: boolean
+};
+
+export function SelectItem({
+                               value,
+                               selected,
+                               children,
+                               disabled
+                           }: SelectItemProps) {
+    return <SelectPrimitive.Item
+        key={value}
+        value={value}
+        className={clsx(
+            "relative relative flex items-center px-6 py-1 rounded-md text-sm text-gray-700 dark:text-gray-300",
+            "border-2 border-transparent focus-visible:border-opacity-75 focus:outline-none focus-visible:border-solid focus-visible:border-solid focus-visible:border-primary",
+            "data-[state=checked]:bg-gray-100 data-[state=checked]:dark:bg-gray-900 focus:bg-gray-100 dark:focus:bg-gray-950",
+            "data-[state=checked]:focus:bg-gray-200 data-[state=checked]:dark:focus:bg-gray-950"
+        )}
+    >
+        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+        <div
+            className="absolute left-1 data-[state=checked]:block hidden">
+            <CheckIcon size={16}/>
+        </div>
+    </SelectPrimitive.Item>;
 }

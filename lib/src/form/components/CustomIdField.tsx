@@ -5,10 +5,11 @@ import { ErrorMessage } from "formik";
 import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } from "../../types";
 
 import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
-import { enumToObjectEntries, Select, TextField } from "../../core";
+import { enumToObjectEntries, Select, SelectItem, TextField } from "../../core";
 import { IconButton, Tooltip } from "../../components";
 import { OpenInNewIcon } from "../../icons/OpenInNewIcon";
 import { ContentCopyIcon } from "../../icons";
+import { EnumValuesChip } from "../../preview";
 
 export function CustomIdField<M extends Record<string, any>>({
                                                                  customId,
@@ -86,14 +87,24 @@ export function CustomIdField<M extends Record<string, any>>({
                 <Select
                     error={error}
                     onValueChange={(v) => onChange(v as string)}
-                    options={enumValues.map((enumConfig) => enumConfig.id as string)}
                     {...fieldProps}
-                    renderOption={(option) => {
+                    renderValue={(option) => {
                         const enumConfig = enumValues.find(e => e.id === option);
                         if (!enumConfig) return option;
                         return `${enumConfig.id} - ${enumConfig.label}`;
                     }}
-                />}
+                >
+                    {enumValues.map((enumConfig) => (
+                        <SelectItem
+                            key={enumConfig.id}
+                            value={String(enumConfig.id)}>
+                            <EnumValuesChip
+                                enumKey={enumConfig.id}
+                                enumValues={enumValues}
+                                size={"medium"}/>
+                        </SelectItem>)
+                    )}
+                </Select>}
 
             {!enumValues &&
                 <TextField {...fieldProps}

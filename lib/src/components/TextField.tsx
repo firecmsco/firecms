@@ -26,6 +26,7 @@ export type TextFieldProps<T extends string | number> = {
     onChange?: (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void,
     label?: React.ReactNode,
     multiline?: boolean,
+    rows?: number,
     disabled?: boolean,
     error?: boolean,
     endAdornment?: React.ReactNode,
@@ -45,6 +46,7 @@ export function TextField<T extends string | number>({
                                                          label,
                                                          type = "text",
                                                          multiline = false,
+                                                         rows,
                                                          disabled,
                                                          error,
                                                          endAdornment,
@@ -79,6 +81,7 @@ export function TextField<T extends string | number>({
             ref={inputRef}
             placeholder={placeholder}
             autoFocus={autoFocus}
+            rows={rows}
             // onFocus={() => setFocused(true)}
             // onBlur={() => setFocused(false)}
             value={value ?? ""}

@@ -5,7 +5,7 @@ import { EnumType, FieldProps } from "../../types";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
-import { getIconForProperty, Select } from "../../core";
+import { getIconForProperty, Select, SelectItem } from "../../core";
 import { IconButton } from "../../components";
 import { FieldHelperText } from "../components/FieldHelperText";
 import { ClearIcon } from "../../icons/ClearIcon";
@@ -73,14 +73,24 @@ export function SelectFieldBinding<T extends EnumType>({
                         : null;
                     return setValue(newValue);
                 }}
-                renderOption={(enumKey: any) => {
+                renderValue={(enumKey: any) => {
                     return <EnumValuesChip
                         enumKey={enumKey}
                         enumValues={enumValues}
                         size={"medium"}/>;
                 }}
-                options={enumValues?.map((enumConfig) => String(enumConfig.id)) ?? []}
-            />
+            >
+                {enumValues && enumValues.map((option) => {
+                    return <SelectItem
+                        key={option.id}
+                        value={String(option.id)}>
+                        <EnumValuesChip
+                            enumKey={String(option.id)}
+                            enumValues={enumValues}
+                            size={"medium"}/>
+                    </SelectItem>
+                })}
+            </Select>
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

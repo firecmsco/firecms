@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { EnumValuesChip } from "../../../../preview";
 import { TableEnumValues, TableWhereFilterOp } from "../../Table";
-import { IconButton, Select, TextField } from "../../../../components";
+import { IconButton, Select, SelectItem, TextField } from "../../../../components";
 import { ClearIcon } from "../../../../icons/ClearIcon";
 
 interface StringNumberFilterFieldProps {
@@ -90,8 +90,13 @@ export function StringNumberFilterField({
                         onValueChange={(value) => {
                             updateFilter(value as TableWhereFilterOp, internalValue);
                         }}
-                        options={possibleOperations}
-                        renderOption={(op) => operationLabels[op as TableWhereFilterOp]}/>
+                        renderValue={(op) => operationLabels[op as TableWhereFilterOp]}>
+                    {possibleOperations.map((op) => (
+                        <SelectItem key={op} value={op}>
+                            {operationLabels[op]}
+                        </SelectItem>
+                    ))}
+                </Select>
             </div>
 
             <div className="flex-grow ml-4">
@@ -127,12 +132,21 @@ export function StringNumberFilterField({
                             onClick={(e) => updateFilter(operation, undefined)}>
                             <ClearIcon/>
                         </IconButton>}
-                        options={enumValues.map((enumConfig) => String(enumConfig.id))}
-                        renderOption={(enumKey) => <EnumValuesChip
+                        renderValue={(enumKey) => <EnumValuesChip
                             key={`select_value_${name}_${enumKey}`}
                             enumKey={enumKey}
                             enumValues={enumValues}
-                            size={"small"}/>}/>
+                            size={"small"}/>}>
+                        {enumValues.map((enumConfig) => (
+                            <SelectItem key={`select_value_${name}_${enumConfig.id}`}
+                                        value={String(enumConfig.id)}>
+                                <EnumValuesChip
+                                    enumKey={String(enumConfig.id)}
+                                    enumValues={enumValues}
+                                    size={"small"}/>
+                            </SelectItem>
+                        ))}
+                    </Select>
                 }
 
             </div>

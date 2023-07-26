@@ -5,7 +5,7 @@ import { ReferencePreview } from "../../../../preview";
 import { getReferenceFrom } from "../../../util";
 import { useNavigationContext, useReferenceDialog } from "../../../../hooks";
 import { Button } from "../../../../components/Button";
-import { Select } from "../../../../components";
+import { Select, SelectItem } from "../../../../components";
 
 interface ReferenceFilterFieldProps {
     name: string,
@@ -147,13 +147,17 @@ export function ReferenceFilterField({
 
         <div className="flex w-[440px] flex-row">
             <div className="w-[120px]">
-
                 <Select value={operation}
                         onValueChange={(value) => {
                             updateFilter(value as TableWhereFilterOp, internalValue);
                         }}
-                        options={possibleOperations}
-                        renderOption={(op) => operationLabels[op as TableWhereFilterOp]}/>
+                        renderValue={(op) => operationLabels[op as TableWhereFilterOp]}>
+                    {possibleOperations.map((op) => (
+                        <SelectItem key={op} value={op}>
+                            {operationLabels[op]}
+                        </SelectItem>
+                    ))}
+                </Select>
             </div>
 
             <div className="flex-grow ml-4 h-full">

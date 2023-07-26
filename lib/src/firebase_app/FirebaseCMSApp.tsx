@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React from "react";
 import { GoogleAuthProvider } from "firebase/auth";
 import { BrowserRouter } from "react-router-dom";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
