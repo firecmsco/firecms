@@ -26,7 +26,7 @@ import { DialogActions } from "../../../DialogActions";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
 import { Button, IconButton, Typography } from "../../../../../components";
-import { ClearIcon } from "../../../../../icons/ClearIcon";
+import { ClearIcon } from "../../../../../icons";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {
     entity?: Entity<M>;

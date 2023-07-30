@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo } from "react";
 import clsx from "clsx";
 
-
 import { Entity, EntityCollection, EntityReference, FilterValues, ResolvedProperty } from "../../types";
 import { ErrorBoundary, ErrorView, getReferenceFrom, getReferencePreviewKeys } from "../../core";
 import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
@@ -13,14 +12,8 @@ import {
     useReferenceDialog,
     useSideEntityController
 } from "../../hooks";
-import { Typography } from "../../components/Typography";
-import { IconButton } from "../../components";
-import { Button } from "../../components/Button";
-import { Tooltip } from "../../components/Tooltip";
-import { ErrorIcon } from "../../icons/ErrorIcon";
-import { LinkIcon } from "../../icons/LinkIcon";
-import { KeyboardTabIcon } from "../../icons/KeyboardTabIcon";
-import { ClearIcon } from "../../icons/ClearIcon";
+import { Button, IconButton, Tooltip, Typography } from "../../components";
+import { ClearIcon, ErrorIcon, KeyboardTabIcon, LinkIcon } from "../../icons";
 
 /**
  * This field allows selecting reference/s.
@@ -193,7 +186,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
 
                     <div className="flex flex-col flex-grow">
                         <LabelWithIcon icon={<LinkIcon color={"inherit"}
-                                                       />}
+                        />}
                                        className="text-text-secondary dark:text-text-secondary-dark ml-3.5"
                                        title={name}
                         />
@@ -243,8 +236,8 @@ export function ReferenceWidget<M extends Record<string, any>>({
 
     return <Typography variant={"label"}
                        className={clsx("relative w-full transition-colors duration-200 ease-in border rounded font-medium",
-                     disabled ? "bg-opacity-50" : "hover:bg-opacity-75",
-                     "text-opacity-50 dark:text-white dark:text-opacity-50")}
+                           disabled ? "bg-opacity-50" : "hover:bg-opacity-75",
+                           "text-opacity-50 dark:text-white dark:text-opacity-50")}
     >
 
         {collection && buildEntityView(collection)}

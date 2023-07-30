@@ -9,15 +9,9 @@ import {
     getIconForProperty,
     TextField
 } from "../../core";
-import { LabelWithIcon } from "../components";
-import { Typography } from "../../components/Typography";
-import { BooleanSwitchWithLabel, IconButton } from "../../components";
-import { Button } from "../../components/Button";
-import { FieldHelperText } from "../components/FieldHelperText";
-import { ArrowDropDownIcon } from "../../icons/ArrowDropDownIcon";
-import { RemoveIcon } from "../../icons/RemoveIcon";
-import { AddIcon } from "../../icons/AddIcon";
-import { Menu, MenuItem } from "../../components/Menu";
+import { FieldHelperText, LabelWithIcon } from "../components";
+import { BooleanSwitchWithLabel, Button, IconButton, Menu, MenuItem, Typography } from "../../components";
+import { AddIcon, ArrowDropDownIcon, RemoveIcon } from "../../icons";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -256,7 +250,6 @@ function MapKeyValueRow<T extends Record<string, any>>({
                               onClick={() => doUpdateDataType("array")}>array</MenuItem>
                 </Menu>
 
-
                 <IconButton aria-label="delete"
                             size={"small"}
                             onClick={onDeleteClick}
@@ -266,7 +259,6 @@ function MapKeyValueRow<T extends Record<string, any>>({
             </Typography>
 
             {(dataType === "map" || dataType === "array") && buildInput(entryValue, fieldKey, dataType)}
-
 
         </>
 

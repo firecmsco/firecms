@@ -1,6 +1,7 @@
 {
     "name": "firecms",
     "version": "3.0.0-alpha.1",
+    "type": "module",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/firecmsco"
@@ -44,7 +45,8 @@
         "prepublishOnly": "run-s build",
         "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
         "test:lint": "eslint \"src/**\" --quiet",
-        "test": "jest"
+        "test": "jest",
+        "generateIcons": "ts-node --esm src/icons/generateIcons.ts"
     },
     "dependencies": {
         "@date-io/date-fns": "^2.16.0",

@@ -6,7 +6,7 @@ import { TableColumn, TableSort, TableWhereFilterOp } from "./VirtualTableProps"
 import { ErrorBoundary } from "../ErrorBoundary";
 import { Button, IconButton } from "../../../components";
 import { defaultBorderMixin } from "../../../styles";
-import { ArrowUpwardIcon, ChevronDownIcon } from "../../../icons";
+import { ArrowUpwardIcon, ExpandMoreIcon } from "../../../icons";
 import { Popover } from "../../../components/Popover";
 import { Badge } from "../../../components/Badge";
 
@@ -150,7 +150,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                         className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
                                         size={"small"}
                                         onClick={handleSettingsClick}>
-                                        <ChevronDownIcon/>
+                                        <ExpandMoreIcon/>
                                     </IconButton>}
                             >
                                 {column.filter && createFilterField &&

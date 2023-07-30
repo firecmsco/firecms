@@ -6,8 +6,7 @@ import { getThumbnailMeasure } from "../util";
 import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { Tooltip, Typography } from "../../components";
-import { OpenInNewIcon } from "../../icons/OpenInNewIcon";
-import { DescriptionOutlinedIcon } from "../../icons/DescriptionOutlinedIcon";
+import { OpenInNewIcon , DescriptionIcon } from "../../icons";
 
 /**
  * @category Preview components
@@ -67,7 +66,7 @@ export function UrlComponentPreview({
                     width: getThumbnailMeasure(size),
                     height: getThumbnailMeasure(size)
                 }}>
-                <DescriptionOutlinedIcon className="flex-grow"/>
+                <DescriptionIcon className="flex-grow"/>
                 {hint &&
                     <Tooltip title={hint}>
                         <Typography

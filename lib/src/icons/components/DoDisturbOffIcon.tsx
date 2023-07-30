@@ -1,0 +1,5 @@
+import { Icon, IconProps } from "../Icon";
+
+export function DoDisturbOffIcon(props: IconProps) {
+    return <Icon {...props} iconKey={"do_disturb_off"}/>
+}

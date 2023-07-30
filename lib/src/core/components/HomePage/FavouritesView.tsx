@@ -5,10 +5,8 @@ import { TopNavigationEntry } from "../../../types";
 
 import { NavigationGroup } from "./NavigationGroup";
 import { NavigationCollectionCard } from "./NavigationCollectionCard";
-import { Chip } from "../../../components";
-import { Collapse } from "../../../components/Collapse";
-import { StarIcon } from "../../../icons/StarIcon";
-import { StarBorderIcon } from "../../../icons/StarBorderIcon";
+import { Chip, Collapse } from "../../../components";
+import { StarBorderIcon, StarIcon } from "../../../icons";
 
 function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
 

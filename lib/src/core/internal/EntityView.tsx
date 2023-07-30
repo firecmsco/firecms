@@ -29,12 +29,11 @@ import {
 } from "../../hooks";
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
-import { Typography } from "../../components/Typography";
+import { IconButton, Typography } from "../../components";
 import { EntityFormSaveParams } from "../../form/EntityForm";
 import { FORM_CONTAINER_WIDTH } from "./common";
-import { IconButton } from "../../components";
 import { defaultBorderMixin } from "../../styles";
-import { CloseIcon } from "../../icons/CloseIcon";
+import { CloseIcon } from "../../icons";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
 

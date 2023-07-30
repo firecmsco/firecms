@@ -1,7 +1,6 @@
 import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
-
 import { Markdown } from "../../../preview";
 import { useFireCMSContext } from "../../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
@@ -9,9 +8,7 @@ import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { IconButton, Typography } from "../../../components";
 import { cardMixin } from "../../../styles";
-import { StarIcon } from "../../../icons/StarIcon";
-import { StarBorderIcon } from "../../../icons/StarBorderIcon";
-import { ArrowForwardIcon } from "../../../icons/ArrowForwardIcon";
+import { StarIcon, StarBorderIcon, ArrowForwardIcon } from "../../../icons";
 
 /**
  * This is the component used in the home page to render a card for each
@@ -39,7 +36,7 @@ export function NavigationCollectionCard({
 }) {
 
     const userConfigurationPersistence = useUserConfigurationPersistence();
-    const collectionIcon = getIconForView(collection ?? view,);
+    const collectionIcon = getIconForView(collection ?? view);
 
     const navigate = useNavigate();
     const context = useFireCMSContext();

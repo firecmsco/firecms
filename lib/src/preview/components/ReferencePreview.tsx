@@ -8,11 +8,9 @@ import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityC
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
-import { Typography } from "../../components/Typography";
+import { Typography, IconButton, Tooltip } from "../../components";
 import clsx from "clsx";
-import { IconButton } from "../../components";
-import { Tooltip } from "../../components/Tooltip";
-import { KeyboardTabIcon } from "../../icons/KeyboardTabIcon";
+import { KeyboardTabIcon } from "../../icons";
 import { Skeleton } from "../../components/Skeleton";
 
 export type ReferencePreviewProps = {

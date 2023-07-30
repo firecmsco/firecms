@@ -22,6 +22,7 @@ import {
     saveEntityWithCallbacks,
     useDataSource,
     useFireCMSContext,
+    useLargeLayout,
     useNavigationContext,
     useSideEntityController
 } from "../../../hooks";
@@ -48,9 +49,8 @@ import { ReferenceFilterField } from "./filters/ReferenceFilterField";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
 import { DateTimeFilterField } from "./filters/DateTimeFilterField";
-import { useLargeLayout } from "../../../hooks/useLargeLayout";
-import { Button } from "../../../components/Button";
-import { KeyboardTabIcon } from "../../../icons/KeyboardTabIcon";
+import { Button } from "../../../components";
+import { KeyboardTabIcon } from "../../../icons";
 
 const DEFAULT_STATE = {} as any;
 

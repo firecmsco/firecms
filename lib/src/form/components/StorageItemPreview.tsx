@@ -8,7 +8,7 @@ import { ErrorBoundary } from "../../core";
 import { IconButton } from "../../components";
 import { paperMixin } from "../../styles";
 import { Tooltip } from "../../components/Tooltip";
-import { RemoveIcon } from "../../icons/RemoveIcon";
+import { RemoveIcon } from "../../icons";
 
 interface StorageItemPreviewProps {
     name: string;

@@ -1,0 +1,5 @@
+import { Icon, IconProps } from "../Icon";
+
+export function ElectricScooterIcon(props: IconProps) {
+    return <Icon {...props} iconKey={"electric_scooter"}/>
+}

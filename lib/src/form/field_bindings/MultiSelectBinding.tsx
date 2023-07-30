@@ -1,13 +1,12 @@
 import React, { useCallback } from "react";
 
 import { EnumType, FieldProps, ResolvedProperty } from "../../types";
-import { LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries, getIconForProperty, Select, SelectItem } from "../../core";
 import { IconButton } from "../../components";
-import { FieldHelperText } from "../components/FieldHelperText";
-import { ClearIcon } from "../../icons/ClearIcon";
+import { ClearIcon } from "../../icons";
 
 /**
  * This fields renders a dropdown with multiple selection.

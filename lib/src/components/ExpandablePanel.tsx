@@ -4,7 +4,7 @@ import clsx from "clsx";
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { defaultBorderMixin, focusedMixin } from "../styles";
 import { useInjectStyles } from "./util/useInjectStyles";
-import { ChevronDownIcon } from "../icons";
+import { ExpandMoreIcon } from "../icons";
 
 export function ExpandablePanel({
                                     title,
@@ -75,7 +75,7 @@ export function ExpandablePanel({
                     )}
                 >
                     {title}
-                    <ChevronDownIcon className={clsx("transition", open ? "rotate-180" : "")}/>
+                    <ExpandMoreIcon className={clsx("transition", open ? "rotate-180" : "")}/>
                 </Collapsible.Trigger>
 
                 <Collapsible.Content

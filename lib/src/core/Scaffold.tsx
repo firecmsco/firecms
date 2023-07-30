@@ -9,8 +9,7 @@ import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProp
 import { useRestoreScroll } from "./internal/useRestoreScroll";
 import { IconButton, Sheet, Tooltip } from "../components";
 import { useLargeLayout } from "../hooks/useLargeLayout";
-import { MenuIcon } from "../icons/MenuIcon";
-import { ChevronLeftIcon } from "../icons/ChevronLeftIcon";
+import { MenuIcon, ChevronLeftIcon } from "../icons";
 
 export const DRAWER_WIDTH = 280;
 
@@ -217,7 +216,6 @@ function StyledDrawer(props: {
                 </Link>
             </Tooltip>
         </div>
-
 
         {props.children}
 

@@ -4,8 +4,7 @@ import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { IconButton } from "../../components";
 import { Tooltip } from "../../components/Tooltip";
-import { ContentCopyIcon } from "../../icons/ContentCopyIcon";
-import { OpenInNewIcon } from "../../icons/OpenInNewIcon";
+import { ContentCopyIcon, OpenInNewIcon } from "../../icons";
 
 /**
  * @category Preview components
@@ -45,7 +44,7 @@ export function ImagePreview({
     const imageStyle: CSSProperties =
         {
             maxWidth: "100%",
-            maxHeight: "100%",
+            maxHeight: "100%"
         };
 
     return (

@@ -11,6 +11,8 @@
         "moduleResolution": "node",
         "jsx": "react-jsx",
         "noFallthroughCasesInSwitch": true,
+        "emitDeclarationOnly": true,
+        "allowImportingTsExtensions": true,
         "sourceMap": true,
         "declaration": true,
         "esModuleInterop": true,
@@ -25,7 +27,11 @@
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "types": ["vite/client", "node", "jest"]
+        "types": [
+            "vite/client",
+            "node",
+            "jest"
+        ]
     },
     "include": [
         "src",

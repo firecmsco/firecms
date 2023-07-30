@@ -7,8 +7,7 @@ import { useAuthController, useFireCMSContext } from "../../../hooks";
 import { CollectionActionsProps, Entity, EntityCollection, ExportConfig, SelectionController } from "../../../types";
 import { Button, IconButton, Tooltip } from "../../../components";
 import { useLargeLayout } from "../../../hooks/useLargeLayout";
-import { AddIcon } from "../../../icons/AddIcon";
-import { DeleteIcon } from "../../../icons/DeleteIcon";
+import { AddIcon, DeleteIcon } from "../../../icons";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

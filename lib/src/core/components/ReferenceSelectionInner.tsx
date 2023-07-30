@@ -20,7 +20,7 @@ import { isFilterCombinationValidForFirestore } from "./EntityCollectionView/isF
 import { Typography } from "../../components/Typography";
 import { useLargeLayout } from "../../hooks/useLargeLayout";
 import { Button } from "../../components/Button";
-import { AddIcon } from "../../icons/AddIcon";
+import { AddIcon } from "../../icons";
 
 /**
  * @category Components

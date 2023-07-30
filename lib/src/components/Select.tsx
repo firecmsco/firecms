@@ -4,7 +4,7 @@ import * as SelectPrimitive from "@radix-ui/react-select";
 
 import clsx from "clsx";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
-import { CheckIcon, ChevronDownIcon } from "../icons";
+import { CheckIcon, ExpandMoreIcon } from "../icons";
 
 export type SelectProps = {
     open?: boolean,
@@ -144,7 +144,7 @@ export function Select({
                     <SelectPrimitive.Icon className={clsx(
                         "px-2 h-full flex items-center"
                     )}>
-                        <ChevronDownIcon size={"small"}
+                        <ExpandMoreIcon size={"small"}
                                          className={clsx("transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
 

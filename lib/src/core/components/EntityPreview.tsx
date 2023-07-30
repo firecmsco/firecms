@@ -6,7 +6,7 @@ import { resolveCollection } from "../util";
 import { useFireCMSContext } from "../../hooks";
 import { defaultBorderMixin } from "../../styles";
 import { IconButton } from "../../components";
-import { OpenInNewIcon } from "../../icons/OpenInNewIcon";
+import { OpenInNewIcon } from "../../icons";
 
 /**
  * @category Components

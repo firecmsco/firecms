@@ -8,7 +8,7 @@ import { getIconForProperty } from "../../core";
 import { IconButton, TextField } from "../../components";
 import { PropertyPreview } from "../../preview";
 import { Collapse } from "../../components/Collapse";
-import { ClearIcon } from "../../icons/ClearIcon";
+import { ClearIcon } from "../../icons";
 
 interface TextFieldProps<T extends string | number> extends FieldProps<T> {
     allowInfinity?: boolean

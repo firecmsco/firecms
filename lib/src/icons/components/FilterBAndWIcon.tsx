@@ -1,0 +1,5 @@
+import { Icon, IconProps } from "../Icon";
+
+export function FilterBAndWIcon(props: IconProps) {
+    return <Icon {...props} iconKey={"filter_b_and_w"}/>
+}

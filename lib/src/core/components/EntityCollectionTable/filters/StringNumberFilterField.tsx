@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { EnumValuesChip } from "../../../../preview";
 import { TableEnumValues, TableWhereFilterOp } from "../../Table";
 import { IconButton, Select, SelectItem, TextField } from "../../../../components";
-import { ClearIcon } from "../../../../icons/ClearIcon";
+import { ClearIcon } from "../../../../icons";
 
 interface StringNumberFilterFieldProps {
     name: string,

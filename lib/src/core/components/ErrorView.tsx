@@ -1,7 +1,7 @@
 import React from "react";
 import { ErrorTooltip } from "./ErrorTooltip";
 import { Typography } from "../../components/Typography";
-import { ErrorIcon } from "../../icons/ErrorIcon";
+import { ErrorIcon } from "../../icons";
 
 /**
  * @category Components

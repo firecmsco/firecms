@@ -1,0 +1,5 @@
+import { Icon, IconProps } from "../Icon";
+
+export function FullscreenExitIcon(props: IconProps) {
+    return <Icon {...props} iconKey={"fullscreen_exit"}/>
+}
