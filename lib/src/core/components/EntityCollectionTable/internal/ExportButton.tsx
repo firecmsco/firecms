@@ -155,7 +155,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                 <br/>
 
                 {needsToAcceptFetchAllData &&
-                    <Alert severity={"warning"}>
+                    <Alert color={"warning"}>
                         <div>
                             This collections has a large number
                             of documents (more

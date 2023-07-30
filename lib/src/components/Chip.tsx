@@ -4,7 +4,7 @@ import { getColorSchemeForKey } from "../core/util/chip_utils";
 
 export interface ChipProps {
     className?: string;
-    label: string;
+    label: React.ReactNode;
     size?: "small" | "medium";
     colorScheme?: ChipColorScheme | ChipColorKey;
     error?: boolean;
@@ -30,7 +30,7 @@ export function Chip({
     const usedColorScheme = typeof colorScheme === "string" ? getColorSchemeForKey(colorScheme) : colorScheme;
     return (
         <div
-            className={clsx("rounded-full w-fit h-fit font-regular flex items-center justify-center gap-1",
+            className={clsx("rounded-full w-fit h-fit font-regular inline-flex items-center justify-center gap-1",
                 "truncate",
                 "font-medium",
                 onClick ? "cursor-pointer hover:bg-gray-300 hover:dark:bg-gray-700" : "",

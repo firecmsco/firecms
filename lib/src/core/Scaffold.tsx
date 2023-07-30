@@ -115,8 +115,9 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                 }}>
 
                 <FireCMSAppBarComponent title={name}
-                                        drawerOpen={computedDrawerOpen}
-                                        toolbarExtraWidget={toolbarExtraWidget}/>
+                                        drawerOpen={computedDrawerOpen}>
+                    {toolbarExtraWidget}
+                </FireCMSAppBarComponent>
 
                 <StyledDrawer
                     onMouseEnter={setOnHoverTrue}

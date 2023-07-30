@@ -1,3 +1,4 @@
+export * from "./Autocomplete";
 export * from "./Alert";
 export * from "./Avatar";
 export * from "./BooleanSwitch";
@@ -15,6 +16,7 @@ export * from "./Dialog";
 export * from "./ExpandablePanel";
 export * from "./IconButton";
 export * from "./InputLabel";
+export * from "./LoadingButton";
 export * from "./Markdown";
 export * from "./Menu";
 export * from "./Paper";

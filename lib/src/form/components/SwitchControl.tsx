@@ -17,12 +17,12 @@ export function SwitchControl({
     size: "small" | "medium"
 }) {
 
-
     const formControlLabel = <BooleanSwitchWithLabel label={label}
-                                   size={size}
-                                   value={field.value}
-                                   disabled={disabled}
-                                   onValueChange={(checked) => form.setFieldValue(field.name, checked)}/>;
+                                                     size={size}
+                                                     position={"start"}
+                                                     value={field.value}
+                                                     disabled={disabled}
+                                                     onValueChange={(checked) => form.setFieldValue(field.name, checked)}/>;
 
     if (tooltip)
         return (

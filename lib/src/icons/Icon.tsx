@@ -3,7 +3,7 @@ import * as React from "react";
 import clsx from "clsx";
 import "@material-design-icons/font/filled.css";
 
-export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error";
+export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error" | "success" | "warning";
 export type IconProps = {
     size?: "smallest" |"small" | "medium" | "large" | number,
     color?: IconColor,
@@ -15,6 +15,8 @@ export type IconProps = {
 const colorClassesMapping: Record<IconColor, string> = {
     inherit: "",
     primary: "text-primary",
+    success: "text-green-500",
+    warning: "text-yellow-500",
     secondary: "text-secondary",
     disabled: "text-disabled dark:text-disabled-dark",
     error: "text-red-500"

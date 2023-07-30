@@ -2,7 +2,14 @@ import React, { useCallback, useRef } from "react";
 
 import { TextareaAutosize } from "./TextareaAutosize";
 import clsx from "clsx";
-import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
+import {
+    fieldBackgroundDisabledMixin,
+    fieldBackgroundHoverMixin,
+    fieldBackgroundInvisibleMixin,
+    fieldBackgroundMixin,
+    focusedInvisibleMixin,
+    focusedMixin
+} from "../styles";
 import { InputLabel } from "./InputLabel";
 
 export type InputType =
@@ -28,6 +35,7 @@ export type TextFieldProps<T extends string | number> = {
     multiline?: boolean,
     rows?: number,
     disabled?: boolean,
+    invisible?: boolean,
     error?: boolean,
     endAdornment?: React.ReactNode,
     autoFocus?: boolean,
@@ -37,7 +45,7 @@ export type TextFieldProps<T extends string | number> = {
     style?: React.CSSProperties,
     inputClassName?: string,
     inputStyle?: React.CSSProperties,
-    inputRef?: React.Ref<any>
+    inputRef?: React.Ref<any>,
 } & Omit<React.InputHTMLAttributes<HTMLInputElement>, "size">;
 
 export function TextField<T extends string | number>({
@@ -46,6 +54,7 @@ export function TextField<T extends string | number>({
                                                          label,
                                                          type = "text",
                                                          multiline = false,
+                                                         invisible,
                                                          rows,
                                                          disabled,
                                                          error,
@@ -63,6 +72,7 @@ export function TextField<T extends string | number>({
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const inputRef = inputRefProp ?? useRef(null);
+
     // @ts-ignore
     const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
     const hasValue = value !== undefined && value !== null && value !== "";
@@ -88,7 +98,7 @@ export function TextField<T extends string | number>({
             onChange={onChange}
             style={inputStyle}
             className={clsx(
-                focusedMixin,
+                invisible ? focusedInvisibleMixin : focusedMixin,
                 "rounded-md resize-none w-full outline-none p-[32px] text-base leading-normal bg-transparent min-h-[64px] px-3 pt-[28px]",
                 disabled && "border border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500"
             )}
@@ -100,11 +110,12 @@ export function TextField<T extends string | number>({
             disabled={disabled}
             style={inputStyle}
             className={clsx(
-                "w-full outline-none bg-transparent leading-normal text-base px-3",
+                "w-full outline-none bg-transparent leading-normal px-3",
                 "rounded-md",
-                focusedMixin,
-                size === "small" ? "min-h-[48px]" : "min-h-[64px]",
-                label ? "pt-[28px] pb-2" : "py-2",
+                invisible ? focusedInvisibleMixin : focusedMixin,
+                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
+                invisible ? "" : (size === "small" ? "min-h-[48px]" : "min-h-[64px]"),
+                label ? (size === "medium" ? "pt-[28px] pb-2" : "pt-4 pb-2") : "py-2",
                 focused ? "text-text-primary dark:text-text-primary-dark" : "",
                 endAdornment ? "pr-10" : "pr-3",
                 inputClassName,
@@ -123,18 +134,20 @@ export function TextField<T extends string | number>({
         <div
             className={clsx(
                 "rounded-md relative max-w-full",
-                fieldBackgroundMixin,
+                invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 {
-                    "min-h-[48px]": size === "small",
-                    "min-h-[64px]": size === "medium"
+                    "min-h-[48px]": !invisible && size === "small",
+                    "min-h-[64px]": !invisible && size === "medium"
                 },
                 className)}
             style={style}>
 
             {label && (
                 <InputLabel
-                    className={clsx("absolute top-1 pointer-events-none",
+                    className={clsx(
+                        "pointer-events-none absolute",
+                        size === "medium" ? "top-1" : "-top-1",
                         !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
                         disabled ? "opacity-50" : "")}
                     shrink={hasValue || focused}
@@ -146,6 +159,7 @@ export function TextField<T extends string | number>({
             {input}
 
             {endAdornment && <div className="flex absolute right-0 top-3 mr-3 ">{endAdornment}</div>}
+
         </div>
     );
 }

@@ -2,20 +2,32 @@ import React from "react";
 import clsx from "clsx";
 
 import { Link as ReactLink } from "react-router-dom";
-import { Avatar, Chip, ErrorBoundary } from "../components";
-import { useAuthController, useBreadcrumbsContext, useModeController, useNavigationContext } from "../../hooks";
-import { Button, IconButton, Typography } from "../../components";
-import { useLargeLayout } from "../../hooks/useLargeLayout";
-import { DarkModeIcon, LightModeIcon } from "../../icons";
+import { Avatar, Chip, ErrorBoundary, Menu, MenuItem } from "../components";
+import {
+    useAuthController,
+    useBreadcrumbsContext,
+    useLargeLayout,
+    useModeController,
+    useNavigationContext
+} from "../../hooks";
+import { IconButton, Typography } from "../../components";
+import { DarkModeIcon, LightModeIcon, LogoutIcon } from "../../icons";
 
 export interface FireCMSAppBarProps {
     title: string;
     /**
      * A component that gets rendered on the upper side of the main toolbar
      */
-    toolbarExtraWidget?: React.ReactNode;
+    children?: React.ReactNode;
+
+    startAdornment?: React.ReactNode;
+
+    dropDownActions?: React.ReactNode;
 
     drawerOpen: boolean;
+
+    className?: string;
+    style?: React.CSSProperties;
 }
 
 /**
@@ -29,8 +41,12 @@ export interface FireCMSAppBarProps {
  */
 export const FireCMSAppBar = function FireCMSAppBar({
                                                         title,
-                                                        toolbarExtraWidget,
-                                                        drawerOpen
+                                                        children,
+                                                        startAdornment,
+                                                        drawerOpen,
+                                                        dropDownActions,
+                                                        className,
+                                                        style
                                                     }: FireCMSAppBarProps) {
 
     const breadcrumbsContext = useBreadcrumbsContext();
@@ -51,21 +67,25 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
     return (
         <div
+            style={style}
             className={clsx({
-                "ml-[18rem]": drawerOpen && largeLayout,
-                "ml-16": !(drawerOpen && largeLayout),
-                "h-16": true,
-                "z-10": largeLayout,
-                "transition-all": true,
-                "ease-in": true,
-                "duration-75": true,
-                "w-[calc(100%-64px)]": !(drawerOpen && largeLayout),
-                "w-[calc(100%-18rem)]": drawerOpen && largeLayout,
-                "duration-150": drawerOpen && largeLayout,
-                fixed: true
-            })}>
+                    "ml-[18rem]": drawerOpen && largeLayout,
+                    "ml-16": !(drawerOpen && largeLayout),
+                    "h-16": true,
+                    "z-10": largeLayout,
+                    "transition-all": true,
+                    "ease-in": true,
+                    "duration-75": true,
+                    "w-[calc(100%-64px)]": !(drawerOpen && largeLayout),
+                    "w-[calc(100%-18rem)]": drawerOpen && largeLayout,
+                    "duration-150": drawerOpen && largeLayout,
+                    fixed: true,
+                },
+                className)}>
 
             <div className="flex flex-row gap-1 space-y-1 px-4 h-full items-center">
+
+                {startAdornment}
 
                 <div className="mr-8 hidden lg:block">
                     <ReactLink
@@ -95,9 +115,9 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
                 <div className={"flex-grow"}/>
 
-                {toolbarExtraWidget &&
+                {children &&
                     <ErrorBoundary>
-                        {toolbarExtraWidget}
+                        {children}
                     </ErrorBoundary>}
 
                 <div className={"p-1"}>
@@ -112,19 +132,26 @@ export const FireCMSAppBar = function FireCMSAppBar({
                     </IconButton>
                 </div>
 
-                <div className={"p-1"}>
-                    {authController.user && authController.user.photoURL
-                        ? <Avatar
-                            src={authController.user.photoURL}/>
-                        : <Avatar>{initial}</Avatar>
-                    }
-                </div>
+                <Menu
+                    trigger={<IconButton>
+                        <div className={"p-1"}>
+                            {authController.user && authController.user.photoURL
+                                ? <Avatar
+                                    src={authController.user.photoURL}/>
+                                : <Avatar>{initial}</Avatar>
+                            }
+                        </div>
+                    </IconButton>}
+                >
 
-                <Button variant="text"
-                        className={"!text-gray-800 dark:!text-gray-200"}
-                        onClick={authController.signOut}>
-                    Log Out
-                </Button>
+                    {dropDownActions}
+
+                    {!dropDownActions && <MenuItem onClick={authController.signOut}>
+                        <LogoutIcon/>
+                        Log Out
+                    </MenuItem>}
+
+                </Menu>
 
             </div>
         </div>

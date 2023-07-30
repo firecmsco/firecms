@@ -3,7 +3,7 @@ import React from "react";
 import { ArrayProperty, FieldConfig, FieldConfigId, FieldProps, Property, ResolvedProperty } from "../types";
 import {
     ArrayCustomShapedFieldBinding,
-    ArrayEnumSelectBinding,
+    MultiSelectBinding,
     ArrayOfReferencesFieldBinding,
     BlockFieldBinding,
     DateTimeFieldBinding,
@@ -95,7 +95,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
         dataType: "array",
         Icon: ListAltIcon,
         color: "#4223c9",
-        Field: ArrayEnumSelectBinding
+        Field: MultiSelectBinding
     },
     number_input: {
         name: "Number input",
@@ -119,7 +119,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
         dataType: "array",
         Icon: FormatListNumberedIcon,
         color: "#bec920",
-        Field: ArrayEnumSelectBinding
+        Field: MultiSelectBinding
     },
     file_upload: {
         name: "File upload",

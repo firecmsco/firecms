@@ -85,6 +85,7 @@ export function TableSelect(props: {
                 ? (multiple ? (internalValue as any[]).map(v => v.toString()) : internalValue?.toString())
                 : (multiple ? [] : "")}
             onValueChange={onChange}
+            onMultiValueChange={onChange}
             renderValue={renderValue}>
             {enumValues?.map((enumConfig) => (
                 <SelectItem

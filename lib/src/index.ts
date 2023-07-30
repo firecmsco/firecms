@@ -6,3 +6,4 @@ export * from "./icons";
 export * from "./preview";
 export * from "./hooks";
 export * from "./firebase_app";
+export * from "./styles";

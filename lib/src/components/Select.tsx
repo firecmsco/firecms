@@ -8,13 +8,18 @@ import { CheckIcon, ChevronDownIcon } from "../icons";
 
 export type SelectProps = {
     open?: boolean,
+    name?: string,
+    id?: string,
     onOpenChange?: (open: boolean) => void,
     value?: string | string[],
     className?: string,
     inputClassName?: string,
-    onValueChange?: (updatedValue: string | string[]) => void,
+    onChange?: React.EventHandler<React.ChangeEvent<HTMLSelectElement>>,
+    onValueChange?: (updatedValue: string) => void,
+    onMultiValueChange?: (updatedValue: string[]) => void,
     placeholder?: React.ReactNode,
-    renderValue: (option: string) => React.ReactNode,
+    renderValue?: (value: string) => React.ReactNode,
+    renderValues?: (value: string[]) => React.ReactNode,
     size?: "small" | "medium",
     label?: React.ReactNode,
     disabled?: boolean,
@@ -31,13 +36,18 @@ export type SelectProps = {
 export function Select({
                            inputRef,
                            open,
+                           name,
+                           id,
                            onOpenChange,
                            value,
+                           onChange,
                            onValueChange,
+                           onMultiValueChange,
                            className,
                            inputClassName,
                            placeholder,
                            renderValue,
+                           renderValues,
                            label,
                            size = "medium",
                            includeFocusOutline = true,
@@ -58,17 +68,22 @@ export function Select({
     const onValueChangeInternal = React.useCallback((newValue: string) => {
         if (multiple) {
             if (Array.isArray(value) && value.includes(newValue)) {
-                onValueChange?.(value.filter(v => v !== newValue));
+                onMultiValueChange?.(value.filter(v => v !== newValue));
             } else {
-                onValueChange?.([...(value ?? []), newValue]);
+                onMultiValueChange?.([...(value ?? []), newValue]);
             }
         } else {
             onValueChange?.(newValue);
         }
-    }, [multiple, value, onValueChange]);
+        if (!multiple && onChange) {
+            const event = { target: { value } } as React.ChangeEvent<HTMLSelectElement>;
+            onChange(event);
+        }
+    }, [multiple, onChange, value, onMultiValueChange, onValueChange]);
 
     return (
         <SelectPrimitive.Root
+            name={name}
             value={Array.isArray(value) ? undefined : value}
             open={openInternal}
             disabled={disabled}
@@ -91,6 +106,7 @@ export function Select({
 
                 <SelectPrimitive.Trigger
                     ref={inputRef}
+                    id={id}
                     className={clsx(
                         "w-full h-full",
                         size === "small" ? "h-[42px]" : "h-[64px]",
@@ -109,12 +125,19 @@ export function Select({
                             "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
                             size === "small" ? "h-[42px]" : "h-[64px]"
                         )}>
-                            {value && Array.isArray(value)
+                            {renderValue &&
+                                (value && Array.isArray(value)
+                                    ? value.map((v) => (
+                                        <div key={v} className={"flex items-center gap-1 max-w-full"}>
+                                            {renderValue ? renderValue(v) : v}
+                                        </div>))
+                                    : (value ? (renderValue ? renderValue(value) : value) : placeholder))}
+
+                            {renderValues && value && Array.isArray(value)
                                 ? value.map((v) => (
-                                    <div key={v} className={"flex items-center gap-1 max-w-full"}>
-                                        {renderValue(v)}
-                                    </div>))
-                                : (value ? renderValue(value) : placeholder)}
+                                    renderValue ? renderValue(v) : v)
+                                )
+                                : null}
                         </div>
                     </SelectPrimitive.Value>
 
@@ -141,9 +164,9 @@ export function Select({
                     align={"center"}>
                     <SelectPrimitive.Viewport
                         className="">
-                        <SelectPrimitive.Group>
+                        {/*<SelectPrimitive.Group>*/}
                             {children}
-                        </SelectPrimitive.Group>
+                        {/*</SelectPrimitive.Group>*/}
                     </SelectPrimitive.Viewport>
                 </SelectPrimitive.Content>
             </SelectPrimitive.Portal>
@@ -155,29 +178,66 @@ export type SelectItemProps = {
     value: string,
     selected?: boolean,
     children?: React.ReactNode,
-    disabled?: boolean
+    disabled?: boolean,
+    className?: string,
+    onClick?: () => void
 };
 
 export function SelectItem({
                                value,
                                selected,
                                children,
-                               disabled
+                               disabled,
+                               className,
+                               onClick
                            }: SelectItemProps) {
     return <SelectPrimitive.Item
         key={value}
         value={value}
+        onClick={onClick}
         className={clsx(
             "relative relative flex items-center px-6 py-1 rounded-md text-sm text-gray-700 dark:text-gray-300",
             "border-2 border-transparent focus-visible:border-opacity-75 focus:outline-none focus-visible:border-solid focus-visible:border-solid focus-visible:border-primary",
             "data-[state=checked]:bg-gray-100 data-[state=checked]:dark:bg-gray-900 focus:bg-gray-100 dark:focus:bg-gray-950",
-            "data-[state=checked]:focus:bg-gray-200 data-[state=checked]:dark:focus:bg-gray-950"
+            "data-[state=checked]:focus:bg-gray-200 data-[state=checked]:dark:focus:bg-gray-950",
+            disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         )}
     >
-        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
+        <SelectPrimitive.ItemText className={className}>{children}</SelectPrimitive.ItemText>
         <div
             className="absolute left-1 data-[state=checked]:block hidden">
             <CheckIcon size={16}/>
         </div>
     </SelectPrimitive.Item>;
+}
+
+export type SelectGroupProps = {
+    label: React.ReactNode,
+    children: React.ReactNode,
+    className?: string
+};
+
+export function SelectGroup({
+                                label,
+                                children,
+                                className
+                            }: SelectGroupProps) {
+    return <SelectPrimitive.Group
+        className={clsx(
+            "text-xs text-gray-500 dark:text-gray-300 uppercase tracking-wider font-bold",
+            "px-6 py-2",
+            className
+        )}>
+        {label}
+        <div className={"mt-2"}>
+            {children}
+        </div>
+    </SelectPrimitive.Group>;
+}
+
+function selectOnChangeEventAdapter(fn: (event: React.ChangeEvent<HTMLSelectElement>) => void): (value: string) => void {
+    return (value: string) => {
+        const event = { target: { value } } as React.ChangeEvent<HTMLSelectElement>;
+        fn(event);
+    };
 }

@@ -15,7 +15,7 @@ export function DialogActions({
     return <div
         className={clsx(
             defaultBorderMixin,
-            "py-3 px-8 border-t flex flex-row items-center justify-end bottom-0 right-0 left-0 text-right z-2 gap-1.5",
+            "py-3 px-8 border-t flex flex-row items-center justify-end bottom-0 right-0 left-0 text-right z-2 gap-2",
             position,
             "bg-white bg-opacity-60 dark:bg-gray-900 dark:bg-opacity-60",
             translucent ? "backdrop-blur-sm" : "")}>

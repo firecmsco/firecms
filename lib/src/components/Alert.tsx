@@ -3,7 +3,8 @@ import * as React from "react";
 export interface AlertProps {
     children: React.ReactNode;
     onDismiss?: () => void;
-    severity: "error" | "warning" | "info" | "success";
+    color: "error" | "warning" | "info" | "success";
+    action?: React.ReactNode;
 }
 
 const getClasses = (severity: string) => {
@@ -24,13 +25,14 @@ const getClasses = (severity: string) => {
 export const Alert: React.FC<AlertProps> = ({
                                                 children,
                                                 onDismiss,
-                                                severity
+                                                color,
+                                                action
                                             }) => {
-    const classes = getClasses(severity);
+    const classes = getClasses(color);
 
     return (
         <div
-            className={`p-4 rounded-md flex items-center space-x-4 ${classes}`}
+            className={`p-4 rounded-md flex items-center gap-2 ${classes}`}
         >
             <span className={`flex-grow`}>{children}</span>
             {onDismiss && (
@@ -39,6 +41,7 @@ export const Alert: React.FC<AlertProps> = ({
                     &times;
                 </button>
             )}
+            {action}
         </div>
     );
 };

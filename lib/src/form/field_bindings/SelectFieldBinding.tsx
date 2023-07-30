@@ -2,13 +2,12 @@ import React, { useCallback } from "react";
 import clsx from "clsx";
 
 import { EnumType, FieldProps } from "../../types";
-import { LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
 import { getIconForProperty, Select, SelectItem } from "../../core";
 import { IconButton } from "../../components";
-import { FieldHelperText } from "../components/FieldHelperText";
-import { ClearIcon } from "../../icons/ClearIcon";
+import { ClearIcon } from "../../icons";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -55,7 +54,6 @@ export function SelectFieldBinding<T extends EnumType>({
                 disabled={disabled}
                 position="item-aligned"
                 inputClassName={clsx("w-full")}
-
                 label={<LabelWithIcon icon={getIconForProperty(property)}
                                       required={property.validation?.required}
                                       title={property.name}
@@ -67,11 +65,11 @@ export function SelectFieldBinding<T extends EnumType>({
                         <ClearIcon/>
                     </IconButton>
                 }
-                onValueChange={(updatedValue: any) => {
+                onValueChange={(updatedValue: string) => {
                     const newValue = updatedValue
                         ? (property.dataType === "number" ? parseFloat(updatedValue) : updatedValue)
                         : null;
-                    return setValue(newValue);
+                    return setValue(newValue as T);
                 }}
                 renderValue={(enumKey: any) => {
                     return <EnumValuesChip

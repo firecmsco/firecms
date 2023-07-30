@@ -14,13 +14,15 @@ export function Menu({
                      }: MenuProps) {
     return (
         <DropdownMenu.Root>
-            <DropdownMenu.Trigger asChild>
-                <div tabIndex={-1}>
-                    {trigger}
-                </div>
+            <DropdownMenu.Trigger>
+                {/*<span tabIndex={-1} className={"focus:outline:none focus-visible:outline:none"}>*/}
+                {trigger}
+                {/*</span>*/}
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
-                <DropdownMenu.Content className={clsx(paperMixin, "shadow py-2 z-50")}>
+                <DropdownMenu.Content className={clsx(paperMixin, "shadow py-2 z-50")}
+                                      // onCloseAutoFocus={(e) => e.preventDefault()}
+                >
                     {children}
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>

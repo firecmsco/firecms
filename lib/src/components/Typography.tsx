@@ -1,12 +1,12 @@
-import React, { forwardRef, ReactEventHandler } from "react";
+import React, { ReactEventHandler } from "react";
 import clsx from "clsx";
 import { focusedMixin } from "../styles";
 
-export interface TextProps {
+export type TextProps<C extends React.ElementType> = {
     align?: "center" | "inherit" | "justify" | "left" | "right";
     children?: React.ReactNode;
     className?: string;
-    component?: React.ElementType;
+    component?: C;
     gutterBottom?: boolean;
     noWrap?: boolean;
     paragraph?: boolean;
@@ -15,7 +15,7 @@ export interface TextProps {
     color?: "inherit" | "initial" | "primary" | "secondary" | "disabled" | "error";
     onClick?: ReactEventHandler<HTMLElement>;
     style?: React.CSSProperties;
-}
+} & React.ComponentPropsWithoutRef<C>;
 
 const defaultVariantMapping = {
     h1: "h1",
@@ -30,7 +30,8 @@ const defaultVariantMapping = {
     body1: "p",
     body2: "p",
     inherit: "p",
-    caption: "p"
+    caption: "p",
+    button: "span"
 };
 
 const colorToClasses = {
@@ -55,10 +56,11 @@ const variantToClasses = {
     body2: "text-sm",
     label: "text-sm font-medium text-gray-500",
     inherit: "text-inherit",
-    caption: "text-xs"
+    caption: "text-xs",
+    button: "text-sm font-medium"
 };
 
-export const Typography = forwardRef<HTMLSpanElement, TextProps>(function Typography(
+export function Typography<C extends React.ElementType>(
     {
         align = "inherit",
         children,
@@ -71,9 +73,9 @@ export const Typography = forwardRef<HTMLSpanElement, TextProps>(function Typogr
         variantMapping = defaultVariantMapping,
         color,
         style,
-        onClick
-    },
-    ref
+        onClick,
+        ...other
+    }: TextProps<C>
 ) {
     const Component =
         component ||
@@ -92,9 +94,11 @@ export const Typography = forwardRef<HTMLSpanElement, TextProps>(function Typogr
     );
 
     return (
-        <Component ref={ref} className={classes} onClick={onClick}
-                   style={style}>
+        <Component className={classes}
+                   onClick={onClick}
+                   style={style}
+                   {...other}>
             {children}
         </Component>
     );
-});
+}

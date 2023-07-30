@@ -1,5 +1,5 @@
 import { SelectFieldBinding } from "./field_bindings/SelectFieldBinding";
-import { ArrayEnumSelectBinding } from "./field_bindings/ArrayEnumSelectBinding";
+import { MultiSelectBinding } from "./field_bindings/MultiSelectBinding";
 import { ArrayOfReferencesFieldBinding } from "./field_bindings/ArrayOfReferencesFieldBinding";
 import { StorageUploadFieldBinding } from "./field_bindings/StorageUploadFieldBinding";
 import { TextFieldBinding } from "./field_bindings/TextFieldBinding";
@@ -17,7 +17,7 @@ import { ArrayCustomShapedFieldBinding } from "./field_bindings/ArrayCustomShape
 export {
     ArrayCustomShapedFieldBinding,
     RepeatFieldBinding,
-    ArrayEnumSelectBinding,
+    MultiSelectBinding,
     ArrayOfReferencesFieldBinding,
     BlockFieldBinding,
     DateTimeFieldBinding,

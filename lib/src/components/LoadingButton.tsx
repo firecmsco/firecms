@@ -2,11 +2,11 @@ import React from "react";
 import { Button, ButtonProps } from "./Button";
 import { CircularProgress } from "./CircularProgress";
 
-export type LoadingButtonProps<P> = ButtonProps<P> & {
+export type LoadingButtonProps<P extends React.ElementType> = ButtonProps<P> & {
     loading?: boolean;
 }
 
-export function LoadingButton<P = any>({
+export function LoadingButton<P extends React.ElementType = "button">({
                                            children,
                                            loading,
                                            disabled,

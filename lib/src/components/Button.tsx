@@ -3,16 +3,16 @@ import clsx from "clsx";
 
 import { focusedMixin } from "../styles";
 
-export type ButtonProps<P> = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type ButtonProps<C extends React.ElementType> = {
     variant?: "filled" | "outlined" | "text";
     disabled?: boolean;
     size?: "small" | "medium" | "large";
     startIcon?: React.ReactNode;
     className?: string;
-    component?: React.ElementType<P>;
-} & P;
+    component?: C;
+} & React.ComponentPropsWithoutRef<C>;
 
-export function Button<P>({
+export function Button<C extends React.ElementType = "button">({
                               children,
                               className,
                               variant = "filled",
@@ -20,7 +20,7 @@ export function Button<P>({
                               size = "medium",
                               startIcon = null,
                               ...props
-                          }: ButtonProps<P>) {
+                          }: ButtonProps<C>) {
     const baseClasses =
         "rounded-md border font-headers uppercase inline-flex items-center justify-center p-2 px-4 text-sm font-medium focus:outline-none transition ease-in-out duration-150";
 
