@@ -5,8 +5,8 @@ import { EnumType, FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
-import { getIconForProperty, Select, SelectItem } from "../../core";
-import { IconButton } from "../../components";
+import { getIconForProperty } from "../../core";
+import { IconButton, Select, SelectItem } from "../../components";
 import { ClearIcon } from "../../icons";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;

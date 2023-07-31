@@ -3,7 +3,7 @@ import {
     AutoFixHighIcon,
     Button,
     Dialog,
-    DialogActions,
+    DialogActions, DialogContent,
     IconButton,
     Typography,
     useSideDialogsController
@@ -44,7 +44,7 @@ export function OpenAIInstructionsActions() {
                 open={open}
                 onOpenChange={setOpen}
             >
-                <div className="p-8 flex flex-col space-y-2">
+                <DialogContent className="p-8 flex flex-col space-y-2">
                     <Typography variant={"h5"} gutterBottom>
                         OpenAI data enhancement DEMO
                     </Typography>
@@ -71,7 +71,7 @@ export function OpenAIInstructionsActions() {
                         of the field, to have it autofilled.
                     </Typography>
 
-                </div>
+                </DialogContent>
                 <DialogActions>
                     <Button onClick={handleClose}
                             variant={"filled"}>

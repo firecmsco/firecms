@@ -22,10 +22,9 @@ import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../types";
 import { ErrorView } from "../../../ErrorView";
 import { isReadOnly, resolveCollection } from "../../../../util";
-import { DialogActions } from "../../../DialogActions";
+import { Button, DialogActions, IconButton, Typography } from "../../../../../components";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
-import { Button, IconButton, Typography } from "../../../../../components";
 import { ClearIcon } from "../../../../../icons";
 
 interface PopupFormFieldProps<M extends Record<string, any>> {

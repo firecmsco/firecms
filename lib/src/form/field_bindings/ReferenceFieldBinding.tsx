@@ -3,10 +3,10 @@ import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FieldProps } from "../../types";
 import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
-import { FieldHelperText } from "../components/FieldHelperText";
+import {  FieldHelperText, LabelWithIcon } from "../components";
 import { ReferencePreview } from "../../preview";
-import { Button, ErrorView, getIconForProperty, getReferenceFrom } from "../../core";
-import { LabelWithIcon } from "../components";
+import { ErrorView, getIconForProperty, getReferenceFrom } from "../../core";
+import { Button } from "../../components";
 
 /**
  * Field that opens a reference selection dialog.
@@ -73,7 +73,7 @@ function ReferenceFieldBindingInternal<M extends Record<string, any>>({
         }
     );
 
-    const onEntryClick = useCallback((e:React.SyntheticEvent) => {
+    const onEntryClick = useCallback((e: React.SyntheticEvent) => {
         e.preventDefault();
         referenceDialogController.open();
     }, [referenceDialogController]);

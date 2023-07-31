@@ -1,10 +1,7 @@
 import React, { useCallback } from "react";
 import { Blocker, Transition } from "history";
 import { UNSAFE_NavigationContext, useNavigate } from "react-router-dom";
-import { DialogActions } from "../components";
-import { Dialog } from "../../components/Dialog";
-import { Button } from "../../components/Button";
-import { Typography } from "../../components";
+import { Button, Dialog, DialogActions, DialogContent, Typography } from "../../components";
 
 export function useNavigationUnsavedChangesDialog(when: boolean, onSuccess: () => void):
     {
@@ -89,10 +86,8 @@ export function UnsavedChangesDialog({
         <Dialog
             open={open}
             onOpenChange={(open) => open ? handleCancel() : handleOk()}
-            aria-labelledby="alert-dialog-title"
-            aria-describedby="alert-dialog-description"
         >
-            <div className={"p-6"}>
+            <DialogContent>
                 <Typography variant={"h6"}>{title}</Typography>
 
                 {body}
@@ -101,7 +96,7 @@ export function UnsavedChangesDialog({
                     Are you sure you want to leave this page?
                 </Typography>
 
-            </div>
+            </DialogContent>
             <DialogActions>
                 <Button variant="text" onClick={handleCancel} autoFocus> Cancel </Button>
                 <Button onClick={handleOk}> Ok </Button>

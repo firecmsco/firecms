@@ -1,10 +1,13 @@
 import * as React from "react";
+import clsx from "clsx";
 
 export interface AlertProps {
     children: React.ReactNode;
     onDismiss?: () => void;
     color: "error" | "warning" | "info" | "success";
     action?: React.ReactNode;
+    className?: string;
+    style?: React.CSSProperties;
 }
 
 const getClasses = (severity: string) => {
@@ -26,13 +29,16 @@ export const Alert: React.FC<AlertProps> = ({
                                                 children,
                                                 onDismiss,
                                                 color,
-                                                action
+                                                action,
+                                                className,
+                                                style
                                             }) => {
     const classes = getClasses(color);
 
     return (
         <div
-            className={`p-4 rounded-md flex items-center gap-2 ${classes}`}
+            style={style}
+            className={clsx(`p-4 rounded-md flex items-center gap-2`,classes , className)}
         >
             <span className={`flex-grow`}>{children}</span>
             {onDismiss && (

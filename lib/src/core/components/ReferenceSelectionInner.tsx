@@ -7,19 +7,17 @@ import {
     useAuthController,
     useDataSource,
     useFireCMSContext,
+    useLargeLayout,
     useNavigationContext,
     useSideEntityController
 } from "../../hooks";
 import { ErrorView } from "./ErrorView";
-import { DialogActions } from "./DialogActions";
+import { Button, DialogActions, Typography } from "../../components";
 import { useSideDialogContext } from "../SideDialogs";
 import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
 import { useTableController } from "./EntityCollectionTable/useTableController";
 import { isFilterCombinationValidForFirestore } from "./EntityCollectionView/isFilterCombinationValidForFirestore";
-import { Typography } from "../../components/Typography";
-import { useLargeLayout } from "../../hooks/useLargeLayout";
-import { Button } from "../../components/Button";
 import { AddIcon } from "../../icons";
 
 /**

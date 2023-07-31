@@ -2116,6 +2116,41 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@firecms/collection_editor@workspace:collection_editor":
+  version: 0.0.0-use.local
+  resolution: "@firecms/collection_editor@workspace:collection_editor"
+  dependencies:
+    "@emotion/react": ^11.11.0
+    "@emotion/styled": ^11.11.0
+    "@mui/icons-material": ^5.11.16
+    "@mui/lab": ^5.0.0-alpha.133
+    "@mui/material": ^5.13.4
+    "@types/react": ^18.2.8
+    "@types/react-dom": ^18.2.4
+    "@typescript-eslint/eslint-plugin": ^5.59.9
+    "@typescript-eslint/parser": ^5.59.9
+    "@vitejs/plugin-react": ^4.0.0
+    algoliasearch: ^4.17.1
+    eslint: ^8.42.0
+    eslint-config-standard: ^17.1.0
+    eslint-plugin-import: ^2.27.5
+    eslint-plugin-n: ^15.7.0
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-react: ^7.32.2
+    eslint-plugin-react-hooks: ^4.6.0
+    firebase: ^9.22.1
+    firecms: "workspace:lib"
+    flexsearch: 0.7.31
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-router: ^6.12.0
+    react-router-dom: ^6.12.0
+    typescript: ^5.1.3
+    vite: ^4.3.9
+    vite-plugin-fonts: ^0.7.0
+  languageName: unknown
+  linkType: soft
+
 "@firecms/data_enhancement@^1.0.0, @firecms/data_enhancement@workspace:data_enhancement":
   version: 0.0.0-use.local
   resolution: "@firecms/data_enhancement@workspace:data_enhancement"
@@ -7116,41 +7151,6 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"firecms_collection_editor@workspace:collection_editor":
-  version: 0.0.0-use.local
-  resolution: "firecms_collection_editor@workspace:collection_editor"
-  dependencies:
-    "@emotion/react": ^11.11.0
-    "@emotion/styled": ^11.11.0
-    "@mui/icons-material": ^5.11.16
-    "@mui/lab": ^5.0.0-alpha.133
-    "@mui/material": ^5.13.4
-    "@types/react": ^18.2.8
-    "@types/react-dom": ^18.2.4
-    "@typescript-eslint/eslint-plugin": ^5.59.9
-    "@typescript-eslint/parser": ^5.59.9
-    "@vitejs/plugin-react": ^4.0.0
-    algoliasearch: ^4.17.1
-    eslint: ^8.42.0
-    eslint-config-standard: ^17.1.0
-    eslint-plugin-import: ^2.27.5
-    eslint-plugin-n: ^15.7.0
-    eslint-plugin-promise: ^6.1.1
-    eslint-plugin-react: ^7.32.2
-    eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.22.1
-    firecms: "workspace:lib"
-    flexsearch: 0.7.31
-    react: ^18.2.0
-    react-dom: ^18.2.0
-    react-router: ^6.12.0
-    react-router-dom: ^6.12.0
-    typescript: ^5.1.3
-    vite: ^4.3.9
-    vite-plugin-fonts: ^0.7.0
-  languageName: unknown
-  linkType: soft
-
 "firecms_user_management@workspace:user_management":
   version: 0.0.0-use.local
   resolution: "firecms_user_management@workspace:user_management"
@@ -10554,6 +10554,8 @@ __metadata:
   dependencies:
     "@emotion/react": ^11.11.1
     "@emotion/styled": ^11.11.0
+    "@firecms/collection_editor": "workspace:collection_editor"
+    "@firecms/data_enhancement": "workspace:data_enhancement"
     "@fontsource/roboto": ^5.0.2
     "@module-federation/vite": ^0.2.6
     "@mui/icons-material": ^5.11.16
@@ -10577,11 +10579,12 @@ __metadata:
     eslint-plugin-react-hooks: ^4.6.0
     firebase: ^9.22.1
     firecms: "workspace:lib"
-    firecms_collection_editor: "workspace:collection_editor"
+    postcss: ^8.4.24
     react: ^18.2.0
     react-dom: ^18.2.0
     react-router: ^6.12.0
     react-router-dom: ^6.12.0
+    tailwindcss: ^3.3.2
     typescript: ^5.1.3
     vite: ^4.3.9
     vite-plugin-fonts: ^0.7.0

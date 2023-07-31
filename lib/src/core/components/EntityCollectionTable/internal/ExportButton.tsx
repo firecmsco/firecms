@@ -3,11 +3,18 @@ import React, { useCallback, useEffect, useRef } from "react";
 import { Entity, EntityCollection, ExportConfig, ResolvedEntityCollection, User } from "../../../../types";
 import { useDataSource, useFireCMSContext, useNavigationContext } from "../../../../hooks";
 import { downloadCSV } from "../../../util/csv";
-import { DialogActions } from "../../DialogActions";
+import {
+    Alert,
+    Button,
+    CircularProgress,
+    Dialog,
+    DialogActions, DialogContent,
+    IconButton,
+    Tooltip,
+    Typography
+} from "../../../../components";
 import { resolveCollection } from "../../../util";
-import { Button, CircularProgress, Dialog, IconButton, Tooltip, Typography } from "../../../../components";
 import { GetAppIcon } from "../../../../icons";
-import { Alert } from "../../../../components/Alert";
 
 interface ExportButtonProps<M extends Record<string, any>, UserType extends User> {
     collection: EntityCollection<M>;
@@ -147,7 +154,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
             open={open}
             onOpenChange={setOpen}
         >
-            <div className={"p-4 flex flex-col gap-2 my-4"}>
+            <DialogContent className={"flex flex-col gap-2 my-4"}>
 
                 <Typography variant={"h6"}>Export data</Typography>
 
@@ -166,7 +173,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                         </div>
 
                     </Alert>}
-            </div>
+            </DialogContent>
 
             <DialogActions>
 

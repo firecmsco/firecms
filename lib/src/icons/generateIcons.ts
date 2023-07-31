@@ -1,4 +1,4 @@
-import { iconKeys } from "./icon_keys.ts";
+import { iconKeys } from "./icon_keys";
 import fs from "fs";
 import path from "path";
 
@@ -9,7 +9,7 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 fs.mkdirSync(path.join(__dirname, "../icons/components"), { recursive: true });
 
 // create empty index file
-fs.writeFileSync(path.join(__dirname, "../icons/index.ts"), "export * from \"./Icon\";\nexport * from \"./GitHubIcon\";\n");
+fs.writeFileSync(path.join(__dirname, "../icons/index.ts"), "export * from \"./icon_keys\";\nexport * from \"./Icon\";\nexport * from \"./GitHubIcon\";\n");
 
 // for each key, generate a file with an Icon ts component
 iconKeys.forEach((key: string) => {

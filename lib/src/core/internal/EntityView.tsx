@@ -2,13 +2,10 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 import { Entity, EntityCollection, EntityStatus, EntityValues, FireCMSPlugin, FormContext, User } from "../../types";
 import {
-    CircularProgress,
     CircularProgressCenter,
     EntityCollectionView,
     EntityPreview,
     ErrorBoundary,
-    Tab,
-    Tabs
 } from "../components";
 import {
     canEditEntity,
@@ -29,7 +26,7 @@ import {
 } from "../../hooks";
 import { EntityForm } from "../../form";
 import { useSideDialogContext } from "../SideDialogs";
-import { IconButton, Typography } from "../../components";
+import { CircularProgress, IconButton, Tab, Tabs, Typography } from "../../components";
 import { EntityFormSaveParams } from "../../form/EntityForm";
 import { FORM_CONTAINER_WIDTH } from "./common";
 import { defaultBorderMixin } from "../../styles";

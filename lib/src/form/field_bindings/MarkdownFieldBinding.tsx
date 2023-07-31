@@ -7,9 +7,10 @@ import MdEditor, { Plugins } from "react-markdown-editor-lite";
 
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
-import { getIconForProperty, Typography } from "../../core";
+import { getIconForProperty } from "../../core";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "../../styles";
 import { useInjectStyles } from "../../components/util/useInjectStyles";
+import { Typography } from "../../components";
 
 const mdParser = new MarkdownIt();
 MdEditor.use(Plugins.AutoResize, {

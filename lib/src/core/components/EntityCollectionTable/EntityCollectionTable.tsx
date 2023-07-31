@@ -163,9 +163,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     dependencies: [],
                     Builder: ({ entity }) => (
                         <Button color={"primary"}
-
                                 startIcon={<KeyboardTabIcon size={"small"}/>}
-                                onClick={(event) => {
+                                onClick={(event:any) => {
                                     event.stopPropagation();
                                     sideEntityController.open({
                                         path: fullPath,
@@ -706,7 +705,7 @@ function createFilterField({
     }
 
     return (
-        <div>{`Currently the field ${property.dataType} is not supported`}</div>
+        <div>{`Currently the filter field ${property.dataType} is not supported`}</div>
     );
 }
 

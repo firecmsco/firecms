@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
 
+import { ArrayContainer, getDefaultValueForDataType, getIconForProperty, } from "../../core";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import {
-    ArrayContainer,
+    BooleanSwitchWithLabel,
+    Button,
     DateTimeField,
     ExpandablePanel,
-    getDefaultValueForDataType,
-    getIconForProperty,
-    TextField
-} from "../../core";
-import { FieldHelperText, LabelWithIcon } from "../components";
-import { BooleanSwitchWithLabel, Button, IconButton, Menu, MenuItem, Typography } from "../../components";
+    IconButton,
+    Menu,
+    MenuItem,
+    TextField,
+    Typography
+} from "../../components";
 import { AddIcon, ArrowDropDownIcon, RemoveIcon } from "../../icons";
 
 type MapEditViewRowState = [number, {

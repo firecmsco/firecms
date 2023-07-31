@@ -1,11 +1,20 @@
 import { useEffect, useState } from "react";
 
-export const useLargeLayout = (): boolean => {
+const breakpoints = {
+    xs: 0,
+    sm: 640,
+    md: 768,
+    lg: 1024,
+    xl: 1280,
+    "2xl": 1536,
+    "3xl": 1920
+}
+export const useLargeLayout = (breakpoint: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" = "lg"): boolean => {
     const [isLargeLayout, setIsLargeLayout] = useState<boolean>(false);
 
     useEffect(() => {
         const handleResize = () => {
-            const matched = window.matchMedia("(min-width: 1025px)").matches;
+            const matched = window.matchMedia(`(min-width: ${breakpoints[breakpoint] + 1}px)`).matches;
             setIsLargeLayout(matched);
         };
 

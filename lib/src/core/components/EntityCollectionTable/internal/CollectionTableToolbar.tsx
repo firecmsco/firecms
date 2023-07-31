@@ -2,8 +2,7 @@ import React from "react";
 import clsx from "clsx";
 
 import { CollectionSize } from "../../../../types";
-import { SearchBar } from "./SearchBar";
-import { CircularProgress, IconButton, Select, SelectItem, Tooltip } from "../../../../components";
+import { SearchBar , CircularProgress, IconButton, Select, SelectItem, Tooltip } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
 import { defaultBorderMixin } from "../../../../styles";
 import { FilterListOffIcon } from "../../../../icons";

@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { ExpandablePanel, getIconForProperty } from "../../core";
+import { getIconForProperty } from "../../core";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
+import { ExpandablePanel } from "../../components";
 
 /**
  * Generic array field that allows reordering and renders the child property

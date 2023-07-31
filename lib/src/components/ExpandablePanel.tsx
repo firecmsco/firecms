@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useState } from "react";
 import clsx from "clsx";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
-import { defaultBorderMixin, focusedMixin } from "../styles";
+import { defaultBorderMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
 import { useInjectStyles } from "./util/useInjectStyles";
 import { ExpandMoreIcon } from "../icons";
 
@@ -13,6 +13,7 @@ export function ExpandablePanel({
                                     initiallyExpanded: initiallyOpen = true,
                                     onExpandedChange,
                                     titleClassName,
+                                    asField,
                                     className
                                 }: PropsWithChildren<{
     title: React.ReactNode,
@@ -20,6 +21,7 @@ export function ExpandablePanel({
     initiallyExpanded?: boolean;
     onExpandedChange?: (expanded: boolean) => void,
     titleClassName?: string,
+    asField?: boolean,
     className?: string
 }>) {
 
@@ -70,6 +72,7 @@ export function ExpandablePanel({
                         "rounded flex items-center justify-between w-full min-h-[64px]",
                         invisible ? "border-b px-2" : "p-4",
                         invisible && defaultBorderMixin,
+                        asField && fieldBackgroundMixin,
                         titleClassName
                     )}
                 >

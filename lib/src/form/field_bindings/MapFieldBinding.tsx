@@ -1,11 +1,11 @@
 import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
 
-import { ExpandablePanel, getIconForProperty, isHidden, pick, Select, SelectItem } from "../../core";
+import {  getIconForProperty, isHidden, pick } from "../../core";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { InputLabel } from "../../components";
+import { ExpandablePanel, InputLabel, Select, SelectItem } from "../../components";
 
 /**
  * Field that renders the children property fields

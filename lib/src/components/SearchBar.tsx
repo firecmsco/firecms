@@ -1,9 +1,9 @@
 import React, { useCallback, useDeferredValue, useState } from "react";
 import clsx from "clsx";
 
-import { fieldBackgroundMixin, focusedMixin } from "../../../../styles";
-import { IconButton } from "../../../../components";
-import { ClearIcon, SearchIcon } from "../../../../icons";
+import { defaultBorderMixin, focusedMixin } from "../styles";
+import { IconButton } from "./index";
+import { ClearIcon, SearchIcon } from "../icons";
 
 interface SearchBarProps {
     onTextSearch: (searchString?: string) => void;
@@ -11,6 +11,7 @@ interface SearchBarProps {
     expandable?: boolean;
     large?: boolean;
     className?: string;
+    autoFocus?: boolean;
 }
 
 export function SearchBar({
@@ -18,7 +19,8 @@ export function SearchBar({
                               placeholder = "Search",
                               expandable = false,
                               large = false,
-                              className
+                              className,
+                              autoFocus
                           }: SearchBarProps) {
 
     const [searchText, setSearchText] = useState<string>("");
@@ -43,8 +45,10 @@ export function SearchBar({
     }, []);
 
     return (
-        <div className={clsx("relative", large ? "h-14" : "h-[42px]",
-            fieldBackgroundMixin,
+        <div className={clsx("relative",
+            large ? "h-14" : "h-[42px]",
+            "bg-gray-50 dark:bg-gray-800 transition duration-150 ease-in-out border",
+            defaultBorderMixin,
             "rounded",)}>
             <div
                 className="absolute p-0 px-4 h-full absolute pointer-events-none flex items-center justify-center top-0">
@@ -56,6 +60,7 @@ export function SearchBar({
                 onChange={(event) => {
                     setSearchText(event.target.value);
                 }}
+                autoFocus={autoFocus}
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)}
                 className={clsx(

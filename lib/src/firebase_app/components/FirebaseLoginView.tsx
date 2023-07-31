@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
-import { CircularProgress, ErrorView, FireCMSLogo, TextField } from "../../core";
+import {  ErrorView, FireCMSLogo,  } from "../../core";
 import { useModeController } from "../../hooks";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
 import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";
@@ -13,7 +13,7 @@ import {
     PhoneMultiFactorGenerator,
     RecaptchaVerifier
 } from "firebase/auth";
-import { Button, IconButton, Typography } from "../../components";
+import { Button, CircularProgress, IconButton, TextField, Typography } from "../../components";
 import { ArrowBackIcon, EmailIcon, PersonOutlineIcon, PhoneIcon } from "../../icons";
 
 /**

@@ -8,9 +8,10 @@ import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 import { FieldProps, FormContext, PropertyOrBuilder } from "../../types";
-import { ExpandablePanel, getDefaultValueFor, getIconForProperty, Select, SelectItem, Typography } from "../../core";
+import { getDefaultValueFor, getIconForProperty, } from "../../core";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
 import { paperMixin } from "../../styles";
+import { ExpandablePanel, Select, SelectItem, Typography } from "../../components";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -204,7 +205,7 @@ function BlockEntry({
                             <Select
                                 className="mb-2"
                                 placeholder={<Typography variant={"caption"}
-                                                   className={"px-4 py-2 font-medium"}>Type</Typography>}
+                                                         className={"px-4 py-2 font-medium"}>Type</Typography>}
                                 size={"small"}
                                 value={fieldProps.field.value !== undefined && fieldProps.field.value !== null ? fieldProps.field.value : ""}
                                 renderValue={(enumKey: any) =>

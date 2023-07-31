@@ -1,28 +1,31 @@
 import React from "react";
+import clsx from "clsx";
+import { Container } from "./Container";
 
 export function CenteredView({
                                  children,
                                  maxWidth,
                                  fullScreen = false,
-                                 fadeTimeout = 800
+                                 className,
                              }: {
     children: React.ReactNode;
-    maxWidth?: number | string;
+    maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "6xl" | "7xl";
+    className?: string;
     fullScreen?: boolean,
-    fadeTimeout?: number
 }) {
 
-    return (
-        <div
-            className={`flex flex-col items-center ${fullScreen ? "h-screen" : "h-full"} ${!maxWidth ? "justify-center" : ""} max-h-full space-y-2 p-2`}
-        >
-            {maxWidth &&
-                <div className="w-full mx-auto" style={{ maxWidth }}>
-                    {children}
-                </div>}
+    const container = <><Container className={clsx("m-auto",
+        className)}
+                                   maxWidth={maxWidth}>
+        {children}
+    </Container></>;
 
-            {!maxWidth && children}
+    if (fullScreen) {
+        return <div className={"flex flex-col flex-grow h-screen"}>
+            {container}
         </div>
-    );
+    }
+
+    return container;
 
 }

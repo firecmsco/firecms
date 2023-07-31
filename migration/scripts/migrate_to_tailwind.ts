@@ -27,7 +27,7 @@ const sxRegexp = /(sx=\{(?:[^{}]|\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\})*\})/g
 
 let dryRun = false;
 let count = 0;
-getRecursiveFileReads("../lib",
+getRecursiveFileReads("../collection_editor/src",
     async (filePath, content,) => {
 
         console.log(filePath);
@@ -55,7 +55,7 @@ getRecursiveFileReads("../lib",
     });
 
 export const openai = new OpenAIApi(new Configuration({
-    apiKey: "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"
+    apiKey: "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"
 }));
 
 async function getOpenAiReplacement(input: string) {
@@ -88,12 +88,15 @@ sx={{
     justifyContent: 'center',
     width: '100%',
     height: '100vh',
-    backgroundColor: 'tomato',
+    backgroundColor: 'red',
   }}
 
 converts to:
 
-className="flex items-center justify-center w-full h-screen bg-tomato"`;
+className="flex items-center justify-center w-full h-screen bg-red-500"
+
+Return exclusively results in the form of 'className="..."' or 'style={{...}}'
+since your output will be injected into a tsx file.`
 
 // getOpenAiReplacement(`sx={{
 //             display: "flex",

@@ -1,13 +1,17 @@
-import React, { ButtonHTMLAttributes } from "react";
+import React from "react";
 import clsx from "clsx";
 import { focusedMixin } from "../styles";
 
-export type IconButtonProps<C extends React.ElementType> = ButtonHTMLAttributes<HTMLButtonElement> & {
+export type IconButtonProps<C extends React.ElementType> =
+    Omit<(C extends "button" ? React.ButtonHTMLAttributes<HTMLButtonElement> : React.ComponentProps<C>), "onClick">
+    & {
     size?: "medium" | "small" | "large";
     variant?: "ghost" | "filled",
     shape?: "circular" | "square",
+    toggled?: boolean;
     component?: C;
-} & Record<string, any>;
+    onClick?: React.MouseEventHandler<any>
+}
 
 const buttonClasses =
     "hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75";
@@ -30,6 +34,7 @@ export function IconButton<C extends React.ElementType>({
                                                             size = "medium",
                                                             variant = "ghost",
                                                             shape = "circular",
+                                                            toggled,
                                                             component,
                                                             ...props
                                                         }: IconButtonProps<C>) {
@@ -42,6 +47,7 @@ export function IconButton<C extends React.ElementType>({
             {...props}
             className={clsx(
                 focusedMixin,
+                toggled ? "outline outline-2 outline-primary" : "",
                 colorClasses,
                 bgClasses,
                 baseClasses,
@@ -49,7 +55,7 @@ export function IconButton<C extends React.ElementType>({
                 shapeClasses[shape],
                 sizeClasses[size],
                 className
-            )}>
+                )}>
             {children}
         </Component>
     );

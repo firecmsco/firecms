@@ -66,7 +66,6 @@ export default function CustomColorTextField({
                                evt.target.value
                            );
                        }}
-                       helperText={error}
                        fullWidth
                        variant={"filled"}/>
 

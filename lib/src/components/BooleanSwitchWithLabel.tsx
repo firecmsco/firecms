@@ -81,7 +81,11 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 size={size}
                 className={invisible && focus ? focusedClasses : ""}/>
 
-            <div className={clsx("flex-grow", position === "end" ? "mr-4" : "ml-4")}>
+            <div className={clsx(
+                "flex-grow",
+                position === "end" ? "mr-4" : "ml-4",
+                size === "small" ? "text-sm" : "text-base"
+            )}>
                 {label}
             </div>
 

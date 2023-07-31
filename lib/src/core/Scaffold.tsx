@@ -4,12 +4,11 @@ import { Link } from "react-router-dom";
 import clsx from "clsx";
 
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
-import { useNavigationContext } from "../hooks";
+import { useLargeLayout, useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
 import { useRestoreScroll } from "./internal/useRestoreScroll";
 import { IconButton, Sheet, Tooltip } from "../components";
-import { useLargeLayout } from "../hooks/useLargeLayout";
-import { MenuIcon, ChevronLeftIcon } from "../icons";
+import { ChevronLeftIcon, MenuIcon } from "../icons";
 
 export const DRAWER_WIDTH = 280;
 

@@ -10,7 +10,7 @@ import { useBuildSideEntityController } from "./internal/useBuildSideEntityContr
 import { useBuildNavigationContext } from "./internal/useBuildNavigationContext";
 import { useBuildSideDialogsController } from "./internal/useBuildSideDialogsController";
 import { FireCMSContextInstance, useFireCMSContext, useModeController } from "../hooks";
-import { CenteredView, ErrorView } from "./components";
+import { ErrorView } from "./components";
 import { StorageSourceContext } from "./contexts/StorageSourceContext";
 import { UserConfigurationPersistenceContext } from "./contexts/UserConfigurationPersistenceContext";
 import { DataSourceContext } from "./contexts/DataSourceContext";
@@ -19,6 +19,7 @@ import { NavigationContextInstance } from "./contexts/NavigationContext";
 import { AuthControllerContext } from "./contexts/AuthControllerContext";
 import { SideDialogsControllerContext } from "./contexts/SideDialogsControllerContext";
 import { useLocaleConfig } from "./internal/useLocaleConfig";
+import { CenteredView } from "../components";
 
 const DEFAULT_COLLECTION_PATH = "/c";
 
@@ -83,7 +84,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     if (navigation.navigationLoadingError) {
         return (
-            <CenteredView maxWidth={300} fullScreen={true}>
+            <CenteredView maxWidth={"md"} fullScreen={true}>
                 <ErrorView
                     title={"Error loading navigation"}
                     error={navigation.navigationLoadingError}/>
@@ -93,7 +94,7 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     if (authController.authError) {
         return (
-            <CenteredView maxWidth={300} fullScreen={true}>
+            <CenteredView maxWidth={"md"} fullScreen={true}>
                 <ErrorView
                     title={"Error loading auth"}
                     error={authController.authError}/>

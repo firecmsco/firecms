@@ -1,3 +1,4 @@
+export * from "./icon_keys";
 export * from "./Icon";
 export * from "./GitHubIcon";
 export * from "./components/SearchIcon";

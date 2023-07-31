@@ -94,7 +94,7 @@ function renderMap<T extends Record<string, any>>(property: ResolvedMapProperty<
     if (size !== "medium")
         return (
             <div
-                className="w-full flex flex-col space-y-4 md:space-y-[theme.spacing(0.5)]"
+                className="w-full flex flex-col space-y-4"
             >
                 {mapPropertyKeys.map((key, index) => (
                     <div key={`map_${key}`}>

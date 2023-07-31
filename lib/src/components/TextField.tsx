@@ -99,7 +99,7 @@ export function TextField<T extends string | number>({
             style={inputStyle}
             className={clsx(
                 invisible ? focusedInvisibleMixin : focusedMixin,
-                "rounded-md resize-none w-full outline-none p-[32px] text-base leading-normal bg-transparent min-h-[64px] px-3 pt-[28px]",
+                "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-[28px]",
                 disabled && "border border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500"
             )}
         />
@@ -114,7 +114,7 @@ export function TextField<T extends string | number>({
                 "rounded-md",
                 invisible ? focusedInvisibleMixin : focusedMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                invisible ? "" : (size === "small" ? "min-h-[48px]" : "min-h-[64px]"),
+                size === "small" ? "min-h-[48px]" : "min-h-[64px]",
                 label ? (size === "medium" ? "pt-[28px] pb-2" : "pt-4 pb-2") : "py-2",
                 focused ? "text-text-primary dark:text-text-primary-dark" : "",
                 endAdornment ? "pr-10" : "pr-3",
@@ -136,6 +136,7 @@ export function TextField<T extends string | number>({
                 "rounded-md relative max-w-full",
                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
+                error ? "border border-red-500 dark:border-red-600" : "",
                 {
                     "min-h-[48px]": !invisible && size === "small",
                     "min-h-[64px]": !invisible && size === "medium"

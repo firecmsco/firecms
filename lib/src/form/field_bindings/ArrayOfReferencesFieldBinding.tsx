@@ -1,12 +1,11 @@
 import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "../../types";
 import { ReferencePreview } from "../../preview";
-import { FormikArrayContainer, LabelWithIcon } from "../components";
-import { ErrorView, ExpandablePanel, getIconForProperty, getReferenceFrom } from "../../core";
+import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
+import { ErrorView, getIconForProperty, getReferenceFrom } from "../../core";
 
 import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
-import { Button } from "../../components/Button";
-import { FieldHelperText } from "../components/FieldHelperText";
+import { Button, ExpandablePanel } from "../../components";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 

@@ -33,9 +33,9 @@ export const Dialog = ({
                            onOpenChange,
                            children,
                            className,
-                           fullWidth,
+                           fullWidth = true,
                            fullHeight,
-                           maxWidth,
+                           maxWidth = "md",
                            ...props
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
@@ -60,7 +60,7 @@ export const Dialog = ({
                 <DialogPrimitive.Overlay
                     className={clsx("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black bg-opacity-50 dark:bg-opacity-60 backdrop-blur-sm ",
                         displayed && open ? "opacity-100" : "opacity-0",
-                        "z-20 fixed top-0 left-0 w-full h-full flex justify-center items-center pointer-events-none"
+                        "z-20 fixed top-0 left-0 w-full h-full flex justify-center items-center"
                     )}
                     style={{
                         pointerEvents: displayed ? "auto" : "none"
@@ -71,19 +71,23 @@ export const Dialog = ({
                         className={clsx(paperMixin,
                             "z-20",
                             "relative",
+                            // "overflow-auto",
                             "outline-none focus:outline-none",
                             fullWidth ? "w-11/12" : undefined,
                             fullHeight ? "h-full" : undefined,
                             "text-gray-900 dark:text-white",
                             "justify-center items-center",
-                            // "fixed top-1/2 left-1/2",
-                            // "transform-gpu -translate-x-1/2 -translate-y-1/2",
-                            "max-h-[90vh]  shadow-xl",
-                            "overflow-y-auto ease-in-out duration-200",
+                            "max-h-[90vh] shadow-xl",
+                            "ease-in-out duration-200",
                             displayed && open ? "opacity-100" : "opacity-0",
                             maxWidth ? widthClasses[maxWidth] : undefined,
-                            className,
+                            className
                         )}
+                        style={{
+                            // height: fullWidth ? undefined : "inherit",
+                            // maxHeight: "calc(100% - 64px)",
+                            overflowY: "auto"
+                        }}
                     >
                         {children}
 
@@ -94,3 +98,4 @@ export const Dialog = ({
         </DialogPrimitive.Root>
     );
 };
+

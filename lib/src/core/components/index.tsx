@@ -13,7 +13,6 @@ export * from "./HomePage";
 export * from "./EntityCollectionView/EntityCollectionView";
 
 export * from "./EntityCollectionTable";
-export * from "./DialogActions";
 export * from "./BreadcrumbUpdater";
 export * from "./NotFoundPage";
 
@@ -27,5 +26,3 @@ export * from "./InfoLabel";
 export * from "./FireCMSAppBar";
 
 export * from "./ArrayContainer";
-
-export * from "../../components";

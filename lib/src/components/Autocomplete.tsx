@@ -1,47 +1,55 @@
 import React from "react";
 import clsx from "clsx";
 
-import { Collapse, useOutsideAlerter } from "../core";
+import { useOutsideAlerter } from "../core";
 import { paperMixin } from "../styles";
+import { Collapse } from "./Collapse";
 
 export type AutocompleteProps = {
     children: React.ReactNode;
-    autocompleteOpen: boolean;
-    setAutocompleteOpen: (open: boolean) => void;
+    open: boolean;
+    setOpen: (open: boolean) => void;
+}
+
+export const useAutoComplete = ({ ref }: {
+    ref: React.MutableRefObject<HTMLDivElement | null>;
+}) => {
+
+    const [autoCompleteOpen, setAutoCompleteOpen] = React.useState(false);
+    const [inputFocused, setInputFocused] = React.useState(false);
+
+    // if ref is not focused, close autocomplete
+    React.useEffect(() => {
+        if (ref.current) {
+            ref.current.onfocus = () => {
+                setAutoCompleteOpen(true);
+                setInputFocused(true);
+            }
+            ref.current.onblur = () => {
+                setInputFocused(false);
+            }
+        }
+    }, [ref]);
+
+    return {
+        inputFocused,
+        autoCompleteOpen,
+        setAutoCompleteOpen
+    };
 }
 
 export function Autocomplete({
                                  children,
-                                 autocompleteOpen,
-                                 setAutocompleteOpen
+                                 open,
+                                 setOpen
                              }: AutocompleteProps) {
 
     const autocompleteRef = React.useRef<HTMLDivElement>(null);
-    useOutsideAlerter(autocompleteRef, () => setAutocompleteOpen(false));
-
-    // return (
-    //
-    //     <DropdownMenu.Root >
-    //         <DropdownMenu.Trigger asChild>
-    //             {trigger}
-    //         </DropdownMenu.Trigger>
-    //
-    //         <DropdownMenu.Portal className={"w-full"}>
-    //             <DropdownMenu.Content className={clsx(
-    //                 defaultBorderMixin,
-    //                 autocompleteOpen ? "border-b shadow " : "",
-    //                 "bg-gray-100 dark:bg-gray-900",
-    //                 "z-20",
-    //                 "w-full")} sideOffset={3}>
-    //                 {children}
-    //             </DropdownMenu.Content>
-    //         </DropdownMenu.Portal>
-    //     </DropdownMenu.Root>
-    // )
+    useOutsideAlerter(autocompleteRef, () => setOpen(false));
 
     return <Collapse
-        in={autocompleteOpen}
-        duration={100}
+        in={open}
+        duration={50}
         className={clsx(
             "absolute top-full left-0 right-0",
             "p-2",
@@ -49,7 +57,7 @@ export function Autocomplete({
             "w-full")}>
         <div ref={autocompleteRef}
              className={clsx(
-                 autocompleteOpen ? clsx(paperMixin, "shadow") : "",
+                 open ? clsx(paperMixin, "shadow") : "",
                  "bg-gray-100 dark:bg-gray-900 py-2"
              )}>
             {children}

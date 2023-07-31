@@ -10,10 +10,9 @@ import { NavigationCollectionCard } from "./NavigationCollectionCard";
 // @ts-ignore
 import * as JsSearch from "js-search";
 
-import { SearchBar } from "../EntityCollectionTable/internal/SearchBar";
+import { Container, SearchBar } from "../../../components";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
-import { Container } from "../../../components";
 
 const search = new JsSearch.Search("home");
 search.addIndex("name");
@@ -99,10 +98,9 @@ export function FireCMSHomePage({
     return (
         <div ref={containerRef}
              className="py-2 overflow-auto h-full w-full">
-            <Container>
-
+            <Container maxWidth={"6xl"}>
                 <div
-                    className="sticky py-4 transition-top duration-400 ease-in-out top-0 z-10"
+                    className="sticky py-4 transition-all duration-400 ease-in-out top-0 z-10"
                     style={{ top: direction === "down" ? -84 : 0 }}>
                     <SearchBar onTextSearch={updateSearchResults}
                                placeholder={"Search collections"}

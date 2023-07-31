@@ -24,9 +24,9 @@ import {
     isPropertyBuilder,
     isReadOnly,
     resolveProperty,
-    Typography
 } from "../core";
 import { useFireCMSContext } from "../hooks";
+import { Typography } from "../components";
 
 /**
  * This component renders a form field creating the corresponding configuration

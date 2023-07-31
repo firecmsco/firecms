@@ -1,10 +1,9 @@
 import { Entity, EntityCallbacks, EntityCollection } from "../../../../types";
 import React, { useCallback, useMemo, useState } from "react";
 import { deleteEntityWithCallbacks, useDataSource, useFireCMSContext, useSnackbarController } from "../../../../hooks";
-import { DialogActions } from "../../DialogActions";
+import { Button, CircularProgress, Dialog, DialogActions, DialogContent, Typography } from "../../../../components";
 import { resolveCollection } from "../../../util";
 import { EntityPreview } from "../../EntityPreview";
-import { Button, CircularProgress, Dialog, Typography } from "../../../../components";
 
 export interface DeleteEntityDialogProps<M extends Record<string, any>> {
     entityOrEntitiesToDelete?: Entity<M> | Entity<M>[],
@@ -159,7 +158,6 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
         const entity = entityOrEntities as Entity<M> | undefined;
         content = entity
             ? <EntityPreview
-                className={"p-8"}
                 entity={entity}
                 collection={collection}
                 path={path}/>
@@ -174,15 +172,17 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
         <Dialog
             aria-labelledby="delete-dialog"
             open={open}
+            fullHeight={!multipleEntities}
             onOpenChange={(open) => !open ? onClose() : undefined}
             {...other}
         >
-            <Typography variant={"subtitle2"} className={"p-8"}>
-                {dialogTitle}
-            </Typography>
+            <DialogContent>
+                <Typography variant={"subtitle2"}>
+                    {dialogTitle}
+                </Typography>
 
-            {!multipleEntities && content}
-
+                {!multipleEntities && content}
+            </DialogContent>
             <DialogActions>
 
                 {loading && <CircularProgress size={"small"}/>}

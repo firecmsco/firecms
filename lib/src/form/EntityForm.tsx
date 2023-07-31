@@ -16,11 +16,11 @@ import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { PropertyFieldBinding } from "./PropertyFieldBinding";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
-import { DialogActions, getDefaultValuesFor, isHidden, isReadOnly, resolveCollection } from "../core";
+import { getDefaultValuesFor, isHidden, isReadOnly, resolveCollection } from "../core";
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import { Typography } from "../components";
+import { DialogActions, Typography } from "../components";
 import { Button } from "../components/Button";
 
 /**

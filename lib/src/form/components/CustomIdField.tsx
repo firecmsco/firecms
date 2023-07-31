@@ -5,9 +5,9 @@ import { ErrorMessage } from "formik";
 import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } from "../../types";
 
 import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
-import { enumToObjectEntries, Select, SelectItem, TextField } from "../../core";
-import { IconButton, Tooltip } from "../../components";
-import { OpenInNewIcon , ContentCopyIcon } from "../../icons";
+import { enumToObjectEntries } from "../../core";
+import { IconButton, Select, SelectItem, TextField, Tooltip } from "../../components";
+import { ContentCopyIcon, OpenInNewIcon } from "../../icons";
 import { EnumValuesChip } from "../../preview";
 
 export function CustomIdField<M extends Record<string, any>>({

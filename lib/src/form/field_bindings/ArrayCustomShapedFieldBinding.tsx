@@ -3,7 +3,8 @@ import { FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { useClearRestoreValue } from "../../hooks";
-import { ExpandablePanel, getIconForProperty } from "../../core";
+import { getIconForProperty } from "../../core";
+import { ExpandablePanel } from "../../components";
 
 /**
  * Array field used for custom

@@ -4,7 +4,6 @@ import { BrowserRouter } from "react-router-dom";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 
 import {
-    CenteredView,
     CircularProgressCenter,
     FireCMS,
     ModeControllerProvider,
@@ -25,6 +24,7 @@ import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./types/auth";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
 import { useBrowserTitleAndIcon } from "../hooks";
+import { CenteredView } from "../components";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID

@@ -25,7 +25,7 @@ export function UrlComponentPreview({
 
     if (!previewType) {
         return (
-            <a className="flex break-words items-center font-medium text-primary"
+            <a className="flex break-words items-center font-medium text-primary visited:text-primary"
                href={url}
                rel="noopener noreferrer"
                onMouseDown={(e: React.MouseEvent) => {

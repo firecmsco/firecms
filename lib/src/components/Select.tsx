@@ -20,7 +20,7 @@ export type SelectProps = {
     onMultiValueChange?: (updatedValue: string[]) => void,
     placeholder?: React.ReactNode,
     renderValue?: (value: string) => React.ReactNode,
-    renderValues?: (value: string[]) => React.ReactNode,
+    renderValues?: (values: string[]) => React.ReactNode,
     size?: "small" | "medium",
     label?: React.ReactNode,
     disabled?: boolean,
@@ -78,7 +78,12 @@ export function Select({
             onValueChange?.(newValue);
         }
         if (!multiple && onChange) {
-            const event = { target: { value } } as React.ChangeEvent<HTMLSelectElement>;
+            const event = {
+                target: {
+                    name,
+                    value: newValue
+                }
+            } as React.ChangeEvent<HTMLSelectElement>;
             onChange(event);
         }
     }, [multiple, onChange, value, onMultiValueChange, onValueChange]);
@@ -96,7 +101,7 @@ export function Select({
                 setOpenInternal(open);
             }}>
 
-            {label}
+            {typeof label === "string" ? <SelectInputLabel>{label}</SelectInputLabel> : label}
 
             <div
                 className={clsx(
@@ -136,11 +141,12 @@ export function Select({
                                         </div>))
                                     : (value ? (renderValue ? renderValue(value) : value) : placeholder))}
 
-                            {renderValues && value && Array.isArray(value)
-                                ? value.map((v) => (
-                                    renderValue ? renderValue(v) : v)
-                                )
+                            {renderValues && (!value || Array.isArray(value))
+                                ? renderValues(value as string[] ?? [])
                                 : null}
+
+                            {!renderValue && !renderValues && value}
+
                         </div>
                     </SelectPrimitive.Value>
 
@@ -236,6 +242,12 @@ export function SelectGroup({
             {children}
         </div>
     </SelectPrimitive.Group>;
+}
+
+function SelectInputLabel({ children }: { children: React.ReactNode }) {
+    return <div className="text-sm text-gray-500 dark:text-gray-300 font-medium ml-3.5 mt-2 mb-1">
+        {children}
+    </div>;
 }
 
 function selectOnChangeEventAdapter(fn: (event: React.ChangeEvent<HTMLSelectElement>) => void): (value: string) => void {
