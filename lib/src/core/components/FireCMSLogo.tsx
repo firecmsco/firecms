@@ -3,10 +3,12 @@ import React from "react";
 export function FireCMSLogo({
                                 width,
                                 height,
+                                className,
                                 style
                             }: {
     width?: string,
     height?: string,
+    className?: string,
     style?: React.CSSProperties
 }) {
     return (
@@ -14,6 +16,7 @@ export function FireCMSLogo({
             width={width ?? "100%"} height={height ?? "100%"}
             viewBox="0 0 599 599" version="1.1"
             style={style}
+            className={className}
             xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <radialGradient cx="28.6213569%" cy="43.1133328%"

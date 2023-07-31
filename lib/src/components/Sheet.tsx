@@ -60,7 +60,7 @@ export const Sheet: React.FC<SheetProps> = ({
                 <DialogPrimitive.Content
                     {...props}
                     className={clsx(
-                        "transform-gpu",
+                        // "transform-gpu",
                         "text-gray-900 dark:text-white",
                         "fixed transform z-20 transition-all duration-[240ms] ease-in-out",
                         "outline-none focus:outline-none",

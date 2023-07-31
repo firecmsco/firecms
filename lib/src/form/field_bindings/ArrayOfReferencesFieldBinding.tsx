@@ -132,7 +132,7 @@ export function ArrayOfReferencesFieldBinding({
 
             {!tableMode &&
                 <ExpandablePanel
-                    contentClassName={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
+                    className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
                     initiallyExpanded={expanded}
                     title={title}>
                     {body}

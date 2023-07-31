@@ -12,16 +12,15 @@ export function ExpandablePanel({
                                     invisible = false,
                                     initiallyExpanded: initiallyOpen = true,
                                     onExpandedChange,
-                                    className,
-                                    contentClassName
+                                    titleClassName,
+                                    className
                                 }: PropsWithChildren<{
     title: React.ReactNode,
     invisible?: boolean,
     initiallyExpanded?: boolean;
-    padding?: number | string;
     onExpandedChange?: (expanded: boolean) => void,
-    className?: string,
-    contentClassName?: string
+    titleClassName?: string,
+    className?: string
 }>) {
 
     useInjectStyles("ExpandablePanel", `
@@ -71,7 +70,7 @@ export function ExpandablePanel({
                         "rounded flex items-center justify-between w-full min-h-[64px]",
                         invisible ? "border-b px-2" : "p-4",
                         invisible && defaultBorderMixin,
-                        className
+                        titleClassName
                     )}
                 >
                     {title}
@@ -81,7 +80,7 @@ export function ExpandablePanel({
                 <Collapsible.Content
                     className={clsx("CollapsibleContent")}
                 >
-                    <div className={contentClassName}>
+                    <div className={className}>
                         {children}
                     </div>
                 </Collapsible.Content>

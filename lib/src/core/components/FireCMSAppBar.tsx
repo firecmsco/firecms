@@ -71,7 +71,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
             className={clsx("pr-2",
                 {
                     "ml-[18rem]": drawerOpen && largeLayout,
-                    "ml-16": !(drawerOpen && largeLayout),
+                    "ml-16": !(drawerOpen && largeLayout) && !startAdornment,
                     "h-16": true,
                     "z-10": largeLayout,
                     "transition-all": true,

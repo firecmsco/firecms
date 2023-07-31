@@ -1,7 +1,7 @@
 import React from "react";
 
 import { DialogActions } from "./DialogActions";
-import { Dialog, Button } from "../../components";
+import { Button, Dialog } from "../../components";
 import { LoadingButton } from "../../components/LoadingButton";
 
 export function DeleteConfirmationDialog({
@@ -24,8 +24,10 @@ export function DeleteConfirmationDialog({
             open={open}
             onOpenChange={(open) => !open ? onCancel() : undefined}
         >
-            {title}
-            {body}
+            <div className={"p-4"}>
+                {title}
+                {body}
+            </div>
 
             <DialogActions>
                 <Button
