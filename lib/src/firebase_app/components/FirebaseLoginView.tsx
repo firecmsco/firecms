@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
-import {  ErrorView, FireCMSLogo,  } from "../../core";
+import { ErrorView, FireCMSLogo, } from "../../core";
 import { useModeController } from "../../hooks";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
 import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";

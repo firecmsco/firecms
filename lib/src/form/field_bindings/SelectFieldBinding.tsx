@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import clsx from "clsx";
 
 import { EnumType, FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
@@ -8,6 +7,7 @@ import { EnumValuesChip } from "../../preview";
 import { getIconForProperty } from "../../core";
 import { IconButton, Select, SelectItem } from "../../components";
 import { ClearIcon } from "../../icons";
+import { cn } from "../../components/util/cn";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -53,7 +53,7 @@ export function SelectFieldBinding<T extends EnumType>({
                 value={value ? value.toString() : ""}
                 disabled={disabled}
                 position="item-aligned"
-                inputClassName={clsx("w-full")}
+                inputClassName={cn("w-full")}
                 label={<LabelWithIcon icon={getIconForProperty(property)}
                                       required={property.validation?.required}
                                       title={property.name}

@@ -1,6 +1,6 @@
-import { TableSize } from "./VirtualTableProps";
+import { VirtualTableSize } from "./VirtualTableProps";
 
-export function getRowHeight(size: TableSize): number {
+export function getRowHeight(size: VirtualTableSize): number {
     switch (size) {
         case "xl":
             return 400;

@@ -1,5 +1,4 @@
 import React, { useCallback, useMemo } from "react";
-import clsx from "clsx";
 
 import { Entity, EntityCollection, EntityReference, FilterValues, ResolvedProperty } from "../../types";
 import { ErrorBoundary, ErrorView, getReferenceFrom, getReferencePreviewKeys } from "../../core";
@@ -14,6 +13,7 @@ import {
 } from "../../hooks";
 import { Button, IconButton, Tooltip, Typography } from "../../components";
 import { ClearIcon, ErrorIcon, KeyboardTabIcon, LinkIcon } from "../../icons";
+import { cn } from "../../components/util/cn";
 
 /**
  * This field allows selecting reference/s.
@@ -235,7 +235,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
     };
 
     return <Typography variant={"label"}
-                       className={clsx("relative w-full transition-colors duration-200 ease-in border rounded font-medium",
+                       className={cn("relative w-full transition-colors duration-200 ease-in border rounded font-medium",
                            disabled ? "bg-opacity-50" : "hover:bg-opacity-75",
                            "text-opacity-50 dark:text-white dark:text-opacity-50")}
     >

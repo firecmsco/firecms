@@ -1,9 +1,8 @@
 import React from "react";
-import clsx from "clsx";
 
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary, } from "../components";
-import { Avatar, Chip, IconButton, Menu, MenuItem, Typography } from "../../components";
+import { Avatar, IconButton, Menu, MenuItem, Typography } from "../../components";
 import {
     useAuthController,
     useBreadcrumbsContext,
@@ -12,6 +11,7 @@ import {
     useNavigationContext
 } from "../../hooks";
 import { DarkModeIcon, LightModeIcon, LogoutIcon } from "../../icons";
+import { cn } from "../../components/util/cn";
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -68,7 +68,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
     return (
         <div
             style={style}
-            className={clsx("pr-2",
+            className={cn("pr-2",
                 {
                     "ml-[18rem]": drawerOpen && largeLayout,
                     "ml-16": !(drawerOpen && largeLayout) && !startAdornment,
@@ -100,20 +100,20 @@ export const FireCMSAppBar = function FireCMSAppBar({
                     </ReactLink>
                 </div>
 
-                {largeLayout && <div className="flex gap-1 flex-grow">
-                    {breadcrumbs.map((entry, index) => (
-                        <ReactLink
-                            key={`breadcrumb-${index}`}
-                            color="inherit"
-                            to={entry.url}>
-                            <Chip
-                                className=" h-12 font-medium active:bg-gray-400 active:shadow-sm cursor-pointer"
-                                label={entry.title}
-                            />
-                        </ReactLink>)
-                    )
-                    }
-                </div>}
+                {/*{largeLayout && <div className="flex gap-1 flex-grow">*/}
+                {/*    {breadcrumbs.map((entry, index) => (*/}
+                {/*        <ReactLink*/}
+                {/*            key={`breadcrumb-${index}`}*/}
+                {/*            color="inherit"*/}
+                {/*            to={entry.url}>*/}
+                {/*            <Chip*/}
+                {/*                className=" h-12 font-medium active:bg-gray-400 active:shadow-sm cursor-pointer">*/}
+                {/*                {entry.title}*/}
+                {/*            </Chip>*/}
+                {/*        </ReactLink>)*/}
+                {/*    )*/}
+                {/*    }*/}
+                {/*</div>}*/}
 
                 <div className={"flex-grow"}/>
 

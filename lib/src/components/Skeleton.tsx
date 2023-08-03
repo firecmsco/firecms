@@ -1,4 +1,4 @@
-import clsx from "clsx";
+import { cn } from "./util/cn";
 
 export type SkeletonProps = {
     width?: number;
@@ -12,7 +12,7 @@ export function Skeleton({
                              className
                          }: SkeletonProps) {
     return <span className={
-        clsx(
+        cn(
             "block",
             "bg-gray-200 dark:bg-gray-800 rounded",
             "animate-pulse",

@@ -1,5 +1,4 @@
 import React, { useRef } from "react";
-import clsx from "clsx";
 // @ts-ignore
 import DatePicker from "react-datepicker";
 
@@ -15,6 +14,7 @@ import {
     paperMixin
 } from "../styles";
 import { InputLabel } from "./InputLabel";
+import { cn } from "./util/cn";
 
 interface DateTimeFieldProps {
     value?: Date;
@@ -63,7 +63,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
 
     return (
         <div
-            className={clsx(
+            className={cn(
                 "rounded-md relative max-w-full",
                 !invisible && fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
@@ -76,7 +76,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
 
             {label && (
                 <InputLabel
-                    className={clsx("absolute top-1 pointer-events-none",
+                    className={cn("absolute top-1 pointer-events-none",
                         !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
                         disabled ? "opacity-50" : "")}
                     shrink={hasValue || focused}
@@ -91,7 +91,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                 selected={value ?? null}
                 onChange={onChange}
                 disabled={false}
-                popperClassName={clsx(paperMixin, "m-4 shadow")}
+                popperClassName={cn(paperMixin, "m-4 shadow")}
                 onClick={(e: any) => e.stopPropagation()}
                 onFocus={() => setFocused(true)}
                 onBlur={() => setFocused(false)}
@@ -101,7 +101,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                 timeCaption="time"
                 dateFormat={mode === "date_time" ? "Pp" : "P"}
                 preventOpenOnFocus={true}
-                className={clsx(
+                className={cn(
                     "w-full outline-none bg-transparent leading-normal text-base px-3",
                     clearable ? "pr-14" : "pr-12",
                     "rounded-md",

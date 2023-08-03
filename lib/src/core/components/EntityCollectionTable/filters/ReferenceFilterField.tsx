@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from "react";
-import { TableWhereFilterOp } from "../../Table";
+import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import { Entity, EntityCollection, EntityReference } from "../../../../types";
 import { ReferencePreview } from "../../../../preview";
 import { getReferenceFrom } from "../../../util";
@@ -9,8 +9,8 @@ import { Select, SelectItem } from "../../../../components";
 
 interface ReferenceFilterFieldProps {
     name: string,
-    value?: [op: TableWhereFilterOp, fieldValue: any];
-    setValue: (filterValue?: [TableWhereFilterOp, any]) => void;
+    value?: [op: VirtualTableWhereFilterOp, fieldValue: any];
+    setValue: (filterValue?: [VirtualTableWhereFilterOp, any]) => void;
     isArray?: boolean;
     path?: string;
     title?: string;
@@ -56,14 +56,14 @@ export function ReferenceFilterField({
         : possibleOperations.push("in", "not-in");
 
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
-    const [operation, setOperation] = useState<TableWhereFilterOp>(fieldOperation);
+    const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
     const [internalValue, setInternalValue] = useState<EntityReference | EntityReference[] | undefined>(fieldValue);
 
     const selectedEntityIds = internalValue
         ? (Array.isArray(internalValue) ? internalValue.map((ref) => ref.id) : [internalValue.id])
         : [];
 
-    function updateFilter(op: TableWhereFilterOp, val?: EntityReference | EntityReference[]) {
+    function updateFilter(op: VirtualTableWhereFilterOp, val?: EntityReference | EntityReference[]) {
 
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
@@ -149,9 +149,9 @@ export function ReferenceFilterField({
             <div className="w-[120px]">
                 <Select value={operation}
                         onValueChange={(value) => {
-                            updateFilter(value as TableWhereFilterOp, internalValue);
+                            updateFilter(value as VirtualTableWhereFilterOp, internalValue);
                         }}
-                        renderValue={(op) => operationLabels[op as TableWhereFilterOp]}>
+                        renderValue={(op) => operationLabels[op as VirtualTableWhereFilterOp]}>
                     {possibleOperations.map((op) => (
                         <SelectItem key={op} value={op}>
                             {operationLabels[op]}

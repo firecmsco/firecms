@@ -2,7 +2,7 @@ import React from "react";
 
 import { FieldProps } from "../../types";
 
-import {  FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { DateTimeField } from "../../components";

@@ -1,6 +1,6 @@
 import React from "react";
-import clsx from "clsx";
 import { defaultBorderMixin } from "../styles";
+import { cn } from "./util/cn";
 
 export function DialogActions({
                                   children,
@@ -15,7 +15,7 @@ export function DialogActions({
 }) {
 
     return <div
-        className={clsx(
+        className={cn(
             defaultBorderMixin,
             "py-3 px-4 border-t flex flex-row items-center justify-end bottom-0 right-0 left-0 text-right z-2 gap-2",
             position,

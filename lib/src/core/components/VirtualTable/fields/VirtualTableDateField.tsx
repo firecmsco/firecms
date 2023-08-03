@@ -1,7 +1,7 @@
 import React from "react";
 import { DateTimeField } from "../../../../components";
 
-export function TableDateField(props: {
+export function VirtualTableDateField(props: {
     name: string;
     error: Error | undefined;
     mode?: "date" | "date_time";

@@ -1,17 +1,16 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import clsx from "clsx";
 
 import useMeasure from "react-use-measure";
 
-import { TableSize } from "../../Table";
-import { getRowHeight } from "../../Table/common";
+import { VirtualTableSize } from "../../VirtualTable";
+import { getRowHeight } from "../../VirtualTable/common";
 import { ErrorBoundary } from "../../ErrorBoundary";
 import { ErrorTooltip } from "../../ErrorTooltip";
-import { IconButton, Tooltip } from "../../../../components";
-import { useOutsideAlerter } from "../../../useOutsideAlerter";
+import { cn, IconButton, Tooltip } from "../../../../components";
+import { useOutsideAlerter } from "../../../../components/util/useOutsideAlerter";
 import { ErrorOutlineIcon, RemoveCircleIcon } from "../../../../icons";
 
-interface TableCellProps {
+interface EntityTableCellProps {
     children: React.ReactNode;
     /**
      * The value is used only to check changes and force re-renders
@@ -22,7 +21,7 @@ interface TableCellProps {
     error?: Error;
     allowScroll?: boolean;
     align: "right" | "left" | "center";
-    size: TableSize;
+    size: VirtualTableSize;
     disabledTooltip?: string;
     width: number;
     showExpandIcon?: boolean;
@@ -51,7 +50,7 @@ const TableCellInner = ({
                         }: TableCellInnerProps) => {
     return (
         <div
-            className={clsx("flex flex-col max-h-full w-full",
+            className={cn("flex flex-col max-h-full w-full",
                 {
                     "items-start": faded || scrollable
                 })}
@@ -72,8 +71,8 @@ const TableCellInner = ({
     );
 };
 
-export const TableCell = React.memo<TableCellProps>(
-    function TableCell({
+export const EntityTableCell = React.memo<EntityTableCellProps>(
+    function EntityTableCell({
                            children,
                            size,
                            selected,
@@ -90,7 +89,7 @@ export const TableCell = React.memo<TableCellProps>(
                            width,
                            hideOverflow = true,
                            showExpandIcon = true
-                       }: TableCellProps) {
+                       }: EntityTableCellProps) {
 
         const [measureRef, bounds] = useMeasure();
         const ref = useRef<HTMLDivElement>(null);
@@ -204,7 +203,7 @@ export const TableCell = React.memo<TableCellProps>(
         return (
             <div
                 ref={ref}
-                className={clsx(
+                className={cn(
                     "transition-colors duration-100 ease-in-out",
                     `flex relative h-full rounded-md p-${p} border border-4  border-opacity-75`,
                     onHover && !disabled ? "bg-gray-50 dark:bg-gray-900" : "",
@@ -311,4 +310,4 @@ export const TableCell = React.memo<TableCellProps>(
         a.showExpandIcon === b.showExpandIcon &&
         a.removePadding === b.removePadding &&
         a.fullHeight === b.fullHeight &&
-        a.selected === b.selected) as React.FunctionComponent<TableCellProps>;
+        a.selected === b.selected) as React.FunctionComponent<EntityTableCellProps>;

@@ -1,8 +1,8 @@
 import * as PopoverPrimitive from "@radix-ui/react-popover";
-import clsx from "clsx";
 
 import { paperMixin } from "../styles";
 import { useInjectStyles } from "./util/useInjectStyles";
+import { cn } from "./util/cn";
 
 export type PopoverSide = "top" | "right" | "bottom" | "left";
 export type PopoverAlign = "start" | "center" | "end";
@@ -49,7 +49,7 @@ export function Popover({
             {trigger}
         </PopoverPrimitive.Trigger>
         <PopoverPrimitive.Portal>
-            <PopoverPrimitive.Content className={clsx(paperMixin, "PopoverContent shadow z-50")}
+            <PopoverPrimitive.Content className={cn(paperMixin, "PopoverContent shadow z-50")}
                                       side={side}
                                       sideOffset={sideOffset}
                                       align={align}

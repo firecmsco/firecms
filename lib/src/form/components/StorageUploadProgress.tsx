@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
-import clsx from "clsx";
 
 import { useSnackbarController, useStorageSource } from "../../hooks";
 import { StorageFieldItem } from "../../core/util/useStorageUploadController";
 import { ErrorView } from "../../core";
 import { paperMixin } from "../../styles";
 import { Skeleton } from "../../components/Skeleton";
+import { cn } from "../../components/util/cn";
 
 export interface StorageUploadItemProps {
     storagePath: string;
@@ -89,7 +89,7 @@ export function StorageUploadProgress({
     }
     return (
 
-        <div className={clsx(paperMixin, "m-4 p-1 box-border min-w-[imageSize] min-h-[imageSize]")}>
+        <div className={cn(paperMixin, "m-4 p-1 box-border min-w-[imageSize] min-h-[imageSize]")}>
 
             {loading &&
                 <Skeleton className="w-full h-full"/>}

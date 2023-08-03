@@ -264,7 +264,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
                                            onEntityClick={onEntityClick}
                                            tableController={tableController}
                                            tableRowActionsBuilder={tableRowActionsBuilder}
-                                           title={<Typography variant={"h6"}>
+                                           title={<Typography variant={"subtitle2"}>
                                                {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
                                            </Typography>}
                                            {...collection}

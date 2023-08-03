@@ -1,9 +1,9 @@
 import React from "react";
-import clsx from "clsx";
 
 import { useOutsideAlerter } from "../core";
 import { paperMixin } from "../styles";
 import { Collapse } from "./Collapse";
+import { cn } from "./util/cn";
 
 export type AutocompleteProps = {
     children: React.ReactNode;
@@ -50,14 +50,14 @@ export function Autocomplete({
     return <Collapse
         in={open}
         duration={50}
-        className={clsx(
+        className={cn(
             "absolute top-full left-0 right-0",
             "p-2",
             "z-20",
             "w-full")}>
         <div ref={autocompleteRef}
-             className={clsx(
-                 open ? clsx(paperMixin, "shadow") : "",
+             className={cn(
+                 open ? cn(paperMixin, "shadow") : "",
                  "bg-gray-100 dark:bg-gray-900 py-2"
              )}>
             {children}

@@ -1,7 +1,7 @@
 import * as TooltipPrimitive from "@radix-ui/react-tooltip";
-import clsx from "clsx";
 
 import { useInjectStyles } from "./util/useInjectStyles";
+import { cn } from "./util/cn";
 
 export type TooltipProps = {
     open?: boolean,
@@ -40,9 +40,9 @@ export const Tooltip = ({
                 </TooltipPrimitive.Trigger>
                 <TooltipPrimitive.Portal>
                     <TooltipPrimitive.Content
-                        className={clsx("TooltipContent",
+                        className={cn("TooltipContent",
                             "max-w-lg leading-relaxed",
-                            "z-20 rounded px-3 py-2 text-xs leading-none bg-gray-700 dark:bg-gray-800 bg-opacity-90 font-medium text-gray-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
+                            "z-50 rounded px-3 py-2 text-xs leading-none bg-gray-700 dark:bg-gray-800 bg-opacity-90 font-medium text-gray-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
                             tooltipClassName)}
                         sideOffset={6}
                         side={placement}>

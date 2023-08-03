@@ -1,12 +1,11 @@
 import React from "react";
 
-
 import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { Tooltip, Typography } from "../../components";
-import { OpenInNewIcon , DescriptionIcon } from "../../icons";
+import { DescriptionIcon, OpenInNewIcon } from "../../icons";
 
 /**
  * @category Preview components
@@ -25,7 +24,7 @@ export function UrlComponentPreview({
 
     if (!previewType) {
         return (
-            <a className="flex break-words items-center font-medium text-primary visited:text-primary"
+            <a className="flex break-words items-center font-medium text-primary visited:text-primary dark:visited:text-primary dark:text-primary"
                href={url}
                rel="noopener noreferrer"
                onMouseDown={(e: React.MouseEvent) => {

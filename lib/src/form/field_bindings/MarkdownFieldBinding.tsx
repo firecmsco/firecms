@@ -1,5 +1,4 @@
 import React, { useDeferredValue, useEffect, useRef } from "react";
-import clsx from "clsx";
 
 // @ts-ignore
 import MarkdownIt from "markdown-it";
@@ -11,6 +10,7 @@ import { getIconForProperty } from "../../core";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "../../styles";
 import { useInjectStyles } from "../../components/util/useInjectStyles";
 import { Typography } from "../../components";
+import { cn } from "../../components/util/cn";
 
 const mdParser = new MarkdownIt();
 MdEditor.use(Plugins.AutoResize, {
@@ -73,7 +73,7 @@ export function MarkdownFieldBinding({
             </Typography>}
 
             <MdEditor value={internalValue ?? ""}
-                      className={clsx(fieldBackgroundMixin,
+                      className={cn(fieldBackgroundMixin,
                           disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                           "text-base")}
                       readOnly={disabled}

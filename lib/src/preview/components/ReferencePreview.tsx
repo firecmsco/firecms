@@ -8,10 +8,10 @@ import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityC
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
-import { Typography, IconButton, Tooltip } from "../../components";
-import clsx from "clsx";
+import { IconButton, Tooltip, Typography } from "../../components";
 import { KeyboardTabIcon } from "../../icons";
 import { Skeleton } from "../../components/Skeleton";
+import { cn } from "../../components/util/cn";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;
@@ -193,7 +193,7 @@ function ReferencePreviewWrap({
     onClick?: (e: React.SyntheticEvent) => void;
 }) {
     return <Typography variant={"label"}
-                       className={clsx("bg-opacity-70 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60",
+                       className={cn("bg-opacity-70 bg-gray-100 dark:bg-gray-800 dark:bg-opacity-60",
                            "w-full",
                            "flex",
                            "rounded-md",

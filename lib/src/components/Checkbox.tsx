@@ -1,8 +1,8 @@
 import React from "react";
-import clsx from "clsx";
 import * as CheckboxPrimitive from "@radix-ui/react-checkbox";
 
 import { Icon } from "../icons";
+import { cn } from "./util/cn";
 
 interface CheckboxProps {
     checked: boolean;
@@ -35,7 +35,7 @@ export const Checkbox = ({
     const isChecked = indeterminate ? false : checked;
 
     return (
-        <div className={clsx(
+        <div className={cn(
             outerSizeClasses[size],
             "inline-flex items-center justify-center p-2 text-sm font-medium focus:outline-none transition-colors ease-in-out duration-150",
             onCheckedChange ? "rounded-full hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75" : "",
@@ -47,7 +47,7 @@ export const Checkbox = ({
                 disabled={disabled}
                 onCheckedChange={onCheckedChange}>
                 <div
-                    className={clsx(
+                    className={cn(
                         "border-2 relative transition-colors ease-in-out duration-150",
                         sizeClasses[size],
                         disabled

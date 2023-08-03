@@ -1,11 +1,11 @@
 import React, { createRef, useCallback, useEffect, useState } from "react";
-import clsx from "clsx";
 
-import { TableColumn, TableWhereFilterOp } from "./VirtualTableProps";
+import { VirtualTableColumn, VirtualTableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { VirtualTableHeader } from "./VirtualTableHeader";
 import { VirtualTableContextProps } from "./types";
 import { defaultBorderMixin } from "../../../styles";
+import { cn } from "../../../components";
 
 export const VirtualTableHeaderRow = ({
                                           columns,
@@ -33,7 +33,7 @@ export const VirtualTableHeaderRow = ({
             column: {
                 ...column,
                 width: newWidth
-            } as TableColumn
+            } as VirtualTableColumn
         };
         if (!end)
             onColumnResize(params);
@@ -100,11 +100,11 @@ export const VirtualTableHeaderRow = ({
 
     return (
         <div
-            className={clsx(defaultBorderMixin, "z-20 sticky min-w-full flex w-fit flex-row top-0 left-0 z-2 h-12 border-b bg-gray-50 dark:bg-gray-900")}>
+            className={cn(defaultBorderMixin, "z-20 sticky min-w-full flex w-fit flex-row top-0 left-0 h-12 border-b bg-gray-50 dark:bg-gray-900")}>
             {columns.map((c, columnIndex) => {
                 const column = columns[columnIndex];
 
-                const filterForThisProperty: [TableWhereFilterOp, any] | undefined =
+                const filterForThisProperty: [VirtualTableWhereFilterOp, any] | undefined =
                     column && filter && filter[column.key]
                         ? filter[column.key]
                         : undefined;

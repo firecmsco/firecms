@@ -1,7 +1,7 @@
 import React from "react";
-import clsx from "clsx";
 
 import { focusedMixin } from "../styles";
+import { cn } from "./util/cn";
 
 export type ButtonProps<P extends React.ElementType> =
     Omit<(P extends "button" ? React.ButtonHTMLAttributes<HTMLButtonElement> : React.ComponentProps<P>), "onClick">
@@ -28,7 +28,7 @@ export function Button<P extends React.ElementType>({
     const baseClasses =
         "rounded-md border font-headers uppercase inline-flex items-center justify-center p-2 px-4 text-sm font-medium focus:outline-none transition ease-in-out duration-150 gap-2";
 
-    const buttonClasses = clsx(
+    const buttonClasses = cn(
         {
             "border-transparent bg-primary hover:bg-blue-600 focus:ring-blue-400 text-white shadow hover:ring-1 hover:ring-primary": variant === "filled" && !disabled,
             "border-primary text-primary hover:bg-primary hover:bg-opacity-10 hover:border-blue-600 hover:text-blue-600 focus:ring-blue-400 hover:ring-1 hover:ring-primary": variant === "outlined" && !disabled,
@@ -38,7 +38,7 @@ export function Button<P extends React.ElementType>({
         }
     );
 
-    const sizeClasses = clsx(
+    const sizeClasses = cn(
         {
             "py-1 px-2": size === "small",
             "py-2 px-4": size === "medium",
@@ -50,7 +50,7 @@ export function Button<P extends React.ElementType>({
         return (
             <Component {...(props as React.ComponentPropsWithRef<P>)}
                        onClick={props.onClick}
-                       className={clsx(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}>
+                       className={cn(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}>
                 {startIcon}
                 {children}
             </Component>
@@ -61,7 +61,7 @@ export function Button<P extends React.ElementType>({
         <button {...props as React.ButtonHTMLAttributes<HTMLButtonElement>}
                 type={props.type ?? "button"}
                 onClick={props.onClick}
-                className={clsx(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
+                className={cn(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
                 disabled={disabled}>
             {startIcon}
             {children}

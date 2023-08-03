@@ -31,9 +31,9 @@ export function StringPropertyPreview({
             <ErrorBoundary>
                 <Chip
                     colorScheme={colorScheme}
-                    label={value}
-                    size={size !== "medium" ? "small" : "medium"}
-                />
+                    size={size !== "medium" ? "small" : "medium"}>
+                    {value}
+                </Chip>
             </ErrorBoundary>);
     } else if (property.url) {
         return (

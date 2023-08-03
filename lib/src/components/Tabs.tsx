@@ -1,6 +1,6 @@
 import * as TabsPrimitive from "@radix-ui/react-tabs";
-import clsx from "clsx";
 import { focusedMixin } from "../styles";
+import { cn } from "./util/cn";
 
 export type TabsProps = {
     value: string,
@@ -17,7 +17,7 @@ export function Tabs({
                      }: TabsProps) {
 
     return <TabsPrimitive.Root value={value} onValueChange={onValueChange}>
-        <TabsPrimitive.List className={clsx(
+        <TabsPrimitive.List className={cn(
             "flex text-sm font-medium text-center text-gray-800 dark:text-gray-200",
             className)
         }>
@@ -41,18 +41,18 @@ export function Tab({
                     }: TabProps) {
     return <TabsPrimitive.Trigger value={value}
                                   disabled={disabled}
-                                  className={clsx(focusedMixin,
+                                  className={cn(focusedMixin,
                                       "border-b-2 border-transparent",
                                       "data-[state=active]:border-secondary",
                                       disabled
                                           ? "text-gray-400 dark:text-gray-500"
-                                          : clsx("text-gray-700 dark:text-gray-300",
+                                          : cn("text-gray-700 dark:text-gray-300",
                                               "data-[state=active]:text-gray-900 data-[state=active]:dark:text-gray-100",
                                               "hover:text-gray-800 dark:hover:text-gray-200"),
                                       // disabled ? "text-gray-400 dark:text-gray-500" : "data-[state=active]:text-primary",
                                       // "data-[state=active]:bg-gray-50 data-[state=active]:dark:bg-gray-800",
                                       className)}>
-        <div className={clsx("uppercase inline-block p-2 px-4 m-2 rounded",
+        <div className={cn("uppercase inline-block p-2 px-4 m-2 rounded",
             "hover:bg-gray-100 dark:hover:bg-gray-800")}>
             {children}
         </div>

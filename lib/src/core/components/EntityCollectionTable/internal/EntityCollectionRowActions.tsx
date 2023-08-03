@@ -1,5 +1,4 @@
 import React, { MouseEvent, useCallback } from "react";
-import clsx from "clsx";
 
 import { CollectionSize, Entity } from "../../../../types";
 import { Checkbox, IconButton, Tooltip, Typography } from "../../../../components";
@@ -7,6 +6,7 @@ import { useLargeLayout } from "../../../../hooks/useLargeLayout";
 import { DeleteIcon, FileCopyIcon, KeyboardTabIcon, MoreVertIcon } from "../../../../icons";
 import { Menu, MenuItem } from "../../../../components/Menu";
 import { Skeleton } from "../../../../components/Skeleton";
+import { cn } from "../../../../components/util/cn";
 
 /**
  *
@@ -84,8 +84,8 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
     return (
         <div
             onClick={onClick}
-            className={clsx(
-                "h-full flex items-center justify-center flex-col bg-gray-50 dark:bg-gray-900 bg-opacity-75 dark:bg-opacity-75 z-10",
+            className={cn(
+                "h-full flex items-center justify-center flex-col bg-gray-50 dark:bg-gray-900 bg-opacity-90 dark:bg-opacity-90 z-10",
                 frozen ? "sticky left-0" : ""
             )}
             style={{

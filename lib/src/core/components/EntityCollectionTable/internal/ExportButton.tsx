@@ -8,7 +8,8 @@ import {
     Button,
     CircularProgress,
     Dialog,
-    DialogActions, DialogContent,
+    DialogActions,
+    DialogContent,
     IconButton,
     Tooltip,
     Typography

@@ -1,6 +1,6 @@
 import React from "react";
-import clsx from "clsx";
 import { Container } from "./Container";
+import { cn } from "./util/cn";
 
 export function CenteredView({
                                  children,
@@ -14,7 +14,7 @@ export function CenteredView({
     fullScreen?: boolean,
 }) {
 
-    const container = <><Container className={clsx("m-auto",
+    const container = <><Container className={cn("m-auto",
         className)}
                                    maxWidth={maxWidth}>
         {children}

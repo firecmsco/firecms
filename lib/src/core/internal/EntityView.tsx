@@ -1,12 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import clsx from "clsx";
 import { Entity, EntityCollection, EntityStatus, EntityValues, FireCMSPlugin, FormContext, User } from "../../types";
-import {
-    CircularProgressCenter,
-    EntityCollectionView,
-    EntityPreview,
-    ErrorBoundary,
-} from "../components";
+import { CircularProgressCenter, EntityCollectionView, EntityPreview, ErrorBoundary, } from "../components";
 import {
     canEditEntity,
     fullPathToCollectionSegments,
@@ -31,6 +25,7 @@ import { EntityFormSaveParams } from "../../form/EntityForm";
 import { FORM_CONTAINER_WIDTH } from "./common";
 import { defaultBorderMixin } from "../../styles";
 import { CloseIcon } from "../../icons";
+import { cn } from "../../components/util/cn";
 
 const MAIN_TAB_VALUE = "main_##Q$SC^#S6";
 
@@ -325,7 +320,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                 return null;
             }
             return <div
-                className={clsx(defaultBorderMixin,
+                className={cn(defaultBorderMixin,
                     "relative flex-grow w-full h-full overflow-auto ")}
                 key={`custom_view_${customView.path}`}
                 role="tabpanel">
@@ -508,7 +503,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                 <>
 
                     <div
-                        className={clsx(defaultBorderMixin, "no-scrollbar border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll bg-gray-50 dark:bg-gray-950")}>
+                        className={cn(defaultBorderMixin, "no-scrollbar border-b pl-2 pr-2 pt-1 flex items-end overflow-scroll bg-gray-50 dark:bg-gray-950")}>
 
                         <div
                             className="pb-1 self-center">

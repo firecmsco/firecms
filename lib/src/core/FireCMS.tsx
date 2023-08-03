@@ -1,6 +1,4 @@
 import React from "react";
-
-import DateFnsUtils from "@date-io/date-fns";
 import * as locales from "date-fns/locale";
 
 import { FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";

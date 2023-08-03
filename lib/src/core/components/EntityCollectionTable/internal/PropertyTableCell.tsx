@@ -10,11 +10,11 @@ import {
     ResolvedProperty,
     ResolvedStringProperty
 } from "../../../../types";
-import { TableInput } from "../../Table/fields/TableInput";
-import { TableSelect } from "../../Table/fields/TableSelect";
-import { NumberTableInput } from "../../Table/fields/TableNumberInput";
-import { TableSwitch } from "../../Table/fields/TableSwitch";
-import { TableDateField } from "../../Table/fields/TableDateField";
+import { VirtualTableInput } from "../../VirtualTable/fields/VirtualTableInput";
+import { VirtualTableSelect } from "../../VirtualTable/fields/VirtualTableSelect";
+import { VirtualTableNumberInput } from "../../VirtualTable/fields/VirtualTableNumberInput";
+import { VirtualTableSwitch } from "../../VirtualTable/fields/VirtualTableSwitch";
+import { VirtualTableDateField } from "../../VirtualTable/fields/VirtualTableDateField";
 import { PropertyPreview } from "../../../../preview";
 import { TableReferenceField } from "../fields/TableReferenceField";
 
@@ -24,8 +24,8 @@ import { TableStorageUpload } from "../fields/TableStorageUpload";
 import { CustomFieldValidator, mapPropertyToYup } from "../../../../form/validation";
 import { useEntityCollectionTableController } from "../EntityCollectionTable";
 import { useClearRestoreValue, useDataSource, useFireCMSContext } from "../../../../hooks";
-import { TableCell } from "./TableCell";
-import { getRowHeight } from "../../Table/common";
+import { EntityTableCell } from "./EntityTableCell";
+import { getRowHeight } from "../../VirtualTable/common";
 
 export interface PropertyTableCellProps<T extends CMSType, M extends Record<string, any>> {
     propertyKey: string;
@@ -221,7 +221,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         let fullHeight = false;
 
         if (readonly || readOnlyProperty) {
-            return <TableCell
+            return <EntityTableCell
                 size={size}
                 width={width}
                 saved={saved}
@@ -240,7 +240,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     value={value}
                     size={getPreviewSizeFrom(size)}
                 />
-            </TableCell>;
+            </EntityTableCell>;
         }
 
         if (!customField && (!customPreview || selected)) {
@@ -263,20 +263,20 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             } else if (selected && property.dataType === "number") {
                 const numberProperty = property as ResolvedNumberProperty;
                 if (numberProperty.enumValues) {
-                    innerComponent = <TableSelect name={propertyKey as string}
-                                                  multiple={false}
-                                                  disabled={disabled}
-                                                  focused={selected}
-                                                  valueType={"number"}
-                                                  small={getPreviewSizeFrom(size) !== "medium"}
-                                                  enumValues={numberProperty.enumValues}
-                                                  error={error}
-                                                  internalValue={internalValue as string | number}
-                                                  updateValue={updateValue}
+                    innerComponent = <VirtualTableSelect name={propertyKey as string}
+                                                         multiple={false}
+                                                         disabled={disabled}
+                                                         focused={selected}
+                                                         valueType={"number"}
+                                                         small={getPreviewSizeFrom(size) !== "medium"}
+                                                         enumValues={numberProperty.enumValues}
+                                                         error={error}
+                                                         internalValue={internalValue as string | number}
+                                                         updateValue={updateValue}
                     />;
                     fullHeight = true;
                 } else {
-                    innerComponent = <NumberTableInput
+                    innerComponent = <VirtualTableNumberInput
                         align={align}
                         error={error}
                         focused={selected}
@@ -289,44 +289,44 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             } else if (selected && property.dataType === "string") {
                 const stringProperty = property as ResolvedStringProperty;
                 if (stringProperty.enumValues) {
-                    innerComponent = <TableSelect name={propertyKey as string}
-                                                  multiple={false}
-                                                  focused={selected}
-                                                  disabled={disabled}
-                                                  valueType={"string"}
-                                                  small={getPreviewSizeFrom(size) !== "medium"}
-                                                  enumValues={stringProperty.enumValues}
-                                                  error={error}
-                                                  internalValue={internalValue as string | number}
-                                                  updateValue={updateValue}
+                    innerComponent = <VirtualTableSelect name={propertyKey as string}
+                                                         multiple={false}
+                                                         focused={selected}
+                                                         disabled={disabled}
+                                                         valueType={"string"}
+                                                         small={getPreviewSizeFrom(size) !== "medium"}
+                                                         enumValues={stringProperty.enumValues}
+                                                         error={error}
+                                                         internalValue={internalValue as string | number}
+                                                         updateValue={updateValue}
                     />;
                     fullHeight = true;
                 } else if (!stringProperty.storage) {
                     const multiline = Boolean(stringProperty.multiline) || Boolean(stringProperty.markdown);
-                    innerComponent = <TableInput error={error}
-                                                 disabled={disabled}
-                                                 multiline={multiline}
-                                                 focused={selected}
-                                                 value={internalValue as string}
-                                                 updateValue={updateValue}
+                    innerComponent = <VirtualTableInput error={error}
+                                                        disabled={disabled}
+                                                        multiline={multiline}
+                                                        focused={selected}
+                                                        value={internalValue as string}
+                                                        updateValue={updateValue}
                     />;
                     allowScroll = true;
                 }
             } else if (property.dataType === "boolean") {
-                innerComponent = <TableSwitch error={error}
-                                              disabled={disabled}
-                                              focused={selected}
-                                              internalValue={internalValue as boolean}
-                                              updateValue={updateValue}
+                innerComponent = <VirtualTableSwitch error={error}
+                                                     disabled={disabled}
+                                                     focused={selected}
+                                                     internalValue={internalValue as boolean}
+                                                     updateValue={updateValue}
                 />;
             } else if (property.dataType === "date") {
-                innerComponent = <TableDateField name={propertyKey as string}
-                                                 error={error}
-                                                 disabled={disabled}
-                                                 mode={property.mode}
-                                                 focused={selected}
-                                                 internalValue={internalValue as Date}
-                                                 updateValue={updateValue}
+                innerComponent = <VirtualTableDateField name={propertyKey as string}
+                                                        error={error}
+                                                        disabled={disabled}
+                                                        mode={property.mode}
+                                                        focused={selected}
+                                                        internalValue={internalValue as Date}
+                                                        updateValue={updateValue}
                 />;
                 fullHeight = true;
                 hideOverflow = false;
@@ -357,19 +357,20 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     if (arrayProperty.of.dataType === "string" || arrayProperty.of.dataType === "number") {
                         if (selected && arrayProperty.of.enumValues) {
                             innerComponent =
-                                <TableSelect name={propertyKey as string}
-                                             multiple={true}
-                                             disabled={disabled}
-                                             focused={selected}
-                                             small={getPreviewSizeFrom(size) !== "medium"}
-                                             valueType={arrayProperty.of.dataType}
-                                             enumValues={arrayProperty.of.enumValues}
-                                             error={error}
-                                             internalValue={internalValue as string | number}
-                                             updateValue={updateValue}
+                                <VirtualTableSelect name={propertyKey as string}
+                                                    multiple={true}
+                                                    disabled={disabled}
+                                                    focused={selected}
+                                                    small={getPreviewSizeFrom(size) !== "medium"}
+                                                    valueType={arrayProperty.of.dataType}
+                                                    enumValues={arrayProperty.of.enumValues}
+                                                    error={error}
+                                                    internalValue={internalValue as string | number}
+                                                    updateValue={updateValue}
                                 />;
                             allowScroll = true;
                             fullHeight = true;
+                            hideOverflow = false;
                         }
                     } else if (arrayProperty.of.dataType === "reference") {
                         if (typeof arrayProperty.of.path === "string") {
@@ -411,7 +412,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         }
 
         return (
-            <TableCell
+            <EntityTableCell
                 key={`cell_${propertyKey}_${entity.path}_${entity.id}`}
                 size={size}
                 width={width}
@@ -433,7 +434,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
 
                 {innerComponent}
 
-            </TableCell>
+            </EntityTableCell>
         );
 
     },

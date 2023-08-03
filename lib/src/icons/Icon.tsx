@@ -1,7 +1,7 @@
 /// <reference types="vite-plugin-svgr/client" />
 import * as React from "react";
-import clsx from "clsx";
 import "@material-design-icons/font/filled.css";
+import { cn } from "../components/util/cn";
 
 export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error" | "success" | "warning";
 export type IconProps = {
@@ -56,7 +56,7 @@ export function Icon({
             ...style
         }}
         className={
-            clsx("material-icons",
+            cn("material-icons",
                 color ? colorClassesMapping[color] : "",
                 "select-none",
                 className)}

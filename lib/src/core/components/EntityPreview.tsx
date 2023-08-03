@@ -1,5 +1,4 @@
 import React, { useMemo } from "react";
-import clsx from "clsx";
 import { PropertyPreview } from "../../preview";
 import { Entity, EntityCollection, FireCMSContext, ResolvedEntityCollection, ResolvedProperties } from "../../types";
 import { resolveCollection } from "../util";
@@ -7,6 +6,7 @@ import { useFireCMSContext } from "../../hooks";
 import { defaultBorderMixin } from "../../styles";
 import { IconButton } from "../../components";
 import { OpenInNewIcon } from "../../icons";
+import { cn } from "../../components/util/cn";
 
 /**
  * @category Components
@@ -42,7 +42,7 @@ export function EntityPreview<M extends Record<string, any>>(
     return (
         <div className={"w-full " + className}>
             <div className={"w-full mb-4"}>
-                <div className={clsx(defaultBorderMixin, "flex justify-between py-2 border-b last:border-b-0")}>
+                <div className={cn(defaultBorderMixin, "flex justify-between py-2 border-b last:border-b-0")}>
                     <div className="flex items-center w-1/4">
                         <span className="pl-2 text-sm text-gray-600">Id</span>
                     </div>
@@ -65,7 +65,7 @@ export function EntityPreview<M extends Record<string, any>>(
                         return (
                             <div
                                 key={`reference_previews_${key}`}
-                                className={clsx(defaultBorderMixin, "flex justify-between py-2 border-b last:border-b-0")}>
+                                className={cn(defaultBorderMixin, "flex justify-between py-2 border-b last:border-b-0")}>
                                 <div className="flex items-center w-1/4">
                                     <span className="pl-2 text-sm text-gray-600">{property.name}</span>
                                 </div>

@@ -3,7 +3,7 @@ import React from "react";
 export type BadgeColor = "primary" | "secondary" | "error";
 
 interface BadgeProps {
-    color: BadgeColor;
+    color?: BadgeColor;
     children: React.ReactNode;
     invisible?: boolean;
 }

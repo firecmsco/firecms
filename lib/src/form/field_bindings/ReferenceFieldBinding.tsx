@@ -3,7 +3,7 @@ import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FieldProps } from "../../types";
 import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
-import {  FieldHelperText, LabelWithIcon } from "../components";
+import { FieldHelperText, LabelWithIcon } from "../components";
 import { ReferencePreview } from "../../preview";
 import { ErrorView, getIconForProperty, getReferenceFrom } from "../../core";
 import { Button } from "../../components";

@@ -1,18 +1,18 @@
 import React, { useState } from "react";
-import { TableWhereFilterOp } from "../../Table";
+import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import { DateTimeField } from "../../../../components/DateTimeField";
 import { Select, SelectItem } from "../../../../components";
 
 interface DateTimeFilterFieldProps {
     name: string,
     mode?: "date" | "date_time",
-    value?: [op: TableWhereFilterOp, fieldValue: any];
-    setValue: (value?: [op: TableWhereFilterOp, newValue: any]) => void;
+    value?: [op: VirtualTableWhereFilterOp, fieldValue: any];
+    setValue: (value?: [op: VirtualTableWhereFilterOp, newValue: any]) => void;
     isArray?: boolean;
     title?: string;
 }
 
-const operationLabels: Record<TableWhereFilterOp, string> = {
+const operationLabels: Record<VirtualTableWhereFilterOp, string> = {
     "==": "==",
     "!=": "!=",
     ">": ">",
@@ -41,10 +41,10 @@ export function DateTimeFilterField({
         : ["==", "!=", ">", "<", ">=", "<="];
 
     const [fieldOperation, fieldValue] = value || [possibleOperations[0], undefined];
-    const [operation, setOperation] = useState<TableWhereFilterOp>(fieldOperation);
+    const [operation, setOperation] = useState<VirtualTableWhereFilterOp>(fieldOperation);
     const [internalValue, setInternalValue] = useState<Date | undefined>(fieldValue);
 
-    function updateFilter(op: TableWhereFilterOp, val: Date | undefined) {
+    function updateFilter(op: VirtualTableWhereFilterOp, val: Date | undefined) {
         let newValue: Date | undefined = val;
         const prevOpIsArray = multipleSelectOperations.includes(operation);
         const newOpIsArray = multipleSelectOperations.includes(op);
@@ -76,9 +76,9 @@ export function DateTimeFilterField({
             <div className="w-[80px]">
                 <Select value={operation}
                         onValueChange={(value) => {
-                            updateFilter(value as TableWhereFilterOp, internalValue);
+                            updateFilter(value as VirtualTableWhereFilterOp, internalValue);
                         }}
-                        renderValue={(op) => operationLabels[op as TableWhereFilterOp]}>
+                        renderValue={(op) => operationLabels[op as VirtualTableWhereFilterOp]}>
                     {possibleOperations.map((op) => (
                         <SelectItem key={op} value={op}>
                             {operationLabels[op]}

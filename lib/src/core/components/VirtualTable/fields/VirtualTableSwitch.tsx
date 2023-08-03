@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { BooleanSwitch } from "../../../../components";
 
-export function TableSwitch(props: {
+export function VirtualTableSwitch(props: {
     error: Error | undefined;
     internalValue?: boolean;
     focused: boolean;

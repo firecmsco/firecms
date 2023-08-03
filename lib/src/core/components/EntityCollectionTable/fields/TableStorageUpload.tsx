@@ -1,7 +1,5 @@
 import * as React from "react";
 import { useMemo, useState } from "react";
-import clsx from "clsx";
-
 
 import { Entity, ResolvedArrayProperty, ResolvedStringProperty, StorageConfig } from "../../../../types";
 import { useDropzone } from "react-dropzone";
@@ -13,6 +11,7 @@ import { StorageFieldItem, useStorageUploadController } from "../../../util/useS
 import { StorageUploadProgress } from "../../../../form/components/StorageUploadProgress";
 import { IconButton, Typography } from "../../../../components";
 import { EditIcon } from "../../../../icons";
+import { cn } from "../../../../components/util/cn";
 
 const dropZoneClasses = "max-w-full box-border relative pt-[2px] items-center border border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const activeDropClasses = "pt-0 border-2 border-solid"
@@ -195,7 +194,7 @@ function StorageUpload({
              onMouseEnter={() => setOnHover(true)}
              onMouseMove={() => setOnHover(true)}
              onMouseLeave={() => setOnHover(false)}
-             className={clsx(dropZoneClasses,
+             className={cn(dropZoneClasses,
                  "relative w-full h-full",
                  `justify-${hasValue ? "start" : "center"}`,
                  isDragActive ? activeDropClasses : "",

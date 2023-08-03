@@ -1,12 +1,11 @@
-
 import React from "react";
-import { TableWhereFilterOp } from "../../Table";
+import { VirtualTableWhereFilterOp } from "../../VirtualTable";
 import { Checkbox } from "../../../../components/Checkbox";
 
 interface BooleanFieldProps {
     name: string,
-    value?: [op: TableWhereFilterOp, fieldValue: any];
-    setValue: (value?: [op: TableWhereFilterOp, newValue: any]) => void;
+    value?: [op: VirtualTableWhereFilterOp, fieldValue: any];
+    setValue: (value?: [op: VirtualTableWhereFilterOp, newValue: any]) => void;
     title?: string;
 }
 

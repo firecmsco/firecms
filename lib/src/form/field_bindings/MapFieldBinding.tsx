@@ -1,7 +1,7 @@
 import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
 
-import {  getIconForProperty, isHidden, pick } from "../../core";
+import { getIconForProperty, isHidden, pick } from "../../core";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";

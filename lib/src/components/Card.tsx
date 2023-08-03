@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import { cardMixin } from "../styles";
+import { cn } from "./util/cn";
 
 export function Card({
                          children,
@@ -13,7 +13,7 @@ export function Card({
 }) {
     return (
         <div
-            className={clsx(cardMixin, className)}
+            className={cn(cardMixin, className)}
             style={style}>
             {children}
         </div>

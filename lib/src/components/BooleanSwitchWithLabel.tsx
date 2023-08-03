@@ -1,5 +1,4 @@
 import React from "react";
-import clsx from "clsx";
 import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
@@ -7,6 +6,7 @@ import {
     focusedClasses
 } from "../styles";
 import { BooleanSwitch } from "./BooleanSwitch";
+import { cn } from "./util/cn";
 
 export type BooleanSwitchWithLabelProps = {
     value: boolean,
@@ -56,7 +56,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
             onFocus={onFocus}
             onBlur={onBlur}
             tabIndex={-1}
-            className={clsx(
+            className={cn(
                 !invisible && fieldBackgroundMixin,
                 !invisible && (disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin),
                 "rounded-md relative cursor-pointer max-w-full justify-between w-full box-border relative inline-flex items-center",
@@ -81,7 +81,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 size={size}
                 className={invisible && focus ? focusedClasses : ""}/>
 
-            <div className={clsx(
+            <div className={cn(
                 "flex-grow",
                 position === "end" ? "mr-4" : "ml-4",
                 size === "small" ? "text-sm" : "text-base"

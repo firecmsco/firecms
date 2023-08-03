@@ -32,7 +32,6 @@ function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
     };
     return <Chip
         key={entry.path}
-        label={entry.name}
         onClick={() => navigate(entry.url)}
         icon={
             favourite
@@ -43,8 +42,9 @@ function NavigationChip({ entry }: { entry: TopNavigationEntry }) {
                 : <StarBorderIcon
                     onClick={onIconClick}
                     size={18}
-                    className={"text-gray-400 dark:text-gray-500"}/>}
-    />;
+                    className={"text-gray-400 dark:text-gray-500"}/>}>
+        {entry.name}
+    </Chip>;
 }
 
 export function FavouritesView({ hidden }: { hidden: boolean }) {

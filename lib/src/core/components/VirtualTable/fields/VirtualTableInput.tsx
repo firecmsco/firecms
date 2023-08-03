@@ -3,7 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useDebounce } from "../../../util";
 import { TextareaAutosize } from "../../../../components/TextareaAutosize";
 
-export function TableInput(props: {
+export function VirtualTableInput(props: {
     error: Error | undefined;
     value: string;
     multiline: boolean;

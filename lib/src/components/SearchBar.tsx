@@ -1,9 +1,9 @@
 import React, { useCallback, useDeferredValue, useState } from "react";
-import clsx from "clsx";
 
 import { defaultBorderMixin, focusedMixin } from "../styles";
 import { IconButton } from "./index";
 import { ClearIcon, SearchIcon } from "../icons";
+import { cn } from "./util/cn";
 
 interface SearchBarProps {
     onTextSearch: (searchString?: string) => void;
@@ -45,7 +45,7 @@ export function SearchBar({
     }, []);
 
     return (
-        <div className={clsx("relative",
+        <div className={cn("relative",
             large ? "h-14" : "h-[42px]",
             "bg-gray-50 dark:bg-gray-800 transition duration-150 ease-in-out border",
             defaultBorderMixin,
@@ -63,7 +63,7 @@ export function SearchBar({
                 autoFocus={autoFocus}
                 onFocus={() => setActive(true)}
                 onBlur={() => setActive(false)}
-                className={clsx(
+                className={cn(
                     "relative flex items-center rounded transition-all bg-transparent outline-none appearance-none border-none",
                     "pl-12 h-full text-current ",
                     expandable ? (active ? "w-[220px]" : "w-[180px]") : "",

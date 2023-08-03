@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
-import clsx from "clsx";
 
 import equal from "react-fast-compare"
 
@@ -31,6 +30,7 @@ import { useTableController } from "../EntityCollectionTable/useTableController"
 import { isFilterCombinationValidForFirestore } from "./isFilterCombinationValidForFirestore";
 import { Typography } from "../../../components/Typography";
 import { Popover } from "../../../components/Popover";
+import { cn } from "../../../components/util/cn";
 
 /**
  * @category Components
@@ -311,7 +311,7 @@ export const EntityCollectionView = React.memo(
         </Popover>;
 
         return (
-            <div className={clsx("overflow-hidden h-full w-full", className)}>
+            <div className={cn("overflow-hidden h-full w-full", className)}>
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     fullPath={fullPath}

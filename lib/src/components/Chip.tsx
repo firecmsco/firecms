@@ -1,10 +1,10 @@
 import { ChipColorKey, ChipColorScheme } from "../types";
-import clsx from "clsx";
 import { getColorSchemeForKey } from "../core/util/chip_utils";
+import { cn } from "./util/cn";
 
 export interface ChipProps {
     className?: string;
-    label: React.ReactNode;
+    children: React.ReactNode;
     size?: "small" | "medium";
     colorScheme?: ChipColorScheme | ChipColorKey;
     error?: boolean;
@@ -17,7 +17,7 @@ export interface ChipProps {
  * @category Preview components
  */
 export function Chip({
-                         label,
+                         children,
                          colorScheme,
                          error,
                          outlined,
@@ -30,11 +30,12 @@ export function Chip({
     const usedColorScheme = typeof colorScheme === "string" ? getColorSchemeForKey(colorScheme) : colorScheme;
     return (
         <div
-            className={clsx("rounded-full w-fit h-fit font-regular inline-flex items-center justify-center gap-1",
+            className={cn("rounded-lg w-fit h-fit font-regular inline-flex items-center gap-1",
                 "truncate",
-                "font-medium",
+                // "font-medium",
                 onClick ? "cursor-pointer hover:bg-gray-300 hover:dark:bg-gray-700" : "",
-                size === "small" ? "text-xs" : "text-sm",
+                // size === "small" ? "text-xs" :
+                    "text-sm",
                 size === "small" ? "px-3 py-1" : "px-4 py-1.5",
                 error || !usedColorScheme ? "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200" : "",
                 error ? "text-red-500 dark:text-red-400" : "",
@@ -45,7 +46,7 @@ export function Chip({
                 color: error || !usedColorScheme ? undefined : usedColorScheme.text
             }}
         >
-            {label}
+            {children}
             {icon}
         </div>
     );

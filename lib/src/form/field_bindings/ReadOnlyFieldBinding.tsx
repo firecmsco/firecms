@@ -1,5 +1,4 @@
 import React from "react";
-import clsx from "clsx";
 
 import { Entity, FieldProps } from "../../types";
 
@@ -9,6 +8,7 @@ import { ErrorBoundary } from "../../core/components/ErrorBoundary";
 import { getIconForProperty } from "../../core";
 import { paperMixin } from "../../styles";
 import { FieldHelperText } from "../components/FieldHelperText";
+import { cn } from "../../components/util/cn";
 
 /**
  *
@@ -49,7 +49,7 @@ export function ReadOnlyFieldBinding({
             }
 
             <div
-                className={clsx(paperMixin, "min-h-14 p-4 md:p-6")}>
+                className={cn(paperMixin, "min-h-14 p-4 md:p-6")}>
 
                 <ErrorBoundary>
                     <PropertyPreview propertyKey={propertyKey}

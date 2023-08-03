@@ -1,6 +1,6 @@
 import React from "react";
-import clsx from "clsx";
 import { defaultBorderMixin } from "../styles";
+import { cn } from "./util/cn";
 
 export type TableProps = {
     children: React.ReactNode;
@@ -11,7 +11,7 @@ export const Table = ({
                           children,
                           className
                       }: TableProps) => (
-    <table className={clsx("w-full text-left text-gray-800 dark:text-gray-200 rounded-md overflow-x-auto",
+    <table className={cn("w-full text-left text-gray-800 dark:text-gray-200 rounded-md overflow-x-auto",
         className)}>
         {children}
     </table>
@@ -26,7 +26,7 @@ export const TableBody = ({
                               className
                           }: TableBodyProps) => (
     <tbody
-        className={clsx("bg-white text-sm dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700", className)}>
+        className={cn("bg-white text-sm dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700", className)}>
     {children}
     </tbody>
 );
@@ -40,7 +40,7 @@ export const TableHeader = ({
                                 children,
                                 className
                             }: TableHeaderProps) => (
-    <thead className={clsx(
+    <thead className={cn(
         defaultBorderMixin,
         "text-sm font-medium text-gray-700 dark:text-gray-300",
         "bg-gray-50 border-b dark:bg-gray-900", className)}>
@@ -61,7 +61,7 @@ export const TableRow = ({
                          }: TableRowProps) => (
     <tr
         onClick={onClick}
-        className={clsx(
+        className={cn(
             defaultBorderMixin,
             "bg-white border-b last:border-b-0 dark:bg-gray-950",
             onClick ? "hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer" : "",
@@ -92,7 +92,7 @@ export const TableCell = ({
     return (
         <Tag scope={scope}
              style={style}
-             className={clsx("px-6 py-3 text-clip ",
+             className={cn("px-6 py-3 text-clip ",
                  align === "center" ? "text-center" : (align === "right" ? "text-right" : "text-left"),
                  className)}>
             {children}

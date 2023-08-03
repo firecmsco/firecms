@@ -1,7 +1,6 @@
 import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
 import { Link } from "react-router-dom";
-import clsx from "clsx";
 
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { useLargeLayout, useNavigationContext } from "../hooks";
@@ -9,6 +8,7 @@ import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProp
 import { useRestoreScroll } from "./internal/useRestoreScroll";
 import { IconButton, Sheet, Tooltip } from "../components";
 import { ChevronLeftIcon, MenuIcon } from "../icons";
+import { cn } from "../components/util/cn";
 
 export const DRAWER_WIDTH = 280;
 
@@ -201,7 +201,7 @@ function StyledDrawer(props: {
                 transition: "padding 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
                 padding: props.open ? "32px 96px 0px 24px" : "72px 16px 0px"
             }}
-            className={clsx("cursor-pointer")}>
+            className={cn("cursor-pointer")}>
 
             <Tooltip title={props.open ? "" : "Home"} placement="right">
                 <Link

@@ -8,10 +8,10 @@ import useMeasure from "react-use-measure";
 
 import { CircularProgressCenter } from "../CircularProgressCenter";
 import {
-    OnTableColumnResizeParams,
-    TableColumn,
-    TableFilterValues,
-    TableWhereFilterOp,
+    OnVirtualTableColumnResizeParams,
+    VirtualTableColumn,
+    VirtualTableFilterValues,
+    VirtualTableWhereFilterOp,
     VirtualTableProps
 } from "./VirtualTableProps";
 
@@ -119,11 +119,11 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const [measureRef, bounds] = useMeasure();
 
-        const onColumnResizeInternal = useCallback((params: OnTableColumnResizeParams) => {
+        const onColumnResizeInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
             setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
         }, [columns]);
 
-        const onColumnResizeEndInternal = useCallback((params: OnTableColumnResizeParams) => {
+        const onColumnResizeEndInternal = useCallback((params: OnVirtualTableColumnResizeParams) => {
             setColumns(columns.map((column) => column.key === params.column.key ? params.column : column));
             if (onColumnResize) {
                 onColumnResize(params);
@@ -131,7 +131,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         }, [columns, onColumnResize]);
 
         // saving the current filter as a ref as a workaround for header closure
-        const filterRef = useRef<TableFilterValues<any> | undefined>();
+        const filterRef = useRef<VirtualTableFilterValues<any> | undefined>();
 
         useEffect(() => {
             filterRef.current = filterInput;
@@ -199,11 +199,11 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                 onEndReachedInternal(scrollOffset);
         }, [maxScroll, onEndReachedInternal]);
 
-        const onFilterUpdateInternal = useCallback((column: TableColumn, filterForProperty?: [TableWhereFilterOp, any]) => {
+        const onFilterUpdateInternal = useCallback((column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => {
 
             endReachCallbackThreshold.current = 0;
             const filter = filterRef.current;
-            let newFilterValue: TableFilterValues<any> = filter ? { ...filter } : {};
+            let newFilterValue: VirtualTableFilterValues<any> = filter ? { ...filter } : {};
 
             if (!filterForProperty) {
                 delete newFilterValue[column.key];
@@ -213,7 +213,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             const newSortBy: [string, "asc" | "desc"] | undefined = sortByProperty && currentSort ? [sortByProperty, currentSort] : undefined;
             const isNewFilterCombinationValid = !checkFilterCombination || checkFilterCombination(newFilterValue, newSortBy);
             if (!isNewFilterCombinationValid) {
-                newFilterValue = filterForProperty ? { [column.key]: filterForProperty } as TableFilterValues<Extract<keyof T, string>> : {};
+                newFilterValue = filterForProperty ? { [column.key]: filterForProperty } as VirtualTableFilterValues<Extract<keyof T, string>> : {};
             }
 
             if (onFilterUpdate) onFilterUpdate(newFilterValue);
@@ -342,7 +342,7 @@ function MemoizedList({
                             top: `calc(${style.top}px + 48px)`
                         }}
                         size={size}>
-                        {columns.map((column: TableColumn, columnIndex: number) => {
+                        {columns.map((column: VirtualTableColumn, columnIndex: number) => {
                             const cellData = rowData && rowData[column.key];
                             return <VirtualTableCell
                                 key={`cell_${column.key}`}

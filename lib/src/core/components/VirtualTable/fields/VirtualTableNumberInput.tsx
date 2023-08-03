@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useDebounce } from "../../../util";
 
-export function NumberTableInput(props: {
+export function VirtualTableNumberInput(props: {
     error: Error | undefined;
     value: number;
     align: "right" | "left" | "center";

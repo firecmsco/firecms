@@ -16,7 +16,7 @@ export * from "./EntityCollectionTable";
 export * from "./BreadcrumbUpdater";
 export * from "./NotFoundPage";
 
-export * from "./Table";
+export * from "./VirtualTable";
 export * from "./ErrorBoundary";
 export * from "./DeleteConfirmationDialog";
 

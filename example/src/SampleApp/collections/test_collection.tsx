@@ -90,6 +90,31 @@ export const testCollection = buildCollection({
     name: "Test entities",
     // formAutoSave: true,
     properties: {
+        array_enum: {
+            name: "Array enum",
+            dataType: "array",
+            of: {
+                name: "My enum",
+                dataType: "string",
+                enumValues: {
+                    value1: "My Value 1",
+                    value2: "Your Value 2",
+                    value3: "Another Value 3"
+                },
+                validation: { required: false },
+                clearable: true
+            }
+        },
+        enum: {
+            name: "My enum",
+            dataType: "string",
+            enumValues: {
+                value1: "My Value 1",
+                value2: "Your Value 2"
+            },
+            validation: { required: false },
+            clearable: true
+        },
         test_date: {
             name: "Test date",
             dataType: "date",

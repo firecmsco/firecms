@@ -13,7 +13,6 @@ import { PreviewSize } from "../../preview";
 import { FieldHelperText, LabelWithIcon } from "../components";
 
 import { getIconForProperty, isReadOnly } from "../../core";
-import clsx from "clsx";
 import { useClearRestoreValue, useSnackbarController, useStorageSource } from "../../hooks";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
 import { StorageFieldItem, useStorageUploadController } from "../../core/util/useStorageUploadController";
@@ -26,6 +25,7 @@ import {
     fieldBackgroundMixin,
     focusedMixin
 } from "../../styles";
+import { cn } from "../../components/util/cn";
 
 const dropZoneClasses = "box-border relative pt-[2px] items-center border border-transparent min-h-[254px] outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
 const disabledClasses = "border-dotted-gray"
@@ -198,7 +198,7 @@ function FileDropComponent({
     return (
         <div
             {...getRootProps()}
-            className={clsx(
+            className={cn(
                 fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                 dropZoneClasses,
@@ -215,7 +215,7 @@ function FileDropComponent({
             <div
                 {...droppableProvided.droppableProps}
                 ref={droppableProvided.innerRef}
-                className={clsx("flex items-center p-1",
+                className={cn("flex items-center p-1",
                     multipleFilesSupported && internalValue.length ? "overflow-auto" : "",
                     multipleFilesSupported && internalValue.length ? "min-h-[180px]" : "min-h-[250px]"
                 )}
@@ -267,7 +267,7 @@ function FileDropComponent({
                                     ref={provided.innerRef}
                                     {...provided.draggableProps}
                                     {...provided.dragHandleProps}
-                                    className={clsx(focusedMixin, "rounded-md")}
+                                    className={cn(focusedMixin, "rounded-md")}
                                     style={{
                                         ...provided.draggableProps.style
                                     }}

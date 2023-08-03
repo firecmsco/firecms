@@ -1,4 +1,3 @@
-import clsx from "clsx";
 import { useNavigate } from "react-router-dom";
 
 import { Markdown } from "../../../preview";
@@ -8,7 +7,8 @@ import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { IconButton, Typography } from "../../../components";
 import { cardMixin } from "../../../styles";
-import { StarIcon, StarBorderIcon, ArrowForwardIcon } from "../../../icons";
+import { ArrowForwardIcon, StarBorderIcon, StarIcon } from "../../../icons";
+import { cn } from "../../../components/util/cn";
 
 /**
  * This is the component used in the home page to render a card for each
@@ -65,7 +65,7 @@ export function NavigationCollectionCard({
     }
 
     return (
-        <div className={clsx(cardMixin, "h-full p-4 cursor-pointer min-h-[230px]")}>
+        <div className={cn(cardMixin, "h-full p-4 cursor-pointer min-h-[230px]")}>
 
             <div
                 className="flex flex-col items-start h-full"

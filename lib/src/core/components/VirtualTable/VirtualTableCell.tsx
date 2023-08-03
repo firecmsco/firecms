@@ -2,12 +2,12 @@ import React from "react";
 
 import equal from "react-fast-compare"
 
-import { CellRendererParams, TableColumn } from "./VirtualTableProps";
+import { CellRendererParams, VirtualTableColumn } from "./VirtualTableProps";
 
 type VirtualTableCellProps<T extends any> = {
     dataKey: string;
-    column: TableColumn;
-    columns: TableColumn[];
+    column: VirtualTableColumn;
+    columns: VirtualTableColumn[];
     rowData: any;
     cellData: any;
     rowIndex: any;

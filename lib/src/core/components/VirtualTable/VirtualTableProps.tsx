@@ -1,5 +1,5 @@
 import React from "react";
-import { EnumValueConfig, WhereFilterOp } from "../../../types";
+import { WhereFilterOp } from "../../../types";
 import { FilterFormFieldProps } from "./VirtualTableHeader";
 
 export type OnRowClickParams<T extends Record<string, any>> = {
@@ -23,7 +23,7 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      * Properties displayed in this collection. If this property is not set
      * every property is displayed, you can filter
      */
-    columns: TableColumn[];
+    columns: VirtualTableColumn[];
 
     /**
      * Custom cell renderer
@@ -42,7 +42,7 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      * @param filterValues
      * @param sortBy
      */
-    checkFilterCombination?: (filterValues: TableFilterValues<Extract<keyof T, string>>,
+    checkFilterCombination?: (filterValues: VirtualTableFilterValues<Extract<keyof T, string>>,
                               sortBy?: [string, "asc" | "desc"]) => boolean;
 
     /**
@@ -64,23 +64,23 @@ export interface VirtualTableProps<T extends Record<string, any>> {
     /**
      * Callback when a column is resized
      */
-    onColumnResize?: (params: OnTableColumnResizeParams) => void;
+    onColumnResize?: (params: OnVirtualTableColumnResizeParams) => void;
 
     /**
      * Size of the table
      */
-    size?: TableSize,
+    size?: VirtualTableSize,
 
     /**
      * In case this table should have some filters set by default
      */
-    filter?: TableFilterValues<any>;
+    filter?: VirtualTableFilterValues<any>;
 
     /**
      * Callback used when filters are updated
      * @param filter
      */
-    onFilterUpdate?: (filter?: TableFilterValues<any> | undefined) => void;
+    onFilterUpdate?: (filter?: VirtualTableFilterValues<any> | undefined) => void;
 
     /**
      * Default sort applied to this collection
@@ -124,11 +124,10 @@ export interface VirtualTableProps<T extends Record<string, any>> {
 
 }
 
-
 export type CellRendererParams<T extends any> = {
     cellData?: any;
-    column: TableColumn;
-    columns: TableColumn[];
+    column: VirtualTableColumn;
+    columns: VirtualTableColumn[];
     columnIndex: number;
     rowData?: T;
     rowIndex: number;
@@ -140,7 +139,7 @@ export type CellRendererParams<T extends any> = {
  * @see Table
  * @category Components
  */
-export interface TableColumn<CustomProps extends any = any> {
+export interface VirtualTableColumn<CustomProps extends any = any> {
 
     /**
      * Data key for the cell value, could be "a.b.c"
@@ -200,35 +199,29 @@ export interface TableColumn<CustomProps extends any = any> {
  * @see Table
  * @category Collection components
  */
-export type OnTableColumnResizeParams = {
+export type OnVirtualTableColumnResizeParams = {
     width: number,
     key: string,
-    column: TableColumn
+    column: VirtualTableColumn
 };
 
 /**
  * @see Table
  * @category Components
  */
-export type TableSize = "xs" | "s" | "m" | "l" | "xl";
+export type VirtualTableSize = "xs" | "s" | "m" | "l" | "xl";
 
 /**
  * @see Table
  * @category Components
  */
-export type TableEnumValues = EnumValueConfig[];
+export type VirtualTableSort = "asc" | "desc" | undefined;
 
 /**
  * @see Table
  * @category Components
  */
-export type TableSort = "asc" | "desc" | undefined;
-
-/**
- * @see Table
- * @category Components
- */
-export type TableFilterValues<Key extends string> = Partial<Record<Key, [WhereFilterOp, any]>>;
+export type VirtualTableFilterValues<Key extends string> = Partial<Record<Key, [WhereFilterOp, any]>>;
 
 /**
  * Filter conditions in a `Query.where()` clause are specified using the
@@ -236,7 +229,7 @@ export type TableFilterValues<Key extends string> = Partial<Record<Key, [WhereFi
  * @see Table
  * @category Models
  */
-export type TableWhereFilterOp =
+export type VirtualTableWhereFilterOp =
     | "<"
     | "<="
     | "=="

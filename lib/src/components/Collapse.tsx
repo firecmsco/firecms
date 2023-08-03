@@ -1,8 +1,8 @@
 import React from "react";
-import clsx from "clsx";
 import * as Collapsible from "@radix-ui/react-collapsible";
 
 import { useInjectStyles } from "./util/useInjectStyles";
+import { cn } from "./util/cn";
 
 interface CollapseProps {
     children?: React.ReactNode;
@@ -54,7 +54,7 @@ export function Collapse({
             className={className}>
 
             <Collapsible.Content
-                className={clsx(`CollapseContent-${duration}`)}
+                className={cn(`CollapseContent-${duration}`)}
             >
                 {children}
             </Collapsible.Content>

@@ -1,19 +1,19 @@
 import React, { RefObject, useCallback, useEffect, useState } from "react";
 import equal from "react-fast-compare";
-import clsx from "clsx";
 
-import { TableColumn, TableSort, TableWhereFilterOp } from "./VirtualTableProps";
+import { VirtualTableColumn, VirtualTableSort, VirtualTableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
 import { Button, IconButton } from "../../../components";
 import { defaultBorderMixin } from "../../../styles";
 import { ArrowUpwardIcon, ExpandMoreIcon } from "../../../icons";
 import { Popover } from "../../../components/Popover";
 import { Badge } from "../../../components/Badge";
+import { cn } from "../../../components/util/cn";
 
 interface FilterFormProps<T> {
-    column: TableColumn<T>;
-    onFilterUpdate: (filter?: [TableWhereFilterOp, any], newOpenFilterState?: boolean) => void;
-    filter?: [TableWhereFilterOp, any];
+    column: VirtualTableColumn<T>;
+    onFilterUpdate: (filter?: [VirtualTableWhereFilterOp, any], newOpenFilterState?: boolean) => void;
+    filter?: [VirtualTableWhereFilterOp, any];
     onHover: boolean,
     createFilterField: (props: FilterFormFieldProps<T>) => React.ReactNode;
     popupOpen: boolean;
@@ -22,9 +22,9 @@ interface FilterFormProps<T> {
 
 export type FilterFormFieldProps<CustomProps> = {
     id: React.Key,
-    filterValue: [TableWhereFilterOp, any] | undefined,
-    setFilterValue: (filterValue?: [TableWhereFilterOp, any]) => void;
-    column: TableColumn<CustomProps>;
+    filterValue: [VirtualTableWhereFilterOp, any] | undefined,
+    setFilterValue: (filterValue?: [VirtualTableWhereFilterOp, any]) => void;
+    column: VirtualTableColumn<CustomProps>;
     popupOpen: boolean;
     setPopupOpen: (open: boolean) => void;
 };
@@ -33,12 +33,12 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
     resizeHandleRef: RefObject<HTMLDivElement>;
     columnIndex: number;
     isResizingIndex: number;
-    column: TableColumn<any>;
+    column: VirtualTableColumn<any>;
     onColumnSort: (key: Extract<keyof M, string>) => void;
-    filter?: [TableWhereFilterOp, any];
-    sort: TableSort;
-    onFilterUpdate: (column: TableColumn, filterForProperty?: [TableWhereFilterOp, any]) => void;
-    onClickResizeColumn?: (columnIndex: number, column: TableColumn) => void;
+    filter?: [VirtualTableWhereFilterOp, any];
+    sort: VirtualTableSort;
+    onFilterUpdate: (column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => void;
+    onClickResizeColumn?: (columnIndex: number, column: VirtualTableColumn) => void;
     createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
 };
 
@@ -64,11 +64,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
             setOpenFilter(true);
         }, []);
 
-        const handleClose = useCallback(() => {
-            setOpenFilter(false);
-        }, []);
-
-        const update = useCallback((filterForProperty?: [TableWhereFilterOp, any], newOpenFilterState?: boolean) => {
+        const update = useCallback((filterForProperty?: [VirtualTableWhereFilterOp, any], newOpenFilterState?: boolean) => {
             onFilterUpdate(column, filterForProperty);
             if (newOpenFilterState !== undefined)
                 setOpenFilter(newOpenFilterState);
@@ -82,7 +78,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
         return (
             <ErrorBoundary>
                 <div
-                    className={clsx("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center bg-gray-50 dark:bg-gray-900",
+                    className={cn("flex py-0 px-3 h-full text-xs uppercase font-semibold relative select-none items-center bg-gray-50 dark:bg-gray-900",
                         "text-gray-600 hover:text-gray-800 dark:text-gray-400 dark:hover:text-gray-200 ",
                         "hover:bg-gray-100 dark:hover:bg-gray-800 hover:bg-opacity-50 dark:hover:bg-opacity-50",
                         column.frozen ? "sticky left-0 z-10" : "relative z-0"
@@ -168,7 +164,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     {column.resizable && <div
                         ref={resizeHandleRef}
-                        className={clsx(
+                        className={cn(
                             "absolute h-full w-[6px] top-0 right-0 cursor-col-resize",
                             hovered && "bg-gray-300 dark:bg-gray-700"
                         )}
@@ -193,7 +189,7 @@ function FilterForm<M>({
 
     const id = column.key;
 
-    const [filterInternal, setFilterInternal] = useState<[TableWhereFilterOp, any] | undefined>(filter);
+    const [filterInternal, setFilterInternal] = useState<[VirtualTableWhereFilterOp, any] | undefined>(filter);
 
     useEffect(() => {
         setFilterInternal(filter);
@@ -223,12 +219,12 @@ function FilterForm<M>({
     if (!filterField) return null;
     return (
         <div className={
-            clsx(
+            cn(
                 "text-gray-900 dark:text-white",
             )
         }>
             <div
-                className={clsx(defaultBorderMixin, "py-4 px-6 text-xs font-semibold uppercase border-b")}>
+                className={cn(defaultBorderMixin, "py-4 px-6 text-xs font-semibold uppercase border-b")}>
                 {column.title ?? id}
             </div>
             {filterField && <div className="m-6">

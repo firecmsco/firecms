@@ -4,7 +4,7 @@ import equal from "react-fast-compare"
 
 import { getRowHeight } from "./common";
 import { VirtualTableRowProps } from "./types";
-import clsx from "clsx";
+import { cn } from "../../../components/util/cn";
 
 export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
     function VirtualTableRow<T>({
@@ -28,7 +28,7 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
 
         return (
             <div
-                className={clsx(
+                className={cn(
                     "flex min-w-full text-sm border-b border-gray-200 dark:border-gray-800 border-opacity-40 dark:border-opacity-40",
                     rowClassName ? rowClassName(rowData) : "",
                     {

@@ -1,9 +1,10 @@
 import { EnumValueConfig } from "../../../../types";
 import { ArrayEnumPreview, EnumValuesChip } from "../../../../preview";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect } from "react";
 import { Select, SelectItem } from "../../../../components";
+import { MultiSelect } from "../../../../components/MultiSelect";
 
-export function TableSelect(props: {
+export function VirtualTableSelect(props: {
     name: string;
     enumValues: EnumValueConfig[];
     error: Error | undefined;
@@ -29,8 +30,6 @@ export function TableSelect(props: {
         multiple,
         valueType
     } = props;
-
-    const [open, setOpen] = useState<boolean>(false);
 
     const validValue = (Array.isArray(internalValue) && multiple) ||
         (!Array.isArray(internalValue) && !multiple);
@@ -73,30 +72,46 @@ export function TableSelect(props: {
         }
     };
     return (
-        <Select
-            inputRef={ref}
-            className="w-full h-full p-0 bg-transparent"
-            position={"item-aligned"}
-            disabled={disabled}
-            multiple={multiple}
-            padding={false}
-            includeFocusOutline={false}
-            value={validValue
-                ? (multiple ? (internalValue as any[]).map(v => v.toString()) : internalValue?.toString())
-                : (multiple ? [] : "")}
-            onValueChange={onChange}
-            onMultiValueChange={onChange}
-            renderValue={renderValue}>
-            {enumValues?.map((enumConfig) => (
-                <SelectItem
-                    key={enumConfig.id}
-                    value={String(enumConfig.id)}>
-                    <EnumValuesChip
-                        enumKey={enumConfig.id}
-                        enumValues={enumValues}
-                        size={small ? "small" : "medium"}/>
-                </SelectItem>
-            ))}
-        </Select>
+        multiple
+            ? <MultiSelect
+                inputRef={ref}
+                containerClassName="w-full h-full"
+                className="w-full h-full p-0 bg-transparent"
+                position={"item-aligned"}
+                disabled={disabled}
+                padding={false}
+                includeFocusOutline={false}
+                value={validValue
+                    ? ((internalValue as any[]).map(v => v.toString()))
+                    : ([])}
+                onMultiValueChange={onChange}
+                options={enumValues?.map((enumConfig) => String(enumConfig.id))}
+                renderValue={renderValue}/>
+            : <Select
+                inputRef={ref}
+                className="w-full h-full p-0 bg-transparent"
+                position={"item-aligned"}
+                disabled={disabled}
+                multiple={multiple}
+                padding={false}
+                includeFocusOutline={false}
+                value={validValue
+                    ? (multiple ? (internalValue as any[]).map(v => v.toString()) : internalValue?.toString())
+                    : (multiple ? [] : "")}
+                onValueChange={onChange}
+                onMultiValueChange={onChange}
+                renderValue={renderValue}>
+                {enumValues?.map((enumConfig) => (
+                    <SelectItem
+                        key={enumConfig.id}
+                        value={String(enumConfig.id)}>
+                        <EnumValuesChip
+                            enumKey={enumConfig.id}
+                            enumValues={enumValues}
+                            size={small ? "small" : "medium"}/>
+                    </SelectItem>
+                ))}
+            </Select>
+
     );
 }

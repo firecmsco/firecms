@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import { paperMixin } from "../styles";
+import { cn } from "./util/cn";
 
 export function Paper({
                           children,
@@ -13,7 +13,7 @@ export function Paper({
 }) {
     return (
         <div
-            className={clsx(paperMixin, className)}
+            className={cn(paperMixin, className)}
             style={style}>
             {children}
         </div>

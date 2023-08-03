@@ -1,11 +1,11 @@
 import React from "react";
-import clsx from "clsx";
 
 import { CollectionSize } from "../../../../types";
-import { SearchBar , CircularProgress, IconButton, Select, SelectItem, Tooltip } from "../../../../components";
+import { CircularProgress, IconButton, SearchBar, Select, SelectItem, Tooltip } from "../../../../components";
 import { useLargeLayout } from "../../../../hooks/useLargeLayout";
 import { defaultBorderMixin } from "../../../../styles";
 import { FilterListOffIcon } from "../../../../icons";
+import { cn } from "../../../../components/util/cn";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
@@ -53,7 +53,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
     return (
         <div
-            className={clsx(defaultBorderMixin, "no-scrollbar min-h-[56px] overflow-x-auto px-4 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}
+            className={cn(defaultBorderMixin, "no-scrollbar min-h-[56px] overflow-x-auto px-4 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}
         >
 
             <div className="flex items-center gap-8 md:gap-4 ">

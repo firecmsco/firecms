@@ -1,15 +1,16 @@
 import { useEffect, useState } from "react";
-import clsx from "clsx";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { paperMixin } from "../styles";
+import { cn } from "./util/cn";
 
 export type DialogProps = {
-    open: boolean;
+    open?: boolean;
     onOpenChange?: (open: boolean) => void;
     children: React.ReactNode;
     className?: string;
     fullWidth?: boolean;
     fullHeight?: boolean;
+    scrollable?: boolean;
     maxWidth?: keyof typeof widthClasses;
 };
 
@@ -35,6 +36,7 @@ export const Dialog = ({
                            className,
                            fullWidth = true,
                            fullHeight,
+                           scrollable = true,
                            maxWidth = "md"
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
@@ -60,7 +62,7 @@ export const Dialog = ({
                 <div className={"fixed inset-0 z-20"}>
 
                     <DialogPrimitive.Overlay
-                        className={clsx("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black bg-opacity-50 dark:bg-opacity-60 backdrop-blur-sm ",
+                        className={cn("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black bg-opacity-50 dark:bg-opacity-60 backdrop-blur-sm ",
                             displayed && open ? "opacity-100" : "opacity-0",
                             "z-20 fixed top-0 left-0 w-full h-full flex justify-center items-center"
                         )}
@@ -70,10 +72,10 @@ export const Dialog = ({
                     />
 
                     <DialogPrimitive.Content
-                        className={clsx("h-full outline-none flex justify-center items-center z-30 opacity-100 transition-all duration-200 ease-in-out")}
+                        className={cn("h-full outline-none flex justify-center items-center z-30 opacity-100 transition-all duration-200 ease-in-out")}
                     >
                         <div
-                            className={clsx(paperMixin,
+                            className={cn(paperMixin,
                                 // "text-gray-900 dark:text-white",
                                 // "m-8 relative overflow-y-auto flex flex-col max-h-full",
                                 // maxWidth ? widthClasses[maxWidth] : undefined,
@@ -86,7 +88,7 @@ export const Dialog = ({
                                 "justify-center items-center",
                                 "max-h-[90vh] shadow-xl",
                                 "ease-in-out duration-200",
-                                "overflow-y-auto",
+                                scrollable && "overflow-y-auto",
                                 displayed && open ? "opacity-100" : "opacity-0",
                                 maxWidth ? widthClasses[maxWidth] : undefined,
                                 className

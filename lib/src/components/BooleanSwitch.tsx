@@ -1,5 +1,5 @@
 import React from "react";
-import clsx from "clsx";
+import { cn } from "./util/cn";
 
 export interface BooleanSwitchProps {
     value: boolean;
@@ -24,14 +24,14 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                     e.preventDefault();
                     onValueChange?.(!value);
                 }}
-            className={clsx(
+            className={cn(
                 size === "small" ? "w-[38px] h-[22px] min-w-[38px] min-h-[22px]" : "w-[42px] h-[26px] min-w-[42px] min-h-[26px]",
                 "outline-none rounded-full relative shadow-sm",
                 value ? "ring-secondary ring-1 bg-secondary dark:bg-secondary" : "bg-white bg-opacity-54 dark:bg-gray-900 ring-1 ring-gray-100 dark:ring-gray-700",
                 className
             )}>
             <div
-                className={clsx(
+                className={cn(
                     "block rounded-full transition-transform duration-100 transform will-change-auto",
                     value ? "bg-white" : disabled ? "bg-gray-400 dark:bg-gray-600" : "bg-gray-600 dark:bg-gray-400",
                     {

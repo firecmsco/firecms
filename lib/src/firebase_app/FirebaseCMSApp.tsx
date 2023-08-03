@@ -184,6 +184,8 @@ export function FirebaseCMSApp({
                               context,
                               loading
                           }) => {
+
+                            // return <MultiSelect/>;
                             let component;
                             if (loading || authLoading) {
                                 component = <CircularProgressCenter size={"large"}/>;

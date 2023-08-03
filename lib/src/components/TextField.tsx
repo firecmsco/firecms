@@ -1,7 +1,6 @@
 import React, { useCallback, useRef } from "react";
 
 import { TextareaAutosize } from "./TextareaAutosize";
-import clsx from "clsx";
 import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
@@ -11,6 +10,7 @@ import {
     focusedMixin
 } from "../styles";
 import { InputLabel } from "./InputLabel";
+import { cn } from "./util/cn";
 
 export type InputType =
     "text"
@@ -97,7 +97,7 @@ export function TextField<T extends string | number>({
             value={value ?? ""}
             onChange={onChange}
             style={inputStyle}
-            className={clsx(
+            className={cn(
                 invisible ? focusedInvisibleMixin : focusedMixin,
                 "rounded-md resize-none w-full outline-none p-[32px] text-base bg-transparent min-h-[64px] px-3 pt-[28px]",
                 disabled && "border border-transparent outline-none opacity-50 text-gray-600 dark:text-gray-500"
@@ -109,7 +109,7 @@ export function TextField<T extends string | number>({
             onWheel={type === "number" ? numberInputOnWheelPreventChange : undefined}
             disabled={disabled}
             style={inputStyle}
-            className={clsx(
+            className={cn(
                 "w-full outline-none bg-transparent leading-normal px-3",
                 "rounded-md",
                 invisible ? focusedInvisibleMixin : focusedMixin,
@@ -132,7 +132,7 @@ export function TextField<T extends string | number>({
 
     return (
         <div
-            className={clsx(
+            className={cn(
                 "rounded-md relative max-w-full",
                 invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                 disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
@@ -146,7 +146,7 @@ export function TextField<T extends string | number>({
 
             {label && (
                 <InputLabel
-                    className={clsx(
+                    className={cn(
                         "pointer-events-none absolute",
                         size === "medium" ? "top-1" : "-top-1",
                         !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",

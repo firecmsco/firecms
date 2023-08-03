@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from "react";
-import clsx from "clsx";
 
 import { FastField, FieldProps as FormikFieldProps, useFormikContext } from "formik";
 
@@ -12,6 +11,7 @@ import { getDefaultValueFor, getIconForProperty, } from "../../core";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
 import { paperMixin } from "../../styles";
 import { ExpandablePanel, Select, SelectItem, Typography } from "../../components";
+import { cn } from "../../components/util/cn";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -193,7 +193,7 @@ function BlockEntry({
     };
 
     return (
-        <div className={clsx(paperMixin, "bg-transparent p-4 my-4 py-8")}>
+        <div className={cn(paperMixin, "bg-transparent p-4 my-4 py-8")}>
 
             <FastField
                 required={true}

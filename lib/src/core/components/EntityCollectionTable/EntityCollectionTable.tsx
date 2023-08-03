@@ -27,7 +27,7 @@ import {
     useSideEntityController
 } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
-import { CellRendererParams, TableColumn, VirtualTable } from "../Table";
+import { CellRendererParams, VirtualTableColumn, VirtualTable } from "../VirtualTable";
 import {
     enumToObjectEntries,
     getIconForProperty,
@@ -37,14 +37,14 @@ import {
     resolveCollection,
     resolveProperty
 } from "../../util";
-import { getRowHeight } from "../Table/common";
+import { getRowHeight } from "../VirtualTable/common";
 import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
 import { EntityCollectionTableController, OnCellValueChange, SelectedCellProps, UniqueFieldValidator } from "./types";
 import { setIn } from "formik";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
-import { TableCell } from "./internal/TableCell";
-import { FilterFormFieldProps } from "../Table/VirtualTableHeader";
+import { EntityTableCell } from "./internal/EntityTableCell";
+import { FilterFormFieldProps } from "../VirtualTable/VirtualTableHeader";
 import { ReferenceFilterField } from "./filters/ReferenceFilterField";
 import { StringNumberFilterField } from "./filters/StringNumberFilterField";
 import { BooleanFilterField } from "./filters/BooleanFilterField";
@@ -361,7 +361,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             }
 
             return (
-                <TableCell
+                <EntityTableCell
                     key={`additional_table_cell_${entity.id}_${column.key}`}
                     width={width}
                     size={size}
@@ -377,13 +377,13 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         <Builder entity={entity}
                                  context={context}/>
                     </ErrorBoundary>
-                </TableCell>
+                </EntityTableCell>
             );
 
         }, [additionalFieldsMap, size, selectedEntityIds]);
 
-        const allColumns: TableColumn[] = useMemo(() => {
-                const columnsResult: TableColumn[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
+        const allColumns: VirtualTableColumn[] = useMemo(() => {
+                const columnsResult: VirtualTableColumn[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
                     .flatMap(([key, property]) => {
                         if (property.dataType === "map" && property.spreadChildren && property.properties) {
                             return Object.keys(property.properties).map(childKey => `${key}.${childKey}`);
@@ -408,7 +408,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         });
                     });
 
-                const additionalTableColumns: TableColumn[] = additionalFields
+                const additionalTableColumns: VirtualTableColumn[] = additionalFields
                     ? additionalFields.map((additionalField) =>
                         ({
                             key: additionalField.id,
@@ -423,7 +423,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             },
             [additionalFields, disabledFilterChange, forceFilter, resolvedCollection.properties]);
 
-        const idColumn: TableColumn = useMemo(() => ({
+        const idColumn: VirtualTableColumn = useMemo(() => ({
             key: "id_ewcfedcswdf3",
             width: largeLayout ? 160 : 130,
             title: "ID",
@@ -432,12 +432,12 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             headerAlign: "center"
         }), [largeLayout])
 
-        const columns: TableColumn[] = useMemo(() => [
+        const columns: VirtualTableColumn[] = useMemo(() => [
             idColumn,
             ...displayedColumnIds
                 .map((p) => {
                     return allColumns.find(c => c.key === p);
-                }).filter(c => !!c) as TableColumn[]
+                }).filter(c => !!c) as VirtualTableColumn[]
         ], [allColumns, displayedColumnIds, idColumn]);
 
         const cellRenderer = useCallback((props: CellRendererParams<any>) => {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import clsx from "clsx";
+import { cn } from "./util/cn";
 
 export interface AlertProps {
     children: React.ReactNode;
@@ -38,7 +38,7 @@ export const Alert: React.FC<AlertProps> = ({
     return (
         <div
             style={style}
-            className={clsx(`p-4 rounded-md flex items-center gap-2`,classes , className)}
+            className={cn(`p-4 rounded-md flex items-center gap-2`,classes , className)}
         >
             <span className={`flex-grow`}>{children}</span>
             {onDismiss && (

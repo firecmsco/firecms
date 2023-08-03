@@ -1,5 +1,5 @@
 import React from "react";
-import clsx from "clsx";
+import { cn } from "./util/cn";
 
 export function DialogContent({
                                   children,
@@ -10,7 +10,7 @@ export function DialogContent({
 }) {
 
     return <div
-        className={clsx("py-6 px-6 h-full flex-grow", className)}>
+        className={cn("py-6 px-6 h-full flex-grow", className)}>
         {children}
     </div>;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import clsx from "clsx";
+import { cn } from "./util/cn";
 
 export type CircularProgressProps = {
     size?: "small" | "medium" | "large",
@@ -31,7 +31,7 @@ export function CircularProgress({
 
     return (
         <div
-            className={clsx(
+            className={cn(
                 sizeClasses,
                 borderClasses,
                 "inline-block animate-spin rounded-full border-solid border-current border-r-transparent align-[-0.125em] motion-reduce:animate-[spin_1.5s_linear_infinite]",
@@ -49,7 +49,7 @@ export function CircularProgress({
     //     <div role="status">
     //         <svg
     //             aria-hidden="true"
-    //             className={clsx(sizeClasses,
+    //             className={cn(sizeClasses,
     //                 "mr-2 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600",
     //                 className)}
     //             viewBox="0 0 100 101"

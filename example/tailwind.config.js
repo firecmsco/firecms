@@ -61,7 +61,7 @@ export default {
             },
             colors: {
                 primary: "#0070F4",
-                secondary: "#FF5B79",
+                secondary: "#ff5064",
                 error: "#F44336",
                 field: {
                     disabled: "rgb(224 224 226)",

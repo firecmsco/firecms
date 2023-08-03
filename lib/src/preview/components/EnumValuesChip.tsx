@@ -8,6 +8,7 @@ export interface EnumValuesChipProps {
     enumKey: string | number;
     size: "small" | "medium";
     className?: string;
+    children?: React.ReactNode;
 }
 
 /**
@@ -17,7 +18,8 @@ export function EnumValuesChip({
                                    enumValues,
                                    enumKey,
                                    size,
-                                   className
+                                   className,
+                                   children
                                }: EnumValuesChipProps) {
     if (!enumValues) return null;
     const enumValuesConfig = enumToObjectEntries(enumValues);
@@ -27,8 +29,10 @@ export function EnumValuesChip({
     return <Chip
         className={className}
         colorScheme={colorScheme}
-        label={label !== undefined ? label : String(enumKey)}
         error={!label}
         outlined={false}
-        size={size}/>;
+        size={size}>
+        {children}
+        {!children && (label !== undefined ? label : String(enumKey))}
+    </Chip>;
 }

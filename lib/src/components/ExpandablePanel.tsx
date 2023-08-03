@@ -1,10 +1,10 @@
 import React, { PropsWithChildren, useState } from "react";
-import clsx from "clsx";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { defaultBorderMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
 import { useInjectStyles } from "./util/useInjectStyles";
 import { ExpandMoreIcon } from "../icons";
+import { cn } from "./util/cn";
 
 export function ExpandablePanel({
                                     title,
@@ -57,7 +57,7 @@ export function ExpandablePanel({
     const [open, setOpen] = useState(initiallyOpen);
     return (<>
             <Collapsible.Root
-                className={clsx(
+                className={cn(
                     !invisible && defaultBorderMixin + " border",
                     "rounded-md"
                 )}
@@ -68,7 +68,7 @@ export function ExpandablePanel({
                 }}>
 
                 <Collapsible.Trigger
-                    className={clsx(focusedMixin,
+                    className={cn(focusedMixin,
                         "rounded flex items-center justify-between w-full min-h-[64px]",
                         invisible ? "border-b px-2" : "p-4",
                         invisible && defaultBorderMixin,
@@ -77,11 +77,11 @@ export function ExpandablePanel({
                     )}
                 >
                     {title}
-                    <ExpandMoreIcon className={clsx("transition", open ? "rotate-180" : "")}/>
+                    <ExpandMoreIcon className={cn("transition", open ? "rotate-180" : "")}/>
                 </Collapsible.Trigger>
 
                 <Collapsible.Content
-                    className={clsx("CollapsibleContent")}
+                    className={cn("CollapsibleContent")}
                 >
                     <div className={className}>
                         {children}

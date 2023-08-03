@@ -3,13 +3,13 @@ import React from "react";
 import { ArrayProperty, FieldConfig, FieldConfigId, FieldProps, Property, ResolvedProperty } from "../types";
 import {
     ArrayCustomShapedFieldBinding,
-    MultiSelectBinding,
     ArrayOfReferencesFieldBinding,
     BlockFieldBinding,
     DateTimeFieldBinding,
     KeyValueFieldBinding,
     MapFieldBinding,
     MarkdownFieldBinding,
+    MultiSelectBinding,
     ReferenceFieldBinding,
     RepeatFieldBinding,
     SelectFieldBinding,

@@ -1,10 +1,10 @@
 import React, { useEffect } from "react";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
-
-import clsx from "clsx";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
 import { CheckIcon, ExpandMoreIcon } from "../icons";
+import { cn } from "./util/cn";
+import { SelectInputLabel } from "./common/SelectInputLabel";
 
 export type SelectProps = {
     open?: boolean,
@@ -104,7 +104,7 @@ export function Select({
             {typeof label === "string" ? <SelectInputLabel>{label}</SelectInputLabel> : label}
 
             <div
-                className={clsx(
+                className={cn(
                     size === "small" ? "min-h-[42px]" : "min-h-[64px]",
                     "select-none rounded-md text-sm",
                     fieldBackgroundMixin,
@@ -115,7 +115,7 @@ export function Select({
                 <SelectPrimitive.Trigger
                     ref={inputRef}
                     id={id}
-                    className={clsx(
+                    className={cn(
                         "w-full h-full",
                         size === "small" ? "h-[42px]" : "h-[64px]",
                         padding ? "px-4 " : "",
@@ -129,8 +129,9 @@ export function Select({
                     )}>
 
                     <SelectPrimitive.Value asChild>
-                        <div className={clsx(
+                        <div className={cn(
                             "flex-grow w-full max-w-full flex flex-row gap-2 items-center",
+                            "overflow-visible",
                             size === "small" ? "h-[42px]" : "h-[64px]"
                         )}>
                             {renderValue &&
@@ -150,16 +151,16 @@ export function Select({
                         </div>
                     </SelectPrimitive.Value>
 
-                    <SelectPrimitive.Icon className={clsx(
-                        "px-2 h-full flex items-center"
+                    <SelectPrimitive.Icon className={cn(
+                        "px-2 h-full flex items-center",
                     )}>
                         <ExpandMoreIcon size={"small"}
-                                        className={clsx("transition", open ? "rotate-180" : "")}/>
+                                        className={cn("transition", open ? "rotate-180" : "")}/>
                     </SelectPrimitive.Icon>
 
                 </SelectPrimitive.Trigger>
 
-                {endAdornment && <div className={clsx("absolute h-full flex items-center",
+                {endAdornment && <div className={cn("absolute h-full flex items-center",
                     size === "small" ? "right-10" : "right-14")}
                                       onClick={(e) => e.stopPropagation()}>
                     {endAdornment}
@@ -168,14 +169,15 @@ export function Select({
             </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
-                    className={"z-50 relative border border-gray-200 dark:border-gray-800 shadow-lg bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg bg-opacity-80 dark:bg-opacity-90 backdrop-blur"}
+                    className={cn("z-50 relative border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg ",
+                        "overflow-auto",
+                    )}
                     position={position}
                     align={"center"}>
-                    <SelectPrimitive.Viewport
-                        className="">
-                        {/*<SelectPrimitive.Group>*/}
-                        {children}
-                        {/*</SelectPrimitive.Group>*/}
+                    <SelectPrimitive.Viewport asChild>
+                        <div style={{ overflow: "visible" }}>
+                            {children}
+                        </div>
                     </SelectPrimitive.Viewport>
                 </SelectPrimitive.Content>
             </SelectPrimitive.Portal>
@@ -185,7 +187,6 @@ export function Select({
 
 export type SelectItemProps = {
     value: string,
-    selected?: boolean,
     children?: React.ReactNode,
     disabled?: boolean,
     className?: string,
@@ -194,7 +195,6 @@ export type SelectItemProps = {
 
 export function SelectItem({
                                value,
-                               selected,
                                children,
                                disabled,
                                className,
@@ -203,13 +203,22 @@ export function SelectItem({
     return <SelectPrimitive.Item
         key={value}
         value={value}
-        onClick={onClick}
-        className={clsx(
-            "relative relative flex items-center px-2 py-1 rounded-md text-sm text-gray-700 dark:text-gray-300",
-            "border-2 border-transparent focus-visible:border-opacity-75 focus:outline-none focus-visible:border-solid focus-visible:border-solid focus-visible:border-primary",
+        // onClick={onClick}
+        disabled={disabled}
+        onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+        }}
+        className={cn(
+            "w-full",
+            "relative relative flex items-center p-2 rounded-md text-sm text-gray-700 dark:text-gray-300",
+            focusedMixin,
+            "focus:z-10",
             "data-[state=checked]:bg-gray-100 data-[state=checked]:dark:bg-gray-900 focus:bg-gray-100 dark:focus:bg-gray-950",
             "data-[state=checked]:focus:bg-gray-200 data-[state=checked]:dark:focus:bg-gray-950",
             disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
+            "[&>*]:w-full",
+            "overflow-visible",
         )}
     >
         <SelectPrimitive.ItemText className={className}>{children}</SelectPrimitive.ItemText>
@@ -231,23 +240,18 @@ export function SelectGroup({
                                 children,
                                 className
                             }: SelectGroupProps) {
-    return <SelectPrimitive.Group
-        className={clsx(
-            "text-xs text-gray-700 dark:text-gray-300 uppercase tracking-wider font-bold",
-            "px-6 py-2",
-            className
-        )}>
-        {label}
-        <div className={"mt-2"}>
-            {children}
-        </div>
-    </SelectPrimitive.Group>;
-}
+    return <>
+        <SelectPrimitive.Group
+            className={cn(
+                "text-xs text-gray-900 dark:text-gray-100 uppercase tracking-wider font-bold mt-6",
+                "px-6 py-2",
+                className
+            )}>
+            {label}
+        </SelectPrimitive.Group>
 
-function SelectInputLabel({ children }: { children: React.ReactNode }) {
-    return <div className="text-sm text-gray-500 dark:text-gray-300 font-medium ml-3.5 mb-1">
         {children}
-    </div>;
+    </>;
 }
 
 function selectOnChangeEventAdapter(fn: (event: React.ChangeEvent<HTMLSelectElement>) => void): (value: string) => void {

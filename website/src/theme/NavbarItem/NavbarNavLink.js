@@ -4,7 +4,7 @@ import NavbarNavLink from "@theme-original/NavbarItem/NavbarNavLink";
 
 export default function NavbarNavLinkWrapper(props) {
     const { pathname } = useLocation();
-    if (pathname.startsWith("/docs/") && props.label === "Demo") {
+    if (pathname.startsWith("/docs/") && props.children === "Demo") {
         return null;
     }
   return (

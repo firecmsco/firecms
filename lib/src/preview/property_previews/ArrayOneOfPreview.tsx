@@ -1,5 +1,4 @@
 import React from "react";
-import clsx from "clsx";
 import { ErrorBoundary, resolveArrayProperty } from "../../core";
 import { ResolvedProperty } from "../../types";
 import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
@@ -7,6 +6,7 @@ import { useFireCMSContext } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
 import { defaultBorderMixin } from "../../styles";
+import { cn } from "../../components/util/cn";
 
 /**
  * @category Preview components
@@ -50,7 +50,7 @@ export function ArrayOneOfPreview({
                 values.map((value, index) =>
                     <React.Fragment
                         key={"preview_array_" + value + "_" + index}>
-                        <div className={clsx(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
+                        <div className={cn(defaultBorderMixin, "m-1 border-b last:border-b-0")}>
                             <ErrorBoundary>
                                 {value && <PropertyPreview
                                     propertyKey={propertyKey}

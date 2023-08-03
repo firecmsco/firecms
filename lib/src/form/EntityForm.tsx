@@ -1,5 +1,4 @@
 import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef, useState } from "react";
-import clsx from "clsx";
 
 import {
     CMSAnalyticsEvent,
@@ -22,6 +21,7 @@ import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
 import { DialogActions, Typography } from "../components";
 import { Button } from "../components/Button";
+import { cn } from "../components/util/cn";
 
 /**
  * @category Components
@@ -381,7 +381,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                 >
 
                     {pluginActions.length > 0 && <div
-                        className={clsx("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-slate-200 dark:bg-opacity-60 dark:bg-slate-800 backdrop-blur-md")}>
+                        className={cn("w-full flex justify-end items-center sticky top-0 right-0 left-0 z-10 bg-opacity-60 bg-slate-200 dark:bg-opacity-60 dark:bg-slate-800 backdrop-blur-md")}>
                         {pluginActions}
                     </div>}
 

@@ -1,5 +1,4 @@
 import React from "react";
-import clsx from "clsx";
 
 import { Entity, ResolvedStringProperty } from "../../types";
 import { PreviewSize, PropertyPreview } from "../../preview";
@@ -9,6 +8,7 @@ import { IconButton } from "../../components";
 import { paperMixin } from "../../styles";
 import { Tooltip } from "../../components/Tooltip";
 import { RemoveIcon } from "../../icons";
+import { cn } from "../../components/util/cn";
 
 interface StorageItemPreviewProps {
     name: string;
@@ -31,7 +31,7 @@ export function StorageItemPreview({
                                    }: StorageItemPreviewProps) {
 
     return (
-        <div className={clsx(paperMixin,
+        <div className={cn(paperMixin,
             "relative m-4 border-box flex items-center justify-center",
             size === "medium" ? "min-w-[220px] min-h-[220px]" : "min-w-[118px] min-h-[118px]")}>
 
