@@ -50,8 +50,13 @@ export const Checkbox = ({
                     className={clsx(
                         "border-2 relative transition-colors ease-in-out duration-150",
                         sizeClasses[size],
-                        isChecked ? "bg-primary text-gray-100 dark:text-gray-900" : "bg-white dark:bg-gray-900",
-                        isChecked ? "border-transparent" : "border-gray-700 dark:border-gray-100"
+                        disabled
+                            ? (isChecked ? "bg-gray-400 dark:bg-gray-600" : "bg-gray-400 dark:bg-gray-600")
+                            : (isChecked ? "bg-primary" : "bg-white dark:bg-gray-900"),
+                        isChecked ? "text-gray-100 dark:text-gray-900" : "",
+                        disabled
+                            ? "border-transparent"
+                            : (isChecked ? "border-transparent" : "border-gray-800 dark:border-gray-200")
                     )}>
                     <CheckboxPrimitive.Indicator asChild>
                         {indeterminate
@@ -59,8 +64,7 @@ export const Checkbox = ({
                                 <div className="w-full h-[1px] bg-currentColor"/>
                             )
                             : (
-
-                                <Icon iconKey={"check"} size={18} className={"absolute"}/>
+                                <Icon iconKey={"check"} size={20} className={"absolute"}/>
                             )}
                     </CheckboxPrimitive.Indicator>
                 </div>

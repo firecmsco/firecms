@@ -35,8 +35,7 @@ export const Dialog = ({
                            className,
                            fullWidth = true,
                            fullHeight,
-                           maxWidth = "md",
-                           ...props
+                           maxWidth = "md"
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
 
@@ -57,42 +56,64 @@ export const Dialog = ({
         <DialogPrimitive.Root open={displayed || open}
                               onOpenChange={onOpenChange}>
             <DialogPrimitive.Portal>
-                <DialogPrimitive.Overlay
-                    className={clsx("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black bg-opacity-50 dark:bg-opacity-60 backdrop-blur-sm ",
-                        displayed && open ? "opacity-100" : "opacity-0",
-                        "z-20 fixed top-0 left-0 w-full h-full flex justify-center items-center"
-                    )}
-                    style={{
-                        pointerEvents: displayed ? "auto" : "none"
-                    }}
-                >
-                    <DialogPrimitive.Content
-                        {...props}
-                        className={clsx(paperMixin,
-                            "z-20",
-                            "relative",
-                            // "overflow-auto",
-                            "outline-none focus:outline-none",
-                            fullWidth ? "w-11/12" : undefined,
-                            fullHeight ? "h-full" : undefined,
-                            "text-gray-900 dark:text-white",
-                            "justify-center items-center",
-                            "max-h-[90vh] shadow-xl",
-                            "ease-in-out duration-200",
+
+                <div className={"fixed inset-0 z-20"}>
+
+                    <DialogPrimitive.Overlay
+                        className={clsx("fixed inset-0 transition-opacity z-20 ease-in-out duration-200 bg-black bg-opacity-50 dark:bg-opacity-60 backdrop-blur-sm ",
                             displayed && open ? "opacity-100" : "opacity-0",
-                            maxWidth ? widthClasses[maxWidth] : undefined,
-                            className
+                            "z-20 fixed top-0 left-0 w-full h-full flex justify-center items-center"
                         )}
                         style={{
-                            // height: fullWidth ? undefined : "inherit",
-                            // maxHeight: "calc(100% - 64px)",
-                            overflowY: "auto"
+                            pointerEvents: displayed ? "auto" : "none"
                         }}
+                    />
+
+                    <DialogPrimitive.Content
+                        className={clsx("h-full outline-none flex justify-center items-center z-30 opacity-100 transition-all duration-200 ease-in-out")}
                     >
-                        {children}
+                        <div
+                            className={clsx(paperMixin,
+                                // "text-gray-900 dark:text-white",
+                                // "m-8 relative overflow-y-auto flex flex-col max-h-full",
+                                // maxWidth ? widthClasses[maxWidth] : undefined,
+                                "z-30",
+                                "relative",
+                                "outline-none focus:outline-none",
+                                fullWidth ? "w-11/12" : undefined,
+                                fullHeight ? "h-full" : undefined,
+                                "text-gray-900 dark:text-white",
+                                "justify-center items-center",
+                                "max-h-[90vh] shadow-xl",
+                                "ease-in-out duration-200",
+                                "overflow-y-auto",
+                                displayed && open ? "opacity-100" : "opacity-0",
+                                maxWidth ? widthClasses[maxWidth] : undefined,
+                                className
+                            )}
+                            style={{
+                                // height: fullWidth ? undefined : "inherit",
+                                // maxHeight: "calc(100% - 64px)",
+                                // backgroundColor: 'rgb(18, 18, 21)',
+                                // color: 'rgb(255, 255, 255)',
+                                // transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+                                // borderRadius: '6px',
+                                // boxShadow: 'rgba(0, 0, 0, 0.2) 0px 11px 15px -7px, rgba(0, 0, 0, 0.14) 0px 24px 38px 3px, rgba(0, 0, 0, 0.12) 0px 9px 46px 8px',
+                                // margin: '32px',
+                                // position: 'relative',
+                                // overflowY: 'auto',
+                                // display: 'flex',
+                                // flexDirection: 'column',
+                                // maxHeight: 'calc(100% - 64px)',
+                                // maxWidth: '1200px',
+                                // width: 'calc(100% - 64px)',
+                                // backgroundImage: 'inherit'
+                            }}>
+                            {children}
+                        </div>
 
                     </DialogPrimitive.Content>
-                </DialogPrimitive.Overlay>
+                </div>
 
             </DialogPrimitive.Portal>
         </DialogPrimitive.Root>

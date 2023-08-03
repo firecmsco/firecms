@@ -31,3 +31,4 @@ export * from "./TextField";
 export * from "./Tooltip";
 export * from "./Typography";
 export * from "./Tabs";
+export * from "./Table";

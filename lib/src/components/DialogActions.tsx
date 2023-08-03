@@ -4,12 +4,14 @@ import { defaultBorderMixin } from "../styles";
 
 export function DialogActions({
                                   children,
-                                  position = "absolute",
-                                  translucent = true
+                                  position = "sticky",
+                                  translucent = true,
+                                  className
                               }: {
     children: React.ReactNode,
     position?: "sticky" | "absolute",
-    translucent?: boolean
+    translucent?: boolean,
+    className?: string
 }) {
 
     return <div
@@ -18,7 +20,8 @@ export function DialogActions({
             "py-3 px-4 border-t flex flex-row items-center justify-end bottom-0 right-0 left-0 text-right z-2 gap-2",
             position,
             "bg-white bg-opacity-60 dark:bg-gray-900 dark:bg-opacity-60",
-            translucent ? "backdrop-blur-sm" : "")}>
+            translucent ? "backdrop-blur-sm" : "",
+            className)}>
         {children}
     </div>;
 }

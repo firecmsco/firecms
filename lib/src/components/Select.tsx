@@ -122,7 +122,7 @@ export function Select({
                         "outline-none focus:outline-none",
                         "select-none rounded-md text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
-                        "text-gray-700 dark:text-gray-100",
+                        disabled ? "text-gray-600 dark:text-gray-400" : "text-gray-800 dark:text-gray-200",
                         "relative flex items-center",
                         includeFocusOutline ? focusedMixin : "",
                         inputClassName
@@ -205,7 +205,7 @@ export function SelectItem({
         value={value}
         onClick={onClick}
         className={clsx(
-            "relative relative flex items-center px-6 py-1 rounded-md text-sm text-gray-700 dark:text-gray-300",
+            "relative relative flex items-center px-2 py-1 rounded-md text-sm text-gray-700 dark:text-gray-300",
             "border-2 border-transparent focus-visible:border-opacity-75 focus:outline-none focus-visible:border-solid focus-visible:border-solid focus-visible:border-primary",
             "data-[state=checked]:bg-gray-100 data-[state=checked]:dark:bg-gray-900 focus:bg-gray-100 dark:focus:bg-gray-950",
             "data-[state=checked]:focus:bg-gray-200 data-[state=checked]:dark:focus:bg-gray-950",
@@ -233,7 +233,7 @@ export function SelectGroup({
                             }: SelectGroupProps) {
     return <SelectPrimitive.Group
         className={clsx(
-            "text-xs text-gray-500 dark:text-gray-300 uppercase tracking-wider font-bold",
+            "text-xs text-gray-700 dark:text-gray-300 uppercase tracking-wider font-bold",
             "px-6 py-2",
             className
         )}>
@@ -245,7 +245,7 @@ export function SelectGroup({
 }
 
 function SelectInputLabel({ children }: { children: React.ReactNode }) {
-    return <div className="text-sm text-gray-500 dark:text-gray-300 font-medium ml-3.5 mt-2 mb-1">
+    return <div className="text-sm text-gray-500 dark:text-gray-300 font-medium ml-3.5 mb-1">
         {children}
     </div>;
 }

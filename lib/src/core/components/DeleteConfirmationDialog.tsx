@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Button, Dialog, DialogActions, DialogContent, LoadingButton } from "../../components";
+import { Button, Dialog, DialogActions, DialogContent, LoadingButton, Typography } from "../../components";
 
 export function DeleteConfirmationDialog({
                                              open,
@@ -23,12 +23,13 @@ export function DeleteConfirmationDialog({
             onOpenChange={(open) => !open ? onCancel() : undefined}
         >
             <DialogContent>
-                {title}
+                <Typography variant={"h6"}>{title}</Typography>
                 {body}
             </DialogContent>
 
             <DialogActions>
                 <Button
+                    variant={"text"}
                     onClick={onCancel}
                     autoFocus>Cancel</Button>
 

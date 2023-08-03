@@ -10,8 +10,7 @@ export function DialogContent({
 }) {
 
     return <div
-        className={clsx("py-6 px-4 h-full overflow-auto", className)}>
+        className={clsx("py-6 px-6 h-full flex-grow", className)}>
         {children}
-        <div className={"h-16"}/>
     </div>;
 }
