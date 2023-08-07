@@ -5,18 +5,20 @@ import { Icon } from "../../icons";
 import { slugify } from "./strings";
 import { coolIconKeys, iconKeys } from "../../icons/icon_keys";
 
-export function getIcon(iconKey?: string): React.ReactElement | undefined {
+export function getIcon(iconKey?: string, className?:string): React.ReactElement | undefined {
     if (!iconKey) return undefined;
     iconKey = slugify(iconKey);
     if (!(iconKey in iconKeysMap)) {
         return undefined;
     }
-    return iconKey in iconKeysMap ? <Icon iconKey={iconKey} size={"medium"}/> : undefined;
+    return iconKey in iconKeysMap ? <Icon iconKey={iconKey} size={"medium"} className={className}/> : undefined;
 }
 
 export function getIconForView(collectionOrView: EntityCollection | CMSView): React.ReactElement {
 
-    const icon = getIcon(collectionOrView.icon);
+    const viewClasses = "text-gray-400 dark:text-gray-600";
+
+    const icon = getIcon(collectionOrView.icon, viewClasses);
     if (collectionOrView?.icon && icon)
         return icon;
 
@@ -37,7 +39,7 @@ export function getIconForView(collectionOrView: EntityCollection | CMSView): Re
     if (!key)
         key = coolIconKeys[hashString(collectionOrView.path) % iconsCount];
 
-    return <Icon iconKey={key} size={"medium"}/>;
+    return <Icon iconKey={key} size={"medium"} className={viewClasses}/>;
 }
 
 const iconKeysMap: Record<string, string> = iconKeys.reduce((acc: Record<string, string>, key) => {

@@ -219,9 +219,10 @@ export function SelectItem({
             disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
             "[&>*]:w-full",
             "overflow-visible",
+            className
         )}
     >
-        <SelectPrimitive.ItemText className={className}>{children}</SelectPrimitive.ItemText>
+        <SelectPrimitive.ItemText>{children}</SelectPrimitive.ItemText>
         <div
             className="absolute left-1 data-[state=checked]:block hidden">
             <CheckIcon size={16}/>
@@ -243,8 +244,8 @@ export function SelectGroup({
     return <>
         <SelectPrimitive.Group
             className={cn(
-                "text-xs text-gray-900 dark:text-gray-100 uppercase tracking-wider font-bold mt-6",
-                "px-6 py-2",
+                "text-xs text-gray-900 dark:text-gray-100 uppercase tracking-wider font-bold mt-6 first:mt-2",
+                "px-3.5 py-2",
                 className
             )}>
             {label}

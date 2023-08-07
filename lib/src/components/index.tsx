@@ -22,6 +22,7 @@ export * from "./InputLabel";
 export * from "./LoadingButton";
 export * from "./Markdown";
 export * from "./Menu";
+export * from "./MultiSelect";
 export * from "./Paper";
 export * from "./Select";
 export * from "./SearchBar";

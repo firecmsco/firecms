@@ -2,7 +2,7 @@ import { EnumValueConfig } from "../../../../types";
 import { ArrayEnumPreview, EnumValuesChip } from "../../../../preview";
 import React, { useCallback, useEffect } from "react";
 import { Select, SelectItem } from "../../../../components";
-import { MultiSelect } from "../../../../components/MultiSelect";
+import { MultiSelect, MultiSelectItem } from "../../../../components/MultiSelect";
 
 export function VirtualTableSelect(props: {
     name: string;
@@ -85,8 +85,18 @@ export function VirtualTableSelect(props: {
                     ? ((internalValue as any[]).map(v => v.toString()))
                     : ([])}
                 onMultiValueChange={onChange}
-                options={enumValues?.map((enumConfig) => String(enumConfig.id))}
-                renderValue={renderValue}/>
+                renderValue={renderValue}>
+                {enumValues?.map((enumConfig) => (
+                    <MultiSelectItem
+                        key={enumConfig.id}
+                        value={String(enumConfig.id)}>
+                        <EnumValuesChip
+                            enumKey={enumConfig.id}
+                            enumValues={enumValues}
+                            size={small ? "small" : "medium"}/>
+                    </MultiSelectItem>
+                ))}
+            </MultiSelect>
             : <Select
                 inputRef={ref}
                 className="w-full h-full p-0 bg-transparent"

@@ -5,9 +5,8 @@ import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
 import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../core";
-import { Chip, IconButton, SelectItem } from "../../components";
-import { ClearIcon, CloseIcon } from "../../icons";
-import { MultiSelect } from "../../components/MultiSelect";
+import { CloseIcon } from "../../icons";
+import { MultiSelect, MultiSelectItem } from "../../components/MultiSelect";
 
 /**
  * This fields renders a dropdown with multiple selection.
@@ -54,41 +53,42 @@ export function MultiSelectBinding({
     });
 
     const validValue = !!value && Array.isArray(value);
+
+    const renderValue = useCallback((enumKey: string, list: boolean) => {
+        const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValues, enumKey) : undefined;
+        return <EnumValuesChip
+            enumKey={enumKey}
+            enumValues={enumValues}
+            size={"medium"}
+            key={enumKey}>
+            {enumValue?.label ?? enumKey}
+            {!list && <button
+                className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                onMouseDown={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                }}
+                onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setValue(value.filter(v => v !== enumKey));
+                }}
+            >
+                <CloseIcon size="smallest"/>
+            </button>}
+        </EnumValuesChip>;
+    }, [enumValues, setValue, value]);
+
     return (
         <div className="mt-0.5 ml-0.5  mt-2">
             <MultiSelect
-                options={enumValues.map((enumValue) => String(enumValue.id))}
                 value={validValue ? value.map((v) => v.toString()) : []}
                 disabled={disabled}
                 label={<LabelWithIcon icon={getIconForProperty(property)}
                                       required={property.validation?.required}
                                       title={property.name}
                                       className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
-                renderValue={(enumKey: string, list) => {
-
-                    const enumValue = enumKey !== undefined ? getLabelOrConfigFrom(enumValues, enumKey) : undefined;
-                    return <EnumValuesChip
-                        enumKey={enumKey}
-                        enumValues={enumValues}
-                        size={"medium"}
-                        key={enumKey}>
-                        {enumValue?.label ?? enumKey}
-                        {!list && <button
-                            className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                            onMouseDown={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                            }}
-                            onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                setValue(value.filter(v => v !== enumKey));
-                            }}
-                        >
-                            <CloseIcon size="smallest"/>
-                        </button>}
-                    </EnumValuesChip>;
-                }}
+                renderValue={useCallback((v: string) => renderValue(v, true), [renderValue])}
                 onMultiValueChange={(updatedValue: string[]) => {
                     let newValue: EnumType[] | null;
                     if (of && (of as ResolvedProperty)?.dataType === "number") {
@@ -97,7 +97,12 @@ export function MultiSelectBinding({
                         newValue = updatedValue;
                     }
                     return setValue(newValue);
-                }}/>
+                }}>
+                {enumValues.map((enumValue) => String(enumValue.id)).map((enumKey) => (
+                    <MultiSelectItem key={enumKey} value={enumKey}>
+                        {renderValue(enumKey, false)}
+                    </MultiSelectItem>))}
+            </MultiSelect>
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

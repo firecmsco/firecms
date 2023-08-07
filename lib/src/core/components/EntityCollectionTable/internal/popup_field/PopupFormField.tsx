@@ -98,7 +98,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         innerRef,
         x: popupLocation?.x,
         y: popupLocation?.y,
-        onMove: (x, y) => onMove({
+        onMove: (x, y) => updatePopupLocation({
             x,
             y
         })
@@ -188,10 +188,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     const adaptResize = useCallback(() => {
         return updatePopupLocation(popupLocation);
     }, [popupLocation, updatePopupLocation]);
-
-    const onMove = useCallback((position: { x: number, y: number }) => {
-        return updatePopupLocation(position);
-    }, [updatePopupLocation]);
 
     const saveValue = async (values: M) => {
         setSavingError(null);
@@ -359,7 +355,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             style={{
                 boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
             }}
-            className={`z-30 inline-block fixed z-50 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
+            className={`inline-block fixed z-30 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
                 !open ? "invisible" : "visible"
             } cursor-grab overflow-visible`}
             ref={containerRef}>

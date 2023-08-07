@@ -1,7 +1,6 @@
 import React, { useCallback } from "react";
 
 import "typeface-rubik";
-// import "@fontsource/ibm-plex-sans";
 import "@fontsource/ibm-plex-mono";
 import "@fontsource/roboto"
 
@@ -65,6 +64,10 @@ function SampleApp() {
     const onFirebaseInit = (config: object, app: FirebaseApp) => {
         // Just calling analytics enables screen tracking
         getAnalytics(app);
+
+        // This is an example of connecting to a local emulator (move import to top)
+        // import { getFirestore, connectFirestoreEmulator } from "firebase/firestore";
+        // connectFirestoreEmulator(getFirestore(app), '127.0.0.1', 8080);
     };
 
     const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({

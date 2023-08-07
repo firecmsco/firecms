@@ -10,22 +10,27 @@ import {
     ResolvedProperty,
     ResolvedStringProperty
 } from "../../../../types";
+
 import { VirtualTableInput } from "../../VirtualTable/fields/VirtualTableInput";
 import { VirtualTableSelect } from "../../VirtualTable/fields/VirtualTableSelect";
 import { VirtualTableNumberInput } from "../../VirtualTable/fields/VirtualTableNumberInput";
 import { VirtualTableSwitch } from "../../VirtualTable/fields/VirtualTableSwitch";
 import { VirtualTableDateField } from "../../VirtualTable/fields/VirtualTableDateField";
-import { PropertyPreview } from "../../../../preview";
+
+import { TableStorageUpload } from "../fields/TableStorageUpload";
 import { TableReferenceField } from "../fields/TableReferenceField";
 
+import { PropertyPreview } from "../../../../preview";
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { isReadOnly } from "../../../util";
-import { TableStorageUpload } from "../fields/TableStorageUpload";
+
 import { CustomFieldValidator, mapPropertyToYup } from "../../../../form/validation";
 import { useEntityCollectionTableController } from "../EntityCollectionTable";
 import { useClearRestoreValue, useDataSource, useFireCMSContext } from "../../../../hooks";
+
 import { EntityTableCell } from "./EntityTableCell";
 import { getRowHeight } from "../../VirtualTable/common";
+import { EntityTableCellActions } from "./EntityTableCellActions";
 
 export interface PropertyTableCellProps<T extends CMSType, M extends Record<string, any>> {
     propertyKey: string;
@@ -219,6 +224,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         let hideOverflow = true;
         let removePadding = false;
         let fullHeight = false;
+        let includeActions = true;
+        const showError = !disabled && error;
 
         if (readonly || readOnlyProperty) {
             return <EntityTableCell
@@ -249,6 +256,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 innerComponent = <TableStorageUpload error={error}
                                                      disabled={disabled}
                                                      focused={selected}
+                                                     selected={selected}
+                                                     openPopup={openPopup}
                                                      property={property as ResolvedStringProperty | ResolvedArrayProperty<string[]>}
                                                      entity={entity}
                                                      path={path}
@@ -257,6 +266,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                      updateValue={updateValue}
                                                      propertyKey={propertyKey as string}
                 />;
+                includeActions = false;
                 showExpandIcon = true;
                 fullHeight = true;
                 removePadding = true;
@@ -427,12 +437,18 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 align={align}
                 allowScroll={allowScroll}
                 showExpandIcon={showExpandIcon}
-                openPopup={!disabled ? openPopup : undefined}
                 value={internalValue}
                 hideOverflow={hideOverflow}
             >
 
                 {innerComponent}
+
+                {includeActions && <EntityTableCellActions
+                    showError={showError}
+                    disabled={disabled}
+                    showExpandIcon={true}
+                    selected={selected}
+                    openPopup={!disabled ? openPopup : undefined}/>}
 
             </EntityTableCell>
         );

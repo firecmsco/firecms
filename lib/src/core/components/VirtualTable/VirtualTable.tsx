@@ -225,13 +225,13 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const buildErrorView = useCallback(() => (
             <div
-                className="h-[calc(100%-64px)] flex flex-col items-center justify-center sticky left-0">
+                className="h-full flex flex-col items-center justify-center sticky left-0">
 
                 <Typography variant={"h6"}>
                     {"Error fetching data from the data source"}
                 </Typography>
 
-                {error?.message && <Typography className={"p-8 break-all"}>
+                {error?.message && <Typography className={"px-4 break-all"}>
                     {error?.message}
                 </Typography>}
 

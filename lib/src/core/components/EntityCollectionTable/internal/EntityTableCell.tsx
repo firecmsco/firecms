@@ -5,10 +5,10 @@ import useMeasure from "react-use-measure";
 import { VirtualTableSize } from "../../VirtualTable";
 import { getRowHeight } from "../../VirtualTable/common";
 import { ErrorBoundary } from "../../ErrorBoundary";
-import { ErrorTooltip } from "../../ErrorTooltip";
-import { cn, IconButton, Tooltip } from "../../../../components";
+import { cn, Tooltip } from "../../../../components";
 import { useOutsideAlerter } from "../../../../components/util/useOutsideAlerter";
-import { ErrorOutlineIcon, RemoveCircleIcon } from "../../../../icons";
+import { RemoveCircleIcon } from "../../../../icons";
+import { EntityTableCellActions } from "./EntityTableCellActions";
 
 interface EntityTableCellProps {
     children: React.ReactNode;
@@ -30,7 +30,6 @@ interface EntityTableCellProps {
     selected?: boolean;
     hideOverflow?: boolean;
     onSelect?: (cellRect: DOMRect | undefined) => void;
-    openPopup?: (cellRect: DOMRect | undefined) => void;
 }
 
 type TableCellInnerProps = {
@@ -73,23 +72,22 @@ const TableCellInner = ({
 
 export const EntityTableCell = React.memo<EntityTableCellProps>(
     function EntityTableCell({
-                           children,
-                           size,
-                           selected,
-                           disabled,
-                           disabledTooltip,
-                           saved,
-                           error,
-                           align,
-                           allowScroll,
-                           openPopup,
-                           removePadding,
-                           fullHeight,
-                           onSelect,
-                           width,
-                           hideOverflow = true,
-                           showExpandIcon = true
-                       }: EntityTableCellProps) {
+                                 children,
+                                 size,
+                                 selected,
+                                 disabled,
+                                 disabledTooltip,
+                                 saved,
+                                 error,
+                                 align,
+                                 allowScroll,
+                                 removePadding,
+                                 fullHeight,
+                                 onSelect,
+                                 width,
+                                 hideOverflow = true,
+                                 showExpandIcon = true
+                             }: EntityTableCellProps) {
 
         const [measureRef, bounds] = useMeasure();
         const ref = useRef<HTMLDivElement>(null);
@@ -106,13 +104,6 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
         const [internalSaved, setInternalSaved] = useState(saved);
 
         const showError = !disabled && error;
-
-        const iconRef = useRef<HTMLButtonElement>();
-        useEffect(() => {
-            if (iconRef.current && selected) {
-                iconRef.current.focus({ preventScroll: true });
-            }
-        }, [selected]);
 
         useEffect(() => {
             if (saved) {
@@ -156,18 +147,12 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
                 justifyContent = "flex-start";
         }
 
-        const doOpenPopup = useCallback(() => {
-            if (openPopup) {
-                const cellRect = ref && ref?.current?.getBoundingClientRect();
-                openPopup(cellRect);
-            }
-        }, []);
 
-        const onClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
-            if (event.detail === 3) {
-                doOpenPopup();
-            }
-        }, [doOpenPopup]);
+        // const onClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
+        //     if (event.detail === 3) {
+        //         doOpenPopup();
+        //     }
+        // }, [doOpenPopup]);
 
         const onSelectCallback = useCallback(() => {
             if (!onSelect) return;
@@ -223,7 +208,7 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
                 }}
                 tabIndex={selected || disabled ? undefined : 0}
                 onFocus={onFocus}
-                onClick={onClick}
+                // onClick={onClick}
                 onMouseEnter={setOnHoverTrue}
                 onMouseMove={setOnHoverTrue}
                 onMouseLeave={setOnHoverFalse}
@@ -259,41 +244,6 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
                             <RemoveCircleIcon size={"smallest"} color={"disabled"} className={"text-gray-500"}/>
                         </Tooltip>
                     </div>}
-
-                {(showError || (!disabled && showExpandIcon)) &&
-                    <div className="absolute top-0.5 right-0.5 flex items-center">
-
-                        {selected && !disabled && showExpandIcon &&
-                            <IconButton
-                                ref={iconRef}
-                                color={"inherit"}
-                                size={"small"}
-                                onClick={doOpenPopup}>
-                                <svg
-                                    fill={"#888"}
-                                    width="20"
-                                    height="20"
-                                    viewBox="0 0 24 24">
-                                    <path className="cls-2"
-                                          d="M20,5a1,1,0,0,0-1-1L14,4h0a1,1,0,0,0,0,2h2.57L13.29,9.29a1,1,0,0,0,0,1.42,1,1,0,0,0,1.42,0L18,7.42V10a1,1,0,0,0,1,1h0a1,1,0,0,0,1-1Z"/>
-                                    <path className="cls-2"
-                                          d="M10.71,13.29a1,1,0,0,0-1.42,0L6,16.57V14a1,1,0,0,0-1-1H5a1,1,0,0,0-1,1l0,5a1,1,0,0,0,1,1h5a1,1,0,0,0,0-2H7.42l3.29-3.29A1,1,0,0,0,10.71,13.29Z"/>
-                                </svg>
-                            </IconButton>
-                        }
-
-                        {showError && <ErrorTooltip
-                            placement={"left"}
-                            title={showError.message}>
-                            <ErrorOutlineIcon
-                                size={"small"}
-                                color={"error"}
-                            />
-                        </ErrorTooltip>
-                        }
-
-                    </div>
-                }
 
             </div>
         );

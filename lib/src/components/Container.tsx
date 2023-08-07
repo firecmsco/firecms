@@ -25,7 +25,7 @@ export function Container({
                               children,
                               className,
                               style,
-                              maxWidth
+                              maxWidth = "7xl"
                           }: ContainerProps) {
 
     const classForMaxWidth = maxWidth ? containerMaxWidths[maxWidth] : "";

@@ -22,3 +22,5 @@ export * from "./useBuildLocalConfigurationPersistence";
 
 export { SnackbarProvider } from "./contexts/SnackbarContext";
 export { ModeControllerProvider } from "./contexts/ModeController";
+
+export * from "./contexts/AuthControllerContext";

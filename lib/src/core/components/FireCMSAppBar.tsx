@@ -12,6 +12,7 @@ import {
 } from "../../hooks";
 import { DarkModeIcon, LightModeIcon, LogoutIcon } from "../../icons";
 import { cn } from "../../components/util/cn";
+import { AuthController } from "../../types";
 
 export interface FireCMSAppBarProps {
     title: string;
@@ -27,6 +28,9 @@ export interface FireCMSAppBarProps {
     drawerOpen: boolean;
 
     className?: string;
+
+    authController?: AuthController;
+
     style?: React.CSSProperties;
 }
 
@@ -45,6 +49,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                                         startAdornment,
                                                         drawerOpen,
                                                         dropDownActions,
+                                                        // authController: authControllerProp,
                                                         className,
                                                         style
                                                     }: FireCMSAppBarProps) {
@@ -53,7 +58,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
     const { breadcrumbs } = breadcrumbsContext;
     const navigation = useNavigationContext();
 
-    const authController = useAuthController();
+    const authController =  useAuthController();
     const {
         mode,
         toggleMode
