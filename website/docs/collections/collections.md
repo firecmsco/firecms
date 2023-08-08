@@ -104,6 +104,12 @@ in [Entity collections](../api/interfaces/entitycollection)
   support filtering/sorting by more than one property. You can then
   specify here the indexes created.
 
+    ```
+    filterCombinations: [
+        { price: "desc", available: "desc" }
+    ],
+    ```
+
 * `initialFilter` Initial filters applied to this collection.
   Defaults to none. Filters applied with this prop can be changed by the user.
   e.g. `initialFilter: { age: [ ">=", 18 ] }`

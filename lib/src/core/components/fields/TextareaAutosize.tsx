@@ -277,7 +277,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
     );
 });
 
-export interface TextareaAutosizeProps {
+export type TextareaAutosizeProps = React.InputHTMLAttributes<HTMLTextAreaElement> &{
     /**
      * @ignore
      */
