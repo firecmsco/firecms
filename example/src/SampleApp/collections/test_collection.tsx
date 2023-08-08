@@ -99,7 +99,19 @@ export const testCollection = buildCollection({
                 enumValues: {
                     value1: "My Value 1",
                     value2: "Your Value 2",
-                    value3: "Another Value 3"
+                    value3: "Another Value 3",
+                    value4: "Another Value 4",
+                    value5: "Another Value 5",
+                    value6: "Another Value 6",
+                    value7: "Another Value 7",
+                    value8: "Another Value 8",
+                    value9: "Another Value 9",
+                    value10: "Another Value 10",
+                    value11: "Another Value 11",
+                    value12: "Another Value 12",
+                    value13: "Another Value 13",
+                    value14: "Another Value 14",
+
                 },
                 validation: { required: false },
                 clearable: true
@@ -110,7 +122,19 @@ export const testCollection = buildCollection({
             dataType: "string",
             enumValues: {
                 value1: "My Value 1",
-                value2: "Your Value 2"
+                value2: "Your Value 2",
+                value3: "Another Value 3",
+                value4: "Another Value 4",
+                value5: "Another Value 5",
+                value6: "Another Value 6",
+                value7: "Another Value 7",
+                value8: "Another Value 8",
+                value9: "Another Value 9",
+                value10: "Another Value 10",
+                value11: "Another Value 11",
+                value12: "Another Value 12",
+                value13: "Another Value 13",
+                value14: "Another Value 14",
             },
             validation: { required: false },
             clearable: true

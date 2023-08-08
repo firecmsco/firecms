@@ -37,7 +37,7 @@ export const CHIP_COLORS: Record<string, ChipColorScheme> = {
 
     blueDarker: { color: "#2750ae", text: "#cfdfff" },
     cyanDarker: { color: "#0b76b7", text: "#d0f0fd" },
-    tealDarker: { color: "#06a09b", text: "#c2f5e9" },
+    tealDarker: { color: "#06a09b", text: "#daf3e9" },
     greenDarker: { color: "#338a17", text: "#d1f7c4" },
     yellowDarker: { color: "#b87503", text: "#ffeab6" },
     orangeDarker: { color: "#d74d26", text: "#fee2d5" },

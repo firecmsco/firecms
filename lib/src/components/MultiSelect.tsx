@@ -1,14 +1,14 @@
 import * as React from "react";
 import { useEffect } from "react";
-import * as Portal from "@radix-ui/react-portal";
+import * as Dialog from "@radix-ui/react-dialog";
 
 import { Command as CommandPrimitive } from "cmdk";
 
 import { ExpandMoreIcon } from "../icons";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
 import { cn } from "./util/cn";
-import { useOutsideAlerter } from "../core";
 import { SelectInputLabel } from "./common/SelectInputLabel";
+import { useOutsideAlerter } from "./util/useOutsideAlerter";
 
 export type MultiSelectProps = {
     open?: boolean,
@@ -61,7 +61,6 @@ export function MultiSelect({
     const containerRef = React.useRef<HTMLInputElement>(null);
     const inputRef = React.useRef<HTMLInputElement>(null);
     const listRef = React.useRef<HTMLDivElement>(null);
-
     useOutsideAlerter(listRef, () => setOpenInternal(false));
 
     const [openInternal, setOpenInternal] = React.useState(false);
@@ -78,6 +77,7 @@ export function MultiSelect({
     }, [value, onMultiValueChange]);
 
     const [inputValue, setInputValue] = React.useState("");
+    const [boundingRect, setBoundingRect] = React.useState<DOMRect | null>(null);
 
     const handleKeyDown = React.useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
         const input = inputRef.current
@@ -98,12 +98,18 @@ export function MultiSelect({
         }
     }, [onMultiValueChange, value]);
 
-    const draggableBoundingRect = containerRef.current?.getBoundingClientRect();
+    const openDialog = React.useCallback(() => {
+        setBoundingRect(containerRef.current?.getBoundingClientRect() ?? null);
+        setOpenInternal(true);
+    }, []);
 
-    const maxHeight = window.innerHeight - (draggableBoundingRect?.top ?? 0);
+    const usedBoundingRect = boundingRect ?? containerRef.current?.getBoundingClientRect();
+    const maxHeight = window.innerHeight - (usedBoundingRect?.top ?? 0) - (usedBoundingRect?.height ?? 0) - 16;
     console.log({
-        top: draggableBoundingRect?.top,
-        windowH: window.innerHeight,
+        openInternal,
+        top: usedBoundingRect?.top,
+        windowH: window.outerHeight,
+        windowi: window.innerHeight,
         maxHeight
     });
     return (<>
@@ -113,9 +119,9 @@ export function MultiSelect({
             <CommandPrimitive onKeyDown={handleKeyDown}
                               onClick={() => {
                                   inputRef.current?.focus();
-                                  setOpenInternal(true);
+                                  openDialog()
                               }}
-                              className={cn("overflow-visible bg-transparent", containerClassName)}>
+                              className={cn("relative overflow-visible bg-transparent", containerClassName)}>
                 <div
                     ref={containerRef}
                     className={cn(
@@ -136,8 +142,8 @@ export function MultiSelect({
                             ref={inputRef}
                             value={inputValue}
                             onValueChange={setInputValue}
-                            onBlur={() => setOpenInternal(false)}
-                            onFocus={() => setOpenInternal(true)}
+                            // onBlur={() => setOpenInternal(false)}
+                            onFocus={openDialog}
                             className="ml-2 bg-transparent outline-none flex-1 h-full w-full "
                         />
                     </div>
@@ -148,33 +154,38 @@ export function MultiSelect({
 
                 </div>
 
-                {openInternal && <Portal.Root className={"z-[100] absolute mt-2 text-gray-900 dark:text-white"}
-                                              role={"presentation"}
-                                              ref={listRef}
-                                              style={{
-                                                  pointerEvents: openInternal ? "auto" : "none",
-                                                  top: (draggableBoundingRect?.top ?? 0) + (draggableBoundingRect?.height ?? 0),
-                                                  left: draggableBoundingRect?.left,
-                                                  right: draggableBoundingRect?.right,
-                                                  width: draggableBoundingRect?.width,
-                                              }}>
-                    <MultiSelectContext.Provider value={{
-                        fieldValue: value,
-                        setInputValue,
-                        onValueChangeInternal
-                    }}>
-                        <div
-                            style={{
-                                maxHeight: maxHeight,
-                                overflow: "auto"
-                            }}
-                            className="absolute w-full outline-none animate-in z-50 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg ">
-                            <div className="h-full overflow-auto">
-                                {children}
+                <Dialog.Root open={openInternal} onOpenChange={setOpenInternal}>
+                    <Dialog.Portal>
+                        <MultiSelectContext.Provider
+                            value={{
+                                fieldValue: value,
+                                setInputValue,
+                                onValueChangeInternal
+                            }}>
+                            <div
+                                ref={listRef}
+                                className={"z-50 absolute overflow-auto outline-none"}
+                                style={{
+                                    pointerEvents: openInternal ? "auto" : "none",
+                                    top: (usedBoundingRect?.top ?? 0) + (usedBoundingRect?.height ?? 0),
+                                    left: usedBoundingRect?.left,
+                                    // right: boundingRect?.right,
+                                    width: usedBoundingRect?.width,
+                                    maxHeight: maxHeight,
+
+                                }}>
+
+                                <CommandPrimitive.Group
+                                    className="mt-2 text-gray-900 dark:text-white animate-in z-50 border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg flex flex-col outline-none w-full"
+                                >
+
+                                    {children}
+                                </CommandPrimitive.Group>
+
                             </div>
-                        </div>
-                    </MultiSelectContext.Provider>
-                </Portal.Root>}
+                        </MultiSelectContext.Provider>
+                    </Dialog.Portal>
+                </Dialog.Root>
             </CommandPrimitive>
 
         </>

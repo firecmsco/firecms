@@ -76,9 +76,6 @@ export const Dialog = ({
                     >
                         <div
                             className={cn(paperMixin,
-                                // "text-gray-900 dark:text-white",
-                                // "m-8 relative overflow-y-auto flex flex-col max-h-full",
-                                // maxWidth ? widthClasses[maxWidth] : undefined,
                                 "z-30",
                                 "relative",
                                 "outline-none focus:outline-none",
@@ -92,25 +89,7 @@ export const Dialog = ({
                                 displayed && open ? "opacity-100" : "opacity-0",
                                 maxWidth ? widthClasses[maxWidth] : undefined,
                                 className
-                            )}
-                            style={{
-                                // height: fullWidth ? undefined : "inherit",
-                                // maxHeight: "calc(100% - 64px)",
-                                // backgroundColor: 'rgb(18, 18, 21)',
-                                // color: 'rgb(255, 255, 255)',
-                                // transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
-                                // borderRadius: '6px',
-                                // boxShadow: 'rgba(0, 0, 0, 0.2) 0px 11px 15px -7px, rgba(0, 0, 0, 0.14) 0px 24px 38px 3px, rgba(0, 0, 0, 0.12) 0px 9px 46px 8px',
-                                // margin: '32px',
-                                // position: 'relative',
-                                // overflowY: 'auto',
-                                // display: 'flex',
-                                // flexDirection: 'column',
-                                // maxHeight: 'calc(100% - 64px)',
-                                // maxWidth: '1200px',
-                                // width: 'calc(100% - 64px)',
-                                // backgroundImage: 'inherit'
-                            }}>
+                            )}>
                             {children}
                         </div>
 

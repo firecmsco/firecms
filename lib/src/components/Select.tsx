@@ -8,7 +8,6 @@ import { SelectInputLabel } from "./common/SelectInputLabel";
 
 export type SelectProps = {
     open?: boolean,
-    defaultOpen?: boolean,
     name?: string,
     id?: string,
     onOpenChange?: (open: boolean) => void,
@@ -37,7 +36,6 @@ export type SelectProps = {
 export function Select({
                            inputRef,
                            open,
-                           defaultOpen,
                            name,
                            id,
                            onOpenChange,
@@ -64,7 +62,7 @@ export function Select({
 
     const [openInternal, setOpenInternal] = React.useState(false);
     useEffect(() => {
-        setOpenInternal(open ?? defaultOpen ?? false);
+        setOpenInternal(open ?? false);
     }, [open]);
 
     const onValueChangeInternal = React.useCallback((newValue: string) => {
@@ -92,7 +90,7 @@ export function Select({
         <SelectPrimitive.Root
             name={name}
             value={Array.isArray(value) ? undefined : value}
-            defaultOpen={defaultOpen}
+            defaultOpen={open}
             open={openInternal}
             disabled={disabled}
             onValueChange={onValueChangeInternal}

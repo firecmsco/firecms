@@ -5,12 +5,18 @@ import { cn } from "./util/cn";
 export interface ChipProps {
     className?: string;
     children: React.ReactNode;
-    size?: "small" | "medium";
+    size?: "smaller" | "small" | "medium";
     colorScheme?: ChipColorScheme | ChipColorKey;
     error?: boolean;
     outlined?: boolean;
     onClick?: () => void;
     icon?: React.ReactNode;
+}
+
+const sizeClassNames = {
+    smaller: "px-2 py-0.5 text-sm",
+    small: "px-3 py-1 text-sm",
+    medium: "px-4 py-1.5 text-sm"
 }
 
 /**
@@ -23,7 +29,7 @@ export function Chip({
                          outlined,
                          onClick,
                          icon,
-                         size,
+                         size = "medium",
                          className
                      }: ChipProps) {
 
@@ -32,11 +38,8 @@ export function Chip({
         <div
             className={cn("rounded-lg w-fit h-fit font-regular inline-flex items-center gap-1",
                 "truncate",
-                // "font-medium",
                 onClick ? "cursor-pointer hover:bg-gray-300 hover:dark:bg-gray-700" : "",
-                // size === "small" ? "text-xs" :
-                    "text-sm",
-                size === "small" ? "px-3 py-1" : "px-4 py-1.5",
+                sizeClassNames[size],
                 error || !usedColorScheme ? "bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200" : "",
                 error ? "text-red-500 dark:text-red-400" : "",
                 className)}

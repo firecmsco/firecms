@@ -88,7 +88,7 @@ export function MultiSelectBinding({
                                       required={property.validation?.required}
                                       title={property.name}
                                       className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}
-                renderValue={useCallback((v: string) => renderValue(v, true), [renderValue])}
+                renderValue={useCallback((v: string) => renderValue(v, false), [renderValue])}
                 onMultiValueChange={(updatedValue: string[]) => {
                     let newValue: EnumType[] | null;
                     if (of && (of as ResolvedProperty)?.dataType === "number") {
@@ -100,7 +100,7 @@ export function MultiSelectBinding({
                 }}>
                 {enumValues.map((enumValue) => String(enumValue.id)).map((enumKey) => (
                     <MultiSelectItem key={enumKey} value={enumKey}>
-                        {renderValue(enumKey, false)}
+                        {renderValue(enumKey, true)}
                     </MultiSelectItem>))}
             </MultiSelect>
 
