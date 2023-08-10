@@ -19,6 +19,7 @@ export * from "./DialogContent";
 export * from "./ExpandablePanel";
 export * from "./IconButton";
 export * from "./InputLabel";
+export * from "./InfoLabel";
 export * from "./LoadingButton";
 export * from "./Markdown";
 export * from "./Menu";

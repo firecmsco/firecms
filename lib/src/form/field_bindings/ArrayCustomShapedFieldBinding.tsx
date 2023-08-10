@@ -54,6 +54,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
             context,
             tableMode: false,
             partOfArray: true,
+            partOfBlock: false,
             autoFocus: false
         };
         return <div key={`custom_shaped_array_${index}`} className="pb-4">

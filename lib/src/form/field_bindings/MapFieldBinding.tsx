@@ -22,6 +22,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
                                                                    disabled,
                                                                    property,
                                                                    setValue,
+                                                                   partOfBlock,
                                                                    tableMode,
                                                                    includeDescription,
                                                                    underlyingValueHasChanged,
@@ -70,6 +71,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
                             context,
                             tableMode: false,
                             partOfArray: false,
+                            partOfBlock: false,
                             autoFocus: autoFocus && index === 0
                         };
                         return (
@@ -96,11 +98,11 @@ export function MapFieldBinding<T extends Record<string, any>>({
     return (
         <>
 
-            {!tableMode && <ExpandablePanel initiallyExpanded={expanded}
+            {!tableMode && !partOfBlock && <ExpandablePanel initiallyExpanded={expanded}
                                             className={"px-2 md:px-4 pb-2 md:pb-4 pt-1 md:pt-2"}
                                             title={title}>{mapFormView}</ExpandablePanel>}
 
-            {tableMode && mapFormView}
+            {(tableMode || partOfBlock) && mapFormView}
 
             <FieldHelperText includeDescription={includeDescription}
                              showError={showError}

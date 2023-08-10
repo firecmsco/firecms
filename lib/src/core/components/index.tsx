@@ -22,7 +22,7 @@ export * from "./DeleteConfirmationDialog";
 
 export * from "./FireCMSLogo";
 
-export * from "./InfoLabel";
+export * from "../../components/InfoLabel";
 export * from "./FireCMSAppBar";
 
 export * from "./ArrayContainer";

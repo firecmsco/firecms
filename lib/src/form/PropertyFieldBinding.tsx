@@ -84,6 +84,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
      disabled,
      tableMode,
      partOfArray,
+     partOfBlock,
      autoFocus,
  }: PropertyFieldBindingProps<T, M>): ReactElement<PropertyFieldBindingProps<T, M>> {
 
@@ -144,6 +145,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
                     disabled,
                     tableMode,
                     partOfArray,
+                    partOfBlock,
                     autoFocus
                 };
 
@@ -173,6 +175,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
          underlyingValueHasChanged,
          tableMode,
          partOfArray,
+         partOfBlock,
          autoFocus,
          context,
          disabled
@@ -229,6 +232,7 @@ function FieldInternal<T extends CMSType, CustomProps, M extends Record<string, 
         underlyingValueHasChanged: underlyingValueHasChanged ?? false,
         tableMode: tableMode ?? false,
         partOfArray: partOfArray ?? false,
+        partOfBlock: partOfBlock ?? false,
         autoFocus: autoFocus ?? false,
         customProps: customFieldProps,
         context

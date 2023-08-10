@@ -502,6 +502,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                         context: formContext,
                         tableMode: false,
                         partOfArray: false,
+                        partOfBlock: false,
                         autoFocus: false
                     };
 
