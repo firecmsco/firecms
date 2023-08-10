@@ -23,10 +23,33 @@ property in the `Collection` configuration.
 
 ```tsx
 export const localeCollectionGroup = buildCollection({
-    ...localeCollection,
     name: "Product locales group",
+    path: "locales",
     description: "This is a collection group related to the locales subcollection of products",
-    group: "Main",
-    collectionGroup: true
+    collectionGroup: true,
+    properties: {
+        name: {
+            name: "Name",
+            validation: { required: true },
+            dataType: "string"
+        },
+        // ...
+    },
 });
 ```
+
+:::note
+Depending on your Firestore rules, you may need to add another
+rule to allow collection group queries. For example:
+
+```text
+match /{path=**}/locales/{document=**} {
+  allow read, write: if true;
+}
+```
+
+When doing a collection group query, the path will be something like
+`/products/{productId}/locales/{localeId}`. But the query will go to all 
+the collections called `locales` in your database. That is why you might need
+to add a rule like the one above.
+:::
