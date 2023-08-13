@@ -44,7 +44,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
             renderValue={(v) => <div className={"font-medium"}>{v.toUpperCase()}</div>}
         >
             {["xs", "s", "m", "l", "xl"].map((size) => (
-                <SelectItem key={size} value={size}>
+                <SelectItem key={size} value={size} className={"w-12 font-medium text-center"}>
                     {size.toUpperCase()}
                 </SelectItem>
             ))}

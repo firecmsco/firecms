@@ -253,7 +253,7 @@ function StorageUpload({
                 className="flex-grow m-2 max-w-[200px]"
                 onClick={open}>
                 <Typography
-                    className="text-[#999] dark:text-[#444]"
+                    className="text-gray-400 dark:text-gray-600"
                     variant={"body2"}
                     align={"center"}>
                     {helpText}

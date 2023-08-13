@@ -1,5 +1,4 @@
 import React from "react";
-import * as locales from "date-fns/locale";
 
 import { FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
@@ -19,6 +18,7 @@ import { SideDialogsControllerContext } from "./contexts/SideDialogsControllerCo
 import { useLocaleConfig } from "./internal/useLocaleConfig";
 import { CenteredView } from "../components";
 
+const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
 
 /**
@@ -49,23 +49,18 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         collectionOverrideHandler,
         storageSource,
         dataSource,
-        basePath,
-        baseCollectionPath,
+        basePath = DEFAULT_BASE_PATH,
+        baseCollectionPath = DEFAULT_COLLECTION_PATH,
         plugins,
         onAnalyticsEvent,
         fields
     } = props;
 
-    const usedBasePath = basePath ?? "/";
-    const usedBasedCollectionPath = baseCollectionPath ?? DEFAULT_COLLECTION_PATH;
-
     useLocaleConfig(locale);
-    // @ts-ignore
-    const dateUtilsLocale = locale ? locales[locale] : undefined;
 
     const navigation = useBuildNavigationContext({
-        basePath: usedBasePath,
-        baseCollectionPath: usedBasedCollectionPath,
+        basePath,
+        baseCollectionPath,
         authController,
         collections,
         views,

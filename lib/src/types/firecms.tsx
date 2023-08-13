@@ -132,12 +132,16 @@ export type FireCMSProps<UserType extends User> = {
     entityLinkBuilder?: EntityLinkBuilder;
 
     /**
-     * Default path under the navigation routes of the CMS will be created
+     * Path under the navigation routes of the CMS will be created. Defaults to `/`.
+     * Internally FireCMS uses `react-router` to create the routes, the base path is attached to the
+     * `BrowserRouter` component. If you are using FireCMS in a subpath of your website, you can use
+     * this prop to specify the base path.
      */
     basePath?: string;
 
     /**
-     * Default path under the collection routes of the CMS will be created
+     * Path under the collection routes of the CMS will be created.
+     * Defaults to `/c`.
      */
     baseCollectionPath?: string;
 
