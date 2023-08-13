@@ -99,9 +99,13 @@ You can also override collections in place, when using `useSideEntityController`
 * `textSearchController` Use this controller to return text search results as document ids, that
 get then fetched from Firestore.
 
-* `basePath` string;
+* `basePath` Path under the navigation routes of the CMS will be created. Defaults to `/`.
+  Internally FireCMS uses `react-router` to create the routes, the base path is attached to the
+  `BrowserRouter` component. If you are using FireCMS in a subpath of your website, you can use
+  this prop to specify the base path.
 
-* `baseCollectionPath` Default path under the navigation routes of the CMS will be created
+* `baseCollectionPath` Path under the collection routes of the CMS will be created.
+  Defaults to `/c`.
 
 * `HomePage` In case you need to override the home page.
 You may want to use {@link useNavigationContext} in order to get the resolved

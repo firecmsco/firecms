@@ -49,12 +49,12 @@ export function FireCMSCloudVersions() {
                     Perfect for small teams and startups.
                 </p>
                 <ul>
-                    <li>Everything in the free tier</li>
+                    <li className={"list-disc"}>Everything in the free tier</li>
                     {/*<li>Text search</li>*/}
-                    <li>Unlimited users and roles</li>
-                    <li>Theme and logo customization</li>
-                    <li>Custom user roles</li>
-                    <li>GPT-4 content generation</li>
+                    <li className={"list-disc"}>Unlimited users and roles</li>
+                    <li className={"list-disc"}>Theme and logo customization</li>
+                    <li className={"list-disc"}>Custom user roles</li>
+                    <li className={"list-disc"}>GPT-4 content generation</li>
                     {/*<li>Custom fields</li>*/}
                 </ul>
             </div>

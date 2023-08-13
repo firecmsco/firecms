@@ -106,6 +106,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
         if (dataType === "string" || dataType === "number") {
             return <TextField
                 key={dataType}
+                placeholder={"value"}
                 value={entryValue}
                 type={dataType === "number" ? "number" : "text"}
                 size={"small"}
@@ -223,6 +224,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                 <div className="w-[200px] max-w-[25%]">
                     <TextField
                         value={fieldKey}
+                        placeholder={"key"}
                         disabled={disabled || Boolean(entryValue)}
                         size={"small"}
                         onChange={(event) => {
@@ -500,7 +502,6 @@ function MapEditView<T extends Record<string, any>>({
                 }
             )}
 
-        <div className="p-4 justify-center text-left">
             <Button variant={"text"}
                     size={"small"}
                     color="primary"
@@ -521,7 +522,6 @@ function MapEditView<T extends Record<string, any>>({
                     }>
                 {fieldName ? `Add to ${fieldName}` : "Add"}
             </Button>
-        </div>
 
     </div>;
 }

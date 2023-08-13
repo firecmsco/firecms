@@ -90,6 +90,64 @@ export const testCollection = buildCollection({
     name: "Test entities",
     // formAutoSave: true,
     properties: {
+        mainSaturation: {
+            name: "Main saturation",
+            description: "Saturation applied to all colors when there is no saturation on color applied",
+            dataType: "array",
+            of: {
+                dataType: "map",
+                properties: {
+                    type: {
+                        name: "Type",
+                        dataType: "string",
+                        enumValues: {
+                            oneNum: "Saturation without range",
+                            fromTo: "Saturation available range",
+                        }
+                    },
+                    value: ({ propertyValue, index }) => {
+                        if (propertyValue?.type === "oneNum") {
+                            return ({
+                                name: "Saturation",
+                                dataType: "number",
+                                validation: { min: 0, max: 100 }
+                            })
+                        } else if (propertyValue?.type === "fromTo") {
+                            return ({
+                                    name: "Saturation available range",
+                                    dataType: "map",
+                                    properties: {
+                                        from: {
+                                            name: "From",
+                                            dataType: "number",
+                                            validation: {
+                                                min: 0,
+                                                max: 100
+                                            }
+                                        },
+                                        to: {
+                                            name: "To",
+                                            dataType: "number",
+                                            clearable: true,
+                                            validation: {
+                                                min: 0,
+                                                max: 100
+                                            }
+                                        },
+                                    }
+                                }
+                            )
+                        } else {
+                            return {
+                                dataType: "string",
+                                name: "Type",
+                                disabled: { hidden: true }
+                            };
+                        }
+                    }
+                }
+            },
+        },
         array_enum: {
             name: "Array enum",
             dataType: "array",
