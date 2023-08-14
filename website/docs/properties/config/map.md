@@ -39,6 +39,17 @@ Record of properties included in this map.
 ### `previewProperties`
 List of properties rendered as this map preview. Defaults to first 3.
 
+### `spreadChildren`
+Display the child properties as independent columns in the collection
+view. Defaults to `false`.
+
+### `expanded`
+Should the map be expanded by default in the form view. Defaults to `false`.
+
+### `keyValue`
+Render this map as a key-value table that allows to use
+arbitrary keys. You don't need to define the properties in this case.
+
 ### `validation`
 
 * `required` Should this field be compulsory.
@@ -48,7 +59,7 @@ List of properties rendered as this map preview. Defaults to first 3.
 
 The widget that gets created is
 - [`MapFieldBinding`](../../api/functions/MapFieldBinding) Field that renders the children
-property fields
+  property fields
 
 Links:
 - [API](../../api/interfaces/mapproperty)
