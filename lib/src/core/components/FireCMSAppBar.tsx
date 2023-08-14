@@ -58,7 +58,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
     const { breadcrumbs } = breadcrumbsContext;
     const navigation = useNavigationContext();
 
-    const authController =  useAuthController();
+    const authController = useAuthController();
     const {
         mode,
         toggleMode
@@ -89,7 +89,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                 },
                 className)}>
 
-            <div className="flex flex-row gap-1 space-y-1 px-4 h-full items-center">
+            <div className="flex flex-row gap-2 px-4 h-full items-center">
 
                 {startAdornment}
 
@@ -127,28 +127,22 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         {children}
                     </ErrorBoundary>}
 
-                <div className={"p-1"}>
-                    <IconButton
-                        color="inherit"
-                        aria-label="Open drawer"
-                        onClick={() => toggleMode()}
-                        size="large">
-                        {mode === "dark"
-                            ? <DarkModeIcon/>
-                            : <LightModeIcon/>}
-                    </IconButton>
-                </div>
+                <IconButton
+                    color="inherit"
+                    aria-label="Open drawer"
+                    onClick={() => toggleMode()}
+                    size="large">
+                    {mode === "dark"
+                        ? <DarkModeIcon/>
+                        : <LightModeIcon/>}
+                </IconButton>
 
                 <Menu
-                    trigger={<IconButton>
-                        <div className={"p-1"}>
-                            {authController.user && authController.user.photoURL
-                                ? <Avatar
-                                    src={authController.user.photoURL}/>
-                                : <Avatar>{initial}</Avatar>
-                            }
-                        </div>
-                    </IconButton>}
+                    trigger={authController.user && authController.user.photoURL
+                        ? <Avatar
+                            src={authController.user.photoURL}/>
+                        : <Avatar>{initial}</Avatar>
+                    }
                 >
 
                     {dropDownActions}

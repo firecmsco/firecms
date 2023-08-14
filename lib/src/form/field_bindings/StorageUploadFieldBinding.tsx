@@ -215,15 +215,10 @@ function FileDropComponent({
             <div
                 {...droppableProvided.droppableProps}
                 ref={droppableProvided.innerRef}
-                className={cn("flex items-center p-1",
+                className={cn("flex items-center p-1 no-scrollbar",
                     multipleFilesSupported && internalValue.length ? "overflow-auto" : "",
                     multipleFilesSupported && internalValue.length ? "min-h-[180px]" : "min-h-[250px]"
                 )}
-                style={{
-                    "&::-webkit-scrollbar": {
-                        display: "none"
-                    }
-                }}
             >
 
                 <input

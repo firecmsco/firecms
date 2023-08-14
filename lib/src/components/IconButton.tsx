@@ -28,22 +28,23 @@ const shapeClasses = {
     square: "rounded-md"
 }
 
-export function IconButton<C extends React.ElementType>({
-                                                            children,
-                                                            className,
-                                                            size = "medium",
-                                                            variant = "ghost",
-                                                            shape = "circular",
-                                                            toggled,
-                                                            component,
-                                                            ...props
-                                                        }: IconButtonProps<C>) {
+const IconButtonInner = <C extends React.ElementType>({
+                                                          children,
+                                                          className,
+                                                          size = "medium",
+                                                          variant = "ghost",
+                                                          shape = "circular",
+                                                          toggled,
+                                                          component,
+                                                          ...props
+                                                      }: IconButtonProps<C>, ref: React.ForwardedRef<HTMLButtonElement>) => {
 
     const bgClasses = variant === "ghost" ? "bg-transparent" : "bg-gray-50 dark:bg-gray-950";
     const Component: React.ElementType<any> = component || "button";
     return (
         <Component
             type="button"
+            ref={ref}
             {...props}
             className={cn(
                 focusedMixin,
@@ -55,8 +56,11 @@ export function IconButton<C extends React.ElementType>({
                 shapeClasses[shape],
                 sizeClasses[size],
                 className
-                )}>
+            )}>
             {children}
         </Component>
     );
 };
+// React.ForwardRefRenderFunction<HTMLButtonElement, IconButtonProps<C>>
+
+export const IconButton = React.forwardRef(IconButtonInner as React.ForwardRefRenderFunction<HTMLButtonElement, IconButtonProps<any>>) as React.ComponentType<IconButtonProps<any>>;

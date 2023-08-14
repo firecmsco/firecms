@@ -1,4 +1,6 @@
 import React from "react";
+import { cn } from "./util/cn";
+import { focusedMixin } from "../styles";
 
 interface AvatarProps {
     src?: string;
@@ -7,22 +9,29 @@ interface AvatarProps {
     className?: string;
 }
 
-export const Avatar: React.FC<AvatarProps> = ({
-                                                  src,
-                                                  alt,
-                                                  children,
-                                                  className
-                                              }) => {
+const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps> = (
+    { src, alt, children, className, ...props }, ref) => {
+
     return (
-        <div
-            className={`flex items-center justify-center overflow-hidden rounded-full ${className} bg-gray-100 dark:bg-gray-800 w-10 h-10`}>
+        <button
+            ref={ref}
+            {...props}
+            className={cn("rounded-full flex items-center justify-center overflow-hidden",
+                focusedMixin,
+                "p-1 hover:bg-gray-200 hover:dark:bg-gray-700",
+                className
+            )}>
             {src
                 ? (
-                    <img className="object-cover w-full h-full" src={src} alt={alt}/>
+                    <img className="object-cover rounded-full w-10 h-10 bg-gray-100 dark:bg-gray-800" src={src}
+                         alt={alt}/>
                 )
                 : (
-                    <span className="text-lg font-medium text-gray-900 dark:text-white">{children}</span>
+                    <span
+                        className="text-lg font-medium text-gray-900 dark:text-white rounded-full w-10 h-10 bg-gray-100 dark:bg-gray-800">{children}</span>
                 )}
-        </div>
+        </button>
     );
 };
+
+export const Avatar = React.forwardRef(AvatarInner);

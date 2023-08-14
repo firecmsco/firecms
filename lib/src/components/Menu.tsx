@@ -13,10 +13,8 @@ export function Menu({
                      }: MenuProps) {
     return (
         <DropdownMenu.Root>
-            <DropdownMenu.Trigger>
-                {/*<span tabIndex={-1} className={"focus:outline:none focus-visible:outline:none"}>*/}
+            <DropdownMenu.Trigger asChild>
                 {trigger}
-                {/*</span>*/}
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
                 <DropdownMenu.Content className={cn(paperMixin, "shadow py-2 z-50")}
