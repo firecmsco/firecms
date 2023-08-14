@@ -63,4 +63,9 @@ export type AuthController<UserType extends User = User> = {
      */
     getAuthToken: () => Promise<string>;
 
+    /**
+     * Has the user skipped the login process
+     */
+    loginSkipped: boolean;
+
 };

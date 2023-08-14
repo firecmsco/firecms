@@ -63,11 +63,6 @@ export type FirebaseAuthController =
     phoneLogin: (phone: string, applicationVerifier: ApplicationVerifier) => void;
 
     /**
-     * Has the user skipped the login process
-     */
-    loginSkipped?: boolean;
-
-    /**
      * Skip login
      */
     skipLogin?: () => void;

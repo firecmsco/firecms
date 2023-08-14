@@ -1,10 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 
-import { User as FirebaseUser } from "firebase/auth";
-
-import { AppCheckTokenResult, DataSource, StorageSource } from "../../types";
-import { Authenticator, FirebaseAuthController } from "../types/auth";
+import { AppCheckTokenResult, AuthController, DataSource, StorageSource, User } from "../../types";
+import { Authenticator } from "../types/auth";
 
 /**
  * This hook is used internally for validating an authenticator.
@@ -17,7 +15,7 @@ import { Authenticator, FirebaseAuthController } from "../types/auth";
  * @param storageSource
  * @param dataSource
  */
-export function useValidateAuthenticator({
+export function useValidateAuthenticator<UserType extends User = User>({
                                              authController,
                                              authentication,
                                              getAppCheckToken,
@@ -26,8 +24,8 @@ export function useValidateAuthenticator({
                                              dataSource
                                          }:
                                              {
-                                                 authController: FirebaseAuthController,
-                                                 authentication?: boolean | Authenticator<FirebaseUser>,
+                                                 authController: AuthController<UserType>,
+                                                 authentication?: boolean | Authenticator<UserType>,
                                                  getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
                                                  appCheckForceRefresh?: boolean,
                                                  dataSource: DataSource;
@@ -58,7 +56,7 @@ export function useValidateAuthenticator({
      * We use this ref to check the authentication only if the user has
      * changed
      */
-    const checkedUserRef = useRef<FirebaseUser | undefined>();
+    const checkedUserRef = useRef<User | undefined>();
 
     const checkAuthentication = useCallback(async () => {
 
