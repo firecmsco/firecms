@@ -18,6 +18,10 @@ export function isFilterCombinationValidForFirestore<M>(
     const filterKeys = Object.keys(filterValues);
     const filtersCount = filterKeys.length;
 
+    if (!sortKey && values.every((v) => v[0] === "==")) {
+        return true;
+    }
+
     if (filtersCount === 1 && (!sortKey || sortKey === filterKeys[0])) {
         return true;
     }
