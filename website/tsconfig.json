@@ -21,13 +21,11 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react-jsx",
-
         "sourceMap": true,
         "declaration": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
-        "strictNullChecks": true,
-        "jsxImportSource": "@emotion/react"
+        "strictNullChecks": true
     },
     "include": [
         "src"
