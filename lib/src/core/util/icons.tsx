@@ -14,11 +14,9 @@ export function getIcon(iconKey?: string, className?:string): React.ReactElement
     return iconKey in iconKeysMap ? <Icon iconKey={iconKey} size={"medium"} className={className}/> : undefined;
 }
 
-export function getIconForView(collectionOrView: EntityCollection | CMSView): React.ReactElement {
+export function getIconForView(collectionOrView: EntityCollection | CMSView, className?:string): React.ReactElement {
 
-    const viewClasses = "text-gray-400 dark:text-gray-600";
-
-    const icon = getIcon(collectionOrView.icon, viewClasses);
+    const icon = getIcon(collectionOrView.icon, className);
     if (collectionOrView?.icon && icon)
         return icon;
 
@@ -39,7 +37,7 @@ export function getIconForView(collectionOrView: EntityCollection | CMSView): Re
     if (!key)
         key = coolIconKeys[hashString(collectionOrView.path) % iconsCount];
 
-    return <Icon iconKey={key} size={"medium"} className={viewClasses}/>;
+    return <Icon iconKey={key} size={"medium"} className={className}/>;
 }
 
 const iconKeysMap: Record<string, string> = iconKeys.reduce((acc: Record<string, string>, key) => {

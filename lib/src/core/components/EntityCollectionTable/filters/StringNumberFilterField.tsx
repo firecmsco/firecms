@@ -88,6 +88,7 @@ export function StringNumberFilterField({
         <div className="flex w-[440px] items-center">
             <div className={"w-[80px]"}>
                 <Select value={operation}
+                        position={"item-aligned"}
                         onValueChange={(value) => {
                             updateFilter(value as VirtualTableWhereFilterOp, internalValue);
                         }}
@@ -100,7 +101,7 @@ export function StringNumberFilterField({
                 </Select>
             </div>
 
-            <div className="flex-grow ml-4">
+            <div className="flex-grow ml-2">
 
                 {!enumValues && <TextField
                     type={dataType === "number" ? "number" : undefined}
@@ -121,6 +122,7 @@ export function StringNumberFilterField({
                 {enumValues &&
 
                     <Select
+                        position={"item-aligned"}
                         value={internalValue !== undefined
                             ? (Array.isArray(internalValue) ? internalValue.map(e => String(e)) : String(internalValue))
                             : isArray ? [] : ""}

@@ -6,6 +6,7 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
+    FilterValues,
     PartialEntityCollection,
     Property,
     SelectionController
@@ -28,9 +29,8 @@ import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigura
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { useTableController } from "../EntityCollectionTable/useTableController";
 import { isFilterCombinationValidForFirestore } from "./isFilterCombinationValidForFirestore";
-import { Typography } from "../../../components/Typography";
+import { cn, Typography } from "../../../components";
 import { Popover } from "../../../components/Popover";
-import { cn } from "../../../components/util/cn";
 
 /**
  * @category Components
@@ -299,7 +299,12 @@ export const EntityCollectionView = React.memo(
                     {`${collection.name}`}
                 </Typography>
 
-                <EntitiesCount fullPath={fullPath} collection={collection}/>
+                <EntitiesCount
+                    fullPath={fullPath}
+                    collection={collection}
+                    filter={tableController.filterValues}
+                    sortBy={tableController.sortBy}
+                />
 
             </div>}
         >
@@ -378,10 +383,14 @@ export function useSelectionController<M extends Record<string, any>>(): Selecti
 
 function EntitiesCount({
                            fullPath,
-                           collection
+                           collection,
+                           filter,
+                           sortBy
                        }: {
     fullPath: string,
-    collection: EntityCollection
+    collection: EntityCollection,
+    filter?: FilterValues<any>,
+    sortBy?: [string, "asc" | "desc"]
 }) {
 
     const dataSource = useDataSource();
@@ -389,12 +398,20 @@ function EntitiesCount({
     const [count, setCount] = useState<number | undefined>(undefined);
     const [error, setError] = useState<Error | undefined>(undefined);
 
+    const sortByProperty = sortBy ? sortBy[0] : undefined;
+    const currentSort = sortBy ? sortBy[1] : undefined;
+    const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
+
+    console.log("EntitiesCount", fullPath, collection, filter, sortByProperty, currentSort)
     useEffect(() => {
         dataSource.countEntities({
-            path: navigation.resolveAliasesFrom(fullPath),
-            collection
+            path: resolvedPath,
+            collection,
+            filter,
+            orderBy: sortByProperty,
+            order: currentSort
         }).then(setCount).catch(setError);
-    }, [fullPath, dataSource, navigation]);
+    }, [fullPath, dataSource, resolvedPath, collection, filter, sortByProperty, currentSort]);
 
     if (error) {
         return null;

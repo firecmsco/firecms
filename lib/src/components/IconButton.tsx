@@ -8,6 +8,7 @@ export type IconButtonProps<C extends React.ElementType> =
     size?: "medium" | "small" | "large";
     variant?: "ghost" | "filled",
     shape?: "circular" | "square",
+    disabled?: boolean;
     toggled?: boolean;
     component?: C;
     onClick?: React.MouseEventHandler<any>
@@ -28,16 +29,17 @@ const shapeClasses = {
     square: "rounded-md"
 }
 
-const IconButtonInner = <C extends React.ElementType>({
-                                                          children,
-                                                          className,
-                                                          size = "medium",
-                                                          variant = "ghost",
-                                                          shape = "circular",
-                                                          toggled,
-                                                          component,
-                                                          ...props
-                                                      }: IconButtonProps<C>, ref: React.ForwardedRef<HTMLButtonElement>) => {
+const IconButtonInner = <C extends React.ElementType = "button">({
+                                                                     children,
+                                                                     className,
+                                                                     size = "medium",
+                                                                     variant = "ghost",
+                                                                     shape = "circular",
+                                                                     disabled,
+                                                                     toggled,
+                                                                     component,
+                                                                     ...props
+                                                                 }: IconButtonProps<C>, ref: React.ForwardedRef<HTMLButtonElement>) => {
 
     const bgClasses = variant === "ghost" ? "bg-transparent" : "bg-gray-50 dark:bg-gray-950";
     const Component: React.ElementType<any> = component || "button";
@@ -48,6 +50,7 @@ const IconButtonInner = <C extends React.ElementType>({
             {...props}
             className={cn(
                 focusedMixin,
+                disabled ? "opacity-50 pointer-events-none" : "cursor-pointer",
                 toggled ? "outline outline-2 outline-primary" : "",
                 colorClasses,
                 bgClasses,

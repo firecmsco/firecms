@@ -87,7 +87,7 @@ export function DateTimeFilterField({
                 </Select>
             </div>
 
-            <div className="flex-grow ml-4">
+            <div className="flex-grow ml-2">
 
                 <DateTimeField
                     mode={mode}

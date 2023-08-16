@@ -121,10 +121,11 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                         </Tooltip>}
 
                     {(copyEnabled || deleteEnabled) &&
-                        <Menu trigger={<IconButton
-                            size={largeLayout ? "medium" : "small"}>
-                            <MoreVertIcon/>
-                        </IconButton>}>
+                        <Menu
+                            trigger={<IconButton
+                                size={largeLayout ? "medium" : "small"}>
+                                <MoreVertIcon/>
+                            </IconButton>}>
                             {deleteEnabled && <MenuItem onClick={onDeleteClick}>
                                 <DeleteIcon/>
                                 Delete

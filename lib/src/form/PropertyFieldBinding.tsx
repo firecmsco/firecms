@@ -130,6 +130,8 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
 
                 }
                 if (!Component) {
+                    console.warn(`No field component found for property ${propertyKey}`);
+                    console.warn("Property:", property);
                     return (
                         <div>{`Currently the field ${resolvedProperty.dataType} is not supported`}</div>
                     );

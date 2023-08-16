@@ -61,11 +61,8 @@ export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps): Dat
         generateEntityId(path: string) {
             return firestoreDataSource.generateEntityId(path);
         },
-        countEntities(path: {
-            path: string,
-            collection: EntityCollection,
-        }): Promise<number> {
-            return firestoreDataSource.countEntities(path);
+        countEntities(props: FetchCollectionProps): Promise<number> {
+            return firestoreDataSource.countEntities(props);
         }
     }
 }

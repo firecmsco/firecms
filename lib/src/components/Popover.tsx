@@ -1,3 +1,4 @@
+import React from "react";
 import * as PopoverPrimitive from "@radix-ui/react-popover";
 
 import { paperMixin } from "../styles";
@@ -45,7 +46,7 @@ export function Popover({
         return trigger;
 
     return <PopoverPrimitive.Root open={open} onOpenChange={onOpenChange}>
-        <PopoverPrimitive.Trigger>
+        <PopoverPrimitive.Trigger asChild>
             {trigger}
         </PopoverPrimitive.Trigger>
         <PopoverPrimitive.Portal>

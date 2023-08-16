@@ -72,7 +72,7 @@ generating an invalid query in Firestore.
 ### Changed
 
 - Added support for collection groups
-- [BREAKING] The `countEntities` function in the data source not takes an
+- [BREAKING] The `countEntities` function in the data source now takes an
   object instead of a string as parameter. This will only affect you if you
   have built a custom component using that function.
 - Added string url previews to fields

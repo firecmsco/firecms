@@ -210,8 +210,5 @@ export interface DataSource {
     /**
      * Count the number of entities in a collection
      */
-    countEntities(props: {
-        path: string,
-        collection: EntityCollection,
-    }): Promise<number>;
+    countEntities<M extends Record<string, any> = any>(props: FetchCollectionProps<M>): Promise<number>;
 }

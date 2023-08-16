@@ -23,7 +23,7 @@ export function DeleteConfirmationDialog({
             onOpenChange={(open) => !open ? onCancel() : undefined}
         >
             <DialogContent>
-                <Typography variant={"h6"}>{title}</Typography>
+                <Typography variant={"h6"} className={"mb-2"}>{title}</Typography>
                 {body}
             </DialogContent>
 

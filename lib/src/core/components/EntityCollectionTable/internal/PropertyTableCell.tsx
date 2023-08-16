@@ -446,7 +446,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 {includeActions && <EntityTableCellActions
                     showError={showError}
                     disabled={disabled}
-                    showExpandIcon={true}
+                    showExpandIcon={showExpandIcon}
                     selected={selected}
                     openPopup={!disabled ? openPopup : undefined}/>}
 

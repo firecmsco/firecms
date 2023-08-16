@@ -54,7 +54,7 @@ export function PopupFormField<M extends Record<string, any>>(props: PopupFormFi
 
 export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           tableKey,
-                                                                          entity,
+                                                                          entity: entityProp,
                                                                           customFieldValidator,
                                                                           propertyKey,
                                                                           collection: inputCollection,
@@ -66,6 +66,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           onCellValueChange
                                                                       }: PopupFormFieldProps<M>) {
 
+    console.log("path", path);
+
     const dataSource = useDataSource();
     const fireCMSContext = useFireCMSContext();
 
@@ -74,6 +76,25 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         x: number,
         y: number
     }>();
+
+    const entityId = entityProp?.id;
+    const [entity, setEntity] = useState<Entity<M> | undefined>(entityProp);
+    useEffect(() => {
+        if (entityId && inputCollection) {
+            return dataSource.listenEntity?.({
+                path,
+                entityId,
+                collection: inputCollection,
+                onUpdate: setEntity
+            });
+        } else {
+            return () => {
+            };
+        }
+    }, [dataSource, entityId, inputCollection, path]);
+
+    console.log("entity", entity)
+
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
 
     const collection: ResolvedEntityCollection<M> | undefined = inputCollection
@@ -81,7 +102,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             collection: inputCollection,
             path,
             values: internalValue,
-            entityId: entity?.id,
+            entityId,
             fields: fireCMSContext.fields
         })
         : undefined;
@@ -176,14 +197,14 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     );
 
     const validationSchema = useMemo(() => {
-        if (!collection || !entity) return;
+        if (!collection || !entityId) return;
         return getYupEntitySchema(
-            entity.id,
+            entityId,
             propertyKey && collection.properties[propertyKey as string]
                 ? { [propertyKey]: collection.properties[propertyKey as string] } as ResolvedProperties<any>
                 : {} as ResolvedProperties<any>,
             customFieldValidator);
-    }, [path, propertyKey, collection, entity]);
+    }, [collection, entityId, propertyKey, customFieldValidator]);
 
     const adaptResize = useCallback(() => {
         return updatePopupLocation(popupLocation);
@@ -216,6 +237,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab`}>
             <Formik
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
+                enableReinitialize
                 validationSchema={validationSchema}
                 validateOnMount={true}
                 validate={(values) => console.debug("Validating", values)}
@@ -255,7 +277,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
                     const formContext: FormContext<M> = {
                         collection,
-                        entityId: entity.id,
+                        entityId,
                         values,
                         path,
                         setFieldValue,
@@ -281,7 +303,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
                     let internalForm = <>
                         <div
-                            key={`popup_form_${tableKey}_${entity.id}_${columnIndex}`}
+                            key={`popup_form_${tableKey}_${entityId}_${columnIndex}`}
                             className="w-[520px] max-w-full max-h-[85vh]">
                             <Form
                                 onSubmit={handleSubmit}
@@ -329,7 +351,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                         collection={collection}
                                         entity={entity}
                                         context={fireCMSContext}
-                                        currentEntityId={entity.id}
+                                        currentEntityId={entityId}
                                         formContext={formContext}
                                         {...plugin.form.provider.props}>
                                         {internalForm}
@@ -352,7 +374,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const draggable = (
         <div
-            key={`draggable_${propertyKey as string}_${entity.id}_${open}`}
+            key={`draggable_${propertyKey as string}_${entityId}_${open}`}
             style={{
                 boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
             }}
@@ -390,7 +412,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     );
 
     return (
-        <Portal.Root>
+        <Portal.Root asChild>
             {draggable}
         </Portal.Root>
     );

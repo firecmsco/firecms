@@ -227,13 +227,14 @@ function FilterForm<M>({
                 className={cn(defaultBorderMixin, "py-4 px-6 text-xs font-semibold uppercase border-b")}>
                 {column.title ?? id}
             </div>
-            {filterField && <div className="m-6">
+            {filterField && <div className="m-4">
                 {filterField}
             </div>}
-            <div className="flex justify-end m-6">
+            <div className="flex justify-end m-4">
                 <Button
                     className="mr-4"
                     disabled={!filterIsSet}
+                    variant={"text"}
                     color="primary"
                     type="reset"
                     aria-label="filter clear"

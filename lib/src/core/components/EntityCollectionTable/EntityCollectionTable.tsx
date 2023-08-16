@@ -128,6 +128,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const navigation = useNavigationContext();
 
+        const resolvedFullPath = navigation.resolveAliasesFrom(fullPath);
+
         const largeLayout = useLargeLayout();
         const disabledFilterChange = Boolean(forceFilter);
         const selectedEntities = selectionController?.selectedEntities?.length > 0 ? selectionController?.selectedEntities : highlightedEntities;
@@ -535,7 +537,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         entity={popupCell?.entity}
                         tableKey={tableKey.current}
                         customFieldValidator={customFieldValidator}
-                        path={fullPath}
+                        path={resolvedFullPath}
                         onCellValueChange={onValueChange}
                     />
 

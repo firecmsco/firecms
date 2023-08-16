@@ -6,7 +6,7 @@ import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { IconButton, Typography } from "../../../components";
-import { cardMixin } from "../../../styles";
+import { cardClickableMixin, cardMixin } from "../../../styles";
 import { ArrowForwardIcon, StarBorderIcon, StarIcon } from "../../../icons";
 import { cn } from "../../../components/util/cn";
 
@@ -65,7 +65,7 @@ export function NavigationCollectionCard({
     }
 
     return (
-        <div className={cn(cardMixin, "h-full p-4 cursor-pointer min-h-[230px]")}>
+        <div className={cn(cardMixin, cardClickableMixin, "h-full p-4 cursor-pointer min-h-[230px]")}>
 
             <div
                 className="flex flex-col items-start h-full"

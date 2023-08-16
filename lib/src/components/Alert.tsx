@@ -38,9 +38,9 @@ export const Alert: React.FC<AlertProps> = ({
     return (
         <div
             style={style}
-            className={cn(`p-4 rounded-md flex items-center gap-2`,classes , className)}
+            className={cn("px-4 py-2 rounded-md flex items-center gap-2", classes, className)}
         >
-            <span className={`flex-grow`}>{children}</span>
+            <span className={"flex-grow"}>{children}</span>
             {onDismiss && (
                 <button className="text-gray-400 hover:text-gray-600 dark:text-gray-500 dark:hover:text-gray-400"
                         onClick={onDismiss}>

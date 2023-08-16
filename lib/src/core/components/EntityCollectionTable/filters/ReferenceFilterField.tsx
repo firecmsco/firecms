@@ -160,7 +160,7 @@ export function ReferenceFilterField({
                 </Select>
             </div>
 
-            <div className="flex-grow ml-4 h-full">
+            <div className="flex-grow ml-2 h-full">
 
                 {internalValue && Array.isArray(internalValue) && <div>
                     {internalValue.map((ref, index) => buildEntry(ref))}

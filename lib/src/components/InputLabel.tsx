@@ -21,10 +21,10 @@ export const InputLabel = React.forwardRef<HTMLLabelElement, InputLabelProps>(fu
     };
 
     const computedClassName = cn(defaultClasses.root,
-        className, {
-        [defaultClasses.shrink]: shrink,
-        [defaultClasses.expanded]: !shrink
-    });
+        {
+            [defaultClasses.shrink]: shrink,
+            [defaultClasses.expanded]: !shrink
+        }, className);
 
     return (
         <label

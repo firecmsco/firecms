@@ -9,9 +9,8 @@ import { useSnackbarController, useStorageSource } from "../../../../hooks";
 import { getThumbnailMeasure } from "../../../../preview/util";
 import { StorageFieldItem, useStorageUploadController } from "../../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../../../../form/components/StorageUploadProgress";
-import { IconButton, Typography } from "../../../../components";
+import { IconButton, Typography , cn } from "../../../../components";
 import { EditIcon } from "../../../../icons";
-import { cn } from "../../../../components/util/cn";
 import { EntityTableCellActions } from "../internal/EntityTableCellActions";
 
 const dropZoneClasses = "max-w-full box-border relative pt-[2px] items-center border border-transparent outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid";
@@ -210,7 +209,7 @@ function StorageUpload({
              onMouseMove={() => setOnHover(true)}
              onMouseLeave={() => setOnHover(false)}
              className={cn(dropZoneClasses,
-                 "relative w-full h-full",
+                 "relative w-full h-full flex",
                  `justify-${hasValue ? "start" : "center"}`,
                  isDragActive ? activeDropClasses : "",
                  isDragAccept ? acceptDropClasses : "",
