@@ -1,14 +1,9 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
-import {
-    ContainerMixin,
-    CTAButtonMixin,
-    CTAOutlinedButtonMixin
-} from "../utils";
+import { ContainerMixin, CTAButtonMixin, CTAOutlinedButtonMixin } from "../utils";
 import CheckIcon from "@site/static/img/icons/check.svg";
 import RemoveIcon from "@site/static/img/icons/remove.svg";
 import ScheduleIcon from "@site/static/img/icons/schedule.svg";
-
 
 const data = [{
         feature: "Unlimited projects",
@@ -52,6 +47,12 @@ const data = [{
         cloud: "Yes",
         cloudPlus: "Yes",
         cloudPro: "Yes"
+    },{
+        feature: "Data import",
+        selfHosted: "No",
+        cloud: "No",
+        cloudPlus: "WIP",
+        cloudPro: "WIP"
     }, {
         feature: "User and role management",
         selfHosted: "Dev managed",
@@ -70,12 +71,6 @@ const data = [{
         cloud: "No",
         cloudPlus: "Yes",
         cloudPro: "Yes"
-    }, {
-        feature: "Text search",
-        selfHosted: "Dev managed",
-        cloud: "No",
-        cloudPlus: "WIP",
-        cloudPro: "WIP"
     }, {
         feature: "Custom user roles",
         selfHosted: "Dev managed",
@@ -101,13 +96,19 @@ const data = [{
         cloudPlus: "WIP",
         cloudPro: "WIP"
     }, {
-        feature: "Custom routes",
+        feature: "Theme and logo customisation",
         selfHosted: "Yes",
+        cloud: "No",
+        cloudPlus: "WIP",
+        cloudPro: "WIP"
+    }, {
+        feature: "Text search",
+        selfHosted: "Dev managed",
         cloud: "No",
         cloudPlus: "No",
         cloudPro: "WIP"
     }, {
-        feature: "Theme and logo customisation",
+        feature: "Custom routes",
         selfHosted: "Yes",
         cloud: "No",
         cloudPlus: "No",
@@ -145,7 +146,7 @@ export function VersionsComparison() {
     return <section className={ContainerMixin + " max-w-full overflow-x-auto"}>
 
         <h2 className={"text-3xl md:text-4xl font-bold my-8 text-center"}>
-            Features comparison
+            Versions comparison
         </h2>
         <table
             className="font-medium  border-separate text-sm text-left my-8">

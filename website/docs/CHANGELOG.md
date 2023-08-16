@@ -2,6 +2,15 @@
 id: changelog
 title: Changelog
 ---
+## [2.0.5] - 2023-07-11
+
+### Changed
+
+- Default value for string properties is now `null` instead of `"""`.
+- Fix for changing text search controller not updating as a dependency.
+- Fix for setting a unique field using a reference, which was 
+generating an invalid query in Firestore.
+ 
 ## [2.0.4] - 2023-06-15
 
 ### Changed
@@ -67,7 +76,7 @@ title: Changelog
 ### Changed
 
 - Added support for collection groups
-- [BREAKING] The `countEntities` function in the data source not takes an
+- [BREAKING] The `countEntities` function in the data source now takes an
   object instead of a string as parameter. This will only affect you if you
   have built a custom component using that function.
 - Added string url previews to fields

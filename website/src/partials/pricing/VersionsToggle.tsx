@@ -37,10 +37,10 @@ export function ToggleButton({ title, subtitle, icon, selected, onClick }: {
     return (
         <div
             onClick={onClick}
-            className={"cursor-pointer max-w-sm p-6 border border-solid rounded-lg flex flex-row gap-4 items-center "
+            className={"cursor-pointer max-w-sm p-6 border border-solid rounded-lg flex flex-row gap-4 items-center bg-gray-50 dark:bg-gray-800 "
                 + (selected
-                    ? "border-primary shadow-xl text-gray-700 dark:text-gray-300"
-                    : "border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 text-gray-600 dark:text-gray-400")}
+                    ? "border-transparent shadow-xl text-gray-700 dark:text-gray-300 ring-2 ring-blue-500"
+                    : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400")}
         >
             {icon}
             <div

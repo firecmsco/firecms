@@ -145,7 +145,7 @@ export default function ThreeJSAnimationShader({
         });
 
         material.wireframe = wireframe;
-        material.flatShading   = true;
+        material.flatShading = true;
         return material;
     }
 
@@ -587,22 +587,23 @@ float Sigmoid (float x) {
 void main(){
     vec3 color = v_color;
     color.rgb += v_displacement_amount * 0.3;
-    color = czm_saturation(color, 1.1);
+    color = czm_saturation(color, 1.5);
     
     if(u_dark_mode == 1.0){
-        color.g = color.g * 0.15;
-        color.r = color.r * 0.35;
-        color.b = color.b * 0.45;
+        color.g = color.g * 0.25;
+        color.r = color.r * 0.25;
+        color.b = color.b * 0.35;
         if(v_position.z < 0.0){
-            color.rg /=  (u_sphere_radius - v_position.z) / u_sphere_radius * 1.1;
+            color.rg *= ((u_sphere_radius - v_position.z) / u_sphere_radius * 0.1);
+            color.b *= ((u_sphere_radius - v_position.z) / u_sphere_radius * 1.30);
         }
     } else {
-        // color.g = color.g * .99;
-        // color.r = color.r * .90;
-        // color.b = color.b * 1.1;
+        color.g = color.g * .99;
+        color.r = color.r * .90;
+        color.b = color.b * 1.1;
         
         if(v_position.z < 0.0){
-            // color.rg *=  (u_sphere_radius - v_position.z) / u_sphere_radius * 1.4;
+            color.rg *=  (u_sphere_radius - v_position.z) / u_sphere_radius * 1.2;
         }
     }
     

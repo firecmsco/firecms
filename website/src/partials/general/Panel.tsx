@@ -15,7 +15,7 @@ export function Panel({
     contained?: boolean
 }) {
 
-    const colorClass = color === "gray" ? "bg-gray-200 dark:bg-gray-800" :
+    const colorClass = color === "gray" ? "bg-gray-200 dark:bg-gray-900" :
         color === "primary" ? "bg-primary text-white" :
             color === "secondary" ? "bg-secondary text-white" : "";
 
