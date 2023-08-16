@@ -10,6 +10,7 @@ export type DialogProps = {
     className?: string;
     fullWidth?: boolean;
     fullHeight?: boolean;
+    fullScreen?: boolean;
     scrollable?: boolean;
     maxWidth?: keyof typeof widthClasses;
 };
@@ -36,6 +37,7 @@ export const Dialog = ({
                            className,
                            fullWidth = true,
                            fullHeight,
+                           fullScreen,
                            scrollable = true,
                            maxWidth = "md"
                        }: DialogProps) => {
@@ -79,15 +81,15 @@ export const Dialog = ({
                                 "z-30",
                                 "relative",
                                 "outline-none focus:outline-none",
-                                fullWidth ? "w-11/12" : undefined,
-                                fullHeight ? "h-full" : undefined,
+                                fullWidth && !fullScreen ? "w-11/12" : undefined,
+                                fullHeight && !fullScreen ? "h-full" : undefined,
                                 "text-gray-900 dark:text-white",
                                 "justify-center items-center",
-                                "max-h-[90vh] shadow-xl",
+                                fullScreen ? "h-screen w-screen" : "max-h-[90vh] shadow-xl",
                                 "ease-in-out duration-200",
                                 scrollable && "overflow-y-auto",
                                 displayed && open ? "opacity-100" : "opacity-0",
-                                maxWidth ? widthClasses[maxWidth] : undefined,
+                                maxWidth && !fullScreen ? widthClasses[maxWidth] : undefined,
                                 className
                             )}>
                             {children}

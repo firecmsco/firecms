@@ -73,7 +73,7 @@ export function SearchBar({
             />
             {searchText
                 ? <IconButton
-                    className={`mr-${large ? 2 : 1} absolute right-0 top-1`}
+                    className={`${large ? "mr-2 top-1" : "mr-1 top-0"} absolute right-0 z-10`}
                     // size={"small"}
                     onClick={clearText}>
                     <ClearIcon size={"small"}/>

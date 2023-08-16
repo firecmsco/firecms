@@ -6,6 +6,7 @@ import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { Tooltip, Typography } from "../../components";
 import { DescriptionIcon, OpenInNewIcon } from "../../icons";
+import { EmptyValue } from "./EmptyValue";
 
 /**
  * @category Preview components
@@ -23,15 +24,16 @@ export function UrlComponentPreview({
 }): React.ReactElement {
 
     if (!previewType) {
+        if (!url || !url.trim()) return <EmptyValue/>;
         return (
-            <a className="flex break-words items-center font-medium text-primary visited:text-primary dark:visited:text-primary dark:text-primary"
+            <a className="flex gap-4 break-words items-center font-medium text-primary visited:text-primary dark:visited:text-primary dark:text-primary"
                href={url}
                rel="noopener noreferrer"
                onMouseDown={(e: React.MouseEvent) => {
                    e.preventDefault();
                }}
                target="_blank">
-                <OpenInNewIcon style={{ marginRight: 8 }} size={"small"}/>
+                <OpenInNewIcon size={"small"}/>
                 {url}
             </a>
         );

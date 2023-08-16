@@ -100,7 +100,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const computedDrawerOpen: boolean = drawerOpen || Boolean(largeLayout && autoOpenDrawer && onHover);
         return (
             <div
-                className="flex h-screen w-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white "
+                className="flex h-screen w-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white overflow-hidden"
                 style={{
                     paddingTop: "env(safe-area-inset-top)",
                     paddingLeft: "env(safe-area-inset-left)",
@@ -172,7 +172,7 @@ function StyledDrawer(props: {
     const navigation = useNavigationContext();
 
     const innerDrawer = <div
-        className={"relative left-0 top-0 h-full overflow-auto no-scrollbar"}
+        className={"relative left-0 top-0 h-full no-scrollbar overflow-y-auto overflow-x-hidden"}
         style={{
             width: props.open ? DRAWER_WIDTH : "72px",
             transition: "left 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
@@ -182,7 +182,7 @@ function StyledDrawer(props: {
         {!props.open && (
             <Tooltip title="Open menu"
                      placement="right"
-                     className="absolute top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit"
+                     className="fixed top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit"
             >
                 <IconButton
                     color="inherit"

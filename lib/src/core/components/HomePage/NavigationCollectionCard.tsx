@@ -5,10 +5,9 @@ import { useFireCMSContext } from "../../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
-import { IconButton, Typography } from "../../../components";
+import { IconButton, Typography , cn } from "../../../components";
 import { cardClickableMixin, cardMixin } from "../../../styles";
 import { ArrowForwardIcon, StarBorderIcon, StarIcon } from "../../../icons";
-import { cn } from "../../../components/util/cn";
 
 /**
  * This is the component used in the home page to render a card for each

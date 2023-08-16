@@ -1,13 +1,11 @@
 import React, { useCallback } from "react";
 
-import { useLargeLayout } from "../hooks/useLargeLayout";
+import { useFireCMSContext, useLargeLayout, useNavigationContext } from "../hooks";
 
 import { NavLink } from "react-router-dom";
-import { useFireCMSContext, useNavigationContext } from "../hooks";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
 import { getIconForView } from "./util";
-import { Tooltip, Typography } from "../components";
-import { cn } from "../components/util/cn";
+import { cn, Tooltip, Typography } from "../components";
 
 /**
  * Props used in case you need to override the default drawer
@@ -130,7 +128,7 @@ export function DrawerNavigationItem({
     const listItem = <NavLink
         onClick={onClick}
         className={({ isActive }: any) => cn("rounded-r-xl truncate",
-            "hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75 text-gray-800 dark:text-gray-200",
+            "hover:bg-gray-200 hover:bg-opacity-75 dark:hover:bg-gray-700 dark:hover:bg-opacity-75 text-gray-800 dark:text-gray-200 hover:text-gray-900 hover:dark:text-gray-100",
             "flex flex-row items-center w-full mr-8",
             drawerOpen ? "pl-8 h-12" : "pl-6 h-11",
             "font-medium text-sm",
