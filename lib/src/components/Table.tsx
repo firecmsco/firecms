@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import { defaultBorderMixin } from "../styles";
 import { cn } from "./util/cn";
 
@@ -40,11 +40,13 @@ export const TableHeader = ({
                                 children,
                                 className
                             }: TableHeaderProps) => (
-    <thead className={cn(
-        defaultBorderMixin,
-        "text-sm font-medium text-gray-700 dark:text-gray-300",
-        "bg-gray-50 border-b dark:bg-gray-900", className)}>
-    {children}
+    <thead>
+        <tr className={cn(
+            defaultBorderMixin,
+            "text-sm font-medium text-gray-700 dark:text-gray-300",
+            "bg-gray-50 border-b dark:bg-gray-900", className)}>
+            {children}
+        </tr>
     </thead>
 );
 
@@ -88,9 +90,13 @@ export const TableCell = ({
                               className,
                               style
                           }: TableCellProps) => {
-    const Tag = header ? "th" : "td";
+
+    const ref = useRef<HTMLTableCellElement>(null);
+
+    const Tag = header || getParentName(ref.current) === "TableHeader" ? "th" : "td";
     return (
         <Tag scope={scope}
+             ref={ref}
              style={style}
              className={cn("px-6 py-3 text-clip ",
                  align === "center" ? "text-center" : (align === "right" ? "text-right" : "text-left"),
@@ -99,3 +105,30 @@ export const TableCell = ({
         </Tag>
     );
 };
+
+// This is highly experimental and might break in the future
+function getParentName(element: HTMLElement | null): string | undefined {
+    if (element) {
+        const key = Object.keys(element).find((key) => {
+            return (
+                key.startsWith("__reactFiber$") ||
+                key.startsWith("__reactInternalInstance$")
+            );
+        });
+
+        // @ts-ignore
+        const domFiber = element[key];
+        // @ts-ignore
+        const getComponentFiber = (fiber) => {
+            let parentFiber = fiber.return;
+            while (typeof parentFiber.type === "string") {
+                parentFiber = parentFiber.return;
+            }
+            return parentFiber;
+        };
+        let fiber = getComponentFiber(domFiber);
+        fiber = getComponentFiber(fiber);
+        return fiber?.elementType?.name;
+    }
+    return undefined;
+}

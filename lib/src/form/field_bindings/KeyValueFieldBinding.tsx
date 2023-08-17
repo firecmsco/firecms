@@ -41,8 +41,6 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
                                                                         context
                                                                     }: FieldProps<T>) {
 
-    console.log("KeyValueFieldBinding", propertyKey, value);
-
     const expanded = (property.expanded === undefined ? true : property.expanded) || autoFocus;
 
     if (!property.keyValue) {
@@ -76,6 +74,155 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
 
         </>
     );
+}
+
+interface MapEditViewParams<T extends Record<string, any>> {
+    value: T;
+    setValue: (value: (T | null)) => void;
+    fieldName?: string,
+    disabled?: boolean
+}
+
+function MapEditView<T extends Record<string, any>>({
+                                                        value,
+                                                        setValue,
+                                                        fieldName,
+                                                        disabled
+                                                    }: MapEditViewParams<T>) {
+    const [internalState, setInternalState] = React.useState<MapEditViewRowState[]>(
+        Object.keys(value ?? {}).map((key) => [getRandomId(), {
+            key,
+            dataType: getDataType(value[key]) ?? "string"
+        }])
+    );
+
+    useEffect(() => {
+        const currentKeys = internalState.map(([id, { key }]) => key);
+        const newKeys = Object.entries(value ?? {}).filter(([key, v]) => v !== undefined).map(([key]) => key);
+        const keysToAdd = newKeys.filter((key) => !currentKeys.includes(key));
+        const keysToRemove = currentKeys.filter((key) => !newKeys.includes(key));
+        const newRowIds = [...internalState];
+        keysToAdd.forEach((key) => {
+            newRowIds.push([getRandomId(), {
+                key,
+                dataType: getDataType(value[key]) ?? "string"
+            }]);
+        });
+        keysToRemove.forEach((key) => {
+            const index = newRowIds.findIndex(([id, { key: k }]) => k === key);
+            newRowIds.splice(index, 1);
+        });
+        setInternalState(newRowIds);
+    }, [value]);
+
+    const originalValue = React.useRef<T>(value);
+
+    const updateDataType = (rowId: number, dataType: DataType) => {
+        if (!rowId) {
+            console.warn("No key selected for data type update");
+            return;
+        }
+        setInternalState(internalState.map((row) => {
+            if (row[0] === rowId) {
+                return [row[0], {
+                    key: row[1].key,
+                    dataType
+                }];
+            }
+            return row;
+        }));
+        setValue({
+            ...value,
+            [internalState.find((row) => row[0] === rowId)?.[1].key ?? ""]: getDefaultValueForDataType(dataType)
+        })
+    };
+
+    return <div className="py-1 flex flex-col gap-1">
+        {internalState
+            .map(([rowId, {
+                    key: fieldKey,
+                    dataType
+                }], index) => {
+                    const entryValue = fieldKey ? value[fieldKey] : "";
+                    const onFieldKeyChange = (newKey: string) => {
+
+                        setInternalState(internalState.map((currentRowId) => {
+                            if (currentRowId[0] === rowId) {
+                                return [rowId, {
+                                    key: newKey ?? "",
+                                    dataType: currentRowId[1].dataType
+                                }];
+                            }
+                            return currentRowId;
+                        }));
+
+                        if (typeof value === "object" && newKey in value) {
+                            // if the key is already there, don't delete the previous value
+                            return;
+                        }
+
+                        const newValue = { ...value };
+                        if (originalValue.current && fieldKey in originalValue.current) {
+                            // @ts-ignore
+                            newValue[fieldKey] = undefined; // set to undefined to remove from the object, the datasource will remove it from the backend
+                        } else {
+                            // @ts-ignore
+                            delete newValue[fieldKey];
+                        }
+                        setValue({
+                            ...newValue,
+                            [newKey ?? ""]: entryValue
+                        });
+                    };
+                    return <MapKeyValueRow rowId={rowId}
+                                           key={rowId}
+                                           fieldKey={fieldKey}
+                                           value={value}
+                                           onDeleteClick={() => {
+                                               const newValue = { ...value };
+                                               if (originalValue.current && fieldKey in originalValue.current) {
+                                                   // @ts-ignore
+                                                   newValue[fieldKey] = undefined;
+                                               } else {
+                                                   // @ts-ignore
+                                                   delete newValue[fieldKey];
+                                               }
+                                               setInternalState(internalState.filter((currentRowId) => currentRowId[0] !== rowId));
+                                               setValue({
+                                                   ...newValue
+                                               });
+                                           }}
+                                           onFieldKeyChange={onFieldKeyChange}
+                                           setValue={setValue}
+                                           entryValue={entryValue}
+                                           dataType={dataType}
+                                           disabled={disabled}
+                                           updateDataType={updateDataType}/>;
+                }
+            )}
+
+        <Button variant={"text"}
+                size={"small"}
+                color="primary"
+                className="w-full"
+                disabled={disabled}
+                startIcon={<AddIcon/>}
+                onClick={(e) => {
+                    e.preventDefault();
+                    setValue({
+                        ...value,
+                        "": null
+                    });
+                    setInternalState([...internalState, [getRandomId(), {
+                        key: "",
+                        dataType: "string"
+                    }]]);
+                }
+                }>
+            {fieldName ? `Add to ${fieldName}` : "Add"}
+        </Button>
+
+    </div>;
 }
 
 function MapKeyValueRow<T extends Record<string, any>>({
@@ -376,155 +523,6 @@ function ArrayKeyValueRow<T>({
     );
 }
 
-interface MapEditViewParams<T extends Record<string, any>> {
-    value: T;
-    setValue: (value: (T | null)) => void;
-    fieldName?: string,
-    disabled?: boolean
-}
-
-function MapEditView<T extends Record<string, any>>({
-                                                        value,
-                                                        setValue,
-                                                        fieldName,
-                                                        disabled
-                                                    }: MapEditViewParams<T>) {
-    const [internalState, setInternalState] = React.useState<MapEditViewRowState[]>(
-        Object.keys(value ?? {}).map((key) => [getRandomId(), {
-            key,
-            dataType: getDataType(value[key]) ?? "string"
-        }])
-    );
-    console.log(internalState);
-
-    useEffect(() => {
-        const currentKeys = internalState.map(([id, { key }]) => key);
-        const newKeys = Object.entries(value ?? {}).filter(([key, v]) => v !== undefined).map(([key]) => key);
-        const keysToAdd = newKeys.filter((key) => !currentKeys.includes(key));
-        const keysToRemove = currentKeys.filter((key) => !newKeys.includes(key));
-        const newRowIds = [...internalState];
-        keysToAdd.forEach((key) => {
-            newRowIds.push([getRandomId(), {
-                key,
-                dataType: getDataType(value[key]) ?? "string"
-            }]);
-        });
-        keysToRemove.forEach((key) => {
-            const index = newRowIds.findIndex(([id, { key: k }]) => k === key);
-            newRowIds.splice(index, 1);
-        });
-        setInternalState(newRowIds);
-    }, [value]);
-
-    const originalValue = React.useRef<T>(value);
-
-    const updateDataType = (rowId: number, dataType: DataType) => {
-        if (!rowId) {
-            console.warn("No key selected for data type update");
-            return;
-        }
-        setInternalState(internalState.map((row) => {
-            if (row[0] === rowId) {
-                return [row[0], {
-                    key: row[1].key,
-                    dataType
-                }];
-            }
-            return row;
-        }));
-        setValue({
-            ...value,
-            [internalState.find((row) => row[0] === rowId)?.[1].key ?? ""]: getDefaultValueForDataType(dataType)
-        })
-    };
-
-    return <div className="py-1 flex flex-col space-y-1">
-        {internalState
-            .map(([rowId, {
-                    key: fieldKey,
-                    dataType
-                }], index) => {
-                    const entryValue = fieldKey ? value[fieldKey] : "";
-                    const onFieldKeyChange = (newKey: string) => {
-
-                        setInternalState(internalState.map((currentRowId) => {
-                            if (currentRowId[0] === rowId) {
-                                return [rowId, {
-                                    key: newKey ?? "",
-                                    dataType: currentRowId[1].dataType
-                                }];
-                            }
-                            return currentRowId;
-                        }));
-
-                        if (typeof value === "object" && newKey in value) {
-                            // if the key is already there, don't delete the previous value
-                            return;
-                        }
-
-                        const newValue = { ...value };
-                        if (originalValue.current && fieldKey in originalValue.current) {
-                            // @ts-ignore
-                            newValue[fieldKey] = undefined; // set to undefined to remove from the object, the datasource will remove it from the backend
-                        } else {
-                            // @ts-ignore
-                            delete newValue[fieldKey];
-                        }
-                        setValue({
-                            ...newValue,
-                            [newKey ?? ""]: entryValue
-                        });
-                    };
-                    return <MapKeyValueRow rowId={rowId}
-                                           key={rowId}
-                                           fieldKey={fieldKey}
-                                           value={value}
-                                           onDeleteClick={() => {
-                                               const newValue = { ...value };
-                                               if (originalValue.current && fieldKey in originalValue.current) {
-                                                   // @ts-ignore
-                                                   newValue[fieldKey] = undefined;
-                                               } else {
-                                                   // @ts-ignore
-                                                   delete newValue[fieldKey];
-                                               }
-                                               setInternalState(internalState.filter((currentRowId) => currentRowId[0] !== rowId));
-                                               setValue({
-                                                   ...newValue
-                                               });
-                                           }}
-                                           onFieldKeyChange={onFieldKeyChange}
-                                           setValue={setValue}
-                                           entryValue={entryValue}
-                                           dataType={dataType}
-                                           disabled={disabled}
-                                           updateDataType={updateDataType}/>;
-                }
-            )}
-
-            <Button variant={"text"}
-                    size={"small"}
-                    color="primary"
-                    className="w-full"
-                    disabled={disabled}
-                    startIcon={<AddIcon/>}
-                    onClick={(e) => {
-                        e.preventDefault();
-                        setValue({
-                            ...value,
-                            "": null
-                        });
-                        setInternalState([...internalState, [getRandomId(), {
-                            key: "",
-                            dataType: "string"
-                        }]]);
-                    }
-                    }>
-                {fieldName ? `Add to ${fieldName}` : "Add"}
-            </Button>
-
-    </div>;
-}
 
 function getRandomId() {
     return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));

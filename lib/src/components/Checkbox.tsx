@@ -45,7 +45,7 @@ export const Checkbox = ({
                 asChild
                 checked={isChecked}
                 disabled={disabled}
-                onCheckedChange={onCheckedChange}>
+                onCheckedChange={disabled ? undefined : onCheckedChange}>
                 <div
                     className={cn(
                         "border-2 relative transition-colors ease-in-out duration-150",

@@ -32,16 +32,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 
     if (!value) return null;
 
-    let mapPropertyKeys: string[];
-    if (size === "medium") {
-        mapPropertyKeys = Object.keys(mapProperty.properties);
-    } else {
-        mapPropertyKeys = (mapProperty.previewProperties || Object.keys(mapProperty.properties)) as string[];
-        if (size === "small")
-            mapPropertyKeys = mapPropertyKeys.slice(0, 3);
-        else if (size === "tiny")
-            mapPropertyKeys = mapPropertyKeys.slice(0, 1);
-    }
+    const mapPropertyKeys: string[] = Object.keys(mapProperty.properties)
 
     if (size !== "medium")
         return (
@@ -63,33 +54,48 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 
     return (
         <div
-            className="flex flex-col w-full">
+            className="flex flex-col gap-1 w-full">
             {mapPropertyKeys &&
                 mapPropertyKeys.map((key, index) => {
+                    const childProperty = mapProperty.properties![key];
                     return (
                         <div
                             key={`map_preview_table_${key}}`}
-                            className={cn(defaultBorderMixin, "flex flex-row pt-0.5 last:border-b-0 border-b border-opacity-gray-100 pb-0.5")}>
+                            className={cn(defaultBorderMixin, "last:border-b-0 border-b")}>
                             <div
-                                key={`table-cell-title-${key}-${key}`}
-                                className="w-1/4 align-top pr-1">
-                                <Typography variant={"caption"}
-                                            className={"font-mono"}
-                                            color={"secondary"}>
-                                    {mapProperty.properties![key].name}
-                                </Typography>
+                                className={"flex flex-row pt-0.5 pb-0.5 gap-2"}>
+                                <div
+                                    className="min-w-[140px] w-[25%]">
+                                    <Typography variant={"caption"}
+                                                className={"font-mono break-words"}
+                                                color={"secondary"}>
+                                        {childProperty.name}
+                                    </Typography>
+                                </div>
+                                <div
+                                    className="flex-grow max-w-[75%]">
+                                    <ErrorBoundary>
+                                        {!(childProperty.dataType === "map" || childProperty === "array") &&
+                                            <PropertyPreview
+                                                propertyKey={key}
+                                                value={(value)[key]}
+                                                property={childProperty}
+                                                entity={entity}
+                                                size={size}/>}
+                                    </ErrorBoundary>
+                                </div>
                             </div>
-                            <div
-                                className="flex-grow">
-                                <ErrorBoundary>
+
+                            {(childProperty.dataType === "map" || childProperty === "array") &&
+                                <div className={cn(defaultBorderMixin, "border-l pl-4 ml-2 my-2")}>
                                     <PropertyPreview
                                         propertyKey={key}
                                         value={(value)[key]}
-                                        property={mapProperty.properties![key]}
+                                        property={childProperty}
                                         entity={entity}
-                                        size={"small"}/>
-                                </ErrorBoundary>
-                            </div>
+                                        size={size}/>
+                                </div>
+                            }
                         </div>
                     );
                 })}
@@ -101,31 +107,37 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 export function KeyValuePreview({ value }: { value: any }) {
     if (typeof value !== "object") return null;
     return <div
-        className="flex flex-col w-full">
+        className="flex flex-col gap-1 w-full">
         {
             Object.entries(value).map(([key, childValue]) => (
                 <div
                     key={`map_preview_table_${key}}`}
-                    className={cn(defaultBorderMixin, "flex flex-row pt-0.5 border-b border-opacity-100 last:border-0 last:pb-0 pb-0.5")}>
+                    className={cn(defaultBorderMixin, "last:border-b-0 border-b")}>
                     <div
-                        key={`table-cell-title-${key}-${key}`}
-                        className="w-1/4 align-top pr-1">
-                        <Typography variant={"caption"}
-                                    className={"font-mono"}
-                                    color={"secondary"}>
-                            {key}
-                        </Typography>
+                        className={"flex flex-row pt-0.5 pb-0.5 gap-2"}>
+                        <div
+                            key={`table-cell-title-${key}-${key}`}
+                            className="min-w-[140px] w-[25%]">
+                            <Typography variant={"caption"}
+                                        className={"font-mono break-words"}
+                                        color={"secondary"}>
+                                {key}
+                            </Typography>
+                        </div>
+                        <div
+                            className="flex-grow max-w-[75%]">
+                            {typeof childValue !== "object" && <Typography>
+                                <ErrorBoundary>
+                                    {childValue && childValue.toString()}
+                                </ErrorBoundary>
+                            </Typography>}
+                        </div>
                     </div>
-                    <div
-                        className="flex-grow">
-                        <Typography
-                            variant={"caption"}
-                            className={"font-mono"}>
-                            <ErrorBoundary>
-                                {JSON.stringify(childValue)}
-                            </ErrorBoundary>
-                        </Typography>
-                    </div>
+                    {typeof childValue !== "object" &&
+                        <div className={cn(defaultBorderMixin, "border-l pl-4")}>
+                            <KeyValuePreview value={childValue}/>
+                        </div>
+                    }
                 </div>
             ))
         }

@@ -1,7 +1,7 @@
 import React from "react";
 import { cn } from "./util/cn";
 
-export interface BooleanSwitchProps {
+export type BooleanSwitchProps = {
     value: boolean;
     className?: string;
     onValueChange?: (newValue: boolean) => void;
@@ -14,7 +14,8 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                                                                          className,
                                                                          onValueChange,
                                                                          disabled = false,
-                                                                         size = "medium"
+                                                                         size = "medium",
+                                                                         ...props
                                                                      }: BooleanSwitchProps, ref: React.Ref<HTMLButtonElement>) {
         return <button
             ref={ref}
@@ -29,7 +30,9 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                 "outline-none rounded-full relative shadow-sm",
                 value ? "ring-secondary ring-1 bg-secondary dark:bg-secondary" : "bg-white bg-opacity-54 dark:bg-gray-900 ring-1 ring-gray-100 dark:ring-gray-700",
                 className
-            )}>
+            )}
+            {...props}
+        >
             <div
                 className={cn(
                     "block rounded-full transition-transform duration-100 transform will-change-auto",

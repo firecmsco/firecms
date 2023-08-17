@@ -5,19 +5,15 @@ import {
     fieldBackgroundMixin,
     focusedClasses
 } from "../styles";
-import { BooleanSwitch } from "./BooleanSwitch";
+import { BooleanSwitch, BooleanSwitchProps } from "./BooleanSwitch";
 import { cn } from "./util/cn";
 
-export type BooleanSwitchWithLabelProps = {
-    value: boolean,
+export type BooleanSwitchWithLabelProps = BooleanSwitchProps & {
     position?: "start" | "end",
     invisible?: boolean,
-    onValueChange?: (value: boolean) => void,
     label?: React.ReactNode,
-    disabled?: boolean,
     error?: boolean,
     autoFocus?: boolean,
-    size?: "small" | "medium";
 };
 
 /**
@@ -33,7 +29,8 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                                                                           label,
                                                                           autoFocus,
                                                                           disabled,
-                                                                          size
+                                                                          size,
+                                                                          ...props
                                                                       }: BooleanSwitchWithLabelProps) {
 
     const ref = React.useRef<HTMLDivElement | null>(null);
@@ -79,7 +76,9 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 value={value}
                 ref={refInput}
                 size={size}
-                className={invisible && focus ? focusedClasses : ""}/>
+                className={invisible && focus ? focusedClasses : ""}
+                {...props}
+            />
 
             <div className={cn(
                 "flex-grow",
