@@ -97,7 +97,6 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
 
     return (
         <FieldComponent
-            // required={property.validation?.required}
             name={propertyKey}
         >
             {(fieldProps: FormikFieldProps<T>) => {

@@ -65,7 +65,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
                             <div
                                 className={"flex flex-row pt-0.5 pb-0.5 gap-2"}>
                                 <div
-                                    className="min-w-[140px] w-[25%]">
+                                    className="min-w-[140px] w-[25%] py-1">
                                     <Typography variant={"caption"}
                                                 className={"font-mono break-words"}
                                                 color={"secondary"}>
@@ -117,7 +117,7 @@ export function KeyValuePreview({ value }: { value: any }) {
                         className={"flex flex-row pt-0.5 pb-0.5 gap-2"}>
                         <div
                             key={`table-cell-title-${key}-${key}`}
-                            className="min-w-[140px] w-[25%]">
+                            className="min-w-[140px] w-[25%] py-1">
                             <Typography variant={"caption"}
                                         className={"font-mono break-words"}
                                         color={"secondary"}>

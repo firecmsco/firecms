@@ -8,21 +8,25 @@ import { CollectionActionsProps, Entity, EntityCollection, ExportConfig, Selecti
 import { Button, IconButton, Tooltip } from "../../../components";
 import { useLargeLayout } from "../../../hooks/useLargeLayout";
 import { AddIcon, DeleteIcon } from "../../../icons";
+import { toArray } from "../../util/arrays";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
     path: string;
+    relativePath: string;
+    parentPathSegments: string[];
     selectionEnabled: boolean;
     exportable: boolean | ExportConfig;
     onNewClick: () => void;
     onMultipleDeleteClick: () => void;
     selectionController: SelectionController<M>;
     loadedEntities: Entity<M>[];
-
 }
 
 export function EntityCollectionViewActions<M extends Record<string, any>>({
                                                                                collection,
+                                                                               relativePath,
+                                                                               parentPathSegments,
                                                                                onNewClick,
                                                                                exportable,
                                                                                onMultipleDeleteClick,
@@ -33,6 +37,8 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                                                                            }: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
+    const plugins = context.plugins ?? [];
+
     const authController = useAuthController();
 
     const largeLayout = useLargeLayout();
@@ -90,26 +96,36 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
 
     const actionProps: CollectionActionsProps = {
         path,
+        relativePath,
+        parentPathSegments,
         collection,
         selectionController,
         context,
         loadedEntities
     };
 
-    const actions = collection.Actions
-        ? Array.isArray(collection.Actions)
-            ? <>
-                {collection.Actions.map((Action, i) => (
-                    <Action key={`actions_${i}`} {...actionProps} />
-                ))}
-            </>
-            : <collection.Actions {...actionProps} />
-        : undefined;
+    const allActions: React.ComponentType<any>[] = [];
+    allActions.push(...toArray(collection.Actions));
+    if (plugins) {
+        plugins.forEach(plugin => {
+            if (plugin.collections?.CollectionActions) {
+                allActions.push(...toArray(plugin.collections?.CollectionActions));
+            }
+        });
+    }
+
+    const actions = <>
+            {allActions.map((Action, i) => (
+                <Action key={`actions_${i}`} {...actionProps} />
+            ))}
+        </>
+    ;
 
     const exportButton = exportable &&
         <ExportButton collection={collection}
                       exportConfig={typeof collection.exportable === "object" ? collection.exportable : undefined}
                       path={path}/>;
+
     return (
         <>
             {actions}

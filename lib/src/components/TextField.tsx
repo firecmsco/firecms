@@ -89,6 +89,7 @@ export function TextField<T extends string | number>({
         ? <TextareaAutosize
             {...inputProps as any}
             ref={inputRef}
+
             placeholder={placeholder}
             autoFocus={autoFocus}
             rows={rows}
@@ -119,7 +120,7 @@ export function TextField<T extends string | number>({
                 focused ? "text-text-primary dark:text-text-primary-dark" : "",
                 endAdornment ? "pr-10" : "pr-3",
                 inputClassName,
-                disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-600 dark:text-gray-500"
+                disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-800 dark:text-gray-200"
             )}
             placeholder={placeholder}
             autoFocus={autoFocus}

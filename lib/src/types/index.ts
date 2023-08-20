@@ -9,7 +9,6 @@ export * from "./locales";
 export * from "./user";
 export * from "./colors";
 export * from "./storage";
-export * from "./collection_override";
 export * from "./fields";
 export * from "./field_config";
 export * from "./datasource";

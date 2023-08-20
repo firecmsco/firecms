@@ -6,7 +6,7 @@ interface DraggableProps {
     // ref: React.RefObject<HTMLDivElement>,
     x?: number;
     y?: number;
-    onMove: (x: number, y: number) => void,
+    onMove: (params: { x: number, y: number }) => void,
 }
 
 export function useDraggable({
@@ -27,7 +27,10 @@ export function useDraggable({
             return;
         }
 
-        const { x, y } = containerRef.current.getBoundingClientRect();
+        const {
+            x,
+            y
+        } = containerRef.current.getBoundingClientRect();
 
         relX = event.screenX - x;
         relY = event.screenY - y;
@@ -58,9 +61,10 @@ export function useDraggable({
     const onMouseMove = (event: any) => {
         if (event.target.localName === "input" || !listeningRef.current)
             return;
-        onMove(
-            event.screenX - relX,
-            event.screenY - relY
+        onMove({
+                x: event.screenX - relX,
+                y: event.screenY - relY
+            }
         );
         event.stopPropagation();
     };

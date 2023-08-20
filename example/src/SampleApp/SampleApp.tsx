@@ -23,7 +23,6 @@ import { showcaseCollection } from "./collections/showcase_collection";
 
 import { textSearchController } from "./text_search";
 
-import { customCollectionOverrideHandler } from "./collections/custom_collection_resolver";
 import { CustomLoginView } from "./CustomLoginView";
 import { cryptoCollection } from "./collections/crypto_collection";
 import CustomColorTextField from "./custom_field/CustomColorTextField";
@@ -143,7 +142,6 @@ function SampleApp() {
         logo={logo}
         collections={(params) => collections}
         views={customViews}
-        collectionOverrideHandler={customCollectionOverrideHandler}
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}

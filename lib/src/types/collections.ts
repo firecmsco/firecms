@@ -277,10 +277,20 @@ export interface EntityCollection<M extends Record<string, any> = any,
  */
 export interface CollectionActionsProps<M extends Record<string, any> = any, UserType extends User = User, EC extends EntityCollection<M> = EntityCollection<M>> {
     /**
-     * Collection path of this entity. This is the full path, like
+     * Full collection path of this entity. This is the full path, like
      * `users/1234/addresses`
      */
     path: string;
+
+    /**
+     * Path of the last collection, like `addresses`
+     */
+    relativePath: string;
+
+    /**
+     * Array of the parent path segments like `['users']`
+     */
+    parentPathSegments: string[];
 
     /**
      * The collection configuration

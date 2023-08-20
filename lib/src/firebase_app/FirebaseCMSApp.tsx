@@ -53,7 +53,6 @@ export function FirebaseCMSApp({
                                    logoDark,
                                    toolbarExtraWidget,
                                    authentication,
-                                   collectionOverrideHandler,
                                    collections,
                                    views,
                                    textSearchController,
@@ -169,7 +168,6 @@ export function FirebaseCMSApp({
                         views={views}
                         authController={authController}
                         userConfigPersistence={userConfigPersistence}
-                        collectionOverrideHandler={collectionOverrideHandler}
                         dateTimeFormat={dateTimeFormat}
                         dataSource={dataSource}
                         storageSource={storageSource}

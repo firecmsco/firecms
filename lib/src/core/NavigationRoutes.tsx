@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from "react";
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../types";
 import { EntityCollectionView, FireCMSHomePage, NotFoundPage } from "./components";
-import { useBreadcrumbsContext, useFireCMSContext, useNavigationContext } from "../hooks";
+import { useBreadcrumbsContext, useNavigationContext } from "../hooks";
 import { toArray } from "./util/arrays";
 import equal from "react-fast-compare"
 
@@ -39,9 +39,6 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         const location = useLocation();
         const navigation = useNavigationContext();
 
-        const context = useFireCMSContext();
-        const plugins = context.plugins ?? [];
-
         if (!navigation)
             return <></>;
 
@@ -71,15 +68,6 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
         const collectionRoutes = sortedCollections
             .map((collection) => {
                     const urlPath = navigation.buildUrlCollectionPath(collection.alias ?? collection.path);
-                    const allActions: React.ComponentType<any>[] = [];
-                    if (plugins) {
-                        plugins.forEach(plugin => {
-                            if (plugin.collections?.CollectionActions) {
-                                allActions.push(...toArray(plugin.collections?.CollectionActions));
-                            }
-                        });
-                    }
-                    allActions.push(...toArray(collection.Actions));
                     return <Route path={urlPath + "/*"}
                                   key={`navigation_${collection.alias ?? collection.path}`}
                                   element={
@@ -90,9 +78,10 @@ export const NavigationRoutes = React.memo<NavigationRoutesProps>(
                                           <EntityCollectionView
                                               key={`collection_view_${collection.alias ?? collection.path}`}
                                               isSubCollection={false}
+                                              parentPathSegments={[]}
                                               fullPath={collection.alias ?? collection.path}
                                               {...collection}
-                                              Actions={allActions}/>
+                                              Actions={toArray(collection.Actions)}/>
                                       </RouteWrapper>
                                   }/>;
                 }

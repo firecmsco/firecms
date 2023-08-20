@@ -5,7 +5,6 @@ import { EntityCollection } from "./collections";
 import { CMSView } from "./navigation";
 import { FireCMSContext } from "./firecms_context";
 import { FieldConfig } from "./field_config";
-import { CollectionOverrideHandler } from "./collection_override";
 import { Locale } from "./locales";
 import { StorageSource } from "./storage";
 import { EntityLinkBuilder } from "./entity_link_builder";
@@ -87,17 +86,6 @@ export type FireCMSProps<UserType extends User> = {
      * the `fieldConfig` prop of a property in a collection.
      */
     fields?: Record<string, FieldConfig>;
-
-    /**
-     * Used to override collections based on the collection path and entityId.
-     * This resolver allows to override the collection for specific entities, or
-     * specific collections, app wide.
-     *
-     * This overrides collections **all through the app.**
-     *
-     * You can also override collections in place, when using {@link useSideEntityController}
-     */
-    collectionOverrideHandler?: CollectionOverrideHandler;
 
     /**
      * Format of the dates in the CMS.

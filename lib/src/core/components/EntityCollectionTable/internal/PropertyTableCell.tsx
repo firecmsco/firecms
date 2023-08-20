@@ -439,16 +439,15 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 showExpandIcon={showExpandIcon}
                 value={internalValue}
                 hideOverflow={hideOverflow}
-            >
-
-                {innerComponent}
-
-                {includeActions && <EntityTableCellActions
+                actions={includeActions && <EntityTableCellActions
                     showError={showError}
                     disabled={disabled}
                     showExpandIcon={showExpandIcon}
                     selected={selected}
                     openPopup={!disabled ? openPopup : undefined}/>}
+            >
+
+                {innerComponent}
 
             </EntityTableCell>
         );

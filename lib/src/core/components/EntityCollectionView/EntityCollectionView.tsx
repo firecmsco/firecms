@@ -37,6 +37,7 @@ import { Popover } from "../../../components/Popover";
  */
 export type EntityCollectionViewProps<M extends Record<string, any>> = {
     fullPath: string;
+    parentPathSegments: string[];
     isSubCollection?: boolean;
     className?: string;
 } & EntityCollection<M>;
@@ -68,6 +69,7 @@ export type EntityCollectionViewProps<M extends Record<string, any>> = {
 export const EntityCollectionView = React.memo(
     function EntityCollectionView<M extends Record<string, any>>({
                                                                      fullPath,
+                                                                     parentPathSegments,
                                                                      isSubCollection,
                                                                      className,
                                                                      ...collectionProp
@@ -330,11 +332,13 @@ export const EntityCollectionView = React.memo(
                     highlightedEntities={selectedNavigationEntity ? [selectedNavigationEntity] : []}
                     {...collection}
                     actions={<EntityCollectionViewActions
+                        parentPathSegments={parentPathSegments}
                         collection={collection}
                         exportable={exportable}
                         onMultipleDeleteClick={onMultipleDeleteClick}
                         onNewClick={onNewClick}
                         path={fullPath}
+                        relativePath={collection.path}
                         loadedEntities={tableController.data}
                         selectionController={usedSelectionController}
                         selectionEnabled={selectionEnabled}/>}
@@ -402,7 +406,6 @@ function EntitiesCount({
     const currentSort = sortBy ? sortBy[1] : undefined;
     const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
 
-    console.log("EntitiesCount", fullPath, collection, filter, sortByProperty, currentSort)
     useEffect(() => {
         dataSource.countEntities({
             path: resolvedPath,

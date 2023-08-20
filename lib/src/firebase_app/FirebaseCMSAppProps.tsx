@@ -6,7 +6,6 @@ import {
     CMSAnalyticsEvent,
     CMSView,
     CMSViewsBuilder,
-    CollectionOverrideHandler,
     EntityCollection,
     EntityCollectionsBuilder,
     FieldConfig,
@@ -137,15 +136,6 @@ export type FirebaseCMSAppProps = {
      * Locale of the CMS, currently only affecting dates
      */
     locale?: Locale;
-
-    /**
-     * Used to override collections based on the collection path and entityId.
-     * This resolver allows to override the collection for specific entities, or
-     * specific collections, app wide. This overrides collections all through the app.
-     *
-     * You can also override collections in place, when using `useSideEntityController`
-     */
-    collectionOverrideHandler?: CollectionOverrideHandler;
 
     /**
      * Use this controller to return text search results as document ids, that

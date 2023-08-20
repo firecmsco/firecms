@@ -8,10 +8,10 @@ import { ErrorBoundary } from "../../ErrorBoundary";
 import { cn, Tooltip } from "../../../../components";
 import { useOutsideAlerter } from "../../../../components/util/useOutsideAlerter";
 import { RemoveCircleIcon } from "../../../../icons";
-import { EntityTableCellActions } from "./EntityTableCellActions";
 
 interface EntityTableCellProps {
     children: React.ReactNode;
+    actions?: React.ReactNode;
     /**
      * The value is used only to check changes and force re-renders
      */
@@ -73,6 +73,7 @@ const TableCellInner = ({
 export const EntityTableCell = React.memo<EntityTableCellProps>(
     function EntityTableCell({
                                  children,
+                                 actions,
                                  size,
                                  selected,
                                  disabled,
@@ -146,7 +147,6 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
             default:
                 justifyContent = "flex-start";
         }
-
 
         // const onClick = useCallback((event: React.MouseEvent<HTMLDivElement>) => {
         //     if (event.detail === 3) {
@@ -237,6 +237,8 @@ export const EntityTableCell = React.memo<EntityTableCellProps>(
 
                     </TableCellInner>}
                 </ErrorBoundary>
+
+                {actions}
 
                 {disabled && onHover && disabledTooltip &&
                     <div className="absolute top-1 right-1 text-xs">

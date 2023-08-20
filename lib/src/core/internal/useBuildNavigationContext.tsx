@@ -1,11 +1,10 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import {
     AuthController,
     CMSView,
     CMSViewsBuilder,
-    CollectionOverrideHandler,
     DataSource,
     EntityCollection,
     EntityCollectionsBuilder,
@@ -32,7 +31,6 @@ type BuildNavigationContextProps<UserType extends User> = {
     authController: AuthController<UserType>;
     collections?: EntityCollection[] | EntityCollectionsBuilder;
     views?: CMSView[] | CMSViewsBuilder;
-    collectionOverrideHandler: CollectionOverrideHandler | undefined;
     userConfigPersistence?: UserConfigurationPersistence;
     plugins?: FireCMSPlugin[];
     dataSource: DataSource;
@@ -44,7 +42,6 @@ export function useBuildNavigationContext<UserType extends User>({
                                                                      authController,
                                                                      collections: baseCollections,
                                                                      views: baseViews,
-                                                                     collectionOverrideHandler,
                                                                      userConfigPersistence,
                                                                      plugins,
                                                                      dataSource
@@ -154,14 +151,6 @@ export function useBuildNavigationContext<UserType extends User>({
 
         let result: Partial<EntityCollection> | undefined = overriddenCollection;
 
-        const resolvedProps: Partial<EntityCollection> | undefined = collectionOverrideHandler && collectionOverrideHandler({
-            entityId,
-            path: removeInitialAndTrailingSlashes(pathOrAlias)
-        });
-
-        if (resolvedProps)
-            result = resolvedProps;
-
         if (overriddenCollection) {
             const subcollections = overriddenCollection.subcollections;
             const callbacks = overriddenCollection.callbacks;
@@ -182,8 +171,26 @@ export function useBuildNavigationContext<UserType extends User>({
         basePath,
         baseCollectionPath,
         collections,
-        collectionOverrideHandler
     ]);
+
+    const getCollectionFromPaths = useCallback(<EC extends EntityCollection>(pathSegments: string[]): EC | undefined => {
+        let currentCollections = collections;
+        if (!currentCollections)
+            throw Error("Collections have not been initialised yet");
+
+        for (let i = 0; i < pathSegments.length; i++) {
+            const pathSegment = pathSegments[i];
+            const collection: EntityCollection | undefined = currentCollections!.find(c => c.alias === pathSegment || c.path === pathSegment);
+            if (!collection)
+                return undefined;
+            currentCollections = collection.subcollections;
+            if (i === pathSegments.length - 1)
+                return collection as EC;
+        }
+
+        return undefined;
+
+    }, [collections]);
 
     const isUrlCollectionPath = useCallback(
         (path: string): boolean => removeInitialAndTrailingSlashes(path + "/").startsWith(removeInitialAndTrailingSlashes(fullCollectionPath) + "/"),
@@ -235,6 +242,7 @@ export function useBuildNavigationContext<UserType extends User>({
         baseCollectionPath,
         initialised,
         getCollection,
+        getCollectionFromPaths,
         isUrlCollectionPath,
         urlPathToDataPath,
         buildUrlCollectionPath,

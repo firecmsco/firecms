@@ -359,6 +359,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
                         (usedEntity && fullPath
                             ? <EntityCollectionView
                                 fullPath={fullPath}
+                                parentPathSegments={fullPathToCollectionSegments(path)}
                                 isSubCollection={true}
                                 {...subcollection}/>
                             : <div

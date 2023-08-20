@@ -99,3 +99,4 @@ export function getResolvedPropertyInPath(properties: Record<string, ResolvedPro
 export function getBracketNotation(path: string): string {
     return path.replace(/\.([^.]*)/g, "[$1]");
 }
+

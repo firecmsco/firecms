@@ -77,7 +77,7 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
 }
 
 interface MapEditViewParams<T extends Record<string, any>> {
-    value: T;
+    value?: T;
     setValue: (value: (T | null)) => void;
     fieldName?: string,
     disabled?: boolean
@@ -92,7 +92,7 @@ function MapEditView<T extends Record<string, any>>({
     const [internalState, setInternalState] = React.useState<MapEditViewRowState[]>(
         Object.keys(value ?? {}).map((key) => [getRandomId(), {
             key,
-            dataType: getDataType(value[key]) ?? "string"
+            dataType: getDataType(value?.[key]) ?? "string"
         }])
     );
 
@@ -105,7 +105,7 @@ function MapEditView<T extends Record<string, any>>({
         keysToAdd.forEach((key) => {
             newRowIds.push([getRandomId(), {
                 key,
-                dataType: getDataType(value[key]) ?? "string"
+                dataType: getDataType(value?.[key]) ?? "string"
             }]);
         });
         keysToRemove.forEach((key) => {
@@ -115,7 +115,7 @@ function MapEditView<T extends Record<string, any>>({
         setInternalState(newRowIds);
     }, [value]);
 
-    const originalValue = React.useRef<T>(value);
+    const originalValue = React.useRef<T>(value ?? {} as T);
 
     const updateDataType = (rowId: number, dataType: DataType) => {
         if (!rowId) {
@@ -132,7 +132,7 @@ function MapEditView<T extends Record<string, any>>({
             return row;
         }));
         setValue({
-            ...value,
+            ...(value ?? {} as T),
             [internalState.find((row) => row[0] === rowId)?.[1].key ?? ""]: getDefaultValueForDataType(dataType)
         })
     };
@@ -143,7 +143,7 @@ function MapEditView<T extends Record<string, any>>({
                     key: fieldKey,
                     dataType
                 }], index) => {
-                    const entryValue = fieldKey ? value[fieldKey] : "";
+                    const entryValue = fieldKey ? value?.[fieldKey] : "";
                     const onFieldKeyChange = (newKey: string) => {
 
                         setInternalState(internalState.map((currentRowId) => {
@@ -161,7 +161,7 @@ function MapEditView<T extends Record<string, any>>({
                             return;
                         }
 
-                        const newValue = { ...value };
+                        const newValue = { ...(value ?? {}) } as T;
                         if (originalValue.current && fieldKey in originalValue.current) {
                             // @ts-ignore
                             newValue[fieldKey] = undefined; // set to undefined to remove from the object, the datasource will remove it from the backend
@@ -177,9 +177,9 @@ function MapEditView<T extends Record<string, any>>({
                     return <MapKeyValueRow rowId={rowId}
                                            key={rowId}
                                            fieldKey={fieldKey}
-                                           value={value}
+                                           value={value ?? {} as T}
                                            onDeleteClick={() => {
-                                               const newValue = { ...value };
+                                               const newValue = { ...(value ?? {}) as T };
                                                if (originalValue.current && fieldKey in originalValue.current) {
                                                    // @ts-ignore
                                                    newValue[fieldKey] = undefined;
@@ -210,7 +210,7 @@ function MapEditView<T extends Record<string, any>>({
                 onClick={(e) => {
                     e.preventDefault();
                     setValue({
-                        ...value,
+                        ...(value ?? {} as T),
                         "": null
                     });
                     setInternalState([...internalState, [getRandomId(), {
@@ -367,12 +367,12 @@ function MapKeyValueRow<T extends Record<string, any>>({
     return (<>
             <Typography key={rowId.toString()}
                         component={"div"}
-                        className="font-mono flex flex-row gap-1 items-center">
+                        className="font-mono flex flex-row gap-1">
                 <div className="w-[200px] max-w-[25%]">
                     <TextField
                         value={fieldKey}
                         placeholder={"key"}
-                        disabled={disabled || Boolean(entryValue)}
+                        disabled={disabled || (entryValue !== undefined && entryValue !== null && entryValue !== "")}
                         size={"small"}
                         onChange={(event) => {
                             onFieldKeyChange(event.target.value);
@@ -522,7 +522,6 @@ function ArrayKeyValueRow<T>({
 
     );
 }
-
 
 function getRandomId() {
     return Math.floor(Math.random() * Math.floor(Number.MAX_SAFE_INTEGER));

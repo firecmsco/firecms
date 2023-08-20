@@ -46,7 +46,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         dateTimeFormat,
         locale,
         authController,
-        collectionOverrideHandler,
         storageSource,
         dataSource,
         basePath = DEFAULT_BASE_PATH,
@@ -64,7 +63,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         authController,
         collections,
         views,
-        collectionOverrideHandler,
         userConfigPersistence,
         dataSource,
         plugins

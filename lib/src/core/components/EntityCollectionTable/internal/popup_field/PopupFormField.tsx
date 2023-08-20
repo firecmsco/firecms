@@ -21,7 +21,7 @@ import { useWindowSize } from "./useWindowSize";
 import { ElementResizeListener } from "./ElementResizeListener";
 import { OnCellValueChangeParams } from "../../types";
 import { ErrorView } from "../../../ErrorView";
-import { isReadOnly, resolveCollection } from "../../../../util";
+import { getPropertyInPath, isReadOnly, resolveCollection } from "../../../../util";
 import { Button, DialogActions, IconButton, Typography } from "../../../../../components";
 import { PropertyFieldBinding } from "../../../../../form";
 import { useDataSource, useFireCMSContext } from "../../../../../hooks";
@@ -66,8 +66,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           onCellValueChange
                                                                       }: PopupFormFieldProps<M>) {
 
-    console.log("path", path);
-
     const dataSource = useDataSource();
     const fireCMSContext = useFireCMSContext();
 
@@ -93,8 +91,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         }
     }, [dataSource, entityId, inputCollection, path]);
 
-    console.log("entity", entity)
-
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
 
     const collection: ResolvedEntityCollection<M> | undefined = inputCollection
@@ -113,24 +109,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     const innerRef = React.useRef<HTMLDivElement>(null);
 
     const initialPositionSet = React.useRef<boolean>(false);
-
-    useDraggable({
-        containerRef,
-        innerRef,
-        x: popupLocation?.x,
-        y: popupLocation?.y,
-        onMove: (x, y) => updatePopupLocation({
-            x,
-            y
-        })
-    });
-
-    useEffect(
-        () => {
-            initialPositionSet.current = false;
-        },
-        [propertyKey, entity]
-    );
 
     const getInitialLocation = useCallback(() => {
         if (!cellRect) throw Error("getInitialLocation error");
@@ -171,6 +149,22 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
             setPopupLocation(newPosition);
     }, [cellRect, getInitialLocation, normalizePosition, popupLocation]);
+
+    useDraggable({
+        containerRef,
+        innerRef,
+        x: popupLocation?.x,
+        y: popupLocation?.y,
+        onMove: updatePopupLocation
+    });
+
+    useEffect(
+        () => {
+            initialPositionSet.current = false;
+        },
+        [propertyKey, entity]
+    );
+
 
     useEffect(
         () => {
@@ -237,7 +231,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab`}>
             <Formik
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
-                enableReinitialize
+                // enableReinitialize
                 validationSchema={validationSchema}
                 validateOnMount={true}
                 validate={(values) => console.debug("Validating", values)}
@@ -248,13 +242,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                 }}
             >
                 {({
-                      handleChange,
                       values,
-                      errors,
-                      touched,
-                      dirty,
                       setFieldValue,
-                      setFieldTouched,
                       handleSubmit,
                       isSubmitting
                   }: FormikProps<EntityValues<M>>) => {
@@ -284,8 +273,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                         save: saveValue
                     };
 
-                    const property: ResolvedProperty<any> | undefined = propertyKey && collection.properties[propertyKey];
-
+                    const property: ResolvedProperty<any> | undefined = propertyKey && getPropertyInPath(collection.properties, propertyKey as string);
                     const fieldProps: PropertyFieldBindingProps<any, M> | undefined = propertyKey && property
                         ? {
                             propertyKey: propertyKey as string,
@@ -304,7 +292,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                     let internalForm = <>
                         <div
                             key={`popup_form_${tableKey}_${entityId}_${columnIndex}`}
-                            className="w-[520px] max-w-full max-h-[85vh]">
+                            className="w-[560px] max-w-full max-h-[85vh]">
                             <Form
                                 onSubmit={handleSubmit}
                                 noValidate>

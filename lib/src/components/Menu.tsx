@@ -17,7 +17,7 @@ export function Menu({
                 {trigger}
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
-                <DropdownMenu.Content className={cn(paperMixin, "shadow py-2 z-50")}
+                <DropdownMenu.Content className={cn(paperMixin, "shadow py-2 z-30")}
                                       // onCloseAutoFocus={(e) => e.preventDefault()}
                 >
                     {children}
