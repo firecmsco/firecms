@@ -1,9 +1,6 @@
 import { Entity, EntityStatus, EntityValues } from "./entities";
 import { EntityCollection, FilterValues } from "./collections";
-import {
-    ResolvedEntityCollection,
-    ResolvedProperty
-} from "./resolved_entities";
+import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities";
 
 /**
  * @category Datasource
@@ -213,8 +210,5 @@ export interface DataSource {
     /**
      * Count the number of entities in a collection
      */
-    countEntities(props: {
-        path: string,
-        collection: EntityCollection,
-    }): Promise<number>;
+    countEntities<M extends Record<string, any> = any>(props: FetchCollectionProps<M>): Promise<number>;
 }

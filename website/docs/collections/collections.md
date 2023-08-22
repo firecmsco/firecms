@@ -112,11 +112,17 @@ in [Entity collections](../api/interfaces/entitycollection)
 
 * `initialFilter` Initial filters applied to this collection.
   Defaults to none. Filters applied with this prop can be changed by the user.
-  e.g. `initialFilter: { age: [ ">=", 18 ] }`
+  e.g. 
+  ```
+  initialFilter: { age: [ ">=", 18 ] }
+  ```
 
 * `forceFilter` Force a filter in this view. If applied, the rest of the filters
   will be disabled. Filters applied with this prop cannot be changed.
-  e.g. `forceFilter: { age: [">=", 18] }`
+  e.g.
+  ```
+  forceFilter: { age: [ ">=", 18 ] }
+  ```
 
 * `initialSort` Default sort applied to this collection. It takes tuples in the
   shape `["property_name", "asc"]` or `["property_name", "desc"]`

@@ -484,15 +484,16 @@ export function useFirestoreDataSource({
             return doc(collectionClause(firestore, path)).id;
         }, [firebaseApp]),
 
-        countEntities: useCallback(async (props: {
+        countEntities: useCallback(async ({ path, collection, filter, order, orderBy }: {
             path: string,
-            collection: EntityCollection<any>
-            onCountUpdate?: (count: number) => void
+            collection: EntityCollection<any>,
+            filter?: FilterValues<Extract<keyof any, string>>,
+            orderBy?: string,
+            order?: "desc" | "asc",
         }): Promise<number> => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
-            const firestore = getFirestore(firebaseApp);
-            const coll = props.collection.collectionGroup ? collectionGroupClause(firestore, props.path) : collectionClause(firestore, props.path);
-            const snapshot = await getCountFromServer(coll);
+            const query = buildQuery(path, filter, orderBy, order, undefined, undefined, collection.collectionGroup);
+            const snapshot = await getCountFromServer(query);
             return snapshot.data().count;
         }, [firebaseApp])
 

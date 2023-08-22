@@ -6,29 +6,17 @@ import {
     CollectionSize,
     Entity,
     EntityCollection,
+    FilterValues,
     PartialEntityCollection,
     Property,
     SelectionController
 } from "../../../types";
-import {
-    EntityCollectionTable,
-    OnColumnResizeParams
-} from "../EntityCollectionTable";
+import { EntityCollectionTable, OnColumnResizeParams } from "../EntityCollectionTable";
 
-import {
-    EntityCollectionRowActions
-} from "../EntityCollectionTable/internal/EntityCollectionRowActions";
-import {
-    DeleteEntityDialog
-} from "../EntityCollectionTable/internal/DeleteEntityDialog";
+import { EntityCollectionRowActions } from "../EntityCollectionTable/internal/EntityCollectionRowActions";
+import { DeleteEntityDialog } from "../EntityCollectionTable/internal/DeleteEntityDialog";
 
-import {
-    canCreateEntity,
-    canDeleteEntity,
-    canEditEntity,
-    fullPathToCollectionSegments,
-    mergeDeep
-} from "../../util";
+import { canCreateEntity, canDeleteEntity, canEditEntity, fullPathToCollectionSegments, mergeDeep } from "../../util";
 import { Markdown, renderSkeletonText } from "../../../preview";
 import {
     useAuthController,
@@ -37,16 +25,10 @@ import {
     useNavigationContext,
     useSideEntityController
 } from "../../../hooks";
-import {
-    useUserConfigurationPersistence
-} from "../../../hooks/useUserConfigurationPersistence";
+import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
-import {
-    useTableController
-} from "../EntityCollectionTable/useTableController";
-import {
-    isFilterCombinationValidForFirestore
-} from "./isFilterCombinationValidForFirestore";
+import { useTableController } from "../EntityCollectionTable/useTableController";
+import { isFilterCombinationValidForFirestore } from "./isFilterCombinationValidForFirestore";
 
 /**
  * @category Components
@@ -232,70 +214,74 @@ export const EntityCollectionView = React.memo(
 
         const open = anchorEl != null;
 
-        const Title = useMemo(() => (
-            <Box sx={{
-                display: "flex",
-                flexDirection: "row",
-                contain: "content",
-                "& > *:not(:last-child)": {
-                    [theme.breakpoints.down("md")]: {
-                        mr: theme.spacing(1)
-                    },
-                    mr: theme.spacing(2)
-                }
-            }}>
-                <Box>
-                    <Typography
-                        variant={"h6"}
-                        sx={{
-                            lineHeight: "1.15",
-                            textOverflow: "ellipsis",
-                            whiteSpace: "nowrap",
-                            overflow: "hidden",
-                            maxWidth: "164px",
-                            cursor: collection.description ? "pointer" : "inherit"
+        const Title = <Box sx={{
+            display: "flex",
+            flexDirection: "row",
+            contain: "content",
+            "& > *:not(:last-child)": {
+                [theme.breakpoints.down("md")]: {
+                    mr: theme.spacing(1)
+                },
+                mr: theme.spacing(2)
+            }
+        }}>
+            <Box>
+                <Typography
+                    variant={"h6"}
+                    sx={{
+                        lineHeight: "1.15",
+                        textOverflow: "ellipsis",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        maxWidth: "164px",
+                        cursor: collection.description ? "pointer" : "inherit"
+                    }}
+                    onClick={collection.description
+                        ? (e) => {
+                            setAnchorEl(e.currentTarget);
+                            e.stopPropagation();
+                        }
+                        : undefined}
+                >
+                    {`${collection.name}`}
+                </Typography>
+
+                <EntitiesCount
+                    fullPath={fullPath}
+                    collection={collection}
+                    filter={tableController.filterValues}
+                    sortBy={tableController.sortBy}
+                />
+
+                {collection.description &&
+                    <Popover
+                        id={"info-dialog"}
+                        open={open}
+                        anchorEl={anchorEl}
+                        elevation={3}
+                        onClose={() => {
+                            setAnchorEl(null);
                         }}
-                        onClick={collection.description
-                            ? (e) => {
-                                setAnchorEl(e.currentTarget);
-                                e.stopPropagation();
-                            }
-                            : undefined}
+                        anchorOrigin={{
+                            vertical: "bottom",
+                            horizontal: "center"
+                        }}
+                        transformOrigin={{
+                            vertical: "top",
+                            horizontal: "center"
+                        }}
                     >
-                        {`${collection.name}`}
-                    </Typography>
-                    <EntitiesCount fullPath={fullPath} collection={collection}/>
 
-                    {collection.description &&
-                        <Popover
-                            id={"info-dialog"}
-                            open={open}
-                            anchorEl={anchorEl}
-                            elevation={3}
-                            onClose={() => {
-                                setAnchorEl(null);
-                            }}
-                            anchorOrigin={{
-                                vertical: "bottom",
-                                horizontal: "center"
-                            }}
-                            transformOrigin={{
-                                vertical: "top",
-                                horizontal: "center"
-                            }}
-                        >
+                        <Box m={2}>
+                            <Markdown source={collection.description}/>
+                        </Box>
 
-                            <Box m={2}>
-                                <Markdown source={collection.description}/>
-                            </Box>
-
-                        </Popover>
-                    }
-
-                </Box>
+                    </Popover>
+                }
 
             </Box>
-        ), [theme, collection.description, collection.name, fullPath, open, anchorEl]);
+
+        </Box>;
 
         const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
 
@@ -434,16 +420,38 @@ export function useSelectionController<M extends Record<string, any>>(): Selecti
     };
 }
 
-function EntitiesCount({ fullPath, collection }: { fullPath: string, collection:EntityCollection }) {
+function EntitiesCount({
+                           fullPath,
+                           collection,
+                           filter,
+                           sortBy
+                       }: {
+    fullPath: string,
+    collection: EntityCollection,
+    filter?: FilterValues<any>,
+    sortBy?: [string, "asc" | "desc"]
+}) {
 
     const dataSource = useDataSource();
     const navigation = useNavigationContext();
     const [count, setCount] = useState<number | undefined>(undefined);
     const [error, setError] = useState<Error | undefined>(undefined);
 
+    const sortByProperty = sortBy ? sortBy[0] : undefined;
+    const currentSort = sortBy ? sortBy[1] : undefined;
+    const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
+
+    console.log({resolvedPath, collection, filter, sortByProperty, currentSort})
+
     useEffect(() => {
-        dataSource.countEntities({ path: navigation.resolveAliasesFrom(fullPath), collection }).then(setCount).catch(setError);
-    }, [fullPath, dataSource, navigation]);
+        dataSource.countEntities({
+            path: resolvedPath,
+            collection,
+            filter,
+            orderBy: sortByProperty,
+            order: currentSort
+        }).then(setCount).catch(setError);
+    }, [fullPath, dataSource, resolvedPath, collection, filter, sortByProperty, currentSort]);
 
     if (error) {
         return null;
