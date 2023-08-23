@@ -76,7 +76,8 @@ export function FirebaseCMSApp({
                                    onAnalyticsEvent,
                                    fields = {},
                                    plugins,
-                                   autoOpenDrawer
+                                   autoOpenDrawer,
+                                   firestoreIndexesBuilder
                                }: FirebaseCMSAppProps) {
 
     /**
@@ -120,7 +121,7 @@ export function FirebaseCMSApp({
     const dataSource = useFirestoreDataSource({
         firebaseApp,
         textSearchController,
-        fields
+        firestoreIndexesBuilder
     });
 
     /**

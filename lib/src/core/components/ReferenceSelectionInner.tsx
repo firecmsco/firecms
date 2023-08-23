@@ -33,9 +33,6 @@ import {
     useSelectionController
 } from "./EntityCollectionView/EntityCollectionView";
 import { useTableController } from "./EntityCollectionTable/useTableController";
-import {
-    isFilterCombinationValidForFirestore
-} from "./EntityCollectionView/isFilterCombinationValidForFirestore";
 
 /**
  * @category Components
@@ -262,7 +259,6 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         fullPath,
         collection,
         entitiesDisplayedFirst,
-        isFilterCombinationValid: isFilterCombinationValidForFirestore,
         forceFilter,
     });
 

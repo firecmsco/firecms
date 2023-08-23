@@ -41,7 +41,7 @@ export const resolveCollection = <M extends Record<string, any>, >
     values?: Partial<EntityValues<M>>,
     previousValues?: Partial<EntityValues<M>>,
     userConfigPersistence?: UserConfigurationPersistence;
-    fields: Record<string, FieldConfig>;
+    fields?: Record<string, FieldConfig>;
 }): ResolvedEntityCollection<M> => {
 
     const collectionOverride = userConfigPersistence?.getCollectionConfig<M>(path);
@@ -105,7 +105,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
     entityId?: string,
     index?: number,
     fromBuilder?: boolean;
-    fields: Record<string, FieldConfig<any>>;
+    fields?: Record<string, FieldConfig<any>>;
 }): ResolvedProperty<T> | null {
 
     if (typeof propertyOrBuilder === "object" && "resolved" in propertyOrBuilder) {
@@ -220,7 +220,7 @@ export function resolveArrayProperty<T extends any[], M>({
     entityId?: string,
     index?: number,
     fromBuilder?: boolean;
-    fields: Record<string, FieldConfig>;
+    fields?: Record<string, FieldConfig>;
 }): ResolvedArrayProperty {
 
     if (property.of) {
@@ -326,7 +326,7 @@ export function resolveProperties<M extends Record<string, any>>({
     entityId?: string,
     index?: number,
     fromBuilder?: boolean;
-    fields: Record<string, FieldConfig>;
+    fields?: Record<string, FieldConfig>;
 }): ResolvedProperties<M> {
     return Object.entries<PropertyOrBuilder>(properties as Record<string, PropertyOrBuilder>)
         .map(([key, property]) => {

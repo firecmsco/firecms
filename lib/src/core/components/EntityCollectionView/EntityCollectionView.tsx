@@ -28,7 +28,6 @@ import {
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { useTableController } from "../EntityCollectionTable/useTableController";
-import { isFilterCombinationValidForFirestore } from "./isFilterCombinationValidForFirestore";
 
 /**
  * @category Components
@@ -126,7 +125,6 @@ export const EntityCollectionView = React.memo(
             fullPath,
             collection,
             entitiesDisplayedFirst: [],
-            isFilterCombinationValid: isFilterCombinationValidForFirestore,
             lastDeleteTimestamp
         });
 
@@ -440,8 +438,6 @@ function EntitiesCount({
     const sortByProperty = sortBy ? sortBy[0] : undefined;
     const currentSort = sortBy ? sortBy[1] : undefined;
     const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
-
-    console.log({resolvedPath, collection, filter, sortByProperty, currentSort})
 
     useEffect(() => {
         dataSource.countEntities({

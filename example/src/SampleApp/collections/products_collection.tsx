@@ -133,24 +133,6 @@ export const productsCollection = buildCollection<Product>({
     ],
     additionalFields: [productAdditionalField],
     // propertiesOrder: ["name", "price", "category", "spanish_title", "currency", "locales"],
-    filterCombinations: [
-        {
-            category: "asc",
-            available: "desc"
-        },
-        {
-            category: "asc",
-            available: "asc"
-        },
-        {
-            category: "desc",
-            available: "desc"
-        },
-        {
-            category: "desc",
-            available: "asc"
-        }
-    ],
     properties: {
         name: {
             dataType: "string",

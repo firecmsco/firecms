@@ -100,7 +100,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          fullPath,
          initialFilter,
          initialSort,
-         filterCombinations,
          forceFilter,
          actionsStart,
          actions,

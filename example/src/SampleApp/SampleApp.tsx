@@ -7,8 +7,8 @@ import "@fontsource/ibm-plex-mono";
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import { AppCheckOptions, Authenticator, CMSView, FirebaseCMSApp } from "firecms";
-// import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
+import { Authenticator, CMSView, FirebaseCMSApp, FirestoreIndexesBuilder } from "firecms";
+import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import { IconButton, Tooltip } from "@mui/material";
 import { GitHub } from "@mui/icons-material";
@@ -138,6 +138,7 @@ function SampleApp() {
             // 'apple.com'
         ]}
         textSearchController={textSearchController}
+        firestoreIndexesBuilder={firestoreIndexesBuilder}
         logo={logo}
         collections={(params) => collections}
         views={customViews}

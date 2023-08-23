@@ -220,15 +220,6 @@ export interface EntityCollection<M extends Record<string, any> = any,
     inlineEditing?: boolean;
 
     /**
-     * If you need to filter/sort by multiple properties in this
-     * collection, you can define the supported filter combinations here.
-     * In the case of Firestore, you need to create special indexes in the console to
-     * support filtering/sorting by more than one property. You can then
-     * specify here the indexes created.
-     */
-    filterCombinations?: FilterCombination<Extract<keyof M, string>>[];
-
-    /**
      * Should this collection be hidden from the main navigation panel, if
      * it is at the root level, or in the entity side panel if it's a
      * subcollection.
