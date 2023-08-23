@@ -59,7 +59,6 @@ export function useTableController<M extends Record<string, any> = any, UserType
     const dataSource = useDataSource();
     const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
 
-
     const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
     const pageSize = typeof collection.pagination === "number" ? collection.pagination : DEFAULT_PAGE_SIZE;
