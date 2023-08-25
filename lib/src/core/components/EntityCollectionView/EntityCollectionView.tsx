@@ -28,7 +28,6 @@ import {
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { useTableController } from "../EntityCollectionTable/useTableController";
-import { isFilterCombinationValidForFirestore } from "./isFilterCombinationValidForFirestore";
 import { cn, Typography } from "../../../components";
 import { Popover } from "../../../components/Popover";
 
@@ -130,7 +129,6 @@ export const EntityCollectionView = React.memo(
             fullPath,
             collection,
             entitiesDisplayedFirst: [],
-            isFilterCombinationValid: isFilterCombinationValidForFirestore,
             lastDeleteTimestamp
         });
 

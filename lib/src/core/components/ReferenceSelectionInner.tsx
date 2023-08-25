@@ -17,7 +17,6 @@ import { useSideDialogContext } from "../SideDialogs";
 import { canCreateEntity, fullPathToCollectionSegments } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
 import { useTableController } from "./EntityCollectionTable/useTableController";
-import { isFilterCombinationValidForFirestore } from "./EntityCollectionView/isFilterCombinationValidForFirestore";
 import { AddIcon } from "../../icons";
 
 /**
@@ -250,7 +249,6 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         fullPath,
         collection,
         entitiesDisplayedFirst,
-        isFilterCombinationValid: isFilterCombinationValidForFirestore,
         forceFilter
     });
 

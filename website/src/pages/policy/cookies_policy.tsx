@@ -1,7 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import Layout from "@theme/Layout";
-import "aos/dist/aos.css";
-import "../../css/tailwind.css";
 import Head from "@docusaurus/Head";
 
 function TermsAndConditions() {

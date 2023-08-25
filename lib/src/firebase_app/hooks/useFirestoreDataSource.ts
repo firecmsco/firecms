@@ -7,7 +7,7 @@ import {
     EntityValues,
     FetchCollectionProps,
     FetchEntityProps,
-    FieldConfig,
+    FilterCombination,
     FilterValues,
     GeoPoint,
     ListenCollectionProps,
@@ -18,7 +18,7 @@ import {
     SaveEntityProps,
     WhereFilterOp
 } from "../../types";
-import { resolveCollection, sanitizeData, updateDateAutoValues } from "../../core";
+import { resolveCollection, updateDateAutoValues } from "../../core";
 import {
     collection as collectionClause,
     collectionGroup as collectionGroupClause,
@@ -57,8 +57,19 @@ import { setDateToMidnight } from "../util/dates";
 export interface FirestoreDataSourceProps {
     firebaseApp?: FirebaseApp,
     textSearchController?: FirestoreTextSearchController,
-    fields?: Record<string, FieldConfig>;
+
+    /**
+     * Use this builder to indicate which indexes are available in your
+     * Firestore database. This is used to allow filtering and sorting
+     * for multiple fields in the CMS.
+     */
+    firestoreIndexesBuilder?: FirestoreIndexesBuilder;
 }
+
+export type FirestoreIndexesBuilder = (params: {
+    path: string,
+    collection: EntityCollection<any>,
+}) => FilterCombination<string>[] | undefined
 
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
@@ -69,7 +80,8 @@ export interface FirestoreDataSourceProps {
  */
 export function useFirestoreDataSource({
                                            firebaseApp,
-                                           textSearchController
+                                           textSearchController,
+                                           firestoreIndexesBuilder
                                        }: FirestoreDataSourceProps): DataSource {
 
     const createEntityFromCollection = useCallback(<M extends Record<string, any>>(
@@ -80,7 +92,7 @@ export function useFirestoreDataSource({
         return {
             id: docSnap.id,
             path: getCMSPathFromFirestorePath(docSnap.ref.path),
-            values: values as EntityValues<M>,
+            values
         };
     }, []);
 
@@ -123,8 +135,8 @@ export function useFirestoreDataSource({
     }, [firebaseApp]);
 
     const getAndBuildEntity = useCallback(<M extends Record<string, any>>(path: string,
-                                                                          entityId: string,
-                                                                          collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M> | undefined> => {
+                                                                          entityId: string
+    ): Promise<Entity<M> | undefined> => {
         if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
         const firestore = getFirestore(firebaseApp);
@@ -139,8 +151,7 @@ export function useFirestoreDataSource({
     }, [firebaseApp]);
 
     const performTextSearch = useCallback(async <M extends Record<string, any>>(path: string,
-                                                                                searchString: string,
-                                                                                collection: EntityCollection<M> | ResolvedEntityCollection<M>): Promise<Entity<M>[]> => {
+                                                                                searchString: string): Promise<Entity<M>[]> => {
         if (!textSearchController)
             throw Error("Trying to make text search without specifying a FirestoreTextSearchController");
         const ids = await textSearchController({
@@ -152,7 +163,7 @@ export function useFirestoreDataSource({
         const promises: Promise<Entity<M> | undefined>[] = ids
             .map(async (entityId) => {
                     try {
-                        return await getAndBuildEntity(path, entityId, collection);
+                        return await getAndBuildEntity(path, entityId);
                     } catch (e) {
                         console.error(e);
                         return undefined;
@@ -192,7 +203,7 @@ export function useFirestoreDataSource({
         ): Promise<Entity<M>[]> => {
 
             if (searchString) {
-                return performTextSearch(path, searchString, collection);
+                return performTextSearch(path, searchString,);
             }
 
             const collectionGroup = collection.collectionGroup ?? false;
@@ -261,7 +272,7 @@ export function useFirestoreDataSource({
             const query = buildQuery(path, filter, orderBy, order, startAfter, limit, collectionGroup);
 
             if (searchString) {
-                performTextSearch<M>(path, searchString, collection)
+                performTextSearch<M>(path, searchString)
                     .then(onUpdate)
                     .catch((e) => {
                         if (onError) onError(e);
@@ -290,10 +301,9 @@ export function useFirestoreDataSource({
          */
         fetchEntity: useCallback(<M extends Record<string, any>>({
                                                                      path,
-                                                                     entityId,
-                                                                     collection
+                                                                     entityId
                                                                  }: FetchEntityProps<M>
-        ): Promise<Entity<M> | undefined> => getAndBuildEntity(path, entityId, collection), [getAndBuildEntity]),
+        ): Promise<Entity<M> | undefined> => getAndBuildEntity(path, entityId), [getAndBuildEntity]),
 
         /**
          *
@@ -461,7 +471,48 @@ export function useFirestoreDataSource({
             const query = buildQuery(path, filter, orderBy, order, undefined, undefined, collection.collectionGroup);
             const snapshot = await getCountFromServer(query);
             return snapshot.data().count;
-        }, [firebaseApp])
+        }, [firebaseApp]),
+
+        isFilterCombinationValid: useCallback(({ path, collection, filterValues, sortBy }: {
+            path: string,
+            collection: EntityCollection<any>,
+            filterValues: FilterValues<any>,
+            sortBy?: [string, "asc" | "desc"]
+        }): boolean => {
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+
+            const indexes = firestoreIndexesBuilder?.({ path, collection });
+
+            const sortKey = sortBy ? sortBy[0] : undefined;
+            const sortDirection = sortBy ? sortBy[1] : undefined;
+
+            // Order by clause cannot contain a field with an equality filter
+            const values: [WhereFilterOp, any][] = Object.values(filterValues) as [WhereFilterOp, any][];
+            if (sortKey && values.map((v) => v[0]).includes("==")) {
+                return false;
+            }
+
+            const filterKeys = Object.keys(filterValues);
+            const filtersCount = filterKeys.length;
+
+            if (!sortKey && values.every((v) => v[0] === "==")) {
+                return true;
+            }
+
+            if (filtersCount === 1 && (!sortKey || sortKey === filterKeys[0])) {
+                return true;
+            }
+
+            if (!indexes && filtersCount > 1) {
+                return false;
+            }
+
+            return !!indexes && indexes
+                .filter((compositeIndex) => !sortKey || sortKey in compositeIndex)
+                .find((compositeIndex) =>
+                    Object.entries(filterValues).every(([key, value]) => compositeIndex[key] !== undefined && (!sortDirection || compositeIndex[key] === sortDirection))
+                ) !== undefined;
+        }, [firebaseApp]),
 
     };
 

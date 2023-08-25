@@ -17,6 +17,7 @@ import { Authenticator, FirebaseSignInOption, FirebaseSignInProvider } from "./t
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 import { useNavigationContext } from "../hooks";
 import { FirebaseApp } from "firebase/app";
+import { FirestoreIndexesBuilder } from "./hooks/useFirestoreDataSource";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -184,5 +185,12 @@ export type FirebaseCMSAppProps = {
      * Open the drawer on hover. Defaults to `false`
      */
     autoOpenDrawer?: boolean;
+
+    /**
+     * Use this builder to indicate which indexes are available in your
+     * Firestore database. This is used to allow filtering and sorting
+     * for multiple fields in the CMS.
+     */
+    firestoreIndexesBuilder?: FirestoreIndexesBuilder;
 
 };

@@ -211,4 +211,15 @@ export interface DataSource {
      * Count the number of entities in a collection
      */
     countEntities<M extends Record<string, any> = any>(props: FetchCollectionProps<M>): Promise<number>;
+
+    /**
+     * Check if the given filter combination is valid
+     * @param params
+     */
+    isFilterCombinationValid?(params: {
+        path: string,
+        collection: EntityCollection<any>,
+        filterValues: FilterValues<any>,
+        sortBy?: [string, "asc" | "desc"]
+    }): boolean;
 }

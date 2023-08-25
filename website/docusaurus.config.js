@@ -1,4 +1,6 @@
+const fontaine = require('fontaine');
 require('dotenv').config();
+
 module.exports = {
     title: "FireCMS",
     tagline: "Awesome headless CMS based Firestore/Firebase and React, and completely open-source",
@@ -26,7 +28,35 @@ module.exports = {
                 tsconfig: "../lib/tsconfig.json",
                 watch: process.env.TYPEDOC_WATCH,
             }
-        ]
+        ],
+        function fontainePlugin(_context, _options) {
+            return {
+                name: 'fontaine-plugin',
+                configureWebpack(_config, _isServer) {
+                    return {
+                        plugins: [
+                            fontaine.FontaineTransform.webpack({
+                                fallbacks: [
+                                    'system-ui',
+                                    '-apple-system',
+                                    'BlinkMacSystemFont',
+                                    'Segoe UI',
+                                    'Roboto',
+                                    'Oxygen',
+                                    'Ubuntu',
+                                    'Cantarell',
+                                    'Open Sans',
+                                    'Helvetica Neue',
+                                    'sans-serif',
+                                ],
+                                // You may need to resolve assets like `/fonts/Poppins-Bold.ttf` to a particular directory
+                                resolvePath: (id) => '../fonts/' + id,
+                            }),
+                        ],
+                    };
+                },
+            };
+        },
     ],
     themeConfig: {
         image: "img/logo_small.png",
@@ -100,31 +130,31 @@ module.exports = {
                     position: "right",
                     value: "<div id=\"docsearch\"></div>"
                 },
+                // {
+                //     type: "html",
+                //     position: "right",
+                //     value: `
+                //     <iframe style="transform: translate(0px, 4px);"
+                //             src="https://ghbtns.com/github-btn.html?user=FireCMSco&repo=FireCMS&type=star&count=true&size=large"
+                //             frameBorder="0"
+                //             scrolling="0"
+                //             width="140"
+                //             height="32"
+                //             title="GitHub"/>
+                //     `
+                // },
                 {
                     type: "docsVersionDropdown",
                     position: "right",
                     dropdownActiveClassDisabled: true,
                 },
                 {
-                    type: "html",
-                    position: "right",
-                    value: `
-                    <iframe 
-                    style="    transform: translate(0px, 4px);"
-                                src="https://ghbtns.com/github-btn.html?user=FireCMSco&repo=FireCMS&type=star&count=true&size=large"
-                                frameBorder="0" scrolling="0"
-                                width="140"
-                                height="32" 
-                                title="GitHub"/>
-                    `
+                    href: "https://github.com/FireCMSco/firecms",
+                    // label: 'GitHub',
+                    className: "header-github-link",
+                    "aria-label": "GitHub repository",
+                    position: "right"
                 },
-                // {
-                //     href: "https://github.com/FireCMSco/firecms",
-                //     // label: 'GitHub',
-                //     className: "header-github-link",
-                //     "aria-label": "GitHub repository",
-                //     position: "right"
-                // },
                 {
                     to: "https://demo.firecms.co",
                     label: "Demo",
@@ -202,7 +232,16 @@ module.exports = {
                         {
                             html: `<iframe src="https://github.com/sponsors/firecmsco/button" title="Sponsor firecmsco" height="32" width="114" style="border: 0; border-radius: 6px;"></iframe>
                                 `,
-                        }
+                        },
+                        // {
+                        //     html: `<iframe
+                        //                 src="https://ghbtns.com/github-btn.html?user=FireCMSco&repo=FireCMS&type=star&count=true&size=large"
+                        //                 frameBorder="0"
+                        //                 scrolling="0"
+                        //                 width="140"
+                        //                 height="32"
+                        //                 title="GitHub"/> `
+                        // }
                     ]
                 },
                 {

@@ -3,6 +3,7 @@ import { Entity, EntityCollection, FireCMSContext, User } from "../../types";
 import { useDataSource } from "./useDataSource";
 import { useNavigationContext } from "../useNavigationContext";
 import { useFireCMSContext } from "../useFireCMSContext";
+import { resolveCollection } from "../../core";
 
 /**
  * @category Hooks and utilities

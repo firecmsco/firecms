@@ -5,7 +5,7 @@
         "serve": "npm run build && firebase serve --only functions",
         "shell": "npm run build && firebase functions:shell",
         "start": "npm run shell",
-        "deploy": "tsc && firebase deploy --only functions:onBooksUpdateIndexAlgolia --project=firecms-demo-27150",
+        "deploy": "tsc && firebase deploy --only functions --project=firecms-demo-27150",
         "logs": "firebase functions:log"
     },
     "engines": {
@@ -13,8 +13,8 @@
     },
     "main": "lib/index.js",
     "dependencies": {
-        "@elastic/elasticsearch": "^8.7.0",
         "@alpacahq/alpaca-trade-api": "^2.16.1",
+        "@elastic/elasticsearch": "^8.7.0",
         "@google-cloud/firestore": "^6.4.1",
         "algoliasearch": "^4.14.2",
         "axios": "1.3.3",

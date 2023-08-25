@@ -139,6 +139,7 @@ function SampleApp() {
             // 'apple.com'
         ]}
         textSearchController={textSearchController}
+        firestoreIndexesBuilder={firestoreIndexesBuilder}
         logo={logo}
         collections={(params) => collections}
         views={customViews}

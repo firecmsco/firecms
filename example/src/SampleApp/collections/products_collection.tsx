@@ -5,6 +5,7 @@ import { SampleCollectionActions } from "../collection_actions/SampleCollectionA
 import { SampleProductsView } from "../custom_entity_view/SampleProductsView";
 import { Locale, Product } from "../types";
 import { categories, currencies, locales } from "./enums";
+import CustomColorTextField from "../custom_field/CustomColorTextField";
 
 export const localeCollection = buildCollection<Locale>({
     path: "locales",
@@ -100,7 +101,6 @@ export const productCallbacks: EntityCallbacks<Product> = {
 export const productsCollection = buildCollection<Product>({
     path: "products",
     alias: "ppp",
-    // inlineEditing: false,
     callbacks: productCallbacks,
     name: "Products",
     singularName: "Product",
@@ -133,24 +133,6 @@ export const productsCollection = buildCollection<Product>({
     ],
     additionalFields: [productAdditionalField],
     // propertiesOrder: ["name", "price", "category", "spanish_title", "currency", "locales"],
-    filterCombinations: [
-        {
-            category: "asc",
-            available: "desc"
-        },
-        {
-            category: "asc",
-            available: "asc"
-        },
-        {
-            category: "desc",
-            available: "desc"
-        },
-        {
-            category: "desc",
-            available: "asc"
-        }
-    ],
     properties: {
         name: {
             dataType: "string",
@@ -226,6 +208,11 @@ export const productsCollection = buildCollection<Product>({
             name: "Brand",
             validation: {
                 required: true
+            },
+            description: "This field uses a custom component defined by the developer",
+            Field: CustomColorTextField,
+            customProps: {
+                color: "gold"
             }
         },
         description: {
@@ -277,8 +264,7 @@ export const productsCollection = buildCollection<Product>({
                     name: "External id",
                     dataType: "string"
                 }
-            },
-            expanded: true
+            }
         },
         available_locales: {
             name: "Available locales",

@@ -99,10 +99,10 @@ function processCSVValue(inputValue: any,
         } else {
             value = inputValue;
         }
-    } else if (property.dataType === "reference") {
+    } else if (property.dataType === "reference" && inputValue instanceof EntityReference) {
         const ref = inputValue ? inputValue as EntityReference : undefined;
         value = ref ? ref.pathWithId : null;
-    } else if (property.dataType === "date") {
+    } else if (property.dataType === "date" && inputValue instanceof Date) {
         value = inputValue ? inputValue.getTime() : null;
     } else {
         value = inputValue;

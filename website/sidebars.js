@@ -6,8 +6,8 @@ module.exports = {
             id: "intro"
         },
         "quickstart",
+        "firebase_setup",
         "openai",
-        "new_in_v2",
         {
             type: "category",
             label: "Collections",
@@ -67,7 +67,6 @@ module.exports = {
         },
         "navigation/app_config",
         "navigation/custom_top_level_views",
-        "firebase_setup",
         "deployment",
         {
             type: "category",
@@ -96,6 +95,7 @@ module.exports = {
         },
         "nextjs",
         "custom_cms_app",
+        "new_in_v2",
         "migrating_from_v1",
         "changelog",
 

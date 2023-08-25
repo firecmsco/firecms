@@ -90,7 +90,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          fullPath,
          initialFilter,
          initialSort,
-         filterCombinations,
          forceFilter,
          actionsStart,
          actions,
@@ -387,10 +386,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const allColumns: VirtualTableColumn[] = useMemo(() => {
                 const columnsResult: VirtualTableColumn[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
                     .flatMap(([key, property]) => {
-                        if (property.dataType === "map" && property.spreadChildren && property.properties) {
-                            return Object.keys(property.properties).map(childKey => `${key}.${childKey}`);
-                        }
-                        return [key];
+                        return getColumnKeysForProperty(property, key);
                     })
                     .map((key) => {
                         const property = getResolvedPropertyInPath(resolvedCollection.properties, key);
@@ -634,7 +630,7 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
             if (property.disabled && typeof property.disabled === "object" && property.disabled.hidden)
                 return [null];
             if (property.dataType === "map" && property.spreadChildren && property.properties) {
-                return Object.keys(property.properties).map(childKey => `${key}.${childKey}`);
+                return getColumnKeysForProperty(property, key);
             }
             return [key];
         }
@@ -722,4 +718,12 @@ function filterableProperty(property: ResolvedProperty, partOfArray = false): bo
             return false;
     }
     return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
+}
+
+function getColumnKeysForProperty(property: ResolvedProperty, key: string): string[] {
+    if (property.dataType === "map" && property.spreadChildren && property.properties) {
+        return Object.entries(property.properties)
+            .flatMap(([childKey, childProperty]) => getColumnKeysForProperty(childProperty, `${key}.${childKey}`));
+    }
+    return [key];
 }

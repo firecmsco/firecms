@@ -1,8 +1,8 @@
 import React, { useCallback, useMemo } from "react";
 
-import { useCollectionFetch } from "../../../hooks";
+import { useCollectionFetch, useDataSource, useNavigationContext } from "../../../hooks";
 import { useDataOrder } from "../../../hooks/data/useDataOrder";
-import { Entity, EntityCollection, FilterCombination, FilterValues, User } from "../../../types";
+import { Entity, EntityCollection,  FilterValues, User } from "../../../types";
 import { useDebouncedData } from "./useDebouncedData";
 
 const DEFAULT_PAGE_SIZE = 50;
@@ -35,10 +35,6 @@ export type TableControllerProps<M extends Record<string, any> = any> = {
      * This is used for reference fields selection
      */
     entitiesDisplayedFirst?: Entity<M>[];
-    isFilterCombinationValid: (
-        filter: FilterValues<Extract<keyof M, string>>,
-        sort?: [string, "asc" | "desc"],
-        filterCombinations?: FilterCombination<Extract<keyof M, string>>[]) => boolean;
     lastDeleteTimestamp?: number;
     forceFilter?: FilterValues<string>;
 }
@@ -48,18 +44,20 @@ export function useTableController<M extends Record<string, any> = any, UserType
         fullPath,
         collection,
         entitiesDisplayedFirst,
-        isFilterCombinationValid,
         lastDeleteTimestamp,
         forceFilter: forceFilterFromProps
     }: TableControllerProps<M>)
     : TableController<M> {
 
     const {
-        filterCombinations,
         initialFilter,
         initialSort,
         forceFilter: forceFilterFromCollection
     } = collection;
+
+    const navigation = useNavigationContext();
+    const dataSource = useDataSource();
+    const resolvedPath = useMemo(() => navigation.resolveAliasesFrom(fullPath), [fullPath, navigation.resolveAliasesFrom]);
 
     const forceFilter = forceFilterFromProps ?? forceFilterFromCollection;
     const paginationEnabled = collection.pagination === undefined || Boolean(collection.pagination);
@@ -69,7 +67,16 @@ export function useTableController<M extends Record<string, any> = any, UserType
     const [itemCount, setItemCount] = React.useState<number | undefined>(paginationEnabled ? pageSize : undefined);
 
     const checkFilterCombination = useCallback((filterValues: FilterValues<any>,
-                                                sortBy?: [string, "asc" | "desc"]) => isFilterCombinationValid(filterValues, sortBy, filterCombinations), [filterCombinations]);
+                                                sortBy?: [string, "asc" | "desc"]) => {
+        if (!dataSource.isFilterCombinationValid)
+            return true;
+        return dataSource.isFilterCombinationValid({
+            path: resolvedPath,
+            collection,
+            filterValues,
+            sortBy
+        })
+    }, []);
 
     const initialSortInternal = useMemo(() => {
         if (initialSort && forceFilter && !checkFilterCombination(forceFilter, initialSort)) {

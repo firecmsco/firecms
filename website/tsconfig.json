@@ -21,7 +21,6 @@
         "isolatedModules": true,
         "noEmit": true,
         "jsx": "react-jsx",
-
         "sourceMap": true,
         "declaration": true,
         "noImplicitReturns": true,

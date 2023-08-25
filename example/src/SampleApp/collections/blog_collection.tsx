@@ -1,16 +1,10 @@
-import CustomColorTextField from "../custom_field/CustomColorTextField";
-import {
-    buildCollection,
-    buildProperty,
-    ExportMappingFunction
-} from "firecms";
+import { buildCollection, buildProperty, ExportMappingFunction } from "firecms";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
 
 export type BlogEntry = {
     name: string,
     header_image: string,
     content: any[],
-    gold_text: string,
     created_on: Date,
     publish_date: Date,
     reviewed: boolean,
@@ -38,7 +32,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     exportable: {
         additionalFields: [sampleAdditionalExportColumn]
     },
-    description: "Collection of blog entries included in our [awesome blog](https://www.google.com)",
+    description: "A blog entry with a quirky humorist tone. Each entry should have at least 5 text pieces of around 100 words each and a quote at least. The quote can be anywhere.",
     textSearchEnabled: true,
     defaultSize: "l",
     views: [{
@@ -77,6 +71,11 @@ export const blogCollection = buildCollection<BlogEntry>({
                         dataType: "string",
                         name: "Text",
                         markdown: true
+                    },
+                    quote: {
+                        dataType: "string",
+                        name: "Quote",
+                        multiline: true
                     },
                     images: {
                         name: "Images",
@@ -125,15 +124,6 @@ export const blogCollection = buildCollection<BlogEntry>({
             },
             defaultValue: "draft"
         })),
-        gold_text: buildProperty({
-            name: "Gold text",
-            description: "This field is a sample that uses a custom component defined by the developer",
-            dataType: "string",
-            Field: CustomColorTextField,
-            customProps: {
-                color: "gold"
-            }
-        }),
         publish_date: buildProperty({
             name: "Publish date",
             dataType: "date",

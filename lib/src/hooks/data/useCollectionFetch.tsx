@@ -107,7 +107,10 @@ export function useCollectionFetch<M extends Record<string, any>, UserType exten
             }
             setDataLoading(false);
             setDataLoadingError(undefined);
-            setData(entities);
+            setData(entities.map(e => ({
+                ...e,
+                // values: sanitizeData(e.values, resolvedCollection.properties)
+            })));
             setNoMoreToLoad(!itemCount || entities.length < itemCount);
         };
 
