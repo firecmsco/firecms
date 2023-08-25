@@ -1,11 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-    Entity,
-    EntityCollection,
-    FilterValues,
-    FireCMSContext,
-    User
-} from "../../types";
+import { Entity, EntityCollection, FilterValues, FireCMSContext, User } from "../../types";
 import { useDataSource } from "./useDataSource";
 import { useNavigationContext } from "../useNavigationContext";
 import { useFireCMSContext } from "../useFireCMSContext";
@@ -113,7 +107,10 @@ export function useCollectionFetch<M extends Record<string, any>, UserType exten
             }
             setDataLoading(false);
             setDataLoadingError(undefined);
-            setData(entities);
+            setData(entities.map(e => ({
+                ...e,
+                // values: sanitizeData(e.values, resolvedCollection.properties)
+            })));
             setNoMoreToLoad(!itemCount || entities.length < itemCount);
         };
 

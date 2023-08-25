@@ -2,15 +2,24 @@
 id: changelog
 title: Changelog
 ---
+## [2.1.0] - 2023-08-
+
+### Changed
+
+- [BREAKING] The logic to verify valid filter combinations has been moved to the `DataSource` interface.
+  This improves the ability to customize the data source and allows for more complex filters.
+  This change will only affect you if you have implemented a custom data source. You will need to 
+  add a `isFilterCombinationValid` method to your data source.
+
 ## [2.0.5] - 2023-07-11
 
 ### Changed
 
 - Default value for string properties is now `null` instead of `"""`.
 - Fix for changing text search controller not updating as a dependency.
-- Fix for setting a unique field using a reference, which was 
-generating an invalid query in Firestore.
- 
+- Fix for setting a unique field using a reference, which was
+  generating an invalid query in Firestore.
+
 ## [2.0.4] - 2023-06-15
 
 ### Changed
@@ -24,14 +33,14 @@ generating an invalid query in Firestore.
 
 - Fix for form resetting values when saving.
 
-
 ## [2.0.2] - 2023-06-14
 
 ### Changed
 
 - Replaced `flexsearch` with `js-search`. Their imports are too messed up.
 - Fix for form assigning wrong ids
-- 
+-
+
 ## [2.0.1] - 2023-06-12
 
 ### Changed

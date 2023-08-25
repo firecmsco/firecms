@@ -3,6 +3,7 @@ import { Entity, EntityCollection, FireCMSContext, User } from "../../types";
 import { useDataSource } from "./useDataSource";
 import { useNavigationContext } from "../useNavigationContext";
 import { useFireCMSContext } from "../useFireCMSContext";
+import { resolveCollection } from "../../core";
 
 /**
  * @category Hooks and utilities
@@ -23,7 +24,7 @@ export interface EntityFetchResult<M extends Record<string, any>> {
     dataLoadingError?: Error
 }
 
-const CACHE:Record<string, Entity<any>| undefined> = {};
+const CACHE: Record<string, Entity<any> | undefined> = {};
 
 /**
  * This hook is used to fetch an entity.

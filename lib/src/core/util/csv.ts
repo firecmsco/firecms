@@ -15,10 +15,10 @@ interface Header {
 }
 
 export function downloadCSV<M extends Record<string, any>>(data: Entity<M>[],
-                               additionalData: Record<string, any>[] | undefined,
-                               collection: ResolvedEntityCollection<M>,
-                               path: string,
-                               exportConfig: ExportConfig | undefined) {
+                                                           additionalData: Record<string, any>[] | undefined,
+                                                           collection: ResolvedEntityCollection<M>,
+                                                           path: string,
+                                                           exportConfig: ExportConfig | undefined) {
     const properties = collection.properties;
     const headers = getExportHeaders(properties, path, exportConfig);
     const exportableData = getExportableData(data, additionalData, properties, headers);
@@ -45,8 +45,8 @@ export function getExportableData(data: any[],
 }
 
 function getExportHeaders<M extends Record<string, any>, UserType extends User>(properties: ResolvedProperties<M>,
-                                                                      path: string,
-                                                                      exportConfig?: ExportConfig<UserType>): Header[] {
+                                                                                path: string,
+                                                                                exportConfig?: ExportConfig<UserType>): Header[] {
     const headers = [
         { label: "id", key: "id" },
         ...Object.entries(properties)
@@ -99,10 +99,10 @@ function processCSVValue(inputValue: any,
         } else {
             value = inputValue;
         }
-    } else if (property.dataType === "reference") {
+    } else if (property.dataType === "reference" && inputValue instanceof EntityReference) {
         const ref = inputValue ? inputValue as EntityReference : undefined;
         value = ref ? ref.pathWithId : null;
-    } else if (property.dataType === "date") {
+    } else if (property.dataType === "date" && inputValue instanceof Date) {
         value = inputValue ? inputValue.getTime() : null;
     } else {
         value = inputValue;
