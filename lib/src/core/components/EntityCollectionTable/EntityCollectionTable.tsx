@@ -1,11 +1,7 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import { Box, Button, useMediaQuery, useTheme } from "@mui/material";
 import equal from "react-fast-compare";
-import {
-    getCellAlignment,
-    getPropertyColumnWidth,
-    getSubcollectionColumnId
-} from "./internal/common";
+import { getCellAlignment, getPropertyColumnWidth, getSubcollectionColumnId } from "./internal/common";
 import {
     AdditionalFieldDelegate,
     CollectionSize,
@@ -42,15 +38,8 @@ import {
     resolveProperty
 } from "../../util";
 import { getRowHeight } from "../Table/common";
-import {
-    EntityCollectionRowActions
-} from "./internal/EntityCollectionRowActions";
-import {
-    EntityCollectionTableController,
-    OnCellValueChange,
-    SelectedCellProps,
-    UniqueFieldValidator
-} from "./types";
+import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
+import { EntityCollectionTableController, OnCellValueChange, SelectedCellProps, UniqueFieldValidator } from "./types";
 import KeyboardTabIcon from "@mui/icons-material/KeyboardTab";
 import { setIn } from "formik";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
@@ -404,10 +393,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const allColumns: TableColumn[] = useMemo(() => {
                 const columnsResult: TableColumn[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
                     .flatMap(([key, property]) => {
-                        if (property.dataType === "map" && property.spreadChildren && property.properties) {
-                            return Object.keys(property.properties).map(childKey => `${key}.${childKey}`);
-                        }
-                        return [key];
+                        return getColumnKeysForProperty(property, key);
                     })
                     .map((key) => {
                         const property = getResolvedPropertyInPath(resolvedCollection.properties, key);
@@ -655,7 +641,7 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
             if (property.disabled && typeof property.disabled === "object" && property.disabled.hidden)
                 return [null];
             if (property.dataType === "map" && property.spreadChildren && property.properties) {
-                return Object.keys(property.properties).map(childKey => `${key}.${childKey}`);
+                return getColumnKeysForProperty(property, key);
             }
             return [key];
         }
@@ -743,4 +729,12 @@ function filterableProperty(property: ResolvedProperty, partOfArray = false): bo
             return false;
     }
     return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
+}
+
+function getColumnKeysForProperty(property: ResolvedProperty, key: string): string[] {
+    if (property.dataType === "map" && property.spreadChildren && property.properties) {
+        return Object.entries(property.properties)
+            .flatMap(([childKey, childProperty]) => getColumnKeysForProperty(childProperty, `${key}.${childKey}`));
+    }
+    return [key];
 }
