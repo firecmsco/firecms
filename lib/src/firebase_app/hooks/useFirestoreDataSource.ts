@@ -69,26 +69,18 @@ export interface FirestoreDataSourceProps {
  */
 export function useFirestoreDataSource({
                                            firebaseApp,
-                                           textSearchController,
-                                           fields = {}
+                                           textSearchController
                                        }: FirestoreDataSourceProps): DataSource {
 
     const createEntityFromCollection = useCallback(<M extends Record<string, any>>(
         docSnap: DocumentSnapshot,
-        path: string,
-        resolvedCollection: ResolvedEntityCollection<M>
     ): Entity<M> => {
 
         const values = firestoreToCMSModel(docSnap.data());
-        const data = docSnap.data()
-            ? resolvedCollection.properties
-                ? sanitizeData(values as EntityValues<M>, resolvedCollection.properties)
-                : docSnap.data()
-            : undefined;
         return {
             id: docSnap.id,
             path: getCMSPathFromFirestorePath(docSnap.ref.path),
-            values: data
+            values: values as EntityValues<M>,
         };
     }, []);
 
@@ -142,14 +134,7 @@ export function useFirestoreDataSource({
                 if (!docSnapshot.exists()) {
                     return undefined;
                 }
-                const resolvedCollection = resolveCollection<M>({
-                    collection,
-                    path,
-                    entityId: docSnapshot.id,
-                    values: firestoreToCMSModel(docSnapshot.data()),
-                    fields
-                });
-                return createEntityFromCollection(docSnapshot, path, resolvedCollection);
+                return createEntityFromCollection(docSnapshot);
             });
     }, [firebaseApp]);
 
@@ -226,13 +211,7 @@ export function useFirestoreDataSource({
             return getDocs(query)
                 .then((snapshot) =>
                     snapshot.docs.map((doc) => {
-                        const resolvedCollection = resolveCollection<M>({
-                            collection,
-                            path,
-                            values: firestoreToCMSModel(doc.data()),
-                            fields
-                        });
-                        return createEntityFromCollection(doc, path, resolvedCollection);
+                        return createEntityFromCollection(doc);
                     }));
         }, [buildQuery, performTextSearch]),
 
@@ -292,16 +271,10 @@ export function useFirestoreDataSource({
                 };
             }
 
-            const resolvedCollection = resolveCollection<M>({
-                collection,
-                path,
-                fields
-            });
-
             return onSnapshot(query,
                 {
                     next: (snapshot) => {
-                        onUpdate(snapshot.docs.map((doc) => createEntityFromCollection(doc, path, resolvedCollection)));
+                        onUpdate(snapshot.docs.map((doc) => createEntityFromCollection(doc)));
                     },
                     error: onError
                 }
@@ -348,13 +321,7 @@ export function useFirestoreDataSource({
                 doc(firestore, path, entityId),
                 {
                     next: (docSnapshot) => {
-                        const resolvedCollection = resolveCollection<M>({
-                            collection,
-                            path,
-                            entityId: docSnapshot.id,
-                            fields
-                        });
-                        onUpdate(createEntityFromCollection(docSnapshot, path, resolvedCollection));
+                        onUpdate(createEntityFromCollection(docSnapshot));
                     },
                     error: onError
                 }
@@ -389,7 +356,6 @@ export function useFirestoreDataSource({
                 collection,
                 path,
                 entityId,
-                fields
             });
 
             const properties: ResolvedProperties<M> = resolvedCollection.properties;
