@@ -8,7 +8,6 @@ import {
     EntityCollection,
     FilterValues,
     PartialEntityCollection,
-    Property,
     SelectionController
 } from "../../../types";
 import { EntityCollectionTable, OnColumnResizeParams } from "../EntityCollectionTable";
@@ -16,7 +15,14 @@ import { EntityCollectionTable, OnColumnResizeParams } from "../EntityCollection
 import { EntityCollectionRowActions } from "../EntityCollectionTable/internal/EntityCollectionRowActions";
 import { DeleteEntityDialog } from "../EntityCollectionTable/internal/DeleteEntityDialog";
 
-import { canCreateEntity, canDeleteEntity, canEditEntity, fullPathToCollectionSegments, mergeDeep } from "../../util";
+import {
+    canCreateEntity,
+    canDeleteEntity,
+    canEditEntity,
+    fullPathToCollectionSegments,
+    getPropertyInPath,
+    mergeDeep
+} from "../../util";
 import { Markdown, renderSkeletonText } from "../../../preview";
 import {
     useAuthController,
@@ -202,10 +208,10 @@ export const EntityCollectionView = React.memo(
                                                 width,
                                                 key
                                             }: OnColumnResizeParams) => {
+            console.log("onColumnResize", width, key);
             // Only for property columns
-            if (!collection.properties[key]) return;
-            const property: Partial<Property> = { columnWidth: width };
-            const localCollection = { properties: { [key as keyof M]: property } } as PartialEntityCollection<M>;
+            if (!getPropertyInPath(collection.properties, key)) return;
+            const localCollection = buildPropertyWidthOverwrite(key, width);
             onCollectionModifiedForUser(fullPath, localCollection);
         }, [collection, onCollectionModifiedForUser, fullPath]);
 
@@ -425,4 +431,12 @@ function EntitiesCount({
         color={"secondary"}>
         {count !== undefined ? `${count} entities` : renderSkeletonText()}
     </Typography>;
+}
+
+function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityCollection {
+    if (key.includes(".")) {
+        const [parentKey, ...childKey] = key.split(".");
+        return { properties: { [parentKey]: buildPropertyWidthOverwrite(childKey.join("."), width) } } as PartialEntityCollection;
+    }
+    return { properties: { [key]: { columnWidth: width } } } as PartialEntityCollection;
 }

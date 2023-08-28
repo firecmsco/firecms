@@ -94,6 +94,8 @@ export function removeUndefined(value: any): any {
     }
     if (typeof value === "object") {
         const res: object = {};
+        if (value === null)
+            return value;
         Object.keys(value).forEach((key) => {
             if (!isEmptyObject(value)) {
                 const childRes = removeUndefined(value[key]);

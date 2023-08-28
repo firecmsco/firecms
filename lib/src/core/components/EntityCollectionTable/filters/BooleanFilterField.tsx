@@ -1,6 +1,6 @@
 import React from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { Checkbox } from "../../../../components/Checkbox";
+import { Checkbox } from "../../../../components";
 
 interface BooleanFieldProps {
     name: string,

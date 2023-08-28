@@ -12,7 +12,6 @@ import {
     GeoPoint,
     ListenCollectionProps,
     ListenEntityProps,
-    ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty,
     SaveEntityProps,

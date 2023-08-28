@@ -8,7 +8,6 @@ import {
     EntityCollection,
     FilterValues,
     FireCMSContext,
-    PropertyOrBuilder,
     ResolvedEntityCollection,
     ResolvedProperty,
     SaveEntityProps,
@@ -27,11 +26,10 @@ import {
     useSideEntityController
 } from "../../../hooks";
 import { PopupFormField } from "./internal/popup_field/PopupFormField";
-import { CellRendererParams, VirtualTableColumn, VirtualTable } from "../VirtualTable";
+import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../VirtualTable";
 import {
     enumToObjectEntries,
     getIconForProperty,
-    getPropertyInPath,
     getResolvedPropertyInPath,
     getValueInPath,
     resolveCollection,
@@ -165,7 +163,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     Builder: ({ entity }) => (
                         <Button color={"primary"}
                                 startIcon={<KeyboardTabIcon size={"small"}/>}
-                                onClick={(event:any) => {
+                                onClick={(event: any) => {
                                     event.stopPropagation();
                                     sideEntityController.open({
                                         path: fullPath,
@@ -295,8 +293,10 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             const entity: Entity<M> = rowData;
 
             const propertyKey = column.key;
+            const propertyOrBuilder = column.custom.property;
+            const disabled = column.custom.disabled;
 
-            const propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
+            // const propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
             if (!propertyOrBuilder) {
                 return null;
             }
@@ -330,6 +330,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             width={column.width}
                             height={getRowHeight(size)}
                             entity={entity}
+                            disabled={disabled}
                             path={entity.path}/>
                         : renderSkeletonText()
                     }
@@ -385,15 +386,13 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const allColumns: VirtualTableColumn[] = useMemo(() => {
                 const columnsResult: VirtualTableColumn[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
-                    .flatMap(([key, property]) => {
-                        return getColumnKeysForProperty(property, key);
-                    })
-                    .map((key) => {
+                    .flatMap(([key, property]) => getColumnKeysForProperty(property, key))
+                    .map(({ key, disabled }) => {
                         const property = getResolvedPropertyInPath(resolvedCollection.properties, key);
                         if (!property)
                             throw Error("Internal error: no property found in path " + key);
                         const filterable = filterableProperty(property);
-                        return ({
+                        return {
                             key: key as string,
                             align: getCellAlignment(property),
                             icon: (hoverOrOpen) => getIconForProperty(property, "small"),
@@ -402,8 +401,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             filter: !disabledFilterChange && filterable,
                             width: getPropertyColumnWidth(property),
                             resizable: true,
-                            custom: property
-                        });
+                            custom: { property, disabled }
+                        };
                     });
 
                 const additionalTableColumns: VirtualTableColumn[] = additionalFields
@@ -434,7 +433,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             idColumn,
             ...displayedColumnIds
                 .map((p) => {
-                    return allColumns.find(c => c.key === p);
+                    return allColumns.find(c => c.key === p.key);
                 }).filter(c => !!c) as VirtualTableColumn[]
         ], [allColumns, displayedColumnIds, idColumn]);
 
@@ -611,7 +610,7 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: R
     return hideAndExpandKeys(collection, columnIds);
 }
 
-function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
+function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): PropertyColumnConfig[] {
     return useMemo(() => {
         if (collection.propertiesOrder)
             return hideAndExpandKeys(collection, collection.propertiesOrder);
@@ -620,7 +619,7 @@ function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityC
     }, [collection, includeSubcollections]);
 }
 
-function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, keys: string[]): string[] {
+function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, keys: string[]): PropertyColumnConfig[] {
 
     return keys.flatMap((key) => {
         const property = collection.properties[key];
@@ -632,20 +631,20 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
             if (property.dataType === "map" && property.spreadChildren && property.properties) {
                 return getColumnKeysForProperty(property, key);
             }
-            return [key];
+            return [{ key, disabled: Boolean(property.disabled) || Boolean(property.readOnly) }];
         }
 
         const additionalField = collection.additionalFields?.find(field => field.id === key);
         if (additionalField) {
-            return [key];
+            return [{ key, disabled: true }];
         }
 
         if (collection.collectionGroup && key === COLLECTION_GROUP_PARENT_ID) {
-            return [key];
+            return [{ key, disabled: true }];
         }
 
         return [null];
-    }).filter((key) => key !== null) as string[];
+    }).filter(Boolean) as PropertyColumnConfig[];
 }
 
 function createFilterField({
@@ -655,11 +654,16 @@ function createFilterField({
                                column,
                                popupOpen,
                                setPopupOpen
-                           }: FilterFormFieldProps<ResolvedProperty>): React.ReactNode {
-    const property: ResolvedProperty | undefined = column.custom;
-    if (!property) {
+                           }: FilterFormFieldProps<{
+    property: ResolvedProperty,
+    disabled: boolean,
+}>): React.ReactNode {
+
+    if (!column.custom) {
         return null;
     }
+
+    const { property } = column.custom;
     const isArray = property?.dataType === "array";
     const baseProperty: ResolvedProperty = isArray ? property.of : property;
     if (!baseProperty) {
@@ -720,10 +724,19 @@ function filterableProperty(property: ResolvedProperty, partOfArray = false): bo
     return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
 }
 
-function getColumnKeysForProperty(property: ResolvedProperty, key: string): string[] {
+type PropertyColumnConfig = {
+    key: string,
+    disabled: boolean,
+};
+
+function getColumnKeysForProperty(property: ResolvedProperty, key: string, disabled?: boolean): PropertyColumnConfig[] {
     if (property.dataType === "map" && property.spreadChildren && property.properties) {
         return Object.entries(property.properties)
-            .flatMap(([childKey, childProperty]) => getColumnKeysForProperty(childProperty, `${key}.${childKey}`));
+            .flatMap(([childKey, childProperty]) => getColumnKeysForProperty(
+                childProperty,
+                `${key}.${childKey}`,
+                disabled || Boolean(property.disabled) || Boolean(property.readOnly))
+            );
     }
-    return [key];
+    return [{ key, disabled: disabled || Boolean(property.disabled) || Boolean(property.readOnly) }];
 }

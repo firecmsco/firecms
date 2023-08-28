@@ -45,6 +45,7 @@ export interface PropertyTableCellProps<T extends CMSType, M extends Record<stri
     width: number;
     entity: Entity<any>;
     path: string;
+    disabled: boolean;
 }
 
 function isStorageProperty<T>(property: ResolvedProperty) {
@@ -74,7 +75,8 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                                                      collection,
                                                                                      path,
                                                                                      entity,
-                                                                                     readonly
+                                                                                     readonly,
+                                                                                     disabled: disabledProp
                                                                                  }: PropertyTableCellProps<T, M>) {
 
         const dataSource = useDataSource();
@@ -109,7 +111,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         const customPreview = Boolean(property.Preview);
         const readOnlyProperty = isReadOnly(property);
         const disabledTooltip: string | undefined = typeof property.disabled === "object" ? property.disabled.disabledMessage : undefined;
-        const disabled = Boolean(property.disabled);
+        const disabled = readonly || disabledProp || Boolean(property.disabled);
 
         const validation = useMemo(() => mapPropertyToYup({
             property,
@@ -130,7 +132,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             [onValueUpdated, value]
         );
 
-        const saveValues = useCallback((value: any) => {
+        const saveValues = (value: any) => {
             setSaved(false);
             validation
                 .validate(value)
@@ -153,7 +155,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 .catch((e) => {
                     setError(e);
                 });
-        }, [entity, onValueChange, propertyKey, validation]);
+        };
 
         useEffect(() => {
             validation
@@ -164,21 +166,18 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 });
         }, [internalValue, validation]);
 
-        const updateValue = useCallback(
-            (newValue: any | null) => {
+        const updateValue = (newValue: any | null) => {
 
-                let updatedValue: any;
-                if (newValue === undefined) {
-                    updatedValue = null;
-                } else {
-                    updatedValue = newValue;
-                }
-                internalValueRef.current = updatedValue;
-                setInternalValue(updatedValue);
-                saveValues(updatedValue);
-            },
-            [saveValues]
-        );
+            let updatedValue: any;
+            if (newValue === undefined) {
+                updatedValue = null;
+            } else {
+                updatedValue = newValue;
+            }
+            internalValueRef.current = updatedValue;
+            setInternalValue(updatedValue);
+            saveValues(updatedValue);
+        };
 
         useClearRestoreValue<any>({
             property,
@@ -235,7 +234,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 key={`${propertyKey}_${entity.path}_${entity.id}`}
                 value={internalValue}
                 align={align ?? "left"}
-                fullHeight={true}
+                fullHeight={false}
                 disabledTooltip={disabledTooltip ?? (readOnlyProperty ? "Read only" : undefined)}
                 disabled={true}>
                 <PropertyPreview

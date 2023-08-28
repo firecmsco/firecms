@@ -14,24 +14,11 @@ export function CenteredView({
     fullScreen?: boolean,
 }) {
 
-    // const container = <>
-    //     <Container className={cn("m-auto",
-    //         className)}
-    //                maxWidth={maxWidth}>
-    //         {children}
-    //     </Container>
-    // </>;
-    //
-    // if (fullScreen) {
-        return <div className={"flex flex-col flex-grow h-full"}>
-            <Container className={cn("m-auto",
-                className)}
-                       maxWidth={maxWidth}>
-                {children}
-            </Container>
-        </div>
-    // }
-    //
-    // return container;
+    return <div className={"flex flex-col flex-grow h-full"}>
+        <Container className={cn("m-auto", className)}
+                   maxWidth={maxWidth}>
+            {children}
+        </Container>
+    </div>
 
 }
