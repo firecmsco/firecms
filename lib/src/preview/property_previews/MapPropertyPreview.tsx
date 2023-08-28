@@ -133,7 +133,7 @@ export function KeyValuePreview({ value }: { value: any }) {
                             </Typography>}
                         </div>
                     </div>
-                    {typeof childValue !== "object" &&
+                    {typeof childValue === "object" &&
                         <div className={cn(defaultBorderMixin, "border-l pl-4")}>
                             <KeyValuePreview value={childValue}/>
                         </div>

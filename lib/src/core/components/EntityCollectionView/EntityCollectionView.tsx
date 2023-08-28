@@ -332,14 +332,15 @@ export const EntityCollectionView = React.memo(
                     actions={<EntityCollectionViewActions
                         parentPathSegments={parentPathSegments}
                         collection={collection}
+                        tableController={tableController}
                         exportable={exportable}
                         onMultipleDeleteClick={onMultipleDeleteClick}
                         onNewClick={onNewClick}
                         path={fullPath}
                         relativePath={collection.path}
-                        loadedEntities={tableController.data}
                         selectionController={usedSelectionController}
-                        selectionEnabled={selectionEnabled}/>}
+                        selectionEnabled={selectionEnabled}
+                    />}
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
                 />

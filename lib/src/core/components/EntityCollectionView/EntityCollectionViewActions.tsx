@@ -9,6 +9,7 @@ import { Button, IconButton, Tooltip } from "../../../components";
 import { useLargeLayout } from "../../../hooks/useLargeLayout";
 import { AddIcon, DeleteIcon } from "../../../icons";
 import { toArray } from "../../util/arrays";
+import { TableController } from "../EntityCollectionTable/useTableController";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -20,7 +21,7 @@ export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     onNewClick: () => void;
     onMultipleDeleteClick: () => void;
     selectionController: SelectionController<M>;
-    loadedEntities: Entity<M>[];
+    tableController: TableController<M>;
 }
 
 export function EntityCollectionViewActions<M extends Record<string, any>>({
@@ -33,7 +34,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
                                                                                selectionEnabled,
                                                                                path,
                                                                                selectionController,
-                                                                               loadedEntities
+                                                                               tableController
                                                                            }: EntityCollectionViewActionsProps<M>) {
 
     const context = useFireCMSContext();
@@ -101,7 +102,7 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         collection,
         selectionController,
         context,
-        loadedEntities
+        tableController
     };
 
     const allActions: React.ComponentType<any>[] = [];

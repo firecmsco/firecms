@@ -6,6 +6,7 @@ import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
 import { EnumValues, PropertiesOrBuilders } from "./properties";
 import { FormContext } from "./fields";
+import { TableController } from "../core/components/EntityCollectionTable/useTableController";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -295,11 +296,10 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
     selectionController: SelectionController<M>;
 
     /**
-     * Entities that are currently loaded in the collection view.
-     * Note that this is not the full list of entities, but only the ones
-     * currently loaded in the collection view.
+     * Use this controller to get the table controller and to update the
+     * table controller state.
      */
-    loadedEntities: Entity<M>[];
+    tableController: TableController<M>;
 
     /**
      * Context of the app status
