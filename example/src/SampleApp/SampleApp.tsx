@@ -7,9 +7,16 @@ import "@fontsource/roboto"
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import { AppCheckOptions, Authenticator, CMSView, FirebaseCMSApp, GitHubIcon, IconButton, Tooltip } from "firecms";
+import {
+    Authenticator,
+    CMSView,
+    FirebaseCMSApp,
+    FirestoreIndexesBuilder,
+    GitHubIcon,
+    IconButton,
+    Tooltip
+} from "firecms";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
-
 
 import { firebaseConfig } from "../firebase_config";
 // import { publicRecaptchaKey } from "../appcheck_config";
@@ -120,6 +127,30 @@ function SampleApp() {
             return false;
         }
     });
+
+    const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
+        if (path === "products") {
+            return [
+                {
+                    category: "asc",
+                    available: "desc"
+                },
+                {
+                    category: "asc",
+                    available: "asc"
+                },
+                {
+                    category: "desc",
+                    available: "desc"
+                },
+                {
+                    category: "desc",
+                    available: "asc"
+                }
+            ];
+        }
+        return undefined;
+    }
 
     return <FirebaseCMSApp
         name={"My Online Shop"}
