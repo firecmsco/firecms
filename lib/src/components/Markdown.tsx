@@ -1,10 +1,12 @@
 import React, { useMemo } from "react";
+import equal from "react-fast-compare"
 
 // @ts-ignore
 import MarkdownIt from "markdown-it";
 
 export interface MarkdownProps {
-    source: string
+    source: string,
+    className?: string
 }
 
 const md = new MarkdownIt({ html: true, });
@@ -12,18 +14,16 @@ const md = new MarkdownIt({ html: true, });
  * @category Preview components
  */
 export const Markdown = React.memo<MarkdownProps>(function Markdown({
-                                                                        source
+                                                                        source,
+                                                                        className
                                                                     }: MarkdownProps) {
         const html = useMemo(() => {
             return md.render(typeof source === "string" ? source : "");
         }, [source]);
 
         return <div
+            className={className}
             dangerouslySetInnerHTML={{ __html: html }}
         />;
     }
-    , areEqual) as React.FunctionComponent<MarkdownProps>;
-
-function areEqual(prevProps: MarkdownProps, nextProps: MarkdownProps) {
-    return prevProps.source === nextProps.source;
-}
+    , equal) as React.FunctionComponent<MarkdownProps>;

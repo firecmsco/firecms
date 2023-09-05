@@ -4,7 +4,7 @@ import { cn } from "./util/cn";
 export interface AlertProps {
     children: React.ReactNode;
     onDismiss?: () => void;
-    color: "error" | "warning" | "info" | "success";
+    color?: "error" | "warning" | "info" | "success";
     action?: React.ReactNode;
     className?: string;
     style?: React.CSSProperties;
@@ -28,7 +28,7 @@ const getClasses = (severity: string) => {
 export const Alert: React.FC<AlertProps> = ({
                                                 children,
                                                 onDismiss,
-                                                color,
+                                                color = "info",
                                                 action,
                                                 className,
                                                 style

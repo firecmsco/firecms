@@ -243,7 +243,7 @@ export function SelectGroup({
         <SelectPrimitive.Group
             className={cn(
                 "text-xs text-gray-900 dark:text-gray-100 uppercase tracking-wider font-bold mt-6 first:mt-2",
-                "px-3.5 py-2",
+                "px-2 py-2",
                 className
             )}>
             {label}

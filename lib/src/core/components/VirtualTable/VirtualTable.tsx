@@ -11,8 +11,8 @@ import {
     OnVirtualTableColumnResizeParams,
     VirtualTableColumn,
     VirtualTableFilterValues,
-    VirtualTableWhereFilterOp,
-    VirtualTableProps
+    VirtualTableProps,
+    VirtualTableWhereFilterOp
 } from "./VirtualTableProps";
 
 import { getRowHeight } from "./common";
@@ -20,7 +20,7 @@ import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
-import { Typography } from "../../../components/Typography";
+import { Markdown, Typography } from "../../../components";
 import { AssignmentIcon } from "../../../icons";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
@@ -231,9 +231,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                     {"Error fetching data from the data source"}
                 </Typography>
 
-                {error?.message && <Typography className={"px-4 break-all"}>
-                    {error?.message}
-                </Typography>}
+                {error?.message && <Markdown className={"px-4 break-all"} source={error.message}/>}
 
             </div>
         ), [error?.message]);

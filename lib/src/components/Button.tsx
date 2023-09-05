@@ -48,9 +48,9 @@ export function Button<P extends React.ElementType>({
 
     if (Component) {
         return (
-            <Component {...(props as React.ComponentPropsWithRef<P>)}
-                       onClick={props.onClick}
-                       className={cn(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}>
+            <Component onClick={props.onClick}
+                       className={cn(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
+                       {...(props as React.ComponentPropsWithRef<P>)}>
                 {startIcon}
                 {children}
             </Component>
@@ -58,11 +58,11 @@ export function Button<P extends React.ElementType>({
     }
 
     return (
-        <button {...props as React.ButtonHTMLAttributes<HTMLButtonElement>}
-                type={props.type ?? "button"}
+        <button type={props.type ?? "button"}
                 onClick={props.onClick}
                 className={cn(focusedMixin, startIcon ? "pl-3" : "", baseClasses, buttonClasses, sizeClasses, className)}
-                disabled={disabled}>
+                disabled={disabled}
+                {...props as React.ButtonHTMLAttributes<HTMLButtonElement>}>
             {startIcon}
             {children}
         </button>
