@@ -1,11 +1,5 @@
 import React from "react";
-import { ThreeColumns } from "../general/ThreeColumns";
-import {
-    ContainerMixin,
-    CTAButtonMixin,
-    CTACaret,
-    CTAOutlinedButtonMixin
-} from "../utils";
+import { CTACaret, CTAOutlinedButtonMixin } from "../utils";
 import { Panel } from "../general/Panel";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
@@ -16,6 +10,8 @@ export function SelfHosted() {
         <h2 className={"text-3xl md:text-4xl font-bold my-2"}>
             Self-hosted mode
         </h2>
+
+
 
         <p className={"text-lg"}>
             With our self-hosted option, you'll have
@@ -29,13 +25,28 @@ export function SelfHosted() {
             build <b>custom features</b>.
         </p>
 
-        <a
-            className={CTAOutlinedButtonMixin}
-            href={useBaseUrl("docs/")}
-        >
-            Go to docs
-            <CTACaret/>
-        </a>
+        <div className={"flex gap-4"}>
+
+            <div
+                className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                yarn create firecms-app
+            </div>
+
+            <a
+                className={CTAOutlinedButtonMixin}
+                href={useBaseUrl("docs/")}
+            >
+                Docs
+                <CTACaret/>
+            </a>
+            <a
+                className={CTAOutlinedButtonMixin}
+                href={"https://demo.firecms.co"}
+            >
+                See self-hosted demo
+                <CTACaret/>
+            </a>
+        </div>
     </Panel>;
 
 }

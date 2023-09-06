@@ -12,7 +12,6 @@ import FirebaseIntro from "../partials/home/FirebaseIntro";
 import { Companies } from "../partials/home/Companies";
 import FeaturesTeaser from "../partials/home/FeaturesTeaser";
 import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
-import { FireCMSCloudIntro } from "../partials/home/FireCMSCloudIntro";
 import OpenAITeaser from "../partials/home/OpenAITeaser";
 import { IntroText } from "../partials/home/IntroText";
 
@@ -36,18 +35,18 @@ function Home() {
                     <ManageYour/>
 
                     <FirebaseIntro/>
-                    <OpenAITeaser/>
 
                     <IntroText/>
                     {/*<FireCMSCloudIntro/>*/}
 
                     <FeaturesPanels/>
+                    <EnterpriseTeaser/>
 
                     <TechSplash/>
                     <Companies/>
 
                     <FeaturesTeaser/>
-                    <EnterpriseTeaser/>
+                    <OpenAITeaser/>
 
                     <FirebaseTeaser/>
 

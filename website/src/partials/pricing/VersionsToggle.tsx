@@ -12,7 +12,7 @@ export function VersionsToggle({ value, onSelect }: {
     return <div className={"flex flex-row gap-8 justify-center"}>
         <ToggleButton title={"Self-hosted"}
                       icon={<ServerIcon/>}
-                      subtitle={"Free and open source"}
+                      subtitle={<><b>FREE</b> and open source</>}
                       selected={value === "self-hosted"}
                       onClick={() => onSelect("self-hosted")}
         />
@@ -29,7 +29,7 @@ export function VersionsToggle({ value, onSelect }: {
 export function ToggleButton({ title, subtitle, icon, selected, onClick }: {
     title: string,
     icon: React.ReactNode,
-    subtitle: string,
+    subtitle: React.ReactNode,
     selected?: boolean,
     onClick?: () => void
 }) {
@@ -39,7 +39,7 @@ export function ToggleButton({ title, subtitle, icon, selected, onClick }: {
             onClick={onClick}
             className={"cursor-pointer max-w-sm p-6 border border-solid rounded-lg flex flex-row gap-4 items-center bg-gray-50 dark:bg-gray-800 "
                 + (selected
-                    ? "border-transparent shadow-xl text-gray-700 dark:text-gray-300 ring-2 ring-blue-500"
+                    ? "border-transparent shadow-xl text-gray-700 dark:text-gray-300 outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent"
                     : "border-gray-200 dark:border-gray-700 text-gray-600 dark:text-gray-400")}
         >
             {icon}

@@ -19,24 +19,25 @@ function HeroButtons() {
     </svg>;
 
     return <div
-        className="mt-8 mb-8 flex justify-center lg:flex-row flex-col-reverse items-center">
+        className="mt-8 mb-8 flex justify-center lg:flex-row flex-col-reverse items-center gap-4">
 
         <a
-            className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded my-2 lg:mx-2"}
+            className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
             href={"https://discord.gg/fxy7xsQm3m"}
         >
             {discordIcon}
         </a>
 
-        <div
-            className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md my-2 lg:mx-2"}>
-            yarn create firecms-app
-        </div>
+        <a
+            className={CTAOutlinedButtonMixin + " w-full lg:w-auto "}
+            href={useBaseUrl("docs/")}
+        >
+            Self-hosted docs
+        </a>
 
         <a
-            className={CTAButtonMixin + " w-full lg:w-auto my-2 lg:mx-2"}
-            // href={"https://app.firecms.co"}
-            href={useBaseUrl("docs/")}
+            className={CTAButtonMixin + " w-full lg:w-auto "}
+            href={"https://app.firecms.co"}
         >
             Get started
             <CTACaret/>

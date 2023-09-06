@@ -1,5 +1,5 @@
 <p align="center">
-    <img src="https://firecms.co/img/dark_mode.webp" alt="Intro video" style="max-width: 100%;">
+    <img src="https://firecms.co/img/dark_mode.webp" alt="Intro video" style="max-width: 100%;"/>
 </p>
 
 <p align="center">

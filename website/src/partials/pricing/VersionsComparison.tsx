@@ -20,9 +20,9 @@ const data = [{
     }, {
         feature: "Subcollection support",
         selfHosted: "Yes",
-        cloud: "WIP",
-        cloudPlus: "WIP",
-        cloudPro: "WIP"
+        cloud: "Yes",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
     }, {
         feature: "Collection editor",
         selfHosted: "No",
@@ -50,7 +50,7 @@ const data = [{
     },{
         feature: "Data import",
         selfHosted: "No",
-        cloud: "No",
+        cloud: "WIP",
         cloudPlus: "WIP",
         cloudPro: "WIP"
     }, {
@@ -119,13 +119,15 @@ const data = [{
         cloud: "No",
         cloudPlus: "No",
         cloudPro: "Yes"
-    }, {
-        feature: "SAML SSO",
-        selfHosted: "No",
-        cloud: "No",
-        cloudPlus: "No",
-        cloudPro: "Yes"
-    }]
+    },
+    // {
+    //     feature: "SAML SSO",
+    //     selfHosted: "No",
+    //     cloud: "No",
+    //     cloudPlus: "No",
+    //     cloudPro: "Yes"
+    // }
+    ]
 ;
 
 export function VersionsComparison() {
@@ -234,7 +236,7 @@ export function VersionsComparison() {
                     className={CTAOutlinedButtonMixin + " table-cell md:px-4"}
                     href={useBaseUrl("docs/")}
                 >
-                    More details
+                    Self-hosted docs
                 </a>
                 {/*<th*/}
                 {/*    className={" table-cell p-0 border-none"}*/}

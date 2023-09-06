@@ -1,6 +1,5 @@
 import React from "react";
 
-
 // @ts-ignore
 import ReactLogo from "@site/static/img/reactjs-icon.svg";
 // @ts-ignore
@@ -25,7 +24,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 function EnterpriseTeaser() {
 
     return (
-        <Panel includeMargin={true} color={"gray"}>
+        <Panel includeMargin={false} color={"gray"}>
             <p className={"h2"}>
                 FireCMS is used by companies of all sizes
             </p>

@@ -34,7 +34,7 @@ export function useOutsideAlerter(ref: RefObject<HTMLElement>, onOutsideClick: (
  * Check if any parent of the node is a presentation node
  * @param node
  */
-function isInPresentationLayer(node: Node | null) {
+function isInPresentationLayer(node: Node | null): boolean {
     if (node instanceof HTMLElement) {
         if (node.getAttribute("role") === "presentation")
             return true;

@@ -1,5 +1,5 @@
-const fontaine = require('fontaine');
-require('dotenv').config();
+const fontaine = require("fontaine");
+require("dotenv").config();
 
 module.exports = {
     title: "FireCMS",
@@ -31,26 +31,26 @@ module.exports = {
         ],
         function fontainePlugin(_context, _options) {
             return {
-                name: 'fontaine-plugin',
+                name: "fontaine-plugin",
                 configureWebpack(_config, _isServer) {
                     return {
                         plugins: [
                             fontaine.FontaineTransform.webpack({
                                 fallbacks: [
-                                    'system-ui',
-                                    '-apple-system',
-                                    'BlinkMacSystemFont',
-                                    'Segoe UI',
-                                    'Roboto',
-                                    'Oxygen',
-                                    'Ubuntu',
-                                    'Cantarell',
-                                    'Open Sans',
-                                    'Helvetica Neue',
-                                    'sans-serif',
+                                    "system-ui",
+                                    "-apple-system",
+                                    "BlinkMacSystemFont",
+                                    "Segoe UI",
+                                    "Roboto",
+                                    "Oxygen",
+                                    "Ubuntu",
+                                    "Cantarell",
+                                    "Open Sans",
+                                    "Helvetica Neue",
+                                    "sans-serif",
                                 ],
                                 // You may need to resolve assets like `/fonts/Poppins-Bold.ttf` to a particular directory
-                                resolvePath: (id) => '../fonts/' + id,
+                                resolvePath: (id) => "../fonts/" + id,
                             }),
                         ],
                     };
@@ -104,21 +104,16 @@ module.exports = {
                     ],
                     position: "left"
                 },
-                {
-                    to: "enterprise",
-                    label: "Enterprise",
-                    position: "left"
-                },
-                {
-                    to: "openai",
-                    label: "ChatGPT",
-                    position: "left"
-                },
                 // {
-                //     to: "pricing",
-                //     label: "Pricing",
+                //     to: "openai",
+                //     label: "ChatGPT",
                 //     position: "left"
                 // },
+                {
+                    to: "pricing",
+                    label: "Pricing",
+                    position: "left"
+                },
                 {
                     type: "docSidebar",
                     sidebarId: "docsSidebar",
@@ -159,17 +154,17 @@ module.exports = {
                     to: "https://demo.firecms.co",
                     label: "Demo",
                     // className: "btn shadow-none mr-2 px-6 py-2  uppercase",
-                    className: "btn mr-3 px-6 py-2 text-white  uppercase bg-primary hover:text-white hover:bg-blue-700",
+                    className: "border-1 border-gray-600 dark:border-gray-700  uppercase rounded border-solid dark:text-white text-gray-800 hover:text-gray-700 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900 h dark:hover:border-gray-800 text-center btn mr-3 px-6 py-2",
                     "aria-label": "Open the demo project",
                     position: "right"
                 },
-                // {
-                //     to: "https://app.firecms.co",
-                //     label: "Sign in",
-                //     className: "btn mr-3 px-6 py-2 text-white  uppercase bg-primary hover:text-white hover:bg-blue-700",
-                //     "aria-label": "Go to FireCMS Cloud",
-                //     position: "right"
-                // },
+                {
+                    to: "https://app.firecms.co",
+                    label: "Sign in",
+                    className: "btn mr-3 px-6 py-2 text-white uppercase bg-primary hover:text-white hover:bg-blue-700",
+                    "aria-label": "Go to FireCMS Cloud",
+                    position: "right"
+                },
             ]
         },
         footer: {
@@ -277,9 +272,15 @@ module.exports = {
                     lastVersion: "current",
                     editUrl: "https://github.com/FireCMSco/firecms/tree/website/website",
                     versions: {
+                        "cloud": {
+                            label: "Cloud",
+                            path: "cloud",
+                            banner: "none"
+                        },
                         "1.0.0": {
                             label: "1.0.0",
                             path: "1.0.0",
+                            banner: "unmaintained"
                         },
                         current: {
                             label: "2.0.0",
@@ -298,9 +299,9 @@ module.exports = {
                     trackingID: process.env.REACT_APP_GTAG_ID ?? "G-D4DQQCW88S"
                 },
                 sitemap: {
-                    changefreq: 'weekly',
+                    changefreq: "weekly",
                     priority: 0.5,
-                    filename: 'sitemap.xml'
+                    filename: "sitemap.xml"
                 },
             }
         ]

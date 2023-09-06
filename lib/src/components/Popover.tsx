@@ -43,7 +43,7 @@ export function Popover({
     useInjectStyles("Popover", popoverStyles);
 
     if (!enabled)
-        return trigger;
+        return <>{trigger}</>;
 
     return <PopoverPrimitive.Root open={open} onOpenChange={onOpenChange}>
         <PopoverPrimitive.Trigger asChild>
