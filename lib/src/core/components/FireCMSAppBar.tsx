@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary, } from "../components";
-import { Avatar, IconButton, Menu, MenuItem, Typography } from "../../components";
+import { Avatar, cn, IconButton, Menu, MenuItem, Typography } from "../../components";
 import {
     useAuthController,
     useBreadcrumbsContext,
@@ -11,7 +11,6 @@ import {
     useNavigationContext
 } from "../../hooks";
 import { DarkModeIcon, LightModeIcon, LogoutIcon } from "../../icons";
-import { cn } from "../../components/util/cn";
 import { AuthController } from "../../types";
 
 export interface FireCMSAppBarProps {
@@ -96,7 +95,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                 <div className="mr-8 hidden lg:block">
                     <ReactLink
                         className="visited:text-inherit visited:dark:text-inherit"
-                        to={navigation.basePath}>
+                        to={navigation.basePath ?? "/"}>
                         <Typography variant="subtitle1"
                                     noWrap
                                     className={"ml-2 !font-medium"}>

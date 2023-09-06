@@ -50,7 +50,7 @@ export function Drawer({
             <Typography variant={"caption"}
                         color={"secondary"}
                         className="font-medium flex-grow">
-                {group ? group.toUpperCase() : "Ungrouped views".toUpperCase()}
+                {group ? group.toUpperCase() : "Views".toUpperCase()}
             </Typography>
 
         </div>;

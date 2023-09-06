@@ -5441,8 +5441,8 @@ __metadata:
 
 "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader::locator=website%40workspace%3A.":
   version: 0.0.0
-  resolution: "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader#plugins/docusaurus-tailwindcss-loader::hash=1c6fb3&locator=website%40workspace%3A."
-  checksum: cf0d50fc2a953e286c9527bdbabf43d1e366061ce536f4acca3eb3077366fb276ce333fc4104df825f19119468ab6cf477db3c0f06b63427ff28b24bbfa321a9
+  resolution: "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader#plugins/docusaurus-tailwindcss-loader::hash=819661&locator=website%40workspace%3A."
+  checksum: a1dff38269ac627bf340ca099cc7c0b99e3af6f311e77529c82c97a0eaf0d110682e4a42e09ab4fb09171a325c50858923a0b4ff103bc1d9fb0aa5a5a449b951
   languageName: node
   linkType: hard
 

@@ -29,7 +29,7 @@ export function NavigationGroup({
             }}
             title={<Typography color={"secondary"}
                                className="font-medium ml-1">
-                {group?.toUpperCase() ?? "Ungrouped views".toUpperCase()}
+                {group?.toUpperCase() ?? "Views".toUpperCase()}
             </Typography>}>
 
             <div className="mb-8">

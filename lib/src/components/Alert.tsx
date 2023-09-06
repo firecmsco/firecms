@@ -13,15 +13,15 @@ export interface AlertProps {
 const getClasses = (severity: string) => {
     switch (severity) {
         case "error":
-            return "bg-red-50 dark:bg-red-800 dark:text-red-200 text-red-900";
+            return "bg-red-50 dark:bg-red-800 dark:text-red-100 text-red-900";
         case "warning":
-            return "bg-amber-50 dark:bg-amber-800 dark:text-amber-200 text-amber-900";
+            return "bg-amber-50 dark:bg-amber-800 dark:text-amber-100 text-amber-900";
         case "info":
-            return "bg-blue-50 dark:bg-blue-800 dark:text-blue-200 text-blue-900";
+            return "bg-blue-50 dark:bg-blue-800 dark:text-blue-100 text-blue-900";
         case "success":
-            return "bg-emerald-50 dark:bg-emerald-800 dark:text-emerald-200 text-emerald-900";
+            return "bg-emerald-50 dark:bg-emerald-800 dark:text-emerald-100 text-emerald-900";
         default:
-            return "bg-blue-50 dark:bg-blue-800 dark:text-blue-200 text-blue-900";
+            return "bg-blue-50 dark:bg-blue-800 dark:text-blue-100 text-blue-900";
     }
 };
 
