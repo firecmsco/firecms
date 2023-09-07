@@ -10,6 +10,8 @@
   nested structures as single columns in the collection view.
 - The collection count value is now updated with filters applied.
 - Fix for csv export not working when underlying data is invalid.
+- Fix for bug of collection search returning a single result.
+- Fix for reference fields breaking with incorrect values.
 
 ## [2.0.5] - 2023-07-11
 

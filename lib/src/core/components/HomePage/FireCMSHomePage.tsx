@@ -14,7 +14,7 @@ import { Container, SearchBar } from "../../../components";
 import { FavouritesView } from "./FavouritesView";
 import { useRestoreScroll } from "../../internal/useRestoreScroll";
 
-const search = new JsSearch.Search("home");
+const search = new JsSearch.Search("url");
 search.addIndex("name");
 search.addIndex("description");
 search.addIndex("group");
@@ -57,7 +57,8 @@ export function FireCMSHomePage({
         : navigationEntries;
 
     useEffect(() => {
-        search.addDocuments(filteredNavigationEntries);
+        console.log("Updating search index", navigationEntries);
+        search.addDocuments(navigationEntries);
     }, [navigationEntries]);
 
     const updateSearchResults = useCallback(
@@ -65,7 +66,9 @@ export function FireCMSHomePage({
             if (!value || value === "") {
                 setFilteredUrls(null);
             } else {
-                setFilteredUrls(search.search(value).map((e: any) => e.url));
+                const searchResult = search.search(value);
+                console.log("Search result", searchResult)
+                setFilteredUrls(searchResult.map((e: any) => e.url));
             }
         }, []);
 
