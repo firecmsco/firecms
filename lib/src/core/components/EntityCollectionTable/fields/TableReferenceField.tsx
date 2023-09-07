@@ -1,12 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { Box, Button } from "@mui/material";
-import { ReferencePreview } from "../../../../preview";
-import {
-    CollectionSize,
-    Entity,
-    EntityReference,
-    FilterValues
-} from "../../../../types";
+import { ReferencePreview, ReferencePreviewContainer } from "../../../../preview";
+import { CollectionSize, Entity, EntityReference, FilterValues } from "../../../../types";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { getReferenceFrom } from "../../../util";
@@ -95,7 +90,11 @@ export function TableReferenceField(props: {
                 previewProperties={previewProperties}
             />;
         else
-            return <ErrorView error={"Data is not a reference"}/>;
+            return <ReferencePreviewContainer
+                onClick={disabled ? undefined : handleOpen}
+                size={getPreviewSizeFrom(size)}>
+                <ErrorView title="Value is not a reference." error={"Click to edit"}/>
+            </ReferencePreviewContainer>;
     };
 
     const buildMultipleReferenceField = () => {
