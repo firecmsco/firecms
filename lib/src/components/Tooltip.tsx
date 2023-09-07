@@ -6,7 +6,8 @@ import { cn } from "./util/cn";
 export type TooltipProps = {
     open?: boolean,
     onOpenChange?: (open: boolean) => void,
-    placement?: "top" | "bottom" | "left" | "right",
+    side?: "top" | "bottom" | "left" | "right",
+    sideOffset?: number,
     title?: string,
     className?: string,
     tooltipClassName?: string,
@@ -16,7 +17,8 @@ export type TooltipProps = {
 
 export const Tooltip = ({
                             open,
-                            placement = "bottom",
+                            side = "bottom",
+                            sideOffset,
                             onOpenChange,
                             title,
                             className,
@@ -44,8 +46,8 @@ export const Tooltip = ({
                             "max-w-lg leading-relaxed",
                             "z-50 rounded px-3 py-2 text-xs leading-none bg-gray-700 dark:bg-gray-800 bg-opacity-90 font-medium text-gray-50 shadow-2xl select-none duration-400 ease-in transform opacity-100",
                             tooltipClassName)}
-                        sideOffset={6}
-                        side={placement}>
+                        sideOffset={sideOffset === undefined ? 4 : sideOffset}
+                        side={side}>
                         {title}
                         {/*<TooltipPrimitive.Arrow className="fill-gray-600"/>*/}
                     </TooltipPrimitive.Content>

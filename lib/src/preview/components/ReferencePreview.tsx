@@ -26,7 +26,19 @@ export type ReferencePreviewProps = {
 /**
  * @category Preview components
  */
-export const ReferencePreview = React.memo<ReferencePreviewProps>(ReferencePreviewInternal, areEqual) as React.FunctionComponent<ReferencePreviewProps>;
+export const ReferencePreview = React.memo<ReferencePreviewProps>(function ReferencePreview(props: ReferencePreviewProps) {
+    const reference = props.reference;
+    if (!(reference instanceof EntityReference)) {
+        console.error("Reference preview received value of type", typeof reference);
+        return <ReferencePreviewContainer
+            onClick={props.onClick}
+                                     size={props.size}>
+            <ErrorView error={"Unexpected value. Click to edit"}
+                                                            tooltip={JSON.stringify(reference)}/>
+        </ReferencePreviewContainer>;
+    }
+    return <ReferencePreviewInternal {...props} />;
+}, areEqual) as React.FunctionComponent<ReferencePreviewProps>;
 
 function areEqual(prevProps: ReferencePreviewProps, nextProps: ReferencePreviewProps) {
     return prevProps.disabled === nextProps.disabled &&
@@ -94,10 +106,6 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
 
     if (!reference) {
         body = <ErrorView error={"Reference not set"}/>;
-    } else if (!(reference instanceof EntityReference)) {
-        console.error("Reference preview received value of type", typeof reference);
-        body = <ErrorView error={"Unexpected value"}
-                          tooltip={JSON.stringify(reference)}/>;
     } else if (usedEntity && !usedEntity.values) {
         body = <ErrorView error={"Reference does not exist"}
                           tooltip={reference.path}/>;
@@ -173,15 +181,15 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
     }
 
     return (
-        <ReferencePreviewWrap onClick={disabled ? undefined : onClick}
-                              onHover={disabled ? undefined : onHover}
-                              size={size}>
+        <ReferencePreviewContainer onClick={disabled ? undefined : onClick}
+                                   onHover={disabled ? undefined : onHover}
+                                   size={size}>
             {body}
-        </ReferencePreviewWrap>
+        </ReferencePreviewContainer>
     );
 }
 
-function ReferencePreviewWrap({
+export function ReferencePreviewContainer({
                                   children,
                                   onHover,
                                   size,

@@ -5,21 +5,29 @@ import { cn } from "./util/cn";
 export type MenuProps = {
     children: React.ReactNode;
     trigger: React.ReactNode;
+
+    open?: boolean;
+    defaultOpen?: boolean;
+    onOpenChange?(open: boolean): void;
 }
 
 export function Menu({
                          children,
-                         trigger
+                         trigger,
+                         open,
+                         defaultOpen,
+                         onOpenChange
                      }: MenuProps) {
     return (
-        <DropdownMenu.Root>
+        <DropdownMenu.Root
+            open={open}
+            defaultOpen={defaultOpen}
+            onOpenChange={onOpenChange}>
             <DropdownMenu.Trigger asChild>
                 {trigger}
             </DropdownMenu.Trigger>
             <DropdownMenu.Portal>
-                <DropdownMenu.Content className={cn(paperMixin, "shadow py-2 z-30")}
-                                      // onCloseAutoFocus={(e) => e.preventDefault()}
-                >
+                <DropdownMenu.Content className={cn(paperMixin, "shadow py-2 z-30")}>
                     {children}
                 </DropdownMenu.Content>
             </DropdownMenu.Portal>

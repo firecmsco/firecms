@@ -280,7 +280,7 @@ export function ArrayItemOptions({
                 {...provided.dragHandleProps}
     >
         <Tooltip
-            placement={direction === "column" ? "left" : undefined}
+            side={direction === "column" ? "left" : undefined}
             title="Move">
             <IconButton
                 size="small"
@@ -302,7 +302,7 @@ export function ArrayItemOptions({
         {!measuring && !contentOverflow && <>
             <Tooltip
                 title="Remove"
-                placement={direction === "column" ? "left" : undefined}>
+                side={direction === "column" ? "left" : undefined}>
                 <IconButton
                     size="small"
                     aria-label="remove"
@@ -314,7 +314,7 @@ export function ArrayItemOptions({
             </Tooltip>
 
             <Tooltip
-                placement={direction === "column" ? "left" : undefined}
+                side={direction === "column" ? "left" : undefined}
                 title="Copy in this position">
                 <IconButton
                     size="small"

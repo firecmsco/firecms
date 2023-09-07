@@ -2,7 +2,7 @@ import React from "react";
 
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary, } from "../components";
-import { Avatar, cn, IconButton, Menu, MenuItem, Typography } from "../../components";
+import { Avatar, CircularProgress, cn, IconButton, Menu, MenuItem, Typography } from "../../components";
 import {
     useAuthController,
     useBreadcrumbsContext,
@@ -53,8 +53,6 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                                         style
                                                     }: FireCMSAppBarProps) {
 
-    const breadcrumbsContext = useBreadcrumbsContext();
-    const { breadcrumbs } = breadcrumbsContext;
     const navigation = useNavigationContext();
 
     const authController = useAuthController();
@@ -65,9 +63,18 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
     const largeLayout = useLargeLayout();
 
-    const initial = authController.user?.displayName
-        ? authController.user.displayName[0].toUpperCase()
-        : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
+    let avatarComponent: JSX.Element;
+    if (authController.user === undefined || authController.authLoading) {
+        avatarComponent = <CircularProgress size={"small"}/>;
+    } else if (authController.user && authController.user.photoURL) {
+        avatarComponent = <Avatar
+            src={authController.user.photoURL}/>;
+    } else {
+        const initial = authController.user?.displayName
+            ? authController.user.displayName[0].toUpperCase()
+            : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
+        avatarComponent = <Avatar>{initial}</Avatar>;
+    }
 
     return (
         <div
@@ -95,7 +102,8 @@ export const FireCMSAppBar = function FireCMSAppBar({
                 <div className="mr-8 hidden lg:block">
                     <ReactLink
                         className="visited:text-inherit visited:dark:text-inherit"
-                        to={navigation.basePath ?? "/"}>
+                        to={navigation.basePath ?? "/"}
+                    >
                         <Typography variant="subtitle1"
                                     noWrap
                                     className={"ml-2 !font-medium"}>
@@ -103,21 +111,6 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         </Typography>
                     </ReactLink>
                 </div>
-
-                {/*{largeLayout && <div className="flex gap-1 flex-grow">*/}
-                {/*    {breadcrumbs.map((entry, index) => (*/}
-                {/*        <ReactLink*/}
-                {/*            key={`breadcrumb-${index}`}*/}
-                {/*            color="inherit"*/}
-                {/*            to={entry.url}>*/}
-                {/*            <Chip*/}
-                {/*                className=" h-12 font-medium active:bg-gray-400 active:shadow-sm cursor-pointer">*/}
-                {/*                {entry.title}*/}
-                {/*            </Chip>*/}
-                {/*        </ReactLink>)*/}
-                {/*    )*/}
-                {/*    }*/}
-                {/*</div>}*/}
 
                 <div className={"flex-grow"}/>
 
@@ -137,11 +130,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                 </IconButton>
 
                 <Menu
-                    trigger={authController.user && authController.user.photoURL
-                        ? <Avatar
-                            src={authController.user.photoURL}/>
-                        : <Avatar>{initial}</Avatar>
-                    }
+                    trigger={avatarComponent}
                 >
 
                     {dropDownActions}

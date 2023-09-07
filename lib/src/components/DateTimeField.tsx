@@ -15,6 +15,7 @@ import {
 } from "../styles";
 import { InputLabel } from "./InputLabel";
 import { cn } from "./util/cn";
+import { ErrorView } from "../core";
 
 interface DateTimeFieldProps {
     value?: Date;
@@ -54,6 +55,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
     const inputRef = useRef(null);
     const [focused, setFocused] = React.useState(document.activeElement === inputRef.current);
     const hasValue = value !== undefined && value !== null;
+    const invalidValue = value !== undefined && value !== null && !(value instanceof Date);
 
     useInjectStyles("DateTimeField", datePickerCss);
     const handleClear = (e: React.MouseEvent) => {
@@ -62,74 +64,81 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
     }
 
     return (
-        <div
-            className={cn(
-                "rounded-md relative max-w-full",
-                !invisible && fieldBackgroundMixin,
-                disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
-                {
-                    "min-h-[48px]": size === "small",
-                    "min-h-[64px]": size === "medium"
-                },
-                className)}
-            style={style}>
+        <>
 
-            {label && (
-                <InputLabel
-                    className={cn("absolute top-1 pointer-events-none",
-                        !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
-                        disabled ? "opacity-50" : "")}
-                    shrink={hasValue || focused}
-                >
-                    {label}
-                </InputLabel>
-            )}
-
-            <DatePicker
-                ref={ref}
-                locale={locale}
-                selected={value ?? null}
-                onChange={onChange}
-                disabled={false}
-                popperClassName={cn(paperMixin, "m-4 shadow")}
-                onClick={(e: any) => e.stopPropagation()}
-                onFocus={() => setFocused(true)}
-                onBlur={() => setFocused(false)}
-                showTimeSelect={mode === "date_time"}
-                timeFormat="HH:mm"
-                timeIntervals={15}
-                timeCaption="time"
-                dateFormat={mode === "date_time" ? "Pp" : "P"}
-                preventOpenOnFocus={true}
+            <div
                 className={cn(
-                    "w-full outline-none bg-transparent leading-normal text-base px-3",
-                    clearable ? "pr-14" : "pr-12",
-                    "rounded-md",
-                    !invisible && focusedMixin,
-                    size === "small" ? "min-h-[48px]" : "min-h-[64px]",
-                    label ? "pt-[28px] pb-2" : "py-2",
-                    inputClassName,
-                    disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-600 dark:text-gray-500"
+                    "rounded-md relative max-w-full",
+                    !invisible && fieldBackgroundMixin,
+                    disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
+                    {
+                        "min-h-[48px]": size === "small",
+                        "min-h-[64px]": size === "medium"
+                    },
+                    className)}
+                style={style}>
+
+                {label && (
+                    <InputLabel
+                        className={cn("absolute top-1 pointer-events-none",
+                            !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
+                            disabled ? "opacity-50" : "")}
+                        shrink={hasValue || focused}
+                    >
+                        {label}
+                    </InputLabel>
                 )}
-            />
 
-            <IconButton
-                onClick={() => {
-                    // @ts-ignore
-                    return ref.current?.setOpen(true);
-                }}
-                className="absolute right-3 top-1/2 transform -translate-y-1/2 !text-gray-500 ">
-                <CalendarMonthIcon color={"disabled"}/>
-            </IconButton>
+                <DatePicker
+                    ref={ref}
+                    locale={locale}
+                    selected={(invalidValue ? null : value) ?? null}
+                    onChange={onChange}
+                    disabled={false}
+                    popperClassName={cn(paperMixin, "m-4 shadow")}
+                    onClick={(e: any) => e.stopPropagation()}
+                    onFocus={() => setFocused(true)}
+                    onBlur={() => setFocused(false)}
+                    showTimeSelect={mode === "date_time"}
+                    timeFormat="HH:mm"
+                    timeIntervals={15}
+                    timeCaption="time"
+                    dateFormat={mode === "date_time" ? "Pp" : "P"}
+                    preventOpenOnFocus={true}
+                    className={cn(
+                        "w-full outline-none bg-transparent leading-normal text-base px-3",
+                        clearable ? "pr-14" : "pr-12",
+                        "rounded-md",
+                        !invisible && focusedMixin,
+                        size === "small" ? "min-h-[48px]" : "min-h-[64px]",
+                        label ? "pt-[28px] pb-2" : "py-2",
+                        inputClassName,
+                        disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-600 dark:text-gray-500"
+                    )}
+                />
 
-            {clearable && value && (
+
                 <IconButton
-                    onClick={handleClear}
-                    className="absolute right-14 top-1/2 transform -translate-y-1/2 text-gray-400 ">
-                    <ClearIcon/>
+                    onClick={() => {
+                        // @ts-ignore
+                        return ref.current?.setOpen(true);
+                    }}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 !text-gray-500 ">
+                    <CalendarMonthIcon color={"disabled"}/>
                 </IconButton>
-            )}
-        </div>
+
+                {clearable && value && (
+                    <IconButton
+                        onClick={handleClear}
+                        className="absolute right-14 top-1/2 transform -translate-y-1/2 text-gray-400 ">
+                        <ClearIcon/>
+                    </IconButton>
+                )}
+            </div>
+
+            {invalidValue && <ErrorView title={"Invalid date value for this field"}
+                                        error={`The provided value is: ${JSON.stringify(value)}`}/>}
+        </>
     );
 }
 

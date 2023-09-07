@@ -51,14 +51,15 @@ export function Autocomplete({
         in={open}
         duration={50}
         className={cn(
-            "absolute top-full left-0 right-0",
-            "p-2",
+            "absolute top-full left-0 right-0 overflow-visible",
+            open ? "shadow" : "",
+            "my-2",
             "z-20",
             "w-full")}>
         <div ref={autocompleteRef}
              className={cn(
-                 open ? cn(paperMixin, "shadow") : "",
-                 "bg-gray-100 dark:bg-gray-900 py-2"
+                 open ? paperMixin : "",
+                 "bg-gray-50 dark:bg-gray-900 py-2"
              )}>
             {children}
         </div>

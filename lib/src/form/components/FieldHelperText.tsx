@@ -45,7 +45,7 @@ export function FieldHelperText({
 
         {property.longDescription &&
             <Tooltip title={property.longDescription}
-                     placement="bottom"
+                     side="bottom"
             >
                 <IconButton
                     size={"small"}

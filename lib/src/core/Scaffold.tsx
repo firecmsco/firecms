@@ -123,7 +123,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     onMouseLeave={setOnHoverFalse}
                     open={computedDrawerOpen}
                     logo={logo}
-                    hovered={autoOpenDrawer ? onHover : false}
+                    hovered={onHover}
                     setDrawerOpen={setDrawerOpen}>
                     {navigation.loading
                         ? <CircularProgressCenter/>
@@ -172,7 +172,7 @@ function StyledDrawer(props: {
     const navigation = useNavigationContext();
 
     const innerDrawer = <div
-        className={"relative left-0 top-0 h-full no-scrollbar overflow-y-auto overflow-x-hidden"}
+        className={"relative h-full no-scrollbar overflow-y-auto overflow-x-hidden"}
         style={{
             width: props.open ? DRAWER_WIDTH : "72px",
             transition: "left 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
@@ -181,7 +181,8 @@ function StyledDrawer(props: {
 
         {!props.open && (
             <Tooltip title="Open menu"
-                     placement="right"
+                     side="right"
+                     sideOffset={12}
                      className="fixed top-2 left-3 !bg-gray-50 dark:!bg-gray-900 rounded-full w-fit"
             >
                 <IconButton
@@ -196,27 +197,32 @@ function StyledDrawer(props: {
             </Tooltip>
         )}
 
-        <div
-            style={{
-                transition: "padding 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
-                padding: props.open ? "32px 96px 0px 24px" : "72px 16px 0px"
-            }}
-            className={cn("cursor-pointer")}>
+        <div className={"flex flex-col h-full"}>
+            <div
+                style={{
+                    transition: "padding 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
+                    padding: props.open ? "32px 96px 0px 24px" : "72px 16px 0px"
+                }}
+                className={cn("cursor-pointer")}>
 
-            <Tooltip title={props.open ? "" : "Home"} placement="right">
-                <Link
-                    to={navigation.basePath}>
-                    {props.logo
-                        ? <img src={props.logo}
-                               alt="Logo"
-                               className="max-w-full max-h-full"/>
-                        : <FireCMSLogo/>}
+                <Tooltip title={"Home"}
+                         // open={props.hovered}
+                         sideOffset={20}
+                         side="right">
+                    <Link
+                        to={navigation.basePath}>
+                        {props.logo
+                            ? <img src={props.logo}
+                                   alt="Logo"
+                                   className="max-w-full max-h-full"/>
+                            : <FireCMSLogo/>}
 
-                </Link>
-            </Tooltip>
+                    </Link>
+                </Tooltip>
+            </div>
+
+            {props.children}
         </div>
-
-        {props.children}
 
     </div>;
 

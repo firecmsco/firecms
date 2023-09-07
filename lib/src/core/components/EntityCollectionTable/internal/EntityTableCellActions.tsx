@@ -54,7 +54,7 @@ export function EntityTableCellActions({ showError, disabled, showExpandIcon, se
                 }
 
                 {showError && <ErrorTooltip
-                    placement={"left"}
+                    side={"left"}
                     className={"flex items-center justify-center"}
                     style={{ width: 32, height: 32 }}
                     title={showError.message}>

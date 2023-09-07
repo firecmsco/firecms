@@ -154,7 +154,7 @@ export function DrawerNavigationItem({
     else
         return <Tooltip
             open={tooltipsOpen}
-            placement="right"
+            side="right"
             title={name}>
             {listItem}
         </Tooltip>;
