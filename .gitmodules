@@ -13,3 +13,7 @@
 [submodule "data_enhancement"]
 	path = data_enhancement
 	url = git@github.com:FireCMSco/firecms_data_enhancement.git
+
+[submodule "schema_inference"]
+	path = schema_inference
+	url = git@github.com:FireCMSco/firecms_schema_inference.git
