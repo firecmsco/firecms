@@ -260,7 +260,7 @@ function StyledDrawer(props: {
             {innerDrawer}
 
             <div
-                className={`absolute right-4 top-4 ${
+                className={`absolute right-0 top-4 ${
                     props.open ? "opacity-100" : "opacity-0 invisible"
                 } transition-opacity duration-1000 ease-in-out`}>
                 <IconButton

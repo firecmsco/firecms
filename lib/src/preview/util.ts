@@ -26,6 +26,6 @@ export function getPreviewSizeFrom(size: CollectionSize): PreviewSize {
         case "xl":
             return "medium";
         default:
-            throw Error("Missing mapping value in getPreviewSizeFrom");
+            throw Error("Missing mapping value in getPreviewSizeFrom: " + size);
     }
 }

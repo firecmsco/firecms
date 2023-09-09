@@ -42,7 +42,7 @@ import { Popover } from "../../../components/Popover";
  */
 export type EntityCollectionViewProps<M extends Record<string, any>> = {
     fullPath: string;
-    parentPathSegments: string[];
+    parentPathSegments?: string[];
     isSubCollection?: boolean;
     className?: string;
 } & EntityCollection<M>;
@@ -336,7 +336,7 @@ export const EntityCollectionView = React.memo(
                     highlightedEntities={selectedNavigationEntity ? [selectedNavigationEntity] : []}
                     {...collection}
                     actions={<EntityCollectionViewActions
-                        parentPathSegments={parentPathSegments}
+                        parentPathSegments={parentPathSegments ?? []}
                         collection={collection}
                         tableController={tableController}
                         exportable={exportable}

@@ -8,6 +8,7 @@ import {
     EntityCollection,
     FilterValues,
     FireCMSContext,
+    PropertyOrBuilder,
     ResolvedEntityCollection,
     ResolvedProperty,
     SaveEntityProps,
@@ -30,6 +31,7 @@ import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../Virtual
 import {
     enumToObjectEntries,
     getIconForProperty,
+    getPropertyInPath,
     getResolvedPropertyInPath,
     getValueInPath,
     resolveCollection,
@@ -293,13 +295,17 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             const entity: Entity<M> = rowData;
 
             const propertyKey = column.key;
-            const propertyOrBuilder = column.custom.property;
-            const disabled = column.custom.disabled;
 
-            // const propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
+            let disabled = false;
+            let propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
+
+            // we might not find the property in the collection if combining property builders and map spread
             if (!propertyOrBuilder) {
-                return null;
+                // these 2 properties are coming from the resolved collection with default values
+                propertyOrBuilder = column.custom.property;
+                disabled = column.custom.disabled;
             }
+
             const property = resolveProperty({
                 propertyKey,
                 propertyOrBuilder,
@@ -555,6 +561,8 @@ const onValueChange: OnCellValueChange<any, any> = ({
                                                         setError,
                                                         entity
                                                     }) => {
+
+    // console.trace("onValueChange", value, propertyKey, entity);
 
     const updatedValues = setIn({ ...entity.values }, propertyKey, value);
 

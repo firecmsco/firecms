@@ -101,7 +101,7 @@ export function ExampleCMSView() {
                                 Use this button to select an entity under the path `products` programmatically
                             </p>
                             <Button
-                                
+                                variant={"outlined"}
                                 size={"small"}
                                 onClick={referenceDialog.open}>
                                 Test reference dialog
@@ -113,7 +113,7 @@ export function ExampleCMSView() {
                                 Use this button to open a snackbar
                             </p>
                             <Button
-                                
+                                variant={"outlined"}
                                 size={"small"}
                                 onClick={() => snackbarController.open({
                                     type: "success",
@@ -128,8 +128,8 @@ export function ExampleCMSView() {
                                 Use this button to open an entity in a custom path with a custom schema
                             </p>
                             <Button
-                                
                                 size={"small"}
+                                variant={"outlined"}
                                 onClick={() => sideEntityController.open({
                                     entityId: "B003WT1622",
                                     path: "/products-test",

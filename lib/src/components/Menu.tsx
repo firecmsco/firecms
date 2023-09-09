@@ -48,7 +48,9 @@ export function MenuItem({
                          }: MenuItemProps) {
     return (
         <DropdownMenu.Item
-            className={cn(focusedMixin, "rounded-md px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 flex items-center gap-4")}
+            className={cn(focusedMixin,
+                onClick && "cursor-pointer",
+                "rounded-md px-4 py-2 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-900 flex items-center gap-4")}
             onClick={onClick}>
             {children}
         </DropdownMenu.Item>

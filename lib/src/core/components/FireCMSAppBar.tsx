@@ -81,7 +81,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
             style={style}
             className={cn("pr-2",
                 {
-                    "ml-[18rem]": drawerOpen && largeLayout,
+                    "ml-[17rem]": drawerOpen && largeLayout,
                     "ml-16": !(drawerOpen && largeLayout) && !startAdornment,
                     "h-16": true,
                     "z-10": largeLayout,
