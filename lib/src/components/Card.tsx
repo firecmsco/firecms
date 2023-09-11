@@ -1,5 +1,5 @@
 import React from "react";
-import { cardMixin, cardClickableMixin } from "../styles";
+import { cardMixin, cardClickableMixin, focusedMixin } from "../styles";
 import { cn } from "./util/cn";
 
 export function Card({
@@ -16,8 +16,9 @@ export function Card({
 }) {
     return (
         <div
+            tabIndex={onClick ? 0 : undefined}
             onClick={onClick}
-            className={cn(cardMixin, onClick && cardClickableMixin, className)}
+            className={cn(cardMixin, focusedMixin, onClick && cardClickableMixin, className)}
             style={style}>
             {children}
         </div>

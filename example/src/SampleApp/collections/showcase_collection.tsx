@@ -3,7 +3,7 @@ import { buildCollection, buildProperty } from "firecms";
 export const showcaseCollection = buildCollection({
     path: "showcase",
     customId: false,
-    icon: "ShowChart",
+    icon: "bento",
     name: "Showcase",
     properties: {
         name: buildProperty({

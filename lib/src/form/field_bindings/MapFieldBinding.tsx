@@ -51,11 +51,11 @@ export function MapFieldBinding<T extends Record<string, any>>({
         mapProperties = property.properties;
     }
 
-    useClearRestoreValue({
-        property,
-        value,
-        setValue
-    });
+    // useClearRestoreValue({
+    //     property,
+    //     value,
+    //     setValue
+    // });
 
     const mapFormView = <>
         <div className="py-1 flex flex-col space-y-2">
@@ -84,7 +84,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
                 )}
         </div>
 
-        {pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value)}
+        {/*{pickOnlySomeKeys && buildPickKeysSelect(disabled, property.properties, setValue, value)}*/}
 
     </>;
 

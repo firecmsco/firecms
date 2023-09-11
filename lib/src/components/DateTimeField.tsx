@@ -58,6 +58,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
     const invalidValue = value !== undefined && value !== null && !(value instanceof Date);
 
     useInjectStyles("DateTimeField", datePickerCss);
+
     const handleClear = (e: React.MouseEvent) => {
         e.preventDefault();
         onChange(null);
