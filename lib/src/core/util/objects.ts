@@ -57,6 +57,8 @@ export function removeInPath(o: object, path: string): object | undefined {
 }
 
 export function removeFunctions(o: object | undefined): any {
+    if (o === undefined) return undefined;
+    if (o === null) return null;
     if (typeof o === "object") {
         return Object.entries(o)
             .filter(([_, value]) => typeof value !== "function")

@@ -9,20 +9,24 @@ export function SwitchControl({
                                   label,
                                   tooltip,
                                   disabled,
-                                  size = "small"
+                                  size = "small",
+                                  allowIndeterminate
                               }: FieldProps & {
     label: string,
     tooltip?: string,
     disabled?: boolean,
-    size: "small" | "medium"
+    size: "small" | "medium",
+    allowIndeterminate?: boolean
 }) {
 
-    const formControlLabel = <BooleanSwitchWithLabel label={label}
-                                                     size={size}
-                                                     position={"start"}
-                                                     value={field.value}
-                                                     disabled={disabled}
-                                                     onValueChange={(checked) => form.setFieldValue(field.name, checked)}/>;
+    const formControlLabel = <BooleanSwitchWithLabel
+        label={label}
+        size={size}
+        position={"start"}
+        value={field.value}
+        disabled={disabled}
+        allowIndeterminate={allowIndeterminate}
+        onValueChange={(checked) => form.setFieldValue(field.name, checked)}/>;
 
     if (tooltip)
         return (

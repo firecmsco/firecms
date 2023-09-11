@@ -2,15 +2,17 @@ import React from "react";
 import { cn } from "./util/cn";
 
 export type BooleanSwitchProps = {
-    value: boolean;
+    value: boolean | null;
+    allowIndeterminate?: boolean;
     className?: string;
-    onValueChange?: (newValue: boolean) => void;
+    onValueChange?: (newValue: boolean | null) => void;
     disabled?: boolean;
     size?: "small" | "medium";
 }
 
 export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                                                                          value,
+                                                                         allowIndeterminate,
                                                                          className,
                                                                          onValueChange,
                                                                          disabled = false,
@@ -22,8 +24,15 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
             onClick={disabled
                 ? undefined
                 : (e) => {
+                    console.log("BooleanSwitch onClick", allowIndeterminate)
                     e.preventDefault();
-                    onValueChange?.(!value);
+                    if (allowIndeterminate) {
+                        if (value === null || value === undefined) onValueChange?.(true)
+                        else if (value) onValueChange?.(false)
+                        else onValueChange?.(null);
+                    } else {
+                        onValueChange?.(!value);
+                    }
                 }}
             className={cn(
                 size === "small" ? "w-[38px] h-[22px] min-w-[38px] min-h-[22px]" : "w-[42px] h-[26px] min-w-[42px] min-h-[26px]",
@@ -33,7 +42,20 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
             )}
             {...props}
         >
-            <div
+            {allowIndeterminate && (value === null || value === undefined) && <div
+                className={cn(
+                    "block rounded-full transition-transform duration-100 transform will-change-auto",
+                    disabled ? "bg-gray-400 dark:bg-gray-600" : "bg-gray-600 dark:bg-gray-400",
+                    {
+                        "w-[21px] h-[10px]": size === "medium",
+                        "w-[19px] h-[8px]": size === "small",
+                        "translate-x-[10px]": size === "medium",
+                        "translate-x-[9px]": size === "small"
+                    }
+                )}
+            />}
+
+            {!(allowIndeterminate && (value === null || value === undefined)) && <div
                 className={cn(
                     "block rounded-full transition-transform duration-100 transform will-change-auto",
                     value ? "bg-white" : disabled ? "bg-gray-400 dark:bg-gray-600" : "bg-gray-600 dark:bg-gray-400",
@@ -44,7 +66,7 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                         [value ? "translate-x-[17px]" : "translate-x-[2px]"]: size === "small"
                     }
                 )}
-            />
+            />}
         </button>;
     }
 ) as React.ForwardRefExoticComponent<BooleanSwitchProps & React.RefAttributes<HTMLButtonElement>>;

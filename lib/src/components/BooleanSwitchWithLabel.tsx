@@ -65,7 +65,14 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 position === "end" ? "flex-row-reverse" : "flex-row"
             )}
             onClick={(e) => {
-                onValueChange?.(!value);
+                e.preventDefault();
+                if (props.allowIndeterminate) {
+                    if (value === null || value === undefined) onValueChange?.(true)
+                    else if (value) onValueChange?.(false)
+                    else onValueChange?.(null);
+                } else {
+                    onValueChange?.(!value);
+                }
                 // refInput.current?.focus();
                 e.stopPropagation()
                 e.preventDefault()

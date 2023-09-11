@@ -188,7 +188,7 @@ export type SelectItemProps = {
     children?: React.ReactNode,
     disabled?: boolean,
     className?: string,
-    onClick?: () => void
+    // onClick?: () => void
 };
 
 export function SelectItem({
@@ -196,12 +196,11 @@ export function SelectItem({
                                children,
                                disabled,
                                className,
-                               onClick
+                               // onClick
                            }: SelectItemProps) {
     return <SelectPrimitive.Item
         key={value}
         value={value}
-        // onClick={onClick}
         disabled={disabled}
         onClick={(e) => {
             e.preventDefault();

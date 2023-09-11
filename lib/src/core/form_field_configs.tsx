@@ -155,7 +155,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
     },
     switch: {
         name: "Switch",
-        description: "True or false field (or yes or no, 0 or 1...)",
+        description: "Boolean true or false field (or yes or no, 0 or 1...)",
         dataType: "boolean",
         Icon: FlagIcon,
         color: "#20d9d2",
@@ -217,7 +217,6 @@ export function getFieldConfig(property: Property | ResolvedProperty): FieldConf
 }
 
 export function getFieldId(property: Property | ResolvedProperty): FieldConfigId | undefined {
-    console.log("Getting field id for property", property)
     if (property.dataType === "string") {
         if (property.multiline) {
             return "multiline";
