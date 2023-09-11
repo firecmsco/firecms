@@ -6,16 +6,15 @@ import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { useLargeLayout, useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
 import { useRestoreScroll } from "./internal/useRestoreScroll";
-import { IconButton, Sheet, Tooltip } from "../components";
+import { cn, IconButton, Sheet, Tooltip } from "../components";
 import { ChevronLeftIcon, MenuIcon } from "../icons";
-import { cn } from "../components/util/cn";
 
 export const DRAWER_WIDTH = 280;
 
 /**
  * @category Core
  */
-export interface ScaffoldProps<ExtraDrawerProps = {}> {
+export interface ScaffoldProps<ExtraDrawerProps = object, ExtraAppbarProps = object> {
 
     /**
      * Name of the app, displayed as the main title and in the tab title
@@ -27,10 +26,7 @@ export interface ScaffoldProps<ExtraDrawerProps = {}> {
      */
     logo?: string;
 
-    /**
-     * A component that gets rendered on the upper side of the main toolbar
-     */
-    toolbarExtraWidget?: React.ReactNode;
+    includeDrawer?: boolean;
 
     /**
      * In case you need to override the view that gets rendered as a drawer
@@ -41,7 +37,7 @@ export interface ScaffoldProps<ExtraDrawerProps = {}> {
     /**
      * Additional props passed to the custom Drawer
      */
-    drawerProps?: ExtraDrawerProps;
+    drawerProps?: Partial<DrawerProps> & ExtraDrawerProps;
 
     /**
      * Open the drawer on hover
@@ -52,7 +48,12 @@ export interface ScaffoldProps<ExtraDrawerProps = {}> {
      * A component that gets rendered on the upper side of the main toolbar.
      * `toolbarExtraWidget` has no effect if this is set.
      */
-    FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps>;
+    FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps<ExtraAppbarProps>>;
+
+    /**
+     * Additional props passed to the custom AppBar
+     */
+    fireCMSAppBarComponentProps?: Partial<FireCMSAppBarProps> & ExtraAppbarProps;
 
 }
 
@@ -74,10 +75,12 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             children,
             name,
             logo,
-            toolbarExtraWidget,
-            Drawer,
+            includeDrawer = true,
             autoOpenDrawer,
-            FireCMSAppBarComponent = FireCMSAppBar
+            Drawer = FireCMSDrawer,
+            drawerProps,
+            FireCMSAppBarComponent = FireCMSAppBar,
+            fireCMSAppBarComponentProps,
         } = props;
 
         const largeLayout = useLargeLayout();
@@ -90,8 +93,6 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
 
         const setOnHoverTrue = useCallback(() => setOnHover(true), []);
         const setOnHoverFalse = useCallback(() => setOnHover(false), []);
-
-        const UsedDrawer = Drawer || FireCMSDrawer;
 
         const handleDrawerClose = useCallback(() => {
             setDrawerOpen(false);
@@ -113,11 +114,10 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                 }}>
 
                 <FireCMSAppBarComponent title={name}
-                                        drawerOpen={computedDrawerOpen}>
-                    {toolbarExtraWidget}
-                </FireCMSAppBarComponent>
+                                        drawerOpen={computedDrawerOpen}
+                                        {...fireCMSAppBarComponentProps}/>
 
-                <StyledDrawer
+                {includeDrawer && <StyledDrawer
                     onMouseEnter={setOnHoverTrue}
                     onMouseMove={setOnHoverTrue}
                     onMouseLeave={setOnHoverFalse}
@@ -127,11 +127,12 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     setDrawerOpen={setDrawerOpen}>
                     {navigation.loading
                         ? <CircularProgressCenter/>
-                        : <UsedDrawer
+                        : <Drawer
                             hovered={onHover}
                             drawerOpen={computedDrawerOpen}
-                            closeDrawer={handleDrawerClose}/>}
-                </StyledDrawer>
+                            closeDrawer={handleDrawerClose}
+                            {...drawerProps}/>}
+                </StyledDrawer>}
 
                 <main
                     className="flex flex-col flex-grow overflow-auto">
@@ -206,7 +207,7 @@ function StyledDrawer(props: {
                 className={cn("cursor-pointer")}>
 
                 <Tooltip title={"Home"}
-                         // open={props.hovered}
+                    // open={props.hovered}
                          sideOffset={20}
                          side="right">
                     <Link

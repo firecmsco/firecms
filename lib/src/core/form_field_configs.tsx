@@ -217,6 +217,7 @@ export function getFieldConfig(property: Property | ResolvedProperty): FieldConf
 }
 
 export function getFieldId(property: Property | ResolvedProperty): FieldConfigId | undefined {
+    console.log("Getting field id for property", property)
     if (property.dataType === "string") {
         if (property.multiline) {
             return "multiline";
@@ -246,7 +247,9 @@ export function getFieldId(property: Property | ResolvedProperty): FieldConfigId
     } else if (property.dataType === "array") {
         const of = (property as ArrayProperty).of;
         const oneOf = (property as ArrayProperty).oneOf;
-        if (Array.isArray(of)) {
+        if (oneOf) {
+            return "block";
+        } else if (Array.isArray(of)) {
             return "custom_array";
         } else if (isPropertyBuilder(of)) {
             return "repeat";
@@ -258,8 +261,6 @@ export function getFieldId(property: Property | ResolvedProperty): FieldConfigId
             return "multi_file_upload";
         } else if (of?.dataType === "reference") {
             return "multi_references";
-        } else if (oneOf) {
-            return "block";
         } else {
             return "repeat";
         }

@@ -50,7 +50,7 @@ const variantToClasses = {
     h4: "text-3xl font-headers font-normal",
     h5: "text-2xl font-headers font-normal",
     h6: "text-xl font-headers font-medium",
-    subtitle1: "text-lg font-headers font-normal",
+    subtitle1: "text-lg font-headers font-medium",
     subtitle2: "text-base font-headers font-medium",
     body1: "text-base",
     body2: "text-sm",
@@ -63,6 +63,7 @@ const variantToClasses = {
 export function Typography<C extends React.ElementType>(
     {
         align = "inherit",
+        color,
         children,
         className,
         component,
@@ -71,7 +72,6 @@ export function Typography<C extends React.ElementType>(
         paragraph = false,
         variant = "body1",
         variantMapping = defaultVariantMapping,
-        color,
         style,
         onClick,
         ...other

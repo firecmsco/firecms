@@ -437,7 +437,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
          * If you are specifying your collection as code, the order is the same as the
          * one you define in `properties`, and you don't need to specify this prop.
          */
-        propertiesOrder?: Extract<keyof T, string>[];
+        propertiesOrder?: string[];
 
         /**
          * Name of the field to use as the discriminator for type

@@ -206,7 +206,9 @@ export function FirebaseCMSApp({
                                         <Scaffold
                                             name={name}
                                             logo={usedLogo}
-                                            toolbarExtraWidget={toolbarExtraWidget}
+                                            fireCMSAppBarComponentProps={{
+                                                endAdornment: toolbarExtraWidget
+                                            }}
                                             autoOpenDrawer={autoOpenDrawer}>
                                             <NavigationRoutes
                                                 HomePage={HomePage}/>

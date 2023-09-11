@@ -3,22 +3,16 @@ import React from "react";
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary, } from "../components";
 import { Avatar, CircularProgress, cn, IconButton, Menu, MenuItem, Typography } from "../../components";
-import {
-    useAuthController,
-    useBreadcrumbsContext,
-    useLargeLayout,
-    useModeController,
-    useNavigationContext
-} from "../../hooks";
+import { useAuthController, useLargeLayout, useModeController, useNavigationContext } from "../../hooks";
 import { DarkModeIcon, LightModeIcon, LogoutIcon } from "../../icons";
 import { AuthController } from "../../types";
 
-export interface FireCMSAppBarProps {
+export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
     title: string;
     /**
      * A component that gets rendered on the upper side of the main toolbar
      */
-    children?: React.ReactNode;
+    endAdornment?: React.ReactNode;
 
     startAdornment?: React.ReactNode;
 
@@ -31,7 +25,7 @@ export interface FireCMSAppBarProps {
     authController?: AuthController;
 
     style?: React.CSSProperties;
-}
+} & ADDITIONAL_PROPS;
 
 /**
  * This component renders the main app bar of FireCMS.
@@ -44,7 +38,7 @@ export interface FireCMSAppBarProps {
  */
 export const FireCMSAppBar = function FireCMSAppBar({
                                                         title,
-                                                        children,
+                                                        endAdornment,
                                                         startAdornment,
                                                         drawerOpen,
                                                         dropDownActions,
@@ -65,7 +59,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
     let avatarComponent: JSX.Element;
     if (authController.user === undefined || authController.authLoading) {
-        avatarComponent = <CircularProgress size={"small"}/>;
+        avatarComponent = <div className={"w-12 p-1 flex justify-center"}><CircularProgress size={"small"}/></div>;
     } else if (authController.user && authController.user.photoURL) {
         avatarComponent = <Avatar
             src={authController.user.photoURL}/>;
@@ -114,9 +108,9 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
                 <div className={"flex-grow"}/>
 
-                {children &&
+                {endAdornment &&
                     <ErrorBoundary>
-                        {children}
+                        {endAdornment}
                     </ErrorBoundary>}
 
                 <IconButton
@@ -129,9 +123,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                         : <LightModeIcon/>}
                 </IconButton>
 
-                <Menu
-                    trigger={avatarComponent}
-                >
+                <Menu trigger={avatarComponent}>
 
                     {dropDownActions}
 
