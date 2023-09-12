@@ -17,6 +17,7 @@ module.exports = {
                 "collections/callbacks",
                 "collections/permissions",
                 "collections/exporting_data",
+                "collections/multiple_filters",
                 "collections/text_search",
                 "collections/dynamic_collections",
                 "collections/custom_entity_views",
