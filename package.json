@@ -22,7 +22,8 @@
         "deploy:saas:prod": "cd saas && yarn deploy:prod",
         "deploy:demo": "cd example && yarn deploy",
         "deploy:web": "cd website && yarn deploy",
-        "build": "cd lib && yarn build"
+        "build": "cd lib && yarn build",
+        "release": "git push origin main:release"
     },
     "packageManager": "yarn@3.2.3"
 }
