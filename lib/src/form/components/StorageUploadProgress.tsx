@@ -56,7 +56,7 @@ export function StorageUploadProgress({
                     setLoading(false);
             })
             .catch((e) => {
-                console.error("Upload error", e);
+                console.warn("Upload error", e);
                 if (mounted.current) {
                     setError(e);
                     setLoading(false);
@@ -89,7 +89,9 @@ export function StorageUploadProgress({
     }
     return (
 
-        <div className={cn(paperMixin, "m-4 p-1 box-border min-w-[imageSize] min-h-[imageSize]")}>
+        <div className={cn(paperMixin,
+            "relative m-4 border-box flex items-center justify-center",
+             `min-w-[${imageSize}px] min-h-[${imageSize}px]`)}>
 
             {loading &&
                 <Skeleton className="w-full h-full"/>}

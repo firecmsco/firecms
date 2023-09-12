@@ -1,4 +1,5 @@
-import React from "react";
+import React, { ForwardRefRenderFunction } from "react";
+import { cn } from "./util/cn";
 
 export type ContainerProps = {
     children: React.ReactNode;
@@ -21,22 +22,29 @@ const containerMaxWidths = {
     "7xl": "max-w-7xl",
 }
 
-export function Container({
-                              children,
-                              className,
-                              style,
-                              maxWidth = "7xl"
-                          }: ContainerProps) {
+const ContainerInner: ForwardRefRenderFunction<HTMLDivElement, ContainerProps> = (
+    {
+        children,
+        className,
+        style,
+        maxWidth = "7xl",
+    },
+    ref
+) => {
 
     const classForMaxWidth = maxWidth ? containerMaxWidths[maxWidth] : "";
 
-    const combinedClasses = `mx-auto px-3 md:px-4 lg-px-6 ${classForMaxWidth} ${className}`;
-
     return (
         <div
-            className={combinedClasses}
+            ref={ref}
+            className={cn("mx-auto px-3 md:px-4 lg-px-6",
+                classForMaxWidth,
+                className)}
             style={style}>
             {children}
         </div>
     );
 }
+
+export const Container = React.forwardRef(ContainerInner);
+

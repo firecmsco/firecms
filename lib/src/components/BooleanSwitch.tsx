@@ -3,12 +3,16 @@ import { cn } from "./util/cn";
 
 export type BooleanSwitchProps = {
     value: boolean | null;
-    allowIndeterminate?: boolean;
     className?: string;
-    onValueChange?: (newValue: boolean | null) => void;
     disabled?: boolean;
     size?: "small" | "medium";
-}
+} & ({
+    allowIndeterminate: true;
+    onValueChange?: (newValue: boolean | null) => void;
+} | {
+    allowIndeterminate?: false;
+    onValueChange?: (newValue: boolean) => void;
+});
 
 export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
                                                                          value,

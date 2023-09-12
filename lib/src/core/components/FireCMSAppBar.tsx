@@ -2,10 +2,11 @@ import React from "react";
 
 import { Link as ReactLink } from "react-router-dom";
 import { ErrorBoundary, } from "../components";
-import { Avatar, CircularProgress, cn, IconButton, Menu, MenuItem, Typography } from "../../components";
+import { Avatar, cn, IconButton, Menu, MenuItem, Typography } from "../../components";
 import { useAuthController, useLargeLayout, useModeController, useNavigationContext } from "../../hooks";
 import { DarkModeIcon, LightModeIcon, LogoutIcon } from "../../icons";
 import { AuthController } from "../../types";
+import { Skeleton } from "../../components/Skeleton";
 
 export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
     title: string;
@@ -17,6 +18,8 @@ export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
     startAdornment?: React.ReactNode;
 
     dropDownActions?: React.ReactNode;
+
+    includeDrawer?: boolean;
 
     drawerOpen: boolean;
 
@@ -42,7 +45,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                                         startAdornment,
                                                         drawerOpen,
                                                         dropDownActions,
-                                                        // authController: authControllerProp,
+                                                        includeDrawer,
                                                         className,
                                                         style
                                                     }: FireCMSAppBarProps) {
@@ -58,11 +61,13 @@ export const FireCMSAppBar = function FireCMSAppBar({
     const largeLayout = useLargeLayout();
 
     let avatarComponent: JSX.Element;
-    if (authController.user === undefined || authController.authLoading) {
-        avatarComponent = <div className={"w-12 p-1 flex justify-center"}><CircularProgress size={"small"}/></div>;
-    } else if (authController.user && authController.user.photoURL) {
+    if (authController.user && authController.user.photoURL) {
         avatarComponent = <Avatar
             src={authController.user.photoURL}/>;
+    } else if (authController.user === undefined || authController.authLoading) {
+        avatarComponent = <div className={"p-1 flex justify-center"}>
+            <Skeleton className={"w-10 h-10 rounded-full"}/>
+        </div>;
     } else {
         const initial = authController.user?.displayName
             ? authController.user.displayName[0].toUpperCase()
@@ -76,14 +81,15 @@ export const FireCMSAppBar = function FireCMSAppBar({
             className={cn("pr-2",
                 {
                     "ml-[17rem]": drawerOpen && largeLayout,
-                    "ml-16": !(drawerOpen && largeLayout) && !startAdornment,
+                    "ml-16": includeDrawer && !(drawerOpen && largeLayout) && !startAdornment,
                     "h-16": true,
                     "z-10": largeLayout,
                     "transition-all": true,
                     "ease-in": true,
                     "duration-75": true,
-                    "w-[calc(100%-64px)]": !(drawerOpen && largeLayout),
-                    "w-[calc(100%-18rem)]": drawerOpen && largeLayout,
+                    "w-full": !includeDrawer,
+                    "w-[calc(100%-64px)]": includeDrawer && !(drawerOpen && largeLayout),
+                    "w-[calc(100%-17rem)]": includeDrawer && (drawerOpen && largeLayout),
                     "duration-150": drawerOpen && largeLayout,
                     fixed: true,
                 },

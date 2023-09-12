@@ -269,8 +269,8 @@ function renderUrlFile(size: PreviewSize) {
     );
 }
 
-export function renderSkeletonText(index?: number) {
-    return <Skeleton width={120} key={`skeleton_${index}`}/>;
+export function renderSkeletonText(index?: number, width = 120) {
+    return <Skeleton width={width} key={`skeleton_${index}`}/>;
 }
 
 export function renderSkeletonCaptionText(index?: number) {

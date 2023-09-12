@@ -1,9 +1,11 @@
 import React, { useCallback, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
+const scrollsMap: Record<string, number> = {};
+
 export function useRestoreScroll() {
 
-    const scrollsMap = React.useRef<Record<string, number>>({});
+    // const scrollsMap = React.useRef<Record<string, number>>({});
 
     const location = useLocation();
 
@@ -13,7 +15,7 @@ export function useRestoreScroll() {
 
     const handleScroll = useCallback(() => {
         if (!containerRef.current || !location.key) return;
-        scrollsMap.current[location.key] = containerRef.current.scrollTop;
+        scrollsMap[location.key] = containerRef.current.scrollTop;
         setScroll(containerRef.current.scrollTop);
         setDirection(containerRef.current.scrollTop > scroll ? "down" : "up");
     }, [containerRef, location.key, scroll]);
@@ -30,10 +32,10 @@ export function useRestoreScroll() {
     }, [containerRef, handleScroll, location]);
 
     useEffect(() => {
-        if (!containerRef.current || !scrollsMap.current || !scrollsMap.current[location.key]) return;
+        if (!containerRef.current || !scrollsMap[location.key]) return;
         containerRef.current.scrollTo(
             {
-                top: scrollsMap.current[location.key],
+                top: scrollsMap[location.key],
                 behavior: "auto"
             });
     }, [location]);

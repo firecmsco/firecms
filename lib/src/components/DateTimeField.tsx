@@ -96,7 +96,7 @@ export const DateTimeField: React.FC<DateTimeFieldProps> = ({
                     selected={(invalidValue ? null : value) ?? null}
                     onChange={onChange}
                     disabled={false}
-                    popperClassName={cn(paperMixin, "m-4 shadow")}
+                    popperClassName={cn(paperMixin, "my-4 shadow")}
                     onClick={(e: any) => e.stopPropagation()}
                     onFocus={() => setFocused(true)}
                     onBlur={() => setFocused(false)}

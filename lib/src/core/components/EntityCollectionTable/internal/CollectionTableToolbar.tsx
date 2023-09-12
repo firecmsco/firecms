@@ -1,11 +1,10 @@
 import React from "react";
 
 import { CollectionSize } from "../../../../types";
-import { CircularProgress, IconButton, SearchBar, Select, SelectItem, Tooltip } from "../../../../components";
-import { useLargeLayout } from "../../../../hooks/useLargeLayout";
+import { Button, CircularProgress, cn, SearchBar, Select, SelectItem } from "../../../../components";
+import { useLargeLayout } from "../../../../hooks";
 import { defaultBorderMixin } from "../../../../styles";
 import { FilterListOffIcon } from "../../../../icons";
-import { cn } from "../../../../components/util/cn";
 
 interface CollectionTableToolbarProps {
     size: CollectionSize;
@@ -20,20 +19,20 @@ interface CollectionTableToolbarProps {
     clearFilter: () => void;
 }
 
-export function CollectionTableToolbar<M extends Record<string, any>>(props: CollectionTableToolbarProps) {
+export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
 
     const largeLayout = useLargeLayout();
 
-    const filterView = !props.forceFilter && props.filterIsSet &&
-        <Tooltip title="Clear filter">
-            <IconButton
-                className="h-fit-content"
-                aria-label="filter clear"
-                onClick={props.clearFilter}
-                size="medium">
-                <FilterListOffIcon/>
-            </IconButton>
-        </Tooltip>;
+    const clearFilterButton = !props.forceFilter && props.filterIsSet &&
+        <Button
+            variant={"outlined"}
+            className="h-fit-content"
+            aria-label="filter clear"
+            onClick={props.clearFilter}
+            size="small">
+            <FilterListOffIcon/>
+            Clear filter
+        </Button>;
 
     const sizeSelect = (
         <Select
@@ -66,7 +65,7 @@ export function CollectionTableToolbar<M extends Record<string, any>>(props: Col
 
                 {props.actionsStart}
 
-                {filterView}
+                {clearFilterButton}
 
             </div>
 

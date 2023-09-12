@@ -1,6 +1,6 @@
 import React from "react";
 import { VirtualTableWhereFilterOp } from "../../VirtualTable";
-import { Checkbox } from "../../../../components";
+import { BooleanSwitchWithLabel, Checkbox } from "../../../../components";
 
 interface BooleanFieldProps {
     name: string,
@@ -32,30 +32,18 @@ export function BooleanFilterField({
     const valueSet = !!value;
 
     return (
-        <div className="w-200px">
-            <label htmlFor={`filter-${name}`} className="flex justify-center items-center gap-4">
-                <span className="text-sm">
-                    {!valueSet
-                        ? "No filter"
-                        : valueSetToTrue
-                            ? `${title} is true`
-                            : `${title} is false`}
-                </span>
-                <Checkbox
-                    key={`filter-${name}`}
-                    checked={valueSet && valueSetToTrue}
-                    indeterminate={!valueSet}
-                    onCheckedChange={(checked) => {
-                        if (valueSetToTrue) {
-                            updateFilter(false);
-                        } else if (!valueSet) {
-                            updateFilter(true);
-                        } else {
-                            updateFilter(undefined);
-                        }
-                    }}
-                />
-            </label>
+        <div className="w-[200px]">
+            <BooleanSwitchWithLabel
+                value={valueSetToTrue}
+                allowIndeterminate={true}
+                onValueChange={(v: boolean | null) => updateFilter(v === null ? undefined : v)}
+                label={!valueSet
+                    ? "No filter"
+                    : valueSetToTrue
+                        ? `${title} is true`
+                        : `${title} is false`}
+            />
         </div>
-    );
+    )
+        ;
 }

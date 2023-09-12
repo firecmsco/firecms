@@ -5,7 +5,6 @@ import { Link } from "react-router-dom";
 import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
 import { useLargeLayout, useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
-import { useRestoreScroll } from "./internal/useRestoreScroll";
 import { cn, IconButton, Sheet, Tooltip } from "../components";
 import { ChevronLeftIcon, MenuIcon } from "../icons";
 
@@ -86,8 +85,6 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
         const largeLayout = useLargeLayout();
 
         const navigation = useNavigationContext();
-        const { containerRef } = useRestoreScroll();
-
         const [drawerOpen, setDrawerOpen] = React.useState(false);
         const [onHover, setOnHover] = React.useState(false);
 
@@ -114,10 +111,12 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                 }}>
 
                 <FireCMSAppBarComponent title={name}
+                                        includeDrawer={includeDrawer}
                                         drawerOpen={computedDrawerOpen}
                                         {...fireCMSAppBarComponentProps}/>
 
-                {includeDrawer && <StyledDrawer
+                <StyledDrawer
+                    displayed={includeDrawer}
                     onMouseEnter={setOnHoverTrue}
                     onMouseMove={setOnHoverTrue}
                     onMouseLeave={setOnHoverFalse}
@@ -125,20 +124,20 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     logo={logo}
                     hovered={onHover}
                     setDrawerOpen={setDrawerOpen}>
-                    {navigation.loading
-                        ? <CircularProgressCenter/>
-                        : <Drawer
-                            hovered={onHover}
-                            drawerOpen={computedDrawerOpen}
-                            closeDrawer={handleDrawerClose}
-                            {...drawerProps}/>}
-                </StyledDrawer>}
+                    {includeDrawer && (
+                        navigation.loading
+                            ? <CircularProgressCenter/>
+                            : <Drawer
+                                hovered={onHover}
+                                drawerOpen={computedDrawerOpen}
+                                closeDrawer={handleDrawerClose}
+                                {...drawerProps}/>)}
+                </StyledDrawer>
 
                 <main
                     className="flex flex-col flex-grow overflow-auto">
                     <DrawerHeader/>
                     <div
-                        ref={containerRef}
                         className={"flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid lg:border-gray-100 lg:dark:border-gray-800 m-0 mt-1"}>
 
                         <ErrorBoundary>
@@ -161,6 +160,7 @@ const DrawerHeader = () => {
 
 function StyledDrawer(props: {
     children: React.ReactNode,
+    displayed: boolean,
     open: boolean,
     logo?: string,
     hovered: boolean,
@@ -172,11 +172,12 @@ function StyledDrawer(props: {
 
     const navigation = useNavigationContext();
 
+    const width = !props.displayed ? 0 : (props.open ? DRAWER_WIDTH : 72);
     const innerDrawer = <div
         className={"relative h-full no-scrollbar overflow-y-auto overflow-x-hidden"}
         style={{
-            width: props.open ? DRAWER_WIDTH : "72px",
-            transition: "left 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
+            width,
+            transition: "left 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
         }}
     >
 
@@ -201,7 +202,7 @@ function StyledDrawer(props: {
         <div className={"flex flex-col h-full"}>
             <div
                 style={{
-                    transition: "padding 200ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
+                    transition: "padding 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms",
                     padding: props.open ? "32px 96px 0px 24px" : "72px 16px 0px"
                 }}
                 className={cn("cursor-pointer")}>
@@ -255,7 +256,8 @@ function StyledDrawer(props: {
             onMouseMove={props.onMouseMove}
             onMouseLeave={props.onMouseLeave}
             style={{
-                width: props.open ? DRAWER_WIDTH : "72px"
+                width,
+                transition: "left 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, opacity 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms, width 150ms cubic-bezier(0.4, 0, 0.6, 1) 0ms"
             }}>
 
             {innerDrawer}

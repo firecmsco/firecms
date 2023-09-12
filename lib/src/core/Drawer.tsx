@@ -66,7 +66,7 @@ export function Drawer({
     };
 
     return (
-        <>
+        <div className={"flex-grow overflow-scroll"}>
 
             {groups.map((group) => (
                 <React.Fragment
@@ -100,7 +100,7 @@ export function Drawer({
                     name={view.name}/>;
             })}
 
-        </>
+        </div>
     );
 }
 

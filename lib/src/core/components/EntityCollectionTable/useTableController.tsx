@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from "react";
 
 import { useCollectionFetch, useDataSource, useNavigationContext } from "../../../hooks";
 import { useDataOrder } from "../../../hooks/data/useDataOrder";
-import { Entity, EntityCollection,  FilterValues, User } from "../../../types";
+import { Entity, EntityCollection, FilterValues, User } from "../../../types";
 import { useDebouncedData } from "./useDebouncedData";
 
 const DEFAULT_PAGE_SIZE = 50;
@@ -91,6 +91,18 @@ export function useTableController<M extends Record<string, any> = any, UserType
 
     const clearFilter = useCallback(() => setFilterValues(forceFilter ?? undefined), [forceFilter]);
 
+    const updateFilterValues = useCallback((updatedFilter: FilterValues<Extract<keyof M, string>> | undefined) => {
+        if (forceFilter) {
+            console.warn("Filter is not compatible with the force filter. Ignoring filter");
+            return;
+        }
+        if (updatedFilter && Object.keys(updatedFilter).length === 0) {
+            setFilterValues(undefined);
+        } else {
+            setFilterValues(updatedFilter);
+        }
+    }, [forceFilter]);
+
     const {
         data: rawData,
         dataLoading,
@@ -124,7 +136,7 @@ export function useTableController<M extends Record<string, any> = any, UserType
         noMoreToLoad,
         dataLoadingError,
         filterValues,
-        setFilterValues,
+        setFilterValues: updateFilterValues,
         sortBy,
         setSortBy,
         searchString,

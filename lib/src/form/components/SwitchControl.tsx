@@ -26,7 +26,7 @@ export function SwitchControl({
         value={field.value}
         disabled={disabled}
         allowIndeterminate={allowIndeterminate}
-        onValueChange={(checked) => form.setFieldValue(field.name, checked)}/>;
+        onValueChange={(checked:boolean | null) => form.setFieldValue(field.name, checked)}/>;
 
     if (tooltip)
         return (

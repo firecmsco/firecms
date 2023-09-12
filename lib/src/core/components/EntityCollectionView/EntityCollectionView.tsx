@@ -23,7 +23,7 @@ import {
     getPropertyInPath,
     mergeDeep
 } from "../../util";
-import { Markdown, renderSkeletonText } from "../../../preview";
+import { Markdown } from "../../../preview";
 import {
     useAuthController,
     useDataSource,
@@ -36,6 +36,7 @@ import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { useTableController } from "../EntityCollectionTable/useTableController";
 import { cn, Typography } from "../../../components";
 import { Popover } from "../../../components/Popover";
+import { Skeleton } from "../../../components/Skeleton";
 
 /**
  * @category Components
@@ -426,10 +427,10 @@ function EntitiesCount({
     }
 
     return <Typography
-        className="text-ellipsis block overflow-hidden whitespace-nowrap max-w-xs text-left"
+        className="w-full text-ellipsis block overflow-hidden whitespace-nowrap max-w-xs text-left w-fit-content"
         variant={"caption"}
         color={"secondary"}>
-        {count !== undefined ? `${count} entities` : renderSkeletonText()}
+        {count !== undefined ? `${count} entities` : <Skeleton className={"w-full max-w-[80px] mt-1"}/>}
     </Typography>;
 }
 
