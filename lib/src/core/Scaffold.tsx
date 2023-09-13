@@ -181,7 +181,7 @@ function StyledDrawer(props: {
         }}
     >
 
-        {!props.open && (
+        {!props.open && props.displayed && (
             <Tooltip title="Open menu"
                      side="right"
                      sideOffset={12}
@@ -229,7 +229,9 @@ function StyledDrawer(props: {
     </div>;
 
     const largeLayout = useLargeLayout();
-    if (!largeLayout)
+    if (!largeLayout) {
+        if (!props.displayed)
+            return null;
         return <>
             <IconButton
                 color="inherit"
@@ -248,6 +250,7 @@ function StyledDrawer(props: {
                 {innerDrawer}
             </Sheet>
         </>;
+    }
 
     return (
         <div

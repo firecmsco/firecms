@@ -1,12 +1,12 @@
-import React from "react";
-import { cardMixin, cardClickableMixin, focusedMixin } from "../styles";
+import React, { useCallback } from "react";
+import { cardClickableMixin, cardMixin, focusedMixin } from "../styles";
 import { cn } from "./util/cn";
 
 export function Card({
                          children,
                          style,
                          onClick,
-                         className,
+                         className
                      }: {
     children: React.ReactNode;
     style?: React.CSSProperties;
@@ -14,8 +14,17 @@ export function Card({
     className?: string;
 
 }) {
+
+    const onKeyPress = useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (e.key === "Enter" || e.key === " ") {
+            onClick?.();
+        }
+    }, [onClick]);
+
     return (
         <div
+            onKeyPress={onKeyPress}
+            role={onClick ? "button" : undefined}
             tabIndex={onClick ? 0 : undefined}
             onClick={onClick}
             className={cn(cardMixin, focusedMixin, onClick && cardClickableMixin, className)}

@@ -5,8 +5,7 @@ import { useFireCMSContext } from "../../../hooks";
 import { PluginHomePageActionsProps, TopNavigationEntry } from "../../../types";
 import { getIconForView } from "../../util";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
-import { IconButton, Typography , cn } from "../../../components";
-import { cardClickableMixin, cardMixin } from "../../../styles";
+import { Card, cn, IconButton, Typography } from "../../../components";
 import { ArrowForwardIcon, StarBorderIcon, StarIcon } from "../../../icons";
 
 /**
@@ -64,20 +63,19 @@ export function NavigationCollectionCard({
     }
 
     return (
-        <div className={cn(cardMixin, cardClickableMixin, "h-full p-4 cursor-pointer min-h-[230px]")}>
+        <Card
+            className={cn("h-full p-4 cursor-pointer min-h-[230px]")}
+            onClick={() => {
+                onClick?.();
+                navigate(url);
+                if (userConfigurationPersistence) {
+                    userConfigurationPersistence.setRecentlyVisitedPaths(
+                        [path, ...(userConfigurationPersistence.recentlyVisitedPaths ?? []).filter(p => p !== path)]
+                    );
+                }
+            }}>
 
-            <div
-                className="flex flex-col items-start h-full"
-                onClick={() => {
-                    onClick?.();
-                    navigate(url);
-                    if (userConfigurationPersistence) {
-                        userConfigurationPersistence.setRecentlyVisitedPaths(
-                            [path, ...(userConfigurationPersistence.recentlyVisitedPaths ?? []).filter(p => p !== path)]
-                        );
-                    }
-                }}
-            >
+            <div className="flex flex-col items-start h-full">
                 <div
                     className="flex-grow w-full">
 
@@ -145,6 +143,5 @@ export function NavigationCollectionCard({
 
             </div>
 
-        </div>)
-        ;
+        </Card>);
 }

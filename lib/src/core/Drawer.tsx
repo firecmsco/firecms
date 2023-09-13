@@ -66,7 +66,7 @@ export function Drawer({
     };
 
     return (
-        <div className={"flex-grow overflow-scroll"}>
+        <div className={"flex-grow overflow-scroll no-scrollbar"}>
 
             {groups.map((group) => (
                 <React.Fragment

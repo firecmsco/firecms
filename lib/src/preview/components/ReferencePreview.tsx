@@ -28,13 +28,13 @@ export type ReferencePreviewProps = {
  */
 export const ReferencePreview = React.memo<ReferencePreviewProps>(function ReferencePreview(props: ReferencePreviewProps) {
     const reference = props.reference;
-    if (!(reference instanceof EntityReference)) {
-        console.error("Reference preview received value of type", typeof reference);
+    if (!((reference as unknown) instanceof EntityReference)) {
+        console.warn("Reference preview received value of type", typeof reference);
         return <ReferencePreviewContainer
             onClick={props.onClick}
-                                     size={props.size}>
+            size={props.size}>
             <ErrorView error={"Unexpected value. Click to edit"}
-                                                            tooltip={JSON.stringify(reference)}/>
+                       tooltip={JSON.stringify(reference)}/>
         </ReferencePreviewContainer>;
     }
     return <ReferencePreviewInternal {...props} />;
@@ -190,11 +190,11 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
 }
 
 export function ReferencePreviewContainer({
-                                  children,
-                                  onHover,
-                                  size,
-                                  onClick
-                              }: {
+                                              children,
+                                              onHover,
+                                              size,
+                                              onClick
+                                          }: {
     children: React.ReactNode;
     onHover?: boolean;
     size: PreviewSize;

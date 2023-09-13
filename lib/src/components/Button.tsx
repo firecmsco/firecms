@@ -10,6 +10,7 @@ export type ButtonProps<P extends React.ElementType> =
     disabled?: boolean;
     size?: "small" | "medium" | "large";
     startIcon?: React.ReactNode;
+    fullWidth?: boolean;
     className?: string;
     onClick?: React.MouseEventHandler<any>
 };
@@ -21,6 +22,7 @@ export function Button<P extends React.ElementType>({
                                                         disabled = false,
                                                         size = "medium",
                                                         startIcon = null,
+                                                        fullWidth = false,
                                                         component: Component,
                                                         ...props
                                                     }: ButtonProps<P>) {
@@ -30,6 +32,8 @@ export function Button<P extends React.ElementType>({
 
     const buttonClasses = cn(
         {
+            "w-full": fullWidth,
+            "w-fit": !fullWidth,
             "border-transparent bg-primary hover:bg-blue-600 focus:ring-blue-400 !text-white shadow hover:ring-1 hover:ring-primary": variant === "filled" && !disabled,
             "border-primary !text-primary hover:bg-primary hover:bg-opacity-10 hover:border-blue-600 !hover:text-blue-600 focus:ring-blue-400 hover:ring-1 hover:ring-primary": variant === "outlined" && !disabled,
             "border-transparent !text-primary !hover:text-blue-600 hover:bg-primary hover:bg-opacity-10": variant === "text" && !disabled,
