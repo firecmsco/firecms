@@ -15,7 +15,7 @@ export const firebaseConfig = {
 
 function App() {
     return <FireCMS3App
-        name={"My Online Shop"}
+        projectId={"firecms-demo-27150"}
         signInOptions={[
             "password",
             "google.com"

@@ -6,7 +6,7 @@
   "dependencies": {
     "@firecms/data_enhancement": "^1.0.0",
     "algoliasearch": "^4.17.1",
-    "firebase": "^9.22.1",
+    "firebase": "^9.23.0",
     "firecms": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

@@ -14,8 +14,11 @@
   },
   "dependencies": {
     "@types/node": "^20.5.9",
-    "firecms": "workspace:^",
     "typescript": "^5.2.2"
+  },
+  "peerDependencies": {
+    "firebase": "^9.23.0",
+    "firecms": "workspace:^"
   },
   "scripts": {
     "dev": "vite",

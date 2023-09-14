@@ -1344,7 +1344,7 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.22.1
+    firebase: ^9.23.0
     firecms: "workspace:^"
     flexsearch: 0.7.31
     react: ^18.2.0
@@ -1382,7 +1382,7 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.22.1
+    firebase: ^9.23.0
     firecms: ^3.0.0-alpha.1
     flexsearch: 0.7.31
     jest: ^29.5.0
@@ -1404,8 +1404,10 @@ __metadata:
   resolution: "@firecms/firebase_firecms@workspace:packages/firebase_firecms"
   dependencies:
     "@types/node": ^20.5.9
-    firecms: "workspace:^"
     typescript: ^5.2.2
+  peerDependencies:
+    firebase: ^9.23.0
+    firecms: "workspace:^"
   languageName: unknown
   linkType: soft
 
@@ -1416,12 +1418,14 @@ __metadata:
     "@types/node": ^20.5.9
     "@types/react": ^18.2.8
     "@types/react-dom": ^18.2.4
+    typescript: ^5.2.2
+  peerDependencies:
+    firebase: ^9.2.3
     firecms: "workspace:^"
     react: ^18.2.0
     react-dom: ^18.2.0
     react-router: ^6.12.0
     react-router-dom: ^6.12.0
-    typescript: ^5.2.2
   languageName: unknown
   linkType: soft
 
@@ -5922,7 +5926,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firebase@npm:^9.21.0, firebase@npm:^9.22.1":
+"firebase@npm:^9.23.0":
   version: 9.23.0
   resolution: "firebase@npm:9.23.0"
   dependencies:
@@ -5976,7 +5980,7 @@ __metadata:
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
     eslint-plugin-react-refresh: ^0.3.4
-    firebase: ^9.22.1
+    firebase: ^9.23.0
     firecms: "workspace:^"
     postcss: ^8.4.24
     react: ^18.2.0
@@ -6040,7 +6044,7 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.21.0
+    firebase: ^9.23.0
     formik: ^2.4.1
     history: ^5.3.0
     jest: ^29.5.0
@@ -6071,7 +6075,7 @@ __metadata:
     yup: ^0.32.11
   peerDependencies:
     algoliasearch: ^4.13.0
-    firebase: ^9.0.0
+    firebase: ^9.23.0
     react: ^18.0.0
     react-dom: ^18.0.0
     react-router: ^6.2.0
@@ -9520,7 +9524,7 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.22.1
+    firebase: ^9.23.0
     firecms: "workspace:^"
     postcss: ^8.4.24
     react: ^18.2.0

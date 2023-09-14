@@ -1,8 +1,13 @@
+import { collection, doc, getFirestore, onSnapshot } from "firebase/firestore";
 import { EntityCollection } from "firecms";
+import React, { useEffect, useRef, useState } from "react";
+import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 
 export type FireCMSRemoteConfig = {
 
-    name: string;
+    loading: boolean;
+
+    name?: string;
 
     logo?: string;
 
@@ -13,22 +18,57 @@ export type FireCMSRemoteConfig = {
      * generates an entry in the main menu.
      */
     collections?: EntityCollection[];
+
+    users: object[];
+
+    projectName?: string,
+    subscriptionPlan?: string,
+    configLoading: boolean,
+    configError: boolean,
+
+    clientFirebaseConfig?: object,
+    clientFirebaseMissing?: boolean,
+    serviceAccountMissing?: boolean,
+    usersLimit: number | null,
+};
+
+const backendProdFirebaseConfig = {
+    apiKey: "AIzaSyDa9HY0_H0GfAwvQnE3Zgo_ZJJEVO6CgrQ",
+    authDomain: "firecms-backend.firebaseapp.com",
+    projectId: "firecms-backend",
+    storageBucket: "firecms-backend.appspot.com",
+    messagingSenderId: "175047346381",
+    appId: "1:175047346381:web:8159c8b49d65c043318184"
 };
 
 function useRemoteConfig({ projectId }: { projectId: string }): FireCMSRemoteConfig {
 
-    const firestoreRef = useRef<Firestore>();
-    const firestore = firestoreRef.current;
+    const configPath = `projects/${projectId}`;
+
+    const { firebaseApp: backendFirebaseApp, firebaseConfigLoading } = useInitialiseFirebase({ firebaseConfig: backendProdFirebaseConfig });
 
     const [collectionsLoading, setCollectionsLoading] = React.useState<boolean>(true);
-    const [persistedCollections, setPersistedCollections] = React.useState<PersistedCollection[] | undefined>();
+    const [EntityCollections, setEntityCollections] = React.useState<EntityCollection[] | undefined>();
 
     const [collectionsError, setCollectionsError] = React.useState<Error | undefined>();
+    const firestore = backendFirebaseApp ? getFirestore(backendFirebaseApp) : null;
 
-    useEffect(() => {
-        if (!firebaseApp) return;
-        firestoreRef.current = getFirestore(firebaseApp);
-    }, [firebaseApp]);
+    const [clientProjectName, setClientProjectName] = useState<string | undefined>();
+    const [subscriptionPlan, setSubscriptionPlan] = useState<string>();
+    const [clientConfigLoading, setClientConfigLoading] = useState<boolean>(false);
+    const [clientFirebaseConfig, setClientFirebaseConfig] = useState<Record<string, unknown> | undefined>();
+    const [clientFirebaseMissing, setClientFirebaseMissing] = useState<boolean | undefined>();
+    const [serviceAccountMissing, setServiceAccountMissing] = useState<boolean | undefined>();
+    const [clientConfigError, setClientConfigError] = useState<boolean>(false);
+
+    const loadedProjectIdRef = useRef<string | undefined>(projectId);
+
+    const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
+    const [logo, setLogo] = React.useState<string | undefined>();
+    const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
+    const [users, setUsers] = React.useState<object[]>([]);
+
+    const [usersError, setUsersError] = React.useState<Error | undefined>();
 
     useEffect(() => {
         if (!firestore || !configPath) return;
@@ -39,7 +79,7 @@ function useRemoteConfig({ projectId }: { projectId: string }): FireCMSRemoteCon
                     setCollectionsError(undefined);
                     try {
                         const newCollections = docsToCollectionTree(snapshot.docs);
-                        setPersistedCollections(newCollections);
+                        setEntityCollections(newCollections);
                     } catch (e) {
                         console.error(e);
                         setCollectionsError(e as Error);
@@ -54,109 +94,7 @@ function useRemoteConfig({ projectId }: { projectId: string }): FireCMSRemoteCon
         );
     }, [configPath, firestore]);
 
-    const deleteCollection = useCallback(({ path, parentPathSegments }: DeleteCollectionParams): Promise<void> => {
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const collectionPath = buildCollectionPath(path, parentPathSegments);
-        const ref = doc(firestore, configPath, "collections", collectionPath);
-        return deleteDoc(ref);
-    }, [configPath, firestore]);
-
-    const saveCollection = useCallback(<M extends Record<string, any>>({ path, collectionData, previousPath, parentPathSegments }: SaveCollectionParams<M>): Promise<void> => {
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const cleanedCollection = prepareCollectionForPersistence(collectionData);
-        const strippedPath = buildCollectionPath(path, parentPathSegments);
-        const previousStrippedPath = previousPath ? buildCollectionPath(previousPath, parentPathSegments) : undefined;
-        const ref = doc(firestore, configPath, "collections", strippedPath);
-        console.debug("Saving collection", { path, previousPath, parentPathSegments, cleanedCollection });
-        return runTransaction(firestore, async (transaction) => {
-            transaction.set(ref, cleanedCollection, { merge: true });
-            if (previousStrippedPath && previousStrippedPath !== strippedPath) {
-                const previousRef = doc(firestore, configPath, "collections", previousStrippedPath);
-                transaction.delete(previousRef);
-            }
-        });
-    }, [configPath, firestore]);
-
-    const collections = persistedCollections !== undefined ? applyPermissionsFunction(persistedCollections, permissions as PermissionsBuilder) : undefined;
-
-    return {
-        loading: collectionsLoading,
-        collections,
-        saveCollection,
-        deleteCollection
-    }
-
-    const [clientProjectName, setClientProjectName] = useState<string | undefined>();
-    const [subscriptionPlan, setSubscriptionPlan] = useState<ProjectSubscriptionPlan>();
-    const [clientConfigLoading, setClientConfigLoading] = useState<boolean>(false);
-    const [clientFirebaseConfig, setClientFirebaseConfig] = useState<Record<string, unknown> | undefined>();
-    const [clientFirebaseMissing, setClientFirebaseMissing] = useState<boolean | undefined>();
-    const [serviceAccountMissing, setServiceAccountMissing] = useState<boolean | undefined>();
-    const [clientConfigError, setClientConfigError] = useState<boolean>(false);
-
-    const loadedProjectIdRef = useRef<string | undefined>(projectId);
-
-    const firestoreRef = useRef<Firestore>();
-    const storageRef = useRef<FirebaseStorage>();
-
-    const [rolesLoading, setRolesLoading] = React.useState<boolean>(true);
-    const [logo, setLogo] = React.useState<string | undefined>();
-    const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
-    const [roles, setRoles] = React.useState<Role[]>([]);
-    const [users, setUsers] = React.useState<SaasUserProject[]>([]);
-
-    const [rolesError, setRolesError] = React.useState<Error | undefined>();
-    const [usersError, setUsersError] = React.useState<Error | undefined>();
-
     useEffect(() => {
-        if (!firebaseApp) return;
-        firestoreRef.current = getFirestore(firebaseApp);
-        storageRef.current = getStorage(firebaseApp);
-    }, [firebaseApp]);
-
-    useEffect(() => {
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) return;
-
-        return onSnapshot(doc(firestore, configPath),
-            {
-                next: (snapshot) => {
-                    setLogo(snapshot.get("logo"));
-                },
-                error: (e) => {
-                    console.error(e);
-                }
-            }
-        );
-    }, [configPath]);
-
-    useEffect(() => {
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) return;
-
-        return onSnapshot(collection(firestore, configPath, "roles"),
-            {
-                next: (snapshot) => {
-                    setRolesError(undefined);
-                    try {
-                        const newRoles = docsToRoles(snapshot.docs);
-                        setRoles(newRoles);
-                    } catch (e) {
-                        // console.error(e);
-                        setRolesError(e as Error);
-                    }
-                    setRolesLoading(false);
-                },
-                error: (e) => {
-                    setRolesError(e);
-                    setRolesLoading(false);
-                }
-            }
-        );
-    }, [configPath]);
-
-    useEffect(() => {
-        const firestore = firestoreRef.current;
         if (!firestore || !configPath) return;
 
         return onSnapshot(collection(firestore, configPath, "users"),
@@ -180,79 +118,8 @@ function useRemoteConfig({ projectId }: { projectId: string }): FireCMSRemoteCon
         );
     }, [configPath]);
 
-    const saveUser = useCallback(async <M extends {
-        [Key: string]: CMSType
-    }>(user: SaasUserProject): Promise<SaasUserProject> => {
-
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.debug("Persisting", user);
-        const {
-            uid,
-            ...userData
-        } = user;
-        const firebaseToken = await authController.getFirebaseIdToken();
-        if (uid) {
-            return updateUser(firebaseToken, projectId, uid, user);
-        } else {
-            return createNewUser(firebaseToken, projectId, user);
-        }
-    }, [authController, configPath, projectId]);
-
-    const saveRole = useCallback(<M extends { [Key: string]: CMSType }>(role: Role): Promise<void> => {
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.debug("Persisting", role);
-        const {
-            id,
-            ...roleData
-        } = role;
-        const ref = doc(firestore, configPath, "roles", id);
-        return setDoc(ref, roleData, { merge: true });
-    }, [configPath]);
-
-    const removeUser = useCallback(async <M extends {
-        [Key: string]: CMSType
-    }>(user: SaasUserProject): Promise<void> => {
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.debug("Deleting", user);
-        const { uid } = user;
-        const firebaseToken = await authController.getFirebaseIdToken();
-        return deleteUser(firebaseToken, projectId, uid);
-    }, [configPath]);
-
-    const deleteRole = useCallback(<M extends { [Key: string]: CMSType }>(role: Role): Promise<void> => {
-
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        console.debug("Deleting", role);
-        const { id } = role;
-        const ref = doc(firestore, configPath, "roles", id);
-        return deleteDoc(ref);
-    }, [configPath]);
-
-    const uploadLogo = useCallback(async (file: File): Promise<void> => {
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const storage = storageRef.current;
-        if (!storage) throw Error("useFirestoreConfigurationPersistence Storage not initialised");
-        const fileRef = await uploadFile(storage, {
-            file,
-            path: `${configPath}/images`
-        });
-        const url = await getDownloadURL(fileRef);
-        setDoc(doc(firestore, configPath), { logo: url }, { merge: true });
-    }, [configPath]);
-
-    const updateProjectName = useCallback(async (name: string): Promise<void> => {
-        const firestore = firestoreRef.current;
-        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        return setDoc(doc(firestore, configPath), { name }, { merge: true });
-    }, [configPath]);
-
     useEffect(() => {
-        if (!projectId || !firebaseApp) {
+        if (!projectId || !backendFirebaseApp) {
             setClientConfigLoading(false);
             return;
         }
@@ -263,11 +130,12 @@ function useRemoteConfig({ projectId }: { projectId: string }): FireCMSRemoteCon
             loadedProjectIdRef.current = undefined;
         }
 
-        const firestore = getFirestore(firebaseApp);
+        const firestore = getFirestore(backendFirebaseApp);
         return onSnapshot(doc(firestore, "projects", projectId),
             {
                 next: (snapshot) => {
 
+                    setLogo(snapshot.get("logo"));
                     setClientProjectName(snapshot.get("name"));
                     setSubscriptionPlan(snapshot.get("subscription_plan") ?? "free"); // TODO: remove default value
 
@@ -297,7 +165,7 @@ function useRemoteConfig({ projectId }: { projectId: string }): FireCMSRemoteCon
                 }
             }
         );
-    }, [firebaseApp, projectId]);
+    }, [backendFirebaseApp, projectId]);
 
     const usersLimit = subscriptionPlan === "free" ? 3 : null;
     const canEditRoles = subscriptionPlan !== "free";
@@ -305,27 +173,19 @@ function useRemoteConfig({ projectId }: { projectId: string }): FireCMSRemoteCon
 
     return {
 
-        loading: rolesLoading || usersLoading,
-        roles,
+        loading: usersLoading || collectionsLoading,
+        collections: EntityCollections,
         users,
-        saveUser,
-        saveRole,
-        deleteUser: removeUser,
-        deleteRole,
         logo,
-        uploadLogo,
-        updateProjectName,
-
+        name: clientProjectName,
         projectName: clientProjectName,
         subscriptionPlan,
         configLoading: loadedProjectIdRef.current !== projectId || clientConfigLoading,
         configError: loadedProjectIdRef.current !== projectId ? false : clientConfigError,
         clientFirebaseConfig: loadedProjectIdRef.current !== projectId ? undefined : clientFirebaseConfig,
-        clientFirebaseMissing: loadedProjectIdRef.current !== projectId ? undefined : clientFirebaseMissing,
+        clientFirebaseMissing: loadedProjectIdRef.current !== projectId ? false : clientFirebaseMissing,
         serviceAccountMissing: loadedProjectIdRef.current !== projectId ? undefined : serviceAccountMissing,
         usersLimit,
-        canEditRoles,
-        canUploadLogo
     }
 
 }

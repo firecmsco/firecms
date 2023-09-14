@@ -1,26 +1,19 @@
 import path from "path";
 import * as fs from "fs/promises";
 import { Configuration, CreateChatCompletionRequest, OpenAIApi } from "openai";
-import util from "util";
 
 const getRecursiveFileReads = async (dir: string, onFileRead: (filePath: string, content: string) => void) => {
-    // @ts-ignore
     const files = await fs.readdir(dir);
-    // @ts-ignore
-    files.forEach(async (file: string) => {
+    for (const file of files) {
         const filePath = path.join(dir, file);
-        // @ts-ignore
         const stat = await fs.stat(filePath);
-        // @ts-ignore
         if (stat.isDirectory()) {
             getRecursiveFileReads(filePath, onFileRead);
-            return;
+            continue;
         }
-        // @ts-ignore
         const content = await fs.readFile(filePath, { encoding: "utf8" });
-        // @ts-ignore
         onFileRead(filePath, content);
-    });
+    }
 }
 
 const sxRegexp = /(sx=\{(?:[^{}]|\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\})*\})/g;
