@@ -30,16 +30,5 @@
       "node",
       "jest"
     ]
-  },
-  "include": [
-    "firecms/src",
-    "./firecms/src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "example",
-    "example_backend",
-    "src/test"
-  ]
+  }
 }

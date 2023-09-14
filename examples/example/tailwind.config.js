@@ -1,40 +1,15 @@
 /** @type {import("tailwindcss").Config} */
 const plugin = require("tailwindcss/plugin")
 
-const fireCMSPlugin = plugin(function ({
-                                       matchUtilities,
-                                       theme
-                                   }) {
-    matchUtilities(
-        {
-            tab: (value) => ({
-                tabSize: value
-            }),
-        },
-        { values: theme("tabSize") }
-    )
-}, {
-    darkMode: ["class", "[data-theme=\"dark\"]"],
-    theme: {
-        tabSize: {
-            1: "1",
-            2: "2",
-            4: "4",
-            8: "8",
-        }
-    }
-})
-
 export default {
     darkMode: ["class", "[data-theme=\"dark\"]"],
     mode: "jit",
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
-        "../node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
-        "../node_modules/@firecms/data_enhancement/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
+        "../../node_modules/firecms/src/**/*.{js,ts,jsx,tsx}",
+        "../../node_modules/@firecms/data_enhancement/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
     ],
-    plugins: [fireCMSPlugin],
     theme: {
         extend: {
             fontFamily: {

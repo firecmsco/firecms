@@ -1,14 +1,18 @@
 import React, { useEffect, useState } from "react";
 import {
+    Card,
+    CircularProgress,
+    Container,
     Entity,
     EntityCustomViewParams,
     EntityReference,
     EntityValues,
     ErrorView,
+    Markdown,
+    Typography,
     useDataSource,
     useStorageSource
 } from "firecms";
-import { Card, CircularProgress, Container, Markdown, Typography } from "firecms/components";
 import { Product } from "../types";
 import { productsCollection } from "../collections/products_collection";
 import { BlogEntry } from "../collections/blog_collection";

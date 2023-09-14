@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
 
 import {
+    CenteredView,
     CircularProgressCenter,
     FireCMS,
     ModeControllerProvider,
@@ -11,6 +12,7 @@ import {
     Scaffold,
     SideDialogs,
     SnackbarProvider,
+    useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController
 } from "firecms";
@@ -23,8 +25,6 @@ import { useInitializeAppCheck } from "./hooks/useInitializeAppCheck";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import { FirebaseAuthController } from "./types/auth";
 import { useValidateAuthenticator } from "./hooks/useValidateAuthenticator";
-import { useBrowserTitleAndIcon } from "firecms";
-import { CenteredView } from "firecms";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
     GoogleAuthProvider.PROVIDER_ID

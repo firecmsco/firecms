@@ -9,21 +9,23 @@ import "@fontsource/ibm-plex-mono";
 import {
     buildCollection,
     CircularProgressCenter,
-    FirebaseAuthController,
-    FirebaseLoginView,
     FireCMS,
     ModeControllerProvider,
     NavigationRoutes,
     Scaffold,
     SideDialogs,
     SnackbarProvider,
-    useBuildModeController,
+    useBuildModeController
+} from "firecms";
+import {
+    FirebaseAuthController,
+    FirebaseLoginView,
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDataSource,
     useInitialiseFirebase,
     useValidateAuthenticator
-} from "firecms";
+} from "@firecms/firebase_firecms";
 
 import { firebaseConfig } from "../firebase_config";
 

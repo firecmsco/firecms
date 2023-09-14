@@ -1,19 +1,15 @@
-[submodule "saas"]
+[submodule "packages/saas"]
 	path = saas
 	url = git@github.com:FireCMSco/firecms_saas.git
 
-[submodule "collection_editor"]
+[submodule "packages/collection_editor"]
 	path = collection_editor
 	url = git@github.com:FireCMSco/firecms_collection_editor.git
 
-[submodule "user_management"]
-	path = user_management
-	url = git@github.com:FireCMSco/firecms_collection_editor.git
-
-[submodule "data_enhancement"]
+[submodule "packages/data_enhancement"]
 	path = data_enhancement
 	url = git@github.com:FireCMSco/firecms_data_enhancement.git
 
-[submodule "schema_inference"]
+[submodule "packages/schema_inference"]
 	path = schema_inference
 	url = git@github.com:FireCMSco/firecms_schema_inference.git

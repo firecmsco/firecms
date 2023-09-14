@@ -3,14 +3,13 @@ import {
     DataSource,
     DeleteEntityProps,
     Entity,
-    EntityCollection,
     FetchCollectionProps,
     FetchEntityProps,
     ResolvedProperty,
     SaveEntityProps,
-    useFirestoreDataSource
 } from "firecms";
 import { FirebaseApp } from "firebase/app";
+import { useFirestoreDataSource } from "@firecms/firebase_firecms";
 
 type CustomDataSourceProps = { firebaseApp?: FirebaseApp };
 

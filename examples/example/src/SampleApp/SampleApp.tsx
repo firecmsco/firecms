@@ -8,14 +8,16 @@ import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
 import {
-    Authenticator,
     CMSView,
-    FirebaseCMSApp,
-    FirestoreIndexesBuilder,
     GitHubIcon,
     IconButton,
     Tooltip
 } from "firecms";
+import {
+    Authenticator,
+    FirebaseCMSApp,
+    FirestoreIndexesBuilder,
+} from "@firecms/firebase_firecms";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import { firebaseConfig } from "../firebase_config";

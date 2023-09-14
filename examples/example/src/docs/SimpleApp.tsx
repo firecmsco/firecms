@@ -1,13 +1,8 @@
 import React, { useCallback } from "react";
 
 import { User as FirebaseUser } from "firebase/auth";
-import {
-    Authenticator,
-    buildCollection,
-    buildProperty,
-    EntityReference,
-    FirebaseCMSApp
-} from "firecms";
+import { buildCollection, buildProperty, EntityReference, } from "firecms";
+import { Authenticator, FirebaseCMSApp } from "@firecms/firebase_firecms";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
@@ -191,9 +186,9 @@ const productsCollection = buildCollection<Product>({
 export default function App() {
 
     const myAuthenticator: Authenticator<FirebaseUser> = useCallback(async ({
-                                                                    user,
-                                                                    authController
-                                                                }) => {
+                                                                                user,
+                                                                                authController
+                                                                            }) => {
 
         if (user?.email?.includes("flanders")) {
             throw Error("Stupid Flanders!");

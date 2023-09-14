@@ -1326,9 +1326,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/collection_editor@workspace:^, @firecms/collection_editor@workspace:collection_editor":
+"@firecms/collection_editor@workspace:^, @firecms/collection_editor@workspace:packages/collection_editor":
   version: 0.0.0-use.local
-  resolution: "@firecms/collection_editor@workspace:collection_editor"
+  resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
     "@firecms/schema_inference": "workspace:^"
     "@types/react": ^18.2.8
@@ -1354,12 +1354,17 @@ __metadata:
     typescript: ^5.1.3
     vite: ^4.3.9
     vite-plugin-fonts: ^0.7.0
+  peerDependencies:
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-router: ^6.12.0
+    react-router-dom: ^6.12.0
   languageName: unknown
   linkType: soft
 
-"@firecms/data_enhancement@^1.0.0, @firecms/data_enhancement@workspace:^, @firecms/data_enhancement@workspace:data_enhancement":
+"@firecms/data_enhancement@^1.0.0, @firecms/data_enhancement@workspace:^, @firecms/data_enhancement@workspace:packages/data_enhancement":
   version: 0.0.0-use.local
-  resolution: "@firecms/data_enhancement@workspace:data_enhancement"
+  resolution: "@firecms/data_enhancement@workspace:packages/data_enhancement"
   dependencies:
     "@testing-library/jest-dom": ^5.16.5
     "@types/jest": ^29.5.2
@@ -1394,9 +1399,35 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/schema_inference@workspace:^, @firecms/schema_inference@workspace:schema_inference":
+"@firecms/firebase_firecms@workspace:packages/firebase_firecms":
   version: 0.0.0-use.local
-  resolution: "@firecms/schema_inference@workspace:schema_inference"
+  resolution: "@firecms/firebase_firecms@workspace:packages/firebase_firecms"
+  dependencies:
+    "@types/node": ^20.5.9
+    firecms: "workspace:^"
+    typescript: ^5.2.2
+  languageName: unknown
+  linkType: soft
+
+"@firecms/firebase_firecms_v3@workspace:packages/firebase_firecms_v3":
+  version: 0.0.0-use.local
+  resolution: "@firecms/firebase_firecms_v3@workspace:packages/firebase_firecms_v3"
+  dependencies:
+    "@types/node": ^20.5.9
+    "@types/react": ^18.2.8
+    "@types/react-dom": ^18.2.4
+    firecms: "workspace:^"
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    react-router: ^6.12.0
+    react-router-dom: ^6.12.0
+    typescript: ^5.2.2
+  languageName: unknown
+  linkType: soft
+
+"@firecms/schema_inference@workspace:^, @firecms/schema_inference@workspace:packages/schema_inference":
+  version: 0.0.0-use.local
+  resolution: "@firecms/schema_inference@workspace:packages/schema_inference"
   dependencies:
     "@types/node": ^20.5.9
     firecms: "workspace:^"
@@ -3691,7 +3722,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.4":
+"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.0.6, @types/react-dom@npm:^18.2.4":
   version: 18.2.7
   resolution: "@types/react-dom@npm:18.2.7"
   dependencies:
@@ -3717,6 +3748,17 @@ __metadata:
     "@types/scheduler": "*"
     csstype: ^3.0.2
   checksum: 2e0d75de2b618e76780019e52478b1bec2b015a9187aea30f84518c0c3ddc639055bdfea50864aece937bad0cb0544d0100b80d30f5461e72fbc1c3c0be8b140
+  languageName: node
+  linkType: hard
+
+"@types/react@npm:^18.0.17":
+  version: 18.2.21
+  resolution: "@types/react@npm:18.2.21"
+  dependencies:
+    "@types/prop-types": "*"
+    "@types/scheduler": "*"
+    csstype: ^3.0.2
+  checksum: ffed203bfe7aad772b8286f7953305c9181ac3a8f27d3f5400fbbc2a8e27ca8e5bbff818ee014f39ca0d19d2b3bb154e5bdbec7e232c6f80b59069375aa78349
   languageName: node
   linkType: hard
 
@@ -5914,9 +5956,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"firecms-example@workspace:example":
+"firecms-example@workspace:examples/example":
   version: 0.0.0-use.local
-  resolution: "firecms-example@workspace:example"
+  resolution: "firecms-example@workspace:examples/example"
   dependencies:
     "@firecms/data_enhancement": ^1.0.0
     "@types/react": ^18.2.8
@@ -5955,9 +5997,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"firecms@^3.0.0-alpha.1, firecms@workspace:^, firecms@workspace:lib":
+"firecms@^3.0.0-alpha.1, firecms@workspace:^, firecms@workspace:packages/firecms":
   version: 0.0.0-use.local
-  resolution: "firecms@workspace:lib"
+  resolution: "firecms@workspace:packages/firecms"
   dependencies:
     "@date-io/date-fns": ^2.16.0
     "@fontsource/ibm-plex-mono": ^4.5.13
@@ -9452,9 +9494,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"saas@workspace:saas":
+"saas@workspace:packages/saas":
   version: 0.0.0-use.local
-  resolution: "saas@workspace:saas"
+  resolution: "saas@workspace:packages/saas"
   dependencies:
     "@firecms/collection_editor": "workspace:^"
     "@firecms/data_enhancement": "workspace:^"
@@ -9573,6 +9615,23 @@ __metadata:
   checksum: 6e65a05f7cf7ebdf8b7c75b101e18c0b7e3dff4940d480efed8aad3a36a4005140b660fa1d804cb8bce911cac290441dc728084a30504d3516ac2ff7ad607b02
   languageName: node
   linkType: hard
+
+"shared@workspace:examples/saas_example":
+  version: 0.0.0-use.local
+  resolution: "shared@workspace:examples/saas_example"
+  dependencies:
+    "@originjs/vite-plugin-federation": ^1.2.3
+    "@types/react": ^18.0.17
+    "@types/react-dom": ^18.0.6
+    "@vitejs/plugin-react": ^4.0.0
+    postcss: ^8.4.24
+    react: ^18.2.0
+    react-dom: ^18.2.0
+    tailwindcss: ^3.3.2
+    typescript: ^5.2.2
+    vite: ^4.3.9
+  languageName: unknown
+  linkType: soft
 
 "shebang-command@npm:^1.2.0":
   version: 1.2.0
