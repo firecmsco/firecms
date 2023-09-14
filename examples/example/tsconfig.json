@@ -1,0 +1,27 @@
+{
+  "extends": "../../packages/firecms/tsconfig.json",
+  "compilerOptions": {
+    "target": "ESNext",
+    "useDefineForClassFields": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": false,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "firecms": ["../../packages/firecms/src/index.ts"],
+      "@firecms/firebase_firecms": ["../../packages/firebase_firecms/src/index.ts"],
+      "@firecms/data_enhancement": ["../../packages/data_enhancement/src/index.ts"],
+    }
+  },
+  "include": ["./src"]
+}

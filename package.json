@@ -5,25 +5,27 @@
     "author": "FireCMS",
     "homepage": "https://firecms.co",
     "workspaces": [
-        "lib",
-        "example",
-        "example-client-project",
-        "saas",
-        "collection_editor",
-        "user_management",
-        "data_enhancement",
-        "schema_inference"
+        "packages/firecms",
+        "packages/firebase_firecms",
+        "packages/firebase_firecms_v3",
+        "packages/saas",
+        "packages/collection_editor",
+        "packages/user_management",
+        "packages/data_enhancement",
+        "packages/schema_inference",
+        "examples/example",
+        "examples/saas_example"
     ],
     "scripts": {
-        "dev": "cd example && yarn dev",
-        "saas": "cd saas && yarn dev",
+        "dev": "cd examples/example && yarn dev",
+        "saas": "cd packages/saas && yarn dev",
         "web": "cd website && yarn start",
-        "preview": "cd example && yarn preview",
-        "deploy:saas": "cd saas && yarn deploy:staging",
-        "deploy:saas:prod": "cd saas && yarn deploy:prod",
-        "deploy:demo": "cd example && yarn deploy",
+        "preview": "cd examples/example && yarn preview",
+        "deploy:saas": "cd packages/saas && yarn deploy:staging",
+        "deploy:saas:prod": "cd packages/saas && yarn deploy:prod",
+        "deploy:demo": "cd examples/example && yarn deploy",
         "deploy:web": "cd website && yarn deploy",
-        "build": "cd lib && yarn build"
+        "build": "cd packages/firecms && yarn build"
     },
     "packageManager": "yarn@3.2.3"
 }

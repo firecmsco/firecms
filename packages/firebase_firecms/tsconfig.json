@@ -11,7 +11,7 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
+    "sourceMap": false,
     "declaration": true,
     "esModuleInterop": true,
     "noImplicitReturns": true,
@@ -29,17 +29,25 @@
       "vite/client",
       "node",
       "jest"
-    ]
+    ],
+    "baseUrl": ".",
+    "paths": {
+      "firecms": [
+        "../firecms/src/index.ts"
+      ]
+    }
   },
   "include": [
-    "firecms/src",
-    "./firecms/src/**/*.ts"
+    "src",
+    "./src/**/*.ts"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "example",
-    "example_backend",
     "src/test"
-  ]
+  ],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node"
+  }
 }
