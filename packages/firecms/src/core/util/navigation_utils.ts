@@ -1,5 +1,18 @@
 import { EntityCollection } from "../../types";
 
+export function unslugify(slug: string): string {
+    if (slug.includes("-") || slug.includes("_")) {
+        const result = slug.replace(/[-_]/g, " ");
+        return result.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1);
+        });
+    } else {
+        const unCamelCased = slug.replace(/([A-Z])/g, " $1");
+        return unCamelCased.charAt(0).toUpperCase() + unCamelCased.slice(1);
+    }
+
+}
+
 export function removeInitialAndTrailingSlashes(s: string): string {
     return removeInitialSlash(removeTrailingSlash(s));
 }

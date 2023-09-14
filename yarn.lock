@@ -1336,7 +1336,6 @@ __metadata:
     "@typescript-eslint/eslint-plugin": ^5.59.9
     "@typescript-eslint/parser": ^5.59.9
     "@vitejs/plugin-react": ^4.0.0
-    algoliasearch: ^4.17.1
     eslint: ^8.42.0
     eslint-config-standard: ^17.1.0
     eslint-plugin-import: ^2.27.5
@@ -1344,8 +1343,6 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
-    firebase: ^9.23.0
-    firecms: "workspace:^"
     flexsearch: 0.7.31
     react: ^18.2.0
     react-dom: ^18.2.0

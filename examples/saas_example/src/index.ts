@@ -1,5 +1,5 @@
-import { FireCMSRemoteConfig } from "firecms";
+import { FireCMSCustomization } from "firecms";
 
-export const config:FireCMSRemoteConfig = {
+export const config:FireCMSCustomization = {
 
 }

@@ -172,7 +172,6 @@ function useRemoteConfig({ projectId }: { projectId: string }): FireCMSRemoteCon
     const canUploadLogo = subscriptionPlan !== "free";
 
     return {
-
         loading: usersLoading || collectionsLoading,
         collections: EntityCollections,
         users,
