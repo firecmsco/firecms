@@ -1408,15 +1408,23 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase_firecms_v3@workspace:packages/firebase_firecms_v3":
+"@firecms/firebase_firecms_v3@workspace:^, @firecms/firebase_firecms_v3@workspace:packages/firebase_firecms_v3":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase_firecms_v3@workspace:packages/firebase_firecms_v3"
   dependencies:
     "@types/node": ^20.5.9
     "@types/react": ^18.2.8
     "@types/react-dom": ^18.2.4
+    eslint: ^8.42.0
+    eslint-config-standard: ^17.1.0
+    eslint-plugin-import: ^2.27.5
+    eslint-plugin-n: ^15.7.0
+    eslint-plugin-promise: ^6.1.1
+    eslint-plugin-react: ^7.32.2
+    eslint-plugin-react-hooks: ^4.6.0
     typescript: ^5.2.2
   peerDependencies:
+    "@firecms/collection_editor": "workspace:^"
     firebase: ^9.2.3
     firecms: "workspace:^"
     react: ^18.2.0
@@ -9501,6 +9509,7 @@ __metadata:
   dependencies:
     "@firecms/collection_editor": "workspace:^"
     "@firecms/data_enhancement": "workspace:^"
+    "@firecms/firebase_firecms_v3": "workspace:^"
     "@fontsource/roboto": ^5.0.2
     "@module-federation/vite": ^0.2.6
     "@originjs/vite-plugin-federation": ^1.2.3
@@ -9617,9 +9626,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"shared@workspace:examples/saas_example":
+"shared@workspace:examples/example_v3":
   version: 0.0.0-use.local
-  resolution: "shared@workspace:examples/saas_example"
+  resolution: "shared@workspace:examples/example_v3"
   dependencies:
     "@originjs/vite-plugin-federation": ^1.2.3
     "@types/react": ^18.0.17

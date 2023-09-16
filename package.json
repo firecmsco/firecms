@@ -14,7 +14,7 @@
         "packages/data_enhancement",
         "packages/schema_inference",
         "examples/example",
-        "examples/saas_example"
+        "examples/example_v3"
     ],
     "scripts": {
         "dev": "cd examples/example && yarn dev",

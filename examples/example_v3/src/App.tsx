@@ -27,10 +27,8 @@ function App() {
             // 'microsoft.com',
             // 'apple.com'
         ]}
-        collections={(params) => []}
-        views={config.views}
+        config={config}
         firebaseConfig={firebaseConfig}
-        fields={config.fields}
     />;
 
 }
