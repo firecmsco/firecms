@@ -6,6 +6,7 @@ import Crop75Icon from "@mui/icons-material/Crop75";
 import {
     FieldConfig,
     PropertiesOrBuilders,
+    Property,
     PropertyOrBuilder,
     ResolvedProperty
 } from "../../types";
@@ -97,7 +98,17 @@ export function getPropertyInPath<M extends Record<string, any>>(properties: Pro
         }
         if (path.includes(".")) {
             const pathSegments = path.split(".");
-            const childProperty = properties[pathSegments[0]];
+            let childProperty = properties[pathSegments[0]];
+
+            if (isPropertyBuilder(childProperty)) {
+                childProperty = childProperty({
+                    path: '',
+                    propertyValue: {},
+                    values: {},
+                    previousValues: {}
+                }) as Property<M[string]>
+            }
+
             if (typeof childProperty === "object" && childProperty.dataType === "map" && childProperty.properties) {
                 return getPropertyInPath(childProperty.properties, pathSegments.slice(1).join("."))
             }

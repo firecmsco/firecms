@@ -300,7 +300,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
             const propertyKey = column.key;
 
-            const propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
+            const propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(resolvedCollection.properties, propertyKey);
             if (!propertyOrBuilder) {
                 return null;
             }
