@@ -54,7 +54,6 @@ export function FireCMSHomePage({ additionalChildrenStart, additionalChildrenEnd
         : navigationEntries;
 
     useEffect(() => {
-        console.log("Updating search index", navigationEntries);
         search.addDocuments(navigationEntries);
     }, [navigationEntries]);
 

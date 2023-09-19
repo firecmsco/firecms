@@ -344,22 +344,22 @@ export const testCollection = buildCollection({
         //     dataType: "reference",
         //     path: "ppp/B000P0MDMS/locales"
         // },
-        // address: buildProperty({
-        //     name: "Address",
-        //     dataType: "map",
-        //     properties: {
-        //         street: {
-        //             name: "Street",
-        //             dataType: "string"
-        //         },
-        //         postal_code: {
-        //             name: "Postal code",
-        //             dataType: "number"
-        //         }
-        //     },
-        //     spreadChildren: true,
-        //     expanded: true
-        // }),
+        address: buildProperty({
+            name: "Address",
+            dataType: "map",
+            properties: {
+                street: {
+                    name: "Street",
+                    dataType: "string"
+                },
+                postal_code: {
+                    name: "Postal code",
+                    dataType: "number"
+                }
+            },
+            spreadChildren: true,
+            expanded: true
+        }),
         // name_number: {
         //     name: "Name starts with number",
         //     dataType: "string",
