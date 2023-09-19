@@ -446,12 +446,8 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
  */
 export type EntityCustomView<M extends Record<string, any> = any> =
     {
-        path: string,
+        key: string,
         name: string,
-        /**
-         * DEPRECATED: Use `Builder` instead
-         */
-        builder?: React.ComponentType<EntityCustomViewParams<M>>;
         Builder?: React.ComponentType<EntityCustomViewParams<M>>;
     }
 

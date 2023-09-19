@@ -1,40 +1,21 @@
 import { FirebaseApp } from "firebase/app";
 import { useCallback, useEffect, useState } from "react";
 import { getAuth, signInWithCustomToken, User as FirebaseUser } from "firebase/auth";
-import { doDelegatedLogin } from "@firecms/firebase_firecms_v3";
+import { ProjectsApi } from "../api/projects";
 
-const tokens = new Map<string, { token: string, expiry: Date }>();
-
-function cacheToken(projectId: string, delegatedToken?: string) {
-    if (!delegatedToken) {
-        return;
-    }
-
-    const data = parseJwt(delegatedToken);
-    // @ts-ignore
-    const expiry = new Date(data.exp * 1000);
-    tokens.set(projectId, { token: delegatedToken, expiry });
-}
-
-function getFromCache(projectId: string) {
-    const entry = tokens.get(projectId);
-    if (entry && entry.expiry > new Date()) {
-        console.log("Using cached token", projectId);
-        return entry.token;
-    }
-    return undefined;
-}
 
 export function useDelegatedLogin({
+                                      projectsApi,
                                       firebaseApp,
                                       projectId,
-                                      getFirebaseIdToken,
-                                      onUserChanged
+                                      getBackendAuthToken,
+                                      onUserChanged,
                                   }: {
+    projectsApi: ProjectsApi;
     firebaseApp?: FirebaseApp,
     projectId: string,
-    getFirebaseIdToken: () => Promise<string>,
-    onUserChanged?: (user?: FirebaseUser) => void
+    getBackendAuthToken: () => Promise<string>,
+    onUserChanged?: (user?: FirebaseUser) => void,
 }) {
 
     const [loginSuccessful, setLoginSuccessful] = useState(false);
@@ -46,11 +27,11 @@ export function useDelegatedLogin({
             setDelegatedLoginError(undefined);
             setDelegatedLoginLoading(true);
             setLoginSuccessful(false);
-            const firebaseAccessToken = await getFirebaseIdToken();
+            const firebaseAccessToken = await getBackendAuthToken();
             try {
-                let delegatedToken = getFromCache(projectId);
+                let delegatedToken = getTokenFromCache(projectId);
                 if (!delegatedToken) {
-                    delegatedToken = await doDelegatedLogin(firebaseAccessToken, projectId);
+                    delegatedToken = await projectsApi.doDelegatedLogin(firebaseAccessToken, projectId);
                     cacheToken(projectId, delegatedToken);
                 }
                 if (!delegatedToken) {
@@ -81,6 +62,32 @@ export function useDelegatedLogin({
 
     return { loginSuccessful, delegatedLoginLoading, delegatedLoginError };
 
+}
+
+
+const tokens = new Map<string, {
+    token: string,
+    expiry: Date
+}>();
+
+function cacheToken(projectId: string, delegatedToken?: string) {
+    if (!delegatedToken) {
+        return;
+    }
+
+    const data = parseJwt(delegatedToken);
+    // @ts-ignore
+    const expiry = new Date(data.exp * 1000);
+    tokens.set(projectId, { token: delegatedToken, expiry });
+}
+
+function getTokenFromCache(projectId: string) {
+    const entry = tokens.get(projectId);
+    if (entry && entry.expiry > new Date()) {
+        console.log("Using cached token", projectId);
+        return entry.token;
+    }
+    return undefined;
 }
 
 function parseJwt(token?: string): object {

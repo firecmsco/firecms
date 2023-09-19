@@ -17,7 +17,8 @@
         "examples/example_v3"
     ],
     "scripts": {
-        "dev": "cd examples/example && yarn dev",
+        "dev_v2": "cd examples/example && yarn dev",
+        "dev": "cd examples/example_v3 && yarn dev",
         "saas": "cd packages/saas && yarn dev",
         "web": "cd website && yarn start",
         "preview": "cd examples/example && yarn preview",

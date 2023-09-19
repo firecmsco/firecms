@@ -194,7 +194,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         if (value === -1) return undefined;
 
         if (customViews && value < customViewsCount) {
-            return customViews[value].path;
+            return customViews[value].key;
         }
 
         if (subcollections) {
@@ -309,12 +309,9 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
     const customViewsView: React.ReactNode[] | undefined = customViews && customViews.map(
         (customView, colIndex) => {
-            if (selectedTabRef.current !== customView.path)
+            if (selectedTabRef.current !== customView.key)
                 return null;
-            if (customView.builder) {
-                console.warn("customView.builder is deprecated, use customView.Builder instead", customView);
-            }
-            const Builder = customView.Builder ?? customView.builder;
+            const Builder = customView.Builder;
             if (!Builder) {
                 console.error("customView.Builder is not defined");
                 return null;
@@ -322,7 +319,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             return <div
                 className={cn(defaultBorderMixin,
                     "relative flex-grow w-full h-full overflow-auto ")}
-                key={`custom_view_${customView.path}`}
+                key={`custom_view_${customView.key}`}
                 role="tabpanel">
                 <ErrorBoundary>
                     {formContext && <Builder
@@ -491,7 +488,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
             <Tab
                 className="text-sm min-w-[140px]"
-                value={view.path}
+                value={view.key}
                 key={`entity_detail_collection_tab_${view.name}`}>
                 {view.name}
             </Tab>

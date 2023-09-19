@@ -29,18 +29,21 @@ const hostingError = "It seems like the provided Firebase config is not correct.
  *
  * @param onFirebaseInit
  * @param firebaseConfig
+ * @param fromUrl
  * @param name
  * @param authDomain
  * @category Firebase
  */
 export function useInitialiseFirebase({
                                           firebaseConfig,
+                                          fromUrl,
                                           onFirebaseInit,
                                           name,
                                           authDomain
                                       }: {
+    firebaseConfig?: Record<string, unknown>,
+    fromUrl?: string | undefined,
     onFirebaseInit?: ((config: object, firebaseApp: FirebaseApp) => void) | undefined,
-    firebaseConfig: Record<string, unknown> | undefined,
     name?: string;
     authDomain?: string;
 }): InitialiseFirebaseResult {
@@ -71,10 +74,8 @@ export function useInitialiseFirebase({
 
         setFirebaseConfigLoading(true);
 
-        if (firebaseConfig) {
-            initFirebase(firebaseConfig);
-        } else if (process.env.NODE_ENV === "production") {
-            fetch("/__/firebase/init.json")
+        function fetchFromUrl(url: string) {
+            fetch(url)
                 .then(async response => {
                     console.debug("Firebase init response", response.status);
                     if (response && response.status < 300) {
@@ -92,13 +93,24 @@ export function useInitialiseFirebase({
                         );
                     }
                 );
-        } else {
-            setFirebaseConfigLoading(false);
-            setConfigError(
-                "You need to deploy the app to Firebase hosting or specify a Firebase configuration object"
-            );
         }
-    }, [firebaseConfig, initFirebase]);
+
+
+        if (firebaseConfig) {
+            initFirebase(firebaseConfig);
+        } else {
+            if (fromUrl) {
+                fetchFromUrl(fromUrl);
+            } else if (process.env.NODE_ENV === "production") {
+                fetchFromUrl("/__/firebase/init.json");
+            } else {
+                setFirebaseConfigLoading(false);
+                setConfigError(
+                    "You need to deploy the app to Firebase hosting or specify a Firebase configuration object"
+                );
+            }
+        }
+    }, []);
 
     return {
         firebaseApp,

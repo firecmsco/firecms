@@ -25,8 +25,6 @@ export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
 
     className?: string;
 
-    authController?: AuthController;
-
     style?: React.CSSProperties;
 } & ADDITIONAL_PROPS;
 
@@ -64,7 +62,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
     if (authController.user && authController.user.photoURL) {
         avatarComponent = <Avatar
             src={authController.user.photoURL}/>;
-    } else if (authController.user === undefined || authController.authLoading) {
+    } else if (authController.user === undefined || authController.initialLoading) {
         avatarComponent = <div className={"p-1 flex justify-center"}>
             <Skeleton className={"w-10 h-10 rounded-full"}/>
         </div>;

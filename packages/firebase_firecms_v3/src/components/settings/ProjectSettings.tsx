@@ -24,7 +24,7 @@ export function ProjectSettings({}: {
 
 }) {
 
-    const { backendUid, backendFirebaseApp, getFirebaseIdToken } = useFireCMSBackend();
+    const { backendUid, backendFirebaseApp, getBackendAuthToken } = useFireCMSBackend();
 
     const [showUpgradeBanner, setShowUpgradeBanner] = useState<boolean>(false);
 
@@ -40,9 +40,7 @@ export function ProjectSettings({}: {
                       className={"w-full flex flex-col gap-16 px-4 py-32"}
         >
 
-            <ProjectSubscriptionPlans uid={backendUid}
-                                      getFirebaseIdToken={getFirebaseIdToken}
-                                      backendFirebaseApp={backendFirebaseApp}/>
+            <ProjectSubscriptionPlans uid={backendUid}/>
 
             <div className={"flex flex-col gap-2"}>
 

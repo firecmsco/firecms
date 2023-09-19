@@ -1,9 +1,9 @@
-import { FirebaseApp } from "firebase/app";
-import { ApplicationVerifier, ConfirmationResult, OAuthCredential, User as FirebaseUser } from "firebase/auth";
+import { User as FirebaseUser, OAuthCredential } from "firebase/auth";
 
 import { AuthController, DataSource, StorageSource, User } from "firecms";
-
-
+import { Role } from "./roles";
+import { FirebaseApp } from "firebase/app";
+import { ProjectsApi } from "../api/projects";
 
 /**
  * @category Firebase
@@ -29,6 +29,33 @@ export type FirebaseSignInOption = {
     customParameters?: Record<string, string>;
 }
 
+export type FireCMSBackend = {
+
+    backendUid?: string;
+    backendFirebaseApp?: FirebaseApp;
+    projectsApi: ProjectsApi;
+
+    user: FirebaseUser | null;
+
+    googleLogin: (includeGoogleAdminScopes?: boolean) => void;
+
+    signOut: () => void;
+
+    googleCredential?: OAuthCredential | null;
+    getBackendAuthToken: () => Promise<string>;
+
+    permissionsNotGrantedError: boolean;
+
+    availableProjects?: string[];
+    availableProjectsLoaded: boolean;
+    availableProjectsLoading: boolean;
+    availableProjectsError?: Error;
+
+    authLoading: boolean;
+    authProviderError?: any;
+}
+
+
 /**
  * @category Firebase
  */
@@ -37,21 +64,21 @@ export type FirebaseAuthController =
 
     authLoading: boolean;
 
-    confirmationResult?: ConfirmationResult;
+    setUser: (user: FirebaseUser | null) => void;
 
     googleLogin: () => void;
 
-    anonymousLogin: () => void;
-
-    appleLogin: () => void;
-
-    facebookLogin: () => void;
-
-    githubLogin: () => void;
-
-    microsoftLogin: () => void;
-
-    twitterLogin: () => void;
+    // appleLogin: () => void;
+    //
+    // anonymousLogin: () => void;
+    //
+    // facebookLogin: () => void;
+    //
+    // githubLogin: () => void;
+    //
+    // microsoftLogin: () => void;
+    //
+    // twitterLogin: () => void;
 
     emailPasswordLogin: (email: string, password: string) => void;
 
@@ -59,7 +86,9 @@ export type FirebaseAuthController =
 
     createUserWithEmailAndPassword: (email: string, password: string) => void;
 
-    phoneLogin: (phone: string, applicationVerifier: ApplicationVerifier) => void;
+    userRoles: Role[] | null;
+
+    setUserRoles: (roles: Role[] | null) => void;
 
     /**
      * Skip login

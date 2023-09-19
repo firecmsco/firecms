@@ -119,7 +119,7 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
                                             size={size}
                         />;
                 } else if (arrayProperty.of.dataType === "reference") {
-                    if (typeof arrayProperty.of.path === "string") {
+                    if (typeof arrayProperty.of.key === "string") {
                         content = <ArrayOfReferencesPreview {...props}
                                                             value={value}
                                                             property={property as ResolvedArrayProperty}/>;

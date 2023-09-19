@@ -1425,6 +1425,8 @@ __metadata:
     typescript: ^5.2.2
   peerDependencies:
     "@firecms/collection_editor": "workspace:^"
+    "@firecms/data_enhancement": "workspace:^"
+    "@firecms/schema_inference": "workspace:^"
     firebase: ^9.2.3
     firecms: "workspace:^"
     react: ^18.2.0
@@ -9630,10 +9632,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "shared@workspace:examples/example_v3"
   dependencies:
+    "@firecms/firebase_firecms_v3": "workspace:^"
     "@originjs/vite-plugin-federation": ^1.2.3
     "@types/react": ^18.0.17
     "@types/react-dom": ^18.0.6
     "@vitejs/plugin-react": ^4.0.0
+    firecms: "workspace:^"
     postcss: ^8.4.24
     react: ^18.2.0
     react-dom: ^18.2.0

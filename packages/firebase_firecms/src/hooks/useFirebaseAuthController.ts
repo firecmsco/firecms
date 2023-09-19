@@ -47,8 +47,6 @@ export const useFirebaseAuthController = (
     const [loginSkipped, setLoginSkipped] = useState<boolean>(false);
     const [confirmationResult, setConfirmationResult] = useState<undefined | ConfirmationResult>();
 
-    const [extra, setExtra] = useState<any>();
-
     useEffect(() => {
         if (!firebaseApp) return;
         try {
@@ -240,7 +238,5 @@ export const useFirebaseAuthController = (
         phoneLogin,
         fetchSignInMethodsForEmail,
         createUserWithEmailAndPassword,
-        extra,
-        setExtra
     };
 };

@@ -36,7 +36,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     textSearchEnabled: true,
     defaultSize: "l",
     views: [{
-        path: "preview",
+        key: "preview",
         name: "Preview",
         Builder: BlogEntryPreview
     }],

@@ -5,7 +5,7 @@ export const productCollection: EntityCollection = {
     name: "Product",
     views: [
         {
-            path: "custom_view",
+            key: "custom_view",
             name: "Test custom view",
             Builder: ({}) => null
         }

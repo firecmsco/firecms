@@ -16,7 +16,7 @@ export const productsCollection = buildCollection({
     singularName: "Product",
     views: [
         {
-            path: "custom_view",
+            key: "custom_view",
             name: "Test custom view",
             Builder: ({}) => null
         }

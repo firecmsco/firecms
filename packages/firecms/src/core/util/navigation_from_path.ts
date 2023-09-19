@@ -75,11 +75,11 @@ export function getNavigationEntriesFromPathInternal(props: {
                         throw Error("collection not found resolving path: " + collection);
                     }
                     const customViews = collection.views;
-                    const customView = customViews && customViews.find((entry) => entry.path === newPath);
+                    const customView = customViews && customViews.find((entry) => entry.key === newPath);
                     if (customView) {
                         const path = currentFullPath && currentFullPath.length > 0
-                            ? (currentFullPath + "/" + customView.path)
-                            : customView.path;
+                            ? (currentFullPath + "/" + customView.key)
+                            : customView.key;
                         result.push({
                             type: "custom_view",
                             path,

@@ -111,7 +111,7 @@ export function buildSidePanelsFromUrl(path: string, collections: EntityCollecti
                 if (previousEntry.type === "entity") {
                     const lastSidePanel: EntitySidePanelProps<any> = sidePanels[sidePanels.length - 1];
                     if (lastSidePanel)
-                        lastSidePanel.selectedSubPath = navigationEntry.view.path;
+                        lastSidePanel.selectedSubPath = navigationEntry.view.key;
                 }
             } else if (navigationEntry.type === "collection") {
                 if (previousEntry.type === "entity") {

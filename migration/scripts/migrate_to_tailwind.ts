@@ -1,6 +1,15 @@
 import path from "path";
 import * as fs from "fs/promises";
+
 import { Configuration, CreateChatCompletionRequest, OpenAIApi } from "openai";
+
+const FOLDER = "../collection_editor/src";
+
+export const openai = new OpenAIApi(new Configuration({
+    apiKey: "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"
+}));
+
+const sxRegexp = /(sx=\{(?:[^{}]|\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\})*\})/g;
 
 const getRecursiveFileReads = async (dir: string, onFileRead: (filePath: string, content: string) => void) => {
     const files = await fs.readdir(dir);
@@ -16,18 +25,12 @@ const getRecursiveFileReads = async (dir: string, onFileRead: (filePath: string,
     }
 }
 
-const sxRegexp = /(sx=\{(?:[^{}]|\{(?:[^{}]|\{(?:[^{}]|\{[^{}]*\})*\})*\})*\})/g;
-
 let dryRun = false;
 let count = 0;
-getRecursiveFileReads("../collection_editor/src",
+
+getRecursiveFileReads(FOLDER,
     async (filePath, content,) => {
-
-        console.log(filePath);
         if (content.includes("sx={")) {
-            console.log(filePath);
-            // console.log(content);
-
             let newContent = content;
             let match;
             while ((match = sxRegexp.exec(content)) !== null) {
@@ -43,13 +46,10 @@ getRecursiveFileReads("../collection_editor/src",
             }
             fs.writeFile(filePath, newContent);
             count++;
-            console.log("count", count);
+            console.log("Processed files", count);
         }
     });
 
-export const openai = new OpenAIApi(new Configuration({
-    apiKey: "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"
-}));
 
 async function getOpenAiReplacement(input: string) {
     const completionParams: CreateChatCompletionRequest = {
@@ -91,9 +91,3 @@ className="flex items-center justify-center w-full h-screen bg-red-500"
 Return exclusively results in the form of 'className="..."' or 'style={{...}}'
 since your output will be injected into a tsx file.`
 
-// getOpenAiReplacement(`sx={{
-//             display: "flex",
-//             gap: "2px",
-//             flexDirection: "column",
-//         }}
-// `);

@@ -1,7 +1,7 @@
 import { CMSType, Permissions, segmentsToStrippedPath, User } from "firecms";
 import { ConfigPermissions, PersistedCollection } from "@firecms/collection_editor";
 import { Role, SaasUserProject } from "../types";
-import { SaasProjectConfig } from "../hooks";
+import { ProjectConfig } from "../hooks";
 
 export const RESERVED_GROUPS = ["Admin"];
 
@@ -15,7 +15,7 @@ const DEFAULT_PERMISSIONS = {
 export function resolveSaasPermissions<M extends { [Key: string]: CMSType }, UserType extends User>
 ({ collection, roles, paths, user }: {
     collection: PersistedCollection<M>,
-    roles: Role[],
+    roles?: Role[],
     paths: string[],
     user: UserType | null
 }): Permissions {
@@ -90,7 +90,7 @@ export function resolveConfigPermissions({
                                              collection
                                          }: {
     user: User | null,
-    currentProjectController: SaasProjectConfig,
+    currentProjectController: ProjectConfig,
     collection?: PersistedCollection
 }): ConfigPermissions {
 

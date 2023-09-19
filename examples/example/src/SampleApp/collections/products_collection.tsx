@@ -111,16 +111,14 @@ export const productsCollection = buildCollection<Product>({
     permissions: ({ authController }) => ({
         edit: true,
         create: true,
-        // we use some custom logic by storing user data in the `extra`
-        // field of the user
-        delete: Boolean(authController.extra?.roles?.admin)
+        delete: true
     }),
     Actions: SampleCollectionActions,
     subcollections: [localeCollection],
     // defaultSelectedView: "sample_custom_view",
     views: [
         {
-            path: "sample_custom_view",
+            key: "sample_custom_view",
             name: "Custom view",
             Builder: ({
                           collection,

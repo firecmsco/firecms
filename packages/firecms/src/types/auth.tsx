@@ -28,12 +28,6 @@ export type AuthController<UserType extends User = User> = {
     signOut: () => void;
 
     /**
-     * If you have defined an {@link Authenticator}, this flag will be set to
-     * true while it loads
-     */
-    authLoading: boolean;
-
-    /**
      * Error initializing the authentication
      */
     authError?: any;
@@ -42,21 +36,6 @@ export type AuthController<UserType extends User = User> = {
      * Error dispatched by the auth provider
      */
     authProviderError?: any;
-
-    /**
-     * Utility field you can use to store your custom data.
-     * e.g: Additional user data fetched from a Firestore document, or custom
-     * claims
-     */
-    readonly extra?: any;
-
-    /**
-     * You can use this method to store any extra data you would like to
-     * associate your user to.
-     * e.g: Additional user data fetched from a Firestore document, or custom
-     * claims
-     */
-    setExtra: (extra: any) => void;
 
     /**
      * You can use this method to retrieve the auth token for the current user.

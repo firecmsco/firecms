@@ -40,6 +40,12 @@
       ],
       "@firecms/collection_editor": [
         "../collection_editor/src/index.ts"
+      ],
+      "@firecms/data_enhancement": [
+        "../data_enhancement/src/index.ts"
+      ],
+      "@firecms/schema_inference": [
+        "../schema_inference/src/index.ts"
       ]
     }
   },

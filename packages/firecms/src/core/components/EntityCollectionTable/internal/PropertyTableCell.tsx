@@ -382,7 +382,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                             hideOverflow = false;
                         }
                     } else if (arrayProperty.of.dataType === "reference") {
-                        if (typeof arrayProperty.of.path === "string") {
+                        if (typeof arrayProperty.of.key === "string") {
                             innerComponent =
                                 <TableReferenceField
                                     name={propertyKey as string}
@@ -391,7 +391,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                     updateValue={updateValue}
                                     size={size}
                                     multiselect={true}
-                                    path={arrayProperty.of.path}
+                                    path={arrayProperty.of.key}
                                     previewProperties={arrayProperty.of.previewProperties}
                                     title={arrayProperty.of.name}
                                     forceFilter={arrayProperty.of.forceFilter}

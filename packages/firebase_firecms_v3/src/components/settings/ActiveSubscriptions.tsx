@@ -1,27 +1,26 @@
-import { Button, Chip, cn, defaultBorderMixin, Paper, Typography } from "firecms";
-import { Subscription } from "../../types/subscriptions";
-import { getPriceString, getStatusText } from "./common";
 import { useEffect, useState } from "react";
-import { getStripePortalLink } from "@firecms/firebase_firecms_v3";
-import { useFireCMSBackend } from "../../hooks/useFireCMSBackend";
+
+import { Button, Chip, cn, defaultBorderMixin, Paper, Typography } from "firecms";
+import { Subscription } from "../../types";
+import { getPriceString, getStatusText } from "./common";
+import { useFireCMSBackend } from "../../hooks";
 
 interface CurrentSubscriptionViewProps {
     subscription: Subscription;
-    getFirebaseIdToken: () => Promise<string>;
 }
 
 export function CurrentSubscriptionView({
                                             subscription,
-                                            getFirebaseIdToken
                                         }: CurrentSubscriptionViewProps) {
+    const { getBackendAuthToken, projectsApi } = useFireCMSBackend();
 
     const statusText = getStatusText(subscription);
     const [stripePortalUrl, setStripePortalUrl] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (!stripePortalUrl) {
-            getFirebaseIdToken()
-                .then(token => getStripePortalLink(token, subscription.metadata.projectId))
+            getBackendAuthToken()
+                .then(token => projectsApi.getStripePortalLink(token, subscription.metadata.projectId))
                 .then(setStripePortalUrl)
             ;
         }
@@ -82,8 +81,6 @@ export function ActiveSubscriptions({ activeSubscriptions }: {
     activeSubscriptions: Subscription[],
 }) {
 
-    const { getFirebaseIdToken} = useFireCMSBackend();
-
     return <div className={cn("my-8 border-t", defaultBorderMixin)}>
 
         <Typography className="my-4 mt-8 font-medium">
@@ -92,8 +89,7 @@ export function ActiveSubscriptions({ activeSubscriptions }: {
 
         {activeSubscriptions.map(subscription => {
             return <CurrentSubscriptionView key={subscription.id}
-                                            subscription={subscription}
-                                            getFirebaseIdToken={getFirebaseIdToken}/>;
+                                            subscription={subscription}/>;
         })}
     </div>
 

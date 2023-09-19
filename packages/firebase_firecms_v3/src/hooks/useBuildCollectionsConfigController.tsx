@@ -8,7 +8,12 @@ import {
     SaveCollectionParams
 } from "@firecms/collection_editor";
 import { PermissionsBuilder, User } from "firecms";
-import { prepareCollectionForPersistence, buildCollectionPath, docsToCollectionTree, applyPermissionsFunction } from "../utils";
+import {
+    applyPermissionsFunction,
+    buildCollectionPath,
+    docsToCollectionTree,
+    prepareCollectionForPersistence
+} from "../utils";
 
 /**
  * @category Firebase
@@ -20,7 +25,7 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
     /**
      * Firestore collection where the configuration is saved.
      */
-    configPath?: string;
+    projectId: string;
 
     /**
      * Define what actions can be performed on data.
@@ -29,20 +34,20 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
 
 }
 
-const DEFAULT_CONFIG_PATH = "__FIRECMS/config";
-
 /**
  * Build a {@link CollectionsConfigController} that persists collection in
  * Firestore, but also allows including collections added in code.
  * @param firebaseApp
  * @param collections
- * @param configPath
+ * @param projectId
  */
 export function useBuildCollectionsConfigController<EC extends PersistedCollection, UserType extends User = User>({
                                                                                                                       firebaseApp,
-                                                                                                                      configPath = DEFAULT_CONFIG_PATH,
+                                                                                                                      projectId,
                                                                                                                       permissions
                                                                                                                   }: CollectionConfigControllerProps<EC, UserType>): CollectionsConfigController {
+
+    const configPath = projectId ? `projects/${projectId}` : undefined;
 
     const firestoreRef = useRef<Firestore>();
     const firestore = firestoreRef.current;

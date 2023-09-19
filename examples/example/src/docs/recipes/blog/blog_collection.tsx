@@ -6,7 +6,7 @@ export const blogCollection = buildCollection<BlogEntry>({
     name: "Blog entry",
     path: "blog",
     views: [{
-        path: "preview",
+        key: "preview",
         name: "Preview",
         Builder: BlogEntryPreview
     }],

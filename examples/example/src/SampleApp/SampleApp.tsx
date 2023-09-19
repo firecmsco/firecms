@@ -91,11 +91,6 @@ function SampleApp() {
         // and storing it in the controller's extra field
         const idTokenResult = await user?.getIdTokenResult();
         const userIsAdmin = idTokenResult?.claims.admin || user?.email?.endsWith("@camberi.com");
-        authController.setExtra({
-            roles: {
-                admin: userIsAdmin
-            }
-        });
 
         console.log("Allowing access to", user);
         return true;

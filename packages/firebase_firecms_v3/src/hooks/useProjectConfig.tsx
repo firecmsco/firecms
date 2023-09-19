@@ -1,6 +1,12 @@
 import React, { useContext } from "react";
-import { SaasProjectConfig } from "./useBuildSaasProjectConfig";
+import { ProjectConfig } from "./useBuildProjectConfig";
 
-export const ProjectConfigContext = React.createContext({} as SaasProjectConfig);
+export const ProjectConfigContext = React.createContext({} as ProjectConfig);
 
-export const useProjectConfig = () => useContext<SaasProjectConfig>(ProjectConfigContext);
+export const useProjectConfig = () => useContext<ProjectConfig>(ProjectConfigContext);
+
+export function ProjectConfigProvider({ children, config }: { children: React.ReactNode, config: ProjectConfig }) {
+    return <ProjectConfigContext.Provider value={config}>
+        {children}
+    </ProjectConfigContext.Provider>;
+}

@@ -1,0 +1,1 @@
+export { getInferredEntityCollection } from "./inference";

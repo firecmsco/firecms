@@ -5,15 +5,13 @@ import { ProductView } from "./ProductView";
 import { getPriceString, getStatusText } from "../settings/common";
 import { Subscription } from "../../types/subscriptions";
 import { StripeDisclaimer } from "./StripeDisclaimer";
-import { getStripePortalLink, PlanChip, useProjectConfig } from "@firecms/firebase_firecms_v3";
-import { FirebaseApp } from "firebase/app";
+import { PlanChip, useFireCMSBackend, useProjectConfig } from "@firecms/firebase_firecms_v3";
 
-export function ProjectSubscriptionPlans({ uid, getFirebaseIdToken, backendFirebaseApp }: {
-    uid: string,
-    backendFirebaseApp: FirebaseApp,
-    getFirebaseIdToken: () => Promise<string>
+export function ProjectSubscriptionPlans({ uid }: {
+    uid: string
 }) {
 
+    const { backendFirebaseApp, projectsApi } = useFireCMSBackend();
     const { subscriptionPlan, projectId } = useProjectConfig();
     if (!subscriptionPlan)
         throw new Error("No subscription plan");
@@ -60,8 +58,7 @@ export function ProjectSubscriptionPlans({ uid, getFirebaseIdToken, backendFireb
                     subscribe={subscribe}/>}
 
                 {subscriptionPlan === "cloud_plus" && plusSubscription &&
-                    <CurrentSubscriptionView subscription={plusSubscription}
-                                             getFirebaseIdToken={getFirebaseIdToken}/>}
+                    <CurrentSubscriptionView subscription={plusSubscription}/>}
 
                 <StripeDisclaimer/>
 
@@ -103,21 +100,21 @@ export function ProjectSubscriptionPlans({ uid, getFirebaseIdToken, backendFireb
 
 interface CurrentSubscriptionViewProps {
     subscription: Subscription;
-    getFirebaseIdToken: () => Promise<string>;
 }
 
 function CurrentSubscriptionView({
                                      subscription,
-                                     getFirebaseIdToken
                                  }: CurrentSubscriptionViewProps) {
+
+    const { getBackendAuthToken, projectsApi } = useFireCMSBackend();
 
     const statusText = getStatusText(subscription);
     const [stripePortalUrl, setStripePortalUrl] = useState<string | undefined>(undefined);
 
     useEffect(() => {
         if (!stripePortalUrl) {
-            getFirebaseIdToken()
-                .then(token => getStripePortalLink(token, subscription.metadata.projectId))
+            getBackendAuthToken()
+                .then(token => projectsApi.getStripePortalLink(token, subscription.metadata.projectId))
                 .then(setStripePortalUrl)
             ;
         }
