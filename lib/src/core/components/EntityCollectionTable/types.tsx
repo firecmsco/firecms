@@ -91,6 +91,7 @@ export type SelectedCellProps<M extends Record<string, any>> =
         width: number,
         height: number,
         collection: EntityCollection<M>,
+        property?: ResolvedProperty<any>,
         entity: Entity<M>
     };
 

@@ -226,6 +226,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     entity,
                     cellRect,
                     propertyKey: propertyKey as keyof M,
+                    property,
                     collection
                 });
             }
