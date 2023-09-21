@@ -5,7 +5,6 @@ import { ErrorBoundary, } from "../components";
 import { Avatar, cn, IconButton, Menu, MenuItem, Typography } from "../../components";
 import { useAuthController, useLargeLayout, useModeController, useNavigationContext } from "../../hooks";
 import { DarkModeIcon, LightModeIcon, LogoutIcon } from "../../icons";
-import { AuthController } from "../../types";
 import { Skeleton } from "../../components/Skeleton";
 
 export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
@@ -120,7 +119,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                 <IconButton
                     color="inherit"
                     aria-label="Open drawer"
-                    onClick={() => toggleMode()}
+                    onClick={toggleMode}
                     size="large">
                     {mode === "dark"
                         ? <DarkModeIcon/>

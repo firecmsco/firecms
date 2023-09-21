@@ -6,6 +6,7 @@ import { FieldHelperText, LabelWithIcon } from "../components";
 import {
     BooleanSwitchWithLabel,
     Button,
+    cn,
     DateTimeField,
     ExpandablePanel,
     IconButton,
@@ -15,6 +16,7 @@ import {
     Typography
 } from "../../components";
 import { AddIcon, ArrowDropDownIcon, RemoveIcon } from "../../icons";
+import { defaultBorderMixin } from "../../styles";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -307,8 +309,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
                                            }}/>;
         } else if (dataType === "array") {
             return <div
-                className="ml-1 pl-1 border-l border-solid border-current"
-                style={{ borderWidth: "1px" }}>
+                className={cn(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
                 <ArrayContainer value={entryValue}
                                 newDefaultEntry={""}
                                 droppableId={rowId.toString()}
@@ -341,8 +342,7 @@ function MapKeyValueRow<T extends Record<string, any>>({
             </div>;
         } else if (dataType === "map") {
             return <div
-                className="ml-1 pl-1 border-l border-solid border-opacity-25"
-                style={{ borderColor: "currentColor" }}>
+                className={cn(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
                 <MapEditView value={entryValue}
                              fieldName={fieldKey}
                              setValue={(updatedValue) => {
@@ -473,8 +473,7 @@ function ArrayKeyValueRow<T>({
                 Arrays of arrays are not supported.
             </Typography>;
         } else if (dataType === "map") {
-            return <div className="ml-1 pl-1 border-l border-solid"
-                        style={{ borderColor: "currentColor" }}>
+            return <div className={cn(defaultBorderMixin, "ml-2 pl-2 border-l border-solid")}>
                 <MapEditView value={entryValue}
                              setValue={(updatedValue) => {
                                  setValue(updatedValue);
