@@ -5,7 +5,6 @@ export interface SaasUser {
     photoURL: string;
     providerId: string;
     isAnonymous: false;
-    name: string;
     active: boolean;
     updated_on: Date;
     created_on: Date;

@@ -1,5 +1,5 @@
 import { CMSType, Permissions, segmentsToStrippedPath, User } from "firecms";
-import { ConfigPermissions, PersistedCollection } from "@firecms/collection_editor";
+import { CollectionEditorPermissions, PersistedCollection } from "@firecms/collection_editor";
 import { Role, SaasUserProject } from "../types";
 import { ProjectConfig } from "../hooks";
 
@@ -12,7 +12,9 @@ const DEFAULT_PERMISSIONS = {
     delete: false
 };
 
-export function resolveSaasPermissions<M extends { [Key: string]: CMSType }, UserType extends User>
+export function resolveSaasPermissions<M extends {
+    [Key: string]: CMSType
+}, UserType extends User>
 ({ collection, roles, paths, user }: {
     collection: PersistedCollection<M>,
     roles?: Role[],
@@ -84,15 +86,15 @@ export function getUserRoles(roles: Role[], saasUser: SaasUserProject): Role[] |
             : []);
 }
 
-export function resolveConfigPermissions({
-                                             user,
-                                             currentProjectController,
-                                             collection
-                                         }: {
+export function resolveCollectionConfigPermissions({
+                                                       user,
+                                                       currentProjectController,
+                                                       collection
+                                                   }: {
     user: User | null,
     currentProjectController: ProjectConfig,
     collection?: PersistedCollection
-}): ConfigPermissions {
+}): CollectionEditorPermissions {
 
     const baseConfigPermissions = {
         createCollections: false,
@@ -107,19 +109,15 @@ export function resolveConfigPermissions({
     }
 
     return userRoles
-        .map(role => resolveCollectionConfigPermissions(saasUser, role, collection))
+        .map(role => ({
+            createCollections: role.isAdmin || role.config?.createCollections === true,
+            editCollections: role.isAdmin || role.config?.editCollections === true || (role.config?.editCollections === "own" && collection?.ownerId === saasUser?.uid),
+            deleteCollections: role.isAdmin || role.config?.deleteCollections === true || (role.config?.deleteCollections === "own" && collection?.ownerId === saasUser?.uid)
+        }))
         .reduce(mergeConfigPermissions, baseConfigPermissions);
 }
 
-function resolveCollectionConfigPermissions(user: SaasUserProject | null, role: Role, collection?: PersistedCollection<any>): ConfigPermissions {
-    return {
-        createCollections: role.isAdmin || role.config?.createCollections === true,
-        editCollections: role.isAdmin || role.config?.editCollections === true || (role.config?.editCollections === "own" && collection?.ownerId === user?.uid),
-        deleteCollections: role.isAdmin || role.config?.deleteCollections === true || (role.config?.deleteCollections === "own" && collection?.ownerId === user?.uid)
-    };
-}
-
-const mergeConfigPermissions = (permA: ConfigPermissions, permB: ConfigPermissions) => {
+const mergeConfigPermissions = (permA: CollectionEditorPermissions, permB: CollectionEditorPermissions) => {
     return {
         createCollections: permA.createCollections || permB.createCollections,
         editCollections: permA.editCollections || permB.editCollections,

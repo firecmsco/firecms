@@ -28,7 +28,7 @@ const AvatarInner: React.ForwardRefRenderFunction<HTMLButtonElement, AvatarProps
                 )
                 : (
                     <span
-                        className="text-lg font-medium text-gray-900 dark:text-white rounded-full w-10 h-10 bg-gray-100 dark:bg-gray-800">{children}</span>
+                        className="py-1.5 text-lg font-medium text-gray-900 dark:text-white rounded-full w-10 h-10 bg-gray-100 dark:bg-gray-800">{children}</span>
                 )}
         </button>
     );

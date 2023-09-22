@@ -1,8 +1,24 @@
 import React from "react";
 import { FirestoreIndexesBuilder } from "../hooks";
-import { CMSView, CMSViewsBuilder, EntityCustomView, FieldConfig, FireCMSAppBarProps } from "firecms";
+import {
+    CMSView,
+    CMSViewsBuilder,
+    EntityCollection,
+    EntityCollectionsBuilder,
+    EntityCustomView,
+    FieldConfig,
+    FireCMSAppBarProps
+} from "firecms";
 
 export type FireCMSCustomization = {
+
+    /**
+     * List of the mapped collections in the CMS.
+     * Each entry relates to a collection in the root database.
+     * Each of the navigation entries in this field
+     * generates an entry in the main menu.
+     */
+    collections?: EntityCollection[] | EntityCollectionsBuilder;
 
     /**
      * Custom additional views created by the developer, added to the main

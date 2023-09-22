@@ -3,8 +3,11 @@ import { handleApiResponse } from "./common";
 
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;
 
-export function buildProjectsApi(host: string) {
-    function createNewFireCMSProject(projectId: string, firebaseAccessToken: string, googleAccessToken: string) {
+export function buildProjectsApi(host: string, getBackendAuthToken: () => Promise<string>) {
+
+    async function createNewFireCMSProject(projectId: string, googleAccessToken: string) {
+
+        const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects",
             {
                 method: "POST",
@@ -22,7 +25,9 @@ export function buildProjectsApi(host: string) {
             });
     }
 
-    function createFirebaseWebapp(projectId: string, firebaseAccessToken: string) {
+    async function createFirebaseWebapp(projectId: string) {
+
+        const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + `/projects/${projectId}/firebase_webapp`,
             {
                 method: "POST",
@@ -39,7 +44,9 @@ export function buildProjectsApi(host: string) {
             });
     }
 
-    function addSecurityRules(projectId: string, firebaseAccessToken: string, googleAccessToken: string) {
+    async function addSecurityRules(projectId: string, googleAccessToken: string) {
+
+        const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + `/projects/${projectId}/firestore_security_rules`,
             {
                 method: "PATCH",
@@ -54,9 +61,10 @@ export function buildProjectsApi(host: string) {
             });
     }
 
-    function createNewUser(firebaseAccessToken: string,
-                           projectId: string,
-                           user: SaasUser): Promise<SaasUserProject> {
+    async function createNewUser(projectId: string,
+                                 user: SaasUser): Promise<SaasUserProject> {
+
+        const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects/" + projectId + "/users",
             {
                 method: "POST",
@@ -71,10 +79,10 @@ export function buildProjectsApi(host: string) {
             });
     }
 
-    function updateUser(firebaseAccessToken: string,
-                        projectId: string,
-                        uid: string,
-                        user: SaasUser): Promise<SaasUserProject> {
+    async function updateUser(projectId: string,
+                              uid: string,
+                              user: SaasUser): Promise<SaasUserProject> {
+        const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects/" + projectId + "/users/" + uid,
             {
                 method: "PATCH",
@@ -89,9 +97,9 @@ export function buildProjectsApi(host: string) {
             });
     }
 
-    function deleteUser(firebaseAccessToken: string,
-                        projectId: string,
-                        uid: string): Promise<void> {
+    async function deleteUser(projectId: string,
+                              uid: string): Promise<void> {
+        const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects/" + projectId + "/users/" + uid,
             {
                 method: "DELETE",
@@ -105,9 +113,10 @@ export function buildProjectsApi(host: string) {
             });
     }
 
-    function getRootCollections(firebaseAccessToken: string,
-                                projectId: string,
-                                googleAccessToken?: string): Promise<string[]> {
+    async function getRootCollections(projectId: string,
+                                      googleAccessToken?: string): Promise<string[]> {
+
+        const firebaseAccessToken = await getBackendAuthToken();
         const headers: {
             "Content-Type": string;
             Authorization: string;
@@ -131,9 +140,9 @@ export function buildProjectsApi(host: string) {
             });
     }
 
-    function createServiceAccount(firebaseAccessToken: string,
-                                  googleAccessToken: string,
-                                  projectId: string): Promise<SaasUserProject> {
+    async function createServiceAccount(googleAccessToken: string,
+                                        projectId: string): Promise<SaasUserProject> {
+        const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects/" + projectId + "/service_accounts",
             {
                 method: "POST",
@@ -152,8 +161,8 @@ export function buildProjectsApi(host: string) {
             });
     }
 
-    function doDelegatedLogin(firebaseAccessToken: string,
-                              projectId: string): Promise<string> {
+    async function doDelegatedLogin(projectId: string): Promise<string> {
+        const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects/" + projectId + "/delegated_login",
             {
                 method: "POST",
@@ -171,7 +180,8 @@ export function buildProjectsApi(host: string) {
             });
     }
 
-    function getStripePortalLink(firebaseAccessToken: string, projectId: string): Promise<string> {
+    async function getStripePortalLink(projectId: string): Promise<string> {
+        const firebaseAccessToken = await getBackendAuthToken();
         return fetch(`${host}/customer/stripe_portal_link?return_url=${encodeURIComponent(window.location.href)}&project_id=${projectId}`,
             {
                 method: "GET",

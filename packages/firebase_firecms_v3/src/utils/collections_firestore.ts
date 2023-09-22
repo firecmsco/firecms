@@ -8,8 +8,7 @@ import {
     removeFunctions,
     removeUndefined,
     sortProperties,
-    stripCollectionPath,
-    User
+    stripCollectionPath
 } from "firecms";
 import {
     EditablePropertiesOrBuilders,
@@ -85,7 +84,7 @@ export function prepareCollectionForPersistence<M extends { [Key: string]: CMSTy
     return newCollection;
 }
 
-export const applyPermissionsFunction = <UserType extends User = User>(collections: PersistedCollection[], permissionsBuilder?: PermissionsBuilder): PersistedCollection[] => {
+export const applyPermissionsFunction = (collections: PersistedCollection[], permissionsBuilder?: PermissionsBuilder): PersistedCollection[] => {
     return collections.map(collection => ({
         ...collection,
         permissions: permissionsBuilder

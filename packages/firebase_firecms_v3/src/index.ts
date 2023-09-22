@@ -5,7 +5,7 @@ export * from "./utils";
 
 export * from "./api/projects";
 
-export { FireCMS3App, FireCMS3ConfigLoad, FireCMS3AppAuthenticated } from "./FireCMS3App";
+export { FireCMS3App, FireCMS3Client } from "./FireCMS3App";
 export type { FireCMS3AppProps } from "./FireCMS3AppProps";
 
 export * from "./collection_editor/infer_collection"

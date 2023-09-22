@@ -13,19 +13,19 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { ProjectsApi } from "../api/projects";
+import { buildProjectsApi } from "../api/projects";
 
 const AUTH_SCOPES = [
     "https://www.googleapis.com/auth/cloud-platform"
 ];
 
-interface FireCMSAuthControllerProps {
+export interface FireCMSBackendProps {
+    backendApiHost: string;
     backendFirebaseApp?: FirebaseApp;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>; // TODO
-    projectsApi: ProjectsApi;
 }
 
-export function useBuildFireCMSAuthController({ backendFirebaseApp, projectsApi }: FireCMSAuthControllerProps): FireCMSBackend {
+export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp }: FireCMSBackendProps): FireCMSBackend {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
 
@@ -143,7 +143,10 @@ export function useBuildFireCMSAuthController({ backendFirebaseApp, projectsApi 
         return loggedUser.getIdToken();
     }, [loggedUser]);
 
+    const projectsApi = buildProjectsApi(backendApiHost, getBackendAuthToken);
+
     return {
+        backendApiHost,
         user: loggedUser ?? null,
         signOut: onSignOut,
         googleLogin,
@@ -158,7 +161,7 @@ export function useBuildFireCMSAuthController({ backendFirebaseApp, projectsApi 
         authProviderError,
         backendFirebaseApp,
         backendUid: loggedUser?.uid,
-        projectsApi,
+        projectsApi
     }
 
 }

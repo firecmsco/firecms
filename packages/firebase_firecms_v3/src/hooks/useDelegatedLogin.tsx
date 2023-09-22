@@ -3,7 +3,6 @@ import { useCallback, useEffect, useState } from "react";
 import { getAuth, signInWithCustomToken, User as FirebaseUser } from "firebase/auth";
 import { ProjectsApi } from "../api/projects";
 
-
 export function useDelegatedLogin({
                                       projectsApi,
                                       firebaseApp,
@@ -27,11 +26,10 @@ export function useDelegatedLogin({
             setDelegatedLoginError(undefined);
             setDelegatedLoginLoading(true);
             setLoginSuccessful(false);
-            const firebaseAccessToken = await getBackendAuthToken();
             try {
                 let delegatedToken = getTokenFromCache(projectId);
                 if (!delegatedToken) {
-                    delegatedToken = await projectsApi.doDelegatedLogin(firebaseAccessToken, projectId);
+                    delegatedToken = await projectsApi.doDelegatedLogin(projectId);
                     cacheToken(projectId, delegatedToken);
                 }
                 if (!delegatedToken) {

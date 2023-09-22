@@ -209,7 +209,6 @@ export const EntityCollectionView = React.memo(
                                                 width,
                                                 key
                                             }: OnColumnResizeParams) => {
-            console.log("onColumnResize", width, key);
             // Only for property columns
             if (!getPropertyInPath(collection.properties, key)) return;
             const localCollection = buildPropertyWidthOverwrite(key, width);

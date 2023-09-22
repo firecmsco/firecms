@@ -12,8 +12,6 @@ import {
     MultiSelectItem,
     TextField,
     Typography,
-    useAuthController,
-    User,
     useSnackbarController,
     MultiSelect
 } from "firecms";
@@ -24,6 +22,7 @@ import { Role } from "../../types/roles";
 import { useProjectConfig } from "../../hooks/useProjectConfig";
 import { areRolesEqual } from "../../utils/permissions";
 import { FieldHelperView } from "../FieldHelperView";
+import { useFireCMSBackend } from "@firecms/firebase_firecms_v3";
 
 export const YupSchema = Yup.object().shape({
     name: Yup.string().required("Required"),
@@ -61,7 +60,7 @@ export function UserDetailsForm({
 }) {
 
     const snackbarController = useSnackbarController();
-    const authController = useAuthController();
+    const fireCMSBackend = useFireCMSBackend();
     const {
         saveUser,
         users,
@@ -70,7 +69,7 @@ export function UserDetailsForm({
     const isNewUser = !userProp;
 
     const onUserUpdated = useCallback((savedUser: SaasUserProject): Promise<SaasUserProject> => {
-        const loggedUser = users.find(u => u.uid === authController.user?.uid);
+        const loggedUser = users.find(u => u.uid === fireCMSBackend.user?.uid);
         if (!loggedUser) {
             throw new Error("User not found");
         }
@@ -80,7 +79,7 @@ export function UserDetailsForm({
         } catch (e: any) {
             return Promise.reject(e);
         }
-    }, [authController.user?.uid, roles, saveUser, userProp, users]);
+    }, [fireCMSBackend.user?.uid, roles, saveUser, userProp, users]);
 
     return (
         <Dialog
@@ -90,7 +89,7 @@ export function UserDetailsForm({
         >
             <Formik
                 initialValues={userProp ?? {
-                    name: "",
+                    displayName: "",
                     email: "",
                     roles: ["editor"]
                 } as SaasUserProject}
@@ -141,16 +140,16 @@ export function UserDetailsForm({
 
                                     <div className={"col-span-12"}>
                                         <TextField
-                                            id="name"
+                                            id="displayName"
                                             required
-                                            error={submitCount > 0 && Boolean(errors.name)}
-                                            value={values.name ?? ""}
+                                            error={submitCount > 0 && Boolean(errors.displayName)}
+                                            value={values.displayName ?? ""}
                                             onChange={handleChange}
                                             aria-describedby="name-helper-text"
                                             label="Name"
                                         />
                                         <FieldHelperView>
-                                            {submitCount > 0 && Boolean(errors.name) ? errors.name : "Name of this user"}
+                                            {submitCount > 0 && Boolean(errors.displayName) ? errors.displayName : "Name of this user"}
                                         </FieldHelperView>
                                     </div>
                                     <div className={"col-span-12"}>

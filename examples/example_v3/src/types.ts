@@ -4,7 +4,9 @@ export type Product = {
     name: string;
     main_image: string;
     available: boolean;
+    category: string;
     price: number;
+    currency: string;
     public: boolean;
     brand: string;
     description: string;
@@ -16,6 +18,7 @@ export type Product = {
         external_id: string;
     },
     uppercase_name: string,
+    tags: string[],
     added_on: Date;
 }
 

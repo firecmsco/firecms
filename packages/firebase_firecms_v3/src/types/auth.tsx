@@ -1,4 +1,4 @@
-import { User as FirebaseUser, OAuthCredential } from "firebase/auth";
+import { OAuthCredential, User as FirebaseUser } from "firebase/auth";
 
 import { AuthController, DataSource, StorageSource, User } from "firecms";
 import { Role } from "./roles";
@@ -33,6 +33,8 @@ export type FireCMSBackend = {
 
     backendUid?: string;
     backendFirebaseApp?: FirebaseApp;
+    backendApiHost: string;
+
     projectsApi: ProjectsApi;
 
     user: FirebaseUser | null;

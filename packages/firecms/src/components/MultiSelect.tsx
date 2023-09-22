@@ -105,13 +105,7 @@ export function MultiSelect({
 
     const usedBoundingRect = boundingRect ?? containerRef.current?.getBoundingClientRect();
     const maxHeight = window.innerHeight - (usedBoundingRect?.top ?? 0) - (usedBoundingRect?.height ?? 0) - 16;
-    console.log({
-        openInternal,
-        top: usedBoundingRect?.top,
-        windowH: window.outerHeight,
-        windowi: window.innerHeight,
-        maxHeight
-    });
+
     return (<>
 
             {typeof label === "string" ? <SelectInputLabel>{label}</SelectInputLabel> : label}
@@ -211,7 +205,6 @@ export function MultiSelectItem({ children, value, className }: MultiSelectItemP
         }}
         onSelect={(_) => {
             setInputValue("");
-            console.log("onSelect", _, value);
             onValueChangeInternal(value);
         }}
         className={cn(

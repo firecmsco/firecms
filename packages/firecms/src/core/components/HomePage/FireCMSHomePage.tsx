@@ -30,7 +30,8 @@ export function FireCMSHomePage({
                                     additionalChildrenStart,
                                     additionalChildrenEnd
                                 }: {
-    additionalChildrenStart?: React.ReactNode, additionalChildrenEnd?: React.ReactNode
+    additionalChildrenStart?: React.ReactNode,
+    additionalChildrenEnd?: React.ReactNode
 }) {
 
     const context = useFireCMSContext();
@@ -66,7 +67,6 @@ export function FireCMSHomePage({
                 setFilteredUrls(null);
             } else {
                 const searchResult = search.search(value);
-                console.log("Search result", searchResult)
                 setFilteredUrls(searchResult.map((e: any) => e.url));
             }
         }, []);
@@ -101,7 +101,7 @@ export function FireCMSHomePage({
         <div id="home_page"
              ref={containerRef}
              className="py-2 overflow-auto h-full w-full">
-            <Container maxWidth={"6xl"} >
+            <Container maxWidth={"6xl"}>
                 <div
                     className="sticky py-4 transition-all duration-400 ease-in-out top-0 z-10"
                     style={{ top: direction === "down" ? -84 : 0 }}>

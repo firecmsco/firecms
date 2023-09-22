@@ -88,7 +88,6 @@ export type FireCMS3AppProps = {
 
     /**
      * Use plugins to modify the behaviour of the CMS.
-     * Currently, in ALPHA, and likely subject to change.
      */
     plugins?: FireCMSPlugin[];
 

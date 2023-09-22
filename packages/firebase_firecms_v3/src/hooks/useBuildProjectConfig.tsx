@@ -166,13 +166,12 @@ export function useBuildProjectConfig({
             uid,
             ...userData
         } = user;
-        const firebaseToken = await getBackendAuthToken();
         if (uid) {
-            return projectsApi.updateUser(firebaseToken, projectId, uid, user);
+            return projectsApi.updateUser(projectId, uid, user);
         } else {
-            return projectsApi.createNewUser(firebaseToken, projectId, user);
+            return projectsApi.createNewUser(projectId, user);
         }
-    }, [getBackendAuthToken, configPath, projectId]);
+    }, [configPath, projectId]);
 
     const saveRole = useCallback(<M extends { [Key: string]: CMSType }>(role: Role): Promise<void> => {
         const firestore = firestoreRef.current;
@@ -193,8 +192,7 @@ export function useBuildProjectConfig({
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Deleting", user);
         const { uid } = user;
-        const firebaseToken = await getBackendAuthToken();
-        return projectsApi.deleteUser(firebaseToken, projectId, uid);
+        return projectsApi.deleteUser(projectId, uid);
     }, [configPath]);
 
     const deleteRole = useCallback(<M extends { [Key: string]: CMSType }>(role: Role): Promise<void> => {

@@ -24,7 +24,11 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
     }
 
     const mapProperty = property as ResolvedMapProperty;
-    if (!mapProperty.properties) {
+
+    if (propertyKey === "result.suggestions")
+        console.log({ propertyKey, property, value })
+
+    if (!mapProperty.properties || Object.keys(mapProperty.properties ?? {}).length === 0) {
         return (
             <KeyValuePreview value={value}/>
         );

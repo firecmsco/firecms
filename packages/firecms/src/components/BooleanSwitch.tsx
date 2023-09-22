@@ -28,7 +28,6 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
             onClick={disabled
                 ? undefined
                 : (e) => {
-                    console.log("BooleanSwitch onClick", allowIndeterminate)
                     e.preventDefault();
                     if (allowIndeterminate) {
                         if (value === null || value === undefined) onValueChange?.(true)

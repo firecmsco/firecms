@@ -7,7 +7,7 @@ import {
     PersistedCollection,
     SaveCollectionParams
 } from "@firecms/collection_editor";
-import { PermissionsBuilder, User } from "firecms";
+import { PermissionsBuilder, useFireCMSContext, User } from "firecms";
 import {
     applyPermissionsFunction,
     buildCollectionPath,

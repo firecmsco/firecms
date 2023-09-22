@@ -37,4 +37,3 @@ export function ${componentName}(props: IconProps) {
     fs.appendFileSync(path.join(__dirname, "../icons/index.ts"), `export * from "./components/${componentName}";\n`, { flag: "a" });
 });
 
-console.log("Generated icons successfully!");

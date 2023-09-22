@@ -84,7 +84,7 @@ export function UsersTable({ onUserClicked }: {
                                 </TableCell>
                                 <TableCell>{user.uid}</TableCell>
                                 <TableCell>{user.email}</TableCell>
-                                <TableCell className={"font-medium align-left"}>{user.name}</TableCell>
+                                <TableCell className={"font-medium align-left"}>{user.displayName}</TableCell>
                                 <TableCell className="align-left">
                                     {userRoles
                                         ? <div className="flex flex-wrap gap-2">

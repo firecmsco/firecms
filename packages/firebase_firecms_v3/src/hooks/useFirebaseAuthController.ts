@@ -11,12 +11,7 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
-import {
-    FirebaseAuthController,
-    FirebaseSignInOption,
-    FirebaseSignInProvider,
-    FireCMSBackend
-} from "../types/auth";
+import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, FireCMSBackend } from "../types/auth";
 import { Role } from "../types";
 
 const AUTH_SCOPES = [
@@ -26,14 +21,14 @@ const AUTH_SCOPES = [
 interface FirebaseAuthControllerProps {
     firebaseApp?: FirebaseApp;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>; // TODO
-    firecmsBackend?: FireCMSBackend;
+    fireCMSBackend?: FireCMSBackend;
 }
 
 /**
  * Use this hook to build an {@link AuthController} based on Firebase Auth
  * @category Firebase
  */
-export const useFirebaseAuthController = ({ firebaseApp, signInOptions, firecmsBackend }: FirebaseAuthControllerProps): FirebaseAuthController => {
+export const useFirebaseAuthController = ({ firebaseApp, signInOptions, fireCMSBackend }: FirebaseAuthControllerProps): FirebaseAuthController => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
     const [authError, setAuthError] = useState<any>();
@@ -101,10 +96,10 @@ export const useFirebaseAuthController = ({ firebaseApp, signInOptions, firecmsB
             .then(_ => {
                 setLoggedUser(null);
                 setAuthProviderError(null);
-                firecmsBackend?.signOut();
+                fireCMSBackend?.signOut();
             });
         setLoginSkipped(false);
-    }, [firebaseApp, firecmsBackend?.signOut]);
+    }, [firebaseApp, fireCMSBackend?.signOut]);
 
     const updateUser = useCallback((user: FirebaseUser | null) => {
         setLoggedUser(user);

@@ -9,5 +9,5 @@ export * from "./useBuildCollectionsConfigController";
 export * from "./useProjectConfig";
 export * from "./useDelegatedLogin";
 export * from "./useSubscriptionsForUserController";
-export * from "./useBuildFireCMSAuthController";
+export * from "./useBuildFireCMSBackend";
 export * from "./useFireCMSBackend";

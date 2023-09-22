@@ -113,8 +113,7 @@ function CurrentSubscriptionView({
 
     useEffect(() => {
         if (!stripePortalUrl) {
-            getBackendAuthToken()
-                .then(token => projectsApi.getStripePortalLink(token, subscription.metadata.projectId))
+            projectsApi.getStripePortalLink(subscription.metadata.projectId)
                 .then(setStripePortalUrl)
             ;
         }
