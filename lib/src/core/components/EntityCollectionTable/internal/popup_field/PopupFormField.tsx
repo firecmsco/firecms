@@ -35,6 +35,7 @@ interface PopupFormFieldProps<M extends Record<string, any>> {
     tableKey: string;
     propertyKey?: keyof M;
     collection?: EntityCollection<M>;
+    property?: ResolvedProperty<any>;
     cellRect?: DOMRect;
     open: boolean;
     onClose: () => void;
@@ -59,6 +60,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           customFieldValidator,
                                                                           propertyKey,
                                                                           collection: inputCollection,
+                                                                          property,
                                                                           path,
                                                                           cellRect,
                                                                           open,
@@ -180,8 +182,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         if (!collection || !entity) return;
         return getYupEntitySchema(
             entity.id,
-            propertyKey && collection.properties[propertyKey as string]
-                ? { [propertyKey]: collection.properties[propertyKey as string] } as ResolvedProperties<any>
+            property
+                ? { [propertyKey as keyof M]: property } as ResolvedProperties<any>
                 : {} as ResolvedProperties<any>,
             customFieldValidator);
     }, [path, propertyKey, collection, entity]);
@@ -271,8 +273,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                         setFieldValue,
                         save: saveValue
                     };
-
-                    const property: ResolvedProperty<any> | undefined = propertyKey && collection.properties[propertyKey];
 
                     const fieldProps: PropertyFieldBindingProps<any, M> | undefined = propertyKey && property
                         ? {
