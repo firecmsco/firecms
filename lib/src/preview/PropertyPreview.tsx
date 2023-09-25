@@ -63,7 +63,8 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
         propertyKey,
         propertyOrBuilder: inputProperty,
         propertyValue: value,
-        fields: fireCMSContext.fields
+        fields: fireCMSContext.fields,
+        path: entity?.path
     });
 
     if (value === undefined || property === null) {
