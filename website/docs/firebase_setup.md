@@ -37,3 +37,35 @@ screen
 In case you want to use the different storage fields provided by the CMS, you
 need to enable **Firebase Storage**. The default bucket will be used to
 save your stored files.
+
+### Firebase Emulator
+
+Use the firebase emulator with `onFirebaseInit`:
+
+```
+  const onFirebaseInit = async () => {
+    if (process.env.NODE_ENV === 'development') {
+      const db = getFirestore();
+      const auth = getAuth();
+
+      connectFirestoreEmulator(db, '127.0.0.1', 8080);
+      connectAuthEmulator(auth, 'http://127.0.0.1:9099');
+    }
+  };
+```
+
+```
+   <FirebaseCMSApp
+      name={'Demo App'}
+      authentication={myAuthenticator}
+      collections={[eventsCollection, usersCollection]}
+      firebaseConfig={firebaseConfig}
+      onFirebaseInit={onFirebaseInit}
+      dateTimeFormat="E d LLL y"
+      signInOptions={[
+        {
+          provider: 'facebook.com',
+        },
+      ]}
+    />
+```
