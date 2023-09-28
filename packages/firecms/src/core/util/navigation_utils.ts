@@ -1,16 +1,18 @@
 import { EntityCollection } from "../../types";
 
 export function unslugify(slug: string): string {
-    if (slug.includes("-") || slug.includes("_")) {
+    if (slug.includes("-") || slug.includes("_") || !slug.includes(" ")) {
         const result = slug.replace(/[-_]/g, " ");
         return result.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1);
         });
     } else {
-        const unCamelCased = slug.replace(/([A-Z])/g, " $1");
-        return unCamelCased.charAt(0).toUpperCase() + unCamelCased.slice(1);
+        return slug;
+        // const unCamelCased = slug.replace(/([a-z])([A-Z])/g, "$1 $2");
+        // return unCamelCased.replace(/\b\w/g, function (l) {
+        //     return l.toUpperCase()
+        // });
     }
-
 }
 
 export function removeInitialAndTrailingSlashes(s: string): string {

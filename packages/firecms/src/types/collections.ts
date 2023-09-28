@@ -351,7 +351,7 @@ export type FilterValues<Key extends string> =
  * @category Models
  */
 export interface ExportConfig<UserType extends User = User> {
-    additionalFields: ExportMappingFunction<UserType> []
+    additionalFields: ExportMappingFunction<UserType> [];
 }
 
 /**

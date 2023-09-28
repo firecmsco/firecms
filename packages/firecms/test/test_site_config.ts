@@ -1,6 +1,5 @@
-import { FirebaseCMSAppProps } from "../firebase_app";
-import { buildCollection, buildProperty } from "../core";
-import { EntityCallbacks, EnumValues } from "../types";
+import { buildCollection, buildProperty } from "../src/core";
+import { EntityCallbacks, EnumValues } from "../src/types";
 
 const locales: EnumValues = {
     "de-DE": "German",
@@ -8,7 +7,6 @@ const locales: EnumValues = {
     "es-ES": "Spanish (Spain)",
     "es-419": "Spanish (South America)"
 };
-
 
 export const productsCollection = buildCollection({
     path: "products",
@@ -275,7 +273,7 @@ export const usersCollection = buildCollection({
     }
 });
 
-export const siteConfig: FirebaseCMSAppProps = {
+export const siteConfig = {
     name: "Test site",
     collections: [
         buildCollection({

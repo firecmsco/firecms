@@ -1,6 +1,6 @@
 import React, { useCallback, useContext, useEffect, useMemo } from "react";
 import equal from "react-fast-compare";
-import { getCellAlignment, getPropertyColumnWidth, getSubcollectionColumnId } from "./internal/common";
+import { getTableCellAlignment, getTablePropertyColumnWidth, getSubcollectionColumnId } from "./internal/common";
 import {
     AdditionalFieldDelegate,
     CollectionSize,
@@ -400,12 +400,12 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         const filterable = filterableProperty(property);
                         return {
                             key: key as string,
-                            align: getCellAlignment(property),
+                            align: getTableCellAlignment(property),
                             icon: (hoverOrOpen) => getIconForProperty(property, "small"),
                             title: property.name ?? key as string,
                             sortable: forceFilter ? Object.keys(forceFilter).includes(key) : true,
                             filter: !disabledFilterChange && filterable,
-                            width: getPropertyColumnWidth(property),
+                            width: getTablePropertyColumnWidth(property),
                             resizable: true,
                             custom: { property, disabled }
                         };

@@ -1,6 +1,6 @@
 import { EntityCollection, Property, ResolvedArrayProperty, ResolvedProperty } from "../../../../types";
 
-export function getCellAlignment(property: Property | ResolvedProperty): "right" | "left" | "center" {
+export function getTableCellAlignment(property: Property | ResolvedProperty): "right" | "left" | "center" {
     if (property.dataType === "boolean") {
         return "center";
     } else if (property.dataType === "number") {
@@ -14,29 +14,7 @@ export function getCellAlignment(property: Property | ResolvedProperty): "right"
     }
 }
 
-export function isPropertyFilterable(property: ResolvedProperty): boolean {
-    if (property.dataType === "boolean") {
-        return true;
-    } else if (property.dataType === "number") {
-        return true;
-    } else if (property.dataType === "string") {
-        return true;
-    } else if (property.dataType === "date") {
-        return true;
-    } else if (property.dataType === "array") {
-        if (Array.isArray(property.of)) {
-            return false;
-        }
-        if (property.of)
-            return isPropertyFilterable(property.of);
-        else
-            return false;
-    } else {
-        return false;
-    }
-}
-
-export function getPropertyColumnWidth(property: ResolvedProperty): number {
+export function getTablePropertyColumnWidth(property: ResolvedProperty): number {
 
     if (property.columnWidth) {
         return property.columnWidth;
@@ -64,7 +42,7 @@ export function getPropertyColumnWidth(property: ResolvedProperty): number {
             if (Array.isArray(property.of)) {
                 return 300;
             } else {
-                return getPropertyColumnWidth(arrayProperty.of as ResolvedProperty);
+                return getTablePropertyColumnWidth(arrayProperty.of as ResolvedProperty);
             }
         } else {
             return 300;

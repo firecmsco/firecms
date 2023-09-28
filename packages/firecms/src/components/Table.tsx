@@ -41,12 +41,12 @@ export const TableHeader = ({
                                 className
                             }: TableHeaderProps) => (
     <thead>
-        <tr className={cn(
-            defaultBorderMixin,
-            "text-sm font-medium text-gray-700 dark:text-gray-300",
-            "bg-gray-50 border-b dark:bg-gray-900", className)}>
-            {children}
-        </tr>
+    <tr className={cn(
+        defaultBorderMixin,
+        "text-sm font-medium text-gray-700 dark:text-gray-300",
+        "bg-gray-50 border-b dark:bg-gray-900", className)}>
+        {children}
+    </tr>
     </thead>
 );
 
@@ -80,6 +80,7 @@ export type TableCellProps = {
     className?: string;
     style?: React.CSSProperties;
     align?: "left" | "center" | "right";
+    colspan?: number;
 };
 
 export const TableCell = ({
@@ -88,7 +89,8 @@ export const TableCell = ({
                               scope = "",
                               align,
                               className,
-                              style
+                              style,
+                              colspan
                           }: TableCellProps) => {
 
     const ref = useRef<HTMLTableCellElement>(null);
@@ -96,6 +98,7 @@ export const TableCell = ({
     const Tag = header || getParentName(ref.current) === "TableHeader" ? "th" : "td";
     return (
         <Tag scope={scope}
+             colSpan={colspan}
              ref={ref}
              style={style}
              className={cn("px-6 py-3 text-clip ",

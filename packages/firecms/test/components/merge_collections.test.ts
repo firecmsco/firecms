@@ -1,5 +1,7 @@
-import { EntityCollection, PropertyBuilder } from "../../types";
-import { mergeCollections } from "../../core/util/collections";
+import { it, expect, test } from "@jest/globals";
+
+import { EntityCollection, PropertyBuilder } from "../../src/types";
+import { mergeCollections } from "../../src/core/util/collections";
 
 const priceBuilder: PropertyBuilder = ({ values }: any) => ({
     dataType: "number",
@@ -77,15 +79,15 @@ export const persistedProductCollection: EntityCollection = {
     propertiesOrder: ["name", "publisher", "price"]
 };
 
-
 it("Merge collections", () => {
     const mergedCollection = mergeCollections(baseProductCollection, persistedProductCollection);
 
     console.log(mergedCollection)
-    expect(mergedCollection).toEqual<EntityCollection>(
+    expect(mergedCollection).toEqual(
         {
             path: "product",
-            name: "Product persisted",
+            name: "Products persisted",
+            singularName: "Product persisted",
             properties: {
                 name: {
                     dataType: "string",

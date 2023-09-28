@@ -52,7 +52,6 @@ export function RolesTable({
                             onClick={() => {
                                 onRoleClicked(role);
                             }}
-                            className="last:child:border-0 bg-white dark:bg-gray-900 cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-800"
                         >
                             <TableCell style={{ width: "64px" }}>
                                 {!role.isAdmin &&
@@ -68,8 +67,7 @@ export function RolesTable({
                                         </IconButton>
                                     </Tooltip>}
                             </TableCell>
-                            <TableCell
-                                scope="row">
+                            <TableCell>
                                 {role.name}
                             </TableCell>
                             <TableCell className={"items-center"}>

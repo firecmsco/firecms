@@ -54,7 +54,7 @@ export function Select({
                            error,
                            disabled,
                            padding = true,
-                           position = "popper",
+                           position = "item-aligned",
                            endAdornment,
                            multiple,
                            children
@@ -167,18 +167,25 @@ export function Select({
             </div>
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
-                    className={cn("z-50 relative border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg ",
-                        "overflow-auto",
-                    )}
                     position={position}
-                    align={"center"}>
-                    <SelectPrimitive.Viewport asChild>
-                        <div style={{ overflow: "visible" }}>
-                            {children}
-                        </div>
+                    className="z-50 overflow-hidden relative border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg">
+                    <SelectPrimitive.Viewport>
+                        {children}
                     </SelectPrimitive.Viewport>
                 </SelectPrimitive.Content>
             </SelectPrimitive.Portal>
+            {/*<SelectPrimitive.Portal>*/}
+            {/*    <SelectPrimitive.Content*/}
+            {/*        className={cn("z-50 relative border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg ",*/}
+            {/*            // "overflow-auto"*/}
+            {/*        )}*/}
+            {/*        position={position}*/}
+            {/*        align={"center"}>*/}
+            {/*        <SelectPrimitive.Viewport>*/}
+            {/*                {children}*/}
+            {/*        </SelectPrimitive.Viewport>*/}
+            {/*    </SelectPrimitive.Content>*/}
+            {/*</SelectPrimitive.Portal>*/}
         </SelectPrimitive.Root>
     );
 }

@@ -414,7 +414,6 @@ function FireCMS3AppAuthenticated({
 
     const {
         appCheckLoading,
-        getAppCheckToken
     } = useInitializeAppCheck({
         firebaseApp,
         options: appCheckOptions

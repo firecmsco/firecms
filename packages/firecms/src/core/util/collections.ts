@@ -27,10 +27,14 @@ export function mergeCollections(target: EntityCollection, source: EntityCollect
     });
 
     const mergedCollection = mergeDeep(target, source);
+    const targetPropertiesOrder = target.propertiesOrder ?? Object.keys(target.properties);
+    const sourcePropertiesOrder = source.propertiesOrder ?? Object.keys(source.properties);
+    const mergedPropertiesOrder = [...new Set([...targetPropertiesOrder, ...sourcePropertiesOrder])];
+
     return {
         ...mergedCollection,
         subcollections: subcollectionsMerged,
-        properties: sortProperties(mergedCollection.properties, mergedCollection.propertiesOrder)
+        properties: sortProperties(mergedCollection.properties, mergedPropertiesOrder)
     }
 }
 

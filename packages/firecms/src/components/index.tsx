@@ -17,6 +17,7 @@ export * from "./Dialog";
 export * from "./DialogActions";
 export * from "./DialogContent";
 export * from "./ExpandablePanel";
+export * from "./FileUpload";
 export * from "./IconButton";
 export * from "./InputLabel";
 export * from "./InfoLabel";

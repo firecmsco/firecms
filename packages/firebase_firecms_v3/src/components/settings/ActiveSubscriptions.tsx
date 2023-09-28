@@ -12,7 +12,7 @@ interface CurrentSubscriptionViewProps {
 export function CurrentSubscriptionView({
                                             subscription,
                                         }: CurrentSubscriptionViewProps) {
-    const { getBackendAuthToken, projectsApi } = useFireCMSBackend();
+    const { projectsApi } = useFireCMSBackend();
 
     const statusText = getStatusText(subscription);
     const [stripePortalUrl, setStripePortalUrl] = useState<string | undefined>(undefined);

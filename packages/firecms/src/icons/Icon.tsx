@@ -1,11 +1,10 @@
-/// <reference types="vite-plugin-svgr/client" />
 import * as React from "react";
 import "@material-design-icons/font/filled.css";
 import { cn } from "../components/util/cn";
 
 export type IconColor = "inherit" | "primary" | "secondary" | "disabled" | "error" | "success" | "warning";
 export type IconProps = {
-    size?: "smallest" |"small" | "medium" | "large" | number,
+    size?: "smallest" | "small" | "medium" | "large" | number,
     color?: IconColor,
     className?: string,
     onClick?: (e: React.SyntheticEvent) => void,

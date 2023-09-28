@@ -20,6 +20,7 @@
       "firecms": ["../../packages/firecms/src/index.ts"],
       "@firecms/firebase_firecms_v3": ["../../packages/firebase_firecms_v3/src/index.ts"],
       "@firecms/data_enhancement": ["../../packages/data_enhancement/src/index.ts"],
+      "@firecms/data_import": ["../../packages/data_import/src/index.ts"]
     }
   },
   "include": ["./src"]

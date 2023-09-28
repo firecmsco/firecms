@@ -16,3 +16,4 @@ export * from "./icons";
 export * from "./plurals";
 export * from "./references";
 export * from "./debounce";
+export * from "./flatten_object";

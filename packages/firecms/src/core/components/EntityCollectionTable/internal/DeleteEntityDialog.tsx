@@ -26,8 +26,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
                                                                       callbacks,
                                                                       onEntityDelete,
                                                                       onMultipleEntitiesDelete,
-                                                                      path,
-                                                                      ...other
+                                                                      path
                                                                   }: DeleteEntityDialogProps<M>) {
 
     const dataSource = useDataSource();
@@ -170,14 +169,13 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
 
     return (
         <Dialog
+            maxWidth={"2xl"}
             aria-labelledby="delete-dialog"
             open={open}
-            fullHeight={!multipleEntities}
             onOpenChange={(open) => !open ? onClose() : undefined}
-            {...other}
         >
-            <DialogContent>
-                <Typography variant={"subtitle2"}>
+            <DialogContent fullHeight={true}>
+                <Typography variant={"subtitle2"} className={"p-4"}>
                     {dialogTitle}
                 </Typography>
 

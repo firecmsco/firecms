@@ -1,37 +1,28 @@
 import React, { useDeferredValue, useEffect, useState } from "react";
-import { useDropzone } from "react-dropzone";
 
 import {
     CenteredView,
-    cn,
-    fieldBackgroundHoverMixin,
-    fieldBackgroundMixin,
+    FileUpload,
     FireCMSLogo,
+    OnFileUploadRejected,
     TextField,
     Typography,
-    useAuthController,
     useBrowserTitleAndIcon,
-    User,
     useSnackbarController
 } from "firecms";
-import { useProjectConfig } from "../../hooks/useProjectConfig";
-import { FirebaseApp } from "firebase/app";
+import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 import { ProjectSubscriptionPlans, SubscriptionPlanWidget } from "../subscriptions";
-import { useFireCMSBackend } from "../../hooks/useFireCMSBackend";
 import { SecurityRulesInstructions } from "../SecurityRulesInstructions";
 
-export function ProjectSettings({}: {
+export function ProjectSettings() {
 
-}) {
-
-    const { backendUid, backendFirebaseApp, getBackendAuthToken } = useFireCMSBackend();
+    const { backendUid } = useFireCMSBackend();
 
     const [showUpgradeBanner, setShowUpgradeBanner] = useState<boolean>(false);
 
     useBrowserTitleAndIcon("Project settings")
 
-
-    if(!backendUid){
+    if (!backendUid) {
         throw new Error("No backendUid in ProjectSettings");
     }
 
@@ -59,6 +50,7 @@ export function ProjectSettings({}: {
             <div className={"flex flex-col gap-2"}>
                 <SecurityRulesInstructions/>
             </div>
+
         </CenteredView>
     );
 
@@ -105,69 +97,34 @@ function LogoUploadField({ onNoSubscriptionPlan }: {
         uploadLogo(acceptedFiles[0]);
     }
 
-    const {
-        getRootProps,
-        getInputProps,
-        isDragActive,
-        isDragAccept,
-        isDragReject
-    } = useDropzone({
-            accept: { "*/image": [] },
-            noDragEventsBubbling: true,
-            maxSize: 2048 * 1024,
-            onDrop: onFilesAdded,
-            onDropRejected: (fileRejections, event) => {
-                if (!canUploadLogo) {
-                    onNoSubscriptionPlan();
-                } else {
-                    for (const fileRejection of fileRejections) {
-                        for (const error of fileRejection.errors) {
-                            snackbarContext.open({
-                                type: "error",
-                                message: `Error uploading file: ${error.message}`
-                            });
-                        }
-                    }
+    const onFilesRejected:OnFileUploadRejected = (fileRejections, event) => {
+        if (!canUploadLogo) {
+            onNoSubscriptionPlan();
+        } else {
+            for (const fileRejection of fileRejections) {
+                for (const error of fileRejection.errors) {
+                    snackbarContext.open({
+                        type: "error",
+                        message: `Error uploading file: ${error.message}`
+                    });
                 }
             }
         }
-    );
+    };
 
-    return <div
-        {...getRootProps()}
-        className={cn(
-            fieldBackgroundMixin,
-            fieldBackgroundHoverMixin,
-            "flex gap-2",
-            "p-4 box-border relative items-center border-2 border-solid border-transparent h-44 outline-none rounded-md duration-200 ease-[cubic-bezier(0.4,0,0.2,1)] focus:border-primary-solid",
-            {
-                "hover:bg-field-hover dark:hover:bg-field-hover-dark": !isDragActive,
-                "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-red-500": isDragReject,
-                "transition-colors duration-200 ease-[cubic-bezier(0,0,0.2,1)] border-green-500": isDragAccept,
-            })}
+    return <FileUpload
+        accept={{ "*/image": [] }}
+        maxSize={2048 * 1024}
+        onFilesAdded={onFilesAdded}
+        onFilesRejected={onFilesRejected}
+        uploadDescription={"Drag and drop your logo here"}
     >
-
-        <Typography variant={"caption"} color={"secondary"} className={"absolute top-2 left-3.5"}>
-            Logo
-        </Typography>
-
-        <input
-            {...getInputProps()} />
-
         {logo && <img
             className={"w-40 h-40 p-4"}
             src={logo}/>}
 
         {!logo && <FireCMSLogo
             className={"w-40 h-40 p-4"}/>}
+    </FileUpload>;
 
-        <div
-            className="flex-grow h-28 box-border flex flex-col items-center justify-center text-center">
-            <Typography align={"center"}
-                        variant={"label"}>
-                Drag and drop your logo here
-            </Typography>
-        </div>
-
-    </div>
 }

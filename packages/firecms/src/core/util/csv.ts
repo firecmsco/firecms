@@ -7,6 +7,7 @@ import {
     ResolvedProperty,
     User
 } from "../../types";
+import { ArrayValuesCount, flattenObject, getArrayValuesCount } from "./flatten_object";
 import { getValueInPath } from "./objects";
 
 interface Header {
@@ -17,48 +18,64 @@ interface Header {
 export function downloadCSV<M extends Record<string, any>>(data: Entity<M>[],
                                                            additionalData: Record<string, any>[] | undefined,
                                                            collection: ResolvedEntityCollection<M>,
-                                                           path: string,
+                                                           flattenArrays: boolean,
                                                            exportConfig: ExportConfig | undefined) {
     const properties = collection.properties;
-    const headers = getExportHeaders(properties, path, exportConfig);
-    const exportableData = getExportableData(data, additionalData, properties, headers);
+
+    const arrayValuesCount = flattenArrays ? getArrayValuesCount(data.map(d => d.values)) : {};
+    const headers = getExportHeaders(properties, exportConfig, arrayValuesCount);
+    console.log({ arrayValuesCount, headers });
+    const exportableData = getExportableData(data, additionalData, properties, flattenArrays, headers);
     const headersData = entryToCSVRow(headers.map(h => h.label));
     const csvData = exportableData.map(entry => entryToCSVRow(entry));
     downloadBlob([headersData, ...csvData], `${collection.name}.csv`, "text/csv");
 }
 
-export function getExportableData(data: any[],
+export function getExportableData(data: Entity<any>[],
                                   additionalData: Record<string, any>[] | undefined,
                                   properties: ResolvedProperties,
+                                  flattenArrays: boolean,
                                   headers: Header[]
 ) {
 
-    const mergedData: any[] = data.map(e => ({ id: e.id, ...processCSVValues(e.values, properties) }));
+    const mergedData: any[] = data.map(e => ({
+        id: e.id,
+        ...processCSVValues( e.values, properties)
+    }));
+
     if (additionalData) {
         additionalData.forEach((additional, index) => {
             mergedData[index] = { ...mergedData[index], ...additional };
         });
     }
+
+    console.log({ mergedData, headers })
+
     return mergedData && mergedData.map((entry) => {
         return headers.map((header) => getValueInPath(entry, header.key));
     });
 }
 
 function getExportHeaders<M extends Record<string, any>, UserType extends User>(properties: ResolvedProperties<M>,
-                                                                                path: string,
-                                                                                exportConfig?: ExportConfig<UserType>): Header[] {
-    const headers = [
+                                                                                exportConfig?: ExportConfig<UserType>,
+                                                                                arrayValuesCount?: ArrayValuesCount): Header[] {
+
+    const headers: Header[] = [
         { label: "id", key: "id" },
         ...Object.entries(properties)
-            .map(([childKey, property]) => getHeaders(property as ResolvedProperty, childKey, ""))
-            .flat()
+            .flatMap(([childKey, property]) => {
+                if (arrayValuesCount && arrayValuesCount[childKey] > 1) {
+                    return Array.from({ length: arrayValuesCount[childKey] },
+                        (_, i) => getHeaders(property as ResolvedProperty, `${childKey}[${i}]`, ""))
+                        .flat();
+                } else {
+                    return getHeaders(property as ResolvedProperty, childKey, "");
+                }
+            })
     ];
 
     if (exportConfig?.additionalFields) {
-        headers.push(...exportConfig.additionalFields.map((column) => ({
-            label: column.key,
-            key: column.key
-        })));
+        headers.push(...exportConfig.additionalFields.map(column => ({ label: column.key, key: column.key })));
     }
 
     return headers;
@@ -126,10 +143,12 @@ function processCSVValues<M extends Record<string, any>>
 
 function entryToCSVRow(entry: any[]) {
     return entry
-        .map((v: string | undefined) => {
+        .map((v: any) => {
             if (v === null || v === undefined) return "";
+            if (Array.isArray(v))
+                return "\"" + JSON.stringify(v).replaceAll("\"", "\\\"") + "\"";
             const s = String(v);
-            return '"' + s.replaceAll('"', '""') + '"';
+            return "\"" + s.replaceAll("\"", "\"\"") + "\"";
         })
         .join(",") + "\r\n";
 }

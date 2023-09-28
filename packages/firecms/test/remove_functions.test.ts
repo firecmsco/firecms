@@ -1,4 +1,5 @@
-import { removeFunctions } from "../core/util/objects";
+import { it, expect } from "@jest/globals";
+import { removeFunctions } from "../src/core/util/objects";
 
 const obj = {
     id: "022QFOrveCab2YUT88iw",

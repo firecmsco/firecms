@@ -46,6 +46,9 @@
       ],
       "@firecms/schema_inference": [
         "../schema_inference/src/index.ts"
+      ],
+      "@firecms/data_import": [
+        "../data_import/src/index.ts"
       ]
     }
   },

@@ -5,6 +5,7 @@ import { useDataSource, useFireCMSContext, useNavigationContext } from "../../..
 import { downloadCSV } from "../../../util/csv";
 import {
     Alert,
+    BooleanSwitchWithLabel,
     Button,
     CircularProgress,
     Dialog,
@@ -31,6 +32,8 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                                                                                        exportConfig
                                                                                    }: ExportButtonProps<M, UserType>
 ) {
+
+    const [flattenArrays, setFlattenArrays] = React.useState<boolean>(false);
 
     const context = useFireCMSContext<UserType>();
     const dataSource = useDataSource();
@@ -69,13 +72,12 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
     const doDownload = useCallback((data: Entity<M>[] | undefined,
                                     additionalData: Record<string, any>[] | undefined,
                                     collection: ResolvedEntityCollection<M>,
-                                    path: string,
                                     exportConfig: ExportConfig<any> | undefined) => {
         if (!data)
             throw Error("Trying to perform export without loading data first");
 
-        downloadCSV(data, additionalData, collection, path, exportConfig);
-    }, []);
+        downloadCSV(data, additionalData, collection, flattenArrays, exportConfig);
+    }, [flattenArrays]);
 
     const fetchAdditionalFields = useCallback(async (entities: Entity<M>[]) => {
 
@@ -111,7 +113,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
         setDataLoadingError(undefined);
 
         if (pendingDownload) {
-            doDownload(entities, additionalFieldsData, collection, path, exportConfig);
+            doDownload(entities, additionalFieldsData, collection, exportConfig);
             handleClose();
         }
     }, [collection, doDownload, exportConfig, fetchAdditionalFields, fetchLargeDataAccepted, handleClose, path]);
@@ -138,7 +140,7 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
         if (needsToAcceptFetchAllData) {
             setFetchLargeDataAccepted(true);
         } else {
-            doDownload(dataRef.current, additionalDataRef.current, collection, path, exportConfig);
+            doDownload(dataRef.current, additionalDataRef.current, collection, exportConfig);
             handleClose();
         }
     }, [needsToAcceptFetchAllData, doDownload, collection, path, exportConfig, handleClose]);
@@ -155,12 +157,11 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
             open={open}
             onOpenChange={setOpen}
         >
-            <DialogContent className={"flex flex-col gap-2 my-4"}>
+            <DialogContent className={"flex flex-col gap-4 my-4"}>
 
                 <Typography variant={"h6"}>Export data</Typography>
 
-                <>Download the the content of this table as a CSV</>
-                <br/>
+                <div>Download the the content of this table as a CSV</div>
 
                 {needsToAcceptFetchAllData &&
                     <Alert color={"warning"}>
@@ -174,6 +175,13 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                         </div>
 
                     </Alert>}
+
+                <BooleanSwitchWithLabel
+                    size={"small"}
+                    value={flattenArrays}
+                    onValueChange={setFlattenArrays}
+                    label={"Flatten arrays"}/>
+
             </DialogContent>
 
             <DialogActions>

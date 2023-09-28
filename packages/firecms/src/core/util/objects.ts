@@ -30,15 +30,41 @@ export function mergeDeep<T extends object>(target: T, source: any): T {
     return output;
 }
 
+// export function getValueInPath(o: object | undefined, path: string): any {
+//     if (!o) return undefined;
+//     if (typeof o === "object") {
+//         if (path in o) {
+//             return (o as any)[path];
+//         }
+//         if (path.includes(".")) {
+//             const pathSegments = path.split(".");
+//             return getValueInPath((o as any)[pathSegments[0]], pathSegments.slice(1).join("."))
+//         }
+//     }
+//     return undefined;
+// }
+
 export function getValueInPath(o: object | undefined, path: string): any {
     if (!o) return undefined;
     if (typeof o === "object") {
         if (path in o) {
             return (o as any)[path];
         }
-        if (path.includes(".")) {
-            const pathSegments = path.split(".");
-            return getValueInPath((o as any)[pathSegments[0]], pathSegments.slice(1).join("."))
+        if (path.includes(".") || path.includes("[")) {
+            let pathSegments = path.split(/[.[]/);
+            if (path.includes("[")) {
+                pathSegments = pathSegments.map(segment => segment.replace("]", ""));
+            }
+            const firstSegment = pathSegments[0];
+            const isArrayAndIndexExists = Array.isArray((o as any)[firstSegment]) && !isNaN(parseInt(pathSegments[1]));
+            const nextObject = isArrayAndIndexExists
+                ? (o as any)[firstSegment][parseInt(pathSegments[1])]
+                : (o as any)[firstSegment];
+
+            const nextPath = pathSegments.slice(isArrayAndIndexExists ? 2 : 1).join(".");
+            if (nextPath === "")
+                return nextObject;
+            return getValueInPath(nextObject, nextPath)
         }
     }
     return undefined;

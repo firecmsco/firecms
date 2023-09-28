@@ -39,7 +39,7 @@ export const Dialog = ({
                            fullHeight,
                            fullScreen,
                            scrollable = true,
-                           maxWidth = "md"
+                           maxWidth = "lg"
                        }: DialogProps) => {
     const [displayed, setDisplayed] = useState(false);
 

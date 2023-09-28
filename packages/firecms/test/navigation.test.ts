@@ -1,7 +1,8 @@
-import { getCollectionByPathOrAlias, resolveCollectionPathAliases } from "../core/util/navigation_utils";
+import { it, expect } from "@jest/globals";
+import { getCollectionByPathOrAlias, resolveCollectionPathAliases } from "../src/core/util/navigation_utils";
 import { siteConfig } from "./test_site_config";
-import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";
-import { EntityCollection } from "../types";
+import { getNavigationEntriesFromPathInternal } from "../src/core/util/navigation_from_path";
+import { EntityCollection } from "../src/types";
 
 const collections = siteConfig.collections as EntityCollection[];
 

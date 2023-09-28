@@ -113,8 +113,13 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
+    const rootCollectionsCache: { [key: string]: string[] } = {};
+
     async function getRootCollections(projectId: string,
                                       googleAccessToken?: string): Promise<string[]> {
+        if (rootCollectionsCache[projectId]) {
+            return rootCollectionsCache[projectId];
+        }
 
         const firebaseAccessToken = await getBackendAuthToken();
         const headers: {
@@ -135,8 +140,10 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 method: "GET",
                 headers
             })
-            .then((res) => {
-                return handleApiResponse<string[]>(res, projectId);
+            .then(async (res) => {
+                const result = await handleApiResponse<string[]>(res, projectId);
+                rootCollectionsCache[projectId] = result;
+                return result;
             });
     }
 

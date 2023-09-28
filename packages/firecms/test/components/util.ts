@@ -1,4 +1,4 @@
-import { EntityCollection } from "../../types";
+import { EntityCollection } from "../src/../src/types";
 
 export const productCollection: EntityCollection = {
     path: "product",

@@ -12,6 +12,7 @@
         "packages/collection_editor",
         "packages/user_management",
         "packages/data_enhancement",
+        "packages/data_import",
         "packages/schema_inference",
         "examples/example",
         "examples/example_v3"

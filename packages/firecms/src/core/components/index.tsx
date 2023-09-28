@@ -12,6 +12,8 @@ export { CircularProgressCenter } from "./CircularProgressCenter";
 export * from "./HomePage";
 export * from "./EntityCollectionView/EntityCollectionView";
 
+export * from "./FieldConfigBadge";
+
 export * from "./EntityCollectionTable";
 export * from "./BreadcrumbUpdater";
 export * from "./NotFoundPage";
