@@ -18,15 +18,15 @@
     },
     "dependencies": {
         "@docsearch/js": "3.3.3",
-        "@docusaurus/core": "^2.4.1",
-        "@docusaurus/plugin-google-gtag": "^2.4.1",
-        "@docusaurus/plugin-sitemap": "^2.4.1",
-        "@docusaurus/preset-classic": "^2.4.1",
+        "@docusaurus/core": "^2.4.3",
+        "@docusaurus/plugin-google-gtag": "^2.4.3",
+        "@docusaurus/plugin-sitemap": "^2.4.3",
+        "@docusaurus/preset-classic": "^2.4.3",
         "aos": "^2.3.4",
         "autoprefixer": "^10.4.14",
         "clsx": "^1.2.1",
-        "docusaurus-plugin-sass": "^0.2.3",
-        "docusaurus-plugin-typedoc": "^0.18.0",
+        "docusaurus-plugin-sass": "^0.2.5",
+        "docusaurus-plugin-typedoc": "^0.20.2",
         "dotenv": "^16.0.3",
         "postprocessing": "^6.30.1",
         "raw-loader": "^4.0.2",
@@ -52,7 +52,7 @@
         ]
     },
     "devDependencies": {
-        "@docusaurus/module-type-aliases": "^2.4.1",
+        "@docusaurus/module-type-aliases": "^2.4.3",
         "@tsconfig/docusaurus": "^1.0.7",
         "@types/react": "^18.0.31",
         "@types/react-helmet": "^6.1.6",
@@ -63,8 +63,8 @@
         "postcss-import": "^15.1.0",
         "postcss-loader": "^7.1.0",
         "postcss-preset-env": "^8.2.0",
-        "typedoc": "^0.23.28",
-        "typedoc-plugin-markdown": "^3.14.0",
+        "typedoc": "^0.25.1",
+        "typedoc-plugin-markdown": "^3.16.0",
         "typescript": "^5.0.2"
     }
 }

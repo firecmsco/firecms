@@ -26,7 +26,7 @@ import { isReadOnly } from "../../../util";
 
 import { CustomFieldValidator, mapPropertyToYup } from "../../../../form/validation";
 import { useEntityCollectionTableController } from "../EntityCollectionTable";
-import { useClearRestoreValue, useDataSource, useFireCMSContext } from "../../../../hooks";
+import { useClearRestoreValue, useFireCMSContext } from "../../../../hooks";
 
 import { EntityTableCell } from "./EntityTableCell";
 import { getRowHeight } from "../../VirtualTable/common";
@@ -79,7 +79,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                                                      disabled: disabledProp
                                                                                  }: PropertyTableCellProps<T, M>) {
 
-        const dataSource = useDataSource();
         const context = useFireCMSContext();
 
         const {
@@ -87,7 +86,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             size,
             selectedCell,
             select,
-            setPopupCell,
+            setPopupCell
         } = useEntityCollectionTableController();
 
         const selected = selectedCell?.columnIndex === columnIndex &&
@@ -147,7 +146,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                             entity,
                             fullPath: path,
                             collection,
-                            dataSource,
                             context
                         });
                     }

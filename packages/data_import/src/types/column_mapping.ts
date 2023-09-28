@@ -1,5 +1,5 @@
 import React from "react";
-import { Property } from "firecms";
+import { Entity, Property } from "firecms";
 
 export type ImportConfig = {
 
@@ -9,8 +9,11 @@ export type ImportConfig = {
     idColumn: string | undefined;
     setIdColumn: React.Dispatch<React.SetStateAction<string | undefined>>;
 
-    data: object[];
-    setData: React.Dispatch<React.SetStateAction<object[]>>;
+    importData: object[];
+    setImportData: React.Dispatch<React.SetStateAction<object[]>>;
+
+    entities: Entity<any>[];
+    setEntities: React.Dispatch<React.SetStateAction<Entity<any>[]>>;
 
     // mapping of the column name in the import file to the property key in the data model
     headersMapping: Record<string, string>;

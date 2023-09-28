@@ -80,7 +80,6 @@ export interface OnCellValueChangeParams<T, M extends Record<string, any>> {
     setError: (e: Error) => void
     fullPath: string
     collection: EntityCollection<M>
-    dataSource: DataSource,
     context: FireCMSContext
 }
 

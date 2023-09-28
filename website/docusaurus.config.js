@@ -23,7 +23,7 @@ module.exports = {
             "docusaurus-plugin-typedoc",
             {
                 entryPoints: [
-                    "../firecms/src/index.ts",
+                    "../packages/firecms/src/index.ts",
                 ],
                 tsconfig: "../packages/firecms/tsconfig.json",
                 watch: process.env.TYPEDOC_WATCH,

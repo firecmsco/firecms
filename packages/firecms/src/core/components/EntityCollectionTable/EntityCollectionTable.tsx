@@ -95,6 +95,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          actions,
          title,
          tableRowActionsBuilder,
+         uniqueFieldValidator,
+         onValueChange,
          selectionController,
          highlightedEntities,
          onEntityClick,
@@ -137,7 +139,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const context: FireCMSContext<UserType> = useFireCMSContext();
 
-        const dataSource = useDataSource();
         const sideEntityController = useSideEntityController();
 
         const resolvedCollection = useMemo(() => resolveCollection<M>({
@@ -211,15 +212,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 ...collectionGroupParentCollections
             ];
         }, [collection, fullPath]);
-
-        const uniqueFieldValidator: UniqueFieldValidator = useCallback(
-            ({
-                 name,
-                 value,
-                 property,
-                 entityId
-             }) => dataSource.checkUniqueField(fullPath, name, value, property, entityId),
-            [fullPath]);
 
         const loadNextPage = () => {
             if (!paginationEnabled || dataLoading || noMoreToLoad)
@@ -393,7 +385,10 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const allColumns: VirtualTableColumn[] = useMemo(() => {
                 const columnsResult: VirtualTableColumn[] = Object.entries<ResolvedProperty>(resolvedCollection.properties)
                     .flatMap(([key, property]) => getColumnKeysForProperty(property, key))
-                    .map(({ key, disabled }) => {
+                    .map(({
+                              key,
+                              disabled
+                          }) => {
                         const property = getResolvedPropertyInPath(resolvedCollection.properties, key);
                         if (!property)
                             throw Error("Internal error: no property found in path " + key);
@@ -407,7 +402,10 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             filter: !disabledFilterChange && filterable,
                             width: getTablePropertyColumnWidth(property),
                             resizable: true,
-                            custom: { property, disabled }
+                            custom: {
+                                property,
+                                disabled
+                            }
                         };
                     });
 
@@ -550,46 +548,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
     equal
 );
 
-const onValueChange: OnCellValueChange<any, any> = ({
-                                                        fullPath,
-                                                        collection,
-                                                        dataSource,
-                                                        context,
-                                                        value,
-                                                        propertyKey,
-                                                        onValueUpdated,
-                                                        setError,
-                                                        entity
-                                                    }) => {
-
-    // console.trace("onValueChange", value, propertyKey, entity);
-
-    const updatedValues = setIn({ ...entity.values }, propertyKey, value);
-
-    const saveProps: SaveEntityProps = {
-        path: fullPath,
-        entityId: entity.id,
-        values: updatedValues,
-        previousValues: entity.values,
-        collection,
-        status: "existing"
-    };
-
-    return saveEntityWithCallbacks({
-        ...saveProps,
-        callbacks: collection.callbacks,
-        dataSource,
-        context,
-        onSaveSuccess: () => onValueUpdated(),
-        onSaveFailure: (e: Error) => {
-            console.error("Save failure");
-            console.error(e);
-            setError(e);
-        }
-    });
-
-};
-
 function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean) {
     const propertyKeys = Object.keys(collection.properties);
 
@@ -639,16 +597,25 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
             if (property.dataType === "map" && property.spreadChildren && property.properties) {
                 return getColumnKeysForProperty(property, key);
             }
-            return [{ key, disabled: Boolean(property.disabled) || Boolean(property.readOnly) }];
+            return [{
+                key,
+                disabled: Boolean(property.disabled) || Boolean(property.readOnly)
+            }];
         }
 
         const additionalField = collection.additionalFields?.find(field => field.id === key);
         if (additionalField) {
-            return [{ key, disabled: true }];
+            return [{
+                key,
+                disabled: true
+            }];
         }
 
         if (collection.collectionGroup && key === COLLECTION_GROUP_PARENT_ID) {
-            return [{ key, disabled: true }];
+            return [{
+                key,
+                disabled: true
+            }];
         }
 
         return [null];
@@ -746,5 +713,8 @@ function getColumnKeysForProperty(property: ResolvedProperty, key: string, disab
                 disabled || Boolean(property.disabled) || Boolean(property.readOnly))
             );
     }
-    return [{ key, disabled: disabled || Boolean(property.disabled) || Boolean(property.readOnly) }];
+    return [{
+        key,
+        disabled: disabled || Boolean(property.disabled) || Boolean(property.readOnly)
+    }];
 }

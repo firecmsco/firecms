@@ -8,9 +8,15 @@ import {
     EntityCollection,
     FilterValues,
     PartialEntityCollection,
+    SaveEntityProps,
     SelectionController
 } from "../../../types";
-import { EntityCollectionTable, OnColumnResizeParams } from "../EntityCollectionTable";
+import {
+    EntityCollectionTable,
+    OnCellValueChange,
+    OnColumnResizeParams,
+    UniqueFieldValidator
+} from "../EntityCollectionTable";
 
 import { EntityCollectionRowActions } from "../EntityCollectionTable/internal/EntityCollectionRowActions";
 import { DeleteEntityDialog } from "../EntityCollectionTable/internal/DeleteEntityDialog";
@@ -25,6 +31,7 @@ import {
 } from "../../util";
 import { Markdown } from "../../../preview";
 import {
+    saveEntityWithCallbacks,
     useAuthController,
     useDataSource,
     useFireCMSContext,
@@ -37,6 +44,7 @@ import { useTableController } from "../EntityCollectionTable/useTableController"
 import { cn, Typography } from "../../../components";
 import { Popover } from "../../../components/Popover";
 import { Skeleton } from "../../../components/Skeleton";
+import { setIn } from "formik";
 
 /**
  * @category Components
@@ -82,6 +90,7 @@ export const EntityCollectionView = React.memo(
                                                                  }: EntityCollectionViewProps<M>
     ) {
 
+        const dataSource = useDataSource();
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
@@ -222,6 +231,53 @@ export const EntityCollectionView = React.memo(
 
         const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
 
+        const uniqueFieldValidator: UniqueFieldValidator = useCallback(
+            ({
+                 name,
+                 value,
+                 property,
+                 entityId
+             }) => dataSource.checkUniqueField(fullPath, name, value, property, entityId),
+            [fullPath]);
+
+        const onValueChange: OnCellValueChange<any, any> = ({
+                                                                fullPath,
+                                                                collection,
+                                                                context,
+                                                                value,
+                                                                propertyKey,
+                                                                onValueUpdated,
+                                                                setError,
+                                                                entity
+                                                            }) => {
+
+            const updatedValues = setIn({ ...entity.values }, propertyKey, value);
+
+            const saveProps: SaveEntityProps = {
+                path: fullPath,
+                entityId: entity.id,
+                values: updatedValues,
+                previousValues: entity.values,
+                collection,
+                status: "existing"
+            };
+
+            return saveEntityWithCallbacks({
+                ...saveProps,
+                callbacks: collection.callbacks,
+                dataSource,
+                context,
+                onSaveSuccess: () => onValueUpdated(),
+                onSaveFailure: (e: Error) => {
+                    console.error("Save failure");
+                    console.error(e);
+                    setError(e);
+                }
+            });
+
+        };
+
+
         const onCopyClicked = useCallback((clickedEntity: Entity<M>) => {
             setSelectedNavigationEntity(clickedEntity);
             context.onAnalyticsEvent?.("copy_entity_click", {
@@ -330,7 +386,9 @@ export const EntityCollectionView = React.memo(
                     onSizeChanged={onSizeChanged}
                     onEntityClick={onEntityClick}
                     onColumnResize={onColumnResize}
+                    onValueChange={onValueChange}
                     tableRowActionsBuilder={tableRowActionsBuilder}
+                    uniqueFieldValidator={uniqueFieldValidator}
                     title={title}
                     selectionController={usedSelectionController}
                     highlightedEntities={selectedNavigationEntity ? [selectedNavigationEntity] : []}
@@ -440,3 +498,5 @@ function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityC
     }
     return { properties: { [key]: { columnWidth: width } } } as PartialEntityCollection;
 }
+
+

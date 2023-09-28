@@ -1,6 +1,7 @@
 import React from "react";
 import { CollectionSize, Entity, EntityCollection, SelectionController } from "../../../types";
 import { TableController } from "./useTableController";
+import { OnCellValueChange, UniqueFieldValidator } from "./types";
 
 /**
  * @category Collection components
@@ -39,6 +40,13 @@ export type EntityCollectionTableProps<M extends Record<string, any>> =
      * collection toolbar, displayed on the left side
      */
     actionsStart?: React.ReactNode;
+
+    /**
+     * Callback when a cell value changes.
+     */
+    onValueChange?: OnCellValueChange<any, M>;
+
+    uniqueFieldValidator?: UniqueFieldValidator;
 
     /**
      * Builder for creating the buttons in each row

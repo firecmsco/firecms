@@ -216,7 +216,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                 },
                 fullPath: path,
                 collection: inputCollection,
-                dataSource,
                 context: fireCMSContext
             });
         }

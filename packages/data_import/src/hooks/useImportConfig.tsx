@@ -1,11 +1,13 @@
 import { useState } from "react";
-import { Property } from "firecms";
+import { Entity, Property } from "firecms";
 import { ImportConfig } from "../types";
 
 export const useImportConfig = (): ImportConfig => {
+
     const [inUse, setInUse] = useState<boolean>(false);
     const [idColumn, setIdColumn] = useState<string | undefined>();
-    const [data, setData] = useState<object[]>([]);
+    const [importData, setImportData] = useState<object[]>([]);
+    const [entities, setEntities] = useState<Entity<any>[]>([]);
     const [headersMapping, setHeadersMapping] = useState<Record<string, string>>({});
     const [properties, setProperties] = useState<Record<string, Property>>({});
 
@@ -14,8 +16,10 @@ export const useImportConfig = (): ImportConfig => {
         setInUse,
         idColumn,
         setIdColumn,
-        data,
-        setData,
+        entities,
+        setEntities,
+        importData,
+        setImportData,
         headersMapping,
         setHeadersMapping,
         properties,
