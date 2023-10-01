@@ -20,7 +20,7 @@ export type ImportConfig = {
     setHeadersMapping: React.Dispatch<React.SetStateAction<Record<string, string>>>;
 
     // mapping of the property key in the data model to the property
-    properties: Record<string, Property>;
-    setProperties: React.Dispatch<React.SetStateAction<Record<string, Property>>>;
+    // properties: Record<string, Property>;
+    // setProperties: React.Dispatch<React.SetStateAction<Record<string, Property>>>;
 
 }

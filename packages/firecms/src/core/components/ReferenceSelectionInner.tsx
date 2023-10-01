@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useCallback, useEffect, useState } from "react";
+import React, { MouseEventHandler, useCallback, useEffect, useMemo, useState } from "react";
 import { CollectionSize, Entity, EntityCollection, FilterValues } from "../../types";
 
 import { EntityCollectionTable } from "./EntityCollectionTable";
@@ -14,10 +14,11 @@ import {
 import { ErrorView } from "./ErrorView";
 import { Button, DialogActions, Typography } from "../../components";
 import { useSideDialogContext } from "../SideDialogs";
-import { canCreateEntity, fullPathToCollectionSegments } from "../util";
+import { canCreateEntity, fullPathToCollectionSegments, resolveCollection } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
-import { useTableController } from "./EntityCollectionTable/useTableController";
+import { useCollectionTableController } from "./EntityCollectionTable/useCollectionTableController";
 import { AddIcon } from "../../icons";
+import { useColumnIds } from "./EntityCollectionView/useColumnsIds";
 
 /**
  * @category Components
@@ -52,7 +53,7 @@ export interface ReferenceSelectionInnerProps<M extends Record<string, any>> {
      * in this callback.
      * @param entity
      * @callback
-        */
+     */
     onSingleEntitySelected?(entity: Entity<any> | null): void;
 
     /**
@@ -60,7 +61,7 @@ export interface ReferenceSelectionInnerProps<M extends Record<string, any>> {
      * in this callback.
      * @param entities
      * @callback
-        */
+     */
     onMultipleEntitiesSelected?(entities: Entity<any>[]): void;
 
     /**
@@ -245,7 +246,18 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
     }
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const tableController = useTableController<M>({
+    const resolvedCollection = useMemo(() => resolveCollection({
+        collection: collection,
+        path: fullPath,
+        values: {},
+        fields: context.fields
+    }), [collection, context.fields, fullPath]);
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const displayedColumnIds = useColumnIds(resolvedCollection, false);
+
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const tableController = useCollectionTableController<M>({
         fullPath,
         collection,
         entitiesDisplayedFirst,
@@ -258,23 +270,25 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
 
             <div className="flex-grow">
                 {entitiesDisplayedFirst &&
-                    <EntityCollectionTable fullPath={fullPath}
-                                           onEntityClick={onEntityClick}
-                                           tableController={tableController}
-                                           tableRowActionsBuilder={tableRowActionsBuilder}
-                                           title={<Typography variant={"subtitle2"}>
-                                               {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
-                                           </Typography>}
-                                           {...collection}
-                                           forceFilter={forceFilter}
-                                           inlineEditing={false}
-                                           selectionController={selectionController}
-                                           actions={<ReferenceDialogActions
-                                               collection={collection}
-                                               path={fullPath}
-                                               onNewClick={onNewClick}
-                                               onClear={onClear}/>
-                                           }
+                    <EntityCollectionTable
+                        displayedColumnIds={displayedColumnIds}
+                        onEntityClick={onEntityClick}
+                        tableController={tableController}
+                        tableRowActionsBuilder={tableRowActionsBuilder}
+                        title={<Typography variant={"subtitle2"}>
+                            {collection.singularName ? `Select ${collection.singularName}` : `Select from ${collection.name}`}
+                        </Typography>}
+                        defaultSize={collection.defaultSize}
+                        properties={resolvedCollection.properties}
+                        forceFilter={forceFilter}
+                        inlineEditing={false}
+                        selectionController={selectionController}
+                        actions={<ReferenceDialogActions
+                            collection={collection}
+                            path={fullPath}
+                            onNewClick={onNewClick}
+                            onClear={onClear}/>
+                        }
                     />}
             </div>
             <DialogActions translucent={false}>

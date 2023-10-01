@@ -6,7 +6,7 @@ import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
 import { EnumValues, PropertiesOrBuilders } from "./properties";
 import { FormContext } from "./fields";
-import { TableController } from "../core/components/EntityCollectionTable/useTableController";
+import { TableController } from "../core/components/EntityCollectionTable/useCollectionTableController";
 
 /**
  * This interface represents a view that includes a collection of entities.

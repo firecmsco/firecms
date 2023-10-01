@@ -1,6 +1,14 @@
 import React from "react";
-import { CollectionSize, Entity, EntityCollection, SelectionController } from "../../../types";
-import { TableController } from "./useTableController";
+import {
+    AdditionalFieldDelegate,
+    CollectionSize,
+    Entity,
+    FilterValues,
+    ResolvedProperties,
+    SelectionController,
+    User
+} from "../../../types";
+import { TableController } from "./useCollectionTableController";
 import { OnCellValueChange, UniqueFieldValidator } from "./types";
 
 /**
@@ -11,14 +19,9 @@ export type OnColumnResizeParams = { width: number, key: string };
 /**
  * @category Collection components
  */
-export type EntityCollectionTableProps<M extends Record<string, any>> =
-    EntityCollection<M>
-    & {
-
-    /**
-     * Absolute collection path
-     */
-    fullPath: string;
+export type EntityCollectionTableProps<M extends Record<string, any>,
+    AdditionalKey extends string = string,
+    UserType extends User = User> = {
 
     /**
      * Display these entities as selected
@@ -88,8 +91,42 @@ export type EntityCollectionTableProps<M extends Record<string, any>> =
 
     /**
      * Controller holding the logic for the table
-     * {@link useTableController}
+     * {@link useCollectionTableController}
      * {@link TableController}
      */
     tableController: TableController<M>;
+
+    displayedColumnIds: PropertyColumnConfig[];
+
+    forceFilter?: FilterValues<Extract<keyof M, string>>;
+
+    textSearchEnabled?: boolean;
+
+    inlineEditing?: boolean | ((entity: Entity<M>) => boolean);
+
+    additionalFields?: AdditionalFieldDelegate<M, AdditionalKey, UserType>[];
+
+    defaultSize?: CollectionSize;
+
+    properties: ResolvedProperties<M>;
+
+    getPropertyFor?: (props: GetPropertyForProps<M>) => ResolvedProperties<M>[string];
+
+    filterable?: boolean;
+
+    sortable?: boolean;
+
+    endAdornment?: React.ReactNode;
+
 }
+
+export type GetPropertyForProps<M extends Record<string, any>> = {
+    propertyKey: string,
+    propertyValue: any,
+    entity: Entity<M>
+};
+
+export type PropertyColumnConfig = {
+    key: string,
+    disabled: boolean,
+};

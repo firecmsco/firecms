@@ -16,8 +16,6 @@ export function convertFileToJson(file: File): Promise<object[]> {
             const parsedData: Array<any> = XLSX.utils.sheet_to_json(worksheet);
             const cleanedData = parsedData.map(mapJsonParse);
             const jsonData = cleanedData.map(unflattenObject);
-            console.log({ parsedData, jsonData });
-            console.log(JSON.stringify(parsedData[0], null, 2));
             resolve(jsonData);
         };
         reader.readAsArrayBuffer(file);

@@ -20,7 +20,7 @@ import { VirtualTableContextProps } from "./types";
 import { VirtualTableHeaderRow } from "./VirtualTableHeaderRow";
 import { VirtualTableRow } from "./VirtualTableRow";
 import { VirtualTableCell } from "./VirtualTableCell";
-import { Markdown, Typography } from "../../../components";
+import { cn, Markdown, Typography } from "../../../components";
 import { AssignmentIcon } from "../../../icons";
 
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
@@ -57,7 +57,9 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
                                     <VirtualTableHeaderRow {...virtualTableProps}/>
                                     {!customView && children}
                                 </div>
+
                             </div>
+
                             {customView && <div style={{
                                 position: "sticky",
                                 top: "56px",
@@ -66,6 +68,7 @@ const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
                                 marginTop: "calc(56px - 100vh)",
                                 left: 0
                             }}>{customView}</div>}
+
                         </>
                     );
                 }}
@@ -102,7 +105,9 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              cellRenderer,
                                                              hoverRow,
                                                              createFilterField,
-                                                             rowClassName
+                                                             rowClassName,
+                                                             className,
+                                                             endAdornment
                                                          }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
@@ -254,7 +259,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
         return (
             <div
                 ref={measureRef}
-                className="h-full w-full">
+                className={cn("h-full w-full", className)}>
                 <VirtualListContext.Provider
                     value={{
                         data,
@@ -272,7 +277,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                         sortByProperty,
                         hoverRow: hoverRow ?? false,
                         createFilterField,
-                        rowClassName
+                        rowClassName,
+                        endAdornment
                     }}>
 
                     <MemoizedList
@@ -280,7 +286,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                         key={size}
                         width={bounds.width}
                         height={bounds.height}
-                        itemCount={data?.length ?? 0}
+                        itemCount={(data?.length ?? 0) + (endAdornment ? 1 : 0)}
                         onScroll={onScroll}
                         itemSize={getRowHeight(size)}/>
 
@@ -323,8 +329,22 @@ function MemoizedList({
                   size = "m",
                   cellRenderer,
                   hoverRow,
-                  rowClassName
+                  rowClassName,
+                  endAdornment
               }) => {
+
+                if (endAdornment && index === (data ?? []).length) {
+                    return <div style={{
+                        ...style,
+                        height: "auto",
+                        position: "sticky",
+                        bottom: 0,
+                        zIndex: 1
+                    }}>
+                        {endAdornment}
+                    </div>;
+                }
+
                 const rowData = data && data[index];
                 return (
                     <VirtualTableRow
@@ -355,7 +375,6 @@ function MemoizedList({
                         })}
                     </VirtualTableRow>
                 );
-
             }}
         </VirtualListContext.Consumer>;
     }, []);

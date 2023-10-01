@@ -22,7 +22,7 @@ export const useImportConfig = (): ImportConfig => {
         setImportData,
         headersMapping,
         setHeadersMapping,
-        properties,
-        setProperties
+        // properties,
+        // setProperties
     };
 };

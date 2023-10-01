@@ -3,11 +3,13 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import equal from "react-fast-compare"
 
 import {
+    AdditionalFieldDelegate,
     CollectionSize,
     Entity,
     EntityCollection,
     FilterValues,
     PartialEntityCollection,
+    PropertyOrBuilder,
     SaveEntityProps,
     SelectionController
 } from "../../../types";
@@ -27,9 +29,11 @@ import {
     canEditEntity,
     fullPathToCollectionSegments,
     getPropertyInPath,
-    mergeDeep
+    mergeDeep,
+    resolveCollection,
+    resolveProperty
 } from "../../util";
-import { Markdown } from "../../../preview";
+import { Markdown, ReferencePreview } from "../../../preview";
 import {
     saveEntityWithCallbacks,
     useAuthController,
@@ -40,11 +44,18 @@ import {
 } from "../../../hooks";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
-import { useTableController } from "../EntityCollectionTable/useTableController";
-import { cn, Typography } from "../../../components";
+import { useCollectionTableController } from "../EntityCollectionTable/useCollectionTableController";
+import { Button, cn, Typography } from "../../../components";
 import { Popover } from "../../../components/Popover";
 import { Skeleton } from "../../../components/Skeleton";
 import { setIn } from "formik";
+import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
+import { KeyboardTabIcon } from "../../../icons";
+import { useColumnIds } from "./useColumnsIds";
+import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
+import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";
+
+const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
 /**
  * @category Components
@@ -91,6 +102,7 @@ export const EntityCollectionView = React.memo(
     ) {
 
         const dataSource = useDataSource();
+        const navigation = useNavigationContext();
         const sideEntityController = useSideEntityController();
         const authController = useAuthController();
         const userConfigPersistence = useUserConfigurationPersistence();
@@ -141,12 +153,19 @@ export const EntityCollectionView = React.memo(
             setDeleteEntityClicked(undefined);
         }, [selectedEntities]);
 
-        const tableController = useTableController<M>({
+        const tableController = useCollectionTableController<M>({
             fullPath,
             collection,
             entitiesDisplayedFirst: [],
             lastDeleteTimestamp
         });
+
+        const tableKey = React.useRef<string>(Math.random().toString(36));
+        const popupCell = tableController.popupCell;
+
+        const onPopupClose = useCallback(() => {
+            tableController.setPopupCell?.(undefined);
+        }, [tableController.setPopupCell]);
 
         const onEntityClick = useCallback((clickedEntity: Entity<M>) => {
             setSelectedNavigationEntity(clickedEntity);
@@ -242,7 +261,6 @@ export const EntityCollectionView = React.memo(
 
         const onValueChange: OnCellValueChange<any, any> = ({
                                                                 fullPath,
-                                                                collection,
                                                                 context,
                                                                 value,
                                                                 propertyKey,
@@ -277,6 +295,34 @@ export const EntityCollectionView = React.memo(
 
         };
 
+        const resolvedFullPath = navigation.resolveAliasesFrom(fullPath);
+        const resolvedCollection = useMemo(() => resolveCollection<M>({
+            collection,
+            path: fullPath,
+            fields: context.fields
+        }), [collection, fullPath]);
+
+        const getPropertyFor = useCallback(({ propertyKey, propertyValue, entity }: GetPropertyForProps<M>) => {
+            let propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
+
+            // we might not find the property in the collection if combining property builders and map spread
+            if (!propertyOrBuilder) {
+                // these 2 properties are coming from the resolved collection with default values
+                propertyOrBuilder = getPropertyInPath<M>(resolvedCollection.properties, propertyKey);
+            }
+
+            return resolveProperty({
+                propertyKey,
+                propertyOrBuilder,
+                path: fullPath,
+                propertyValue,
+                values: entity.values,
+                entityId: entity.id,
+                fields: context.fields
+            });
+        }, [collection.properties, context.fields, fullPath, resolvedCollection.properties]);
+
+        const displayedColumnIds = useColumnIds(resolvedCollection, true);
 
         const onCopyClicked = useCallback((clickedEntity: Entity<M>) => {
             setSelectedNavigationEntity(clickedEntity);
@@ -308,6 +354,63 @@ export const EntityCollectionView = React.memo(
                 onClose: unselectNavigatedEntity
             });
         }, [sideEntityController, collection, fullPath, unselectNavigatedEntity]);
+
+        const additionalFields = useMemo(() => {
+            const subcollectionColumns: AdditionalFieldDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
+                return {
+                    id: getSubcollectionColumnId(subcollection),
+                    name: subcollection.name,
+                    width: 200,
+                    dependencies: [],
+                    Builder: ({ entity }) => (
+                        <Button color={"primary"}
+                                startIcon={<KeyboardTabIcon size={"small"}/>}
+                                onClick={(event: any) => {
+                                    event.stopPropagation();
+                                    sideEntityController.open({
+                                        path: fullPath,
+                                        entityId: entity.id,
+                                        selectedSubPath: subcollection.alias ?? subcollection.path,
+                                        collection,
+                                        updateUrl: true
+                                    });
+                                }}>
+                            {subcollection.name}
+                        </Button>
+                    )
+                };
+            }) ?? [];
+
+            const collectionGroupParentCollections: AdditionalFieldDelegate<M, any, any>[] = collection.collectionGroup
+                ? [{
+                    id: COLLECTION_GROUP_PARENT_ID,
+                    name: "Parent entities",
+                    width: 260,
+                    dependencies: [],
+                    Builder: ({ entity }) => {
+                        const collectionsWithPath = navigation.getParentReferencesFromPath(entity.path);
+                        return (
+                            <>
+                                {collectionsWithPath.map((reference) => {
+                                    return (
+                                        <ReferencePreview
+                                            key={reference.path + "/" + reference.id}
+                                            reference={reference}
+                                            size={"tiny"}/>
+                                    );
+                                })}
+                            </>
+                        );
+                    }
+                }]
+                : [];
+
+            return [
+                ...(collection.additionalFields ?? collection.additionalColumns ?? []),
+                ...subcollectionColumns,
+                ...collectionGroupParentCollections
+            ];
+        }, [collection, fullPath]);
 
         const tableRowActionsBuilder = useCallback(({
                                                         entity,
@@ -381,8 +484,9 @@ export const EntityCollectionView = React.memo(
             <div className={cn("overflow-hidden h-full w-full", className)}>
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
-                    fullPath={fullPath}
+                    additionalFields={additionalFields}
                     tableController={tableController}
+                    displayedColumnIds={displayedColumnIds}
                     onSizeChanged={onSizeChanged}
                     onEntityClick={onEntityClick}
                     onColumnResize={onColumnResize}
@@ -392,7 +496,9 @@ export const EntityCollectionView = React.memo(
                     title={title}
                     selectionController={usedSelectionController}
                     highlightedEntities={selectedNavigationEntity ? [selectedNavigationEntity] : []}
-                    {...collection}
+                    defaultSize={collection.defaultSize}
+                    properties={resolvedCollection.properties}
+                    getPropertyFor={getPropertyFor}
                     actions={<EntityCollectionViewActions
                         parentPathSegments={parentPathSegments ?? []}
                         collection={collection}
@@ -407,6 +513,21 @@ export const EntityCollectionView = React.memo(
                     />}
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
+                />
+
+                <PopupFormField
+                    key={`popup_form_${popupCell?.columnIndex}_${popupCell?.entity?.id}`}
+                    open={Boolean(popupCell)}
+                    onClose={onPopupClose}
+                    cellRect={popupCell?.cellRect}
+                    columnIndex={popupCell?.columnIndex}
+                    propertyKey={popupCell?.propertyKey}
+                    collection={collection}
+                    entity={popupCell?.entity}
+                    tableKey={tableKey.current}
+                    customFieldValidator={uniqueFieldValidator}
+                    path={resolvedFullPath}
+                    onCellValueChange={onValueChange}
                 />
 
                 {deleteEntityClicked &&

@@ -1,71 +1,71 @@
 import {
-    cardClickableMixin,
-    cardMixin,
-    cardSelectedMixin,
+    Card,
     cn,
+    EditIcon,
     ErrorBoundary,
     FieldConfigBadge,
     FunctionsIcon,
     getFieldConfig,
+    IconButton,
     Paper,
     Property,
     RemoveCircleIcon,
+    TextField,
     Typography
 } from "firecms";
 
-export function PropertyFieldPreview({
-                                         propertyKey,
-                                         property,
-                                         onClick,
-                                         hasError,
-                                         includeName = true,
-                                         selected
-                                     }: {
+export function ImportPropertyFieldPreview({
+                                               propertyKey,
+                                               property,
+                                               onClick,
+                                               hasError,
+                                               includeName = true,
+                                               selected,
+                                               onPropertyNameChanged
+                                           }: {
     propertyKey: string,
     property: Property
     hasError?: boolean,
     selected?: boolean,
     includeName?: boolean,
-    onClick?: () => void
+    onClick?: () => void,
+    onPropertyNameChanged?: (propertyKey: string, value: string) => void
 }) {
 
     const widget = getFieldConfig(property);
 
-    const borderColorClass = hasError
-        ? "border-red-500"
-        : (selected ? "border-blue-500" : "border-transparent");
-
     return <ErrorBoundary>
         <div
-            onClick={onClick}
-            className="flex flex-row w-full cursor-pointer">
+            className="flex flex-row w-full items-center">
             <div className={"m-4"}>
                 <FieldConfigBadge widget={widget}/>
             </div>
-            <Paper
-                className={cn(
-                    "pl-2 w-full flex flex-row gap-4 items-center",
-                    cardMixin,
-                    onClick ? cardClickableMixin : "",
-                    selected ? cardSelectedMixin : "",
-                    "flex-grow p-4 border transition-colors duration-200",
-                    borderColorClass
-                )}
+            <Card
+                className={"grow"}
+                // className={cn(
+                //     "pl-2 w-full flex flex-row gap-4 items-center",
+                //     "flex-grow p-4 border transition-colors duration-200",
+                //     borderColorClass
+                // )}
             >
 
-                <div className="w-full flex flex-col">
+                <div className="w-full flex flex-col grow">
 
-                    {includeName &&
-                        <ErrorBoundary>
-                            <Typography variant="body1"
-                                        component="span"
-                                        className="flex-grow pr-2">
-                                {property.name
-                                    ? property.name
-                                    : "\u00a0"
-                                }
-                            </Typography>
-                        </ErrorBoundary>}
+                    <div className={"flex flex-row"}>
+                        {includeName &&
+                            <TextField invisible={true}
+                                       size={"small"}
+                                       className={"text-base grow"}
+                                       value={property.name ?? ""}
+                                       onChange={(e) => {
+                                           if (onPropertyNameChanged)
+                                               onPropertyNameChanged(propertyKey, e.target.value);
+                                       }}/>}
+
+                        <IconButton onClick={onClick}>
+                            <EditIcon/>
+                        </IconButton>
+                    </div>
 
                     <div className="flex flex-row items-center">
                         <ErrorBoundary>
@@ -86,7 +86,9 @@ export function PropertyFieldPreview({
                     </div>
                 </div>
 
-            </Paper>
+            </Card>
+
+
         </div>
     </ErrorBoundary>
 }

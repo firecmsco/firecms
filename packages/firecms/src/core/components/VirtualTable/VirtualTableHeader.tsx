@@ -134,7 +134,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                         </Badge>
                     }
 
-                    {column.filter && <div>
+                    {column.filter && createFilterField && <div>
                         <Badge color="secondary"
                                invisible={!filter}>
 
@@ -149,7 +149,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                         <ExpandMoreIcon/>
                                     </IconButton>}
                             >
-                                {column.filter && createFilterField &&
+                                {column.filter &&
                                     <FilterForm column={column}
                                                 filter={filter}
                                                 onHover={onHover}

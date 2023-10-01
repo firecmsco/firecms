@@ -215,7 +215,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                 onValueUpdated: () => {
                 },
                 fullPath: path,
-                collection: inputCollection,
                 context: fireCMSContext
             });
         }

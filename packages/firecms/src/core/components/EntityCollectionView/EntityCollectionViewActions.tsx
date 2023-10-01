@@ -9,7 +9,7 @@ import { Button, IconButton, Tooltip } from "../../../components";
 import { useLargeLayout } from "../../../hooks/useLargeLayout";
 import { AddIcon, DeleteIcon } from "../../../icons";
 import { toArray } from "../../util/arrays";
-import { TableController } from "../EntityCollectionTable/useTableController";
+import { TableController } from "../EntityCollectionTable/useCollectionTableController";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

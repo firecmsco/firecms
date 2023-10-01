@@ -38,4 +38,5 @@ export type VirtualTableContextProps<T extends any> = {
     hoverRow: boolean;
     createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
     rowClassName?: (rowData: T) => string | undefined;
+    endAdornment?: React.ReactNode;
 };

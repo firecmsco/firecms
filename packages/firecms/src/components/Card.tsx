@@ -27,7 +27,7 @@ export function Card({
             role={onClick ? "button" : undefined}
             tabIndex={onClick ? 0 : undefined}
             onClick={onClick}
-            className={cn(cardMixin, focusedMixin, onClick && cardClickableMixin, className)}
+            className={cn(cardMixin, onClick && focusedMixin, onClick && cardClickableMixin, className)}
             style={style}>
             {children}
         </div>

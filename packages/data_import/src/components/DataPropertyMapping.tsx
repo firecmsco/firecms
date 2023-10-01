@@ -11,27 +11,33 @@ import {
     TableRow,
     Typography
 } from "firecms";
-import { PropertyFieldPreview } from "./PropertyFieldPreview";
-import { ImportConfig } from "../types";
+import { ImportPropertyFieldPreview } from "./ImportPropertyFieldPreview";
 
 export interface DataPropertyMappingProps {
-    importConfig: ImportConfig;
+    idColumn?: string;
+    headersMapping: Record<string, string>;
+    properties: Record<string, Property>;
     onPropertyClicked: (propertyKey: string, property: Property) => void;
     onIdPropertyChanged: (value: string) => void;
+    onPropertyNameChanged?: (propertyKey: string, value: string) => void;
 }
 
-export function DataPropertyMapping({
-                                        importConfig,
-                                        onIdPropertyChanged,
-                                        onPropertyClicked
-                                    }: DataPropertyMappingProps) {
 
-    console.log("DataPropertyMapping", importConfig,)
+
+export function DataPropertyMapping({
+                                        idColumn,
+                                        headersMapping,
+                                        properties,
+                                        onIdPropertyChanged,
+                                        onPropertyClicked,
+                                        onPropertyNameChanged
+                                    }: DataPropertyMappingProps) {
 
     return (
         <>
 
-            <IdSelectField importConfig={importConfig}
+            <IdSelectField idColumn={idColumn}
+                           headersMapping={headersMapping}
                            onChange={onIdPropertyChanged}/>
 
             <Table>
@@ -46,11 +52,11 @@ export function DataPropertyMapping({
                     </TableCell>
                 </TableHeader>
                 <TableBody>
-                    {importConfig.properties &&
-                        Object.entries(importConfig.headersMapping)
+                    {properties &&
+                        Object.entries(headersMapping)
                             .map(([importKey, mappedKey]) => {
-                                    const propertyKey = importConfig.headersMapping[importKey];
-                                    const property = getPropertyInPath(importConfig.properties, mappedKey) as Property;
+                                    const propertyKey = headersMapping[importKey];
+                                    const property = getPropertyInPath(properties, mappedKey) as Property;
                                     return <TableRow key={importKey}>
                                         <TableCell>
                                             <Typography variant={"body2"}>{importKey}</Typography>
@@ -59,16 +65,17 @@ export function DataPropertyMapping({
                                             <ChevronRightIcon/>
                                         </TableCell>
                                         <TableCell>
-                                            {importKey === importConfig.idColumn
+                                            {importKey === idColumn
                                                 ? <Typography>This property will be used as ID</Typography>
-                                                : <PropertyFieldPreview property={property}
-                                                                        propertyKey={propertyKey}
-                                                                        onClick={
-                                                                            () => {
-                                                                                if (onPropertyClicked)
-                                                                                    onPropertyClicked(propertyKey, property);
-                                                                            }
-                                                                        }/>}
+                                                : <ImportPropertyFieldPreview property={property}
+                                                                              propertyKey={propertyKey}
+                                                                              onPropertyNameChanged={onPropertyNameChanged}
+                                                                              onClick={
+                                                                                  () => {
+                                                                                      if (onPropertyClicked)
+                                                                                          onPropertyClicked(propertyKey, property);
+                                                                                  }
+                                                                              }/>}
                                         </TableCell>
                                     </TableRow>;
                                 }
@@ -79,16 +86,20 @@ export function DataPropertyMapping({
     );
 }
 
-function IdSelectField({ importConfig, onChange }: { importConfig: ImportConfig, onChange: (value: string) => void }) {
+function IdSelectField({ idColumn, headersMapping, onChange }: {
+    idColumn?: string,
+    headersMapping: Record<string, string>;
+    onChange: (value: string) => void
+}) {
     return <div>
         <Select
             size={"small"}
-            value={importConfig.idColumn}
+            value={idColumn}
             onChange={(event) => {
                 onChange(event.target.value as string);
             }}
             label={"Column that will be used as ID for each document"}>
-            {Object.entries(importConfig.headersMapping).map(([key, value]) => {
+            {Object.entries(headersMapping).map(([key, value]) => {
                 return <SelectItem key={key} value={key}>{key}</SelectItem>;
             })}
         </Select>

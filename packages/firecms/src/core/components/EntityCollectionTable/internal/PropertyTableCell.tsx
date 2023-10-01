@@ -3,7 +3,6 @@ import equal from "react-fast-compare"
 import {
     CMSType,
     Entity,
-    EntityCollection,
     EntityReference,
     ResolvedArrayProperty,
     ResolvedNumberProperty,
@@ -39,7 +38,6 @@ export interface PropertyTableCellProps<T extends CMSType, M extends Record<stri
     customFieldValidator?: CustomFieldValidator;
     value: T;
     readonly: boolean;
-    collection: EntityCollection<M>;
     property: ResolvedProperty<T>;
     height: number;
     width: number;
@@ -72,7 +70,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                                                      align,
                                                                                      width,
                                                                                      height,
-                                                                                     collection,
                                                                                      path,
                                                                                      entity,
                                                                                      readonly,
@@ -145,7 +142,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                             onValueUpdated,
                             entity,
                             fullPath: path,
-                            collection,
                             context
                         });
                     }
@@ -194,12 +190,13 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     entity,
                     cellRect,
                     propertyKey: propertyKey as keyof M,
-                    collection
                 });
             }
-        }, [collection, columnIndex, entity, height, propertyKey, select, width]);
+        }, [columnIndex, entity, height, propertyKey, select, width]);
 
         const openPopup = (cellRect: DOMRect | undefined) => {
+            if (!setPopupCell)
+                return;
             if (!cellRect) {
                 setPopupCell(undefined);
             } else {
@@ -209,8 +206,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     height,
                     entity,
                     cellRect,
-                    propertyKey: propertyKey as keyof M,
-                    collection
+                    propertyKey: propertyKey as keyof M
                 });
             }
         };
@@ -254,7 +250,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                                                      disabled={disabled}
                                                      focused={selected}
                                                      selected={selected}
-                                                     openPopup={openPopup}
+                                                     openPopup={setPopupCell ? openPopup : undefined}
                                                      property={property as ResolvedStringProperty | ResolvedArrayProperty<string[]>}
                                                      entity={entity}
                                                      path={path}

@@ -16,14 +16,14 @@ interface CollectionTableToolbarProps {
     title?: React.ReactNode,
     onTextSearch?: (searchString?: string) => void;
     onSizeChanged: (size: CollectionSize) => void;
-    clearFilter: () => void;
+    clearFilter?: () => void;
 }
 
 export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
 
     const largeLayout = useLargeLayout();
 
-    const clearFilterButton = !props.forceFilter && props.filterIsSet &&
+    const clearFilterButton = !props.forceFilter && props.filterIsSet && props.clearFilter &&
         <Button
             variant={"outlined"}
             className="h-fit-content"

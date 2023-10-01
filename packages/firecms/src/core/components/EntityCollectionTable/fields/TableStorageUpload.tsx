@@ -37,7 +37,7 @@ export function TableStorageUpload(props: {
     entity: Entity<any>;
     path: string;
     previewSize: PreviewSize;
-    openPopup: (cellRect?: DOMRect) => void;
+    openPopup?: (cellRect?: DOMRect) => void;
     onBlur?: React.FocusEventHandler<HTMLInputElement | HTMLTextAreaElement>;
 }) {
 
@@ -117,7 +117,7 @@ interface StorageUploadProps {
     storage: StorageConfig;
     onFilesAdded: (acceptedFiles: File[]) => void;
     storagePathBuilder: (file: File) => string;
-    openPopup: (cellRect?: DOMRect) => void;
+    openPopup?: (cellRect?: DOMRect) => void;
     onFileUploadComplete: (uploadedPath: string, entry: StorageFieldItem, fileMetadata?: any) => Promise<void>;
 }
 

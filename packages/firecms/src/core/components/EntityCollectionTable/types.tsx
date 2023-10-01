@@ -59,7 +59,7 @@ export type EntityCollectionTableController<M extends Record<string, any>> = {
 
     selectedCell?: SelectedCellProps<any>;
     select: (cell?: SelectedCellProps<M>) => void;
-    setPopupCell: (cell?: SelectedCellProps<M>) => void;
+    setPopupCell?: (cell?: SelectedCellProps<M>) => void;
     onValueChange?: (params: OnCellValueChangeParams<any, M>) => void;
     selectedEntityIds?: string[];
     /**
@@ -79,7 +79,6 @@ export interface OnCellValueChangeParams<T, M extends Record<string, any>> {
     onValueUpdated: () => void
     setError: (e: Error) => void
     fullPath: string
-    collection: EntityCollection<M>
     context: FireCMSContext
 }
 
@@ -90,7 +89,6 @@ export type SelectedCellProps<M extends Record<string, any>> =
         cellRect: DOMRect;
         width: number,
         height: number,
-        collection: EntityCollection<M>,
         entity: Entity<M>
     };
 

@@ -120,7 +120,21 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      */
     rowClassName?: (rowData: T) => string | undefined;
 
+    /**
+     * Callback to create a filter field, displayed in the header as a dropdown
+     * @param props
+     */
     createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
+
+    /**
+     * Class name applied to the table
+     */
+    className?: string;
+
+    /**
+     * Component rendered at the end of the table, after scroll
+     */
+    endAdornment?: React.ReactNode;
 
 }
 

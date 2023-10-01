@@ -12,3 +12,5 @@ export type {
     OnCellValueChange,
     OnCellValueChangeParams
 } from "./types";
+
+export * from "./useCollectionTableController";

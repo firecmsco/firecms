@@ -4,6 +4,7 @@ import { useCollectionFetch, useDataSource, useNavigationContext } from "../../.
 import { useDataOrder } from "../../../hooks/data/useDataOrder";
 import { Entity, EntityCollection, FilterValues, User } from "../../../types";
 import { useDebouncedData } from "./useDebouncedData";
+import { SelectedCellProps } from "./types";
 
 const DEFAULT_PAGE_SIZE = 50;
 
@@ -13,21 +14,23 @@ export type TableController<M extends Record<string, any> = any> = {
     noMoreToLoad: boolean;
     dataLoadingError?: Error;
     filterValues?: FilterValues<Extract<keyof M, string>>;
-    setFilterValues: (filterValues: FilterValues<Extract<keyof M, string>>) => void;
+    setFilterValues?: (filterValues: FilterValues<Extract<keyof M, string>>) => void;
     sortBy?: [Extract<keyof M, string>, "asc" | "desc"];
-    setSortBy: (sortBy: [Extract<keyof M, string>, "asc" | "desc"]) => void;
+    setSortBy?: (sortBy: [Extract<keyof M, string>, "asc" | "desc"]) => void;
     searchString?: string;
-    setSearchString: (searchString?: string) => void;
-    clearFilter: () => void;
+    setSearchString?: (searchString?: string) => void;
+    clearFilter?: () => void;
     itemCount?: number;
-    setItemCount: (itemCount: number) => void;
-    pageSize: number;
-    paginationEnabled: boolean;
-    checkFilterCombination: (filterValues: FilterValues<any>,
+    setItemCount?: (itemCount: number) => void;
+    paginationEnabled?: boolean;
+    pageSize?: number;
+    checkFilterCombination?: (filterValues: FilterValues<any>,
                              sortBy?: [string, "asc" | "desc"]) => boolean;
+    popupCell?: SelectedCellProps<M>;
+    setPopupCell?: (popupCell?: SelectedCellProps<M>) => void;
 
 }
-export type TableControllerProps<M extends Record<string, any> = any> = {
+export type CollectionTableControllerProps<M extends Record<string, any> = any> = {
     fullPath: string;
     collection: EntityCollection<M>;
     /**
@@ -39,14 +42,15 @@ export type TableControllerProps<M extends Record<string, any> = any> = {
     forceFilter?: FilterValues<string>;
 }
 
-export function useTableController<M extends Record<string, any> = any, UserType extends User = User>(
+
+export function useCollectionTableController<M extends Record<string, any> = any, UserType extends User = User>(
     {
         fullPath,
         collection,
         entitiesDisplayedFirst,
         lastDeleteTimestamp,
         forceFilter: forceFilterFromProps
-    }: TableControllerProps<M>)
+    }: CollectionTableControllerProps<M>)
     : TableController<M> {
 
     const {
@@ -54,6 +58,8 @@ export function useTableController<M extends Record<string, any> = any, UserType
         initialSort,
         forceFilter: forceFilterFromCollection
     } = collection;
+
+    const [popupCell, setPopupCell] = React.useState<SelectedCellProps<M> | undefined>(undefined);
 
     const navigation = useNavigationContext();
     const dataSource = useDataSource();
@@ -146,6 +152,8 @@ export function useTableController<M extends Record<string, any> = any, UserType
         setItemCount,
         paginationEnabled,
         pageSize,
-        checkFilterCombination
+        checkFilterCombination,
+        popupCell,
+        setPopupCell
     }
 }
