@@ -1,7 +1,13 @@
 import React, { useEffect } from "react";
 
 import * as SelectPrimitive from "@radix-ui/react-select";
-import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
+import {
+    fieldBackgroundDisabledMixin,
+    fieldBackgroundHoverMixin,
+    fieldBackgroundInvisibleMixin,
+    fieldBackgroundMixin,
+    focusedMixin
+} from "../styles";
 import { CheckIcon, ExpandMoreIcon } from "../icons";
 import { cn } from "./util/cn";
 import { SelectInputLabel } from "./common/SelectInputLabel";
@@ -30,6 +36,7 @@ export type SelectProps = {
     inputRef?: React.RefObject<HTMLButtonElement>,
     padding?: boolean,
     includeFocusOutline?: boolean,
+    invisible?: boolean,
     children?: React.ReactNode
 };
 
@@ -57,6 +64,7 @@ export function Select({
                            position = "item-aligned",
                            endAdornment,
                            multiple,
+                           invisible,
                            children
                        }: SelectProps) {
 
@@ -105,7 +113,7 @@ export function Select({
                 className={cn(
                     size === "small" ? "min-h-[42px]" : "min-h-[64px]",
                     "select-none rounded-md text-sm",
-                    fieldBackgroundMixin,
+                    invisible ? fieldBackgroundInvisibleMixin : fieldBackgroundMixin,
                     disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                     "relative flex items-center",
                     className)}>
@@ -117,7 +125,7 @@ export function Select({
                         "w-full h-full",
                         size === "small" ? "h-[42px]" : "h-[64px]",
                         padding ? "px-4 " : "",
-                        "outline-none focus:outline-none",
+                        "outlin e-none focus:outline-none",
                         "select-none rounded-md text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
                         disabled ? "text-gray-600 dark:text-gray-400" : "text-gray-800 dark:text-gray-200",

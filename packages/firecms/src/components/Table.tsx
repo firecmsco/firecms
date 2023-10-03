@@ -101,7 +101,7 @@ export const TableCell = ({
              colSpan={colspan}
              ref={ref}
              style={style}
-             className={cn("px-6 py-3 text-clip ",
+             className={cn("px-4 py-3 text-clip ",
                  align === "center" ? "text-center" : (align === "right" ? "text-right" : "text-left"),
                  className)}>
             {children}
