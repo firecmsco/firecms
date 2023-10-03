@@ -412,7 +412,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                             onValuesChanged={doOnValuesChanges}
                             underlyingChanges={underlyingChanges}
                             entity={entity}
-                            collection={collection}
+                            resolvedCollection={collection}
                             formContext={formContext}
                             status={status}
                             savingError={savingError}
@@ -431,7 +431,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
     onValuesChanged?: (changedValues?: EntityValues<M>) => void,
     underlyingChanges: Partial<M>,
     entity: Entity<M> | undefined,
-    collection: EntityCollection<M>,
+    resolvedCollection: ResolvedEntityCollection<M>,
     formContext: FormContext<M>,
     status: "new" | "existing" | "copy",
     savingError?: Error,
@@ -448,7 +448,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
         entity,
         touched,
         setFieldValue,
-        collection,
+        resolvedCollection,
         isSubmitting,
         status,
         handleSubmit,
@@ -482,8 +482,10 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
     const formFields = (
         <div className={"flex flex-col gap-8"}>
-            {Object.entries(collection.properties)
-                .map(([key, property]) => {
+            {(resolvedCollection.propertiesOrder ?? Object.keys(resolvedCollection.properties))
+                .map((key) => {
+
+                    const property = resolvedCollection.properties[key];
 
                     const underlyingValueHasChanged: boolean =
                         !!underlyingChanges &&
@@ -508,7 +510,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
 
                     return (
                         <div id={`form_field_${key}`}
-                             key={`field_${collection.name}_${key}`}>
+                             key={`field_${resolvedCollection.name}_${key}`}>
                             <PropertyFieldBinding {...cmsFormFieldProps}/>
                         </div>
                     );
