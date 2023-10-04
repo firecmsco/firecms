@@ -1,5 +1,4 @@
 import {
-    Card,
     cn,
     EditIcon,
     ErrorBoundary,
@@ -17,19 +16,21 @@ import {
 export function ImportPropertyFieldPreview({
                                                propertyKey,
                                                property,
-                                               onClick,
+                                               onEditClick,
                                                hasError,
                                                includeName = true,
                                                selected,
-                                               onPropertyNameChanged
+                                               onPropertyNameChanged,
+                                               propertyTypeView
                                            }: {
     propertyKey: string,
     property: Property
     hasError?: boolean,
     selected?: boolean,
     includeName?: boolean,
-    onClick?: () => void,
-    onPropertyNameChanged?: (propertyKey: string, value: string) => void
+    onEditClick?: () => void,
+    onPropertyNameChanged?: (propertyKey: string, value: string) => void,
+    propertyTypeView?: React.ReactNode
 }) {
 
     const widget = getFieldConfig(property);
@@ -37,56 +38,30 @@ export function ImportPropertyFieldPreview({
     return <ErrorBoundary>
         <div
             className="flex flex-row w-full items-center">
-            <div className={"m-4"}>
-                <FieldConfigBadge widget={widget}/>
+
+            <div className={"mx-4"}>
+                {propertyTypeView ?? <FieldConfigBadge widget={widget}/>}
             </div>
-            <Card
-                className={"grow"}
-                // className={cn(
-                //     "pl-2 w-full flex flex-row gap-4 items-center",
-                //     "flex-grow p-4 border transition-colors duration-200",
-                //     borderColorClass
-                // )}
-            >
 
-                <div className="w-full flex flex-col grow">
+            <div className="w-full flex flex-col grow">
 
-                    <div className={"flex flex-row"}>
-                        {includeName &&
-                            <TextField invisible={true}
-                                       size={"small"}
-                                       className={"text-base grow"}
-                                       value={property.name ?? ""}
-                                       onChange={(e) => {
-                                           if (onPropertyNameChanged)
-                                               onPropertyNameChanged(propertyKey, e.target.value);
-                                       }}/>}
+                <div className={"flex flex-row items-center gap-2"}>
+                    {includeName &&
+                        <TextField
+                            size={"small"}
+                            className={"text-base grow"}
+                            value={property.name ?? ""}
+                            onChange={(e) => {
+                                if (onPropertyNameChanged)
+                                    onPropertyNameChanged(propertyKey, e.target.value);
+                            }}/>}
 
-                        <IconButton onClick={onClick}>
-                            <EditIcon/>
-                        </IconButton>
-                    </div>
-
-                    <div className="flex flex-row items-center">
-                        <ErrorBoundary>
-                            <Typography className="flex-grow pr-2"
-                                        variant={includeName ? "body2" : "subtitle1"}
-                                        component="span"
-                                        color="secondary">
-                                {propertyKey}
-                            </Typography>
-                        </ErrorBoundary>
-                        <ErrorBoundary>
-                            <Typography variant="body2"
-                                        component="span"
-                                        color="disabled">
-                                {widget?.name} - {property.dataType}
-                            </Typography>
-                        </ErrorBoundary>
-                    </div>
+                    <IconButton onClick={onEditClick} size={"small"}>
+                        <EditIcon size={"small"}/>
+                    </IconButton>
                 </div>
 
-            </Card>
+            </div>
 
 
         </div>
@@ -99,7 +74,9 @@ export function PropertyBuilderPreview({
                                            onClick
                                        }: {
     name: string,
-    selected: boolean,
+    selected
+        :
+        boolean,
     onClick?: () => void,
 }) {
 

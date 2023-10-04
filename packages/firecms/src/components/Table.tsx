@@ -54,15 +54,18 @@ export type TableRowProps = {
     children?: React.ReactNode;
     className?: string;
     onClick?: React.MouseEventHandler<any>;
+    style?: React.CSSProperties;
 };
 
 export const TableRow = ({
                              children,
                              className,
-                             onClick
+                             onClick,
+                             style
                          }: TableRowProps) => (
     <tr
         onClick={onClick}
+        style={style}
         className={cn(
             defaultBorderMixin,
             "bg-white border-b last:border-b-0 dark:bg-gray-950",

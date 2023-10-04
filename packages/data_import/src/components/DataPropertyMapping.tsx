@@ -17,20 +17,20 @@ export interface DataPropertyMappingProps {
     idColumn?: string;
     headersMapping: Record<string, string>;
     properties: Record<string, Property>;
-    onPropertyClicked: (propertyKey: string, property: Property) => void;
+    onPropertyEditClicked: (propertyKey: string, property: Property) => void;
     onIdPropertyChanged: (value: string) => void;
     onPropertyNameChanged?: (propertyKey: string, value: string) => void;
+    propertyBadgeBuilder?: (props: { propertyKey: string, property: Property }) => React.ReactNode;
 }
-
-
 
 export function DataPropertyMapping({
                                         idColumn,
                                         headersMapping,
                                         properties,
                                         onIdPropertyChanged,
-                                        onPropertyClicked,
-                                        onPropertyNameChanged
+                                        onPropertyEditClicked,
+                                        onPropertyNameChanged,
+                                        propertyBadgeBuilder
                                     }: DataPropertyMappingProps) {
 
     return (
@@ -57,25 +57,33 @@ export function DataPropertyMapping({
                             .map(([importKey, mappedKey]) => {
                                     const propertyKey = headersMapping[importKey];
                                     const property = getPropertyInPath(properties, mappedKey) as Property;
-                                    return <TableRow key={importKey}>
-                                        <TableCell>
+
+                                    const propertySelect = propertyBadgeBuilder?.({ propertyKey, property });
+
+                                    return <TableRow key={importKey} style={{ height: "90px" }}>
+                                        <TableCell style={{ maxWidth: "30%" }}>
                                             <Typography variant={"body2"}>{importKey}</Typography>
                                         </TableCell>
                                         <TableCell>
                                             <ChevronRightIcon/>
                                         </TableCell>
-                                        <TableCell>
+                                        <TableCell className={importKey === idColumn ? "text-center" : undefined}>
                                             {importKey === idColumn
-                                                ? <Typography>This property will be used as ID</Typography>
+                                                ? <Typography variant={"label"}>
+                                                    This column will be used as the ID
+                                                </Typography>
                                                 : <ImportPropertyFieldPreview property={property}
                                                                               propertyKey={propertyKey}
                                                                               onPropertyNameChanged={onPropertyNameChanged}
-                                                                              onClick={
+                                                                              onEditClick={
                                                                                   () => {
-                                                                                      if (onPropertyClicked)
-                                                                                          onPropertyClicked(propertyKey, property);
+                                                                                      if (onPropertyEditClicked)
+                                                                                          onPropertyEditClicked(propertyKey, property);
                                                                                   }
-                                                                              }/>}
+                                                                              }
+                                                                              propertyTypeView={propertySelect}
+                                                />
+                                            }
                                         </TableCell>
                                     </TableRow>;
                                 }
@@ -99,11 +107,10 @@ function IdSelectField({ idColumn, headersMapping, onChange }: {
                 onChange(event.target.value as string);
             }}
             label={"Column that will be used as ID for each document"}>
+            <SelectItem value={""}>Autogenerate ID</SelectItem>
             {Object.entries(headersMapping).map(([key, value]) => {
                 return <SelectItem key={key} value={key}>{key}</SelectItem>;
             })}
         </Select>
-        {/*<Typography variant={"caption"} color={"secondary"}*/}
-        {/*className={"my-2 ml-3.5"}>The column that will be used as ID for each document</Typography>*/}
     </div>;
 }

@@ -1,5 +1,5 @@
 import React from "react";
-import { Entity, Property } from "firecms";
+import { DataType, Entity, Property } from "firecms";
 
 export type ImportConfig = {
 
@@ -19,8 +19,16 @@ export type ImportConfig = {
     headersMapping: Record<string, string>;
     setHeadersMapping: React.Dispatch<React.SetStateAction<Record<string, string>>>;
 
-    // mapping of the property key in the data model to the property
-    // properties: Record<string, Property>;
-    // setProperties: React.Dispatch<React.SetStateAction<Record<string, Property>>>;
+    inferredProperties: Record<string, Property>;
+    setInferredProperties: React.Dispatch<React.SetStateAction<Record<string, Property>>>;
 
+    getPropertiesMapping: (properties: Record<string, Property>) => Record<string, [DataType, DataType]>;
+
+}
+
+export type DataTypeMapping = {
+    from: DataType;
+    fromSubtype?: DataType;
+    to: DataType;
+    toSubtype?: DataType;
 }

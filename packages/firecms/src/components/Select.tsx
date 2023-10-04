@@ -203,15 +203,13 @@ export type SelectItemProps = {
     children?: React.ReactNode,
     disabled?: boolean,
     className?: string,
-    // onClick?: () => void
 };
 
 export function SelectItem({
                                value,
                                children,
                                disabled,
-                               className,
-                               // onClick
+                               className
                            }: SelectItemProps) {
     return <SelectPrimitive.Item
         key={value}
