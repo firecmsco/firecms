@@ -22,7 +22,7 @@ export type ImportConfig = {
     inferredProperties: Record<string, Property>;
     setInferredProperties: React.Dispatch<React.SetStateAction<Record<string, Property>>>;
 
-    getPropertiesMapping: (properties: Record<string, Property>) => Record<string, [DataType, DataType]>;
+    getPropertiesMapping: (properties: Record<string, Property>) => Record<string, DataTypeMapping>;
 
 }
 

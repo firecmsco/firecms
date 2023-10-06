@@ -2,12 +2,13 @@ import React, { useCallback, useEffect, useRef } from "react";
 
 import { Entity, EntityCollection, ExportConfig, ResolvedEntityCollection, User } from "../../../../types";
 import { useDataSource, useFireCMSContext, useNavigationContext } from "../../../../hooks";
-import { downloadCSV } from "../../../util/csv";
+import { downloadExport } from "../../../util/export";
 import {
     Alert,
     BooleanSwitchWithLabel,
     Button,
     CircularProgress,
+    cn,
     Dialog,
     DialogActions,
     DialogContent,
@@ -17,6 +18,7 @@ import {
 } from "../../../../components";
 import { resolveCollection } from "../../../util";
 import { GetAppIcon } from "../../../../icons";
+import { focusedMixin } from "../../../../styles";
 
 interface ExportButtonProps<M extends Record<string, any>, UserType extends User> {
     collection: EntityCollection<M>;
@@ -33,7 +35,8 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                                                                                    }: ExportButtonProps<M, UserType>
 ) {
 
-    const [flattenArrays, setFlattenArrays] = React.useState<boolean>(false);
+    const [flattenArrays, setFlattenArrays] = React.useState<boolean>(true);
+    const [exportType, setExportType] = React.useState<"csv" | "json">("csv");
 
     const context = useFireCMSContext<UserType>();
     const dataSource = useDataSource();
@@ -76,8 +79,8 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
         if (!data)
             throw Error("Trying to perform export without loading data first");
 
-        downloadCSV(data, additionalData, collection, flattenArrays, exportConfig);
-    }, [flattenArrays]);
+        downloadExport(data, additionalData, collection, flattenArrays, exportConfig, exportType);
+    }, [flattenArrays, exportType]);
 
     const fetchAdditionalFields = useCallback(async (entities: Entity<M>[]) => {
 
@@ -181,6 +184,25 @@ export function ExportButton<M extends Record<string, any>, UserType extends Use
                     value={flattenArrays}
                     onValueChange={setFlattenArrays}
                     label={"Flatten arrays"}/>
+
+                <div className={"p-4 flex flex-col gap-4"}>
+                    <div className="flex items-center">
+                        <input id="radio-csv" type="radio" value="csv" name="exportType"
+                               checked={exportType === "csv"}
+                               onChange={() => setExportType("csv")}
+                               className={cn(focusedMixin, "w-4 text-blue-600 bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
+                        <label htmlFor="radio-csv"
+                               className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">CSV</label>
+                    </div>
+                    <div className="flex items-center">
+                        <input id="radio-json" type="radio" value="json" name="exportType"
+                               checked={exportType === "json"}
+                               onChange={() => setExportType("json")}
+                               className={cn(focusedMixin, "w-4 text-blue-600 bg-gray-100 border-gray-300 dark:bg-gray-700 dark:border-gray-600")}/>
+                        <label htmlFor="radio-json"
+                               className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">JSON</label>
+                    </div>
+                </div>
 
             </DialogContent>
 

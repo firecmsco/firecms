@@ -2,23 +2,35 @@ import * as XLSX from "xlsx";
 
 export function convertFileToJson(file: File): Promise<object[]> {
     return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = function (e) {
-            const data = new Uint8Array(e.target?.result as ArrayBuffer);
-            const workbook = XLSX.read(data,
-                {
-                    type: "array",
-                    codepage: 65001,
-                    cellDates: true,
-                });
-            const worksheetName = workbook.SheetNames[0];
-            const worksheet = workbook.Sheets[worksheetName];
-            const parsedData: Array<any> = XLSX.utils.sheet_to_json(worksheet);
-            const cleanedData = parsedData.map(mapJsonParse);
-            const jsonData = cleanedData.map(unflattenObject);
-            resolve(jsonData);
-        };
-        reader.readAsArrayBuffer(file);
+        // check if file is a JSON file
+        if (file.type === "application/json") {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const data = e.target?.result as string;
+                const jsonData = JSON.parse(data);
+                resolve(jsonData);
+            };
+            reader.readAsText(file);
+        } else {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+
+                const data = new Uint8Array(e.target?.result as ArrayBuffer);
+                const workbook = XLSX.read(data,
+                    {
+                        type: "array",
+                        codepage: 65001,
+                        cellDates: true,
+                    });
+                const worksheetName = workbook.SheetNames[0];
+                const worksheet = workbook.Sheets[worksheetName];
+                const parsedData: Array<any> = XLSX.utils.sheet_to_json(worksheet);
+                const cleanedData = parsedData.map(mapJsonParse);
+                const jsonData = cleanedData.map(unflattenObject);
+                resolve(jsonData);
+            };
+            reader.readAsArrayBuffer(file);
+        }
     });
 }
 

@@ -36,20 +36,17 @@ export function ArrayOfStorageComponentsPreview({
     const childSize: PreviewSize = size === "medium" ? "small" : "tiny";
 
     return (
-        <div className={"flex flex-wrap"}>
+        <div className={"flex flex-wrap gap-2"}>
             {value &&
                 value.map((v, index) =>
-                    <div className={"m-2"}
-                         key={`preview_array_storage_${propertyKey}_${index}`}>
-                        <ErrorBoundary>
-                            <PropertyPreview
-                                propertyKey={propertyKey}
-                                value={v}
-                                entity={entity}
-                                property={property.of as ResolvedProperty<string>}
-                                size={childSize}/>
-                        </ErrorBoundary>
-                    </div>
+                    <ErrorBoundary key={`preview_array_storage_${propertyKey}_${index}`}>
+                        <PropertyPreview
+                            propertyKey={propertyKey}
+                            value={v}
+                            entity={entity}
+                            property={property.of as ResolvedProperty<string>}
+                            size={childSize}/>
+                    </ErrorBoundary>
                 )}
         </div>
     );

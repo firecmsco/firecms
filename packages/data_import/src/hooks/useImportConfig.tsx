@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import { DataType, Entity, getPropertyInPath, Properties, Property } from "firecms";
-import { ImportConfig } from "../types";
+import { DataTypeMapping, ImportConfig } from "../types";
 
 export const useImportConfig = (): ImportConfig => {
 
@@ -13,12 +13,9 @@ export const useImportConfig = (): ImportConfig => {
 
     const getPropertiesMapping = useCallback((newProperties: Record<string, Property>) => {
 
-        // we need to compare the new properties with the inferred ones
-        // and create a map of the different types from ones that were inferred
-        // e.g. { "address.city": ["string", "reference"] }
-        function updateMapping(properties: Record<string, Property>, namespace?: string): Record<string, [DataType, DataType]> {
+        function updateMapping(properties: Record<string, Property>, namespace?: string): Record<string, DataTypeMapping> {
 
-            const dataMapping: Record<string, [DataType, DataType]> = {};
+            const dataMapping: Record<string, DataTypeMapping> = {};
 
             Object.keys(properties).forEach((key) => {
 
@@ -27,19 +24,41 @@ export const useImportConfig = (): ImportConfig => {
                 const property = getPropertyInPath(properties, key) as Property;
                 const inferredProperty = getPropertyInPath(inferredProperties, currentKey) as Property;
 
-                console.log("checking key", key, property, inferredProperty)
                 if (property) {
                     if (property.dataType === "map" && property.properties) {
                         const nestedMapping = updateMapping(property.properties as Properties, currentKey);
                         Object.keys(nestedMapping).forEach((nestedKey) => {
-                            dataMapping[currentKey] = nestedMapping[nestedKey];
+                            dataMapping[`${currentKey}.${nestedKey}`] = nestedMapping[nestedKey];
                         });
                         return;
                     }
 
-                    if (inferredProperty && property.dataType !== inferredProperty.dataType) {
-                        dataMapping[key] = [inferredProperty.dataType, property.dataType];
+                    if (inferredProperty) {
+
+                        const from = inferredProperty.dataType;
+                        const to = property.dataType;
+                        let fromSubtype: DataType | undefined;
+                        let toSubtype: DataType | undefined;
+
+                        if (property.dataType === "array" && property.of) {
+                            toSubtype = (property.of as Property).dataType;
+                        }
+
+                        if (inferredProperty?.dataType === "array" && inferredProperty?.of) {
+                            fromSubtype = (inferredProperty.of as Property).dataType;
+                        }
+
+                        if (from !== to || fromSubtype !== toSubtype) {
+                            console.log(`Mapping`, { currentKey, inferredProperty, property, from, to, fromSubtype, toSubtype });
+                            dataMapping[key] = {
+                                from,
+                                to,
+                                fromSubtype,
+                                toSubtype
+                            };
+                        }
                     }
+
                 }
 
             });
@@ -47,9 +66,7 @@ export const useImportConfig = (): ImportConfig => {
             return dataMapping;
         }
 
-        const updateMapping1 = updateMapping(newProperties);
-        console.log("updateMapping1", updateMapping1)
-        return updateMapping1;
+        return updateMapping(newProperties);
     }, [inferredProperties]);
 
     return {

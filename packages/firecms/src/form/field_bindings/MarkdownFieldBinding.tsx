@@ -13,11 +13,15 @@ import { Typography } from "../../components";
 import { cn } from "../../components/util/cn";
 
 const mdParser = new MarkdownIt();
-MdEditor.use(Plugins.AutoResize, {
-    min: 100
-})
-MdEditor.unuse(Plugins.FontUnderline)
-MdEditor.unuse(Plugins.Clear);
+try {
+    MdEditor.use(Plugins.AutoResize, {
+        min: 100
+    })
+    MdEditor.unuse(Plugins.FontUnderline)
+    MdEditor.unuse(Plugins.Clear);
+} catch (e) {
+    // this fails in some tests, we can ignore it
+}
 
 /**
  * Render a markdown field that allows edition and seeing the preview.

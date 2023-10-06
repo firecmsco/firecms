@@ -20,7 +20,7 @@ export interface DataPropertyMappingProps {
     onPropertyEditClicked: (propertyKey: string, property: Property) => void;
     onIdPropertyChanged: (value: string) => void;
     onPropertyNameChanged?: (propertyKey: string, value: string) => void;
-    propertyBadgeBuilder?: (props: { propertyKey: string, property: Property }) => React.ReactNode;
+    propertyBadgeBuilder?: (props: { importKey: string, propertyKey: string, property: Property }) => React.ReactNode;
 }
 
 export function DataPropertyMapping({
@@ -58,7 +58,7 @@ export function DataPropertyMapping({
                                     const propertyKey = headersMapping[importKey];
                                     const property = getPropertyInPath(properties, mappedKey) as Property;
 
-                                    const propertySelect = propertyBadgeBuilder?.({ propertyKey, property });
+                                    const propertySelect = propertyBadgeBuilder?.({ importKey, propertyKey, property });
 
                                     return <TableRow key={importKey} style={{ height: "90px" }}>
                                         <TableCell style={{ maxWidth: "30%" }}>
@@ -72,16 +72,18 @@ export function DataPropertyMapping({
                                                 ? <Typography variant={"label"}>
                                                     This column will be used as the ID
                                                 </Typography>
-                                                : <ImportPropertyFieldPreview property={property}
-                                                                              propertyKey={propertyKey}
-                                                                              onPropertyNameChanged={onPropertyNameChanged}
-                                                                              onEditClick={
-                                                                                  () => {
-                                                                                      if (onPropertyEditClicked)
-                                                                                          onPropertyEditClicked(propertyKey, property);
-                                                                                  }
-                                                                              }
-                                                                              propertyTypeView={propertySelect}
+                                                : <ImportPropertyFieldPreview
+                                                    importKey={importKey}
+                                                    property={property}
+                                                    propertyKey={propertyKey}
+                                                    onPropertyNameChanged={onPropertyNameChanged}
+                                                    onEditClick={
+                                                        () => {
+                                                            if (onPropertyEditClicked)
+                                                                onPropertyEditClicked(propertyKey, property);
+                                                        }
+                                                    }
+                                                    propertyTypeView={propertySelect}
                                                 />
                                             }
                                         </TableCell>

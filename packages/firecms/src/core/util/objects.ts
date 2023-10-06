@@ -113,12 +113,12 @@ export function getHashValue<T>(v: T) {
     return hash(v, { ignoreUnknown: true });
 }
 
-export function removeUndefined(value: any): any {
+export function removeUndefined(value: any, removeEmptyStrings?: boolean): any {
     if (typeof value === "function") {
         return value;
     }
     if (Array.isArray(value)) {
-        return value.map((v: any) => removeUndefined(v));
+        return value.map((v: any) => removeUndefined(v, removeEmptyStrings));
     }
     if (typeof value === "object") {
         const res: object = {};
@@ -126,8 +126,10 @@ export function removeUndefined(value: any): any {
             return value;
         Object.keys(value).forEach((key) => {
             if (!isEmptyObject(value)) {
-                const childRes = removeUndefined(value[key]);
-                if (childRes !== undefined && !isEmptyObject(childRes))
+                const childRes = removeUndefined(value[key], removeEmptyStrings);
+                const isString = typeof childRes === "string";
+                const shouldKeepIfString = !removeEmptyStrings || (removeEmptyStrings && !isString) || (removeEmptyStrings && isString && childRes !== "");
+                if (childRes !== undefined && !isEmptyObject(childRes) && shouldKeepIfString)
                     (res as any)[key] = childRes;
             }
         });

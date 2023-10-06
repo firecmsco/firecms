@@ -1,3 +1,4 @@
+import React from "react";
 import {
     cn,
     EditIcon,
@@ -14,6 +15,7 @@ import {
 } from "firecms";
 
 export function ImportPropertyFieldPreview({
+                                               importKey,
                                                propertyKey,
                                                property,
                                                onEditClick,
@@ -23,6 +25,7 @@ export function ImportPropertyFieldPreview({
                                                onPropertyNameChanged,
                                                propertyTypeView
                                            }: {
+    importKey: string,
     propertyKey: string,
     property: Property
     hasError?: boolean,

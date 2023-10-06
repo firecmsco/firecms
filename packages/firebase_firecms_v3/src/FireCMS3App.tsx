@@ -68,6 +68,7 @@ import {
 import { SaasDataEnhancementSubscriptionMessage, SaasDrawer, SaasLoginView } from "./components";
 import { buildCollectionInference } from "./collection_editor/infer_collection";
 import { SaasProjectPage } from "./components/SaasProjectPage";
+import { getFirestoreDataInPath } from "./utils/database";
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services
@@ -404,7 +405,8 @@ function FireCMS3AppAuthenticated({
             console.log("Getting user", uid, saasUser);
             return saasUser ?? null;
         },
-        collectionInference: buildCollectionInference(firebaseApp)
+        collectionInference: buildCollectionInference(firebaseApp),
+        getData: path => getFirestoreDataInPath(firebaseApp, path, 100)
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({

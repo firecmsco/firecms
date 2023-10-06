@@ -7,7 +7,7 @@ import {
     ResolvedProperty,
     User
 } from "../../types";
-import { ArrayValuesCount, flattenObject, getArrayValuesCount } from "./flatten_object";
+import { ArrayValuesCount, getArrayValuesCount } from "./flatten_object";
 import { getValueInPath } from "./objects";
 
 interface Header {
@@ -15,32 +15,37 @@ interface Header {
     label: string;
 }
 
-export function downloadCSV<M extends Record<string, any>>(data: Entity<M>[],
-                                                           additionalData: Record<string, any>[] | undefined,
-                                                           collection: ResolvedEntityCollection<M>,
-                                                           flattenArrays: boolean,
-                                                           exportConfig: ExportConfig | undefined) {
+export function downloadExport<M extends Record<string, any>>(data: Entity<M>[],
+                                                              additionalData: Record<string, any>[] | undefined,
+                                                              collection: ResolvedEntityCollection<M>,
+                                                              flattenArrays: boolean,
+                                                              exportConfig: ExportConfig | undefined,
+                                                              exportType: "csv" | "json") {
     const properties = collection.properties;
 
-    const arrayValuesCount = flattenArrays ? getArrayValuesCount(data.map(d => d.values)) : {};
-    const headers = getExportHeaders(properties, exportConfig, arrayValuesCount);
-    console.log({ arrayValuesCount, headers });
-    const exportableData = getExportableData(data, additionalData, properties, flattenArrays, headers);
-    const headersData = entryToCSVRow(headers.map(h => h.label));
-    const csvData = exportableData.map(entry => entryToCSVRow(entry));
-    downloadBlob([headersData, ...csvData], `${collection.name}.csv`, "text/csv");
+    if (exportType === "csv") {
+        const arrayValuesCount = flattenArrays ? getArrayValuesCount(data.map(d => d.values)) : {};
+        const headers = getExportHeaders(properties, exportConfig, arrayValuesCount);
+        const exportableData = getCSVExportableData(data, additionalData, properties, headers);
+        const headersData = entryToCSVRow(headers.map(h => h.label));
+        const csvData = exportableData.map(entry => entryToCSVRow(entry));
+        downloadBlob([headersData, ...csvData], `${collection.name}.csv`, "text/csv");
+    } else {
+        const exportableData = getJsonExportableData(data, additionalData);
+        const json = JSON.stringify(exportableData, null, 2);
+        downloadBlob([json], `${collection.name}.json`, "application/json");
+    }
 }
 
-export function getExportableData(data: Entity<any>[],
-                                  additionalData: Record<string, any>[] | undefined,
-                                  properties: ResolvedProperties,
-                                  flattenArrays: boolean,
-                                  headers: Header[]
+export function getCSVExportableData(data: Entity<any>[],
+                                     additionalData: Record<string, any>[] | undefined,
+                                     properties: ResolvedProperties,
+                                     headers: Header[]
 ) {
 
     const mergedData: any[] = data.map(e => ({
         id: e.id,
-        ...processCSVValues( e.values, properties)
+        ...processCSVValues(e.values, properties)
     }));
 
     if (additionalData) {
@@ -49,11 +54,26 @@ export function getExportableData(data: Entity<any>[],
         });
     }
 
-    console.log({ mergedData, headers })
-
     return mergedData && mergedData.map((entry) => {
         return headers.map((header) => getValueInPath(entry, header.key));
     });
+}
+export function getJsonExportableData(data: Entity<any>[],
+                                     additionalData: Record<string, any>[] | undefined,
+) {
+
+    const mergedData: any[] = data.map(e => ({
+        id: e.id,
+        ...e.values
+    }));
+
+    if (additionalData) {
+        additionalData.forEach((additional, index) => {
+            mergedData[index] = { ...mergedData[index], ...additional };
+        });
+    }
+
+    return mergedData;
 }
 
 function getExportHeaders<M extends Record<string, any>, UserType extends User>(properties: ResolvedProperties<M>,
