@@ -59,7 +59,7 @@
         "@types/react-router-dom": "^5.3.3",
         "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",
         "fontaine": "^0.4.0",
-        "postcss": "^8.4.21",
+        "postcss": "^8.4.31",
         "postcss-import": "^15.1.0",
         "postcss-loader": "^7.1.0",
         "postcss-preset-env": "^8.2.0",

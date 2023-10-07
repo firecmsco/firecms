@@ -5441,8 +5441,8 @@ __metadata:
 
 "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader::locator=website%40workspace%3A.":
   version: 0.0.0
-  resolution: "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader#plugins/docusaurus-tailwindcss-loader::hash=1c6fb3&locator=website%40workspace%3A."
-  checksum: cf0d50fc2a953e286c9527bdbabf43d1e366061ce536f4acca3eb3077366fb276ce333fc4104df825f19119468ab6cf477db3c0f06b63427ff28b24bbfa321a9
+  resolution: "docusaurus-tailwindcss-loader@file:plugins/docusaurus-tailwindcss-loader#plugins/docusaurus-tailwindcss-loader::hash=819661&locator=website%40workspace%3A."
+  checksum: a1dff38269ac627bf340ca099cc7c0b99e3af6f311e77529c82c97a0eaf0d110682e4a42e09ab4fb09171a325c50858923a0b4ff103bc1d9fb0aa5a5a449b951
   languageName: node
   linkType: hard
 
@@ -8239,6 +8239,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"nanoid@npm:^3.3.6":
+  version: 3.3.6
+  resolution: "nanoid@npm:3.3.6"
+  bin:
+    nanoid: bin/nanoid.cjs
+  checksum: 7d0eda657002738aa5206107bd0580aead6c95c460ef1bdd0b1a87a9c7ae6277ac2e9b945306aaa5b32c6dcb7feaf462d0f552e7f8b5718abfc6ead5c94a71b3
+  languageName: node
+  linkType: hard
+
 "negotiator@npm:0.6.3, negotiator@npm:^0.6.3":
   version: 0.6.3
   resolution: "negotiator@npm:0.6.3"
@@ -9715,7 +9724,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss@npm:^8.0.9, postcss@npm:^8.3.11, postcss@npm:^8.4.14, postcss@npm:^8.4.17, postcss@npm:^8.4.19, postcss@npm:^8.4.21":
+"postcss@npm:^8.0.9, postcss@npm:^8.3.11, postcss@npm:^8.4.14, postcss@npm:^8.4.17, postcss@npm:^8.4.19":
   version: 8.4.21
   resolution: "postcss@npm:8.4.21"
   dependencies:
@@ -9723,6 +9732,17 @@ __metadata:
     picocolors: ^1.0.0
     source-map-js: ^1.0.2
   checksum: e39ac60ccd1542d4f9d93d894048aac0d686b3bb38e927d8386005718e6793dbbb46930f0a523fe382f1bbd843c6d980aaea791252bf5e176180e5a4336d9679
+  languageName: node
+  linkType: hard
+
+"postcss@npm:^8.4.31":
+  version: 8.4.31
+  resolution: "postcss@npm:8.4.31"
+  dependencies:
+    nanoid: ^3.3.6
+    picocolors: ^1.0.0
+    source-map-js: ^1.0.2
+  checksum: 1d8611341b073143ad90486fcdfeab49edd243377b1f51834dc4f6d028e82ce5190e4f11bb2633276864503654fb7cab28e67abdc0fbf9d1f88cad4a0ff0beea
   languageName: node
   linkType: hard
 
@@ -12405,7 +12425,7 @@ __metadata:
     docusaurus-tailwindcss-loader: "file:plugins/docusaurus-tailwindcss-loader"
     dotenv: ^16.0.3
     fontaine: ^0.4.0
-    postcss: ^8.4.21
+    postcss: ^8.4.31
     postcss-import: ^15.1.0
     postcss-loader: ^7.1.0
     postcss-preset-env: ^8.2.0
