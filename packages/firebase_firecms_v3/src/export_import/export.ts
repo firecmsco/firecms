@@ -1,14 +1,15 @@
 import {
+    ArrayValuesCount,
     Entity,
     EntityReference,
-    ExportConfig,
+    getArrayValuesCount,
+    getValueInPath,
     ResolvedEntityCollection,
     ResolvedProperties,
     ResolvedProperty,
     User
-} from "../../types";
-import { ArrayValuesCount, getArrayValuesCount } from "./flatten_object";
-import { getValueInPath } from "./objects";
+} from "firecms";
+import { ExportConfig } from "../types/export_import";
 
 interface Header {
     key: string;
@@ -20,18 +21,20 @@ export function downloadExport<M extends Record<string, any>>(data: Entity<M>[],
                                                               collection: ResolvedEntityCollection<M>,
                                                               flattenArrays: boolean,
                                                               exportConfig: ExportConfig | undefined,
-                                                              exportType: "csv" | "json") {
+                                                              exportType: "csv" | "json",
+                                                              dateExportType: "timestamp" | "string"
+) {
     const properties = collection.properties;
 
     if (exportType === "csv") {
         const arrayValuesCount = flattenArrays ? getArrayValuesCount(data.map(d => d.values)) : {};
         const headers = getExportHeaders(properties, exportConfig, arrayValuesCount);
-        const exportableData = getCSVExportableData(data, additionalData, properties, headers);
+        const exportableData = getCSVExportableData(data, additionalData, properties, headers, dateExportType);
         const headersData = entryToCSVRow(headers.map(h => h.label));
         const csvData = exportableData.map(entry => entryToCSVRow(entry));
         downloadBlob([headersData, ...csvData], `${collection.name}.csv`, "text/csv");
     } else {
-        const exportableData = getJsonExportableData(data, additionalData);
+        const exportableData = getJsonExportableData(data, additionalData, properties, dateExportType);
         const json = JSON.stringify(exportableData, null, 2);
         downloadBlob([json], `${collection.name}.json`, "application/json");
     }
@@ -40,12 +43,13 @@ export function downloadExport<M extends Record<string, any>>(data: Entity<M>[],
 export function getCSVExportableData(data: Entity<any>[],
                                      additionalData: Record<string, any>[] | undefined,
                                      properties: ResolvedProperties,
-                                     headers: Header[]
+                                     headers: Header[],
+                                     dateExportType: "timestamp" | "string"
 ) {
 
     const mergedData: any[] = data.map(e => ({
         id: e.id,
-        ...processCSVValues(e.values, properties)
+        ...processValuesForExport(e.values, properties, "csv", dateExportType)
     }));
 
     if (additionalData) {
@@ -58,13 +62,16 @@ export function getCSVExportableData(data: Entity<any>[],
         return headers.map((header) => getValueInPath(entry, header.key));
     });
 }
+
 export function getJsonExportableData(data: Entity<any>[],
-                                     additionalData: Record<string, any>[] | undefined,
+                                      additionalData: Record<string, any>[] | undefined,
+                                      properties: ResolvedProperties,
+                                      dateExportType: "timestamp" | "string"
 ) {
 
     const mergedData: any[] = data.map(e => ({
         id: e.id,
-        ...e.values
+        ...processValuesForExport(e.values, properties, "json", dateExportType)
     }));
 
     if (additionalData) {
@@ -118,20 +125,26 @@ function getHeaders(property: ResolvedProperty, propertyKey: string, prefix = ""
     }
 }
 
-function processCSVValue(inputValue: any,
-                         property: ResolvedProperty): any {
+function processValueForExport(inputValue: any,
+                               property: ResolvedProperty,
+                               exportType: "csv" | "json",
+                               dateExportType: "timestamp" | "string"
+): any {
 
     let value;
     if (property.dataType === "map" && property.properties) {
-        value = processCSVValues(inputValue, property.properties as ResolvedProperties);
+        value = processValuesForExport(inputValue, property.properties as ResolvedProperties, exportType, dateExportType);
     } else if (property.dataType === "array") {
         if (property.of && Array.isArray(inputValue)) {
             if (Array.isArray(property.of)) {
-                value = property.of.map((p, i) => processCSVValue(inputValue[i], p));
+                value = property.of.map((p, i) => processValueForExport(inputValue[i], p, exportType, dateExportType));
             } else if (property.of.dataType === "map") {
-                value = inputValue.map((e) => JSON.stringify(e));
+                value = exportType === "csv"
+                    ? inputValue.map((e) => JSON.stringify(e))
+                    : inputValue.map((e) => processValueForExport(e, property.of as ResolvedProperty, exportType, dateExportType));
+                ;
             } else {
-                value = inputValue.map((e) => processCSVValue(e, property.of as ResolvedProperty));
+                value = inputValue.map((e) => processValueForExport(e, property.of as ResolvedProperty, exportType, dateExportType));
             }
         } else {
             value = inputValue;
@@ -140,7 +153,7 @@ function processCSVValue(inputValue: any,
         const ref = inputValue ? inputValue as EntityReference : undefined;
         value = ref ? ref.pathWithId : null;
     } else if (property.dataType === "date" && inputValue instanceof Date) {
-        value = inputValue ? inputValue.getTime() : null;
+        value = inputValue ? (dateExportType === "timestamp" ? inputValue.getTime() : inputValue.toISOString()) : null;
     } else {
         value = inputValue;
     }
@@ -148,12 +161,16 @@ function processCSVValue(inputValue: any,
     return value;
 }
 
-function processCSVValues<M extends Record<string, any>>
-(inputValues: Record<keyof M, any>, properties: ResolvedProperties<M>): Record<keyof M, any> {
+function processValuesForExport<M extends Record<string, any>>
+(inputValues: Record<keyof M, any>,
+ properties: ResolvedProperties<M>,
+ exportType: "csv" | "json",
+ dateExportType: "timestamp" | "string"
+): Record<keyof M, any> {
     const updatedValues = Object.entries(properties)
         .map(([key, property]) => {
             const inputValue = inputValues && (inputValues)[key];
-            const updatedValue = processCSVValue(inputValue, property as ResolvedProperty);
+            const updatedValue = processValueForExport(inputValue, property as ResolvedProperty, exportType, dateExportType);
             if (updatedValue === undefined) return {};
             return ({ [key]: updatedValue });
         })

@@ -116,6 +116,7 @@ export function PlansComparison() {
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in the free tier</li>
                     <li className={"ml-8 list-disc"}>Unlimited users and roles</li>
+                    <li className={"ml-8 list-disc"}>Unlimited data export</li>
                     <li className={"ml-8 list-disc"}>Theme and logo customization</li>
                     <li className={"ml-8 list-disc"}>Custom user roles</li>
                     <li className={"ml-8 list-disc"}>GPT-4 content generation</li>

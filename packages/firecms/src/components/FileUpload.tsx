@@ -41,7 +41,7 @@ export function FileUpload({
                                uploadDescription = "Drag and drop a file here or click",
                                children,
                                preventDropOnDocument = true,
-    size
+                               size
                            }: React.PropsWithChildren<FileUploadProps>) {
 
     const {
@@ -58,7 +58,11 @@ export function FileUpload({
             onDropRejected: onFilesRejected,
             disabled,
             maxFiles,
-            preventDropOnDocument
+            preventDropOnDocument,
+            validator: (file: File) => {
+                console.log("file", file);
+                return null;
+            }
         }
     );
     return <div

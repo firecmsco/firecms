@@ -135,7 +135,7 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
 
                         return (
                             <div key={"ref_prev_" + (key as string)}
-                                 className={listProperties.length > 1 ? "my-1" : "my-0"}>
+                                 className={listProperties.length > 1 ? "my-0.5" : "my-0"}>
                                 {
                                     usedEntity
                                         ? <PropertyPreview

@@ -5,14 +5,17 @@ import { cn } from "./util/cn";
 export type TableProps = {
     children: React.ReactNode;
     className?: string;
+    style?: React.CSSProperties;
 };
 
 export const Table = ({
                           children,
-                          className
+                          className,
+                          style
                       }: TableProps) => (
     <table className={cn("w-full text-left text-gray-800 dark:text-gray-200 rounded-md overflow-x-auto",
-        className)}>
+        className)}
+           style={style}>
         {children}
     </table>
 );

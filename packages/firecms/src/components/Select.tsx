@@ -146,7 +146,7 @@ export function Select({
                                         <div key={v} className={"flex items-center gap-1 max-w-full"}>
                                             {renderValue ? renderValue(v) : v}
                                         </div>))
-                                    : (value ? (renderValue ? renderValue(value) : value) : placeholder))}
+                                    : (typeof value === "string" ? (renderValue ? renderValue(value) : value) : placeholder))}
 
                             {renderValues && (!value || Array.isArray(value))
                                 ? renderValues(value as string[] ?? [])

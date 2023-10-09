@@ -30,7 +30,11 @@ export function useDelegatedLogin({
                 let delegatedToken = getTokenFromCache(projectId);
                 if (!delegatedToken) {
                     delegatedToken = await projectsApi.doDelegatedLogin(projectId);
-                    cacheToken(projectId, delegatedToken);
+                    try {
+                        cacheToken(projectId, delegatedToken);
+                    } catch (e) {
+                        console.error("Error caching token", e);
+                    }
                 }
                 if (!delegatedToken) {
                     throw new Error("No delegated token");
@@ -61,7 +65,6 @@ export function useDelegatedLogin({
     return { loginSuccessful, delegatedLoginLoading, delegatedLoginError };
 
 }
-
 
 const tokens = new Map<string, {
     token: string,

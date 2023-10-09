@@ -118,6 +118,9 @@ export const EntityCollectionView = React.memo(
 
         const [lastDeleteTimestamp, setLastDeleteTimestamp] = React.useState<number>(0);
 
+        // number of entities in the collection
+        const [docsCount, setDocsCount] = useState<number>(0);
+
         const unselectNavigatedEntity = useCallback(() => {
             const currentSelection = selectedNavigationEntity;
             setTimeout(() => {
@@ -132,8 +135,6 @@ export const EntityCollectionView = React.memo(
             }
             return collection.inlineEditing === undefined || collection.inlineEditing;
         }, [collection, authController, fullPath]);
-
-        const exportable = collection.exportable === undefined || collection.exportable;
 
         const selectionEnabled = collection.selectionEnabled === undefined || collection.selectionEnabled;
         const hoverRow = !checkInlineEditing();
@@ -469,6 +470,7 @@ export const EntityCollectionView = React.memo(
                     collection={collection}
                     filter={tableController.filterValues}
                     sortBy={tableController.sortBy}
+                    onCountChange={setDocsCount}
                 />
 
             </div>}
@@ -503,13 +505,13 @@ export const EntityCollectionView = React.memo(
                         parentPathSegments={parentPathSegments ?? []}
                         collection={collection}
                         tableController={tableController}
-                        exportable={exportable}
                         onMultipleDeleteClick={onMultipleDeleteClick}
                         onNewClick={onNewClick}
                         path={fullPath}
                         relativePath={collection.path}
                         selectionController={usedSelectionController}
                         selectionEnabled={selectionEnabled}
+                        collectionEntitiesCount={docsCount}
                     />}
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
@@ -573,12 +575,14 @@ function EntitiesCount({
                            fullPath,
                            collection,
                            filter,
-                           sortBy
+                           sortBy,
+                           onCountChange
                        }: {
     fullPath: string,
     collection: EntityCollection,
     filter?: FilterValues<any>,
-    sortBy?: [string, "asc" | "desc"]
+    sortBy?: [string, "asc" | "desc"],
+    onCountChange?: (count: number) => void,
 }) {
 
     const dataSource = useDataSource();
@@ -599,6 +603,12 @@ function EntitiesCount({
             order: currentSort
         }).then(setCount).catch(setError);
     }, [fullPath, dataSource, resolvedPath, collection, filter, sortByProperty, currentSort]);
+
+    useEffect(() => {
+        if (onCountChange) {
+            onCountChange(count ?? 0);
+        }
+    }, [onCountChange, count]);
 
     if (error) {
         return null;

@@ -121,14 +121,6 @@ export interface EntityCollection<M extends Record<string, any> = any,
     selectionEnabled?: boolean;
 
     /**
-     * Should the data in this collection view include an export button.
-     * You can also set an `ExportConfig` configuration object to customize
-     * the export and add additional values.
-     * Defaults to `true`
-     */
-    exportable?: boolean | ExportConfig<UserType>;
-
-    /**
      * You can add subcollections to your entity in the same way you define the root
      * collections. The collections added here will be displayed when opening
      * the side dialog of an entity.
@@ -306,6 +298,11 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
      */
     context: FireCMSContext<UserType>;
 
+    /**
+     * Count of the entities in this collection
+     */
+    collectionEntitiesCount: number;
+
 }
 
 /**
@@ -345,28 +342,6 @@ export type WhereFilterOp =
 export type FilterValues<Key extends string> =
     Partial<Record<Key, [WhereFilterOp, any]>>;
 
-/**
- * You can use this configuration to add additional fields to the data
- * exports
- * @category Models
- */
-export interface ExportConfig<UserType extends User = User> {
-    additionalFields: ExportMappingFunction<UserType> [];
-}
-
-/**
- * @category Models
- */
-export interface ExportMappingFunction<UserType extends User = User> {
-    key: string;
-    builder: ({
-                  entity,
-                  context
-              }: {
-        entity: Entity<any>,
-        context: FireCMSContext<UserType>
-    }) => Promise<string> | string;
-}
 
 /**
  * Used to indicate valid filter combinations (e.g. created in Firestore)

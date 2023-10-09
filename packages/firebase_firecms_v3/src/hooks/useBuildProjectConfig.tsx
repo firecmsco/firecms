@@ -43,6 +43,7 @@ export type ProjectConfig = {
     usersLimit: number | null;
     canEditRoles: boolean;
     canUploadLogo: boolean;
+    canExport: boolean;
 };
 
 interface ProjectConfigParams {
@@ -275,6 +276,7 @@ export function useBuildProjectConfig({
     const usersLimit = subscriptionPlan === "free" ? 3 : null;
     const canEditRoles = subscriptionPlan !== "free";
     const canUploadLogo = subscriptionPlan !== "free";
+    const canExport = subscriptionPlan !== "free";
 
     return {
 
@@ -299,7 +301,8 @@ export function useBuildProjectConfig({
         serviceAccountMissing: loadedProjectIdRef.current !== projectId ? undefined : serviceAccountMissing,
         usersLimit,
         canEditRoles,
-        canUploadLogo
+        canUploadLogo,
+        canExport
     }
 }
 

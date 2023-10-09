@@ -56,15 +56,16 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
             className={cn(
                 !invisible && fieldBackgroundMixin,
                 !invisible && (disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin),
-                "rounded-md relative cursor-pointer max-w-full justify-between w-full box-border relative inline-flex items-center",
-                !invisible && focus ? focusedClasses : "",
-                error ? "text-red-500 dark:text-red-600" : !invisible && focus ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark",
+                disabled ? "cursor-default" : "cursor-pointer",
+                "rounded-md relative max-w-full justify-between w-full box-border relative inline-flex items-center",
+                !invisible && focus && !disabled ? focusedClasses : "",
+                error ? "text-red-500 dark:text-red-600" : !invisible && focus && !disabled ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark",
                 size === "small" ? "min-h-[40px]" : "min-h-[64px]",
                 size === "small" ? "pl-2" : "pl-4",
                 size === "small" ? "pr-4" : "pr-6",
                 position === "end" ? "flex-row-reverse" : "flex-row"
             )}
-            onClick={(e) => {
+            onClick={disabled ? undefined : (e) => {
                 if (props.allowIndeterminate) {
                     if (value === null || value === undefined) onValueChange?.(true)
                     else if (value) onValueChange?.(false)
@@ -81,6 +82,7 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
                 ref={refInput}
                 size={size}
                 className={invisible && focus ? focusedClasses : ""}
+                disabled={disabled}
                 {...props}
             />
 

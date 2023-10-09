@@ -69,6 +69,7 @@ import { SaasDataEnhancementSubscriptionMessage, SaasDrawer, SaasLoginView } fro
 import { buildCollectionInference } from "./collection_editor/infer_collection";
 import { SaasProjectPage } from "./components/SaasProjectPage";
 import { getFirestoreDataInPath } from "./utils/database";
+import { useImportExportPlugin } from "./hooks/useImportExportPlugin";
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services
@@ -119,7 +120,7 @@ export function FireCMS3App({
     });
 
     if (backendConfigLoading || !backendFirebaseApp) {
-        return <CircularProgressCenter/>;
+        return <FullLoadingView projectId={projectId}/>;
     }
 
     if (backendFirebaseConfigError) {
@@ -133,7 +134,7 @@ export function FireCMS3App({
     }
 
     if (fireCMSBackend.authLoading) {
-        return <CircularProgressCenter/>;
+        return <FullLoadingView projectId={projectId}/>;
     }
 
     if (!fireCMSBackend.user) {
@@ -181,6 +182,16 @@ export type FireCMS3ClientProps = {
     FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps>
 };
 
+function FullLoadingView(props: { projectId: string, currentProjectController?: ProjectConfig }) {
+    return <Scaffold
+        key={"project_scaffold_" + props.projectId}
+        name={props.currentProjectController?.projectName ?? "FireCMS"}
+        logo={props.currentProjectController?.logo}
+        includeDrawer={false}>
+        <CircularProgressCenter/>
+    </Scaffold>;
+}
+
 export const FireCMS3Client = function FireCMS3Client({
                                                           projectId,
                                                           fireCMSBackend,
@@ -195,7 +206,7 @@ export const FireCMS3Client = function FireCMS3Client({
     });
 
     if (!currentProjectController.clientFirebaseConfig) {
-        return <CircularProgressCenter/>;
+        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
     }
 
     return <FireCMS3ClientInner
@@ -282,7 +293,7 @@ function FireCMS3ClientInner({
         if (!user) return;
         if (!saasUser) {
             setNotValidUser(user);
-            throw Error("No user was found with email " + user.email);
+            // throw Error("No user was found with email " + user.email);
         } else {
             setNotValidUser(undefined);
             const userRoles = getUserRoles(currentProjectController.roles, saasUser);
@@ -295,7 +306,7 @@ function FireCMS3ClientInner({
     }
 
     if (currentProjectController.loading) {
-        return <CircularProgressCenter/>;
+        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
     }
 
     if (currentProjectController.configError) {
@@ -304,7 +315,7 @@ function FireCMS3ClientInner({
     }
 
     if (firebaseConfigLoading) {
-        return <CircularProgressCenter/>;
+        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
     }
 
     if (firebaseConfigError || !clientFirebaseApp) {
@@ -320,11 +331,11 @@ function FireCMS3ClientInner({
     }
 
     if (delegatedLoginLoading || firebaseConfigLoading || !clientFirebaseApp) {
-        return <CircularProgressCenter/>;
+        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
     }
 
     if (!authController.user) {
-        return <CircularProgressCenter/>;
+        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
     }
 
     if (!saasUser) {
@@ -391,6 +402,8 @@ function FireCMS3AppAuthenticated({
         collection
     }), [currentProjectController, fireCMSUser]);
 
+    const importExportPlugin = useImportExportPlugin();
+
     const collectionEditorPlugin = useCollectionEditorPlugin<PersistedCollection, User>({
         collectionConfigController,
         configPermissions,
@@ -448,7 +461,7 @@ function FireCMS3AppAuthenticated({
     });
 
     if (appCheckLoading) {
-        return <CircularProgressCenter/>
+        return <FullLoadingView projectId={currentProjectController.projectId} currentProjectController={currentProjectController}/>;
     }
 
     return (
@@ -471,7 +484,7 @@ function FireCMS3AppAuthenticated({
                             basePath={basePath}
                             baseCollectionPath={baseCollectionPath}
                             onAnalyticsEvent={onAnalyticsEvent}
-                            plugins={[collectionEditorPlugin, dataEnhancementPlugin]}>
+                            plugins={[importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin]}>
                             {({
                                   context,
                                   loading
@@ -483,6 +496,7 @@ function FireCMS3AppAuthenticated({
                                 } else {
                                     component = (
                                         <Scaffold
+                                            key={"project_scaffold_" + currentProjectController.projectId}
                                             name={currentProjectController.projectName ?? "FireCMS"}
                                             logo={currentProjectController.logo}
                                             Drawer={SaasDrawer}

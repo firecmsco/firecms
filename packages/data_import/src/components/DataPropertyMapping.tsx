@@ -40,14 +40,16 @@ export function DataPropertyMapping({
                            headersMapping={headersMapping}
                            onChange={onIdPropertyChanged}/>
 
-            <Table>
+            <Table style={{
+                tableLayout: "fixed"
+            }}>
                 <TableHeader>
-                    <TableCell header={true}>
+                    <TableCell header={true} style={{ width: "20%" }}>
                         Column in file
                     </TableCell>
                     <TableCell header={true}>
                     </TableCell>
-                    <TableCell header={true}>
+                    <TableCell header={true} style={{ width: "75%" }}>
                         Property
                     </TableCell>
                 </TableHeader>
@@ -61,13 +63,14 @@ export function DataPropertyMapping({
                                     const propertySelect = propertyBadgeBuilder?.({ importKey, propertyKey, property });
 
                                     return <TableRow key={importKey} style={{ height: "90px" }}>
-                                        <TableCell style={{ maxWidth: "30%" }}>
+                                        <TableCell style={{ width: "20%" }}>
                                             <Typography variant={"body2"}>{importKey}</Typography>
                                         </TableCell>
                                         <TableCell>
                                             <ChevronRightIcon/>
                                         </TableCell>
-                                        <TableCell className={importKey === idColumn ? "text-center" : undefined}>
+                                        <TableCell className={importKey === idColumn ? "text-center" : undefined}
+                                                   style={{ width: "75%" }}>
                                             {importKey === idColumn
                                                 ? <Typography variant={"label"}>
                                                     This column will be used as the ID
@@ -104,9 +107,15 @@ function IdSelectField({ idColumn, headersMapping, onChange }: {
     return <div>
         <Select
             size={"small"}
-            value={idColumn}
+            value={idColumn ?? ""}
             onChange={(event) => {
                 onChange(event.target.value as string);
+            }}
+            renderValue={(value) => {
+                console.log("value", value);
+                return <Typography variant={"body2"}>
+                    {value !== "" ? value : "Autogenerate ID"}
+                </Typography>;
             }}
             label={"Column that will be used as ID for each document"}>
             <SelectItem value={""}>Autogenerate ID</SelectItem>
