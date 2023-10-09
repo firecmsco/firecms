@@ -16,6 +16,17 @@ module.exports = {
         docSearchApiKey: process.env.REACT_APP_DOC_SEARCH_KEY,
         docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID,
     },
+    webpack: {
+        jsLoader: (isServer) => ({
+            loader: require.resolve('esbuild-loader'),
+            options: {
+                loader: 'tsx',
+                format: isServer ? 'cjs' : undefined,
+                target: isServer ? 'node16' : 'es2017',
+            },
+        }),
+    },
+
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { useCollectionsConfigController } from "@firecms/collection_editor";
 
-import { AddIcon, Button, Container, Typography } from "firecms";
+import { AddIcon, Button, Container, Tooltip, Typography } from "firecms";
 import { RolesTable } from "./RolesTable";
 import { RolesDetailsForm } from "./RolesDetailsForm";
 import { useProjectConfig } from "../../hooks";
@@ -40,13 +40,15 @@ export const RolesView = React.memo(
                                 component="h4">
                         Roles
                     </Typography>
-                    <Button
-                        size={"large"}
-                        disabled={!canEditRoles}
-                        startIcon={<AddIcon/>}
-                        onClick={() => setDialogOpen(true)}>
-                        Add role
-                    </Button>
+                    <Tooltip title={!canEditRoles ? "Update plans to customise roles" : undefined}>
+                        <Button
+                            size={"large"}
+                            disabled={!canEditRoles}
+                            startIcon={<AddIcon/>}
+                            onClick={() => setDialogOpen(true)}>
+                            Add role
+                        </Button>
+                    </Tooltip>
                 </div>
 
                 <RolesTable onRoleClicked={onRoleClicked} editable={canEditRoles}/>

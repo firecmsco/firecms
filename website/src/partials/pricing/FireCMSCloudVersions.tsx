@@ -26,6 +26,7 @@ export function FireCMSCloudVersions() {
                     <li className={"ml-8 list-disc"}>Unlimited collections</li>
                     <li className={"ml-8 list-disc"}>All available form fields</li>
                     <li className={"ml-8 list-disc"}>Schema editor and inference from data</li>
+                    <li className={"ml-8 list-disc"}>Advanced data import and export</li>
                     <li className={"ml-8 list-disc"}>Default roles</li>
                     <li className={"ml-8 list-disc"}>3 users</li>
                 </ul>
