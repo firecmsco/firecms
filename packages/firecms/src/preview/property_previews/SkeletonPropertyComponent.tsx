@@ -202,7 +202,7 @@ function renderGenericArrayCell(
 ) {
     return (
 
-        <div key={"array_index"}
+        <div key={"array_index_" + index}
              className={"flex flex-col gap-2"}>
 
             {

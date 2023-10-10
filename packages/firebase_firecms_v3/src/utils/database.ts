@@ -2,6 +2,7 @@ import { FirebaseApp } from "firebase/app";
 import { collection, getDocs, getFirestore, limit as limitClause, query } from "firebase/firestore";
 
 export function getFirestoreDataInPath(firebaseApp: FirebaseApp, path: string, limit: number): Promise<object[]> {
+    console.log("getFirestoreDataInPath", path, limit)
     const firestore = getFirestore(firebaseApp);
     const q = query(collection(firestore, path), limitClause(limit));
     return getDocs(q).then((querySnapshot) => {

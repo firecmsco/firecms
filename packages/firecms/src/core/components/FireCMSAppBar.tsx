@@ -96,10 +96,10 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
                 {startAdornment}
 
-                <div className="mr-8 hidden lg:block">
+                {navigation && <div className="mr-8 hidden lg:block">
                     <ReactLink
                         className="visited:text-inherit visited:dark:text-inherit"
-                        to={navigation.basePath ?? "/"}
+                        to={navigation?.basePath ?? "/"}
                     >
                         <Typography variant="subtitle1"
                                     noWrap
@@ -107,7 +107,7 @@ export const FireCMSAppBar = function FireCMSAppBar({
                             {title}
                         </Typography>
                     </ReactLink>
-                </div>
+                </div>}
 
                 <div className={"flex-grow"}/>
 

@@ -119,35 +119,27 @@ export function FireCMS3App({
         backendFirebaseApp,
     });
 
+    let component;
+
     if (backendConfigLoading || !backendFirebaseApp) {
-        return <FullLoadingView projectId={projectId}/>;
-    }
-
-    if (backendFirebaseConfigError) {
-        return <ErrorView
+        component = <FullLoadingView projectId={projectId}/>;
+    } else if (backendFirebaseConfigError) {
+        component = <ErrorView
             error={backendFirebaseConfigError}/>
-    }
-
-    if (configError) {
-        return <ErrorView
+    } else if (configError) {
+        component = <ErrorView
             error={configError}/>
-    }
-
-    if (fireCMSBackend.authLoading) {
-        return <FullLoadingView projectId={projectId}/>;
-    }
-
-    if (!fireCMSBackend.user) {
-        return <SaasLoginView
+    } else if (fireCMSBackend.authLoading) {
+        component = <FullLoadingView projectId={projectId}/>;
+    } else if (!fireCMSBackend.user) {
+        component = <SaasLoginView
             authController={fireCMSBackend}
             includeLogo={true}
             includeGoogleAdminScopes={false}
             includeTermsAndNewsLetter={false}
             includeGoogleDisclosure={false}/>
-    }
-
-    return <BrowserRouter basename={basePath}>
-        <FireCMS3Client
+    } else {
+        component = <FireCMS3Client
             fireCMSBackend={fireCMSBackend}
             projectId={projectId}
             onFirebaseInit={onFirebaseInit}
@@ -161,6 +153,10 @@ export function FireCMS3App({
             onAnalyticsEvent={onAnalyticsEvent}
             modeController={modeController}
         />
+    }
+
+    return <BrowserRouter basename={basePath}>
+        {component}
     </BrowserRouter>;
 
 }
@@ -419,7 +415,7 @@ function FireCMS3AppAuthenticated({
             return saasUser ?? null;
         },
         collectionInference: buildCollectionInference(firebaseApp),
-        getData: path => getFirestoreDataInPath(firebaseApp, path, 100)
+        getData: (path) => getFirestoreDataInPath(firebaseApp, path, 100)
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
@@ -461,7 +457,8 @@ function FireCMS3AppAuthenticated({
     });
 
     if (appCheckLoading) {
-        return <FullLoadingView projectId={currentProjectController.projectId} currentProjectController={currentProjectController}/>;
+        return <FullLoadingView projectId={currentProjectController.projectId}
+                                currentProjectController={currentProjectController}/>;
     }
 
     return (
