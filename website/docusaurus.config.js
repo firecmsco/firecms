@@ -16,16 +16,16 @@ module.exports = {
         docSearchApiKey: process.env.REACT_APP_DOC_SEARCH_KEY,
         docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID,
     },
-    webpack: {
-        jsLoader: (isServer) => ({
-            loader: require.resolve('esbuild-loader'),
-            options: {
-                loader: 'tsx',
-                format: isServer ? 'cjs' : undefined,
-                target: isServer ? 'node16' : 'es2017',
-            },
-        }),
-    },
+    // webpack: {
+    //     jsLoader: (isServer) => ({
+    //         loader: require.resolve('esbuild-loader'),
+    //         options: {
+    //             loader: 'tsx',
+    //             format: isServer ? 'cjs' : undefined,
+    //             target: isServer ? 'node16' : 'es2017',
+    //         },
+    //     }),
+    // },
 
     plugins: [
         "docusaurus-tailwindcss-loader",
@@ -72,9 +72,9 @@ module.exports = {
     themeConfig: {
         image: "img/logo_small.png",
         announcementBar: {
-            id: "2.0.0",
+            id: "cloud-beta",
             content:
-                "Version 2.0.0 is out! 🎉 Now supporting collection groups and much more!",
+                "FireCMS Cloud beta is out! 🎉 Try our the collection editor and the new importing features!",
             backgroundColor: "#FF5B79",
             textColor: "black",
             isCloseable: true,

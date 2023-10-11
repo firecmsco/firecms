@@ -228,6 +228,8 @@ export function VersionsComparison() {
                     colSpan={3}
                 >
                     <a className={CTAButtonMixin + " w-full"}
+                       rel="noopener noreferrer"
+                       target="_blank"
                        href={"https://app.firecms.co"}>
                         Get started
                     </a>

@@ -15,9 +15,9 @@ export function CircularProgress({
     if (size === "small") {
         sizeClasses = "w-4 h-4 m-1";
     } else if (size === "medium") {
-        sizeClasses = "w-8 h-8 m-2";
+        sizeClasses = "w-8 h-8 m-1";
     } else {
-        sizeClasses = "w-10 h-10 m-3";
+        sizeClasses = "w-10 h-10 m-1";
     }
 
     let borderClasses = "";

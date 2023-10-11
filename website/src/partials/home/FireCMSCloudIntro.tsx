@@ -44,12 +44,6 @@ export const FireCMSCloudIntro = () => {
                             since it sets up a complete Google Cloud Project for
                             you.</p>
 
-                        <div >
-                            Note that you can always use the <a
-                            href={useBaseUrl("docs")}>self-hosted version</a> of
-                            FireCMS
-                        </div>
-
                     </div>
 
 
@@ -72,7 +66,7 @@ export const FireCMSCloudIntro = () => {
                     style={{
                         aspectRatio: 2.415
                     }}
-                    className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+                    className={"rounded-xl"}
                     width="100%" loop autoPlay muted>
                     <source src={collectionEditorVideo} type="video/mp4"/>
                 </video>

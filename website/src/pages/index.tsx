@@ -14,6 +14,7 @@ import FeaturesTeaser from "../partials/home/FeaturesTeaser";
 import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
 import OpenAITeaser from "../partials/home/OpenAITeaser";
 import { IntroText } from "../partials/home/IntroText";
+import { FireCMSCloudIntro } from "../partials/home/FireCMSCloudIntro";
 
 function Home() {
     const context = useDocusaurusContext();
@@ -36,8 +37,8 @@ function Home() {
 
                     <FirebaseIntro/>
 
-                    <IntroText/>
-                    {/*<FireCMSCloudIntro/>*/}
+                    {/*<IntroText/>*/}
+                    <FireCMSCloudIntro/>
 
                     <FeaturesPanels/>
                     <EnterpriseTeaser/>

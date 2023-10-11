@@ -19,29 +19,34 @@ function HeroButtons() {
     </svg>;
 
     return <div
-        className="mt-8 mb-8 flex justify-center lg:flex-row flex-col-reverse items-center gap-4">
+        className="mt-8 mb-8 ">
 
-        <a
-            className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
-            href={"https://discord.gg/fxy7xsQm3m"}
-        >
-            {discordIcon}
-        </a>
+        <div className={"flex justify-center lg:flex-row flex-col-reverse items-center gap-4"}>
+            <a
+                className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
+                href={"https://discord.gg/fxy7xsQm3m"}
+            >
+                {discordIcon}
+            </a>
 
-        <a
-            className={CTAOutlinedButtonMixin + " w-full lg:w-auto "}
-            href={useBaseUrl("docs/")}
-        >
-            Self-hosted docs
-        </a>
+            <a
+                className={CTAOutlinedButtonMixin + " w-full lg:w-auto "}
+                href={useBaseUrl("docs/")}
+            >
+                Self-hosted docs
+            </a>
 
-        <a
-            className={CTAButtonMixin + " w-full lg:w-auto "}
-            href={"https://app.firecms.co"}
-        >
-            Get started
-            <CTACaret/>
-        </a>
+            <a
+                className={CTAButtonMixin + " w-full lg:w-auto "}
+                href={"https://app.firecms.co"}
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                Get started
+                <CTACaret/>
+            </a>
+        </div>
+        <b className={"text-primary"}>Check the new FireCMS Cloud version!</b>
     </div>;
 }
 

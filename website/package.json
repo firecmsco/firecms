@@ -5,7 +5,7 @@
     "scripts": {
         "docusaurus": "docusaurus",
         "start": "yarn run copyChangelog && TYPEDOC_WATCH=true docusaurus start",
-        "build": "yarn run copyChangelog && TYPEDOC_WATCH=false docusaurus build",
+        "build": "NODE_OPTIONS=--max-old-space-size=24048 && yarn run copyChangelog && TYPEDOC_WATCH=false docusaurus build",
         "preview": "yarn build && docusaurus serve",
         "copyChangelog": "echo '---' > ./docs/CHANGELOG.md && echo 'id: changelog' >> ./docs/CHANGELOG.md && echo 'title: Changelog' >> ./docs/CHANGELOG.md && echo '---' >> ./docs/CHANGELOG.md && cat ../CHANGELOG.md >> ./docs/CHANGELOG.md ",
         "swizzle": "docusaurus swizzle --danger",
@@ -14,7 +14,7 @@
         "clear": "docusaurus clear"
     },
     "engines": {
-        "node": ">=14"
+        "node": ">=20"
     },
     "dependencies": {
         "@docsearch/js": "3.3.3",

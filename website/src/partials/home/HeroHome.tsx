@@ -5,11 +5,8 @@ import HeroButtons from "./HeroButtons";
 import darkModeVideo from "@site/static/img/full_screen_dark.mp4";
 // @ts-ignore
 import lightModeVideo from "@site/static/img/full_screen_light.mp4";
-import { BrowserFrame } from "../BrowserFrame";
 import { useColorMode } from "@docusaurus/theme-common";
 import { ContainerMixin } from "../utils";
-
-// const LazyThreeJSAnimationShader = React.lazy(() => import("../shape/ThreeJSAnimationShader"));
 
 function HeroHome({}) {
 
@@ -66,6 +63,7 @@ function HeroHome({}) {
             </h2>
 
             <HeroButtons/>
+
 
         </div>
 
