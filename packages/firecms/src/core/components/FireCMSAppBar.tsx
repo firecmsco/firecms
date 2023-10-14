@@ -47,7 +47,8 @@ export const FireCMSAppBar = function FireCMSAppBar({
                                                         dropDownActions,
                                                         includeDrawer,
                                                         className,
-                                                        style
+                                                        style,
+                                                        user: userProp
                                                     }: FireCMSAppBarProps) {
 
     const navigation = useNavigationContext();
@@ -60,18 +61,20 @@ export const FireCMSAppBar = function FireCMSAppBar({
 
     const largeLayout = useLargeLayout();
 
+    const user = userProp ?? authController.user;
+
     let avatarComponent: JSX.Element;
-    if (authController.user && authController.user.photoURL) {
+    if (user && user.photoURL) {
         avatarComponent = <Avatar
-            src={authController.user.photoURL}/>;
-    } else if (authController.user === undefined || authController.initialLoading) {
+            src={user.photoURL}/>;
+    } else if (user === undefined || authController.initialLoading) {
         avatarComponent = <div className={"p-1 flex justify-center"}>
             <Skeleton className={"w-10 h-10 rounded-full"}/>
         </div>;
     } else {
-        const initial = authController.user?.displayName
-            ? authController.user.displayName[0].toUpperCase()
-            : (authController.user?.email ? authController.user.email[0].toUpperCase() : "A");
+        const initial = user?.displayName
+            ? user.displayName[0].toUpperCase()
+            : (user?.email ? user.email[0].toUpperCase() : "A");
         avatarComponent = <Avatar>{initial}</Avatar>;
     }
 
