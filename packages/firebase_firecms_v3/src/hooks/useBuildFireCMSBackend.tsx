@@ -14,6 +14,7 @@ import {
 } from "firebase/auth";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { buildProjectsApi } from "../api/projects";
+import { clearDelegatedLoginTokensCache } from "../utils/local_storage";
 
 const AUTH_SCOPES = [
     "https://www.googleapis.com/auth/cloud-platform"
@@ -128,6 +129,7 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp }: F
 
     const onSignOut = useCallback(() => {
         const auth = getAuth(backendFirebaseApp);
+        clearDelegatedLoginTokensCache()
         signOut(auth)
             .then(_ => {
                 setLoggedUser(null);

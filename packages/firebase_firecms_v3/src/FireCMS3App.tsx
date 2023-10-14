@@ -5,6 +5,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import {
     AppCheckOptions,
     BreadcrumbUpdater,
+    Button,
     CenteredView,
     CircularProgressCenter,
     CMSAnalyticsEvent,
@@ -132,12 +133,14 @@ export function FireCMS3App({
     } else if (fireCMSBackend.authLoading) {
         component = <FullLoadingView projectId={projectId}/>;
     } else if (!fireCMSBackend.user) {
-        component = <SaasLoginView
-            authController={fireCMSBackend}
-            includeLogo={true}
-            includeGoogleAdminScopes={false}
-            includeTermsAndNewsLetter={false}
-            includeGoogleDisclosure={false}/>
+        component = <CenteredView maxWidth={"lg"} fullScreen={true}>
+            <SaasLoginView
+                authController={fireCMSBackend}
+                includeLogo={true}
+                includeGoogleAdminScopes={false}
+                includeTermsAndNewsLetter={false}
+                includeGoogleDisclosure={false}/>
+        </CenteredView>
     } else {
         component = <FireCMS3Client
             fireCMSBackend={fireCMSBackend}
@@ -181,7 +184,7 @@ export type FireCMS3ClientProps = {
 function FullLoadingView(props: { projectId: string, currentProjectController?: ProjectConfig }) {
     return <Scaffold
         key={"project_scaffold_" + props.projectId}
-        name={props.currentProjectController?.projectName ?? "FireCMS"}
+        name={props.currentProjectController?.projectName ?? ""}
         logo={props.currentProjectController?.logo}
         includeDrawer={false}>
         <CircularProgressCenter/>
@@ -258,7 +261,6 @@ function FireCMS3ClientInner({
     } = useDelegatedLogin({
         projectsApi: fireCMSBackend.projectsApi,
         firebaseApp: clientFirebaseApp,
-        getBackendAuthToken: fireCMSBackend.getBackendAuthToken,
         projectId,
         onUserChanged: (user) => {
             console.log("User changed", user)
@@ -298,7 +300,8 @@ function FireCMS3ClientInner({
     }, [authController.user, currentProjectController.loading, currentProjectController.roles, currentProjectController.users, saasUser]);
 
     if (notValidUser) {
-        return <NoAccessError/>
+        console.warn("No user was found with email " + notValidUser.email);
+        return <NoAccessError authController={authController}/>
     }
 
     if (currentProjectController.loading) {
@@ -323,6 +326,7 @@ function FireCMS3ClientInner({
     if (delegatedLoginError) {
         return <CenteredView fullScreen={true}>
             <ErrorView error={delegatedLoginError}/>
+            <Button variant="text" onClick={authController.signOut}>Sign out</Button>
         </CenteredView>;
     }
 
@@ -335,7 +339,7 @@ function FireCMS3ClientInner({
     }
 
     if (!saasUser) {
-        return <NoAccessError/>;
+        return <NoAccessError authController={authController}/>;
     }
 
     return <FireCMS3AppAuthenticated
@@ -350,10 +354,11 @@ function FireCMS3ClientInner({
     />;
 }
 
-function NoAccessError() {
-    return <CenteredView maxWidth={"md"} fullScreen={true}>
+function NoAccessError({ authController }: { authController: FirebaseAuthController }) {
+    return <CenteredView maxWidth={"md"} fullScreen={true} className={"gap-4"}>
         <ErrorView title={"You don't have access to this project"}
                    error={"You can request permission to the owner"}/>
+        <Button variant="text" onClick={authController.signOut}>Sign out</Button>
     </CenteredView>;
 }
 
@@ -433,7 +438,7 @@ function FireCMS3AppAuthenticated({
     /**
      * Update the browser title and icon
      */
-    useBrowserTitleAndIcon(currentProjectController.projectName ?? "FireCMS", currentProjectController.logo);
+    useBrowserTitleAndIcon(currentProjectController.projectName ?? "", currentProjectController.logo);
 
     /**
      * Controller for saving some user preferences locally.
@@ -494,7 +499,7 @@ function FireCMS3AppAuthenticated({
                                     component = (
                                         <Scaffold
                                             key={"project_scaffold_" + currentProjectController.projectId}
-                                            name={currentProjectController.projectName ?? "FireCMS"}
+                                            name={currentProjectController.projectName ?? ""}
                                             logo={currentProjectController.logo}
                                             Drawer={SaasDrawer}
                                             FireCMSAppBarComponent={FireCMSAppBarComponent}

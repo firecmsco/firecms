@@ -16,11 +16,11 @@ export type ImportConfig = {
     setEntities: React.Dispatch<React.SetStateAction<Entity<any>[]>>;
 
     // mapping of the column name in the import file to the property key in the data model
-    headersMapping: Record<string, string>;
-    setHeadersMapping: React.Dispatch<React.SetStateAction<Record<string, string>>>;
+    headersMapping: Record<string, string | null>;
+    setHeadersMapping: React.Dispatch<React.SetStateAction<Record<string, string | null>>>;
 
-    inferredProperties: Record<string, Property>;
-    setInferredProperties: React.Dispatch<React.SetStateAction<Record<string, Property>>>;
+    originProperties: Record<string, Property>;
+    setOriginProperties: React.Dispatch<React.SetStateAction<Record<string, Property>>>;
 
     getPropertiesMapping: (properties: Record<string, Property>) => Record<string, DataTypeMapping>;
 

@@ -70,8 +70,8 @@ export const TableRow = ({
         onClick={onClick}
         style={style}
         className={cn(
-            defaultBorderMixin,
-            "bg-white border-b last:border-b-0 dark:bg-gray-950",
+            "divide-gray-100 dark:divide-gray-800",
+            "bg-white dark:bg-gray-950",
             onClick ? "hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer" : "",
             className)}
     >

@@ -11,27 +11,29 @@ import {
     TableRow,
     Typography
 } from "firecms";
-import { ImportPropertyFieldPreview } from "./ImportPropertyFieldPreview";
 
 export interface DataPropertyMappingProps {
     idColumn?: string;
-    headersMapping: Record<string, string>;
-    properties: Record<string, Property>;
-    onPropertyEditClicked: (propertyKey: string, property: Property) => void;
+    headersMapping: Record<string, string | null>;
+    originProperties: Record<string, Property>;
+    destinationProperties: Record<string, Property>;
     onIdPropertyChanged: (value: string) => void;
-    onPropertyNameChanged?: (propertyKey: string, value: string) => void;
-    propertyBadgeBuilder?: (props: { importKey: string, propertyKey: string, property: Property }) => React.ReactNode;
+    buildPropertyView?: (props: {
+        isIdColumn: boolean,
+        property: Property | null,
+        propertyKey: string | null,
+        importKey: string
+    }) => React.ReactNode;
 }
 
-export function DataPropertyMapping({
-                                        idColumn,
-                                        headersMapping,
-                                        properties,
-                                        onIdPropertyChanged,
-                                        onPropertyEditClicked,
-                                        onPropertyNameChanged,
-                                        propertyBadgeBuilder
-                                    }: DataPropertyMappingProps) {
+export function DataNewPropertiesMapping({
+                                             idColumn,
+                                             headersMapping,
+                                             originProperties,
+                                             destinationProperties,
+                                             onIdPropertyChanged,
+                                             buildPropertyView,
+                                         }: DataPropertyMappingProps) {
 
     return (
         <>
@@ -54,40 +56,36 @@ export function DataPropertyMapping({
                     </TableCell>
                 </TableHeader>
                 <TableBody>
-                    {properties &&
+                    {destinationProperties &&
                         Object.entries(headersMapping)
                             .map(([importKey, mappedKey]) => {
                                     const propertyKey = headersMapping[importKey];
-                                    const property = getPropertyInPath(properties, mappedKey) as Property;
+                                    const property = mappedKey ? getPropertyInPath(destinationProperties, mappedKey) as Property : null;
 
-                                    const propertySelect = propertyBadgeBuilder?.({ importKey, propertyKey, property });
-
+                                    const originProperty = getPropertyInPath(originProperties, importKey) as Property | undefined;
+                                    const originDataType = originProperty ? (originProperty.dataType === "array" && typeof originProperty.of === "object"
+                                            ? `${originProperty.dataType} - ${(originProperty.of as Property).dataType}`
+                                            : originProperty.dataType)
+                                        : undefined;
                                     return <TableRow key={importKey} style={{ height: "90px" }}>
                                         <TableCell style={{ width: "20%" }}>
                                             <Typography variant={"body2"}>{importKey}</Typography>
+                                            {originProperty && <Typography
+                                                variant={"caption"}
+                                                color={"secondary"}
+                                            >{originDataType}</Typography>}
                                         </TableCell>
                                         <TableCell>
                                             <ChevronRightIcon/>
                                         </TableCell>
                                         <TableCell className={importKey === idColumn ? "text-center" : undefined}
                                                    style={{ width: "75%" }}>
-                                            {importKey === idColumn
-                                                ? <Typography variant={"label"}>
-                                                    This column will be used as the ID
-                                                </Typography>
-                                                : <ImportPropertyFieldPreview
-                                                    importKey={importKey}
-                                                    property={property}
-                                                    propertyKey={propertyKey}
-                                                    onPropertyNameChanged={onPropertyNameChanged}
-                                                    onEditClick={
-                                                        () => {
-                                                            if (onPropertyEditClicked)
-                                                                onPropertyEditClicked(propertyKey, property);
-                                                        }
-                                                    }
-                                                    propertyTypeView={propertySelect}
-                                                />
+                                            {buildPropertyView?.({
+                                                isIdColumn: importKey === idColumn,
+                                                property,
+                                                propertyKey,
+                                                importKey
+                                            })
                                             }
                                         </TableCell>
                                     </TableRow>;
@@ -99,9 +97,13 @@ export function DataPropertyMapping({
     );
 }
 
-function IdSelectField({ idColumn, headersMapping, onChange }: {
+function IdSelectField({
+                           idColumn,
+                           headersMapping,
+                           onChange
+                       }: {
     idColumn?: string,
-    headersMapping: Record<string, string>;
+    headersMapping: Record<string, string | null>;
     onChange: (value: string) => void
 }) {
     return <div>
@@ -112,7 +114,6 @@ function IdSelectField({ idColumn, headersMapping, onChange }: {
                 onChange(event.target.value as string);
             }}
             renderValue={(value) => {
-                console.log("value", value);
                 return <Typography variant={"body2"}>
                     {value !== "" ? value : "Autogenerate ID"}
                 </Typography>;

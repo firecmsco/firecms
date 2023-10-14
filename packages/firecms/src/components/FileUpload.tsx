@@ -58,11 +58,7 @@ export function FileUpload({
             onDropRejected: onFilesRejected,
             disabled,
             maxFiles,
-            preventDropOnDocument,
-            validator: (file: File) => {
-                console.log("file", file);
-                return null;
-            }
+            preventDropOnDocument
         }
     );
     return <div

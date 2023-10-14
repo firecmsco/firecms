@@ -1,5 +1,5 @@
 import { useSnackbar } from "notistack";
-import { useCallback } from "react";
+import { useCallback, useMemo } from "react";
 
 /**
  * Possible snackbar types
@@ -64,9 +64,13 @@ export const useSnackbarController = () => {
         })
     }, []);
 
-    return {
+    const close = useCallback(() => {
+        closeSnackbar();
+    }, []);
+
+    return useMemo(() => ({
         open,
-        close: closeSnackbar
-    }
+        close
+    }), [open, close]);
 
 };

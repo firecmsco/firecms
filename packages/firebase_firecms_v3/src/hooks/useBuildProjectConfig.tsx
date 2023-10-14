@@ -39,8 +39,10 @@ export type ProjectConfig = {
     clientFirebaseConfig?: Record<string, unknown>;
     clientFirebaseMissing?: boolean;
     serviceAccountMissing?: boolean;
+
     subscriptionPlan?: ProjectSubscriptionPlan;
     usersLimit: number | null;
+
     canEditRoles: boolean;
     canUploadLogo: boolean;
     canExport: boolean;

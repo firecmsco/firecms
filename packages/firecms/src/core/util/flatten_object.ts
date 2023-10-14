@@ -19,6 +19,7 @@ export function flattenObject(obj: any, parentKey = "") {
     }, {} as { [key: string]: any });
 }
 
+
 // map from nested property key like "a.b.c" to the maximum array count found in a list of objects for that array
 export type ArrayValuesCount = Record<string, number>;
 

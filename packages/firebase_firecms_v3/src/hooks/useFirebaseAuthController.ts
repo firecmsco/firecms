@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import {
     createUserWithEmailAndPassword as createUserWithEmailAndPasswordFirebase,
@@ -14,10 +14,6 @@ import { FirebaseApp } from "firebase/app";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, FireCMSBackend } from "../types/auth";
 import { Role } from "../types";
 
-const AUTH_SCOPES = [
-    "https://www.googleapis.com/auth/cloud-platform"
-];
-
 interface FirebaseAuthControllerProps {
     firebaseApp?: FirebaseApp;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>; // TODO
@@ -28,7 +24,11 @@ interface FirebaseAuthControllerProps {
  * Use this hook to build an {@link AuthController} based on Firebase Auth
  * @category Firebase
  */
-export const useFirebaseAuthController = ({ firebaseApp, signInOptions, fireCMSBackend }: FirebaseAuthControllerProps): FirebaseAuthController => {
+export const useFirebaseAuthController = ({
+                                              firebaseApp,
+                                              signInOptions,
+                                              fireCMSBackend
+                                          }: FirebaseAuthControllerProps): FirebaseAuthController => {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
     const [authError, setAuthError] = useState<any>();
@@ -106,7 +106,7 @@ export const useFirebaseAuthController = ({ firebaseApp, signInOptions, fireCMSB
         setAuthLoading(false);
     }, []);
 
-    return {
+    return useMemo(() => ({
         user: loggedUser ?? null,
         setUser: updateUser,
         authProviderError,
@@ -121,5 +121,5 @@ export const useFirebaseAuthController = ({ firebaseApp, signInOptions, fireCMSB
         emailPasswordLogin,
         createUserWithEmailAndPassword,
         fetchSignInMethodsForEmail
-    };
+    }), [authLoading, authProviderError, createUserWithEmailAndPassword, emailPasswordLogin, fetchSignInMethodsForEmail, getAuthToken, googleLogin, loggedUser, onSignOut, updateUser, userRoles]);
 };

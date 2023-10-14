@@ -6,6 +6,7 @@ import { Avatar, cn, IconButton, Menu, MenuItem, Typography } from "../../compon
 import { useAuthController, useLargeLayout, useModeController, useNavigationContext } from "../../hooks";
 import { DarkModeIcon, LightModeIcon, LogoutIcon } from "../../icons";
 import { Skeleton } from "../../components/Skeleton";
+import { User } from "../../types";
 
 export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
     title: string;
@@ -25,6 +26,8 @@ export type FireCMSAppBarProps<ADDITIONAL_PROPS = object> = {
     className?: string;
 
     style?: React.CSSProperties;
+
+    user?: User;
 } & ADDITIONAL_PROPS;
 
 /**

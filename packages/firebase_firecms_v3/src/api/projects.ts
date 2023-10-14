@@ -1,4 +1,4 @@
-import { SaasUser, SaasUserProject } from "../types";
+import { SaasApiError, SaasUser, SaasUserProject } from "../types";
 import { handleApiResponse } from "./common";
 
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;
@@ -183,6 +183,9 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             })
             .then(async (res) => {
                 const data = await res.json();
+                if (!res.ok) {
+                    throw new SaasApiError(data.message, data.code, projectId);
+                }
                 return data.data as string;
             });
     }

@@ -2,18 +2,17 @@ import { FirebaseApp } from "firebase/app";
 import { useCallback, useEffect, useState } from "react";
 import { getAuth, signInWithCustomToken, User as FirebaseUser } from "firebase/auth";
 import { ProjectsApi } from "../api/projects";
+import { cacheDelegatedLoginToken, getDelegatedLoginTokenFromCache } from "../utils/local_storage";
 
 export function useDelegatedLogin({
                                       projectsApi,
                                       firebaseApp,
                                       projectId,
-                                      getBackendAuthToken,
                                       onUserChanged,
                                   }: {
     projectsApi: ProjectsApi;
     firebaseApp?: FirebaseApp,
     projectId: string,
-    getBackendAuthToken: () => Promise<string>,
     onUserChanged?: (user?: FirebaseUser) => void,
 }) {
 
@@ -27,24 +26,31 @@ export function useDelegatedLogin({
             setDelegatedLoginLoading(true);
             setLoginSuccessful(false);
             try {
-                let delegatedToken = getTokenFromCache(projectId);
+                let delegatedToken = getDelegatedLoginTokenFromCache(projectId);
                 if (!delegatedToken) {
-                    delegatedToken = await projectsApi.doDelegatedLogin(projectId);
                     try {
-                        cacheToken(projectId, delegatedToken);
+                        delegatedToken = await projectsApi.doDelegatedLogin(projectId);
                     } catch (e) {
-                        console.error("Error caching token", e);
+                        console.error("Error delegating login", e);
+                        setDelegatedLoginError(e as any);
                     }
                 }
+
                 if (!delegatedToken) {
-                    throw new Error("No delegated token");
+                    return;
                 }
+
                 const auth = getAuth(firebaseApp);
                 signInWithCustomToken(auth, delegatedToken)
-                    .then((userCredential) => {
+                    .then(async (userCredential) => {
                         console.log("Delegated user signed in", userCredential);
                         onUserChanged?.(userCredential.user);
                         setLoginSuccessful(true);
+                        try {
+                            cacheDelegatedLoginToken(projectId, delegatedToken);
+                        } catch (e) {
+                            console.error("Error caching token", e);
+                        }
                     })
                     .catch((error) => {
                         setLoginSuccessful(false);
@@ -62,44 +68,10 @@ export function useDelegatedLogin({
         checkLogin();
     }, [checkLogin]);
 
-    return { loginSuccessful, delegatedLoginLoading, delegatedLoginError };
+    return {
+        loginSuccessful,
+        delegatedLoginLoading,
+        delegatedLoginError
+    };
 
-}
-
-const tokens = new Map<string, {
-    token: string,
-    expiry: Date
-}>();
-
-function cacheToken(projectId: string, delegatedToken?: string) {
-    if (!delegatedToken) {
-        return;
-    }
-
-    const data = parseJwt(delegatedToken);
-    // @ts-ignore
-    const expiry = new Date(data.exp * 1000);
-    tokens.set(projectId, { token: delegatedToken, expiry });
-}
-
-function getTokenFromCache(projectId: string) {
-    const entry = tokens.get(projectId);
-    if (entry && entry.expiry > new Date()) {
-        console.log("Using cached token", projectId);
-        return entry.token;
-    }
-    return undefined;
-}
-
-function parseJwt(token?: string): object {
-    if (!token) {
-        throw new Error("No JWT token");
-    }
-    const base64Url = token.split(".")[1];
-    const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
-    const jsonPayload = decodeURIComponent(window.atob(base64).split("").map(function (c) {
-        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
-    }).join(""));
-
-    return JSON.parse(jsonPayload);
 }

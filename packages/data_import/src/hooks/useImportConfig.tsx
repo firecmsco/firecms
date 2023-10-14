@@ -8,12 +8,14 @@ export const useImportConfig = (): ImportConfig => {
     const [idColumn, setIdColumn] = useState<string | undefined>();
     const [importData, setImportData] = useState<object[]>([]);
     const [entities, setEntities] = useState<Entity<any>[]>([]);
-    const [headersMapping, setHeadersMapping] = useState<Record<string, string>>({});
-    const [inferredProperties, setInferredProperties] = useState<Record<string, Property>>({});
+    const [headersMapping, setHeadersMapping] = useState<Record<string, string | null>>({});
+    const [originProperties, setOriginProperties] = useState<Record<string, Property>>({});
 
-    const getPropertiesMapping = useCallback((newProperties: Record<string, Property>) => {
+    const getPropertiesMapping = useCallback((newProperties: Record<string, Property>): Record<string, DataTypeMapping> => {
 
         function updateMapping(properties: Record<string, Property>, namespace?: string): Record<string, DataTypeMapping> {
+
+            console.log(`updateMapping`, { originProperties, properties, namespace });
 
             const dataMapping: Record<string, DataTypeMapping> = {};
 
@@ -22,7 +24,7 @@ export const useImportConfig = (): ImportConfig => {
                 const currentKey = namespace ? `${namespace}.${key}` : key;
 
                 const property = getPropertyInPath(properties, key) as Property;
-                const inferredProperty = getPropertyInPath(inferredProperties, currentKey) as Property;
+                const inferredProperty = getPropertyInPath(originProperties, currentKey) as Property;
 
                 if (property) {
                     if (property.dataType === "map" && property.properties) {
@@ -67,7 +69,7 @@ export const useImportConfig = (): ImportConfig => {
         }
 
         return updateMapping(newProperties);
-    }, [inferredProperties]);
+    }, [originProperties]);
 
     return {
         inUse,
@@ -80,8 +82,8 @@ export const useImportConfig = (): ImportConfig => {
         setImportData,
         headersMapping,
         setHeadersMapping,
-        inferredProperties,
-        setInferredProperties,
+        originProperties,
+        setOriginProperties,
         getPropertiesMapping
     };
 };

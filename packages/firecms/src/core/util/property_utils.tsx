@@ -100,3 +100,25 @@ export function getBracketNotation(path: string): string {
     return path.replace(/\.([^.]*)/g, "[$1]");
 }
 
+/**
+ * Get properties exclusively indexed by their order
+ * @param properties
+ * @param propertiesOrder
+ */
+export function getPropertiesWithPropertiesOrder<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: Extract<keyof M, string>[]): PropertiesOrBuilders<M> {
+    if(!propertiesOrder) return properties;
+    const result: PropertiesOrBuilders<any> = {};
+    propertiesOrder.forEach(path => {
+        const property = getPropertyInPath(properties, path);
+        if (typeof property === "object" && property.dataType === "map" && property.properties) {
+            result[path] = {
+                ...property,
+                properties: getPropertiesWithPropertiesOrder(property.properties, property.propertiesOrder ?? [])
+            }
+        }
+        if (property) {
+            result[path] = property;
+        }
+    });
+    return result;
+}

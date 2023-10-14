@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useLocation } from "react-router-dom";
 
 import {
@@ -103,7 +103,10 @@ export function useBuildNavigationContext<UserType extends User>({
             .map(e => e.group)
             .filter(Boolean)
             .filter((value, index, array) => array.indexOf(value) === index) as string[];
-        return { navigationEntries, groups };
+        return {
+            navigationEntries,
+            groups
+        };
     }, [buildCMSUrlPath, buildUrlCollectionPath]);
 
     const refreshNavigation = useCallback(async () => {
@@ -232,7 +235,7 @@ export function useBuildNavigationContext<UserType extends User>({
         });
     }, [collections]);
 
-    return {
+    return useMemo(() => ({
         collections: collections ?? [],
         views: views ?? [],
         loading: !initialised || navigationLoading,
@@ -253,7 +256,7 @@ export function useBuildNavigationContext<UserType extends User>({
         baseLocation,
         refreshNavigation,
         getParentReferencesFromPath: getAllParentCollectionsForPath
-    };
+    }), [baseCollectionPath, baseLocation, basePath, buildCMSUrlPath, buildUrlCollectionPath, buildUrlEditCollectionPath, collections, getAllParentCollectionsForPath, getCollection, getCollectionFromPaths, homeUrl, initialised, isUrlCollectionPath, navigationLoading, navigationLoadingError, refreshNavigation, resolveAliasesFrom, topLevelNavigation, urlPathToDataPath, views]);
 }
 
 export function getSidePanelKey(path: string, entityId?: string) {

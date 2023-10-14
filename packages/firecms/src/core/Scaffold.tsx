@@ -7,6 +7,7 @@ import { useLargeLayout, useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
 import { cn, IconButton, Sheet, Tooltip } from "../components";
 import { ChevronLeftIcon, MenuIcon } from "../icons";
+import { defaultBorderMixin } from "../styles";
 
 export const DRAWER_WIDTH = 280;
 
@@ -138,7 +139,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
                     className="flex flex-col flex-grow overflow-auto">
                     <DrawerHeader/>
                     <div
-                        className={"flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid lg:border-gray-100 lg:dark:border-gray-800 m-0 mt-1"}>
+                        className={cn(defaultBorderMixin, "flex-grow overflow-auto lg:m-0 lg:mx-4 lg:mb-4 lg:rounded-lg lg:border lg:border-solid m-0 mt-1")}>
 
                         <ErrorBoundary>
                             {children}

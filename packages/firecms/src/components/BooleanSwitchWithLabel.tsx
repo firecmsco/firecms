@@ -54,12 +54,12 @@ export const BooleanSwitchWithLabel = function BooleanSwitchWithLabel({
             onBlur={onBlur}
             tabIndex={-1}
             className={cn(
-                !invisible && fieldBackgroundMixin,
+                    !invisible && fieldBackgroundMixin,
                 !invisible && (disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin),
                 disabled ? "cursor-default" : "cursor-pointer",
                 "rounded-md relative max-w-full justify-between w-full box-border relative inline-flex items-center",
                 !invisible && focus && !disabled ? focusedClasses : "",
-                error ? "text-red-500 dark:text-red-600" : !invisible && focus && !disabled ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark",
+                error ? "text-red-500 dark:text-red-600" : (focus ? "text-primary" : (!disabled ? "text-text-primary dark:text-text-primary-dark" : "text-text-secondary dark:text-text-secondary-dark")),
                 size === "small" ? "min-h-[40px]" : "min-h-[64px]",
                 size === "small" ? "pl-2" : "pl-4",
                 size === "small" ? "pr-4" : "pr-6",

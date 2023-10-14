@@ -1,5 +1,6 @@
 import { FireCMSPlugin } from "firecms";
-import { ExportButton } from "../export_import/ExportButton";
+import { ExportColectionAction } from "../export_import/ExportColectionAction";
+import { ImportCollectionAction } from "../export_import/ImportCollectionAction";
 
 /**
  *
@@ -9,7 +10,7 @@ export function useImportExportPlugin(): FireCMSPlugin {
     return {
         name: "Import/Export",
         collections: {
-            CollectionActions: ExportButton
+            CollectionActions: [ImportCollectionAction , ExportColectionAction]
         },
     };
 }

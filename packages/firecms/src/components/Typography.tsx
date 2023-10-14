@@ -63,7 +63,7 @@ const variantToClasses = {
 export function Typography<C extends React.ElementType>(
     {
         align = "inherit",
-        color,
+        color = "primary",
         children,
         className,
         component,
