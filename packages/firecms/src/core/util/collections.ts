@@ -51,8 +51,9 @@ export function joinCollectionLists(fetchedCollections: EntityCollection[], base
     }));
     const updatedCollections = (baseCollections ?? [])
         .map((navigationCollection) => {
-            const storedCollection = resolvedFetchedCollections?.find((collection) => collection.path === navigationCollection.path) ??
-                resolvedFetchedCollections?.find((collection) => collection.alias === navigationCollection.alias);
+            const storedCollection = resolvedFetchedCollections?.find((collection) => {
+                return collection.path === navigationCollection.path || (collection.alias && navigationCollection.alias && collection.alias === navigationCollection.alias);
+            });
             if (!storedCollection) {
                 return { ...navigationCollection, deletable: false };
             } else {

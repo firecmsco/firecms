@@ -83,9 +83,6 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             fireCMSAppBarComponentProps,
         } = props;
 
-        console.log("Scaffold", {
-            includeDrawer, fireCMSAppBarComponentProps, FireCMSAppBarComponent})
-
         const largeLayout = useLargeLayout();
 
         const navigation = useNavigationContext();

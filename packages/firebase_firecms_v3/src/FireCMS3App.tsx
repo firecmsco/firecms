@@ -197,6 +197,7 @@ export const FireCMS3Client = function FireCMS3Client({
                                                           ...props
                                                       }: FireCMS3ClientProps) {
 
+
     const currentProjectController = useBuildProjectConfig({
         projectId,
         getBackendAuthToken: fireCMSBackend.getBackendAuthToken,
@@ -486,7 +487,8 @@ function FireCMS3AppAuthenticated({
                             basePath={basePath}
                             baseCollectionPath={baseCollectionPath}
                             onAnalyticsEvent={onAnalyticsEvent}
-                            plugins={[importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin]}>
+                            plugins={[importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin]}
+                        >
                             {({
                                   context,
                                   loading
@@ -541,3 +543,8 @@ function buildSaasRoutes() {
             </BreadcrumbUpdater>}
     />)
 }
+
+function getRemoteConfig(arg0: string) {
+    throw new Error("Function not implemented.");
+}
+
