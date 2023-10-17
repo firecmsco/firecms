@@ -10,24 +10,19 @@ export default defineConfig({
     esbuild: {
         logOverride: { "this-is-undefined-in-esm": "silent" }
     },
-    optimizeDeps: { include: ["react/jsx-runtime"] },
+    // optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
         react(),
         federation({
             name: "remote_app",
             filename: "remoteEntry.js",
             exposes: {
-                "./index": "./src/index"
+                "./config": "./src/index"
             },
-            shared: ["react", "react-dom"]
+            shared: ["react", "react-dom", "firecms", "@firecms/firebase_firecms_v3"]
         })
     ],
     build: {
-        // lib: {
-        //     entry: path.resolve(__dirname, "src/index.ts"),
-        //     name: "FireCMS",
-        //     // fileName: (format) => `index.${format}.js`
-        // },
         modulePreload: false,
         target: "esnext",
         minify: false,

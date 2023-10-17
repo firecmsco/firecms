@@ -2237,13 +2237,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@originjs/vite-plugin-federation@npm:^1.2.3":
-  version: 1.2.3
-  resolution: "@originjs/vite-plugin-federation@npm:1.2.3"
+"@originjs/vite-plugin-federation@npm:^1.3.2":
+  version: 1.3.2
+  resolution: "@originjs/vite-plugin-federation@npm:1.3.2"
   dependencies:
     estree-walker: ^3.0.2
     magic-string: ^0.27.0
-  checksum: 252dbeb9399a420bfe38314e835354069d8203586916df6f77e744a7392285f41b4b74d46c2d853b16107eb15a3e3385ac275ef1aeb2fb7b4c04678eaa53a2b0
+  checksum: 454963557ce7cd2607661754f0b1d11fcf4f9a2a80273ace6f74d7d6ccc4682c558fe143816294501dd7727a80f023e4831aeea9834d1e8e84ae864ad6545a66
   languageName: node
   linkType: hard
 
@@ -10358,7 +10358,7 @@ __metadata:
     "@firecms/firebase_firecms_v3": "workspace:^"
     "@fontsource/roboto": ^5.0.2
     "@module-federation/vite": ^0.2.6
-    "@originjs/vite-plugin-federation": ^1.2.3
+    "@originjs/vite-plugin-federation": ^1.3.2
     "@sentry/react": ^7.54.0
     "@sentry/tracing": ^7.54.0
     "@sentry/vite-plugin": ^2.7.1
@@ -10477,7 +10477,7 @@ __metadata:
   resolution: "shared@workspace:examples/example_v3"
   dependencies:
     "@firecms/firebase_firecms_v3": "workspace:^"
-    "@originjs/vite-plugin-federation": ^1.2.3
+    "@originjs/vite-plugin-federation": ^1.3.2
     "@types/react": ^18.0.17
     "@types/react-dom": ^18.0.6
     "@vitejs/plugin-react": ^4.0.0

@@ -61,6 +61,7 @@ export const testCallbacks: EntityCallbacks = {
                     status,
                     context
                 }) => {
+        console.log("onPreSave", values);
         return resolveNavigationFrom({
             path: `${path}/${entityId}`,
             context
