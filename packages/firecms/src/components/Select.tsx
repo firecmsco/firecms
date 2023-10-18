@@ -65,7 +65,8 @@ export function Select({
                            endAdornment,
                            multiple,
                            invisible,
-                           children
+                           children,
+                           ...props
                        }: SelectProps) {
 
     const [openInternal, setOpenInternal] = React.useState(false);
@@ -105,9 +106,10 @@ export function Select({
             onOpenChange={(open) => {
                 onOpenChange?.(open);
                 setOpenInternal(open);
-            }}>
+            }}
+            {...props}>
 
-            {typeof label === "string" ? <SelectInputLabel>{label}</SelectInputLabel> : label}
+            {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
 
             <div
                 className={cn(
@@ -128,6 +130,7 @@ export function Select({
                         "outlin e-none focus:outline-none",
                         "select-none rounded-md text-sm",
                         error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
+                        error ? "border border-red-500 dark:border-red-600" : "",
                         disabled ? "text-gray-600 dark:text-gray-400" : "text-gray-800 dark:text-gray-200",
                         "relative flex items-center",
                         includeFocusOutline ? focusedMixin : "",

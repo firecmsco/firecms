@@ -55,7 +55,8 @@ export function MultiSelect({
                                 includeFocusOutline = true,
                                 containerClassName,
                                 className,
-                                children
+                                children,
+                                error
                             }: MultiSelectProps) {
 
     const containerRef = React.useRef<HTMLInputElement>(null);
@@ -108,7 +109,7 @@ export function MultiSelect({
 
     return (<>
 
-            {typeof label === "string" ? <SelectInputLabel>{label}</SelectInputLabel> : label}
+            {typeof label === "string" ? <SelectInputLabel error={error}>{label}</SelectInputLabel> : label}
 
             <CommandPrimitive onKeyDown={handleKeyDown}
                               onClick={() => {
@@ -126,6 +127,8 @@ export function MultiSelect({
                         disabled ? fieldBackgroundDisabledMixin : fieldBackgroundHoverMixin,
                         "relative flex items-center",
                         "p-4",
+                        error ? "text-red-500 dark:text-red-600" : "focus:text-text-primary dark:focus:text-text-primary-dark",
+                        error ? "border border-red-500 dark:border-red-600" : "",
                         includeFocusOutline ? focusedMixin : "",
                         className)}
                 >
