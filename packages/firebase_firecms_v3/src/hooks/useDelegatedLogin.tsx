@@ -4,17 +4,19 @@ import { getAuth, signInWithCustomToken, User as FirebaseUser } from "firebase/a
 import { ProjectsApi } from "../api/projects";
 import { cacheDelegatedLoginToken, getDelegatedLoginTokenFromCache } from "../utils/local_storage";
 
+export type DelegatedLoginProps = {
+    projectsApi: ProjectsApi;
+    firebaseApp?: FirebaseApp,
+    projectId: string,
+    onUserChanged?: (user?: FirebaseUser) => void,
+};
+
 export function useDelegatedLogin({
                                       projectsApi,
                                       firebaseApp,
                                       projectId,
                                       onUserChanged,
-                                  }: {
-    projectsApi: ProjectsApi;
-    firebaseApp?: FirebaseApp,
-    projectId: string,
-    onUserChanged?: (user?: FirebaseUser) => void,
-}) {
+                                  }: DelegatedLoginProps) {
 
     const [loginSuccessful, setLoginSuccessful] = useState(false);
     const [delegatedLoginLoading, setDelegatedLoginLoading] = useState(false);

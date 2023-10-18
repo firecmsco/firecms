@@ -13,11 +13,11 @@
     }
   },
   "peerDependencies": {
+    "firecms": "workspace:^",
     "@firecms/collection_editor": "workspace:^",
     "@firecms/data_enhancement": "workspace:^",
     "@firecms/schema_inference": "workspace:^",
     "firebase": "^9.2.3",
-    "firecms": "workspace:^",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.12.0",
