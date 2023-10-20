@@ -1,4 +1,4 @@
-## [2.1.0] - 2023-08-
+## [2.1.0] - 2023-09-12
 
 ### Changed
 
@@ -6,6 +6,10 @@
   This improves the ability to customize the data source and allows for more complex filters.
   This change will only affect you if you have implemented a custom data source. You will need to 
   add a `isFilterCombinationValid` method to your data source.
+- [BREAKING] The prop `filterCombinations` has been removed from the `EntityCollection` component.
+  This is now handled by the data source. If you need to allow multiple filters, you can use the
+  new `FireStoreIndexesBuilder` callback. Check the [documentation](https://firecms.co/docs/collections/multiple_filters)
+  for more information.
 - You can now use nested `spreadChildren` in map properties, allowing to show arbitrary
   nested structures as single columns in the collection view.
 - The collection count value is now updated with filters applied.

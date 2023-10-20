@@ -27,7 +27,8 @@
         "deploy:saas:prod": "cd packages/saas && yarn deploy:prod",
         "deploy:demo": "cd examples/example && yarn deploy",
         "deploy:web": "cd website && yarn deploy",
-        "build": "cd packages/firecms && yarn build"
+        "build": "cd packages/firecms && yarn build",
+        "release": "git push origin main:release"
     },
     "packageManager": "yarn@3.2.3"
 }
