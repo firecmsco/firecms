@@ -417,16 +417,16 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     ? additionalFields.map((additionalField) =>
                         ({
                             key: additionalField.id,
-                            type: "additional",
                             align: "left",
                             sortable: false,
                             title: additionalField.name,
                             width: additionalField.width ?? 200
                         }))
                     : [];
+
                 return [...columnsResult, ...additionalTableColumns];
             },
-            [additionalFields, disabledFilterChange, forceFilter, resolvedCollection.properties]);
+            [additionalFields, disabledFilterChange, forceFilter, resolvedCollection.properties, resolvedCollection.subcollections]);
 
         const idColumn: TableColumn = useMemo(() => ({
             key: "id_ewcfedcswdf3",
@@ -442,7 +442,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             ...displayedColumnIds
                 .map((p) => {
                     return allColumns.find(c => c.key === p);
-                }).filter(c => !!c) as TableColumn[]
+                }).filter(Boolean) as TableColumn[]
         ], [allColumns, displayedColumnIds, idColumn]);
 
         const cellRenderer = useCallback((props: CellRendererParams<any>) => {
@@ -594,7 +594,7 @@ const onValueChange: OnCellValueChange<any, any> = ({
 
 };
 
-function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean) {
+function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: ResolvedEntityCollection<M>, includeSubCollections: boolean) {
     const propertyKeys = Object.keys(collection.properties);
 
     if (collection.additionalColumns) {
@@ -609,7 +609,7 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: R
         ...additionalFields.map((field) => field.id)
     ];
 
-    if (includeSubcollections) {
+    if (includeSubCollections) {
         const subCollectionIds = subCollections
             .map((collection) => getSubcollectionColumnId(collection));
         columnIds.push(...subCollectionIds.filter((subColId) => !columnIds.includes(subColId)));
@@ -619,26 +619,23 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: R
         columnIds.push(COLLECTION_GROUP_PARENT_ID);
     }
 
-    return hideAndExpandKeys(collection, columnIds);
+    return hideAndExpandKeys(collection, columnIds, true);
 }
 
 function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): string[] {
-    return useMemo(() => {
-        if (collection.propertiesOrder)
-            return hideAndExpandKeys(collection, collection.propertiesOrder);
-        return getDefaultColumnKeys(collection, includeSubcollections);
-
-    }, [collection, includeSubcollections]);
+    if (collection.propertiesOrder)
+        return hideAndExpandKeys(collection, collection.propertiesOrder, false);
+    return getDefaultColumnKeys(collection, includeSubcollections);
 }
 
-function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, keys: string[]): string[] {
+function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, keys: string[], excludeHidden: boolean): string[] {
 
     return keys.flatMap((key) => {
         const property = collection.properties[key];
         if (property) {
-            if (property.hideFromCollection)
+            if (excludeHidden && property.hideFromCollection)
                 return [null];
-            if (property.disabled && typeof property.disabled === "object" && property.disabled.hidden)
+            if (excludeHidden && property.disabled && typeof property.disabled === "object" && property.disabled.hidden)
                 return [null];
             if (property.dataType === "map" && property.spreadChildren && property.properties) {
                 return getColumnKeysForProperty(property, key);
@@ -649,6 +646,13 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
         const additionalField = collection.additionalFields?.find(field => field.id === key);
         if (additionalField) {
             return [key];
+        }
+
+        if (collection.subcollections) {
+            const subCollection = collection.subcollections.find(subCol => getSubcollectionColumnId(subCol) === key);
+            if (subCollection) {
+                return [key];
+            }
         }
 
         if (collection.collectionGroup && key === COLLECTION_GROUP_PARENT_ID) {
