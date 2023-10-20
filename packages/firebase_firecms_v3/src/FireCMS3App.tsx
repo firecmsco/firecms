@@ -197,7 +197,6 @@ export const FireCMS3Client = function FireCMS3Client({
                                                           ...props
                                                       }: FireCMS3ClientProps) {
 
-
     const currentProjectController = useBuildProjectConfig({
         projectId,
         getBackendAuthToken: fireCMSBackend.getBackendAuthToken,
@@ -205,7 +204,7 @@ export const FireCMS3Client = function FireCMS3Client({
         projectsApi: fireCMSBackend.projectsApi
     });
 
-    if (!currentProjectController.clientFirebaseConfig) {
+    if (currentProjectController.loading || (!currentProjectController.clientFirebaseConfig && !currentProjectController.configError)) {
         return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
     }
 
@@ -292,7 +291,6 @@ function FireCMS3ClientInner({
         if (!user) return;
         if (!saasUser) {
             setNotValidUser(user);
-            // throw Error("No user was found with email " + user.email);
         } else {
             setNotValidUser(undefined);
             const userRoles = getUserRoles(currentProjectController.roles, saasUser);

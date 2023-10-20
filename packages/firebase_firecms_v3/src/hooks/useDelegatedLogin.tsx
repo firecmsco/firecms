@@ -15,7 +15,7 @@ export function useDelegatedLogin({
                                       projectsApi,
                                       firebaseApp,
                                       projectId,
-                                      onUserChanged,
+                                      onUserChanged
                                   }: DelegatedLoginProps) {
 
     const [loginSuccessful, setLoginSuccessful] = useState(false);
@@ -55,6 +55,7 @@ export function useDelegatedLogin({
                         }
                     })
                     .catch((error) => {
+                        console.error("Error signing in with delegated token", error);
                         setLoginSuccessful(false);
                         setDelegatedLoginError(error);
                     }).finally(() => setDelegatedLoginLoading(false));
