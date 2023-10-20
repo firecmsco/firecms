@@ -50,9 +50,9 @@ const data = [{
     },{
         feature: "Data import",
         selfHosted: "No",
-        cloud: "WIP",
-        cloudPlus: "WIP",
-        cloudPro: "WIP"
+        cloud: "Yes",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
     }, {
         feature: "User and role management",
         selfHosted: "Dev managed",
