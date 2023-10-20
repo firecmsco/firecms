@@ -10,7 +10,7 @@
     "@mui/lab": "^5.0.0-alpha.133",
     "@mui/material": "^5.13.4",
     "algoliasearch": "^4.17.1",
-    "firebase": "^9.22.1",
+    "firebase": "^10.4.0",
     "firecms": "workspace:lib",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
