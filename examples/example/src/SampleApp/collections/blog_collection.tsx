@@ -1,4 +1,4 @@
-import { buildCollection, buildProperty, ExportMappingFunction } from "firecms";
+import { buildCollection, buildProperty } from "firecms";
 import { BlogEntryPreview } from "../custom_entity_view/BlogEntryPreview";
 
 export type BlogEntry = {
@@ -12,26 +12,12 @@ export type BlogEntry = {
     tags: string[]
 }
 
-/**
- * Sample field that will be added to the export
- */
-const sampleAdditionalExportColumn: ExportMappingFunction = {
-    key: "extra",
-    builder: async ({ entity }) => {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        return "Additional exported value " + entity.id;
-    }
-};
-
 export const blogCollection = buildCollection<BlogEntry>({
     path: "blog",
     name: "Blog",
     singularName: "Blog entry",
     group: "Content",
     icon: "Article",
-    exportable: {
-        additionalFields: [sampleAdditionalExportColumn]
-    },
     description: "A blog entry with a quirky humorist tone. Each entry should have at least 5 text pieces of around 100 words each and a quote at least. The quote can be anywhere.",
     textSearchEnabled: true,
     defaultSize: "l",
