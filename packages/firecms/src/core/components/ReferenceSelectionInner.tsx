@@ -93,7 +93,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         multiselect,
         collection,
         path: pathInput,
-        selectedEntityIds,
+        selectedEntityIds: selectedEntityIdsProp,
         description,
         forceFilter,
         maxSelection
@@ -117,6 +117,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
      */
     useEffect(() => {
         let unmounted = false;
+        const selectedEntityIds = selectedEntityIdsProp?.map(id => id?.toString()).filter(Boolean);
         if (selectedEntityIds && collection) {
             Promise.all(
                 selectedEntityIds.map((entityId) =>
@@ -139,7 +140,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         return () => {
             unmounted = true;
         };
-    }, [dataSource, fullPath, selectedEntityIds, collection, selectionController.setSelectedEntities]);
+    }, [dataSource, fullPath, selectedEntityIdsProp, collection, selectionController.setSelectedEntities]);
 
     const onClear = useCallback(() => {
         context.onAnalyticsEvent?.("reference_selection_clear", {

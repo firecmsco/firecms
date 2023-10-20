@@ -60,7 +60,12 @@ export function ReferenceFilterField({
     const [internalValue, setInternalValue] = useState<EntityReference | EntityReference[] | undefined>(fieldValue);
 
     const selectedEntityIds = internalValue
-        ? (Array.isArray(internalValue) ? internalValue.map((ref) => ref.id) : [internalValue.id])
+        ? (Array.isArray(internalValue) ? internalValue.map((ref) => {
+            if (!(ref instanceof EntityReference)) {
+                return null;
+            }
+            return ref.id;
+        }).filter(Boolean) as string[] : [internalValue.id])
         : [];
 
     function updateFilter(op: VirtualTableWhereFilterOp, val?: EntityReference | EntityReference[]) {
