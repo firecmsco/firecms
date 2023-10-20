@@ -541,6 +541,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         columnIndex={popupCell?.columnIndex}
                         propertyKey={popupCell?.propertyKey}
                         collection={popupCell?.collection}
+                        property={popupCell?.property}
                         entity={popupCell?.entity}
                         tableKey={tableKey.current}
                         customFieldValidator={customFieldValidator}
