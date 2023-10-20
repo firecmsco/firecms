@@ -1,39 +1,12 @@
-import React, {
-    ReactNode,
-    useCallback,
-    useEffect,
-    useRef,
-    useState
-} from "react";
+import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
-import {
-    Box,
-    Button,
-    CircularProgress,
-    Fade,
-    Grid,
-    IconButton,
-    Slide,
-    TextField,
-    Typography
-} from "@mui/material";
+import { Box, Button, CircularProgress, Fade, Grid, IconButton, Slide, TextField, Typography } from "@mui/material";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
 import { ErrorView, FireCMSLogo } from "../../core";
 import { useModeController } from "../../hooks";
-import {
-    FirebaseAuthController,
-    FirebaseSignInOption,
-    FirebaseSignInProvider
-} from "../types/auth";
-import {
-    appleIcon,
-    facebookIcon,
-    githubIcon,
-    googleIcon,
-    microsoftIcon,
-    twitterIcon
-} from "./social_icons";
+import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
+import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";
 import EmailIcon from "@mui/icons-material/Email";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import PersonOutlineIcon from "@mui/icons-material/PersonOutline";
@@ -138,7 +111,7 @@ export function FirebaseLoginView({
 
     const sendMFASms = useCallback(() => {
         const auth = getAuth();
-        const recaptchaVerifier = new RecaptchaVerifier("recaptcha", { size: "invisible" }, auth);
+        const recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha", { size: "invisible" });
 
         const resolver = getMultiFactorResolver(auth, authController.authProviderError);
 
@@ -492,6 +465,8 @@ function PhoneLoginForm({
     );
 }
 
+type LoginFormMode = "email" | "password" | "registration";
+
 function LoginForm({
                        onClose,
                        authController,
@@ -508,20 +483,16 @@ function LoginForm({
 
     const passwordRef = useRef<HTMLInputElement | null>(null);
 
+    const [loginState, setLoginState] = useState<LoginFormMode>("email"); // ["email", "password", "registration"
     const [email, setEmail] = useState<string>();
-    const [availableProviders, setAvailableProviders] = useState<string[] | undefined>();
     const [password, setPassword] = useState<string>();
-
-    const shouldShowEmail = availableProviders === undefined;
-    const loginMode = availableProviders && availableProviders.includes("password");
-    const otherProvidersMode = availableProviders && !availableProviders.includes("password") && availableProviders.length > 0;
-    const registrationMode = availableProviders && !availableProviders.includes("password");
+    const [previouslyUsedMethodsForUser, setPreviouslyUsedMethodsForUser] = useState<string[] | undefined>();
 
     useEffect(() => {
-        if ((loginMode || registrationMode) && passwordRef.current) {
+        if ((loginState === "password" || loginState === "registration") && passwordRef.current) {
             passwordRef.current.focus()
         }
-    }, [loginMode, registrationMode]);
+    }, [loginState]);
 
     useEffect(() => {
         if (!document) return;
@@ -539,8 +510,9 @@ function LoginForm({
     function handleEnterEmail() {
         if (email) {
             authController.fetchSignInMethodsForEmail(email).then((availableProviders) => {
-                setAvailableProviders(availableProviders)
+                setPreviouslyUsedMethodsForUser(availableProviders.filter(p => p !== "password"));
             });
+            setLoginState("password");
         }
     }
 
@@ -557,58 +529,31 @@ function LoginForm({
     }
 
     const onBackPressed = () => {
-        if (shouldShowEmail) {
+        if (loginState === "email") {
             onClose();
+        } else if (loginState === "password" || loginState === "registration") {
+            setLoginState("email");
         } else {
-            setAvailableProviders(undefined);
+            setPreviouslyUsedMethodsForUser(undefined);
         }
     }
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
-        if (shouldShowEmail) {
+        if (loginState === "email") {
             handleEnterEmail();
-        } else if (loginMode) {
+        } else if (loginState === "password") {
             handleEnterPassword();
-        } else if (registrationMode) {
+        } else if (loginState === "registration") {
             handleRegistration();
         }
     }
 
-    const label = registrationMode
-        ? "No user found with that email. Pick a password to create a new account"
-        : (loginMode ? "Please enter your password" : "Please enter your email");
-    const button = registrationMode ? "Create account" : (loginMode ? "Login" : "Ok");
+    const label = loginState === "registration"
+        ? "Pick a password to create a new account for " + email
+        : (loginState === "password" ? "Please enter your password" : "Please enter your email");
 
-    if (otherProvidersMode) {
-        return (
-            <Grid container spacing={1}>
-                <Grid item xs={12}>
-                    <IconButton
-                        onClick={onBackPressed}>
-                        <ArrowBackIcon sx={{
-                            width: 20,
-                            height: 20
-                        }}/>
-                    </IconButton>
-                </Grid>
-
-                <Grid item xs={12} sx={{ p: 1 }}>
-                    <Typography align={"center"} variant={"subtitle2"}>
-                        You already have an account
-                    </Typography>
-                    <Typography align={"center"} variant={"body2"}>
-                        You can use one of these
-                        methods to login with {email}
-                    </Typography>
-                </Grid>
-
-                <Grid item xs={12}>
-                    {availableProviders && buildOauthLoginButtons(authController, availableProviders, mode, false)}
-                </Grid>
-            </Grid>
-        );
-    }
+    const button = loginState === "registration" ? "Create account" : (loginState === "password" ? "Login" : "Login");
 
     return (
         <Slide
@@ -628,29 +573,28 @@ function LoginForm({
                         </IconButton>
                     </Grid>
 
+                    <Grid item xs={12}>
+                        {loginState === "registration" && noUserComponent}
+                    </Grid>
+
                     <Grid item xs={12} sx={{
                         p: 1,
-                        display: (registrationMode && disableSignupScreen) ? "none" : "flex"
+                        display: (loginState === "registration" && disableSignupScreen) ? "none" : "flex"
                     }}>
                         <Typography align={"center"}
                                     variant={"subtitle2"}>{label}</Typography>
                     </Grid>
 
-                    <Grid item xs={12}
-                          sx={{ display: shouldShowEmail ? "inherit" : "none" }}>
+                    {loginState === "email" && <Grid item xs={12}>
                         <TextField placeholder="Email" fullWidth autoFocus
                                    value={email ?? ""}
                                    disabled={authController.authLoading}
                                    type="email"
                                    onChange={(event) => setEmail(event.target.value)}/>
-                    </Grid>
-
-                    <Grid item xs={12}>
-                        {registrationMode && noUserComponent}
-                    </Grid>
+                    </Grid>}
 
                     <Grid item xs={12}
-                          sx={{ display: loginMode || (registrationMode && !disableSignupScreen) ? "inherit" : "none" }}>
+                          sx={{ display: (loginState === "password") || (loginState === "registration" && !disableSignupScreen) ? "inherit" : "none" }}>
                         <TextField placeholder="Password" fullWidth
                                    value={password ?? ""}
                                    disabled={authController.authLoading}
@@ -661,10 +605,11 @@ function LoginForm({
 
                     <Grid item xs={12}>
                         <Box sx={{
-                            display: (registrationMode && disableSignupScreen) ? "none" : "flex",
+                            display: (loginState === "registration" && disableSignupScreen) ? "none" : "flex",
                             justifyContent: "end",
                             alignItems: "center",
-                            width: "100%"
+                            width: "100%",
+                            gap: 1
                         }}>
 
                             {authController.authLoading &&
@@ -672,11 +617,34 @@ function LoginForm({
                                                   thickness={8}/>
                             }
 
-                            <Button type="submit">
+                            {loginState === "email" && <Button onClick={() => setLoginState("registration")}>
+                                New user
+                            </Button>}
+
+                            <Button type="submit" variant={"outlined"}>
                                 {button}
                             </Button>
                         </Box>
                     </Grid>
+
+                    {previouslyUsedMethodsForUser && previouslyUsedMethodsForUser.length > 0 &&
+                        <Grid container spacing={1} sx={{ p: 1 }}>
+                            <Grid item xs={12} >
+                                <Typography variant={"subtitle2"}>
+                                    You already have an account
+                                </Typography>
+                                <Typography variant={"body2"}>
+                                    You can use one of these
+                                    methods to login with {email}
+                                </Typography>
+                            </Grid>
+
+                            <Grid item xs={12}>
+                                {previouslyUsedMethodsForUser && buildOauthLoginButtons(authController, previouslyUsedMethodsForUser, mode, false)}
+                            </Grid>
+                        </Grid>
+                    }
+
                 </Grid>
             </form>
         </Slide>

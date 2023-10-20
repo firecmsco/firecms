@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect } from "react";
 
 import { FirebaseApp, initializeApp } from "firebase/app";
-import { config } from "react-transition-group";
 
 /**
  * @category Firebase
@@ -52,21 +51,18 @@ export function useInitialiseFirebase({
 
     const initFirebase = useCallback((config: Record<string, unknown>) => {
         try {
-            const initialisedFirebaseApp = initializeApp(config, name ?? "[DEFAULT]");
+            const initialisedFirebaseApp = initializeApp(config, name);
             setConfigError(undefined);
             setFirebaseConfigLoading(false);
             setFirebaseApp(initialisedFirebaseApp);
+            if (onFirebaseInit && config && initialisedFirebaseApp) {
+                onFirebaseInit(config, initialisedFirebaseApp);
+            }
         } catch (e: any) {
             console.error("Error initialising Firebase", e);
             setConfigError(hostingError + "\n" + (e.message ?? JSON.stringify(e)));
         }
     }, [name]);
-
-    useEffect(() => {
-        if (onFirebaseInit && firebaseConfig && firebaseApp) {
-            onFirebaseInit(firebaseConfig, firebaseApp);
-        }
-    }, [firebaseApp]);
 
     useEffect(() => {
 

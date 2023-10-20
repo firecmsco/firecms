@@ -125,7 +125,7 @@ function SampleApp() {
         // appCheckOptions={appCheckOptions}
         authentication={myAuthenticator}
         allowSkipLogin={true}
-        // plugins={[dataEnhancementPlugin]}
+        plugins={[dataEnhancementPlugin]}
         signInOptions={[
             "password",
             "google.com"
