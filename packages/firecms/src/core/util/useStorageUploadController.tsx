@@ -114,12 +114,17 @@ export function useStorageUploadController<M extends object>({
 
         console.debug("onFileUploadComplete", uploadedPath, entry);
 
-        let uploadPathOrDownloadUrl = uploadedPath;
+        let uploadPathOrDownloadUrl: string | null = uploadedPath;
         if (storage.storeUrl) {
             uploadPathOrDownloadUrl = (await storageSource.getDownloadURL(uploadedPath)).url;
         }
-        if (storage.postProcess) {
+        if (storage.postProcess && uploadPathOrDownloadUrl) {
             uploadPathOrDownloadUrl = await storage.postProcess(uploadPathOrDownloadUrl);
+        }
+
+        if (!uploadPathOrDownloadUrl) {
+            console.warn("uploadPathOrDownloadUrl is null")
+            return;
         }
 
         let newValue: StorageFieldItem[];

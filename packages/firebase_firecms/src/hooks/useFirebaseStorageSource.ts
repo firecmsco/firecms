@@ -56,13 +56,19 @@ export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceP
             if (!storage) throw Error("useFirebaseStorageSource Firebase not initialised");
             if (urlsCache[storagePathOrUrl])
                 return urlsCache[storagePathOrUrl];
-            const fileRef = ref(storage, storagePathOrUrl);
-            const [url, metadata] = await Promise.all([getDownloadURL(fileRef), getMetadata(fileRef)]);
-            const result: DownloadConfig = {
-                url, metadata: metadata as DownloadMetadata
+            try {
+                const fileRef = ref(storage, storagePathOrUrl);
+                const [url, metadata] = await Promise.all([getDownloadURL(fileRef), getMetadata(fileRef)]);
+                const result: DownloadConfig = {
+                    url,
+                    metadata: metadata as DownloadMetadata
+                }
+                urlsCache[storagePathOrUrl] = result;
+                return result;
+            } catch (e: any) {
+                if (e?.code === "storage/object-not-found") return { url: null, fileNotFound: true };
+                throw e;
             }
-            urlsCache[storagePathOrUrl] = result;
-            return result;
         }
     };
 }

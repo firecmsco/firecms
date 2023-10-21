@@ -5,6 +5,7 @@ import { UrlComponentPreview } from "./UrlComponentPreview";
 import { useStorageSource } from "../../hooks";
 import { DownloadConfig, FileType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
+import { ErrorView } from "../../core";
 
 type StorageThumbnailProps = {
     storagePathOrDownloadUrl: string;
@@ -30,6 +31,8 @@ export function StorageThumbnailInternal({
                                              storagePathOrDownloadUrl,
                                              size
                                          }: StorageThumbnailProps) {
+
+    const [error, setError] = React.useState<Error | undefined>(undefined);
     const storage = useStorageSource();
 
     const [downloadConfig, setDownloadConfig] = React.useState<DownloadConfig>(URL_CACHE[storagePathOrDownloadUrl]);
@@ -44,7 +47,7 @@ export function StorageThumbnailInternal({
                     setDownloadConfig(downloadConfig);
                     URL_CACHE[storagePathOrDownloadUrl] = downloadConfig;
                 }
-            });
+            }).catch(setError);
         return () => {
             unmounted = true;
         };
@@ -59,7 +62,10 @@ export function StorageThumbnailInternal({
             ? "video"
             : (filetype?.startsWith("audio") ? "audio" : "file"));
 
-    return downloadConfig
+    if (downloadConfig?.fileNotFound)
+        return <ErrorView error={"File not found"}></ErrorView>
+
+    return downloadConfig?.url
         ? <UrlComponentPreview previewType={previewType}
                                url={downloadConfig.url}
                                size={size}

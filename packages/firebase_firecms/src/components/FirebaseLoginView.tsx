@@ -1,8 +1,20 @@
 import React, { ReactNode, useCallback, useEffect, useRef, useState } from "react";
 
 import { FirebaseApp, FirebaseError } from "firebase/app";
-import { ErrorView, FireCMSLogo, } from "firecms";
-import { useModeController } from "firecms";
+import {
+    ArrowBackIcon,
+    Button,
+    CircularProgress,
+    EmailIcon,
+    ErrorView,
+    FireCMSLogo,
+    IconButton,
+    PersonOutlineIcon,
+    PhoneIcon,
+    TextField,
+    Typography,
+    useModeController,
+} from "firecms";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
 import { appleIcon, facebookIcon, githubIcon, googleIcon, microsoftIcon, twitterIcon } from "./social_icons";
 import { RECAPTCHA_CONTAINER_ID, useRecaptcha } from "../hooks/useRecaptcha";
@@ -13,8 +25,6 @@ import {
     PhoneMultiFactorGenerator,
     RecaptchaVerifier
 } from "firebase/auth";
-import { Button, CircularProgress, IconButton, TextField, Typography } from "firecms";
-import { ArrowBackIcon, EmailIcon, PersonOutlineIcon, PhoneIcon } from "firecms";
 
 /**
  * @category Firebase
@@ -107,7 +117,7 @@ export function FirebaseLoginView({
 
     const sendMFASms = useCallback(() => {
         const auth = getAuth();
-        const recaptchaVerifier = new RecaptchaVerifier("recaptcha", { size: "invisible" }, auth);
+        const recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha", { size: "invisible" });
 
         const resolver = getMultiFactorResolver(auth, authController.authProviderError);
 
@@ -252,13 +262,13 @@ export function FirebaseLoginView({
                             onClick={authController.anonymousLogin}/>}
 
                     {allowSkipLogin &&
-                            <Button
-                                className={"m-1 mb-4"}
-                                variant={"text"}
-                                disabled={disabled}
-                                onClick={authController.skipLogin}>
-                                Skip login
-                            </Button>
+                        <Button
+                            className={"m-1 mb-4"}
+                            variant={"text"}
+                            disabled={disabled}
+                            onClick={authController.skipLogin}>
+                            Skip login
+                        </Button>
                     }
 
                 </>}
@@ -397,6 +407,8 @@ function PhoneLoginForm({
     );
 }
 
+type LoginFormMode = "email" | "password" | "registration";
+
 function LoginForm({
                        onClose,
                        authController,
@@ -413,20 +425,16 @@ function LoginForm({
 
     const passwordRef = useRef<HTMLInputElement | null>(null);
 
+    const [loginState, setLoginState] = useState<LoginFormMode>("email"); // ["email", "password", "registration"
     const [email, setEmail] = useState<string>();
-    const [availableProviders, setAvailableProviders] = useState<string[] | undefined>();
     const [password, setPassword] = useState<string>();
-
-    const shouldShowEmail = availableProviders === undefined;
-    const loginMode = availableProviders && availableProviders.includes("password");
-    const otherProvidersMode = availableProviders && !availableProviders.includes("password") && availableProviders.length > 0;
-    const registrationMode = availableProviders && !availableProviders.includes("password");
+    const [previouslyUsedMethodsForUser, setPreviouslyUsedMethodsForUser] = useState<string[] | undefined>();
 
     useEffect(() => {
-        if ((loginMode || registrationMode) && passwordRef.current) {
+        if ((loginState === "password" || loginState === "registration") && passwordRef.current) {
             passwordRef.current.focus()
         }
-    }, [loginMode, registrationMode]);
+    }, [loginState]);
 
     useEffect(() => {
         if (!document) return;
@@ -444,8 +452,9 @@ function LoginForm({
     function handleEnterEmail() {
         if (email) {
             authController.fetchSignInMethodsForEmail(email).then((availableProviders) => {
-                setAvailableProviders(availableProviders)
+                setPreviouslyUsedMethodsForUser(availableProviders.filter(p => p !== "password"));
             });
+            setLoginState("password");
         }
     }
 
@@ -462,51 +471,31 @@ function LoginForm({
     }
 
     const onBackPressed = () => {
-        if (shouldShowEmail) {
+        if (loginState === "email") {
             onClose();
+        } else if (loginState === "password" || loginState === "registration") {
+            setLoginState("email");
         } else {
-            setAvailableProviders(undefined);
+            setPreviouslyUsedMethodsForUser(undefined);
         }
     }
 
     const handleSubmit = (event: any) => {
         event.preventDefault();
-        if (shouldShowEmail) {
+        if (loginState === "email") {
             handleEnterEmail();
-        } else if (loginMode) {
+        } else if (loginState === "password") {
             handleEnterPassword();
-        } else if (registrationMode) {
+        } else if (loginState === "registration") {
             handleRegistration();
         }
     }
 
-    const label = registrationMode
-        ? "No user found with that email. Pick a password to create a new account"
-        : (loginMode ? "Please enter your password" : "Please enter your email");
-    const button = registrationMode ? "Create account" : (loginMode ? "Login" : "Ok");
+    const label = loginState === "registration"
+        ? "Pick a password to create a new account for " + email
+        : (loginState === "password" ? "Please enter your password" : "Please enter your email");
 
-    if (otherProvidersMode) {
-        return (
-            <div className={"flex flex-col gap-1"}>
-                <IconButton
-                    onClick={onBackPressed}>
-                    <ArrowBackIcon className="w-5 h-5"/>
-                </IconButton>
-
-                <div className="p-1">
-                    <Typography align={"center"} variant={"subtitle2"}>
-                        You already have an account
-                    </Typography>
-                    <Typography align={"center"} variant={"body2"}>
-                        You can use one of these
-                        methods to login with {email}
-                    </Typography>
-                </div>
-
-                {availableProviders && buildOauthLoginButtons(authController, availableProviders, mode, false)}
-            </div>
-        );
-    }
+    const button = loginState === "registration" ? "Create account" : (loginState === "password" ? "Login" : "Login");
 
     return (
         <form onSubmit={handleSubmit}>
@@ -517,27 +506,26 @@ function LoginForm({
                     <ArrowBackIcon className="w-5 h-5"/>
                 </IconButton>
 
+                <div>
+                    {loginState === "registration" && noUserComponent}
+                </div>
+
                 <div
-                    className={`p-4 ${registrationMode && disableSignupScreen ? "hidden" : "flex"}`}>
+                    className={`p-4 ${loginState === "registration" && disableSignupScreen ? "hidden" : "flex"}`}>
                     <Typography align={"center"}
                                 variant={"subtitle2"}>{label}</Typography>
                 </div>
 
-                <div
-                    className={`${
-                        shouldShowEmail ? "block" : "hidden"
-                    }`}>
-                    <TextField placeholder="Email"
-                               value={email ?? ""}
-                               disabled={authController.authLoading}
-                               type="email"
-                               onChange={(event) => setEmail(event.target.value)}/>
-                </div>
+                {loginState === "email" && <TextField placeholder="Email" autoFocus
+                                                      value={email ?? ""}
+                                                      disabled={authController.authLoading}
+                                                      type="email"
+                                                      onChange={(event) => setEmail(event.target.value)}/>}
 
-                {registrationMode && noUserComponent}
+                {loginState === "registration" && noUserComponent}
 
                 <div
-                    className={`${loginMode || (registrationMode && !disableSignupScreen) ? "block" : "hidden"}`}>
+                    className={`${loginState === "password" || (loginState === "registration" && !disableSignupScreen) ? "block" : "hidden"}`}>
                     <TextField placeholder="Password"
                                value={password ?? ""}
                                disabled={authController.authLoading}
@@ -546,18 +534,39 @@ function LoginForm({
                                onChange={(event) => setPassword(event.target.value)}/>
                 </div>
 
-                <div className={`${
-                    registrationMode && disableSignupScreen ? "hidden" : "flex"
-                } justify-end items-center w-full`}>
+                <div
+                    className={`${loginState === "registration" && disableSignupScreen ? "hidden" : "flex"} justify-end items-center w-full`}>
 
                     {authController.authLoading &&
                         <CircularProgress className="p-1" size={"small"}/>
                     }
 
+                    {loginState === "email" && <Button onClick={() => setLoginState("registration")}>
+                        New user
+                    </Button>}
+
                     <Button type="submit">
                         {button}
                     </Button>
                 </div>
+
+                {previouslyUsedMethodsForUser && previouslyUsedMethodsForUser.length > 0 &&
+                    <div className={"flex flex-col gap-4 p-4"}>
+                        <div>
+                            <Typography variant={"subtitle2"}>
+                                You already have an account
+                            </Typography>
+                            <Typography variant={"body2"}>
+                                You can use one of these
+                                methods to login with {email}
+                            </Typography>
+                        </div>
+
+                        <div>
+                            {previouslyUsedMethodsForUser && buildOauthLoginButtons(authController, previouslyUsedMethodsForUser, mode, false)}
+                        </div>
+                    </div>
+                }
             </div>
         </form>
     );

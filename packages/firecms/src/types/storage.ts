@@ -25,9 +25,11 @@ export interface DownloadConfig {
     /**
      * Temporal url that can be used to download the file
      */
-    url: string;
+    url: string | null;
 
     metadata?: DownloadMetadata;
+
+    fileNotFound?: boolean;
 }
 
 /**
