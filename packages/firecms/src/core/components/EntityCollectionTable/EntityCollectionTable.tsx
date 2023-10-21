@@ -302,7 +302,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     ? additionalFields.map((additionalField) =>
                         ({
                             key: additionalField.id,
-                            type: "additional",
                             align: "left",
                             sortable: false,
                             title: additionalField.name,
@@ -311,7 +310,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     : [];
                 return [...columnsResult, ...additionalTableColumns];
             },
-            [additionalFields, disabledFilterChange, forceFilter, properties]);
+            [additionalFields, disabledFilterChange, forceFilter, properties, sortable]);
 
         const idColumn: VirtualTableColumn = useMemo(() => ({
             key: "id_ewcfedcswdf3",
@@ -327,7 +326,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             ...displayedColumnIds
                 .map((p) => {
                     return allColumns.find(c => c.key === p.key);
-                }).filter(c => !!c) as VirtualTableColumn[]
+                }).filter(Boolean) as VirtualTableColumn[]
         ], [allColumns, displayedColumnIds, idColumn]);
 
         const cellRenderer = useCallback((props: CellRendererParams<any>) => {
