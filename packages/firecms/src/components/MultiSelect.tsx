@@ -21,7 +21,7 @@ export type MultiSelectProps = {
     inputClassName?: string,
     onMultiValueChange?: (updatedValue: string[]) => void,
     placeholder?: React.ReactNode,
-    renderValue?: (values: string) => React.ReactNode,
+    renderValue?: (values: string, index:number) => React.ReactNode,
     renderValues?: (values: string[]) => React.ReactNode,
     size?: "small" | "medium",
     label?: React.ReactNode,
@@ -133,7 +133,7 @@ export function MultiSelect({
                         className)}
                 >
                     <div className={cn("flex-grow flex gap-1.5 flex-wrap items-center")}>
-                        {renderValue && (value ?? []).map((v, i) => renderValue(v))}
+                        {renderValue && (value ?? []).map((v, i) => renderValue(v, i))}
                         {renderValues && renderValues(value ?? [])}
                         <CommandPrimitive.Input
                             ref={inputRef}

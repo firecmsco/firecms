@@ -24,7 +24,7 @@ export type SelectProps = {
     onValueChange?: (updatedValue: string) => void,
     onMultiValueChange?: (updatedValue: string[]) => void,
     placeholder?: React.ReactNode,
-    renderValue?: (value: string) => React.ReactNode,
+    renderValue?: (value: string, index: number) => React.ReactNode,
     renderValues?: (values: string[]) => React.ReactNode,
     size?: "small" | "medium",
     label?: React.ReactNode,
@@ -145,11 +145,11 @@ export function Select({
                         )}>
                             {renderValue &&
                                 (value && Array.isArray(value)
-                                    ? value.map((v) => (
+                                    ? value.map((v, i) => (
                                         <div key={v} className={"flex items-center gap-1 max-w-full"}>
-                                            {renderValue ? renderValue(v) : v}
+                                            {renderValue ? renderValue(v, i) : v}
                                         </div>))
-                                    : (typeof value === "string" ? (renderValue ? renderValue(value) : value) : placeholder))}
+                                    : (typeof value === "string" ? (renderValue ? renderValue(value, 0) : value) : placeholder))}
 
                             {renderValues && (!value || Array.isArray(value))
                                 ? renderValues(value as string[] ?? [])

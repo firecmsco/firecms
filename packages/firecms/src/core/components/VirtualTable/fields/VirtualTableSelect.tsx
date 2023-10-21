@@ -58,14 +58,18 @@ export function VirtualTableSelect(props: {
             throw Error("Missing mapping in TableSelect");
         }
     }, [multiple, updateValue, valueType]);
-    const renderValue = (enumKey: string | number) => {
+
+    const renderValue = (enumKey: string | number, index: number) => {
         if (multiple && Array.isArray(enumKey)) {
-            return <ArrayEnumPreview value={enumKey}
-                                     name={name}
-                                     enumValues={enumValues}
-                                     size={small ? "small" : "medium"}/>;
+            return <ArrayEnumPreview
+                key={`${enumKey}-${index}`}
+                value={enumKey}
+                name={name}
+                enumValues={enumValues}
+                size={small ? "small" : "medium"}/>;
         } else {
             return <EnumValuesChip
+                key={`${enumKey}-${index}`}
                 enumKey={enumKey}
                 enumValues={enumValues}
                 size={small ? "small" : "medium"}/>;
