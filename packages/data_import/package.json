@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "algoliasearch": "^4.17.1",
-    "firebase": "^9.23.0",
+    "firebase": "^10.4.0",
     "firecms": "^3.0.0-alpha.1",
     "flexsearch": "0.7.31",
     "react": "^18.2.0",
