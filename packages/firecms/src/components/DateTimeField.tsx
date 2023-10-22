@@ -187,7 +187,7 @@ const datePickerCss = `
 }
 
 .react-datepicker-popper {
-  z-index: 1;
+  z-index: 100;
   min-width: 348px;
 }
 

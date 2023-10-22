@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from "react";
+import React, { PropsWithChildren, useEffect, useState } from "react";
 
 import * as Collapsible from "@radix-ui/react-collapsible";
 import { defaultBorderMixin, fieldBackgroundMixin, focusedMixin } from "../styles";
@@ -55,6 +55,18 @@ export function ExpandablePanel({
 }`);
 
     const [open, setOpen] = useState(initiallyOpen);
+    const [allowOverflow, setAllowOverflow] = useState(open);
+
+    useEffect(() => {
+        if (open) {
+            setTimeout(() => {
+                setAllowOverflow(true);
+            }, 220);
+        } else {
+            setAllowOverflow(false);
+        }
+    }, [open]);
+
     return (<>
             <Collapsible.Root
                 className={cn(
@@ -82,6 +94,9 @@ export function ExpandablePanel({
 
                 <Collapsible.Content
                     className={cn("CollapsibleContent")}
+                    style={{
+                        overflow: allowOverflow ? "visible" : "hidden"
+                    }}
                 >
                     <div className={className}>
                         {children}
