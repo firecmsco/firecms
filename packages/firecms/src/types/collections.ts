@@ -84,7 +84,8 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * end of the list, if the order is not specified.
      * You can use this prop to hide some properties from the table view.
      * Note that if you set this prop, other ways to hide fields, like
-     * `hidden` in the property definition, will not work.
+     * `hidden` in the property definition, will be ignored.
+     * `propertiesOrder` has precedence over `hidden`.
      *     - For properties use the property key.
      *     - For additional columns use the column id.
      *     - If you have subcollections, you get a column for each subcollection,
@@ -341,7 +342,6 @@ export type WhereFilterOp =
  */
 export type FilterValues<Key extends string> =
     Partial<Record<Key, [WhereFilterOp, any]>>;
-
 
 /**
  * Used to indicate valid filter combinations (e.g. created in Firestore)

@@ -58,7 +58,8 @@ in [Entity collections](../api/interfaces/entitycollection)
 
   You can use this prop to hide some properties from the table view.
   Note that if you set this prop, other ways to hide fields, like
-  `hidden` in the property definition, will not work.
+  `hidden` in the property definition,will be ignored.
+  `propertiesOrder` has precedence over `hidden`.
 
 * `formAutoSave` If set to true, the form will be auto-saved when the user changes
   the value of a field. Defaults to false. You can't use this prop if you are using a `customId`
