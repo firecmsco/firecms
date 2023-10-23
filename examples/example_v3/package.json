@@ -1,7 +1,7 @@
 {
   "name": "firecms-example-v3",
   "private": true,
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.5",
   "type": "module",
   "scripts": {
     "dev": "vite --port 5001 --strictPort",
@@ -10,8 +10,8 @@
     "serve": "vite preview --port 5001 --strictPort"
   },
   "dependencies": {
-    "@firecms/firebase_firecms_v3": "^3.0.0-alpha.4",
-    "firecms": "^3.0.0-alpha.4",
+    "@firecms/firebase_firecms_v3": "^3.0.0-alpha.5",
+    "firecms": "^3.0.0-alpha.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

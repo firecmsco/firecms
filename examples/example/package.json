@@ -1,13 +1,13 @@
 {
   "name": "firecms-example",
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-alpha.5",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@firecms/data_enhancement": "^3.0.0-alpha.4",
+    "@firecms/data_enhancement": "^3.0.0-alpha.5",
     "algoliasearch": "^4.17.1",
     "firebase": "^10.4.0",
-    "firecms": "^3.0.0-alpha.4",
+    "firecms": "^3.0.0-alpha.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.12.0",
