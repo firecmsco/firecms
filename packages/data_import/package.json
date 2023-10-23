@@ -1,6 +1,6 @@
 {
   "name": "@firecms/data_import",
-  "version": "3.0.0-alpha.2",
+  "version": "3.0.0-alpha.1",
   "access": "public",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
@@ -20,7 +20,7 @@
   "dependencies": {
     "algoliasearch": "^4.17.1",
     "firebase": "^10.4.0",
-    "firecms": "3.0.0-alpha.2",
+    "firecms": "^3.0.0-alpha.1",
     "flexsearch": "0.7.31",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
