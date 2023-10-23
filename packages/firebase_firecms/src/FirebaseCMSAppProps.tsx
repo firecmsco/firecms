@@ -11,8 +11,8 @@ import {
     FieldConfig,
     FireCMSPlugin,
     Locale
-} from "firecms";
-import { useNavigationContext } from "firecms";
+} from "@firecms/core";
+import { useNavigationContext } from "@firecms/core";
 import { FirestoreTextSearchController } from "./types/text_search";
 import { Authenticator, FirebaseSignInOption, FirebaseSignInProvider } from "./types/auth";
 import { FirebaseLoginViewProps } from "./components/FirebaseLoginView";

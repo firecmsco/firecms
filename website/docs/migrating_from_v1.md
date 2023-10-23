@@ -212,7 +212,7 @@ buildProperty(({ values }) => ({
   you would pass to `LoginView` looks like:
 
 ```tsx
-import { FirebaseLoginView, FirebaseLoginViewProps } from "firecms";
+import { FirebaseLoginView, FirebaseLoginViewProps } from "@firecms/core";
 
 export function CustomLoginView(props: FirebaseLoginViewProps) {
   return <FirebaseLoginView {...props}/>;

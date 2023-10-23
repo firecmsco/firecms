@@ -1,4 +1,4 @@
-import { FireCMSPlugin } from "firecms";
+import { FireCMSPlugin } from "@firecms/core";
 import { ExportColectionAction } from "../export_import/ExportColectionAction";
 import { ImportCollectionAction } from "../export_import/ImportCollectionAction";
 

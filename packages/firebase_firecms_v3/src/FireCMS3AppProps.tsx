@@ -1,5 +1,5 @@
 import { FirebaseApp } from "firebase/app";
-import { AppCheckOptions, CMSAnalyticsEvent, FireCMSPlugin, Locale } from "firecms";
+import { AppCheckOptions, CMSAnalyticsEvent, FireCMSPlugin, Locale } from "@firecms/core";
 import { FirestoreTextSearchController } from "./types/text_search";
 import { FirebaseSignInOption, FirebaseSignInProvider } from "./types/auth";
 import { FireCMSCustomization } from "./types/firecms_v3_config";

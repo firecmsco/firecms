@@ -8,7 +8,7 @@ import {
     EntityCustomView,
     FieldConfig,
     FireCMSAppBarProps
-} from "firecms";
+} from "@firecms/core";
 
 export type FireCMSCustomization = {
 

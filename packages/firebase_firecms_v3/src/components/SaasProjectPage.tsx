@@ -9,7 +9,7 @@ import {
     getIconForView,
     NavigationGroup,
     Typography
-} from "firecms";
+} from "@firecms/core";
 
 import { Link as ReactLink } from "react-router-dom";
 import { ADMIN_VIEWS, SubscriptionPlanWidget } from "@firecms/firebase_firecms_v3";

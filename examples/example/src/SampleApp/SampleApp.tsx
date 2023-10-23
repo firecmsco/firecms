@@ -12,7 +12,7 @@ import {
     GitHubIcon,
     IconButton,
     Tooltip
-} from "firecms";
+} from "@firecms/core";
 import {
     Authenticator,
     FirebaseCMSApp,

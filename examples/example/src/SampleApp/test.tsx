@@ -3,7 +3,7 @@ import {
     buildEntityCallbacks,
     EntityOnDeleteProps,
     EntityOnSaveProps
-} from "firecms";
+} from "@firecms/core";
 
 type Product = {
     name: string;

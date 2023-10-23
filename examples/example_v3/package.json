@@ -10,8 +10,8 @@
     "serve": "vite preview --port 5001 --strictPort"
   },
   "dependencies": {
+    "@firecms/core": "^3.0.0-alpha.5",
     "@firecms/firebase_firecms_v3": "^3.0.0-alpha.5",
-    "firecms": "^3.0.0-alpha.5",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },

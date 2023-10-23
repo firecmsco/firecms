@@ -9,7 +9,7 @@ import {
     IconButton,
     useAuthController,
     useNavigationContext
-} from "firecms";
+} from "@firecms/core";
 import { useNavigate } from "react-router-dom";
 import { useProjectConfig, useSubscriptionsForUserController } from "../../hooks";
 import { ProductView } from "./ProductView";

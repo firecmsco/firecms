@@ -1,5 +1,5 @@
 import React from "react";
-import { Alert, Button } from "firecms";
+import { Alert, Button } from "@firecms/core";
 import { PlansComparisonDialog } from "./PlansComparison";
 import { PlanChip } from "./PlanChip";
 import { useProjectConfig } from "../../hooks";

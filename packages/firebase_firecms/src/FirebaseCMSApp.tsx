@@ -15,7 +15,7 @@ import {
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController
-} from "firecms";
+} from "@firecms/core";
 
 import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
 import { useFirebaseAuthController } from "./hooks/useFirebaseAuthController";

@@ -24,7 +24,7 @@ import {
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     User
-} from "firecms";
+} from "@firecms/core";
 
 import {
     CollectionEditorPermissionsBuilder,

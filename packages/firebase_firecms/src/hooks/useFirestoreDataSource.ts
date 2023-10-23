@@ -16,8 +16,8 @@ import {
     ResolvedProperty,
     SaveEntityProps,
     WhereFilterOp
-} from "firecms";
-import { resolveCollection, updateDateAutoValues } from "firecms";
+} from "@firecms/core";
+import { resolveCollection, updateDateAutoValues } from "@firecms/core";
 import {
     collection as collectionClause,
     collectionGroup as collectionGroupClause,

@@ -18,7 +18,7 @@ import {
     SaveEntityProps,
     updateDateAutoValues,
     WhereFilterOp
-} from "firecms";
+} from "@firecms/core";
 import {
     collection as collectionClause,
     collectionGroup as collectionGroupClause,

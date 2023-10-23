@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Entity, EntityValues, useSnackbarController } from "firecms";
+import { Button, Entity, EntityValues, useSnackbarController } from "@firecms/core";
 import { Product } from "../types";
 
 export function SampleProductsView({

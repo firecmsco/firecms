@@ -24,7 +24,7 @@ This callback will be called with the current path of the collection being rende
 You can then return an array of indexes that will be used to filter the collection.
 
 ```tsx
-import { FirebaseCMSApp, FirestoreIndexesBuilder } from "firecms";
+import { FirebaseCMSApp, FirestoreIndexesBuilder } from "@firecms/core";
 
 // Sample index builder that allows filtering by `category` and `available` for the `products` collection
 const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { AutoAwesomeIcon, Card, Chip, CircularProgressCenter, cn, Typography, useBrowserTitleAndIcon } from "firecms";
+import { AutoAwesomeIcon, Card, Chip, CircularProgressCenter, cn, Typography, useBrowserTitleAndIcon } from "@firecms/core";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { ProductView } from "./ProductView";
 import { getPriceString, getStatusText } from "../settings/common";

@@ -9,7 +9,7 @@ import {
     Typography,
     useBrowserTitleAndIcon,
     useSnackbarController
-} from "firecms";
+} from "@firecms/core";
 import { useFireCMSBackend, useProjectConfig } from "../../hooks";
 import { ProjectSubscriptionPlans, SubscriptionPlanWidget } from "../subscriptions";
 import { SecurityRulesInstructions } from "../SecurityRulesInstructions";

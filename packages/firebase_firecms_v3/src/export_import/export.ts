@@ -8,7 +8,7 @@ import {
     ResolvedProperties,
     ResolvedProperty,
     User
-} from "firecms";
+} from "@firecms/core";
 import { ExportConfig } from "../types/export_import";
 
 interface Header {

@@ -9,7 +9,7 @@ import {
     removeUndefined,
     sortProperties,
     stripCollectionPath
-} from "firecms";
+} from "@firecms/core";
 import {
     EditablePropertiesOrBuilders,
     PersistedCollection,

@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, CollectionActionsProps, useSnackbarController } from "firecms";
+import { Button, CollectionActionsProps, useSnackbarController } from "@firecms/core";
 
 export function SampleCollectionActions({ selectionController }: CollectionActionsProps) {
 

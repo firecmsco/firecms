@@ -5,7 +5,7 @@
   "author": "FireCMS",
   "homepage": "https://firecms.co",
   "workspaces": [
-    "packages/firecms",
+    "packages/firecms_core",
     "packages/firecms_cli",
     "packages/firebase_firecms",
     "packages/firebase_firecms_v3",
@@ -28,7 +28,7 @@
     "deploy:saas:prod": "cd packages/saas && yarn deploy:prod",
     "deploy:demo": "cd examples/example && yarn deploy",
     "deploy:web": "cd website && yarn deploy",
-    "build": "cd packages/firecms && yarn build",
+    "build": "cd packages/firecms_core && yarn build",
     "release": "git push origin main:release"
   },
   "packageManager": "yarn@3.2.3",

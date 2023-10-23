@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { ProjectSubscriptionPlan, Role, SaasUserProject } from "../types";
-import { CMSType } from "firecms";
+import { CMSType } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
 import { ProjectsApi } from "../api/projects";
 

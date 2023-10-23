@@ -8,7 +8,7 @@ title: Switch
 Simple toggle for selecting `true` or `false` values.
 
 ```typescript jsx
-import { buildProperty } from "firecms";
+import { buildProperty } from "@firecms/core";
 
 buildProperty({
     name: "Selectable",

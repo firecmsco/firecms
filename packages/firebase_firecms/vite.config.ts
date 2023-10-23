@@ -24,7 +24,7 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            firecms: path.resolve(__dirname, "../firecms/src")
+            firecms: path.resolve(__dirname, "../firecms_core/src")
         }
     },
     plugins: [react({})]

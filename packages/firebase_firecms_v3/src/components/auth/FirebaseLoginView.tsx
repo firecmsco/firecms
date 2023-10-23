@@ -1,7 +1,7 @@
 import React, { ReactNode, useCallback, useState } from "react";
 
 import { FirebaseApp } from "firebase/app";
-import { BooleanSwitchWithLabel, Button, ErrorView, FireCMSLogo, Typography, } from "firecms";
+import { BooleanSwitchWithLabel, Button, ErrorView, FireCMSLogo, Typography, } from "@firecms/core";
 import { FirebaseSignInOption, FirebaseSignInProvider, FireCMSBackend } from "../../types/auth";
 import { googleIcon } from "./social_icons";
 import {

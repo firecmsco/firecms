@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Button, Chip, cn, defaultBorderMixin, Paper, Typography } from "firecms";
+import { Button, Chip, cn, defaultBorderMixin, Paper, Typography } from "@firecms/core";
 import { Subscription } from "../../types";
 import { getPriceString, getStatusText } from "./common";
 import { useFireCMSBackend } from "../../hooks";

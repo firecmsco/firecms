@@ -1,4 +1,4 @@
-import { buildCollection, EntityCallbacks } from "firecms";
+import { buildCollection, EntityCallbacks } from "@firecms/core";
 
 import { SampleProductsView } from "../custom_entity_view/SampleProductsView";
 import { Product } from "../types";

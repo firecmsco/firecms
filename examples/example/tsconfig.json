@@ -1,5 +1,5 @@
 {
-  "extends": "../../packages/firecms/tsconfig.json",
+  "extends": "../../packages/firecms_core/tsconfig.json",
   "compilerOptions": {
     "target": "ESNext",
     "useDefineForClassFields": true,
@@ -18,7 +18,7 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
-      "firecms": ["../../packages/firecms/src/index.ts"],
+      "@firecms/core": ["../../packages/firecms_core/src/index.ts"],
       "@firecms/firebase_firecms": ["../../packages/firebase_firecms/src/index.ts"],
       "@firecms/data_enhancement": ["../../packages/data_enhancement/src/index.ts"],
     }

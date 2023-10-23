@@ -19,8 +19,8 @@
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
-    "firebase": "^10.4.0",
-    "firecms": "*"
+    "@firecms/core": "*",
+    "firebase": "^10.4.0"
   },
   "scripts": {
     "dev": "vite",

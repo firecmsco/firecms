@@ -22,7 +22,7 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            firecms: path.resolve(__dirname, "../firecms/src"),
+            firecms: path.resolve(__dirname, "../firecms_core/src"),
             "@firecms/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
         }
     },

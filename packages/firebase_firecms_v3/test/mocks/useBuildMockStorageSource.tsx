@@ -1,4 +1,4 @@
-import { DownloadConfig, StorageSource, UploadFileProps, UploadFileResult } from "firecms";
+import { DownloadConfig, StorageSource, UploadFileProps, UploadFileResult } from "@firecms/core";
 
 export function useBuildMockStorageSource(): StorageSource {
 

@@ -1,5 +1,5 @@
 {
-    "name": "firecms",
+    "name": "@firecms/core",
     "version": "3.0.0-alpha.5",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {

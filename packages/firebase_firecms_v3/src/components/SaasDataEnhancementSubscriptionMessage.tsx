@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Typography } from "firecms";
+import { Button, Typography } from "@firecms/core";
 import { SubscriptionMessageProps } from "@firecms/data_enhancement";
 
 export function SaasDataEnhancementSubscriptionMessage({ projectId, context }: SubscriptionMessageProps) {

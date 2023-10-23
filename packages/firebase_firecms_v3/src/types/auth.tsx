@@ -1,6 +1,6 @@
 import { OAuthCredential, User as FirebaseUser } from "firebase/auth";
 
-import { AuthController, DataSource, StorageSource, User } from "firecms";
+import { AuthController, DataSource, StorageSource, User } from "@firecms/core";
 import { Role } from "./roles";
 import { FirebaseApp } from "firebase/app";
 import { ProjectsApi } from "../api/projects";

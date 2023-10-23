@@ -15,7 +15,7 @@ import {
     Typography,
     useSnackbarController,
     MultiSelect
-} from "firecms";
+} from "@firecms/core";
 
 import { SaasUserProject } from "../../types/saas_user";
 import { Role } from "../../types/roles";

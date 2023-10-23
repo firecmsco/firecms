@@ -10,7 +10,7 @@ import {
     TableHeader,
     TableRow,
     Tooltip
-} from "firecms";
+} from "@firecms/core";
 import { Role } from "../../types";
 import { useProjectConfig } from "../../hooks";
 

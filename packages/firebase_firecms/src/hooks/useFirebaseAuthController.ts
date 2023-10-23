@@ -21,7 +21,7 @@ import {
     User as FirebaseUser
 } from "firebase/auth";
 import { FirebaseApp } from "firebase/app";
-import { AuthController } from "firecms";
+import { AuthController } from "@firecms/core";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider } from "../types/auth";
 
 interface FirebaseAuthHandlerProps {

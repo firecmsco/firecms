@@ -7,7 +7,7 @@ import {
     ReCaptchaEnterpriseProvider,
     ReCaptchaV3Provider
 } from "firebase/app-check";
-import { AppCheck, AppCheckOptions, AppCheckTokenResult } from "firecms";
+import { AppCheck, AppCheckOptions, AppCheckTokenResult } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
 
 /**

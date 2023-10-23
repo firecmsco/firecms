@@ -12,7 +12,7 @@ Permissions define the CRUD operations that can be performed over entities in
 collections. They are defined by an object like:
 
 ```typescript jsx
-import { Permissions } from "firecms";
+import { Permissions } from "@firecms/core";
 
 const samplePermissions: Permissions = {
     read: true,
@@ -27,7 +27,7 @@ a `PermissionsBuilder` to modify permissions based on the entity being edited,
 or the logged-in user.
 
 ```typescript jsx
-import { PermissionsBuilder } from "firecms";
+import { PermissionsBuilder } from "@firecms/core";
 
 const samplePermissions: PermissionsBuilder = ({
                                                    pathSegments,
@@ -57,7 +57,7 @@ You can use the `isAdmin` prop to quickly create an admin role with full
 permissions, and you can define the default permissions for every collection:
 
 ```typescript jsx
-import { Roles } from "firecms";
+import { Roles } from "@firecms/core";
 
 const roles: Roles = {
     "admin": {
@@ -90,7 +90,7 @@ The subcollection with path `products/123456/locales`
 becomes `products::locales`
 
 ```typescript jsx
-import { Roles } from "firecms";
+import { Roles } from "@firecms/core";
 
 const roles: Roles = {
     "admin": {
@@ -145,7 +145,7 @@ a user.
 import {
     Authenticator,
     FirebaseCMSApp,
-} from "firecms";
+} from "@firecms/core";
 
 function App() {
     // ...

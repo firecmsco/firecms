@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 
 import { User as FirebaseUser } from "firebase/auth";
-import { buildCollection, buildProperty, EntityReference, } from "firecms";
+import { buildCollection, buildProperty, EntityReference, } from "@firecms/core";
 import { Authenticator, FirebaseCMSApp } from "@firecms/firebase_firecms";
 
 import "typeface-rubik";

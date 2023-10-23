@@ -62,7 +62,7 @@ export default function LayoutWrapper(props) {
                 container: "#docsearch",
                 appId: siteConfig.customFields.docSearchAppId,
                 apiKey: siteConfig.customFields.docSearchApiKey,
-                indexName: "firecms",
+                indexName: "@firecms/core",
             });
         }
     }, [pathname]);

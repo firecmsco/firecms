@@ -13,7 +13,7 @@ import {
     useDataSource,
     useNavigationContext,
     useStorageSource
-} from "firecms";
+} from "@firecms/core";
 import { BlogEntry, Product } from "../types";
 
 /**

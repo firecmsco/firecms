@@ -15,7 +15,7 @@ import {
     Typography,
     useAuthController,
     useNavigationContext
-} from "firecms";
+} from "@firecms/core";
 import { useCollectionEditorController } from "@firecms/collection_editor";
 import { useNavigate } from "react-router-dom";
 import { ADMIN_VIEWS, RESERVED_GROUPS } from "../utils";

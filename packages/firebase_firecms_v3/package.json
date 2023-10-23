@@ -16,10 +16,10 @@
   },
   "peerDependencies": {
     "@firecms/collection_editor": "*",
+    "@firecms/core": "*",
     "@firecms/data_enhancement": "*",
     "@firecms/schema_inference": "*",
     "firebase": "^10.4.0",
-    "firecms": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.12.0",

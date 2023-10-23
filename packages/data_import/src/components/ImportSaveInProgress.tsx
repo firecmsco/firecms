@@ -1,4 +1,4 @@
-import { CenteredView, CircularProgress, CMSType, DataSource, Entity, EntityCollection, Typography, useDataSource } from "firecms";
+import { CenteredView, CircularProgress, CMSType, DataSource, Entity, EntityCollection, Typography, useDataSource } from "@firecms/core";
 import { useEffect, useRef, useState } from "react";
 import { ImportConfig } from "../types";
 

@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import { DataType, Entity, getPropertyInPath, Properties, Property } from "firecms";
+import { DataType, Entity, getPropertyInPath, Properties, Property } from "@firecms/core";
 import { DataTypeMapping, ImportConfig } from "../types";
 
 export const useImportConfig = (): ImportConfig => {

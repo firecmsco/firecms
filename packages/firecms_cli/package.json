@@ -5,7 +5,7 @@
   "description": "A CLI to bootstrap FireCMS",
   "main": "src/index.ts",
   "bin": {
-    "firecms": "bin/firecms"
+    "core": "bin/firecms"
   },
   "publishConfig": {
     "access": "public"
@@ -18,7 +18,7 @@
   "keywords": [
     "cli",
     "create-firecms-app",
-    "firecms",
+    "@firecms/core",
     "firebase",
     "firestore",
     "cms",

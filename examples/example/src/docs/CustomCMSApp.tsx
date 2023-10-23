@@ -16,7 +16,7 @@ import {
     SideDialogs,
     SnackbarProvider,
     useBuildModeController
-} from "firecms";
+} from "@firecms/core";
 import {
     FirebaseAuthController,
     FirebaseLoginView,

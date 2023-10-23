@@ -25,7 +25,7 @@ import {
     User,
     useSelectionController,
     useSnackbarController
-} from "firecms";
+} from "@firecms/core";
 import {
     convertDataToEntity,
     DataNewPropertiesMapping,

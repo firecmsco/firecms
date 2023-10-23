@@ -1,4 +1,4 @@
-import { DataType, Entity, EntityReference, getPropertyInPath, Properties } from "firecms";
+import { DataType, Entity, EntityReference, getPropertyInPath, Properties } from "@firecms/core";
 import { unflattenObject } from "./file_to_json";
 
 type DataTypeMapping = {

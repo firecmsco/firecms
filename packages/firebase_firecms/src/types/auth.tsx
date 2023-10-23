@@ -1,6 +1,6 @@
 import { ApplicationVerifier, ConfirmationResult, User as FirebaseUser } from "firebase/auth";
 
-import { AuthController, DataSource, StorageSource, User } from "firecms";
+import { AuthController, DataSource, StorageSource, User } from "@firecms/core";
 
 /**
  * @category Firebase

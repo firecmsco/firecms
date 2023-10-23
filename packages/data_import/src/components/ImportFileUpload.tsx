@@ -1,4 +1,4 @@
-import { FileUpload, UploadIcon } from "firecms";
+import { FileUpload, UploadIcon } from "@firecms/core";
 import { convertFileToJson } from "../utils/file_to_json";
 
 export function ImportFileUpload({ onDataAdded }: { onDataAdded: (data: object[]) => void }) {

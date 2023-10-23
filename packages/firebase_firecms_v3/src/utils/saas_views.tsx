@@ -1,4 +1,4 @@
-import { CMSView } from "firecms";
+import { CMSView } from "@firecms/core";
 import { ProjectSettings } from "../components/settings/ProjectSettings";
 import { UsersView } from "../components/users/UsersView";
 import { RolesView } from "../components/roles/RolesView";

@@ -14,7 +14,7 @@ import {
     useSelectionController,
     useSideEntityController,
     useSnackbarController
-} from "firecms";
+} from "@firecms/core";
 import { Product } from "./types";
 import { usersCollection } from "./collections/users_collection";
 

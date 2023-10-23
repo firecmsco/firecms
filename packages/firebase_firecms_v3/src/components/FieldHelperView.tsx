@@ -1,4 +1,4 @@
-import { Typography } from "firecms";
+import { Typography } from "@firecms/core";
 
 export function FieldHelperView({
                                     error,

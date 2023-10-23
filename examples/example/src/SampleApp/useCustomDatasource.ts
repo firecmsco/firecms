@@ -7,7 +7,7 @@ import {
     FetchEntityProps,
     ResolvedProperty,
     SaveEntityProps
-} from "firecms";
+} from "@firecms/core";
 
 import { FirebaseApp } from "firebase/app";
 import { useFirestoreDataSource } from "@firecms/firebase_firecms";

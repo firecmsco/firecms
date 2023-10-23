@@ -1,4 +1,4 @@
-import { CMSType, Permissions, segmentsToStrippedPath, User } from "firecms";
+import { CMSType, Permissions, segmentsToStrippedPath, User } from "@firecms/core";
 import { CollectionEditorPermissions, PersistedCollection } from "@firecms/collection_editor";
 import { Role, SaasUserProject } from "../types";
 import { ProjectConfig } from "../hooks";

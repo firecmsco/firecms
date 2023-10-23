@@ -10,7 +10,7 @@ import {
     TableHeader,
     TableRow,
     Typography
-} from "firecms";
+} from "@firecms/core";
 
 export interface DataPropertyMappingProps {
     idColumn?: string;

@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 
-import { AppCheckTokenResult, AuthController, DataSource, StorageSource, User } from "firecms";
+import { AppCheckTokenResult, AuthController, DataSource, StorageSource, User } from "@firecms/core";
 import { Authenticator } from "../types/auth";
 
 /**

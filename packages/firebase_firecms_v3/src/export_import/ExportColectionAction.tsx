@@ -22,7 +22,7 @@ import {
     useFireCMSContext,
     useNavigationContext,
     User
-} from "firecms";
+} from "@firecms/core";
 import { downloadExport } from "./export";
 import { ExportConfig } from "../types/export_import";
 import { SubscriptionPlanWidget } from "../components";

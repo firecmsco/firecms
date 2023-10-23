@@ -2,7 +2,7 @@ import React from "react";
 import {
     buildCollection,
     EntityCollectionsBuilder,
-} from "firecms";
+} from "@firecms/core";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";

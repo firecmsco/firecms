@@ -1,4 +1,4 @@
-import { buildCollection } from "firecms";
+import { buildCollection } from "@firecms/core";
 
 export const usersCollection = buildCollection({
     path: "users",

@@ -23,7 +23,7 @@ import {
     Tooltip,
     toSnakeCase,
     Typography
-} from "firecms";
+} from "@firecms/core";
 import { Role } from "../../types";
 import { useProjectConfig } from "../../hooks";
 import { FieldHelperView } from "../FieldHelperView";

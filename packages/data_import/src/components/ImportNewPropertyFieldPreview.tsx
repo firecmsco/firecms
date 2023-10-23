@@ -12,7 +12,7 @@ import {
     RemoveCircleIcon,
     TextField,
     Typography
-} from "firecms";
+} from "@firecms/core";
 
 export function ImportNewPropertyFieldPreview({
                                                   propertyKey,
