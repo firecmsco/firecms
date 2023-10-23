@@ -7,7 +7,7 @@
     "@firecms/data_enhancement": "^1.0.0",
     "algoliasearch": "^4.17.1",
     "firebase": "^10.4.0",
-    "firecms": "workspace:^",
+    "firecms": "file:../../packages/firecms",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.12.0",

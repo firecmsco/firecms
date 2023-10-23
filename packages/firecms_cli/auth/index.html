@@ -1,0 +1,56 @@
+<html lang="en">
+<head>
+    <style>
+        html, body {
+            font-family: sans-serif;
+            height: 100%;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+
+</head>
+
+<body>
+
+
+<h3>FireCMS CLI</h3>
+
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<div id="g_id_onload"
+     data-client_id="175047346381-vbhs16ok2uv8ihvlp05k5meruo57o0af.apps.googleusercontent.com"
+     data-callback="onSignIn">
+</div>
+<div class="g_id_signin" data-type="standard"></div>
+
+<p>This tab will close automatically after you sign in</p>
+
+<script>
+
+    function reqListener() {
+        // window.close();
+    }
+
+    function onSignIn(googleUser) {
+        console.log(googleUser);
+        const oReq = new XMLHttpRequest();
+        oReq.addEventListener("load", reqListener);
+        oReq.open("POST", "/result/" + googleUser.credential);
+        oReq.send();
+    }
+
+    function onFailure(error) {
+        console.log(error);
+        const oReq = new XMLHttpRequest();
+        // oReq.addEventListener("load", reqListener);
+        oReq.open("POST", "/error/");
+        oReq.send();
+    }
+
+</script>
+
+</body>
+</html>

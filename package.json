@@ -1,34 +1,38 @@
 {
-    "name": "firecms-parent",
-    "private": true,
-    "description": "Awesome Firebase/Firestore-based headless open-source CMS",
-    "author": "FireCMS",
-    "homepage": "https://firecms.co",
-    "workspaces": [
-        "packages/firecms",
-        "packages/firebase_firecms",
-        "packages/firebase_firecms_v3",
-        "packages/saas",
-        "packages/collection_editor",
-        "packages/user_management",
-        "packages/data_enhancement",
-        "packages/data_import",
-        "packages/schema_inference",
-        "examples/example",
-        "examples/example_v3"
-    ],
-    "scripts": {
-        "dev_v2": "cd examples/example && yarn dev",
-        "dev": "cd examples/example_v3 && yarn dev",
-        "saas": "cd packages/saas && yarn dev",
-        "web": "cd website && yarn start",
-        "preview": "cd examples/example && yarn preview",
-        "deploy:saas": "cd packages/saas && yarn deploy:staging",
-        "deploy:saas:prod": "cd packages/saas && yarn deploy:prod",
-        "deploy:demo": "cd examples/example && yarn deploy",
-        "deploy:web": "cd website && yarn deploy",
-        "build": "cd packages/firecms && yarn build",
-        "release": "git push origin main:release"
-    },
-    "packageManager": "yarn@3.2.3"
+  "name": "firecms-parent",
+  "private": true,
+  "description": "Awesome Firebase/Firestore-based headless open-source CMS",
+  "author": "FireCMS",
+  "homepage": "https://firecms.co",
+  "workspaces": [
+    "packages/firecms",
+    "packages/firecms_cli",
+    "packages/firebase_firecms",
+    "packages/firebase_firecms_v3",
+    "packages/saas",
+    "packages/collection_editor",
+    "packages/user_management",
+    "packages/data_enhancement",
+    "packages/data_import",
+    "packages/schema_inference",
+    "examples/example",
+    "examples/example_v3"
+  ],
+  "scripts": {
+    "dev_v2": "cd examples/example && yarn dev",
+    "dev": "cd examples/example_v3 && yarn dev",
+    "saas": "cd packages/saas && yarn dev",
+    "web": "cd website && yarn start",
+    "preview": "cd examples/example && yarn preview",
+    "deploy:saas": "cd packages/saas && yarn deploy:staging",
+    "deploy:saas:prod": "cd packages/saas && yarn deploy:prod",
+    "deploy:demo": "cd examples/example && yarn deploy",
+    "deploy:web": "cd website && yarn deploy",
+    "build": "cd packages/firecms && yarn build",
+    "release": "git push origin main:release"
+  },
+  "packageManager": "yarn@3.2.3",
+  "devDependencies": {
+    "lerna": "^7.4.1"
+  }
 }

@@ -1,4 +1,5 @@
 {
+  "version": "0.0.0",
   "name": "@firecms/firebase_firecms_v3",
   "packageManager": "yarn@3.2.3",
   "type": "module",
@@ -13,11 +14,11 @@
     }
   },
   "peerDependencies": {
-    "@firecms/collection_editor": "workspace:^",
-    "@firecms/data_enhancement": "workspace:^",
-    "@firecms/schema_inference": "workspace:^",
+    "@firecms/collection_editor": "*",
+    "@firecms/data_enhancement": "*",
+    "@firecms/schema_inference": "*",
     "firebase": "^10.4.0",
-    "firecms": "workspace:^",
+    "firecms": "*",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.12.0",

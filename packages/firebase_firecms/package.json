@@ -1,4 +1,5 @@
 {
+  "version": "0.0.0",
   "name": "@firecms/firebase_firecms",
   "packageManager": "yarn@3.2.3",
   "type": "module",
@@ -18,7 +19,7 @@
   },
   "peerDependencies": {
     "firebase": "^10.4.0",
-    "firecms": "workspace:^"
+    "firecms": "*"
   },
   "scripts": {
     "dev": "vite",
