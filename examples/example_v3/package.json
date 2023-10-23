@@ -1,7 +1,7 @@
 {
   "name": "shared",
   "private": true,
-  "version": "0.0.0",
+  "version": "3.0.0-alpha.2",
   "type": "module",
   "scripts": {
     "dev": "vite --port 5001 --strictPort",

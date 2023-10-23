@@ -1331,8 +1331,8 @@ __metadata:
   linkType: hard
 
 "@firecms/collection_editor@file:../collection_editor::locator=saas%40workspace%3Apackages%2Fsaas":
-  version: 0.1.0
-  resolution: "@firecms/collection_editor@file:../collection_editor#../collection_editor::hash=d2acde&locator=saas%40workspace%3Apackages%2Fsaas"
+  version: 3.0.0-alpha.2
+  resolution: "@firecms/collection_editor@file:../collection_editor#../collection_editor::hash=650928&locator=saas%40workspace%3Apackages%2Fsaas"
   dependencies:
     "@firecms/data_import": "file:../data_import"
     "@firecms/schema_inference": "file:../schema_inference"
@@ -1342,7 +1342,7 @@ __metadata:
     react-dom: ^18.2.0
     react-router: ^6.12.0
     react-router-dom: ^6.12.0
-  checksum: 02b50a83d5bbf0b73f3eb91eff8ad51071e53d47e9389b93ef2109a6fefdd0c477666908f39f2af341963e57ace7ed37b10c39681dad0258e78c9fc9fd3be6ce
+  checksum: d2d778641e12e83b668e7bfe6846590ffb0e163911f304abc467d41d25a1a22caa7d4917a7f214ffc048eedb4e1819e6ce342ebda6ab862872fccc4f025c27d3
   languageName: node
   linkType: hard
 
@@ -1383,7 +1383,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_enhancement@^1.0.0, @firecms/data_enhancement@workspace:packages/data_enhancement":
+"@firecms/data_enhancement@3.0.0-alpha.2, @firecms/data_enhancement@workspace:packages/data_enhancement":
   version: 0.0.0-use.local
   resolution: "@firecms/data_enhancement@workspace:packages/data_enhancement"
   dependencies:
@@ -1404,7 +1404,7 @@ __metadata:
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
     firebase: ^10.4.0
-    firecms: ^3.0.0-alpha.1
+    firecms: 3.0.0-alpha.2
     flexsearch: 0.7.31
     jest: ^29.5.0
     react: ^18.2.0
@@ -1421,12 +1421,12 @@ __metadata:
   linkType: soft
 
 "@firecms/data_enhancement@file:../data_enhancement::locator=saas%40workspace%3Apackages%2Fsaas":
-  version: 1.1.3
-  resolution: "@firecms/data_enhancement@file:../data_enhancement#../data_enhancement::hash=6d2c8b&locator=saas%40workspace%3Apackages%2Fsaas"
+  version: 3.0.0-alpha.2
+  resolution: "@firecms/data_enhancement@file:../data_enhancement#../data_enhancement::hash=661047&locator=saas%40workspace%3Apackages%2Fsaas"
   dependencies:
     algoliasearch: ^4.17.1
     firebase: ^10.4.0
-    firecms: ^3.0.0-alpha.1
+    firecms: 3.0.0-alpha.2
     flexsearch: 0.7.31
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -1434,17 +1434,17 @@ __metadata:
     react-router-dom: ^6.12.0
   peerDependencies:
     firecms: ^3.0.0-alpha.1
-  checksum: 603a93e3e519f62d0f3b1760b5861d20659c7b7e2487b5ea281b7c4d4fbe95ad081fd6a79de67a3989c5cd8f415a607560c185f1b281facfc90eaa1ced63e36b
+  checksum: ebfbfd603801da831f95c77f78c08c94ba8499c49787c194071868b14db3d05dc56f77e48c9d5a417b84c59686bd810708df4d7075ee9e1e9ccb3b965ef2f2a2
   languageName: node
   linkType: hard
 
-"@firecms/data_import@file:../data_import::locator=%40firecms%2Fcollection_editor%40file%3A..%2Fcollection_editor%23..%2Fcollection_editor%3A%3Ahash%3Dd2acde%26locator%3Dsaas%2540workspace%253Apackages%252Fsaas":
-  version: 1.1.3
-  resolution: "@firecms/data_import@file:../data_import#../data_import::hash=8eeb4c&locator=%40firecms%2Fcollection_editor%40file%3A..%2Fcollection_editor%23..%2Fcollection_editor%3A%3Ahash%3Dd2acde%26locator%3Dsaas%2540workspace%253Apackages%252Fsaas"
+"@firecms/data_import@file:../data_import::locator=%40firecms%2Fcollection_editor%40file%3A..%2Fcollection_editor%23..%2Fcollection_editor%3A%3Ahash%3D650928%26locator%3Dsaas%2540workspace%253Apackages%252Fsaas":
+  version: 3.0.0-alpha.2
+  resolution: "@firecms/data_import@file:../data_import#../data_import::hash=c28504&locator=%40firecms%2Fcollection_editor%40file%3A..%2Fcollection_editor%23..%2Fcollection_editor%3A%3Ahash%3D650928%26locator%3Dsaas%2540workspace%253Apackages%252Fsaas"
   dependencies:
     algoliasearch: ^4.17.1
     firebase: ^10.4.0
-    firecms: ^3.0.0-alpha.1
+    firecms: 3.0.0-alpha.2
     flexsearch: 0.7.31
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -1454,17 +1454,17 @@ __metadata:
   peerDependencies:
     "@firecms/schema_inference": ^3.0.0-alpha.1
     firecms: ^3.0.0-alpha.1
-  checksum: 34e1111b3c3b7aba9f4b61ce232288facd4d3facecf6c23050753a15f75ad559d89e64bd07651373320caa00c5ebb6cb2ebc8e62eb993afc1124c689e7aa0e46
+  checksum: 9496a9ce71fd89cca2a309d846603d5b0ce85a2bb261b90183bcfb1b016f84c815297ccbb883b4de87c72a1223a1159b1518c7530dabd9421aa08a6a5f4ff297
   languageName: node
   linkType: hard
 
 "@firecms/data_import@file:../data_import::locator=%40firecms%2Fcollection_editor%40workspace%3Apackages%2Fcollection_editor":
-  version: 1.1.3
-  resolution: "@firecms/data_import@file:../data_import#../data_import::hash=8eeb4c&locator=%40firecms%2Fcollection_editor%40workspace%3Apackages%2Fcollection_editor"
+  version: 3.0.0-alpha.2
+  resolution: "@firecms/data_import@file:../data_import#../data_import::hash=c28504&locator=%40firecms%2Fcollection_editor%40workspace%3Apackages%2Fcollection_editor"
   dependencies:
     algoliasearch: ^4.17.1
     firebase: ^10.4.0
-    firecms: ^3.0.0-alpha.1
+    firecms: 3.0.0-alpha.2
     flexsearch: 0.7.31
     react: ^18.2.0
     react-dom: ^18.2.0
@@ -1474,7 +1474,7 @@ __metadata:
   peerDependencies:
     "@firecms/schema_inference": ^3.0.0-alpha.1
     firecms: ^3.0.0-alpha.1
-  checksum: 34e1111b3c3b7aba9f4b61ce232288facd4d3facecf6c23050753a15f75ad559d89e64bd07651373320caa00c5ebb6cb2ebc8e62eb993afc1124c689e7aa0e46
+  checksum: 9496a9ce71fd89cca2a309d846603d5b0ce85a2bb261b90183bcfb1b016f84c815297ccbb883b4de87c72a1223a1159b1518c7530dabd9421aa08a6a5f4ff297
   languageName: node
   linkType: hard
 
@@ -1500,7 +1500,7 @@ __metadata:
     eslint-plugin-react: ^7.32.2
     eslint-plugin-react-hooks: ^4.6.0
     firebase: ^10.4.0
-    firecms: ^3.0.0-alpha.1
+    firecms: 3.0.0-alpha.2
     flexsearch: 0.7.31
     jest: ^29.7.0
     react: ^18.2.0
@@ -1531,8 +1531,8 @@ __metadata:
   linkType: soft
 
 "@firecms/firebase_firecms_v3@file:../../packages/firebase_firecms_v3::locator=shared%40workspace%3Aexamples%2Fexample_v3":
-  version: 0.0.0
-  resolution: "@firecms/firebase_firecms_v3@file:../../packages/firebase_firecms_v3#../../packages/firebase_firecms_v3::hash=22c60c&locator=shared%40workspace%3Aexamples%2Fexample_v3"
+  version: 3.0.0-alpha.2
+  resolution: "@firecms/firebase_firecms_v3@file:../../packages/firebase_firecms_v3#../../packages/firebase_firecms_v3::hash=f6164b&locator=shared%40workspace%3Aexamples%2Fexample_v3"
   peerDependencies:
     "@firecms/collection_editor": "*"
     "@firecms/data_enhancement": "*"
@@ -1543,13 +1543,13 @@ __metadata:
     react-dom: ^18.2.0
     react-router: ^6.12.0
     react-router-dom: ^6.12.0
-  checksum: eba059f647926df1dc94aeb49619ca99e9c59f1c874e2b18da1ed3c230f2c296e5c924dad08a6a74fb96591b049868bfc7a01866f2d3e9161ddc8029b63da7ba
+  checksum: a30ad39e440ff9f6c935e54018d4becd018abc7314fc3efb63449057f9aeec8eedd2e9f959e4a3747020f79fbb8b55145af8a7b313ab59ec141bf1bd9d09d944
   languageName: node
   linkType: hard
 
 "@firecms/firebase_firecms_v3@file:../firebase_firecms_v3::locator=saas%40workspace%3Apackages%2Fsaas":
-  version: 0.0.0
-  resolution: "@firecms/firebase_firecms_v3@file:../firebase_firecms_v3#../firebase_firecms_v3::hash=22c60c&locator=saas%40workspace%3Apackages%2Fsaas"
+  version: 3.0.0-alpha.2
+  resolution: "@firecms/firebase_firecms_v3@file:../firebase_firecms_v3#../firebase_firecms_v3::hash=f6164b&locator=saas%40workspace%3Apackages%2Fsaas"
   peerDependencies:
     "@firecms/collection_editor": "*"
     "@firecms/data_enhancement": "*"
@@ -1560,7 +1560,7 @@ __metadata:
     react-dom: ^18.2.0
     react-router: ^6.12.0
     react-router-dom: ^6.12.0
-  checksum: eba059f647926df1dc94aeb49619ca99e9c59f1c874e2b18da1ed3c230f2c296e5c924dad08a6a74fb96591b049868bfc7a01866f2d3e9161ddc8029b63da7ba
+  checksum: a30ad39e440ff9f6c935e54018d4becd018abc7314fc3efb63449057f9aeec8eedd2e9f959e4a3747020f79fbb8b55145af8a7b313ab59ec141bf1bd9d09d944
   languageName: node
   linkType: hard
 
@@ -1592,25 +1592,25 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/schema_inference@file:../schema_inference::locator=%40firecms%2Fcollection_editor%40file%3A..%2Fcollection_editor%23..%2Fcollection_editor%3A%3Ahash%3Dd2acde%26locator%3Dsaas%2540workspace%253Apackages%252Fsaas":
-  version: 0.0.0
-  resolution: "@firecms/schema_inference@file:../schema_inference#../schema_inference::hash=f8a000&locator=%40firecms%2Fcollection_editor%40file%3A..%2Fcollection_editor%23..%2Fcollection_editor%3A%3Ahash%3Dd2acde%26locator%3Dsaas%2540workspace%253Apackages%252Fsaas"
+"@firecms/schema_inference@file:../schema_inference::locator=%40firecms%2Fcollection_editor%40file%3A..%2Fcollection_editor%23..%2Fcollection_editor%3A%3Ahash%3D650928%26locator%3Dsaas%2540workspace%253Apackages%252Fsaas":
+  version: 3.0.0-alpha.2
+  resolution: "@firecms/schema_inference@file:../schema_inference#../schema_inference::hash=253239&locator=%40firecms%2Fcollection_editor%40file%3A..%2Fcollection_editor%23..%2Fcollection_editor%3A%3Ahash%3D650928%26locator%3Dsaas%2540workspace%253Apackages%252Fsaas"
   dependencies:
     "@types/node": ^20.5.9
     firecms: "file:../firecms"
     typescript: ^5.2.2
-  checksum: 63880bc2a98c1c04a0d6b3b6a7738aa920674d26d42b7c87e9acdc676c3900939b6265e8cd1c0a5658bbdba1af66d7510ce7ca9a78ee147e790d7622d8fe90c1
+  checksum: cfd314a5d8659afe44edf8fafc3a3f2780601905a8f734b37078a0f27c90f784fefc245d000df4c78a66634c1ed72a291e6c69fa8a653b7383faf97897e80903
   languageName: node
   linkType: hard
 
 "@firecms/schema_inference@file:../schema_inference::locator=%40firecms%2Fcollection_editor%40workspace%3Apackages%2Fcollection_editor":
-  version: 0.0.0
-  resolution: "@firecms/schema_inference@file:../schema_inference#../schema_inference::hash=f8a000&locator=%40firecms%2Fcollection_editor%40workspace%3Apackages%2Fcollection_editor"
+  version: 3.0.0-alpha.2
+  resolution: "@firecms/schema_inference@file:../schema_inference#../schema_inference::hash=253239&locator=%40firecms%2Fcollection_editor%40workspace%3Apackages%2Fcollection_editor"
   dependencies:
     "@types/node": ^20.5.9
     firecms: "file:../firecms"
     typescript: ^5.2.2
-  checksum: 63880bc2a98c1c04a0d6b3b6a7738aa920674d26d42b7c87e9acdc676c3900939b6265e8cd1c0a5658bbdba1af66d7510ce7ca9a78ee147e790d7622d8fe90c1
+  checksum: cfd314a5d8659afe44edf8fafc3a3f2780601905a8f734b37078a0f27c90f784fefc245d000df4c78a66634c1ed72a291e6c69fa8a653b7383faf97897e80903
   languageName: node
   linkType: hard
 
@@ -7692,7 +7692,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example@workspace:examples/example"
   dependencies:
-    "@firecms/data_enhancement": ^1.0.0
+    "@firecms/data_enhancement": 3.0.0-alpha.2
     "@types/react": ^18.2.8
     "@types/react-dom": ^18.2.4
     "@typescript-eslint/eslint-plugin": ^5.59.9
@@ -7731,7 +7731,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"firecms@^3.0.0-alpha.1, firecms@workspace:packages/firecms":
+"firecms@3.0.0-alpha.2, firecms@workspace:packages/firecms":
   version: 0.0.0-use.local
   resolution: "firecms@workspace:packages/firecms"
   dependencies:
@@ -7815,8 +7815,8 @@ __metadata:
   linkType: soft
 
 "firecms@file:../../packages/firecms::locator=firecms-example%40workspace%3Aexamples%2Fexample":
-  version: 3.0.0-alpha.1
-  resolution: "firecms@file:../../packages/firecms#../../packages/firecms::hash=c18e2a&locator=firecms-example%40workspace%3Aexamples%2Fexample"
+  version: 3.0.0-alpha.2
+  resolution: "firecms@file:../../packages/firecms#../../packages/firecms::hash=2ffcd0&locator=firecms-example%40workspace%3Aexamples%2Fexample"
   dependencies:
     "@date-io/date-fns": ^2.16.0
     "@fontsource/ibm-plex-mono": ^4.5.13
@@ -7860,13 +7860,13 @@ __metadata:
     react-dom: ^18.0.0
     react-router: ^6.2.0
     react-router-dom: ^6.2.0
-  checksum: 9260138361e27ee0c8a33bfb9c88d1e160a08896b64a191145520865324a738255c6a184e2bcb3a75c39029e865bc014dbec4499f3c25227414912194fbd544a
+  checksum: ef7c9aeb541b4942519dee79ffa8103e2c0db2bcd1e0b0f0308770983de4ead30ddcc83f33cd543807362b53933984857f46878bb41bd1ca5ad0bcd61b69e4cc
   languageName: node
   linkType: hard
 
 "firecms@file:../../packages/firecms::locator=shared%40workspace%3Aexamples%2Fexample_v3":
-  version: 3.0.0-alpha.1
-  resolution: "firecms@file:../../packages/firecms#../../packages/firecms::hash=c18e2a&locator=shared%40workspace%3Aexamples%2Fexample_v3"
+  version: 3.0.0-alpha.2
+  resolution: "firecms@file:../../packages/firecms#../../packages/firecms::hash=2ffcd0&locator=shared%40workspace%3Aexamples%2Fexample_v3"
   dependencies:
     "@date-io/date-fns": ^2.16.0
     "@fontsource/ibm-plex-mono": ^4.5.13
@@ -7910,13 +7910,13 @@ __metadata:
     react-dom: ^18.0.0
     react-router: ^6.2.0
     react-router-dom: ^6.2.0
-  checksum: 9260138361e27ee0c8a33bfb9c88d1e160a08896b64a191145520865324a738255c6a184e2bcb3a75c39029e865bc014dbec4499f3c25227414912194fbd544a
+  checksum: ef7c9aeb541b4942519dee79ffa8103e2c0db2bcd1e0b0f0308770983de4ead30ddcc83f33cd543807362b53933984857f46878bb41bd1ca5ad0bcd61b69e4cc
   languageName: node
   linkType: hard
 
-"firecms@file:../firecms::locator=%40firecms%2Fschema_inference%40file%3A..%2Fschema_inference%23..%2Fschema_inference%3A%3Ahash%3Df8a000%26locator%3D%2540firecms%252Fcollection_editor%2540file%253A..%252Fcollection_editor%2523..%252Fcollection_editor%253A%253Ahash%253Dd2acde%2526locator%253Dsaas%252540workspace%25253Apackages%25252Fsaas":
-  version: 3.0.0-alpha.1
-  resolution: "firecms@file:../firecms#../firecms::hash=c18e2a&locator=%40firecms%2Fschema_inference%40file%3A..%2Fschema_inference%23..%2Fschema_inference%3A%3Ahash%3Df8a000%26locator%3D%2540firecms%252Fcollection_editor%2540file%253A..%252Fcollection_editor%2523..%252Fcollection_editor%253A%253Ahash%253Dd2acde%2526locator%253Dsaas%252540workspace%25253Apackages%25252Fsaas"
+"firecms@file:../firecms::locator=%40firecms%2Fschema_inference%40file%3A..%2Fschema_inference%23..%2Fschema_inference%3A%3Ahash%3D253239%26locator%3D%2540firecms%252Fcollection_editor%2540file%253A..%252Fcollection_editor%2523..%252Fcollection_editor%253A%253Ahash%253D650928%2526locator%253Dsaas%252540workspace%25253Apackages%25252Fsaas":
+  version: 3.0.0-alpha.2
+  resolution: "firecms@file:../firecms#../firecms::hash=2ffcd0&locator=%40firecms%2Fschema_inference%40file%3A..%2Fschema_inference%23..%2Fschema_inference%3A%3Ahash%3D253239%26locator%3D%2540firecms%252Fcollection_editor%2540file%253A..%252Fcollection_editor%2523..%252Fcollection_editor%253A%253Ahash%253D650928%2526locator%253Dsaas%252540workspace%25253Apackages%25252Fsaas"
   dependencies:
     "@date-io/date-fns": ^2.16.0
     "@fontsource/ibm-plex-mono": ^4.5.13
@@ -7960,13 +7960,13 @@ __metadata:
     react-dom: ^18.0.0
     react-router: ^6.2.0
     react-router-dom: ^6.2.0
-  checksum: 9260138361e27ee0c8a33bfb9c88d1e160a08896b64a191145520865324a738255c6a184e2bcb3a75c39029e865bc014dbec4499f3c25227414912194fbd544a
+  checksum: ef7c9aeb541b4942519dee79ffa8103e2c0db2bcd1e0b0f0308770983de4ead30ddcc83f33cd543807362b53933984857f46878bb41bd1ca5ad0bcd61b69e4cc
   languageName: node
   linkType: hard
 
-"firecms@file:../firecms::locator=%40firecms%2Fschema_inference%40file%3A..%2Fschema_inference%23..%2Fschema_inference%3A%3Ahash%3Df8a000%26locator%3D%2540firecms%252Fcollection_editor%2540workspace%253Apackages%252Fcollection_editor":
-  version: 3.0.0-alpha.1
-  resolution: "firecms@file:../firecms#../firecms::hash=c18e2a&locator=%40firecms%2Fschema_inference%40file%3A..%2Fschema_inference%23..%2Fschema_inference%3A%3Ahash%3Df8a000%26locator%3D%2540firecms%252Fcollection_editor%2540workspace%253Apackages%252Fcollection_editor"
+"firecms@file:../firecms::locator=%40firecms%2Fschema_inference%40file%3A..%2Fschema_inference%23..%2Fschema_inference%3A%3Ahash%3D253239%26locator%3D%2540firecms%252Fcollection_editor%2540workspace%253Apackages%252Fcollection_editor":
+  version: 3.0.0-alpha.2
+  resolution: "firecms@file:../firecms#../firecms::hash=2ffcd0&locator=%40firecms%2Fschema_inference%40file%3A..%2Fschema_inference%23..%2Fschema_inference%3A%3Ahash%3D253239%26locator%3D%2540firecms%252Fcollection_editor%2540workspace%253Apackages%252Fcollection_editor"
   dependencies:
     "@date-io/date-fns": ^2.16.0
     "@fontsource/ibm-plex-mono": ^4.5.13
@@ -8010,13 +8010,13 @@ __metadata:
     react-dom: ^18.0.0
     react-router: ^6.2.0
     react-router-dom: ^6.2.0
-  checksum: 9260138361e27ee0c8a33bfb9c88d1e160a08896b64a191145520865324a738255c6a184e2bcb3a75c39029e865bc014dbec4499f3c25227414912194fbd544a
+  checksum: ef7c9aeb541b4942519dee79ffa8103e2c0db2bcd1e0b0f0308770983de4ead30ddcc83f33cd543807362b53933984857f46878bb41bd1ca5ad0bcd61b69e4cc
   languageName: node
   linkType: hard
 
 "firecms@file:../firecms::locator=%40firecms%2Fschema_inference%40workspace%3Apackages%2Fschema_inference":
-  version: 3.0.0-alpha.1
-  resolution: "firecms@file:../firecms#../firecms::hash=c18e2a&locator=%40firecms%2Fschema_inference%40workspace%3Apackages%2Fschema_inference"
+  version: 3.0.0-alpha.2
+  resolution: "firecms@file:../firecms#../firecms::hash=2ffcd0&locator=%40firecms%2Fschema_inference%40workspace%3Apackages%2Fschema_inference"
   dependencies:
     "@date-io/date-fns": ^2.16.0
     "@fontsource/ibm-plex-mono": ^4.5.13
@@ -8060,13 +8060,13 @@ __metadata:
     react-dom: ^18.0.0
     react-router: ^6.2.0
     react-router-dom: ^6.2.0
-  checksum: 9260138361e27ee0c8a33bfb9c88d1e160a08896b64a191145520865324a738255c6a184e2bcb3a75c39029e865bc014dbec4499f3c25227414912194fbd544a
+  checksum: ef7c9aeb541b4942519dee79ffa8103e2c0db2bcd1e0b0f0308770983de4ead30ddcc83f33cd543807362b53933984857f46878bb41bd1ca5ad0bcd61b69e4cc
   languageName: node
   linkType: hard
 
 "firecms@file:../firecms::locator=saas%40workspace%3Apackages%2Fsaas":
-  version: 3.0.0-alpha.1
-  resolution: "firecms@file:../firecms#../firecms::hash=c18e2a&locator=saas%40workspace%3Apackages%2Fsaas"
+  version: 3.0.0-alpha.2
+  resolution: "firecms@file:../firecms#../firecms::hash=2ffcd0&locator=saas%40workspace%3Apackages%2Fsaas"
   dependencies:
     "@date-io/date-fns": ^2.16.0
     "@fontsource/ibm-plex-mono": ^4.5.13
@@ -8110,7 +8110,7 @@ __metadata:
     react-dom: ^18.0.0
     react-router: ^6.2.0
     react-router-dom: ^6.2.0
-  checksum: 9260138361e27ee0c8a33bfb9c88d1e160a08896b64a191145520865324a738255c6a184e2bcb3a75c39029e865bc014dbec4499f3c25227414912194fbd544a
+  checksum: ef7c9aeb541b4942519dee79ffa8103e2c0db2bcd1e0b0f0308770983de4ead30ddcc83f33cd543807362b53933984857f46878bb41bd1ca5ad0bcd61b69e4cc
   languageName: node
   linkType: hard
 

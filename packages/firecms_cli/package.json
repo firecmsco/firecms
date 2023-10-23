@@ -1,6 +1,6 @@
 {
   "name": "firecms_cli",
-  "version": "2.0.0",
+  "version": "3.0.0-alpha.2",
   "description": "A CLI to bootstrap FireCMS",
   "main": "src/index.ts",
   "bin": {

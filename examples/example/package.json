@@ -1,10 +1,10 @@
 {
   "name": "firecms-example",
-  "version": "0.1.0",
+  "version": "3.0.0-alpha.2",
   "private": true,
   "type": "module",
   "dependencies": {
-    "@firecms/data_enhancement": "^1.0.0",
+    "@firecms/data_enhancement": "3.0.0-alpha.2",
     "algoliasearch": "^4.17.1",
     "firebase": "^10.4.0",
     "firecms": "file:../../packages/firecms",
