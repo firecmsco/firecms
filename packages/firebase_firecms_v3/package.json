@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-alpha.1",
+  "version": "3.0.0-alpha.2",
   "name": "@firecms/firebase_firecms_v3",
   "packageManager": "yarn@3.2.3",
   "type": "module",
