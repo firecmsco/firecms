@@ -24,5 +24,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc --emitDeclarationOnly"
-  }
+  },
+  "gitHead": "d02838b65237622b386e5c4e585a946b02f7b875"
 }
