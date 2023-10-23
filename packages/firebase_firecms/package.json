@@ -1,5 +1,6 @@
 {
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-3.0.0-alpha.4.0",
+  "private": true,
   "name": "@firecms/firebase_firecms",
   "packageManager": "yarn@3.2.3",
   "type": "module",
@@ -25,5 +26,5 @@
     "dev": "vite",
     "build": "vite build && tsc --emitDeclarationOnly"
   },
-  "gitHead": "d02838b65237622b386e5c4e585a946b02f7b875"
+  "gitHead": "17bba2feea1f6c818c0d9d4b3d6c8e4dfd4e5b4b"
 }

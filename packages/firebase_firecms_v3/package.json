@@ -1,5 +1,6 @@
 {
-  "version": "3.0.0-alpha.4",
+  "version": "3.0.0-3.0.0-alpha.4.0",
+  "access": "public",
   "name": "@firecms/firebase_firecms_v3",
   "packageManager": "yarn@3.2.3",
   "type": "module",
@@ -47,5 +48,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "d02838b65237622b386e5c4e585a946b02f7b875"
+  "gitHead": "17bba2feea1f6c818c0d9d4b3d6c8e4dfd4e5b4b"
 }
