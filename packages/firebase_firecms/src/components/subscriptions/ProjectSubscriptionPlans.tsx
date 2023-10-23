@@ -5,7 +5,7 @@ import { ProductView } from "./ProductView";
 import { getPriceString, getStatusText } from "../settings/common";
 import { Subscription } from "../../types/subscriptions";
 import { StripeDisclaimer } from "./StripeDisclaimer";
-import { PlanChip, useFireCMSBackend, useProjectConfig } from "@firecms/firebase_firecms_v3";
+import { PlanChip, useFireCMSBackend, useProjectConfig } from "@firecms/firebase";
 
 export function ProjectSubscriptionPlans({ uid }: {
     uid: string

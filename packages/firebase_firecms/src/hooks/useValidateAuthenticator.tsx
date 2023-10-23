@@ -6,7 +6,7 @@ import { Authenticator } from "../types/auth";
 
 /**
  * This hook is used internally for validating an authenticator.
- * You may want to use it if you are not using {@link FirebaseCMSApp}, but
+ * You may want to use it if you are not using {@link FireCMS3App}, but
  * building your own custom {@link FireCMS} instance.
  * @param authController
  * @param authentication
@@ -16,21 +16,21 @@ import { Authenticator } from "../types/auth";
  * @param dataSource
  */
 export function useValidateAuthenticator<UserType extends User = User>({
-                                             authController,
-                                             authentication,
-                                             getAppCheckToken,
-                                             appCheckForceRefresh = false,
-                                             storageSource,
-                                             dataSource
-                                         }:
-                                             {
-                                                 authController: AuthController<UserType>,
-                                                 authentication?: boolean | Authenticator<UserType>,
-                                                 getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
-                                                 appCheckForceRefresh?: boolean,
-                                                 dataSource: DataSource;
-                                                 storageSource: StorageSource;
-                                             }): {
+                                                                           authController,
+                                                                           authentication,
+                                                                           getAppCheckToken,
+                                                                           appCheckForceRefresh = false,
+                                                                           storageSource,
+                                                                           dataSource
+                                                                       }:
+                                                                           {
+                                                                               authController: AuthController<UserType>,
+                                                                               authentication?: boolean | Authenticator<UserType>,
+                                                                               getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
+                                                                               appCheckForceRefresh?: boolean,
+                                                                               dataSource: DataSource;
+                                                                               storageSource: StorageSource;
+                                                                           }): {
     canAccessMainView: boolean,
     authLoading: boolean,
     notAllowedError: any,

@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { useFireCMSBackend } from "@firecms/firebase_firecms_v3";
+import { useFireCMSBackend } from "@firecms/firebase";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import {

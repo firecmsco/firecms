@@ -9,7 +9,7 @@ import {
     SaveEntityProps,
 } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
-import { useFirestoreDataSource } from "@firecms/firebase_firecms";
+import { useFirestoreDataSource } from "@firecms/firebase_legacy";
 
 type CustomDataSourceProps = { firebaseApp?: FirebaseApp };
 

@@ -19,7 +19,7 @@ export default defineConfig({
             exposes: {
                 "./config": "./src/index"
             },
-            shared: ["react", "react-dom", "@firecms/core", "@firecms/firebase_firecms_v3"]
+            shared: ["react", "react-dom", "@firecms/core", "@firecms/firebase"]
         })
     ],
     build: {
@@ -31,7 +31,7 @@ export default defineConfig({
     resolve: {
         alias: {
             "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
-            "@firecms/firebase_firecms_v3": path.resolve(__dirname, "../../packages/firebase_firecms_v3/src"),
+            "@firecms/firebase": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
             "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
             "@firecms/data_import": path.resolve(__dirname, "../../packages/data_import/src"),
             "@firecms/schema_inference": path.resolve(__dirname, "../../packages/schema_inference/src"),

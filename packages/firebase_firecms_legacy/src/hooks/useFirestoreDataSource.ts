@@ -12,13 +12,12 @@ import {
     GeoPoint,
     ListenCollectionProps,
     ListenEntityProps,
-    resolveCollection,
     ResolvedProperties,
     ResolvedProperty,
     SaveEntityProps,
-    updateDateAutoValues,
     WhereFilterOp
 } from "@firecms/core";
+import { resolveCollection, updateDateAutoValues } from "@firecms/core";
 import {
     collection as collectionClause,
     collectionGroup as collectionGroupClause,
@@ -49,7 +48,7 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../types/text_search";
 import { useCallback } from "react";
-import { setDateToMidnight } from "../utils/dates";
+import { setDateToMidnight } from "../util/dates";
 
 /**
  * @category Firebase

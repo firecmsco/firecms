@@ -24,26 +24,23 @@ const hostingError = "It seems like the provided Firebase config is not correct.
  * configuration.
  *
  * You most likely only need to use this if you are developing a custom app
- * that is not using {@link FireCMS3App}. You can also not use this component
+ * that is not using {@link FirebaseCMSApp}. You can also not use this component
  * and initialise Firebase yourself.
  *
  * @param onFirebaseInit
  * @param firebaseConfig
- * @param fromUrl
  * @param name
  * @param authDomain
  * @category Firebase
  */
 export function useInitialiseFirebase({
                                           firebaseConfig,
-                                          fromUrl,
                                           onFirebaseInit,
                                           name,
                                           authDomain
                                       }: {
-    firebaseConfig?: Record<string, unknown>,
-    fromUrl?: string | undefined,
     onFirebaseInit?: ((config: object, firebaseApp: FirebaseApp) => void) | undefined,
+    firebaseConfig: Record<string, unknown> | undefined,
     name?: string;
     authDomain?: string;
 }): InitialiseFirebaseResult {
@@ -74,8 +71,10 @@ export function useInitialiseFirebase({
 
         setFirebaseConfigLoading(true);
 
-        function fetchFromUrl(url: string) {
-            fetch(url)
+        if (firebaseConfig) {
+            initFirebase(firebaseConfig);
+        } else if (process.env.NODE_ENV === "production") {
+            fetch("/__/firebase/init.json")
                 .then(async response => {
                     console.debug("Firebase init response", response.status);
                     if (response && response.status < 300) {
@@ -93,24 +92,13 @@ export function useInitialiseFirebase({
                         );
                     }
                 );
-        }
-
-
-        if (firebaseConfig) {
-            initFirebase(firebaseConfig);
         } else {
-            if (fromUrl) {
-                fetchFromUrl(fromUrl);
-            } else if (process.env.NODE_ENV === "production") {
-                fetchFromUrl("/__/firebase/init.json");
-            } else {
-                setFirebaseConfigLoading(false);
-                setConfigError(
-                    "You need to deploy the app to Firebase hosting or specify a Firebase configuration object"
-                );
-            }
+            setFirebaseConfigLoading(false);
+            setConfigError(
+                "You need to deploy the app to Firebase hosting or specify a Firebase configuration object"
+            );
         }
-    }, []);
+    }, [firebaseConfig, initFirebase]);
 
     return {
         firebaseApp,

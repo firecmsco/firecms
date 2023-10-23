@@ -4,7 +4,7 @@ import React, { useCallback } from "react";
 
 import { User as FirebaseUser } from "firebase/auth";
 import { buildCollection, buildProperty, EntityReference, } from "@firecms/core";
-import { Authenticator, FirebaseCMSApp } from "@firecms/firebase_firecms";
+import { Authenticator, FirebaseCMSApp } from "@firecms/firebase_legacy";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";

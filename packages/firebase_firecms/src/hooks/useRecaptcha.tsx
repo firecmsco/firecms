@@ -16,11 +16,11 @@ export function useRecaptcha() {
         const auth = getAuth();
 
         window.recaptchaVerifier = new RecaptchaVerifier(
-            auth,
             RECAPTCHA_CONTAINER_ID,
             {
                 size: "invisible"
-            }
+            },
+            auth
         );
     }, []);
 

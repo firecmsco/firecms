@@ -6,7 +6,7 @@ import {
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
-import { FirebaseCMSApp } from "@firecms/firebase_firecms";
+import { FirebaseCMSApp } from "@firecms/firebase_legacy";
 
 // TODO: Replace with your config
 const firebaseConfig = {

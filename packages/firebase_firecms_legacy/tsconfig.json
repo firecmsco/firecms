@@ -11,7 +11,7 @@
     "moduleResolution": "node",
     "jsx": "react-jsx",
     "noFallthroughCasesInSwitch": true,
-    "sourceMap": false,
+    "sourceMap": true,
     "declaration": true,
     "esModuleInterop": true,
     "noImplicitReturns": true,
@@ -34,21 +34,6 @@
     "paths": {
       "@firecms/core": [
         "../firecms_core/src/index.ts"
-      ],
-      "@firecms/firebase_firecms_v3": [
-        "../firebase_firecms_v3/src/index.ts"
-      ],
-      "@firecms/collection_editor": [
-        "../collection_editor/src/index.ts"
-      ],
-      "@firecms/data_enhancement": [
-        "../data_enhancement/src/index.ts"
-      ],
-      "@firecms/schema_inference": [
-        "../schema_inference/src/index.ts"
-      ],
-      "@firecms/data_import": [
-        "../data_import/src/index.ts"
       ]
     }
   },

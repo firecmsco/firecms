@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { FirebaseAuthController, Role } from "@firecms/firebase_firecms_v3";
+import { FirebaseAuthController, Role } from "@firecms/firebase";
 
 import { User as FirebaseUser } from "firebase/auth";
 import { createMockUser } from "./mock_user";

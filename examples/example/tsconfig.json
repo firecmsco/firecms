@@ -19,7 +19,7 @@
     "baseUrl": ".",
     "paths": {
       "@firecms/core": ["../../packages/firecms_core/src/index.ts"],
-      "@firecms/firebase_firecms": ["../../packages/firebase_firecms/src/index.ts"],
+      "@firecms/firebase_legacy": ["../../packages/firebase_firecms/src/index.ts"],
       "@firecms/data_enhancement": ["../../packages/data_enhancement/src/index.ts"],
     }
   },

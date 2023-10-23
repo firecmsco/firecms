@@ -1,19 +1,11 @@
-export * from "./hooks/useFirebaseAuthController";
-export * from "./hooks/useFirestoreDataSource";
-export * from "./hooks/useFirebaseStorageSource";
-export * from "./hooks/useValidateAuthenticator";
+export * from "./hooks";
+export * from "./components";
+export * from "./types";
+export * from "./utils";
 
-export { FirebaseCMSApp } from "./FirebaseCMSApp";
-export type { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
+export * from "./api/projects";
 
-export type { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
-export { FirebaseLoginView, LoginButton } from "./components/FirebaseLoginView";
+export { FireCMS3App, FireCMS3Client } from "./FireCMS3App";
+export type { FireCMS3AppProps } from "./FireCMS3AppProps";
 
-export type { InitialiseFirebaseResult } from "./hooks/useInitialiseFirebase";
-export { useInitialiseFirebase } from "./hooks/useInitialiseFirebase";
-export { useInitializeAppCheck } from "./hooks/useInitializeAppCheck";
-
-export * from "./types/auth";
-
-export type { FirestoreTextSearchController } from "./types/text_search";
-export { performAlgoliaTextSearch } from "./types/text_search";
+export * from "./collection_editor/infer_collection"

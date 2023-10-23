@@ -12,7 +12,7 @@ import {
 } from "@firecms/core";
 
 import { Link as ReactLink } from "react-router-dom";
-import { ADMIN_VIEWS, SubscriptionPlanWidget } from "@firecms/firebase_firecms_v3";
+import { ADMIN_VIEWS, SubscriptionPlanWidget } from "@firecms/firebase";
 
 /**
  * Default entry view for the CMS under the path "/"

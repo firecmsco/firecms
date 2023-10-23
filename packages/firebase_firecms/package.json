@@ -1,7 +1,7 @@
 {
   "version": "3.0.0-alpha.5",
-  "private": true,
-  "name": "@firecms/firebase_firecms",
+  "access": "public",
+  "name": "@firecms/firebase",
   "packageManager": "yarn@3.2.3",
   "type": "module",
   "main": "./dist/index.umd.js",
@@ -14,17 +14,39 @@
       "require": "./dist/index.umd.js"
     }
   },
-  "dependencies": {
-    "@types/node": "^20.5.9",
-    "typescript": "^5.2.2"
-  },
   "peerDependencies": {
+    "@firecms/collection_editor": "*",
     "@firecms/core": "*",
-    "firebase": "^10.4.0"
+    "@firecms/data_enhancement": "*",
+    "@firecms/schema_inference": "*",
+    "firebase": "^10.4.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-router": "^6.12.0",
+    "react-router-dom": "^6.12.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.9",
+    "@types/react": "^18.2.8",
+    "@types/react-dom": "^18.2.4",
+    "eslint": "^8.42.0",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-n": "^15.7.0",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.32.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "typescript": "^5.2.2"
   },
   "scripts": {
     "dev": "vite",
     "build": "vite build && tsc --emitDeclarationOnly"
   },
-  "gitHead": "17bba2feea1f6c818c0d9d4b3d6c8e4dfd4e5b4b"
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "gitHead": "f73e3367dc97cbea9c98408b3aafaa48454d440b"
 }

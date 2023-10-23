@@ -17,7 +17,7 @@ import {
     Authenticator,
     FirebaseCMSApp,
     FirestoreIndexesBuilder,
-} from "@firecms/firebase_firecms";
+} from "@firecms/firebase_legacy";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import { firebaseConfig } from "../firebase_config";
