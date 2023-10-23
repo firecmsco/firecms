@@ -2,7 +2,5 @@
   "extends": "./tsconfig",
   "compilerOptions": {
     "sourceMap": false,
-    "paths": {
-    }
   }
 }
