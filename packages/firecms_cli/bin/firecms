@@ -1,4 +1,4 @@
 #!/usr/bin/env node
 
 require = require('esm')(module /*, options*/);
-require('../build/cli').createFireCMSApp(process.argv);
+require('../build/cli').entry(process.argv);

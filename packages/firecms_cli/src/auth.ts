@@ -7,7 +7,6 @@ import path from 'path';
 import axios from "axios";
 import * as querystring from "querystring";
 
-
 export async function authInBrowser() {
     const wss = new WebSocket.Server({ port: 9117 });
 

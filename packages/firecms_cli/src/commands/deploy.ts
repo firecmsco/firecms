@@ -4,6 +4,20 @@ import axios from "axios";
 
 import fs from "fs";
 
+import { exec } from "child_process";
+
+export function build() {
+
+    exec('yarn build', (err, stdout, stderr) => {
+        if (err) {
+            // Node couldn't execute the command
+            return console.error(`exec error: ${err}`);
+        }
+        // The output of the command is passed in stdout and stderr
+        console.log(`stdout: ${stdout}`);
+        console.error(`stderr: ${stderr}`);
+    });
+}
 
 async function uploadZip() {
     const form = new FormData();
@@ -30,6 +44,3 @@ async function uploadZip() {
         console.error(err);
     }
 }
-
-uploadZip();
-
