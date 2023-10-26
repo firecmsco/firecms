@@ -1,6 +1,5 @@
 {
   "name": "@firecms/cli",
-  "private": true,
   "version": "3.0.0-alpha.7",
   "description": "A CLI to bootstrap FireCMS",
   "main": "src/index.ts",
