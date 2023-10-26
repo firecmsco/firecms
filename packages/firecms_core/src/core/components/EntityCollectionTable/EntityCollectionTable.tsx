@@ -364,7 +364,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
             <EntityCollectionTableContext.Provider
                 value={{
-                    setPopupCell,
+                    setPopupCell: setPopupCell as ((cell?: SelectedCellProps<M>) => void),
                     select,
                     onValueChange,
                     size,
