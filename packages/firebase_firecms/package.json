@@ -1,5 +1,5 @@
 {
-  "version": "3.0.0-alpha.8",
+  "version": "3.0.0-alpha.9",
   "publishConfig": {
     "access": "public"
   },
@@ -16,11 +16,14 @@
       "require": "./dist/index.umd.js"
     }
   },
+  "dependencies": {
+    "@firecms/collection_editor": "3.0.0-alpha.9",
+    "@firecms/core": "3.0.0-alpha.9",
+    "@firecms/data_enhancement": "3.0.0-alpha.9",
+    "@firecms/data_import": "3.0.0-alpha.9",
+    "@firecms/schema_inference": "3.0.0-alpha.9"
+  },
   "peerDependencies": {
-    "@firecms/collection_editor": "*",
-    "@firecms/core": "*",
-    "@firecms/data_enhancement": "*",
-    "@firecms/schema_inference": "*",
     "firebase": "^10.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -42,7 +45,7 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc --emitDeclarationOnly"
+    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json"
   },
   "eslintConfig": {
     "extends": [
@@ -50,5 +53,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "b7cc1558378034282eaac7c9cc425853eddf4e5c"
+  "gitHead": "85611c918afa8321f1710b05ddc15f7a5354d077"
 }

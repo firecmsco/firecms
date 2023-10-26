@@ -1,6 +1,6 @@
 {
   "name": "@firecms/data_import",
-  "version": "3.0.0-alpha.8",
+  "version": "3.0.0-alpha.9",
   "access": "public",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
@@ -18,7 +18,7 @@
     "@firecms/schema_inference": "^3.0.0-alpha.1"
   },
   "dependencies": {
-    "@firecms/core": "^3.0.0-alpha.8",
+    "@firecms/core": "3.0.0-alpha.9",
     "algoliasearch": "^4.17.1",
     "firebase": "^10.4.0",
     "flexsearch": "0.7.31",
@@ -98,5 +98,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "b7cc1558378034282eaac7c9cc425853eddf4e5c"
+  "gitHead": "85611c918afa8321f1710b05ddc15f7a5354d077"
 }

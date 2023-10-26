@@ -1,6 +1,6 @@
 {
     "name": "@firecms/core",
-    "version": "3.0.0-alpha.8",
+    "version": "3.0.0-alpha.9",
     "description": "Awesome Firebase/Firestore-based headless open-source CMS",
     "funding": {
         "url": "https://github.com/sponsors/firecmsco"
@@ -40,7 +40,7 @@
     ],
     "scripts": {
         "watch": "vite build --watch",
-        "build": "vite build",
+        "build": "vite build && tsc --emitDeclarationOnly",
         "prepublishOnly": "run-s build",
         "createTag": "PACKAGE_VERSION=$(cat package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[\",]//g' | tr -d '[[:space:]]') && git tag v$PACKAGE_VERSION && git push --tags",
         "test:lint": "eslint \"src/**\" --quiet",
@@ -137,7 +137,7 @@
     "files": [
         "dist"
     ],
-    "gitHead": "b7cc1558378034282eaac7c9cc425853eddf4e5c",
+    "gitHead": "85611c918afa8321f1710b05ddc15f7a5354d077",
     "publishConfig": {
         "access": "public"
     }
