@@ -206,6 +206,10 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
+    function getRemoteConfigUrl(projectId: string, revisionId?: string) {
+        return `${host}/projects/${projectId}/customization/${revisionId}/remoteEntry.js`;
+    }
+
     return {
         createNewFireCMSProject,
         createFirebaseWebapp,
@@ -217,6 +221,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
         deleteUser,
         getRootCollections,
         doDelegatedLogin,
-        getStripePortalLink
+        getStripePortalLink,
+
+        getRemoteConfigUrl
     }
 }

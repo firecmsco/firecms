@@ -1,49 +1,59 @@
-import arg from "arg";
 import chalk from "chalk";
-import { build } from "./commands/deploy";
-const fs = require('fs');
+import { deploy } from "./commands/deploy";
+import { getCurrentUser, login, logout } from "./commands/auth";
 
+export async function entry(args) {
 
-export function entry(args) {
-    fs.readdir(process.cwd(), (err, files) => {
-        if (err) {
-            console.error(`An error occurred: ${err}`);
-        } else {
-            console.log(`Current directory files: \n${files.join('\n')}`);
-        }
-    });
-
-    if (args.length !== 3) {
+    if (args.length < 2) {
         printHelp();
         return;
-    } else {
-        if (args[2] === "init") {
-            console.log("init");
-        } else if (args[2] === "deploy") {
-            build();
-            console.log("deploy");
-        } else {
-            console.log("Unknown command", args[2])
-            printHelp();
+    }
+
+    const command = args[2];
+    const project = args.length === 4 && args[3] ? args[3].split("=")[1] : null;
+
+    if (command === "init") {
+        console.log("init");
+    } else if (command === "login") {
+        await login();
+    } else if (command === "logout") {
+        logout();
+    } else if (command === "deploy") {
+        if (!project) {
+            console.log("Please specify a project:");
+            console.log("firecms deploy --project=your-project-id");
             return;
         }
+        await deploy(project);
+    } else {
+        console.log("Unknown command", command)
+        printHelp();
+        return;
     }
 }
 
-function printHelp() {
+async function printHelp() {
+
     console.log(`
 ${chalk.red.bold("Welcome to the FireCMS CLI 🔥🔥🔥")}
 
 ${chalk.green.bold("Usage")}
-firecms <command> [options]
+firecms ${chalk.blue.bold("<command>")} [options]
 
 ${chalk.green.bold("Commands")}
+${chalk.blue.bold("login")} - Login to FireCMS
+${chalk.blue.bold("logout")} - Sign out
 ${chalk.blue.bold("init")} - Create a new CMS project
 ${chalk.blue.bold("deploy")} - Deploy an existing CMS project
-    
 `);
-}
+    const currentCredentials = await getCurrentUser();
+    if (currentCredentials) {
+        console.log(`${chalk.green.bold("Current user")}
+${currentCredentials["email"]}
+`);
+    }
 
+}
 
 // function debugPaths() {
 //     // @ts-ignore

@@ -3,7 +3,6 @@ import { FirebaseApp } from "firebase/app";
 import { BrowserRouter, Route } from "react-router-dom";
 
 import {
-    AppCheckOptions,
     BreadcrumbUpdater,
     Button,
     CenteredView,
@@ -12,7 +11,6 @@ import {
     ErrorView,
     FireCMS,
     FireCMSAppBarProps,
-    Locale,
     ModeController,
     ModeControllerProvider,
     NavigationRoutes,
@@ -45,8 +43,7 @@ import {
     useFirebaseAuthController,
     useFirebaseStorageSource,
     useFirestoreDataSource,
-    useInitialiseFirebase,
-    useInitializeAppCheck
+    useInitialiseFirebase
 } from "./hooks";
 
 import { FireCMS3AppProps } from "./FireCMS3AppProps";
@@ -58,7 +55,6 @@ import {
     FireCMSCustomization,
     SaasUser
 } from "./types";
-import { FirestoreTextSearchController } from "./types/text_search";
 import {
     ADMIN_VIEWS,
     getUserRoles,
@@ -91,17 +87,11 @@ import { useImportExportPlugin } from "./hooks/useImportExportPlugin";
  */
 export function FireCMS3App({
                                 projectId,
-                                config,
-                                textSearchController,
-                                onFirebaseInit,
-                                appCheckOptions,
-                                dateTimeFormat,
-                                locale,
+                                customization,
+                                backendApiHost = "https://api-kdoe6pj3qq-ey.a.run.app", // TODO
+                                onAnalyticsEvent,
                                 basePath,
                                 baseCollectionPath,
-                                onAnalyticsEvent,
-                                plugins,
-                                backendApiHost = "https://api-kdoe6pj3qq-ey.a.run.app" // TODO
                             }: FireCMS3AppProps) {
 
     const modeController = useBuildModeController();
@@ -145,16 +135,11 @@ export function FireCMS3App({
         component = <FireCMS3Client
             fireCMSBackend={fireCMSBackend}
             projectId={projectId}
-            onFirebaseInit={onFirebaseInit}
-            appCheckOptions={appCheckOptions}
-            textSearchController={textSearchController}
-            config={config}
-            dateTimeFormat={dateTimeFormat}
-            locale={locale}
+            modeController={modeController}
+            customization={customization}
             basePath={basePath}
             baseCollectionPath={baseCollectionPath}
             onAnalyticsEvent={onAnalyticsEvent}
-            modeController={modeController}
         />
     }
 
@@ -168,17 +153,12 @@ export type FireCMS3ClientProps = {
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     fireCMSBackend: FireCMSBackend,
     projectId: string;
-    config?: FireCMSCustomization;
-    onFirebaseInit?: (config: object, app: FirebaseApp) => void;
-    appCheckOptions?: AppCheckOptions;
-    textSearchController?: FirestoreTextSearchController;
-    dateTimeFormat?: string;
-    locale?: Locale;
+    customization?: FireCMSCustomization;
+    modeController: ModeController;
+    FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps>;
     basePath?: string;
     baseCollectionPath?: string;
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
-    modeController: ModeController;
-    FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps>
 };
 
 function FullLoadingView(props: { projectId: string, currentProjectController?: ProjectConfig }) {
@@ -199,7 +179,6 @@ export const FireCMS3Client = function FireCMS3Client({
 
     const currentProjectController = useBuildProjectConfig({
         projectId,
-        getBackendAuthToken: fireCMSBackend.getBackendAuthToken,
         backendFirebaseApp: fireCMSBackend.backendFirebaseApp,
         projectsApi: fireCMSBackend.projectsApi
     });
@@ -208,7 +187,7 @@ export const FireCMS3Client = function FireCMS3Client({
         return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
     }
 
-    return <FireCMS3ClientInner
+    return <FireCMS3ClientWithController
         projectId={projectId}
         currentProjectController={currentProjectController}
         fireCMSBackend={fireCMSBackend}
@@ -216,14 +195,14 @@ export const FireCMS3Client = function FireCMS3Client({
     />;
 };
 
-function FireCMS3ClientInner({
-                                 currentProjectController,
-                                 projectId,
-                                 onFirebaseInit,
-                                 fireCMSBackend,
-                                 signInOptions,
-                                 ...props
-                             }: FireCMS3ClientProps & {
+export function FireCMS3ClientWithController({
+                                                 currentProjectController,
+                                                 projectId,
+                                                 fireCMSBackend,
+                                                 signInOptions,
+                                                 customization,
+                                                 ...props
+                                             }: FireCMS3ClientProps & {
     currentProjectController: ProjectConfig;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     projectId: string;
@@ -236,7 +215,7 @@ function FireCMS3ClientInner({
         firebaseConfigLoading,
         configError: firebaseConfigError
     } = useInitialiseFirebase({
-        onFirebaseInit,
+        onFirebaseInit: customization?.onFirebaseInit,
         firebaseConfig: currentProjectController.clientFirebaseConfig,
         name: projectId
     });
@@ -344,7 +323,7 @@ function FireCMS3ClientInner({
     return <FireCMS3AppAuthenticated
         fireCMSUser={saasUser}
         fireCMSBackend={fireCMSBackend}
-        onFirebaseInit={onFirebaseInit}
+        customization={customization}
         authController={authController}
         currentProjectController={currentProjectController}
         collectionConfigController={configController}
@@ -366,18 +345,14 @@ function FireCMS3AppAuthenticated({
                                       firebaseApp,
                                       currentProjectController,
                                       collectionConfigController,
-                                      appCheckOptions,
-                                      textSearchController,
-                                      config,
-                                      dateTimeFormat,
-                                      locale,
-                                      basePath,
-                                      baseCollectionPath,
-                                      onAnalyticsEvent,
+                                      customization,
                                       authController,
                                       modeController,
                                       fireCMSBackend,
-                                      FireCMSAppBarComponent
+                                      FireCMSAppBarComponent,
+                                      onAnalyticsEvent,
+                                      basePath,
+                                      baseCollectionPath
                                   }: Omit<FireCMS3ClientProps, "projectId"> & {
     fireCMSUser: SaasUser;
     firebaseApp: FirebaseApp;
@@ -427,12 +402,12 @@ function FireCMS3AppAuthenticated({
         host: fireCMSBackend.backendApiHost,
     });
 
-    const {
-        appCheckLoading,
-    } = useInitializeAppCheck({
-        firebaseApp,
-        options: appCheckOptions
-    });
+    // const {
+    //     appCheckLoading,
+    // } = useInitializeAppCheck({
+    //     firebaseApp,
+    //     options: customization.appCheckOptions
+    // });
 
     /**
      * Update the browser title and icon
@@ -449,8 +424,8 @@ function FireCMS3AppAuthenticated({
      */
     const dataSource = useFirestoreDataSource({
         firebaseApp,
-        textSearchController,
-        firestoreIndexesBuilder: config?.firestoreIndexesBuilder
+        textSearchController: customization?.textSearchController,
+        firestoreIndexesBuilder: customization?.firestoreIndexesBuilder
     });
 
     /**
@@ -460,10 +435,10 @@ function FireCMS3AppAuthenticated({
         firebaseApp
     });
 
-    if (appCheckLoading) {
-        return <FullLoadingView projectId={currentProjectController.projectId}
-                                currentProjectController={currentProjectController}/>;
-    }
+    // if (appCheckLoading) {
+    //     return <FullLoadingView projectId={currentProjectController.projectId}
+    //                             currentProjectController={currentProjectController}/>;
+    // }
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
@@ -472,16 +447,16 @@ function FireCMS3AppAuthenticated({
                     <ModeControllerProvider
                         value={modeController}>
                         <FireCMS
-                            collections={config?.collections}
-                            views={config?.views}
-                            fields={config?.fields}
+                            collections={customization?.collections}
+                            views={customization?.views}
+                            fields={customization?.fields}
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
-                            dateTimeFormat={dateTimeFormat}
+                            dateTimeFormat={customization?.dateTimeFormat}
                             dataSource={dataSource}
                             storageSource={storageSource}
                             entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                            locale={locale}
+                            locale={customization?.locale}
                             basePath={basePath}
                             baseCollectionPath={baseCollectionPath}
                             onAnalyticsEvent={onAnalyticsEvent}
@@ -503,10 +478,10 @@ function FireCMS3AppAuthenticated({
                                             logo={currentProjectController.logo}
                                             Drawer={SaasDrawer}
                                             FireCMSAppBarComponent={FireCMSAppBarComponent}
-                                            fireCMSAppBarComponentProps={config?.fireCMSAppBarComponentProps}
-                                            autoOpenDrawer={config?.autoOpenDrawer}>
+                                            fireCMSAppBarComponentProps={customization?.fireCMSAppBarComponentProps}
+                                            autoOpenDrawer={customization?.autoOpenDrawer}>
                                             <NavigationRoutes
-                                                HomePage={config?.HomePage ?? SaasProjectPage}
+                                                HomePage={customization?.HomePage ?? SaasProjectPage}
                                                 customRoutes={customSaasRoutes}/>
                                             <SideDialogs/>
                                         </Scaffold>

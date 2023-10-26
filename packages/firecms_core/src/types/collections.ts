@@ -6,7 +6,6 @@ import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
 import { EnumValues, PropertiesOrBuilders } from "./properties";
 import { FormContext } from "./fields";
-import { TableController } from "../core/components/EntityCollectionTable/useCollectionTableController";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -357,10 +356,6 @@ export type FilterCombination<Key extends string> = Partial<Record<Key, "asc" | 
  */
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
-/**
- * DEPRECATED: Use `AdditionalFieldDelegate` instead
- */
-export type AdditionalColumnDelegate = AdditionalFieldDelegate;
 
 export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, UserType extends User = User> = {
     entity: Entity<M>,
@@ -471,4 +466,37 @@ export type DefaultSelectedViewBuilder = (params: DefaultSelectedViewParams) => 
 export type DefaultSelectedViewParams = {
     status?: EntityStatus;
     entityId?: string;
+};
+/**
+ * You can use this controller to control the table view of a collection.
+ */
+export type TableController<M extends Record<string, any> = any> = {
+    data: Entity<M>[];
+    dataLoading: boolean;
+    noMoreToLoad: boolean;
+    dataLoadingError?: Error;
+    filterValues?: FilterValues<Extract<keyof M, string>>;
+    setFilterValues?: (filterValues: FilterValues<Extract<keyof M, string>>) => void;
+    sortBy?: [Extract<keyof M, string>, "asc" | "desc"];
+    setSortBy?: (sortBy: [Extract<keyof M, string>, "asc" | "desc"]) => void;
+    searchString?: string;
+    setSearchString?: (searchString?: string) => void;
+    clearFilter?: () => void;
+    itemCount?: number;
+    setItemCount?: (itemCount: number) => void;
+    paginationEnabled?: boolean;
+    pageSize?: number;
+    checkFilterCombination?: (filterValues: FilterValues<any>,
+                              sortBy?: [string, "asc" | "desc"]) => boolean;
+    popupCell?: SelectedCellProps<M>;
+    setPopupCell?: (popupCell?: SelectedCellProps<M>) => void;
+}
+
+export type SelectedCellProps<M extends Record<string, any>> = {
+    propertyKey: keyof M;
+    columnIndex: number;
+    cellRect: DOMRect;
+    width: number;
+    height: number;
+    entity: Entity<M>;
 };

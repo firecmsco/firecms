@@ -2,11 +2,10 @@ import React from "react";
 
 import { canCreateEntity, canDeleteEntity, fullPathToCollectionSegments } from "../../util";
 import { useAuthController, useFireCMSContext, useLargeLayout } from "../../../hooks";
-import { CollectionActionsProps, EntityCollection, SelectionController } from "../../../types";
+import { CollectionActionsProps, EntityCollection, SelectionController, TableController } from "../../../types";
 import { Button, IconButton, Tooltip } from "../../../components";
 import { AddIcon, DeleteIcon } from "../../../icons";
 import { toArray } from "../../util/arrays";
-import { TableController } from "../EntityCollectionTable";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;

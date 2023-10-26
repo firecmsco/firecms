@@ -5,10 +5,9 @@ import {
     Entity,
     FilterValues,
     ResolvedProperties,
-    SelectionController,
+    SelectionController, TableController,
     User
 } from "../../../types";
-import { TableController } from "./useCollectionTableController";
 import { OnCellValueChange, UniqueFieldValidator } from "./types";
 
 /**

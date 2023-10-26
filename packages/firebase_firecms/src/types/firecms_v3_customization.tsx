@@ -7,8 +7,11 @@ import {
     EntityCollectionsBuilder,
     EntityCustomView,
     FieldConfig,
-    FireCMSAppBarProps
+    FireCMSAppBarProps,
+    Locale
 } from "@firecms/core";
+import { FirebaseApp } from "firebase/app";
+import { FirestoreTextSearchController } from "./text_search";
 
 export type FireCMSCustomization = {
 
@@ -64,4 +67,35 @@ export type FireCMSCustomization = {
      * for multiple fields in the CMS.
      */
     firestoreIndexesBuilder?: FirestoreIndexesBuilder;
+
+    /**
+     * Optional callback after Firebase has been initialised. Useful for
+     * using the local emulator or retrieving the used configuration.
+     * @param config
+     */
+    onFirebaseInit?: (config: object, app: FirebaseApp) => void;
+
+    // /**
+    //  * Use this to enable Firebase App Check
+    //  */
+    // appCheckOptions?: AppCheckOptions;
+
+    /**
+     * Format of the dates in the CMS.
+     * Defaults to 'MMMM dd, yyyy, HH:mm:ss'
+     */
+    dateTimeFormat?: string;
+
+    /**
+     * Locale of the CMS, currently only affecting dates
+     */
+    locale?: Locale;
+
+    /**
+     * Use this controller to return text search results as document ids, that
+     * get then fetched from Firestore.
+     *
+     */
+    textSearchController?: FirestoreTextSearchController;
+
 }

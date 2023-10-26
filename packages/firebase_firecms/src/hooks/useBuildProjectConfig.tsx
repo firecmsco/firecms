@@ -41,6 +41,7 @@ export type ProjectConfig = {
     serviceAccountMissing?: boolean;
 
     subscriptionPlan?: ProjectSubscriptionPlan;
+    customizationRevision?: string;
     usersLimit: number | null;
 
     canEditRoles: boolean;
@@ -51,14 +52,12 @@ export type ProjectConfig = {
 interface ProjectConfigParams {
     backendFirebaseApp?: FirebaseApp;
     projectId: string;
-    getBackendAuthToken: (forceRefresh?: boolean) => Promise<string>;
     projectsApi: ProjectsApi
 }
 
 export function useBuildProjectConfig({
                                           backendFirebaseApp,
                                           projectId,
-                                          getBackendAuthToken,
                                           projectsApi
                                       }: ProjectConfigParams): ProjectConfig {
 
@@ -71,6 +70,8 @@ export function useBuildProjectConfig({
     const [clientFirebaseMissing, setClientFirebaseMissing] = useState<boolean | undefined>();
     const [serviceAccountMissing, setServiceAccountMissing] = useState<boolean | undefined>();
     const [clientConfigError, setClientConfigError] = useState<Error | undefined>();
+
+    const [customizationRevision, setCustomizationRevision] = useState<string | undefined>();
 
     const loadedProjectIdRef = useRef<string | undefined>(projectId);
 
@@ -246,6 +247,8 @@ export function useBuildProjectConfig({
 
                     setClientProjectName(snapshot.get("name"));
                     setSubscriptionPlan(snapshot.get("subscription_plan") ?? "free"); // TODO: remove default value
+                    const currentCustomizationRevision = snapshot.get("current_customization_revision");
+                    setCustomizationRevision(currentCustomizationRevision);
 
                     const firebaseConfig = snapshot.get("firebase_config");
 
@@ -295,7 +298,8 @@ export function useBuildProjectConfig({
         updateProjectName,
 
         projectName: clientProjectName,
-        subscriptionPlan,
+        subscriptionPlan: loadedProjectIdRef.current !== projectId ? undefined : subscriptionPlan,
+        customizationRevision: loadedProjectIdRef.current !== projectId ? undefined : customizationRevision,
         configLoading: loadedProjectIdRef.current !== projectId || clientConfigLoading,
         configError: loadedProjectIdRef.current !== projectId ? undefined : clientConfigError,
         clientFirebaseConfig: loadedProjectIdRef.current !== projectId ? undefined : clientFirebaseConfig,

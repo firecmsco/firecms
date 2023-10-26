@@ -8,7 +8,7 @@
     "build": "vite build",
     "preview": "vite preview --port 5001 --strictPort",
     "serve": "vite preview --port 5001 --strictPort",
-    "cli": "firecms deploy"
+    "deploy": "firecms deploy"
   },
   "dependencies": {
     "@firecms/core": "^3.0.0-alpha.5",

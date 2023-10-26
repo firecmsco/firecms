@@ -2,34 +2,13 @@ import React, { useCallback, useMemo } from "react";
 
 import { useCollectionFetch, useDataSource, useNavigationContext } from "../../../hooks";
 import { useDataOrder } from "../../../hooks/data/useDataOrder";
-import { Entity, EntityCollection, FilterValues, User } from "../../../types";
+import { Entity, EntityCollection, FilterValues, TableController, User } from "../../../types";
 import { useDebouncedData } from "./useDebouncedData";
 import { SelectedCellProps } from "./types";
 
 const DEFAULT_PAGE_SIZE = 50;
 
-export type TableController<M extends Record<string, any> = any> = {
-    data: Entity<M>[];
-    dataLoading: boolean;
-    noMoreToLoad: boolean;
-    dataLoadingError?: Error;
-    filterValues?: FilterValues<Extract<keyof M, string>>;
-    setFilterValues?: (filterValues: FilterValues<Extract<keyof M, string>>) => void;
-    sortBy?: [Extract<keyof M, string>, "asc" | "desc"];
-    setSortBy?: (sortBy: [Extract<keyof M, string>, "asc" | "desc"]) => void;
-    searchString?: string;
-    setSearchString?: (searchString?: string) => void;
-    clearFilter?: () => void;
-    itemCount?: number;
-    setItemCount?: (itemCount: number) => void;
-    paginationEnabled?: boolean;
-    pageSize?: number;
-    checkFilterCombination?: (filterValues: FilterValues<any>,
-                             sortBy?: [string, "asc" | "desc"]) => boolean;
-    popupCell?: SelectedCellProps<M>;
-    setPopupCell?: (popupCell?: SelectedCellProps<M>) => void;
 
-}
 export type CollectionTableControllerProps<M extends Record<string, any> = any> = {
     fullPath: string;
     collection: EntityCollection<M>;
