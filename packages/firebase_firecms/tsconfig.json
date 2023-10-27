@@ -35,9 +35,6 @@
       "@firecms/core": [
         "../firecms_core/src/index.ts"
       ],
-      "@firecms/firebase": [
-        "../firebase_firecms/src/index.ts"
-      ],
       "@firecms/collection_editor": [
         "../collection_editor/src/index.ts"
       ],
@@ -60,9 +57,5 @@
     "node_modules",
     "dist",
     "src/test"
-  ],
-  "ts-node": {
-    "esm": true,
-    "experimentalSpecifierResolution": "node"
-  }
+  ]
 }

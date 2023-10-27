@@ -22,8 +22,6 @@ export type ImportConfig = {
     originProperties: Record<string, Property>;
     setOriginProperties: React.Dispatch<React.SetStateAction<Record<string, Property>>>;
 
-    getPropertiesMapping: (properties: Record<string, Property>) => Record<string, DataTypeMapping>;
-
 }
 
 export type DataTypeMapping = {

@@ -2,7 +2,15 @@
   "$schema": "node_modules/lerna/schemas/lerna-schema.json",
   "version": "3.0.0-alpha.9",
   "packages": [
-    "packages/*",
+    "packages/collection_editor",
+    "packages/data_enhancement",
+    "packages/data_import",
+    "packages/firebase_firecms",
+    "packages/firecms_cli",
+    "packages/collection_editor",
+    "packages/firecms_core",
+    "packages/saas",
+    "packages/schema_inference",
     "examples/example_v3"
   ],
   "npmClient": "yarn"

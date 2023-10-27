@@ -12,10 +12,9 @@
     "packages/saas",
     "packages/collection_editor",
     "packages/user_management",
-    "packages/data_enhancement",
     "packages/data_import",
     "packages/schema_inference",
-    "examples/example",
+    "packages/data_enhancement",
     "examples/example_v3"
   ],
   "scripts": {
@@ -28,7 +27,7 @@
     "deploy:saas:prod": "cd packages/saas && yarn deploy:prod",
     "deploy:demo": "cd examples/example && yarn deploy",
     "deploy:web": "cd website && yarn deploy",
-    "build": "cd packages/firecms_core && yarn build",
+    "build": "lerna run build",
     "release": "git push origin main:release"
   },
   "packageManager": "yarn@3.2.3",

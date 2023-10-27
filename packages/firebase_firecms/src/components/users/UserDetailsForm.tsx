@@ -1,5 +1,4 @@
 import React, { useCallback } from "react";
-import { useFireCMSBackend } from "@firecms/firebase";
 import { Form, Formik } from "formik";
 import * as Yup from "yup";
 import {
@@ -23,6 +22,7 @@ import { Role } from "../../types/roles";
 import { useProjectConfig } from "../../hooks/useProjectConfig";
 import { areRolesEqual } from "../../utils/permissions";
 import { FieldHelperView } from "../FieldHelperView";
+import { useFireCMSBackend } from "../../hooks";
 
 export const YupSchema = Yup.object().shape({
     displayName: Yup.string().required("Required"),

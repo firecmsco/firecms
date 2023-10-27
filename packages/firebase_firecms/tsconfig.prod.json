@@ -6,7 +6,10 @@
   "exclude": [
     "node_modules",
     "dist",
-    "src/test",
-    "../firecms_core/src"
+    "../firecms_core/src",
+    "../collection_editor/src",
+    "../data_enhancement/src",
+    "../schema_inference/src",
+    "../data_import/src",
   ]
 }

@@ -1,6 +1,13 @@
 {
-  "extends": "./tsconfig",
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "sourceMap": false,
-  }
+    "paths": {}
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/test",
+    "../firecms_core/src",
+    "../schema_inference/src",
+  ]
 }

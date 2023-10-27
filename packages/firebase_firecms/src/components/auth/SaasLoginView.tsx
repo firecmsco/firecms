@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from "react";
 
 import { BooleanSwitchWithLabel, ErrorView, FireCMSLogo, Typography } from "@firecms/core";
 import { GoogleLoginButton } from "./GoogleLoginButton";
-import { FireCMSBackend } from "@firecms/firebase";
+import { FireCMSBackend } from "../../types";
 
 export interface SaasLoginViewProps {
     authController: FireCMSBackend;

@@ -24,11 +24,8 @@ export default defineConfig(() => ({
     },
     resolve: {
         alias: {
-            firecms: path.resolve(__dirname, "../firecms/src"),
+            "@firecms/core": path.resolve(__dirname, "../firecms_core/src"),
             "@firecms/schema_inference": path.resolve(__dirname, "../schema_inference/src"),
-            "@firecms/data_enhancement": path.resolve(__dirname, "../data_enhancement/src"),
-            "@firecms/data_import": path.resolve(__dirname, "../data_import/src"),
-            "@firecms/collection_editor": path.resolve(__dirname, "../collection_editor/src")
         }
     },
     plugins: [react()]

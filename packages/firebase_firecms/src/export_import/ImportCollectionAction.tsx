@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import {
     Button,
     cn,
-    CollectionActionsProps,
+    CollectionActionsProps, DataType,
     defaultBorderMixin,
     Dialog,
     DialogActions,
@@ -28,8 +28,8 @@ import {
 } from "@firecms/core";
 import {
     convertDataToEntity,
-    DataNewPropertiesMapping,
-    getInferenceType,
+    DataNewPropertiesMapping, DataTypeMapping,
+    getInferenceType, getPropertiesMapping,
     ImportConfig,
     ImportFileUpload,
     ImportSaveInProgress,
@@ -369,13 +369,9 @@ export function ImportDataPreview<M extends Record<string, any>>({
 }) {
 
     useEffect(() => {
-        const propertiesMapping = importConfig.getPropertiesMapping(properties);
+        const propertiesMapping = getPropertiesMapping(importConfig.originProperties, properties) ;
         const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, propertiesMapping, "TEMP_PATH"));
         importConfig.setEntities(mappedData);
-        console.log("res", {
-            propertiesMapping,
-            mappedData
-        })
     }, []);
 
     const selectionController = useSelectionController();
@@ -384,7 +380,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
         title={<div>
             <Typography variant={"subtitle2"}>Imported data preview</Typography>
             <Typography variant={"caption"}>Entities with the same id will be overwritten</Typography>
-    </div>}
+        </div>}
         tableController={{
             data: importConfig.entities,
             dataLoading: false,
@@ -401,7 +397,6 @@ export function ImportDataPreview<M extends Record<string, any>>({
         properties={properties}/>
 
 }
-
 
 function buildHeadersMappingFromData(objArr: object[]) {
     const headersMapping: Record<string, string> = {};

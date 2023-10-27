@@ -486,6 +486,10 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                 .map((key) => {
 
                     const property = resolvedCollection.properties[key];
+                    if (!property) {
+                        console.warn(`Property ${key} not found in collection ${resolvedCollection.name}`);
+                        return null;
+                    }
 
                     const underlyingValueHasChanged: boolean =
                         !!underlyingChanges &&

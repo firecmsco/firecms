@@ -3,7 +3,7 @@ import path from "path";
 import { defineConfig } from "vite"
 import react from "@vitejs/plugin-react"
 
-import svgr from "vite-plugin-svgr";
+// import svgr from "vite-plugin-svgr";
 
 export default defineConfig({
     esbuild: {
@@ -16,12 +16,12 @@ export default defineConfig({
     },
     optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
-        svgr(),
+        // svgr(),
         react({})
     ],
     resolve: {
         alias: {
-            firecms: path.resolve(__dirname, "../../packages/firecms_core/src"),
+            "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
             "@firecms/firebase_legacy": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
             "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src")
         }
