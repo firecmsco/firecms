@@ -1,6 +1,6 @@
 {
   "name": "@firecms/firebase",
-  "version": "3.0.0-alpha.9",
+  "version": "3.0.0-alpha.10",
   "publishConfig": {
     "access": "public"
   },
@@ -17,11 +17,11 @@
     }
   },
   "dependencies": {
-    "@firecms/collection_editor": "3.0.0-alpha.9",
-    "@firecms/core": "3.0.0-alpha.9",
-    "@firecms/data_enhancement": "3.0.0-alpha.9",
-    "@firecms/data_import": "3.0.0-alpha.9",
-    "@firecms/schema_inference": "3.0.0-alpha.9",
+    "@firecms/collection_editor": "^3.0.0-alpha.10",
+    "@firecms/core": "^3.0.0-alpha.10",
+    "@firecms/data_enhancement": "^3.0.0-alpha.10",
+    "@firecms/data_import": "^3.0.0-alpha.10",
+    "@firecms/schema_inference": "^3.0.0-alpha.10",
     "firebase": "^10.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
