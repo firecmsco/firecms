@@ -1,6 +1,6 @@
 {
   "name": "@firecms/firebase",
-  "version": "3.0.0-alpha.11",
+  "version": "3.0.0-alpha.12",
   "publishConfig": {
     "access": "public"
   },
@@ -17,16 +17,18 @@
     }
   },
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-alpha.11",
-    "@firecms/core": "^3.0.0-alpha.11",
-    "@firecms/data_enhancement": "^3.0.0-alpha.11",
-    "@firecms/data_import": "^3.0.0-alpha.11",
-    "@firecms/schema_inference": "^3.0.0-alpha.11",
+    "@firecms/collection_editor": "^3.0.0-alpha.12",
+    "@firecms/core": "^3.0.0-alpha.12",
+    "@firecms/data_enhancement": "^3.0.0-alpha.12",
+    "@firecms/data_import": "^3.0.0-alpha.12",
+    "@firecms/schema_inference": "^3.0.0-alpha.12",
     "firebase": "^10.5.2",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
     "react-router": "^6.17.0",
     "react-router-dom": "^6.17.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   },
   "devDependencies": {
     "@types/node": "^20.8.9",
@@ -54,5 +56,5 @@
       "react-app/jest"
     ]
   },
-  "gitHead": "168e9703b80ed521e319a5a4e2e8c220f3434638"
+  "gitHead": "f8ed794d581af078dae32571a85d8602b2f07bfd"
 }
