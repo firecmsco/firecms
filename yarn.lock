@@ -1403,7 +1403,7 @@ __metadata:
     "@fontsource/roboto": ^5.0.8
     "@hello-pangea/dnd": ^16.3.0
     "@jest/globals": ^29.7.0
-    "@material-design-icons/font": latest
+    "@material-design-icons/font": ^0.14.13
     "@radix-ui/react-checkbox": ^1.0.4
     "@radix-ui/react-collapsible": ^1.0.3
     "@radix-ui/react-dialog": ^1.0.5
@@ -1500,7 +1500,7 @@ __metadata:
     vite: ^4.5.0
     vite-plugin-fonts: ^0.7.0
   peerDependencies:
-    "@firecms/core": 3.0.0-alpha.9
+    "@firecms/core": 3.0.0-alpha.16
     algoliasearch: ^4.17.1
     firebase: ^10.4.0
     flexsearch: ^0.7.31
@@ -1538,8 +1538,8 @@ __metadata:
     vite-plugin-fonts: ^0.7.0
     xlsx: ^0.18.5
   peerDependencies:
-    "@firecms/core": 3.0.0-alpha.9
-    "@firecms/schema_inference": 3.0.0-alpha.9
+    "@firecms/core": 3.0.0-alpha.16
+    "@firecms/schema_inference": 3.0.0-alpha.16
     algoliasearch: ^4.17.1
     firebase: ^10.4.0
     react: ^18.2.0
@@ -2126,7 +2126,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@material-design-icons/font@npm:latest":
+"@material-design-icons/font@npm:^0.14.13":
   version: 0.14.13
   resolution: "@material-design-icons/font@npm:0.14.13"
   checksum: 338a46396aaa91e2f9a01ad8bf411fc81bafe4ebc54994f9b92a4b9f82d3b9418be541abff1830dd16edeacbefdc5c7897b6ec1e615e7952196b6daf4a318cc8
@@ -3722,16 +3722,27 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser@npm:7.75.1":
-  version: 7.75.1
-  resolution: "@sentry/browser@npm:7.75.1"
+"@sentry-internal/tracing@npm:7.76.0":
+  version: 7.76.0
+  resolution: "@sentry-internal/tracing@npm:7.76.0"
   dependencies:
-    "@sentry-internal/tracing": 7.75.1
-    "@sentry/core": 7.75.1
-    "@sentry/replay": 7.75.1
-    "@sentry/types": 7.75.1
-    "@sentry/utils": 7.75.1
-  checksum: f815d3e91b0cb6ce30f44a8c7ee8ae42a73304880bdc2a9d0da727948db68b81bef410fffde5a99b511222d1931688a4aab88d45b47eb6ec4e9773297d5f8e32
+    "@sentry/core": 7.76.0
+    "@sentry/types": 7.76.0
+    "@sentry/utils": 7.76.0
+  checksum: b64ea35aa315f3a81c0866715459359173e6a07f3b5973cde4607e56b21dbd67e8ffb5e12a66fa838119bf1983f4893c8cd7573adc8877834261012aa67dc60c
+  languageName: node
+  linkType: hard
+
+"@sentry/browser@npm:7.76.0":
+  version: 7.76.0
+  resolution: "@sentry/browser@npm:7.76.0"
+  dependencies:
+    "@sentry-internal/tracing": 7.76.0
+    "@sentry/core": 7.76.0
+    "@sentry/replay": 7.76.0
+    "@sentry/types": 7.76.0
+    "@sentry/utils": 7.76.0
+  checksum: c3c9cee50912245112f804aa1419f90fb2cde456e1c0bb61b83b98d42cd61b04dd423aeff069c66b5e677f6b2a54ace0c30b5f763112c341ddaf0dc326ec6032
   languageName: node
   linkType: hard
 
@@ -3776,6 +3787,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/core@npm:7.76.0":
+  version: 7.76.0
+  resolution: "@sentry/core@npm:7.76.0"
+  dependencies:
+    "@sentry/types": 7.76.0
+    "@sentry/utils": 7.76.0
+  checksum: 76b4fedd76f31e5b0e7eef53aa557b4fb17ad89f50bf9078916983dbab33e7a0ab3fc679a47fcf53119f04e0abbb186617beef58ae733971c0dc007d6cf5b275
+  languageName: node
+  linkType: hard
+
 "@sentry/node@npm:^7.60.0":
   version: 7.75.1
   resolution: "@sentry/node@npm:7.75.1"
@@ -3789,38 +3810,38 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/react@npm:^7.75.1":
-  version: 7.75.1
-  resolution: "@sentry/react@npm:7.75.1"
+"@sentry/react@npm:^7.76.0":
+  version: 7.76.0
+  resolution: "@sentry/react@npm:7.76.0"
   dependencies:
-    "@sentry/browser": 7.75.1
-    "@sentry/types": 7.75.1
-    "@sentry/utils": 7.75.1
+    "@sentry/browser": 7.76.0
+    "@sentry/types": 7.76.0
+    "@sentry/utils": 7.76.0
     hoist-non-react-statics: ^3.3.2
   peerDependencies:
     react: 15.x || 16.x || 17.x || 18.x
-  checksum: 10565b3363a7c49d8b9503eaae50252772678a65d1395a3e4ec2ca3114fd0ea74428571313ba9d0d9b9204fbf076a0cd05a3461ea0ec485c7416e0e439a339a2
+  checksum: ce9c67ec64ee9fad08ba10a689fa5d1ce4cec893e00c14f00bc55a5546aeca5107dea89d67f0433cb90d76612d76b50183e225b273e71126866d907b35c13a75
   languageName: node
   linkType: hard
 
-"@sentry/replay@npm:7.75.1":
-  version: 7.75.1
-  resolution: "@sentry/replay@npm:7.75.1"
+"@sentry/replay@npm:7.76.0":
+  version: 7.76.0
+  resolution: "@sentry/replay@npm:7.76.0"
   dependencies:
-    "@sentry-internal/tracing": 7.75.1
-    "@sentry/core": 7.75.1
-    "@sentry/types": 7.75.1
-    "@sentry/utils": 7.75.1
-  checksum: e6c1dade10af72ad9a9a8c5a5e46ff13f3f713d8350f39ab5de97bc5f7d252b763b5ea20311ed0b8f39baad8830b982cfc5c57f363c580937ef3145352231dfd
+    "@sentry-internal/tracing": 7.76.0
+    "@sentry/core": 7.76.0
+    "@sentry/types": 7.76.0
+    "@sentry/utils": 7.76.0
+  checksum: e695889812fdf754f201f63d7ec2d27f5f93232cb2e078c12dfbeffdf2d29af7b7b82fbabb22747f76e68312ebbdd2479dab9e8a0f76f7a175d832a77d3ce9d2
   languageName: node
   linkType: hard
 
-"@sentry/tracing@npm:^7.75.1":
-  version: 7.75.1
-  resolution: "@sentry/tracing@npm:7.75.1"
+"@sentry/tracing@npm:^7.76.0":
+  version: 7.76.0
+  resolution: "@sentry/tracing@npm:7.76.0"
   dependencies:
-    "@sentry-internal/tracing": 7.75.1
-  checksum: f08da3680eb2a09824a37a3889b08790b4c318a9006a5b75d4d5c45a0aabceb7c9603e8a938972fd93ce66d5fb728fcfc0ca466814a3a4b0b6b2695ba8f5d9bd
+    "@sentry-internal/tracing": 7.76.0
+  checksum: 0119226dcf82cf1dad32ac5db35a9d1f058d6b054b2ff4890492acaaf2a9f395c59c250b80d7b4d92063926fdfdda93ec429ba3f78eddfa2c8a9df2210e239aa
   languageName: node
   linkType: hard
 
@@ -3831,12 +3852,28 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@sentry/types@npm:7.76.0":
+  version: 7.76.0
+  resolution: "@sentry/types@npm:7.76.0"
+  checksum: 8978b0b1e680cabc0f9f04881452832e53d636e37bfd0599a8c988ee8bbd244539a286102eba322b4b2019428ceb9c662edb69e3ec88255c8cb217e0ba84f9ce
+  languageName: node
+  linkType: hard
+
 "@sentry/utils@npm:7.75.1, @sentry/utils@npm:^7.60.0":
   version: 7.75.1
   resolution: "@sentry/utils@npm:7.75.1"
   dependencies:
     "@sentry/types": 7.75.1
   checksum: 83077d597360996b7098894ba083cfb8f6565b0e4bdc4fbc8b805b7041aaa5a1cc5e671c2291c45a27bfb95295b2722923a678875cb11011259a2811c9492a36
+  languageName: node
+  linkType: hard
+
+"@sentry/utils@npm:7.76.0":
+  version: 7.76.0
+  resolution: "@sentry/utils@npm:7.76.0"
+  dependencies:
+    "@sentry/types": 7.76.0
+  checksum: 6a9e796835da6daa04893817b57af180cf1b04fb6c61d7523635cf7c41f616be6fb8ba485b6f6bdd626006398dc3491b3e4c981219e4874772b7e59f545b206f
   languageName: node
   linkType: hard
 
@@ -4236,7 +4273,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.14":
+"@types/react-dom@npm:18.2.14, @types/react-dom@npm:^18.0.0, @types/react-dom@npm:^18.2.14":
   version: 18.2.14
   resolution: "@types/react-dom@npm:18.2.14"
   dependencies:
@@ -4254,7 +4291,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:^18.2.33":
+"@types/react@npm:*, @types/react@npm:18.2.33, @types/react@npm:^18.2.33":
   version: 18.2.33
   resolution: "@types/react@npm:18.2.33"
   dependencies:
@@ -7388,8 +7425,8 @@ __metadata:
     "@firecms/firebase": ^3.0.0-alpha.16
     "@firecms/schema_inference": ^3.0.0-alpha.16
     "@originjs/vite-plugin-federation": ^1.3.2
-    "@types/react": ^18.2.33
-    "@types/react-dom": ^18.2.14
+    "@types/react": 18.2.33
+    "@types/react-dom": 18.2.14
     "@vitejs/plugin-react": ^4.1.0
     autoprefixer: ^10.4.16
     postcss: ^8.4.31
@@ -7405,7 +7442,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-parent@workspace:."
   dependencies:
-    lerna: ^7.4.1
+    lerna: ^7.4.2
   languageName: unknown
   linkType: soft
 
@@ -9720,7 +9757,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"lerna@npm:^7.4.1":
+"lerna@npm:^7.4.2":
   version: 7.4.2
   resolution: "lerna@npm:7.4.2"
   dependencies:
@@ -12669,8 +12706,8 @@ __metadata:
     "@firecms/schema_inference": ^3.0.0-alpha.16
     "@fontsource/roboto": ^5.0.8
     "@originjs/vite-plugin-federation": ^1.3.2
-    "@sentry/react": ^7.75.1
-    "@sentry/tracing": ^7.75.1
+    "@sentry/react": ^7.76.0
+    "@sentry/tracing": ^7.76.0
     "@sentry/vite-plugin": ^2.9.0
     "@types/react": ^18.2.33
     "@types/react-dom": ^18.2.14

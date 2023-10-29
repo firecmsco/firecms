@@ -1,4 +1,3 @@
-import * as Sentry from "@sentry/browser";
 import { doc, Firestore, getFirestore, onSnapshot } from "firebase/firestore";
 
 import { FirebaseSignInOption, FirebaseSignInProvider, FireCMSBackend } from "../types";
@@ -24,9 +23,10 @@ export interface FireCMSBackendProps {
     backendApiHost: string;
     backendFirebaseApp?: FirebaseApp;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>; // TODO
+    onUserChange?: (user: FirebaseUser | null) => void;
 }
 
-export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp }: FireCMSBackendProps): FireCMSBackend {
+export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onUserChange }: FireCMSBackendProps): FireCMSBackend {
 
     const [loggedUser, setLoggedUser] = useState<FirebaseUser | null | undefined>(undefined); // logged user, anonymous or logged out
 
@@ -44,12 +44,7 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp }: F
     const firestore = firestoreRef.current;
 
     const updateFirebaseUser = useCallback(async (firebaseUser: FirebaseUser | null) => {
-        Sentry.setUser(firebaseUser
-            ? {
-                id: firebaseUser.uid,
-                email: firebaseUser.email ?? ""
-            }
-            : null);
+        onUserChange?.(firebaseUser);
         setLoggedUser(firebaseUser);
     }, []);
 

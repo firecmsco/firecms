@@ -14,8 +14,8 @@
     }
   },
   "peerDependencies": {
-    "@firecms/core": "3.0.0-alpha.9",
-    "@firecms/schema_inference": "3.0.0-alpha.9",
+    "@firecms/core": "3.0.0-alpha.16",
+    "@firecms/schema_inference": "3.0.0-alpha.16",
     "algoliasearch": "^4.17.1",
     "firebase": "^10.4.0",
     "react": "^18.2.0",
@@ -96,5 +96,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "f94cd1f1f796c317827ca3afdbcf504a40647986"
+  "gitHead": "d9e03bdd4b54f0ff2f5a221d03ffbe84dc4ca97f"
 }

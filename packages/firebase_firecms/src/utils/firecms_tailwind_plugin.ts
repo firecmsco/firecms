@@ -1,18 +1,19 @@
-/** @type {import("tailwindcss").Config} */
-// import { fireCMSPlugin } from "@firecms/firebase";
+import plugin from "tailwindcss/plugin";
 
-export default {
+export const fireCMSPlugin = plugin(function ({
+                                                  matchUtilities,
+                                                  theme
+                                              }) {
+}, {
     darkMode: ["class", "[data-theme=\"dark\"]"],
-    mode: "jit",
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
-        "../../node_modules/@firecms/core/src/**/*.{js,ts,jsx,tsx}",
-        "../../node_modules/@firecms/firebase/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
-        "../../node_modules/@firecms/collection_editor/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
-        "../../node_modules/@firecms/data_enhancement/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
+        "./node_modules/@firecms/core/dist/**/*.{js,ts,jsx,tsx}",
+        "./node_modules/@firecms/firebase/dist/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
+        "./node_modules/@firecms/collection_editor/dist/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
+        "./node_modules/@firecms/data_enhancement/dist/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
     ],
-    // plugins: [fireCMSPlugin],
     theme: {
         extend: {
             fontFamily: {
@@ -67,11 +68,14 @@ export default {
                     900: "#18181C",
                     950: "#101013"
                 }
-            }
+            },
+            // tabSize: {
+            //     1: "1",
+            //     2: "2",
+            //     4: "4",
+            //     8: "8",
+            // }
         }
 
-    },
-    variants: {
-        extend: {}
     }
-};
+});

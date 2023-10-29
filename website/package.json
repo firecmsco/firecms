@@ -54,7 +54,7 @@
     "devDependencies": {
         "@docusaurus/module-type-aliases": "^2.4.3",
         "@tsconfig/docusaurus": "^1.0.7",
-        "@types/react": "^18.0.31",
+        "@types/react": "^18.2.33",
         "@types/react-helmet": "^6.1.6",
         "@types/react-router-dom": "^5.3.3",
         "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",

@@ -52,7 +52,7 @@
         "@fontsource/ibm-plex-mono": "^5.0.8",
         "@fontsource/roboto": "^5.0.8",
         "@hello-pangea/dnd": "^16.3.0",
-        "@material-design-icons/font": "latest",
+        "@material-design-icons/font": "^0.14.13",
         "@radix-ui/react-checkbox": "^1.0.4",
         "@radix-ui/react-collapsible": "^1.0.3",
         "@radix-ui/react-dialog": "^1.0.5",
@@ -135,7 +135,7 @@
     "files": [
         "dist"
     ],
-    "gitHead": "f94cd1f1f796c317827ca3afdbcf504a40647986",
+    "gitHead": "d9e03bdd4b54f0ff2f5a221d03ffbe84dc4ca97f",
     "publishConfig": {
         "access": "public"
     }

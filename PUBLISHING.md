@@ -20,7 +20,7 @@ npm login
 Then you can publish all packages:
 
 ```bash
-lerna publish --dist-tag pre
+lerna publish --dist-tag pre --force-publish
 ```
 
 To force

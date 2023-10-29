@@ -37,8 +37,7 @@ ${chalk.green.bold("| __(_)_ _ ___ / __|  \\/  / __|")}
 ${chalk.green.bold("| _|| | '_/ -_) (__| |\\/| \\__ \\")}
 ${chalk.green.bold("|_| |_|_| \\___|\\___|_|  |_|___/")}
 
-${chalk.green.bold("Welcome to the CMS CLI")}
-🔥🔥🔥
+${chalk.green.bold("Welcome to the CMS CLI")} 🔥🔥🔥
 `);
     console.log("");
 

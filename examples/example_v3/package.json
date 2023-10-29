@@ -23,8 +23,8 @@
   "devDependencies": {
     "@firecms/cli": "^3.0.0-alpha.16",
     "@originjs/vite-plugin-federation": "^1.3.2",
-    "@types/react": "^18.2.33",
-    "@types/react-dom": "^18.2.14",
+    "@types/react": "18.2.33",
+    "@types/react-dom": "18.2.14",
     "@vitejs/plugin-react": "^4.1.0",
     "autoprefixer": "^10.4.16",
     "postcss": "^8.4.31",

@@ -4,6 +4,8 @@ import path from "path";
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react"
 
+const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
+
 export default defineConfig(() => ({
     esbuild: {
         logOverride: { "this-is-undefined-in-esm": "silent" }
@@ -19,6 +21,9 @@ export default defineConfig(() => ({
             name: "FireCMS",
             fileName: (format) => `index.${format}.js`
         },
+        rollupOptions: {
+            external: isExternal
+        }
     },
     resolve: {
         alias: {

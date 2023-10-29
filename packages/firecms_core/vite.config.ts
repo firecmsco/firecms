@@ -13,7 +13,7 @@ export default defineConfig(() => ({
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),
-            name: "FireCMS",
+            name: "FireCMS core",
             fileName: (format) => `index.${format}.js`
         },
         target: "esnext",
