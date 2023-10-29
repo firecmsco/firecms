@@ -1,6 +1,6 @@
 {
   "name": "@firecms/data_import",
-  "version": "3.0.0-alpha.14",
+  "version": "3.0.0-alpha.15",
   "access": "public",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
@@ -96,5 +96,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "09897bc8ce36b59f1fb5e7f023c7bb64b5dbacd2"
+  "gitHead": "40d5b17f4cdadfef2ba894b56adfe9e51c2d1e9a"
 }
