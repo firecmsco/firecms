@@ -1,6 +1,6 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-alpha.12",
+  "version": "3.0.0-alpha.13",
   "description": "A CLI to bootstrap FireCMS",
   "main": "src/index.ts",
   "packageManager": "yarn@3.2.3",
@@ -63,5 +63,5 @@
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "f8ed794d581af078dae32571a85d8602b2f07bfd"
+  "gitHead": "77ed3e939b32f9dfcb7be961ec957e30c422da01"
 }
