@@ -517,7 +517,3 @@ function buildSaasRoutes() {
     />)
 }
 
-function getRemoteConfig(arg0: string) {
-    throw new Error("Function not implemented.");
-}
-

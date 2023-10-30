@@ -206,8 +206,8 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             });
     }
 
-    function getRemoteConfigUrl(projectId: string, revisionId?: string) {
-        return `${host}/projects/${projectId}/customization/${revisionId}/remoteEntry.js`;
+    async function getRemoteConfigUrl(projectId: string, revisionId?: string) {
+        return `${host}/projects/${projectId}/customization/${revisionId}/${await getBackendAuthToken()}/remoteEntry.js`;
     }
 
     return {
