@@ -2,7 +2,7 @@ import React from "react";
 import { Button, Entity, EntityValues, useSnackbarController } from "@firecms/core";
 import { Product } from "../types";
 
-export function SampleProductsView({
+export function SampleEntityView({
                                        entity,
                                        modifiedValues
                                    }: {
@@ -13,6 +13,7 @@ export function SampleProductsView({
     const snackbarController = useSnackbarController();
 
     const onClick = (event: React.MouseEvent) => {
+        console.log("onClick", event, snackbarController);
         snackbarController.open({
             type: "success",
             message: `Custom action for ${modifiedValues?.name}`

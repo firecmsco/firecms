@@ -24,7 +24,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
 
     const storage = useStorageSource();
 
-    const [headerUrl, setHeaderUrl] = useState<string | undefined>();
+    const [headerUrl, setHeaderUrl] = useState<string | null>();
     useEffect(() => {
         if (modifiedValues?.header_image) {
             storage.getDownloadURL(modifiedValues.header_image)
@@ -92,7 +92,7 @@ export function Images({ storagePaths }: { storagePaths: string[] }) {
 export function StorageImage({ storagePath }: { storagePath: string }) {
 
     const storage = useStorageSource();
-    const [url, setUrl] = useState<string | undefined>();
+    const [url, setUrl] = useState<string | null>();
     useEffect(() => {
         if (storagePath) {
             storage.getDownloadURL(storagePath)
@@ -103,7 +103,7 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
     if (!storagePath)
         return <></>;
 
-    return (<img
+    return (!url ? null : <img
         alt={"Generic"}
         style={{
             objectFit: "contain",

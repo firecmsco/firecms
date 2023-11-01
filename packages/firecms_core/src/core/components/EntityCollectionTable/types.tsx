@@ -4,7 +4,7 @@ import {
     Entity,
     EntityCollection,
     FireCMSContext,
-    ResolvedProperty,
+    ResolvedProperty, SelectedCellProps,
     User
 } from "../../../types";
 
@@ -81,16 +81,6 @@ export interface OnCellValueChangeParams<T, M extends Record<string, any>> {
     fullPath: string
     context: FireCMSContext
 }
-
-export type SelectedCellProps<M extends Record<string, any>> =
-    {
-        propertyKey: keyof M,
-        columnIndex: number,
-        cellRect: DOMRect;
-        width: number,
-        height: number,
-        entity: Entity<M>
-    };
 
 /**
  * @category Collection components

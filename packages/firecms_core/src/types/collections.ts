@@ -493,7 +493,7 @@ export type TableController<M extends Record<string, any> = any> = {
 }
 
 export type SelectedCellProps<M extends Record<string, any>> = {
-    propertyKey: keyof M;
+    propertyKey: Extract<keyof M, string>;
     columnIndex: number;
     cellRect: DOMRect;
     width: number;

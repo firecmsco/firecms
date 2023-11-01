@@ -6,10 +6,10 @@ import axios from "axios";
 import { exec } from "child_process";
 import zipFolder from "zip-folder";
 import { getCurrentUser, getTokens, refreshCredentials } from "./auth";
-import { DEFAULT_SERVER } from "../common";
+import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import ora from "ora";
 
-export async function deploy(projectId: string) {
+export async function deploy(projectId: string, env: "prod" | "dev") {
     const currentUser = await getCurrentUser();
     if (!currentUser) {
         console.log("You are not logged in");
@@ -19,7 +19,7 @@ export async function deploy(projectId: string) {
     console.log("Starting deploy");
     // await build();
     const zipFilePath = await createZipFromBuild();
-    await uploadZip(projectId, zipFilePath);
+    await uploadZip(projectId, zipFilePath, env);
 }
 
 export function build() {
@@ -50,8 +50,11 @@ export async function createZipFromBuild(): Promise<string> {
     })
 }
 
-export async function uploadZip(projectId: string, zipFilePath: string) {
+export async function uploadZip(projectId: string, zipFilePath: string, env: "prod" | "dev") {
 
+    if(env === "dev") {
+        console.log("!!! Uploading to dev server");
+    }
     const spinner = ora("Uploading build of project " + projectId).start();
 
     const tokens = await refreshCredentials(await getTokens());
@@ -67,8 +70,9 @@ export async function uploadZip(projectId: string, zipFilePath: string) {
     form.append("zip", fs.createReadStream(zipFilePath), "file.zip");
 
     try {
+        const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
         // const response = await axios.post("http://127.0.0.1:5001/firecms-dev-2da42/europe-west3/api/projects/firecms-demo-27150/upload_config", form, {
-        const response = await axios.post(`${DEFAULT_SERVER}/projects/${projectId}/upload_config`, form, {
+        const response = await axios.post(`${server}/projects/${projectId}/upload_config`, form, {
             headers: {
                 ...form.getHeaders(),
                 ["x-admin-authorization"]: `Bearer ${tokens["access_token"]}`

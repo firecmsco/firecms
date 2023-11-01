@@ -76,12 +76,13 @@ export function FireCMSHomePage({
         allGroups.push(undefined);
     }
 
-    let additionalSections: React.ReactNode | undefined;
+    let additionalPluginChildrenStart: React.ReactNode | undefined;
+    let additionalPluginSections: React.ReactNode | undefined;
     if (context.plugins) {
         const sectionProps: PluginGenericProps = {
             context
         };
-        additionalSections = <>
+        additionalPluginSections = <>
             {context.plugins.filter(plugin => plugin.homePage?.includeSection)
                 .map((plugin, i) => {
                     const section = plugin.homePage!.includeSection!(sectionProps)
@@ -93,8 +94,13 @@ export function FireCMSHomePage({
                         </NavigationGroup>
                     );
                 })}
-        </>
-        ;
+        </>;
+        additionalPluginChildrenStart = <div className={"flex flex-col gap-2"}>
+            {context.plugins.filter(plugin => plugin.homePage?.additionalChildrenStart)
+                .map((plugin, i) => {
+                    return plugin.homePage!.additionalChildrenStart;
+                })}
+        </div>;
     }
 
     return (
@@ -114,6 +120,8 @@ export function FireCMSHomePage({
                 <FavouritesView hidden={Boolean(filteredUrls)}/>
 
                 {additionalChildrenStart}
+
+                {additionalPluginChildrenStart}
 
                 {allGroups.map((group, index) => {
 
@@ -168,7 +176,7 @@ export function FireCMSHomePage({
                     );
                 })}
 
-                {additionalSections}
+                {additionalPluginSections}
 
                 {additionalChildrenEnd}
 

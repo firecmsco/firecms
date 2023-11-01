@@ -1,3 +1,4 @@
+import React from "react";
 import { ChipColorKey, ChipColorScheme } from "../types";
 import { getColorSchemeForKey } from "../core/util/chip_utils";
 import { cn } from "./util/cn";

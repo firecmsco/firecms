@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import { FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
@@ -52,7 +52,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         baseCollectionPath = DEFAULT_COLLECTION_PATH,
         plugins,
         onAnalyticsEvent,
-        fields
+        fields,
+        entityViews
     } = props;
 
     useLocaleConfig(locale);
@@ -73,6 +74,16 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
 
     const loading = authController.initialLoading || navigation.loading || (plugins?.some(p => p.loading) ?? false);
 
+    const context: Partial<FireCMSContext> = useMemo(() => ({
+        entityLinkBuilder,
+        dateTimeFormat,
+        locale,
+        plugins,
+        onAnalyticsEvent,
+        entityViews: entityViews ?? [],
+        fields: fields ?? {}
+    }), [dateTimeFormat, locale, plugins, entityViews, fields]);
+
     if (navigation.navigationLoadingError) {
         return (
             <CenteredView maxWidth={"md"} fullScreen={true}>
@@ -92,15 +103,6 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
             </CenteredView>
         );
     }
-
-    const context: Partial<FireCMSContext> = {
-        entityLinkBuilder,
-        dateTimeFormat,
-        locale,
-        plugins,
-        onAnalyticsEvent,
-        fields: fields ?? {}
-    };
 
     return (
         <ModeControllerContext.Provider value={modeController}>

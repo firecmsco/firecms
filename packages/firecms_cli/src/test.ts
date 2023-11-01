@@ -4,12 +4,14 @@ import { getTokens, login, logout, refreshCredentials } from "./commands/auth";
 async function main(){
     // await logout();
     // await login();
-    getTokens().then((tokens) => {
-        console.log("current", tokens);
-        refreshCredentials(tokens).then((n) => {
-            console.log("new tokens", n);
-        });
-    })
+
+    const tokens = await refreshCredentials(await getTokens());
+    // getTokens().then((tokens) => {
+    //     console.log("current", tokens);
+    //     refreshCredentials(tokens).then((n) => {
+    //         console.log("new tokens", n);
+    //     });
+    // })
 }
 
 main();

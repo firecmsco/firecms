@@ -76,6 +76,8 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
     };
 
     homePage?: {
+
+        additionalChildrenStart?: React.ReactNode;
         /**
          * Use this component to add custom actions to the navigation card
          * in the home page.

@@ -1,6 +1,6 @@
 import { buildCollection, EntityCallbacks } from "@firecms/core";
 
-import { SampleProductsView } from "../custom_entity_view/SampleProductsView";
+import { SampleEntityView } from "../custom_entity_view/SampleEntityView";
 import { Product } from "../types";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import { PriceTextPreview } from "../custom_field/PriceTextPreview";
@@ -57,8 +57,8 @@ export const productsCollection = buildCollection<Product>({
                           entity,
                           modifiedValues
                       }) =>
-                <SampleProductsView entity={entity}
-                                    modifiedValues={modifiedValues}/>
+                <SampleEntityView entity={entity}
+                                  modifiedValues={modifiedValues}/>
         }
     ],
     properties: {

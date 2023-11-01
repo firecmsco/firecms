@@ -38,7 +38,7 @@ interface PopupFormFieldProps<M extends Record<string, any>> {
     open: boolean;
     onClose: () => void;
     columnIndex?: number;
-
+    container: HTMLElement | null;
     /**
      * Callback when the value of a cell has been edited
      * @param params
@@ -63,7 +63,8 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           open,
                                                                           onClose,
                                                                           columnIndex,
-                                                                          onCellValueChange
+                                                                          onCellValueChange,
+                                                                          container
                                                                       }: PopupFormFieldProps<M>) {
 
     const dataSource = useDataSource();
@@ -105,7 +106,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const windowSize = useWindowSize();
 
-    const containerRef = React.useRef<HTMLDivElement>(null);
+    const draggableRef = React.useRef<HTMLDivElement>(null);
     const innerRef = React.useRef<HTMLDivElement>(null);
 
     const initialPositionSet = React.useRef<boolean>(false);
@@ -128,7 +129,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                y
                                            }: { x: number, y: number }) => {
 
-        const draggableBoundingRect = containerRef.current?.getBoundingClientRect();
+        const draggableBoundingRect = draggableRef.current?.getBoundingClientRect();
         if (!draggableBoundingRect)
             throw Error("normalizePosition called before draggableBoundingRect is set");
 
@@ -143,15 +144,16 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         y: number
     }) => {
 
-        const draggableBoundingRect = containerRef.current?.getBoundingClientRect();
+        const draggableBoundingRect = draggableRef.current?.getBoundingClientRect();
         if (!cellRect || !draggableBoundingRect) return;
-        const newPosition = normalizePosition(position ?? getInitialLocation());
+        // const newPosition = normalizePosition(position ?? getInitialLocation());
+        const newPosition = position ?? normalizePosition(getInitialLocation());
         if (!popupLocation || newPosition.x !== popupLocation.x || newPosition.y !== popupLocation.y)
             setPopupLocation(newPosition);
     }, [cellRect, getInitialLocation, normalizePosition, popupLocation]);
 
     useDraggable({
-        containerRef,
+        containerRef: draggableRef,
         innerRef,
         x: popupLocation?.x,
         y: popupLocation?.y,
@@ -165,17 +167,9 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
         [propertyKey, entity]
     );
 
-
-    useEffect(
-        () => {
-            initialPositionSet.current = false;
-        },
-        [propertyKey]
-    );
-
     useLayoutEffect(
         () => {
-            const draggableBoundingRect = containerRef.current?.getBoundingClientRect();
+            const draggableBoundingRect = draggableRef.current?.getBoundingClientRect();
             if (!cellRect || !draggableBoundingRect || initialPositionSet.current) return;
             updatePopupLocation();
             initialPositionSet.current = true;
@@ -226,10 +220,9 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
     const form = entity && (
         <div
-            className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab`}>
+            className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
             <Formik
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
-                // enableReinitialize
                 validationSchema={validationSchema}
                 validateOnMount={true}
                 validate={(values) => console.debug("Validating", values)}
@@ -367,7 +360,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             className={`inline-block fixed z-30 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
                 !open ? "invisible" : "visible"
             } cursor-grab overflow-visible`}
-            ref={containerRef}>
+            ref={draggableRef}>
 
             <ElementResizeListener onResize={adaptResize}/>
 
@@ -398,7 +391,9 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
     );
 
     return (
-        <Portal.Root asChild>
+        <Portal.Root asChild
+                     container={container}
+        >
             {draggable}
         </Portal.Root>
     );

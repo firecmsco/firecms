@@ -7,7 +7,7 @@ import {
     Entity,
     FilterValues,
     FireCMSContext,
-    ResolvedProperty,
+    ResolvedProperty, SelectedCellProps,
     User
 } from "../../../types";
 import { renderSkeletonText } from "../../../preview";
@@ -19,7 +19,7 @@ import { CellRendererParams, VirtualTable, VirtualTableColumn } from "../Virtual
 import { enumToObjectEntries, getIconForProperty, getResolvedPropertyInPath, getValueInPath } from "../../util";
 import { getRowHeight } from "../VirtualTable/common";
 import { EntityCollectionRowActions } from "./internal/EntityCollectionRowActions";
-import { EntityCollectionTableController, SelectedCellProps } from "./types";
+import { EntityCollectionTableController } from "./types";
 import { CollectionTableToolbar } from "./internal/CollectionTableToolbar";
 import { EntityCollectionTableProps } from "./EntityCollectionTableProps";
 import { EntityTableCell } from "./internal/EntityTableCell";

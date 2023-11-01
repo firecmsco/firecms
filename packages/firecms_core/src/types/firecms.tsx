@@ -1,7 +1,7 @@
 import { User } from "./user";
 import { AuthController } from "./auth";
 import { DataSource } from "./datasource";
-import { EntityCollection } from "./collections";
+import { EntityCollection, EntityCustomView } from "./collections";
 import { CMSView } from "./navigation";
 import { FireCMSContext } from "./firecms_context";
 import { FieldConfig } from "./field_config";
@@ -86,6 +86,16 @@ export type FireCMSProps<UserType extends User> = {
      * the `fieldConfig` prop of a property in a collection.
      */
     fields?: Record<string, FieldConfig>;
+
+    /**
+     * List of additional custom views for entities.
+     * You can use the key to reference the custom view in
+     * the `entityViews` prop of a collection.
+     *
+     * You can also define an entity view from the UI.
+     */
+
+    entityViews?: EntityCustomView[];
 
     /**
      * Format of the dates in the CMS.

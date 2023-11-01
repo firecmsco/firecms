@@ -20,11 +20,6 @@
             "import": "./dist/index.es.js",
             "require": "./dist/index.umd.js",
             "types": "./dist/index.d.ts"
-        },
-        "./components": {
-            "import": "./dist/components/index.es.js",
-            "require": "./dist/components/index.umd.js",
-            "types": "./dist/components/index.d.ts"
         }
     },
     "keywords": [

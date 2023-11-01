@@ -73,7 +73,9 @@ export function SaasDrawer({
                     variant={"text"}
                     onClick={() => {
                         collectionEditorController?.createCollection({
-                            group,
+                            initialValues: {
+                                group,
+                            },
                             parentPathSegments: []
                         });
                     }}>

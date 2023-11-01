@@ -113,7 +113,7 @@ export function FireCMS3App({
     let component;
 
     if (backendConfigLoading || !backendFirebaseApp) {
-        component = <FullLoadingView projectId={projectId}/>;
+        component = <FullLoadingView projectId={projectId} text={"Backend loading"}/>;
     } else if (backendFirebaseConfigError) {
         component = <ErrorView
             error={backendFirebaseConfigError}/>
@@ -121,7 +121,7 @@ export function FireCMS3App({
         component = <ErrorView
             error={configError}/>
     } else if (fireCMSBackend.authLoading) {
-        component = <FullLoadingView projectId={projectId}/>;
+        component = <FullLoadingView projectId={projectId} text={"Auth loading"}/>;
     } else if (!fireCMSBackend.user) {
         component = <CenteredView maxWidth={"lg"} fullScreen={true}>
             <SaasLoginView
@@ -161,13 +161,13 @@ export type FireCMS3ClientProps = {
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
 };
 
-function FullLoadingView(props: { projectId: string, currentProjectController?: ProjectConfig }) {
+function FullLoadingView(props: { projectId: string, currentProjectController?: ProjectConfig, text?: string }) {
     return <Scaffold
         key={"project_scaffold_" + props.projectId}
         name={props.currentProjectController?.projectName ?? ""}
         logo={props.currentProjectController?.logo}
         includeDrawer={false}>
-        <CircularProgressCenter/>
+        <CircularProgressCenter text={props.text}/>
     </Scaffold>;
 }
 
@@ -184,13 +184,16 @@ export const FireCMS3Client = function FireCMS3Client({
     });
 
     if (currentProjectController.loading || (!currentProjectController.clientFirebaseConfig && !currentProjectController.configError)) {
-        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
+        return <FullLoadingView projectId={projectId}
+                                currentProjectController={currentProjectController}
+                                text={"Client loading"}/>;
     }
 
     return <FireCMS3ClientWithController
         projectId={projectId}
         currentProjectController={currentProjectController}
         fireCMSBackend={fireCMSBackend}
+        customizationLoading={false}
         {...props}
     />;
 };
@@ -201,11 +204,13 @@ export function FireCMS3ClientWithController({
                                                  fireCMSBackend,
                                                  signInOptions,
                                                  customization,
+                                                 customizationLoading,
                                                  ...props
                                              }: FireCMS3ClientProps & {
     currentProjectController: ProjectConfig;
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     projectId: string;
+    customizationLoading: boolean;
 }) {
 
     const [notValidUser, setNotValidUser] = useState<User | undefined>();
@@ -241,10 +246,7 @@ export function FireCMS3ClientWithController({
         projectsApi: fireCMSBackend.projectsApi,
         firebaseApp: clientFirebaseApp,
         projectId,
-        onUserChanged: (user) => {
-            console.log("User changed", user)
-            authController.setUser(user ?? null);
-        }
+        onUserChanged: (user) => authController.setUser(user ?? null)
     });
 
     const permissions: PermissionsBuilder<PersistedCollection, SaasUser> = useCallback(({
@@ -283,7 +285,9 @@ export function FireCMS3ClientWithController({
     }
 
     if (currentProjectController.loading) {
-        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
+        return <FullLoadingView projectId={projectId}
+                                currentProjectController={currentProjectController}
+                                text={"Project loading"}/>;
     }
 
     if (currentProjectController.configError) {
@@ -291,8 +295,16 @@ export function FireCMS3ClientWithController({
             error={currentProjectController.configError as Error}/>
     }
 
+    if (customizationLoading) {
+        return <FullLoadingView projectId={projectId}
+                                currentProjectController={currentProjectController}
+                                text={"Project customization loading"}/>;
+    }
+
     if (firebaseConfigLoading) {
-        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
+        return <FullLoadingView projectId={projectId}
+                                currentProjectController={currentProjectController}
+                                text={"Client config loading"}/>;
     }
 
     if (firebaseConfigError || !clientFirebaseApp) {
@@ -308,12 +320,16 @@ export function FireCMS3ClientWithController({
         </CenteredView>;
     }
 
-    if (delegatedLoginLoading || firebaseConfigLoading || !clientFirebaseApp) {
-        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
+    if (delegatedLoginLoading) {
+        return <FullLoadingView projectId={projectId}
+                                currentProjectController={currentProjectController}
+                                text={"Delegating client login"}/>;
     }
 
     if (!authController.user) {
-        return <FullLoadingView projectId={projectId} currentProjectController={currentProjectController}/>;
+        return <FullLoadingView projectId={projectId}
+                                currentProjectController={currentProjectController}
+                                text={"Auth loading"}/>;
     }
 
     if (!saasUser) {
@@ -448,15 +464,16 @@ function FireCMS3AppAuthenticated({
                         value={modeController}>
                         <FireCMS
                             collections={customization?.collections}
+                            dateTimeFormat={customization?.dateTimeFormat}
                             views={customization?.views}
                             fields={customization?.fields}
+                            locale={customization?.locale}
+                            entityViews={customization?.entityViews}
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
-                            dateTimeFormat={customization?.dateTimeFormat}
                             dataSource={dataSource}
                             storageSource={storageSource}
                             entityLinkBuilder={({ entity }) => `https://console.firebase.google.com/project/${firebaseApp.options.projectId}/firestore/data/${entity.path}/${entity.id}`}
-                            locale={customization?.locale}
                             basePath={basePath}
                             baseCollectionPath={baseCollectionPath}
                             onAnalyticsEvent={onAnalyticsEvent}
@@ -469,7 +486,7 @@ function FireCMS3AppAuthenticated({
 
                                 let component;
                                 if (loading) {
-                                    component = <CircularProgressCenter size={"large"}/>;
+                                    component = <CircularProgressCenter/>;
                                 } else {
                                     component = (
                                         <Scaffold

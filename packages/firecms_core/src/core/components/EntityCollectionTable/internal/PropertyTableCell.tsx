@@ -189,7 +189,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     height,
                     entity,
                     cellRect,
-                    propertyKey: propertyKey as keyof M,
+                    propertyKey: propertyKey as Extract<keyof M, string>,
                 });
             }
         }, [columnIndex, entity, height, propertyKey, select, width]);
@@ -206,7 +206,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     height,
                     entity,
                     cellRect,
-                    propertyKey: propertyKey as keyof M
+                    propertyKey: propertyKey as Extract<keyof M, string>
                 });
             }
         };

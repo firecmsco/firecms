@@ -93,7 +93,6 @@ function saveTokens(tokens: object) {
 
     fs.writeFile(filePath, data, (error) => {
         if (error) throw error;
-        console.log("File is written successfully.");
     });
 
 }
@@ -124,7 +123,7 @@ export async function getTokens(): Promise<object | null> {
     }
 
     return new Promise((resolve, reject) => {
-        fs.readFile(filePath, 'utf8', (err, data) => {
+        fs.readFile(filePath, "utf8", (err, data) => {
             if (err) {
                 reject(err);
                 return;
@@ -199,10 +198,18 @@ export async function refreshCredentials(credentials?: object) {
             return credentials;
         }
     }
-    const response = await axios.post(DEFAULT_SERVER + "/cli/refresh_access_token", credentials);
-    const newCredentials = response.data.data;
-    saveTokens({ ...credentials, ...newCredentials });
-    return newCredentials;
+    try {
+        const response = await axios.post(DEFAULT_SERVER + "/cli/refresh_access_token", credentials);
+        if (response.status !== 200) {
+            throw new Error("Error refreshing credentials");
+        }
+        const newCredentials = response.data.data;
+        saveTokens({ ...credentials, ...newCredentials });
+        return newCredentials;
+    } catch (error) {
+        console.error("Error refreshing credentials", error.response?.data);
+        return null;
+    }
 }
 
 async function exchangeCodeForToken(code: string) {

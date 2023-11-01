@@ -25,7 +25,7 @@ export interface FireCMS3LoginViewProps {
     /**
      * Delegate holding the auth state
      */
-    authController: FireCMSBackend;
+    fireCMSBackend: FireCMSBackend;
 
     /**
      * Path to the logo displayed in the login screen
@@ -75,7 +75,7 @@ export function FirebaseLoginView({
                                       logo,
                                       signInOptions,
                                       firebaseApp,
-                                      authController,
+                                      fireCMSBackend,
                                       noUserComponent,
                                       disableSignupScreen = false,
                                       disabled = false,
@@ -98,7 +98,7 @@ export function FirebaseLoginView({
         const auth = getAuth();
         const recaptchaVerifier = new RecaptchaVerifier(auth, "recaptcha", { size: "invisible" });
 
-        const resolver = getMultiFactorResolver(auth, authController.authProviderError);
+        const resolver = getMultiFactorResolver(auth, fireCMSBackend.authProviderError);
 
         if (resolver.hints[0].factorId === PhoneMultiFactorGenerator.FACTOR_ID) {
 
@@ -125,15 +125,15 @@ export function FirebaseLoginView({
             console.warn("Unsupported second factor.");
         }
 
-    }, [authController.authProviderError]);
+    }, [fireCMSBackend.authProviderError]);
 
     function buildErrorView() {
         let errorView: any;
-        if (authController.user != null) return errorView; // if the user is logged in via MFA
+        if (fireCMSBackend.user != null) return errorView; // if the user is logged in via MFA
         const ignoredCodes = ["auth/popup-closed-by-user", "auth/cancelled-popup-request"];
-        if (authController.authProviderError) {
-            if (authController.authProviderError.code === "auth/operation-not-allowed" ||
-                authController.authProviderError.code === "auth/configuration-not-found") {
+        if (fireCMSBackend.authProviderError) {
+            if (fireCMSBackend.authProviderError.code === "auth/operation-not-allowed" ||
+                fireCMSBackend.authProviderError.code === "auth/configuration-not-found") {
                 errorView =
                     <>
                         <div className="p-4">
@@ -152,19 +152,19 @@ export function FirebaseLoginView({
                                 </a>
                             </div>}
                     </>;
-            } else if (authController.authProviderError.code === "auth/invalid-api-key") {
+            } else if (fireCMSBackend.authProviderError.code === "auth/invalid-api-key") {
                 errorView = <div className="p-4">
                     <ErrorView
                         title={"Invalid API key"}
                         error={"auth/invalid-api-key: Check that your Firebase config is set correctly in your `firebase-config.ts` file"}/>
                 </div>;
-            } else if (!ignoredCodes.includes(authController.authProviderError.code)) {
-                if (authController.authProviderError.code === "auth/multi-factor-auth-required") {
+            } else if (!ignoredCodes.includes(fireCMSBackend.authProviderError.code)) {
+                if (fireCMSBackend.authProviderError.code === "auth/multi-factor-auth-required") {
                     sendMFASms();
                 }
                 errorView =
                     <div className="p-4">
-                        <ErrorView error={authController.authProviderError}/>
+                        <ErrorView error={fireCMSBackend.authProviderError}/>
                     </div>;
             }
         }

@@ -155,7 +155,7 @@ export function CustomCMSApp() {
                                         allowSkipLogin={false}
                                         signInOptions={signInOptions}
                                         firebaseApp={firebaseApp}
-                                        authController={authController}/>
+                                        fireCMSBackend={authController}/>
                                 );
                             } else {
                                 component = (

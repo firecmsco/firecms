@@ -12,6 +12,7 @@ import { SideDialogsController } from "./side_dialogs_controller";
 import { FireCMSPlugin } from "./plugins";
 import { CMSAnalyticsEvent } from "./analytics";
 import { FieldConfig } from "./field_config";
+import { EntityCustomView } from "./collections";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -98,4 +99,13 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
      * the `fieldConfig` prop of a property in a collection.
      */
     fields: Record<string, FieldConfig>;
+
+    /**
+     * List of additional custom views for entities.
+     * You can use the key to reference the custom view in
+     * the `entityViews` prop of a collection.
+     *
+     * You can also define an entity view from the UI.
+     */
+    entityViews?: EntityCustomView[];
 };

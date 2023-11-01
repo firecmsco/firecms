@@ -44,7 +44,7 @@ import {
 } from "../../../hooks";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
-import { useCollectionTableController } from "../EntityCollectionTable/useCollectionTableController";
+import { useEntityCollectionTableController } from "../EntityCollectionTable/useEntityCollectionTableController";
 import { Button, cn, Typography } from "../../../components";
 import { Popover } from "../../../components/Popover";
 import { Skeleton } from "../../../components/Skeleton";
@@ -108,9 +108,11 @@ export const EntityCollectionView = React.memo(
         const userConfigPersistence = useUserConfigurationPersistence();
         const context = useFireCMSContext();
 
+        const containerRef = React.useRef<HTMLDivElement>(null);
+
         const collection = useMemo(() => {
             const userOverride = userConfigPersistence?.getCollectionConfig<M>(fullPath);
-            return userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp;
+            return (userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp) as EntityCollection<M>;
         }, [collectionProp, fullPath, userConfigPersistence?.getCollectionConfig]);
 
         const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
@@ -154,7 +156,7 @@ export const EntityCollectionView = React.memo(
             setDeleteEntityClicked(undefined);
         }, [selectedEntities]);
 
-        const tableController = useCollectionTableController<M>({
+        const tableController = useEntityCollectionTableController<M>({
             fullPath,
             collection,
             entitiesDisplayedFirst: [],
@@ -483,7 +485,8 @@ export const EntityCollectionView = React.memo(
         </Popover>;
 
         return (
-            <div className={cn("overflow-hidden h-full w-full", className)}>
+            <div className={cn("overflow-hidden h-full w-full", className)}
+                 ref={containerRef}>
                 <EntityCollectionTable
                     key={`collection_table_${fullPath}`}
                     additionalFields={additionalFields}
@@ -530,7 +533,7 @@ export const EntityCollectionView = React.memo(
                     customFieldValidator={uniqueFieldValidator}
                     path={resolvedFullPath}
                     onCellValueChange={onValueChange}
-                />
+                    container={containerRef.current}/>
 
                 {deleteEntityClicked &&
                     <DeleteEntityDialog

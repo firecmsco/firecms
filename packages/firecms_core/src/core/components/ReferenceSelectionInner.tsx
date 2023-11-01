@@ -16,7 +16,7 @@ import { Button, DialogActions, Typography } from "../../components";
 import { useSideDialogContext } from "../SideDialogs";
 import { canCreateEntity, fullPathToCollectionSegments, resolveCollection } from "../util";
 import { useSelectionController } from "./EntityCollectionView/EntityCollectionView";
-import { useCollectionTableController } from "./EntityCollectionTable/useCollectionTableController";
+import { useEntityCollectionTableController } from "./EntityCollectionTable/useEntityCollectionTableController";
 import { AddIcon } from "../../icons";
 import { useColumnIds } from "./EntityCollectionView/useColumnsIds";
 
@@ -258,7 +258,7 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
     const displayedColumnIds = useColumnIds(resolvedCollection, false);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
-    const tableController = useCollectionTableController<M>({
+    const tableController = useEntityCollectionTableController<M>({
         fullPath,
         collection,
         entitiesDisplayedFirst,

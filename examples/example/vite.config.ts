@@ -21,9 +21,9 @@ export default defineConfig({
     ],
     resolve: {
         alias: {
-            "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core"),
-            "@firecms/firebase_legacy": path.resolve(__dirname, "../../packages/firebase_firecms"),
-            "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement"),
+            "@firecms/core": path.resolve(__dirname, "../../packages/firecms_core/src"),
+            "@firecms/firebase_legacy": path.resolve(__dirname, "../../packages/firebase_firecms/src"),
+            "@firecms/data_enhancement": path.resolve(__dirname, "../../packages/data_enhancement/src"),
         }
     }
 })

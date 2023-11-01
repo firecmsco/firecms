@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { deploy } from "./commands/deploy";
 import { getCurrentUser, login, logout } from "./commands/auth";
+import arg from "arg";
 
 export async function entry(args) {
 
@@ -10,7 +11,6 @@ export async function entry(args) {
     }
 
     const command = args[2];
-    const project = args.length === 4 && args[3] ? args[3].split("=")[1] : null;
 
     if (command === "init") {
         console.log("init");
@@ -19,18 +19,40 @@ export async function entry(args) {
     } else if (command === "logout") {
         logout();
     } else if (command === "deploy") {
-        if (!project) {
-            console.log("Please specify a project:");
-            console.log("firecms deploy --project=your-project-id");
-            return;
-        }
-        await deploy(project);
+        await deployArgs(args);
     } else {
         console.log("Unknown command", command)
         printHelp();
         return;
     }
 }
+
+async function deployArgs(rawArgs) {
+    const args = arg(
+        {
+            "--project": String,
+            "--env": String
+        },
+        {
+            argv: rawArgs.slice(2),
+        }
+    );
+    const project = args["--project"];
+
+    if (!project) {
+        console.log("Please specify a project:");
+        console.log("firecms deploy --project=your-project-id");
+        return;
+    }
+    const env = args["--env"] || "prod";
+    if (env !== "prod" && env !== "dev") {
+        console.log("Please specify a valid environment:");
+        console.log("firecms deploy --project=your-project-id --env=dev");
+        return;
+    }
+    await deploy(project, env);
+}
+
 
 async function printHelp() {
 

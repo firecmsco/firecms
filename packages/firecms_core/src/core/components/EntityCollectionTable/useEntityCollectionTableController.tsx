@@ -2,14 +2,12 @@ import React, { useCallback, useMemo } from "react";
 
 import { useCollectionFetch, useDataSource, useNavigationContext } from "../../../hooks";
 import { useDataOrder } from "../../../hooks/data/useDataOrder";
-import { Entity, EntityCollection, FilterValues, TableController, User } from "../../../types";
+import { Entity, EntityCollection, FilterValues, SelectedCellProps, TableController, User } from "../../../types";
 import { useDebouncedData } from "./useDebouncedData";
-import { SelectedCellProps } from "./types";
 
 const DEFAULT_PAGE_SIZE = 50;
 
-
-export type CollectionTableControllerProps<M extends Record<string, any> = any> = {
+export type EntityCollectionTableControllerProps<M extends Record<string, any> = any> = {
     fullPath: string;
     collection: EntityCollection<M>;
     /**
@@ -21,15 +19,22 @@ export type CollectionTableControllerProps<M extends Record<string, any> = any> 
     forceFilter?: FilterValues<string>;
 }
 
-
-export function useCollectionTableController<M extends Record<string, any> = any, UserType extends User = User>(
+/**
+ * Use this hook to build a controller for the {@link EntityCollectionTable}
+ * @param fullPath
+ * @param collection
+ * @param entitiesDisplayedFirst
+ * @param lastDeleteTimestamp
+ * @param forceFilterFromProps
+ */
+export function useEntityCollectionTableController<M extends Record<string, any> = any, UserType extends User = User>(
     {
         fullPath,
         collection,
         entitiesDisplayedFirst,
         lastDeleteTimestamp,
         forceFilter: forceFilterFromProps
-    }: CollectionTableControllerProps<M>)
+    }: EntityCollectionTableControllerProps<M>)
     : TableController<M> {
 
     const {
