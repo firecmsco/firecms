@@ -1376,7 +1376,6 @@ __metadata:
     eslint-plugin-promise: ^6.1.1
     eslint-plugin-react: ^7.33.2
     eslint-plugin-react-hooks: ^4.6.0
-    flexsearch: ^0.7.31
     jest: ^29.7.0
     react-router: ^6.17.0
     react-router-dom: ^6.17.0
@@ -1503,7 +1502,6 @@ __metadata:
     "@firecms/core": 3.0.0-alpha.16
     algoliasearch: ^4.17.1
     firebase: ^10.4.0
-    flexsearch: ^0.7.31
     react: ^18.2.0
     react-dom: ^18.2.0
     react-router: ^6.12.0
@@ -7470,13 +7468,6 @@ __metadata:
   version: 3.2.9
   resolution: "flatted@npm:3.2.9"
   checksum: f14167fbe26a9d20f6fca8d998e8f1f41df72c8e81f9f2c9d61ed2bea058248f5e1cbd05e7f88c0e5087a6a0b822a1e5e2b446e879f3cfbe0b07ba2d7f80b026
-  languageName: node
-  linkType: hard
-
-"flexsearch@npm:^0.7.31":
-  version: 0.7.31
-  resolution: "flexsearch@npm:0.7.31"
-  checksum: 9817d8909a0d07d98e2c31f8a39cbc91be7a900cc3f86d74214ee49d00b6f3b133b883a3a19154de1d2064519494002dcfb1a30fbc65c8ef44259c3655fa8f39
   languageName: node
   linkType: hard
 
