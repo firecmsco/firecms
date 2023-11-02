@@ -1,3 +1,4 @@
+import React from "react";
 import { CMSType, DataType, PropertyOrBuilder } from "./properties";
 import { FieldProps } from "./fields";
 
@@ -30,8 +31,6 @@ export type FieldConfig<T extends CMSType = any> = {
      * You can define a default config for the property.
      * Whenever this field is used, this property or builder will be used as
      * the base values for the resulting property.
-     * Any props that are defined in the property will override the
-     * ones specified in `baseProperty`.
      * You can also use a builder function to generate the base property.
      */
     defaultProperty?: PropertyOrBuilder<T>;

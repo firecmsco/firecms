@@ -65,7 +65,7 @@ export function joinCollectionLists(fetchedCollections: EntityCollection[], base
             if (!storedCollection) {
                 return { ...navigationCollection, deletable: false };
             } else {
-                const mergedCollection = mergeCollections(navigationCollection, storedCollection);
+                const mergedCollection = mergeCollections(storedCollection, navigationCollection);
                 return { ...mergedCollection, deletable: false };
             }
         });
