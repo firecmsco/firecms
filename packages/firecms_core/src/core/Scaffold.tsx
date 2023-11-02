@@ -209,7 +209,6 @@ function StyledDrawer(props: {
                 className={cn("cursor-pointer")}>
 
                 <Tooltip title={"Home"}
-                    // open={props.hovered}
                          sideOffset={20}
                          side="right">
                     <Link
@@ -217,7 +216,8 @@ function StyledDrawer(props: {
                         {props.logo
                             ? <img src={props.logo}
                                    alt="Logo"
-                                   className="max-w-full max-h-full"/>
+                                   className={cn("max-w-full max-h-full",
+                                       props.open ?? "w-[160px] h-[160px]")}/>
                             : <FireCMSLogo/>}
 
                     </Link>
