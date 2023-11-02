@@ -18,6 +18,7 @@ import {
     Scaffold,
     SideDialogs,
     SnackbarProvider,
+    Typography,
     useBrowserTitleAndIcon,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
@@ -295,6 +296,14 @@ export function FireCMS3ClientWithController({
             error={currentProjectController.configError as Error}/>
     }
 
+    if (delegatedLoginError) {
+        return <CenteredView fullScreen={true}>
+            <Typography variant={"h4"}>Error delegating login</Typography>
+            <ErrorView error={delegatedLoginError}/>
+            <Button variant="text" onClick={authController.signOut}>Sign out</Button>
+        </CenteredView>;
+    }
+
     if (customizationLoading) {
         return <FullLoadingView projectId={projectId}
                                 currentProjectController={currentProjectController}
@@ -310,13 +319,6 @@ export function FireCMS3ClientWithController({
     if (firebaseConfigError || !clientFirebaseApp) {
         return <CenteredView fullScreen={true}>
             <ErrorView error={firebaseConfigError ?? "Error fetching client Firebase config"}/>
-        </CenteredView>;
-    }
-
-    if (delegatedLoginError) {
-        return <CenteredView fullScreen={true}>
-            <ErrorView error={delegatedLoginError}/>
-            <Button variant="text" onClick={authController.signOut}>Sign out</Button>
         </CenteredView>;
     }
 
