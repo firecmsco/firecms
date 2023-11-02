@@ -61,6 +61,13 @@ export const productsCollection = buildCollection<Product>({
                                   modifiedValues={modifiedValues}/>
         }
     ],
+    additionalFields: [
+        {
+            id: "additional_field",
+            name: "Additional field",
+            Builder: () => <div>Additional field</div>
+        }
+    ],
     properties: {
         name: {
             dataType: "string",
