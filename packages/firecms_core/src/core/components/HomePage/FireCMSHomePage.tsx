@@ -98,7 +98,7 @@ export function FireCMSHomePage({
         additionalPluginChildrenStart = <div className={"flex flex-col gap-2"}>
             {context.plugins.filter(plugin => plugin.homePage?.additionalChildrenStart)
                 .map((plugin, i) => {
-                    return plugin.homePage!.additionalChildrenStart;
+                    return <div key={`plugin_children_start_${i}`}>{plugin.homePage!.additionalChildrenStart}</div>;
                 })}
         </div>;
     }
