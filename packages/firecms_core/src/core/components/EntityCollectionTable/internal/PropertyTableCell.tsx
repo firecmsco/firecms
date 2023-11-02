@@ -63,7 +63,6 @@ function isStorageProperty<T>(property: ResolvedProperty) {
 export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
     function PropertyTableCell<T extends CMSType, M extends Record<string, any>>({
                                                                                      propertyKey,
-                                                                                     columnIndex,
                                                                                      customFieldValidator,
                                                                                      value,
                                                                                      property,
@@ -86,7 +85,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             setPopupCell
         } = useEntityCollectionTableController();
 
-        const selected = selectedCell?.columnIndex === columnIndex &&
+        const selected = selectedCell?.propertyKey === propertyKey &&
             selectedCell?.entity.path === entity.path &&
             selectedCell?.entity.id === entity.id;
 
@@ -184,7 +183,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 select(undefined);
             } else {
                 select({
-                    columnIndex,
                     width,
                     height,
                     entity,
@@ -192,7 +190,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     propertyKey: propertyKey as Extract<keyof M, string>,
                 });
             }
-        }, [columnIndex, entity, height, propertyKey, select, width]);
+        }, [entity, height, propertyKey, select, width]);
 
         const openPopup = (cellRect: DOMRect | undefined) => {
             if (!setPopupCell)
@@ -201,7 +199,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 setPopupCell(undefined);
             } else {
                 setPopupCell({
-                    columnIndex,
                     width,
                     height,
                     entity,

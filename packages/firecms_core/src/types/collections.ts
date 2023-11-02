@@ -190,15 +190,6 @@ export interface EntityCollection<M extends Record<string, any> = any,
      */
     additionalFields?: AdditionalFieldDelegate<M, AdditionalKey, UserType>[];
 
-    /**
-     * DEPRECATED: Use `additionalFields` instead
-     *
-     * This prop will be removed in the final version
-     *
-     * You can add additional fields to the collection view by implementing
-     * an additional field delegate.
-     */
-    additionalColumns?: AdditionalFieldDelegate<M, AdditionalKey, UserType>[];
 
     /**
      * Default size of the rendered collection
@@ -388,12 +379,6 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
     width?: number;
 
     /**
-     * DEPRECATED: Use `Builder` instead
-     * Builder for the content of the cell for this column
-     */
-    builder?: React.ComponentType<AdditionalFieldDelegateProps<M, UserType>>;
-
-    /**
      * Builder for the content of the cell for this column
      */
     Builder?: React.ComponentType<AdditionalFieldDelegateProps<M, UserType>>;
@@ -494,7 +479,6 @@ export type TableController<M extends Record<string, any> = any> = {
 
 export type SelectedCellProps<M extends Record<string, any>> = {
     propertyKey: Extract<keyof M, string>;
-    columnIndex: number;
     cellRect: DOMRect;
     width: number;
     height: number;

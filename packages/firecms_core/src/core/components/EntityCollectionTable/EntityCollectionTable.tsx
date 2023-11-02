@@ -7,7 +7,8 @@ import {
     Entity,
     FilterValues,
     FireCMSContext,
-    ResolvedProperty, SelectedCellProps,
+    ResolvedProperty,
+    SelectedCellProps,
     User
 } from "../../../types";
 import { renderSkeletonText } from "../../../preview";
@@ -240,11 +241,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     .reduce((a, b) => ({ ...a, ...b }), {})
                 : entity;
 
-            if (additionalField.builder) {
-                console.warn("`additionalField.builder` is deprecated. Use `additionalField.Builder` instead.");
-            }
-
-            const Builder = additionalField.builder ?? additionalField.Builder;
+            const Builder = additionalField.Builder;
             if (!Builder) {
                 throw new Error("No builder provided for additional field");
             }

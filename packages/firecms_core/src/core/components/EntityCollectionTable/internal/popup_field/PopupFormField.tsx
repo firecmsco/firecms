@@ -32,12 +32,11 @@ interface PopupFormFieldProps<M extends Record<string, any>> {
     customFieldValidator?: CustomFieldValidator;
     path: string;
     tableKey: string;
-    propertyKey?: keyof M;
+    propertyKey?: Extract<keyof M, string>;
     collection?: EntityCollection<M>;
     cellRect?: DOMRect;
     open: boolean;
     onClose: () => void;
-    columnIndex?: number;
     container: HTMLElement | null;
     /**
      * Callback when the value of a cell has been edited
@@ -62,7 +61,6 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                                                                           cellRect,
                                                                           open,
                                                                           onClose,
-                                                                          columnIndex,
                                                                           onCellValueChange,
                                                                           container
                                                                       }: PopupFormFieldProps<M>) {
@@ -282,7 +280,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
 
                     let internalForm = <>
                         <div
-                            key={`popup_form_${tableKey}_${entityId}_${columnIndex}`}
+                            key={`popup_form_${tableKey}_${entityId}_${propertyKey}`}
                             className="w-[560px] max-w-full max-h-[85vh]">
                             <Form
                                 onSubmit={handleSubmit}

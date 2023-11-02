@@ -8,19 +8,19 @@ const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 export function useColumnIds<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, includeSubcollections: boolean): PropertyColumnConfig[] {
     return useMemo(() => {
         if (collection.propertiesOrder)
-            return hideAndExpandKeys(collection, collection.propertiesOrder, false);
+            return hideAndExpandKeys(collection, collection.propertiesOrder);
         return getDefaultColumnKeys(collection, includeSubcollections);
     }, [collection, includeSubcollections]);
 }
 
-function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, keys: string[], excludeHidden:boolean): PropertyColumnConfig[] {
+function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEntityCollection<M>, keys: string[]): PropertyColumnConfig[] {
 
     return keys.flatMap((key) => {
         const property = collection.properties[key];
         if (property) {
-            if (excludeHidden && property.hideFromCollection)
+            if (property.hideFromCollection)
                 return [null];
-            if (excludeHidden && property.disabled && typeof property.disabled === "object" && property.disabled.hidden)
+            if (property.disabled && typeof property.disabled === "object" && property.disabled.hidden)
                 return [null];
             if (property.dataType === "map" && property.spreadChildren && property.properties) {
                 return getColumnKeysForProperty(property, key);
@@ -63,11 +63,7 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
 function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: ResolvedEntityCollection<M>, includeSubCollections: boolean) {
     const propertyKeys = Object.keys(collection.properties);
 
-    if (collection.additionalColumns) {
-        console.warn("`additionalColumns` is deprecated and will be removed in previous versions. Use `additionalFields` instead, with the same structure.");
-    }
-
-    const additionalFields = collection.additionalFields ?? collection.additionalColumns ?? [];
+    const additionalFields = collection.additionalFields ?? [];
     const subCollections: EntityCollection[] = collection.subcollections ?? [];
 
     const columnIds: string[] = [
@@ -85,9 +81,8 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: R
         columnIds.push(COLLECTION_GROUP_PARENT_ID);
     }
 
-    return hideAndExpandKeys(collection, columnIds, true);
+    return hideAndExpandKeys(collection, columnIds);
 }
-
 
 export function getColumnKeysForProperty(property: ResolvedProperty, key: string, disabled?: boolean): PropertyColumnConfig[] {
     if (property.dataType === "map" && property.spreadChildren && property.properties) {

@@ -8,6 +8,13 @@ import {
 import { mergeDeep } from "./objects";
 import { isPropertyBuilder } from "./entities";
 
+function getCollectionKeys(collection: EntityCollection) {
+    return [
+        ...Object.keys(collection.properties),
+        ...(collection.additionalFields ?? [])?.map(f => f.id)
+    ];
+}
+
 /**
  *
  * @param target
@@ -27,14 +34,15 @@ export function mergeCollections(target: EntityCollection, source: EntityCollect
     });
 
     const mergedCollection = mergeDeep(target, source);
-    const targetPropertiesOrder = target.propertiesOrder ?? Object.keys(target.properties);
-    const sourcePropertiesOrder = source.propertiesOrder ?? Object.keys(source.properties);
+    const targetPropertiesOrder = target.propertiesOrder ?? getCollectionKeys(target);
+    const sourcePropertiesOrder = source.propertiesOrder ?? getCollectionKeys(source);
     const mergedPropertiesOrder = [...new Set([...targetPropertiesOrder, ...sourcePropertiesOrder])];
 
     return {
         ...mergedCollection,
         subcollections: subcollectionsMerged,
-        properties: sortProperties(mergedCollection.properties, mergedPropertiesOrder)
+        properties: sortProperties(mergedCollection.properties, mergedPropertiesOrder),
+        propertiesOrder: mergedPropertiesOrder
     }
 }
 

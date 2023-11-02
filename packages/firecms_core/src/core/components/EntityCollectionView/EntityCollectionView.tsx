@@ -409,7 +409,7 @@ export const EntityCollectionView = React.memo(
                 : [];
 
             return [
-                ...(collection.additionalFields ?? collection.additionalColumns ?? []),
+                ...(collection.additionalFields ?? []),
                 ...subcollectionColumns,
                 ...collectionGroupParentCollections
             ];
@@ -521,11 +521,10 @@ export const EntityCollectionView = React.memo(
                 />
 
                 <PopupFormField
-                    key={`popup_form_${popupCell?.columnIndex}_${popupCell?.entity?.id}`}
+                    key={`popup_form_${popupCell?.propertyKey}_${popupCell?.entity?.id}`}
                     open={Boolean(popupCell)}
                     onClose={onPopupClose}
                     cellRect={popupCell?.cellRect}
-                    columnIndex={popupCell?.columnIndex}
                     propertyKey={popupCell?.propertyKey}
                     collection={collection}
                     entity={popupCell?.entity}
