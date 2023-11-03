@@ -52,10 +52,9 @@ export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
 
     return (
         <div
-            className={cn(defaultBorderMixin, "no-scrollbar min-h-[56px] overflow-x-auto px-4 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}
-        >
+            className={cn(defaultBorderMixin, "no-scrollbar min-h-[56px] overflow-x-auto px-4 bg-gray-50 dark:bg-gray-900 border-b flex flex-row justify-between items-center w-full")}>
 
-            <div className="flex items-center gap-8 md:gap-4 ">
+            <div className="flex items-center gap-2">
 
                 {props.title && <div className={"hidden lg:block"}>
                     {props.title}
@@ -69,7 +68,7 @@ export function CollectionTableToolbar(props: CollectionTableToolbarProps) {
 
             </div>
 
-            <div className="flex items-center gap-4 md:gap-2">
+            <div className="flex items-center gap-2">
 
                 {largeLayout && <div className="w-[22px]">
                     {props.loading &&
