@@ -36,22 +36,23 @@ export function getIconForWidget(widget: FieldConfig | undefined,
 
 export function getIconForProperty(
     property: PropertyOrBuilder | ResolvedProperty,
-    size: "small" | "medium" | "large" = "small"
+    size: "small" | "medium" | "large" = "small",
+    fields: Record<string, FieldConfig> = {}
 ): React.ReactNode {
 
     if (isPropertyBuilder(property)) {
         return <FunctionsIcon size={size}/>;
     } else {
-        const widget = getFieldConfig(property);
+        const widget = getFieldConfig(property, fields);
         return getIconForWidget(widget, size);
     }
 }
 
-export function getColorForProperty(property: PropertyOrBuilder): string {
+export function getColorForProperty(property: PropertyOrBuilder, fields: Record<string, FieldConfig>): string {
     if (isPropertyBuilder(property)) {
         return "#888";
     } else {
-        const widget = getFieldConfig(property);
+        const widget = getFieldConfig(property, fields);
         return widget?.color ?? "#666";
     }
 }
@@ -106,7 +107,7 @@ export function getBracketNotation(path: string): string {
  * @param propertiesOrder
  */
 export function getPropertiesWithPropertiesOrder<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: Extract<keyof M, string>[]): PropertiesOrBuilders<M> {
-    if(!propertiesOrder) return properties;
+    if (!propertiesOrder) return properties;
     const result: PropertiesOrBuilders<any> = {};
     propertiesOrder.forEach(path => {
         const property = getPropertyInPath(properties, path);

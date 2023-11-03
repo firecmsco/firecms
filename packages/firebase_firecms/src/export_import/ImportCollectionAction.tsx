@@ -2,7 +2,7 @@ import React, { useCallback, useEffect } from "react";
 import {
     Button,
     cn,
-    CollectionActionsProps, DataType,
+    CollectionActionsProps,
     defaultBorderMixin,
     Dialog,
     DialogActions,
@@ -22,14 +22,16 @@ import {
     SelectItem,
     Tooltip,
     Typography,
+    useFireCMSContext,
     User,
     useSelectionController,
     useSnackbarController
 } from "@firecms/core";
 import {
     convertDataToEntity,
-    DataNewPropertiesMapping, DataTypeMapping,
-    getInferenceType, getPropertiesMapping,
+    DataNewPropertiesMapping,
+    getInferenceType,
+    getPropertiesMapping,
     ImportConfig,
     ImportFileUpload,
     ImportSaveInProgress,
@@ -45,6 +47,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
                                                                                                  collectionEntitiesCount,
                                                                                              }: CollectionActionsProps<M, UserType>
 ) {
+    const context = useFireCMSContext();
 
     const snackbarController = useSnackbarController();
 
@@ -94,7 +97,8 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
 
     const resolvedCollection = resolveCollection({
         collection,
-        path
+        path,
+        fields: context.fields
     });
 
     const properties = getPropertiesWithPropertiesOrder<M>(resolvedCollection.properties, resolvedCollection.propertiesOrder as Extract<keyof M, string>[]) as ResolvedProperties<M>;
@@ -322,7 +326,8 @@ export function PropertySelectEntry({
     level?: number;
 }) {
 
-    const widget = getFieldConfig(property);
+    const { fields } = useFireCMSContext();
+    const widget = getFieldConfig(property, fields);
 
     return <div
         className="flex flex-row w-full text-start items-center h-full">
@@ -369,7 +374,7 @@ export function ImportDataPreview<M extends Record<string, any>>({
 }) {
 
     useEffect(() => {
-        const propertiesMapping = getPropertiesMapping(importConfig.originProperties, properties) ;
+        const propertiesMapping = getPropertiesMapping(importConfig.originProperties, properties);
         const mappedData = importConfig.importData.map(d => convertDataToEntity(d, importConfig.idColumn, importConfig.headersMapping, properties, propertiesMapping, "TEMP_PATH"));
         importConfig.setEntities(mappedData);
     }, []);

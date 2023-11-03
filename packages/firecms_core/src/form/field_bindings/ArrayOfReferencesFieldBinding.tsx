@@ -4,7 +4,7 @@ import { ReferencePreview } from "../../preview";
 import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
 import { ErrorView, getIconForProperty, getReferenceFrom } from "../../core";
 
-import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
+import { useClearRestoreValue, useFireCMSContext, useNavigationContext, useReferenceDialog } from "../../hooks";
 import { Button, ExpandablePanel } from "../../components";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
@@ -95,7 +95,7 @@ export function ArrayOfReferencesFieldBinding({
     }, [ofProperty.path, ofProperty.previewProperties, onHover, value]);
 
     const title = (
-        <LabelWithIcon icon={getIconForProperty(property)}
+        <LabelWithIcon icon={getIconForProperty(property, "small")}
                        required={property.validation?.required}
                        title={property.name}
                        className={"text-text-secondary dark:text-text-secondary-dark"}/>

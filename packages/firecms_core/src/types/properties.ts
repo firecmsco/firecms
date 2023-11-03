@@ -1,3 +1,4 @@
+import React from "react";
 import { FieldProps } from "./fields";
 import { PropertyPreviewProps } from "../preview";
 import { ChipColorKey, ChipColorScheme } from "./colors";

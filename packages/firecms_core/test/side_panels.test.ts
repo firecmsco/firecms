@@ -9,7 +9,7 @@ describe('buildSidePanelsFromUrl', () => {
             name: "Products",
             path: "products",
             properties: {},
-            views: [{
+            entityViews: [{
                 key: "custom_view",
                 name: "Custom view",
             }],
@@ -22,7 +22,7 @@ describe('buildSidePanelsFromUrl', () => {
         {
             name: "Experiences",
             path: "users/J4WyZHd3DhgcWRdJaBodSkSAVuN2/experiences",
-            views: [{
+            entityViews: [{
                 key: "editor",
                 name: "Editor",
             }],

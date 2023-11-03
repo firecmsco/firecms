@@ -46,7 +46,7 @@ export function DateTimeFieldBinding({
                 mode={property.mode}
                 clearable={property.clearable}
                 label={<LabelWithIcon
-                    icon={getIconForProperty(property)}
+                    icon={getIconForProperty(property, "small")}
                     required={property.validation?.required}
                     className={"text-text-secondary dark:text-text-secondary-dark"}
                     title={property.name}/>}

@@ -89,7 +89,7 @@ export function MapFieldBinding<T extends Record<string, any>>({
     </>;
 
     const title = (
-        <LabelWithIcon icon={getIconForProperty(property)}
+        <LabelWithIcon icon={getIconForProperty(property, "small")}
                        required={property.validation?.required}
                        title={property.name}
                        className={"text-text-secondary dark:text-text-secondary-dark"}/>

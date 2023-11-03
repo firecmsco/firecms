@@ -2,7 +2,7 @@ import React from "react";
 import { FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { useClearRestoreValue } from "../../hooks";
+import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
 import { getIconForProperty } from "../../core";
 import { ExpandablePanel } from "../../components";
 
@@ -28,6 +28,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         disabled
                                                                     }: FieldProps<T, any, any>) {
 
+    const { fields } = useFireCMSContext();
     if (!Array.isArray(property.resolvedProperties))
         throw Error("ArrayCustomShapedFieldBinding misconfiguration. Property `of` not set");
 
@@ -39,7 +40,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
         setValue
     });
 
-    const title = <LabelWithIcon icon={getIconForProperty(property)}
+    const title = <LabelWithIcon icon={getIconForProperty(property, "small")}
                                  required={property.validation?.required}
                                  className={"text-text-secondary dark:text-text-secondary-dark"}
                                  title={property.name}/>;

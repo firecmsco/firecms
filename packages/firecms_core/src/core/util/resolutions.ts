@@ -25,6 +25,7 @@ import { getDefaultValuesFor, isPropertyBuilder } from "./entities";
 import { DEFAULT_ONE_OF_TYPE } from "./common";
 import { getIn } from "formik";
 import { enumToObjectEntries } from "./enums";
+import { isDefaultFieldConfigId } from "../form_field_configs";
 
 export const resolveCollection = <M extends Record<string, any>, >
 ({
@@ -175,7 +176,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
         } as ResolvedProperty<T>;
     }
 
-    if (resolvedProperty.fieldConfig) {
+    if (resolvedProperty.fieldConfig && !isDefaultFieldConfigId(resolvedProperty.fieldConfig)) {
         const cmsFields = props.fields;
         if (!cmsFields) {
             throw Error(`Trying to resolve a property with key ${resolvedProperty.fieldConfig} that inherits from a custom field but no custom fields were provided. Use the property 'fields' in your top level component to provide them`);
@@ -183,9 +184,9 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
         const customField: FieldConfig<any> = cmsFields[resolvedProperty.fieldConfig];
         if (!customField)
             throw Error(`Trying to resolve a property that inherits from a custom field but no custom field with id ${resolvedProperty.fieldConfig} was found. Check the \`fields\` in your top level component`);
-        if (customField.defaultProperty) {
+        if (customField.property) {
             const customFieldProperty = resolveProperty<any>({
-                propertyOrBuilder: customField.defaultProperty,
+                propertyOrBuilder: customField.property,
                 propertyValue,
                 ...props
             });
@@ -193,9 +194,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
                 resolvedProperty = mergeDeep(customFieldProperty, resolvedProperty);
             }
         }
-        if (customField.Field) {
-            resolvedProperty!.Field = customField.Field;
-        }
+
     }
 
     return resolvedProperty

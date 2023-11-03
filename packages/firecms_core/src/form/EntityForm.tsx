@@ -15,7 +15,7 @@ import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { PropertyFieldBinding } from "./PropertyFieldBinding";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
-import { getDefaultValuesFor, isHidden, isReadOnly, resolveCollection } from "../core";
+import { ErrorBoundary, getDefaultValuesFor, isHidden, isReadOnly, resolveCollection } from "../core";
 import { useDataSource, useFireCMSContext } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
@@ -515,7 +515,9 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                     return (
                         <div id={`form_field_${key}`}
                              key={`field_${resolvedCollection.name}_${key}`}>
-                            <PropertyFieldBinding {...cmsFormFieldProps}/>
+                            <ErrorBoundary>
+                                <PropertyFieldBinding {...cmsFormFieldProps}/>
+                            </ErrorBoundary>
                         </div>
                     );
                 })

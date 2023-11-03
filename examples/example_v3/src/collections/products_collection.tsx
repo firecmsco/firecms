@@ -48,7 +48,7 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         delete: true
     }),
-    views: [
+    entityViews: [
         {
             key: "sample_custom_view",
             name: "Custom view",

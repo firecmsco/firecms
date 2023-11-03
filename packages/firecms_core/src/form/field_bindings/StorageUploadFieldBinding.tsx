@@ -99,7 +99,7 @@ export function StorageUploadFieldBinding({
         <>
 
             {!tableMode &&
-                <LabelWithIcon icon={getIconForProperty(property)}
+                <LabelWithIcon icon={getIconForProperty(property, "small")}
                                required={property.validation?.required}
                                title={property.name}
                                className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}

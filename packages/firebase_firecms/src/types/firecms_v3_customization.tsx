@@ -30,11 +30,11 @@ export type FireCMSCustomization = {
     views?: CMSView[] | CMSViewsBuilder;
 
     /**
-     * Record of custom form fields to be used in the CMS.
+     * List of custom form fields to be used in the CMS.
      * You can use the key to reference the custom field in
      * the `fieldConfig` prop of a property in a collection.
      */
-    fields?: Record<string, FieldConfig>;
+    fields?: FieldConfig[];
 
     /**
      * List of additional custom views for entities.

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ArrayProperty, FieldConfig, FieldConfigId, FieldProps, Property, ResolvedProperty } from "../types";
+import { ArrayProperty, FieldConfig, FieldProps, Property, ResolvedProperty } from "../types";
 import {
     ArrayCustomShapedFieldBinding,
     ArrayOfReferencesFieldBinding,
@@ -17,7 +17,7 @@ import {
     SwitchFieldBinding,
     TextFieldBinding
 } from "../form";
-import { isPropertyBuilder } from "./util";
+import { isPropertyBuilder, mergeDeep } from "./util";
 
 import {
     AddLinkIcon,
@@ -40,183 +40,293 @@ import {
     ViewStreamIcon
 } from "../icons";
 
-export const DEFAULT_FIELD_CONFIGS: Record<FieldConfigId, FieldConfig<any>> = {
+export function isDefaultFieldConfigId(id: string) {
+    return Object.keys(DEFAULT_FIELD_CONFIGS).includes(id);
+}
+
+export const DEFAULT_FIELD_CONFIGS: Record<string, FieldConfig<any>> = {
     text_field: {
+        key: "text_field",
         name: "Text field",
         description: "Simple short text",
-        dataType: "string",
         Icon: ShortTextIcon,
         color: "#2d7ff9",
-        Field: TextFieldBinding
+        property: {
+            dataType: "string",
+            Field: TextFieldBinding
+        }
     },
     multiline: {
+        key: "multiline",
         name: "Multiline",
         description: "Text with multiple lines",
-        dataType: "string",
         Icon: SubjectIcon,
         color: "#2d7ff9",
-        Field: TextFieldBinding
+        property: {
+            dataType: "string",
+            multiline: true,
+            Field: TextFieldBinding
+        }
     },
     markdown: {
+        key: "markdown",
         name: "Markdown",
         description: "Text with advanced markdown syntax",
-        dataType: "string",
         Icon: FormatQuoteIcon,
         color: "#2d7ff9",
-        Field: MarkdownFieldBinding
+        property: {
+            dataType: "string",
+            markdown: true,
+            Field: MarkdownFieldBinding
+        }
     },
     url: {
+        key: "url",
         name: "Url",
         description: "Text with URL validation",
-        dataType: "string",
         Icon: HttpIcon,
         color: "#154fb3",
-        Field: TextFieldBinding
+        property: {
+            dataType: "string",
+            url: true,
+            Field: TextFieldBinding
+        }
     },
     email: {
+        key: "email",
         name: "Email",
         description: "Text with email validation",
-        dataType: "string",
         Icon: EmailIcon,
         color: "#154fb3",
-        Field: TextFieldBinding
+        property: {
+            dataType: "string",
+            email: true,
+            Field: TextFieldBinding
+        }
     },
     select: {
+        key: "select",
         name: "Select/enum",
         description: "Select one text value from within an enumeration",
-        dataType: "string",
         Icon: ListIcon,
         color: "#4223c9",
-        Field: SelectFieldBinding
+        property: {
+            dataType: "string",
+            enumValues: [],
+            Field: SelectFieldBinding
+        }
     },
     multi_select: {
+        key: "multi_select",
         name: "Multi select",
         description: "Select multiple text values from within an enumeration",
-        dataType: "array",
         Icon: ListAltIcon,
         color: "#4223c9",
-        Field: MultiSelectBinding
+        property: {
+            dataType: "array",
+            of: {
+                dataType: "string",
+                enumValues: [],
+            },
+            Field: MultiSelectBinding
+        }
     },
     number_input: {
+        key: "number_input",
         name: "Number input",
         description: "Simple number field with validation",
-        dataType: "number",
         Icon: NumbersIcon,
         color: "#bec920",
-        Field: TextFieldBinding
+        property: {
+            dataType: "number",
+            Field: TextFieldBinding
+        }
     },
     number_select: {
+        key: "number_select",
         name: "Number select",
         description: "Select a number value from within an enumeration",
-        dataType: "number",
         Icon: FormatListNumberedIcon,
         color: "#bec920",
-        Field: SelectFieldBinding
+        property: {
+            dataType: "number",
+            enumValues: [],
+            Field: SelectFieldBinding
+        }
     },
     multi_number_select: {
+        key: "multi_number_select",
         name: "Multiple number select",
         description: "Select multiple number values from within an enumeration",
-        dataType: "array",
         Icon: FormatListNumberedIcon,
         color: "#bec920",
-        Field: MultiSelectBinding
+        property: {
+            dataType: "array",
+            of: {
+                dataType: "number",
+                enumValues: [],
+            },
+            Field: MultiSelectBinding
+        }
     },
     file_upload: {
+        key: "file_upload",
         name: "File upload",
         description: "Input for uploading single files",
-        dataType: "string",
         Icon: UploadFileIcon,
         color: "#f92d9a",
-        Field: StorageUploadFieldBinding as React.ComponentType<FieldProps<string>>
+        property: {
+            dataType: "string",
+            storage: {
+                storagePath: "{path}"
+            },
+            Field: StorageUploadFieldBinding as React.ComponentType<FieldProps<string>>
+        }
     },
     multi_file_upload: {
+        key: "multi_file_upload",
         name: "Multiple file upload",
         description: "Input for uploading multiple files",
-        dataType: "array",
         Icon: DriveFolderUploadIcon,
         color: "#f92d9a",
-        Field: StorageUploadFieldBinding
+        property: {
+            dataType: "array",
+            of: {
+                dataType: "string",
+                storage: {
+                    storagePath: "{path}"
+                }
+            },
+            Field: StorageUploadFieldBinding
+        }
     },
     reference: {
+        key: "reference",
         name: "Reference",
         description: "The value refers to a different collection",
-        dataType: "reference",
         Icon: LinkIcon,
         color: "#ff0042",
-        Field: ReferenceFieldBinding
+        property: {
+            dataType: "reference",
+            Field: ReferenceFieldBinding
+        }
     },
     multi_references: {
+        key: "multi_references",
         name: "Multiple references",
         description: "Multiple values that refer to a different collection",
-        dataType: "array",
         Icon: AddLinkIcon,
         color: "#ff0042",
-        Field: ArrayOfReferencesFieldBinding
+        property: {
+            dataType: "array",
+            of: {
+                dataType: "reference",
+            },
+            Field: ArrayOfReferencesFieldBinding
+        }
     },
     switch: {
+        key: "switch",
         name: "Switch",
         description: "Boolean true or false field (or yes or no, 0 or 1...)",
-        dataType: "boolean",
         Icon: FlagIcon,
         color: "#20d9d2",
-        Field: SwitchFieldBinding
+        property: {
+            dataType: "boolean",
+            Field: SwitchFieldBinding
+        }
     },
     date_time: {
+        key: "date_time",
         name: "Date/time",
         description: "A date time select field",
-        dataType: "date",
         Icon: ScheduleIcon,
         color: "#8b46ff",
-        Field: DateTimeFieldBinding
+        property: {
+            dataType: "date",
+            Field: DateTimeFieldBinding
+        }
     },
     group: {
+        key: "group",
         name: "Group",
         description: "Group of multiple fields",
-        dataType: "map",
         Icon: BallotIcon,
         color: "#ff9408",
-        Field: MapFieldBinding
+        property: {
+            dataType: "map",
+            properties: {},
+            Field: MapFieldBinding
+        }
     },
     key_value: {
+        key: "key_value",
         name: "Key-value",
         description: "Flexible field that allows the user to add multiple key-value pairs",
-        dataType: "map",
         Icon: BallotIcon,
         color: "#ff9408",
-        Field: KeyValueFieldBinding
+        property: {
+            dataType: "map",
+            keyValue: true,
+            Field: KeyValueFieldBinding
+        }
     },
     repeat: {
+        key: "repeat",
         name: "Repeat/list",
         description: "A field that gets repeated multiple times (e.g. multiple text fields)",
-        dataType: "array",
         Icon: RepeatIcon,
         color: "#ff9408",
-        Field: RepeatFieldBinding
+        property: {
+            dataType: "array",
+            of: {
+                dataType: "string",
+            },
+            Field: RepeatFieldBinding
+        }
     },
     custom_array: {
+        key: "custom_array",
         name: "Custom array",
         description: "A field that saved its value as an array of custom objects",
-        dataType: "array",
         Icon: RepeatIcon,
         color: "#ff9408",
-        Field: ArrayCustomShapedFieldBinding
+        property: {
+            dataType: "array",
+            of: [],
+            Field: ArrayCustomShapedFieldBinding
+        }
     },
     block: {
+        key: "block",
         name: "Block",
         description: "A complex field that allows the user to compose different fields together, with a key->value format",
-        dataType: "array",
         Icon: ViewStreamIcon,
         color: "#ff9408",
-        Field: BlockFieldBinding
+        property: {
+            dataType: "array",
+            oneOf: {
+                properties: {},
+            },
+            Field: BlockFieldBinding
+        }
     }
 };
 
-export function getFieldConfig(property: Property | ResolvedProperty): FieldConfig | undefined {
+export function getFieldConfig(property: Property | ResolvedProperty, customFields: Record<string, FieldConfig<any>>): FieldConfig | undefined {
     const fieldId = getFieldId(property);
-    return fieldId ? DEFAULT_FIELD_CONFIGS[fieldId] : undefined;
+    const defaultFieldId = getDefaultFieldId(property);
+    // console.log("fieldId", { fieldId });
+    if (!defaultFieldId) {
+        console.error("No field id found for property", property);
+        return undefined;
+    }
+    const defaultFieldConfig = DEFAULT_FIELD_CONFIGS[defaultFieldId];
+    const customField = fieldId ? customFields[fieldId] : undefined;
+    return mergeDeep(defaultFieldConfig ?? {}, customField ?? {});
 }
 
-export function getFieldId(property: Property | ResolvedProperty): FieldConfigId | undefined {
+export function getDefaultFieldId(property: Property | ResolvedProperty) {
     if (property.dataType === "string") {
         if (property.multiline) {
             return "multiline";
@@ -273,4 +383,10 @@ export function getFieldId(property: Property | ResolvedProperty): FieldConfigId
 
     console.error("Unsupported field config mapping", property);
     return undefined;
+}
+
+export function getFieldId(property: Property | ResolvedProperty): string | undefined {
+    if (property.fieldConfig)
+        return property.fieldConfig;
+    return getDefaultFieldId(property);
 }

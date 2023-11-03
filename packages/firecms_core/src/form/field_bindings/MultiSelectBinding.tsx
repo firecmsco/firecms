@@ -84,7 +84,7 @@ export function MultiSelectBinding({
             <MultiSelect
                 value={validValue ? value.map((v) => v.toString()) : []}
                 disabled={disabled}
-                label={<LabelWithIcon icon={getIconForProperty(property)}
+                label={<LabelWithIcon icon={getIconForProperty(property, "small")}
                                       required={property.validation?.required}
                                       title={property.name}
                                       className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}/>}

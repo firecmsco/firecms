@@ -121,12 +121,20 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
                         Component = resolvedProperty.Field as ComponentType<FieldProps<any>>;
                     }
                 } else {
-                    const fieldConfig = getFieldConfig(resolvedProperty);
+                    const fieldConfig = getFieldConfig(resolvedProperty, fireCMSContext.fields);
                     if (!fieldConfig) {
+                        console.log("INTERNAL: Could not find field config for property", { propertyKey, resolvedProperty, fields: fireCMSContext.fields, fieldConfig });
                         throw new Error(`INTERNAL: Could not find field config for property ${propertyKey}`);
                     }
-                    Component = fieldConfig.Field as ComponentType<FieldProps<T>>;
-
+                    const configProperty = resolveProperty({
+                        propertyOrBuilder: fieldConfig.property,
+                        propertyValue: fieldProps.field.value,
+                        values: fieldProps.form.values,
+                        path: context.path,
+                        entityId: context.entityId,
+                        fields: fireCMSContext.fields
+                    });
+                    Component = configProperty.Field as ComponentType<FieldProps<T>>;
                 }
                 if (!Component) {
                     console.warn(`No field component found for property ${propertyKey}`);
@@ -134,7 +142,6 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
                     return (
                         <div>{`Currently the field ${resolvedProperty.dataType} is not supported`}</div>
                     );
-                    // return null;
                 }
 
                 const componentProps: ResolvedPropertyFieldBindingProps<T, M> = {

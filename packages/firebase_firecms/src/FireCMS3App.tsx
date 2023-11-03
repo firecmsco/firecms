@@ -458,6 +458,14 @@ function FireCMS3AppAuthenticated({
     //                             currentProjectController={currentProjectController}/>;
     // }
 
+    const fieldsMap = useMemo(() => {
+        const fieldsMap: Record<string, any> = {};
+        customization?.fields?.forEach(field => {
+            fieldsMap[field.key] = field;
+        });
+        return fieldsMap;
+    }, [customization?.fields]);
+
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
             <ProjectConfigProvider config={currentProjectController}>
@@ -468,7 +476,7 @@ function FireCMS3AppAuthenticated({
                             collections={customization?.collections}
                             dateTimeFormat={customization?.dateTimeFormat}
                             views={customization?.views}
-                            fields={customization?.fields}
+                            fields={fieldsMap}
                             locale={customization?.locale}
                             entityViews={customization?.entityViews}
                             authController={authController}

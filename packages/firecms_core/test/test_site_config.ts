@@ -12,7 +12,7 @@ export const productsCollection = buildCollection({
     path: "products",
     name: "Products",
     singularName: "Product",
-    views: [
+    entityViews: [
         {
             key: "custom_view",
             name: "Test custom view",

@@ -145,7 +145,7 @@ export interface PluginFormActionProps<UserType extends User = User> {
 }
 
 export type PluginFieldBuilderParams<T extends CMSType = CMSType, M extends Record<string, any> = any> = {
-    fieldConfigId: FieldConfigId;
+    fieldConfigId: string;
     propertyKey: string;
     property: Property<T> | ResolvedProperty<T>;
     Field: React.ComponentType<FieldProps<T, any, M>>;

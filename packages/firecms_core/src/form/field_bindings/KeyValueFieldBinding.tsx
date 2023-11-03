@@ -54,7 +54,7 @@ export function KeyValueFieldBinding<T extends Record<string, any>>({
                                      fieldName={property.name ?? propertyKey}/>;
 
     const title = <LabelWithIcon
-        icon={getIconForProperty(property)}
+        icon={getIconForProperty(property, "small")}
         required={property.validation?.required}
         title={property.name}
         className={"text-text-secondary dark:text-text-secondary-dark"}/>;

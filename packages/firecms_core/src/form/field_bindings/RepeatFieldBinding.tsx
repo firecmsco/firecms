@@ -74,7 +74,7 @@ export function RepeatFieldBinding<T extends Array<any>>({
                                                  includeAddButton={!property.disabled}
                                                  newDefaultEntry={property.of.defaultValue}/>;
 
-    const title = (<LabelWithIcon icon={getIconForProperty(property)}
+    const title = (<LabelWithIcon icon={getIconForProperty(property, "small")}
                                   required={property.validation?.required}
                                   title={property.name}
                                   className={"text-text-secondary dark:text-text-secondary-dark"}/>);

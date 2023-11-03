@@ -107,7 +107,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
 
     const subcollections = (collection.subcollections ?? []).filter(c => !c.hideFromNavigation);
     const subcollectionsCount = subcollections?.length ?? 0;
-    const customViews = collection.views;
+    const customViews = collection.entityViews;
     const customViewsCount = customViews?.length ?? 0;
     const autoSave = collection.formAutoSave && !collection.customId;
 

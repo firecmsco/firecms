@@ -75,7 +75,7 @@ export function prepareCollectionForPersistence<M extends { [Key: string]: CMSTy
     if (newCollection.alias === "")
         delete newCollection.alias;
     delete newCollection.permissions;
-    delete newCollection.views;
+    delete newCollection.entityViews;
     delete newCollection.additionalFields;
     delete newCollection.callbacks;
     delete newCollection.Actions;

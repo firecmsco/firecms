@@ -42,7 +42,7 @@ export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                 value={value}
                 onValueChange={(v) => setValue(v)}
                 error={showError}
-                label={<LabelWithIcon icon={getIconForProperty(property)}
+                label={<LabelWithIcon icon={getIconForProperty(property, "small")}
                                       required={property.validation?.required}
                                       title={property.name}/>}
                 disabled={disabled}

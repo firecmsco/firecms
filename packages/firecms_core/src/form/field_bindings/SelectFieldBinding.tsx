@@ -54,7 +54,7 @@ export function SelectFieldBinding<T extends EnumType>({
                 disabled={disabled}
                 position="item-aligned"
                 inputClassName={cn("w-full")}
-                label={<LabelWithIcon icon={getIconForProperty(property)}
+                label={<LabelWithIcon icon={getIconForProperty(property, "small")}
                                       required={property.validation?.required}
                                       title={property.name}
                                       className={"text-text-secondary dark:text-text-secondary-dark ml-3.5"}

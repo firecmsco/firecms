@@ -11,7 +11,7 @@ import {
     Property,
     RemoveCircleIcon,
     TextField,
-    Typography
+    Typography, useFireCMSContext
 } from "@firecms/core";
 
 export function ImportNewPropertyFieldPreview({
@@ -30,7 +30,8 @@ export function ImportNewPropertyFieldPreview({
     propertyTypeView?: React.ReactNode
 }) {
 
-    const widget = property ? getFieldConfig(property) : null;
+    const { fields } = useFireCMSContext();
+    const widget = property ? getFieldConfig(property, fields) : null;
 
     return <ErrorBoundary>
         <div

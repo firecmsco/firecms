@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { FastField, FieldProps as FormikFieldProps, useFormikContext } from "formik";
 
 import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
-import { useClearRestoreValue } from "../../hooks";
+import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types";
@@ -62,7 +62,7 @@ export function BlockFieldBinding<T extends Array<any>>({
     }, [context, lastAddedId, property.oneOf, propertyKey, value]);
 
     const title = (
-        <LabelWithIcon icon={getIconForProperty(property)}
+        <LabelWithIcon icon={getIconForProperty(property, "small")}
                        required={property.validation?.required}
                        title={property.name}
                        className={"text-text-secondary dark:text-text-secondary-dark"}/>
