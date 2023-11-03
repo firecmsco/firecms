@@ -1,11 +1,21 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { Entity, EntityCollection, EntityStatus, EntityValues, FireCMSPlugin, FormContext, User } from "../../types";
+import {
+    Entity,
+    EntityCollection,
+    EntityCustomView,
+    EntityStatus,
+    EntityValues,
+    FireCMSPlugin,
+    FormContext,
+    User
+} from "../../types";
 import { CircularProgressCenter, EntityCollectionView, EntityPreview, ErrorBoundary, } from "../components";
 import {
     canEditEntity,
     fullPathToCollectionSegments,
     removeInitialAndTrailingSlashes,
     resolveDefaultSelectedView,
+    resolveEntityView,
     useDebounce
 } from "../util";
 
@@ -190,20 +200,6 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         console.error(e);
     }, [snackbarController]);
 
-    const getSelectedSubPath = (value: number) => {
-        if (value === -1) return undefined;
-
-        if (customViews && value < customViewsCount) {
-            return customViews[value].key;
-        }
-
-        if (subcollections) {
-            return subcollections[value - customViewsCount].path;
-        }
-
-        throw Error("Something is wrong in getSelectedSubPath");
-    };
-
     const onSaveSuccess = (updatedEntity: Entity<M>, closeAfterSave: boolean) => {
 
         setSaving(false);
@@ -307,31 +303,38 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
         }
     };
 
-    const customViewsView: React.ReactNode[] | undefined = customViews && customViews.map(
-        (customView, colIndex) => {
-            if (selectedTabRef.current !== customView.key)
-                return null;
-            const Builder = customView.Builder;
-            if (!Builder) {
-                console.error("customView.Builder is not defined");
-                return null;
+    const resolvedEntityViews = customViews ? customViews
+            .map(e => resolveEntityView(e, context.entityViews))
+            .filter(Boolean) as EntityCustomView[]
+        : [];
+    const customViewsView: React.ReactNode[] | undefined = customViews && resolvedEntityViews
+        .map(
+            (customView, colIndex) => {
+                if (!customView)
+                    return null;
+                if (selectedTabRef.current !== customView.key)
+                    return null;
+                const Builder = customView.Builder;
+                if (!Builder) {
+                    console.error("customView.Builder is not defined");
+                    return null;
+                }
+                return <div
+                    className={cn(defaultBorderMixin,
+                        "relative flex-grow w-full h-full overflow-auto ")}
+                    key={`custom_view_${customView.key}`}
+                    role="tabpanel">
+                    <ErrorBoundary>
+                        {formContext && <Builder
+                            collection={collection}
+                            entity={usedEntity}
+                            modifiedValues={modifiedValues ?? usedEntity?.values}
+                            formContext={formContext}
+                        />}
+                    </ErrorBoundary>
+                </div>;
             }
-            return <div
-                className={cn(defaultBorderMixin,
-                    "relative flex-grow w-full h-full overflow-auto ")}
-                key={`custom_view_${customView.key}`}
-                role="tabpanel">
-                <ErrorBoundary>
-                    {formContext && <Builder
-                        collection={collection}
-                        entity={usedEntity}
-                        modifiedValues={modifiedValues ?? usedEntity?.values}
-                        formContext={formContext}
-                    />}
-                </ErrorBoundary>
-            </div>;
-        }
-    ).filter(Boolean);
+        ).filter(Boolean);
 
     const globalLoading = (dataLoading && !usedEntity) ||
         ((!usedEntity || readOnly === undefined) && (status === "existing" || status === "copy"));
@@ -483,7 +486,7 @@ export function EntityView<M extends Record<string, any>, UserType extends User>
             </Tab>
     );
 
-    const customViewTabs = customViews && customViews.map(
+    const customViewTabs = resolvedEntityViews.map(
         (view) =>
 
             <Tab

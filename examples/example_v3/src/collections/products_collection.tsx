@@ -51,14 +51,8 @@ export const productsCollection = buildCollection<Product>({
     entityViews: [
         {
             key: "sample_custom_view",
-            name: "Custom view",
-            Builder: ({
-                          collection,
-                          entity,
-                          modifiedValues
-                      }) =>
-                <SampleEntityView entity={entity}
-                                  modifiedValues={modifiedValues}/>
+            name: "Custom hardcoded view",
+            Builder: SampleEntityView
         }
     ],
     additionalFields: [

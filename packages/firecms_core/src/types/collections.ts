@@ -184,7 +184,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * You can either define the custom view inline or pass a reference to
      * a custom view defined in the main configuration under `entityViews`
      */
-    entityViews?: (EntityCustomView<M>)[];
+    entityViews?: (string | EntityCustomView<M>)[];
 
     /**
      * You can add additional fields to the collection view by implementing

@@ -37,12 +37,14 @@ export function mergeCollections(target: EntityCollection, source: EntityCollect
     const targetPropertiesOrder = target.propertiesOrder ?? getCollectionKeys(target);
     const sourcePropertiesOrder = source.propertiesOrder ?? getCollectionKeys(source);
     const mergedPropertiesOrder = [...new Set([...targetPropertiesOrder, ...sourcePropertiesOrder])];
+    const mergedEntityViews = [...new Set([...(target.entityViews ?? []), ...(source.entityViews ?? [])])];
 
     return {
         ...mergedCollection,
         subcollections: subcollectionsMerged,
         properties: sortProperties(mergedCollection.properties, mergedPropertiesOrder),
-        propertiesOrder: mergedPropertiesOrder
+        propertiesOrder: mergedPropertiesOrder,
+        entityViews: mergedEntityViews
     }
 }
 

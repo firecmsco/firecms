@@ -68,14 +68,16 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
 
 export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: EntityCollection<M>) {
     const properties = setUndefinedToDelete(removeFunctions(removeNonEditableProperties(collection.properties as EditablePropertiesOrBuilders)));
-    const newCollection = {
+    const newCollection: PersistedCollection = {
         ...removeUndefined(collection),
         properties
     };
     if (newCollection.alias === "")
         delete newCollection.alias;
     delete newCollection.permissions;
-    delete newCollection.entityViews;
+    if (newCollection.entityViews) {
+        newCollection.entityViews = newCollection.entityViews.filter(view => typeof view === "string");
+    }
     delete newCollection.additionalFields;
     delete newCollection.callbacks;
     delete newCollection.Actions;

@@ -99,7 +99,7 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
         const strippedPath = buildCollectionPath(path, parentPathSegments);
         const previousStrippedPath = previousPath ? buildCollectionPath(previousPath, parentPathSegments) : undefined;
         const ref = doc(firestore, configPath, "collections", strippedPath);
-        console.debug("Saving collection", { path, previousPath, parentPathSegments, cleanedCollection });
+        console.debug("Saving collection", { collectionData, path, previousPath, parentPathSegments, cleanedCollection });
         return runTransaction(firestore, async (transaction) => {
             transaction.set(ref, cleanedCollection, { merge: true });
             if (previousStrippedPath && previousStrippedPath !== strippedPath) {

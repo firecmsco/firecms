@@ -1,5 +1,6 @@
 import { EntityCollection, EntityCustomView } from "../../types";
 import { getCollectionPathsCombinations, removeInitialAndTrailingSlashes } from "./navigation_utils";
+import { resolveEntityView } from "./resolutions";
 
 export type NavigationViewInternal<M extends Record<string, any> = any> =
     | NavigationViewEntityInternal<M>
@@ -28,8 +29,8 @@ export interface NavigationViewEntityCustomInternal<M extends Record<string, any
 export function getNavigationEntriesFromPathInternal(props: {
     path: string,
     collections: EntityCollection[] | undefined,
-    customViews?: EntityCustomView<any>[],
     currentFullPath?: string,
+    contextEntityViews?: EntityCustomView<any>[]
 }): NavigationViewInternal [] {
 
     const {
@@ -74,8 +75,11 @@ export function getNavigationEntriesFromPathInternal(props: {
                     if (!collection) {
                         throw Error("collection not found resolving path: " + collection);
                     }
-                    const customViews = collection.entityViews;
-                    const customView = customViews && customViews.find((entry) => entry.key === newPath);
+                    const entityViews = collection.entityViews;
+                    const customView = entityViews && entityViews
+                        .map((entry) => resolveEntityView(entry, props.contextEntityViews))
+                        .filter(Boolean)
+                        .find((entry) => entry!.key === newPath);
                     if (customView) {
                         const path = currentFullPath && currentFullPath.length > 0
                             ? (currentFullPath + "/" + customView.key)
@@ -88,9 +92,9 @@ export function getNavigationEntriesFromPathInternal(props: {
                     } else if (collection.subcollections) {
                         result.push(...getNavigationEntriesFromPathInternal({
                             path: newPath,
-                            customViews,
                             collections: collection.subcollections,
-                            currentFullPath: fullPath
+                            currentFullPath: fullPath,
+                            contextEntityViews: props.contextEntityViews
                         }));
                     }
                 }

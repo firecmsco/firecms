@@ -1,7 +1,7 @@
 import {
     ArrayProperty,
     CMSType,
-    EntityCollection,
+    EntityCollection, EntityCustomView,
     EntityValues,
     EnumValueConfig,
     EnumValues,
@@ -373,5 +373,13 @@ export function resolveEnumValues(input: EnumValues): EnumValueConfig[] | undefi
         return input as EnumValueConfig[];
     } else {
         return undefined;
+    }
+}
+
+export function resolveEntityView(entityView: string | EntityCustomView<any>, contextEntityViews?: EntityCustomView<any>[]): EntityCustomView<any> | undefined {
+    if (typeof entityView === "string") {
+        return contextEntityViews?.find((entry) => entry.key === entityView);
+    } else {
+        return entityView;
     }
 }
