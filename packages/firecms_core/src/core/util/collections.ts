@@ -50,16 +50,18 @@ export function mergeCollections(target: EntityCollection, source: EntityCollect
 
 /**
  *
- * @param fetchedCollections
- * @param baseCollections
+ * @param storedCollections
+ * @param codedCollections
  */
-export function joinCollectionLists(fetchedCollections: EntityCollection[], baseCollections: EntityCollection[] | undefined): EntityCollection[] {
-    const resolvedFetchedCollections: EntityCollection[] = fetchedCollections.map(c => ({
+export function joinCollectionLists(storedCollections: EntityCollection[], codedCollections: EntityCollection[] | undefined): EntityCollection[] {
+    const resolvedFetchedCollections: EntityCollection[] = storedCollections.map(c => ({
         ...c,
         editable: true,
         deletable: true
     }));
-    const updatedCollections = (baseCollections ?? [])
+
+    // merge collections that are in both lists
+    const updatedCollections = (codedCollections ?? [])
         .map((navigationCollection) => {
             const storedCollection = resolvedFetchedCollections?.find((collection) => {
                 return collection.path === navigationCollection.path || (collection.alias && navigationCollection.alias && collection.alias === navigationCollection.alias);
@@ -71,10 +73,12 @@ export function joinCollectionLists(fetchedCollections: EntityCollection[], base
                 return { ...mergedCollection, deletable: false };
             }
         });
-    const storedCollections = resolvedFetchedCollections
+
+    // fetched collections that are not in the base collections
+    const resultStoredCollections = resolvedFetchedCollections
         .filter((col) => !updatedCollections.map(c => c.path).includes(col.path) || !updatedCollections.map(c => c.alias).includes(col.alias));
 
-    return [...updatedCollections, ...storedCollections];
+    return [...updatedCollections, ...resultStoredCollections];
 }
 
 export function sortProperties<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {

@@ -4,10 +4,14 @@ import { productsCollection } from "./collections/products_collection";
 import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
 
 export const customization: FireCMSCustomization = {
-    collections: [
-        testCollection,
-        productsCollection
-    ],
+    collections: async (props) => {
+        console.log("Customization props", props);
+        await new Promise(res => setTimeout(res, 3000));
+        return ([
+            testCollection,
+            productsCollection
+        ]);
+    },
     fields: [
         {
             key: "test",
