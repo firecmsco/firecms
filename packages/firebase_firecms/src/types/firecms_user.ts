@@ -1,4 +1,4 @@
-export interface SaasUser {
+export interface FireCMSUser {
     uid: string;
     email: string;
     displayName: string;
@@ -11,6 +11,6 @@ export interface SaasUser {
     firebase_uid: string;
 }
 
-export type SaasUserProject = SaasUser & {
+export type FireCMSUserProject = FireCMSUser & {
     roles: string[];
 }

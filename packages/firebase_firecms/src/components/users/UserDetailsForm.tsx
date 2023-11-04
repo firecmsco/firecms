@@ -16,7 +16,7 @@ import {
     MultiSelect
 } from "@firecms/core";
 
-import { SaasUserProject } from "../../types/saas_user";
+import { FireCMSUserProject } from "../../types/firecms_user";
 import { Role } from "../../types/roles";
 
 import { useProjectConfig } from "../../hooks/useProjectConfig";
@@ -30,7 +30,7 @@ export const YupSchema = Yup.object().shape({
     roles: Yup.array().min(1)
 });
 
-function canUserBeEdited(loggedUser: SaasUserProject, user: SaasUserProject, users: SaasUserProject[], roles: Role[], prevUser?: SaasUserProject) {
+function canUserBeEdited(loggedUser: FireCMSUserProject, user: FireCMSUserProject, users: FireCMSUserProject[], roles: Role[], prevUser?: FireCMSUserProject) {
     const admins = users.filter(u => u.roles.includes("admin"));
     const loggedUserIsAdmin = loggedUser.roles.includes("admin");
     const didRolesChange = !prevUser || !areRolesEqual(prevUser.roles, user.roles);
@@ -55,7 +55,7 @@ export function UserDetailsForm({
                                     handleClose
                                 }: {
     open: boolean,
-    user?: SaasUserProject,
+    user?: FireCMSUserProject,
     handleClose: () => void
 }) {
 
@@ -68,7 +68,7 @@ export function UserDetailsForm({
     } = useProjectConfig();
     const isNewUser = !userProp;
 
-    const onUserUpdated = useCallback((savedUser: SaasUserProject): Promise<SaasUserProject> => {
+    const onUserUpdated = useCallback((savedUser: FireCMSUserProject): Promise<FireCMSUserProject> => {
         const loggedUser = users.find(u => u.uid === fireCMSBackend.user?.uid);
         if (!loggedUser) {
             throw new Error("User not found");
@@ -92,9 +92,9 @@ export function UserDetailsForm({
                     displayName: "",
                     email: "",
                     roles: ["editor"]
-                } as SaasUserProject}
+                } as FireCMSUserProject}
                 validationSchema={YupSchema}
-                onSubmit={(user: SaasUserProject, formikHelpers) => {
+                onSubmit={(user: FireCMSUserProject, formikHelpers) => {
                     return onUserUpdated(user)
                         .then(() => {
                             handleClose();

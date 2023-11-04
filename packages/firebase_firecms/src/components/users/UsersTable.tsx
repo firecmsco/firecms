@@ -14,7 +14,7 @@ import {
     useFireCMSContext,
     useSnackbarController
 } from "@firecms/core";
-import { SaasUserProject } from "../../types/saas_user";
+import { FireCMSUserProject } from "../../types/firecms_user";
 import { getUserRoles } from "../../utils/permissions";
 
 import format from "date-fns/format";
@@ -23,7 +23,7 @@ import { useState } from "react";
 import { useProjectConfig } from "../../hooks/useProjectConfig";
 
 export function UsersTable({ onUserClicked }: {
-    onUserClicked: (user: SaasUserProject) => void;
+    onUserClicked: (user: FireCMSUserProject) => void;
 }) {
 
     const {
@@ -38,7 +38,7 @@ export function UsersTable({ onUserClicked }: {
     const dateUtilsLocale = appConfig?.locale ? locales[appConfig?.locale as keyof typeof locales] : undefined;
     const dateFormat: string = appConfig?.dateTimeFormat ?? defaultDateFormat;
 
-    const [userToBeDeleted, setUserToBeDeleted] = useState<SaasUserProject | undefined>(undefined);
+    const [userToBeDeleted, setUserToBeDeleted] = useState<FireCMSUserProject | undefined>(undefined);
     const [deleteInProgress, setDeleteInProgress] = useState<boolean>(false);
 
     return (

@@ -4,7 +4,7 @@ import {
     cardClickableMixin,
     cardMixin,
     cn,
-    FireCMSHomePage,
+    DefaultHomePage,
     focusedMixin,
     getIconForView,
     NavigationGroup,
@@ -22,9 +22,9 @@ import { ADMIN_VIEWS } from "../utils";
  * @constructor
  * @category Components
  */
-export function SaasProjectPage() {
+export function FireCMSProjectHomePage() {
 
-    return <FireCMSHomePage
+    return <DefaultHomePage
         additionalChildrenStart={<SubscriptionPlanWidget showForPlans={["free"]}/>}
         additionalChildrenEnd={
             <NavigationGroup group={"ADMIN"}>

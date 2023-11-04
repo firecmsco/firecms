@@ -1,3 +1,3 @@
-export * from "./SaasLoginView";
+export * from "./FireCMSLoginView";
 export * from "./GoogleLoginButton";
 export * from "./FirebaseLoginView";

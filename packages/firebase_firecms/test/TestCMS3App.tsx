@@ -49,7 +49,7 @@ import {
     FirebaseSignInProvider,
     FireCMSBackend,
     FireCMSCustomization,
-    SaasUser
+    FireCMSUser
 } from "../src/types";
 import { FirestoreTextSearchController } from "../src/types/text_search";
 import {
@@ -57,11 +57,11 @@ import {
     getUserRoles,
     RESERVED_GROUPS,
     resolveCollectionConfigPermissions,
-    resolveSaasPermissions
+    resolveUserRolePermissions
 } from "../src/utils";
-import { SaasDataEnhancementSubscriptionMessage, SaasDrawer, SaasLoginView } from "../src/components";
+import { FireCMSDataEnhancementSubscriptionMessage, FireCMSDrawer, FireCMSLoginView } from "../src/components";
 import { buildCollectionInference } from "../src/collection_editor/infer_collection";
-import { SaasProjectPage } from "../src/components/SaasProjectPage";
+import { FireCMSProjectHomePage } from "../src/components/FireCMSProjectHomePage";
 import { getFirestoreDataInPath } from "../src/utils/database";
 import { useImportExportPlugin } from "../src/hooks/useImportExportPlugin";
 import { useBuildMockFireCMSBackend } from "./mocks/useBuildMockFireCMSBackend";
@@ -91,16 +91,10 @@ import { useBuildMockStorageSource } from "./mocks/useBuildMockStorageSource";
  */
 export function FireCMS3App({
                                 projectId,
-                                config,
-                                textSearchController,
-                                onFirebaseInit,
-                                appCheckOptions,
-                                dateTimeFormat,
-                                locale,
                                 basePath,
                                 baseCollectionPath,
                                 onAnalyticsEvent,
-                                plugins,
+                                customization,
                                 backendApiHost = "https://api-kdoe6pj3qq-ey.a.run.app" // TODO
                             }: FireCMS3AppProps) {
 
@@ -112,7 +106,7 @@ export function FireCMS3App({
 
     if (!fireCMSBackend.user) {
         component = <CenteredView maxWidth={"lg"} fullScreen={true}>
-            <SaasLoginView
+            <FireCMSLoginView
                 authController={fireCMSBackend}
                 includeLogo={true}
                 includeGoogleAdminScopes={false}
@@ -123,12 +117,7 @@ export function FireCMS3App({
         component = <Mock3Client
             fireCMSBackend={fireCMSBackend}
             projectId={projectId}
-            onFirebaseInit={onFirebaseInit}
-            appCheckOptions={appCheckOptions}
-            textSearchController={textSearchController}
-            config={config}
-            dateTimeFormat={dateTimeFormat}
-            locale={locale}
+            customization={customization}
             basePath={basePath}
             baseCollectionPath={baseCollectionPath}
             onAnalyticsEvent={onAnalyticsEvent}
@@ -146,7 +135,7 @@ export type Mock3ClientProps = {
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     fireCMSBackend: FireCMSBackend,
     projectId: string;
-    config?: FireCMSCustomization;
+    customization?: FireCMSCustomization;
     onFirebaseInit?: (config: object, app: FirebaseApp) => void;
     appCheckOptions?: AppCheckOptions;
     textSearchController?: FirestoreTextSearchController;
@@ -224,11 +213,11 @@ function Mock3ClientInner({
         }
     });
 
-    const permissions: PermissionsBuilder<PersistedCollection, SaasUser> = useCallback(({
+    const permissions: PermissionsBuilder<PersistedCollection, FireCMSUser> = useCallback(({
                                                                                             pathSegments,
                                                                                             collection,
                                                                                             user
-                                                                                        }) => resolveSaasPermissions({
+                                                                                        }) => resolveUserRolePermissions({
         collection,
         roles: authController.userRoles ?? undefined,
         paths: pathSegments,
@@ -305,7 +294,7 @@ function Mock3AppAuthenticated({
                                    collectionConfigController,
                                    appCheckOptions,
                                    textSearchController,
-                                   config,
+                                   customization,
                                    dateTimeFormat,
                                    locale,
                                    basePath,
@@ -316,7 +305,7 @@ function Mock3AppAuthenticated({
                                    fireCMSBackend,
                                    FireCMSAppBarComponent
                                }: Omit<Mock3ClientProps, "projectId"> & {
-    fireCMSUser: SaasUser;
+    fireCMSUser: FireCMSUser;
     currentProjectController: ProjectConfig;
     fireCMSBackend: FireCMSBackend,
     collectionConfigController: CollectionsConfigController;
@@ -383,9 +372,9 @@ function Mock3AppAuthenticated({
                     <ModeControllerProvider
                         value={modeController}>
                         <FireCMS
-                            collections={config?.collections}
-                            views={config?.views}
-                            fields={config?.fields}
+                            collections={customization?.collections}
+                            views={customization?.views}
+                            fields={{}} // TODO
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
                             dateTimeFormat={dateTimeFormat}
@@ -411,12 +400,12 @@ function Mock3AppAuthenticated({
                                             key={"project_scaffold_" + currentProjectController.projectId}
                                             name={currentProjectController.projectName ?? ""}
                                             logo={currentProjectController.logo}
-                                            Drawer={SaasDrawer}
+                                            Drawer={FireCMSDrawer}
                                             FireCMSAppBarComponent={FireCMSAppBarComponent}
-                                            fireCMSAppBarComponentProps={config?.fireCMSAppBarComponentProps}
-                                            autoOpenDrawer={config?.autoOpenDrawer}>
+                                            fireCMSAppBarComponentProps={customization?.fireCMSAppBarComponentProps}
+                                            autoOpenDrawer={customization?.autoOpenDrawer}>
                                             <NavigationRoutes
-                                                HomePage={config?.HomePage ?? SaasProjectPage}
+                                                HomePage={customization?.HomePage ?? FireCMSProjectHomePage}
                                                 customRoutes={customSaasRoutes}/>
                                             <SideDialogs/>
                                         </Scaffold>

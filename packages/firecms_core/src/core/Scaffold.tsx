@@ -2,7 +2,7 @@ import React, { PropsWithChildren, useCallback } from "react";
 import equal from "react-fast-compare"
 import { Link } from "react-router-dom";
 
-import { Drawer as FireCMSDrawer, DrawerProps } from "./Drawer";
+import { Drawer as DefaultDrawer, DrawerProps } from "./Drawer";
 import { useLargeLayout, useNavigationContext } from "../hooks";
 import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
 import { cn, IconButton, Sheet, Tooltip } from "../components";
@@ -30,7 +30,7 @@ export interface ScaffoldProps<ExtraDrawerProps = object, ExtraAppbarProps = obj
 
     /**
      * In case you need to override the view that gets rendered as a drawer
-     * @see FireCMSDrawer
+     * @see DefaultDrawer
      */
     Drawer?: React.ComponentType<DrawerProps<ExtraDrawerProps>>;
 
@@ -77,7 +77,7 @@ export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
             logo,
             includeDrawer = true,
             autoOpenDrawer,
-            Drawer = FireCMSDrawer,
+            Drawer = DefaultDrawer,
             drawerProps,
             FireCMSAppBarComponent = FireCMSAppBar,
             fireCMSAppBarComponentProps,

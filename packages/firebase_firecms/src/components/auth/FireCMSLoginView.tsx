@@ -4,7 +4,7 @@ import { BooleanSwitchWithLabel, ErrorView, FireCMSLogo, Typography } from "@fir
 import { GoogleLoginButton } from "./GoogleLoginButton";
 import { FireCMSBackend } from "../../types";
 
-export interface SaasLoginViewProps {
+export interface FireCMSLoginViewProps {
     authController: FireCMSBackend;
     includeGoogleAdminScopes: boolean;
     includeLogo: boolean;
@@ -18,13 +18,13 @@ export interface SaasLoginViewProps {
  * @constructor
  * @category Firebase
  */
-export function SaasLoginView({
+export function FireCMSLoginView({
                                   authController,
                                   includeGoogleAdminScopes,
                                   includeLogo,
                                   includeGoogleDisclosure,
                                   includeTermsAndNewsLetter
-                              }: SaasLoginViewProps) {
+                              }: FireCMSLoginViewProps) {
 
     const [termsAccepted, setTermsAccepted] = useState(false);
     const [newsletterSubscribed, setNewsletterSubscribed] = useState(false);

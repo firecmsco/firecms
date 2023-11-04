@@ -1,10 +1,10 @@
-export class SaasApiError extends Error {
+export class ApiError extends Error {
 
     public code?: string;
     public projectId?: string;
 
     static fromError(error: any, projectId?: string) {
-        return new SaasApiError(error.message ?? error.error, error.code, projectId); //return new this(props); also works
+        return new ApiError(error.message ?? error.error, error.code, projectId); //return new this(props); also works
     }
 
     constructor(message: string, code?: string, projectId?: string) {

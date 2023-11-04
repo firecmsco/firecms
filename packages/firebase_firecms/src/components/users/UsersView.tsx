@@ -3,19 +3,19 @@ import { AddIcon, Button, Container, Typography } from "@firecms/core";
 import { UsersTable } from "./UsersTable";
 import { UserDetailsForm } from "./UserDetailsForm";
 import React, { useCallback, useState } from "react";
-import { SaasUserProject } from "../../types";
+import { FireCMSUserProject } from "../../types";
 import { useProjectConfig } from "../../hooks";
 import { SubscriptionPlanWidget } from "../subscriptions";
 
 export const UsersView = function UsersView() {
 
     const [dialogOpen, setDialogOpen] = useState<boolean>();
-    const [selectedUser, setSelectedUser] = useState<SaasUserProject | undefined>();
+    const [selectedUser, setSelectedUser] = useState<FireCMSUserProject | undefined>();
 
     const { usersLimit, users } = useProjectConfig();
     const reachedUsersLimit = usersLimit !== null && (users && users.length >= usersLimit);
 
-    const onUserClicked = useCallback((user: SaasUserProject) => {
+    const onUserClicked = useCallback((user: FireCMSUserProject) => {
         setSelectedUser(user);
         setDialogOpen(true);
     }, []);

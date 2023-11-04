@@ -26,7 +26,7 @@ search.addIndex("path");
  * @constructor
  * @category Components
  */
-export function FireCMSHomePage({
+export function DefaultHomePage({
                                     additionalChildrenStart,
                                     additionalChildrenEnd
                                 }: {

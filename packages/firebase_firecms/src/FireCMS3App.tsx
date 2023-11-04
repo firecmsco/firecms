@@ -54,18 +54,18 @@ import {
     FirebaseSignInProvider,
     FireCMSBackend,
     FireCMSCustomization,
-    SaasUser
+    FireCMSUser
 } from "./types";
 import {
     ADMIN_VIEWS,
     getUserRoles,
     RESERVED_GROUPS,
     resolveCollectionConfigPermissions,
-    resolveSaasPermissions
+    resolveUserRolePermissions
 } from "./utils";
-import { SaasDataEnhancementSubscriptionMessage, SaasDrawer, SaasLoginView } from "./components";
+import { FireCMSDataEnhancementSubscriptionMessage, FireCMSDrawer, FireCMSLoginView } from "./components";
 import { buildCollectionInference } from "./collection_editor/infer_collection";
-import { SaasProjectPage } from "./components/SaasProjectPage";
+import { FireCMSProjectHomePage } from "./components/FireCMSProjectHomePage";
 import { getFirestoreDataInPath } from "./utils/database";
 import { useImportExportPlugin } from "./hooks/useImportExportPlugin";
 
@@ -125,7 +125,7 @@ export function FireCMS3App({
         component = <FullLoadingView projectId={projectId} text={"Auth loading"}/>;
     } else if (!fireCMSBackend.user) {
         component = <CenteredView maxWidth={"lg"} fullScreen={true}>
-            <SaasLoginView
+            <FireCMSLoginView
                 authController={fireCMSBackend}
                 includeLogo={true}
                 includeGoogleAdminScopes={false}
@@ -232,11 +232,11 @@ export function FireCMS3ClientWithController({
         signInOptions
     });
 
-    const saasUser = useMemo(() => {
+    const fireCMSUser = useMemo(() => {
             if (currentProjectController.loading || authController.authLoading) return;
             const user = authController.user;
             if (!user) return;
-            return currentProjectController.users.find((saasUser) => saasUser.email === user?.email);
+            return currentProjectController.users.find((fireCMSUser) => fireCMSUser.email === user?.email);
         },
         [authController.authLoading, authController.user, currentProjectController.loading, currentProjectController.users]);
 
@@ -250,11 +250,11 @@ export function FireCMS3ClientWithController({
         onUserChanged: (user) => authController.setUser(user ?? null)
     });
 
-    const permissions: PermissionsBuilder<PersistedCollection, SaasUser> = useCallback(({
+    const permissions: PermissionsBuilder<PersistedCollection, FireCMSUser> = useCallback(({
                                                                                             pathSegments,
                                                                                             collection,
                                                                                             user
-                                                                                        }) => resolveSaasPermissions({
+                                                                                        }) => resolveUserRolePermissions({
         collection,
         roles: authController.userRoles ?? undefined,
         paths: pathSegments,
@@ -271,14 +271,14 @@ export function FireCMS3ClientWithController({
         if (currentProjectController.loading) return;
         const user = authController.user;
         if (!user) return;
-        if (!saasUser) {
+        if (!fireCMSUser) {
             setNotValidUser(user);
         } else {
             setNotValidUser(undefined);
-            const userRoles = getUserRoles(currentProjectController.roles, saasUser);
+            const userRoles = getUserRoles(currentProjectController.roles, fireCMSUser);
             authController.setUserRoles(userRoles ?? null);
         }
-    }, [authController.user, currentProjectController.loading, currentProjectController.roles, currentProjectController.users, saasUser]);
+    }, [authController.user, currentProjectController.loading, currentProjectController.roles, currentProjectController.users, fireCMSUser]);
 
     if (notValidUser) {
         console.warn("No user was found with email " + notValidUser.email);
@@ -334,12 +334,12 @@ export function FireCMS3ClientWithController({
                                 text={"Auth loading"}/>;
     }
 
-    if (!saasUser) {
+    if (!fireCMSUser) {
         return <NoAccessError authController={authController}/>;
     }
 
     return <FireCMS3AppAuthenticated
-        fireCMSUser={saasUser}
+        fireCMSUser={fireCMSUser}
         fireCMSBackend={fireCMSBackend}
         customization={customization}
         authController={authController}
@@ -372,7 +372,7 @@ function FireCMS3AppAuthenticated({
                                       basePath,
                                       baseCollectionPath
                                   }: Omit<FireCMS3ClientProps, "projectId"> & {
-    fireCMSUser: SaasUser;
+    fireCMSUser: FireCMSUser;
     firebaseApp: FirebaseApp;
     currentProjectController: ProjectConfig;
     fireCMSBackend: FireCMSBackend,
@@ -384,7 +384,7 @@ function FireCMS3AppAuthenticated({
         throw Error("You can only use FireCMS3AppAuthenticated with an authenticated user");
     }
 
-    const customSaasRoutes = useMemo(buildSaasRoutes, []);
+    const adminRoutes = useMemo(buildAdminRoutes, []);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
                                                                                                               user,
@@ -407,16 +407,16 @@ function FireCMS3AppAuthenticated({
             return Promise.resolve([]);
         },
         getUser: (uid) => {
-            const saasUser = currentProjectController.users.find(u => u.uid === uid);
-            console.log("Getting user", uid, saasUser);
-            return saasUser ?? null;
+            const fireCMSUser = currentProjectController.users.find(u => u.uid === uid);
+            console.log("Getting user", uid, fireCMSUser);
+            return fireCMSUser ?? null;
         },
         collectionInference: buildCollectionInference(firebaseApp),
         getData: (path) => getFirestoreDataInPath(firebaseApp, path, 100)
     });
 
     const dataEnhancementPlugin = useDataEnhancementPlugin({
-        SubscriptionMessage: SaasDataEnhancementSubscriptionMessage,
+        SubscriptionMessage: FireCMSDataEnhancementSubscriptionMessage,
         host: fireCMSBackend.backendApiHost,
     });
 
@@ -476,9 +476,9 @@ function FireCMS3AppAuthenticated({
                             collections={customization?.collections}
                             dateTimeFormat={customization?.dateTimeFormat}
                             views={customization?.views}
-                            fields={fieldsMap}
-                            locale={customization?.locale}
                             entityViews={customization?.entityViews}
+                            locale={customization?.locale}
+                            fields={fieldsMap}
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
                             dataSource={dataSource}
@@ -503,13 +503,13 @@ function FireCMS3AppAuthenticated({
                                             key={"project_scaffold_" + currentProjectController.projectId}
                                             name={currentProjectController.projectName ?? ""}
                                             logo={currentProjectController.logo}
-                                            Drawer={SaasDrawer}
+                                            Drawer={FireCMSDrawer}
                                             FireCMSAppBarComponent={FireCMSAppBarComponent}
                                             fireCMSAppBarComponentProps={customization?.fireCMSAppBarComponentProps}
                                             autoOpenDrawer={customization?.autoOpenDrawer}>
                                             <NavigationRoutes
-                                                HomePage={customization?.HomePage ?? SaasProjectPage}
-                                                customRoutes={customSaasRoutes}/>
+                                                HomePage={customization?.HomePage ?? FireCMSProjectHomePage}
+                                                customRoutes={adminRoutes}/>
                                             <SideDialogs/>
                                         </Scaffold>
                                     );
@@ -526,7 +526,7 @@ function FireCMS3AppAuthenticated({
 
 }
 
-function buildSaasRoutes() {
+function buildAdminRoutes() {
     return ADMIN_VIEWS.map(({
                                 path,
                                 name,

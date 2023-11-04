@@ -1,4 +1,4 @@
-import { SaasApiError, SaasUser, SaasUserProject } from "../types";
+import { ApiError, FireCMSUser, FireCMSUserProject } from "../types";
 import { handleApiResponse } from "./common";
 
 export type ProjectsApi = ReturnType<typeof buildProjectsApi>;
@@ -62,7 +62,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
     }
 
     async function createNewUser(projectId: string,
-                                 user: SaasUser): Promise<SaasUserProject> {
+                                 user: FireCMSUser): Promise<FireCMSUserProject> {
 
         const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects/" + projectId + "/users",
@@ -75,13 +75,13 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 body: JSON.stringify(user)
             })
             .then((res) => {
-                return handleApiResponse<SaasUserProject>(res, projectId);
+                return handleApiResponse<FireCMSUserProject>(res, projectId);
             });
     }
 
     async function updateUser(projectId: string,
                               uid: string,
-                              user: SaasUser): Promise<SaasUserProject> {
+                              user: FireCMSUser): Promise<FireCMSUserProject> {
         const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects/" + projectId + "/users/" + uid,
             {
@@ -93,7 +93,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                 body: JSON.stringify(user)
             })
             .then((res) => {
-                return handleApiResponse<SaasUserProject>(res, projectId);
+                return handleApiResponse<FireCMSUserProject>(res, projectId);
             });
     }
 
@@ -148,7 +148,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
     }
 
     async function createServiceAccount(googleAccessToken: string,
-                                        projectId: string): Promise<SaasUserProject> {
+                                        projectId: string): Promise<FireCMSUserProject> {
         const firebaseAccessToken = await getBackendAuthToken();
         return fetch(host + "/projects/" + projectId + "/service_accounts",
             {
@@ -164,7 +164,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
                     throw Error("The service account already exists for this project.")
                 const data = await res.json();
                 console.log("createServiceAccount res", res, data);
-                return data.user as SaasUserProject;
+                return data.user as FireCMSUserProject;
             });
     }
 
@@ -184,7 +184,7 @@ export function buildProjectsApi(host: string, getBackendAuthToken: () => Promis
             .then(async (res) => {
                 const data = await res.json();
                 if (!res.ok) {
-                    throw new SaasApiError(data.message, data.code, projectId);
+                    throw new ApiError(data.message, data.code, projectId);
                 }
                 return data.data as string;
             });

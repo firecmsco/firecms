@@ -10,7 +10,7 @@ import {
     setDoc
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
-import { ProjectSubscriptionPlan, Role, SaasUserProject } from "../types";
+import { ProjectSubscriptionPlan, Role, FireCMSUserProject } from "../types";
 import { CMSType } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
 import { ProjectsApi } from "../api/projects";
@@ -19,9 +19,9 @@ export type ProjectConfig = {
     projectId: string;
     loading: boolean;
 
-    users: SaasUserProject[];
-    saveUser: (user: SaasUserProject) => Promise<SaasUserProject>;
-    deleteUser: (user: SaasUserProject) => Promise<void>;
+    users: FireCMSUserProject[];
+    saveUser: (user: FireCMSUserProject) => Promise<FireCMSUserProject>;
+    deleteUser: (user: FireCMSUserProject) => Promise<void>;
 
     roles: Role[];
     saveRole: (role: Role) => Promise<void>;
@@ -82,7 +82,7 @@ export function useBuildProjectConfig({
     const [logo, setLogo] = React.useState<string | undefined>();
     const [usersLoading, setUsersLoading] = React.useState<boolean>(true);
     const [roles, setRoles] = React.useState<Role[]>([]);
-    const [users, setUsers] = React.useState<SaasUserProject[]>([]);
+    const [users, setUsers] = React.useState<FireCMSUserProject[]>([]);
 
     const [rolesError, setRolesError] = React.useState<Error | undefined>();
     const [usersError, setUsersError] = React.useState<Error | undefined>();
@@ -161,7 +161,7 @@ export function useBuildProjectConfig({
 
     const saveUser = useCallback(async <M extends {
         [Key: string]: CMSType
-    }>(user: SaasUserProject): Promise<SaasUserProject> => {
+    }>(user: FireCMSUserProject): Promise<FireCMSUserProject> => {
 
         const firestore = firestoreRef.current;
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
@@ -191,7 +191,7 @@ export function useBuildProjectConfig({
 
     const removeUser = useCallback(async <M extends {
         [Key: string]: CMSType
-    }>(user: SaasUserProject): Promise<void> => {
+    }>(user: FireCMSUserProject): Promise<void> => {
         const firestore = firestoreRef.current;
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         console.debug("Deleting", user);
@@ -331,13 +331,13 @@ const uploadFile = (storage: FirebaseStorage, {
         .then(snapshot => snapshot.ref);
 }
 
-const docsToUsers = (docs: DocumentSnapshot[]): SaasUserProject[] => {
+const docsToUsers = (docs: DocumentSnapshot[]): FireCMSUserProject[] => {
     return docs.map((doc) => ({
         uid: doc.id,
         ...doc.data(),
         created_on: doc.data()?.created_on?.toDate(),
         updated_on: doc.data()?.updated_on?.toDate()
-    } as SaasUserProject));
+    } as FireCMSUserProject));
 }
 
 const docsToRoles = (docs: DocumentSnapshot[]): Role[] => {

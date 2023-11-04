@@ -21,20 +21,14 @@ import { useNavigate } from "react-router-dom";
 import { ADMIN_VIEWS, RESERVED_GROUPS } from "../utils";
 
 /**
- * Props used in case you need to override the default drawer
- * @category Core
- */
-export type SaasDrawerProps = DrawerProps<{}>;
-
-/**
  * Default drawer used in the CMS
  * @category Core
  */
-export function SaasDrawer({
+export function FireCMSDrawer({
                                hovered,
                                drawerOpen,
                                closeDrawer
-                           }: SaasDrawerProps) {
+                           }: DrawerProps) {
 
     const navigate = useNavigate();
 

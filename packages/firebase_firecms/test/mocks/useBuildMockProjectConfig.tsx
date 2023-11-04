@@ -1,4 +1,4 @@
-import { ProjectConfig, Role, SaasUserProject } from "../../src";
+import { ProjectConfig, Role, FireCMSUserProject } from "../../src";
 import { MOCK_PROJECT_ID } from "./constants";
 
 export function useBuildMockProjectConfig(): ProjectConfig {
@@ -11,7 +11,7 @@ export function useBuildMockProjectConfig(): ProjectConfig {
         deleteRole(role: Role): Promise<void> {
             throw new Error("Function not implemented.");
         },
-        deleteUser(user: SaasUserProject): Promise<void> {
+        deleteUser(user: FireCMSUserProject): Promise<void> {
             throw new Error("Function not implemented.");
         },
         loading: false,
@@ -20,7 +20,7 @@ export function useBuildMockProjectConfig(): ProjectConfig {
         saveRole(role: Role): Promise<void> {
             throw new Error("Function not implemented.");
         },
-        saveUser(user: SaasUserProject): Promise<SaasUserProject> {
+        saveUser(user: FireCMSUserProject): Promise<FireCMSUserProject> {
             throw new Error("Function not implemented.");
         },
         updateProjectName(name: string): Promise<void> {

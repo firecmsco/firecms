@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../types";
-import { EntityCollectionView, FireCMSHomePage, NotFoundPage } from "./components";
+import { EntityCollectionView, DefaultHomePage, NotFoundPage } from "./components";
 import { useBreadcrumbsContext, useNavigationContext } from "../hooks";
 import { toArray } from "./util/arrays";
 import equal from "react-fast-compare"
@@ -32,7 +32,7 @@ export type NavigationRoutesProps = {
 
 export const NavigationRoutes = React.memo<NavigationRoutesProps>(
     function NavigationRoutes({
-                                  HomePage = FireCMSHomePage,
+                                  HomePage = DefaultHomePage,
                                   customRoutes
                               }: NavigationRoutesProps) {
 
