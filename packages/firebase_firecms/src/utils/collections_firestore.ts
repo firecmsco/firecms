@@ -11,7 +11,7 @@ import {
     stripCollectionPath
 } from "@firecms/core";
 import {
-    EditablePropertiesOrBuilders,
+    PropertiesOrBuilders,
     PersistedCollection,
     removeNonEditableProperties
 } from "@firecms/collection_editor";
@@ -66,8 +66,8 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
     return { ...data, properties: sortedProperties } as PersistedCollection;
 }
 
-export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: EntityCollection<M>) {
-    const properties = setUndefinedToDelete(removeFunctions(removeNonEditableProperties(collection.properties as EditablePropertiesOrBuilders)));
+export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: PersistedCollection<M>) {
+    const properties = setUndefinedToDelete(removeFunctions(removeNonEditableProperties(collection.properties as PropertiesOrBuilders)));
     const newCollection: PersistedCollection = {
         ...removeUndefined(collection),
         properties

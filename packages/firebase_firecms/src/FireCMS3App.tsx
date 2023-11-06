@@ -496,7 +496,16 @@ function FireCMS3AppAuthenticated({
 
                                 let component;
                                 if (loading) {
-                                    component = <CircularProgressCenter/>;
+                                    component =
+                                        <Scaffold
+                                            key={"project_scaffold_" + currentProjectController.projectId}
+                                            name={currentProjectController.projectName ?? ""}
+                                            logo={currentProjectController.logo}
+                                            includeDrawer={false}
+                                            FireCMSAppBarComponent={FireCMSAppBarComponent}
+                                            fireCMSAppBarComponentProps={customization?.fireCMSAppBarComponentProps}>
+                                            <CircularProgressCenter/>
+                                        </Scaffold>;
                                 } else {
                                     component = (
                                         <Scaffold

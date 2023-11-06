@@ -355,7 +355,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             style={{
                 boxShadow: "0 0 0 2px rgba(128,128,128,0.2)",
             }}
-            className={`inline-block fixed z-30 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
+            className={`inline-block fixed z-20 shadow-outline rounded-md bg-white dark:bg-gray-950 ${
                 !open ? "invisible" : "visible"
             } cursor-grab overflow-visible`}
             ref={draggableRef}>

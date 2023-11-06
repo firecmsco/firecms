@@ -38,7 +38,8 @@ export function useBuildMockFireCMSBackend(): FireCMSBackend {
         deleteUser: notImplemented,
         getRootCollections: notImplemented,
         doDelegatedLogin: notImplemented,
-        getStripePortalLink: notImplemented
+        getStripePortalLink: notImplemented,
+        getRemoteConfigUrl: notImplemented,
     }
 
     return {

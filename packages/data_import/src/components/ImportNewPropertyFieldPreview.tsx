@@ -38,7 +38,7 @@ export function ImportNewPropertyFieldPreview({
             className="flex flex-row w-full items-center">
 
             <div className={"mx-4"}>
-                {propertyTypeView ?? <FieldConfigBadge widget={widget ?? undefined}/>}
+                {propertyTypeView ?? <FieldConfigBadge fieldConfig={widget ?? undefined}/>}
             </div>
 
             <div className="w-full flex flex-col grow">

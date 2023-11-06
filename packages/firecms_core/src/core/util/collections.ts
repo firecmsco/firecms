@@ -1,85 +1,10 @@
 import {
     DefaultSelectedViewBuilder,
     DefaultSelectedViewParams,
-    EntityCollection,
     PropertiesOrBuilders,
     PropertyOrBuilder
 } from "../../types";
-import { mergeDeep } from "./objects";
 import { isPropertyBuilder } from "./entities";
-
-function getCollectionKeys(collection: EntityCollection) {
-    return [
-        ...Object.keys(collection.properties),
-        ...(collection.additionalFields ?? [])?.map(f => f.id)
-    ];
-}
-
-/**
- *
- * @param target
- * @param source
- */
-export function mergeCollections(target: EntityCollection, source: EntityCollection): EntityCollection {
-    const subcollectionsMerged = target.subcollections?.map((targetSubcollection) => {
-        const modifiedCollection =
-            source.subcollections?.find((sourceSubcollection) => sourceSubcollection.path === targetSubcollection.path) ??
-            source.subcollections?.find((sourceSubcollection) => sourceSubcollection.alias === targetSubcollection.alias);
-
-        if (!modifiedCollection) {
-            return targetSubcollection;
-        } else {
-            return mergeCollections(targetSubcollection, modifiedCollection);
-        }
-    });
-
-    const mergedCollection = mergeDeep(target, source);
-    const targetPropertiesOrder = target.propertiesOrder ?? getCollectionKeys(target);
-    const sourcePropertiesOrder = source.propertiesOrder ?? getCollectionKeys(source);
-    const mergedPropertiesOrder = [...new Set([...targetPropertiesOrder, ...sourcePropertiesOrder])];
-    const mergedEntityViews = [...new Set([...(target.entityViews ?? []), ...(source.entityViews ?? [])])];
-
-    return {
-        ...mergedCollection,
-        subcollections: subcollectionsMerged,
-        properties: sortProperties(mergedCollection.properties, mergedPropertiesOrder),
-        propertiesOrder: mergedPropertiesOrder,
-        entityViews: mergedEntityViews
-    }
-}
-
-/**
- *
- * @param storedCollections
- * @param codedCollections
- */
-export function joinCollectionLists(storedCollections: EntityCollection[], codedCollections: EntityCollection[] | undefined): EntityCollection[] {
-    const resolvedFetchedCollections: EntityCollection[] = storedCollections.map(c => ({
-        ...c,
-        editable: true,
-        deletable: true
-    }));
-
-    // merge collections that are in both lists
-    const updatedCollections = (codedCollections ?? [])
-        .map((navigationCollection) => {
-            const storedCollection = resolvedFetchedCollections?.find((collection) => {
-                return collection.path === navigationCollection.path || (collection.alias && navigationCollection.alias && collection.alias === navigationCollection.alias);
-            });
-            if (!storedCollection) {
-                return { ...navigationCollection, deletable: false };
-            } else {
-                const mergedCollection = mergeCollections(storedCollection, navigationCollection);
-                return { ...mergedCollection, deletable: false };
-            }
-        });
-
-    // fetched collections that are not in the base collections
-    const resultStoredCollections = resolvedFetchedCollections
-        .filter((col) => !updatedCollections.map(c => c.path).includes(col.path) || !updatedCollections.map(c => c.alias).includes(col.alias));
-
-    return [...updatedCollections, ...resultStoredCollections];
-}
 
 export function sortProperties<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: (keyof M)[]): PropertiesOrBuilders<M> {
     try {

@@ -19,7 +19,6 @@ export type DataType<T extends CMSType = CMSType> =
                             T extends Array<CMSType> ? "array" :
                                 T extends Record<string, any> ? "map" : never;
 
-
 /**
  * @category Entity properties
  */
@@ -151,6 +150,11 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      */
     defaultValue?: T;
 
+    /**
+     * Should this property be editable. If set to true, the user will be able to modify the property and
+     * save the new config. The saved config will then become the source of truth.
+     */
+    editable?: boolean;
 }
 
 /**

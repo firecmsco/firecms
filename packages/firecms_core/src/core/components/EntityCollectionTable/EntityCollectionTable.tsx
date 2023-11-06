@@ -192,7 +192,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
             const propertyKey = column.key;
 
-            let disabled = column.custom.disabled;
+            let disabled = column.custom?.disabled;
             const propertyValue = entity.values ? getValueInPath(entity.values, propertyKey) : undefined;
             const property = getPropertyFor?.({ propertyKey, propertyValue, entity }) ?? column.custom.resolvedProperty;
             if (!property?.disabled) {

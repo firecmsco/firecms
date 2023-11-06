@@ -179,7 +179,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
                     {dialogTitle}
                 </Typography>
 
-                {!multipleEntities && content}
+                {!multipleEntities && <div className={"p-4"}>{content}</div>}
             </DialogContent>
             <DialogActions>
 

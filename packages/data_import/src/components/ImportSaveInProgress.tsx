@@ -1,4 +1,13 @@
-import { CenteredView, CircularProgress, CMSType, DataSource, Entity, EntityCollection, Typography, useDataSource } from "@firecms/core";
+import {
+    CenteredView,
+    CircularProgress,
+    CMSType,
+    DataSource,
+    Entity,
+    EntityCollection,
+    Typography,
+    useDataSource
+} from "@firecms/core";
 import { useEffect, useRef, useState } from "react";
 import { ImportConfig } from "../types";
 
@@ -10,8 +19,8 @@ export function ImportSaveInProgress<M extends { [Key: string]: CMSType }>
  }:
      {
          importConfig: ImportConfig,
-         collection: EntityCollection<M>,
-         onImportSuccess: (collection: EntityCollection<M>) => void
+         collection: EntityCollection<any>,
+         onImportSuccess: (collection: EntityCollection<any>) => void
      }) {
 
     const dataSource = useDataSource();
