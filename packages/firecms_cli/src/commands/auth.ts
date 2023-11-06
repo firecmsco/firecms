@@ -27,56 +27,67 @@ export async function login() {
         return;
     }
 
-    const server = http.createServer(async function (req, res) {
+    return new Promise((resolve, reject) => {
+        const server = http.createServer(async function (req, res) {
 
-        res.setHeader("Cache-Control", "no-store, max-age=0");
+            res.setHeader("Cache-Control", "no-store, max-age=0");
 
-        // Example on redirecting user to Google's OAuth 2.0 server.
-        if (req.url == "/") {
-            const authURL = await getAuthURL();
-            res.writeHead(301, { "Location": authURL });
-            res.end();
-        }
-
-        // Receive the callback from Google's OAuth 2.0 server.
-        if (req.url.startsWith("/oauth2callback")) {
-            // Handle the OAuth 2.0 server response
-            let q = url.parse(req.url, true).query;
-
-            if (q.error) { // An error response e.g. error=access_denied
-                console.log("Error:" + q.error);
-            } else {
-                const tokens = await exchangeCodeForToken(q.code);
-                saveTokens(tokens);
-                console.log("You have successfully logged in.")
+            // Example on redirecting user to Google's OAuth 2.0 server.
+            if (req.url == "/") {
+                const authURL = await getAuthURL();
+                console.log("Opening browser to", authURL);
+                res.writeHead(301, { "Location": authURL });
+                res.end();
             }
 
-            fs.readFile(path.join(__dirname, "/../../html/done.html"),
-                function (err, data) {
-                    if (err) {
-                        res.writeHead(404);
-                        res.end(JSON.stringify(err));
-                        return;
-                    }
-                    res.writeHead(200);
-                    res.end(data);
+            // Receive the callback from Google's OAuth 2.0 server.
+            if (req.url.startsWith("/oauth2callback")) {
+
+                // Handle the OAuth 2.0 server response
+                let q = url.parse(req.url, true).query;
+
+                if (q.error) { // An error response e.g. error=access_denied
+                    console.log("Error:" + q.error);
+                    reject(q.error);
                     server.close();
-                });
+                    return;
+                } else {
+                    fs.readFile(path.join(__dirname, "/../../html/done.html"),
+                        function (err, data) {
+                            if (err) {
+                                res.writeHead(404);
+                                res.end(JSON.stringify(err));
+                                return;
+                            }
+                            res.writeHead(200);
+                            res.end(data);
+                            server.close();
+                        });
+                    const tokens = await exchangeCodeForToken(q.code);
+                    saveTokens(tokens);
+                    resolve(tokens);
+                    console.log("You have successfully logged in.");
+                    return;
+                }
 
-        }
+            }
 
-        // if (req.url == "/revoke") {
-        //     console.log("Revoking token");
-        //     const userCredential = await getTokens();
-        //     if (userCredential) {
-        //         revokeToken(userCredential["access_token"]);
-        //     }
-        //     res.end();
-        // }
+            // if (req.url == "/revoke") {
+            //     console.log("Revoking token");
+            //     const userCredential = await getTokens();
+            //     if (userCredential) {
+            //         revokeToken(userCredential["access_token"]);
+            //     }
+            //     res.end();
+            // }
 
-    }).listen(3000);
+        }).listen(3000);
+        server.on("error", (e) => {
+            reject(e);
+        });
 
-    open("http://localhost:3000");
+        open("http://localhost:3000");
+    });
 }
 
 // save this token to a file in .firecms or program data
@@ -153,7 +164,7 @@ function revokeToken(accessToken: string) {
     const postReq = https.request(postOptions, function (res) {
         res.setEncoding("utf8");
         res.on("data", d => {
-            console.log("Response: " + d);
+            // console.log("Response: " + d);
         });
     });
 
@@ -189,7 +200,6 @@ async function getAuthURL() {
 
     return response.data.data;
 }
-
 
 export async function refreshCredentials(credentials?: object) {
     if (credentials) {
