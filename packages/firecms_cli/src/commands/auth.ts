@@ -190,6 +190,7 @@ async function getAuthURL() {
     return response.data.data;
 }
 
+
 export async function refreshCredentials(credentials?: object) {
     if (credentials) {
         const expiryDate = new Date(credentials["expiry_date"]);

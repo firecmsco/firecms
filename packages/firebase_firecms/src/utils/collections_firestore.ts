@@ -4,14 +4,13 @@ import {
     COLLECTION_PATH_SEPARATOR,
     EntityCollection,
     PermissionsBuilder,
-    Properties,
+    Properties, PropertiesOrBuilders,
     removeFunctions,
     removeUndefined,
     sortProperties,
     stripCollectionPath
 } from "@firecms/core";
 import {
-    PropertiesOrBuilders,
     PersistedCollection,
     removeNonEditableProperties
 } from "@firecms/collection_editor";
@@ -67,7 +66,7 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
 }
 
 export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: PersistedCollection<M>) {
-    const properties = setUndefinedToDelete(removeFunctions(removeNonEditableProperties(collection.properties as PropertiesOrBuilders)));
+    const properties = setUndefinedToDelete(removeFunctions(removeNonEditableProperties(collection.properties)));
     const newCollection: PersistedCollection = {
         ...removeUndefined(collection),
         properties

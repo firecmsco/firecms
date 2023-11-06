@@ -2,6 +2,7 @@ import chalk from "chalk";
 import { deploy } from "./commands/deploy";
 import { getCurrentUser, login, logout } from "./commands/auth";
 import arg from "arg";
+import { createFireCMSApp } from "./commands/init";
 
 export async function entry(args) {
 
@@ -13,7 +14,7 @@ export async function entry(args) {
     const command = args[2];
 
     if (command === "init") {
-        console.log("init");
+        createFireCMSApp(args);
     } else if (command === "login") {
         await login();
     } else if (command === "logout") {

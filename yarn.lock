@@ -1329,7 +1329,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/cli@^3.0.0-alpha.16, @firecms/cli@workspace:packages/firecms_cli":
+"@firecms/cli@3.0.0-alpha.16, @firecms/cli@^3.0.0-alpha.16, @firecms/cli@workspace:packages/firecms_cli":
   version: 0.0.0-use.local
   resolution: "@firecms/cli@workspace:packages/firecms_cli"
   dependencies:
@@ -5981,6 +5981,19 @@ __metadata:
   checksum: 7b60c7d645dd79b898202f3980d05a5d7046a87740cfda023cac7f54d7d9390bb32c72d505eaa18bbeb5f32c6800c822b7a1a60db7133cc228bed15c72f58a5a
   languageName: node
   linkType: hard
+
+"create-firecms-app@workspace:packages/create_firecms_app":
+  version: 0.0.0-use.local
+  resolution: "create-firecms-app@workspace:packages/create_firecms_app"
+  dependencies:
+    "@firecms/cli": 3.0.0-alpha.16
+    "@types/node": ^20.8.9
+    ts-node: ^10.9.1
+    typescript: ^5.2.2
+  bin:
+    create-firecms-app: bin/create-firecms-app
+  languageName: unknown
+  linkType: soft
 
 "create-jest@npm:^29.7.0":
   version: 29.7.0

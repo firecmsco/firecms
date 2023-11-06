@@ -10,6 +10,8 @@ import Listr from "listr";
 import { projectInstall } from "pkg-install";
 
 import JSON5 from "json5";
+import axios from "axios";
+import { DEFAULT_SERVER } from "../common";
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
@@ -25,8 +27,9 @@ export type InitOptions = Partial<{
     skipInstall: boolean;
 
     authToken?: string;
-    firebaseProject?: string;
+    firebaseProjectId?: string;
 
+    v2: boolean;
 }>
 
 export async function createFireCMSApp(args) {
@@ -54,6 +57,8 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
             "--git": Boolean,
             "--yes": Boolean,
             "--skipInstall": Boolean,
+            "--projectId": String,
+            "--v2": Boolean
         },
         {
             argv: rawArgs.slice(2),
@@ -64,6 +69,8 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         git: args["--git"] || false,
         dir_name: args._[0],
         skipInstall: args["--skipInstall"] || false,
+        v2: args["--v2"] || false,
+        firebaseProjectId: args["--projectId"],
     };
 }
 
@@ -92,6 +99,22 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
             name: "git",
             message: "Initialize a git repository?",
             default: false,
+        });
+    }
+
+    if (!options.v2) {
+        questions.push({
+            type: "confirm",
+            name: "existing_firecms_project",
+            message: "Do you already have a FireCMS project?",
+            default: false,
+        });
+
+        questions.push({
+            type: "input",
+            name: "project_id",
+            message: "Enter the URL",
+            when: (answers) => Boolean(answers.existing_firecms_project)
         });
     }
 
@@ -137,7 +160,7 @@ export async function createProject(options: InitOptions) {
 
     const templateDir = path.resolve(
         __dirname,
-        "../template"
+        "../templates/" + options.v2 ? "template_v2" : "template_v3"
     );
     options.templateDirectory = templateDir;
 
@@ -204,4 +227,10 @@ function writeWebAppConfig(options: InitOptions, webappConfig: object) {
         function (err) {
             if (err) return console.log(err);
         });
+}
+
+async function getProjects() {
+    const response = await axios.get(DEFAULT_SERVER + "/projects", {});
+
+    return response.data.data;
 }

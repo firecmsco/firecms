@@ -6,7 +6,7 @@ This CLI tool allows you to create new FireCMS projects.
 
 ```bash
 npm link
-npx create-firecms-app
+firecms
 ```
 
 ### CLI

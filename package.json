@@ -7,6 +7,7 @@
   "workspaces": [
     "packages/firecms_core",
     "packages/firecms_cli",
+    "packages/create_firecms_app",
     "packages/firebase_firecms_legacy",
     "packages/firebase_firecms",
     "packages/saas",

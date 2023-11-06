@@ -1,9 +1,12 @@
 {
   "name": "@firecms/cli",
   "version": "3.0.0-alpha.16",
-  "description": "A CLI to bootstrap FireCMS",
-  "main": "src/index.ts",
+  "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@3.2.3",
+  "main": "./build/index.js",
+  "module": "./build/index.js",
+  "types": "./build/index.d.ts",
+  "source": "src/index.ts",
   "bin": {
     "firecms": "bin/firecms"
   },
