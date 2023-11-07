@@ -178,7 +178,7 @@ export const EntityCollectionView = React.memo(
             });
             return sideEntityController.open({
                 entityId: clickedEntity.id,
-                path: fullPath,
+                path: clickedEntity.path,
                 collection,
                 updateUrl: true,
                 onClose: unselectNavigatedEntity
@@ -335,7 +335,7 @@ export const EntityCollectionView = React.memo(
             });
             sideEntityController.open({
                 entityId: clickedEntity.id,
-                path: fullPath,
+                path: clickedEntity.path,
                 copy: true,
                 collection,
                 updateUrl: true,

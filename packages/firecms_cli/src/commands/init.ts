@@ -120,7 +120,6 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
     //     };
     // }
 
-
     const questions = [];
     if (!options.v2) {
         questions.push({
@@ -137,6 +136,12 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
                 return res;
             })
             .catch(() => spinner.fail("Error loading projects"));
+
+        const fireCMSProjects = projects.filter(project => project["fireCMSProject"]);
+        if (!fireCMSProjects.length) {
+            console.log("No FireCMS projects found");
+            process.exit(1);
+        }
         // console.log({ projects });
         questions.push({
             type: "list",
@@ -146,11 +151,13 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
             choices: projects.map(project => project.projectId)
         });
     }
+
     if (!options.dir_name) {
         questions.push({
             type: "input",
             name: "dir_name",
             message: "Please choose which folder to create the project in",
+            when: (answers) => Boolean(answers.firebaseProjectId),
             default: defaultName,
         });
     }
@@ -160,11 +167,17 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
             type: "confirm",
             name: "git",
             message: "Initialize a git repository?",
+            when: (answers) => Boolean(answers.firebaseProjectId),
             default: false,
         });
     }
 
     const answers = await inquirer.prompt(questions);
+
+    if(!answers.existing_firecms_project) {
+        console.log("Please create a FireCMS project first. Head to https://app.firecms.co to get started and then run this command again!");
+        process.exit(1);
+    }
 
     return {
         ...options,

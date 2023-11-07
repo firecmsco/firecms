@@ -4,9 +4,8 @@ import { productsCollection } from "./collections/products_collection";
 import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
 
 const customization: FireCMSCustomization = {
+    version: "1",
     collections: async (props) => {
-        console.log("Customization props", props);
-        // await new Promise(res => setTimeout(res, 1000));
         return ([
             testCollection,
             productsCollection

@@ -1,19 +1,17 @@
 import plugin from "tailwindcss/plugin";
 
-export const fireCMSPlugin = plugin(function ({
-                                                  matchUtilities,
-                                                  theme
-                                              }) {
-}, {
+export const fireCMSTailwindConfig: any = {
+    mode: "jit",
     darkMode: ["class", "[data-theme=\"dark\"]"],
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
-        "./node_modules/@firecms/core/dist/**/*.{js,ts,jsx,tsx}",
-        "./node_modules/@firecms/firebase/dist/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
-        "./node_modules/@firecms/collection_editor/dist/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
-        "./node_modules/@firecms/data_enhancement/dist/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
+        "../../node_modules/@firecms/core/src/**/*.{js,ts,jsx,tsx}",
+        "../../node_modules/@firecms/firebase/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
+        "../../node_modules/@firecms/collection_editor/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
+        "../../node_modules/@firecms/data_enhancement/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
     ],
+    // plugins: [fireCMSPlugin],
     theme: {
         extend: {
             fontFamily: {
@@ -68,14 +66,16 @@ export const fireCMSPlugin = plugin(function ({
                     900: "#18181C",
                     950: "#101013"
                 }
-            },
-            // tabSize: {
-            //     1: "1",
-            //     2: "2",
-            //     4: "4",
-            //     8: "8",
-            // }
+            }
         }
 
+    },
+    variants: {
+        extend: {}
     }
-});
+};
+export const fireCMSTailwindPlugin = plugin(function ({
+                                                          matchUtilities,
+                                                          theme
+                                                      }) {
+}, fireCMSTailwindConfig);

@@ -5,8 +5,6 @@ export function getPropertiesMapping(originProperties: Properties, newProperties
 
     function updateMapping(properties: Record<string, Property>, namespace?: string): Record<string, DataTypeMapping> {
 
-        console.log("updateMapping", { originProperties, properties, namespace });
-
         const dataMapping: Record<string, DataTypeMapping> = {};
 
         Object.keys(properties).forEach((key) => {

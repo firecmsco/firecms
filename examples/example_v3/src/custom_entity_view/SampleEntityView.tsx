@@ -11,9 +11,7 @@ export function SampleEntityView({
 }) {
 
     const snackbarController = useSnackbarController();
-
     const onClick = (event: React.MouseEvent) => {
-        console.log("onClick", event, snackbarController);
         snackbarController.open({
             type: "success",
             message: `Custom action for ${modifiedValues?.name}`

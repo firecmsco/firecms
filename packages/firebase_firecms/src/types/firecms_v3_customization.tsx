@@ -16,6 +16,11 @@ import { FirestoreTextSearchController } from "./text_search";
 export type FireCMSCustomization = {
 
     /**
+     * Customization schema version.
+     */
+    version: "1";
+
+    /**
      * List of the mapped collections in the CMS.
      * Each entry relates to a collection in the root database.
      * Each of the navigation entries in this field
