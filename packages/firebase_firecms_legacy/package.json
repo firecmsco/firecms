@@ -12,7 +12,8 @@
     ".": {
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js"
-    }
+    },
+    "./package.json": "./package.json"
   },
   "dependencies": {
     "@types/node": "^20.8.9",

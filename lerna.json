@@ -7,6 +7,7 @@
     "packages/data_import",
     "packages/firebase_firecms",
     "packages/firecms_cli",
+    "packages/create_firecms_app",
     "packages/collection_editor",
     "packages/firecms_core",
     "packages/saas",

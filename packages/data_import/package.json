@@ -11,20 +11,21 @@
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js",
       "types": "./dist/src/index.d.ts"
-    }
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@firecms/core": "^3.0.0-alpha.19",
+    "@firecms/schema_inference": "^3.0.0-alpha.19",
+    "xlsx": "^0.18.5"
   },
   "peerDependencies": {
-    "@firecms/core": "3.0.0-alpha.18",
-    "@firecms/schema_inference": "3.0.0-alpha.18",
     "algoliasearch": "^4.17.1",
     "firebase": "^10.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router": "^6.12.0",
     "react-router-dom": "^6.12.0"
-  },
-  "dependencies": {
-    "xlsx": "^0.18.5"
   },
   "scripts": {
     "dev": "vite",
@@ -97,5 +98,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "ab75f612b0aa204b1a3f656367578b6ca65e8c5e"
+  "gitHead": "dfac6a681cd88ab0b926eb6fcd94a3a49a43d945"
 }
