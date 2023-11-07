@@ -1329,7 +1329,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/cli@^3.0.0-alpha.18, @firecms/cli@workspace:packages/firecms_cli":
+"@firecms/cli@^3.0.0-alpha.19, @firecms/cli@workspace:packages/firecms_cli":
   version: 0.0.0-use.local
   resolution: "@firecms/cli@workspace:packages/firecms_cli"
   dependencies:
@@ -1359,9 +1359,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/cli@npm:3.0.0-alpha.16":
-  version: 3.0.0-alpha.16
-  resolution: "@firecms/cli@npm:3.0.0-alpha.16"
+"@firecms/cli@npm:3.0.0-alpha.18":
+  version: 3.0.0-alpha.18
+  resolution: "@firecms/cli@npm:3.0.0-alpha.18"
   dependencies:
     arg: ^4.1.3
     axios: ^0.21.4
@@ -1383,11 +1383,11 @@ __metadata:
     zip-folder: ^1.0.0
   bin:
     firecms: bin/firecms
-  checksum: c6806ec49e2619bc3dbe9273d841f4da1907f27c33c76ca83d92b9ce421f20f74b10650001bd941484c603ab01a585961dc69e5217d29a1c8a1f1ebc317cc8be
+  checksum: ee0b8de579fd841d4f63b82cbe4f28bf637a98e3b432684b83a1baac9e7c85874dfb935b8ab2e7987b2a531eaeeabf5f35852c9418304a7c7622a820138e8997
   languageName: node
   linkType: hard
 
-"@firecms/collection_editor@^3.0.0-alpha.18, @firecms/collection_editor@workspace:packages/collection_editor":
+"@firecms/collection_editor@^3.0.0-alpha.19, @firecms/collection_editor@workspace:packages/collection_editor":
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
@@ -1421,7 +1421,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/core@^3.0.0-alpha.18, @firecms/core@workspace:packages/firecms_core":
+"@firecms/core@^3.0.0-alpha.19, @firecms/core@workspace:packages/firecms_core":
   version: 0.0.0-use.local
   resolution: "@firecms/core@workspace:packages/firecms_core"
   dependencies:
@@ -1502,7 +1502,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_enhancement@^3.0.0-alpha.18, @firecms/data_enhancement@workspace:packages/data_enhancement":
+"@firecms/data_enhancement@^3.0.0-alpha.19, @firecms/data_enhancement@workspace:packages/data_enhancement":
   version: 0.0.0-use.local
   resolution: "@firecms/data_enhancement@workspace:packages/data_enhancement"
   dependencies:
@@ -1527,7 +1527,7 @@ __metadata:
     vite: ^4.5.0
     vite-plugin-fonts: ^0.7.0
   peerDependencies:
-    "@firecms/core": 3.0.0-alpha.16
+    "@firecms/core": 3.0.0-alpha.18
     algoliasearch: ^4.17.1
     firebase: ^10.4.0
     react: ^18.2.0
@@ -1537,7 +1537,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import@^3.0.0-alpha.18, @firecms/data_import@workspace:packages/data_import":
+"@firecms/data_import@^3.0.0-alpha.19, @firecms/data_import@workspace:packages/data_import":
   version: 0.0.0-use.local
   resolution: "@firecms/data_import@workspace:packages/data_import"
   dependencies:
@@ -1564,8 +1564,8 @@ __metadata:
     vite-plugin-fonts: ^0.7.0
     xlsx: ^0.18.5
   peerDependencies:
-    "@firecms/core": 3.0.0-alpha.16
-    "@firecms/schema_inference": 3.0.0-alpha.16
+    "@firecms/core": 3.0.0-alpha.18
+    "@firecms/schema_inference": 3.0.0-alpha.18
     algoliasearch: ^4.17.1
     firebase: ^10.4.0
     react: ^18.2.0
@@ -1575,15 +1575,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase@^3.0.0-alpha.18, @firecms/firebase@workspace:packages/firebase_firecms":
+"@firecms/firebase@^3.0.0-alpha.19, @firecms/firebase@workspace:packages/firebase_firecms":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase@workspace:packages/firebase_firecms"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-alpha.18
-    "@firecms/core": ^3.0.0-alpha.18
-    "@firecms/data_enhancement": ^3.0.0-alpha.18
-    "@firecms/data_import": ^3.0.0-alpha.18
-    "@firecms/schema_inference": ^3.0.0-alpha.18
+    "@firecms/collection_editor": ^3.0.0-alpha.19
+    "@firecms/core": ^3.0.0-alpha.19
+    "@firecms/data_enhancement": ^3.0.0-alpha.19
+    "@firecms/data_import": ^3.0.0-alpha.19
+    "@firecms/schema_inference": ^3.0.0-alpha.19
     "@types/node": ^20.8.9
     "@types/react": ^18.2.33
     "@types/react-dom": ^18.2.14
@@ -1616,11 +1616,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/schema_inference@^3.0.0-alpha.18, @firecms/schema_inference@workspace:packages/schema_inference":
+"@firecms/schema_inference@^3.0.0-alpha.19, @firecms/schema_inference@workspace:packages/schema_inference":
   version: 0.0.0-use.local
   resolution: "@firecms/schema_inference@workspace:packages/schema_inference"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.18
+    "@firecms/core": ^3.0.0-alpha.19
     "@types/node": ^20.8.9
     typescript: ^5.2.2
   languageName: unknown
@@ -6081,7 +6081,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-firecms-app@workspace:packages/create_firecms_app"
   dependencies:
-    "@firecms/cli": 3.0.0-alpha.16
+    "@firecms/cli": 3.0.0-alpha.18
     "@types/node": ^20.8.9
     ts-node: ^10.9.1
     typescript: ^5.2.2
@@ -7523,13 +7523,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example-v3@workspace:examples/example_v3"
   dependencies:
-    "@firecms/cli": ^3.0.0-alpha.18
-    "@firecms/collection_editor": ^3.0.0-alpha.18
-    "@firecms/core": ^3.0.0-alpha.18
-    "@firecms/data_enhancement": ^3.0.0-alpha.18
-    "@firecms/data_import": ^3.0.0-alpha.18
-    "@firecms/firebase": ^3.0.0-alpha.18
-    "@firecms/schema_inference": ^3.0.0-alpha.18
+    "@firecms/cli": ^3.0.0-alpha.19
+    "@firecms/collection_editor": ^3.0.0-alpha.19
+    "@firecms/core": ^3.0.0-alpha.19
+    "@firecms/data_enhancement": ^3.0.0-alpha.19
+    "@firecms/data_import": ^3.0.0-alpha.19
+    "@firecms/firebase": ^3.0.0-alpha.19
+    "@firecms/schema_inference": ^3.0.0-alpha.19
     "@originjs/vite-plugin-federation": ^1.3.2
     "@types/react": 18.2.33
     "@types/react-dom": 18.2.14
@@ -12910,12 +12910,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "saas@workspace:packages/saas"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-alpha.18
-    "@firecms/core": ^3.0.0-alpha.18
-    "@firecms/data_enhancement": ^3.0.0-alpha.18
-    "@firecms/data_import": ^3.0.0-alpha.18
-    "@firecms/firebase": ^3.0.0-alpha.18
-    "@firecms/schema_inference": ^3.0.0-alpha.18
+    "@firecms/collection_editor": ^3.0.0-alpha.19
+    "@firecms/core": ^3.0.0-alpha.19
+    "@firecms/data_enhancement": ^3.0.0-alpha.19
+    "@firecms/data_import": ^3.0.0-alpha.19
+    "@firecms/firebase": ^3.0.0-alpha.19
+    "@firecms/schema_inference": ^3.0.0-alpha.19
     "@fontsource/roboto": ^5.0.8
     "@originjs/vite-plugin-federation": ^1.3.2
     "@sentry/react": ^7.76.0
