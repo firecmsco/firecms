@@ -11,13 +11,15 @@ import { projectInstall } from "pkg-install";
 
 import JSON5 from "json5";
 import axios from "axios";
-import { DEFAULT_SERVER } from "../common";
+import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
+import { getCurrentUser, getTokens, login, refreshCredentials } from "./auth";
+import ora from "ora";
 
 const access = promisify(fs.access);
 const copy = promisify(ncp);
 
 export type InitOptions = Partial<{
-    skipPrompts: boolean;
+    // skipPrompts: boolean;
     git: boolean;
     dir_name: string;
 
@@ -30,6 +32,8 @@ export type InitOptions = Partial<{
     firebaseProjectId?: string;
 
     v2: boolean;
+
+    env: "prod" | "dev";
 }>
 
 export async function createFireCMSApp(args) {
@@ -40,13 +44,37 @@ ${chalk.green.bold("| __(_)_ _ ___ / __|  \\/  / __|")}
 ${chalk.green.bold("| _|| | '_/ -_) (__| |\\/| \\__ \\")}
 ${chalk.green.bold("|_| |_|_| \\___|\\___|_|  |_|___/")}
 
-${chalk.green.bold("Welcome to the CMS CLI")} 🔥🔥🔥
+${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
 `);
-    console.log("");
-
     let options = parseArgumentsIntoOptions(args);
 
+    let currentUser = await getCurrentUser();
+    if (!options.v2 && !currentUser) {
+        console.log("You need to be logged in to create a project");
+        await inquirer.prompt([
+            {
+                type: "confirm",
+                name: "login",
+                message: "Do you want to log in?",
+                default: true,
+            }
+        ]).then(async answers => {
+            if (answers.login) {
+                return login(options.env);
+            }
+        });
+
+        let currentUser = await getCurrentUser();
+        if (!currentUser) {
+            console.log("The login process was not completed. Exiting...");
+            return;
+        }
+    } else {
+        console.log("You are logged in as", currentUser["email"]);
+    }
+
     options = await promptForMissingOptions(options);
+    // console.log({ options });
 
     await createProject(options);
 }
@@ -58,37 +86,71 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
             "--yes": Boolean,
             "--skipInstall": Boolean,
             "--projectId": String,
-            "--v2": Boolean
+            "--v2": Boolean,
+            "--env": String
         },
         {
             argv: rawArgs.slice(2),
         }
     );
+    const env = args["--env"] || "prod";
+    if (env !== "prod" && env !== "dev") {
+        console.log("Please specify a valid environment: dev or prod");
+        console.log("create-firecms-app --env=prod");
+        return;
+    }
+
     return {
-        skipPrompts: args["--yes"] || false,
+        // skipPrompts: args["--yes"] || false,
         git: args["--git"] || false,
         dir_name: args._[0],
         skipInstall: args["--skipInstall"] || false,
         v2: args["--v2"] || false,
         firebaseProjectId: args["--projectId"],
+        env
     };
 }
 
 async function promptForMissingOptions(options: InitOptions): Promise<InitOptions> {
     const defaultName = "my-cms";
-    if (options.skipPrompts) {
-        return {
-            ...options,
-            dir_name: options.dir_name || defaultName,
-        };
-    }
+    // if (options.skipPrompts) {
+    //     return {
+    //         ...options,
+    //         dir_name: options.dir_name || defaultName,
+    //     };
+    // }
+
 
     const questions = [];
+    if (!options.v2) {
+        questions.push({
+            type: "confirm",
+            name: "existing_firecms_project",
+            message: "Do you already have a FireCMS project?",
+            default: false,
+        });
+
+        const spinner = ora("Loading your projects").start();
+        const projects = await getProjects(options.env)
+            .then((res) => {
+                spinner.succeed();
+                return res;
+            })
+            .catch(() => spinner.fail("Error loading projects"));
+        // console.log({ projects });
+        questions.push({
+            type: "list",
+            name: "firebaseProjectId",
+            message: "Select your project",
+            when: (answers) => Boolean(answers.existing_firecms_project),
+            choices: projects.map(project => project.projectId)
+        });
+    }
     if (!options.dir_name) {
         questions.push({
             type: "input",
             name: "dir_name",
-            message: "Please choose which folder to use",
+            message: "Please choose which folder to create the project in",
             default: defaultName,
         });
     }
@@ -102,27 +164,13 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         });
     }
 
-    if (!options.v2) {
-        questions.push({
-            type: "confirm",
-            name: "existing_firecms_project",
-            message: "Do you already have a FireCMS project?",
-            default: false,
-        });
-
-        questions.push({
-            type: "input",
-            name: "project_id",
-            message: "Enter the URL",
-            when: (answers) => Boolean(answers.existing_firecms_project)
-        });
-    }
-
     const answers = await inquirer.prompt(questions);
+
     return {
         ...options,
         dir_name: options.dir_name || answers.dir_name,
         git: options.git || answers.git,
+        firebaseProjectId: answers.firebaseProjectId,
     };
 }
 
@@ -229,8 +277,19 @@ function writeWebAppConfig(options: InitOptions, webappConfig: object) {
         });
 }
 
-async function getProjects() {
-    const response = await axios.get(DEFAULT_SERVER + "/projects", {});
+async function getProjects(env: "prod" | "dev") {
 
-    return response.data.data;
+    try {
+        const tokens = await refreshCredentials(env, await getTokens());
+        const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
+        const response = await axios.get(server + "/gcp_projects", {
+            headers: {
+                ["x-admin-authorization"]: `Bearer ${tokens["access_token"]}`
+            },
+        });
+
+        return response.data.data;
+    } catch (e) {
+        console.error("Error getting projects", e.response?.data);
+    }
 }

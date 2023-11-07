@@ -16,7 +16,7 @@ export async function entry(args) {
     if (command === "init") {
         createFireCMSApp(args);
     } else if (command === "login") {
-        await login();
+        await loginArgs(args);
     } else if (command === "logout") {
         logout();
     } else if (command === "deploy") {
@@ -26,6 +26,24 @@ export async function entry(args) {
         printHelp();
         return;
     }
+}
+
+async function loginArgs(rawArgs) {
+    const args = arg(
+        {
+            "--env": String
+        },
+        {
+            argv: rawArgs.slice(2),
+        }
+    );
+    const env = args["--env"] || "prod";
+    if (env !== "prod" && env !== "dev") {
+        console.log("Please specify a valid environment: dev or prod");
+        console.log("firecms login --env=prod");
+        return;
+    }
+    await login(env);
 }
 
 async function deployArgs(rawArgs) {
@@ -53,7 +71,6 @@ async function deployArgs(rawArgs) {
     }
     await deploy(project, env);
 }
-
 
 async function printHelp() {
 

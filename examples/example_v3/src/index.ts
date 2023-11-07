@@ -3,7 +3,7 @@ import { testCollection } from "./collections/test_collection";
 import { productsCollection } from "./collections/products_collection";
 import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
 
-export const customization: FireCMSCustomization = {
+const customization: FireCMSCustomization = {
     collections: async (props) => {
         console.log("Customization props", props);
         // await new Promise(res => setTimeout(res, 1000));
@@ -29,3 +29,5 @@ export const customization: FireCMSCustomization = {
         Builder: SampleEntityView
     }]
 }
+
+export default customization;

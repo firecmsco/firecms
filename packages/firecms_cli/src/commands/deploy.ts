@@ -57,7 +57,7 @@ export async function uploadZip(projectId: string, zipFilePath: string, env: "pr
     }
     const spinner = ora("Uploading build of project " + projectId).start();
 
-    const tokens = await refreshCredentials(await getTokens());
+    const tokens = await refreshCredentials(env, await getTokens());
 
     const form = new FormData();
 

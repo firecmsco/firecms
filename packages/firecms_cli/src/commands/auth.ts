@@ -4,8 +4,9 @@ import fs from "fs";
 import http from "http";
 import path from "path";
 import axios from "axios";
-import { DEFAULT_SERVER } from "../common";
+import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import * as os from "os";
+import EventEmitter from "events";
 
 const https = require("https");
 const url = require("url");
@@ -18,8 +19,8 @@ export async function getCurrentUser(): Promise<object | null> {
     return parseJwt(userCredential["id_token"]);
 }
 
-export async function login() {
-
+export async function login(env: "prod" | "dev") {
+    const emitter = new EventEmitter();
     const currentUser = await getCurrentUser();
     if (currentUser) {
         console.log("You are already logged in as", currentUser["email"]);
@@ -27,66 +28,66 @@ export async function login() {
         return;
     }
 
-    return new Promise((resolve, reject) => {
-        const server = http.createServer(async function (req, res) {
+    const activeConnections: Set<any> = new Set();
+    const server = http.createServer(async (req, res) => {
+        res.setHeader("Cache-Control", "no-store, max-age=0");
 
-            res.setHeader("Cache-Control", "no-store, max-age=0");
+        if (req.url === "/") {
+            const authURL = await getAuthURL(env);
+            console.log("Opening browser to", authURL);
+            res.writeHead(301, { "Location": authURL });
+            res.end();
+        }
 
-            // Example on redirecting user to Google's OAuth 2.0 server.
-            if (req.url == "/") {
-                const authURL = await getAuthURL();
-                console.log("Opening browser to", authURL);
-                res.writeHead(301, { "Location": authURL });
-                res.end();
+        if (req.url.startsWith("/oauth2callback")) {
+            let q = url.parse(req.url, true).query;
+
+            if (q.error) {
+                console.log("Error:" + q.error);
+                server.close();
+                throw new Error(q.error);
+            } else {
+                fs.readFile(path.join(__dirname, "/../../html/done.html"), function (err, data) {
+                    if (err) {
+                        res.writeHead(404);
+                        res.end(JSON.stringify(err));
+                        return;
+                    }
+                    const code = q.code;
+                    res.writeHead(200);
+                    res.end(data, () => req.socket.end());
+                    emitter.emit("tokensReady", code);
+                });
             }
+        }
 
-            // Receive the callback from Google's OAuth 2.0 server.
-            if (req.url.startsWith("/oauth2callback")) {
+    }).listen(3000);
 
-                // Handle the OAuth 2.0 server response
-                let q = url.parse(req.url, true).query;
-
-                if (q.error) { // An error response e.g. error=access_denied
-                    console.log("Error:" + q.error);
-                    reject(q.error);
-                    server.close();
-                    return;
-                } else {
-                    fs.readFile(path.join(__dirname, "/../../html/done.html"),
-                        function (err, data) {
-                            if (err) {
-                                res.writeHead(404);
-                                res.end(JSON.stringify(err));
-                                return;
-                            }
-                            res.writeHead(200);
-                            res.end(data);
-                            server.close();
-                        });
-                    const tokens = await exchangeCodeForToken(q.code);
-                    saveTokens(tokens);
-                    resolve(tokens);
-                    console.log("You have successfully logged in.");
-                    return;
-                }
-
-            }
-
-            // if (req.url == "/revoke") {
-            //     console.log("Revoking token");
-            //     const userCredential = await getTokens();
-            //     if (userCredential) {
-            //         revokeToken(userCredential["access_token"]);
-            //     }
-            //     res.end();
-            // }
-
-        }).listen(3000);
-        server.on("error", (e) => {
-            reject(e);
+    server.on('connection', (socket) => {
+        activeConnections.add(socket);
+        socket.on('close', () => {
+            activeConnections.delete(socket);
         });
+    });
 
-        open("http://localhost:3000");
+    open("http://localhost:3000");
+
+    return new Promise(async (resolve, reject) => {
+        emitter.once("tokensReady", async (code) => {
+            // Handle the OAuth 2.0 server response
+            const tokens = await exchangeCodeForToken(code, env);
+            if (!tokens) {
+                return reject("Token could not be obtained");
+            } else {
+                console.log("You have successfully logged in.");
+                saveTokens(tokens);
+                resolve(tokens);
+            }
+            for (const socket of activeConnections) {
+                socket.destroy();
+            }
+            server.close();
+        })
     });
 }
 
@@ -139,7 +140,11 @@ export async function getTokens(): Promise<object | null> {
                 reject(err);
                 return;
             }
-            resolve(JSON.parse(data));
+            const result = JSON.parse(data);
+            if(result["env"] === "dev") {
+               console.log("Using DEV environment");
+            }
+            resolve(result);
         });
     });
 }
@@ -191,8 +196,10 @@ export function parseJwt(token: string): object {
     return JSON.parse(jsonPayload);
 }
 
-async function getAuthURL() {
-    const response = await axios.get(DEFAULT_SERVER + "/cli/generate_auth_url", {
+async function getAuthURL(env: "prod" | "dev") {
+    const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
+
+    const response = await axios.get(server + "/cli/generate_auth_url", {
         params: {
             redirect_uri: "http://localhost:3000/oauth2callback/"
         }
@@ -201,7 +208,7 @@ async function getAuthURL() {
     return response.data.data;
 }
 
-export async function refreshCredentials(credentials?: object) {
+export async function refreshCredentials(env:string, credentials?: object) {
     if (credentials) {
         const expiryDate = new Date(credentials["expiry_date"]);
         const now = new Date();
@@ -210,12 +217,14 @@ export async function refreshCredentials(credentials?: object) {
         }
     }
     try {
-        const response = await axios.post(DEFAULT_SERVER + "/cli/refresh_access_token", credentials);
+        const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
+
+        const response = await axios.post(server + "/cli/refresh_access_token", credentials);
         if (response.status !== 200) {
             throw new Error("Error refreshing credentials");
         }
         const newCredentials = response.data.data;
-        saveTokens({ ...credentials, ...newCredentials });
+        saveTokens({ ...credentials, ...newCredentials, env });
         return newCredentials;
     } catch (error) {
         console.error("Error refreshing credentials", error.response?.data);
@@ -223,8 +232,10 @@ export async function refreshCredentials(credentials?: object) {
     }
 }
 
-async function exchangeCodeForToken(code: string) {
-    const response = await axios.get(DEFAULT_SERVER + "/cli/exchange_code_for_token", {
+async function exchangeCodeForToken(code: string, env: "prod" | "dev") {
+    const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
+
+    const response = await axios.get(server + "/cli/exchange_code_for_token", {
         params: {
             code
         }
