@@ -1,6 +1,6 @@
 {
   "name": "@firecms/firebase",
-  "version": "3.0.0-alpha.17",
+  "version": "3.0.0-alpha.18",
   "publishConfig": {
     "access": "public"
   },
@@ -18,11 +18,11 @@
     }
   },
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-alpha.17",
-    "@firecms/core": "^3.0.0-alpha.17",
-    "@firecms/data_enhancement": "^3.0.0-alpha.17",
-    "@firecms/data_import": "^3.0.0-alpha.17",
-    "@firecms/schema_inference": "^3.0.0-alpha.17",
+    "@firecms/collection_editor": "^3.0.0-alpha.18",
+    "@firecms/core": "^3.0.0-alpha.18",
+    "@firecms/data_enhancement": "^3.0.0-alpha.18",
+    "@firecms/data_import": "^3.0.0-alpha.18",
+    "@firecms/schema_inference": "^3.0.0-alpha.18",
     "firebase": "^10.5.2",
     "react-router": "^6.17.0",
     "react-router-dom": "^6.17.0"
@@ -49,7 +49,8 @@
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json"
   },
   "files": [
-    "dist"
+    "dist",
+    "src"
   ],
   "eslintConfig": {
     "extends": [
