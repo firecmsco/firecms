@@ -28,6 +28,7 @@ import {
 import {
     CollectionEditorPermissionsBuilder,
     CollectionsConfigController,
+    MissingReferenceWidget,
     PersistedCollection,
     useCollectionEditorPlugin
 } from "@firecms/collection_editor";
@@ -251,10 +252,10 @@ export function FireCMS3ClientWithController({
     });
 
     const permissions: PermissionsBuilder<PersistedCollection, FireCMSUser> = useCallback(({
-                                                                                            pathSegments,
-                                                                                            collection,
-                                                                                            user
-                                                                                        }) => resolveUserRolePermissions({
+                                                                                               pathSegments,
+                                                                                               collection,
+                                                                                               user
+                                                                                           }) => resolveUserRolePermissions({
         collection,
         roles: authController.userRoles ?? undefined,
         paths: pathSegments,
@@ -488,6 +489,9 @@ function FireCMS3AppAuthenticated({
                             baseCollectionPath={baseCollectionPath}
                             onAnalyticsEvent={onAnalyticsEvent}
                             plugins={[importExportPlugin, collectionEditorPlugin, dataEnhancementPlugin]}
+                            components={{
+                                missingReference: MissingReferenceWidget
+                            }}
                         >
                             {({
                                   context,

@@ -1,15 +1,13 @@
 import plugin from "tailwindcss/plugin";
+import { Config } from "tailwindcss";
 
-export const fireCMSTailwindConfig: any = {
+export const fireCMSTailwindConfig: Config = {
     mode: "jit",
     darkMode: ["class", "[data-theme=\"dark\"]"],
     content: [
         "./index.html",
         "./src/**/*.{js,ts,jsx,tsx}",
-        "../../node_modules/@firecms/core/src/**/*.{js,ts,jsx,tsx}",
-        "../../node_modules/@firecms/firebase/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
-        "../../node_modules/@firecms/collection_editor/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
-        "../../node_modules/@firecms/data_enhancement/src/**/*.{js,ts,jsx,tsx}", // TODO: make sure this is the right path
+        "./**/node_modules/@firecms/**/src/**/*.{js,ts,jsx,tsx}"
     ],
     // plugins: [fireCMSPlugin],
     theme: {

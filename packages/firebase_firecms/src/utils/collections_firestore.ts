@@ -2,7 +2,7 @@ import { deleteField, DocumentSnapshot } from "firebase/firestore";
 import {
     CMSType,
     COLLECTION_PATH_SEPARATOR,
-    EntityCollection,
+    EntityCollection, makePropertiesEditable,
     PermissionsBuilder,
     Properties, PropertiesOrBuilders,
     removeFunctions,
@@ -61,6 +61,7 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
         throw Error("Entity collection has not been persisted correctly");
     const propertiesOrder = data.propertiesOrder;
     const properties = data.properties as Properties ?? {};
+    makePropertiesEditable(properties);
     const sortedProperties = sortProperties(properties, propertiesOrder);
     return { ...data, properties: sortedProperties } as PersistedCollection;
 }

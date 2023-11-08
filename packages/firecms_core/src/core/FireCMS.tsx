@@ -53,7 +53,8 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         plugins,
         onAnalyticsEvent,
         fields,
-        entityViews
+        entityViews,
+        components
     } = props;
 
     useLocaleConfig(locale);
@@ -81,8 +82,9 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
         plugins,
         onAnalyticsEvent,
         entityViews: entityViews ?? [],
-        fields: fields ?? {}
-    }), [dateTimeFormat, locale, plugins, entityViews, fields]);
+        fields: fields ?? {},
+        components
+    }), [dateTimeFormat, locale, plugins, entityViews, fields, components]);
 
     if (navigation.navigationLoadingError) {
         return (

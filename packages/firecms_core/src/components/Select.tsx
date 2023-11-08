@@ -185,18 +185,6 @@ export function Select({
                     </SelectPrimitive.Viewport>
                 </SelectPrimitive.Content>
             </SelectPrimitive.Portal>
-            {/*<SelectPrimitive.Portal>*/}
-            {/*    <SelectPrimitive.Content*/}
-            {/*        className={cn("z-50 relative border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg ",*/}
-            {/*            // "overflow-auto"*/}
-            {/*        )}*/}
-            {/*        position={position}*/}
-            {/*        align={"center"}>*/}
-            {/*        <SelectPrimitive.Viewport>*/}
-            {/*                {children}*/}
-            {/*        </SelectPrimitive.Viewport>*/}
-            {/*    </SelectPrimitive.Content>*/}
-            {/*</SelectPrimitive.Portal>*/}
         </SelectPrimitive.Root>
     );
 }

@@ -7,7 +7,7 @@
     "dev": "vite --port 5001",
     "build": "vite build",
     "serve": "vite preview --port 5001",
-    "deploy": "firecms deploy --project=[REPLACE_WITH_PROJECT_ID]"
+    "deploy": "run-s build && firecms deploy --project=[REPLACE_WITH_PROJECT_ID]"
   },
   "dependencies": {
     "@firecms/firebase": "^3.0.0-alpha.20",

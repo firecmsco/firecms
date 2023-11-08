@@ -17,3 +17,4 @@ export * from "./plurals";
 export * from "./references";
 export * from "./debounce";
 export * from "./flatten_object";
+export * from "./make_properties_editable";

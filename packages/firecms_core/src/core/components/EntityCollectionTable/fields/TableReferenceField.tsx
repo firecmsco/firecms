@@ -1,14 +1,14 @@
 import React, { useCallback, useState } from "react";
 import { ReferencePreview, ReferencePreviewContainer } from "../../../../preview";
-import { CollectionSize, Entity, EntityReference, FilterValues } from "../../../../types";
+import { CollectionSize, Entity, EntityCollection, EntityReference, FilterValues } from "../../../../types";
 
 import { getPreviewSizeFrom } from "../../../../preview/util";
 import { getReferenceFrom } from "../../../util";
-import { useNavigationContext, useReferenceDialog } from "../../../../hooks";
+import { useFireCMSContext, useNavigationContext, useReferenceDialog } from "../../../../hooks";
 import { ErrorView } from "../../ErrorView";
 import { Button } from "../../../../components/Button";
 
-export function TableReferenceField(props: {
+type TableReferenceFieldProps = {
     name: string;
     disabled: boolean;
     internalValue: EntityReference | EntityReference[] | undefined | null;
@@ -19,8 +19,27 @@ export function TableReferenceField(props: {
     title?: string;
     path: string;
     forceFilter?: FilterValues<string>;
-}) {
+};
 
+export function TableReferenceField(props: TableReferenceFieldProps) {
+
+    const context = useFireCMSContext();
+    const navigationContext = useNavigationContext();
+    const { path } = props;
+    const collection = navigationContext.getCollection<EntityCollection>(path);
+    if (!collection) {
+        if (context.components?.missingReference) {
+            return <context.components.missingReference path={path}/>;
+        } else {
+            throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
+        }
+    }
+    return <TableReferenceFieldSuccess {...props} collection={collection}/>;
+}
+
+function TableReferenceFieldSuccess(props: TableReferenceFieldProps & {
+    collection: EntityCollection;
+}) {
     const {
         name,
         internalValue,
@@ -31,20 +50,14 @@ export function TableReferenceField(props: {
         previewProperties,
         title,
         disabled,
-        forceFilter
+        forceFilter,
+        collection
     } = props;
 
     const [onHover, setOnHover] = useState(false);
 
     const hoverTrue = useCallback(() => setOnHover(true), []);
     const hoverFalse = useCallback(() => setOnHover(false), []);
-
-    const navigationContext = useNavigationContext();
-
-    const collection = navigationContext.getCollection(path);
-    if (!collection) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${path}`);
-    }
 
     const onSingleEntitySelected = useCallback((entity: Entity<any>) => {
         updateValue(entity ? getReferenceFrom(entity) : null);

@@ -1,3 +1,4 @@
+import React from "react";
 import { User } from "./user";
 import { AuthController } from "./auth";
 import { DataSource } from "./datasource";
@@ -124,12 +125,6 @@ export type FireCMSProps<UserType extends User> = {
     authController: AuthController<UserType>;
 
     /**
-     * Optional link builder you can add to generate a button in your entity forms.
-     * The function must return a URL that gets opened when the button is clicked
-     */
-    entityLinkBuilder?: EntityLinkBuilder;
-
-    /**
      * Path under the navigation routes of the CMS will be created. Defaults to `/`.
      * Internally FireCMS uses `react-router` to create the routes, the base path is attached to the
      * `BrowserRouter` component. If you are using FireCMS in a subpath of your website, you can use
@@ -159,5 +154,22 @@ export type FireCMSProps<UserType extends User> = {
      * Callback used to get analytics events from the CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
+
+    /**
+     * Optional link builder you can add to generate a button in your entity forms.
+     * The function must return a URL that gets opened when the button is clicked
+     */
+    entityLinkBuilder?: EntityLinkBuilder;
+
+    components?: {
+
+        /**
+         * Component to render when a reference is missing
+         */
+        missingReference?: React.ComponentType<{
+            path: string,
+        }>;
+
+    }
 
 };

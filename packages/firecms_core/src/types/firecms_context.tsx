@@ -108,4 +108,13 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
      * You can also define an entity view from the UI.
      */
     entityViews?: EntityCustomView[];
+
+    components?: {
+
+        /**
+         * Component to render when a reference is missing
+         */
+        missingReference?: React.ComponentType<{ path: string }>;
+
+    }
 };

@@ -61,14 +61,34 @@ function ReferencePreviewInternal<M extends Record<string, any>>({
                                                                  }: ReferencePreviewProps) {
 
     const context = useFireCMSContext();
-
     const navigationContext = useNavigationContext();
-    const sideEntityController = useSideEntityController();
 
     const collection = navigationContext.getCollection<EntityCollection<M>>(reference.path);
     if (!collection) {
-        throw Error(`Couldn't find the corresponding collection view for the path: ${reference.path}`);
+        if (context.components?.missingReference) {
+            return <context.components.missingReference path={reference.path}/>;
+        } else {
+            throw Error(`Couldn't find the corresponding collection view for the path: ${reference.path}`);
+        }
     }
+
+    return <ReferencePreviewExisting
+        reference={reference}
+        collection={collection}
+        previewProperties={previewProperties}
+        size={size}
+        disabled={disabled}
+        allowEntityNavigation={allowEntityNavigation}
+        onClick={onClick}
+        onHover={onHover}/>
+}
+
+function ReferencePreviewExisting<M extends Record<string, any> = any>({ reference, collection, previewProperties, size, disabled, allowEntityNavigation, onClick, onHover }: ReferencePreviewProps & {
+    collection: EntityCollection<M>
+}) {
+
+    const context = useFireCMSContext();
+    const sideEntityController = useSideEntityController();
 
     const {
         entity,
