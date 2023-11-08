@@ -126,7 +126,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
             type: "confirm",
             name: "existing_firecms_project",
             message: "Do you already have a FireCMS project?",
-            default: false,
+            default: true,
         });
 
         const spinner = ora("Loading your projects").start();
@@ -174,7 +174,7 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
 
     const answers = await inquirer.prompt(questions);
 
-    if(!answers.existing_firecms_project) {
+    if (!answers.existing_firecms_project) {
         console.log("Please create a FireCMS project first. Head to https://app.firecms.co to get started and then run this command again!");
         process.exit(1);
     }
@@ -185,16 +185,6 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         git: options.git || answers.git,
         firebaseProjectId: answers.firebaseProjectId,
     };
-}
-
-async function copyTemplateFiles(options: InitOptions, webappConfig?: object) {
-    return copy(options.templateDirectory, options.targetDirectory, {
-        clobber: false,
-    }).then(_ => {
-        if (webappConfig) {
-            writeWebAppConfig(options, webappConfig);
-        }
-    });
 }
 
 export async function createProject(options: InitOptions) {
@@ -221,7 +211,7 @@ export async function createProject(options: InitOptions) {
 
     const templateDir = path.resolve(
         __dirname,
-        "../templates/" + options.v2 ? "template_v2" : "template_v3"
+        "../../templates/" + (options.v2 ? "template_v2" : "template_v3")
     );
     options.templateDirectory = templateDir;
 
@@ -258,18 +248,64 @@ export async function createProject(options: InitOptions) {
     await tasks.run();
 
     console.log("");
-    console.log("%s Project ready", chalk.green.bold("DONE"));
+    console.log("%s Your project is ready!", chalk.green.bold("DONE"));
     console.log("");
-    console.log("First update your firebase config in");
-    console.log(chalk.bgYellow.black.bold("src/firebase-config.ts"));
-    console.log("");
-    console.log("Then run:");
-    console.log(chalk.cyan.bold("cd " + options.dir_name));
-    if (options.skipInstall)
-        console.log(chalk.cyan.bold("yarn"));
-    console.log(chalk.cyan.bold("yarn dev"));
-    console.log("");
+
+    if (options.v2) {
+        console.log("First update your firebase config in");
+        console.log(chalk.bgYellow.black.bold("src/firebase-config.ts"));
+        console.log("");
+        console.log("Then run:");
+        console.log(chalk.cyan.bold("cd " + options.dir_name));
+        if (options.skipInstall)
+            console.log(chalk.cyan.bold("yarn"));
+        console.log(chalk.cyan.bold("yarn dev"));
+        console.log("");
+    } else {
+        console.log("If you want to run your project locally, run:");
+        console.log(chalk.bgYellow.black.bold("yarn dev"));
+        console.log("");
+        console.log("If you want to deploy your project, run:");
+        console.log(chalk.bgYellow.black.bold("yarn deploy"));
+        console.log("and see it running in https://app.firecms.co");
+    }
+
     return true;
+}
+
+async function copyTemplateFiles(options: InitOptions, webappConfig?: object) {
+    return copy(options.templateDirectory, options.targetDirectory, {
+        clobber: false,
+    }).then(_ => {
+        if (options.v2 && webappConfig) {
+            writeWebAppConfig(options, webappConfig);
+        }
+        if (!options.v2) {
+            return replaceProjectIdInTemplateFiles(options, [
+                "./src/App.tsx",
+                "./package.json",
+            ]);
+        }
+    });
+}
+
+async function replaceProjectIdInTemplateFiles(options: InitOptions, files: string[] = []) {
+    const fs = require("fs");
+
+    for (const file of files) {
+        const fullFileName = path.resolve(options.targetDirectory, file);
+        await fs.readFile(fullFileName, "utf8", function (err, data) {
+            if (err) {
+                return console.log(err);
+            }
+            const result = data.replace(/\[REPLACE_WITH_PROJECT_ID]/g, options.firebaseProjectId);
+
+            fs.writeFile(fullFileName, result, "utf8", function (err) {
+                if (err) return console.log(err);
+            });
+        });
+    }
+
 }
 
 async function initGit(options: InitOptions) {
