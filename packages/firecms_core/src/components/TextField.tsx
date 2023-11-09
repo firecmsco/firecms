@@ -89,8 +89,7 @@ export function TextField<T extends string | number>({
         ? <TextareaAutosize
             {...inputProps as any}
             ref={inputRef}
-
-            placeholder={placeholder}
+            placeholder={!focused && !hasValue ? undefined : placeholder}
             autoFocus={autoFocus}
             rows={rows}
             // onFocus={() => setFocused(true)}
@@ -119,10 +118,10 @@ export function TextField<T extends string | number>({
                 label ? (size === "medium" ? "pt-[28px] pb-2" : "pt-4 pb-2") : "py-2",
                 focused ? "text-text-primary dark:text-text-primary-dark" : "",
                 endAdornment ? "pr-10" : "pr-3",
-                inputClassName,
-                disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-800 dark:text-gray-200"
+                disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-800 dark:text-gray-200",
+                inputClassName
             )}
-            placeholder={placeholder}
+            placeholder={!focused && !hasValue ? undefined : placeholder}
             autoFocus={autoFocus}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
@@ -150,7 +149,7 @@ export function TextField<T extends string | number>({
                     className={cn(
                         "pointer-events-none absolute",
                         size === "medium" ? "top-1" : "-top-1",
-                        !error ? (focused ? "text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
+                        !error ? (focused ? "text-primary dark:text-primary" : "text-text-secondary dark:text-text-secondary-dark") : "text-red-500 dark:text-red-600",
                         disabled ? "opacity-50" : "")}
                     shrink={hasValue || focused}
                 >

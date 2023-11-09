@@ -1,5 +1,4 @@
 import React from "react";
-import { Typography } from "../../components/Typography";
 
 interface LabelWithIconProps {
     icon: React.ReactNode;
@@ -27,8 +26,8 @@ export function LabelWithIcon({
 
             {icon}
 
-            <Typography component={"span"}
-                        className={`font-medium text-${small ? "base" : "sm"} origin-top-left transform ${small ? "translate-x-2 scale-75" : ""}`}>{(title ?? "") + (required ? " *" : "")}</Typography>
+            <span
+                className={`font-medium text-${small ? "base" : "sm"} origin-top-left transform ${small ? "translate-x-2 scale-75" : ""}`}>{(title ?? "") + (required ? " *" : "")}</span>
 
         </span>
     );

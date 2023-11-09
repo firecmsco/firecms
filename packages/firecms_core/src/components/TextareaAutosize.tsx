@@ -2,6 +2,7 @@ import * as React from "react";
 import { useLayoutEffect } from "react";
 import * as ReactDOM from "react-dom";
 import { debounce } from "../core/util/debounce";
+import { cn } from "./util/cn";
 
 type State = {
     outerHeightStyle: number;
@@ -102,6 +103,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
             getStyleValue(computedStyle.paddingBottom) + getStyleValue(computedStyle.paddingTop);
         const border =
             getStyleValue(computedStyle.borderBottomWidth) + getStyleValue(computedStyle.borderTopWidth);
+        const minHeight = getStyleValue(computedStyle.minHeight);
 
         // The height of the inner content
         const innerHeight = sizeReferenceElement.scrollHeight;
@@ -119,10 +121,11 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         if (maxRows) {
             outerHeight = Math.min(Number(maxRows) * singleRowHeight, outerHeight);
         }
-        outerHeight = Math.max(outerHeight, singleRowHeight);
+        outerHeight = Math.max(outerHeight, singleRowHeight, minHeight);
 
         // Take the box sizing into account for applying this value as a style.
-        const outerHeightStyle = outerHeight + (boxSizing === "border-box" ? padding + border : 0);
+        const outerHeightStyle = outerHeight + (!props.ignoreBoxSizing && boxSizing === "border-box" ? padding + border : 0);
+
         const overflow = Math.abs(outerHeight - innerHeight) <= 1;
 
         return {
@@ -251,6 +254,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         }
     };
 
+    console.log("className", props.className)
     return (
         <React.Fragment>
             <textarea
@@ -274,7 +278,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
             />
             <textarea
                 aria-hidden
-                className={props.shadowClassName}
+                className={cn(props.className, props.shadowClassName)}
                 readOnly
                 ref={shadowRef}
                 tabIndex={-1}
@@ -327,8 +331,9 @@ export type TextareaAutosizeProps = Omit<React.InputHTMLAttributes<HTMLTextAreaE
     onResize?: (state: State) => void;
 
     autoFocus?: boolean;
-}
 
+    ignoreBoxSizing?: boolean;
+}
 
 function useForkRef<Instance>(
     ...refs: Array<React.Ref<Instance> | undefined>

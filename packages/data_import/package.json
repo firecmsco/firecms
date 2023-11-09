@@ -31,7 +31,7 @@
     "dev": "vite",
     "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
     "prepublishOnly": "run-s build",
-    "clean": "rm -rf dist",
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f",
     "test": "jest"
   },
   "eslintConfig": {

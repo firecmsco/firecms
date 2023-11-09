@@ -70,7 +70,8 @@ export const productsCollection = buildCollection<Product>({
             clearable: true,
             validation: {
                 required: true
-            }
+            },
+            editable: true
         },
         main_image: {
             dataType: "string",

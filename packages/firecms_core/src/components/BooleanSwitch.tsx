@@ -27,7 +27,7 @@ export const BooleanSwitch = React.forwardRef(function BooleanSwitch({
             ref={ref}
             tabIndex={disabled ? -1 : undefined}
             onClick={disabled
-                ? undefined
+                ? (e) => e.preventDefault()
                 : (e) => {
                     e.preventDefault();
                     if (allowIndeterminate) {
