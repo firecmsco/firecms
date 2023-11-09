@@ -10,7 +10,6 @@ export default defineConfig({
     esbuild: {
         logOverride: { "this-is-undefined-in-esm": "silent" }
     },
-    // optimizeDeps: { include: ["react/jsx-runtime"] },
     plugins: [
         react(),
         federation({

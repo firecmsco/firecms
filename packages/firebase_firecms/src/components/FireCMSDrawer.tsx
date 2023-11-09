@@ -70,7 +70,8 @@ export function FireCMSDrawer({
                             initialValues: {
                                 group,
                             },
-                            parentPathSegments: []
+                            parentPathSegments: [],
+                            redirect: true
                         });
                     }}>
                     <AddIcon size={"small"}/>

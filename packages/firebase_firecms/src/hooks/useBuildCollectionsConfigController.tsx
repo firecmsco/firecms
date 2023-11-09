@@ -1,13 +1,13 @@
 import { FirebaseApp } from "firebase/app";
 import { collection, deleteDoc, doc, Firestore, getFirestore, onSnapshot, runTransaction } from "firebase/firestore";
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import {
     CollectionsConfigController,
     DeleteCollectionParams,
     PersistedCollection,
     SaveCollectionParams
 } from "@firecms/collection_editor";
-import { PermissionsBuilder, useFireCMSContext, User } from "@firecms/core";
+import { PermissionsBuilder, User } from "@firecms/core";
 import {
     applyPermissionsFunction,
     buildCollectionPath,
@@ -111,10 +111,10 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
 
     const collections = persistedCollections !== undefined ? applyPermissionsFunction(persistedCollections, permissions as PermissionsBuilder) : undefined;
 
-    return {
+    return useMemo(() => ({
         loading: collectionsLoading,
         collections,
         saveCollection,
         deleteCollection
-    }
+    }), [collections, collectionsLoading, deleteCollection, saveCollection])
 }

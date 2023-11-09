@@ -24,5 +24,6 @@
       "@firecms/data_import": ["../../packages/data_import/src/index.ts"]
     }
   },
-  "include": ["./src"]
+  "include": ["./src"],
+  "exclude": ["node_modules", "build", "../*"]
 }

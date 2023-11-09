@@ -46,7 +46,8 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json"
+    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+    "clean": "rm -rf dist"
   },
   "files": [
     "dist",

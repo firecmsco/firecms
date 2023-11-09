@@ -29,6 +29,7 @@
     "deploy:demo": "cd examples/example && yarn deploy",
     "deploy:web": "cd website && yarn deploy",
     "build": "lerna run build",
+    "clean": "lerna run clean",
     "release": "git push origin main:release"
   },
   "packageManager": "yarn@3.2.3",

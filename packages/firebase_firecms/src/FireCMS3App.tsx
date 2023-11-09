@@ -326,7 +326,7 @@ export function FireCMS3ClientWithController({
     if (delegatedLoginLoading) {
         return <FullLoadingView projectId={projectId}
                                 currentProjectController={currentProjectController}
-                                text={"Delegating client login"}/>;
+                                text={"Logging in to " + projectId}/>;
     }
 
     if (!authController.user) {
@@ -408,9 +408,7 @@ function FireCMS3AppAuthenticated({
             return Promise.resolve([]);
         },
         getUser: (uid) => {
-            const fireCMSUser = currentProjectController.users.find(u => u.uid === uid);
-            console.log("Getting user", uid, fireCMSUser);
-            return fireCMSUser ?? null;
+            return currentProjectController.users.find(u => u.uid === uid) ?? null;
         },
         collectionInference: buildCollectionInference(firebaseApp),
         getData: (path) => getFirestoreDataInPath(firebaseApp, path, 100)

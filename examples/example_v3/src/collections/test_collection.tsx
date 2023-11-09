@@ -7,7 +7,6 @@ import {
     resolveNavigationFrom
 } from "@firecms/core";
 import { CustomField } from "../custom_field/SubPropertyField";
-import { usersCollection } from "./users_collection";
 
 const relaxedStatus: EnumValues = [
     {
@@ -823,8 +822,5 @@ export const testCollection = buildCollection({
             },
             dependencies: ["name"]
         }
-    ],
-    subcollections: [
-        usersCollection
     ]
 });

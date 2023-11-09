@@ -1,7 +1,7 @@
 import { FireCMSCustomization } from "@firecms/firebase";
 import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
 
-export const customization: FireCMSCustomization = {
+const customization: FireCMSCustomization = {
     collections: [],
     fields: [],
     entityViews: [
@@ -12,3 +12,5 @@ export const customization: FireCMSCustomization = {
         }
     ]
 }
+
+export default customization;

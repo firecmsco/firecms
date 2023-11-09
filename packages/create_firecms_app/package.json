@@ -11,6 +11,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "echo \"create-firecms-app: no need to build\" && exit 0",
+    "clean": "echo \"create-firecms-app: no need to clean\" && exit 0",
     "dev": "ts-node src/index.ts"
   },
   "keywords": [

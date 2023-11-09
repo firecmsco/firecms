@@ -1,6 +1,6 @@
 import React from "react"
 import { FireCMS3App } from "@firecms/firebase";
-import { customization } from "./index";
+import customization from "./index";
 
 function App() {
     return <FireCMS3App

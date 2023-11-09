@@ -10,13 +10,13 @@
     "deploy": "run-s build && firecms deploy --project=[REPLACE_WITH_PROJECT_ID]"
   },
   "dependencies": {
-    "@firecms/firebase": "^3.0.0-alpha.20",
+    "@firecms/firebase": "^3.0.0-alpha.23",
     "firebase": "^10.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@firecms/cli": "^3.0.0-alpha.19",
+    "@firecms/cli": "^3.0.0-alpha.23",
     "@originjs/vite-plugin-federation": "^1.3.2",
     "@types/react": "^18.2.33",
     "@types/react-dom": "^18.2.14",

@@ -2,18 +2,15 @@ import { deleteField, DocumentSnapshot } from "firebase/firestore";
 import {
     CMSType,
     COLLECTION_PATH_SEPARATOR,
-    EntityCollection, makePropertiesEditable,
+    makePropertiesEditable,
     PermissionsBuilder,
-    Properties, PropertiesOrBuilders,
+    Properties,
     removeFunctions,
     removeUndefined,
     sortProperties,
     stripCollectionPath
 } from "@firecms/core";
-import {
-    PersistedCollection,
-    removeNonEditableProperties
-} from "@firecms/collection_editor";
+import { PersistedCollection, removeNonEditableProperties } from "@firecms/collection_editor";
 
 export function buildCollectionPath(path: string, parentPathSegments?: string[]): string {
     if (!parentPathSegments)
@@ -42,7 +39,10 @@ export const docsToCollectionTree = (docs: DocumentSnapshot[]): PersistedCollect
         return { [id]: collection };
     }).reduce((a, b) => ({ ...a, ...b }), {});
 
-    Object.entries(collectionsMap).forEach(([id, collection]) => {
+    const orderedKeys = Object.keys(collectionsMap).sort((a, b) => b.split(COLLECTION_PATH_SEPARATOR).length - a.split(COLLECTION_PATH_SEPARATOR).length);
+
+    orderedKeys.forEach((id) => {
+        const collection = collectionsMap[id];
         if (id.includes(COLLECTION_PATH_SEPARATOR)) {
             const parentId = id.split(COLLECTION_PATH_SEPARATOR).slice(0, -1).join(COLLECTION_PATH_SEPARATOR);
             const parentCollection = collectionsMap[parentId];
