@@ -7,7 +7,7 @@ import "@fontsource/ibm-plex-mono";
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import { Authenticator, CMSView, FirebaseCMSApp, FirestoreIndexesBuilder } from "firecms";
+import { Authenticator, CMSView, EntityCollection, FirebaseCMSApp, FirestoreIndexesBuilder } from "firecms";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import { IconButton, Tooltip } from "@mui/material";
@@ -102,7 +102,7 @@ function SampleApp() {
     ];
 
     if (process.env.NODE_ENV !== "production") {
-        collections.push(testCollection);
+        collections.push({ ...testCollection, subcollections: [{ ...testCollection, subcollections: [{ ...testCollection, subcollections: [] }] }] } as EntityCollection);
     }
 
     const onAnalyticsEvent = useCallback((event: string, data?: object) => {

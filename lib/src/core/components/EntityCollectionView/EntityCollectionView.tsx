@@ -136,7 +136,7 @@ export const EntityCollectionView = React.memo(
             });
             return sideEntityController.open({
                 entityId: clickedEntity.id,
-                path: fullPath,
+                path: clickedEntity.path,
                 collection,
                 updateUrl: true,
                 onClose: unselectNavigatedEntity

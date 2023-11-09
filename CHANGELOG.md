@@ -1,3 +1,12 @@
+## [2.2.0] - 2023-11-07
+
+### Changed
+- Fix for missing subcollection links.
+- New email and password login flow
+- Removed add button in collection group
+- Export fixes
+- Fix for collections search
+
 ## [2.1.0] - 2023-09-12
 
 ### Changed
