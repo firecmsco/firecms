@@ -37,6 +37,7 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
     onFilterUpdate: (column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => void;
     onClickResizeColumn?: (columnIndex: number, column: VirtualTableColumn) => void;
     createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
+    additionalChildren?: React.ReactNode;
 };
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
@@ -50,7 +51,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                                                    filter,
                                                                    column,
                                                                    onClickResizeColumn,
-                                                                   createFilterField
+                                                                   createFilterField,
+                                                                   additionalChildren
                                                                }: VirtualTableHeaderProps<M>) {
 
         const [onHover, setOnHover] = useState(false);
@@ -112,23 +114,26 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     </div>
 
                     {column.sortable && (sort || hovered || openFilter) &&
-                        <Badge color="secondary"
-                               invisible={!sort}>
-                            <IconButton
-                                size={"small"}
-                                className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
-                                onClick={() => {
-                                    onColumnSort(column.key as Extract<keyof M, string>);
-                                }}
-                            >
-                                {!sort &&
-                                    <ArrowUpwardIcon/>}
-                                {sort === "asc" &&
-                                    <ArrowUpwardIcon/>}
-                                {sort === "desc" &&
-                                    <ArrowUpwardIcon className={"rotate-180"}/>}
-                            </IconButton>
-                        </Badge>
+                        <>
+                            {additionalChildren}
+                            <Badge color="secondary"
+                                   invisible={!sort}>
+                                <IconButton
+                                    size={"small"}
+                                    className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
+                                    onClick={() => {
+                                        onColumnSort(column.key as Extract<keyof M, string>);
+                                    }}
+                                >
+                                    {!sort &&
+                                        <ArrowUpwardIcon/>}
+                                    {sort === "asc" &&
+                                        <ArrowUpwardIcon/>}
+                                    {sort === "desc" &&
+                                        <ArrowUpwardIcon className={"rotate-180"}/>}
+                                </IconButton>
+                            </Badge>
+                        </>
                     }
 
                     {column.filter && createFilterField && <div>

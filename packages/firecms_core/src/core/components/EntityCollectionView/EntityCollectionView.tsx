@@ -519,6 +519,7 @@ export const EntityCollectionView = React.memo(
                     />}
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
+                    // additionalHeaderWidget={buildAdditionalHeaderWidget}
                 />
 
                 <PopupFormField

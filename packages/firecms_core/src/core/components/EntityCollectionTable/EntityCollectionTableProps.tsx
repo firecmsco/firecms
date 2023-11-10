@@ -5,7 +5,9 @@ import {
     Entity,
     FilterValues,
     ResolvedProperties,
-    SelectionController, TableController,
+    ResolvedProperty,
+    SelectionController,
+    TableController,
     User
 } from "../../../types";
 import { OnCellValueChange, UniqueFieldValidator } from "./types";
@@ -116,6 +118,8 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
     sortable?: boolean;
 
     endAdornment?: React.ReactNode;
+
+    additionalHeaderWidget?: (props: { property: ResolvedProperty }) => React.ReactNode;
 
 }
 

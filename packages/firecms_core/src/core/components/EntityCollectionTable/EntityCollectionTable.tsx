@@ -106,7 +106,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
              },
          filterable = true,
          sortable = true,
-         endAdornment
+         endAdornment,
+         additionalHeaderWidget
      }: EntityCollectionTableProps<M>) {
 
         const largeLayout = useLargeLayout();
@@ -291,7 +292,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                             custom: {
                                 resolvedProperty: property,
                                 disabled
-                            }
+                            },
+                            additionalHeaderWidget: additionalHeaderWidget?.({ property })
                         };
                     });
 

@@ -206,7 +206,15 @@ export interface VirtualTableColumn<CustomProps extends any = any> {
      */
     resizable?: boolean;
 
+    /**
+     * Custom props passed to the cell renderer
+     */
     custom?: CustomProps;
+
+    /**
+     * Additional children to be rendered in the header when hovering
+     */
+    additionalHeaderWidget?: React.ReactNode;
 }
 
 /**
