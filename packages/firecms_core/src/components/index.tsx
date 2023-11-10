@@ -36,3 +36,5 @@ export * from "./Tooltip";
 export * from "./Typography";
 export * from "./Tabs";
 export * from "./Table";
+export * from "./Popover";
+export * from "./Badge";

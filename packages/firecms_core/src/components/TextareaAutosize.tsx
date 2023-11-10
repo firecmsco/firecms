@@ -254,7 +254,6 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         }
     };
 
-    console.log("className", props.className)
     return (
         <React.Fragment>
             <textarea

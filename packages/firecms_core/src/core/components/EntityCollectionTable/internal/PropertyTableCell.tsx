@@ -234,7 +234,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                     propertyKey={propertyKey}
                     property={property}
                     entity={entity}
-                    value={value}
+                    value={internalValue}
                     size={getPreviewSizeFrom(size)}
                 />
             </EntityTableCell>;

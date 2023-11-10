@@ -3,12 +3,9 @@ import equal from "react-fast-compare";
 
 import { VirtualTableColumn, VirtualTableSort, VirtualTableWhereFilterOp } from "./VirtualTableProps";
 import { ErrorBoundary } from "../ErrorBoundary";
-import { Button, IconButton } from "../../../components";
+import { Badge, Button, cn, IconButton, Popover } from "../../../components";
 import { defaultBorderMixin } from "../../../styles";
 import { ArrowUpwardIcon, ExpandMoreIcon } from "../../../icons";
-import { Popover } from "../../../components/Popover";
-import { Badge } from "../../../components/Badge";
-import { cn } from "../../../components/util/cn";
 
 interface FilterFormProps<T> {
     column: VirtualTableColumn<T>;
