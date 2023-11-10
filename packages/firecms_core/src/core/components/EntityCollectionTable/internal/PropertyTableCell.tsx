@@ -128,11 +128,14 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
         );
 
         const saveValues = (value: any) => {
+            if (equal(value, internalValueRef.current))
+                return;
             setSaved(false);
             validation
                 .validate(value)
                 .then(() => {
                     setError(undefined);
+                    internalValueRef.current = value;
                     if (onValueChange) {
                         onValueChange({
                             value,
@@ -167,7 +170,6 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
             } else {
                 updatedValue = newValue;
             }
-            internalValueRef.current = updatedValue;
             setInternalValue(updatedValue);
             saveValues(updatedValue);
         };
