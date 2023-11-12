@@ -293,7 +293,11 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                                 resolvedProperty: property,
                                 disabled
                             },
-                            additionalHeaderWidget: additionalHeaderWidget?.({ property })
+                            additionalHeaderWidget: (onHover) => additionalHeaderWidget?.({
+                                property,
+                                propertyKey: key,
+                                onHover
+                            })
                         };
                     });
 

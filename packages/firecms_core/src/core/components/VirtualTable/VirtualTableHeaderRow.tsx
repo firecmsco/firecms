@@ -120,7 +120,7 @@ export const VirtualTableHeaderRow = ({
                         onClickResizeColumn={onClickResizeColumn}
                         column={column}
                         createFilterField={createFilterField}
-                    additionalChildren={column.additionalHeaderWidget}/>
+                        additionalHeaderWidget={column.additionalHeaderWidget}/>
                 </ErrorBoundary>;
             })}
         </div>

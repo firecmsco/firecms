@@ -214,7 +214,7 @@ export interface VirtualTableColumn<CustomProps extends any = any> {
     /**
      * Additional children to be rendered in the header when hovering
      */
-    additionalHeaderWidget?: React.ReactNode;
+    additionalHeaderWidget?: (onHover:boolean) => React.ReactNode;
 }
 
 /**

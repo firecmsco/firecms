@@ -10,6 +10,7 @@ import {
     FilterValues,
     PartialEntityCollection,
     PropertyOrBuilder,
+    ResolvedProperty,
     SaveEntityProps,
     SelectionController
 } from "../../../types";
@@ -305,7 +306,11 @@ export const EntityCollectionView = React.memo(
             fields: context.fields
         }), [collection, fullPath]);
 
-        const getPropertyFor = useCallback(({ propertyKey, propertyValue, entity }: GetPropertyForProps<M>) => {
+        const getPropertyFor = useCallback(({
+                                                propertyKey,
+                                                propertyValue,
+                                                entity
+                                            }: GetPropertyForProps<M>) => {
             let propertyOrBuilder: PropertyOrBuilder<any, M> | undefined = getPropertyInPath<M>(collection.properties, propertyKey);
 
             // we might not find the property in the collection if combining property builders and map spread
@@ -485,6 +490,28 @@ export const EntityCollectionView = React.memo(
 
         </Popover>;
 
+        function buildAdditionalHeaderWidget({
+                                                 property,
+                                                 propertyKey,
+                                                 onHover
+                                             }: { property: ResolvedProperty, propertyKey: string, onHover: boolean }) {
+            if (!context.plugins)
+                return null;
+            return <>
+                {context.plugins.filter(plugin => plugin.collectionView?.HeaderAction)
+                    .map((plugin, i) => {
+                        const HeaderAction = plugin.collectionView!.HeaderAction!;
+                        return <HeaderAction
+                            key={`plugin_header_action_${i}`}
+                            propertyKey={propertyKey}
+                            property={property}
+                            onHover={onHover}
+                            fullPath={fullPath}
+                            parentPathSegments={parentPathSegments ?? []}/>;
+                    })}
+            </>;
+        }
+
         return (
             <div className={cn("overflow-hidden h-full w-full", className)}
                  ref={containerRef}>
@@ -519,7 +546,7 @@ export const EntityCollectionView = React.memo(
                     />}
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
-                    // additionalHeaderWidget={buildAdditionalHeaderWidget}
+                    additionalHeaderWidget={buildAdditionalHeaderWidget}
                 />
 
                 <PopupFormField

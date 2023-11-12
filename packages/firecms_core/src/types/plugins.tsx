@@ -3,7 +3,6 @@ import React, { PropsWithChildren } from "react";
 import { FireCMSContext } from "./firecms_context";
 import { CollectionActionsProps, EntityCollection } from "./collections";
 import { User } from "./user";
-import { FieldConfigId } from "./field_config";
 import { FieldProps, FormContext } from "./fields";
 import { CMSType, Property } from "./properties";
 import { EntityStatus } from "./entities";
@@ -103,6 +102,20 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
             children: React.ReactNode;
         }
 
+    }
+
+    collectionView?: {
+        /**
+         * Use this method to inject widgets to the entity collections header
+         * @param props
+         */
+        HeaderAction?: React.ComponentType<{
+            property: ResolvedProperty,
+            propertyKey: string,
+            onHover: boolean,
+            fullPath: string,
+            parentPathSegments: string[],
+        }>;
     }
 
 }

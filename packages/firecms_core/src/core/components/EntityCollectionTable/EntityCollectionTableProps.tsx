@@ -119,7 +119,11 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     endAdornment?: React.ReactNode;
 
-    additionalHeaderWidget?: (props: { property: ResolvedProperty }) => React.ReactNode;
+    additionalHeaderWidget?: (props: {
+        property: ResolvedProperty,
+        propertyKey: string,
+        onHover: boolean,
+    }) => React.ReactNode;
 
 }
 

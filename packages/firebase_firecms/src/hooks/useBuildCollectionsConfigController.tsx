@@ -5,7 +5,8 @@ import {
     CollectionsConfigController,
     DeleteCollectionParams,
     PersistedCollection,
-    SaveCollectionParams
+    SaveCollectionParams,
+    namespaceToPropertiesPath
 } from "@firecms/collection_editor";
 import { PermissionsBuilder, User } from "@firecms/core";
 import {
@@ -86,20 +87,34 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
         );
     }, [configPath, firestore]);
 
-    const deleteCollection = useCallback(({ path, parentPathSegments }: DeleteCollectionParams): Promise<void> => {
+    const deleteCollection = useCallback(({
+                                              path,
+                                              parentPathSegments
+                                          }: DeleteCollectionParams): Promise<void> => {
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const collectionPath = buildCollectionPath(path, parentPathSegments);
         const ref = doc(firestore, configPath, "collections", collectionPath);
         return deleteDoc(ref);
     }, [configPath, firestore]);
 
-    const saveCollection = useCallback(<M extends Record<string, any>>({ path, collectionData, previousPath, parentPathSegments }: SaveCollectionParams<M>): Promise<void> => {
+    const saveCollection = useCallback(<M extends Record<string, any>>({
+                                                                           path,
+                                                                           collectionData,
+                                                                           previousPath,
+                                                                           parentPathSegments
+                                                                       }: SaveCollectionParams<M>): Promise<void> => {
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
         const cleanedCollection = prepareCollectionForPersistence(collectionData);
         const strippedPath = buildCollectionPath(path, parentPathSegments);
         const previousStrippedPath = previousPath ? buildCollectionPath(previousPath, parentPathSegments) : undefined;
         const ref = doc(firestore, configPath, "collections", strippedPath);
-        console.debug("Saving collection", { collectionData, path, previousPath, parentPathSegments, cleanedCollection });
+        console.debug("Saving collection", {
+            collectionData,
+            path,
+            previousPath,
+            parentPathSegments,
+            cleanedCollection
+        });
         return runTransaction(firestore, async (transaction) => {
             transaction.set(ref, cleanedCollection, { merge: true });
             if (previousStrippedPath && previousStrippedPath !== strippedPath) {
@@ -111,10 +126,45 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
 
     const collections = persistedCollections !== undefined ? applyPermissionsFunction(persistedCollections, permissions as PermissionsBuilder) : undefined;
 
+    const saveProperty = useCallback(({
+                                          path,
+                                          propertyKey,
+                                          property,
+                                          parentPathSegments,
+                                          namespace
+                                      }: {
+        path: string,
+        propertyKey: string,
+        property: any,
+        parentPathSegments?: string[],
+        namespace?: string
+    }): Promise<void> => {
+
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const collectionPath = buildCollectionPath(path, parentPathSegments);
+        const ref = doc(firestore, configPath, "collections", collectionPath);
+        return runTransaction(firestore, async (transaction) => {
+            const data = {
+                [namespaceToPropertiesPath(namespace) + "." + propertyKey]: property,
+            };
+            console.log("Saving property", {
+                path,
+                propertyKey,
+                property,
+                collectionPath,
+                namespace,
+                data
+            });
+            transaction.update(ref, data);
+        });
+
+    }, [configPath, firestore]);
+
     return useMemo(() => ({
         loading: collectionsLoading,
         collections,
         saveCollection,
-        deleteCollection
-    }), [collections, collectionsLoading, deleteCollection, saveCollection])
+        deleteCollection,
+        saveProperty
+    }), [collections, collectionsLoading, deleteCollection, saveCollection, saveProperty])
 }

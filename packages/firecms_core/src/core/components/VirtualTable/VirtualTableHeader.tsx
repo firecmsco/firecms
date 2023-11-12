@@ -5,7 +5,7 @@ import { VirtualTableColumn, VirtualTableSort, VirtualTableWhereFilterOp } from 
 import { ErrorBoundary } from "../ErrorBoundary";
 import { Badge, Button, cn, IconButton, Popover } from "../../../components";
 import { defaultBorderMixin } from "../../../styles";
-import { ArrowUpwardIcon, ExpandMoreIcon } from "../../../icons";
+import { ArrowUpwardIcon, ExpandMoreIcon, FilterIcon, FilterListIcon } from "../../../icons";
 
 interface FilterFormProps<T> {
     column: VirtualTableColumn<T>;
@@ -37,7 +37,7 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
     onFilterUpdate: (column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => void;
     onClickResizeColumn?: (columnIndex: number, column: VirtualTableColumn) => void;
     createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
-    additionalChildren?: React.ReactNode;
+    additionalHeaderWidget?: (onHover: boolean) => React.ReactNode;
 };
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
@@ -52,7 +52,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                                                    column,
                                                                    onClickResizeColumn,
                                                                    createFilterField,
-                                                                   additionalChildren
+                                                                   additionalHeaderWidget
                                                                }: VirtualTableHeaderProps<M>) {
 
         const [onHover, setOnHover] = useState(false);
@@ -115,7 +115,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                     {column.sortable && (sort || hovered || openFilter) &&
                         <>
-                            {additionalChildren}
+                            {additionalHeaderWidget && additionalHeaderWidget(hovered || openFilter)}
                             <Badge color="secondary"
                                    invisible={!sort}>
                                 <IconButton
@@ -148,7 +148,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                         className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
                                         size={"small"}
                                         onClick={handleSettingsClick}>
-                                        <ExpandMoreIcon/>
+                                        <FilterListIcon size={"small"}/>
                                     </IconButton>}
                             >
                                 {column.filter &&
