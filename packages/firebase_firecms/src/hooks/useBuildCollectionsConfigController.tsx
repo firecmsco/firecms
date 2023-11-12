@@ -4,11 +4,11 @@ import React, { useCallback, useEffect, useMemo, useRef } from "react";
 import {
     CollectionsConfigController,
     DeleteCollectionParams,
+    namespaceToPropertiesPath,
     PersistedCollection,
-    SaveCollectionParams,
-    namespaceToPropertiesPath
+    SaveCollectionParams
 } from "@firecms/collection_editor";
-import { PermissionsBuilder, User } from "@firecms/core";
+import { PermissionsBuilder, removeUndefined, User } from "@firecms/core";
 import {
     applyPermissionsFunction,
     buildCollectionPath,
@@ -130,12 +130,14 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
                                           path,
                                           propertyKey,
                                           property,
+                                          newPropertiesOrder,
                                           parentPathSegments,
                                           namespace
                                       }: {
         path: string,
         propertyKey: string,
         property: any,
+        newPropertiesOrder?: string[],
         parentPathSegments?: string[],
         namespace?: string
     }): Promise<void> => {
@@ -145,8 +147,11 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
         const ref = doc(firestore, configPath, "collections", collectionPath);
         return runTransaction(firestore, async (transaction) => {
             const data = {
-                [namespaceToPropertiesPath(namespace) + "." + propertyKey]: property,
+                [namespaceToPropertiesPath(namespace) + "." + propertyKey]: removeUndefined(property),
             };
+            if (newPropertiesOrder) {
+                data.propertiesOrder = newPropertiesOrder;
+            }
             console.log("Saving property", {
                 path,
                 propertyKey,

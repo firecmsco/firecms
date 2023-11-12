@@ -229,6 +229,17 @@ export const EntityCollectionView = React.memo(
             setLastDeleteTimestamp(Date.now());
         }, [setSelectedEntities]);
 
+        let AddColumnComponent: React.ComponentType<{
+            fullPath: string,
+            parentPathSegments: string[],
+            collection: EntityCollection;
+        }> | undefined
+
+        // we are only using the first plugin that implements this
+        if (context?.plugins) {
+            AddColumnComponent = context.plugins.find(plugin => plugin.collectionView?.AddColumnComponent)?.collectionView?.AddColumnComponent;
+        }
+
         const onCollectionModifiedForUser = useCallback((path: string, partialCollection: PartialEntityCollection<M>) => {
             if (userConfigPersistence) {
                 const currentStoredConfig = userConfigPersistence.getCollectionConfig(path);
@@ -494,7 +505,11 @@ export const EntityCollectionView = React.memo(
                                                  property,
                                                  propertyKey,
                                                  onHover
-                                             }: { property: ResolvedProperty, propertyKey: string, onHover: boolean }) {
+                                             }: {
+            property: ResolvedProperty,
+            propertyKey: string,
+            onHover: boolean
+        }) {
             if (!context.plugins)
                 return null;
             return <>
@@ -511,6 +526,16 @@ export const EntityCollectionView = React.memo(
                     })}
             </>;
         }
+
+        const addColumnComponentInternal = AddColumnComponent
+            ? function () {
+                if (typeof AddColumnComponent === "function")
+                    return <AddColumnComponent fullPath={fullPath}
+                                               parentPathSegments={parentPathSegments ?? []}
+                                               collection={collection}/>;
+                return null;
+            }
+            : undefined;
 
         return (
             <div className={cn("overflow-hidden h-full w-full", className)}
@@ -547,6 +572,7 @@ export const EntityCollectionView = React.memo(
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
                     additionalHeaderWidget={buildAdditionalHeaderWidget}
+                    AddColumnComponent={addColumnComponentInternal}
                 />
 
                 <PopupFormField
@@ -660,5 +686,3 @@ function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityC
     }
     return { properties: { [key]: { columnWidth: width } } } as PartialEntityCollection;
 }
-
-

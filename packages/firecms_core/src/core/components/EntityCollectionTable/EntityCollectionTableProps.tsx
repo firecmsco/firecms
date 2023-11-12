@@ -125,6 +125,8 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
         onHover: boolean,
     }) => React.ReactNode;
 
+    AddColumnComponent?: React.ComponentType;
+
 }
 
 export type GetPropertyForProps<M extends Record<string, any>> = {

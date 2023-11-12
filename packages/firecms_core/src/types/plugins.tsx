@@ -116,6 +116,16 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
             fullPath: string,
             parentPathSegments: string[],
         }>;
+
+        /**
+         * If you add this callback to your plugin, an add button will be added to the collection table.
+         * TODO: Only the first plugin that defines this callback will be used, at the moment.
+         */
+        AddColumnComponent?: React.ComponentType<{
+            fullPath: string,
+            parentPathSegments: string[],
+            collection: EntityCollection;
+        }>;
     }
 
 }

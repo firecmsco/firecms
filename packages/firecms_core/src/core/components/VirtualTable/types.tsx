@@ -1,3 +1,4 @@
+import React from "react";
 import {
     CellRendererParams,
     OnRowClickParams,
@@ -39,4 +40,5 @@ export type VirtualTableContextProps<T extends any> = {
     createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
     rowClassName?: (rowData: T) => string | undefined;
     endAdornment?: React.ReactNode;
+    AddColumnComponent?: React.ComponentType;
 };

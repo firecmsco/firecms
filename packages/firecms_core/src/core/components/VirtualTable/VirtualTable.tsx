@@ -26,7 +26,10 @@ import { AssignmentIcon } from "../../../icons";
 const VirtualListContext = createContext<VirtualTableContextProps<any>>({} as any);
 VirtualListContext.displayName = "VirtualListContext";
 
-type InnerElementProps = { children: React.ReactNode, style: any };
+type InnerElementProps = {
+    children: React.ReactNode,
+    style: any
+};
 
 // eslint-disable-next-line react/display-name
 const innerElementType = forwardRef<HTMLDivElement, InnerElementProps>(({
@@ -107,7 +110,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              createFilterField,
                                                              rowClassName,
                                                              className,
-                                                             endAdornment
+                                                             endAdornment,
+                                                             AddColumnComponent
                                                          }: VirtualTableProps<T>) {
 
         const sortByProperty: string | undefined = sortBy ? sortBy[0] : undefined;
@@ -186,11 +190,11 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
 
         const maxScroll = Math.max((data?.length ?? 0) * getRowHeight(size) - bounds.height, 0);
         const onEndReachedInternal = useCallback((scrollOffset: number) => {
-            if (onEndReached && (data?.length ?? 0) > 0 && scrollOffset > endReachCallbackThreshold.current + 500) {
+            if (onEndReached && (data?.length ?? 0) > 0 && scrollOffset > endReachCallbackThreshold.current + 600) {
                 endReachCallbackThreshold.current = scrollOffset;
                 onEndReached();
             }
-        }, [data, onEndReached]);
+        }, [data?.length, onEndReached]);
 
         const onScroll = useCallback(({
                                           scrollOffset,
@@ -200,7 +204,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             scrollOffset: number,
             scrollUpdateWasRequested: boolean;
         }) => {
-            if (!scrollUpdateWasRequested && (scrollOffset >= maxScroll - 500))
+            if (!scrollUpdateWasRequested && (scrollOffset >= maxScroll - 600))
                 onEndReachedInternal(scrollOffset);
         }, [maxScroll, onEndReachedInternal]);
 
@@ -278,7 +282,8 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                         hoverRow: hoverRow ?? false,
                         createFilterField,
                         rowClassName,
-                        endAdornment
+                        endAdornment,
+                        AddColumnComponent
                     }}>
 
                     <MemoizedList
@@ -288,6 +293,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                         height={bounds.height}
                         itemCount={(data?.length ?? 0) + (endAdornment ? 1 : 0)}
                         onScroll={onScroll}
+                        includeAddColumn={Boolean(AddColumnComponent)}
                         itemSize={getRowHeight(size)}/>
 
                 </VirtualListContext.Provider>
@@ -303,7 +309,8 @@ function MemoizedList({
                           height,
                           itemCount,
                           onScroll,
-                          itemSize
+                          itemSize,
+                          includeAddColumn
                       }: {
     outerRef: RefObject<HTMLDivElement>;
     width: number;
@@ -315,6 +322,7 @@ function MemoizedList({
         scrollUpdateWasRequested: boolean;
     }) => void;
     itemSize: number;
+    includeAddColumn?: boolean;
 }) {
 
     const Row = useCallback(({
@@ -360,6 +368,7 @@ function MemoizedList({
                             top: `calc(${style.top}px + 48px)`
                         }}
                         size={size}>
+
                         {columns.map((column: VirtualTableColumn, columnIndex: number) => {
                             const cellData = rowData && rowData[column.key];
                             return <VirtualTableCell
@@ -373,6 +382,9 @@ function MemoizedList({
                                 rowIndex={index}
                                 columnIndex={columnIndex}/>;
                         })}
+
+                        {includeAddColumn && <div className={"w-20"}/>}
+
                     </VirtualTableRow>
                 );
             }}

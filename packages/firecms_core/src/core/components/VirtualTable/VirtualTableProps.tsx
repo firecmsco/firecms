@@ -136,6 +136,12 @@ export interface VirtualTableProps<T extends Record<string, any>> {
      */
     endAdornment?: React.ReactNode;
 
+    /**
+     * If adding this callback, a button to add a new column is displayed.
+     * @param column
+     */
+    AddColumnComponent?: React.ComponentType;
+
 }
 
 export type CellRendererParams<T extends any> = {

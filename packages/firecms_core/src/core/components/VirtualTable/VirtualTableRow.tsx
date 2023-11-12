@@ -15,7 +15,7 @@ export const VirtualTableRow = React.memo<VirtualTableRowProps<any>>(
                                     size,
                                     style,
                                     hoverRow,
-                                    rowClassName
+                                    rowClassName,
                                 }: VirtualTableRowProps<T>) {
 
         const onClick = useCallback((event: React.SyntheticEvent) => onRowClick

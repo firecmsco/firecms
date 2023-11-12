@@ -33,7 +33,7 @@ export function useEntityCollectionTableController<M extends Record<string, any>
         collection,
         entitiesDisplayedFirst,
         lastDeleteTimestamp,
-        forceFilter: forceFilterFromProps
+        forceFilter: forceFilterFromProps,
     }: EntityCollectionTableControllerProps<M>)
     : TableController<M> {
 

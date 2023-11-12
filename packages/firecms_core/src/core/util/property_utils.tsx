@@ -1,6 +1,6 @@
 import React from "react";
 
-import { FieldConfig, PropertiesOrBuilders, PropertyOrBuilder, ResolvedProperty } from "../../types";
+import { EntityCollection, FieldConfig, PropertiesOrBuilders, PropertyOrBuilder, ResolvedProperty } from "../../types";
 import { getFieldConfig } from "../form_field_configs";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
@@ -122,4 +122,9 @@ export function getPropertiesWithPropertiesOrder<M extends Record<string, any>>(
         }
     });
     return result;
+}
+
+export function getDefaultPropertiesOrder(collection: EntityCollection<any>): string[] {
+    if (collection.propertiesOrder) return collection.propertiesOrder;
+    return [...Object.keys(collection.properties), ...(collection.additionalFields ?? []).map(field => field.id)];
 }

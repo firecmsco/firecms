@@ -16,7 +16,8 @@ export const VirtualTableHeaderRow = ({
                                           filter,
                                           onColumnResize,
                                           onColumnResizeEnd,
-                                          createFilterField
+                                          createFilterField,
+                                          AddColumnComponent
                                       }: VirtualTableContextProps<any>) => {
 
     const columnRefs = columns.map(() => createRef<HTMLDivElement>());
@@ -123,6 +124,9 @@ export const VirtualTableHeaderRow = ({
                         additionalHeaderWidget={column.additionalHeaderWidget}/>
                 </ErrorBoundary>;
             })}
+
+            {AddColumnComponent && <AddColumnComponent/>}
+
         </div>
     );
 };

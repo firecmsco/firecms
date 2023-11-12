@@ -102,12 +102,13 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                  pageSize = 50,
                  paginationEnabled,
                  checkFilterCombination,
-                 setPopupCell
+                 setPopupCell,
              },
          filterable = true,
          sortable = true,
          endAdornment,
-         additionalHeaderWidget
+         additionalHeaderWidget,
+         AddColumnComponent
      }: EntityCollectionTableProps<M>) {
 
         const largeLayout = useLargeLayout();
@@ -414,6 +415,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         }, [selectedEntityIds])}
                         className="flex-grow"
                         endAdornment={endAdornment}
+                        AddColumnComponent={AddColumnComponent}
                     />
 
                 </div>

@@ -477,6 +477,8 @@ export type TableController<M extends Record<string, any> = any> = {
                               sortBy?: [string, "asc" | "desc"]) => boolean;
     popupCell?: SelectedCellProps<M>;
     setPopupCell?: (popupCell?: SelectedCellProps<M>) => void;
+
+    onAddColumn?: (column: string) => void;
 }
 
 export type SelectedCellProps<M extends Record<string, any>> = {
