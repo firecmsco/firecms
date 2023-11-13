@@ -5,6 +5,7 @@ import {
     AdditionalFieldDelegate,
     CollectionSize,
     Entity,
+    EntityCollection,
     FilterValues,
     FireCMSContext,
     ResolvedProperty,
@@ -102,13 +103,14 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                  pageSize = 50,
                  paginationEnabled,
                  checkFilterCombination,
-                 setPopupCell,
+                 setPopupCell
              },
          filterable = true,
          sortable = true,
          endAdornment,
-         additionalHeaderWidget,
-         AddColumnComponent
+         AddColumnComponent,
+         AdditionalHeaderWidget,
+         additionalIDHeaderWidget
      }: EntityCollectionTableProps<M>) {
 
         const largeLayout = useLargeLayout();
@@ -270,7 +272,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         }, [additionalFieldsMap, size, selectedEntityIds]);
 
-        const allColumns: VirtualTableColumn[] = useMemo(() => {
+        const collectionColumns: VirtualTableColumn[] = useMemo(() => {
                 const columnsResult: VirtualTableColumn[] = Object.entries<ResolvedProperty>(properties)
                     .flatMap(([key, property]) => getColumnKeysForProperty(property, key))
                     .map(({
@@ -294,11 +296,9 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                                 resolvedProperty: property,
                                 disabled
                             },
-                            additionalHeaderWidget: (onHover) => additionalHeaderWidget?.({
-                                property,
-                                propertyKey: key,
-                                onHover
-                            })
+                            AdditionalHeaderWidget: ({ onHover }) => AdditionalHeaderWidget
+                                ? <AdditionalHeaderWidget property={property} propertyKey={key} onHover={onHover}/>
+                                : undefined
                         };
                     });
 
@@ -322,16 +322,18 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
             title: "ID",
             resizable: false,
             frozen: largeLayout,
-            headerAlign: "center"
+            headerAlign: "center",
+            align: "center",
+            AdditionalHeaderWidget: () => additionalIDHeaderWidget
         }), [largeLayout])
 
         const columns: VirtualTableColumn[] = useMemo(() => [
             idColumn,
             ...displayedColumnIds
                 .map((p) => {
-                    return allColumns.find(c => c.key === p.key);
+                    return collectionColumns.find(c => c.key === p.key);
                 }).filter(Boolean) as VirtualTableColumn[]
-        ], [allColumns, displayedColumnIds, idColumn]);
+        ], [collectionColumns, displayedColumnIds, idColumn]);
 
         const cellRenderer = useCallback((props: CellRendererParams<any>) => {
             const column = props.column;
@@ -373,7 +375,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     onValueChange,
                     size,
                     selectedCell,
-                    selectedEntityIds,
+                    selectedEntityIds
                 }}
             >
 
@@ -503,3 +505,4 @@ function filterableProperty(property: ResolvedProperty, partOfArray = false): bo
     }
     return ["string", "number", "boolean", "date", "reference", "array"].includes(property.dataType);
 }
+

@@ -112,9 +112,9 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
         HeaderAction?: React.ComponentType<{
             property: ResolvedProperty,
             propertyKey: string,
-            onHover: boolean,
             fullPath: string,
             parentPathSegments: string[],
+            onHover: boolean,
         }>;
 
         /**

@@ -5,7 +5,7 @@ import { VirtualTableColumn, VirtualTableSort, VirtualTableWhereFilterOp } from 
 import { ErrorBoundary } from "../ErrorBoundary";
 import { Badge, Button, cn, IconButton, Popover } from "../../../components";
 import { defaultBorderMixin } from "../../../styles";
-import { ArrowUpwardIcon, ExpandMoreIcon, FilterIcon, FilterListIcon } from "../../../icons";
+import { ArrowUpwardIcon, FilterListIcon } from "../../../icons";
 
 interface FilterFormProps<T> {
     column: VirtualTableColumn<T>;
@@ -37,7 +37,7 @@ type VirtualTableHeaderProps<M extends Record<string, any>> = {
     onFilterUpdate: (column: VirtualTableColumn, filterForProperty?: [VirtualTableWhereFilterOp, any]) => void;
     onClickResizeColumn?: (columnIndex: number, column: VirtualTableColumn) => void;
     createFilterField?: (props: FilterFormFieldProps<any>) => React.ReactNode;
-    additionalHeaderWidget?: (onHover: boolean) => React.ReactNode;
+    AdditionalHeaderWidget?: (props: { onHover: boolean }) => React.ReactNode;
 };
 
 export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
@@ -52,7 +52,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                                                    column,
                                                                    onClickResizeColumn,
                                                                    createFilterField,
-                                                                   additionalHeaderWidget
+                                                                   AdditionalHeaderWidget
                                                                }: VirtualTableHeaderProps<M>) {
 
         const [onHover, setOnHover] = useState(false);
@@ -112,10 +112,12 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
 
                         </div>
                     </div>
+                    <>
 
-                    {column.sortable && (sort || hovered || openFilter) &&
-                        <>
-                            {additionalHeaderWidget && additionalHeaderWidget(hovered || openFilter)}
+                        {AdditionalHeaderWidget &&
+                            <AdditionalHeaderWidget onHover={onHover || openFilter}/>}
+
+                        {column.sortable && (sort || hovered || openFilter) &&
                             <Badge color="secondary"
                                    invisible={!sort}>
                                 <IconButton
@@ -133,8 +135,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                         <ArrowUpwardIcon className={"rotate-180"}/>}
                                 </IconButton>
                             </Badge>
-                        </>
-                    }
+                        }
+                    </>
 
                     {column.filter && createFilterField && <div>
                         <Badge color="secondary"
@@ -220,11 +222,7 @@ function FilterForm<M>({
 
     if (!filterField) return null;
     return (
-        <div className={
-            cn(
-                "text-gray-900 dark:text-white",
-            )
-        }>
+        <div className={"text-gray-900 dark:text-white"}>
             <div
                 className={cn(defaultBorderMixin, "py-4 px-6 text-xs font-semibold uppercase border-b")}>
                 {column.title ?? id}

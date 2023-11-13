@@ -46,12 +46,12 @@ import {
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { useEntityCollectionTableController } from "../EntityCollectionTable/useEntityCollectionTableController";
-import { Button, cn, Typography } from "../../../components";
+import { Button, cn, IconButton, TextField, Tooltip, Typography } from "../../../components";
 import { Popover } from "../../../components/Popover";
 import { Skeleton } from "../../../components/Skeleton";
 import { setIn } from "formik";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
-import { KeyboardTabIcon } from "../../../icons";
+import { KeyboardTabIcon, SearchIcon } from "../../../icons";
 import { useColumnIds } from "./useColumnsIds";
 import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
 import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";
@@ -517,10 +517,10 @@ export const EntityCollectionView = React.memo(
                     .map((plugin, i) => {
                         const HeaderAction = plugin.collectionView!.HeaderAction!;
                         return <HeaderAction
+                            onHover={onHover}
                             key={`plugin_header_action_${i}`}
                             propertyKey={propertyKey}
                             property={property}
-                            onHover={onHover}
                             fullPath={fullPath}
                             parentPathSegments={parentPathSegments ?? []}/>;
                     })}
@@ -571,8 +571,11 @@ export const EntityCollectionView = React.memo(
                     />}
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
-                    additionalHeaderWidget={buildAdditionalHeaderWidget}
+                    AdditionalHeaderWidget={buildAdditionalHeaderWidget}
                     AddColumnComponent={addColumnComponentInternal}
+                    additionalIDHeaderWidget={<EntityIdHeaderWidget
+                        path={fullPath}
+                        collection={collection}/>}
                 />
 
                 <PopupFormField
@@ -685,4 +688,55 @@ function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityC
         return { properties: { [parentKey]: buildPropertyWidthOverwrite(childKey.join("."), width) } } as PartialEntityCollection;
     }
     return { properties: { [key]: { columnWidth: width } } } as PartialEntityCollection;
+}
+
+function EntityIdHeaderWidget({ collection, path }: {
+    collection: EntityCollection,
+    path: string
+}) {
+    const [openPopup, setOpenPopup] = React.useState(false);
+    const [searchString, setSearchString] = React.useState("");
+    const sideEntityController = useSideEntityController();
+    return (
+        <Tooltip title={!openPopup ? "Find by ID" : undefined}>
+            <Popover
+                open={openPopup}
+                onOpenChange={setOpenPopup}
+                trigger={
+                    <IconButton size={"small"}>
+                        <SearchIcon size={"small"}/>
+                    </IconButton>
+                }
+            >
+                <form noValidate={true}
+                      onSubmit={(e) => {
+                          e.preventDefault();
+                          if (!searchString) return;
+                          setOpenPopup(false);
+                          return sideEntityController.open({
+                              entityId: searchString,
+                              path,
+                              collection,
+                              updateUrl: true
+                          });
+                      }}
+                      className={"text-gray-900 dark:text-white w-96 max-w-full"}>
+
+                    <div className="flex p-4 w-full gap-4">
+                        <TextField
+                            placeholder={"Find entity by ID"}
+                            size={"small"}
+                            onChange={(e) => setSearchString(e.target.value)}
+                            value={searchString}
+                            className={"flex-grow"}/>
+                        <Button variant={"outlined"}
+                                disabled={!searchString}
+                                type={"submit"}
+                        >Go</Button>
+                    </div>
+                </form>
+            </Popover>
+
+        </Tooltip>
+    );
 }

@@ -89,7 +89,7 @@ export function TextField<T extends string | number>({
         ? <TextareaAutosize
             {...inputProps as any}
             ref={inputRef}
-            placeholder={!focused && !hasValue ? undefined : placeholder}
+            placeholder={focused || hasValue || !label ? placeholder : undefined}
             autoFocus={autoFocus}
             rows={rows}
             // onFocus={() => setFocused(true)}
@@ -121,7 +121,7 @@ export function TextField<T extends string | number>({
                 disabled && "border border-transparent outline-none opacity-50 dark:opacity-50 text-gray-800 dark:text-gray-200",
                 inputClassName
             )}
-            placeholder={!focused && !hasValue ? undefined : placeholder}
+            placeholder={focused || hasValue || !label ? placeholder : undefined}
             autoFocus={autoFocus}
             onFocus={() => setFocused(true)}
             onBlur={() => setFocused(false)}
