@@ -1,6 +1,6 @@
 {
   "name": "@firecms/core",
-  "version": "3.0.0-alpha.26",
+  "version": "3.0.0-alpha.27",
   "description": "Awesome Firebase/Firestore-based headless open-source CMS",
   "funding": {
     "url": "https://github.com/sponsors/firecmsco"
@@ -133,7 +133,7 @@
     "dist",
     "src"
   ],
-  "gitHead": "8bce80c65696930df7a8003b0b5d0310f595d46d",
+  "gitHead": "6cf98e00ea1eee087526615c741eeeedfaf400b7",
   "publishConfig": {
     "access": "public"
   }
