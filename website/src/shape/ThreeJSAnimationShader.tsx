@@ -590,9 +590,9 @@ void main(){
     color = czm_saturation(color, 1.5);
     
     if(u_dark_mode == 1.0){
-        color.g = color.g * 0.25;
-        color.r = color.r * 0.25;
-        color.b = color.b * 0.35;
+        color.g = color.g * 0.15;
+        color.r = color.r * 0.15;
+        color.b = color.b * 0.20;
         if(v_position.z < 0.0){
             color.rg *= ((u_sphere_radius - v_position.z) / u_sphere_radius * 0.1);
             color.b *= ((u_sphere_radius - v_position.z) / u_sphere_radius * 1.30);
