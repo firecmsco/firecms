@@ -13,7 +13,7 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "./text_search";
 
-export type FireCMSCustomization = {
+export type FireCMSAppConfig = {
 
     /**
      * Customization schema version.
