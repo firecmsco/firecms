@@ -7,7 +7,6 @@ import ncp from "ncp";
 import { promisify } from "util";
 import execa from "execa";
 import Listr from "listr";
-import { projectInstall } from "pkg-install";
 
 import JSON5 from "json5";
 import axios from "axios";
@@ -26,7 +25,7 @@ export type InitOptions = Partial<{
     targetDirectory: string;
     templateDirectory: string;
 
-    skipInstall: boolean;
+    // skipInstall: boolean;
 
     authToken?: string;
     firebaseProjectId?: string;
@@ -104,7 +103,7 @@ function parseArgumentsIntoOptions(rawArgs): InitOptions {
         // skipPrompts: args["--yes"] || false,
         git: args["--git"] || false,
         dir_name: args._[0],
-        skipInstall: args["--skipInstall"] || false,
+        // skipInstall: args["--skipInstall"] || false,
         v2: args["--v2"] || false,
         firebaseProjectId: args["--projectId"],
         env
@@ -232,17 +231,17 @@ export async function createProject(options: InitOptions) {
             task: () => initGit(options),
             enabled: () => options.git,
         },
-        {
-            title: "Install dependencies",
-            task: () =>
-                projectInstall({
-                    cwd: options.targetDirectory,
-                }),
-            skip: () =>
-                options.skipInstall
-                    ? "Pass --skipInstall to skip automatically installing dependencies"
-                    : undefined,
-        },
+        // {
+        //     title: "Install dependencies",
+        //     task: () =>
+        //         projectInstall({
+        //             cwd: options.targetDirectory,
+        //         }),
+        //     skip: () =>
+        //         options.skipInstall
+        //             ? "Pass --skipInstall to skip automatically installing dependencies"
+        //             : undefined,
+        // },
     ]);
 
     await tasks.run();
@@ -257,12 +256,13 @@ export async function createProject(options: InitOptions) {
         console.log("");
         console.log("Then run:");
         console.log(chalk.cyan.bold("cd " + options.dir_name));
-        if (options.skipInstall)
-            console.log(chalk.cyan.bold("yarn"));
+        console.log(chalk.cyan.bold("yarn"));
         console.log(chalk.cyan.bold("yarn dev"));
         console.log("");
     } else {
         console.log("If you want to run your project locally, run:");
+        console.log(chalk.bgYellow.black.bold("cd " + options.dir_name));
+        console.log(chalk.cyan.bold("yarn install"));
         console.log(chalk.bgYellow.black.bold("yarn dev"));
         console.log("");
         console.log("If you want to deploy your project, run:");
