@@ -83,7 +83,7 @@ export async function uploadZip(projectId: string, zipFilePath: string, env: "pr
 
         if (response.status === 200) {
             spinner.succeed();
-            console.log("\nSuccessfully uploaded new build");
+            console.log("🔥 Successfully uploaded new build");
         } else {
             console.error("There was an error uploading the build");
             console.error(response.data);
