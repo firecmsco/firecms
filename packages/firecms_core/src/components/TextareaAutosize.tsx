@@ -55,6 +55,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         onFocus,
         onBlur,
         sizeRef,
+        ignoreBoxSizing,
         ...other
     } = props;
 
@@ -124,7 +125,7 @@ export const TextareaAutosize = React.forwardRef(function TextareaAutosize(
         outerHeight = Math.max(outerHeight, singleRowHeight, minHeight);
 
         // Take the box sizing into account for applying this value as a style.
-        const outerHeightStyle = outerHeight + (!props.ignoreBoxSizing && boxSizing === "border-box" ? padding + border : 0);
+        const outerHeightStyle = outerHeight + (!ignoreBoxSizing && boxSizing === "border-box" ? padding + border : 0);
 
         const overflow = Math.abs(outerHeight - innerHeight) <= 1;
 
