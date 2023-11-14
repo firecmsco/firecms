@@ -47,7 +47,7 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
 `);
     let options = parseArgumentsIntoOptions(args);
 
-    let currentUser = await getCurrentUser();
+    let currentUser = await getCurrentUser(args.env);
     if (!options.v2 && !currentUser) {
         console.log("You need to be logged in to create a project");
         await inquirer.prompt([
@@ -63,7 +63,7 @@ ${chalk.red.bold("Welcome to the FireCMS CLI")} 🔥
             }
         });
 
-        let currentUser = await getCurrentUser();
+        let currentUser = await getCurrentUser(args.env);
         if (!currentUser) {
             console.log("The login process was not completed. Exiting...");
             return;
@@ -329,7 +329,7 @@ function writeWebAppConfig(options: InitOptions, webappConfig: object) {
 async function getProjects(env: "prod" | "dev") {
 
     try {
-        const tokens = await refreshCredentials(env, await getTokens());
+        const tokens = await refreshCredentials(env, await getTokens(env));
         const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
         const response = await axios.get(server + "/gcp_projects", {
             headers: {

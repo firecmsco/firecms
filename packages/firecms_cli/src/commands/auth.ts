@@ -11,8 +11,8 @@ import EventEmitter from "events";
 const https = require("https");
 const url = require("url");
 
-export async function getCurrentUser(): Promise<object | null> {
-    const userCredential = await getTokens();
+export async function getCurrentUser(env: "prod" | "dev"): Promise<object | null> {
+    const userCredential = await getTokens(env);
     if (!userCredential) {
         return null;
     }
@@ -21,7 +21,7 @@ export async function getCurrentUser(): Promise<object | null> {
 
 export async function login(env: "prod" | "dev") {
     const emitter = new EventEmitter();
-    const currentUser = await getCurrentUser();
+    const currentUser = await getCurrentUser(env);
     if (currentUser) {
         console.log("You are already logged in as", currentUser["email"]);
         console.log("Run 'firecms logout' to sign out");
@@ -63,9 +63,9 @@ export async function login(env: "prod" | "dev") {
 
     }).listen(3000);
 
-    server.on('connection', (socket) => {
+    server.on("connection", (socket) => {
         activeConnections.add(socket);
-        socket.on('close', () => {
+        socket.on("close", () => {
             activeConnections.delete(socket);
         });
     });
@@ -80,7 +80,7 @@ export async function login(env: "prod" | "dev") {
                 return reject("Token could not be obtained");
             } else {
                 console.log("You have successfully logged in.");
-                saveTokens(tokens);
+                saveTokens(tokens, env);
                 resolve(tokens);
             }
             for (const socket of activeConnections) {
@@ -92,14 +92,14 @@ export async function login(env: "prod" | "dev") {
 }
 
 // save this token to a file in .firecms or program data
-function saveTokens(tokens: object) {
+function saveTokens(tokens: object, env: "prod" | "dev") {
     const dirPath = path.join(os.homedir(), ".firecms");
 
     if (!fs.existsSync(dirPath)) {
         fs.mkdirSync(dirPath);
     }
 
-    const filePath = path.join(dirPath, "tokens.json");
+    const filePath = path.join(dirPath, (env === "dev" ? "staging." : "") + "tokens.json");
 
     const data = JSON.stringify(tokens);
 
@@ -109,26 +109,26 @@ function saveTokens(tokens: object) {
 
 }
 
-export async function logout() {
+export async function logout(env: "prod" | "dev") {
 
-    const userCredential = await getTokens();
+    const userCredential = await getTokens(env);
     if (!userCredential) {
         console.log("You are not logged in");
         console.log("Run 'firecms login' to log in");
         return;
     }
 
-    revokeToken(userCredential["access_token"]);
+    revokeToken(userCredential["access_token"], env);
 
     const dirPath = path.join(os.homedir(), ".firecms");
-    const filePath = path.join(dirPath, "tokens.json");
+    const filePath = path.join(dirPath, (env === "dev" ? "staging." : "") + "tokens.json");
     fs.unlinkSync(filePath);
     console.log("You have successfully logged out.")
 }
 
-export async function getTokens(): Promise<object | null> {
+export async function getTokens(env: "prod" | "dev"): Promise<object | null> {
     const dirPath = path.join(os.homedir(), ".firecms");
-    const filePath = path.join(dirPath, "tokens.json");
+    const filePath = path.join(dirPath, (env === "dev" ? "staging." : "") + "tokens.json");
 
     if (!fs.existsSync(filePath)) {
         return null;
@@ -141,15 +141,15 @@ export async function getTokens(): Promise<object | null> {
                 return;
             }
             const result = JSON.parse(data);
-            if(result["env"] === "dev") {
-               console.log("Using DEV environment");
+            if (result["env"] === "dev") {
+                console.log("Using DEV environment");
             }
             resolve(result);
         });
     });
 }
 
-function revokeToken(accessToken: string) {
+function revokeToken(accessToken: string, env: "prod" | "dev") {
     // Build the string for the POST request
     let postData = "token=" + accessToken;
 
@@ -208,7 +208,7 @@ async function getAuthURL(env: "prod" | "dev") {
     return response.data.data;
 }
 
-export async function refreshCredentials(env:string, credentials?: object) {
+export async function refreshCredentials(env: "dev" | "prod", credentials?: object) {
     if (credentials) {
         const expiryDate = new Date(credentials["expiry_date"]);
         const now = new Date();
@@ -224,7 +224,7 @@ export async function refreshCredentials(env:string, credentials?: object) {
             throw new Error("Error refreshing credentials");
         }
         const newCredentials = response.data.data;
-        saveTokens({ ...credentials, ...newCredentials, env });
+        saveTokens({ ...credentials, ...newCredentials, env }, env);
         return newCredentials;
     } catch (error) {
         console.error("Error refreshing credentials", error.response?.data);

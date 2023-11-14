@@ -10,7 +10,7 @@ import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import ora from "ora";
 
 export async function deploy(projectId: string, env: "prod" | "dev") {
-    const currentUser = await getCurrentUser();
+    const currentUser = await getCurrentUser(env);
     if (!currentUser) {
         console.log("You are not logged in");
         console.log("Run 'firecms login' to log in");
@@ -57,7 +57,7 @@ export async function uploadZip(projectId: string, zipFilePath: string, env: "pr
     }
     const spinner = ora("Uploading build of project " + projectId).start();
 
-    const tokens = await refreshCredentials(env, await getTokens());
+    const tokens = await refreshCredentials(env, await getTokens(env));
 
     const form = new FormData();
 
