@@ -4,6 +4,11 @@
       "type": "doc",
       "label": "Introduction",
       "id": "intro"
+    },
+    {
+      "type": "doc",
+      "label": "Introduction",
+      "id": "what_is_new_v3.mdx"
     }
   ]
 }

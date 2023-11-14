@@ -1,24 +1,122 @@
 ---
-id: what_is_new_v3
-title: What's new in FireCMS 3.0
-sidebar_label: What's new in FireCMS 3.0
+id: migrating_from_v2.mdx
+title: Migrating from FireCMS 2.0
+sidebar_label: Migrating from FireCMS 2.0
 ---
+
 
 FireCMS 3.0 is a major release that introduces a lot of changes. This page
 describes the main changes and how to migrate from FireCMS 2.0.
 
-FireCMS 3.0 now makes use of a backend to provide a more flexible and
-customizable experience.
 
-Until now, FireCMS was a frontend-only library that would connect directly to
-the client-side Firebase SDK. This was great for simple use cases, but it
-limited the flexibility of the library. For example, it was not possible to
-customize collections from the UI, since they were hard coded in the clients
-code.
+## Create a project in app.firecms.co
 
-Having a backend allows us to store configuration in Firestore, and to make it easy for end users
-to modify the schemas. We have done a lot of work to **prevent polluting your database** with
-FireCMS' configuration.
+FireCMS 3.0 now requires to create a project in [app.firecms.co](https://app.firecms.co).
 
-Having a backend also allows us to provide a better experience by offering additional features
-such as data enhancement through OpenAPI GPT-4.
+The new version provides a backend service that allows you to manage your
+collections and schemas. The final users are now able to modify collections,
+so we use a centralised service to store the configuration.
+
+By doing this you will **not need to specify your Firebase project credentials**,
+since the service will be able to access your project directly. You will only need
+to specify the **project id**.
+
+
+## Migrating collections to the new format
+
+Despite the new format, FireCMS aims allow users to migrate existing apps with minimal
+changes. The collections can be now stored both in the FireCMS backend or defined in
+code like until now.
+
+Also, you can have collections defined in both places, and decide if the code defined collections
+can be modified by the user or not.
+
+## New format
+
+Since it is now possible to deploy FireCMS in our hosted service, the output
+of your project needs to be a in a specific format.
+
+The `index.ts` file should export a `FireCMSAppConfig` object, which is defined as follows:
+
+```
+export type FireCMSAppConfig = {
+
+    /**
+     * Customization schema version.
+     */
+    version: "1";
+
+    /**
+     * List of the mapped collections in the CMS.
+     * Each entry relates to a collection in the root database.
+     * Each of the navigation entries in this field
+     * generates an entry in the main menu.
+     */
+    collections?: EntityCollection[] | EntityCollectionsBuilder;
+
+    /**
+     * Custom additional views created by the developer, added to the main
+     * navigation.
+     */
+    views?: CMSView[] | CMSViewsBuilder;
+
+    /**
+     * List of custom form fields to be used in the CMS.
+     * You can use the key to reference the custom field in
+     * the `fieldConfig` prop of a property in a collection.
+     */
+    fields?: FieldConfig[];
+
+    /**
+     * List of additional custom views for entities.
+     * You can use the key to reference the custom view in
+     * the `entityViews` prop of a collection.
+     *
+     * You can also define an entity view from the UI.
+     */
+    entityViews?: EntityCustomView[];
+
+}
+```
+
+Let's break down the different fields:
+
+## Collection configuration
+
+Collections have suffered minimal changes. If you don't have any custom components defined, it should be
+easy to adapt your collections to the new format.
+
+Simply export your collections in your `index.ts` file:
+
+```typescript
+
+```
+
+- The `views` property has been renamed to `entityViews`, since they are applied to entities.
+  - The `path` prop of views has been renamed to `key`, for consistency with the rest of the library.
+
+## No longer supported features:
+- `ExportMappingFunction` is not currently supported. Reach out to us if you need this feature.
+
+## Migrating custom components
+
+FireCMS 3.0 is based on tailwindcss instead of material-ui.
+
+The new version of FireCMS has built in almost 50 new components implemented with tailwindcss, that
+mimic in a good way the material-ui components. You are encouraged to migrate your custom components
+to the new format.
+
+However, if you want to keep using mui: you can still use the old components, but you will need to
+install the `mui` package manually.
+
+```
+yarn add @mui/material @emotion/react @emotion/styled
+```
+
+If you need MUI icons, run:
+
+```
+yarn add @mui/icons-material
+```
+
+

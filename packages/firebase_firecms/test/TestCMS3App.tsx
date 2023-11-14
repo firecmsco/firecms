@@ -48,7 +48,7 @@ import {
     FirebaseSignInOption,
     FirebaseSignInProvider,
     FireCMSBackend,
-    FireCMSCustomization,
+    FireCMSAppConfig,
     FireCMSUser
 } from "../src/types";
 import { FirestoreTextSearchController } from "../src/types/text_search";
@@ -94,7 +94,7 @@ export function FireCMS3App({
                                 basePath,
                                 baseCollectionPath,
                                 onAnalyticsEvent,
-                                customization,
+                                appConfig,
                                 backendApiHost = "https://api-kdoe6pj3qq-ey.a.run.app" // TODO
                             }: FireCMS3AppProps) {
 
@@ -117,7 +117,7 @@ export function FireCMS3App({
         component = <Mock3Client
             fireCMSBackend={fireCMSBackend}
             projectId={projectId}
-            customization={customization}
+            appConfig={appConfig}
             basePath={basePath}
             baseCollectionPath={baseCollectionPath}
             onAnalyticsEvent={onAnalyticsEvent}
@@ -135,7 +135,7 @@ export type Mock3ClientProps = {
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     fireCMSBackend: FireCMSBackend,
     projectId: string;
-    customization?: FireCMSCustomization;
+    appConfig?: FireCMSAppConfig;
     onFirebaseInit?: (config: object, app: FirebaseApp) => void;
     appCheckOptions?: AppCheckOptions;
     textSearchController?: FirestoreTextSearchController;
@@ -294,7 +294,7 @@ function Mock3AppAuthenticated({
                                    collectionConfigController,
                                    appCheckOptions,
                                    textSearchController,
-                                   customization,
+                                   appConfig,
                                    dateTimeFormat,
                                    locale,
                                    basePath,
@@ -372,8 +372,8 @@ function Mock3AppAuthenticated({
                     <ModeControllerProvider
                         value={modeController}>
                         <FireCMS
-                            collections={customization?.collections}
-                            views={customization?.views}
+                            collections={appConfig?.collections}
+                            views={appConfig?.views}
                             fields={{}} // TODO
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
@@ -402,10 +402,10 @@ function Mock3AppAuthenticated({
                                             logo={currentProjectController.logo}
                                             Drawer={FireCMSDrawer}
                                             FireCMSAppBarComponent={FireCMSAppBarComponent}
-                                            fireCMSAppBarComponentProps={customization?.fireCMSAppBarComponentProps}
-                                            autoOpenDrawer={customization?.autoOpenDrawer}>
+                                            fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}
+                                            autoOpenDrawer={appConfig?.autoOpenDrawer}>
                                             <NavigationRoutes
-                                                HomePage={customization?.HomePage ?? FireCMSProjectHomePage}
+                                                HomePage={appConfig?.HomePage ?? FireCMSProjectHomePage}
                                                 customRoutes={customSaasRoutes}/>
                                             <SideDialogs/>
                                         </Scaffold>

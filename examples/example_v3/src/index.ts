@@ -1,9 +1,9 @@
-import { FireCMSCustomization } from "@firecms/firebase";
+import { FireCMSAppConfig } from "@firecms/firebase";
 import { testCollection } from "./collections/test_collection";
 import { productsCollection } from "./collections/products_collection";
 import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
 
-const customization: FireCMSCustomization = {
+const appConfig: FireCMSAppConfig = {
     version: "1",
     collections: async (props) => {
         return ([
@@ -29,4 +29,4 @@ const customization: FireCMSCustomization = {
     }]
 }
 
-export default customization;
+export default appConfig;

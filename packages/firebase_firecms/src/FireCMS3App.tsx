@@ -54,7 +54,7 @@ import {
     FirebaseSignInOption,
     FirebaseSignInProvider,
     FireCMSBackend,
-    FireCMSCustomization,
+    FireCMSAppConfig,
     FireCMSUser
 } from "./types";
 import {
@@ -89,7 +89,7 @@ import { useImportExportPlugin } from "./hooks/useImportExportPlugin";
  */
 export function FireCMS3App({
                                 projectId,
-                                customization,
+                                appConfig,
                                 backendApiHost = "https://api-kdoe6pj3qq-ey.a.run.app", // TODO
                                 onAnalyticsEvent,
                                 basePath,
@@ -138,7 +138,7 @@ export function FireCMS3App({
             fireCMSBackend={fireCMSBackend}
             projectId={projectId}
             modeController={modeController}
-            customization={customization}
+            appConfig={appConfig}
             basePath={basePath}
             baseCollectionPath={baseCollectionPath}
             onAnalyticsEvent={onAnalyticsEvent}
@@ -155,7 +155,7 @@ export type FireCMS3ClientProps = {
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     fireCMSBackend: FireCMSBackend,
     projectId: string;
-    customization?: FireCMSCustomization;
+    appConfig?: FireCMSAppConfig;
     modeController: ModeController;
     FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps>;
     basePath?: string;
@@ -205,7 +205,7 @@ export function FireCMS3ClientWithController({
                                                  projectId,
                                                  fireCMSBackend,
                                                  signInOptions,
-                                                 customization,
+                                                 appConfig,
                                                  customizationLoading,
                                                  ...props
                                              }: FireCMS3ClientProps & {
@@ -222,7 +222,7 @@ export function FireCMS3ClientWithController({
         firebaseConfigLoading,
         configError: firebaseConfigError
     } = useInitialiseFirebase({
-        onFirebaseInit: customization?.onFirebaseInit,
+        onFirebaseInit: appConfig?.onFirebaseInit,
         firebaseConfig: currentProjectController.clientFirebaseConfig,
         name: projectId
     });
@@ -342,7 +342,7 @@ export function FireCMS3ClientWithController({
     return <FireCMS3AppAuthenticated
         fireCMSUser={fireCMSUser}
         fireCMSBackend={fireCMSBackend}
-        customization={customization}
+        appConfig={appConfig}
         authController={authController}
         currentProjectController={currentProjectController}
         collectionConfigController={configController}
@@ -364,7 +364,7 @@ function FireCMS3AppAuthenticated({
                                       firebaseApp,
                                       currentProjectController,
                                       collectionConfigController,
-                                      customization,
+                                      appConfig,
                                       authController,
                                       modeController,
                                       fireCMSBackend,
@@ -423,7 +423,7 @@ function FireCMS3AppAuthenticated({
     //     appCheckLoading,
     // } = useInitializeAppCheck({
     //     firebaseApp,
-    //     options: customization.appCheckOptions
+    //     options: appConfig.appCheckOptions
     // });
 
     /**
@@ -441,8 +441,8 @@ function FireCMS3AppAuthenticated({
      */
     const dataSource = useFirestoreDataSource({
         firebaseApp,
-        textSearchController: customization?.textSearchController,
-        firestoreIndexesBuilder: customization?.firestoreIndexesBuilder
+        textSearchController: appConfig?.textSearchController,
+        firestoreIndexesBuilder: appConfig?.firestoreIndexesBuilder
     });
 
     /**
@@ -459,11 +459,13 @@ function FireCMS3AppAuthenticated({
 
     const fieldsMap = useMemo(() => {
         const fieldsMap: Record<string, any> = {};
-        customization?.fields?.forEach(field => {
+        appConfig?.fields?.forEach(field => {
             fieldsMap[field.key] = field;
         });
         return fieldsMap;
-    }, [customization?.fields]);
+    }, [appConfig?.fields]);
+
+    console.log("inner appConfig", appConfig)
 
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
@@ -472,11 +474,11 @@ function FireCMS3AppAuthenticated({
                     <ModeControllerProvider
                         value={modeController}>
                         <FireCMS
-                            collections={customization?.collections}
-                            dateTimeFormat={customization?.dateTimeFormat}
-                            views={customization?.views}
-                            entityViews={customization?.entityViews}
-                            locale={customization?.locale}
+                            collections={appConfig?.collections}
+                            dateTimeFormat={appConfig?.dateTimeFormat}
+                            views={appConfig?.views}
+                            entityViews={appConfig?.entityViews}
+                            locale={appConfig?.locale}
                             fields={fieldsMap}
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
@@ -505,7 +507,7 @@ function FireCMS3AppAuthenticated({
                                             logo={currentProjectController.logo}
                                             includeDrawer={false}
                                             FireCMSAppBarComponent={FireCMSAppBarComponent}
-                                            fireCMSAppBarComponentProps={customization?.fireCMSAppBarComponentProps}>
+                                            fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}>
                                             <CircularProgressCenter/>
                                         </Scaffold>;
                                 } else {
@@ -516,10 +518,10 @@ function FireCMS3AppAuthenticated({
                                             logo={currentProjectController.logo}
                                             Drawer={FireCMSDrawer}
                                             FireCMSAppBarComponent={FireCMSAppBarComponent}
-                                            fireCMSAppBarComponentProps={customization?.fireCMSAppBarComponentProps}
-                                            autoOpenDrawer={customization?.autoOpenDrawer}>
+                                            fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}
+                                            autoOpenDrawer={appConfig?.autoOpenDrawer}>
                                             <NavigationRoutes
-                                                HomePage={customization?.HomePage ?? FireCMSProjectHomePage}
+                                                HomePage={appConfig?.HomePage ?? FireCMSProjectHomePage}
                                                 customRoutes={adminRoutes}/>
                                             <SideDialogs/>
                                         </Scaffold>

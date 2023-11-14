@@ -11,7 +11,7 @@ import {
 } from "firebase/firestore";
 import { FirebaseApp } from "firebase/app";
 import { ProjectSubscriptionPlan, Role, FireCMSUserProject } from "../types";
-import { CMSType } from "@firecms/core";
+import { CMSType, UploadFileProps } from "@firecms/core";
 import { FirebaseStorage, getDownloadURL, getStorage, ref, StorageReference, uploadBytes } from "firebase/storage";
 import { ProjectsApi } from "../api/projects";
 
@@ -247,7 +247,7 @@ export function useBuildProjectConfig({
 
                     setClientProjectName(snapshot.get("name"));
                     setSubscriptionPlan(snapshot.get("subscription_plan") ?? "free"); // TODO: remove default value
-                    const currentCustomizationRevision = snapshot.get("current_customization_revision");
+                    const currentCustomizationRevision = snapshot.get("current_app_config_revision");
                     setCustomizationRevision(currentCustomizationRevision);
 
                     const firebaseConfig = snapshot.get("firebase_config");
@@ -310,13 +310,6 @@ export function useBuildProjectConfig({
         canUploadLogo,
         canExport
     }
-}
-
-export interface UploadFileProps {
-    file: File,
-    fileName?: string,
-    path?: string,
-    metadata?: any,
 }
 
 const uploadFile = (storage: FirebaseStorage, {

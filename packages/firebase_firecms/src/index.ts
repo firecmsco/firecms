@@ -8,4 +8,7 @@ export * from "./api/projects";
 export * from "./FireCMS3App";
 export type { FireCMS3AppProps } from "./FireCMS3AppProps";
 
-export * from "./collection_editor/infer_collection"
+export * from "./collection_editor/infer_collection";
+
+// we export everything in this package for simplicity
+export * from "@firecms/core";

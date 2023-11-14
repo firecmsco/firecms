@@ -1,5 +1,5 @@
 import { CMSAnalyticsEvent } from "@firecms/core";
-import { FireCMSCustomization } from "./types";
+import { FireCMSAppConfig } from "./types";
 
 /**
  * Main entry point that defines the CMS configuration
@@ -15,7 +15,7 @@ export type FireCMS3AppProps = {
     /**
      * Customization object to define the CMS.
      */
-    customization: FireCMSCustomization;
+    appConfig: FireCMSAppConfig;
 
     /**
      * Default path under the navigation routes of the CMS will be created.
