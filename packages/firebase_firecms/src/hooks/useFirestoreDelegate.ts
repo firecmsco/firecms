@@ -1,22 +1,18 @@
 import {
     DataSource,
+    DataSourceDelegate,
     DeleteEntityProps,
     Entity,
     EntityCollection,
     EntityReference,
-    EntityValues,
-    FetchCollectionProps,
+    FetchCollectionDelegateProps,
     FetchEntityProps,
     FilterCombination,
     FilterValues,
-    GeoPoint,
+    GeoPoint, ListenCollectionDelegateProps,
     ListenCollectionProps,
     ListenEntityProps,
-    resolveCollection,
-    ResolvedProperties,
-    ResolvedProperty,
     SaveEntityProps,
-    updateDateAutoValues,
     WhereFilterOp
 } from "@firecms/core";
 import {
@@ -28,7 +24,6 @@ import {
     doc,
     DocumentReference,
     DocumentSnapshot,
-    Firestore,
     GeoPoint as FirestoreGeoPoint,
     getCountFromServer,
     getDoc,
@@ -49,7 +44,7 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../types/text_search";
 import { useCallback } from "react";
-import { setDateToMidnight } from "../utils/dates";
+import { cmsToFirestoreModel } from "./useFirestoreDataSource";
 
 /**
  * @category Firebase
@@ -78,11 +73,11 @@ export type FirestoreIndexesBuilder = (params: {
  * @param collectionRegistry
  * @category Firebase
  */
-export function useFirestoreDataSource({
-                                           firebaseApp,
-                                           textSearchController,
-                                           firestoreIndexesBuilder
-                                       }: FirestoreDataSourceProps): DataSource {
+export function useFirestoreDelegate({
+                                         firebaseApp,
+                                         textSearchController,
+                                         firestoreIndexesBuilder
+                                     }: FirestoreDataSourceProps): DataSourceDelegate {
 
     const createEntityFromCollection = useCallback(<M extends Record<string, any>>(
         docSnap: DocumentSnapshot,
@@ -174,7 +169,63 @@ export function useFirestoreDataSource({
             .then((res) => res.filter((e) => e !== undefined && e.values) as Entity<M>[]);
     }, [getAndBuildEntity, textSearchController]);
 
+    function delegateToCMSModel(data: any): any {
+        if (data === null || data === undefined) return null;
+        if (deleteField().isEqual(data)) {
+            return undefined;
+        }
+        if (serverTimestamp().isEqual(data)) {
+            return null;
+        }
+        if (data instanceof Timestamp || (typeof data.toDate === "function" && data.toDate() instanceof Date)) {
+            return data.toDate();
+        }
+        if (data instanceof Date) {
+            return data;
+        }
+        if (data instanceof FirestoreGeoPoint) {
+            return new GeoPoint(data.latitude, data.longitude);
+        }
+        if (data instanceof DocumentReference) {
+            return new EntityReference(data.id, getCMSPathFromFirestorePath(data.path));
+        }
+        if (Array.isArray(data)) {
+            return data.map(delegateToCMSModel).filter(v => v !== undefined);
+        }
+        if (typeof data === "object") {
+            const result: Record<string, any> = {};
+            for (const key of Object.keys(data)) {
+                const childValue = delegateToCMSModel(data[key]);
+                if (childValue !== undefined)
+                    result[key] = childValue;
+            }
+            return result;
+        }
+        return data;
+    }
+
     return {
+        setDateToMidnight: (input?: any) => {
+            return setDateToMidnight(input);
+        },
+        delegateToCMSModel,
+        buildDate(date: Date): any {
+            return Timestamp.fromDate(date);
+        },
+        buildDeleteFieldValue(): any {
+            return deleteField();
+        },
+        currentTime(): any {
+            return serverTimestamp();
+        },
+        buildGeoPoint(geoPoint: GeoPoint): any {
+            return new FirestoreGeoPoint(geoPoint.latitude, geoPoint.longitude)
+        },
+        buildReference(reference: EntityReference): any {
+            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            const firestore = getFirestore(firebaseApp);
+            return doc(firestore, reference.path, reference.id);
+        },
 
         /**
          * Fetch entities in a Firestore path
@@ -192,21 +243,19 @@ export function useFirestoreDataSource({
          */
         fetchCollection: useCallback(<M extends Record<string, any>>({
                                                                          path,
-                                                                         collection,
                                                                          filter,
                                                                          limit,
                                                                          startAfter,
                                                                          searchString,
                                                                          orderBy,
-                                                                         order
-                                                                     }: FetchCollectionProps<M>
+                                                                         order,
+                                                                         isCollectionGroup
+                                                                     }: FetchCollectionDelegateProps<M>
         ): Promise<Entity<M>[]> => {
 
             if (searchString) {
                 return performTextSearch(path, searchString,);
             }
-
-            const collectionGroup = collection.collectionGroup ?? false;
 
             console.debug("Fetching collection", {
                 path,
@@ -215,9 +264,9 @@ export function useFirestoreDataSource({
                 startAfter,
                 orderBy,
                 order,
-                collectionGroup
+                isCollectionGroup
             });
-            const query = buildQuery(path, filter, orderBy, order, startAfter, limit, collectionGroup);
+            const query = buildQuery(path, filter, orderBy, order, startAfter, limit, isCollectionGroup);
 
             return getDocs(query)
                 .then((snapshot) =>
@@ -245,7 +294,6 @@ export function useFirestoreDataSource({
         listenCollection: useCallback(<M extends Record<string, any>>(
             {
                 path,
-                collection,
                 filter,
                 limit,
                 startAfter,
@@ -254,14 +302,13 @@ export function useFirestoreDataSource({
                 order,
                 onUpdate,
                 onError,
-            }: ListenCollectionProps<M>
+                isCollectionGroup
+            }: ListenCollectionDelegateProps<M>
         ): () => void => {
-
-            const collectionGroup = collection.collectionGroup ?? false;
 
             console.debug("Listening collection", {
                 path,
-                collectionGroup,
+                isCollectionGroup,
                 limit,
                 filter,
                 startAfter,
@@ -269,7 +316,7 @@ export function useFirestoreDataSource({
                 order
             });
 
-            const query = buildQuery(path, filter, orderBy, order, startAfter, limit, collectionGroup);
+            const query = buildQuery(path, filter, orderBy, order, startAfter, limit, isCollectionGroup);
 
             if (searchString) {
                 performTextSearch<M>(path, searchString)
@@ -354,7 +401,6 @@ export function useFirestoreDataSource({
                 path,
                 entityId,
                 values,
-                collection,
                 status
             }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
@@ -362,26 +408,9 @@ export function useFirestoreDataSource({
 
             const firestore = getFirestore(firebaseApp);
 
-            const resolvedCollection = resolveCollection<M>({
-                collection,
-                path,
-                entityId,
-            });
-
-            const properties: ResolvedProperties<M> = resolvedCollection.properties;
             const collectionReference: CollectionReference = collectionClause(firestore, path);
 
-            const firestoreValues = cmsToFirestoreModel(values, firestore);
-            const updatedFirestoreValues: EntityValues<M> = updateDateAutoValues(
-                {
-                    inputValues: firestoreValues,
-                    properties,
-                    status,
-                    timestampNowValue: serverTimestamp(),
-                    setDateToMidnight
-                });
-
-            console.debug("Saving entity", path, entityId, updatedFirestoreValues);
+            console.debug("Saving entity", path, entityId, values);
 
             let documentReference: DocumentReference;
             if (entityId)
@@ -389,11 +418,11 @@ export function useFirestoreDataSource({
             else
                 documentReference = doc(collectionReference);
 
-            return setDoc(documentReference, updatedFirestoreValues, { merge: true })
+            return setDoc(documentReference, values, { merge: true })
                 .then(() => ({
                     id: documentReference.id,
                     path,
-                    values: firestoreToCMSModel(updatedFirestoreValues)
+                    values: values as M
                 }));
         }, [firebaseApp]),
 
@@ -455,20 +484,31 @@ export function useFirestoreDataSource({
             return doc(collectionClause(firestore, path)).id;
         }, [firebaseApp]),
 
-        countEntities: useCallback(async ({ path, collection, filter, order, orderBy }: {
+        countEntities: useCallback(async ({
+                                              path,
+                                              filter,
+                                              order,
+                                              orderBy,
+            isCollectionGroup
+                                          }: {
             path: string,
-            collection: EntityCollection<any>,
             filter?: FilterValues<Extract<keyof any, string>>,
             orderBy?: string,
             order?: "desc" | "asc",
+            isCollectionGroup?: boolean
         }): Promise<number> => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
-            const query = buildQuery(path, filter, orderBy, order, undefined, undefined, collection.collectionGroup);
+            const query = buildQuery(path, filter, orderBy, order, undefined, undefined, isCollectionGroup);
             const snapshot = await getCountFromServer(query);
             return snapshot.data().count;
         }, [firebaseApp]),
 
-        isFilterCombinationValid: useCallback(({ path, collection, filterValues, sortBy }: {
+        isFilterCombinationValid: useCallback(({
+                                                   path,
+                                                   collection,
+                                                   filterValues,
+                                                   sortBy
+                                               }: {
             path: string,
             collection: EntityCollection<any>,
             filterValues: FilterValues<any>,
@@ -476,7 +516,10 @@ export function useFirestoreDataSource({
         }): boolean => {
             if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
 
-            const indexes = firestoreIndexesBuilder?.({ path, collection });
+            const indexes = firestoreIndexesBuilder?.({
+                path,
+                collection
+            });
 
             const sortKey = sortBy ? sortBy[0] : undefined;
             const sortDirection = sortBy ? sortBy[1] : undefined;
@@ -507,7 +550,7 @@ export function useFirestoreDataSource({
                 .find((compositeIndex) =>
                     Object.entries(filterValues).every(([key, value]) => compositeIndex[key] !== undefined && (!sortDirection || compositeIndex[key] === sortDirection))
                 ) !== undefined;
-        }, [firebaseApp]),
+        }, [firebaseApp])
 
     };
 
@@ -558,24 +601,24 @@ export function firestoreToCMSModel(data: any): any {
     return data;
 }
 
-export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
-    if (data === undefined) {
-        return deleteField();
-    } else if (Array.isArray(data)) {
-        return data.map(v => cmsToFirestoreModel(v, firestore));
-    } else if (data instanceof EntityReference) {
-        return doc(firestore, data.path, data.id);
-    } else if (data instanceof GeoPoint) {
-        return new FirestoreGeoPoint(data.latitude, data.longitude);
-    } else if (data instanceof Date) {
-        return Timestamp.fromDate(data);
-    } else if (data && typeof data === "object") {
-        return Object.entries(data)
-            .map(([key, v]) => ({ [key]: cmsToFirestoreModel(v, firestore) }))
-            .reduce((a, b) => ({ ...a, ...b }), {});
-    }
-    return data;
-}
+// export function cmsToFirestoreModel(data: any, firestore: Firestore): any {
+//     if (data === undefined) {
+//         return deleteField();
+//     } else if (Array.isArray(data)) {
+//         return data.map(v => cmsToFirestoreModel(v, firestore));
+//     } else if (data instanceof EntityReference) {
+//         return doc(firestore, data.path, data.id);
+//     } else if (data instanceof GeoPoint) {
+//         return new FirestoreGeoPoint(data.latitude, data.longitude);
+//     } else if (data instanceof Date) {
+//         return Timestamp.fromDate(data);
+//     } else if (data && typeof data === "object") {
+//         return Object.entries(data)
+//             .map(([key, v]) => ({ [key]: cmsToFirestoreModel(v, firestore) }))
+//             .reduce((a, b) => ({ ...a, ...b }), {});
+//     }
+//     return data;
+// }
 
 /**
  * Remove id from Firestore path
@@ -585,4 +628,11 @@ function getCMSPathFromFirestorePath(fsPath: string): string {
     let to = fsPath.lastIndexOf("/");
     to = to === -1 ? fsPath.length : to;
     return fsPath.substring(0, to);
+}
+
+function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
+    if (!input) return input;
+    const date = input.toDate();
+    date.setHours(0, 0, 0, 0);
+    return Timestamp.fromDate(date);
 }

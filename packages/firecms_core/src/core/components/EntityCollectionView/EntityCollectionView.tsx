@@ -271,7 +271,7 @@ export const EntityCollectionView = React.memo(
                  value,
                  property,
                  entityId
-             }) => dataSource.checkUniqueField(fullPath, name, value, property, entityId),
+             }) => dataSource.checkUniqueField(fullPath, name, value, entityId),
             [fullPath]);
 
         const onValueChange: OnCellValueChange<any, any> = ({

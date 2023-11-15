@@ -411,9 +411,9 @@ export const testCollection = buildCollection({
             of: {
                 dataType: "reference",
                 path: "products",
-                forceFilter: {
-                    tags: ["array-contains", "test"]
-                }
+                // forceFilter: {
+                //     tags: ["array-contains", "test"]
+                // }
             },
         })),
         // product: {

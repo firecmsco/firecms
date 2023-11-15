@@ -19,7 +19,7 @@ import {
     SideDialogs,
     SnackbarProvider,
     Typography,
-    useBrowserTitleAndIcon,
+    useBrowserTitleAndIcon, useBuildDataSource,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     User
@@ -69,6 +69,7 @@ import { buildCollectionInference } from "./collection_editor/infer_collection";
 import { FireCMSProjectHomePage } from "./components/FireCMSProjectHomePage";
 import { getFirestoreDataInPath } from "./utils/database";
 import { useImportExportPlugin } from "./hooks/useImportExportPlugin";
+import { useFirestoreDelegate } from "./hooks/useFirestoreDelegate";
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services
@@ -385,6 +386,7 @@ function FireCMS3AppAuthenticated({
         throw Error("You can only use FireCMS3AppAuthenticated with an authenticated user");
     }
 
+
     const adminRoutes = useMemo(buildAdminRoutes, []);
 
     const configPermissions: CollectionEditorPermissionsBuilder<User, PersistedCollection> = useCallback(({
@@ -395,6 +397,14 @@ function FireCMS3AppAuthenticated({
         currentProjectController,
         collection
     }), [currentProjectController, fireCMSUser]);
+
+    const propertyConfigsMap = useMemo(() => {
+        const map: Record<string, any> = {};
+        appConfig?.propertyConfigs?.forEach(field => {
+            map[field.key] = field;
+        });
+        return map;
+    }, [appConfig?.propertyConfigs]);
 
     const importExportPlugin = useImportExportPlugin();
 
@@ -436,13 +446,19 @@ function FireCMS3AppAuthenticated({
      */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-    /**
-     * Controller in charge of fetching and persisting data
-     */
-    const dataSource = useFirestoreDataSource({
+
+    const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
         textSearchController: appConfig?.textSearchController,
         firestoreIndexesBuilder: appConfig?.firestoreIndexesBuilder
+    })
+
+    /**
+     * Controller in charge of fetching and persisting data
+     */
+    const dataSource = useBuildDataSource({
+        delegate: firestoreDelegate,
+        customFields: propertyConfigsMap
     });
 
     /**
@@ -457,13 +473,7 @@ function FireCMS3AppAuthenticated({
     //                             currentProjectController={currentProjectController}/>;
     // }
 
-    const fieldsMap = useMemo(() => {
-        const fieldsMap: Record<string, any> = {};
-        appConfig?.propertyConfigs?.forEach(field => {
-            fieldsMap[field.key] = field;
-        });
-        return fieldsMap;
-    }, [appConfig?.propertyConfigs]);
+
 
     console.log("inner appConfig", appConfig)
 
@@ -479,7 +489,7 @@ function FireCMS3AppAuthenticated({
                             views={appConfig?.views}
                             entityViews={appConfig?.entityViews}
                             locale={appConfig?.locale}
-                            fields={fieldsMap}
+                            fields={propertyConfigsMap}
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
                             dataSource={dataSource}

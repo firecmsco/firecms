@@ -8,7 +8,7 @@ import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities"
  *
  * @category Form custom fields
  */
-export interface FieldProps<T extends CMSType = CMSType, CustomProps = any, M extends Record<string, any> = any> {
+export interface FieldProps<T extends CMSType = any, CustomProps = any, M extends Record<string, any> = any> {
 
     /**
      * Key of the property

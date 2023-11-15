@@ -82,13 +82,16 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
                 path,
                 entityId,
                 collection: inputCollection,
-                onUpdate: setEntity
+                onUpdate: (e) => {
+                    setEntity(e);
+                    setInternalValue(e?.values);
+                }
             });
         } else {
             return () => {
             };
         }
-    }, [dataSource, entityId, inputCollection, path]);
+    }, [dataSource, entityId, inputCollection, path, open]);
 
     const [internalValue, setInternalValue] = useState<EntityValues<M> | undefined>(entity?.values);
 
@@ -221,6 +224,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             className={`text-gray-900 dark:text-white overflow-auto rounded rounded-md bg-white dark:bg-gray-950 ${!open ? "hidden" : ""} cursor-grab max-w-[100vw]`}>
             <Formik
                 initialValues={(entity?.values ?? {}) as EntityValues<M>}
+                enableReinitialize={true}
                 validationSchema={validationSchema}
                 validateOnMount={true}
                 validate={(values) => console.debug("Validating", values)}

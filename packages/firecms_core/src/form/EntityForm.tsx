@@ -315,7 +315,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                                                                         name,
                                                                         value,
                                                                         property
-                                                                    }) => dataSource.checkUniqueField(path, name, value, property, entityId),
+                                                                    }) => dataSource.checkUniqueField(path, name, value, entityId),
         [dataSource, path, entityId]);
 
     const validationSchema = useMemo(() => entityId
