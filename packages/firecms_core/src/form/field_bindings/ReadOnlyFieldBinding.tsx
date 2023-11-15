@@ -3,12 +3,10 @@ import React from "react";
 import { Entity, FieldProps } from "../../types";
 
 import { PropertyPreview } from "../../preview";
-import { LabelWithIcon } from "../components";
-import { ErrorBoundary } from "../../core/components/ErrorBoundary";
-import { getIconForProperty } from "../../core";
+import { FieldHelperText, LabelWithIcon } from "../components";
+import { ErrorBoundary, getIconForProperty } from "../../core";
 import { paperMixin } from "../../styles";
-import { FieldHelperText } from "../components/FieldHelperText";
-import { cn } from "../../components/util/cn";
+import { cn } from "../../components";
 
 /**
  *

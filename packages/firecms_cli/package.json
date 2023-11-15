@@ -15,7 +15,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "tsc",
+    "build": "rm -rf templates/template_v3/node_modules && rm -rf templates/template_v3/yarn.lock && tsc",
     "dev": "ts-node src/index.ts",
     "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
   },

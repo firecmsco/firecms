@@ -90,6 +90,10 @@ export const testCollection = buildCollection({
     name: "Test entities",
     // formAutoSave: true,
     properties: {
+        color:{
+            dataType: "string",
+            fieldConfig: "color",
+        },
         mainSaturation: {
             name: "Main saturation",
             description: "Saturation applied to all colors when there is no saturation on color applied",

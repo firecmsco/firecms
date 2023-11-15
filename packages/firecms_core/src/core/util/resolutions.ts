@@ -1,7 +1,8 @@
 import {
     ArrayProperty,
     CMSType,
-    EntityCollection, EntityCustomView,
+    EntityCollection,
+    EntityCustomView,
     EntityValues,
     EnumValueConfig,
     EnumValues,
@@ -185,8 +186,12 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
         if (!customField)
             throw Error(`Trying to resolve a property that inherits from a custom field but no custom field with id ${resolvedProperty.fieldConfig} was found. Check the \`fields\` in your top level component`);
         if (customField.property) {
+            const configPropertyOrBuilder = customField.property;
+            if ("fieldConfig" in configPropertyOrBuilder) {
+                delete configPropertyOrBuilder.fieldConfig;
+            }
             const customFieldProperty = resolveProperty<any>({
-                propertyOrBuilder: customField.property,
+                propertyOrBuilder: configPropertyOrBuilder,
                 propertyValue,
                 ...props
             });
