@@ -459,11 +459,11 @@ function FireCMS3AppAuthenticated({
 
     const fieldsMap = useMemo(() => {
         const fieldsMap: Record<string, any> = {};
-        appConfig?.fields?.forEach(field => {
+        appConfig?.propertyConfigs?.forEach(field => {
             fieldsMap[field.key] = field;
         });
         return fieldsMap;
-    }, [appConfig?.fields]);
+    }, [appConfig?.propertyConfigs]);
 
     console.log("inner appConfig", appConfig)
 

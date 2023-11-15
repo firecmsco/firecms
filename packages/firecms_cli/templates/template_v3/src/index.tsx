@@ -7,7 +7,7 @@ const appConfig: FireCMSAppConfig = {
     collections: [
         demoCollection
     ],
-    fields: [{
+    propertyConfigs: [{
         name: "String with color",
         key: "color",
         property: {

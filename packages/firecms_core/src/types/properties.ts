@@ -85,7 +85,7 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
      * All the configuration will be taken from the inherited config, and
      * overwritten by the current property config.
      */
-    fieldConfig?: string;
+    propertyConfig?: string;
 
     /**
      * Longer description of a field, displayed under a popover

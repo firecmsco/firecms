@@ -1,13 +1,13 @@
 import React from "react";
 
-import { EntityCollection, FieldConfig, PropertiesOrBuilders, PropertyOrBuilder, ResolvedProperty } from "../../types";
+import { EntityCollection, PropertyConfig, PropertiesOrBuilders, PropertyOrBuilder, ResolvedProperty } from "../../types";
 import { getFieldConfig } from "../form_field_configs";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
 import { CircleIcon, FunctionsIcon } from "../../icons";
 
 export function isReferenceProperty(propertyOrBuilder: PropertyOrBuilder,
-                                    fields: Record<string, FieldConfig>) {
+                                    fields: Record<string, PropertyConfig>) {
     const resolvedProperty = resolveProperty({
         propertyKey: "ignore", // TODO
         propertyOrBuilder,
@@ -28,7 +28,7 @@ export function getIdIcon(size: "small" | "medium" | "large"): React.ReactNode {
     return <CircleIcon size={size}/>;
 }
 
-export function getIconForWidget(widget: FieldConfig | undefined,
+export function getIconForWidget(widget: PropertyConfig | undefined,
                                  size: "small" | "medium" | "large") {
     const Icon = widget?.Icon ?? CircleIcon;
     return <Icon size={size}/>;
@@ -37,7 +37,7 @@ export function getIconForWidget(widget: FieldConfig | undefined,
 export function getIconForProperty(
     property: PropertyOrBuilder | ResolvedProperty,
     size: "small" | "medium" | "large" = "small",
-    fields: Record<string, FieldConfig> = {}
+    fields: Record<string, PropertyConfig> = {}
 ): React.ReactNode {
 
     if (isPropertyBuilder(property)) {
@@ -48,7 +48,7 @@ export function getIconForProperty(
     }
 }
 
-export function getColorForProperty(property: PropertyOrBuilder, fields: Record<string, FieldConfig>): string {
+export function getColorForProperty(property: PropertyOrBuilder, fields: Record<string, PropertyConfig>): string {
     if (isPropertyBuilder(property)) {
         return "#888";
     } else {

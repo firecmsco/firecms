@@ -1,6 +1,6 @@
 import React from "react";
 
-import { ArrayProperty, FieldConfig, FieldProps, Property, ResolvedProperty } from "../types";
+import { ArrayProperty, PropertyConfig, FieldProps, Property, ResolvedProperty } from "../types";
 import {
     ArrayCustomShapedFieldBinding,
     ArrayOfReferencesFieldBinding,
@@ -44,7 +44,7 @@ export function isDefaultFieldConfigId(id: string) {
     return Object.keys(DEFAULT_FIELD_CONFIGS).includes(id);
 }
 
-export const DEFAULT_FIELD_CONFIGS: Record<string, FieldConfig<any>> = {
+export const DEFAULT_FIELD_CONFIGS: Record<string, PropertyConfig<any>> = {
     text_field: {
         key: "text_field",
         name: "Text field",
@@ -313,7 +313,7 @@ export const DEFAULT_FIELD_CONFIGS: Record<string, FieldConfig<any>> = {
     }
 };
 
-export function getFieldConfig(property: Property | ResolvedProperty, customFields: Record<string, FieldConfig<any>>): FieldConfig | undefined {
+export function getFieldConfig(property: Property | ResolvedProperty, customFields: Record<string, PropertyConfig<any>>): PropertyConfig | undefined {
     const fieldId = getFieldId(property);
     const defaultFieldId = getDefaultFieldId(property);
     // console.log("fieldId", { fieldId });
@@ -386,7 +386,7 @@ export function getDefaultFieldId(property: Property | ResolvedProperty) {
 }
 
 export function getFieldId(property: Property | ResolvedProperty): string | undefined {
-    if (property.fieldConfig)
-        return property.fieldConfig;
+    if (property.propertyConfig)
+        return property.propertyConfig;
     return getDefaultFieldId(property);
 }

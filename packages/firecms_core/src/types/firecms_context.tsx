@@ -11,7 +11,7 @@ import { UserConfigurationPersistence } from "./local_config_persistence";
 import { SideDialogsController } from "./side_dialogs_controller";
 import { FireCMSPlugin } from "./plugins";
 import { CMSAnalyticsEvent } from "./analytics";
-import { FieldConfig } from "./field_config";
+import { PropertyConfig } from "./property_config";
 import { EntityCustomView } from "./collections";
 
 /**
@@ -96,9 +96,9 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
     /**
      * Record of custom form fields to be used in the CMS.
      * You can use the key to reference the custom field in
-     * the `fieldConfig` prop of a property in a collection.
+     * the `propertyConfig` prop of a property in a collection.
      */
-    fields: Record<string, FieldConfig>;
+    fields: Record<string, PropertyConfig>;
 
     /**
      * List of additional custom views for entities.

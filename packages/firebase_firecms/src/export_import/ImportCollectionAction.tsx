@@ -337,7 +337,7 @@ export function PropertySelectEntry({
 
         <div className={"m-4"}>
             <Tooltip title={widget?.name}>
-                <FieldConfigBadge fieldConfig={widget}/>
+                <FieldConfigBadge propertyConfig={widget}/>
             </Tooltip>
         </div>
 

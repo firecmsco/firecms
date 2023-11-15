@@ -1,14 +1,14 @@
 import { getIconForWidget } from "../util";
-import { FieldConfig } from "../../types";
+import { PropertyConfig } from "../../types";
 
-export function FieldConfigBadge({ fieldConfig }: { fieldConfig: FieldConfig | undefined }): React.ReactNode {
+export function FieldConfigBadge({ propertyConfig }: { propertyConfig: PropertyConfig | undefined }): React.ReactNode {
     const classes = "h-8 w-8 p-1 rounded-full shadow text-white";
 
     return <div
         className={classes}
         style={{
-            background: fieldConfig?.color ?? "#888"
+            background: propertyConfig?.color ?? "#888"
         }}>
-        {getIconForWidget(fieldConfig, "medium")}
+        {getIconForWidget(propertyConfig, "medium")}
     </div>
 }

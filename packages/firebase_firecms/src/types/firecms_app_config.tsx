@@ -6,7 +6,7 @@ import {
     EntityCollection,
     EntityCollectionsBuilder,
     EntityCustomView,
-    FieldConfig,
+    PropertyConfig,
     FireCMSAppBarProps,
     Locale
 } from "@firecms/core";
@@ -35,11 +35,11 @@ export type FireCMSAppConfig = {
     views?: CMSView[] | CMSViewsBuilder;
 
     /**
-     * List of custom form fields to be used in the CMS.
+     * List of custom property configs to be used in the CMS.
      * You can use the key to reference the custom field in
-     * the `fieldConfig` prop of a property in a collection.
+     * the `propertyConfig` prop of a property in a collection.
      */
-    fields?: FieldConfig[];
+    propertyConfigs?: PropertyConfig[];
 
     /**
      * List of additional custom views for entities.

@@ -5,7 +5,7 @@ import { DataSource } from "./datasource";
 import { EntityCollection, EntityCustomView } from "./collections";
 import { CMSView } from "./navigation";
 import { FireCMSContext } from "./firecms_context";
-import { FieldConfig } from "./field_config";
+import { PropertyConfig } from "./property_config";
 import { Locale } from "./locales";
 import { StorageSource } from "./storage";
 import { EntityLinkBuilder } from "./entity_link_builder";
@@ -84,9 +84,9 @@ export type FireCMSProps<UserType extends User> = {
     /**
      * Record of custom form fields to be used in the CMS.
      * You can use the key to reference the custom field in
-     * the `fieldConfig` prop of a property in a collection.
+     * the `propertyConfig` prop of a property in a collection.
      */
-    fields?: Record<string, FieldConfig>;
+    fields?: Record<string, PropertyConfig>;
 
     /**
      * List of additional custom views for entities.

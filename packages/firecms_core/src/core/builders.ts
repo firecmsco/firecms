@@ -8,7 +8,7 @@ import {
     EntityCollection,
     EnumValueConfig,
     EnumValues,
-    FieldConfig,
+    PropertyConfig,
     GeopointProperty,
     MapProperty,
     NumberProperty,
@@ -130,11 +130,11 @@ export function buildAdditionalFieldDelegate<M extends Record<string, any>, Addi
 /**
  * Identity function we use to defeat the type system of Typescript and build
  * additional field delegates views with all its properties
- * @param fieldConfig
+ * @param propertyConfig
  * @category Builder
  */
 export function buildFieldConfig<T extends CMSType = CMSType>(
-    fieldConfig: FieldConfig<T>
-): FieldConfig<T> {
-    return fieldConfig;
+    propertyConfig: PropertyConfig<T>
+): PropertyConfig<T> {
+    return propertyConfig;
 }

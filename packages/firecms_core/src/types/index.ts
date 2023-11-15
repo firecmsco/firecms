@@ -10,7 +10,7 @@ export * from "./user";
 export * from "./colors";
 export * from "./storage";
 export * from "./fields";
-export * from "./field_config";
+export * from "./property_config";
 export * from "./datasource";
 export * from "./entity_link_builder";
 export * from "./side_entity_controller";

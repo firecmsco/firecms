@@ -92,7 +92,7 @@ export const testCollection = buildCollection({
     properties: {
         color:{
             dataType: "string",
-            fieldConfig: "color",
+            propertyConfig: "color",
         },
         mainSaturation: {
             name: "Main saturation",
@@ -253,7 +253,7 @@ export const testCollection = buildCollection({
         // test_custom: {
         //     dataType: "string",
         //     name: "Test custom",
-        //     fieldConfig: "test_custom_field"
+        //     propertyConfig: "test_custom_field"
         // },
         // map: {
         //     dataType: "map",
