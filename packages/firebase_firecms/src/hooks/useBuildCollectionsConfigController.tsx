@@ -8,12 +8,13 @@ import {
     PersistedCollection,
     SaveCollectionParams
 } from "@firecms/collection_editor";
-import { PermissionsBuilder, removeUndefined, User } from "@firecms/core";
+import { PermissionsBuilder, Property, removeFunctions, removeUndefined, User } from "@firecms/core";
 import {
     applyPermissionsFunction,
     buildCollectionPath,
     docsToCollectionTree,
-    prepareCollectionForPersistence
+    prepareCollectionForPersistence,
+    setUndefinedToDelete
 } from "../utils";
 
 /**
@@ -136,7 +137,7 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
                                       }: {
         path: string,
         propertyKey: string,
-        property: any,
+        property: Property,
         newPropertiesOrder?: string[],
         parentPathSegments?: string[],
         namespace?: string
@@ -147,7 +148,7 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
         const ref = doc(firestore, configPath, "collections", collectionPath);
         return runTransaction(firestore, async (transaction) => {
             const data = {
-                [namespaceToPropertiesPath(namespace) + "." + propertyKey]: removeUndefined(property),
+                [namespaceToPropertiesPath(namespace) + "." + propertyKey]: setUndefinedToDelete(removeFunctions(removeUndefined(property))),
             };
             if (newPropertiesOrder) {
                 data.propertiesOrder = newPropertiesOrder;
@@ -165,11 +166,47 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
 
     }, [configPath, firestore]);
 
+    const deleteProperty = useCallback(({
+                                            path,
+                                            propertyKey,
+                                            newPropertiesOrder,
+                                            parentPathSegments,
+                                            namespace
+                                        }: {
+        path: string,
+        propertyKey: string,
+        newPropertiesOrder?: string[],
+        parentPathSegments?: string[],
+        namespace?: string
+    }): Promise<void> => {
+
+        if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
+        const collectionPath = buildCollectionPath(path, parentPathSegments);
+        const ref = doc(firestore, configPath, "collections", collectionPath);
+        return runTransaction(firestore, async (transaction) => {
+            const data: any = setUndefinedToDelete({
+                [namespaceToPropertiesPath(namespace) + "." + propertyKey]: undefined,
+            });
+            if (newPropertiesOrder) {
+                data.propertiesOrder = newPropertiesOrder;
+            }
+            console.log("Deleting property", {
+                path,
+                propertyKey,
+                collectionPath,
+                namespace,
+                data
+            });
+            transaction.update(ref, data);
+        });
+    }, [configPath, firestore]);
+
     return useMemo(() => ({
         loading: collectionsLoading,
         collections,
         saveCollection,
         deleteCollection,
-        saveProperty
+        saveProperty,
+        deleteProperty,
     }), [collections, collectionsLoading, deleteCollection, saveCollection, saveProperty])
 }

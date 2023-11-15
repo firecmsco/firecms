@@ -433,8 +433,8 @@ function createFilterField({
                                filterValue,
                                setFilterValue,
                                column,
-                               popupOpen,
-                               setPopupOpen
+                               hidden,
+                               setHidden
                            }: FilterFormFieldProps<{
     resolvedProperty: ResolvedProperty,
     disabled: boolean,
@@ -459,8 +459,8 @@ function createFilterField({
                                      path={baseProperty.path}
                                      title={resolvedProperty?.name}
                                      previewProperties={baseProperty?.previewProperties}
-                                     popupOpen={popupOpen}
-                                     setPopupOpen={setPopupOpen}/>;
+                                     hidden={hidden}
+                                     setHidden={setHidden}/>;
     } else if (baseProperty.dataType === "number" || baseProperty.dataType === "string") {
         const name = baseProperty.name;
         const enumValues = baseProperty.enumValues ? enumToObjectEntries(baseProperty.enumValues) : undefined;

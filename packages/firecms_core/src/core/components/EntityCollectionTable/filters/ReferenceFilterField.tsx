@@ -15,8 +15,8 @@ interface ReferenceFilterFieldProps {
     path?: string;
     title?: string;
     previewProperties?: string[];
-    popupOpen: boolean;
-    setPopupOpen: (open: boolean) => void;
+    hidden: boolean;
+    setHidden: (hidden: boolean) => void;
 }
 
 const operationLabels = {
@@ -42,7 +42,7 @@ export function ReferenceFilterField({
                                          path,
                                          title,
                                          previewProperties,
-                                         setPopupOpen
+                                         setHidden
                                      }: ReferenceFilterFieldProps) {
 
     const possibleOperations: (keyof typeof operationLabels) [] = isArray
@@ -118,13 +118,13 @@ export function ReferenceFilterField({
             onMultipleEntitiesSelected,
             selectedEntityIds,
             onClose: () => {
-                setPopupOpen(true);
+                setHidden(false);
             }
         }
     );
 
     const doOpenDialog = () => {
-        setPopupOpen(false);
+        setHidden(true);
         referenceDialogController.open();
     };
 
@@ -148,6 +148,10 @@ export function ReferenceFilterField({
         );
     };
 
+    console.log("ReferenceFilterField", {
+        internalValue
+
+    })
     return (
 
         <div className="flex w-[440px] flex-row">
@@ -175,7 +179,8 @@ export function ReferenceFilterField({
                 </div>}
                 {(!internalValue || (Array.isArray(internalValue) && internalValue.length === 0)) &&
                     <Button onClick={doOpenDialog}
-                            className="h-full">
+                            variant={"outlined"}
+                            className="h-full w-full">
                         {multiple ? "Select references" : "Select reference"}
                     </Button>
                 }

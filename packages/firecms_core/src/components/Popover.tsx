@@ -22,6 +22,8 @@ export interface PopoverProps {
     hideWhenDetached?: boolean;
     avoidCollisions?: boolean;
     enabled?: boolean;
+    modal?: boolean;
+    className?: string;
 }
 
 export function Popover({
@@ -37,7 +39,9 @@ export function Popover({
                             sticky,
                             hideWhenDetached,
                             avoidCollisions,
-                            enabled = true
+                            enabled = true,
+                            modal = false,
+                            className
                         }: PopoverProps) {
 
     useInjectStyles("Popover", popoverStyles);
@@ -45,12 +49,15 @@ export function Popover({
     if (!enabled)
         return <>{trigger}</>;
 
-    return <PopoverPrimitive.Root open={open} onOpenChange={onOpenChange}>
+    return <PopoverPrimitive.Root open={open}
+                                  onOpenChange={onOpenChange}
+                                  modal={modal}
+    >
         <PopoverPrimitive.Trigger asChild>
             {trigger}
         </PopoverPrimitive.Trigger>
         <PopoverPrimitive.Portal>
-            <PopoverPrimitive.Content className={cn(paperMixin, "PopoverContent shadow z-50")}
+            <PopoverPrimitive.Content className={cn(paperMixin, "PopoverContent shadow z-40", className)}
                                       side={side}
                                       sideOffset={sideOffset}
                                       align={align}

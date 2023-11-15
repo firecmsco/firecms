@@ -1,3 +1,4 @@
+import { getIconForProperty, LabelWithIcon } from "@firecms/core";
 import { FieldProps, PropertyConfig, PropertyPreviewProps, Typography } from "@firecms/firebase";
 
 export const colorPropertyConfig: PropertyConfig = {
@@ -5,25 +6,27 @@ export const colorPropertyConfig: PropertyConfig = {
     key: "color",
     property: {
         dataType: "string",
-        name: "Color",
-        Field: ({ value, setValue }: FieldProps<string>) => {
-            return <div className={"flex flex-row gap-4"}>
-                <input
-                    className={"input rounded-md"}
-                    type="color"
-                    value={value}
-                    onChange={(evt: any) => setValue(evt.target.value)}/>
-                <Typography>
-                    Pick a color
-                </Typography>
-            </div>;
+        Field: ({ value, setValue, tableMode, property }: FieldProps<string>) => {
+            return <>
+                {!tableMode && <LabelWithIcon icon={getIconForProperty(property, "small")}
+                                              required={property.validation?.required}
+                                              title={property.name}/>}
+                <div className={"flex flex-row gap-4"}>
+                    <input
+                        className={"rounded-md"}
+                        type="color"
+                        value={value}
+                        onChange={(evt: any) => setValue(evt.target.value)}/>
+                    <Typography>
+                        Pick a color
+                    </Typography>
+                </div>
+            </>;
         },
         Preview: ({ value }: PropertyPreviewProps<string>) => {
             return <div
-                className={"rounded-md"}
+                className={"rounded-md w-5 h-5"}
                 style={{
-                    width: 20,
-                    height: 20,
                     backgroundColor: value,
                 }}/>;
         },

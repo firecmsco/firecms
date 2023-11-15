@@ -1,4 +1,4 @@
-import React, { RefObject, useCallback, useEffect, useState } from "react";
+import React, { RefObject, useCallback, useEffect, useRef, useState } from "react";
 import equal from "react-fast-compare";
 
 import { VirtualTableColumn, VirtualTableSort, VirtualTableWhereFilterOp } from "./VirtualTableProps";
@@ -13,8 +13,8 @@ interface FilterFormProps<T> {
     filter?: [VirtualTableWhereFilterOp, any];
     onHover: boolean,
     createFilterField: (props: FilterFormFieldProps<T>) => React.ReactNode;
-    popupOpen: boolean;
-    setPopupOpen: (open: boolean) => void;
+    hidden: boolean;
+    setHidden: (hidden: boolean) => void;
 }
 
 export type FilterFormFieldProps<CustomProps> = {
@@ -22,8 +22,8 @@ export type FilterFormFieldProps<CustomProps> = {
     filterValue: [VirtualTableWhereFilterOp, any] | undefined,
     setFilterValue: (filterValue?: [VirtualTableWhereFilterOp, any]) => void;
     column: VirtualTableColumn<CustomProps>;
-    popupOpen: boolean;
-    setPopupOpen: (open: boolean) => void;
+    hidden: boolean;
+    setHidden: (hidden: boolean) => void;
 };
 
 type VirtualTableHeaderProps<M extends Record<string, any>> = {
@@ -58,6 +58,7 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
         const [onHover, setOnHover] = useState(false);
 
         const [openFilter, setOpenFilter] = React.useState(false);
+        const [hidden, setHidden] = React.useState(false);
 
         const handleSettingsClick = useCallback((event: any) => {
             setOpenFilter(true);
@@ -145,6 +146,8 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                             <Popover
                                 open={openFilter}
                                 onOpenChange={setOpenFilter}
+                                className={hidden ? "hidden" : undefined}
+                                modal={true}
                                 trigger={
                                     <IconButton
                                         className={onHover || openFilter ? "bg-white dark:bg-gray-950" : undefined}
@@ -153,17 +156,18 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                                         <FilterListIcon size={"small"}/>
                                     </IconButton>}
                             >
-                                {column.filter &&
-                                    <FilterForm column={column}
-                                                filter={filter}
-                                                onHover={onHover}
-                                                onFilterUpdate={update}
-                                                createFilterField={createFilterField}
-                                                popupOpen={openFilter}
-                                                setPopupOpen={setOpenFilter}/>}
+                                <FilterForm column={column}
+                                            filter={filter}
+                                            onHover={onHover}
+                                            onFilterUpdate={update}
+                                            createFilterField={createFilterField}
+                                            hidden={hidden}
+                                            setHidden={setHidden}/>
+
                             </Popover>
 
                         </Badge>
+
                     </div>}
 
                     {column.resizable && <div
@@ -176,7 +180,6 @@ export const VirtualTableHeader = React.memo<VirtualTableHeaderProps<any>>(
                     />}
                 </div>
 
-
             </ErrorBoundary>
         );
     }, equal) as React.FunctionComponent<VirtualTableHeaderProps<any>>;
@@ -187,8 +190,8 @@ function FilterForm<M>({
                            filter,
                            onHover,
                            createFilterField,
-                           popupOpen,
-                           setPopupOpen,
+                           hidden,
+                           setHidden,
                        }: FilterFormProps<M>) {
 
     const id = column.key;
@@ -216,8 +219,8 @@ function FilterForm<M>({
         filterValue: filterInternal,
         setFilterValue: setFilterInternal,
         column,
-        popupOpen,
-        setPopupOpen
+        hidden,
+        setHidden
     });
 
     if (!filterField) return null;
