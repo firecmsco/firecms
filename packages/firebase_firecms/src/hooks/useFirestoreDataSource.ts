@@ -49,7 +49,6 @@ import {
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "../types/text_search";
 import { useCallback } from "react";
-import { setDateToMidnight } from "../utils/dates";
 
 /**
  * @category Firebase
@@ -585,4 +584,13 @@ function getCMSPathFromFirestorePath(fsPath: string): string {
     let to = fsPath.lastIndexOf("/");
     to = to === -1 ? fsPath.length : to;
     return fsPath.substring(0, to);
+}
+
+
+function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
+    if (!(input instanceof Timestamp)) return input;
+    if (!input) return input;
+    const date = input.toDate();
+    date.setHours(0, 0, 0, 0);
+    return Timestamp.fromDate(date);
 }

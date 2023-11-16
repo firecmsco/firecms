@@ -9,8 +9,8 @@ import {
     FetchEntityProps,
     FilterCombination,
     FilterValues,
-    GeoPoint, ListenCollectionDelegateProps,
-    ListenCollectionProps,
+    GeoPoint,
+    ListenCollectionDelegateProps,
     ListenEntityProps,
     SaveEntityProps,
     WhereFilterOp
@@ -489,7 +489,7 @@ export function useFirestoreDelegate({
                                               filter,
                                               order,
                                               orderBy,
-            isCollectionGroup
+                                              isCollectionGroup
                                           }: {
             path: string,
             filter?: FilterValues<Extract<keyof any, string>>,
@@ -632,6 +632,7 @@ function getCMSPathFromFirestorePath(fsPath: string): string {
 
 function setDateToMidnight(input?: Timestamp): Timestamp | undefined {
     if (!input) return input;
+    if (!(input instanceof Timestamp)) return input;
     const date = input.toDate();
     date.setHours(0, 0, 0, 0);
     return Timestamp.fromDate(date);
