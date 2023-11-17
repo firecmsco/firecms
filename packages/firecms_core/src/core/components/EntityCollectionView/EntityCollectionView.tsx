@@ -116,6 +116,7 @@ export const EntityCollectionView = React.memo(
             return (userOverride ? mergeDeep(collectionProp, userOverride) : collectionProp) as EntityCollection<M>;
         }, [collectionProp, fullPath, userConfigPersistence?.getCollectionConfig]);
 
+        const canCreateEntities = canCreateEntity(collection, authController, fullPathToCollectionSegments(fullPath), null);
         const [selectedNavigationEntity, setSelectedNavigationEntity] = useState<Entity<M> | undefined>(undefined);
         const [deleteEntityClicked, setDeleteEntityClicked] = React.useState<Entity<M> | Entity<M>[] | undefined>(undefined);
 
@@ -569,6 +570,20 @@ export const EntityCollectionView = React.memo(
                         selectionEnabled={selectionEnabled}
                         collectionEntitiesCount={docsCount}
                     />}
+                    emptyComponent={canCreateEntities
+                        ? <div className="flex flex-col items-center justify-center">
+                            <Typography variant={"subtitle2"}>Nothing here yet!</Typography>
+                            <Button
+                                color={"primary"}
+                                variant={"outlined"}
+                                onClick={onNewClick}
+                                className="mt-4"
+                            >
+                                Create your first entity
+                            </Button>
+                        </div>
+                        : undefined
+                    }
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}
                     AdditionalHeaderWidget={buildAdditionalHeaderWidget}
@@ -690,7 +705,10 @@ function buildPropertyWidthOverwrite(key: string, width: number): PartialEntityC
     return { properties: { [key]: { columnWidth: width } } } as PartialEntityCollection;
 }
 
-function EntityIdHeaderWidget({ collection, path }: {
+function EntityIdHeaderWidget({
+                                  collection,
+                                  path
+                              }: {
     collection: EntityCollection,
     path: string
 }) {

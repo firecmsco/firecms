@@ -102,7 +102,7 @@ export interface VirtualTableProps<T extends Record<string, any>> {
     /**
      * Message displayed when there is no data
      */
-    emptyMessage?: string;
+    emptyComponent?: React.ReactNode;
 
     /**
      * Is the table in a loading state

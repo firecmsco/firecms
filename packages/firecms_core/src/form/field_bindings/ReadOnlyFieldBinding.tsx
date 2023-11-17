@@ -47,7 +47,7 @@ export function ReadOnlyFieldBinding({
             }
 
             <div
-                className={cn(paperMixin, "min-h-14 p-4 md:p-6")}>
+                className={cn(paperMixin, "min-h-14 p-4 md:p-6 overflow-x-scroll no-scrollbar")}>
 
                 <ErrorBoundary>
                     <PropertyPreview propertyKey={propertyKey}

@@ -52,8 +52,8 @@ export function StringPropertyPreview({
                         {index !== lines.length - 1 && <br/>}
                     </React.Fragment>)}
             </div>
-            : <div className={"overflow-x-scroll"}>
+            : <>
                 {value}
-            </div>;
+            </>;
     }
 }

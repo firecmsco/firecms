@@ -14,7 +14,7 @@ export async function entry(args) {
     const command = args[2];
 
     if (command === "init") {
-        createFireCMSApp(args);
+        await createFireCMSApp(args);
     } else if (command === "login") {
         await loginArgs(args);
     } else if (command === "logout") {

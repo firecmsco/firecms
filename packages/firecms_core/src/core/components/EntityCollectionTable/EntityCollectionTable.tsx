@@ -110,7 +110,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          endAdornment,
          AddColumnComponent,
          AdditionalHeaderWidget,
-         additionalIDHeaderWidget
+         additionalIDHeaderWidget,
+         emptyComponent
      }: EntityCollectionTableProps<M>) {
 
         const largeLayout = useLargeLayout();
@@ -198,7 +199,11 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
             let disabled = column.custom?.disabled;
             const propertyValue = entity.values ? getValueInPath(entity.values, propertyKey) : undefined;
-            const property = getPropertyFor?.({ propertyKey, propertyValue, entity }) ?? column.custom.resolvedProperty;
+            const property = getPropertyFor?.({
+                propertyKey,
+                propertyValue,
+                entity
+            }) ?? column.custom.resolvedProperty;
             if (!property?.disabled) {
                 disabled = false;
             }
@@ -410,6 +415,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                         sortBy={sortBy}
                         onSortByUpdate={setSortBy as ((sortBy?: [string, "asc" | "desc"]) => void)}
                         hoverRow={hoverRow}
+                        emptyComponent={emptyComponent}
                         checkFilterCombination={checkFilterCombination}
                         createFilterField={filterable ? createFilterField : undefined}
                         rowClassName={useCallback((entity: Entity<M>) => {

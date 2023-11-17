@@ -102,7 +102,7 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
                                                              onFilterUpdate,
                                                              sortBy,
                                                              error,
-                                                             emptyMessage,
+                                                             emptyComponent,
                                                              onSortByUpdate,
                                                              loading,
                                                              cellRenderer,
@@ -249,13 +249,11 @@ export const VirtualTable = React.memo<VirtualTableProps<any>>(
             if (loading)
                 return <CircularProgressCenter/>;
             return <div
-                className="flex overflow-auto items-center justify-center p-2 gap-2 h-full">
+                className="flex flex-col overflow-auto items-center justify-center p-2 gap-2 h-full">
                 <AssignmentIcon/>
-                <Typography>
-                    {emptyMessage}
-                </Typography>
+                {emptyComponent}
             </div>;
-        }, [emptyMessage, loading]);
+        }, [emptyComponent, loading]);
 
         const empty = !loading && (data?.length ?? 0) === 0;
         const customView = error ? buildErrorView() : (empty ? buildEmptyView() : undefined);

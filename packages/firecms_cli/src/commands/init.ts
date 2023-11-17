@@ -129,12 +129,22 @@ async function promptForMissingOptions(options: InitOptions): Promise<InitOption
         });
 
         const spinner = ora("Loading your projects").start();
-        const projects = await getProjects(options.env)
+        const projects = await getProjects(options.env, onErr => {
+            spinner.fail("Error loading projects");
+        })
             .then((res) => {
+                if (!res) {
+                    if (spinner.isSpinning)
+                    spinner.fail("Error loading projects");
+                    process.exit(1);
+                }
                 spinner.succeed();
                 return res;
             })
-            .catch(() => spinner.fail("Error loading projects"));
+            .catch((e) => {
+                if (spinner.isSpinning)
+                    spinner.fail("Error loading projects");
+            });
 
         const fireCMSProjects = projects.filter(project => project["fireCMSProject"]);
         if (!fireCMSProjects.length) {
@@ -326,10 +336,14 @@ function writeWebAppConfig(options: InitOptions, webappConfig: object) {
         });
 }
 
-async function getProjects(env: "prod" | "dev") {
+async function getProjects(env: "prod" | "dev", onErr?: (e: any) => void) {
 
     try {
-        const tokens = await refreshCredentials(env, await getTokens(env));
+        const credentials = await getTokens(env);
+        const tokens = await refreshCredentials(env, credentials, onErr);
+        if (!tokens) {
+            return null;
+        }
         const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
         const response = await axios.get(server + "/gcp_projects", {
             headers: {
@@ -337,8 +351,16 @@ async function getProjects(env: "prod" | "dev") {
             },
         });
 
+        console.log("status", response.status);
+        if (response.status >= 400) {
+            console.log(response.data.data?.message);
+            return null;
+        }
         return response.data.data;
     } catch (e) {
+        if (onErr) {
+            onErr(e);
+        }
         console.error("Error getting projects", e.response?.data);
     }
 }

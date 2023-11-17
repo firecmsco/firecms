@@ -129,6 +129,8 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     additionalIDHeaderWidget?: React.ReactNode;
 
+    emptyComponent?: React.ReactNode;
+
 }
 
 export type GetPropertyForProps<M extends Record<string, any>> = {

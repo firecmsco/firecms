@@ -8,12 +8,13 @@ import zipFolder from "zip-folder";
 import { getCurrentUser, getTokens, refreshCredentials } from "./auth";
 import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import ora from "ora";
+import chalk from "chalk";
 
 export async function deploy(projectId: string, env: "prod" | "dev") {
     const currentUser = await getCurrentUser(env);
     if (!currentUser) {
         console.log("You are not logged in");
-        console.log("Run 'firecms login' to log in");
+        console.log(`Run ${chalk.bold("firecms login")} to log in`);
         return;
     }
     console.log("Starting deploy");

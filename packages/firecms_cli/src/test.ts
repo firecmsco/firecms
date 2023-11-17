@@ -6,7 +6,7 @@ async function main(){
     // await logout();
     // await login("dev");
 
-    createFireCMSApp(["", "", "--env=dev"]);
+    createFireCMSApp(["", "", "--env=prod"]);
     // const tokens = await refreshCredentials(await getTokens());
     // getTokens().then((tokens) => {
     //     console.log("current", tokens);

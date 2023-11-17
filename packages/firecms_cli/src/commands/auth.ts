@@ -7,6 +7,7 @@ import axios from "axios";
 import { DEFAULT_SERVER, DEFAULT_SERVER_DEV } from "../common";
 import * as os from "os";
 import EventEmitter from "events";
+import chalk from "chalk";
 
 const https = require("https");
 const url = require("url");
@@ -24,7 +25,7 @@ export async function login(env: "prod" | "dev") {
     const currentUser = await getCurrentUser(env);
     if (currentUser) {
         console.log("You are already logged in as", currentUser["email"]);
-        console.log("Run 'firecms logout' to sign out");
+        console.log(`Run ${chalk.bold("firecms logout")} to sign out`);
         return;
     }
 
@@ -114,7 +115,7 @@ export async function logout(env: "prod" | "dev") {
     const userCredential = await getTokens(env);
     if (!userCredential) {
         console.log("You are not logged in");
-        console.log("Run 'firecms login' to log in");
+        console.log(`Run ${chalk.bold("firecms login")} to log in`);
         return;
     }
 
@@ -208,7 +209,7 @@ async function getAuthURL(env: "prod" | "dev") {
     return response.data.data;
 }
 
-export async function refreshCredentials(env: "dev" | "prod", credentials?: object) {
+export async function refreshCredentials(env: "dev" | "prod", credentials?: object, onErr?: (e: any) => void) {
     if (credentials) {
         const expiryDate = new Date(credentials["expiry_date"]);
         const now = new Date();
@@ -220,14 +221,18 @@ export async function refreshCredentials(env: "dev" | "prod", credentials?: obje
         const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
 
         const response = await axios.post(server + "/cli/refresh_access_token", credentials);
-        if (response.status !== 200) {
-            throw new Error("Error refreshing credentials");
-        }
+        console.log("Refreshing credentials", response)
         const newCredentials = response.data.data;
-        saveTokens({ ...credentials, ...newCredentials, env }, env);
+        saveTokens({
+            ...credentials, ...newCredentials,
+            env
+        }, env);
         return newCredentials;
     } catch (error) {
-        console.error("Error refreshing credentials", error.response?.data);
+        if (onErr) onErr(error);
+        await logout(env);
+        console.error("\nError refreshing credentials", error.response?.status, error.response?.data?.message);
+        console.log(`Run ${chalk.bold("firecms login")} to log in again`);
         return null;
     }
 }
