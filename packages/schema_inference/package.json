@@ -1,0 +1,33 @@
+{
+  "version": "3.0.0-alpha.28",
+  "name": "@firecms/schema_inference",
+  "access": "public",
+  "packageManager": "yarn@3.2.3",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "source": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@firecms/core": "^3.0.0-alpha.28",
+    "@types/node": "^20.8.9",
+    "typescript": "^5.2.2"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc --emitDeclarationOnly -p tsconfig.prod.json",
+    "clean": "rm -rf dist && find ./src -name '*.js' -type f | xargs rm -f"
+  },
+  "gitHead": "aba9501b45cf2dc84dc172084510b90e417b42f1"
+}

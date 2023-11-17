@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "paths": {}
+  },
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/test",
+    "../firecms_core/src",
+    "../schema_inference/src",
+    "../data_import/src"
+  ]
+}

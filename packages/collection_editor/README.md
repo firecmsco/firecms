@@ -1,0 +1,1 @@
+## Collection editor plugin
