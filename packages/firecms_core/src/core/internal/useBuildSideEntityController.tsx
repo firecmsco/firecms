@@ -38,7 +38,15 @@ export const useBuildSideEntityController = (navigation: NavigationContext,
                 const newFlag = location.hash === `#${NEW_URL_HASH}`;
                 const entityOrCollectionPath = navigation.urlPathToDataPath(location.pathname);
                 const panelsFromUrl = buildSidePanelsFromUrl(entityOrCollectionPath, navigation.collections, newFlag);
-                sideDialogsController.replace(panelsFromUrl.map((props) => propsToSidePanel(props, navigation, smallLayout)));
+                for (let i = 0; i < panelsFromUrl.length; i++) {
+                    const panel = panelsFromUrl[i];
+                    setTimeout(() => {
+                        if (i === 0)
+                            sideDialogsController.replace(propsToSidePanel(panel, navigation, smallLayout));
+                        else
+                            sideDialogsController.open(propsToSidePanel(panel, navigation, smallLayout))
+                    }, 1);
+                }
             }
             initialised.current = true;
         }

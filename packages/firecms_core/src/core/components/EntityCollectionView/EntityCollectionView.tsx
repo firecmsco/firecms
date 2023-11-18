@@ -572,7 +572,7 @@ export const EntityCollectionView = React.memo(
                     />}
                     emptyComponent={canCreateEntities
                         ? <div className="flex flex-col items-center justify-center">
-                            <Typography variant={"subtitle2"}>Nothing here yet!</Typography>
+                            <Typography variant={"subtitle2"}>So empty...</Typography>
                             <Button
                                 color={"primary"}
                                 variant={"outlined"}

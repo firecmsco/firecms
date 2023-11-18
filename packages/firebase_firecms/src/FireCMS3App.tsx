@@ -468,15 +468,6 @@ function FireCMS3AppAuthenticated({
         firebaseApp
     });
 
-    // if (appCheckLoading) {
-    //     return <FullLoadingView projectId={currentProjectController.projectId}
-    //                             currentProjectController={currentProjectController}/>;
-    // }
-
-
-
-    console.log("inner appConfig", appConfig)
-
     return (
         <FireCMSBackEndProvider {...fireCMSBackend}>
             <ProjectConfigProvider config={currentProjectController}>
