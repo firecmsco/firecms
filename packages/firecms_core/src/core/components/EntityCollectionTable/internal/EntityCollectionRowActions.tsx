@@ -1,12 +1,11 @@
 import React, { MouseEvent, useCallback } from "react";
+import equal from "react-fast-compare"
 
-import { CollectionSize, Entity } from "../../../../types";
-import { Checkbox, IconButton, Tooltip, Typography } from "../../../../components";
-import { useLargeLayout } from "../../../../hooks/useLargeLayout";
-import { DeleteIcon, FileCopyIcon, KeyboardTabIcon, MoreVertIcon } from "../../../../icons";
-import { Menu, MenuItem } from "../../../../components/Menu";
+import { CollectionSize, Entity, EntityAction, EntityCollection, SelectionController } from "../../../../types";
+import { Checkbox, cn, IconButton, Menu, MenuItem, Tooltip, Typography } from "../../../../components";
+import { useFireCMSContext, useLargeLayout } from "../../../../hooks";
+import { MoreVertIcon } from "../../../../icons";
 import { Skeleton } from "../../../../components/Skeleton";
-import { cn } from "../../../../components/util/cn";
 
 /**
  *
@@ -25,62 +24,57 @@ import { cn } from "../../../../components/util/cn";
  *
  * @category Collection components
  */
-export function EntityCollectionRowActions<M extends Record<string, any>>({
-                                                                              entity,
-                                                                              width,
-                                                                              frozen,
-                                                                              isSelected,
-                                                                              selectionEnabled,
-                                                                              size,
-                                                                              toggleEntitySelection,
-                                                                              onCopyClicked,
-                                                                              onEditClicked,
-                                                                              onDeleteClicked,
-                                                                              hideId
-                                                                          }:
-                                                                              {
-                                                                                  entity: Entity<M>,
-                                                                                  width: number,
-                                                                                  frozen?: boolean,
-                                                                                  size: CollectionSize,
-                                                                                  isSelected: boolean,
-                                                                                  selectionEnabled?: boolean,
-                                                                                  toggleEntitySelection?: (selectedEntity: Entity<M>) => void
-                                                                                  onEditClicked?: (selectedEntity: Entity<M>) => void,
-                                                                                  onCopyClicked?: (selectedEntity: Entity<M>) => void,
-                                                                                  onDeleteClicked?: (selectedEntity: Entity<M>) => void,
-                                                                                  hideId?: boolean
-                                                                              }) {
+export const EntityCollectionRowActions = React.memo(function EntityCollectionRowActions({
+                                                                                             entity,
+                                                                                             collection,
+                                                                                             fullPath,
+                                                                                             width,
+                                                                                             frozen,
+                                                                                             isSelected,
+                                                                                             selectionEnabled,
+                                                                                             size,
+                                                                                             highlightEntity,
+                                                                                             onCollectionChange,
+                                                                                             unhighlightEntity,
+                                                                                             actions = [],
+                                                                                             hideId,
+                                                                                             selectionController
+                                                                                         }:
+                                                                                             {
+                                                                                                 entity: Entity<any>,
+                                                                                                 collection?: EntityCollection<any>,
+                                                                                                 fullPath?: string,
+                                                                                                 width: number,
+                                                                                                 frozen?: boolean,
+                                                                                                 size: CollectionSize,
+                                                                                                 isSelected: boolean,
+                                                                                                 selectionEnabled?: boolean,
+                                                                                                 actions?: EntityAction[],
+                                                                                                 hideId?: boolean,
+                                                                                                 onCollectionChange?: () => void,
+                                                                                                 selectionController?: SelectionController;
+                                                                                                 highlightEntity?: (entity: Entity<any>) => void;
+                                                                                                 unhighlightEntity?: (entity: Entity<any>) => void;
+                                                                                             }) {
 
     const largeLayout = useLargeLayout();
 
-    const editEnabled = Boolean(onEditClicked);
-    const copyEnabled = Boolean(onCopyClicked);
-    const deleteEnabled = Boolean(onDeleteClicked);
+    const context = useFireCMSContext();
 
     const onCheckedChange = useCallback((checked: boolean) => {
-        if (toggleEntitySelection)
-            toggleEntitySelection(entity);
-    }, [entity, toggleEntitySelection]);
-
-    const onDeleteClick = useCallback((event: MouseEvent) => {
-        event.stopPropagation();
-        if (onDeleteClicked)
-            onDeleteClicked(entity);
-    }, [entity, onDeleteClicked]);
-
-    const onCopyClick = useCallback((event: MouseEvent) => {
-        event.stopPropagation();
-        if (onCopyClicked)
-            onCopyClicked(entity);
-    }, [entity, onCopyClicked]);
+        selectionController?.toggleEntitySelection(entity);
+    }, [entity, selectionController?.toggleEntitySelection]);
 
     const onClick = useCallback((event: MouseEvent) => {
         event.stopPropagation();
-        if (toggleEntitySelection)
-            toggleEntitySelection(entity);
-    }, [entity, toggleEntitySelection]);
+        selectionController?.toggleEntitySelection(entity);
+    }, [entity, selectionController?.toggleEntitySelection]);
 
+    const hasActions = actions.length > 0;
+    const hasCollapsedActions = actions.some(a => a.collapsed || a.collapsed === undefined);
+
+    const collapsedActions = actions.filter(a => a.collapsed || a.collapsed === undefined);
+    const uncollapsedActions = actions.filter(a => a.collapsed === false);
     return (
         <div
             onClick={onClick}
@@ -95,20 +89,58 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                 contain: "strict"
             }}>
 
-            {(editEnabled || deleteEnabled || selectionEnabled) &&
+            {(hasActions || selectionEnabled) &&
                 <div className="w-34 flex justify-center">
-                    {editEnabled &&
-                        <Tooltip title={`Edit ${entity.id}`}>
+
+                    {uncollapsedActions.map((action, index) => (
+                        <Tooltip key={index} title={action.name}>
                             <IconButton
                                 onClick={(event: MouseEvent) => {
                                     event.stopPropagation();
-                                    if (onEditClicked)
-                                        onEditClicked(entity);
+                                    action.onClick({
+                                        entity,
+                                        fullPath,
+                                        collection,
+                                        context,
+                                        selectionController,
+                                        highlightEntity,
+                                        unhighlightEntity,
+                                        onCollectionChange
+                                    });
                                 }}
                                 size={largeLayout ? "medium" : "small"}>
-                                <KeyboardTabIcon/>
+                                {action.icon}
                             </IconButton>
                         </Tooltip>
+                    ))}
+
+                    {hasCollapsedActions &&
+                        <Menu
+                            trigger={<IconButton
+                                size={largeLayout ? "medium" : "small"}>
+                                <MoreVertIcon/>
+                            </IconButton>}>
+                            {collapsedActions.map((action, index) => (
+                                <MenuItem
+                                    key={index}
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        action.onClick({
+                                            entity,
+                                            fullPath,
+                                            collection,
+                                            context,
+                                            selectionController,
+                                            highlightEntity,
+                                            unhighlightEntity,
+                                            onCollectionChange
+                                        });
+                                    }}>
+                                    {action.icon}
+                                    {action.name}
+                                </MenuItem>
+                            ))}
+                        </Menu>
                     }
 
                     {selectionEnabled &&
@@ -120,24 +152,6 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
                             />
                         </Tooltip>}
 
-                    {(copyEnabled || deleteEnabled) &&
-                        <Menu
-                            trigger={<IconButton
-                                size={largeLayout ? "medium" : "small"}>
-                                <MoreVertIcon/>
-                            </IconButton>}>
-                            {deleteEnabled && <MenuItem onClick={onDeleteClick}>
-                                <DeleteIcon/>
-                                Delete
-                            </MenuItem>}
-
-                            {copyEnabled && <MenuItem onClick={onCopyClick}>
-                                <FileCopyIcon/>
-                                Copy
-                            </MenuItem>}
-                        </Menu>
-                    }
-
                 </div>}
 
             {!hideId && size !== "xs" && (
@@ -145,7 +159,10 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
 
                     {entity
                         ? <Typography
-                            className={"font-mono"}
+                            onClick={(event) => {
+                                event.stopPropagation();
+                            }}
+                            className={"font-mono select-all"}
                             variant={"caption"}
                             color={"secondary"}> {entity.id} </Typography>
                         : <Skeleton/>
@@ -156,4 +173,4 @@ export function EntityCollectionRowActions<M extends Record<string, any>>({
         </div>
     );
 
-}
+}, equal);

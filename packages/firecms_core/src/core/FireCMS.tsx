@@ -17,6 +17,7 @@ import { AuthControllerContext } from "./contexts/AuthControllerContext";
 import { SideDialogsControllerContext } from "./contexts/SideDialogsControllerContext";
 import { useLocaleConfig } from "./internal/useLocaleConfig";
 import { CenteredView } from "../components";
+import { DialogsProvider } from "./contexts/DialogsProvider";
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
@@ -124,10 +125,12 @@ export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
                                         <NavigationContextInstance.Provider
                                             value={navigation}>
                                             <BreadcrumbsProvider>
-                                                <FireCMSInternal
-                                                    loading={loading}>
-                                                    {children}
-                                                </FireCMSInternal>
+                                                <DialogsProvider>
+                                                    <FireCMSInternal
+                                                        loading={loading}>
+                                                        {children}
+                                                    </FireCMSInternal>
+                                                </DialogsProvider>
                                             </BreadcrumbsProvider>
                                         </NavigationContextInstance.Provider>
                                     </SideEntityControllerContext.Provider>

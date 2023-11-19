@@ -131,6 +131,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     emptyComponent?: React.ReactNode;
 
+    getIdColumnWidth?: () => number;
 }
 
 export type GetPropertyForProps<M extends Record<string, any>> = {

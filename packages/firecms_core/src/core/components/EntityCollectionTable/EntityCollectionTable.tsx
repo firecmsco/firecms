@@ -111,7 +111,8 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
          AddColumnComponent,
          AdditionalHeaderWidget,
          additionalIDHeaderWidget,
-         emptyComponent
+         emptyComponent,
+         getIdColumnWidth
      }: EntityCollectionTableProps<M>) {
 
         const largeLayout = useLargeLayout();
@@ -323,14 +324,14 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const idColumn: VirtualTableColumn = useMemo(() => ({
             key: "id_ewcfedcswdf3",
-            width: largeLayout ? 160 : 130,
+            width: getIdColumnWidth?.() ?? (largeLayout ? 160 : 130),
             title: "ID",
             resizable: false,
             frozen: largeLayout,
             headerAlign: "center",
             align: "center",
             AdditionalHeaderWidget: () => additionalIDHeaderWidget
-        }), [largeLayout])
+        }), [getIdColumnWidth, largeLayout])
 
         const columns: VirtualTableColumn[] = useMemo(() => [
             idColumn,

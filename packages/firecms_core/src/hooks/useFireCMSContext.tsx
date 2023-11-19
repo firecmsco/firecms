@@ -8,17 +8,9 @@ import { useDataSource } from "./data/useDataSource";
 import { useStorageSource } from "./useStorageSource";
 import { useSnackbarController } from "./useSnackbarController";
 import { useUserConfigurationPersistence } from "./useUserConfigurationPersistence";
+import { useDialogsController } from "./useDialogsController";
 
-export const FireCMSContextInstance = createContext<Partial<FireCMSContext>>({
-    sideDialogsController: {} as any,
-    sideEntityController: {} as any,
-    navigation: {} as any,
-    dataSource: {} as any,
-    storageSource: {} as any,
-    authController: {} as any,
-    snackbarController: {} as any,
-    fields: {}
-});
+export const FireCMSContextInstance = createContext<Partial<FireCMSContext>>({});
 
 /**
  * Hook to retrieve the {@link FireCMSContext}.
@@ -40,6 +32,7 @@ export const useFireCMSContext = <UserType extends User = User, AuthControllerTy
     const storageSource = useStorageSource();
     const snackbarController = useSnackbarController();
     const userConfigPersistence = useUserConfigurationPersistence();
+    const dialogsController = useDialogsController();
 
     return {
         ...partialContext,
@@ -50,7 +43,8 @@ export const useFireCMSContext = <UserType extends User = User, AuthControllerTy
         dataSource,
         storageSource,
         snackbarController,
-        userConfigPersistence
+        userConfigPersistence,
+        dialogsController
     }
 
 };

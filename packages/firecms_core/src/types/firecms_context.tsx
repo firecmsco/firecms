@@ -13,6 +13,7 @@ import { FireCMSPlugin } from "./plugins";
 import { CMSAnalyticsEvent } from "./analytics";
 import { PropertyConfig } from "./property_config";
 import { EntityCustomView } from "./collections";
+import { DialogsController } from "./dialogs_controller";
 
 /**
  * Context that includes the internal controllers and contexts used by the app.
@@ -59,8 +60,15 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
 
     /**
      * Controller used to open side dialogs
+     * This is the controller used internally by side entity dialogs
+     * or reference dialogs.
      */
     sideDialogsController: SideDialogsController;
+
+    /**
+     * Controller used to open regular dialogs
+     */
+    dialogsController: DialogsController;
 
     /**
      * Used auth controller

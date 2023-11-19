@@ -6,6 +6,7 @@ import {
     AdditionalFieldDelegate,
     CollectionSize,
     Entity,
+    EntityAction,
     EntityCollection,
     FilterValues,
     PartialEntityCollection,
@@ -40,14 +41,14 @@ import {
     useAuthController,
     useDataSource,
     useFireCMSContext,
+    useLargeLayout,
     useNavigationContext,
     useSideEntityController
 } from "../../../hooks";
 import { useUserConfigurationPersistence } from "../../../hooks/useUserConfigurationPersistence";
 import { EntityCollectionViewActions } from "./EntityCollectionViewActions";
 import { useEntityCollectionTableController } from "../EntityCollectionTable/useEntityCollectionTableController";
-import { Button, cn, IconButton, TextField, Tooltip, Typography } from "../../../components";
-import { Popover } from "../../../components/Popover";
+import { Button, cn, IconButton, Popover, TextField, Tooltip, Typography } from "../../../components";
 import { Skeleton } from "../../../components/Skeleton";
 import { setIn } from "formik";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
@@ -55,6 +56,11 @@ import { KeyboardTabIcon, SearchIcon } from "../../../icons";
 import { useColumnIds } from "./useColumnsIds";
 import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
 import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";
+import {
+    copyEntityAction,
+    deleteEntityAction,
+    editEntityAction
+} from "../EntityCollectionTable/internal/default_entity_actions";
 
 const COLLECTION_GROUP_PARENT_ID = "collectionGroupParent";
 
@@ -344,37 +350,6 @@ export const EntityCollectionView = React.memo(
 
         const displayedColumnIds = useColumnIds(resolvedCollection, true);
 
-        const onCopyClicked = useCallback((clickedEntity: Entity<M>) => {
-            setSelectedNavigationEntity(clickedEntity);
-            context.onAnalyticsEvent?.("copy_entity_click", {
-                path: clickedEntity.path,
-                entityId: clickedEntity.id
-            });
-            sideEntityController.open({
-                entityId: clickedEntity.id,
-                path: clickedEntity.path,
-                copy: true,
-                collection,
-                updateUrl: true,
-                onClose: unselectNavigatedEntity
-            });
-        }, [sideEntityController, collection, fullPath, unselectNavigatedEntity]);
-
-        const onEditClicked = useCallback((clickedEntity: Entity<M>) => {
-            setSelectedNavigationEntity(clickedEntity);
-            context.onAnalyticsEvent?.("entity_click", {
-                path: clickedEntity.path,
-                entityId: clickedEntity.id
-            });
-            sideEntityController.open({
-                entityId: clickedEntity.id,
-                path: clickedEntity.path,
-                collection,
-                updateUrl: true,
-                onClose: unselectNavigatedEntity
-            });
-        }, [sideEntityController, collection, fullPath, unselectNavigatedEntity]);
-
         const additionalFields = useMemo(() => {
             const subcollectionColumns: AdditionalFieldDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
                 return {
@@ -433,6 +408,32 @@ export const EntityCollectionView = React.memo(
             ];
         }, [collection, fullPath]);
 
+        const updateLastDeleteTimestamp = useCallback(() => {
+            setLastDeleteTimestamp(Date.now());
+        }, []);
+
+        const largeLayout = useLargeLayout();
+
+        const getActionsForEntity = useCallback(({ entity, customEntityActions }: { entity?: Entity<M>, customEntityActions?: EntityAction[] }): EntityAction[] => {
+            const deleteEnabled = entity ? canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity) : true;
+            const actions: EntityAction[] = [editEntityAction];
+            if (createEnabled)
+                actions.push(copyEntityAction);
+            if (deleteEnabled)
+                actions.push(deleteEntityAction);
+            if (customEntityActions)
+                actions.push(...customEntityActions);
+            return actions;
+        }, [authController, collection, createEnabled, fullPath]);
+
+        const getIdColumnWidth = useCallback(() => {
+            const entityActions = getActionsForEntity({});
+            const collapsedActions = entityActions.filter(a => a.collapsed !== false);
+            const uncollapsedActions = entityActions.filter(a => a.collapsed === false);
+            const actionsWidth = uncollapsedActions.length * (largeLayout ? 40 : 30);
+            return (largeLayout ? (80 + actionsWidth) : (70 + actionsWidth)) + (collapsedActions.length > 0 ? (largeLayout ? 40 : 30) : 0);
+        }, [largeLayout, getActionsForEntity]);
+
         const tableRowActionsBuilder = useCallback(({
                                                         entity,
                                                         size,
@@ -447,7 +448,7 @@ export const EntityCollectionView = React.memo(
 
             const isSelected = isEntitySelected(entity);
 
-            const deleteEnabled = canDeleteEntity(collection, authController, fullPathToCollectionSegments(fullPath), entity);
+            const actions = getActionsForEntity({ entity });
 
             return (
                 <EntityCollectionRowActions
@@ -457,15 +458,18 @@ export const EntityCollectionView = React.memo(
                     isSelected={isSelected}
                     selectionEnabled={selectionEnabled}
                     size={size}
-                    toggleEntitySelection={toggleEntitySelection}
-                    onEditClicked={onEditClicked}
-                    onCopyClicked={createEnabled ? onCopyClicked : undefined}
-                    onDeleteClicked={deleteEnabled ? onSingleDeleteClick : undefined}
+                    highlightEntity={setSelectedNavigationEntity}
+                    unhighlightEntity={unselectNavigatedEntity}
+                    collection={collection}
+                    fullPath={fullPath}
+                    actions={actions}
                     hideId={collection?.hideIdFromCollection}
+                    onCollectionChange={updateLastDeleteTimestamp}
+                    selectionController={usedSelectionController}
                 />
             );
 
-        }, [isEntitySelected, collection, authController, fullPath, selectionEnabled, toggleEntitySelection, onEditClicked, createEnabled, onCopyClicked]);
+        }, [isEntitySelected, collection, authController, fullPath, selectionEnabled, toggleEntitySelection, createEnabled]);
 
         const title = <Popover
             open={popOverOpen}
@@ -588,6 +592,7 @@ export const EntityCollectionView = React.memo(
                     inlineEditing={checkInlineEditing()}
                     AdditionalHeaderWidget={buildAdditionalHeaderWidget}
                     AddColumnComponent={addColumnComponentInternal}
+                    getIdColumnWidth={getIdColumnWidth}
                     additionalIDHeaderWidget={<EntityIdHeaderWidget
                         path={fullPath}
                         collection={collection}/>}
