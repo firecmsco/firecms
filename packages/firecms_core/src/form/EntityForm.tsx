@@ -3,6 +3,7 @@ import React, { MutableRefObject, useCallback, useEffect, useMemo, useRef, useSt
 import {
     CMSAnalyticsEvent,
     Entity,
+    EntityAction,
     EntityCollection,
     EntityStatus,
     EntityValues,
@@ -15,13 +16,26 @@ import { Form, Formik, FormikHelpers, FormikProps } from "formik";
 import { PropertyFieldBinding } from "./PropertyFieldBinding";
 import { CustomFieldValidator, getYupEntitySchema } from "./validation";
 import equal from "react-fast-compare"
-import { ErrorBoundary, getDefaultValuesFor, isHidden, isReadOnly, resolveCollection } from "../core";
-import { useDataSource, useFireCMSContext } from "../hooks";
+import {
+    canCreateEntity,
+    canDeleteEntity,
+    ErrorBoundary,
+    fullPathToCollectionSegments,
+    getDefaultValuesFor,
+    isHidden,
+    isReadOnly,
+    resolveCollection
+} from "../core";
+import { useAuthController, useDataSource, useFireCMSContext, useSideEntityController } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import { DialogActions, Typography } from "../components";
+import { DialogActions, IconButton, Typography } from "../components";
 import { Button } from "../components/Button";
 import { cn } from "../components/util/cn";
+import {
+    copyEntityAction,
+    deleteEntityAction
+} from "../core/components/EntityCollectionTable/internal/default_entity_actions";
 
 /**
  * @category Components
@@ -326,6 +340,21 @@ function EntityFormInternal<M extends Record<string, any>>({
             : undefined,
         [entityId, collection.properties, uniqueFieldValidator]);
 
+    const authController = useAuthController();
+
+    const getActionsForEntity = useCallback(({ entity, customEntityActions }: { entity?: Entity<M>, customEntityActions?: EntityAction[] }): EntityAction[] => {
+        const createEnabled = canCreateEntity(collection, authController, fullPathToCollectionSegments(path), null);
+        const deleteEnabled = entity ? canDeleteEntity(collection, authController, fullPathToCollectionSegments(path), entity) : true;
+        const actions: EntityAction[] = [];
+        if (createEnabled)
+            actions.push(copyEntityAction);
+        if (deleteEnabled)
+            actions.push(deleteEntityAction);
+        if (customEntityActions)
+            actions.push(...customEntityActions);
+        return actions;
+    }, [authController, collection, path]);
+
     return (
         <Formik
             initialValues={baseDataSourceValues as M}
@@ -417,7 +446,8 @@ function EntityFormInternal<M extends Record<string, any>>({
                             status={status}
                             savingError={savingError}
                             closeAfterSaveRef={closeAfterSaveRef}
-                            autoSave={autoSave}/>}
+                            autoSave={autoSave}
+                            entityActions={getActionsForEntity({ entity, customEntityActions: collection.entityActions })}/>}
 
                     </div>
                 </div>
@@ -436,7 +466,8 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
     status: "new" | "existing" | "copy",
     savingError?: Error,
     closeAfterSaveRef: MutableRefObject<boolean>,
-    autoSave?: boolean
+    autoSave?: boolean,
+    entityActions: EntityAction[]
 }) {
 
     const {
@@ -455,8 +486,13 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
         savingError,
         dirty,
         closeAfterSaveRef,
-        autoSave
+        autoSave,
+        entityActions
     } = props;
+
+    const context = useFireCMSContext();
+    const formActions = entityActions.filter(a => a.includeInForm === undefined || a.includeInForm);
+    const sideEntityController = useSideEntityController();
 
     const modified = dirty;
     useEffect(() => {
@@ -552,6 +588,27 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                             {savingError.message}
                         </Typography>
                     </div>}
+
+                {entity && formActions.length > 0 && <div className="flex-grow flex overflow-scroll">
+                    {formActions.map(action => (
+                        <IconButton
+                            key={action.name}
+                            color="primary"
+                            onClick={(event: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+                                event.stopPropagation();
+                                if (entity)
+                                    action.onClick({
+                                        entity,
+                                        fullPath: resolvedCollection.path,
+                                        collection: resolvedCollection,
+                                        context,
+                                        sideEntityController
+                                    });
+                            }}>
+                            {action.icon}
+                        </IconButton>
+                    ))}
+                </div>}
 
                 <Button
                     variant="text"

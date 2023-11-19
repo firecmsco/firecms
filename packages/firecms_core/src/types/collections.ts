@@ -6,6 +6,7 @@ import { EntityCallbacks } from "./entity_callbacks";
 import { Permissions, PermissionsBuilder } from "./permissions";
 import { EnumValues, PropertiesOrBuilders } from "./properties";
 import { FormContext } from "./fields";
+import { EntityAction } from "./entity_actions";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -58,9 +59,9 @@ export interface EntityCollection<M extends Record<string, any> = any,
 
     /**
      * Icon key to use in this collection.
-     * You can use any of the icons in the MUI specs:
-     * https://mui.com/material-ui/material-icons/
-     * e.g. 'AccountTree' or 'Person'
+     * You can use any of the icons in the Material specs:
+     * https://fonts.google.com/icons
+     * e.g. 'account_tree' or 'person'
      */
     icon?: string;
 
@@ -141,6 +142,31 @@ export interface EntityCollection<M extends Record<string, any> = any,
     Actions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
 
     /**
+     * You can define additional actions that can be performed on the entities
+     * in this collection. These actions can be displayed in the collection
+     * view or in the entity view.
+     *
+     * You can use the `onClick` method to implement your own logic.
+     * In the `context` prop you can access all the controllers of FireCMS.
+     *
+     * ```
+     * const archiveEntityAction: EntityAction = {
+     *     icon: <ArchiveIcon/>,
+     *     name: "Archive",
+     *     onClick({
+     *                 entity,
+     *                 collection,
+     *                 context,
+     *             }): Promise<void> {
+     *         // Add your code here
+     *         return Promise.resolve(undefined);
+     *     }
+     * }
+     * ```
+     */
+    entityActions?: EntityAction<M, UserType>[];
+
+    /**
      * Pass your own selection controller if you want to control selected
      * entities externally.
      * @see useSelectionController
@@ -191,7 +217,6 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * an additional field delegate.
      */
     additionalFields?: AdditionalFieldDelegate<M, AdditionalKey, UserType>[];
-
 
     /**
      * Default size of the rendered collection
@@ -348,7 +373,6 @@ export type FilterCombination<Key extends string> = Partial<Record<Key, "asc" | 
  * @category Models
  */
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
-
 
 export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, UserType extends User = User> = {
     entity: Entity<M>,

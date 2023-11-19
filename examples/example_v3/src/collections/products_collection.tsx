@@ -1,4 +1,4 @@
-import { buildCollection, EntityCallbacks } from "@firecms/core";
+import { ArchiveIcon, buildCollection, EntityCallbacks } from "@firecms/core";
 
 import { SampleEntityView } from "../custom_entity_view/SampleEntityView";
 import { Product } from "../types";
@@ -48,6 +48,20 @@ export const productsCollection = buildCollection<Product>({
         create: true,
         delete: true
     }),
+    entityActions: [
+        {
+            icon: <ArchiveIcon/>,
+            name: "Archive",
+            onClick({
+                        entity,
+                        collection,
+                        context,
+                    }): Promise<void> {
+                // Add your code here
+                return Promise.resolve(undefined);
+            }
+        }
+    ],
     entityViews: [
         {
             key: "sample_custom_view",

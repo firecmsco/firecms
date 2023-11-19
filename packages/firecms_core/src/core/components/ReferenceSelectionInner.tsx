@@ -232,7 +232,6 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
             selectionEnabled={multiselect}
             hideId={collection?.hideIdFromCollection}
             fullPath={fullPath}
-            editEnabled={false} copyEnabled={false} deleteEnabled={false}
             selectionController={selectionController}/>;
 
     }, [multiselect, selectionController.selectedEntities, toggleEntitySelection, collection?.hideIdFromCollection]);

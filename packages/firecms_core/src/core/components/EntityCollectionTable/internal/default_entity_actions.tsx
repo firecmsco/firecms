@@ -1,6 +1,6 @@
 import { EntityAction } from "../../../../types";
 import { DeleteEntityDialog } from "./DeleteEntityDialog";
-import { DeleteIcon, FileCopyIcon, KeyboardTabIcon } from "../../../../icons";
+import { ArchiveIcon, DeleteIcon, FileCopyIcon, KeyboardTabIcon } from "../../../../icons";
 
 export const editEntityAction: EntityAction = {
     icon: <KeyboardTabIcon/>,
@@ -55,6 +55,18 @@ export const copyEntityAction: EntityAction = {
         return Promise.resolve(undefined);
     }
 }
+export const archiveEntityAction: EntityAction = {
+    icon: <ArchiveIcon/>,
+    name: "Archive",
+    onClick({
+                entity,
+                collection,
+                context,
+            }): Promise<void> {
+        // Add your code here
+        return Promise.resolve(undefined);
+    }
+}
 
 export const deleteEntityAction: EntityAction = {
     icon: <DeleteIcon/>,
@@ -65,7 +77,8 @@ export const deleteEntityAction: EntityAction = {
                 collection,
                 context,
                 selectionController,
-                onCollectionChange
+                onCollectionChange,
+                sideEntityController
             }): Promise<void> {
         const { closeDialog } = context.dialogsController.open({
             key: "delete_entity_dialog_" + entity.id,
@@ -84,6 +97,7 @@ export const deleteEntityAction: EntityAction = {
                         });
                         selectionController?.setSelectedEntities(selectionController.selectedEntities.filter(e => e.id !== entity.id));
                         onCollectionChange?.();
+                        sideEntityController?.close();
                     }}
                     onClose={closeDialog}/>;
             }

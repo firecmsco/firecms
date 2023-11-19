@@ -448,7 +448,7 @@ export const EntityCollectionView = React.memo(
 
             const isSelected = isEntitySelected(entity);
 
-            const actions = getActionsForEntity({ entity });
+            const actions = getActionsForEntity({ entity, customEntityActions: collection.entityActions });
 
             return (
                 <EntityCollectionRowActions
