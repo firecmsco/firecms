@@ -45,14 +45,14 @@ export const Newsletter = () => {
         <section
             className="relative">
             <div
-                className={"mx-auto px-4 sm:px-6 bg-gray-200 dark:bg-gray-800 "}
+                className={"mx-auto px-4 sm:px-6 bg-slate-200 dark:bg-slate-800 "}
                 // data-aos="fade-up"
                 // data-aos-delay="100"
             >
                 <div
                     className="relative flex flex-col items-center px-6 py-16">
 
-                    {/*<h4 className="h2 mb-4 text-gray-900">*/}
+                    {/*<h4 className="h2 mb-4 text-slate-900">*/}
                     {/*    Stay in the loop*/}
                     {/*</h4>*/}
                     <div>
@@ -81,7 +81,7 @@ export const Newsletter = () => {
                                     className="w-full py-2 flex justify-between gap-2">
                                     <input
                                         disabled={loading || completed}
-                                        className={"appearance-none outline-none text-xl flex-1 px-4 py-4 bg-gray-100 dark:bg-gray-900 rounded w-full leading-tight focus:border-primary "
+                                        className={"appearance-none outline-none text-xl flex-1 px-4 py-4 bg-slate-100 dark:bg-slate-900 rounded w-full leading-tight focus:border-primary "
                                             + (!validEmail && submitClicked ? "border-solid border-red-600" : "border-none")}
                                         id="email" type="email"
                                         placeholder="Enter your email"
@@ -89,7 +89,7 @@ export const Newsletter = () => {
                                         value={email}/>
                                     <button type="submit"
                                             disabled={loading || completed || !policyAccepted}
-                                            className={"btn px-8 py-4 sm:px-12 sm:py-4 uppercase w-auto sm:mb-0 sm:ml-2 " + (loading || !policyAccepted ? "bg-gray-200 dark:bg-gray-800" : (completed ? "bg-green-600" : "bg-primary hover:bg-blue-700"))}>
+                                            className={"btn px-8 py-4 sm:px-12 sm:py-4 uppercase w-auto sm:mb-0 sm:ml-2 " + (loading || !policyAccepted ? "bg-slate-200 dark:bg-slate-800" : (completed ? "bg-green-600" : "bg-primary hover:bg-blue-700"))}>
                                         {loading ? "Loading" : (completed ? "Signed up!" : "Sign up")}
                                     </button>
                                 </div>

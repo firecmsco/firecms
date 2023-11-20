@@ -23,7 +23,7 @@ function HeroButtons() {
 
         <div className={"flex justify-center lg:flex-row flex-col-reverse items-center gap-4"}>
             <a
-                className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
+                className={"btn shadow-none py-4 text-white dark:hover:bg-slate-900 hover:bg-slate-200 uppercase border border-solid w-full lg:w-auto rounded"}
                 href={"https://discord.gg/fxy7xsQm3m"}
             >
                 {discordIcon}

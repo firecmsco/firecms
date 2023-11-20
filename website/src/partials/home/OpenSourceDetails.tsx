@@ -16,7 +16,7 @@ function OpenSourceDetails() {
                             data-aos="zoom-y-out">
                             All the power of Firebase and open source
                         </h2>
-                        <p className="text-xl md:text-2xltext-gray-600 dark:text-gray-200"
+                        <p className="text-xl md:text-2xltext-slate-600 dark:text-slate-200"
                            data-aos="zoom-y-out">
                             Extend the functionality of your admin panel and
                             your complete project with all the capabilities of

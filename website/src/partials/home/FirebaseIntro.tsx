@@ -42,7 +42,7 @@ function FirebaseIntro() {
                     <h2 className="h1 mb-4">
                         Don't build another admin tool
                     </h2>
-                    <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200 dark:text-gray-200">
+                    <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-200 dark:text-slate-200">
                         <b>FireCMS</b> is an open source headless CMS built by <b>developers
                         for developers</b>.
                         <br/>

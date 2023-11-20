@@ -132,7 +132,7 @@
 
 html[data-theme='dark'] {
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
-    --ifm-background-color: #1b1b21;
+    --ifm-background-color: rgb(5, 6, 11);
     --ifm-background-surface-color: #232328;
     --ifm-color-emphasis-100: #232328;
     /*--ifm-background-surface-color: #242526;*/

@@ -69,7 +69,7 @@ export function DataEnhancementHero() {
                 className={" flex content-center justify-center"}>
                 <video
                     key={isDarkTheme ? "dark" : "light"}
-                    className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+                    className={"rounded-xl border border-solid dark:border-slate-800 border-slate-200"}
                     width="100%"
                     loop autoPlay muted>
                     <source

@@ -13,7 +13,7 @@ export function ManageYour() {
 
     return <Panel color={"primary"}>
         <div
-            className={" h1 relative items-center text-white uppercase "}>
+            className={" h1 relative items-center text-white uppercase"}>
             <h4 className="h1 mb-4 text-white uppercase md:inline">
                 Manage your&nbsp;
             </h4>

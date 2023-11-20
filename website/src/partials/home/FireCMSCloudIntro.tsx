@@ -21,7 +21,7 @@ export const FireCMSCloudIntro = () => {
                 <div
                     className={ContainerMixin + " flex flex-col py-20"}>
 
-                    <h2 className="h1 mb-4 text-gray-900 uppercase">
+                    <h2 className="h1 mb-4 text-slate-900 uppercase">
                         New No-code FireCMS
                     </h2>
 

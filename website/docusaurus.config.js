@@ -165,7 +165,7 @@ module.exports = {
                     to: "https://demo.firecms.co",
                     label: "Demo",
                     // className: "btn shadow-none mr-2 px-6 py-2  uppercase",
-                    className: "border-1 border-gray-600 dark:border-gray-700  uppercase rounded border-solid dark:text-white text-gray-800 hover:text-gray-700 dark:hover:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-900 h dark:hover:border-gray-800 text-center btn mr-3 px-6 py-2",
+                    className: "border-1 border-slate-600 dark:border-slate-700  uppercase rounded border-solid dark:text-white text-slate-800 hover:text-slate-700 dark:hover:text-slate-100 hover:bg-slate-100 dark:hover:bg-slate-900 h dark:hover:border-slate-800 text-center btn mr-3 px-6 py-2",
                     "aria-label": "Open the demo project",
                     position: "right"
                 },

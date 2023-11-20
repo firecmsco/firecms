@@ -10,7 +10,7 @@ export function EnterpriseTeaser() {
                 className={"mx-auto px-4 sm:px-6 bg-primary text-white "}>
                 <div
                     className="relative flex flex-col items-center px-6 py-12">
-                    <h4 className="h2 my-4 text-white uppercase">
+                    <h4 className="h2 my-4 text-white uppercase font-mono">
                         Enterprise or start-up?
                     </h4>
 
@@ -28,7 +28,7 @@ export function EnterpriseTeaser() {
 
                     <div className="flex flex-wrap">
                         <div
-                            className="w-full py-2 border-b-2 border-gray-400 flex justify-between gap-2">
+                            className="w-full py-2 border-b-2 border-slate-400 flex justify-between gap-2">
                         </div>
 
                     </div>

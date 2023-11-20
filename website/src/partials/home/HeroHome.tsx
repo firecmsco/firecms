@@ -20,7 +20,7 @@ function HeroHome({}) {
             style={{
                 aspectRatio: 1440 / 587
             }}
-            className={"my-4 rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+            className={"my-4 rounded-xl border border-solid dark:border-slate-800 border-slate-200"}
             width="100%"
             loop autoPlay muted>
             <source src={isDarkTheme ? darkModeVideo : lightModeVideo}

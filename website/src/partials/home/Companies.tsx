@@ -20,7 +20,7 @@ export function Companies() {
 
     return <Panel color={"gray"}>
 
-        <h2 className={"text-2xl text-center p-1 text-gray-500 dark:text-gray-400"}>
+        <h2 className={"text-2xl text-center p-1 text-slate-500 dark:text-slate-400"}>
             Trusted by
         </h2>
         <div
@@ -60,9 +60,9 @@ export function Companies() {
             </a>
         </div>
         <div
-            className={" text-gray-500 dark:text-gray-400 text-center text-sm"}>
+            className={" text-slate-500 dark:text-slate-400 text-center text-sm"}>
             To get your project featured here, please contact us at <a
-            className={"font-bold text-gray-500 dark:text-gray-400"}
+            className={"font-bold text-slate-500 dark:text-slate-400"}
             href="mailto:hello@firecms.co?subject=FireCMS%20feature%20project"
             rel="noopener noreferrer"
             target="_blank"

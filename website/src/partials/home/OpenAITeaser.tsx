@@ -25,14 +25,14 @@ function OpenAITeaser() {
                 left={
                     <div>
 
-                        <p className="text-secondary uppercase font-bold ">
+                        <p className="text-secondary uppercase font-bold font-mono">
                             Advanced editing
                         </p>
 
 
                         <div className={"flex items-center mb-4"}>
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-4">
+                                className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 mr-4">
                                 <MagicIcon/>
                             </div>
 
@@ -89,7 +89,7 @@ function OpenAITeaser() {
                         className={" flex content-center justify-center"}>
                         <video
                             key={isDarkTheme ? "dark" : "light"}
-                            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+                            className={"rounded-xl border border-solid dark:border-slate-800 border-slate-200"}
                             width="100%"
                             loop autoPlay muted>
                             <source

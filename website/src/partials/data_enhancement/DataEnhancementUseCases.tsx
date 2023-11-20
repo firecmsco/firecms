@@ -3,10 +3,10 @@ import { Panel } from "../general/Panel";
 
 export function DataEnhancementUseCases() {
     return <Panel color={"primary"}>
-        <h2 className="h1 my-1 text-white uppercase">
+        <h2 className="h1 my-1 text-white uppercase font-mono">
             The world has changed.
         </h2>
-        <h2 className="h1 my-1 text-white uppercase">
+        <h2 className="h1 my-1 text-white uppercase font-mono">
             Your CMS should too.
         </h2>
         {/*<h2 className="h1 my-1 text-white uppercase">*/}

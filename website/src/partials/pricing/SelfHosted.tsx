@@ -28,7 +28,7 @@ export function SelfHosted() {
         <div className={"flex gap-4"}>
 
             <div
-                className={"select-all font-mono text-gray-800 p-4 px-6 bg-gray-200 border-gray-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
+                className={"select-all font-mono text-slate-800 p-4 px-6 bg-slate-200 border-slate-300 border-solid w-fit text-md font-bold inline-flex rounded-md"}>
                 yarn create firecms-app
             </div>
 
