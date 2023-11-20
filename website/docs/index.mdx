@@ -1,216 +1,74 @@
 ---
 id: intro
-title: Introduction
-sidebar_label: Introduction
+title: FireCMS Cloud
+sidebar_label: FireCMS Cloud
 slug: /
 ---
 
-
-:::important
-These docs are for the self-hosted version of FireCMS.
-
-If you are using **FireCMS Cloud**, check the docs [here](./docs/cloud/)
-:::
-
 <video class="intro_video" loop autoPlay muted>
-  <source src="/img/dark_mode.mp4" type="video/mp4"/>
+    <source src="/img/collection_editor_preview.mp4" type="video/mp4"/>
 </video>
 
 
 > FireCMS is an **open source headless CMS and admin panel** built by developers
 > for developers.
 
-FireCMS is a content management system (CMS) that is built on top of the
-Firebase platform. It is a cloud-based system that allows users to manage and
-publish content to their websites or applications. With FireCMS, users can
-create and edit pages, upload and manage media files, and manage users and
-permissions. FireCMS is designed to be easy to use and can be integrated with
-other Firebase services, such as Firebase Authentication and Firebase Cloud
-Functions, to provide additional features and functionality.
+FireCMS 3.0 is the latest version of FireCMS. You can either use it as a
+**self-hosted** solution or as a **fully managed service**. In both cases, you
+can use the same codebase and the same configuration.
 
-It generates **CRUD views** based on your configuration. It is easy to set up
-for the straight forward cases and easy to extend and customise.
+:::tip NEW
+FireCMS Cloud is the hosted version of FireCMS. It is a **fully managed
+service** that allows you to **create and manage your content** in a
+**user-friendly interface**.
 
-FireCMS does **not** enforce any data structure on your side, and works out of
-the box with any project.
-
-The goal of this CMS is to generate collection and form views that bind nicely
-to the collection/document model. We have built in many basic (and not
-so basic) use cases; but FireCMS is built with extensibility in mind, so it is
-easy to create your custom form fields, or your complete views.
-
-There are two ways to build top level views in FireCMS:
-
-- By creating mapping configurations for **collections** (to datasource
-  collections, such as Firestore collections, with your schema).
-  The best way to get a grasp of how
-  this works is checking the [Quickstart](quickstart.mdx) and
-  [Collections](collections/collections.md)
-  documentation.
-- Create **custom views** that sit in the main level of your navigation tree. In
-  this case you can build your custom React component and make use of the
-  internal components of the CMS as well as the provided hooks.
-  Check [Custom top level views](navigation/custom_top_level_views.mdx) for more
-  details
-
-:::note Custom backend
-FireCMS was built with Firebase/Firestore as the default backend, but nothing
-stops you from implementing your own `DataSource`, `AuthController` and
-`StorageSource` and override the default implementations.
+With FireCMS Cloud you can visualize and edit your Firestore data in a friendly
+interface, **without writing a single line of code**.
 :::
 
-FireCMS works as a complete app that is in charge of creating the views that
-you define based on your collections and entity schemas. It handles
-navigation for you as well as authentication and login.
-
-However, there is a lot of room to customization,
-including [custom top level views](navigation/custom_top_level_views.mdx),
-[custom entity views](collections/custom_entity_views.md),
-and [custom fields](properties/custom_fields.md)
-for your entity properties, in case the basic use cases we include don't suit
-your needs.
-
-In the simplest case, you will want to create some properties, include them
-in an entity collection, include it in a collection and include that in a CMS
-instance.
-
-## FirebaseCMSApp
-
-The entry point for setting up a FireCMS app based on Firebase is
-the `FirebaseCMSApp`.
-This component is in charge of building a full FireCMS instance, using Firebase
-Auth,
-Firestore, and Firebase Storage as backend services.
-
-Internally it will create a `FireCMS` which holds the main state and
-logic of the app, and create the app scaffold and routes.
-
-:::note
-It is also possible to use FireCMS by using lower level components and including
-`FireCMS` in your code, even without using Firebase.
-More details in the [Custom CMSApp](custom_cms_app.mdx) section
-:::
-
-You can find an example of a basic `FirebaseCMSApp` implementation in the
-[quickstart section](quickstart.mdx)
-
-### Core technologies
-
-FireCMS is based on these great technologies:
-
-- Typescript
-- Firebase
-- React
-- React Router
-- Material UI
-- Formik + Yup
-
-:::important
-You can use this library as a full application, with routing enabled.
-But if you need better customisation and to use the internal components, tweak
-the
-MUI theme, control the routes or replace the backend altogether
-(including auth, storage and data), you can do it starting from version 1.0.0.
-Check the details in the [Custom CMSApp](custom_cms_app.mdx) section
-:::
-
-## Firebase
-
-If Firebase is your chosen backend:
-
-* You need to enable the **Firestore** database in your Firebase project.
-* If you want to have  **authentication** enabled in your CMS config, you need
-  to enable
-  the corresponding auth method in your project.
-* Also, if you are using **storage** fields in your string properties, you need
-  to enable Firebase Storage.
-
-More details in [Firebase setup section](firebase_setup.md).
-
-## Deployment to Firebase hosting
-
-If you are deploying this project to firebase hosting, and the app is properly
-linked to it, you can omit the `firebaseConfig` specification, since it gets
-picked up automatically.
-
-More details in [the deployment section](deployment.md)
+**But** you still can upload your own code and define your custom properties,
+views, etc. in both the self-hosted and the hosted version of FireCMS.
 
 ## Features
 
-FireCMS has been meticulously crafted to make it incredibly easy for developers
-to build a CMS/admin tool while offering an excellent data editing experience
-and a user-friendly interface for marketers and content managers.
+- **Fully managed service**. No need to worry about infrastructure, security,
+scalability or maintenance.
+- **User-friendly interface**. FireCMS Cloud provides a user-friendly interface
+to visualize and edit your Firestore data.
+- **Collection editor**. Create and edit your collections and documents in a
+friendly interface. No need to write a single line of code.
+- **Users and roles**. Create users and roles to manage access to your data.
 
-### 🏓 Exceptional Spreadsheet View
 
-We've developed a highly efficient windowed **spreadsheet view** for
-collections, allowing inline editing for most common fields, as well as popup
-views for other cases and your custom field implementations.
+## Getting started
 
-Featuring **real-time** support, FireCMS is perfect for apps that require
-constant updates. It also supports **text search** (through an external provider
-like Algolia, if using Firestore), **filtering and sorting**, and **exporting**
-data.
+You can use FireCMS Cloud with your existing Firestore project, or let it create
+a new one for you.
 
-### ✨ Robust Forms
+Just sign up and start using it!
 
-![fields](https://firecms.co/img/post_editing.png)
+<a href="https://app.firecms.co"
+   rel="noopener noreferrer"
+   target="_blank"
+   class="btn px-6 my-2 py-2 md:px-12 md:py-4 text-white bg-primary hover:text-white hover:bg-blue-700 uppercase border-solid rounded
+text-center">
+    Go to FireCMS Cloud
+</a>
 
-When editing an entity, FireCMS offers a nested system of side dialogs for
-navigating through **subcollections** and accessing custom views (such as custom
-forms or blog previews). This functionality can also be accessed
-programmatically using the `useSideEntityController` hook.
+After you have created your FireCMS 3 project, you can either use it directly or customize it
+by uploading your own code.
 
-FireCMS includes **over 15 built-in fields** with numerous customization and
-validation options. The components have been carefully designed for an
-outstanding user experience, including advanced features like **references** to
-other collections, **markdown**, and **array reordering**.
 
-For unsupported use cases, create your own **custom field** as a React
-component.
 
-FireCMS also supports **conditional fields** in forms, allowing you to define
-rules for active fields based on your logic.
 
-### 👮 Authentication, Permissions, and Role System
+## Current limitations
 
-Define which navigation views users can see and the operations (create, edit,
-delete) they can perform based on your role system. You can even configure this
-on a per-entity or collection level.
+Compared to the self-hosted version of FireCMS, FireCMS Cloud has the following
+limitation: **No custom code**. You cannot add custom code to your CMS. This includes
+custom fields, custom views, custom routes, custom authentication, etc.
 
-By default, FireCMS supports all Firebase authorization mechanisms, but you can
-implement your own.
+This is a limitation that we are working on removing in the future. If you are
+interested in this feature, please let us know your use case in our [Discord channel](https://discord.gg/fxy7xsQm3m)
+or at hello@firecms.co
 
-### 🏹 Relational Support
 
-Define references to entities in other collections and benefit from the
-integrated reference fields and shortcuts.
-
-You can also define subcollections at the entity level for nesting data in a
-collection/document/collection model.
-
-### 🆒 Real-Time Data
-
-Every view in the CMS supports real-time data, making it suitable for displaying
-constantly updated information.
-
-Forms also support this feature, with any modified value in the database being
-updated in any open form view as long as it hasn't been touched by the user.
-This enables advanced cases where a Cloud Function is triggered after saving an
-entity, modifying some values, and requiring real-time updates.
-
-### 🗂️ File Storage
-
-FireCMS supports uploading files to Firebase Storage out of the box and provides
-specific fields for handling single and multiple file uploads, as well as
-reordering.
-
-You can replace the Firebase Storage implementation with your own.
-
-### 🙌 Custom backend
-
-FireCMS has a good separation of concerns. All the logic related to
-Firebase/Firestore is abstracted away behind 3 interfaces: `DataSource`,
-`StorageSource` and `AuthController`. This means you can extend or even
-completely
-replace those 3 implementations with your own.

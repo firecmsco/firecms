@@ -16,6 +16,12 @@ function FeaturesPage() {
             title={"Pricing - FireCMS"}
             description="Free self-hosted version and free Cloud tier, adaptive pricing for everyone">
 
+            <a
+                className="relative group/button inline-block -mx-0.5px font-mono text-sm leading-mono font-normal uppercase text-black bg-white"
+                href="/sales-contact">
+                Get a Demo
+            </a>
+
             <Hero
                 title={
                     <>

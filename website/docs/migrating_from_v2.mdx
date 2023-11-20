@@ -1,5 +1,5 @@
 ---
-id: migrating_from_v2.mdx
+id: migrating_from_v2
 title: Migrating from FireCMS 2.0
 sidebar_label: Migrating from FireCMS 2.0
 ---
@@ -18,7 +18,7 @@ Consider this before migrating!
 
 FireCMS 3.0 now requires to create a project in [app.firecms.co](https://app.firecms.co).
 
-The new version provides a backend service that allows you to manage your
+The new version relies on a backend that allows you to manage your
 collections and schemas. The final users are now able to modify collections,
 so we use a centralised service to store the configuration.
 
@@ -38,7 +38,9 @@ can be modified by the user or not.
 
 ## Changing the import
 
-The package has been renamed to `@firecms/firebase` and the main entry point is now
+The package has been renamed to `@firecms/firebase` instead of `firecms`. You need to update your
+imports to use the new package name.
+
 
 
 ## New format
@@ -48,7 +50,8 @@ of your project needs to be a in a specific format.
 
 The `index.ts` file should export a `FireCMSAppConfig` object, which is defined as follows:
 
-```
+```typescript
+import {CMSView,CMSViewsBuilder, EntityCollection,EntityCollectionsBuilder,EntityCustomView,PropertyConfig } from "@firecms/firebase";
 export type FireCMSAppConfig = {
 
     /**
@@ -75,7 +78,7 @@ export type FireCMSAppConfig = {
      * You can use the key to reference the custom field in
      * the `propertyConfig` prop of a property in a collection.
      */
-    fields?: PropertyConfig[];
+    propertyConfigs?: PropertyConfig[];
 
     /**
      * List of additional custom views for entities.
@@ -99,7 +102,23 @@ easy to adapt your collections to the new format.
 Simply export your collections in your `index.ts` file:
 
 ```typescript
-
+import { FireCMSAppConfig } from "@firecms/firebase";
+const appConfig: FireCMSAppConfig = {
+    version: "1",
+    collections: async (props) => {
+        return ([
+            productsCollection
+        ]);
+    },
+    propertyConfigs: [
+        colorPropertyConfig
+    ],
+    entityViews: [{
+        key: "test",
+        name: "Test",
+        Builder: SampleEntityView
+    }]
+}
 ```
 
 - The `views` property has been renamed to `entityViews`, since they are applied to entities.
@@ -107,10 +126,13 @@ Simply export your collections in your `index.ts` file:
 
 ## No longer supported features:
 
-Some features are no longer supported in FireCMS 3.0. Some of them will be added in future releases.
+Some features are no longer supported in FireCMS 3.0. Some of them might be added in future releases.
 
-- `ExportMappingFunction` is not currently supported.
 - `Authenticator`
+- `Custom CMS implementations`.
+- `ExportMappingFunction` is not currently supported.
+
+Please reach out to us in our [Discord channel](https://discord.gg/fxy7xsQm3m) if you need any of these features.
 
 ## Migrating custom components (MUI)
 
@@ -147,5 +169,13 @@ Tip: ChatGPT is great at converting Box components to div with tailwind classes.
 - `Select` does not use `labelId` anymore. Just add the label as a component in `label`.
     - `SelectChangeEvent` is now `ChangeEvent<HTMLSelectElement>`
 - `CircularProgress` size is a string instead of a number. You can use `size="small"` or `size="large"`.
+
+### Deployment
+
+FireCMS 3.0 is now deployed in our own service, and reachable through [app.firecms.co](https://app.firecms.co).
+
+You can still deploy it in your own Firebase project. The same build you generate for running the
+CMS locally can be deployed to Firebase hosting, or any other hosting service.
+
 
 

@@ -34,9 +34,9 @@ module.exports = {
             "docusaurus-plugin-typedoc",
             {
                 entryPoints: [
-                    "../packages/firecms_core/src/index.ts",
+                    "../packages/firebase_firecms/src/index.ts",
                 ],
-                tsconfig: "../packages/firecms_core/tsconfig.json",
+                tsconfig: "../packages/firebase_firecms/tsconfig.json",
                 watch: process.env.TYPEDOC_WATCH,
             }
         ],
@@ -283,9 +283,9 @@ module.exports = {
                     lastVersion: "current",
                     editUrl: "https://github.com/FireCMSco/firecms/tree/website/website",
                     versions: {
-                        "cloud": {
-                            label: "Cloud",
-                            path: "cloud",
+                        "2.0.0": {
+                            label: "2.0.0",
+                            path: "2.0.0",
                             banner: "none"
                         },
                         "1.0.0": {
@@ -294,7 +294,7 @@ module.exports = {
                             banner: "unmaintained"
                         },
                         current: {
-                            label: "2.0.0",
+                            label: "3.0.0",
                         }
                     },
                 },

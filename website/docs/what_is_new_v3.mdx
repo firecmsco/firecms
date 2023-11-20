@@ -1,0 +1,76 @@
+---
+id: what_is_new_v3
+title: What's new in FireCMS 3.0
+sidebar_label: What's new in FireCMS 3.0
+---
+
+The new version of FireCMS is a major release that brings a lot of new features
+and improvements. This page will guide you through the most important changes 🔥
+
+FireCMS 3.0 now makes use of a backend to provide a more flexible and
+customizable experience.
+
+Until now, FireCMS was a frontend-only library that would connect directly to
+the client-side Firebase SDK. This was great for simple use cases, but it
+limited the flexibility of the library. For example, it was not possible to
+customize collections from the UI, since they were hard coded in the clients
+code.
+
+Having a backend allows us to store configuration in Firestore, and to make it easy for end users
+to modify the schemas. We have done a lot of work to **prevent polluting your database** with
+FireCMS' configuration.
+
+Having a backend also allows us to provide a better experience by offering additional features
+such as data enhancement through OpenAPI GPT-4.
+
+
+## New UI collection schema editor
+
+Until now, the collection schema was defined in the client-side code. This was
+great for simple use cases, but it limited the flexibility of the library. For
+example, it was not possible to customize collections from the UI, since they
+were hard coded in the clients code.
+
+Now **the collection schema is stored in FireCMS backend**, (no worries, you can still
+use the old way if you want to). Your end users will be able to modify the
+collection schema. Let's say you have a collection of `Posts` and you want to
+add a new possible value for the enum `status`. You can now open the collection
+editor and add the new value. Even better, FireCMS can find new values and add
+them to your schema with one click!
+
+### New data inference
+
+Do you have a few collections in your project and you want to get started
+quickly? FireCMS can now **infer the schema from your data**. This means that
+you can get started with FireCMS in a few minutes, without having to write a
+single line of code.
+
+## Data import and export
+
+### Export
+You now have better control of how your data is **exported**:
+- Define the format of your timestamps
+- Define how arrays get serialized in CSV files (assign one column per array item, or
+serialize the array as a string)
+- Export your data as JSON or CSV.
+
+### Import
+You can now **import data** from CSV, JSON or Excel files. This is great for migrating data
+from other systems. We incorporate a modern UI that allows to define how the data is imported
+and how it is mapped to your collections.
+
+## Tailwind migration and performance improvements
+
+Versions 1.0 and 2.0 of FireCMS were based on Material UI (mui). This was great
+for getting started quickly, but it had some drawbacks. The main one was that
+**performance was not great**. The styling solution of MUI is based on emotion
+which resolves styles at runtime. This means that the browser has to do a lot of
+work to resolve the styles. This is not a problem for small applications, but
+it can be a problem for large applications.
+
+In FireCMS 3.0 we have migrated to Tailwind CSS. This is a utility-first CSS
+framework that allows us to generate a small CSS file with all the styles
+resolved at build time. This means that the browser does not have to do any
+work to resolve the styles, which results in a **much faster experience**. 🚀
+
+
