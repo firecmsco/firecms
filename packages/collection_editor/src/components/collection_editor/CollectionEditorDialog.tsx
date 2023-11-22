@@ -392,7 +392,8 @@ export function CollectionEditorDialogInternal<M extends {
 
                 const path = values.path ?? editedCollectionPath;
                 const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path;
-                const getDataWithPath = updatedFullPath && getData ? () => getData(updatedFullPath) : undefined;
+                const resolvedPath = navigation.resolveAliasesFrom(updatedFullPath);
+                const getDataWithPath = resolvedPath && getData ? () => getData(resolvedPath) : undefined;
 
                 // eslint-disable-next-line react-hooks/rules-of-hooks
                 useEffect(() => {
@@ -430,6 +431,7 @@ export function CollectionEditorDialogInternal<M extends {
                     })
                 };
 
+                const collectionEditable = collection?.editable || isNewCollection;
                 return (
                     <>
                         {!isNewCollection && <Tabs value={currentView}
@@ -476,6 +478,7 @@ export function CollectionEditorDialogInternal<M extends {
 
                             {currentView === "import_data_mapping" && importConfig &&
                                 <CollectionEditorImportMapping importConfig={importConfig}
+                                                               collectionEditable={collectionEditable}
                                                                customFields={customFields}/>}
 
                             {currentView === "import_data_preview" && importConfig &&
@@ -527,6 +530,7 @@ export function CollectionEditorDialogInternal<M extends {
                                     getData={getDataWithPath}
                                     doCollectionInference={doCollectionInference}
                                     customFields={customFields}
+                                    collectionEditable={collectionEditable}
                                     extraIcon={extraView?.icon &&
                                         <IconButton
                                             color={"primary"}

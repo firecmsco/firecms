@@ -5,11 +5,12 @@ import { PropertyFormDialog } from "../PropertyEditView";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
 import { PropertyTree } from "../PropertyTree";
 
-export function BlockPropertyField({ disabled, getData, allowDataInference, customFields }: {
+export function BlockPropertyField({ disabled, getData, allowDataInference, customFields, collectionEditable }: {
     disabled: boolean;
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
-    customFields: Record<string, PropertyConfig>
+    customFields: Record<string, PropertyConfig>,
+    collectionEditable: boolean;
 }) {
 
     const {
@@ -81,6 +82,7 @@ export function BlockPropertyField({ disabled, getData, allowDataInference, cust
                         properties={values.oneOf?.properties ?? {}}
                         propertiesOrder={values.oneOf?.propertiesOrder}
                         errors={{}}
+                        collectionEditable={collectionEditable}
                         onPropertyClick={disabled
                             ? undefined
                             : (propertyKey, namespace) => {
@@ -116,6 +118,7 @@ export function BlockPropertyField({ disabled, getData, allowDataInference, cust
                     setSelectedPropertyKey(undefined);
                     setSelectedPropertyNamespace(undefined);
                 }}
+                collectionEditable={collectionEditable}
                 onDelete={deleteProperty}
                 propertyKey={selectedPropertyKey}
                 propertyNamespace={selectedPropertyNamespace}

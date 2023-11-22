@@ -446,7 +446,6 @@ function FireCMS3AppAuthenticated({
      */
     const userConfigPersistence = useBuildLocalConfigurationPersistence();
 
-
     const firestoreDelegate = useFirestoreDelegate({
         firebaseApp,
         textSearchController: appConfig?.textSearchController,

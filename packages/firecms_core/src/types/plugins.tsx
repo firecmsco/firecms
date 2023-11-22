@@ -115,6 +115,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
             fullPath: string,
             parentPathSegments: string[],
             onHover: boolean,
+            collection: EntityCollection;
         }>;
 
         /**

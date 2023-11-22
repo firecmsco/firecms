@@ -42,6 +42,7 @@ type CollectionEditorFormProps = {
     getData?: () => Promise<object[]>;
     doCollectionInference: (collection: PersistedCollection<any, string>) => Promise<EntityCollection | null> | undefined;
     customFields: Record<string, PropertyConfig>;
+    collectionEditable: boolean;
 };
 
 export function CollectionPropertiesEditorForm({
@@ -55,7 +56,8 @@ export function CollectionPropertiesEditorForm({
                                                    getUser,
                                                    getData,
                                                    doCollectionInference,
-                                                   customFields
+                                                   customFields,
+                                                   collectionEditable
                                                }: CollectionEditorFormProps) {
 
     const {
@@ -354,6 +356,7 @@ export function CollectionPropertiesEditorForm({
                         propertiesOrder={usedPropertiesOrder}
                         onPropertyMove={onPropertyMove}
                         onPropertyRemove={isNewCollection ? deleteProperty : undefined}
+                        collectionEditable={collectionEditable}
                         errors={showErrors ? errors : {}}/>
                 </ErrorBoundary>
 
@@ -392,6 +395,7 @@ export function CollectionPropertiesEditorForm({
                                 initialErrors={initialErrors}
                                 getData={getData}
                                 customFields={customFields}
+                                collectionEditable={collectionEditable}
                             />}
 
                         {!selectedProperty &&
@@ -426,6 +430,7 @@ export function CollectionPropertiesEditorForm({
                 initialErrors={initialErrors}
                 getData={getData}
                 customFields={customFields}
+                collectionEditable={collectionEditable}
                 onOkClicked={asDialog
                     ? closePropertyDialog
                     : undefined
@@ -450,6 +455,7 @@ export function CollectionPropertiesEditorForm({
                 getData={getData}
                 allowDataInference={!isNewCollection}
                 customFields={customFields}
+                collectionEditable={collectionEditable}
                 existingPropertyKeys={values.propertiesOrder as string[]}/>
 
         </>

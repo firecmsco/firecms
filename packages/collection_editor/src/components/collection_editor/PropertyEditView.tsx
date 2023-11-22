@@ -20,7 +20,7 @@ import {
     isPropertyBuilder,
     mergeDeep,
     Property,
-    PropertyConfig,
+    PropertyConfig, PropertyOrBuilder,
     Select,
     toSnakeCase,
     Typography
@@ -73,6 +73,7 @@ export type PropertyFormProps = {
     getData?: () => Promise<object[]>;
     getHelpers?: (formikProps: FormikProps<PropertyWithId>) => void;
     customFields: Record<string, PropertyConfig>;
+    collectionEditable: boolean;
 };
 
 export const PropertyForm = React.memo(
@@ -95,7 +96,8 @@ export const PropertyForm = React.memo(
                               allowDataInference,
                               getHelpers,
                               getData,
-                              customFields
+                              customFields,
+                              collectionEditable
                           }: PropertyFormProps) {
 
         const initialValue: PropertyWithId = {
@@ -103,7 +105,8 @@ export const PropertyForm = React.memo(
             name: ""
         } as PropertyWithId;
 
-        const disabled = (property && !editableProperty(property)) ?? false;
+        const disabled = (Boolean(property && !editableProperty(property)) && !collectionEditable);
+        console.log("PropertyForm disabled", disabled)
 
         const lastSubmittedProperty = useRef<OnPropertyChangedParams | undefined>(property ? {
             id: propertyKey,
@@ -182,6 +185,7 @@ export const PropertyForm = React.memo(
                     getData={getData}
                     allowDataInference={allowDataInference}
                     customFields={customFields}
+                    collectionEditable={collectionEditable}
                     {...props}/>;
 
             }}
@@ -201,6 +205,7 @@ export function PropertyFormDialog({
                                        onOkClicked,
                                        onPropertyChanged,
                                        getData,
+                                       collectionEditable,
                                        ...formProps
                                    }: PropertyFormProps & {
     open?: boolean;
@@ -224,6 +229,7 @@ export function PropertyFormDialog({
                               onPropertyChanged?.(params);
                               onOkClicked?.();
                           }}
+                          collectionEditable={collectionEditable}
                           onPropertyChangedImmediate={false}
                           getHelpers={getHelpers}
                           getData={getData}
@@ -271,7 +277,8 @@ function PropertyEditView({
                               existingPropertyKeys,
                               getData,
                               allowDataInference,
-                              customFields
+                              customFields,
+                              collectionEditable
                           }: {
     includeIdAndTitle?: boolean;
     existing: boolean;
@@ -288,6 +295,7 @@ function PropertyEditView({
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
     customFields: Record<string, PropertyConfig>;
+    collectionEditable: boolean;
 } & FormikProps<PropertyWithId>) {
 
     const [selectOpen, setSelectOpen] = useState(autoOpenTypeSelect);
@@ -395,10 +403,12 @@ function PropertyEditView({
     } else if (selectedFieldConfigId === "group") {
         childComponent =
             <MapPropertyField disabled={disabled} getData={getData} allowDataInference={allowDataInference}
+                              collectionEditable={collectionEditable}
                               customFields={customFields}/>;
     } else if (selectedFieldConfigId === "block") {
         childComponent =
             <BlockPropertyField disabled={disabled} getData={getData} allowDataInference={allowDataInference}
+                                collectionEditable={collectionEditable}
                                 customFields={customFields}/>;
     } else if (selectedFieldConfigId === "reference") {
         childComponent =
@@ -421,6 +431,7 @@ function PropertyEditView({
                                  getData={getData}
                                  allowDataInference={allowDataInference}
                                  disabled={disabled}
+                                 collectionEditable={collectionEditable}
                                  customFields={customFields}/>;
     } else if (selectedFieldConfigId === "key_value") {
         childComponent =

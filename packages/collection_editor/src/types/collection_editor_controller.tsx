@@ -31,6 +31,7 @@ export interface CollectionEditorController {
         currentPropertiesOrder?: string[],
         editedCollectionPath: string,
         parentPathSegments: string[],
+        collection: EntityCollection<any, any, any>
     }) => void;
 
     configPermissions: CollectionEditorPermissionsBuilder;

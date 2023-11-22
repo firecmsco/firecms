@@ -1,4 +1,4 @@
-import { IconButton, ResolvedProperty, SettingsIcon, Tooltip } from "@firecms/core";
+import { EntityCollection, IconButton, ResolvedProperty, SettingsIcon, Tooltip } from "@firecms/core";
 import React from "react";
 import { useCollectionEditorController } from "../useCollectionEditorController";
 
@@ -7,13 +7,15 @@ export function CollectionViewHeaderAction({
                                                onHover,
                                                property,
                                                fullPath,
-                                               parentPathSegments
+                                               parentPathSegments,
+                                               collection
                                            }: {
     property: ResolvedProperty,
     propertyKey: string,
     onHover: boolean,
     fullPath: string,
     parentPathSegments: string[],
+    collection: EntityCollection;
 }) {
 
     const collectionEditorController = useCollectionEditorController();
@@ -27,7 +29,8 @@ export function CollectionViewHeaderAction({
                         propertyKey,
                         property,
                         editedCollectionPath: fullPath,
-                        parentPathSegments
+                        parentPathSegments,
+                        collection
                     });
                 }}
                 size={"small"}>

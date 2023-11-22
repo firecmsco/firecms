@@ -111,7 +111,10 @@ export const ConfigControllerProvider = React.memo(
             editedCollectionPath: string,
             fullPath?: string,
             parentPathSegments: string[],
+            collectionEditable: boolean;
         }>();
+
+        console.log("currentPropertyDialog", currentPropertyDialog);
 
         const defaultConfigPermissions: CollectionEditorPermissionsBuilder = useCallback(() => ({
             createCollections: true,
@@ -146,14 +149,14 @@ export const ConfigControllerProvider = React.memo(
                                               editedCollectionPath,
                                               currentPropertiesOrder,
                                               parentPathSegments,
-                                              parentCollection
+                                              collection
                                           }: {
             propertyKey?: string,
             property?: Property,
             currentPropertiesOrder?: string[],
             editedCollectionPath: string,
             parentPathSegments: string[],
-            parentCollection?: EntityCollection
+            collection: EntityCollection,
         }) => {
             // namespace is all the path until the last dot
             const namespace = propertyKey && propertyKey.includes(".")
@@ -162,6 +165,7 @@ export const ConfigControllerProvider = React.memo(
             const propertyKeyWithoutNamespace = propertyKey && propertyKey.includes(".")
                 ? propertyKey.substring(propertyKey.lastIndexOf(".") + 1)
                 : propertyKey;
+            console.log("edit property", propertyKeyWithoutNamespace, collection)
             setCurrentPropertyDialog({
                 propertyKey: propertyKeyWithoutNamespace,
                 property,
@@ -169,7 +173,7 @@ export const ConfigControllerProvider = React.memo(
                 currentPropertiesOrder,
                 editedCollectionPath,
                 parentPathSegments,
-                parentCollection
+                collectionEditable: collection?.editable ?? false
             });
         }, []);
 
@@ -206,6 +210,9 @@ export const ConfigControllerProvider = React.memo(
                     return pathSuggestions?.(path);
                 }
             }
+
+        console.log("aaa", getData, currentPropertyDialog?.editedCollectionPath);
+        console.log(currentPropertyDialog)
 
         return (
             <ConfigControllerContext.Provider value={collectionConfigController}>
@@ -249,7 +256,13 @@ export const ConfigControllerProvider = React.memo(
                         autoUpdateId={!currentPropertyDialog ? false : !currentPropertyDialog?.propertyKey}
                         autoOpenTypeSelect={!currentPropertyDialog ? false : !currentPropertyDialog?.propertyKey}
                         inArray={false}
-                        getData={getData && currentDialog?.fullPath ? () => getData(currentDialog.fullPath!) : undefined}
+                        collectionEditable={currentPropertyDialog?.collectionEditable ?? false}
+                        getData={getData && currentPropertyDialog?.editedCollectionPath
+                            ? () => {
+                                const resolvedPath = navigation.resolveAliasesFrom(currentPropertyDialog.editedCollectionPath!)
+                                return getData(resolvedPath);
+                            }
+                            : undefined}
                         onPropertyChanged={({
                                                 id,
                                                 property

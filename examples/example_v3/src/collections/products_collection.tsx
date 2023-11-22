@@ -43,6 +43,7 @@ export const productsCollection = buildCollection<Product>({
     icon: "shopping_cart",
     description: "List of the products currently sold in our shop",
     textSearchEnabled: true,
+    editable: true,
     permissions: ({ authController }) => ({
         edit: true,
         create: true,
@@ -84,8 +85,7 @@ export const productsCollection = buildCollection<Product>({
             clearable: true,
             validation: {
                 required: true
-            },
-            editable: true
+            }
         },
         main_image: {
             dataType: "string",

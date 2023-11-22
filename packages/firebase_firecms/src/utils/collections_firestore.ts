@@ -78,6 +78,7 @@ export function prepareCollectionForPersistence<M extends { [Key: string]: CMSTy
     if (newCollection.entityViews) {
         newCollection.entityViews = newCollection.entityViews.filter(view => typeof view === "string");
     }
+    delete newCollection.editable;
     delete newCollection.additionalFields;
     delete newCollection.callbacks;
     delete newCollection.Actions;

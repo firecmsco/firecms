@@ -14,7 +14,6 @@ import {
     FormikArrayContainer,
     IconButton,
     ListIcon,
-    LoadingButton,
     Paper,
     SettingsIcon,
     Typography
@@ -132,7 +131,8 @@ function EnumFormFields({
     };
 
     const inferValues = async () => {
-
+        if (!getData)
+            return;
         setInferring(true);
         getData?.().then((data) => {
             if (!data)
@@ -169,12 +169,14 @@ function EnumFormFields({
                     Values
                 </Typography>
                 {allowDataInference &&
-                    <LoadingButton loading={inferring}
-                                   disabled={disabled || inferring}
-                                   variant={"text"} size={"small"} onClick={inferValues}>
+                    <Button loading={inferring}
+                            disabled={disabled || inferring}
+                            variant={"text"}
+                            size={"small"}
+                            onClick={inferValues}>
                         {inferring ? <CircularProgress size={"small"}/> : <AutoAwesomeIcon/>}
                         Infer values from data
-                    </LoadingButton>}
+                    </Button>}
             </div>
 
             <Paper className="p-4 m-1">

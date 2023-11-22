@@ -8,12 +8,12 @@ import { getIn, useFormikContext } from "formik";
 
 import {
     Container,
-    PropertyConfig,
     FieldConfigBadge,
     getFieldConfig,
     getFieldId,
     Properties,
     Property,
+    PropertyConfig,
     Select,
     Tooltip,
     Typography,
@@ -30,11 +30,13 @@ import { buildPropertyFromData } from "@firecms/schema_inference";
 
 export function CollectionEditorImportMapping({
                                                   importConfig,
-                                                  customFields
+                                                  customFields,
+                                                  collectionEditable
                                               }:
                                                   {
                                                       importConfig: ImportConfig,
-                                                      customFields: Record<string, PropertyConfig>
+                                                      customFields: Record<string, PropertyConfig>,
+                                                      collectionEditable: boolean
                                                   }) {
 
     const {
@@ -192,6 +194,7 @@ export function CollectionEditorImportMapping({
                 autoUpdateId={false}
                 onPropertyChanged={onPropertyChanged}
                 allowDataInference={false}
+                collectionEditable={collectionEditable}
                 onOkClicked={() => {
                     setSelectedProperty(undefined);
                 }}

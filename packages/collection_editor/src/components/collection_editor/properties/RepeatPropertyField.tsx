@@ -2,10 +2,10 @@ import React, { useCallback, useState } from "react";
 import {
     ArrayProperty,
     Button,
-    PropertyConfig,
     getFieldConfig,
     Paper,
     Property,
+    PropertyConfig,
     Typography,
     useFireCMSContext
 } from "@firecms/core";
@@ -21,14 +21,16 @@ export function RepeatPropertyField({
                                         disabled,
                                         getData,
                                         allowDataInference,
-                                        customFields
+                                        customFields,
+                                        collectionEditable
                                     }: {
     showErrors: boolean,
     existing: boolean,
     disabled: boolean,
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
-    customFields: Record<string, PropertyConfig>
+    customFields: Record<string, PropertyConfig>,
+    collectionEditable: boolean;
 }) {
 
     const { fields } = useFireCMSContext();
@@ -96,6 +98,7 @@ export function RepeatPropertyField({
                                 onPropertyChanged={onPropertyChanged}
                                 forceShowErrors={showErrors}
                                 customFields={customFields}
+                                collectionEditable={collectionEditable}
                             />
                         </Paper>
                     )}

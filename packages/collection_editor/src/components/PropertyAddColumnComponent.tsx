@@ -29,7 +29,8 @@ export function PropertyAddColumnComponent({
                     collectionEditorController.editProperty({
                         editedCollectionPath: fullPath,
                         parentPathSegments,
-                        currentPropertiesOrder: getDefaultPropertiesOrder(collection)
+                        currentPropertiesOrder: getDefaultPropertiesOrder(collection),
+                        collection
                     });
                 }}>
                 <AddIcon color={"inherit"}/>

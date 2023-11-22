@@ -78,6 +78,13 @@ export interface EntityCollection<M extends Record<string, any> = any,
     properties: PropertiesOrBuilders<M>;
 
     /**
+     * Can this collection be edited by the end user.
+     * Defaults to `false`.
+     * Keep in mind that you can also set this prop to individual properties.
+     */
+    editable?: boolean;
+
+    /**
      * Order in which the properties are displayed.
      * If you are specifying your collection as code, the order is the same as the
      * one you define in `properties`. Additional columns are added at the

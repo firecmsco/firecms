@@ -527,6 +527,7 @@ export const EntityCollectionView = React.memo(
                             propertyKey={propertyKey}
                             property={property}
                             fullPath={fullPath}
+                            collection={collection}
                             parentPathSegments={parentPathSegments ?? []}/>;
                     })}
             </>;

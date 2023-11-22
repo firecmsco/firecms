@@ -5,8 +5,10 @@ import {
     defaultBorderMixin,
     DragHandleIcon,
     ErrorBoundary,
-    IconButton, isPropertyBuilder,
-    PropertiesOrBuilders, PropertyOrBuilder,
+    IconButton,
+    isPropertyBuilder,
+    PropertiesOrBuilders,
+    PropertyOrBuilder,
     RemoveIcon,
     Tooltip
 } from "@firecms/core";
@@ -30,7 +32,8 @@ export function PropertyTree<M extends {
        onPropertyMove,
        onPropertyRemove,
        className,
-       inferredPropertyKeys
+       inferredPropertyKeys,
+       collectionEditable
    }: {
     namespace?: string;
     selectedPropertyKey?: string;
@@ -43,6 +46,7 @@ export function PropertyTree<M extends {
     onPropertyRemove?: (propertyKey: string, namespace?: string) => void;
     className?: string;
     inferredPropertyKeys?: string[];
+    collectionEditable: boolean;
 }) {
 
     const propertiesOrder = propertiesOrderProp ?? Object.keys(properties);
@@ -102,6 +106,7 @@ export function PropertyTree<M extends {
                                                             onPropertyRemove={onPropertyRemove}
                                                             onPropertyClick={snapshot.isDragging ? undefined : onPropertyClick}
                                                             selectedPropertyKey={selectedPropertyKey}
+                                                            collectionEditable={collectionEditable}
                                                         />
                                                     </ErrorBoundary>
                                                 );
@@ -131,7 +136,8 @@ export function PropertyTreeEntry({
                                       onPropertyClick,
                                       onPropertyMove,
                                       onPropertyRemove,
-                                      inferredPropertyKeys
+                                      inferredPropertyKeys,
+                                      collectionEditable
                                   }: {
     propertyKey: string;
     namespace?: string;
@@ -144,6 +150,7 @@ export function PropertyTreeEntry({
     onPropertyMove?: (propertiesOrder: string[], namespace?: string) => void;
     onPropertyRemove?: (propertyKey: string, namespace?: string) => void;
     inferredPropertyKeys?: string[];
+    collectionEditable: boolean;
 }) {
 
     const isPropertyInferred = inferredPropertyKeys?.includes(namespace ? `${namespace}.${propertyKey}` : propertyKey);
@@ -161,13 +168,15 @@ export function PropertyTreeEntry({
                 errors={errors}
                 onPropertyClick={onPropertyClick}
                 onPropertyMove={onPropertyMove}
-                onPropertyRemove={onPropertyRemove}/>
+                onPropertyRemove={onPropertyRemove}
+                collectionEditable={collectionEditable}
+            />
         }
     }
 
     const hasError = fullId ? getIn(errors, idToPropertiesPath(fullId)) : false;
     const selected = selectedPropertyKey === fullId;
-    const editable = propertyOrBuilder && editableProperty(propertyOrBuilder);
+    const editable = propertyOrBuilder && ((collectionEditable && !isPropertyBuilder(propertyOrBuilder)) || editableProperty(propertyOrBuilder));
 
     return (
         <div
