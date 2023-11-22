@@ -18,7 +18,7 @@ import customFieldVideo from "@site/static/img/custom_fields.mp4";
 // @ts-ignore
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 import { Panel } from "../general/Panel";
-import { CTACaret, CTAOutlinedButtonMixin } from "../utils";
+import { CTACaret, CTAOutlinedButtonMixin } from "../styles";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 function EnterpriseTeaser() {

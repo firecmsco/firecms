@@ -44,7 +44,7 @@ export function DeveloperFeatures() {
                     className=" relative flex-col font-mono">
 
                     <SyntaxHighlighter
-                        className={"max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid dark:border-slate-800 border-slate-200"}
+                        className={"max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid dark:border-gray-800 border-gray-200"}
                         language={"typescript"}
                         showLineNumbers={false}
                         wrapLines={true}
@@ -81,7 +81,7 @@ export function DeveloperFeatures() {
                         className={"flex items-center mb-3"}>
 
                         <div
-                            className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 ">
+                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 ">
                             {arrowIcon}
                         </div>
                         <h3 className="h3 m-0 ml-3 ">
@@ -90,32 +90,27 @@ export function DeveloperFeatures() {
 
                     </div>
 
-                    <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-200">
+                    <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                         Define your schemas and choose from
                         multiple form widgets and validation
                         options.
                     </p>
 
-                    <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-200">
+                    <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                         Use advanced features like conditional logic
                         for your fields, references to other
                         collections, markdown or file uploads
                     </p>
 
-                    <p className="text-xl text-slate-600 dark:text-slate-200">
+                    <p className="text-xl text-gray-600 dark:text-gray-200">
                         FireCMS provides a powerful schema
                         definition API that allows you to
                         customise your forms and views.
                     </p>
-                    <p className="text-xl text-slate-600 dark:text-slate-200">
+                    <p className="text-xl text-gray-600 dark:text-gray-200">
                         You can also use the schema definition
                         API to create custom views and
                         components.
-                    </p>
-                    <p className="italic text-base text-slate-600 dark:text-slate-200">
-                        * Some features can only be enabled by
-                        using the self-hosted version, but will be
-                        available in FireCMS Cloud version soon.
                     </p>
 
                 </div>
@@ -128,7 +123,7 @@ export function DeveloperFeatures() {
                         <div className={"flex items-center mb-3"}>
 
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 mr-3">
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
                                 <TickIcon/>
                             </div>
 
@@ -137,30 +132,25 @@ export function DeveloperFeatures() {
                             </h3>
 
                         </div>
-                        <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             FireCMS is a headless CMS built to work
                             with every existing Firebase/Firestore
                             project. It does not
                             enforce any data structure.
                         </p>
-                        <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             Use the integrated hooks and callbacks to
                             integrate your business logic in multiple
                             ways.
                         </p>
 
-                        <p className="italic text-base text-slate-600 dark:text-slate-200">
-                            * Some features can only be enabled by
-                            using the self-hosted version, but will be
-                            available in the FireCMS Cloud version soon.
-                        </p>
                     </>
                 } right={
                 <>
                     <div
                         className="relative flex-col font-mono">
                         <SyntaxHighlighter
-                            className={"max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid dark:border-slate-800 border-slate-200"}
+                            className={"max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid dark:border-gray-800 border-gray-200"}
                             language={"typescript"}
                             showLineNumbers={false}
                             style={isDarkTheme ? dracula : atomOneLight}

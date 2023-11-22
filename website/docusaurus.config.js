@@ -86,8 +86,9 @@ module.exports = {
             }
         ],
         colorMode: {
-            // defaultMode: "system",
-            respectPrefersColorScheme: true,
+            defaultMode: "dark",
+            disableSwitch: true,
+            // respectPrefersColorScheme: false,
         },
         navbar: {
             title: "FireCMS",
@@ -103,6 +104,10 @@ module.exports = {
                         {
                             label: "Features",
                             to: "/features",
+                        },
+                        {
+                            label: "OpenAI GPT integration",
+                            to: "/openai",
                         },
                         {
                             label: "Advanced content editing",

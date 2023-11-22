@@ -1,15 +1,7 @@
 import React from "react"
 
-import collectionEditorVideo
-// @ts-ignore
-    from "@site/static/img/collection_editor_preview.mp4";
-import {
-    ContainerMixin,
-    CTAButtonMixin,
-    CTACaret,
-    CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin
-} from "../utils";
-import useBaseUrl from "@docusaurus/useBaseUrl";
+import collectionEditorVideo from "@site/static/img/collection_editor_preview.mp4";
+import { ContainerMixin, CTACaret, CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin } from "../styles";
 
 export const FireCMSCloudIntro = () => {
 
@@ -17,11 +9,11 @@ export const FireCMSCloudIntro = () => {
         <section
             className="relative">
             <div
-                className={"px-4 sm:px-6 mb-16 bg-pink-400 text-white pb-16"}>
+                className={"px-4 sm:px-6 mb-16 bg-light text-gray-900 pb-16"}>
                 <div
                     className={ContainerMixin + " flex flex-col py-20"}>
 
-                    <h2 className="h1 mb-4 text-slate-900 uppercase">
+                    <h2 className="h1 mb-4 text-gray-900 uppercase">
                         New No-code FireCMS
                     </h2>
 
@@ -49,7 +41,7 @@ export const FireCMSCloudIntro = () => {
 
                     <div className={"my-8"}>
                         <a
-                            className={CTAOutlinedButtonWhiteMixin}
+                            className={CTAOutlinedButtonMixin}
                             href="http://app.firecms.co"
                             rel="noopener noreferrer"
                             target="_blank"
@@ -60,6 +52,7 @@ export const FireCMSCloudIntro = () => {
                     </div>
                 </div>
             </div>
+
             <div
                 className={ContainerMixin + " px-4 sm:px-6 -translate-y-44"}>
                 <video

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../utils";
+import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../styles";
 import { TwoColumns } from "../general/TwoColumns";
 
 export function DataEnhancementHero() {
@@ -42,17 +42,6 @@ export function DataEnhancementHero() {
                         <CTACaret/>
                     </a>
 
-                    <p
-                        className={"mt-4"}>
-                        <a
-                            className={" text-inherit"}
-                            rel="noopener noreferrer"
-                            target="_blank"
-                            href={"https://app.firecms.co/subscriptions"}
-                        >
-                            Go to subscriptions management
-                        </a>
-                    </p>
                 </div>
             </div>
         }
@@ -69,7 +58,7 @@ export function DataEnhancementHero() {
                 className={" flex content-center justify-center"}>
                 <video
                     key={isDarkTheme ? "dark" : "light"}
-                    className={"rounded-xl border border-solid dark:border-slate-800 border-slate-200"}
+                    className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
                     width="100%"
                     loop autoPlay muted>
                     <source

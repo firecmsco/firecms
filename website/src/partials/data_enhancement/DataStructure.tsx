@@ -10,7 +10,7 @@ import {
     CTAButtonMixin,
     CTACaret,
     CTAOutlinedButtonWhiteMixin
-} from "../utils";
+} from "../styles";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
 export function DataStructure() {

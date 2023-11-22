@@ -26,6 +26,20 @@ By doing this you will **not need to specify your Firebase project credentials**
 since the service will be able to access your project directly. You will only need
 to specify the **project id**.
 
+## Initialize a FireCMS 3 project in a new folder
+
+It is advisable to create a new project from scratch and then migrate your collections and views to
+the new folder.
+
+In order to do so, run
+```
+yarn create firecms-app
+```
+and create a new project in a new folder.
+
+The CLI will initialize an empty project with the new format, and all the configuration files
+ready so you don't need to worry about it.
+
 
 ## Migrating collections to the new format
 
@@ -36,17 +50,19 @@ code like until now.
 Also, you can have collections defined in both places, and decide if the code defined collections
 can be modified by the user or not.
 
+Please note that properties defined in code will not be editable by the user, unless you
+explicitly mark them as `editable: true`.
+
 ## Changing the import
 
 The package has been renamed to `@firecms/firebase` instead of `firecms`. You need to update your
 imports to use the new package name.
 
 
-
 ## New format
 
 Since it is now possible to deploy FireCMS in our hosted service, the output
-of your project needs to be a in a specific format.
+of your project needs to be in a specific format.
 
 The `index.ts` file should export a `FireCMSAppConfig` object, which is defined as follows:
 

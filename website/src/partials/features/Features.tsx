@@ -30,7 +30,7 @@ import {
     ContainerMixin,
     ContainerSmallMixin, CTACaret,
     CTAOutlinedButtonMixin
-} from "../utils";
+} from "../styles";
 import { BrowserFrame } from "../BrowserFrame";
 
 function Features() {
@@ -59,7 +59,7 @@ function Features() {
                 <div className={"flex items-center mb-3 max-w-5xl"}>
 
                     <div
-                        className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 mr-3">
+                        className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
                         <LightingIcon height={12} width={12}/>
                     </div>
 
@@ -69,7 +69,7 @@ function Features() {
 
                 </div>
 
-                <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-200">
+                <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                     FireCMS provides all the flexibility you
                     need with the best UX.
                     Edit your collections and entities using
@@ -77,7 +77,7 @@ function Features() {
                     view</b> and <b>powerful forms</b>.
                 </p>
 
-                <p className="text-xl text-slate-600 dark:text-slate-200">
+                <p className="text-xl text-gray-600 dark:text-gray-200">
                     Inline editing is very useful when you want to
                     quickly edit a few fields of a
                     document. For example, if you have a list of users,
@@ -104,7 +104,7 @@ function Features() {
                         <div className={"flex items-center mb-3 "}>
 
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 mr-3">
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
                                 <DashboardIcon height={24} width={24}/>
                             </div>
 
@@ -114,7 +114,7 @@ function Features() {
 
                         </div>
 
-                        <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             FireCMS offers more than 20 built-in property
                             fields, from basic text fields to
                             complex ones, like multiple file uploads, sortable
@@ -122,13 +122,13 @@ function Features() {
                             other collections, etc.
                         </p>
 
-                        <p className="text-xl text-slate-600 dark:text-slate-200">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             The form view opens by default in a convenient side
                             dialog that allows you
                             to maintain the context you are working on, when you
                             are done.
                         </p>
-                        <p className="text-xl text-slate-600 dark:text-slate-200">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             FireCMS is a React CMS, and it offers multiple
                             extension points where you can
                             define your custom views. Adding additional custom
@@ -146,7 +146,7 @@ function Features() {
                                 maxWidth: 540,
                                 aspectRatio: 508 / 589
                             }}
-                            className={"rounded-xl border border-solid dark:border-slate-800 border-slate-200 border-slate-200"}
+                            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                             width="100%" loop autoPlay muted>
                             <source
                                 src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
@@ -162,7 +162,7 @@ function Features() {
                 right={<>
                     <div className="relative flex flex-col">
                         <video
-                            className={"rounded-xl border border-solid dark:border-slate-800 border-slate-200 border-slate-200"}
+                            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                             style={{
                                 maxWidth: 540,
                                 aspectRatio: 540 / 515
@@ -181,7 +181,7 @@ function Features() {
                             className={"flex items-center mb-3"}>
 
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 ">
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 ">
                                 <SettingsIcon/>
                             </div>
                             <h3 className="h3 m-0 ml-3 ">
@@ -190,14 +190,14 @@ function Features() {
 
                         </div>
 
-                        <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             FireCMS offers developers an easy way to adapt the
                             platform to their specific needs while keeping the
                             <b>initial setup simple</b>. Our practical defaults
                             can be
                             conveniently <b>overridden or expanded</b>.
                         </p>
-                        <p className="text-xl text-slate-600 dark:text-slate-200">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             Effortlessly integrate your custom form fields as
                             React components and preview widgets. Moreover, you
                             can create detailed views related to your entities
@@ -205,7 +205,7 @@ function Features() {
                             experience.
                         </p>
 
-                        <p className="text-xl text-slate-600 dark:text-slate-200">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             You could add:
                             <li> A dashboard for your client</li>
                             <li> A preview of the blog article you are

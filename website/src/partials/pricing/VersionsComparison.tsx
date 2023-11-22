@@ -1,6 +1,6 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
-import { ContainerMixin, CTAButtonMixin, CTAOutlinedButtonMixin } from "../utils";
+import { ContainerMixin, CTAButtonMixin, CTAOutlinedButtonMixin } from "../styles";
 import CheckIcon from "@site/static/img/icons/check.svg";
 import RemoveIcon from "@site/static/img/icons/remove.svg";
 import ScheduleIcon from "@site/static/img/icons/schedule.svg";
@@ -154,7 +154,7 @@ export function VersionsComparison() {
             className="font-medium  border-separate text-sm text-left my-8">
 
             <thead
-                className="text-xs text-slate-800 uppercase font-mono bg-slate-50 dark:bg-slate-800 dark:text-slate-300 font-bold">
+                className="text-xs text-gray-800 uppercase font-mono bg-gray-50 dark:bg-gray-800 dark:text-gray-300 font-bold">
             <tr>
                 <th colSpan={1} scope="col"
                     className="border-none rounded-lg md:px-6 md:py-4 invisible">
@@ -168,7 +168,7 @@ export function VersionsComparison() {
             </thead>
 
             <thead
-                className="text-xs text-slate-800 uppercase font-mono bg-slate-50 dark:bg-slate-800 dark:text-slate-300 font-bold">
+                className="text-xs text-gray-800 uppercase font-mono bg-gray-50 dark:bg-gray-800 dark:text-gray-300 font-bold">
             <tr>
                 <th scope="col"
                     className="border-none rounded-lg md:px-6 py-6 invisible">
@@ -197,19 +197,19 @@ export function VersionsComparison() {
                 (
                     <tr className="border-b ">
                         <td scope="row"
-                            className="bg-slate-50 mx-2 dark:bg-slate-900 border-none rounded-lg px-4 py-2 text-slate-800 dark:text-slate-300 font-bold">
+                            className="bg-gray-50 mx-2 dark:bg-gray-900 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-300 font-bold">
                             {row.feature}
                         </td>
-                        <td className={"bg-slate-50 mx-2 dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-slate-800 dark:text-slate-200 text-center " + getEntryClass(row.cloud)}>
+                        <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.cloud)}>
                             {getFeatureComponent(row.cloud)}
                         </td>
-                        <td className={"bg-slate-50 mx-2 dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-slate-800 dark:text-slate-200 text-center " + getEntryClass(row.cloudPlus)}>
+                        <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.cloudPlus)}>
                             {getFeatureComponent(row.cloudPlus)}
                         </td>
-                        <td className={"bg-slate-50 mx-2 dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-slate-800 dark:text-slate-200 text-center " + getEntryClass(row.cloudPro)}>
+                        <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.cloudPro)}>
                             {getFeatureComponent(row.cloudPro)}
                         </td>
-                        <td className={"bg-slate-50 mx-2 dark:bg-slate-800 border-none rounded-lg px-4 py-2 text-slate-800 dark:text-slate-200 text-center " + getEntryClass(row.selfHosted)}>
+                        <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.selfHosted)}>
                             {getFeatureComponent(row.selfHosted)}
                         </td>
                     </tr>
@@ -218,7 +218,7 @@ export function VersionsComparison() {
             </tbody>
 
             <tfoot
-                className="text-xs text-slate-800 uppercase font-mono bg-slate-50 dark:bg-slate-800 dark:text-slate-300 font-bold">
+                className="text-xs text-gray-800 uppercase font-mono bg-gray-50 dark:bg-gray-800 dark:text-gray-300 font-bold">
             <tr>
                 <th scope="col"
                     className="border-none rounded-lg px-6 py-3 invisible">

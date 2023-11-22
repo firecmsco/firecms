@@ -26,7 +26,7 @@ import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 
 import { useColorMode } from "@docusaurus/theme-common";
 import { TwoColumns } from "../general/TwoColumns";
-import { ContainerMixin, ContainerSmallMixin } from "../utils";
+import { ContainerMixin, ContainerSmallMixin } from "../styles";
 import { BrowserFrame } from "../BrowserFrame";
 import { Panel } from "../general/Panel";
 
@@ -41,7 +41,7 @@ function RealTime() {
             <div className={"flex items-center mb-3 "}>
 
                 <div
-                    className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 mr-3">
+                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
                     <LightingIcon height={12} width={12}/>
                 </div>
 

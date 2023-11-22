@@ -10,8 +10,8 @@ export default function DocsVersionDropdownNavbarItemWrapper(props) {
         return null;
     }
     return (
-        <>
+        <div className={"font-mono font-bold uppercase"}>
             <DocsVersionDropdownNavbarItem {...props} />
-        </>
+        </div>
     );
 }

@@ -35,7 +35,7 @@ export function Translations() {
                     data-aos="fade-up"
                     className={" flex content-center justify-center"}>
                     <img
-                        className={"rounded-xl border border-solid dark:border-slate-800 border-slate-200"}
+                        className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
                         src={isDarkTheme ? translationDark : translationLight}
                         width="500"
                         alt="Element"

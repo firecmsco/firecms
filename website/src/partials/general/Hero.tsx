@@ -1,5 +1,5 @@
 import React from "react";
-import { ContainerMixin } from "../utils";
+import { ContainerMixin } from "../styles";
 
 export function Hero({
                          title,

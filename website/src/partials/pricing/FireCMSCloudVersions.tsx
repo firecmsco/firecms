@@ -5,15 +5,15 @@ import {
     CTAButtonMixin,
     CTACaret,
     CTAOutlinedButtonMixin
-} from "../utils";
+} from "../styles";
 
 export function FireCMSCloudVersions() {
 
     const freeTier = (
         <div
-            className="h-full max-w-sm p-6 border border-solid border-slate-200 rounded-lg shadow dark:border-slate-700 flex flex-col">
+            className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
 
-            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-slate-700 dark:text-slate-300"}>
+            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Free
             </h3>
             <div className={"grow"}>
@@ -31,7 +31,7 @@ export function FireCMSCloudVersions() {
                     <li className={"ml-8 list-disc"}>3 users</li>
                 </ul>
             </div>
-            <div className={"text-center mt-4 text-slate-600 dark:text-slate-400 w-full"}>
+            <div className={"text-center mt-4 text-gray-600 dark:text-gray-400 w-full"}>
                 <span className={"text-2xl font-bold "}>€0 user/month</span>
             </div>
 
@@ -42,7 +42,7 @@ export function FireCMSCloudVersions() {
         <div
             className="h-full max-w-sm p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent">
 
-            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-slate-700 dark:text-slate-300 text-primary"}>
+            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300 text-primary"}>
                 Plus
             </h3>
             <div className={"grow"}>
@@ -68,9 +68,9 @@ export function FireCMSCloudVersions() {
 
     const proTier = (
         <div
-            className="h-full max-w-sm p-6 border border-solid border-slate-200 rounded-lg shadow dark:border-slate-700 flex flex-col">
+            className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
 
-            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-slate-700 dark:text-slate-300"}>
+            <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Pro
             </h3>
             <div className={"grow"}>

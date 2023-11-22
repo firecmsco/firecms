@@ -13,6 +13,8 @@ const fireCMSTailwindConfig = {
                 primary: "#0070F4",
                 secondary: "#ff5064",
                 error: "#F44336",
+                light: "#f4f6f4",
+                outline: "#828c97",
                 field: {
                     disabled: "rgb(224 224 226)",
                     "disabled-dark": "rgb(35 35 37)"

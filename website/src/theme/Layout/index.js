@@ -1,4 +1,6 @@
 import React, { useEffect } from "react";
+import clsx from "clsx";
+
 import Layout from "@theme-original/Layout";
 import { PagesBackground } from "../../partials/general/PagesBackground";
 import docsearch from "@docsearch/js";
@@ -14,6 +16,7 @@ import "../../css/custom.css";
 
 import { useLocation } from "@docusaurus/router";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
+import { defaultBorderMixin } from "../../partials/styles";
 
 export default function LayoutWrapper(props) {
 
@@ -70,6 +73,9 @@ export default function LayoutWrapper(props) {
     return (
         <>
             <PagesBackground darkMode={darkMode}/>
+            <div className={clsx("fixed top-0 left-0 right-0 w-[84rem] h-full max-w-full mx-auto border-x border-y-0 border-solid", defaultBorderMixin)}>
+
+            </div>
             <Layout {...props} />
         </>
     );

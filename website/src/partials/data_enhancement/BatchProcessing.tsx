@@ -4,7 +4,7 @@ import { TwoColumns } from "../general/TwoColumns";
 import { useColorMode } from "@docusaurus/theme-common";
 
 import { Panel } from "../general/Panel";
-import { CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin } from "../utils";
+import { CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin } from "../styles";
 
 export function BatchProcessing() {
 

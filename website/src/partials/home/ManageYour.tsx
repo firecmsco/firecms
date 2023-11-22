@@ -6,7 +6,7 @@ import {
     ContainerMixin,
     CTACaret,
     CTAOutlinedButtonWhiteMixin
-} from "../utils";
+} from "../styles";
 import { Panel } from "../general/Panel";
 
 export function ManageYour() {

@@ -6,7 +6,7 @@ import FirebaseLogo from "@site/static/img/firebase.svg";
 
 import { useColorMode } from "@docusaurus/theme-common";
 
-import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../utils";
+import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import { TwoColumns } from "../general/TwoColumns";
 import useBaseUrl from "@docusaurus/useBaseUrl";
@@ -32,7 +32,7 @@ function OpenAITeaser() {
 
                         <div className={"flex items-center mb-4"}>
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 mr-4">
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-4">
                                 <MagicIcon/>
                             </div>
 
@@ -89,7 +89,7 @@ function OpenAITeaser() {
                         className={" flex content-center justify-center"}>
                         <video
                             key={isDarkTheme ? "dark" : "light"}
-                            className={"rounded-xl border border-solid dark:border-slate-800 border-slate-200"}
+                            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
                             width="100%"
                             loop autoPlay muted>
                             <source

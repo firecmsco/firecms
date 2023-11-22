@@ -7,9 +7,9 @@ export default function NavbarNavLinkWrapper(props) {
     if (pathname.startsWith("/docs/") && props.children === "Demo") {
         return null;
     }
-  return (
-    <>
-      <NavbarNavLink {...props} />
-    </>
-  );
+    return (
+        <>
+            <NavbarNavLink {...props} />
+        </>
+    );
 }

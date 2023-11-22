@@ -4,7 +4,7 @@ title: Multiple filters in collection views
 sidebar_label: Multiple filters
 ---
 
-Unfortunately Firestore is limited to a single `where` clause per query by default.
+Firestore is a bit limited when filtering and sorting. limited to a single `where` clause per query by default.
 This means that filtering by multiple fields is not possible out of the box.
 
 Anyhow, you can define indexes in Firestore to allow queries per multiple fields.

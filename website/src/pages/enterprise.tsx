@@ -6,7 +6,7 @@ import { EnterpriseFeatures } from "../partials/enterprise/EnterpriseFeatures";
 import {
     EnterpriseArchitectures
 } from "../partials/enterprise/EnterpriseArchitectures";
-import { CTAButtonMixin, CTAOutlinedButtonWhiteMixin } from "../partials/utils";
+import { CTAButtonMixin, CTAOutlinedButtonWhiteMixin } from "../partials/styles";
 import { Panel } from "../partials/general/Panel";
 
 function Enterprise() {

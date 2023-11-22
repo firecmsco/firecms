@@ -1,6 +1,6 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
-import { ContainerMixin, CTACaret, CTAOutlinedButtonMixin } from "../utils";
+import { ContainerMixin, CTACaret, CTAOutlinedButtonMixin } from "../styles";
 import { gridIcon, lightningIcon } from "../icons";
 
 // @ts-ignore
@@ -28,7 +28,7 @@ function FeaturesPanels() {
                     <div className={"flex items-center mb-4"}>
 
                         <div
-                            className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 mr-4">
+                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-4">
                             {lightningIcon}
                         </div>
 
@@ -38,7 +38,7 @@ function FeaturesPanels() {
 
                     </div>
 
-                    <p className="text-xl text-slate-600 dark:text-slate-200 text-xl md:text-2xl">
+                    <p className="text-xl text-gray-600 dark:text-gray-200 text-xl md:text-2xl">
                         FireCMS provides all the flexibility you
                         need with the best UX.
                         Edit your collections and entities using
@@ -60,7 +60,7 @@ function FeaturesPanels() {
             {/*                maxHeight: 589,*/}
             {/*                aspectRatio: 508 / 589*/}
             {/*            }}*/}
-            {/*            className={"rounded-xl border border-solid dark:border-slate-800 border-slate-200 border-slate-200"}*/}
+            {/*            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}*/}
             {/*            width="100%" loop autoPlay muted>*/}
             {/*            <source*/}
             {/*                src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}*/}
@@ -76,12 +76,12 @@ function FeaturesPanels() {
                     data-aos="fade-up"
                     data-aos-delay="100">
                     <div
-                        className="relative flex flex-col items-center p-6 bg-white dark:bg-slate-900 rounded border border-solid dark:border-slate-800 border-slate-200">
+                        className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
                         {iconStars}
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                             Consistent Data Management
                         </h4>
-                        <p className="text-slate-600 dark:text-slate-200 text-center">
+                        <p className="text-gray-600 dark:text-gray-200 text-center">
                             Establish schemas for your data types and set
                             validation options
                         </p>
@@ -92,12 +92,12 @@ function FeaturesPanels() {
                     data-aos="fade-up"
                     data-aos-delay="150">
                     <div
-                        className="relative flex flex-col items-center p-6 bg-white dark:bg-slate-900 rounded border border-solid dark:border-slate-800 border-slate-200">
+                        className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
                         {gridIcon}
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                             Sophisticated Editing Tools
                         </h4>
-                        <p className="text-slate-600 dark:text-slate-200 text-center">
+                        <p className="text-gray-600 dark:text-gray-200 text-center">
                             Spreadsheet-style editing, robust forms,
                             file storage, entity references...
                         </p>
@@ -108,12 +108,12 @@ function FeaturesPanels() {
                     data-aos="fade-up"
                     data-aos-delay="200">
                     <div
-                        className="relative flex flex-col items-center p-6 bg-white dark:bg-slate-900 rounded border border-solid dark:border-slate-800 border-slate-200">
+                        className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
                         {iconDoor}
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                             Role-Based System
                         </h4>
-                        <p className="text-slate-600 dark:text-slate-200 text-center">
+                        <p className="text-gray-600 dark:text-gray-200 text-center">
                             Configure app settings according to the logged-in
                             user
                         </p>
@@ -125,12 +125,12 @@ function FeaturesPanels() {
                     data-aos="fade-up"
                     data-aos-delay="100">
                     <div
-                        className="relative flex flex-col items-center p-6 bg-white dark:bg-slate-900 rounded border border-solid dark:border-slate-800 border-slate-200">
+                        className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
                         {iconCards}
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                             Flexible Customization
                         </h4>
-                        <p className="text-slate-600 dark:text-slate-200 text-center">
+                        <p className="text-gray-600 dark:text-gray-200 text-center">
                             Incorporate custom form fields, hooks, and full views based on React
                         </p>
                     </div>
@@ -140,12 +140,12 @@ function FeaturesPanels() {
                     data-aos="fade-up"
                     data-aos-delay="150">
                     <div
-                        className="relative flex flex-col items-center p-6 bg-white dark:bg-slate-900 rounded border border-solid dark:border-slate-800 border-slate-200">
+                        className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
                         {iconArrows}
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                             Subcollection Compatibility
                         </h4>
-                        <p className="text-slate-600 dark:text-slate-200 text-center">
+                        <p className="text-gray-600 dark:text-gray-200 text-center">
                             Seamless navigation for collections within other entities
                         </p>
                     </div>
@@ -154,14 +154,14 @@ function FeaturesPanels() {
                     data-aos="fade-up"
                     data-aos-delay="200">
                     <div
-                        className="relative flex flex-col items-center p-6 bg-white dark:bg-slate-900 rounded border border-solid dark:border-slate-800 border-slate-200">
+                        className="relative flex flex-col items-center p-6 bg-white dark:bg-gray-900 rounded border border-solid dark:border-gray-800 border-gray-200">
 
                         {iconRadar}
 
                         <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                             Real-Time Support
                         </h4>
-                        <p className="text-slate-600 dark:text-slate-200 text-center">
+                        <p className="text-gray-600 dark:text-gray-200 text-center">
                             Live updates in every view of your CMS, ideal for background updates
                         </p>
                     </div>

@@ -27,7 +27,7 @@ import {
     CTACaret,
     CTAOutlinedButtonMixin,
     CTAOutlinedButtonWhiteMixin
-} from "../utils";
+} from "../styles";
 
 function FeaturesTeaser() {
 
@@ -45,7 +45,7 @@ function FeaturesTeaser() {
                             <div className={"flex items-center mb-3 "}>
 
                                 <div
-                                    className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 mr-3">
+                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
                                     {lightningIcon}
                                 </div>
 
@@ -55,7 +55,7 @@ function FeaturesTeaser() {
 
                             </div>
 
-                            <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-200">
+                            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                                 FireCMS offers both flexibility and an excellent
                                 user experience. Edit your collections and
                                 entities
@@ -64,11 +64,11 @@ function FeaturesTeaser() {
                                 forms</b>.
                             </p>
 
-                            <p className="text-slate-600 dark:text-slate-200">
+                            <p className="text-gray-600 dark:text-gray-200">
                                 Generate Attractive Views from Your Schemas
                                 Automatically
                             </p>
-                            <p className="text-slate-600 dark:text-slate-200">
+                            <p className="text-gray-600 dark:text-gray-200">
                                 FireCMS creates CRUD views based on your
                                 configurations with ease. It's simple to set up
                                 for
@@ -97,7 +97,7 @@ function FeaturesTeaser() {
                                 maxWidth: 540,
                                 aspectRatio: 508 / 589
                             }}
-                            className={"rounded-xl border border-solid dark:border-slate-800 border-slate-200 border-slate-200"}
+                            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                             width="100%" loop autoPlay muted>
                             <source
                                 src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
@@ -113,7 +113,7 @@ function FeaturesTeaser() {
                 left={<>
                     <div className="relative flex flex-col p-4">
                         <video
-                            className={"rounded-xl border border-solid dark:border-slate-800 border-slate-200 border-slate-200"}
+                            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
                             style={{
                                 maxWidth: 540,
                                 aspectRatio: 538 / 592
@@ -132,7 +132,7 @@ function FeaturesTeaser() {
                             className={"flex items-center mb-3"}>
 
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-slate-800 rounded-full shadow flex-shrink-0 ">
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 ">
                                 <SettingsIcon/>
                             </div>
                             <h3 className="h3 m-0 ml-3 ">
@@ -141,14 +141,14 @@ function FeaturesTeaser() {
 
                         </div>
 
-                        <p className="text-xl md:text-2xl text-slate-600 dark:text-slate-200">
+                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
                             FireCMS offers developers an easy way to adapt the
                             platform to their specific needs while keeping the
                             <b>initial setup simple</b>. Our practical defaults
                             can be
                             conveniently <b>overridden or expanded</b>.
                         </p>
-                        <p className="text-xl text-slate-600 dark:text-slate-200">
+                        <p className="text-xl text-gray-600 dark:text-gray-200">
                             Effortlessly integrate your custom form fields as
                             React components and preview widgets. Moreover, you
                             can create detailed views related to your entities

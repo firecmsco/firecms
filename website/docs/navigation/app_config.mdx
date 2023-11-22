@@ -3,11 +3,17 @@ id: app_config
 title: App Config
 ---
 
-When creating a FireCMS app, you will **either** be using the components:
-- `FirebaseCMSApp` Default implementation of FireCMS that uses Firebase Auth, Firestore
-and Firebase Storage.
-- `FireCMSApp` Lower level component that allows you to provide your own implementations
-of the different services and more customization.
+The app config is the main configuration object of FireCMS. It is defined
+by the interface `FireCMSAppConfig`. In order to customize the CMS, you need
+to create a project in [app.firecms.co](https://app.firecms.co) and
+initialise a new project in code with `yarn create firecms-app`.
+
+After those steps are ready you can use the `FireCMSAppConfig` export to add
+your own customizations, like custom reusable properties or fields, collections,
+entity views, cms views, etc.
+
+
+
 
 ### Navigation
 
@@ -30,8 +36,7 @@ collections that get mapped to CMS views, or create your own top level React vie
 
 ### Customization
 
-Let's see all the customization options available for `FirebaseCMSApp` (most
-of them are also available for `FireCMSApp`).
+Let's see all the customization options available:
 
 * `name`: Name of the app, displayed as the main title and in the tab title
 

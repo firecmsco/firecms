@@ -28,7 +28,7 @@ export function EnterpriseTeaser() {
 
                     <div className="flex flex-wrap">
                         <div
-                            className="w-full py-2 border-b-2 border-slate-400 flex justify-between gap-2">
+                            className="w-full py-2 border-b-2 border-gray-400 flex justify-between gap-2">
                         </div>
 
                     </div>
