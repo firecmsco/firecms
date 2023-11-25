@@ -7,7 +7,8 @@ module.exports = {
         },
         "what_is_new_v3",
         "migrating_from_v2",
-        "quickstart",
+        "customization_quickstart",
+        "deployment",
         "firebase_setup",
         {
             "type":"category",
@@ -67,9 +68,8 @@ module.exports = {
                 "properties/custom_previews"
             ]
         },
-        "navigation/app_config",
-        "navigation/custom_top_level_views",
-        "deployment",
+        "app_config",
+        "custom_top_level_views",
         {
             "type":"category",
             "label":"Provided hooks",

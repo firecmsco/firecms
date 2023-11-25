@@ -5,6 +5,7 @@ import Features from "../partials/features/Features";
 import { Hero } from "../partials/general/Hero";
 import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
 import HeroButtons from "../partials/home/HeroButtons";
+import { IntroText } from "../partials/home/IntroText";
 
 function FeaturesPage() {
 
@@ -37,7 +38,8 @@ function FeaturesPage() {
 
                     <Features/>
 
-                    <DeveloperFeatures/>
+
+                    <IntroText/>
 
                     <HeroButtons/>
 

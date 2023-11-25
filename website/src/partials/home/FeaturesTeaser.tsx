@@ -24,10 +24,12 @@ import { useColorMode } from "@docusaurus/theme-common";
 import { lightningIcon } from "../icons";
 import { TwoColumns } from "../general/TwoColumns";
 import {
+    ContainerPaddingMixin,
     CTACaret,
     CTAOutlinedButtonMixin,
     CTAOutlinedButtonWhiteMixin
 } from "../styles";
+import clsx from "clsx";
 
 function FeaturesTeaser() {
 
@@ -39,10 +41,10 @@ function FeaturesTeaser() {
 
             <TwoColumns
                 left={
-                    <>
-                        <div className={"text-xl"}>
+                    <div className={ContainerPaddingMixin}>
+                        <div className={clsx("text-xl")}>
 
-                            <div className={"flex items-center mb-3 "}>
+                            <div className={"flex items-center mb-3 text-text-primary"}>
 
                                 <div
                                     className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
@@ -55,7 +57,7 @@ function FeaturesTeaser() {
 
                             </div>
 
-                            <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
+                            <p className="text-xl md:text-2xl text-text-primary">
                                 FireCMS offers both flexibility and an excellent
                                 user experience. Edit your collections and
                                 entities
@@ -64,11 +66,11 @@ function FeaturesTeaser() {
                                 forms</b>.
                             </p>
 
-                            <p className="text-gray-600 dark:text-gray-200">
+                            <p className="text-text-primary">
                                 Generate Attractive Views from Your Schemas
                                 Automatically
                             </p>
-                            <p className="text-gray-600 dark:text-gray-200">
+                            <p className="text-text-primary">
                                 FireCMS creates CRUD views based on your
                                 configurations with ease. It's simple to set up
                                 for
@@ -87,7 +89,7 @@ function FeaturesTeaser() {
                             Try the demo
                             <CTACaret/>
                         </a>
-                    </>
+                    </div>
                 }
                 right={<>
                     <div className="relative flex flex-col p-4">
@@ -126,10 +128,10 @@ function FeaturesTeaser() {
                     </div>
                 </>}
                 right={
-                    <>
+                    <div className={ContainerPaddingMixin}>
 
                         <div
-                            className={"flex items-center mb-3"}>
+                            className={"flex items-center mb-3 text-text-primary"}>
 
                             <div
                                 className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 ">
@@ -141,14 +143,14 @@ function FeaturesTeaser() {
 
                         </div>
 
-                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl md:text-2xl text-text-primary">
                             FireCMS offers developers an easy way to adapt the
                             platform to their specific needs while keeping the
                             <b>initial setup simple</b>. Our practical defaults
                             can be
                             conveniently <b>overridden or expanded</b>.
                         </p>
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl text-text-primary">
                             Effortlessly integrate your custom form fields as
                             React components and preview widgets. Moreover, you
                             can create detailed views related to your entities
@@ -156,7 +158,7 @@ function FeaturesTeaser() {
                             experience.
                         </p>
 
-                    </>
+                    </div>
                 }
             />
 

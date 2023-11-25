@@ -4,7 +4,7 @@ import {
     ContainerMixin,
     CTAButtonMixin,
     CTACaret,
-    CTAOutlinedButtonMixin
+    CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin
 } from "../styles";
 
 export function FireCMSCloudVersions() {
@@ -124,7 +124,7 @@ export function FireCMSCloudVersions() {
         />
 
         <a
-            className={CTAButtonMixin}
+            className={CTAOutlinedButtonWhiteMixin}
             href="http://app.firecms.co"
             rel="noopener noreferrer"
             target="_blank"

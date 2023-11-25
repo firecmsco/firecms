@@ -69,7 +69,7 @@ function Features() {
 
                 </div>
 
-                <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
+                <p className="text-xl md:text-2xl text-white">
                     FireCMS provides all the flexibility you
                     need with the best UX.
                     Edit your collections and entities using
@@ -77,7 +77,7 @@ function Features() {
                     view</b> and <b>powerful forms</b>.
                 </p>
 
-                <p className="text-xl text-gray-600 dark:text-gray-200">
+                <p className="text-xl text-white">
                     Inline editing is very useful when you want to
                     quickly edit a few fields of a
                     document. For example, if you have a list of users,
@@ -114,7 +114,7 @@ function Features() {
 
                         </div>
 
-                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl md:text-2xl text-white">
                             FireCMS offers more than 20 built-in property
                             fields, from basic text fields to
                             complex ones, like multiple file uploads, sortable
@@ -122,13 +122,13 @@ function Features() {
                             other collections, etc.
                         </p>
 
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl text-white">
                             The form view opens by default in a convenient side
                             dialog that allows you
                             to maintain the context you are working on, when you
                             are done.
                         </p>
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl text-white">
                             FireCMS is a React CMS, and it offers multiple
                             extension points where you can
                             define your custom views. Adding additional custom
@@ -190,14 +190,14 @@ function Features() {
 
                         </div>
 
-                        <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl md:text-2xl text-white">
                             FireCMS offers developers an easy way to adapt the
                             platform to their specific needs while keeping the
                             <b>initial setup simple</b>. Our practical defaults
                             can be
                             conveniently <b>overridden or expanded</b>.
                         </p>
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl text-white">
                             Effortlessly integrate your custom form fields as
                             React components and preview widgets. Moreover, you
                             can create detailed views related to your entities
@@ -205,7 +205,7 @@ function Features() {
                             experience.
                         </p>
 
-                        <p className="text-xl text-gray-600 dark:text-gray-200">
+                        <p className="text-xl text-white">
                             You could add:
                             <li> A dashboard for your client</li>
                             <li> A preview of the blog article you are

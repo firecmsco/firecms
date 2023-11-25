@@ -30,9 +30,9 @@
 }
 
 .btn {
-    @apply px-8 py-3 shadow-lg;
+    @apply px-8 py-3;
 }
 
 .btn-sm {
-    @apply px-4 py-2 shadow;
+    @apply px-4 py-2;
 }

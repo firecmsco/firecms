@@ -4,21 +4,19 @@ import ReactLogo from "@site/static/img/reactjs-icon.svg";
 // @ts-ignore
 import FirebaseLogo from "@site/static/img/firebase.svg";
 import { FireCMSLogo } from "../FireCMSLogo";
-import { ContainerMixin } from "../styles";
+import { ContainerMixin, defaultBorderMixin } from "../styles";
+import clsx from "clsx";
 
 function FirebaseIntro() {
     return (
-        <section className="relative py-40 md:py-48">
+        <section className="relative py-16 md:py-24"
+                 data-aos="fade-up">
 
-            <div className={ContainerMixin + " px-4 sm:px-6"}>
+            <div className={clsx(ContainerMixin)}>
 
-                <div
-                    className="relative flex justify-center mb-12"
-                    data-aos="fade-up"
-                    data-aos-delay="150"
-                >
+                <div className={clsx("relative flex justify-center mb-12 border-y border-x-0", defaultBorderMixin)}>
                     <div
-                        className="flex flex-row gap-2 md:gap-8 justify-center items-center">
+                        className="flex flex-row gap-8 md:gap-12 justify-center items-center p-4">
                         <ReactLogo
                             style={{
                                 width: 150,
@@ -36,13 +34,11 @@ function FirebaseIntro() {
                 </div>
 
                 <div
-                    className="max-w-4xl mx-auto text-center"
-                    data-aos="fade-up"
-                    data-aos-delay="100">
+                    className="max-w-4xl mx-auto text-center text-text-primary">
                     <h2 className="h1 mb-4">
                         Don't build another admin tool
                     </h2>
-                    <p className="text-xl md:text-2xl text-gray-600 dark:text-gray-200 dark:text-gray-200">
+                    <p className="text-xl md:text-2xl">
                         <b>FireCMS</b> is an open source headless CMS built by <b>developers
                         for developers</b>.
                         <br/>
@@ -78,6 +74,5 @@ function FirebaseIntro() {
         </section>
     );
 }
-
 
 export default FirebaseIntro;

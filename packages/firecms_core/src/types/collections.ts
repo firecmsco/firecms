@@ -277,10 +277,8 @@ export interface EntityCollection<M extends Record<string, any> = any,
 
 /**
  * Parameter passed to the `Actions` prop in the collection configuration.
- * Note that actions are rendered in the collection toolbar, as well
- * as in the home page card.
- * If you don't want to render the actions in the home page card, you can
- * return `null` if mode is `home`.
+ * The component will receive this prop when it is rendered in the collection
+ * toolbar.
  *
  * @category Models
  */

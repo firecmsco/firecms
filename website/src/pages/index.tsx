@@ -1,6 +1,5 @@
 import React from "react";
 import Layout from "@theme/Layout";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
 import Head from "@docusaurus/Head";
 import { TechSplash } from "../partials/home/TechSplash";
@@ -13,12 +12,10 @@ import { Companies } from "../partials/home/Companies";
 import FeaturesTeaser from "../partials/home/FeaturesTeaser";
 import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
 import OpenAITeaser from "../partials/home/OpenAITeaser";
-import { IntroText } from "../partials/home/IntroText";
-import { FireCMSCloudIntro } from "../partials/home/FireCMSCloudIntro";
+import { SchemaEditorIntro } from "../partials/home/SchemaEditorIntro";
+import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
 
 function Home() {
-    const context = useDocusaurusContext();
-    const { siteConfig = {} } = context;
 
     return (
         <Layout
@@ -27,29 +24,34 @@ function Home() {
             <Head>
                 <title>FireCMS - Firestore/Firebase headless CMS</title>
             </Head>
-            <div className="flex flex-col min-h-screen overflow-hidden">
+            <div className="flex flex-col min-h-screen overflow-hidden bg-lighter">
 
                 <main className="flex-grow">
 
                     <HeroHome/>
 
-                    <ManageYour/>
-
                     <FirebaseIntro/>
 
-                    {/*<IntroText/>*/}
-                    <FireCMSCloudIntro/>
+
+
+                    <ManageYour/>
 
                     <FeaturesPanels/>
-                    <EnterpriseTeaser/>
 
-                    <TechSplash/>
                     <Companies/>
 
-                    <FeaturesTeaser/>
-                    <OpenAITeaser/>
 
+                    <FeaturesTeaser/>
+
+                    <DeveloperFeatures/>
+
+                    <TechSplash/>
+
+                    <SchemaEditorIntro/>
+
+                    <OpenAITeaser/>
                     <FirebaseTeaser/>
+                    <EnterpriseTeaser/>
 
                 </main>
 

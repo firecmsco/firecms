@@ -182,6 +182,7 @@
 
 html[data-theme='dark'] {
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
+    /*--ifm-background-color: #ececec;*/
     --ifm-background-color: #242628;
     --ifm-background-surface-color: #232328;
     --ifm-color-emphasis-100: #232328;
@@ -191,6 +192,10 @@ html[data-theme='dark'] {
 article header {
     margin-top: 40px;
     margin-bottom: 16px;
+}
+article .theme-admonition {
+    margin-top: 32px;
+    margin-bottom: 32px;
 }
 
 article h2 {
@@ -219,17 +224,21 @@ article blockquote {
         flex-direction: column;
         align-items: end;
     }
+
     main .container {
         margin-left: 0 !important;
     }
 }
 
 .navbar.navbar--fixed-top {
+    position: fixed;
+    right: 0;
+    left: 0;
     padding: 0;
     background-color: var(--ifm-custom-navbar-background-color);
 }
 
-.navbar__logo{
+.navbar__logo {
     width: 32px;
 }
 
@@ -320,6 +329,11 @@ article {
     font-size: 1.06rem;
 }
 
+article p  {
+    margin-top: 8px;
+    margin-bottom: 8px;
+}
+
 article p img {
     max-width: 100%;
 }
@@ -347,6 +361,7 @@ html[data-theme="dark"] {
     --docsearch-logo-color: #0070f4;
     /*--docsearch-muted-color: #7f8497;*/
 
+    --ifm-leading-desktop: 1;
     --docsearch-primary-color: #0070f4;
     --docsearch-modal-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
     --docsearch-searchbox-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);

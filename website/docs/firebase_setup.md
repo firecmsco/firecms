@@ -4,14 +4,18 @@ title: Firebase setup
 sidebar_label: Firebase setup
 ---
 
-In order to run **FireCMS**, you need to create a Firebase project first, with
+:::important
+After you have created a FireCMS Cloud project, your Firebase
+project will be automatically configured for you.
+:::
+
+In order to run **FireCMS**, you need to have a Firebase project, with
 some requirements:
 
 ### Firestore
 
-You need to enable **Firestore** in it. You can initialise the security rules
-in test mode to allow reads and writes, but you are encouraged to write rules
-that are suited for your domain.
+You need to enable **Firestore**. You are free to define your own 
+security rules to enable read and write access to your collections.
 
 Keep in mind that rules should be defined for each collection and should be
 defined in a way that is suited for your domain.
@@ -25,57 +29,34 @@ will not allow you to read or write to the database. Continue reading to
 learn how to set up your rules.
 :::
 
-For example, a simple rule that allows any authenticated user to read and write
-to any collection would be:
+FireCMS will use the following rules by default:
 
 ```
 rules_version = '2';
 service cloud.firestore {
-  match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if request.auth != null;
-    }
+  match /{document=**} {
+    allow read, write: if request.auth.token.fireCMSUser;
   }
+  // ...rest of your rules
 }
 ```
 
-but ideally you will want to make it more restricitve. For the demo in the website, you could have rules
-like this:
+Users managed by FireCMS will have a custom claim `fireCMSUser` that will
+allow them to read and write to the database.
 
-```
+FireCMS still enforces frontend security though the roles defined in the
+CMS. Anyhow, if you need to make sure that some users cannot access certain
+collections, you should define your own rules.
 
-For the products demo to work, your rules should look like this:
-
-rules_version = '2';
-service cloud.firestore {
-
-    // everything is private by default
-    match /{document=**} {
-      allow read: false;
-      allow write: false;
-    }
-    
-    // allow every read to products collection but write only to authenticated users
-    match /databases/{database}/documents {
-        match /products/{id=**} {
-          allow read: if true;
-          allow write: if request.auth != null;
-        }
-    }
-    
-    // allow users to modify only their own user document
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-    }
-}
-
-```
 
 ### Web app
 
 In the project settings, you need to create a **Web app** within your
 project, from which you can get your Firebase config as a Javascript object.
 That is the object that you need to pass to the CMS.
+
+After initializing the CMS, you should have a webapp created in your Firebase
+project, called FireCMS.
 
 ![firebase_setup](/img/firebase_setup_app.png)
 

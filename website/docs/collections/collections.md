@@ -4,9 +4,24 @@ title: Collections
 sidebar_label: Collections
 ---
 
-:::tip
-You can customize your collections based on the **logged-in user**, by defining
-them using a callback, as described in [Navigation](../navigation).
+Collections in FireCMs can be defined in two ways:
+- Using the **FireCMS UI**.
+- Using **code**.
+
+If the logged-in user has the required permissions, they will be able to create
+collections using the UI. Collections defined by the UI hae some limitations,
+such as not being able to define any callbacks.
+
+On the other hand, if you are using code, you can define your collections
+programmatically, and you can use all the features of FireCMS.
+
+:::important
+You can have the same collection defined in both ways. In that case, the
+collection defined in code will take precedence.
+
+A deep merge is performed, so you can define some properties in the UI, and
+override them in code. For example, you can define an enum string property
+and the values will be merged from both definitions.
 :::
 
 In FireCMS, **collections** represent groups of entities.
@@ -99,6 +114,30 @@ in [Entity collections](../api/interfaces/entitycollection)
 
 * `description` Optional description of this view. You can use Markdown.
 
+* `entityActions`: EntityAction<M, UserType>[];
+
+    You can define additional actions that can be performed on the entities
+    in this collection. These actions can be displayed in the collection
+    view or in the entity view.
+
+    You can use the `onClick` method to implement your own logic.
+    In the `context` prop you can access all the controllers of FireCMS.
+    
+    ```
+    const archiveEntityAction: EntityAction = {
+        icon: <ArchiveIcon/>,
+        name: "Archive",
+        onClick({
+                    entity,
+                    collection,
+                    context,
+                }): Promise<void> {
+            // Add your code here
+            return Promise.resolve(undefined);
+        }
+    }
+    ```
+
 * `filterCombinations` If you need to filter/sort by multiple properties in this
   collection, you can define the supported filter combinations here.
   In the case of Firestore, you need to create special indexes in the console to
@@ -113,7 +152,7 @@ in [Entity collections](../api/interfaces/entitycollection)
 
 * `initialFilter` Initial filters applied to this collection.
   Defaults to none. Filters applied with this prop can be changed by the user.
-  e.g. 
+  e.g.
   ```
   initialFilter: { age: [ ">=", 18 ] }
   ```
@@ -422,3 +461,6 @@ const productsCollection = buildCollection<Product>({
     ]
 });
 ```
+
+### Customizing the collections based on the logged-in user
+

@@ -1,6 +1,6 @@
 import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
-import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../styles";
+import { CTAButtonDarkMixin, CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../styles";
 
 function HeroButtons() {
 
@@ -21,7 +21,7 @@ function HeroButtons() {
     return <div
         className="mt-8 mb-8 ">
 
-        <div className={"flex justify-center lg:flex-row flex-col-reverse items-center gap-4"}>
+        <div className={"flex justify-center lg:flex-row flex-col-reverse items-center gap-4 px-4"}>
             <a
                 className={"btn shadow-none py-4 text-white dark:hover:bg-gray-900 hover:bg-gray-200 uppercase border border-solid w-full lg:w-auto rounded"}
                 href={"https://discord.gg/fxy7xsQm3m"}
@@ -30,10 +30,10 @@ function HeroButtons() {
             </a>
 
             <a
-                className={CTAOutlinedButtonMixin + " w-full lg:w-auto "}
-                href={useBaseUrl("docs/")}
+                className={CTAButtonDarkMixin + " w-full lg:w-auto "}
+                href={"https://demo.firecms.co"}
             >
-                Self-hosted docs
+                Check the demo
             </a>
 
             <a
@@ -46,7 +46,7 @@ function HeroButtons() {
                 <CTACaret/>
             </a>
         </div>
-        <b className={"text-primary"}>Check the new FireCMS Cloud version!</b>
+        {/*<b className={"text-primary"}>Check the new FireCMS Cloud version!</b>*/}
     </div>;
 }
 

@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import clsx from "clsx";
 
 import Layout from "@theme-original/Layout";
-import { PagesBackground } from "../../partials/general/PagesBackground";
 import docsearch from "@docsearch/js";
 import siteConfig from "@generated/docusaurus.config";
 
@@ -58,9 +57,13 @@ export default function LayoutWrapper(props) {
         };
     }, [ExecutionEnvironment.canUseDOM, documentEnabled]);
 
-    // should show algolia docsearch
+    function isDocs() {
+        return pathname.startsWith("/docs/");
+    }
+
+// should show algolia docsearch
     useEffect(() => {
-        if (pathname.startsWith("/docs/")) {
+        if (isDocs()) {
             docsearch({
                 container: "#docsearch",
                 appId: siteConfig.customFields.docSearchAppId,
@@ -72,10 +75,9 @@ export default function LayoutWrapper(props) {
 
     return (
         <>
-            <PagesBackground darkMode={darkMode}/>
-            <div className={clsx("fixed top-0 left-0 right-0 w-[84rem] h-full max-w-full mx-auto border-x border-y-0 border-solid", defaultBorderMixin)}>
-
-            </div>
+            <div
+                className={clsx("pointer-events-none fixed top-0 left-0 right-0 w-[84rem] h-full max-w-full mx-auto border-x border-y-0 border-solid", defaultBorderMixin)}/>
+            {isDocs() && <div className={"h-20"}/>}
             <Layout {...props} />
         </>
     );

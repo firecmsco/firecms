@@ -6,9 +6,6 @@ import react from "@vitejs/plugin-react";
 const isExternal = (id: string) => !id.startsWith(".") && !path.isAbsolute(id);
 
 export default defineConfig(() => ({
-    esbuild: {
-        // jsxInject: "import React from 'react'",
-    },
     build: {
         lib: {
             entry: path.resolve(__dirname, "src/index.ts"),

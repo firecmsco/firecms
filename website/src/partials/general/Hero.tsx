@@ -1,5 +1,6 @@
 import React from "react";
 import { ContainerMixin } from "../styles";
+import { Panel } from "./Panel";
 
 export function Hero({
                          title,
@@ -11,7 +12,7 @@ export function Hero({
     cta?: React.ReactNode,
 }) {
     return (
-        <section className={ContainerMixin + " my-8"}>
+        <Panel>
             <div style={{height: "120px"}}/>
             <div
                 className="mt-10 mx-auto max-w-7xl ">
@@ -29,6 +30,6 @@ export function Hero({
                     </div>
                 </div>
             </div>
-        </section>
+        </Panel>
     );
 }

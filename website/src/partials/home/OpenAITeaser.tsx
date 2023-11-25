@@ -19,7 +19,7 @@ function OpenAITeaser() {
     const isDarkTheme = colorMode === "dark";
 
     return (
-        <Panel color={"gray"}>
+        <Panel color={"light"}>
 
             <TwoColumns
                 left={

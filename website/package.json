@@ -1,71 +1,72 @@
 {
-    "name": "website",
-    "version": "0.0.0",
-    "private": true,
-    "scripts": {
-        "docusaurus": "docusaurus",
-        "start": "yarn run copyChangelog && TYPEDOC_WATCH=true docusaurus start",
-        "build": "NODE_OPTIONS=--max-old-space-size=24048 && yarn run copyChangelog && TYPEDOC_WATCH=false docusaurus build",
-        "preview": "yarn build && docusaurus serve",
-        "copyChangelog": "echo '---' > ./docs/CHANGELOG.md && echo 'id: changelog' >> ./docs/CHANGELOG.md && echo 'title: Changelog' >> ./docs/CHANGELOG.md && echo '---' >> ./docs/CHANGELOG.md && cat ../CHANGELOG.md >> ./docs/CHANGELOG.md ",
-        "swizzle": "docusaurus swizzle --danger",
-        "deploy": "yarn build && firebase deploy --only hosting",
-        "serve": "docusaurus serve",
-        "clear": "docusaurus clear"
-    },
-    "engines": {
-        "node": ">=20"
-    },
-    "dependencies": {
-        "@docsearch/js": "3.3.3",
-        "@docusaurus/core": "^2.4.3",
-        "@docusaurus/plugin-google-gtag": "^2.4.3",
-        "@docusaurus/plugin-sitemap": "^2.4.3",
-        "@docusaurus/preset-classic": "^2.4.3",
-        "aos": "^2.3.4",
-        "autoprefixer": "^10.4.14",
-        "clsx": "^1.2.1",
-        "docusaurus-plugin-sass": "^0.2.5",
-        "docusaurus-plugin-typedoc": "^0.20.2",
-        "dotenv": "^16.0.3",
-        "postprocessing": "^6.30.1",
-        "raw-loader": "^4.0.2",
-        "react": "^18.2.0",
-        "react-dom": "^18.2.0",
-        "react-syntax-highlighter": "^15.5.0",
-        "react-transition-group": "^4.4.5",
-        "react-type-animation": "^2.1.2",
-        "sass": "^1.60.0",
-        "tailwindcss": "^3.3.0",
-        "three": "^0.149.0"
-    },
-    "browserslist": {
-        "production": [
-            ">0.5%",
-            "not dead",
-            "not op_mini all"
-        ],
-        "development": [
-            "last 1 chrome version",
-            "last 1 firefox version",
-            "last 1 safari version"
-        ]
-    },
-    "devDependencies": {
-        "@docusaurus/module-type-aliases": "^2.4.3",
-        "@tsconfig/docusaurus": "^1.0.7",
-        "@types/react": "^18.2.33",
-        "@types/react-helmet": "^6.1.6",
-        "@types/react-router-dom": "^5.3.3",
-        "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",
-        "esbuild-loader": "^4.0.2",
-        "fontaine": "^0.4.0",
-        "postcss": "^8.4.21",
-        "postcss-import": "^15.1.0",
-        "postcss-loader": "^7.1.0",
-        "postcss-preset-env": "^8.2.0",
-        "typedoc": "^0.25.1",
-        "typedoc-plugin-markdown": "^3.16.0",
-        "typescript": "^5.0.2"
-    }
+  "name": "website",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "docusaurus": "docusaurus",
+    "dev": "yarn run copyChangelog && TYPEDOC_WATCH=true docusaurus start",
+    "build": "NODE_OPTIONS=--max-old-space-size=24048 && yarn run copyChangelog && TYPEDOC_WATCH=false docusaurus build",
+    "preview": "yarn build && docusaurus serve",
+    "copyChangelog": "echo '---' > ./docs/CHANGELOG.md && echo 'id: changelog' >> ./docs/CHANGELOG.md && echo 'title: Changelog' >> ./docs/CHANGELOG.md && echo '---' >> ./docs/CHANGELOG.md && cat ../CHANGELOG.md >> ./docs/CHANGELOG.md ",
+    "swizzle": "docusaurus swizzle --danger",
+    "deploy": "yarn build && firebase deploy --only hosting",
+    "serve": "docusaurus serve",
+    "clear": "docusaurus clear"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "@docsearch/js": "3.3.3",
+    "@docusaurus/core": "^2.4.3",
+    "@docusaurus/plugin-google-gtag": "^2.4.3",
+    "@docusaurus/plugin-sitemap": "^2.4.3",
+    "@docusaurus/preset-classic": "^2.4.3",
+    "@firecms/neat": "0.1.4",
+    "aos": "^2.3.4",
+    "autoprefixer": "^10.4.14",
+    "clsx": "^1.2.1",
+    "docusaurus-plugin-sass": "^0.2.5",
+    "docusaurus-plugin-typedoc": "^0.20.2",
+    "dotenv": "^16.0.3",
+    "postprocessing": "^6.30.1",
+    "raw-loader": "^4.0.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-syntax-highlighter": "^15.5.0",
+    "react-transition-group": "^4.4.5",
+    "react-type-animation": "^2.1.2",
+    "sass": "^1.60.0",
+    "tailwindcss": "^3.3.0",
+    "three": "^0.149.0"
+  },
+  "browserslist": {
+    "production": [
+      ">0.5%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@docusaurus/module-type-aliases": "^2.4.3",
+    "@tsconfig/docusaurus": "^1.0.7",
+    "@types/react": "^18.2.33",
+    "@types/react-helmet": "^6.1.6",
+    "@types/react-router-dom": "^5.3.3",
+    "docusaurus-tailwindcss-loader": "file:plugins/docusaurus-tailwindcss-loader",
+    "esbuild-loader": "^4.0.2",
+    "fontaine": "^0.4.0",
+    "postcss": "^8.4.21",
+    "postcss-import": "^15.1.0",
+    "postcss-loader": "^7.1.0",
+    "postcss-preset-env": "^8.2.0",
+    "typedoc": "^0.25.1",
+    "typedoc-plugin-markdown": "^3.16.0",
+    "typescript": "^5.0.2"
+  }
 }

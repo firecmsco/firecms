@@ -175,7 +175,7 @@ export function ArrayContainer<T>({
 
                         {droppableProvided.placeholder}
 
-                        {includeAddButton && <div className="p-4 justify-center text-left">
+                        {includeAddButton && <div className="py-4 justify-center text-left">
                             <Button
                                 variant={size === "small" ? "text" : "outlined"}
                                 size={size === "small" ? "small" : "medium"}

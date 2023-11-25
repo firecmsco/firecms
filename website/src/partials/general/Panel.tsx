@@ -1,5 +1,5 @@
 import React from "react";
-import { ContainerMixin, defaultBorderMixin } from "../styles";
+import { ContainerMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 
 export function Panel({
@@ -7,33 +7,42 @@ export function Panel({
                           color = "gray",
                           centered = false,
                           includeMargin = false,
-                          contained = false
+                          includePadding = true,
+                          className
                       }: {
     children: React.ReactNode,
-    color?: "gray" | "primary" | "secondary" | "light",
+    color?: "gray" | "light_gray" | "primary" | "secondary" | "light" | "lighter" | "transparent",
     centered?: boolean,
     includeMargin?: boolean,
-    contained?: boolean
+    includePadding?: boolean,
+    className?: string
 }) {
 
-    const colorClass = color === "light" ? "bg-light" :
-        color === "gray" ? "bg-gray-100 dark:bg-gray-900" :
-            color === "primary" ? "bg-primary text-white" :
-                color === "secondary" ? "bg-secondary text-white" : "";
+    const colorClass = color === "transparent" ? "bg-inherit text-text-primary" :
+        color === "light" ? "bg-light text-text-primary" :
+            color === "lighter" ? "bg-lighter text-text-primary" :
+                color === "light_gray" ? "bg-gray-600 text-white" :
+                    color === "gray" ? "bg-gray-800 text-white" :
+                        color === "primary" ? "bg-primary text-white" :
+                            color === "secondary" ? "bg-secondary text-white" : "";
 
     return (
         <section
-            className={"max-w-full relative flex flex-col items " + colorClass
-                + (includeMargin ? " my-16" : "")}>
+            className={clsx("max-w-full relative flex flex-col items ",
+                colorClass,
+                includeMargin ? " my-16" : "",
+                "border-0 border-t",
+                defaultBorderMixin,
+                className
+            )}>
             <div className={clsx(
                 ContainerMixin,
                 (centered ? " flex flex-col items-center" : ""),
                 defaultBorderMixin,
+                includePadding ? ContainerPaddingMixin : "",
                 "border-x border-y-0 border-solid"
             )}>
-                <div className={(contained ? " my-16 max-w-3xl" : " my-12")}>
-                    {children}
-                </div>
+                {children}
             </div>
         </section>
     );

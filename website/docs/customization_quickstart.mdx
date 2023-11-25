@@ -1,0 +1,65 @@
+---
+id: customization_quickstart
+title: Customization quickstart
+sidebar_label: Customization quickstart
+---
+
+import { DocsCloudCTA } from "../src/DocsCloudCTA";
+
+:::note
+Start here if you want to customize FireCMS.
+You can run a FireCMS 3.0 project without writing a single line of code
+from [FireCMS Cloud](https://app.firecms.co).
+:::
+
+In order to add custom code to your FireCMS project, you need:
+- A Firebase project
+- A FireCMS project
+
+You can create both projects from FireCMS Cloud.
+<DocsCloudCTA/>
+
+Once you have both projects created you can initialize your codebase by running:
+
+```
+yarn create firecms-app
+```
+
+or
+
+```
+npx create-firecms-app
+```
+
+This will create a new folder with all the code you need to get started.
+In the code you will be able to add custom collections, custom pages, custom
+fields, custom actions, custom properties, etc.
+
+
+## Running your project
+
+To run your project locally, you can run the following command, like any
+other Vite project:
+
+```
+yarn dev
+```
+
+This will execute a version of your project that uses FireCMS backend to
+store config data but runs locally.
+
+You should be able to see your FireCMS instance in your browser, awesome!
+
+If you want to deploy to FireCMS cloud your module must export a
+`FireCMSAppConfig` object. You can find more information about this object
+in the [App config section](./app_config) reference.
+
+:::important
+Vite uses the default url `http://127.0.0.1:5173` for the development server
+in versions of `node` < 18.0.0.
+If you are using a version of node < 18.0.0, you will need to add this url to
+the authorized domains in the Firebase console.
+Firebase Auth will require to add this url to the authorized domains in the
+Firebase console.
+Alternatively, you can use the url `http://localhost:5173`.
+:::

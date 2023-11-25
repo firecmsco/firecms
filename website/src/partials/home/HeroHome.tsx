@@ -2,11 +2,14 @@ import React from "react";
 import HeroButtons from "./HeroButtons";
 
 // @ts-ignore
-import darkModeVideo from "@site/static/img/full_screen_dark.mp4";
-// @ts-ignore
-import lightModeVideo from "@site/static/img/full_screen_light.mp4";
+import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
+
 import { useColorMode } from "@docusaurus/theme-common";
-import { ContainerMixin } from "../styles";
+import { defaultBorderMixin } from "../styles";
+import { Panel } from "../general/Panel";
+import clsx from "clsx";
+import { LinedSpace } from "../layout/LinedSpace";
+import { PagesBackground } from "../general/PagesBackground";
 
 function HeroHome({}) {
 
@@ -14,71 +17,71 @@ function HeroHome({}) {
     const isDarkTheme = colorMode === "dark";
 
     const video = <div
-        className={ContainerMixin + " flex flex-col items-center px-8 sm:px-16 content-center justify-center"}>
+        className={"flex flex-col items-center content-center justify-center -m-px"}>
         <video
             key={isDarkTheme ? "dark" : "light"}
-            style={{
-                aspectRatio: 1440 / 587
-            }}
-            className={"my-4 rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+            className={"rounded-2xl border border-solid dark:border-gray-800 border-gray-200"}
             width="100%"
             loop autoPlay muted>
-            <source src={isDarkTheme ? darkModeVideo : lightModeVideo}
+            <source src={editingDemoDarkVideo}
                     type="video/mp4"/>
         </video>
     </div>;
 
-    const titleDiv = <div className="px-8 md:px-16 my-4 ">
+    const titleDiv = <>
 
-        <div className="text-center mt-16 lg:mt-28">
-            <h1 className="block tracking-tight text-5xl md:text-6xl font-extrabold tracking-tight leading-none uppercase">
-                <div className={"block"}>
+        <h1 className={clsx("m-0 text-center block text-5xl md:text-6xl font-extrabold tracking-tight leading-none uppercase text-white",
+            "px-16 md:px-24 py-6 md:py-12",
+            "border-0 border-b",
+            defaultBorderMixin)}
+            data-aos="zoom-y-out">
+            <div className={"block"}>
+                <span>Your </span>
                 <span
-                    data-aos="zoom-y-out"
-                    data-aos-delay="100">Your </span>
-                    <span
-                        data-aos="zoom-y-out"
-                        data-aos-delay="200"
-                        style={{
-                            // mixBlendMode: "color-dodge",
-                            WebkitBackgroundClip: "text",
-                            backgroundClip: "text",
-                            backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
-                        }}
-                        className="font-extrabold text-transparent bg-clip-text text-7xl md:text-8xl">CMS</span>
-                </div>
-                <span
-                    data-aos="zoom-y-out"
-                    data-aos-delay="300">based on </span>
-                <span
-                    data-aos="zoom-y-out"
-                    data-aos-delay="400"
-                    className={"text-5xl md:text-7xl "}
-                    style={{ color: "#FFA000" }}>Firebase</span>
+                    style={{
+                        // mixBlendMode: "color-dodge",
+                        WebkitBackgroundClip: "text",
+                        backgroundClip: "text",
+                        backgroundImage: "linear-gradient(to right, #EC4C51, #FA5574, #9543C1, #9543C1)"
+                    }}
+                    className="font-extrabold text-transparent bg-clip-text text-7xl md:text-8xl">CMS</span>
+            </div>
+            <span>based on </span>
+            <span
+                className={"text-5xl md:text-7xl"}
+                style={{ color: "#FFA000" }}>Firebase</span>
 
-            </h1>
+        </h1>
 
-            <h2 className={"text-xl"}>
-                You are building a great product, you don't need to build a CMS
-            </h2>
+        <HeroButtons/>
 
-            <HeroButtons/>
+        <h2 className={clsx("font-mono text-center uppercase m-0 text-2xl px-8 md:px-16 py-8 md:py-12 border-0 border-t text-white", defaultBorderMixin)}>
+            The prime choice for innovative CMS
+        </h2>
 
 
-        </div>
-
-    </div>;
+    </>;
 
     return (
-        <section id="hero" className="relative my-32 md:my-48" style={{
-            isolation: "isolate"
-        }}>
-
-            {titleDiv}
-
-            {video}
-
-        </section>
+        <div className={"w-full relative"}>
+            <PagesBackground/>
+            <div className={"h-20 "}/>
+            <Panel includeMargin={false} includePadding={false} color={"transparent"} className={"border-t-0"}>
+                <div className={"w-full"}>
+                    <div className="flex flex-wrap">
+                        <div className={clsx("w-full lg:w-1/2 border-0 border-r", defaultBorderMixin)}>
+                            <LinedSpace/>
+                            {titleDiv}
+                        </div>
+                        <div className="w-full lg:w-1/2">
+                            <LinedSpace/>
+                            {video}
+                        </div>
+                    </div>
+                </div>
+                <LinedSpace position={"top"}/>
+            </Panel>
+        </div>
     );
 }
 

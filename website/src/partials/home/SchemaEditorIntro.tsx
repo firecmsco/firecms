@@ -1,20 +1,36 @@
 import React from "react"
 
+// @ts-ignore
 import collectionEditorVideo from "@site/static/img/collection_editor_preview.mp4";
-import { ContainerMixin, CTACaret, CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin } from "../styles";
+import {
+    ContainerMixin,
+    ContainerPaddingMixin,
+    CTACaret,
+    CTAOutlinedButtonMixin,
+    CTAOutlinedLightButtonMixin,
+    defaultBorderMixin
+} from "../styles";
+import clsx from "clsx";
 
-export const FireCMSCloudIntro = () => {
+export const SchemaEditorIntro = () => {
 
     return (
         <section
             className="relative">
             <div
-                className={"px-4 sm:px-6 mb-16 bg-light text-gray-900 pb-16"}>
+                className={clsx("px-4 sm:px-6 mb-16 bg-light text-gray-900",
+                    "border-0 border-y",
+                    defaultBorderMixin,)}>
                 <div
-                    className={ContainerMixin + " flex flex-col py-20"}>
+                    className={clsx(
+                        ContainerMixin,
+                        ContainerPaddingMixin,
+                        defaultBorderMixin,
+                        "border-x border-y-0 ",
+                        " flex flex-col py-20")}>
 
                     <h2 className="h1 mb-4 text-gray-900 uppercase">
-                        New No-code FireCMS
+                        The best data schema editor
                     </h2>
 
                     <div className={"mt-4 mx-auto text-xl"}>
@@ -39,9 +55,9 @@ export const FireCMSCloudIntro = () => {
                     </div>
 
 
-                    <div className={"my-8"}>
+                    <div className={"my-8 pb-16"}>
                         <a
-                            className={CTAOutlinedButtonMixin}
+                            className={CTAOutlinedLightButtonMixin}
                             href="http://app.firecms.co"
                             rel="noopener noreferrer"
                             target="_blank"

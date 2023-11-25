@@ -54,7 +54,7 @@ export function AutofillFeature() {
                     ...or <b>any creative endeavor</b> you can imagine
                 </p>
 
-                <p className="text-base text-gray-600 dark:text-gray-200">
+                <p className="text-base text-text-primary">
                     The ChatGPT plugin for FireCMS leverages OpenAI's
                     state-of-the-art GPT model to generate content that meets
                     your requirements. Feel free to edit the generated content
