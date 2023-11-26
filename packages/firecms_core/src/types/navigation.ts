@@ -154,9 +154,9 @@ export interface CMSView {
 
     /**
      * Icon key to use in this view.
-     * You can use any of the icons in the MUI specs:
-     * https://mui.com/material-ui/material-icons/
-     * e.g. 'AccountTree' or 'Person'
+     * You can use any of the icons in the Material specs:
+     * https://fonts.google.com/icons
+     * e.g. 'account_tree' or 'person'
      */
     icon?: string;
 

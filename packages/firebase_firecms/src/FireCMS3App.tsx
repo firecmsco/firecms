@@ -19,7 +19,8 @@ import {
     SideDialogs,
     SnackbarProvider,
     Typography,
-    useBrowserTitleAndIcon, useBuildDataSource,
+    useBrowserTitleAndIcon,
+    useBuildDataSource,
     useBuildLocalConfigurationPersistence,
     useBuildModeController,
     User
@@ -44,7 +45,6 @@ import {
     useDelegatedLogin,
     useFirebaseAuthController,
     useFirebaseStorageSource,
-    useFirestoreDataSource,
     useInitialiseFirebase
 } from "./hooks";
 
@@ -53,8 +53,8 @@ import {
     FirebaseAuthController,
     FirebaseSignInOption,
     FirebaseSignInProvider,
-    FireCMSBackend,
     FireCMSAppConfig,
+    FireCMSBackend,
     FireCMSUser
 } from "./types";
 import {
@@ -282,72 +282,68 @@ export function FireCMS3ClientWithController({
         }
     }, [authController.user, currentProjectController.loading, currentProjectController.roles, currentProjectController.users, fireCMSUser]);
 
-    if (notValidUser) {
-        console.warn("No user was found with email " + notValidUser.email);
-        return <NoAccessError authController={authController}/>
-    }
-
     if (currentProjectController.loading) {
         return <FullLoadingView projectId={projectId}
                                 currentProjectController={currentProjectController}
                                 text={"Project loading"}/>;
     }
 
-    if (currentProjectController.configError) {
-        return <ErrorView
+    let loadingOrErrorComponent;
+    if (notValidUser) {
+        console.warn("No user was found with email " + notValidUser.email);
+        loadingOrErrorComponent = <NoAccessError authController={authController}/>
+    } else if (currentProjectController.configError) {
+        loadingOrErrorComponent = <ErrorView
             error={currentProjectController.configError as Error}/>
-    }
-
-    if (delegatedLoginError) {
-        return <CenteredView fullScreen={true}>
+    } else if (delegatedLoginError) {
+        loadingOrErrorComponent = <CenteredView fullScreen={true}>
             <Typography variant={"h4"}>Error delegating login</Typography>
             <ErrorView error={delegatedLoginError}/>
             <Button variant="text" onClick={authController.signOut}>Sign out</Button>
         </CenteredView>;
-    }
-
-    if (customizationLoading) {
-        return <FullLoadingView projectId={projectId}
-                                currentProjectController={currentProjectController}
-                                text={"Project customization loading"}/>;
-    }
-
-    if (firebaseConfigLoading) {
-        return <FullLoadingView projectId={projectId}
-                                currentProjectController={currentProjectController}
-                                text={"Client config loading"}/>;
-    }
-
-    if (firebaseConfigError || !clientFirebaseApp) {
-        return <CenteredView fullScreen={true}>
+    } else if (customizationLoading) {
+        loadingOrErrorComponent = <FullLoadingView projectId={projectId}
+                                                   currentProjectController={currentProjectController}
+                                                   text={"Project customization loading"}/>;
+    } else if (firebaseConfigLoading) {
+        loadingOrErrorComponent = <FullLoadingView projectId={projectId}
+                                                   currentProjectController={currentProjectController}
+                                                   text={"Client config loading"}/>;
+    } else if (firebaseConfigError || !clientFirebaseApp) {
+        loadingOrErrorComponent = <CenteredView fullScreen={true}>
             <ErrorView error={firebaseConfigError ?? "Error fetching client Firebase config"}/>
         </CenteredView>;
+    } else if (delegatedLoginLoading) {
+        loadingOrErrorComponent = <FullLoadingView projectId={projectId}
+                                                   currentProjectController={currentProjectController}
+                                                   text={"Logging in to " + projectId}/>;
+    } else if (!authController.user) {
+        loadingOrErrorComponent = <FullLoadingView projectId={projectId}
+                                                   currentProjectController={currentProjectController}
+                                                   text={"Auth loading"}/>;
+    } else if (!fireCMSUser) {
+        loadingOrErrorComponent = <NoAccessError authController={authController}/>;
     }
 
-    if (delegatedLoginLoading) {
-        return <FullLoadingView projectId={projectId}
-                                currentProjectController={currentProjectController}
-                                text={"Logging in to " + projectId}/>;
-    }
-
-    if (!authController.user) {
-        return <FullLoadingView projectId={projectId}
-                                currentProjectController={currentProjectController}
-                                text={"Auth loading"}/>;
-    }
-
-    if (!fireCMSUser) {
-        return <NoAccessError authController={authController}/>;
+    if (loadingOrErrorComponent) {
+        return <Scaffold
+            key={"project_scaffold_" + currentProjectController.projectId}
+            name={currentProjectController.projectName ?? ""}
+            logo={currentProjectController.logo}
+            includeDrawer={false}
+            FireCMSAppBarComponent={props.FireCMSAppBarComponent}>
+            {loadingOrErrorComponent}
+        </Scaffold>;
     }
 
     return <FireCMS3AppAuthenticated
-        fireCMSUser={fireCMSUser}
+        fireCMSUser={fireCMSUser!}
         fireCMSBackend={fireCMSBackend}
         appConfig={appConfig}
         authController={authController}
         currentProjectController={currentProjectController}
         collectionConfigController={configController}
-        firebaseApp={clientFirebaseApp}
+        firebaseApp={clientFirebaseApp!}
         {...props}
     />;
 }
@@ -385,7 +381,6 @@ function FireCMS3AppAuthenticated({
     if (!authController.user) {
         throw Error("You can only use FireCMS3AppAuthenticated with an authenticated user");
     }
-
 
     const adminRoutes = useMemo(buildAdminRoutes, []);
 

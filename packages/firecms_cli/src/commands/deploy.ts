@@ -72,7 +72,6 @@ export async function uploadZip(projectId: string, zipFilePath: string, env: "pr
 
     try {
         const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
-        // const response = await axios.post("http://127.0.0.1:5001/firecms-dev-2da42/europe-west3/api/projects/firecms-demo-27150/upload_config", form, {
         const response = await axios.post(`${server}/projects/${projectId}/upload_config`, form, {
             headers: {
                 ...form.getHeaders(),
