@@ -2,40 +2,41 @@ import React, { Suspense, useEffect } from "react";
 import BrowserOnly from "@docusaurus/BrowserOnly";
 import ExecutionEnvironment from "@docusaurus/ExecutionEnvironment";
 import { useLocation } from "@docusaurus/router";
-import useDocusaurusContext from "@docusaurus/useDocusaurusContext";
 
-const LazyNewNeatGradient = React.lazy(() => import("../../shape/NewNeatGradient"));
+const LazyHomeHeroNeatGradient = React.lazy(() => import("../../shape/HomeHeroNeatGradient"));
+const LazyBlueNeatGradient = React.lazy(() => import("../../shape/BlueNeatGradient"));
 
-function shouldShowAnimation(pathname) {
-    return ExecutionEnvironment.canUseDOM
-        && animationPaths.some((p) => pathname === "/" || pathname.startsWith(p));
-}
+// function shouldShowAnimation(pathname:string) {
+//     return ExecutionEnvironment.canUseDOM
+//         && animationPaths.some((p) => pathname === "/" || pathname.startsWith(p));
+// }
+//
+// const animationPaths = [
+//     "/features",
+//     "/enterprise",
+//     "/pricing",
+//     "/openai",
+//     "/f/"
+// ];
 
-const animationPaths = [
-    "/features",
-    "/enterprise",
-    "/pricing",
-    "/openai",
-    "/f/"
-];
+export function PagesBackground({ color = "grey" }: { color?: "grey" | "blue" }) {
 
-export function PagesBackground() {
-
-    const { pathname } = useLocation();
-    const [showAnimation, setShowAnimation] = React.useState(shouldShowAnimation(pathname));
-
-    useEffect(() => {
-        if (shouldShowAnimation(pathname)) {
-            setShowAnimation(true);
-        }
-    }, [ExecutionEnvironment.canUseDOM]);
+    // const { pathname } = useLocation();
+    // const [showAnimation, setShowAnimation] = React.useState(shouldShowAnimation(pathname));
+    //
+    // useEffect(() => {
+    //     if (shouldShowAnimation(pathname)) {
+    //         setShowAnimation(true);
+    //     }
+    // }, [ExecutionEnvironment.canUseDOM]);
 
     return <>
         <BrowserOnly
             fallback={<div className={"absolute"}/>}>
             {() => (
                 <Suspense fallback={<div/>}>
-                    {showAnimation && <LazyNewNeatGradient/>}
+                    {color === "grey"  && <LazyHomeHeroNeatGradient/>}
+                    {color === "blue"  && <LazyBlueNeatGradient/>}
                 </Suspense>
             )}
         </BrowserOnly>

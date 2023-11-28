@@ -6,16 +6,20 @@ import pricePreview from "@site/static/img/price.png";
 
 import { useColorMode } from "@docusaurus/theme-common";
 
+// @ts-ignore
 import SyntaxHighlighter from "react-syntax-highlighter";
 import {
     atomOneLight,
     dracula
+// @ts-ignore
 } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { arrowIcon } from "../icons";
 
 import TickIcon from "@site/static/img/icons/check.svg";
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
+import clsx from "clsx";
+import { defaultBorderMixin } from "../styles";
 
 export function DeveloperFeatures() {
 
@@ -36,7 +40,7 @@ export function DeveloperFeatures() {
                     className=" relative flex-col font-mono">
 
                     <SyntaxHighlighter
-                        className={"max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid dark:border-gray-800 border-gray-200"}
+                        className={clsx("max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
                         language={"typescript"}
                         showLineNumbers={false}
                         wrapLines={true}
@@ -142,7 +146,7 @@ export function DeveloperFeatures() {
                     <div
                         className="relative flex-col font-mono">
                         <SyntaxHighlighter
-                            className={"max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid dark:border-gray-800 border-gray-200"}
+                            className={clsx("max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
                             language={"typescript"}
                             showLineNumbers={false}
                             style={isDarkTheme ? dracula : atomOneLight}

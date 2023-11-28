@@ -93,9 +93,9 @@ in [Entity collections](../api/interfaces/entitycollection)
   Note that you can use this value in reference properties too.
 
 * `icon` Icon key to use in this collection.
-  You can use any of the icons in the MUI specs:
-  https://mui.com/material-ui/material-icons/
-  e.g. 'AccountTree' or 'Person'
+  You can use any of the icons in the Material specs:
+  https://fonts.google.com/icons
+  e.g. 'account_tree' or 'person'
 
 * `customId` If this prop is not set, the ID of the document will be created by
   the datasource. You can set the value to 'true' to force the users to choose
@@ -237,7 +237,7 @@ import {
     buildCollection,
     buildProperty,
     EntityReference
-} from "@firecms/core";
+} from "@firecms/firebase";
 
 type Product = {
     name: string;
@@ -358,7 +358,7 @@ import {
     buildCollection,
     buildCollection,
     AdditionalFieldDelegate
-} from "@firecms/core";
+} from "@firecms/firebase";
 
 type User = { name: string }
 
@@ -391,7 +391,7 @@ import {
     buildCollection,
     AdditionalFieldDelegate,
     AsyncPreviewComponent
-} from "@firecms/core";
+} from "@firecms/firebase";
 
 export const productAdditionalField: AdditionalFieldDelegate<Product> = {
     id: "spanish_title",
@@ -445,7 +445,7 @@ can specify the filters that you have enabled in your Firestore configuration.
 In order to do so, just pass the indexes configuration to your collection:
 
 ```tsx
-import { buildCollection } from "@firecms/core";
+import { buildCollection } from "@firecms/firebase";
 
 const productsCollection = buildCollection<Product>({
     path: "products",

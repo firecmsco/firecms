@@ -20,18 +20,19 @@ import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
 // @ts-ignore
 import customFieldVideo from "@site/static/img/custom_fields.mp4";
 // @ts-ignore
-import inlineEditingVideo from "@site/static/img/inline_table_editing.mp4";
-// @ts-ignore
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
+// @ts-ignore
+import inlineEditingVideo from "@site/static/img/inline_table_editing.mp4";
 
 import { useColorMode } from "@docusaurus/theme-common";
 import { TwoColumns } from "../general/TwoColumns";
 import {
     ContainerMixin,
     ContainerSmallMixin, CTACaret,
-    CTAOutlinedButtonMixin
+    CTAOutlinedButtonMixin, defaultBorderMixin
 } from "../styles";
 import { BrowserFrame } from "../BrowserFrame";
+import clsx from "clsx";
 
 function Features() {
 
@@ -146,7 +147,7 @@ function Features() {
                                 maxWidth: 540,
                                 aspectRatio: 508 / 589
                             }}
-                            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
+                            className={clsx("rounded-xl border", defaultBorderMixin)}
                             width="100%" loop autoPlay muted>
                             <source
                                 src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
@@ -162,7 +163,7 @@ function Features() {
                 right={<>
                     <div className="relative flex flex-col">
                         <video
-                            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
+                            className={clsx("rounded-xl border", defaultBorderMixin)}
                             style={{
                                 maxWidth: 540,
                                 aspectRatio: 540 / 515

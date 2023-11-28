@@ -77,7 +77,7 @@ function FeaturesPanels() {
                 </div>
 
                 <div
-                    className="relative flex flex-col items-center p-6  rounded-2xl border border-solid ">
+                    className="relative flex flex-col items-center p-6 rounde   d-2xl border border-solid ">
                     {gridIcon}
                     <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
                         Sophisticated Editing Tools

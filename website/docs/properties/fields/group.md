@@ -12,7 +12,7 @@ both from the UX and the data model perspective.
 Group fields can be initially expanded or collapsed by default.
 
 ```typescript jsx
-import { buildProperty } from "@firecms/core";
+import { buildProperty } from "@firecms/firebase";
 
 buildProperty({
     name: "Address",

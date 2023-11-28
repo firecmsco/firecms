@@ -24,7 +24,7 @@ containing a `string` and an error snackbar will be displayed.
 :::
 
 ```tsx
-import { buildCollection, buildEntityCallbacks, EntityOnDeleteProps, EntityOnSaveProps, toSnakeCase } from "@firecms/core";
+import { buildCollection, buildEntityCallbacks, EntityOnDeleteProps, EntityOnSaveProps, toSnakeCase } from "@firecms/firebase";
 
 type Product = {
     name: string;

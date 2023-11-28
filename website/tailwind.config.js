@@ -13,7 +13,7 @@ const fireCMSTailwindConfig = {
                 primary: "#0070F4",
                 secondary: "#ff5064",
                 error: "#F44336",
-                light: "#e4e1dd",
+                light: "#e5e3e2",
                 lighter: "#f8f8fc",
                 outline: "#828c97",
                 field: {

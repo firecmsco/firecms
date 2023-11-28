@@ -12,6 +12,7 @@ navigation, as the example below.
 By default, it will show in the main navigation view.
 
 For custom views you can define the following props:
+
 * `path` string
 
   CMS Path you can reach this view from.
@@ -45,58 +46,18 @@ For custom views you can define the following props:
 ### Example:
 A quick example for a custom view:
 
-```tsx
-import {
-    buildCollection,
-    CMSView,
-    EntityCollectionsBuilder,
-    FirebaseCMSApp
-} from "@firecms/core";
-import { ExampleCMSView } from "./ExampleCMSView";
+import CodeBlock from "@theme/CodeBlock";
+import CustomViewSampleApp
+    from "!!raw-loader!../src/samples_v3/custom_cms_view/CustomViewSampleApp";
 
-export default function App() {
+<CodeBlock language="tsx">{CustomViewSampleApp}</CodeBlock>
 
-    const productCollection = buildCollection({
-        name: "Product",
-        properties: {
-            name: {
-                name: "Name",
-                validation: { required: true },
-                dataType: "string"
-            }
-        }
-    });
-
-    const customViews: CMSView[] = [{
-        path: "additional",
-        name: "Additional view",
-        description: "This is an example of an additional view that is defined by the user",
-        // This can be any React component
-        view: <ExampleCMSView/>
-    }];
-
-    return <FirebaseCMSApp
-        name={"My Online Shop"}
-        collections={({ user }: EntityCollectionsBuilder) => [
-            buildCollection({
-                path: "products",
-                collection: productCollection,
-                name: "Products"
-            })
-        ]}
-        views={customViews}
-    />;
-}
-```
 
 Your custom view is implemented as any regular React component that uses
 some hooks provided by the CMS:
 
+import ExampleCMSView
+    from "!!raw-loader!../src/samples_v3/custom_cms_view/ExampleCMSView";
 
-
-import CodeBlock from "@theme/CodeBlock";
-import MyComponentSource
-    from "!!raw-loader!../../examples/example/src/SampleApp/ExampleCMSView";
-
-<CodeBlock language="tsx">{MyComponentSource}</CodeBlock>
+<CodeBlock language="tsx">{ExampleCMSView}</CodeBlock>
 

@@ -10,12 +10,9 @@ image: /img/blog_example.png
 
 :::note
 In this tutorial we assume you have set up a Firebase project and a FireCMS
-instance. If you don't, check the [Quickstart](firebase_setup.md) and
+instance. If you don't, check the [Quickstart](customization_quickstart.mdx) and
 [Firebase setup](firebase_setup.md) sections.
 :::
-
-In this section we will break down the collection configuration we use to
-build the [blog section in our demo](https://demo.firecms.co/c/blog).
 
 We don't need to explain the benefits of using a headless CMS instead of a
 traditional blogging approach like WordPress, but here are a few:
@@ -295,6 +292,6 @@ we get the following code for the blog collection:
 
 import CodeBlock from "@theme/CodeBlock";
 import MyComponentSource
-    from "!!raw-loader!../../../examples/example/src/docs/recipes/blog/blog_collection";
+    from "!!raw-loader!../../src/samples_v3/recipes/blog/blog_collection";
 
 <CodeBlock language="tsx">{MyComponentSource}</CodeBlock>

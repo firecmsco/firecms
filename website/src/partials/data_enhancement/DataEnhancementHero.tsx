@@ -1,8 +1,9 @@
 import React from "react";
 
 import { useColorMode } from "@docusaurus/theme-common";
-import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin } from "../styles";
+import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
 import { TwoColumns } from "../general/TwoColumns";
+import clsx from "clsx";
 
 export function DataEnhancementHero() {
 
@@ -58,7 +59,7 @@ export function DataEnhancementHero() {
                 className={" flex content-center justify-center"}>
                 <video
                     key={isDarkTheme ? "dark" : "light"}
-                    className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+                    className={clsx("rounded-xl border border-solid", defaultBorderMixin)}
                     width="100%"
                     loop autoPlay muted>
                     <source

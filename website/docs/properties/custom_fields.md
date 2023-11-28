@@ -32,7 +32,7 @@ This is an example of a custom TextField that takes the background color as a pr
 
 import React from "react";
 import { TextField } from "@mui/material";
-import { FieldProps } from "@firecms/core";
+import { FieldProps } from "@firecms/firebase";
 
 interface CustomColorTextFieldProps {
     color: string

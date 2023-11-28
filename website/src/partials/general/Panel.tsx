@@ -8,14 +8,16 @@ export function Panel({
                           centered = false,
                           includeMargin = false,
                           includePadding = true,
-                          className
+                          className,
+                          innerClassName
                       }: {
     children: React.ReactNode,
     color?: "gray" | "light_gray" | "primary" | "secondary" | "light" | "lighter" | "transparent",
     centered?: boolean,
     includeMargin?: boolean,
     includePadding?: boolean,
-    className?: string
+    className?: string,
+    innerClassName?: string,
 }) {
 
     const colorClass = color === "transparent" ? "bg-inherit text-text-primary" :
@@ -40,7 +42,8 @@ export function Panel({
                 (centered ? " flex flex-col items-center" : ""),
                 defaultBorderMixin,
                 includePadding ? ContainerPaddingMixin : "",
-                "border-x border-y-0 border-solid"
+                "border-x border-y-0 border-solid",
+                innerClassName
             )}>
                 {children}
             </div>

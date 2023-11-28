@@ -27,7 +27,7 @@ Example:
 ```tsx
 
 import React from "react";
-import { useSnackbarController } from "@firecms/core";
+import { useSnackbarController } from "@firecms/firebase";
 
 export function ExampleCMSView() {
 

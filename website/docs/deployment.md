@@ -4,7 +4,7 @@ title: Deployment
 sidebar_label: Deployment
 ---
 
-### Deployment to FireCMS
+## Deployment to FireCMS
 
 FireCMS is unique among CMSs in that it allows to upload custom code to
 its Cloud version. This is a very advanced feature enables you to tailor
@@ -26,9 +26,29 @@ The benefit of this approach is that you can use any npm package you want,
 and you can use the latest version of FireCMS without having to manually
 update your code.
 
+### FireCMS CLI
 
+The FireCMS CLI is a tool that allows you to deploy your CMS to FireCMS Cloud
+with a single command. In your project, you should have `@firecms/cli` as a dev
+dependency:
 
-### Deployment to Firebase Hosting
+The available commands are:
+
+```bash
+firecms login
+```
+
+```bash
+firecms logout
+```
+
+and
+
+```bash
+firecms deploy --project=your-project-id
+```
+
+## Deployment to Firebase Hosting
 
 If you would like to deploy your CMS to Firebase Hosting, you need to enable
 it first in the Hosting tab of your Firebase project.

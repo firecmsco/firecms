@@ -8,6 +8,7 @@ module.exports = {
         "what_is_new_v3",
         "migrating_from_v2",
         "customization_quickstart",
+        "app_config",
         "deployment",
         "firebase_setup",
         {
@@ -68,7 +69,6 @@ module.exports = {
                 "properties/custom_previews"
             ]
         },
-        "app_config",
         "custom_top_level_views",
         {
             "type":"category",
@@ -91,7 +91,6 @@ module.exports = {
             "items":[
                 "recipes/building_a_blog",
                 "recipes/copy_entity",
-                "recipes/custom_datasource",
                 "recipes/documents_as_subcollections"
             ]
         },

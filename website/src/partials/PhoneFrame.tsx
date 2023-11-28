@@ -1,8 +1,12 @@
-import React from 'react';
-export function PhoneFrame({ children }: { children: React.ReactNode }) {
+import clsx from "clsx";
+import React from "react";
+
+export function PhoneFrame({ children, className }: {
+    children: React.ReactNode,
+    className?: string
+}) {
     return <div
-        data-aos="fade-up"
-        className="relative w-72 mx-auto">
+        className={clsx("relative w-72 mx-auto", className)}>
         <div
             className="h-6 w-0.5 rounded-l-sm bg-black absolute -left-0.5 top-16"></div>
         <div

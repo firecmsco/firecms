@@ -54,6 +54,7 @@
   },
   "devDependencies": {
     "@docusaurus/module-type-aliases": "^2.4.3",
+    "@firecms/firebase": "^3.0.0-alpha.28",
     "@tsconfig/docusaurus": "^1.0.7",
     "@types/react": "^18.2.33",
     "@types/react-helmet": "^6.1.6",

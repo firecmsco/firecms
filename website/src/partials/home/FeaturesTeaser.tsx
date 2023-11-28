@@ -27,7 +27,7 @@ import {
     ContainerPaddingMixin,
     CTACaret,
     CTAOutlinedButtonMixin,
-    CTAOutlinedButtonWhiteMixin
+    CTAOutlinedButtonWhiteMixin, defaultBorderMixin
 } from "../styles";
 import clsx from "clsx";
 
@@ -67,10 +67,6 @@ function FeaturesTeaser() {
                             </p>
 
                             <p className="text-text-primary">
-                                Generate Attractive Views from Your Schemas
-                                Automatically
-                            </p>
-                            <p className="text-text-primary">
                                 FireCMS creates CRUD views based on your
                                 configurations with ease. It's simple to set up
                                 for
@@ -99,7 +95,7 @@ function FeaturesTeaser() {
                                 maxWidth: 540,
                                 aspectRatio: 508 / 589
                             }}
-                            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
+                            className={clsx("rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200")}
                             width="100%" loop autoPlay muted>
                             <source
                                 src={isDarkTheme ? editingDemoDarkVideo : editingDemoVideo}
@@ -115,7 +111,7 @@ function FeaturesTeaser() {
                 left={<>
                     <div className="relative flex flex-col p-4">
                         <video
-                            className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200 border-gray-200"}
+                            className={clsx("rounded-xl border", defaultBorderMixin)}
                             style={{
                                 maxWidth: 540,
                                 aspectRatio: 538 / 592

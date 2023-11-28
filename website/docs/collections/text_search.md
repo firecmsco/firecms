@@ -14,7 +14,7 @@ solutions. If you specify a `textSearchEnabled` flag to the **collection**, you
 will see a search bar on top of the collection view.
 
 You need to define a `FirestoreTextSearchController` and pass it to your
-`FirebaseCMSApp` component (or `useFirestoreDataSource` if you are building a
+`FireCMS3App` component (or `useFirestoreDataSource` if you are building a
 custom app). Typically, you will want to index your entities in some external
 solution, such as Algolia. For this to work you need to set up an AlgoliaSearch
 account and manage the indexing of your documents. 
@@ -25,7 +25,7 @@ There is also a Firebase extension for the very same purpose.
 
 :::note 
 Find all the available props
-for `FirebaseCMSApp` [here](../navigation/app_config)
+for `FireCMS3App` [here](../navigation/app_config)
 :::
 
 We provide a utility method for performing searches in
@@ -41,9 +41,9 @@ import {
     FirestoreTextSearchController,
     buildCollection,
     buildCollection,
-    FirebaseCMSApp,
+    FireCMS3App,
     EntityCollectionsBuilder
-} from "@firecms/core";
+} from "@firecms/firebase";
 
 const client: SearchClient | undefined = algoliasearch("YOUR_ALGOLIA_APP_ID", "YOUR_ALGOLIA_SEARCH_KEY");
 
@@ -71,7 +71,7 @@ export default function App() {
         }
     });
 
-    return <FirebaseCMSApp
+    return <FireCMS3App
         name={"My Online Shop"}
         collections={[productCollection]}
         textSearchController={textSearchController}

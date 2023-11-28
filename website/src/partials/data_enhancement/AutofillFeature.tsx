@@ -7,6 +7,8 @@ import { useColorMode } from "@docusaurus/theme-common";
 import demoDark from "@site/static/img/data/product_demo_dark.mp4";
 // @ts-ignore
 import demoLight from "@site/static/img/data/product_demo_light.mp4";
+import clsx from "clsx";
+import { defaultBorderMixin } from "../styles";
 
 export function AutofillFeature() {
 
@@ -25,7 +27,7 @@ export function AutofillFeature() {
                     className={" flex content-center justify-center"}>
                     <video
                         key={isDarkTheme ? "dark" : "light"}
-                        className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+                        className={clsx("rounded-xl border border-solid", defaultBorderMixin)}
                         width="100%"
                         loop autoPlay muted>
                         <source

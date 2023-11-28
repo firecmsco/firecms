@@ -3,6 +3,9 @@ import { useColorMode } from "@docusaurus/theme-common";
 
 // @ts-ignore
 import MMLogo from "@site/static/img/logos/mm_logo.webp";
+
+// @ts-ignore
+import SomnioLogo from "@site/static/img/logos/logo_somnio_blanco.png";
 // @ts-ignore
 import MMLogoDark from "@site/static/img/logos/mm_logo_white.webp";
 import TPALogo from "@site/static/img/logos/the_planet_app_logo.svg";
@@ -39,6 +42,14 @@ export function Companies() {
                 href={"https://medicalmotion.com"}>
                 <img src={isDarkTheme ? MMLogoDark : MMLogo}
                      alt="MedicalMotion Logo"
+                     className="w-48 h-min aspect-auto m-4"/>
+            </a>
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={"https://www.somniosoftware.com/"}>
+                <img src={SomnioLogo}
+                     alt="Somnio Logo"
                      className="w-48 h-min aspect-auto m-4"/>
             </a>
             <a

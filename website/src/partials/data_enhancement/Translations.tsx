@@ -7,6 +7,8 @@ import { useColorMode } from "@docusaurus/theme-common";
 import translationLight from "@site/static/img/data/translations_light.png";
 // @ts-ignore
 import translationDark from "@site/static/img/data/translations_dark.png";
+import clsx from "clsx";
+import { defaultBorderMixin } from "../styles";
 
 export function Translations() {
 
@@ -35,7 +37,7 @@ export function Translations() {
                     data-aos="fade-up"
                     className={" flex content-center justify-center"}>
                     <img
-                        className={"rounded-xl border border-solid dark:border-gray-800 border-gray-200"}
+                        className={clsx("rounded-xl border", defaultBorderMixin)}
                         src={isDarkTheme ? translationDark : translationLight}
                         width="500"
                         alt="Element"

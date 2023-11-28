@@ -1,6 +1,6 @@
 import React from "react";
-import { ContainerMixin } from "../styles";
 import { Panel } from "./Panel";
+import { PagesBackground } from "./PagesBackground";
 
 export function Hero({
                          title,
@@ -12,24 +12,37 @@ export function Hero({
     cta?: React.ReactNode,
 }) {
     return (
-        <Panel>
-            <div style={{height: "120px"}}/>
-            <div
-                className="mt-10 mx-auto max-w-7xl ">
-                <div className="lg:text-left">
-                    <h1 className="text-4xl tracking-tight font-extrabold md:text-6xl">
-                        {title}
-                    </h1>
-                    {subtitle &&
-                        <div className="mt-3 text-xl sm:mt-4 md:text-2xl">
-                            {subtitle}
-                        </div>}
+        <>
+            <div className={"w-full relative"}>
+                <PagesBackground color={"blue"}/>
+                <div className={"h-20 "}/>
+                <Panel includeMargin={false}
+                       includePadding={false}
+                       color={"transparent"}
+                       innerClassName={"py-8 md:py-12 p-4 md:p-8"}
+                       className={"border-t-0"}>
+                    <div style={{ height: "200px" }}/>
                     <div
-                        className="mt-5 sm:mt-8">
-                        {cta}
+                        className="mt-10 text-white">
+                        <div className="lg:text-left">
+                            <h1 className="tracking-tight font-extrabold text-6xl">
+                                {title}
+                            </h1>
+                        </div>
                     </div>
-                </div>
+                </Panel>
             </div>
-        </Panel>
+
+            <Panel color={"secondary"} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
+                {subtitle &&
+                    <div className="text-xl  md:text-2xl">
+                        {subtitle}
+                    </div>}
+                {cta && <div
+                    className="mt-5 sm:mt-8">
+                    {cta}
+                </div>}
+            </Panel>
+        </>
     );
 }

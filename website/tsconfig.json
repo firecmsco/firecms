@@ -25,7 +25,13 @@
         "declaration": true,
         "noImplicitReturns": true,
         "noImplicitThis": true,
-        "strictNullChecks": true
+        "strictNullChecks": true,
+        "baseUrl": ".",
+        "paths": {
+            "@firecms/firecms": [
+                "../packages/firecms_core/src/index.ts"
+            ]
+        }
     },
     "include": [
         "src"

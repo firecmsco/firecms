@@ -19,8 +19,11 @@ function HeroHome({}) {
     const video = <div
         className={"flex flex-col items-center content-center justify-center -m-px"}>
         <video
+            style={{
+                aspectRatio: 1
+            }}
             key={isDarkTheme ? "dark" : "light"}
-            className={"rounded-2xl border border-solid dark:border-gray-800 border-gray-200"}
+            className={clsx("rounded-2xl border", defaultBorderMixin)}
             width="100%"
             loop autoPlay muted>
             <source src={editingDemoDarkVideo}
@@ -63,7 +66,7 @@ function HeroHome({}) {
     </>;
 
     return (
-        <div className={"w-full relative"}>
+        <div className={clsx("w-full relative border-0 border-b", defaultBorderMixin)}>
             <PagesBackground/>
             <div className={"h-20 "}/>
             <Panel includeMargin={false} includePadding={false} color={"transparent"} className={"border-t-0"}>
@@ -80,6 +83,7 @@ function HeroHome({}) {
                     </div>
                 </div>
                 <LinedSpace position={"top"}/>
+                <LinedSpace position={"top"} size={"xlarge"}/>
             </Panel>
         </div>
     );

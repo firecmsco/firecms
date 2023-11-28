@@ -14,6 +14,7 @@ import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
 import OpenAITeaser from "../partials/home/OpenAITeaser";
 import { SchemaEditorIntro } from "../partials/home/SchemaEditorIntro";
 import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
+import { UsageExamples } from "../partials/UsageExamples";
 
 function Home() {
 
@@ -24,12 +25,13 @@ function Home() {
             <Head>
                 <title>FireCMS - Firestore/Firebase headless CMS</title>
             </Head>
-            <div className="flex flex-col min-h-screen overflow-hidden bg-lighter">
+            <div className="flex flex-col min-h-screen overflow-hidden">
 
                 <main className="flex-grow">
 
                     <HeroHome/>
 
+                    <UsageExamples/>
                     <FirebaseIntro/>
 
 

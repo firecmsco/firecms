@@ -41,7 +41,7 @@ Example:
 
 ```tsx
 import React from "react";
-import { useSideEntityController } from "@firecms/core";
+import { useSideEntityController } from "@firecms/firebase";
 
 export function ExampleCMSView() {
 
@@ -86,7 +86,7 @@ can specify a custom `schema` (including callbacks and custom views),
 `permissions` and `subcollections`
 
 ```tsx
-import { buildCollection, SchemaOverrideHandler } from "@firecms/core";
+import { buildCollection, SchemaOverrideHandler } from "@firecms/firebase";
 
 const customSchemaOverrideHandler: SchemaOverrideHandler = ({
                                                   entityId,
@@ -118,4 +118,4 @@ const customSchemaOverrideHandler: SchemaOverrideHandler = ({
 };
 ```
 
-Then you can pass your `SchemaOverrideHandler` to your `FirebaseCMSApp` or `FireCMS`
+Then you can pass your `SchemaOverrideHandler` to your `FireCMS3App` or `FireCMS`
