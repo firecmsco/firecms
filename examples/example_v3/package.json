@@ -1,7 +1,7 @@
 {
   "name": "firecms-example-v3",
   "private": true,
-  "version": "3.0.0-alpha.29",
+  "version": "3.0.0-alpha.30",
   "scripts": {
     "dev": "vite --port 5001 --strictPort",
     "build": "vite build",
@@ -10,17 +10,17 @@
     "deploy": "firecms deploy"
   },
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-alpha.29",
-    "@firecms/core": "^3.0.0-alpha.29",
-    "@firecms/data_enhancement": "^3.0.0-alpha.29",
-    "@firecms/data_import": "^3.0.0-alpha.29",
-    "@firecms/firebase": "^3.0.0-alpha.29",
-    "@firecms/schema_inference": "^3.0.0-alpha.29",
+    "@firecms/collection_editor": "^3.0.0-alpha.30",
+    "@firecms/core": "^3.0.0-alpha.30",
+    "@firecms/data_enhancement": "^3.0.0-alpha.30",
+    "@firecms/data_import": "^3.0.0-alpha.30",
+    "@firecms/firebase": "^3.0.0-alpha.30",
+    "@firecms/schema_inference": "^3.0.0-alpha.30",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   },
   "devDependencies": {
-    "@firecms/cli": "^3.0.0-alpha.29",
+    "@firecms/cli": "^3.0.0-alpha.30",
     "@originjs/vite-plugin-federation": "^1.3.2",
     "@types/react": "18.2.33",
     "@types/react-dom": "18.2.14",
