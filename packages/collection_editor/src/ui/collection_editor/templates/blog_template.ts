@@ -1,6 +1,6 @@
-import { buildCollection, buildProperty } from "@firecms/core";
+import { EntityCollection } from "@firecms/firebase";
 
-export const blogCollectionTemplate = buildCollection({
+export const blogCollectionTemplate:EntityCollection = {
     path: "blog",
     name: "Blog",
     singularName: "Blog entry",
@@ -9,12 +9,12 @@ export const blogCollectionTemplate = buildCollection({
     description: "A collection of blog entries",
     defaultSize: "l",
     properties: {
-        name: buildProperty({
+        name: {
             name: "Name",
             validation: { required: true },
             dataType: "string"
-        }),
-        header_image: buildProperty({
+        },
+        header_image: {
             name: "Header image",
             dataType: "string",
             storage: {
@@ -24,8 +24,8 @@ export const blogCollectionTemplate = buildCollection({
                     cacheControl: "max-age=1000000"
                 }
             }
-        }),
-        content: buildProperty({
+        },
+        content: {
             name: "Content",
             description: "Content blocks for the blog entry",
             validation: { required: true },
@@ -71,7 +71,7 @@ export const blogCollectionTemplate = buildCollection({
                 },
                 propertiesOrder: ["text", "quote", "images", "products"]
             }
-        }),
+        },
         created_on: {
             name: "Created on",
             dataType: "date",
@@ -112,4 +112,4 @@ export const blogCollectionTemplate = buildCollection({
     initialFilter: {
         status: ["==", "published"]
     }
-});
+};

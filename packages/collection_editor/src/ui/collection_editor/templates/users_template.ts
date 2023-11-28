@@ -1,6 +1,6 @@
-import { buildCollection } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
 
-export const usersCollectionTemplate = buildCollection({
+export const usersCollectionTemplate: EntityCollection = {
     path: "users",
     name: "Users",
     singularName: "User",
@@ -31,4 +31,4 @@ export const usersCollectionTemplate = buildCollection({
             url: "image"
         }
     },
-});
+};

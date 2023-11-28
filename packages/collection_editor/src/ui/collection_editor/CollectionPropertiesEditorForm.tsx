@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import JSON5 from "json5";
 
 import { Field, FormikErrors, getIn, useFormikContext } from "formik";
 import {
@@ -7,28 +8,36 @@ import {
     Button,
     CircularProgress,
     cn,
+    CodeIcon,
     DebouncedTextField,
     defaultBorderMixin,
+    Dialog,
+    DialogActions,
+    DialogContent,
     EntityCollection,
     ErrorBoundary,
-    PropertyConfig,
+    IconButton,
     isPropertyBuilder,
     makePropertiesEditable,
     Paper,
     Properties,
     Property,
+    PropertyConfig,
     PropertyOrBuilder,
     Tooltip,
     Typography,
     useLargeLayout,
     User,
-    useSnackbarController,
+    useSnackbarController
 } from "@firecms/core";
+
+import { Highlight, themes } from "prism-react-renderer"
 
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "./util";
 import { OnPropertyChangedParams, PropertyForm, PropertyFormDialog } from "./PropertyEditView";
 import { PropertyTree } from "./PropertyTree";
 import { PersistedCollection } from "../../types/persisted_collection";
+import { camelCase } from "./utils/strings";
 
 type CollectionEditorFormProps = {
     showErrors: boolean;
@@ -44,6 +53,47 @@ type CollectionEditorFormProps = {
     customFields: Record<string, PropertyConfig>;
     collectionEditable: boolean;
 };
+
+function GetCodeDialog({ collection, onOpenChange, open }: { onOpenChange: (open: boolean) => void, collection: any, open: any }) {
+    const code = "const " + camelCase(collection.name) + "Collection = " + JSON5.stringify(collection, null, "\t");
+    return <Dialog open={open}
+                   onOpenChange={onOpenChange}
+                   maxWidth={"4xl"}>
+        <DialogContent>
+            <Typography variant={"h6"} className={"my-4"}>
+                Code for {collection.name}
+            </Typography>
+            <Typography variant={"body2"} className={"my-4 mb-8"}>
+                If you want to customise the collection in code, you can add this collection code to your CMS
+                app configuration.
+                More info in the <a
+                rel="noopener noreferrer"
+                href={"https://firecms.co/docs/customization_quickstart"}>docs</a>.
+            </Typography>
+            <Highlight
+                theme={themes.vsDark}
+                code={code}
+                language="typescript"
+            >
+                {({ className, style, tokens, getLineProps, getTokenProps }) => (
+                    <pre style={style} className={"p-4 rounded"}>
+        {tokens.map((line, i) => (
+            <div key={i} {...getLineProps({ line })}>
+                {line.map((token, key) => (
+                    <span key={key} {...getTokenProps({ token })} />
+                ))}
+            </div>
+        ))}
+      </pre>
+                )}
+            </Highlight>
+
+        </DialogContent>
+        <DialogActions>
+            <Button onClick={() => onOpenChange(false)}>Close</Button>
+        </DialogActions>
+    </Dialog>;
+}
 
 export function CollectionPropertiesEditorForm({
                                                    showErrors,
@@ -81,6 +131,7 @@ export function CollectionPropertiesEditorForm({
 
     const selectedPropertyFullId = selectedPropertyKey ? getFullId(selectedPropertyKey, selectedPropertyNamespace) : undefined;
     const selectedProperty = selectedPropertyFullId ? getIn(values.properties, selectedPropertyFullId.replaceAll(".", ".properties.")) : undefined;
+    const [codeDialogOpen, setCodeDialogOpen] = useState<boolean>(false);
 
     const [inferringProperties, setInferringProperties] = useState<boolean>(false);
 
@@ -112,7 +163,7 @@ export function CollectionPropertiesEditorForm({
                     if (!newCollection) {
                         snackbarController.open({
                             type: "error",
-                            message: "Could not infer properties from data",
+                            message: "Could not infer properties from data"
                         });
                         return;
                     }
@@ -122,7 +173,7 @@ export function CollectionPropertiesEditorForm({
                     if (newPropertyKeys.length === 0) {
                         snackbarController.open({
                             type: "info",
-                            message: "No new properties found",
+                            message: "No new properties found"
                         });
                         return;
                     }
@@ -132,7 +183,7 @@ export function CollectionPropertiesEditorForm({
                             acc[propertyKey] = newCollection.properties[propertyKey];
                             return acc;
                         }, {} as { [key: string]: PropertyOrBuilder }),
-                        ...values.properties,
+                        ...values.properties
                     };
                     const updatedPropertiesOrder = [
                         ...newPropertyKeys,
@@ -323,13 +374,21 @@ export function CollectionPropertiesEditorForm({
                     </div>}
 
                     <div className="ml-1 mt-2 flex flex-row gap-2">
+                        <Tooltip title={"Get the code of this collection"}>
+                            <IconButton
+                                variant={"filled"}
+                                disabled={inferringProperties}
+                                onClick={() => setCodeDialogOpen(true)}>
+                                <CodeIcon/>
+                            </IconButton>
+                        </Tooltip>
                         {inferPropertiesFromData && <Tooltip title={"Add new properties based on data"}>
-                            <Button
-                                variant={"text"}
+                            <IconButton
+                                variant={"filled"}
                                 disabled={inferringProperties}
                                 onClick={inferPropertiesFromData}>
                                 {inferringProperties ? <CircularProgress size={"small"}/> : <AutoAwesomeIcon/>}
-                            </Button>
+                            </IconButton>
                         </Tooltip>}
                         <Tooltip title={"Add new property"}>
                             <Button
@@ -457,6 +516,11 @@ export function CollectionPropertiesEditorForm({
                 customFields={customFields}
                 collectionEditable={collectionEditable}
                 existingPropertyKeys={values.propertiesOrder as string[]}/>
+
+            <GetCodeDialog
+                collection={values}
+                open={codeDialogOpen}
+                onOpenChange={setCodeDialogOpen}/>
 
         </>
     );

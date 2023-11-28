@@ -1,6 +1,6 @@
-import { buildCollection } from "@firecms/core";
+import { EntityCollection } from "@firecms/core";
 
-export const productsCollectionTemplate = buildCollection({
+export const productsCollectionTemplate: EntityCollection = {
     path: "products",
     name: "Products",
     singularName: "Product",
@@ -86,4 +86,4 @@ export const productsCollectionTemplate = buildCollection({
         }
     }
 
-});
+};
