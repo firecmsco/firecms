@@ -1,6 +1,6 @@
 {
   "name": "@firecms/firebase",
-  "version": "3.0.0-alpha.30",
+  "version": "3.0.0-alpha.31",
   "publishConfig": {
     "access": "public"
   },
@@ -18,11 +18,11 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/collection_editor": "^3.0.0-alpha.30",
-    "@firecms/core": "^3.0.0-alpha.30",
-    "@firecms/data_enhancement": "^3.0.0-alpha.30",
-    "@firecms/data_import": "^3.0.0-alpha.30",
-    "@firecms/schema_inference": "^3.0.0-alpha.30",
+    "@firecms/collection_editor": "^3.0.0-alpha.31",
+    "@firecms/core": "^3.0.0-alpha.31",
+    "@firecms/data_enhancement": "^3.0.0-alpha.31",
+    "@firecms/data_import": "^3.0.0-alpha.31",
+    "@firecms/schema_inference": "^3.0.0-alpha.31",
     "firebase": "^10.5.2",
     "react-router": "^6.17.0",
     "react-router-dom": "^6.17.0"

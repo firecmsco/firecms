@@ -124,7 +124,7 @@ export type FireCMSCollection<M extends Record<string, any> = any, UserType exte
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`.
      */
-    permissions?: Permissions | PermissionsBuilder<FireCMSCollection, UserType, M>;
+    permissions?: Permissions | PermissionsBuilder<EntityCollection, UserType, M>;
 
     /**
      * Are the entities in this collection selectable. Defaults to `true`
