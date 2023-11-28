@@ -1,6 +1,6 @@
 {
   "name": "@firecms/data_import",
-  "version": "3.0.0-alpha.33",
+  "version": "3.0.0-alpha.34",
   "access": "public",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
@@ -15,8 +15,8 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/core": "^3.0.0-alpha.33",
-    "@firecms/schema_inference": "^3.0.0-alpha.33",
+    "@firecms/core": "^3.0.0-alpha.34",
+    "@firecms/schema_inference": "^3.0.0-alpha.34",
     "xlsx": "^0.18.5"
   },
   "peerDependencies": {
@@ -99,5 +99,5 @@
   "publishConfig": {
     "access": "public"
   },
-  "gitHead": "f545e3572aa7f025222713984025288bf62b0d4c"
+  "gitHead": "6d5339ab786c9e239ff98da651fde4e4f4879f21"
 }
