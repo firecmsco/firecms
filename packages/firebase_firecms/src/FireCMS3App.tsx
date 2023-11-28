@@ -282,14 +282,12 @@ export function FireCMS3ClientWithController({
         }
     }, [authController.user, currentProjectController.loading, currentProjectController.roles, currentProjectController.users, fireCMSUser]);
 
-    if (currentProjectController.loading) {
-        return <FullLoadingView projectId={projectId}
-                                currentProjectController={currentProjectController}
-                                text={"Project loading"}/>;
-    }
+
 
     let loadingOrErrorComponent;
-    if (notValidUser) {
+    if (currentProjectController.loading) {
+        return <CircularProgressCenter text={"Project loading"}/>;
+    } else if (notValidUser) {
         console.warn("No user was found with email " + notValidUser.email);
         loadingOrErrorComponent = <NoAccessError authController={authController}/>
     } else if (currentProjectController.configError) {
@@ -302,25 +300,17 @@ export function FireCMS3ClientWithController({
             <Button variant="text" onClick={authController.signOut}>Sign out</Button>
         </CenteredView>;
     } else if (customizationLoading) {
-        loadingOrErrorComponent = <FullLoadingView projectId={projectId}
-                                                   currentProjectController={currentProjectController}
-                                                   text={"Project customization loading"}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"Project customization loading"}/>;
     } else if (firebaseConfigLoading) {
-        loadingOrErrorComponent = <FullLoadingView projectId={projectId}
-                                                   currentProjectController={currentProjectController}
-                                                   text={"Client config loading"}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"Client config loading"}/>;
     } else if (firebaseConfigError || !clientFirebaseApp) {
         loadingOrErrorComponent = <CenteredView fullScreen={true}>
             <ErrorView error={firebaseConfigError ?? "Error fetching client Firebase config"}/>
         </CenteredView>;
     } else if (delegatedLoginLoading) {
-        loadingOrErrorComponent = <FullLoadingView projectId={projectId}
-                                                   currentProjectController={currentProjectController}
-                                                   text={"Logging in to " + projectId}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"Logging in to " + projectId}/>;
     } else if (!authController.user) {
-        loadingOrErrorComponent = <FullLoadingView projectId={projectId}
-                                                   currentProjectController={currentProjectController}
-                                                   text={"Auth loading"}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"Auth loading"}/>;
     } else if (!fireCMSUser) {
         loadingOrErrorComponent = <NoAccessError authController={authController}/>;
     }

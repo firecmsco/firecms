@@ -29,6 +29,7 @@
     "web": "cd website && yarn dev",
     "deploy:web": "cd website && yarn deploy",
     "build": "lerna run build",
+    "build:stream": "lerna run build --stream --loglevel=info",
     "clean": "lerna run clean",
     "release": "git push origin main:release"
   },

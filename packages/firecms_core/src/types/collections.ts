@@ -128,6 +128,12 @@ export interface EntityCollection<M extends Record<string, any> = any,
      */
     selectionEnabled?: boolean;
 
+    // /**
+    //  * Is the collection exportable. Defaults to `true`
+    //  * You can also pass an `ExportConfig` object to customize the export
+    //  */
+    // exportable?: boolean | ExportConfig<UserType>;
+
     /**
      * You can add subcollections to your entity in the same way you define the root
      * collections. The collections added here will be displayed when opening

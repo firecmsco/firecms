@@ -30,7 +30,7 @@ import { useProjectConfig } from "../hooks";
 
 const DOCS_LIMIT = 500;
 
-export function ExportColectionAction<M extends Record<string, any>, UserType extends User>({
+export function ExportCollectionAction<M extends Record<string, any>, UserType extends User>({
                                                                                        collection: inputCollection,
                                                                                        path: inputPath,
                                                                                        collectionEntitiesCount,

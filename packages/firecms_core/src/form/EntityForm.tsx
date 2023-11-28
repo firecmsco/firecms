@@ -589,7 +589,7 @@ function InnerForm<M extends Record<string, any>>(props: FormikProps<M> & {
                         </Typography>
                     </div>}
 
-                {entity && formActions.length > 0 && <div className="flex-grow flex overflow-scroll">
+                {entity && formActions.length > 0 && <div className="flex-grow flex overflow-auto no-scrollbar">
                     {formActions.map(action => (
                         <IconButton
                             key={action.name}
