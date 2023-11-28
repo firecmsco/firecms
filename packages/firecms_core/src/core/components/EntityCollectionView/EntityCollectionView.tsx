@@ -351,7 +351,7 @@ export const EntityCollectionView = React.memo(
         const displayedColumnIds = useColumnIds(resolvedCollection, true);
 
         const additionalFields = useMemo(() => {
-            const subcollectionColumns: AdditionalFieldDelegate<M, any, any>[] = collection.subcollections?.map((subcollection) => {
+            const subcollectionColumns: AdditionalFieldDelegate<M, any>[] = collection.subcollections?.map((subcollection) => {
                 return {
                     id: getSubcollectionColumnId(subcollection),
                     name: subcollection.name,
@@ -377,7 +377,7 @@ export const EntityCollectionView = React.memo(
                 };
             }) ?? [];
 
-            const collectionGroupParentCollections: AdditionalFieldDelegate<M, any, any>[] = collection.collectionGroup
+            const collectionGroupParentCollections: AdditionalFieldDelegate<M, any>[] = collection.collectionGroup
                 ? [{
                     id: COLLECTION_GROUP_PARENT_ID,
                     name: "Parent entities",

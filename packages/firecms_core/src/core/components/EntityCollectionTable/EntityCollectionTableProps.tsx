@@ -21,7 +21,7 @@ export type OnColumnResizeParams = { width: number, key: string };
  * @category Collection components
  */
 export type EntityCollectionTableProps<M extends Record<string, any>,
-    AdditionalKey extends string = string,
+
     UserType extends User = User> = {
 
     /**
@@ -105,7 +105,7 @@ export type EntityCollectionTableProps<M extends Record<string, any>,
 
     inlineEditing?: boolean | ((entity: Entity<M>) => boolean);
 
-    additionalFields?: AdditionalFieldDelegate<M, AdditionalKey, UserType>[];
+    additionalFields?: AdditionalFieldDelegate<M,  UserType>[];
 
     defaultSize?: CollectionSize;
 

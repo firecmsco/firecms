@@ -63,7 +63,7 @@ export const useEntityCollectionTableController = () => useContext<EntityCollect
  * @category Components
  */
 export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>(
-    function EntityCollectionTable<M extends Record<string, any>, AdditionalKey extends string, UserType extends User>
+    function EntityCollectionTable<M extends Record<string, any>, UserType extends User>
     ({
          forceFilter,
          actionsStart,
@@ -156,12 +156,12 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
         const onTextSearch = useCallback((newSearchString?: string) => setSearchString?.(newSearchString), []);
 
-        const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, string, UserType>> = useMemo(() => {
+        const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, UserType>> = useMemo(() => {
             return (additionalFields
                 ? additionalFields
-                    .map((aC) => ({ [aC.id]: aC as AdditionalFieldDelegate<M, string, any> }))
+                    .map((aC) => ({ [aC.id]: aC as AdditionalFieldDelegate<M, any> }))
                     .reduce((a, b) => ({ ...a, ...b }), {})
-                : {}) as Record<string, AdditionalFieldDelegate<M, string, UserType>>;
+                : {}) as Record<string, AdditionalFieldDelegate<M, UserType>>;
         }, [additionalFields]);
 
         // on ESC key press
@@ -244,7 +244,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
 
             const entity: Entity<M> = rowData;
 
-            const additionalField = additionalFieldsMap[column.key as AdditionalKey];
+            const additionalField = additionalFieldsMap[column.key as string];
             const value = additionalField.dependencies
                 ? Object.entries(entity.values)
                     .filter(([key, value]) => additionalField.dependencies!.includes(key as Extract<keyof M, string>))

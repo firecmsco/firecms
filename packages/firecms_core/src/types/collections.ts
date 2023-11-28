@@ -15,9 +15,8 @@ import { EntityAction } from "./entity_actions";
  *
  * @category Models
  */
-export interface EntityCollection<M extends Record<string, any> = any,
-    AdditionalKey extends string = string,
-    UserType extends User = User> {
+export type EntityCollection<M extends Record<string, any> = any,
+    UserType extends User = User> = {
 
     /**
      * Name of the collection, typically plural.
@@ -101,7 +100,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
      *     - If you are using a collection group, you will also have an
      *       additional `collectionGroupParent` column.
      */
-    propertiesOrder?: Extract<keyof M | AdditionalKey, string>[];
+    propertiesOrder?: Extract<keyof M, string>[];
 
     /**
      * If enabled, content is loaded in batches. If `false` all entities in the
@@ -229,7 +228,7 @@ export interface EntityCollection<M extends Record<string, any> = any,
      * You can add additional fields to the collection view by implementing
      * an additional field delegate.
      */
-    additionalFields?: AdditionalFieldDelegate<M, AdditionalKey, UserType>[];
+    additionalFields?: AdditionalFieldDelegate<M, UserType>[];
 
     /**
      * Default size of the rendered collection
@@ -396,14 +395,13 @@ export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, Us
  * @category Models
  */
 export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
-    AdditionalKey extends string = string,
     UserType extends User = User> {
 
     /**
      * ID of this column. You can use this id in the `properties` field of the
      * collection in any order you want
      */
-    id: AdditionalKey;
+    id: string;
 
     /**
      * Header of this column

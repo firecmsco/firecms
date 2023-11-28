@@ -27,10 +27,10 @@ import {
  * @category Builder
  */
 export function buildCollection<M extends Record<string, any> = any,
-    AdditionalKey extends string = string,
+
     UserType extends User = User>(
-    collection: EntityCollection<M, AdditionalKey, UserType>
-): EntityCollection<M, AdditionalKey, UserType> {
+    collection: EntityCollection<M,  UserType>
+): EntityCollection<M,  UserType> {
     return collection;
 }
 
@@ -121,9 +121,9 @@ export function buildEntityCallbacks<M extends Record<string, any> = any>(
  * @param additionalFieldDelegate
  * @category Builder
  */
-export function buildAdditionalFieldDelegate<M extends Record<string, any>, AdditionalKey extends string = string, UserType extends User = User>(
-    additionalFieldDelegate: AdditionalFieldDelegate<M, AdditionalKey, UserType>
-): AdditionalFieldDelegate<M, AdditionalKey, UserType> {
+export function buildAdditionalFieldDelegate<M extends Record<string, any>,  UserType extends User = User>(
+    additionalFieldDelegate: AdditionalFieldDelegate<M,  UserType>
+): AdditionalFieldDelegate<M,  UserType> {
     return additionalFieldDelegate;
 }
 
