@@ -8,12 +8,12 @@ import {
     EntityCollection,
     EnumValueConfig,
     EnumValues,
-    PropertyConfig,
     GeopointProperty,
     MapProperty,
     NumberProperty,
     PropertiesOrBuilders,
     PropertyBuilder,
+    PropertyConfig,
     PropertyOrBuilder,
     ReferenceProperty,
     StringProperty,
@@ -27,10 +27,9 @@ import {
  * @category Builder
  */
 export function buildCollection<M extends Record<string, any> = any,
-
     UserType extends User = User>(
-    collection: EntityCollection<M,  UserType>
-): EntityCollection<M,  UserType> {
+    collection: EntityCollection<M, UserType>
+): EntityCollection<M, UserType> {
     return collection;
 }
 
@@ -121,9 +120,9 @@ export function buildEntityCallbacks<M extends Record<string, any> = any>(
  * @param additionalFieldDelegate
  * @category Builder
  */
-export function buildAdditionalFieldDelegate<M extends Record<string, any>,  UserType extends User = User>(
-    additionalFieldDelegate: AdditionalFieldDelegate<M,  UserType>
-): AdditionalFieldDelegate<M,  UserType> {
+export function buildAdditionalFieldDelegate<M extends Record<string, any>, UserType extends User = User>(
+    additionalFieldDelegate: AdditionalFieldDelegate<M, UserType>
+): AdditionalFieldDelegate<M, UserType> {
     return additionalFieldDelegate;
 }
 

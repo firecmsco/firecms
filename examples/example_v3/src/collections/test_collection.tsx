@@ -816,6 +816,11 @@ export const testCollection = buildCollection({
         //     }
         // }),
     },
+
+    // exportable:{
+    //
+    // },
+
     additionalFields: [
         {
             id: "full_name",

@@ -1,5 +1,6 @@
 import { CollectionEditorPermissionsBuilder } from "./config_permissions";
 import { EntityCollection, Property } from "@firecms/core";
+import { PersistedCollection } from "./persisted_collection";
 
 /**
  * Controller to open the collection editor dialog.
@@ -11,7 +12,7 @@ export interface CollectionEditorController {
         path?: string,
         fullPath?: string,
         parentPathSegments: string[],
-        parentCollection?: EntityCollection<any, any, any>
+        parentCollection?: EntityCollection
     }) => void;
 
     createCollection: (props: {
@@ -21,7 +22,7 @@ export interface CollectionEditorController {
             name?: string
         },
         parentPathSegments: string[],
-        parentCollection?: EntityCollection<any, any, any>,
+        parentCollection?: PersistedCollection,
         redirect: boolean
     }) => void;
 
@@ -31,7 +32,7 @@ export interface CollectionEditorController {
         currentPropertiesOrder?: string[],
         editedCollectionPath: string,
         parentPathSegments: string[],
-        collection: EntityCollection<any, any, any>
+        collection: PersistedCollection
     }) => void;
 
     configPermissions: CollectionEditorPermissionsBuilder;

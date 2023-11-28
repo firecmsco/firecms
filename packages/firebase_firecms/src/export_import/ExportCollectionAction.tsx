@@ -27,19 +27,18 @@ import { downloadExport } from "./export";
 import { ExportConfig } from "../types/export_import";
 import { SubscriptionPlanWidget } from "../components";
 import { useProjectConfig } from "../hooks";
+import { FireCMSCollection } from "../types/collection";
 
 const DOCS_LIMIT = 500;
 
 export function ExportCollectionAction<M extends Record<string, any>, UserType extends User>({
-                                                                                       collection: inputCollection,
-                                                                                       path: inputPath,
-                                                                                       collectionEntitiesCount,
-                                                                                       exportConfig
-                                                                                   }: CollectionActionsProps<M, UserType> & {
-                                                                                       exportConfig?: ExportConfig // TODO: currently unused, because it is not set
-                                                                                   }
-) {
+                                                                                                 collection: inputCollection,
+                                                                                                 path: inputPath,
+                                                                                                 collectionEntitiesCount,
+                                                                                             }: CollectionActionsProps<M, UserType, FireCMSCollection<M, any>>) {
     const { canExport } = useProjectConfig();
+
+    const exportConfig = typeof inputCollection.exportable === "object" ? inputCollection.exportable : undefined;
 
     const dateRef = React.useRef<Date>(new Date());
     const [flattenArrays, setFlattenArrays] = React.useState<boolean>(true);

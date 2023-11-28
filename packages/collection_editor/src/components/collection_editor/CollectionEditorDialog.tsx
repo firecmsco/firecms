@@ -285,11 +285,11 @@ export function CollectionEditorDialogInternal<M extends {
 
         if (Object.keys(inferredCollection.properties ?? {}).length > 0) {
             values.properties = inferredCollection.properties as Properties<M>;
-            values.propertiesOrder = inferredCollection.propertiesOrder
+            values.propertiesOrder = inferredCollection.propertiesOrder as Extract<keyof M, string>[];
         }
 
         if (!values.propertiesOrder) {
-            values.propertiesOrder = Object.keys(values.properties);
+            values.propertiesOrder = Object.keys(values.properties) as Extract<keyof M, string>[];
             return values;
         }
 

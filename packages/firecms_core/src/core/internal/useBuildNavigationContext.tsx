@@ -25,27 +25,27 @@ import {
 } from "../util";
 import { getParentReferencesFromPath } from "../util/parent_references_from_path";
 
-type BuildNavigationContextProps<UserType extends User> = {
+type BuildNavigationContextProps<EC extends EntityCollection, UserType extends User> = {
     basePath: string,
     baseCollectionPath: string,
     authController: AuthController<UserType>;
-    collections?: EntityCollection[] | EntityCollectionsBuilder;
+    collections?: EC[] | EntityCollectionsBuilder<EC>;
     views?: CMSView[] | CMSViewsBuilder;
     userConfigPersistence?: UserConfigurationPersistence;
     plugins?: FireCMSPlugin[];
     dataSource: DataSource;
 };
 
-export function useBuildNavigationContext<UserType extends User>({
-                                                                     basePath,
-                                                                     baseCollectionPath,
-                                                                     authController,
-                                                                     collections: baseCollections,
-                                                                     views: baseViews,
-                                                                     userConfigPersistence,
-                                                                     plugins,
-                                                                     dataSource
-                                                                 }: BuildNavigationContextProps<UserType>): NavigationContext {
+export function useBuildNavigationContext<EC extends EntityCollection, UserType extends User>({
+                                                                                                                 basePath,
+                                                                                                                 baseCollectionPath,
+                                                                                                                 authController,
+                                                                                                                 collections: baseCollections,
+                                                                                                                 views: baseViews,
+                                                                                                                 userConfigPersistence,
+                                                                                                                 plugins,
+                                                                                                                 dataSource
+                                                                                                             }: BuildNavigationContextProps<EC, UserType>): NavigationContext {
 
     const location = useLocation();
 
@@ -288,7 +288,7 @@ function filterOutNotAllowedCollections(resolvedCollections: EntityCollection[],
         });
 }
 
-async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder, authController: AuthController, dataSource: DataSource, plugins?: FireCMSPlugin[]) {
+async function resolveCollections(collections: undefined | EntityCollection[] | EntityCollectionsBuilder<any>, authController: AuthController, dataSource: DataSource, plugins?: FireCMSPlugin[]) {
     let resolvedCollections: EntityCollection[] = [];
     if (typeof collections === "function") {
         resolvedCollections = await collections({

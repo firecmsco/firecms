@@ -16,6 +16,7 @@ import { CollectionEditorController } from "./types/collection_editor_controller
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { CollectionInference } from "./types/collection_inference";
 import { PropertyFormDialog } from "./components/collection_editor/PropertyEditView";
+import { PersistedCollection } from "./types/persisted_collection";
 
 export const ConfigControllerContext = React.createContext<CollectionsConfigController>({} as any);
 export const CollectionEditorContext = React.createContext<CollectionEditorController>({} as any);
@@ -114,8 +115,6 @@ export const ConfigControllerProvider = React.memo(
             collectionEditable: boolean;
         }>();
 
-        console.log("currentPropertyDialog", currentPropertyDialog);
-
         const defaultConfigPermissions: CollectionEditorPermissionsBuilder = useCallback(() => ({
             createCollections: true,
             editCollections: true,
@@ -156,7 +155,7 @@ export const ConfigControllerProvider = React.memo(
             currentPropertiesOrder?: string[],
             editedCollectionPath: string,
             parentPathSegments: string[],
-            collection: EntityCollection,
+            collection: PersistedCollection,
         }) => {
             // namespace is all the path until the last dot
             const namespace = propertyKey && propertyKey.includes(".")
@@ -184,7 +183,7 @@ export const ConfigControllerProvider = React.memo(
                                                         redirect
                                                     }: {
             parentPathSegments: string[],
-            parentCollection?: EntityCollection<any, any, any>
+            parentCollection?: EntityCollection
             initialValues?: {
                 group?: string,
                 path?: string,
@@ -210,9 +209,6 @@ export const ConfigControllerProvider = React.memo(
                     return pathSuggestions?.(path);
                 }
             }
-
-        console.log("aaa", getData, currentPropertyDialog?.editedCollectionPath);
-        console.log(currentPropertyDialog)
 
         return (
             <ConfigControllerContext.Provider value={collectionConfigController}>

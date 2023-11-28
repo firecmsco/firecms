@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 
-import { FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
+import { EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
 import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
 import { ModeControllerContext } from "./contexts/ModeController";
 import { useBuildSideEntityController } from "./internal/useBuildSideEntityController";
@@ -35,7 +35,7 @@ const DEFAULT_COLLECTION_PATH = "/c";
  * @constructor
  * @category Core
  */
-export function FireCMS<UserType extends User>(props: FireCMSProps<UserType>) {
+export function FireCMS<UserType extends User, EC extends EntityCollection>(props: FireCMSProps<UserType, EC>) {
 
     const modeController = useModeController();
     const {

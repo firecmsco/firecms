@@ -91,7 +91,7 @@ import { useFirestoreDelegate } from "./hooks/useFirestoreDelegate";
 export function FireCMS3App({
                                 projectId,
                                 appConfig,
-                                backendApiHost = "https://api-kdoe6pj3qq-ey.a.run.app", // TODO
+                                backendApiHost = "https://api-drplyi3b6q-ey.a.run.app", // TODO
                                 onAnalyticsEvent,
                                 basePath,
                                 baseCollectionPath,
@@ -164,7 +164,11 @@ export type FireCMS3ClientProps = {
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
 };
 
-function FullLoadingView(props: { projectId: string, currentProjectController?: ProjectConfig, text?: string }) {
+function FullLoadingView(props: {
+    projectId: string,
+    currentProjectController?: ProjectConfig,
+    text?: string
+}) {
     return <Scaffold
         key={"project_scaffold_" + props.projectId}
         name={props.currentProjectController?.projectName ?? ""}
@@ -282,8 +286,6 @@ export function FireCMS3ClientWithController({
         }
     }, [authController.user, currentProjectController.loading, currentProjectController.roles, currentProjectController.users, fireCMSUser]);
 
-
-
     let loadingOrErrorComponent;
     if (currentProjectController.loading) {
         return <CircularProgressCenter text={"Project loading"}/>;
@@ -338,7 +340,9 @@ export function FireCMS3ClientWithController({
     />;
 }
 
-function NoAccessError({ authController }: { authController: FirebaseAuthController }) {
+function NoAccessError({ authController }: {
+    authController: FirebaseAuthController
+}) {
     return <CenteredView maxWidth={"md"} fullScreen={true} className={"gap-4"}>
         <ErrorView title={"You don't have access to this project"}
                    error={"You can request permission to the owner"}/>

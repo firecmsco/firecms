@@ -13,7 +13,7 @@ import { ResolvedProperty } from "./resolved_entities";
  * NOTE: This is a work in progress and the API is not stable yet.
  * @category Core
  */
-export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
+export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection> = {
 
     /**
      * Name of the plugin
@@ -41,19 +41,19 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
          * Use this component to add custom actions to the entity collections
          * toolbar.
          */
-        CollectionActions?: React.ComponentType<CollectionActionsProps> | React.ComponentType<CollectionActionsProps>[];
+        CollectionActions?: React.ComponentType<CollectionActionsProps<any, any, EC>> | React.ComponentType<CollectionActionsProps<any, any, EC>>[];
 
     }
 
     form?: {
         provider?: {
-            Component: React.ComponentType<PropsWithChildren<FORM_PROPS & PluginFormActionProps<any>>>;
+            Component: React.ComponentType<PropsWithChildren<FORM_PROPS & PluginFormActionProps<any, EC>>>;
             props?: FORM_PROPS;
         }
 
-        Actions?: React.ComponentType<PluginFormActionProps>;
+        Actions?: React.ComponentType<PluginFormActionProps<any, EC>>;
 
-        fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) => React.ComponentType<FieldProps<T>> | null;
+        fieldBuilder?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T, any, EC>) => React.ComponentType<FieldProps<T>> | null;
 
         fieldBuilderEnabled?: <T extends CMSType = CMSType>(props: PluginFieldBuilderParams<T>) => boolean;
     }
@@ -115,7 +115,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
             fullPath: string,
             parentPathSegments: string[],
             onHover: boolean,
-            collection: EntityCollection;
+            collection: EC;
         }>;
 
         /**
@@ -125,7 +125,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any> = {
         AddColumnComponent?: React.ComponentType<{
             fullPath: string,
             parentPathSegments: string[],
-            collection: EntityCollection;
+            collection: EC;
         }>;
     }
 
@@ -158,24 +158,24 @@ export interface PluginHomePageActionsProps<EP extends object = object, M extend
 
 }
 
-export interface PluginFormActionProps<UserType extends User = User> {
+export interface PluginFormActionProps<UserType extends User = User, EC extends EntityCollection = EntityCollection> {
     entityId?: string;
     path: string;
     status: EntityStatus;
-    collection: EntityCollection;
+    collection: EC;
     formContext?: FormContext<any>;
     context: FireCMSContext<UserType>;
     currentEntityId?: string;
 }
 
-export type PluginFieldBuilderParams<T extends CMSType = CMSType, M extends Record<string, any> = any> = {
+export type PluginFieldBuilderParams<T extends CMSType = CMSType, M extends Record<string, any> = any, EC extends EntityCollection<M> = EntityCollection<M>> = {
     fieldConfigId: string;
     propertyKey: string;
     property: Property<T> | ResolvedProperty<T>;
     Field: React.ComponentType<FieldProps<T, any, M>>;
     plugin: FireCMSPlugin;
     path: string;
-    collection: EntityCollection<M>;
+    collection: EC;
 };
 
 export interface PluginGenericProps<UserType extends User = User> {

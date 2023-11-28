@@ -1,6 +1,7 @@
 import { EntityCollection, IconButton, ResolvedProperty, SettingsIcon, Tooltip } from "@firecms/core";
 import React from "react";
 import { useCollectionEditorController } from "../useCollectionEditorController";
+import { PersistedCollection } from "../types/persisted_collection";
 
 export function CollectionViewHeaderAction({
                                                propertyKey,
@@ -15,7 +16,7 @@ export function CollectionViewHeaderAction({
     onHover: boolean,
     fullPath: string,
     parentPathSegments: string[],
-    collection: EntityCollection;
+    collection: PersistedCollection;
 }) {
 
     const collectionEditorController = useCollectionEditorController();

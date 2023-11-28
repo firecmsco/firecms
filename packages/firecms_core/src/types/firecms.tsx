@@ -23,11 +23,11 @@ import { CMSAnalyticsEvent } from "./analytics";
  * APIs directly, or a REST API.
  * @category Models
  */
-export type EntityCollectionsBuilder = (params: {
+export type EntityCollectionsBuilder<EC extends EntityCollection> = (params: {
     user: User | null,
     authController: AuthController,
     dataSource: DataSource
-}) => EntityCollection[] | Promise<EntityCollection[]>;
+}) => EC[] | Promise<EC[]>;
 
 /**
  * Use this callback to build custom views dynamically.
@@ -47,7 +47,7 @@ export type CMSViewsBuilder = (params: {
 /**
  * @category Models
  */
-export type FireCMSProps<UserType extends User> = {
+export type FireCMSProps<UserType extends User, EC extends EntityCollection> = {
 
     /**
      * Use this function to return the components you want to render under
@@ -73,7 +73,7 @@ export type FireCMSProps<UserType extends User> = {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections?: EntityCollection[] | EntityCollectionsBuilder;
+    collections?: EC[] | EntityCollectionsBuilder<EC>;
 
     /**
      * Custom additional views created by the developer, added to the main
@@ -148,7 +148,7 @@ export type FireCMSProps<UserType extends User> = {
      * Use plugins to modify the behaviour of the CMS.
      * Currently, in ALPHA, and likely subject to change.
      */
-    plugins?: FireCMSPlugin[];
+    plugins?: FireCMSPlugin<any, any, any>[];
 
     /**
      * Callback used to get analytics events from the CMS

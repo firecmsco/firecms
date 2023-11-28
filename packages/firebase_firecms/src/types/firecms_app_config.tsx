@@ -3,7 +3,6 @@ import { FirestoreIndexesBuilder } from "../hooks";
 import {
     CMSView,
     CMSViewsBuilder,
-    EntityCollection,
     EntityCollectionsBuilder,
     EntityCustomView,
     PropertyConfig,
@@ -12,6 +11,7 @@ import {
 } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "./text_search";
+import { FireCMSCollection } from "./collection";
 
 export type FireCMSAppConfig = {
 
@@ -26,7 +26,7 @@ export type FireCMSAppConfig = {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections?: EntityCollection[] | EntityCollectionsBuilder;
+    collections?: FireCMSCollection[] | EntityCollectionsBuilder<FireCMSCollection>;
 
     /**
      * Custom additional views created by the developer, added to the main

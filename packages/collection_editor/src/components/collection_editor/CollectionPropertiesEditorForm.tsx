@@ -40,7 +40,7 @@ type CollectionEditorFormProps = {
     extraIcon: React.ReactNode;
     getUser: (uid: string) => User | null;
     getData?: () => Promise<object[]>;
-    doCollectionInference: (collection: PersistedCollection<any, string>) => Promise<EntityCollection | null> | undefined;
+    doCollectionInference: (collection: PersistedCollection) => Promise<EntityCollection | null> | undefined;
     customFields: Record<string, PropertyConfig>;
     collectionEditable: boolean;
 };

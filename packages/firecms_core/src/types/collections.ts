@@ -15,8 +15,7 @@ import { EntityAction } from "./entity_actions";
  *
  * @category Models
  */
-export type EntityCollection<M extends Record<string, any> = any,
-    UserType extends User = User> = {
+export interface EntityCollection<M extends Record<string, any> = any, UserType extends User = User> {
 
     /**
      * Name of the collection, typically plural.
@@ -77,13 +76,6 @@ export type EntityCollection<M extends Record<string, any> = any,
     properties: PropertiesOrBuilders<M>;
 
     /**
-     * Can this collection be edited by the end user.
-     * Defaults to `false`.
-     * Keep in mind that you can also set this prop to individual properties.
-     */
-    editable?: boolean;
-
-    /**
      * Order in which the properties are displayed.
      * If you are specifying your collection as code, the order is the same as the
      * one you define in `properties`. Additional columns are added at the
@@ -120,18 +112,12 @@ export type EntityCollection<M extends Record<string, any> = any,
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`.
      */
-    permissions?: Permissions | PermissionsBuilder<EntityCollection<M>, UserType, M>;
+    permissions?: Permissions | PermissionsBuilder<any, UserType, M>;
 
     /**
      * Are the entities in this collection selectable. Defaults to `true`
      */
     selectionEnabled?: boolean;
-
-    // /**
-    //  * Is the collection exportable. Defaults to `true`
-    //  * You can also pass an `ExportConfig` object to customize the export
-    //  */
-    // exportable?: boolean | ExportConfig<UserType>;
 
     /**
      * You can add subcollections to your entity in the same way you define the root
