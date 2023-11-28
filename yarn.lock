@@ -1329,7 +1329,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@firecms/cli@^3.0.0-alpha.31, @firecms/cli@workspace:packages/firecms_cli":
+"@firecms/cli@^3.0.0-alpha.32, @firecms/cli@workspace:packages/firecms_cli":
   version: 0.0.0-use.local
   resolution: "@firecms/cli@workspace:packages/firecms_cli"
   dependencies:
@@ -1359,12 +1359,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/collection_editor@^3.0.0-alpha.31, @firecms/collection_editor@workspace:packages/collection_editor":
+"@firecms/collection_editor@^3.0.0-alpha.32, @firecms/collection_editor@workspace:packages/collection_editor":
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
-    "@firecms/data_import": ^3.0.0-alpha.31
-    "@firecms/schema_inference": ^3.0.0-alpha.31
+    "@firecms/data_import": ^3.0.0-alpha.32
+    "@firecms/schema_inference": ^3.0.0-alpha.32
     "@jest/globals": ^29.7.0
     "@types/react": ^18.2.33
     "@types/react-dom": ^18.2.14
@@ -1379,6 +1379,8 @@ __metadata:
     eslint-plugin-react: ^7.33.2
     eslint-plugin-react-hooks: ^4.6.0
     jest: ^29.7.0
+    json5: ^2.2.3
+    prism-react-renderer: ^2.3.0
     react-router: ^6.17.0
     react-router-dom: ^6.17.0
     ts-jest: ^29.1.1
@@ -1393,7 +1395,7 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/core@^3.0.0-alpha.31, @firecms/core@workspace:packages/firecms_core":
+"@firecms/core@^3.0.0-alpha.32, @firecms/core@workspace:packages/firecms_core":
   version: 0.0.0-use.local
   resolution: "@firecms/core@workspace:packages/firecms_core"
   dependencies:
@@ -1474,11 +1476,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_enhancement@^3.0.0-alpha.31, @firecms/data_enhancement@workspace:packages/data_enhancement":
+"@firecms/data_enhancement@^3.0.0-alpha.32, @firecms/data_enhancement@workspace:packages/data_enhancement":
   version: 0.0.0-use.local
   resolution: "@firecms/data_enhancement@workspace:packages/data_enhancement"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.31
+    "@firecms/core": ^3.0.0-alpha.32
     "@testing-library/jest-dom": ^5.17.0
     "@types/jest": ^29.5.6
     "@types/react": ^18.2.33
@@ -1509,12 +1511,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import@^3.0.0-alpha.31, @firecms/data_import@workspace:packages/data_import":
+"@firecms/data_import@^3.0.0-alpha.32, @firecms/data_import@workspace:packages/data_import":
   version: 0.0.0-use.local
   resolution: "@firecms/data_import@workspace:packages/data_import"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.31
-    "@firecms/schema_inference": ^3.0.0-alpha.31
+    "@firecms/core": ^3.0.0-alpha.32
+    "@firecms/schema_inference": ^3.0.0-alpha.32
     "@jest/globals": ^29.7.0
     "@testing-library/jest-dom": ^5.17.0
     "@types/jest": ^29.5.6
@@ -1547,15 +1549,15 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/firebase@^3.0.0-alpha.31, @firecms/firebase@workspace:packages/firebase_firecms":
+"@firecms/firebase@^3.0.0-alpha.32, @firecms/firebase@workspace:packages/firebase_firecms":
   version: 0.0.0-use.local
   resolution: "@firecms/firebase@workspace:packages/firebase_firecms"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-alpha.31
-    "@firecms/core": ^3.0.0-alpha.31
-    "@firecms/data_enhancement": ^3.0.0-alpha.31
-    "@firecms/data_import": ^3.0.0-alpha.31
-    "@firecms/schema_inference": ^3.0.0-alpha.31
+    "@firecms/collection_editor": ^3.0.0-alpha.32
+    "@firecms/core": ^3.0.0-alpha.32
+    "@firecms/data_enhancement": ^3.0.0-alpha.32
+    "@firecms/data_import": ^3.0.0-alpha.32
+    "@firecms/schema_inference": ^3.0.0-alpha.32
     "@types/node": ^20.8.9
     "@types/react": ^18.2.33
     "@types/react-dom": ^18.2.14
@@ -1588,11 +1590,11 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/schema_inference@^3.0.0-alpha.31, @firecms/schema_inference@workspace:packages/schema_inference":
+"@firecms/schema_inference@^3.0.0-alpha.32, @firecms/schema_inference@workspace:packages/schema_inference":
   version: 0.0.0-use.local
   resolution: "@firecms/schema_inference@workspace:packages/schema_inference"
   dependencies:
-    "@firecms/core": ^3.0.0-alpha.31
+    "@firecms/core": ^3.0.0-alpha.32
     "@types/node": ^20.8.9
     typescript: ^5.2.2
   languageName: unknown
@@ -4313,6 +4315,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/prismjs@npm:^1.26.0":
+  version: 1.26.3
+  resolution: "@types/prismjs@npm:1.26.3"
+  checksum: c627fa9d9f4277ce413bb8347944152cddfc892702e34ff4b099dc1cf3f00c09514d36349c23529b903b0e57f3b2e0dc91ee66e98af07fbbe1e3fe8346b23370
+  languageName: node
+  linkType: hard
+
 "@types/prop-types@npm:*":
   version: 15.7.10
   resolution: "@types/prop-types@npm:15.7.10"
@@ -5770,6 +5779,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"clsx@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "clsx@npm:2.0.0"
+  checksum: a2cfb2351b254611acf92faa0daf15220f4cd648bdf96ce369d729813b85336993871a4bf6978ddea2b81b5a130478339c20d9d0b5c6fc287e5147f0c059276e
+  languageName: node
+  linkType: hard
+
 "cmd-shim@npm:6.0.1":
   version: 6.0.1
   resolution: "cmd-shim@npm:6.0.1"
@@ -6108,7 +6124,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "create-firecms-app@workspace:packages/create_firecms_app"
   dependencies:
-    "@firecms/cli": ^3.0.0-alpha.31
+    "@firecms/cli": ^3.0.0-alpha.32
     "@types/node": ^20.8.9
     ts-node: ^10.9.1
     typescript: ^5.2.2
@@ -7535,13 +7551,13 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "firecms-example-v3@workspace:examples/example_v3"
   dependencies:
-    "@firecms/cli": ^3.0.0-alpha.31
-    "@firecms/collection_editor": ^3.0.0-alpha.31
-    "@firecms/core": ^3.0.0-alpha.31
-    "@firecms/data_enhancement": ^3.0.0-alpha.31
-    "@firecms/data_import": ^3.0.0-alpha.31
-    "@firecms/firebase": ^3.0.0-alpha.31
-    "@firecms/schema_inference": ^3.0.0-alpha.31
+    "@firecms/cli": ^3.0.0-alpha.32
+    "@firecms/collection_editor": ^3.0.0-alpha.32
+    "@firecms/core": ^3.0.0-alpha.32
+    "@firecms/data_enhancement": ^3.0.0-alpha.32
+    "@firecms/data_import": ^3.0.0-alpha.32
+    "@firecms/firebase": ^3.0.0-alpha.32
+    "@firecms/schema_inference": ^3.0.0-alpha.32
     "@originjs/vite-plugin-federation": ^1.3.2
     "@types/react": 18.2.33
     "@types/react-dom": 18.2.14
@@ -11997,6 +12013,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"prism-react-renderer@npm:^2.3.0":
+  version: 2.3.0
+  resolution: "prism-react-renderer@npm:2.3.0"
+  dependencies:
+    "@types/prismjs": ^1.26.0
+    clsx: ^2.0.0
+  peerDependencies:
+    react: ">=16.0.0"
+  checksum: 29b24eb5015c09e1b7e3fa2941584ead6fceb5556fdfbe7c34548d96886e0b291290bda93a421aab8b26ce6aae677387aac294982d11349a050843f6dbbc7449
+  languageName: node
+  linkType: hard
+
 "proc-log@npm:^3.0.0":
   version: 3.0.0
   resolution: "proc-log@npm:3.0.0"
@@ -12893,12 +12921,12 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "saas@workspace:packages/saas"
   dependencies:
-    "@firecms/collection_editor": ^3.0.0-alpha.31
-    "@firecms/core": ^3.0.0-alpha.31
-    "@firecms/data_enhancement": ^3.0.0-alpha.31
-    "@firecms/data_import": ^3.0.0-alpha.31
-    "@firecms/firebase": ^3.0.0-alpha.31
-    "@firecms/schema_inference": ^3.0.0-alpha.31
+    "@firecms/collection_editor": ^3.0.0-alpha.32
+    "@firecms/core": ^3.0.0-alpha.32
+    "@firecms/data_enhancement": ^3.0.0-alpha.32
+    "@firecms/data_import": ^3.0.0-alpha.32
+    "@firecms/firebase": ^3.0.0-alpha.32
+    "@firecms/schema_inference": ^3.0.0-alpha.32
     "@fontsource/roboto": ^5.0.8
     "@originjs/vite-plugin-federation": ^1.3.2
     "@sentry/react": ^7.76.0
