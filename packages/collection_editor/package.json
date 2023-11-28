@@ -1,6 +1,6 @@
 {
   "name": "@firecms/collection_editor",
-  "version": "3.0.0-alpha.28",
+  "version": "3.0.0-alpha.29",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.es.js",
   "types": "dist/index.d.ts",
@@ -14,8 +14,8 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/data_import": "^3.0.0-alpha.28",
-    "@firecms/schema_inference": "^3.0.0-alpha.28"
+    "@firecms/data_import": "^3.0.0-alpha.29",
+    "@firecms/schema_inference": "^3.0.0-alpha.29"
   },
   "peerDependencies": {
     "react": "^18.2.0",
