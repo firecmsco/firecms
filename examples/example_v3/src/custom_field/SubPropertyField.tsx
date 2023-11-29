@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { buildProperty, FieldHelperText, FieldProps, Paper, PropertyFieldBinding } from "@firecms/core";
+import { FieldHelperText, FieldProps, Paper, Property, PropertyFieldBinding } from "@firecms/core";
 
 /**
  * Simple map field to test validation of custom fields
@@ -21,13 +21,13 @@ export const CustomField = ({
 
     const fieldProps = {
         propertyKey: `${propertyKey}.sample`,
-        property: buildProperty({
+        property: {
             name: "Sample",
             dataType: "string",
             validation: {
                 required: true
             }
-        }),
+        } satisfies Property,
         context
     };
 

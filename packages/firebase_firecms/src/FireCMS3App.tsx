@@ -152,13 +152,18 @@ export function FireCMS3App({
 
 }
 
-export type FireCMS3ClientProps = {
+export type FireCMS3ClientProps<ExtraAppbarProps = object> = {
     signInOptions?: Array<FirebaseSignInProvider | FirebaseSignInOption>;
     fireCMSBackend: FireCMSBackend,
     projectId: string;
     appConfig?: FireCMSAppConfig;
     modeController: ModeController;
-    FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps>;
+    /**
+     * A component that gets rendered on the upper side of the main toolbar.
+     * `toolbarExtraWidget` has no effect if this is set.
+     */
+    FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps<ExtraAppbarProps>>;
+
     basePath?: string;
     baseCollectionPath?: string;
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
@@ -323,7 +328,8 @@ export function FireCMS3ClientWithController({
             name={currentProjectController.projectName ?? ""}
             logo={currentProjectController.logo}
             includeDrawer={false}
-            FireCMSAppBarComponent={props.FireCMSAppBarComponent}>
+            FireCMSAppBarComponent={props.FireCMSAppBarComponent}
+        >
             {loadingOrErrorComponent}
         </Scaffold>;
     }

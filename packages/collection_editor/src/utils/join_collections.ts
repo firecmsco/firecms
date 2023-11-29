@@ -96,10 +96,18 @@ function mergePropertyOrBuilder(target: Property, source: PropertyOrBuilder): Pr
 
 function getCollectionKeys(collection: EntityCollection) {
     if (collection.propertiesOrder && collection.propertiesOrder.length > 0) {
-        return collection.propertiesOrder;
+        const propertiesOrder = collection.propertiesOrder;
+        if (collection.additionalFields) {
+            collection.additionalFields.forEach((field) => {
+                if (!propertiesOrder.includes(field.key)) {
+                    propertiesOrder.push(field.key);
+                }
+            });
+        }
+        return propertiesOrder;
     }
     return [
         ...Object.keys(collection.properties),
-        ...(collection.additionalFields ?? [])?.map(f => f.id)
+        ...(collection.additionalFields ?? [])?.map(f => f.key)
     ];
 }

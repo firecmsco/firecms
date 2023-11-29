@@ -112,7 +112,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * Permissions the logged-in user can perform on this collection.
      * If not specified everything defaults to `true`.
      */
-    permissions?: Permissions | PermissionsBuilder<any, UserType, M>;
+    permissions?: Permissions | PermissionsBuilder<EntityCollection, UserType, M>;
 
     /**
      * Are the entities in this collection selectable. Defaults to `true`
@@ -387,7 +387,7 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
      * ID of this column. You can use this id in the `properties` field of the
      * collection in any order you want
      */
-    id: string;
+    key: string;
 
     /**
      * Header of this column
@@ -413,6 +413,15 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
      * it will be updated in every render.
      */
     dependencies?: Extract<keyof M, string>[];
+
+    /**
+     * Use this prop to define the value of the column as a string or number.
+     * This is the value that will be used for exporting the collection.
+     * If `Builder` is defined, this prop will be ignored in the collection
+     * view.
+     * @param entity
+     */
+    value?: (props: { entity: Entity<M>, context: FireCMSContext }) => string | number | Promise<string | number> | undefined;
 }
 
 /**

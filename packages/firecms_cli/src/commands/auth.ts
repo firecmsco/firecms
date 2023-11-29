@@ -221,7 +221,6 @@ export async function refreshCredentials(env: "dev" | "prod", credentials?: obje
         const server = env === "prod" ? DEFAULT_SERVER : DEFAULT_SERVER_DEV;
 
         const response = await axios.post(server + "/cli/refresh_access_token", credentials);
-        console.log("Refreshing credentials", response)
         const newCredentials = response.data.data;
         saveTokens({
             ...credentials, ...newCredentials,

@@ -27,15 +27,15 @@ import { downloadExport } from "./export";
 import { ExportConfig } from "../types/export_import";
 import { SubscriptionPlanWidget } from "../components";
 import { useProjectConfig } from "../hooks";
-import { FireCMSCollection } from "../types/collection";
+import { FirebaseCMSCollection } from "../types/collections";
 
 const DOCS_LIMIT = 500;
 
 export function ExportCollectionAction<M extends Record<string, any>, UserType extends User>({
                                                                                                  collection: inputCollection,
                                                                                                  path: inputPath,
-                                                                                                 collectionEntitiesCount,
-                                                                                             }: CollectionActionsProps<M, UserType, FireCMSCollection<M, any>>) {
+                                                                                                 collectionEntitiesCount
+                                                                                             }: CollectionActionsProps<M, UserType, FirebaseCMSCollection<M, any>>) {
     const { canExport } = useProjectConfig();
 
     const exportConfig = typeof inputCollection.exportable === "object" ? inputCollection.exportable : undefined;
@@ -74,23 +74,38 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
 
     const fetchAdditionalFields = useCallback(async (entities: Entity<M>[]) => {
 
-        if (!exportConfig?.additionalFields) {
-            return;
-        }
+        const additionalExportFields = exportConfig?.additionalFields;
+        const additionalFields = collection.additionalFields;
 
-        const additionalFields = exportConfig.additionalFields;
+        const resolvedExportColumnsValues: Record<string, any>[] = additionalExportFields
+            ? await Promise.all(entities.map(async (entity) => {
+                return (await Promise.all(additionalExportFields.map(async (column) => {
+                    return {
+                        [column.key]: await column.builder({
+                            entity,
+                            context
+                        })
+                    };
+                }))).reduce((a, b) => ({ ...a, ...b }), {});
+            }))
+            : [];
 
-        const resolvedColumnsValues: Record<string, any>[] = await Promise.all(entities.map(async (entity) => {
-            return (await Promise.all(additionalFields.map(async (column) => {
-                return {
-                    [column.key]: await column.builder({
-                        entity,
-                        context
-                    })
-                };
-            }))).reduce((a, b) => ({ ...a, ...b }), {});
-        }));
-        return resolvedColumnsValues;
+        const resolvedColumnsValues: Record<string, any>[] = additionalFields
+            ? await Promise.all(entities.map(async (entity) => {
+                return (await Promise.all(additionalFields
+                    .map(async (field) => {
+                        if (!field.value)
+                            return {};
+                        return {
+                            [field.key]: await field.value({
+                                entity,
+                                context
+                            })
+                        };
+                    }))).reduce((a, b) => ({ ...a, ...b }), {});
+            }))
+            : [];
+        return [...resolvedExportColumnsValues, ...resolvedColumnsValues];
     }, [exportConfig?.additionalFields]);
 
     const doDownload = useCallback(async (collection: ResolvedEntityCollection<M>,
@@ -104,7 +119,11 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
             .then(async (data) => {
                 setDataLoadingError(undefined);
                 const additionalData = await fetchAdditionalFields(data);
-                downloadExport(data, additionalData, collection, flattenArrays, exportConfig, exportType, dateExportType);
+                const additionalHeaders = [
+                    ...exportConfig?.additionalFields?.map(column => column.key) ?? [],
+                    ...collection.additionalFields?.map(field => field.key) ?? []
+                ];
+                downloadExport(data, additionalData, collection, flattenArrays, additionalHeaders, exportType, dateExportType);
             })
             .catch(setDataLoadingError)
             .finally(() => setDataLoading(false));
@@ -127,8 +146,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
         <Dialog
             open={open}
             onOpenChange={setOpen}
-            maxWidth={"xl"}
-        >
+            maxWidth={"xl"}>
             <DialogContent className={"flex flex-col gap-4 my-4"}>
 
                 <Typography variant={"h6"}>Export data</Typography>

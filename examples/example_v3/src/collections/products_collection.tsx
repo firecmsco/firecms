@@ -1,7 +1,8 @@
-import { ArchiveIcon, buildCollection, EntityCallbacks } from "@firecms/core";
+import { buildCollection } from "@firecms/firebase";
+import { ArchiveIcon, EntityCallbacks } from "@firecms/core";
 
-import { SampleEntityView } from "../custom_entity_view/SampleEntityView";
 import { Product } from "../types";
+import { SampleEntityView } from "../custom_entity_view/SampleEntityView";
 import CustomColorTextField from "../custom_field/CustomColorTextField";
 import { PriceTextPreview } from "../custom_field/PriceTextPreview";
 import { categories, currencies } from "./enums";

@@ -31,7 +31,7 @@ function hideAndExpandKeys<M extends Record<string, any>>(collection: ResolvedEn
             }];
         }
 
-        const additionalField = collection.additionalFields?.find(field => field.id === key);
+        const additionalField = collection.additionalFields?.find(field => field.key === key);
         if (additionalField) {
             return [{
                 key,
@@ -68,7 +68,7 @@ function getDefaultColumnKeys<M extends Record<string, any> = any>(collection: R
 
     const columnIds: string[] = [
         ...propertyKeys,
-        ...additionalFields.map((field) => field.id)
+        ...additionalFields.map((field) => field.key)
     ];
 
     if (includeSubCollections) {

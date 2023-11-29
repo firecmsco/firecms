@@ -23,7 +23,7 @@ import { CMSAnalyticsEvent } from "./analytics";
  * APIs directly, or a REST API.
  * @category Models
  */
-export type EntityCollectionsBuilder<EC extends EntityCollection> = (params: {
+export type EntityCollectionsBuilder<EC extends EntityCollection = EntityCollection> = (params: {
     user: User | null,
     authController: AuthController,
     dataSource: DataSource

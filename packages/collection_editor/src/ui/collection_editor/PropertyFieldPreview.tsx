@@ -92,10 +92,6 @@ export function PropertyFieldPreview({
                             </Typography>
                         </ErrorBoundary>
 
-                        {disabled && <div
-                            className="text-xs h-3 ml-0.5">
-                            <RemoveCircleIcon color={"disabled"}/>
-                        </div>}
                     </div>
                 </div>
 

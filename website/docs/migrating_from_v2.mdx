@@ -115,7 +115,9 @@ Let's break down the different fields:
 Collections have suffered minimal changes. If you don't have any custom components defined, it should be
 easy to adapt your collections to the new format.
 
-Simply export your collections in your `index.ts` file:
+For `AdditionalFieldDelegate` the prop `id` has been renamed to `key`.
+
+To migrate your collections, simply export them in your `index.ts` file:
 
 ```typescript
 import { FireCMSAppConfig } from "@firecms/firebase";
@@ -138,7 +140,7 @@ const appConfig: FireCMSAppConfig = {
 ```
 
 - The `views` property has been renamed to `entityViews`, since they are applied to entities.
-  - The `path` prop of views has been renamed to `key`, for consistency with the rest of the library.
+- The `path` prop of views has been renamed to `key`, for consistency with the rest of the library.
 
 ## No longer supported features:
 
@@ -184,7 +186,7 @@ Tip: ChatGPT is great at converting Box components to div with tailwind classes.
 ### Components that change behaviour:
 - `Menu` and `MenuItem`: Menu items do not have an id anymore. You can add an `onClick` props per menu item.
 - `Select` does not use `labelId` anymore. Just add the label as a component in `label`.
-    - `SelectChangeEvent` is now `ChangeEvent<HTMLSelectElement>`
+  - `SelectChangeEvent` is now `ChangeEvent<HTMLSelectElement>`
 - `CircularProgress` size is a string instead of a number. You can use `size="small"` or `size="large"`.
 
 ### Deployment

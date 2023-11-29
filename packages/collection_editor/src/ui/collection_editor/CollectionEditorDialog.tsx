@@ -390,6 +390,11 @@ export function CollectionEditorDialogInternal<M extends {
                   submitCount
               }) => {
 
+                console.debug({
+                    valuesPath: values.path,
+                    editedCollectionPath,
+                    fullPath
+                })
                 const path = values.path ?? editedCollectionPath;
                 const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
                 const resolvedPath = navigation.resolveAliasesFrom(updatedFullPath);

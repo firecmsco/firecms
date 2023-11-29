@@ -2,16 +2,16 @@ import React, { useCallback } from "react";
 import { EntityCollection, FireCMSPlugin, makePropertiesEditable, User } from "@firecms/core";
 import { ConfigControllerProvider } from "./ConfigControllerProvider";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
-import { EditorCollectionAction } from "./components/EditorCollectionAction";
-import { HomePageEditorCollectionAction } from "./components/HomePageEditorCollectionAction";
-import { NewCollectionCard } from "./components/NewCollectionCard";
+import { EditorCollectionAction } from "./ui/EditorCollectionAction";
+import { HomePageEditorCollectionAction } from "./ui/HomePageEditorCollectionAction";
+import { NewCollectionCard } from "./ui/NewCollectionCard";
 import { PersistedCollection } from "./types/persisted_collection";
 import { CollectionInference } from "./types/collection_inference";
 import { CollectionsConfigController } from "./types/config_controller";
-import { RootCollectionSuggestions } from "./components/RootCollectionSuggestions";
+import { RootCollectionSuggestions } from "./ui/RootCollectionSuggestions";
 import { joinCollectionLists } from "./utils/join_collections";
-import { CollectionViewHeaderAction } from "./components/CollectionViewHeaderAction";
-import { PropertyAddColumnComponent } from "./components/PropertyAddColumnComponent";
+import { CollectionViewHeaderAction } from "./ui/CollectionViewHeaderAction";
+import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent";
 
 export interface CollectionConfigControllerProps<EC extends PersistedCollection = PersistedCollection, UserType extends User = User> {
 

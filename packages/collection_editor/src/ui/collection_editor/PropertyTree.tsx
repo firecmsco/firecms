@@ -80,7 +80,7 @@ export function PropertyTree<M extends {
                                 // .filter((propertyKey) => Boolean(properties[propertyKey]))
                                 .map((propertyKey: string, index: number) => {
                                     const property = properties[propertyKey] as PropertyOrBuilder;
-                                    const additionalField = additionalFields?.find(field => field.id === propertyKey);
+                                    const additionalField = additionalFields?.find(field => field.key === propertyKey);
 
                                     if (!property && !additionalField) {
                                         console.warn(`Property ${propertyKey} not found in properties or additionalFields`);

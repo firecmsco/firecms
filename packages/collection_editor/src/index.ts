@@ -30,5 +30,5 @@ export type {
     CollectionInference
 } from "./types/collection_inference";
 
-export { MissingReferenceWidget } from "./components/MissingReferenceWidget";
-export * from "./components/collection_editor/util";
+export { MissingReferenceWidget } from "./ui/MissingReferenceWidget";
+export * from "./ui/collection_editor/util";

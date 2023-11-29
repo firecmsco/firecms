@@ -11,7 +11,7 @@ import {
 } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "./text_search";
-import { FireCMSCollection } from "./collection";
+import { FirebaseCMSCollection } from "./collections";
 
 export type FireCMSAppConfig = {
 
@@ -26,7 +26,7 @@ export type FireCMSAppConfig = {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections?: FireCMSCollection[] | EntityCollectionsBuilder<FireCMSCollection>;
+    collections?: FirebaseCMSCollection[] | EntityCollectionsBuilder<FirebaseCMSCollection>;
 
     /**
      * Custom additional views created by the developer, added to the main

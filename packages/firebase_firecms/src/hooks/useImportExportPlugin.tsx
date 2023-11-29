@@ -1,7 +1,7 @@
 import { FireCMSPlugin } from "@firecms/core";
 import { ExportCollectionAction } from "../export_import/ExportCollectionAction";
 import { ImportCollectionAction } from "../export_import/ImportCollectionAction";
-import { FireCMSCollection } from "../types/collection";
+import { FirebaseCMSCollection } from "../types/collections";
 
 /**
  *

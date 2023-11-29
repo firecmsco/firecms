@@ -10,12 +10,12 @@ import {
     User,
     useSnackbarController
 } from "@firecms/core";
-import { CollectionEditorDialog } from "./components/collection_editor/CollectionEditorDialog";
+import { CollectionEditorDialog } from "./ui/collection_editor/CollectionEditorDialog";
 import { useNavigate } from "react-router";
 import { CollectionEditorController } from "./types/collection_editor_controller";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { CollectionInference } from "./types/collection_inference";
-import { PropertyFormDialog } from "./components/collection_editor/PropertyEditView";
+import { PropertyFormDialog } from "./ui/collection_editor/PropertyEditView";
 import { PersistedCollection } from "./types/persisted_collection";
 
 export const ConfigControllerContext = React.createContext<CollectionsConfigController>({} as any);

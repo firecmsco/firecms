@@ -5,7 +5,7 @@ import {
     EntityOnFetchProps,
     EnumValues,
     resolveNavigationFrom
-} from "@firecms/core";
+} from "@firecms/firebase";
 import { CustomField } from "../custom_field/SubPropertyField";
 
 const relaxedStatus: EnumValues = [
@@ -90,7 +90,7 @@ export const testCollection = buildCollection({
     name: "Test entities",
     // formAutoSave: true,
     properties: {
-        color:{
+        color: {
             dataType: "string",
             propertyConfig: "color",
         },
@@ -817,13 +817,21 @@ export const testCollection = buildCollection({
         // }),
     },
 
-    // exportable:{
-    //
-    // },
+    exportable: {
+        additionalFields: [
+            {
+                key: "test_export",
+                builder: ({
+                              entity,
+                              context
+                          }) => "test_export"
+            }
+        ]
+    },
 
     additionalFields: [
         {
-            id: "full_name",
+            key: "full_name",
             name: "Full Name",
             Builder: ({ entity }) => {
                 const values = entity.values;

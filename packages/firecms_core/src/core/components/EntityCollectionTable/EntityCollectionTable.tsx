@@ -95,7 +95,6 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                  setFilterValues,
                  sortBy,
                  setSortBy,
-                 searchString,
                  setSearchString,
                  clearFilter,
                  itemCount,
@@ -159,7 +158,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
         const additionalFieldsMap: Record<string, AdditionalFieldDelegate<M, UserType>> = useMemo(() => {
             return (additionalFields
                 ? additionalFields
-                    .map((aC) => ({ [aC.id]: aC as AdditionalFieldDelegate<M, any> }))
+                    .map((aC) => ({ [aC.key]: aC as AdditionalFieldDelegate<M, any> }))
                     .reduce((a, b) => ({ ...a, ...b }), {})
                 : {}) as Record<string, AdditionalFieldDelegate<M, UserType>>;
         }, [additionalFields]);
@@ -252,9 +251,13 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 : entity;
 
             const Builder = additionalField.Builder;
-            if (!Builder) {
-                throw new Error("No builder provided for additional field");
+            if (!Builder && !additionalField.value) {
+                throw new Error("When using additional fields you need to provide a Builder or a value");
             }
+
+            const child = Builder
+                ? <Builder entity={entity} context={context}/>
+                : <>{additionalField.value?.({ entity, context })}</>;
 
             return (
                 <EntityTableCell
@@ -270,8 +273,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                     disabledTooltip={"This column can't be edited directly"}
                 >
                     <ErrorBoundary>
-                        <Builder entity={entity}
-                                 context={context}/>
+                        {child}
                     </ErrorBoundary>
                 </EntityTableCell>
             );
@@ -311,7 +313,7 @@ export const EntityCollectionTable = React.memo<EntityCollectionTableProps<any>>
                 const additionalTableColumns: VirtualTableColumn[] = additionalFields
                     ? additionalFields.map((additionalField) =>
                         ({
-                            key: additionalField.id,
+                            key: additionalField.key,
                             align: "left",
                             sortable: false,
                             title: additionalField.name,

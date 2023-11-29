@@ -6,10 +6,8 @@ import {
     getValueInPath,
     ResolvedEntityCollection,
     ResolvedProperties,
-    ResolvedProperty,
-    User
+    ResolvedProperty
 } from "@firecms/core";
-import { ExportConfig } from "../types/export_import";
 
 interface Header {
     key: string;
@@ -20,7 +18,7 @@ export function downloadExport<M extends Record<string, any>>(data: Entity<M>[],
                                                               additionalData: Record<string, any>[] | undefined,
                                                               collection: ResolvedEntityCollection<M>,
                                                               flattenArrays: boolean,
-                                                              exportConfig: ExportConfig | undefined,
+                                                              additionalHeaders: string[] | undefined,
                                                               exportType: "csv" | "json",
                                                               dateExportType: "timestamp" | "string"
 ) {
@@ -28,7 +26,7 @@ export function downloadExport<M extends Record<string, any>>(data: Entity<M>[],
 
     if (exportType === "csv") {
         const arrayValuesCount = flattenArrays ? getArrayValuesCount(data.map(d => d.values)) : {};
-        const headers = getExportHeaders(properties, exportConfig, arrayValuesCount);
+        const headers = getExportHeaders(properties, additionalHeaders, arrayValuesCount);
         const exportableData = getCSVExportableData(data, additionalData, properties, headers, dateExportType);
         const headersData = entryToCSVRow(headers.map(h => h.label));
         const csvData = exportableData.map(entry => entryToCSVRow(entry));
@@ -83,9 +81,9 @@ export function getJsonExportableData(data: Entity<any>[],
     return mergedData;
 }
 
-function getExportHeaders<M extends Record<string, any>, UserType extends User>(properties: ResolvedProperties<M>,
-                                                                                exportConfig?: ExportConfig<UserType>,
-                                                                                arrayValuesCount?: ArrayValuesCount): Header[] {
+function getExportHeaders<M extends Record<string, any>>(properties: ResolvedProperties<M>,
+                                                         additionalHeaders: string[] | undefined,
+                                                         arrayValuesCount?: ArrayValuesCount): Header[] {
 
     const headers: Header[] = [
         { label: "id", key: "id" },
@@ -101,8 +99,8 @@ function getExportHeaders<M extends Record<string, any>, UserType extends User>(
             })
     ];
 
-    if (exportConfig?.additionalFields) {
-        headers.push(...exportConfig.additionalFields.map(column => ({ label: column.key, key: column.key })));
+    if (additionalHeaders) {
+        headers.push(...additionalHeaders.map(h => ({ label: h, key: h })));
     }
 
     return headers;

@@ -126,5 +126,5 @@ export function getPropertiesWithPropertiesOrder<M extends Record<string, any>>(
 
 export function getDefaultPropertiesOrder(collection: EntityCollection<any>): string[] {
     if (collection.propertiesOrder) return collection.propertiesOrder;
-    return [...Object.keys(collection.properties), ...(collection.additionalFields ?? []).map(field => field.id)];
+    return [...Object.keys(collection.properties), ...(collection.additionalFields ?? []).map(field => field.key)];
 }

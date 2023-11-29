@@ -16,7 +16,7 @@ import {
 } from "@firecms/core";
 import { ExportConfig } from "./export_import";
 
-export type FireCMSCollection<M extends Record<string, any> = any, UserType extends User = User> =
+export type FirebaseCMSCollection<M extends Record<string, any> = any, UserType extends User = User> =
     EntityCollection<M, UserType>
     & {
 
