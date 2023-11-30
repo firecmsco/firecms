@@ -1,0 +1,23 @@
+---
+id: "EqualizerIcon"
+title: "Function: EqualizerIcon"
+sidebar_label: "EqualizerIcon"
+sidebar_position: 0
+custom_edit_url: null
+---
+
+▸ **EqualizerIcon**(`props`): `Element`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | [`IconProps`](../types/IconProps.md) |
+
+#### Returns
+
+`Element`
+
+#### Defined in
+
+[packages/firecms_core/src/icons/components/EqualizerIcon.tsx:3](https://github.com/FireCMSco/firecms/blob/d45f3739/packages/firecms_core/src/icons/components/EqualizerIcon.tsx#L3)

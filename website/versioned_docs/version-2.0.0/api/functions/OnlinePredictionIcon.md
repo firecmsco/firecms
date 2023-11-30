@@ -1,0 +1,23 @@
+---
+id: "OnlinePredictionIcon"
+title: "Function: OnlinePredictionIcon"
+sidebar_label: "OnlinePredictionIcon"
+sidebar_position: 0
+custom_edit_url: null
+---
+
+▸ **OnlinePredictionIcon**(`props`): `Element`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | [`IconProps`](../types/IconProps.md) |
+
+#### Returns
+
+`Element`
+
+#### Defined in
+
+[packages/firecms_core/src/icons/components/OnlinePredictionIcon.tsx:3](https://github.com/FireCMSco/firecms/blob/d45f3739/packages/firecms_core/src/icons/components/OnlinePredictionIcon.tsx#L3)

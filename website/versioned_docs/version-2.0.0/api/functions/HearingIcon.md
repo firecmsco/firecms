@@ -1,0 +1,23 @@
+---
+id: "HearingIcon"
+title: "Function: HearingIcon"
+sidebar_label: "HearingIcon"
+sidebar_position: 0
+custom_edit_url: null
+---
+
+▸ **HearingIcon**(`props`): `Element`
+
+#### Parameters
+
+| Name | Type |
+| :------ | :------ |
+| `props` | [`IconProps`](../types/IconProps.md) |
+
+#### Returns
+
+`Element`
+
+#### Defined in
+
+[packages/firecms_core/src/icons/components/HearingIcon.tsx:3](https://github.com/FireCMSco/firecms/blob/d45f3739/packages/firecms_core/src/icons/components/HearingIcon.tsx#L3)
