@@ -3,8 +3,7 @@ import { User } from "./user";
 /**
  * Controller for retrieving the logged user or performing auth related operations.
  * Note that if you are implementing your AuthController, you probably will want
- * to do it as the result of a hook. Check {@link useFirebaseAuthController} code
- * for an example.
+ * to do it as the result of a hook.
  * @category Hooks and utilities
  */
 export type AuthController<UserType extends User = User> = {

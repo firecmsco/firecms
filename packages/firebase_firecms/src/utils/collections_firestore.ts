@@ -67,7 +67,7 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
 }
 
 export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: PersistedCollection<M>) {
-    const properties = setUndefinedToDelete(removeFunctions(removeNonEditableProperties(collection.properties)));
+    const properties = setUndefinedToDelete(removeFunctions(collection.properties));
     const newCollection: PersistedCollection = {
         ...removeUndefined(collection),
         properties

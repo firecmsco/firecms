@@ -9,6 +9,7 @@ export function makePropertiesEditable(properties: Properties) {
             makePropertiesEditable(property.properties as Properties);
         }
     });
+    return properties;
 }
 
 export function makePropertiesNonEditable(properties: PropertiesOrBuilders): PropertiesOrBuilders {

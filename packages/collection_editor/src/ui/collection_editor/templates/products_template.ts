@@ -1,13 +1,12 @@
-import { EntityCollection } from "@firecms/core";
+import { EntityCollection, makePropertiesEditable } from "@firecms/core";
 
 export const productsCollectionTemplate: EntityCollection = {
     path: "products",
     name: "Products",
     singularName: "Product",
-    group: "Main",
     icon: "shopping_cart",
     description: "List of the products currently sold in your shop",
-    properties: {
+    properties: makePropertiesEditable({
         name: {
             dataType: "string",
             name: "Name",
@@ -84,6 +83,5 @@ export const productsCollectionTemplate: EntityCollection = {
             name: "Added on",
             autoValue: "on_create"
         }
-    }
-
+    })
 };

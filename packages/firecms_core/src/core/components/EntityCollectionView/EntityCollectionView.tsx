@@ -575,7 +575,7 @@ export const EntityCollectionView = React.memo(
                         selectionEnabled={selectionEnabled}
                         collectionEntitiesCount={docsCount}
                     />}
-                    emptyComponent={canCreateEntities
+                    emptyComponent={canCreateEntities && tableController.filterValues === undefined && tableController.sortBy === undefined
                         ? <div className="flex flex-col items-center justify-center">
                             <Typography variant={"subtitle2"}>So empty...</Typography>
                             <Button
@@ -587,7 +587,7 @@ export const EntityCollectionView = React.memo(
                                 Create your first entity
                             </Button>
                         </div>
-                        : undefined
+                        : <Typography variant={"label"}>No results with the applied filter/sort</Typography>
                     }
                     hoverRow={hoverRow}
                     inlineEditing={checkInlineEditing()}

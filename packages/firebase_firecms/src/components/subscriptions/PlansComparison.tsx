@@ -47,10 +47,12 @@ export function PlansComparisonDialog({
 
 export function PlansComparison() {
 
-    const { backendFirebaseApp } = useFireCMSBackend();
-    const authController = useAuthController();
+    const { backendFirebaseApp, backendUid } = useFireCMSBackend();
 
-    const { subscriptionPlan, projectId } = useProjectConfig();
+    const {
+        subscriptionPlan,
+        projectId
+    } = useProjectConfig();
     if (!subscriptionPlan)
         throw new Error("No subscription plan");
 
@@ -60,7 +62,6 @@ export function PlansComparison() {
         getSubscriptionsForProject
     } = useSubscriptionsForUserController({
         firebaseApp: backendFirebaseApp,
-        userId: authController.user?.uid
     });
 
     const projectSubscriptions = getSubscriptionsForProject(projectId);

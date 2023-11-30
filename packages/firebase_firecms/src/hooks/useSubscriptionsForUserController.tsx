@@ -11,8 +11,9 @@ import {
     query,
     where
 } from "firebase/firestore";
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Product, ProductPrice, ProductWithPrices, Subscription, SubscriptionType } from "../types/subscriptions";
+import { useFireCMSBackend } from "./useFireCMSBackend";
 
 export const SUBSCRIPTIONS_COLLECTION = "subscriptions";
 export const PRODUCTS_COLLECTION = "products";
@@ -23,7 +24,6 @@ export const CHECKOUT_SESSION_COLLECTION = "checkout_sessions";
  * @category Firebase
  */
 export interface SubscriptionsForUserControllerProps {
-    userId?: string;
     firebaseApp?: FirebaseApp;
 }
 
@@ -43,9 +43,10 @@ export interface SubscriptionsController {
 }
 
 export function useSubscriptionsForUserController({
-                                               userId,
-                                               firebaseApp
-                                           }: SubscriptionsForUserControllerProps): SubscriptionsController {
+                                                      firebaseApp
+                                                  }: SubscriptionsForUserControllerProps): SubscriptionsController {
+
+    const { backendUid: userId } = useFireCMSBackend();
 
     const firestoreRef = useRef<Firestore>();
 
@@ -221,7 +222,6 @@ export function useSubscriptionsForUserController({
     }
 
     const getSubscriptionsForProject = (projectId: string): Subscription[] => {
-        console.log("activeSubscriptions", activeSubscriptions)
         return activeSubscriptions?.filter((subscription) => subscription.metadata.projectId === projectId);
     }
 

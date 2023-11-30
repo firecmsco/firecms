@@ -1,6 +1,12 @@
 import React from "react";
 
-import { EntityCollection, PropertyConfig, PropertiesOrBuilders, PropertyOrBuilder, ResolvedProperty } from "../../types";
+import {
+    EntityCollection,
+    PropertiesOrBuilders,
+    PropertyConfig,
+    PropertyOrBuilder,
+    ResolvedProperty
+} from "../../types";
 import { getFieldConfig } from "../form_field_configs";
 import { isPropertyBuilder } from "./entities";
 import { resolveProperty } from "./resolutions";
@@ -109,7 +115,7 @@ export function getBracketNotation(path: string): string {
 export function getPropertiesWithPropertiesOrder<M extends Record<string, any>>(properties: PropertiesOrBuilders<M>, propertiesOrder?: Extract<keyof M, string>[]): PropertiesOrBuilders<M> {
     if (!propertiesOrder) return properties;
     const result: PropertiesOrBuilders<any> = {};
-    propertiesOrder.forEach(path => {
+    propertiesOrder.filter(Boolean).forEach(path => {
         const property = getPropertyInPath(properties, path);
         if (typeof property === "object" && property.dataType === "map" && property.properties) {
             result[path] = {

@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { AutoAwesomeIcon, Card, Chip, CircularProgressCenter, cn, Typography, useBrowserTitleAndIcon } from "@firecms/core";
+import {
+    AutoAwesomeIcon,
+    Card,
+    Chip,
+    CircularProgressCenter,
+    cn,
+    Typography,
+    useBrowserTitleAndIcon
+} from "@firecms/core";
 import { useSubscriptionsForUserController } from "../../hooks/useSubscriptionsForUserController";
 import { ProductView } from "./ProductView";
 import { getPriceString, getStatusText } from "../settings/common";
@@ -12,7 +20,7 @@ export function ProjectSubscriptionPlans({ uid }: {
     uid: string
 }) {
 
-    const { backendFirebaseApp, projectsApi } = useFireCMSBackend();
+    const { backendFirebaseApp } = useFireCMSBackend();
     const { subscriptionPlan, projectId } = useProjectConfig();
     if (!subscriptionPlan)
         throw new Error("No subscription plan");
@@ -25,7 +33,6 @@ export function ProjectSubscriptionPlans({ uid }: {
         getSubscriptionsForProject
     } = useSubscriptionsForUserController({
         firebaseApp: backendFirebaseApp,
-        userId: uid
     });
 
     const projectSubscriptions = getSubscriptionsForProject(projectId);

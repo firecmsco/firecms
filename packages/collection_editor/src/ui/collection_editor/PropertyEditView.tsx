@@ -106,7 +106,6 @@ export const PropertyForm = React.memo(
         } as PropertyWithId;
 
         const disabled = (Boolean(property && !editableProperty(property)) && !collectionEditable);
-        console.log("PropertyForm disabled", disabled)
 
         const lastSubmittedProperty = useRef<OnPropertyChangedParams | undefined>(property ? {
             id: propertyKey,

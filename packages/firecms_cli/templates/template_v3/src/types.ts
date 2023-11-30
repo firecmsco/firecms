@@ -1,4 +1,4 @@
-import { EntityReference } from "@firecms/core";
+import { EntityReference } from "@firecms/firebase";
 
 export type Product = {
     name: string;
