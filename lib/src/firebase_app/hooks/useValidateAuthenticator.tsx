@@ -16,21 +16,21 @@ import { Authenticator } from "../types/auth";
  * @param dataSource
  */
 export function useValidateAuthenticator<UserType extends User = User>({
-                                             authController,
-                                             authentication,
-                                             getAppCheckToken,
-                                             appCheckForceRefresh = false,
-                                             storageSource,
-                                             dataSource
-                                         }:
-                                             {
-                                                 authController: AuthController<UserType>,
-                                                 authentication?: boolean | Authenticator<UserType>,
-                                                 getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
-                                                 appCheckForceRefresh?: boolean,
-                                                 dataSource: DataSource;
-                                                 storageSource: StorageSource;
-                                             }): {
+                                                                           authController,
+                                                                           authentication,
+                                                                           getAppCheckToken,
+                                                                           appCheckForceRefresh = false,
+                                                                           storageSource,
+                                                                           dataSource
+                                                                       }:
+                                                                           {
+                                                                               authController: AuthController<UserType>,
+                                                                               authentication?: boolean | Authenticator<UserType>,
+                                                                               getAppCheckToken?: (forceRefresh: boolean) => Promise<AppCheckTokenResult> | undefined,
+                                                                               appCheckForceRefresh?: boolean,
+                                                                               dataSource: DataSource;
+                                                                               storageSource: StorageSource;
+                                                                           }): {
     canAccessMainView: boolean,
     authLoading: boolean,
     notAllowedError: any,
@@ -99,6 +99,8 @@ export function useValidateAuthenticator<UserType extends User = User>({
                 if (!allowed) {
                     authController.signOut();
                     setNotAllowedError(true);
+                } else {
+                    setNotAllowedError(false);
                 }
             } catch (e) {
                 setNotAllowedError(e);

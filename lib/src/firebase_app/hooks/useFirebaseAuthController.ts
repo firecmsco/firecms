@@ -104,6 +104,7 @@ export const useFirebaseAuthController = (
     const googleLogin = useCallback(() => {
         const provider = new GoogleAuthProvider();
         const options = getProviderOptions("google.com");
+        provider.setCustomParameters({ prompt: "select_account" });
         if (options?.scopes)
             options.scopes.forEach((scope) => provider.addScope(scope));
         if (options?.customParameters)

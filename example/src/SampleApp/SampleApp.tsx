@@ -3,7 +3,6 @@ import React, { useCallback } from "react";
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 
-
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
@@ -102,7 +101,10 @@ function SampleApp() {
     ];
 
     if (process.env.NODE_ENV !== "production") {
-        collections.push({ ...testCollection, subcollections: [{ ...testCollection, subcollections: [{ ...testCollection, subcollections: [] }] }] } as EntityCollection);
+        collections.push({
+            ...testCollection,
+            subcollections: [{ ...testCollection, subcollections: [{ ...testCollection, subcollections: [] }] }]
+        } as EntityCollection);
     }
 
     const onAnalyticsEvent = useCallback((event: string, data?: object) => {
@@ -110,15 +112,43 @@ function SampleApp() {
         logEvent(analytics, event, data);
     }, []);
 
-    // const dataEnhancementPlugin = useDataEnhancementPlugin({
-    //     getConfigForPath: ({ path }) => {
-    //         if (process.env.NODE_ENV !== "production")
-    //             return true;
-    //         if (path === "books")
-    //             return true;
-    //         return false;
-    //     }
-    // });
+    const dataEnhancementPlugin = useDataEnhancementPlugin({
+        getConfigForPath: ({ path }) => {
+            if (process.env.NODE_ENV !== "production")
+                return true;
+            if (path === "books")
+                return true;
+            if (path === "products")
+                return true;
+            if (path === "blog")
+                return true;
+            return false;
+        }
+    });
+
+    const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
+        if (path === "products") {
+            return [
+                {
+                    category: "asc",
+                    available: "desc"
+                },
+                {
+                    category: "asc",
+                    available: "asc"
+                },
+                {
+                    category: "desc",
+                    available: "desc"
+                },
+                {
+                    category: "desc",
+                    available: "asc"
+                }
+            ];
+        }
+        return undefined;
+    }
 
     return <FirebaseCMSApp
         name={"My Online Shop"}

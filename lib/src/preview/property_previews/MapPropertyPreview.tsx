@@ -1,12 +1,5 @@
 import React from "react";
-import {
-    Box,
-    Table,
-    TableBody,
-    TableCell,
-    TableRow,
-    Typography
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import { ResolvedMapProperty } from "../../types";
 import { ErrorBoundary } from "../../core";
@@ -128,7 +121,7 @@ export function MapPropertyPreview<T extends Record<string, any> = Record<string
 }
 
 export function KeyValuePreview({ value }: { value: any }) {
-    if (typeof value !== "object") return null;
+    if (typeof value !== "object" || value === undefined || value === null) return null;
     return <Box
         sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
         {
