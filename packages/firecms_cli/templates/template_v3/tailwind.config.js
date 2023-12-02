@@ -53,7 +53,7 @@ const fireCMSPlugin = plugin(function ({
             },
             colors: {
                 primary: "#0070F4",
-                secondary: "#ff5064",
+                secondary: "#FF5B79",
                 error: "#F44336",
                 field: {
                     disabled: "rgb(224 224 226)",
