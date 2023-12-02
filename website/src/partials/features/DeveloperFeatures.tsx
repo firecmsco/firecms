@@ -3,23 +3,18 @@ import React from "react";
 // @ts-ignore
 import pricePreview from "@site/static/img/price.png";
 
-
 import { useColorMode } from "@docusaurus/theme-common";
 
 // @ts-ignore
 import SyntaxHighlighter from "react-syntax-highlighter";
-import {
-    atomOneLight,
-    dracula
-// @ts-ignore
-} from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { atomOneLight, dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { arrowIcon } from "../icons";
 
 import TickIcon from "@site/static/img/icons/check.svg";
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
-import { defaultBorderMixin } from "../styles";
+import { ContainerInnerPaddingMixin, ContainerPaddingMixin, defaultBorderMixin } from "../styles";
 
 export function DeveloperFeatures() {
 
@@ -27,9 +22,9 @@ export function DeveloperFeatures() {
     const isDarkTheme = colorMode === "dark";
 
     return (
-        <Panel color={"gray"} includeMargin={false}>
+        <Panel color={"gray"} includeMargin={false} includePadding={false}>
 
-            <p className="text-center text-secondary uppercase font-mono font-bold ">
+            <p className={clsx("text-center text-secondary uppercase font-mono font-bold p-8 border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
                 For developers
             </p>
 
@@ -37,7 +32,7 @@ export function DeveloperFeatures() {
                 reverseSmall={true}
                 animation={false}
                 left={<div
-                    className=" relative flex-col font-mono">
+                    className="p-8 relative flex-col font-mono">
 
                     <SyntaxHighlighter
                         className={clsx("max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
@@ -71,13 +66,13 @@ export function DeveloperFeatures() {
                     </div>
                 </div>
                 }
-                right={<div className="lg:pr-4 lg:pr-12 xl:pr-16">
+                right={<div className="p-8">
 
                     <div
                         className={"flex items-center mb-3"}>
 
                         <div
-                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 ">
+                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">
                             {arrowIcon}
                         </div>
                         <h3 className="h3 m-0 ml-3 ">
@@ -115,11 +110,11 @@ export function DeveloperFeatures() {
             <TwoColumns
                 animation={false}
                 left={
-                    <>
+                    <div className={"p-8"}>
                         <div className={"flex items-center mb-3"}>
 
                             <div
-                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
                                 <TickIcon/>
                             </div>
 
@@ -140,11 +135,11 @@ export function DeveloperFeatures() {
                             ways.
                         </p>
 
-                    </>
+                    </div>
                 } right={
                 <>
                     <div
-                        className="relative flex-col font-mono">
+                        className="relative flex-col font-mono p-8">
                         <SyntaxHighlighter
                             className={clsx("max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
                             language={"typescript"}

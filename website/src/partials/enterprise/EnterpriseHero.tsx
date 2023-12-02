@@ -1,10 +1,11 @@
 import React from "react";
-import { CTAButtonMixin } from "../styles";
+import { CTAButtonMixin, CTAOutlinedButtonWhiteMixin } from "../styles";
 import { Hero } from "../general/Hero";
 
 export function EnterpriseHero() {
 
     return <Hero
+        color={"primary"}
         title={
             <>
                 <span className="block lg:inline">Enterprise</span>
@@ -17,7 +18,7 @@ export function EnterpriseHero() {
         cta={<a href="mailto:hello@firecms.co?subject=FireCMS%20consulting"
                 rel="noopener noreferrer"
                 target="_blank"
-                className={CTAButtonMixin}>
+                className={CTAOutlinedButtonWhiteMixin}>
             Get in touch
         </a>}
     />;

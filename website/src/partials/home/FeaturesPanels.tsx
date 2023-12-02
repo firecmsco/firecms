@@ -21,7 +21,7 @@ function FeaturesPanels() {
     return (
         <Panel
             data-aos="fade-up"
-            color={"light"}
+            color={"lighter"}
             includePadding={false}
             // className={ContainerMixin + " px-4 relative sm:px-6 py-16 md:py-28 text-text-primary"}
         >
@@ -29,9 +29,9 @@ function FeaturesPanels() {
             <LinedSpace/>
 
             <div
-                className={"flex items-center max-w-xl md:max-w-none md:w-full mx-auto mb-4"}
+                className={"flex items-center mb-4"}
             >
-                <div className="md:pr-4 lg:pr-12 xl:pr-16">
+                <div>
 
                     <div
                         className={clsx("flex mb-4 relative items-center uppercase border-b border-0",
@@ -48,7 +48,7 @@ function FeaturesPanels() {
 
                     </div>
 
-                    <p className={clsx("text-xl md:text-2xl text-text-primary", ContainerInnerPaddingMixin)}>
+                    <p className={clsx("text-xl md:text-2xl text-text-primary px-8 py-4 md:px-8")}>
                         FireCMS provides all the flexibility you
                         need with the best UX.
                         Edit your collections and entities using
@@ -61,25 +61,22 @@ function FeaturesPanels() {
 
 
             <div
-                className="max-w-sm mx-auto grid md:grid-cols-2 lg:grid-cols-3 items-start md:max-w-2xl lg:max-w-none text-xl">
-                <div className={clsx(defaultBorderMixin, "border", "-ml-px")}>
-                    <div
-                        className={clsx("relative flex flex-col items-center p-6 rounded-2xl border border-solid -m-px", defaultBorderMixin)}>
-                        {iconStars}
-                        <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
-                            Consistent Data Management
-                        </h4>
-                        <p className="text-text-primary text-center">
-                            Establish schemas for your data types and set
-                            validation options
-                        </p>
-                    </div>
+                className="mx-auto grid md:grid-cols-2 lg:grid-cols-3 items-start text-xl gap-4 px-8">
+                <div className={"relative flex flex-col items-center p-6  rounded-2xl border border-solid"}>
+                    {iconStars}
+                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
+                        Consistent Data Management
+                    </h4>
+                    <p className="text-text-primary text-center">
+                        Establish schemas for your data types and set
+                        validation options
+                    </p>
                 </div>
 
                 <div
-                    className="relative flex flex-col items-center p-6 rounde   d-2xl border border-solid ">
+                    className="relative flex flex-col items-center p-6  rounded-2xl border border-solid ">
                     {gridIcon}
-                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Sophisticated Editing Tools
                     </h4>
                     <p className="text-text-primary text-center">
@@ -91,7 +88,7 @@ function FeaturesPanels() {
                 <div
                     className="relative flex flex-col items-center p-6  rounded-2xl border border-solid ">
                     {iconDoor}
-                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Role-Based System
                     </h4>
                     <p className="text-text-primary text-center">
@@ -104,7 +101,7 @@ function FeaturesPanels() {
                 <div
                     className="relative flex flex-col items-center p-6  rounded-2xl border border-solid ">
                     {iconCards}
-                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Flexible Customization
                     </h4>
                     <p className="text-text-primary text-center">
@@ -114,7 +111,7 @@ function FeaturesPanels() {
                 <div
                     className="relative flex flex-col items-center p-6  rounded-2xl border border-solid ">
                     {iconArrows}
-                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Subcollection Compatibility
                     </h4>
                     <p className="text-text-primary text-center">
@@ -127,7 +124,7 @@ function FeaturesPanels() {
 
                     {iconRadar}
 
-                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1">
+                    <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Real-Time Support
                     </h4>
                     <p className="text-text-primary text-center">

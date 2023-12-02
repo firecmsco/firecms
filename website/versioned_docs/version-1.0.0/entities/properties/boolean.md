@@ -26,4 +26,4 @@ The widget that gets created is
 - `SwitchField` simple boolean switch
 
 Links:
-- [API](../../api/interfaces/booleanproperty)
+- [API]

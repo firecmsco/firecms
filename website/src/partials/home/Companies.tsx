@@ -3,6 +3,8 @@ import { useColorMode } from "@docusaurus/theme-common";
 
 // @ts-ignore
 import MMLogo from "@site/static/img/logos/mm_logo.webp";
+// @ts-ignore
+import ProtonLogo from "@site/static/img/logos/proton_logo.webp";
 
 // @ts-ignore
 import SomnioLogo from "@site/static/img/logos/logo_somnio_blanco.png";
@@ -12,6 +14,7 @@ import TPALogo from "@site/static/img/logos/the_planet_app_logo.svg";
 import TPALogoDark from "@site/static/img/logos/the_planet_app_logo_dark.svg";
 import SocialIncomeLogo from "@site/static/img/logos/social_income_logo.svg";
 import MindSwitchLogo from "@site/static/img/logos/mindswitch_logo.svg";
+import OikosLogo from "@site/static/img/logos/oikos_logo.svg";
 import MindSwitchLogoDark from "@site/static/img/logos/mindswitch_logo_white.svg";
 import GearFocusLogo from "@site/static/img/logos/gearfocus_logo.svg";
 
@@ -29,18 +32,20 @@ export function Companies() {
         </h2>
         <div
             className={"mx-auto px-4 sm:px-6 mb-8 flex items-center flex-wrap justify-center"}>
-            <a
-                target="_blank"
-                rel="noopener noreferrer"
-                href={"https://www.gearfocus.com/"}>
-                <GearFocusLogo
-                    className="w-52 h-min aspect-auto m-4"/>
-            </a>
+
             <a
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://medicalmotion.com"}>
                 <img src={isDarkTheme ? MMLogoDark : MMLogo}
+                     alt="MedicalMotion Logo"
+                     className="w-48 h-min aspect-auto m-4"/>
+            </a>
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={"https://www.proton-health.com"}>
+                <img src={ProtonLogo}
                      alt="MedicalMotion Logo"
                      className="w-48 h-min aspect-auto m-4"/>
             </a>
@@ -70,6 +75,12 @@ export function Companies() {
             <a
                 target="_blank"
                 rel="noopener noreferrer"
+                href={"https://oikosbrain.com"}>
+                <OikosLogo className="w-48 h-min aspect-auto m-4"/>
+            </a>
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
                 href={"https://www.mindswitch.me/"}>
                 {isDarkTheme ?
                     <MindSwitchLogoDark
@@ -77,6 +88,14 @@ export function Companies() {
                     <MindSwitchLogo
                         className="w-52 h-min aspect-auto m-4"/>}
             </a>
+            <a
+                target="_blank"
+                rel="noopener noreferrer"
+                href={"https://www.gearfocus.com/"}>
+                <GearFocusLogo
+                    className="w-52 h-min aspect-auto m-4"/>
+            </a>
+
         </div>
     </Panel>;
 

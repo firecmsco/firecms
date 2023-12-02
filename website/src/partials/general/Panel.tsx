@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 export function Panel({
                           children,
-                          color = "gray",
+                          color = "white",
                           centered = false,
                           includeMargin = false,
                           includePadding = true,
@@ -12,7 +12,7 @@ export function Panel({
                           innerClassName
                       }: {
     children: React.ReactNode,
-    color?: "gray" | "light_gray" | "primary" | "secondary" | "light" | "lighter" | "transparent",
+    color?: "gray" | "light_gray" | "white" | "primary" | "secondary" | "light" | "lighter" | "transparent",
     centered?: boolean,
     includeMargin?: boolean,
     includePadding?: boolean,
@@ -20,13 +20,14 @@ export function Panel({
     innerClassName?: string,
 }) {
 
-    const colorClass = color === "transparent" ? "bg-inherit text-text-primary" :
-        color === "light" ? "bg-light text-text-primary" :
-            color === "lighter" ? "bg-lighter text-text-primary" :
-                color === "light_gray" ? "bg-gray-600 text-white" :
-                    color === "gray" ? "bg-gray-800 text-white" :
-                        color === "primary" ? "bg-primary text-white" :
-                            color === "secondary" ? "bg-secondary text-white" : "";
+    const colorClass = color === "transparent" ? "text-text-primary" :
+        color === "white" ? "bg-white text-text-primary" :
+            color === "light" ? "bg-gray-100 text-text-primary" :
+                color === "lighter" ? "bg-gray-50 text-text-primary" :
+                    color === "light_gray" ? "bg-gray-600 text-white" :
+                        color === "gray" ? "bg-gray-800 text-white" :
+                            color === "primary" ? "bg-primary text-white" :
+                                color === "secondary" ? "bg-secondary text-white" : "";
 
     return (
         <section
@@ -40,8 +41,8 @@ export function Panel({
             <div className={clsx(
                 ContainerMixin,
                 (centered ? " flex flex-col items-center" : ""),
-                defaultBorderMixin,
                 includePadding ? ContainerPaddingMixin : "",
+                defaultBorderMixin,
                 "border-x border-y-0 border-solid",
                 innerClassName
             )}>

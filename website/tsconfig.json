@@ -28,8 +28,11 @@
         "strictNullChecks": true,
         "baseUrl": ".",
         "paths": {
-            "@firecms/firecms": [
+            "@firecms/core": [
                 "../packages/firecms_core/src/index.ts"
+            ],
+            "@firecms/firebase": [
+                "../packages/firebase_firecms/src/index.ts"
             ]
         }
     },

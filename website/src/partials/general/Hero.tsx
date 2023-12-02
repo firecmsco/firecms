@@ -5,23 +5,25 @@ import { PagesBackground } from "./PagesBackground";
 export function Hero({
                          title,
                          subtitle,
-                         cta
+                         cta,
+                         color
                      }: {
     title: React.ReactNode,
     subtitle?: React.ReactNode,
     cta?: React.ReactNode,
+    color: "primary" | "secondary"
 }) {
     return (
         <>
-            <div className={"w-full relative"}>
-                <PagesBackground color={"blue"}/>
-                <div className={"h-20 "}/>
+            <div className={"w-full relative bg-blue-800"}>
+                <PagesBackground color={color}/>
                 <Panel includeMargin={false}
                        includePadding={false}
                        color={"transparent"}
                        innerClassName={"py-8 md:py-12 p-4 md:p-8"}
                        className={"border-t-0"}>
-                    <div style={{ height: "200px" }}/>
+                    <div className={"h-20"}/>
+                    <div style={{ height: "300px" }}/>
                     <div
                         className="mt-10 text-white">
                         <div className="lg:text-left">
@@ -33,7 +35,7 @@ export function Hero({
                 </Panel>
             </div>
 
-            <Panel color={"secondary"} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
+            <Panel includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
                 {subtitle &&
                     <div className="text-xl  md:text-2xl">
                         {subtitle}

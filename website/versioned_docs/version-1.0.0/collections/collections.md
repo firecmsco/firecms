@@ -17,7 +17,7 @@ the main menu, or as subcollections inside other collections, following the
 Firestore data schema.
 
 Check the full API reference
-in [Entity collections](../api/interfaces/entitycollection)
+in [Entity collections]
 
 * `name` The plural name of the view. E.g. 'products'.
 
@@ -25,7 +25,7 @@ in [Entity collections](../api/interfaces/entitycollection)
   view is in the root the path, it is equal to the absolute one. This path also
   determines the URL in FireCMS.
 
-* `subcollections` Following the Firestore document and collection collection, you
+* `subcollections` Following the Firestore document and collection model, you
   can add subcollections to your entity in the same way you define the root
   collections.
 
@@ -72,7 +72,7 @@ in [Entity collections](../api/interfaces/entitycollection)
 
 * `permissions` You can specify an object with boolean permissions with the
   shape `{edit:boolean; create:boolean; delete:boolean}` to indicate the actions
-  the user can perform. You can also pass a [`PermissionsBuilder`](../api/types/permissionsbuilder)
+  the user can perform. You can also pass a [`PermissionsBuilder`]
   to customize the permissions based on user or entity.
 
 * `inlineEditing` Can the elements in this collection be edited inline in the
@@ -80,7 +80,7 @@ in [Entity collections](../api/interfaces/entitycollection)
   , entities can still be edited in the side panel.
 
 * `exportable` Should the data in this collection view include an export button.
-  You can also set an [`ExportConfig`](../api/interfaces/exportconfig)
+  You can also set an [`ExportConfig`]
   configuration object to customize the export and add additional values.
   Defaults to `true`
 

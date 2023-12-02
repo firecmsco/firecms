@@ -34,5 +34,5 @@ buildProperty({
 The data type is [`map`](../config/map).
 
 Internally the component used
-is [`MapFieldBinding`](../../../api/functions/MapFieldBinding).
+is [`MapFieldBinding`].
 

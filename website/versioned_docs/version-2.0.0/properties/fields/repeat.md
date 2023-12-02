@@ -33,5 +33,5 @@ buildProperty({
 The data type is [`array`](../config/array).
 
 Internally the component used
-is [`RepeatFieldBinding`](../../../api/functions/RepeatFieldBinding).
+is [`RepeatFieldBinding`].
 

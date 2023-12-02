@@ -16,30 +16,22 @@ module.exports = {
         docSearchApiKey: process.env.REACT_APP_DOC_SEARCH_KEY,
         docSearchAppId: process.env.REACT_APP_DOC_SEARCH_APP_ID,
     },
-    // webpack: {
-    //     jsLoader: (isServer) => ({
-    //         loader: require.resolve('esbuild-loader'),
-    //         options: {
-    //             loader: 'tsx',
-    //             format: isServer ? 'cjs' : undefined,
-    //             target: isServer ? 'node16' : 'es2017',
-    //         },
-    //     }),
-    // },
+    webpack: {
+    },
 
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
-        [
-            "docusaurus-plugin-typedoc",
-            {
-                entryPoints: [
-                    "../packages/firebase_firecms/src/index.ts",
-                ],
-                tsconfig: "../packages/firebase_firecms/tsconfig.json",
-                watch: process.env.TYPEDOC_WATCH,
-            }
-        ],
+        // [
+        //     "docusaurus-plugin-typedoc",
+        //     {
+        //         entryPoints: [
+        //             "../packages/firebase_firecms/src/index.ts",
+        //         ],
+        //         tsconfig: "../packages/firebase_firecms/tsconfig.json",
+        //         watch: process.env.TYPEDOC_WATCH,
+        //     }
+        // ],
         function fontainePlugin(_context, _options) {
             return {
                 name: "fontaine-plugin",
@@ -83,8 +75,29 @@ module.exports = {
             {
                 name: "twitter:card",
                 content: "summary"
-            }
+            },
+            {
+                name: "keywords",
+                content: "firebase, cms, react, react cms, firestore, firebase cms, headless cms, firebase admin, firebase admin sdk, strapi, contentful, rowy, forest admin, ghost cms, keystone, wordpress"
+            },
         ],
+        headTags: [
+            // Declare some json-ld structured data
+            {
+                tagName: 'script',
+                attributes: {
+                    type: 'application/ld+json',
+                },
+                innerHTML: JSON.stringify({
+                    '@context': 'https://schema.org/',
+                    '@type': 'Organization',
+                    name: 'Meta Open Source',
+                    url: 'https://opensource.fb.com/',
+                    logo: 'https://opensource.fb.com/img/logos/Meta-Open-Source.svg',
+                }),
+            },
+        ],
+
         colorMode: {
             defaultMode: "dark",
             disableSwitch: true,

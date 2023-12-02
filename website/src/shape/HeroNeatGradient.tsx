@@ -1,39 +1,13 @@
 import React, { useEffect, useRef } from "react";
 import { NeatGradient } from "@firecms/neat";
-import { easeInOut } from "../partials/styles";
-
-function getBrightnessFrom(scroll: number) {
-    const min = .5;
-    const max = .8;
-    return Math.min(max, Math.max(min, min + scroll / 1000));
-}
-
-function getAlphaFrom(scroll: number) {
-    const min = 0;
-    const max = 1;
-    return easeInOut(Math.min(max, Math.max(min, min + (scroll) / 1000)));
-}
-
-function getSaturateFrom(scroll: number) {
-    const min = -10;
-    const max = -4;
-    return Math.min(max, Math.max(min, min + scroll / 50));
-}
 
 function getAmplitude(scroll: number) {
-    const min = 2;
-    const max = 40;
+    const min = 10;
+    const max = 30;
     return Math.min(max, Math.max(min, min + scroll / 50));
 }
-function getResolution(scroll: number) {
-    console.log("scroll", scroll)
-    return 1 / 3.33335
-    // const min = 1 / 3.33335;
-    // const max = 1 / 6;
-    // return Math.min(max, Math.max(min, min + scroll / 1000));
-}
 
-export default function HomeHeroNeatGradient() {
+export default function HeroNeatGradient({ color }: { color: "primary" | "secondary" }) {
 
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
     const gradientRef = useRef<NeatGradient | null>(null);
@@ -42,11 +16,7 @@ export default function HomeHeroNeatGradient() {
     function onScrollUpdate(scroll: number) {
         scrollRef.current = scroll;
         if (gradientRef.current) {
-            gradientRef.current.colorBrightness = getBrightnessFrom(scroll);
-            gradientRef.current.colorSaturation = getSaturateFrom(scroll);
             gradientRef.current.waveAmplitude = getAmplitude(scroll);
-            gradientRef.current.backgroundAlpha = getAlphaFrom(scroll);
-            gradientRef.current.resolution = getResolution(scroll);
         }
     }
 
@@ -71,41 +41,44 @@ export default function HomeHeroNeatGradient() {
         if (!canvasRef.current)
             return;
 
-        const backgroundColor = "rgb(30, 64, 175)";
-
-        const alphaFrom = getAlphaFrom(scrollRef.current);
         gradientRef.current = new NeatGradient({
             ref: canvasRef.current,
             "colors": [
                 {
-                    "color": "#0070F4",
+                    "color": "#FF5373",
                     "enabled": true
                 },
                 {
-                    "color": "#fb5607",
+                    "color": "#FFC858",
                     "enabled": true
                 },
                 {
-                    "color": "#8338ec",
+                    "color": "#05d5ef",
                     "enabled": true
+                },
+                {
+                    "color": "#6D3BFF",
+                    "enabled": true
+                },
+                {
+                    "color": "#f5e1e5",
+                    "enabled": false
                 }
             ],
-            "speed": 2,
-            "horizontalPressure": 5,
-            "verticalPressure": 10,
+            "speed": 4,
+            "horizontalPressure": 4,
+            "verticalPressure": 5,
             "waveFrequencyX": 2,
             "waveFrequencyY": 3,
             "waveAmplitude": getAmplitude(scrollRef.current),
             "shadows": 0,
-            "highlights": 0,
-            "colorSaturation": getSaturateFrom(scrollRef.current),
-            "colorBrightness": getBrightnessFrom(scrollRef.current),
+            "highlights": 1,
+            "colorSaturation": 10,
             "wireframe": true,
             "colorBlending": 6,
-            "backgroundColor": backgroundColor,
-            // "backgroundColor": "#201f22",
-            "backgroundAlpha": alphaFrom,
-            resolution: getResolution(scrollRef.current)
+            // "backgroundColor": "#0070F4",
+            "backgroundAlpha": 0,
+            resolution: 1 / 3.33335
         });
 
         return gradientRef.current.destroy;
@@ -114,7 +87,7 @@ export default function HomeHeroNeatGradient() {
 
     return (
         <canvas
-            // className={"bg-gray-100"}
+            className={color === "primary" ? "bg-blue-800" : "bg-rose-500"}
             style={{
                 position: "absolute",
                 isolation: "isolate",

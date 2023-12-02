@@ -51,7 +51,7 @@ function RealTime() {
 
             </div>
 
-            <p>FireCMS uses Firestore as a backend, which is a <strong>real time
+            <p>FireCMS uses Firestore as a backend, which is a <strong>real-time
                 database</strong>. This means
                 that any change in the database is reflected in the CMS in real
                 time.

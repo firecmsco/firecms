@@ -2,13 +2,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 import React from "react";
 
 import { TypeAnimation } from "react-type-animation";
-import {
-    ContainerInnerPaddingMixin,
-    CTACaret,
-    CTAOutlinedButtonMixin,
-    CTAOutlinedButtonWhiteMixin, CTAOutlinedLightButtonMixin,
-    defaultBorderMixin
-} from "../styles";
+import { ContainerInnerPaddingMixin, CTACaret, CTAOutlinedButtonWhiteMixin, defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import clsx from "clsx";
 
@@ -68,7 +62,7 @@ export function ManageYour() {
                 </p>
             </div>
 
-            <div className={" mt-4 mx-auto"}>
+            <div className={"mt-4 mb-8"}>
                 <a
                     className={CTAOutlinedButtonWhiteMixin}
                     href={useBaseUrl("features/")}
@@ -78,6 +72,5 @@ export function ManageYour() {
                 </a>
             </div>
         </div>
-    </Panel>
-        ;
+    </Panel>;
 }

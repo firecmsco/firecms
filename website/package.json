@@ -22,7 +22,7 @@
     "@docusaurus/plugin-google-gtag": "^2.4.3",
     "@docusaurus/plugin-sitemap": "^2.4.3",
     "@docusaurus/preset-classic": "^2.4.3",
-    "@firecms/neat": "0.1.4",
+    "@firecms/neat": "0.1.5",
     "aos": "^2.3.4",
     "autoprefixer": "^10.4.14",
     "clsx": "^1.2.1",

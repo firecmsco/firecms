@@ -1,15 +1,18 @@
 import React from "react";
 
-
 import CloudIcon from "@site/static/img/icons/cloud.svg";
 import ServerIcon from "@site/static/img/icons/server.svg";
+import { Panel } from "../general/Panel";
 
-export function VersionsToggle({ value, onSelect }: {
+export function VersionsToggle({
+                                   value,
+                                   onSelect
+                               }: {
     value: "self-hosted" | "cloud",
     onSelect: (value: "self-hosted" | "cloud") => void
 }) {
 
-    return <div className={"flex flex-row gap-8 justify-center"}>
+    return <Panel color={"light_gray"} className={"flex flex-row gap-8 justify-center"}>
         <ToggleButton title={"Self-hosted"}
                       icon={<ServerIcon/>}
                       subtitle={<><b>FREE</b> and open source</>}
@@ -22,11 +25,16 @@ export function VersionsToggle({ value, onSelect }: {
                       selected={value === "cloud"}
                       onClick={() => onSelect("cloud")}
         />
-    </div>
+    </Panel>
 }
 
-
-export function ToggleButton({ title, subtitle, icon, selected, onClick }: {
+export function ToggleButton({
+                                 title,
+                                 subtitle,
+                                 icon,
+                                 selected,
+                                 onClick
+                             }: {
     title: string,
     icon: React.ReactNode,
     subtitle: React.ReactNode,
@@ -57,6 +65,5 @@ export function ToggleButton({ title, subtitle, icon, selected, onClick }: {
             </div>
         </div>
     );
-
 
 }

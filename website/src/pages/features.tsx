@@ -3,9 +3,9 @@ import Layout from "@theme/Layout";
 
 import Features from "../partials/features/Features";
 import { Hero } from "../partials/general/Hero";
-import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
 import HeroButtons from "../partials/home/HeroButtons";
 import { IntroText } from "../partials/home/IntroText";
+import { Panel } from "../partials/general/Panel";
 
 function FeaturesPage() {
 
@@ -18,6 +18,7 @@ function FeaturesPage() {
 
                 <main className="flex-grow">
                     <Hero
+                        color={"secondary"}
                         title={
                             <>
                                 <span
@@ -38,10 +39,11 @@ function FeaturesPage() {
 
                     <Features/>
 
-
                     <IntroText/>
 
-                    <HeroButtons/>
+                    <Panel color={"gray"} includePadding={true}>
+                        <HeroButtons/>
+                    </Panel>
 
                 </main>
             </div>

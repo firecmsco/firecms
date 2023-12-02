@@ -19,5 +19,5 @@ buildProperty({
 The data type is [`boolean`](../config/boolean).
 
 Internally the component used
-is [`SwitchFieldBinding`](../../../api/variables/SwitchFieldBinding).
+is [`SwitchFieldBinding`].
 

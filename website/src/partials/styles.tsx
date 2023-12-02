@@ -11,9 +11,8 @@ export const CTAOutlinedLightButtonMixin = "btn px-10 py-4 md:px-12 border-1 bor
 export const ContainerMixin = "relative max-w-full w-[84rem] mx-auto";
 export const ContainerSmallMixin = "relative max-w-5xl mx-auto p-4";
 export const ContainerPaddingMixin = "py-12 md:py-16 p-4 md:p-8";
-export const ContainerInnerPaddingMixin = "py-8 md:py-12 p-4 md:p-8";
+export const ContainerInnerPaddingMixin = "px-8 py-4 md:px-8 md:py-12";
 
-// export const defaultBorderMixin = "border-outline dark:border-outline";
 export const defaultBorderMixin = "border-solid border-gray-400 border-opacity-20 dark:border-gray-900 dark:border-opacity-90";
 
 
@@ -25,4 +24,8 @@ export const CTACaret = () => <svg aria-hidden="true"
           d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z"
           clip-rule="evenodd"></path>
 </svg>;
+
+export function easeInOut(t: number): number {
+    return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+}
 

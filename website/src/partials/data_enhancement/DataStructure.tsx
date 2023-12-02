@@ -43,17 +43,6 @@ export function DataStructure() {
                 Get started
                 <CTACaret/>
             </a>
-            <p
-                className={"mt-4"}>
-                <a
-                    className={" text-white"}
-                    rel="noopener noreferrer"
-                    target="_blank"
-                    href={"https://app.firecms.co/subscriptions"}
-                >
-                    Go to subscriptions management
-                </a>
-            </p>
         </Panel>
     );
 }

@@ -1,13 +1,17 @@
 import React from "react";
-import { ContainerMixin } from "../styles";
+import { ContainerMixin, defaultBorderMixin } from "../styles";
+import { LinedSpace } from "../layout/LinedSpace";
+import clsx from "clsx";
 
 export function TwoColumns({
                                left,
                                right,
                                distribution,
                                reverseSmall,
-                               animation = true
+                               animation = true,
+                               includeBorder
                            }: {
+    includeBorder?: boolean,
     left: React.ReactNode,
     right: React.ReactNode,
     distribution?: "bigLeft" | "bigRight",
@@ -21,7 +25,10 @@ export function TwoColumns({
 
     return (
         <div
-            className={ContainerMixin + " relative mx-auto my-8 md:my-12"}>
+            className={clsx(ContainerMixin,
+                "relative mx-auto",
+                includeBorder ? defaultBorderMixin : "",
+                includeBorder ? "border-x border-y-0 border-solid" : "")}>
             <div
                 className={"max-w-full flex flex-col lg:grid lg:grid-cols-12 lg:gap-10 " + flexDirection}>
                 <div

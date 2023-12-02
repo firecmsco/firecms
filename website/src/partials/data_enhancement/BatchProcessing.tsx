@@ -11,7 +11,7 @@ export function BatchProcessing() {
     const { colorMode } = useColorMode();
     const isDarkTheme = colorMode === "dark";
     return (
-        <Panel color={"gray"}>
+        <Panel color={"light"}>
             <p className="text-secondary uppercase font-mono font-bold ">
                 Work smarter, not harder
             </p>

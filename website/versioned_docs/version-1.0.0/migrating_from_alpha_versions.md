@@ -154,10 +154,10 @@ const myAuthenticator: Authenticator<FirebaseUser> = async ({
   refactored, and now you will need to implement a bunch of extra stuff if you
   want to go down the super custom road. Those components have now been turned
   into:
-    - [`FireCMS`](./api/functions/firecms)
-    - [`Scaffold`](./api/functions/scaffold)
-    - [`NavigationRoutes`](./api/functions/navigationroutes)
-    - [`SideEntityDialogs`](./api/functions/sideentitydialogs)
+    - [`FireCMS`]
+    - [`Scaffold`]
+    - [`NavigationRoutes`]
+    - [`SideEntityDialogs`]
 
   You will be responsible for initialising the material theme, Firebase (or your
   own backend) and providing the Router. On the plus side, this is going to give

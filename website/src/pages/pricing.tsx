@@ -17,6 +17,7 @@ function FeaturesPage() {
             description="Free self-hosted version and free Cloud tier, adaptive pricing for everyone">
 
             <Hero
+                color={"primary"}
                 title={
                     <>
                         <span className="block lg:inline">Pricing</span>
@@ -24,8 +25,8 @@ function FeaturesPage() {
                 subtitle={
                     <>
                         <p>Experience the power of our CMS platform with a
-                            free, <b>self-hosted</b> option or upgrade to <b>FireCMS
-                                Cloud</b> for a premium, full-service solution.
+                            free, <b>self-hosted</b> option or try <b>FireCMS
+                                Cloud</b> for a fully-managed, full-service solution.
                         </p>
                     </>}
                 // cta={<a
@@ -41,6 +42,7 @@ function FeaturesPage() {
 
             {version === "cloud" && <FireCMSCloudVersions/>}
             {version === "self-hosted" && <SelfHosted/>}
+
             <VersionsComparison/>
 
 

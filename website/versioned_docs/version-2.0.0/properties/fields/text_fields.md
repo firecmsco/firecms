@@ -29,7 +29,7 @@ buildProperty({
 The data type is [`string`](../config/string) or [`number`](../config/number).
 
 Internally the component used
-is [`TextFieldBinding`](../../../api/functions/TextFieldBinding).
+is [`TextFieldBinding`].
 
 ### Multi line text field
 
@@ -56,7 +56,7 @@ buildProperty({
 The data type is [`string`](../config/string).
 
 Internally the component used
-is [`TextFieldBinding`](../../../api/functions/TextFieldBinding).
+is [`TextFieldBinding`].
 
 
 ### Markdown text field
@@ -84,7 +84,7 @@ buildProperty({
 The data type is [`string`](../config/string).
 
 Internally the component used
-is [`MarkdownFieldBinding`](../../../api/functions/MarkdownFieldBinding).
+is [`MarkdownFieldBinding`].
 
 
 ### Url text field
@@ -112,7 +112,7 @@ buildProperty({
 The data type is [`string`](../config/string).
 
 Internally the component used
-is [`TextFieldBinding`](../../../api/functions/TextFieldBinding).
+is [`TextFieldBinding`].
 
 
 ### Email field
@@ -140,4 +140,4 @@ buildProperty({
 The data type is [`string`](../config/string).
 
 Internally the component used
-is [`TextFieldBinding`](../../../api/functions/TextFieldBinding).
+is [`TextFieldBinding`].

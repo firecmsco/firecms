@@ -28,7 +28,7 @@ buildProperty({
 The data type is [`reference`](../config/reference)
 
 Internally the component used
-is [`ReferenceFieldBinding`](../../../api/functions/ReferenceFieldBinding).
+is [`ReferenceFieldBinding`].
 
 
 ### Multiple reference field
@@ -52,5 +52,5 @@ The data type is [`array`](../config/array) with a reference
 property as the `of` prop. 
 
 Internally the component used
-is [`ArrayOfReferencesFieldBinding`](../../../api/functions/ArrayOfReferencesFieldBinding).
+is [`ArrayOfReferencesFieldBinding`].
 

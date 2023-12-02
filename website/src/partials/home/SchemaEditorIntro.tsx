@@ -16,7 +16,7 @@ export const SchemaEditorIntro = () => {
 
     return (
         <section
-            className="relative">
+            className="relative bg-lighter">
             <div
                 className={clsx("px-4 sm:px-6 mb-16 bg-light text-gray-900",
                     "border-0 border-y",

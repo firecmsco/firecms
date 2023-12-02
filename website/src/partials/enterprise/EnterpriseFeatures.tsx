@@ -1,5 +1,5 @@
 import React from "react";
-import { ContainerMixin, ContainerSmallMixin } from "../styles";
+import { ContainerMixin } from "../styles";
 import { TwoColumns } from "../general/TwoColumns";
 import { Panel } from "../general/Panel";
 import AutoModeIcon from "@site/static/img/icons/auto_mode.svg";
@@ -11,58 +11,61 @@ import { BrowserFrame } from "../BrowserFrame";
 export function EnterpriseFeatures() {
     return (
         <>
+            <Panel color={"white"}>
 
-            <TwoColumns
-                left={<>
+                <TwoColumns
+                    left={<>
 
-                    <div className={"flex items-center my-4 "}>
+                        <div className={"flex items-center my-4 "}>
 
-                        <div
-                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
-                            <AutoModeIcon width={"20px"} height={"20px"}/>
-                        </div>
-                        <h2 className={"h2 m-0"}>Why Choose FireCMS?</h2>
+                            <div
+                                className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                                <AutoModeIcon width={"20px"} height={"20px"}/>
+                            </div>
+                            <h2 className={"h2 m-0"}>Why Choose FireCMS?</h2>
 
-                    </div>
-
-
-                    <p className={"text-2xl "}>
-                        Every organization has unique content management
-                        requirements. We've designed FireCMS with flexibility
-                        and customization in mind to cater to these diverse
-                        needs.
-                    </p>
-
-                    <p className={"text-2xl "}>
-                        Firebase offers exceptional scalability, making it an
-                        ideal choice for companies aiming to build products that
-                        can accommodate millions of users. With Firebase/Firestore, you
-                        can focus on your product without concerns about
-                        infrastructure limitations.
-                    </p>
-                </>}
-                right={<>
-                    <div className={"m-4 text-3xl"}>
-                        <div className={"flex items-center gap-4"}>
-                            <CheckCircleIcon/>SSO integration
-                        </div>
-                        <div className={"flex items-center gap-4"}>
-                            <CheckCircleIcon/>Advanced data filtering
-                        </div>
-                        <div className={"flex items-center gap-4"}>
-                            <CheckCircleIcon/>Text search
-                        </div>
-                        <div className={"flex items-center gap-4"}>
-                            <CheckCircleIcon/>Support SLA
-                        </div>
-                        <div className={"flex items-center gap-4"}>
-                            <CheckCircleIcon/>Custom integrations
                         </div>
 
-                    </div>
-                </>}/>
 
-            <Panel color={"gray"} includeMargin={true}>
+                        <p className={"text-2xl "}>
+                            Every organization has unique content management
+                            requirements. We've designed FireCMS with flexibility
+                            and customization in mind to cater to these diverse
+                            needs.
+                        </p>
+
+                        <p className={"text-2xl "}>
+                            Firebase offers exceptional scalability, making it an
+                            ideal choice for companies aiming to build products that
+                            can accommodate millions of users. With Firebase/Firestore, you
+                            can focus on your product without concerns about
+                            infrastructure limitations.
+                        </p>
+                    </>}
+                    right={<>
+                        <div className={"m-4 text-3xl"}>
+                            <div className={"flex items-center gap-4"}>
+                                <CheckCircleIcon/>SSO integration
+                            </div>
+                            <div className={"flex items-center gap-4"}>
+                                <CheckCircleIcon/>Advanced data filtering
+                            </div>
+                            <div className={"flex items-center gap-4"}>
+                                <CheckCircleIcon/>Text search
+                            </div>
+                            <div className={"flex items-center gap-4"}>
+                                <CheckCircleIcon/>Support SLA
+                            </div>
+                            <div className={"flex items-center gap-4"}>
+                                <CheckCircleIcon/>Custom integrations
+                            </div>
+
+                        </div>
+                    </>}/>
+
+            </Panel>
+
+            <Panel color={"light_gray"} includeMargin={false}>
                 <div
                     className={"max-w-7xl text-2xl md:text-5xl font-bold tracking-tight"}>
                     <p>
@@ -76,7 +79,7 @@ export function EnterpriseFeatures() {
                 </div>
             </Panel>
 
-            <section className={ContainerMixin + " my-16"}>
+            <Panel color={"light"}>
                 <div className={"flex items-center my-4 "}>
 
                     <div
@@ -148,7 +151,7 @@ export function EnterpriseFeatures() {
 
                 {/*</div>*/}
 
-            </section>
+            </Panel>
 
             {/*<section className={ContainerMixin + " my-8"}>*/}
 

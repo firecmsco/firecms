@@ -24,7 +24,7 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 function EnterpriseTeaser() {
 
     return (
-        <Panel includeMargin={false} color={"gray"}>
+        <Panel includeMargin={false} color={"light_gray"}>
             <p className={"h2"}>
                 FireCMS is used by companies of all sizes
             </p>

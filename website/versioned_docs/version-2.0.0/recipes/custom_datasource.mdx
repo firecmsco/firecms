@@ -16,15 +16,15 @@ use FireCMS with a different database, or if you want to use a different
 Firestore instance.
 
 Data sources are implemented as objects that implement the
-[`DataSource`](./api/interfaces/DataSource) interface.
+[`DataSource`] interface.
 
 Since FireCMS is a CMS based on React, you can use the hooks provided by FireCMS to
 develop your own data sources.
 
-The default datasource is implemented in the [`useFirestoreDataSource`](./api/functions/useFirestoreDataSource)
+The default datasource is implemented in the [`useFirestoreDataSource`]
 hook. You can call this hook from your own data source to get the default
 implementation and extend it. When defining your own data source, you need
-to implement all the methods defined in the [`DataSource`](./api/interfaces/DataSource)
+to implement all the methods defined in the [`DataSource`]
 interface.
 
 ## Example custom datasource
@@ -41,7 +41,7 @@ import CustomDataSource
 ## Using a custom data source
 
 Once you have defined your custom data source, you can use it in your
-custom [`FireCMS`](./api/interfaces/FireCMS) instance (keep in mind that you can't use a
+custom [`FireCMS`] instance (keep in mind that you can't use a
 custom data source with `FirebaseCMSApp`).
 
 You will need to create a custom app, and use your custom data source when

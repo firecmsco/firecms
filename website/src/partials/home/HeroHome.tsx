@@ -83,7 +83,6 @@ function HeroHome({}) {
                     </div>
                 </div>
                 <LinedSpace position={"top"}/>
-                <LinedSpace position={"top"} size={"xlarge"}/>
             </Panel>
         </div>
     );

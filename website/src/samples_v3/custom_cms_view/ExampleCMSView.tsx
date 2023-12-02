@@ -14,7 +14,7 @@ import {
     useSelectionController,
     useSideEntityController,
     useSnackbarController
-} from "@firecms/firecms";
+} from "@firecms/firebase";
 
 const usersCollection = buildCollection({
     path: "users",
@@ -71,7 +71,7 @@ const usersCollection = buildCollection({
     },
     additionalFields: [
         {
-            id: "sample_additional",
+            key: "sample_additional",
             name: "Sample additional",
             Builder: ({ entity }) => <>{`Generated column: ${entity.values.first_name}`}</>,
             dependencies: ["first_name"]

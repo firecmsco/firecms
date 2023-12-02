@@ -2,9 +2,9 @@ import React from "react";
 import Layout from "@theme/Layout";
 
 import Head from "@docusaurus/Head";
+import HeroHome from "../partials/home/HeroHome";
 import { TechSplash } from "../partials/home/TechSplash";
 import { ManageYour } from "../partials/home/ManageYour";
-import HeroHome from "../partials/home/HeroHome";
 import FeaturesPanels from "../partials/home/FeaturesPanels";
 import FirebaseTeaser from "../partials/home/OpenSourceDetails";
 import FirebaseIntro from "../partials/home/FirebaseIntro";
@@ -33,7 +33,6 @@ function Home() {
 
                     <UsageExamples/>
                     <FirebaseIntro/>
-
 
 
                     <ManageYour/>

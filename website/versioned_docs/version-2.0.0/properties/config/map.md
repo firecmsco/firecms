@@ -58,8 +58,8 @@ arbitrary keys. You don't need to define the properties in this case.
 ---
 
 The widget that gets created is
-- [`MapFieldBinding`](../../../api/functions/MapFieldBinding) Field that renders the children
+- [`MapFieldBinding`] Field that renders the children
   property fields
 
 Links:
-- [API](../../../api/interfaces/mapproperty)
+- [API]

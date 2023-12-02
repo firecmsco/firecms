@@ -23,12 +23,7 @@ import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 import { useColorMode } from "@docusaurus/theme-common";
 import { lightningIcon } from "../icons";
 import { TwoColumns } from "../general/TwoColumns";
-import {
-    ContainerPaddingMixin,
-    CTACaret,
-    CTAOutlinedButtonMixin,
-    CTAOutlinedButtonWhiteMixin, defaultBorderMixin
-} from "../styles";
+import { ContainerPaddingMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
 import clsx from "clsx";
 
 function FeaturesTeaser() {
@@ -37,9 +32,10 @@ function FeaturesTeaser() {
     const isDarkTheme = colorMode === "dark";
 
     return (
-        <section className="relative">
+        <section className={clsx("relative bg-lighter")}>
 
             <TwoColumns
+                includeBorder={true}
                 left={
                     <div className={ContainerPaddingMixin}>
                         <div className={clsx("text-xl")}>
@@ -88,7 +84,7 @@ function FeaturesTeaser() {
                     </div>
                 }
                 right={<>
-                    <div className="relative flex flex-col p-4">
+                    <div className={ContainerPaddingMixin}>
                         <video
                             key={`demo_video_${isDarkTheme}`}
                             style={{
@@ -108,13 +104,14 @@ function FeaturesTeaser() {
 
             <TwoColumns
                 reverseSmall={true}
+                includeBorder={true}
                 left={<>
-                    <div className="relative flex flex-col p-4">
+                    <div className={ContainerPaddingMixin}>
                         <video
                             className={clsx("rounded-xl border", defaultBorderMixin)}
                             style={{
                                 maxWidth: 540,
-                                aspectRatio: 538 / 592
+                                aspectRatio: 538 / 513
                             }}
                             width="100%" loop autoPlay muted>
                             <source

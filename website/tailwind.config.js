@@ -11,11 +11,10 @@ const fireCMSTailwindConfig = {
         extend: {
             colors: {
                 primary: "#0070F4",
-                secondary: "#ff5064",
+                secondary: "#FF5B79",
                 error: "#F44336",
-                light: "#e5e3e2",
-                lighter: "#f8f8fc",
-                outline: "#828c97",
+                light: "#e6e6e9",
+                lighter: "#f8f8fa",
                 field: {
                     disabled: "rgb(224 224 226)",
                     "disabled-dark": "rgb(35 35 37)"
@@ -30,9 +29,9 @@ const fireCMSTailwindConfig = {
                     label: "rgb(131, 131, 131)"
                 },
                 gray: {
-                    50: "#f8f8fc",
-                    100: "#E7E7EB",
-                    200: "#CFCFD6",
+                    50: "#f8f8fa",
+                    100: "#e7e7ea",
+                    200: "#d3d3d7",
                     300: "#B7B7BF",
                     400: "#A0A0A9",
                     500: "#87878F",
@@ -41,17 +40,6 @@ const fireCMSTailwindConfig = {
                     800: "#35353A",
                     900: "#18181C",
                     950: "#101013"
-                },
-                blue: {
-                    100: "#E6F0FD",
-                    200: "#CCE2FC",
-                    300: "#99C5FA",
-                    400: "#66A9F7",
-                    500: "#338CF5",
-                    600: "#0070F4",
-                    700: "#0064DA",
-                    800: "#0059C2",
-                    900: "#004391"
                 },
                 pink: {
                     DEFAULT: "#FF5B79",
