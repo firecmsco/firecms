@@ -63,7 +63,6 @@ export function FireCMSHomePage({ additionalChildrenStart, additionalChildrenEnd
                 setFilteredUrls(null);
             } else {
                 const searchResult = search.search(value);
-                console.log("Search result", searchResult)
                 setFilteredUrls(searchResult.map((e: any) => e.url));
             }
         }, []);
