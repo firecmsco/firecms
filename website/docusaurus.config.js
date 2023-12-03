@@ -25,7 +25,7 @@ module.exports = {
         [
             "docusaurus-plugin-typedoc",
             {
-                watch: process.env.TYPEDOC_WATCH,
+                watch: false,
             }
         ],
         function fontainePlugin(_context, _options) {

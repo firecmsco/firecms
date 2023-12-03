@@ -2,7 +2,7 @@ import React from "react";
 import HeroButtons from "./HeroButtons";
 
 // @ts-ignore
-import editingDemoDarkVideo from "@site/static/img/editing_demo_dark.mp4";
+import editingDemoDarkVideo from "@site/static/img/demo_square.mp4";
 
 import { useColorMode } from "@docusaurus/theme-common";
 import { defaultBorderMixin } from "../styles";
@@ -33,11 +33,11 @@ function HeroHome({}) {
 
     const titleDiv = <>
 
-        <h1 className={clsx("m-0 text-center block text-5xl md:text-6xl font-extrabold tracking-tight leading-none uppercase text-white",
-            "px-16 md:px-24 py-6 md:py-12",
+        <h1 className={clsx("m-0  text-center block text-5xl md:text-6xl font-extrabold tracking-tight leading-none uppercase text-white",
+            "px-16 md:px-24 py-8 md:py-16",
             "border-0 border-b",
             defaultBorderMixin)}
-            data-aos="zoom-y-out">
+            data-aos="fade-up">
             <div className={"block"}>
                 <span>Your </span>
                 <span
@@ -77,7 +77,6 @@ function HeroHome({}) {
                             {titleDiv}
                         </div>
                         <div className="w-full lg:w-1/2">
-                            <LinedSpace/>
                             {video}
                         </div>
                     </div>

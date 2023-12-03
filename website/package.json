@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "docusaurus": "docusaurus",
-    "dev": "yarn copyChangelog && TYPEDOC_WATCH=true docusaurus start",
-    "build": "NODE_OPTIONS=--max-old-space-size=24048 && yarn copyChangelog && TYPEDOC_WATCH=false docusaurus build",
+    "dev": "yarn copyChangelog && docusaurus start",
+    "build": "NODE_OPTIONS=--max-old-space-size=24048 && yarn copyChangelog && docusaurus build",
     "preview": "yarn build && docusaurus serve",
     "genAPI": "typedoc --plugin typedoc-plugin-markdown --hideGenerator --hidePageHeader --hideInPageTOC --out docs/api",
     "copyChangelog": "echo '---' > ./docs/CHANGELOG.md && echo 'id: changelog' >> ./docs/CHANGELOG.md && echo 'title: Changelog' >> ./docs/CHANGELOG.md && echo '---' >> ./docs/CHANGELOG.md && cat ../CHANGELOG.md >> ./docs/CHANGELOG.md ",

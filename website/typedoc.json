@@ -1,4 +1,5 @@
 {
+    "allReflectionsHaveOwnDocument": true,
     "cleanOutputDir": true,
     "entryPointStrategy": "expand",
     "readme": "docs/api_index.md",

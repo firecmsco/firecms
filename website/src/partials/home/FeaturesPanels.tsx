@@ -20,15 +20,14 @@ function FeaturesPanels() {
 
     return (
         <Panel
-            data-aos="fade-up"
             color={"lighter"}
             includePadding={false}
-            // className={ContainerMixin + " px-4 relative sm:px-6 py-16 md:py-28 text-text-primary"}
         >
 
             <LinedSpace size={"medium"}/>
 
             <div
+                data-aos="fade-up"
                 className={"flex items-center mb-4"}
             >
                 <div>

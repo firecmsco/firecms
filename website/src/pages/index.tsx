@@ -52,7 +52,6 @@ function Home() {
 
                     <OpenAITeaser/>
                     <FirebaseTeaser/>
-                    <EnterpriseTeaser/>
 
                 </main>
 
