@@ -1,5 +1,5 @@
 import { ResolvedProperty } from "../../types";
-import { IconButton, Tooltip, Typography } from "../../components";
+import { IconButton, Tooltip, Typography } from "../../ui";
 
 import { InfoIcon } from "../../icons";
 

@@ -3,7 +3,7 @@ import { FireCMSAppConfig } from "./types";
 
 /**
  * Main entry point that defines the CMS configuration
- * @category Firebase
+ * @group Firebase
  */
 export type FireCMS3AppProps = {
 

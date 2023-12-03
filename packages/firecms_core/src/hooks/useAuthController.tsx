@@ -1,6 +1,6 @@
 import { AuthController, User } from "../types";
 import { useContext } from "react";
-import { AuthControllerContext } from "../core/contexts/AuthControllerContext";
+import { AuthControllerContext } from "../contexts/AuthControllerContext";
 
 /**
  * Hook to retrieve the AuthContext.
@@ -9,6 +9,6 @@ import { AuthControllerContext } from "../core/contexts/AuthControllerContext";
  * `FireCMS`
  *
  * @see AuthController
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export const useAuthController = <UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>>(): AuthControllerType => useContext(AuthControllerContext) as AuthControllerType;

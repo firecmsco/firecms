@@ -19,7 +19,7 @@ import { DialogsController } from "./dialogs_controller";
  * Context that includes the internal controllers and contexts used by the app.
  * Some controllers and context included in this context can be accessed
  * directly from their respective hooks.
- * @category Hooks and utilities
+ * @group Hooks and utilities
  * @see useFireCMSContext
  */
 export type FireCMSContext<UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>> = {

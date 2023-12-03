@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { PartialEntityCollection, UserConfigurationPersistence } from "../types";
-import { mergeDeep, stripCollectionPath } from "./util";
+import { mergeDeep, stripCollectionPath } from "../util";
 
 export function useBuildLocalConfigurationPersistence(): UserConfigurationPersistence {
 

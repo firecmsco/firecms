@@ -22,7 +22,7 @@ import { ADMIN_VIEWS, RESERVED_GROUPS } from "../utils";
 
 /**
  * Default drawer used in the CMS
- * @category Core
+ * @group Core
  */
 export function FireCMSDrawer({
                                hovered,

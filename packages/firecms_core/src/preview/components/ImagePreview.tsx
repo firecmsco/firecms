@@ -2,8 +2,7 @@ import React, { CSSProperties, useMemo, useState } from "react";
 
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
-import { IconButton } from "../../components";
-import { Tooltip } from "../../components/Tooltip";
+import { IconButton, Tooltip } from "../../ui";
 import { ContentCopyIcon, OpenInNewIcon } from "../../icons";
 
 /**

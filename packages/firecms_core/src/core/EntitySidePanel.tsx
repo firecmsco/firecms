@@ -3,8 +3,8 @@ import React, { useCallback, useEffect, useMemo } from "react";
 import { EntitySidePanelProps } from "../types";
 import { useNavigationContext } from "../hooks";
 
-import { ErrorBoundary } from "./components";
-import { EntityView } from "./internal/EntityView";
+import { ErrorBoundary } from "../components";
+import { EntityView } from "../internal/EntityView";
 import { useSideDialogContext } from "./SideDialogs";
 
 /**
@@ -13,7 +13,7 @@ import { useSideDialogContext } from "./SideDialogs";
  * and control the dialogs.
  * This component needs a parent {@link FireCMS}
  * {@link useSideEntityController}
- * @category Components
+ * @group Components
  */
 export function EntitySidePanel(props: EntitySidePanelProps) {
 

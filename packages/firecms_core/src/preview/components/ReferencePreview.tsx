@@ -3,15 +3,15 @@ import { useMemo } from "react";
 
 import { Entity, EntityCollection, EntityReference, ResolvedProperty } from "../../types";
 
-import { ErrorView, getReferencePreviewKeys, getValueInPath, resolveCollection } from "../../core";
+import { getReferencePreviewKeys, getValueInPath, resolveCollection } from "../../util";
 import { useEntityFetch, useFireCMSContext, useNavigationContext, useSideEntityController } from "../../hooks";
 import { PropertyPreview } from "../PropertyPreview";
 import { PreviewSize } from "../PropertyPreviewProps";
 import { SkeletonPropertyComponent } from "../property_previews/SkeletonPropertyComponent";
-import { IconButton, Tooltip, Typography } from "../../components";
+import { IconButton, Skeleton, Tooltip, Typography } from "../../ui";
 import { KeyboardTabIcon } from "../../icons";
-import { Skeleton } from "../../components/Skeleton";
-import { cn } from "../../components/util/cn";
+import { cn } from "../../ui/util/cn";
+import { ErrorView } from "../../components";
 
 export type ReferencePreviewProps = {
     disabled?: boolean;

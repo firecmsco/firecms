@@ -8,7 +8,7 @@ import { User } from "./user";
  * This interface defines all the callbacks that can be used when an entity
  * is being created, updated or deleted.
  * Useful for adding your own logic or blocking the execution of the operation.
- * @category Models
+ * @group Models
  */
 export interface EntityCallbacks<M extends Record<string, any> = any, UserType extends User = User> {
 
@@ -70,7 +70,7 @@ export interface EntityCallbacks<M extends Record<string, any> = any, UserType e
 
 /**
  * Parameters passed to hooks when an entity is fetched
- * @category Models
+ * @group Models
  */
 export interface EntityOnFetchProps<M extends Record<string, any> = any, UserType extends User = User> {
 
@@ -98,7 +98,7 @@ export interface EntityOnFetchProps<M extends Record<string, any> = any, UserTyp
 
 /**
  * Parameters passed to hooks when an entity is saved
- * @category Models
+ * @group Models
  */
 export interface EntityOnSaveProps<M extends Record<string, any> = any, UserType extends User = User> {
 
@@ -146,7 +146,7 @@ export interface EntityOnSaveProps<M extends Record<string, any> = any, UserType
 
 /**
  * Parameters passed to hooks when an entity is deleted
- * @category Models
+ * @group Models
  */
 export interface EntityOnDeleteProps<M extends Record<string, any> = any, UserType extends User = User> {
 
@@ -178,7 +178,7 @@ export interface EntityOnDeleteProps<M extends Record<string, any> = any, UserTy
 
 /**
  * Parameters passed to hooks when an entity is deleted
- * @category Models
+ * @group Models
  */
 export interface EntityIdUpdateProps<M extends Record<string, any> = any> {
 

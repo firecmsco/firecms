@@ -13,7 +13,7 @@ import { EntityAction } from "./entity_actions";
  * It can be in the root level of the configuration, defining the main
  * menu navigation. You can also find it as a subcollection of a different one.
  *
- * @category Models
+ * @group Models
  */
 export interface EntityCollection<M extends Record<string, any> = any, UserType extends User = User> {
 
@@ -271,7 +271,7 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
  * The component will receive this prop when it is rendered in the collection
  * toolbar.
  *
- * @category Models
+ * @group Models
  */
 export interface CollectionActionsProps<M extends Record<string, any> = any, UserType extends User = User, EC extends EntityCollection<M> = EntityCollection<M>> {
     /**
@@ -323,7 +323,7 @@ export interface CollectionActionsProps<M extends Record<string, any> = any, Use
  * Use this controller to retrieve the selected entities or modify them in
  * an {@link EntityCollection}
  * If you want to pass a `SelectionController` to
- * @category Models
+ * @group Models
  */
 export type SelectionController<M extends Record<string, any> = any> = {
     selectedEntities: Entity<M>[];
@@ -335,7 +335,7 @@ export type SelectionController<M extends Record<string, any> = any> = {
 /**
  * Filter conditions in a `Query.where()` clause are specified using the
  * strings '<', '<=', '==', '>=', '>', 'array-contains', 'in', and 'array-contains-any'.
- * @category Models
+ * @group Models
  */
 export type WhereFilterOp =
     | "<"
@@ -351,7 +351,7 @@ export type WhereFilterOp =
 
 /**
  * Used to define filters applied in collections
- * @category Models
+ * @group Models
  */
 export type FilterValues<Key extends string> =
     Partial<Record<Key, [WhereFilterOp, any]>>;
@@ -360,13 +360,13 @@ export type FilterValues<Key extends string> =
  * Used to indicate valid filter combinations (e.g. created in Firestore)
  * If the user selects a specific filter/sort combination, the CMS checks if it's
  * valid, otherwise it reverts to the simpler valid case
- * @category Models
+ * @group Models
  */
 export type FilterCombination<Key extends string> = Partial<Record<Key, "asc" | "desc">>;
 
 /**
  * Sizes in which a collection can be rendered
- * @category Models
+ * @group Models
  */
 export type CollectionSize = "xs" | "s" | "m" | "l" | "xl";
 
@@ -378,7 +378,7 @@ export type AdditionalFieldDelegateProps<M extends Record<string, any> = any, Us
 /**
  * Use this interface for adding additional fields to entity collection views.
  * If you need to do some async loading you can use {@link AsyncPreviewComponent}
- * @category Models
+ * @group Models
  */
 export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
     UserType extends User = User> {
@@ -427,7 +427,7 @@ export interface AdditionalFieldDelegate<M extends Record<string, any> = any,
 /**
  * You can use this builder to render a custom panel in the entity detail view.
  * It gets rendered as a tab.
- * @category Models
+ * @group Models
  */
 export type EntityCustomView<M extends Record<string, any> = any> =
     {
@@ -439,7 +439,7 @@ export type EntityCustomView<M extends Record<string, any> = any> =
 /**
  * Parameters passed to the builder in charge of rendering a custom panel for
  * an entity view.
- * @category Models
+ * @group Models
  */
 export interface EntityCustomViewParams<M extends Record<string, any> = any> {
 
@@ -470,13 +470,13 @@ export type InferCollectionType<S extends EntityCollection> = S extends EntityCo
 
 /**
  * Used in the {@link EntityCollection#defaultSelectedView} to define the default
- * @category Models
+ * @group Models
  */
 export type DefaultSelectedViewBuilder = (params: DefaultSelectedViewParams) => string | undefined;
 
 /**
  * Used in the {@link EntityCollection#defaultSelectedView} to define the default
- * @category Models
+ * @group Models
  */
 export type DefaultSelectedViewParams = {
     status?: EntityStatus;

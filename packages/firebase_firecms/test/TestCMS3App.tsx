@@ -87,7 +87,7 @@ import { useBuildMockStorageSource } from "./mocks/useBuildMockStorageSource";
  *
  * @param props
  * @constructor
- * @category Firebase
+ * @group Firebase
  */
 export function FireCMS3App({
                                 projectId,

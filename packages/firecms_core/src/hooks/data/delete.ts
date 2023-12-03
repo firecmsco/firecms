@@ -10,7 +10,7 @@ import {
 } from "../../types";
 
 /**
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export type DeleteEntityWithCallbacksProps<M extends Record<string, any>> =
     DeleteEntityProps<M>
@@ -41,7 +41,7 @@ export type DeleteEntityWithCallbacksProps<M extends Record<string, any>> =
  * @param onPreDeleteHookError
  * @param onDeleteSuccessHookError
  * @param context
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export async function deleteEntityWithCallbacks<M extends Record<string, any>, UserType extends User>({
                                                                                                           dataSource,

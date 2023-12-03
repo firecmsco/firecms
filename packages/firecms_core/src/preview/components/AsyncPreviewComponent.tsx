@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useEffect, useState } from "react";
-import { Skeleton } from "../../components/Skeleton";
+import { Skeleton } from "../../ui/Skeleton";
 
 export interface AsyncPreviewComponentProps {
     builder: Promise<React.ReactNode>;

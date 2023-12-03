@@ -19,26 +19,26 @@ import equal from "react-fast-compare"
 import {
     canCreateEntity,
     canDeleteEntity,
-    ErrorBoundary,
     fullPathToCollectionSegments,
     getDefaultValuesFor,
     isHidden,
     isReadOnly,
     resolveCollection
-} from "../core";
+} from "../util";
 import { useAuthController, useDataSource, useFireCMSContext, useSideEntityController } from "../hooks";
 import { ErrorFocus } from "./components/ErrorFocus";
 import { CustomIdField } from "./components/CustomIdField";
-import { DialogActions, IconButton, Typography } from "../components";
-import { Button } from "../components/Button";
-import { cn } from "../components/util/cn";
+import { DialogActions, IconButton, Typography } from "../ui";
+import { Button } from "../ui/Button";
+import { cn } from "../ui/util/cn";
+import { ErrorBoundary } from "../components";
 import {
     copyEntityAction,
     deleteEntityAction
-} from "../core/components/EntityCollectionTable/internal/default_entity_actions";
+} from "../components/EntityCollectionTable/internal/default_entity_actions";
 
 /**
- * @category Components
+ * @group Components
  */
 export interface EntityFormProps<M extends Record<string, any>> {
 
@@ -125,7 +125,7 @@ export type EntityFormSaveParams<M extends Record<string, any>> = {
  * @param onModified
  * @param onValuesChanged
  * @constructor
- * @category Components
+ * @group Components
  */
 export const EntityForm = React.memo<EntityFormProps<any>>(EntityFormInternal,
     (a: EntityFormProps<any>, b: EntityFormProps<any>) => {

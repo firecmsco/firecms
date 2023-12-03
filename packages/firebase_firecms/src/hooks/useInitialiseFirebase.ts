@@ -3,7 +3,7 @@ import React, { useCallback, useEffect } from "react";
 import { FirebaseApp, initializeApp } from "firebase/app";
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export interface InitialiseFirebaseResult {
     firebaseConfigLoading: boolean,
@@ -32,7 +32,7 @@ const hostingError = "It seems like the provided Firebase config is not correct.
  * @param fromUrl
  * @param name
  * @param authDomain
- * @category Firebase
+ * @group Firebase
  */
 export function useInitialiseFirebase({
                                           firebaseConfig,

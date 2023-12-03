@@ -1,5 +1,5 @@
 import { useSideDialogsController } from "./useSideDialogsController";
-import { ReferenceSelectionInner, ReferenceSelectionInnerProps } from "../core";
+import { ReferenceSelectionInner, ReferenceSelectionInnerProps } from "../components";
 import { useCallback } from "react";
 import { useNavigationContext } from "./useNavigationContext";
 
@@ -11,7 +11,7 @@ import { useNavigationContext } from "./useNavigationContext";
  * If your collection is not defined in your  top collection configuration
  * (in your `FireCMS` component), you need to specify explicitly.
  * This is the same hook used internally when a reference property is defined.
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export function useReferenceDialog<M extends Record<string, any>>(referenceDialogProps: Omit<ReferenceSelectionInnerProps<M>, "path"> & {
     path?: string | false;

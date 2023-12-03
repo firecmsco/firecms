@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { EntityCollection, FireCMSPlugin, makePropertiesEditable, User } from "@firecms/core";
+import { EntityCollection, FireCMSPlugin, joinCollectionLists, makePropertiesEditable, User } from "@firecms/core";
 import { ConfigControllerProvider } from "./ConfigControllerProvider";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { EditorCollectionAction } from "./ui/EditorCollectionAction";
@@ -9,7 +9,6 @@ import { PersistedCollection } from "./types/persisted_collection";
 import { CollectionInference } from "./types/collection_inference";
 import { CollectionsConfigController } from "./types/config_controller";
 import { RootCollectionSuggestions } from "./ui/RootCollectionSuggestions";
-import { joinCollectionLists } from "./utils/join_collections";
 import { CollectionViewHeaderAction } from "./ui/CollectionViewHeaderAction";
 import { PropertyAddColumnComponent } from "./ui/PropertyAddColumnComponent";
 

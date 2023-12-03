@@ -2,10 +2,11 @@ import React, { useCallback, useMemo } from "react";
 import { Entity, EntityCollection, EntityReference, FieldProps, ResolvedProperty } from "../../types";
 import { ReferencePreview } from "../../preview";
 import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
-import { ErrorView, getIconForProperty, getReferenceFrom } from "../../core";
+import { getIconForProperty, getReferenceFrom } from "../../util";
 
-import { useClearRestoreValue, useFireCMSContext, useNavigationContext, useReferenceDialog } from "../../hooks";
-import { Button, ExpandablePanel } from "../../components";
+import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "../../hooks";
+import { Button, ExpandablePanel } from "../../ui";
+import { ErrorView } from "../../components";
 
 type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
 
@@ -14,7 +15,7 @@ type ArrayOfReferencesFieldProps = FieldProps<EntityReference[]>;
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function ArrayOfReferencesFieldBinding({
                                                   propertyKey,

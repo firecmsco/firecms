@@ -4,7 +4,7 @@ import { EntityReference } from "./entities";
 /**
  * Context that includes the resolved navigation and utility methods and
  * attributes.
- * @category Models
+ * @group Models
  */
 export type NavigationContext = {
 
@@ -133,7 +133,7 @@ export type NavigationContext = {
 /**
  * Custom additional views created by the developer, added to the main
  * navigation.
- * @category Models
+ * @group Models
  */
 export interface CMSView {
 

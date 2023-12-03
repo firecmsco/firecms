@@ -1,14 +1,15 @@
 import React from "react";
 
-import { ErrorBoundary, resolveArrayProperty } from "../../core";
+import { resolveArrayProperty } from "../../util";
 import { ResolvedProperty } from "../../types";
 
 import { useFireCMSContext } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
+import { ErrorBoundary } from "../../components";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function ArrayOfStorageComponentsPreview({
                                                     propertyKey,

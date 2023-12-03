@@ -21,7 +21,7 @@ import { CMSAnalyticsEvent } from "./analytics";
  * Note: you can use any type of synchronous or asynchronous code here,
  * including fetching data from external sources, like using the Firestore
  * APIs directly, or a REST API.
- * @category Models
+ * @group Models
  */
 export type EntityCollectionsBuilder<EC extends EntityCollection = EntityCollection> = (params: {
     user: User | null,
@@ -36,7 +36,7 @@ export type EntityCollectionsBuilder<EC extends EntityCollection = EntityCollect
  * views. Note: you can use any type of synchronous or asynchronous code here,
  * including fetching data from external sources, like using the Firestore
  * APIs directly, or a REST API.
- * @category Models
+ * @group Models
  */
 export type CMSViewsBuilder = (params: {
     user: User | null,
@@ -45,7 +45,7 @@ export type CMSViewsBuilder = (params: {
 }) => CMSView[] | Promise<CMSView[]>;
 
 /**
- * @category Models
+ * @group Models
  */
 export type FireCMSProps<UserType extends User, EC extends EntityCollection> = {
 

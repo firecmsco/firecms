@@ -1,7 +1,7 @@
 import React from "react";
 import { EnumValues } from "../../types";
-import { buildEnumLabel, enumToObjectEntries, getColorScheme, getLabelOrConfigFrom } from "../../core/util/enums";
-import { Chip } from "../../components/Chip";
+import { buildEnumLabel, enumToObjectEntries, getColorScheme, getLabelOrConfigFrom } from "../../util/enums";
+import { Chip } from "../../ui/Chip";
 
 export interface EnumValuesChipProps {
     enumValues?: EnumValues;

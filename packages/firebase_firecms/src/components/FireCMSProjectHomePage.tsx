@@ -20,7 +20,7 @@ import { ADMIN_VIEWS } from "../utils";
  * This component takes navigation as an input and renders cards
  * for each entry, including title and description.
  * @constructor
- * @category Components
+ * @group Components
  */
 export function FireCMSProjectHomePage() {
 

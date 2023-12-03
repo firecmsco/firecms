@@ -11,7 +11,7 @@ import { ResolvedProperty } from "./resolved_entities";
 /**
  * Interface used to define plugins for FireCMS.
  * NOTE: This is a work in progress and the API is not stable yet.
- * @category Core
+ * @group Core
  */
 export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection> = {
 
@@ -135,7 +135,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
  * Props passed to the {@link FireCMSPlugin.homePage.CollectionActions} method.
  * You can use it to add custom actions to the navigation card of each collection.
  *
- * @category Models
+ * @group Models
  */
 export interface PluginHomePageActionsProps<EP extends object = object, M extends Record<string, any> = any, UserType extends User = User, EC extends EntityCollection<M> = EntityCollection<M>> {
     /**

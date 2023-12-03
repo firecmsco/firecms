@@ -1,6 +1,6 @@
 import { SideEntityController } from "../types";
 import { useContext } from "react";
-import { SideEntityControllerContext } from "../core/contexts/SideEntityControllerContext";
+import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
 
 /**
  * Use this hook to retrieve an entity controller that allows you to open
@@ -10,6 +10,6 @@ import { SideEntityControllerContext } from "../core/contexts/SideEntityControll
  * `FireCMS`
  *
  * @see SideEntityController
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export const useSideEntityController = (): SideEntityController => useContext(SideEntityControllerContext);

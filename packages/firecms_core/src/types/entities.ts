@@ -1,12 +1,12 @@
 /**
  * New or existing status
- * @category Models
+ * @group Models
  */
 export type EntityStatus = "new" | "existing" | "copy";
 
 /**
  * Representation of an entity fetched from the datasource
- * @category Models
+ * @group Models
  */
 export interface Entity<M extends object> {
 
@@ -30,7 +30,7 @@ export interface Entity<M extends object> {
 /**
  * This type represents a record of key value pairs as described in an
  * entity collection.
- * @category Models
+ * @group Models
  */
 export type EntityValues<M extends object> = M;
 

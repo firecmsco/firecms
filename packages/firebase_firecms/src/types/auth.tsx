@@ -6,7 +6,7 @@ import { FirebaseApp } from "firebase/app";
 import { ProjectsApi } from "../api/projects";
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export type FirebaseSignInProvider =
 // | 'email'
@@ -21,7 +21,7 @@ export type FirebaseSignInProvider =
     | "apple.com";
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export type FirebaseSignInOption = {
     provider: FirebaseSignInProvider;
@@ -59,7 +59,7 @@ export type FireCMSBackend = {
 
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export type FirebaseAuthController =
     AuthController<FirebaseUser> & {
@@ -103,7 +103,7 @@ export type FirebaseAuthController =
  * Implement this function to allow access to specific users.
  * You might also want to load additional data for a user asynchronously
  * and store it using the `setExtra` method in the `authController`.
- * @category Firebase
+ * @group Firebase
  */
 export type Authenticator<UserType extends User = User> = ({ user }: {
     /**

@@ -5,15 +5,16 @@ import { useClearRestoreValue, useNavigationContext, useReferenceDialog } from "
 import { ReadOnlyFieldBinding } from "./ReadOnlyFieldBinding";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { ReferencePreview } from "../../preview";
-import { ErrorView, getIconForProperty, getReferenceFrom } from "../../core";
-import { Button } from "../../components";
+import { getIconForProperty, getReferenceFrom } from "../../util";
+import { Button } from "../../ui";
+import { ErrorView } from "../../components";
 
 /**
  * Field that opens a reference selection dialog.
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function ReferenceFieldBinding<M extends Record<string, any>>(props: FieldProps<EntityReference>) {
 

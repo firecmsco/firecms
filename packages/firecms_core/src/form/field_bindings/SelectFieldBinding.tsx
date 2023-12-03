@@ -4,10 +4,10 @@ import { EnumType, FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
-import { getIconForProperty } from "../../core";
-import { IconButton, Select, SelectItem } from "../../components";
+import { getIconForProperty } from "../../util";
+import { IconButton, Select, SelectItem } from "../../ui";
 import { ClearIcon } from "../../icons";
-import { cn } from "../../components/util/cn";
+import { cn } from "../../ui/util/cn";
 
 type SelectProps<T extends EnumType> = FieldProps<T>;
 
@@ -17,7 +17,7 @@ type SelectProps<T extends EnumType> = FieldProps<T>;
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function SelectFieldBinding<T extends EnumType>({
                                                            propertyKey,

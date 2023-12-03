@@ -2,7 +2,9 @@ import { Button, Dialog, DialogActions, DialogContent, Typography, useFireCMSCon
 import React from "react";
 
 export function EntityCustomViewsSelectDialog({ open, onClose }: { open: boolean, onClose: (selectedViewKey?: string) => void }) {
-    const { entityViews } = useFireCMSContext();
+    const {
+        entityViews,
+    } = useFireCMSContext();
 
     return <Dialog
         maxWidth={"md"}

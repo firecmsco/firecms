@@ -3,8 +3,8 @@ import React, { useCallback } from "react";
 import { FieldProps, PreviewType } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { getIconForProperty } from "../../core";
-import { Collapse, IconButton, TextField } from "../../components";
+import { getIconForProperty } from "../../util";
+import { Collapse, IconButton, TextField } from "../../ui";
 import { PropertyPreview } from "../../preview";
 import { ClearIcon } from "../../icons";
 
@@ -16,7 +16,7 @@ interface TextFieldProps<T extends string | number> extends FieldProps<T> {
  * Generic text field.
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function TextFieldBinding<T extends string | number>({
                                                                 propertyKey,

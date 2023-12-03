@@ -16,17 +16,11 @@ import {
 } from "../types";
 import { ReadOnlyFieldBinding } from "./field_bindings/ReadOnlyFieldBinding";
 
-import {
-    ErrorBoundary,
-    getFieldConfig,
-    getFieldId,
-    isHidden,
-    isPropertyBuilder,
-    isReadOnly,
-    resolveProperty,
-} from "../core";
+import { isHidden, isPropertyBuilder, isReadOnly, resolveProperty } from "../util";
 import { useFireCMSContext } from "../hooks";
-import { Typography } from "../components";
+import { Typography } from "../ui";
+import { getFieldConfig, getFieldId } from "../form/form_field_configs";
+import { ErrorBoundary } from "../components";
 
 /**
  * This component renders a form field creating the corresponding configuration
@@ -51,9 +45,8 @@ import { Typography } from "../components";
  * @param tableMode
  * @param partOfArray
  * @param autoFocus
- * @category Form custom fields
+ * @group Form custom fields
  */
-// export const PropertyFieldBinding = PropertyFieldBindingInternal;
 export const PropertyFieldBinding = React.memo(PropertyFieldBindingInternal, (a: PropertyFieldBindingProps<any>, b: PropertyFieldBindingProps<any>) => {
     if (a.propertyKey !== b.propertyKey) {
         return false;

@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from "react";
 
 import { Entity, EntityCollection, EntityReference, FilterValues, ResolvedProperty } from "../../types";
-import { ErrorBoundary, ErrorView, getReferenceFrom, getReferencePreviewKeys } from "../../core";
+import { getReferenceFrom, getReferencePreviewKeys } from "../../util";
 import { PropertyPreview, SkeletonPropertyComponent } from "../../preview";
 import { LabelWithIcon } from "../components";
 import {
@@ -11,9 +11,10 @@ import {
     useReferenceDialog,
     useSideEntityController
 } from "../../hooks";
-import { Button, IconButton, Tooltip, Typography } from "../../components";
+import { Button, IconButton, Tooltip, Typography } from "../../ui";
 import { ClearIcon, ErrorIcon, KeyboardTabIcon, LinkIcon } from "../../icons";
-import { cn } from "../../components/util/cn";
+import { cn } from "../../ui/util/cn";
+import { ErrorBoundary, ErrorView } from "../../components";
 
 /**
  * This field allows selecting reference/s.

@@ -1,23 +1,23 @@
 import React, { useMemo } from "react";
 
 import { EntityCollection, FireCMSContext, FireCMSPlugin, FireCMSProps, User } from "../types";
-import { BreadcrumbsProvider } from "./contexts/BreacrumbsContext";
-import { ModeControllerContext } from "./contexts/ModeController";
-import { useBuildSideEntityController } from "./internal/useBuildSideEntityController";
-import { useBuildNavigationContext } from "./internal/useBuildNavigationContext";
-import { useBuildSideDialogsController } from "./internal/useBuildSideDialogsController";
+import { BreadcrumbsProvider } from "../contexts/BreacrumbsContext";
+import { ModeControllerContext } from "../contexts/ModeController";
+import { useBuildSideEntityController } from "../internal/useBuildSideEntityController";
+import { useBuildNavigationContext } from "../internal/useBuildNavigationContext";
+import { useBuildSideDialogsController } from "../internal/useBuildSideDialogsController";
 import { FireCMSContextInstance, useFireCMSContext, useModeController } from "../hooks";
-import { ErrorView } from "./components";
-import { StorageSourceContext } from "./contexts/StorageSourceContext";
-import { UserConfigurationPersistenceContext } from "./contexts/UserConfigurationPersistenceContext";
-import { DataSourceContext } from "./contexts/DataSourceContext";
-import { SideEntityControllerContext } from "./contexts/SideEntityControllerContext";
-import { NavigationContextInstance } from "./contexts/NavigationContext";
-import { AuthControllerContext } from "./contexts/AuthControllerContext";
-import { SideDialogsControllerContext } from "./contexts/SideDialogsControllerContext";
-import { useLocaleConfig } from "./internal/useLocaleConfig";
-import { CenteredView } from "../components";
-import { DialogsProvider } from "./contexts/DialogsProvider";
+import { ErrorView } from "../components";
+import { StorageSourceContext } from "../contexts/StorageSourceContext";
+import { UserConfigurationPersistenceContext } from "../contexts/UserConfigurationPersistenceContext";
+import { DataSourceContext } from "../contexts/DataSourceContext";
+import { SideEntityControllerContext } from "../contexts/SideEntityControllerContext";
+import { NavigationContextInstance } from "../contexts/NavigationContext";
+import { AuthControllerContext } from "../contexts/AuthControllerContext";
+import { SideDialogsControllerContext } from "../contexts/SideDialogsControllerContext";
+import { useLocaleConfig } from "../internal/useLocaleConfig";
+import { CenteredView } from "../ui";
+import { DialogsProvider } from "../contexts/DialogsProvider";
 
 const DEFAULT_BASE_PATH = "/";
 const DEFAULT_COLLECTION_PATH = "/c";
@@ -33,7 +33,7 @@ const DEFAULT_COLLECTION_PATH = "/c";
  * In most cases you can just use the {@link FirebaseCMSApp} component.
  *
  * @constructor
- * @category Core
+ * @group Core
  */
 export function FireCMS<UserType extends User, EC extends EntityCollection>(props: FireCMSProps<UserType, EC>) {
 

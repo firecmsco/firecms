@@ -9,7 +9,7 @@ export interface DataOrderProps<M extends Record<string, any>> {
  * This hook is used to have some entities at the beginning of data.
  * @param path
  * @param entitiesDisplayedFirst
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export function useDataOrder<M extends Record<string, any>>(
     {

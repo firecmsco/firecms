@@ -1,11 +1,11 @@
 import { ResolvedReferenceProperty } from "../../types";
-import { resolveArrayProperty } from "../../core";
+import { resolveArrayProperty } from "../../util";
 import { useFireCMSContext } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { ReferencePreview } from "../components/ReferencePreview";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function ArrayOfReferencesPreview({
                                              propertyKey,

@@ -4,8 +4,8 @@ import { FieldProps } from "../../types";
 
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { getIconForProperty } from "../../core";
-import { DateTimeField } from "../../components";
+import { getIconForProperty } from "../../util";
+import { DateTimeField } from "../../ui";
 
 type DateTimeFieldProps = FieldProps<Date>;
 
@@ -14,7 +14,7 @@ type DateTimeFieldProps = FieldProps<Date>;
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function DateTimeFieldBinding({
                                          propertyKey,

@@ -18,7 +18,7 @@
   "dependencies": {
     "@firecms/core": "^3.0.0-alpha.34",
     "@types/node": "^20.8.9",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.0"
   },
   "files": [
     "dist",

@@ -3,14 +3,14 @@ import { Entity, FireCMSContext, User } from "@firecms/core";
 /**
  * You can use this configuration to add additional fields to the data
  * exports
- * @category Models
+ * @group Models
  */
 export interface ExportConfig<UserType extends User = User> {
     additionalFields: ExportMappingFunction<UserType> [];
 }
 
 /**
- * @category Models
+ * @group Models
  */
 export interface ExportMappingFunction<UserType extends User = User> {
     key: string;

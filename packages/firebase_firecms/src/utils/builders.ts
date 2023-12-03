@@ -24,7 +24,7 @@ import { FirebaseCMSCollection } from "../types/collections";
  * Identity function we use to defeat the type system of Typescript and build
  * collection views with all its properties
  * @param collection
- * @category Builder
+ * @group Builder
  */
 export function buildCollection<M extends Record<string, any> = any,
     UserType extends User = User>(
@@ -37,7 +37,7 @@ export function buildCollection<M extends Record<string, any> = any,
  * Identity function we use to defeat the type system of Typescript and preserve
  * the property keys.
  * @param property
- * @category Builder
+ * @group Builder
  */
 export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrBuilder<T> = PropertyOrBuilder<T>, M extends Record<string, any> = Record<string, any>>(
     property: P
@@ -58,7 +58,7 @@ export function buildProperty<T extends CMSType = CMSType, P extends PropertyOrB
  * Identity function we use to defeat the type system of Typescript and preserve
  * the properties keys.
  * @param properties
- * @category Builder
+ * @group Builder
  */
 export function buildProperties<M extends Record<string, any>>(
     properties: PropertiesOrBuilders<M>
@@ -70,7 +70,7 @@ export function buildProperties<M extends Record<string, any>>(
  * Identity function we use to defeat the type system of Typescript and preserve
  * the properties keys.
  * @param propertiesOrBuilder
- * @category Builder
+ * @group Builder
  */
 export function buildPropertiesOrBuilder<M extends Record<string, any>>(
     propertiesOrBuilder: PropertiesOrBuilders<M>
@@ -82,7 +82,7 @@ export function buildPropertiesOrBuilder<M extends Record<string, any>>(
  * Identity function we use to defeat the type system of Typescript and preserve
  * the properties keys.
  * @param enumValues
- * @category Builder
+ * @group Builder
  */
 export function buildEnumValues(
     enumValues: EnumValues
@@ -94,7 +94,7 @@ export function buildEnumValues(
  * Identity function we use to defeat the type system of Typescript and preserve
  * the properties keys.
  * @param enumValueConfig
- * @category Builder
+ * @group Builder
  */
 export function buildEnumValueConfig(
     enumValueConfig: EnumValueConfig
@@ -106,7 +106,7 @@ export function buildEnumValueConfig(
  * Identity function we use to defeat the type system of Typescript and preserve
  * the properties keys.
  * @param callbacks
- * @category Builder
+ * @group Builder
  */
 export function buildEntityCallbacks<M extends Record<string, any> = any>(
     callbacks: EntityCallbacks<M>
@@ -118,7 +118,7 @@ export function buildEntityCallbacks<M extends Record<string, any> = any>(
  * Identity function we use to defeat the type system of Typescript and build
  * additional field delegates views with all its properties
  * @param additionalFieldDelegate
- * @category Builder
+ * @group Builder
  */
 export function buildAdditionalFieldDelegate<M extends Record<string, any>, UserType extends User = User>(
     additionalFieldDelegate: AdditionalFieldDelegate<M, UserType>
@@ -130,7 +130,7 @@ export function buildAdditionalFieldDelegate<M extends Record<string, any>, User
  * Identity function we use to defeat the type system of Typescript and build
  * additional field delegates views with all its properties
  * @param propertyConfig
- * @category Builder
+ * @group Builder
  */
 export function buildFieldConfig<T extends CMSType = CMSType>(
     propertyConfig: PropertyConfig<T>

@@ -1,8 +1,8 @@
 import { useContext } from "react";
-import { BreadcrumbContext } from "../core/contexts/BreacrumbsContext";
+import { BreadcrumbContext } from "../contexts/BreacrumbsContext";
 
 /**
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface BreadcrumbsController {
     breadcrumbs: BreadcrumbEntry[];
@@ -12,7 +12,7 @@ export interface BreadcrumbsController {
 }
 
 /**
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface BreadcrumbEntry {
     title: string;
@@ -26,6 +26,6 @@ export interface BreadcrumbEntry {
  * `FireCMS`
  *
  * @see BreadcrumbsController
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export const useBreadcrumbsContext = (): BreadcrumbsController => useContext(BreadcrumbContext);

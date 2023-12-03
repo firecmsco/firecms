@@ -5,8 +5,8 @@ import { ErrorMessage } from "formik";
 import { Entity, EntityStatus, EnumValueConfig, EnumValues, FireCMSContext } from "../../types";
 
 import { useClipboard, useFireCMSContext, useSnackbarController } from "../../hooks";
-import { enumToObjectEntries } from "../../core";
-import { IconButton, Select, SelectItem, TextField, Tooltip } from "../../components";
+import { enumToObjectEntries } from "../../util";
+import { IconButton, Select, SelectItem, TextField, Tooltip } from "../../ui";
 import { ContentCopyIcon, OpenInNewIcon } from "../../icons";
 import { EnumValuesChip } from "../../preview";
 

@@ -1,15 +1,16 @@
 import React from "react";
 
-import { ErrorBoundary, resolvePropertyEnum } from "../../core";
+import { resolvePropertyEnum } from "../../util";
 import { EnumValuesChip } from "../components/EnumValuesChip";
-import { getColorSchemeForSeed } from "../../core/util/chip_utils";
+import { getColorSchemeForSeed } from "../../util/chip_utils";
 import { PreviewType } from "../../types";
 import { UrlComponentPreview } from "../components/UrlComponentPreview";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
-import { Chip } from "../../components/Chip";
+import { Chip } from "../../ui/Chip";
+import { ErrorBoundary } from "../../components";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function StringPropertyPreview({
                                           propertyKey,

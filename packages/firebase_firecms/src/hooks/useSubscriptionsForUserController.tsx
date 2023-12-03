@@ -21,7 +21,7 @@ export const CUSTOMERS_COLLECTION = "customers";
 export const CHECKOUT_SESSION_COLLECTION = "checkout_sessions";
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export interface SubscriptionsForUserControllerProps {
     firebaseApp?: FirebaseApp;

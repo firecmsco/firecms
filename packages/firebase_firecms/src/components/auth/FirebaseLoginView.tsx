@@ -13,7 +13,7 @@ import {
 } from "firebase/auth";
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export interface FireCMS3LoginViewProps {
 
@@ -69,7 +69,7 @@ export interface FireCMS3LoginViewProps {
  * Use this component to render a login view, that updates
  * the state of the {@link FirebaseAuthController} based on the result
  * @constructor
- * @category Firebase
+ * @group Firebase
  */
 export function FirebaseLoginView({
                                       logo,

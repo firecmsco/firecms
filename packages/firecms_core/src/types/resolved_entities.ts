@@ -16,7 +16,7 @@ import { EntityCollection } from "./collections";
 /**
  * This is the same entity collection you define, only all the property builders
  * are resolved to regular `Property` objects.
- * @category Models
+ * @group Models
  */
 export type ResolvedEntityCollection<M extends Record<string, any> = any> =
     Omit<EntityCollection<M>, "properties">
@@ -28,7 +28,7 @@ export type ResolvedEntityCollection<M extends Record<string, any> = any> =
     }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type ResolvedProperty<T extends CMSType = CMSType> =
     T extends string ? ResolvedStringProperty :
@@ -41,14 +41,14 @@ export type ResolvedProperty<T extends CMSType = CMSType> =
                                 T extends Record<string, any> ? ResolvedMapProperty<T> : any;
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type ResolvedProperties<M extends Record<string, any> = any> = {
     [k in keyof M]: ResolvedProperty<M[keyof M]>;
 };
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type ResolvedStringProperty =
     Omit<StringProperty, "enumValues" | "dataType"> &
@@ -60,7 +60,7 @@ export type ResolvedStringProperty =
     }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type ResolvedNumberProperty =
     Omit<NumberProperty, "enumValues" | "dataType"> &
@@ -72,7 +72,7 @@ export type ResolvedNumberProperty =
     }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type ResolvedBooleanProperty =
     Omit<BooleanProperty, "dataType"> &
@@ -83,7 +83,7 @@ export type ResolvedBooleanProperty =
     }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type ResolvedTimestampProperty =
     Omit<DateProperty, "dataType"> &
@@ -94,7 +94,7 @@ export type ResolvedTimestampProperty =
     }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type ResolvedGeopointProperty =
     Omit<GeopointProperty, "dataType"> &
@@ -105,7 +105,7 @@ export type ResolvedGeopointProperty =
     }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type ResolvedReferenceProperty =
     Omit<ReferenceProperty, "dataType"> &
@@ -116,7 +116,7 @@ export type ResolvedReferenceProperty =
     }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType>
     =
@@ -135,7 +135,7 @@ export type ResolvedArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMS
     }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type ResolvedMapProperty<T extends Record<string, any> = any> =
     Omit<MapProperty, "properties" | "dataType" | "propertiesOrder"> &

@@ -1,11 +1,11 @@
 import React, { useCallback } from "react";
 
 import { useSnackbarController, useStorageSource } from "../../hooks";
-import { StorageFieldItem } from "../../core/util/useStorageUploadController";
-import { ErrorView } from "../../core";
+import { StorageFieldItem } from "../../util/useStorageUploadController";
+import { ErrorView } from "../../components";
 import { paperMixin } from "../../styles";
-import { Skeleton } from "../../components/Skeleton";
-import { cn } from "../../components/util/cn";
+import { Skeleton } from "../../ui/Skeleton";
+import { cn } from "../../ui/util/cn";
 
 export interface StorageUploadItemProps {
     storagePath: string;

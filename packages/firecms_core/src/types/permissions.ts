@@ -5,7 +5,7 @@ import { Entity } from "./entities";
 
 /**
  * Define the operations that can be performed in a collection.
- * @category Models
+ * @group Models
  */
 export interface Permissions {
     /**
@@ -30,7 +30,7 @@ export interface Permissions {
 
 /**
  * Props passed to a {@link PermissionsBuilder}
- * @category Models
+ * @group Models
  */
 export interface PermissionsBuilderProps<EC extends EntityCollection = EntityCollection, UserType extends User = User, M extends object = InferCollectionType<EC>> {
     /**
@@ -65,7 +65,7 @@ export interface PermissionsBuilderProps<EC extends EntityCollection = EntityCol
 /**
  * Builder used to assign permissions to entities,
  * based on the logged user or collection.
- * @category Models
+ * @group Models
  */
 export type PermissionsBuilder<EC extends EntityCollection = EntityCollection, UserType extends User = User, M extends object = InferCollectionType<EC>> =
     (({

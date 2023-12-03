@@ -22,7 +22,7 @@ interface FirebaseAuthControllerProps {
 
 /**
  * Use this hook to build an {@link AuthController} based on Firebase Auth
- * @category Firebase
+ * @group Firebase
  */
 export const useFirebaseAuthController = ({
                                               firebaseApp,

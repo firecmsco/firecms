@@ -1,11 +1,11 @@
 import { Entity, EntityCollection, EntityCustomView, FireCMSContext, User } from "../types";
 import { useEffect, useState } from "react";
-import { getNavigationEntriesFromPathInternal } from "../core/util/navigation_from_path";
+import { getNavigationEntriesFromPathInternal } from "../util/navigation_from_path";
 import { useFireCMSContext } from "./useFireCMSContext";
 
 /**
  * @see resolveNavigationFrom
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export type ResolvedNavigationEntry<M extends Record<string, any>> =
     | ResolvedNavigationEntity<M>
@@ -14,7 +14,7 @@ export type ResolvedNavigationEntry<M extends Record<string, any>> =
 
 /**
  * @see resolveNavigationFrom
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface ResolvedNavigationEntity<M extends Record<string, any>> {
     type: "entity";
@@ -26,7 +26,7 @@ export interface ResolvedNavigationEntity<M extends Record<string, any>> {
 
 /**
  * @see resolveNavigationFrom
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface ResolvedNavigationCollection<M extends Record<string, any>> {
     type: "collection";
@@ -36,7 +36,7 @@ export interface ResolvedNavigationCollection<M extends Record<string, any>> {
 
 /**
  * @see resolveNavigationFrom
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 interface ResolvedNavigationEntityCustom<M extends Record<string, any>> {
     type: "custom_view";
@@ -53,7 +53,7 @@ interface ResolvedNavigationEntityCustom<M extends Record<string, any>> {
  *
  * @param path
  * @param context
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export function resolveNavigationFrom<M extends Record<string, any>, UserType extends User>({
                                                                                                 path,
@@ -105,14 +105,14 @@ export function resolveNavigationFrom<M extends Record<string, any>, UserType ex
 }
 
 /**
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface NavigationFromProps {
     path: string;
 }
 
 /**
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface NavigationFrom<M extends Record<string, any>> {
     data?: ResolvedNavigationEntry<M>[]
@@ -124,7 +124,7 @@ export interface NavigationFrom<M extends Record<string, any>> {
  * Use this hook to retrieve an array of navigation entries (resolved
  * collection or entity) for the given path. You can use this hook
  * in any React component that lives under `FireCMS`
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export function useResolvedNavigationFrom<M extends Record<string, any>, UserType extends User>(
     {

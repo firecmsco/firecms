@@ -1,5 +1,5 @@
 /**
- * @category Models
+ * @group Models
  */
 export type ChipColorScheme = {
     color: string;
@@ -7,7 +7,7 @@ export type ChipColorScheme = {
 }
 
 /**
- * @category Models
+ * @group Models
  */
 export type ChipColorKey =
     | "blueLighter"

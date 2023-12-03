@@ -4,15 +4,15 @@ import { Link } from "react-router-dom";
 
 import { Drawer as DefaultDrawer, DrawerProps } from "./Drawer";
 import { useLargeLayout, useNavigationContext } from "../hooks";
-import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "./components";
-import { cn, IconButton, Sheet, Tooltip } from "../components";
+import { CircularProgressCenter, ErrorBoundary, FireCMSAppBar, FireCMSAppBarProps, FireCMSLogo } from "../components";
+import { cn, IconButton, Sheet, Tooltip } from "../ui";
 import { ChevronLeftIcon, MenuIcon } from "../icons";
 import { defaultBorderMixin } from "../styles";
 
 export const DRAWER_WIDTH = 280;
 
 /**
- * @category Core
+ * @group Core
  */
 export interface ScaffoldProps<ExtraDrawerProps = object, ExtraAppbarProps = object> {
 
@@ -66,7 +66,7 @@ export interface ScaffoldProps<ExtraDrawerProps = object, ExtraAppbarProps = obj
  *
  * @param props
  * @constructor
- * @category Core
+ * @group Core
  */
 export const Scaffold = React.memo<PropsWithChildren<ScaffoldProps>>(
     function Scaffold(props: PropsWithChildren<ScaffoldProps>) {

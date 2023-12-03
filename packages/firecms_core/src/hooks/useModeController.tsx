@@ -1,9 +1,9 @@
-import { ModeControllerContext } from "../core/contexts/ModeController";
+import { ModeControllerContext } from "../contexts/ModeController";
 import { useContext } from "react";
 
 /**
  * Use this controller to change color mode
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface ModeController {
     mode: "light" | "dark";
@@ -19,6 +19,6 @@ export interface ModeController {
  * `FireCMS`
  *
  * @see ModeController
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export const useModeController = () => useContext(ModeControllerContext);

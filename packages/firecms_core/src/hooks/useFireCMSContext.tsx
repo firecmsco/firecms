@@ -19,7 +19,7 @@ export const FireCMSContextInstance = createContext<Partial<FireCMSContext>>({})
  * `FireCMS` component.
  *
  * @see FireCMSContext
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export const useFireCMSContext = <UserType extends User = User, AuthControllerType extends AuthController<UserType> = AuthController<UserType>>(): FireCMSContext<UserType, AuthControllerType> => {
 

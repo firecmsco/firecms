@@ -1,5 +1,8 @@
 import { Icon, IconProps } from "../Icon";
 
+/**
+ * @group Icons
+ */
 export function SpaceDashboardIcon(props: IconProps) {
     return <Icon {...props} iconKey={"space_dashboard"}/>
 }

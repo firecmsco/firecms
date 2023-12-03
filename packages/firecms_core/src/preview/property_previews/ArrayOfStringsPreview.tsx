@@ -1,13 +1,13 @@
 import React from "react";
 import { ResolvedStringProperty } from "../../types";
 
-import { ErrorBoundary, resolveArrayProperty } from "../../core";
-import { StringPropertyPreview } from "./StringPropertyPreview";
+import { resolveArrayProperty } from "../../util";
+import { PropertyPreviewProps, StringPropertyPreview } from "../../preview";
 import { useFireCMSContext } from "../../hooks";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
+import { ErrorBoundary } from "../../components";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function ArrayOfStringsPreview({
                                           propertyKey,

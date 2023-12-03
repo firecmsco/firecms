@@ -24,9 +24,9 @@ import {
     User
 } from "@firecms/core";
 import { downloadExport } from "./export";
-import { ExportConfig } from "../types/export_import";
 import { SubscriptionPlanWidget } from "../components";
 import { useProjectConfig } from "../hooks";
+import { ExportConfig } from "../types/export_import";
 import { FirebaseCMSCollection } from "../types/collections";
 
 const DOCS_LIMIT = 500;

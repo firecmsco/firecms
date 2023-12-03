@@ -3,12 +3,10 @@ import React from "react";
 import { Entity, ResolvedStringProperty } from "../../types";
 import { PreviewSize, PropertyPreview } from "../../preview";
 
-import { ErrorBoundary } from "../../core";
-import { IconButton } from "../../components";
+import { cn, IconButton, Tooltip } from "../../ui";
 import { paperMixin } from "../../styles";
-import { Tooltip } from "../../components/Tooltip";
 import { RemoveIcon } from "../../icons";
-import { cn } from "../../components/util/cn";
+import { ErrorBoundary } from "../../components";
 
 interface StorageItemPreviewProps {
     name: string;

@@ -3,7 +3,7 @@ import { EntityCollection, FilterValues } from "./collections";
 import { ResolvedEntityCollection } from "./resolved_entities";
 
 /**
- * @category Datasource
+ * @group Datasource
  */
 export interface FetchEntityProps<M extends Record<string, any> = any> {
     path: string;
@@ -12,7 +12,7 @@ export interface FetchEntityProps<M extends Record<string, any> = any> {
 }
 
 /**
- * @category Datasource
+ * @group Datasource
  */
 export type ListenEntityProps<M extends Record<string, any> = any> =
     FetchEntityProps<M>
@@ -22,7 +22,7 @@ export type ListenEntityProps<M extends Record<string, any> = any> =
 }
 
 /**
- * @category Datasource
+ * @group Datasource
  */
 export interface FetchCollectionProps<M extends Record<string, any> = any> {
     path: string;
@@ -36,7 +36,7 @@ export interface FetchCollectionProps<M extends Record<string, any> = any> {
 }
 
 /**
- * @category Datasource
+ * @group Datasource
  */
 export type ListenCollectionProps<M extends Record<string, any> = any> =
     FetchCollectionProps<M> &
@@ -46,7 +46,7 @@ export type ListenCollectionProps<M extends Record<string, any> = any> =
     };
 
 /**
- * @category Datasource
+ * @group Datasource
  */
 export interface SaveEntityProps<M extends Record<string, any> = any> {
     path: string;
@@ -58,7 +58,7 @@ export interface SaveEntityProps<M extends Record<string, any> = any> {
 }
 
 /**
- * @category Datasource
+ * @group Datasource
  */
 export interface DeleteEntityProps<M extends Record<string, any> = any> {
     entity: Entity<M>;
@@ -68,7 +68,7 @@ export interface DeleteEntityProps<M extends Record<string, any> = any> {
  * Implement this interface and pass it to a {@link FireCMS}
  * to connect it to your data source.
  * A Firestore implementation of this interface can be found in {@link useFirestoreDataSource}
- * @category Datasource
+ * @group Datasource
  */
 export interface DataSource {
 

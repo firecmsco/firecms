@@ -1,18 +1,17 @@
 import React from "react";
 import { FieldProps, Properties, ResolvedProperties } from "../../types";
 
-import { getIconForProperty, isHidden, pick } from "../../core";
+import { getIconForProperty, isHidden, pick } from "../../util";
 import { FieldHelperText, LabelWithIcon } from "../components";
-import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { ExpandablePanel, InputLabel, Select, SelectItem } from "../../components";
+import { ExpandablePanel, InputLabel, Select, SelectItem } from "../../ui";
 
 /**
  * Field that renders the children property fields
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function MapFieldBinding<T extends Record<string, any>>({
                                                                    propertyKey,

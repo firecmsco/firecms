@@ -1,15 +1,15 @@
 import React from "react";
 
 import { ResolvedMapProperty } from "../../types";
-import { ErrorBoundary } from "../../core";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
-import { Typography } from "../../components";
+import { Typography } from "../../ui";
 import { defaultBorderMixin } from "../../styles";
-import { cn } from "../../components/util/cn";
+import { cn } from "../../ui/util/cn";
+import { ErrorBoundary } from "../../components";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function MapPropertyPreview<T extends Record<string, any> = Record<string, any>>({
                                                                                             propertyKey,

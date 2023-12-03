@@ -4,7 +4,7 @@ import { Entity } from "./entities";
 
 /**
  * Props used to open a side dialog
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface EntitySidePanelProps<M extends Record<string, any> = any> {
 
@@ -69,7 +69,7 @@ export interface EntitySidePanelProps<M extends Record<string, any> = any> {
 
 /**
  * Controller to open the side dialog displaying entity forms
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface SideEntityController {
     /**

@@ -1,11 +1,10 @@
 import React from "react";
 
-import { EnumValuesChip } from "../components/EnumValuesChip";
-import { PropertyPreviewProps } from "../PropertyPreviewProps";
-import { enumToObjectEntries } from "../../core";
+import { EnumValuesChip, PropertyPreviewProps } from "../../preview";
+import { enumToObjectEntries } from "../../util";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function NumberPropertyPreview({
                                           value,

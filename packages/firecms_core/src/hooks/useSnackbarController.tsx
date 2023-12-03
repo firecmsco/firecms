@@ -3,13 +3,13 @@ import { useCallback, useMemo } from "react";
 
 /**
  * Possible snackbar types
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export type SnackbarMessageType = "success" | "info" | "warning" | "error";
 
 /**
  * Controller to display snackbars
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface SnackbarController {
 
@@ -37,7 +37,7 @@ export interface SnackbarController {
  * `FireCMS`
  *
  * @see SnackbarController
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export const useSnackbarController = () => {
 

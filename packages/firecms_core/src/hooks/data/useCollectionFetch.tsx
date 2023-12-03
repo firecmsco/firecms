@@ -5,7 +5,7 @@ import { useNavigationContext } from "../useNavigationContext";
 import { useFireCMSContext } from "../useFireCMSContext";
 
 /**
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface CollectionFetchProps<M extends Record<string, any>> {
 
@@ -41,7 +41,7 @@ export interface CollectionFetchProps<M extends Record<string, any>> {
 }
 
 /**
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface CollectionFetchResult<M extends Record<string, any>> {
     data: Entity<M>[];
@@ -58,7 +58,7 @@ export interface CollectionFetchResult<M extends Record<string, any>> {
  * @param sortBy
  * @param itemCount
  * @param searchString
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export function useCollectionFetch<M extends Record<string, any>, UserType extends User>(
     {

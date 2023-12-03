@@ -12,13 +12,13 @@ import { useDropzone } from "react-dropzone";
 import { PreviewSize } from "../../preview";
 import { FieldHelperText, LabelWithIcon } from "../components";
 
-import { getIconForProperty, isReadOnly } from "../../core";
+import { getIconForProperty, isReadOnly } from "../../util";
 import { useClearRestoreValue, useSnackbarController, useStorageSource } from "../../hooks";
 import { DragDropContext, Draggable, Droppable } from "@hello-pangea/dnd";
-import { StorageFieldItem, useStorageUploadController } from "../../core/util/useStorageUploadController";
+import { StorageFieldItem, useStorageUploadController } from "../../util/useStorageUploadController";
 import { StorageUploadProgress } from "../components/StorageUploadProgress";
 import { StorageItemPreview } from "../components/StorageItemPreview";
-import { cn, Typography } from "../../components";
+import { cn, Typography } from "../../ui";
 import {
     fieldBackgroundDisabledMixin,
     fieldBackgroundHoverMixin,
@@ -40,7 +40,7 @@ type StorageUploadFieldProps = FieldProps<string | string[]>;
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function StorageUploadFieldBinding({
                                               propertyKey,

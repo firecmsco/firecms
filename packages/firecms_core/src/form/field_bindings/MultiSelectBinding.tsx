@@ -4,16 +4,16 @@ import { EnumType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
 import { EnumValuesChip } from "../../preview";
-import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../core";
+import { enumToObjectEntries, getIconForProperty, getLabelOrConfigFrom } from "../../util";
 import { CloseIcon } from "../../icons";
-import { MultiSelect, MultiSelectItem } from "../../components/MultiSelect";
+import { MultiSelect, MultiSelectItem } from "../../ui/MultiSelect";
 
 /**
  * This fields renders a dropdown with multiple selection.
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function MultiSelectBinding({
                                        propertyKey,

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { FieldProps } from "formik";
-import { BooleanSwitchWithLabel, Tooltip } from "../../components";
+import { BooleanSwitchWithLabel, Tooltip } from "../../ui";
 
 export function SwitchControl({
                                   field,

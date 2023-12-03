@@ -1,6 +1,6 @@
 /**
  * Controller to open the side dialog
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface DialogsController {
 
@@ -18,7 +18,7 @@ export interface DialogsController {
 
 /**
  * Props used to open a side dialog
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface DialogControllerEntryProps {
 

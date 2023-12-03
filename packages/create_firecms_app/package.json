@@ -32,7 +32,7 @@
   "devDependencies": {
     "@types/node": "^20.8.9",
     "ts-node": "^10.9.1",
-    "typescript": "^5.2.2"
+    "typescript": "^5.3.0"
   },
   "files": [
     "bin/",

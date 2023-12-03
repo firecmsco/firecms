@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import { CMSType, FieldProps, ResolvedProperty } from "../../types";
 import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { getIconForProperty } from "../../core";
+import { getIconForProperty } from "../../util";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
-import { ExpandablePanel } from "../../components";
+import { ExpandablePanel } from "../../ui";
 
 /**
  * Generic array field that allows reordering and renders the child property
@@ -12,7 +12,7 @@ import { ExpandablePanel } from "../../components";
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function RepeatFieldBinding<T extends Array<any>>({
                                                              propertyKey,

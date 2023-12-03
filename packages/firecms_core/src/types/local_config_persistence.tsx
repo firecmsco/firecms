@@ -2,7 +2,7 @@ import { EntityCollection } from "./collections";
 
 /**
  * Use to resolve the collection properties for specific path, entity id or values.
- * @category Models
+ * @group Models
  */
 export type PartialEntityCollection<M extends Record<string, any> = any> = Partial<EntityCollection<M>>;
 

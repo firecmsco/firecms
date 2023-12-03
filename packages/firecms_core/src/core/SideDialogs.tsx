@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useSideDialogsController } from "../hooks";
-import { ErrorBoundary } from "./components";
-import { UnsavedChangesDialog, useNavigationUnsavedChangesDialog } from "./internal/useUnsavedChangesDialog";
 import { SideDialogPanelProps } from "../types";
-import { Sheet } from "../components";
+import { Sheet } from "../ui";
+import { UnsavedChangesDialog, useNavigationUnsavedChangesDialog } from "../internal/useUnsavedChangesDialog";
+import { ErrorBoundary } from "../components";
 
 export type SideDialogContextProps = {
     blocked: boolean,
@@ -37,7 +37,7 @@ export const useSideDialogContext = () => useContext<SideDialogContextProps>(Sid
  * and control the dialogs.
  * This component needs a parent {@link FireCMS}
  * {@link useSideDialogsController}
- * @category Components
+ * @group Components
  */
 export function SideDialogs() {
 

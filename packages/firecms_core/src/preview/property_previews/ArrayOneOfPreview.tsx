@@ -1,15 +1,16 @@
 import React from "react";
-import { ErrorBoundary, resolveArrayProperty } from "../../core";
+import { resolveArrayProperty } from "../../util";
 import { ResolvedProperty } from "../../types";
-import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
 import { useFireCMSContext } from "../../hooks";
 import { PreviewSize, PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
 import { defaultBorderMixin } from "../../styles";
-import { cn } from "../../components/util/cn";
+import { cn } from "../../ui/util/cn";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
+import { ErrorBoundary } from "../../components";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function ArrayOneOfPreview({
                                       propertyKey,

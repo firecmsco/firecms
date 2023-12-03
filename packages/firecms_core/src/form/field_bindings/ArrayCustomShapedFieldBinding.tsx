@@ -3,15 +3,15 @@ import { FieldProps } from "../../types";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
-import { getIconForProperty } from "../../core";
-import { ExpandablePanel } from "../../components";
+import { ExpandablePanel } from "../../ui";
+import { getIconForProperty } from "../../util";
 
 /**
  * Array field used for custom
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         propertyKey,

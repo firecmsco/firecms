@@ -3,14 +3,14 @@ import React, { useCallback, useEffect, useState } from "react";
 import { FastField, FieldProps as FormikFieldProps, useFormikContext } from "formik";
 
 import { FieldHelperText, FormikArrayContainer, LabelWithIcon } from "../components";
-import { useClearRestoreValue, useFireCMSContext } from "../../hooks";
+import { useClearRestoreValue } from "../../hooks";
 import { PropertyFieldBinding } from "../PropertyFieldBinding";
 import { EnumValuesChip } from "../../preview";
 import { FieldProps, FormContext, PropertyFieldBindingProps, PropertyOrBuilder } from "../../types";
-import { getDefaultValueFor, getIconForProperty, } from "../../core";
-import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../core/util/common";
+import { getDefaultValueFor, getIconForProperty, } from "../../util";
+import { DEFAULT_ONE_OF_TYPE, DEFAULT_ONE_OF_VALUE } from "../../util/common";
 import { paperMixin } from "../../styles";
-import { cn, ExpandablePanel, Select, SelectItem, Typography } from "../../components";
+import { cn, ExpandablePanel, Select, SelectItem, Typography } from "../../ui";
 
 /**
  * If the `oneOf` property is specified, this fields render each array entry as
@@ -18,7 +18,7 @@ import { cn, ExpandablePanel, Select, SelectItem, Typography } from "../../compo
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function BlockFieldBinding<T extends Array<any>>({
                                                             propertyKey,

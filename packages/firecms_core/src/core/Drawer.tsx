@@ -4,12 +4,12 @@ import { useFireCMSContext, useLargeLayout, useNavigationContext } from "../hook
 
 import { NavLink } from "react-router-dom";
 import { CMSAnalyticsEvent, TopNavigationEntry, TopNavigationResult } from "../types";
-import { getIconForView } from "./util";
-import { cn, Tooltip, Typography } from "../components";
+import { getIconForView } from "../util";
+import { cn, Tooltip, Typography } from "../ui";
 
 /**
  * Props used in case you need to override the default drawer
- * @category Core
+ * @group Core
  */
 export type DrawerProps<T = {}> = T & {
     hovered: boolean,
@@ -19,7 +19,7 @@ export type DrawerProps<T = {}> = T & {
 
 /**
  * Default drawer used in the CMS
- * @category Core
+ * @group Core
  */
 export function Drawer({
                            hovered,

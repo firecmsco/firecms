@@ -1,9 +1,9 @@
 import React from "react";
 
 import { EnumValueConfig } from "../../types";
-import { ErrorBoundary } from "../../core";
 import { EnumValuesChip } from "./EnumValuesChip";
 import { PreviewSize } from "../PropertyPreviewProps";
+import { ErrorBoundary } from "../../components";
 
 /**
  * @category Preview components

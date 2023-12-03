@@ -47,7 +47,7 @@ import { useCallback } from "react";
 import { cmsToFirestoreModel } from "./useFirestoreDataSource";
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export interface FirestoreDataSourceProps {
     firebaseApp?: FirebaseApp,
@@ -71,7 +71,7 @@ export type FirestoreIndexesBuilder = (params: {
  * @param firebaseApp
  * @param textSearchController
  * @param collectionRegistry
- * @category Firebase
+ * @group Firebase
  */
 export function useFirestoreDelegate({
                                          firebaseApp,
@@ -239,7 +239,7 @@ export function useFirestoreDelegate({
          * @param order
          * @return Function to cancel subscription
          * @see useCollectionFetch if you need this functionality implemented as a hook
-         * @category Firestore
+         * @group Firestore
          */
         fetchCollection: useCallback(<M extends Record<string, any>>({
                                                                          path,
@@ -289,7 +289,7 @@ export function useFirestoreDelegate({
          * @param onUpdate
          * @return Function to cancel subscription
          * @see useCollectionFetch if you need this functionality implemented as a hook
-         * @category Firestore
+         * @group Firestore
          */
         listenCollection: useCallback(<M extends Record<string, any>>(
             {
@@ -344,7 +344,7 @@ export function useFirestoreDelegate({
          * @param path
          * @param entityId
          * @param collection
-         * @category Firestore
+         * @group Firestore
          */
         fetchEntity: useCallback(<M extends Record<string, any>>({
                                                                      path,
@@ -360,7 +360,7 @@ export function useFirestoreDelegate({
          * @param onUpdate
          * @param onError
          * @return Function to cancel subscription
-         * @category Firestore
+         * @group Firestore
          */
         listenEntity: useCallback(<M extends Record<string, any>>(
             {
@@ -394,7 +394,7 @@ export function useFirestoreDelegate({
          * @param schemaId
          * @param collection
          * @param status
-         * @category Firestore
+         * @group Firestore
          */
         saveEntity: useCallback(<M extends Record<string, any>>(
             {
@@ -430,7 +430,7 @@ export function useFirestoreDelegate({
          * Delete an entity
          * @param entity
          * @param collection
-         * @category Firestore
+         * @group Firestore
          */
         deleteEntity: useCallback(<M extends Record<string, any>>(
             {
@@ -452,7 +452,7 @@ export function useFirestoreDelegate({
          * @param property
          * @param entityId
          * @return `true` if there are no other fields besides the given entity
-         * @category Firestore
+         * @group Firestore
          */
         checkUniqueField: useCallback((
             path: string,
@@ -564,7 +564,7 @@ export function useFirestoreDelegate({
  * bindings.
  * Also, Firestore references are replaced with {@link EntityReference}
  * @param data
- * @category Firestore
+ * @group Firestore
  */
 export function firestoreToCMSModel(data: any): any {
     if (data === null || data === undefined) return null;

@@ -6,7 +6,7 @@ import { ResolvedEntityCollection, ResolvedProperty } from "./resolved_entities"
  * When building a custom field you need to create a React component that takes
  * this interface as props.
  *
- * @category Form custom fields
+ * @group Form custom fields
  */
 export interface FieldProps<T extends CMSType = any, CustomProps = any, M extends Record<string, any> = any> {
 
@@ -119,7 +119,7 @@ export interface FieldProps<T extends CMSType = any, CustomProps = any, M extend
 
 /**
  * Context passed to custom fields
- * @category Form custom fields
+ * @group Form custom fields
  */
 export interface FormContext<M extends Record<string, any> = any> {
 
@@ -160,7 +160,7 @@ export interface FormContext<M extends Record<string, any> = any> {
 /**
  * In case you need to render a field bound to a Property inside your
  * custom field you can use {@link PropertyFieldBinding} with these props.
- * @category Form custom fields
+ * @group Form custom fields
  */
 export interface PropertyFieldBindingProps<T extends CMSType, M extends Record<string, any> = any> {
 

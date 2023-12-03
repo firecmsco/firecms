@@ -1,14 +1,14 @@
 import { FirebaseApp } from "firebase/app";
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export interface AppCheck {
     firebaseApp?: FirebaseApp;
 }
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export interface AppCheckOptions {
     providerKey: string;
@@ -19,7 +19,7 @@ export interface AppCheckOptions {
 }
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export declare interface AppCheckTokenResult {
     /**

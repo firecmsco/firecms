@@ -1,7 +1,8 @@
 import { useCallback } from "react";
 import {
     DataSource,
-    DataSourceDelegate, DeleteEntityProps,
+    DataSourceDelegate,
+    DeleteEntityProps,
     Entity,
     EntityCollection,
     EntityReference,
@@ -16,14 +17,14 @@ import {
     ResolvedProperties,
     SaveEntityProps
 } from "../types";
-import { resolveCollection, updateDateAutoValues } from "../core";
+import { resolveCollection, updateDateAutoValues } from "../util";
 
 /**
  * Use this hook to build a {@link DataSource} based on Firestore
  * @param firebaseApp
  * @param textSearchController
  * @param collectionRegistry
- * @category Firebase
+ * @group Firebase
  */
 export function useBuildDataSource({
                                        delegate,
@@ -47,7 +48,7 @@ export function useBuildDataSource({
          * @param order
          * @return Function to cancel subscription
          * @see useCollectionFetch if you need this functionality implemented as a hook
-         * @category Firestore
+         * @group Firestore
          */
         fetchCollection: useCallback(<M extends Record<string, any>>({
                                                                          path,
@@ -86,7 +87,7 @@ export function useBuildDataSource({
          * @param onUpdate
          * @return Function to cancel subscription
          * @see useCollectionFetch if you need this functionality implemented as a hook
-         * @category Firestore
+         * @group Firestore
          */
         listenCollection: delegate.listenCollection
             // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -129,7 +130,7 @@ export function useBuildDataSource({
          * @param path
          * @param entityId
          * @param collection
-         * @category Firestore
+         * @group Firestore
          */
         fetchEntity: useCallback(<M extends Record<string, any>>({
                                                                      path,
@@ -148,7 +149,7 @@ export function useBuildDataSource({
          * @param onUpdate
          * @param onError
          * @return Function to cancel subscription
-         * @category Firestore
+         * @group Firestore
          */
         listenEntity: delegate.listenEntity
             // eslint-disable-next-line react-hooks/rules-of-hooks
@@ -180,7 +181,7 @@ export function useBuildDataSource({
          * @param schemaId
          * @param collection
          * @param status
-         * @category Firestore
+         * @group Firestore
          */
         saveEntity: useCallback(<M extends Record<string, any>>(
             {
@@ -236,7 +237,7 @@ export function useBuildDataSource({
          * Delete an entity
          * @param entity
          * @param collection
-         * @category Firestore
+         * @group Firestore
          */
         deleteEntity: useCallback(<M extends Record<string, any>>(
             {
@@ -254,7 +255,7 @@ export function useBuildDataSource({
          * @param property
          * @param entityId
          * @return `true` if there are no other fields besides the given entity
-         * @category Firestore
+         * @group Firestore
          */
         checkUniqueField: useCallback((
             path: string,
@@ -323,7 +324,7 @@ export function useBuildDataSource({
  * bindings.
  * Also, Firestore references are replaced with {@link EntityReference}
  * @param data
- * @category Firestore
+ * @group Firestore
  */
 export function cmsToDelegateModel(data: any,
                                    buildReference: (reference: EntityReference) => any,

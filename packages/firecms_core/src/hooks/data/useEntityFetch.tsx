@@ -3,10 +3,9 @@ import { Entity, EntityCollection, FireCMSContext, User } from "../../types";
 import { useDataSource } from "./useDataSource";
 import { useNavigationContext } from "../useNavigationContext";
 import { useFireCMSContext } from "../useFireCMSContext";
-import { resolveCollection } from "../../core";
 
 /**
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface EntityFetchProps<M extends Record<string, any>> {
     path: string;
@@ -16,7 +15,7 @@ export interface EntityFetchProps<M extends Record<string, any>> {
 }
 
 /**
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface EntityFetchResult<M extends Record<string, any>> {
     entity?: Entity<M>,
@@ -33,7 +32,7 @@ const CACHE: Record<string, Entity<any> | undefined> = {};
  * @param collection
  * @param entityId
  * @param useCache
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 
 export function useEntityFetch<M extends Record<string, any>, UserType extends User>(

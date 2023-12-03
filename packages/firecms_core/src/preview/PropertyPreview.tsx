@@ -8,14 +8,14 @@ import {
     ResolvedStringProperty
 } from "../types";
 
-import { ErrorView, resolveProperty } from "../core";
+import { resolveProperty } from "../util";
 
 import { PropertyPreviewProps } from "./PropertyPreviewProps";
 import { useFireCMSContext } from "../hooks";
 import { EmptyValue } from "./components/EmptyValue";
 import { UrlComponentPreview } from "./components/UrlComponentPreview";
 import { StorageThumbnail } from "./components/StorageThumbnail";
-import { Markdown } from "../components";
+import { Markdown } from "../ui";
 import { StringPropertyPreview } from "./property_previews/StringPropertyPreview";
 import { ArrayOfMapsPreview } from "./property_previews/ArrayOfMapsPreview";
 import { ArrayPropertyPreview } from "./property_previews/ArrayPropertyPreview";
@@ -29,9 +29,10 @@ import { ReferencePreview } from "./components/ReferencePreview";
 import { DatePreview } from "./components/DatePreview";
 import { BooleanPreview } from "./components/BooleanPreview";
 import { NumberPropertyPreview } from "./property_previews/NumberPropertyPreview";
+import { ErrorView } from "../components";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T>) {
 

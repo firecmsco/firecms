@@ -1,5 +1,5 @@
+import { ArrayContainer } from "../../components";
 import React from "react";
-import { ArrayContainer } from "../../core";
 
 interface ArrayContainerProps<T> {
     value: T[];
@@ -15,7 +15,7 @@ interface ArrayContainerProps<T> {
 }
 
 /**
- * @category Form custom fields
+ * @group Form custom fields
  */
 export function FormikArrayContainer<T>({
                                             name,

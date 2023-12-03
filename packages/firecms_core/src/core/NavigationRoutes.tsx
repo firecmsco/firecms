@@ -2,13 +2,13 @@ import React, { PropsWithChildren } from "react";
 
 import { Route, Routes, useLocation } from "react-router-dom";
 import { CMSView } from "../types";
-import { EntityCollectionView, DefaultHomePage, NotFoundPage } from "./components";
+import { DefaultHomePage, EntityCollectionView, NotFoundPage } from "../components";
 import { useBreadcrumbsContext, useNavigationContext } from "../hooks";
-import { toArray } from "./util/arrays";
+import { toArray } from "../util/arrays";
 import equal from "react-fast-compare"
 
 /**
- * @category Components
+ * @group Components
  */
 export type NavigationRoutesProps = {
     /**
@@ -27,7 +27,7 @@ export type NavigationRoutesProps = {
  * This component needs a parent {@link FireCMS}
  *
  * @constructor
- * @category Components
+ * @group Components
  */
 
 export const NavigationRoutes = React.memo<NavigationRoutesProps>(
@@ -150,7 +150,7 @@ interface RouteWrapperProps {
  * @param path
  * @param type
  * @constructor
- * @category Components
+ * @group Components
  */
 
 export const RouteWrapper = React.memo<PropsWithChildren<RouteWrapperProps>>(

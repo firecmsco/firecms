@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { DataType, EntityReference, FieldProps, GeoPoint } from "../../types";
 
-import { ArrayContainer, getDefaultValueForDataType, getIconForProperty, } from "../../core";
+import { ArrayContainer } from "../../components";
 import { FieldHelperText, LabelWithIcon } from "../components";
 import {
     BooleanSwitchWithLabel,
@@ -14,9 +14,10 @@ import {
     MenuItem,
     TextField,
     Typography
-} from "../../components";
+} from "../../ui";
 import { AddIcon, ArrowDropDownIcon, RemoveIcon } from "../../icons";
 import { defaultBorderMixin } from "../../styles";
+import { getDefaultValueForDataType, getIconForProperty } from "../../util";
 
 type MapEditViewRowState = [number, {
     key: string,
@@ -26,7 +27,7 @@ type MapEditViewRowState = [number, {
 /**
  * Field that allows edition of key value pairs.
  *
- * @category Form fields
+ * @group Form fields
  */
 export function KeyValueFieldBinding<T extends Record<string, any>>({
                                                                         propertyKey,

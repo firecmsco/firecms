@@ -4,7 +4,7 @@ import { ImagePreview } from "./ImagePreview";
 import { getThumbnailMeasure } from "../util";
 import { PreviewType } from "../../types";
 import { PreviewSize } from "../PropertyPreviewProps";
-import { Tooltip, Typography } from "../../components";
+import { Tooltip, Typography } from "../../ui";
 import { DescriptionIcon, OpenInNewIcon } from "../../icons";
 import { EmptyValue } from "./EmptyValue";
 

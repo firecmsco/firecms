@@ -6,11 +6,11 @@ import MdEditor, { Plugins } from "react-markdown-editor-lite";
 
 import { FieldHelperText, LabelWithIcon } from "../components";
 import { FieldProps } from "../../types";
-import { getIconForProperty } from "../../core";
+import { getIconForProperty } from "../../util";
 import { fieldBackgroundDisabledMixin, fieldBackgroundHoverMixin, fieldBackgroundMixin } from "../../styles";
-import { useInjectStyles } from "../../components/util/useInjectStyles";
-import { Typography } from "../../components";
-import { cn } from "../../components/util/cn";
+import { useInjectStyles } from "../../ui/util/useInjectStyles";
+import { Typography } from "../../ui";
+import { cn } from "../../ui/util/cn";
 
 const mdParser = new MarkdownIt();
 try {
@@ -28,7 +28,7 @@ try {
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export function MarkdownFieldBinding({
                                          propertyKey,

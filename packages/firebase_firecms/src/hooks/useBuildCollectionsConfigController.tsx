@@ -18,7 +18,7 @@ import {
 } from "../utils";
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export interface CollectionConfigControllerProps<EC extends PersistedCollection, UserType extends User = User> {
 

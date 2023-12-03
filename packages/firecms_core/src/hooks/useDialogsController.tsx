@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { DialogsController } from "../types/dialogs_controller";
-import { DialogsControllerContext } from "../core/contexts/DialogsProvider";
+import { DialogsControllerContext } from "../contexts/DialogsProvider";
 
 /**
  * Use this hook to open a dialog imperatively.
@@ -9,6 +9,6 @@ import { DialogsControllerContext } from "../core/contexts/DialogsProvider";
  * Consider that in order to use this hook you need to have a parent
  * `FireCMS`
  *
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export const useDialogsController = (): DialogsController => useContext(DialogsControllerContext);

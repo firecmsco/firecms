@@ -7,7 +7,7 @@ import { ResolvedArrayProperty, ResolvedStringProperty } from "./resolved_entiti
 import { FilterValues } from "./collections";
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type DataType<T extends CMSType = CMSType> =
     T extends string ? "string" :
@@ -20,7 +20,7 @@ export type DataType<T extends CMSType = CMSType> =
                                 T extends Record<string, any> ? "map" : never;
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type CMSType =
     | string
@@ -46,7 +46,7 @@ export type AnyProperty =
     MapProperty;
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type Property<T extends CMSType = CMSType> =
     T extends string ? StringProperty :
@@ -60,7 +60,7 @@ export type Property<T extends CMSType = CMSType> =
 
 /**
  * Interface including all common properties of a CMS property
- * @category Entity properties
+ * @group Entity properties
  */
 export interface BaseProperty<T extends CMSType, CustomProps = any> {
 
@@ -158,7 +158,7 @@ export interface BaseProperty<T extends CMSType, CustomProps = any> {
 }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export interface PropertyDisabledConfig {
 
@@ -184,7 +184,7 @@ export interface PropertyDisabledConfig {
 }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type EnumType = number | string;
 
@@ -197,14 +197,14 @@ export type EnumType = number | string;
  * label instead of a simple string (for enabling or disabling options and
  * choosing colors).
  * If you need to ensure the order of the elements use an array of {@link EnumValueConfig}
- * @category Entity properties
+ * @group Entity properties
  */
 export type EnumValues = EnumValueConfig[]
     | Record<string | number, string | EnumValueConfig>;
 
 /**
  * Configuration for a particular entry in an `EnumValues`
- * @category Entity properties
+ * @group Entity properties
  */
 export type EnumValueConfig = {
     /**
@@ -228,14 +228,14 @@ export type EnumValueConfig = {
 
 /**
  * Record of properties of an entity or a map property
- * @category Entity properties
+ * @group Entity properties
  */
 export type Properties<M extends Record<string, any> = any> = {
     [k in keyof M]: Property<M[keyof M]>;
 };
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type PropertyBuilderProps<M extends Record<string, any> = any> =
     {
@@ -269,7 +269,7 @@ export type PropertyBuilderProps<M extends Record<string, any> = any> =
  * You can use this type to define a property dynamically, based
  * on the current values of the entity, the previous values and the
  * current value of the property, as well as the path and entity ID.
- * @category Entity properties
+ * @group Entity properties
  */
 export type PropertyBuilder<T extends CMSType = any, M extends Record<string, any> = any> =
     ({
@@ -281,14 +281,14 @@ export type PropertyBuilder<T extends CMSType = any, M extends Record<string, an
      }: PropertyBuilderProps<M>) => Property<T> | null;
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type PropertyOrBuilder<T extends CMSType = CMSType, M extends Record<string, any> = Record<string, any>> =
     Property<T>
     | PropertyBuilder<T, M>;
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export type PropertiesOrBuilders<M extends Record<string, any> = Record<string, any>> =
     {
@@ -296,7 +296,7 @@ export type PropertiesOrBuilders<M extends Record<string, any> = Record<string, 
     };
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export interface NumberProperty extends BaseProperty<number> {
 
@@ -321,7 +321,7 @@ export interface NumberProperty extends BaseProperty<number> {
 }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export interface BooleanProperty extends BaseProperty<boolean> {
 
@@ -335,7 +335,7 @@ export interface BooleanProperty extends BaseProperty<boolean> {
 }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export interface StringProperty extends BaseProperty<string> {
 
@@ -401,7 +401,7 @@ export interface StringProperty extends BaseProperty<string> {
 }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSType = CMSType> extends BaseProperty<T> {
 
@@ -470,7 +470,7 @@ export interface ArrayProperty<T extends ArrayT[] = any[], ArrayT extends CMSTyp
 }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export interface MapProperty<T extends Record<string, CMSType> = Record<string, CMSType>> extends BaseProperty<T> {
 
@@ -529,7 +529,7 @@ export interface MapProperty<T extends Record<string, CMSType> = Record<string, 
 }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export interface DateProperty extends BaseProperty<Date> {
 
@@ -562,7 +562,7 @@ export interface DateProperty extends BaseProperty<Date> {
 }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 // TODO: currently this is the only unsupported field
 export interface GeopointProperty extends BaseProperty<GeoPoint> {
@@ -577,7 +577,7 @@ export interface GeopointProperty extends BaseProperty<GeoPoint> {
 }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export interface ReferenceProperty extends BaseProperty<EntityReference> {
 
@@ -613,7 +613,7 @@ export interface ReferenceProperty extends BaseProperty<EntityReference> {
 /**
  * Rules to validate any property. Some properties have specific rules
  * additionally to these.
- * @category Entity properties
+ * @group Entity properties
  */
 export interface PropertyValidationSchema {
     /**
@@ -643,7 +643,7 @@ export interface PropertyValidationSchema {
 
 /**
  * Validation rules for numbers
- * @category Entity properties
+ * @group Entity properties
  */
 export interface NumberPropertyValidationSchema extends PropertyValidationSchema {
     min?: number;
@@ -657,7 +657,7 @@ export interface NumberPropertyValidationSchema extends PropertyValidationSchema
 
 /**
  * Validation rules for strings
- * @category Entity properties
+ * @group Entity properties
  */
 export interface StringPropertyValidationSchema extends PropertyValidationSchema {
     length?: number;
@@ -675,7 +675,7 @@ export interface StringPropertyValidationSchema extends PropertyValidationSchema
 
 /**
  * Validation rules for dates
- * @category Entity properties
+ * @group Entity properties
  */
 export interface DatePropertyValidationSchema extends PropertyValidationSchema {
     min?: Date;
@@ -684,7 +684,7 @@ export interface DatePropertyValidationSchema extends PropertyValidationSchema {
 
 /**
  * Validation rules for arrays
- * @category Entity properties
+ * @group Entity properties
  */
 export interface ArrayPropertyValidationSchema extends PropertyValidationSchema {
     min?: number;
@@ -693,7 +693,7 @@ export interface ArrayPropertyValidationSchema extends PropertyValidationSchema 
 
 /**
  * Additional configuration related to Storage related fields
- * @category Entity properties
+ * @group Entity properties
  */
 export interface StorageConfig {
 
@@ -774,7 +774,7 @@ export interface StorageConfig {
 }
 
 /**
- * @category Entity properties
+ * @group Entity properties
  */
 export interface UploadedFileContext {
     /**
@@ -815,14 +815,14 @@ export interface UploadedFileContext {
 
 /**
  * Used for previewing urls if the download file is known
- * @category Entity properties
+ * @group Entity properties
  */
 export type PreviewType = "image" | "video" | "audio" | "file";
 
 /**
  * MIME types for storage fields
  * @see https://developer.mozilla.org/en-US/docs/Web/HTTP/Basics_of_HTTP/MIME_types/Common_types
- * @category Entity properties
+ * @group Entity properties
  */
 export type FileType =
     "image/*"

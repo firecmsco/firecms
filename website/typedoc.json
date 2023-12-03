@@ -1,30 +1,7 @@
 {
-    "allReflectionsHaveOwnDocument": true,
     "cleanOutputDir": true,
-    "readme": "docs/api_index.md",
-    "name": "API",
-    "categorizeByGroup": true,
-    "categoryOrder": [
-        "Core",
-        "Collections",
-        "Entity properties",
-        "Entities",
-        "Form fields",
-
-        "Builder",
-
-        "Core components",
-        "Form custom fields",
-        "Preview components",
-        "Collection components",
-
-        "Hooks and utilities",
-
-        "Authentication",
-        "Firestore",
-        "Locales",
-        "Navigation",
-        "Firebase Auth, Firestore and FirebaseStorage",
-        "*"
-    ]
+    "entryPointStrategy": "expand",
+    "name": "FireCMS API",
+    "out": "docs-test",
+    "plugin": ["typedoc-plugin-markdown"]
 }

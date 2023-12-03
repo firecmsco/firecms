@@ -24,7 +24,9 @@ iconKeys.forEach((key: string) => {
         "Icon";
 
     const iconComponent = `import { Icon, IconProps } from "../Icon";
-
+/**
+ * @group Icons
+ */
 export function ${componentName}(props: IconProps) {
     return <Icon {...props} iconKey={"${key}"}/>
 }

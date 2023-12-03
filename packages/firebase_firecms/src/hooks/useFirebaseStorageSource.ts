@@ -4,7 +4,7 @@ import { DownloadConfig, DownloadMetadata, StorageSource, UploadFileProps } from
 import { useEffect, useState } from "react";
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export interface FirebaseStorageSourceProps {
     firebaseApp?: FirebaseApp
@@ -12,7 +12,7 @@ export interface FirebaseStorageSourceProps {
 
 /**
  * Use this hook to build an {@link StorageSource} based on Firebase storage
- * @category Firebase
+ * @group Firebase
  */
 export function useFirebaseStorageSource({ firebaseApp }: FirebaseStorageSourceProps): StorageSource {
 

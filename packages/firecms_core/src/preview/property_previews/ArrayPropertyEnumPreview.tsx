@@ -3,7 +3,7 @@ import { ArrayEnumPreview } from "../components/ArrayEnumPreview";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function ArrayPropertyEnumPreview({
                                              propertyKey,

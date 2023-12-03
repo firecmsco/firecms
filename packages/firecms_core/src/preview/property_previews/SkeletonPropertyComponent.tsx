@@ -8,7 +8,7 @@ import {
 import React from "react";
 import { getThumbnailMeasure } from "../util";
 import { PreviewSize } from "../PropertyPreviewProps";
-import { Skeleton } from "../../components/Skeleton";
+import { Skeleton } from "../../ui";
 
 export interface SkeletonPropertyComponentProps {
     property: ResolvedProperty,
@@ -16,7 +16,7 @@ export interface SkeletonPropertyComponentProps {
 }
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function SkeletonPropertyComponent({
                                               property,

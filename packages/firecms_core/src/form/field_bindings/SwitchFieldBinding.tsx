@@ -3,8 +3,8 @@ import React from "react";
 import { FieldProps } from "../../types";
 import { LabelWithIcon } from "../components";
 import { useClearRestoreValue } from "../../hooks";
-import { getIconForProperty } from "../../core";
-import { BooleanSwitchWithLabel } from "../../components/BooleanSwitchWithLabel";
+import { getIconForProperty } from "../../util";
+import { BooleanSwitchWithLabel } from "../../ui/BooleanSwitchWithLabel";
 import { FieldHelperText } from "../components/FieldHelperText";
 
 type SwitchFieldProps = FieldProps<boolean>;
@@ -14,7 +14,7 @@ type SwitchFieldProps = FieldProps<boolean>;
  *
  * This is one of the internal components that get mapped natively inside forms
  * and tables to the specified properties.
- * @category Form fields
+ * @group Form fields
  */
 export const SwitchFieldBinding = React.forwardRef(function SwitchFieldBinding({
                                                                                    propertyKey,

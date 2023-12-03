@@ -1,5 +1,5 @@
 import React from "react";
-import { Checkbox } from "../../components/Checkbox";
+import { Checkbox } from "../../ui/Checkbox";
 
 /**
  * @category Preview components

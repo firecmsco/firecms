@@ -1,11 +1,12 @@
 import React from "react";
-import { ErrorBoundary, resolveArrayProperty } from "../../core";
+import { ErrorBoundary } from "../../components";
 import { useFireCMSContext } from "../../hooks";
 import { PropertyPreviewProps } from "../PropertyPreviewProps";
 import { PropertyPreview } from "../PropertyPreview";
+import { resolveArrayProperty } from "../../util";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function ArrayOfMapsPreview({
                                        propertyKey,

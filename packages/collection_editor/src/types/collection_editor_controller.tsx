@@ -4,7 +4,7 @@ import { PersistedCollection } from "./persisted_collection";
 
 /**
  * Controller to open the collection editor dialog.
- * @category Hooks and utilities
+ * @group Hooks and utilities
  */
 export interface CollectionEditorController {
 

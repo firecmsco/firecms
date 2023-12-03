@@ -6,7 +6,7 @@
  * in this interface, it contains all the methods of the former, such as `delete`,
  * `getIdToken`, etc.
  *
- * @category Models
+ * @group Models
  */
 export type User = {
     /**

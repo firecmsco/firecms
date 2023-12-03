@@ -1,5 +1,8 @@
 import { Icon, IconProps } from "../Icon";
 
+/**
+ * @group Icons
+ */
 export function TouchAppIcon(props: IconProps) {
     return <Icon {...props} iconKey={"touch_app"}/>
 }

@@ -11,7 +11,7 @@ import { AppCheck, AppCheckOptions, AppCheckTokenResult } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
 
 /**
- * @category Firebase
+ * @group Firebase
  */
 export interface InitializeAppCheckProps {
     firebaseApp?: FirebaseApp;
@@ -33,7 +33,7 @@ export interface InitializeAppCheckResult {
  * and initialise App Check yourself.
  *
  * @param firebaseApp
- * @category Firebase
+ * @group Firebase
  */
 export function useInitializeAppCheck({
                                           firebaseApp,

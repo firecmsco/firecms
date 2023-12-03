@@ -11,7 +11,7 @@ interface LabelWithIconProps {
 /**
  * Render the label of a form field for a given property, with the corresponding
  * icon.
- * @category Form custom fields
+ * @group Form custom fields
  */
 export function LabelWithIcon({
                                   icon,

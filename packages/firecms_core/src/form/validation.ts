@@ -9,8 +9,8 @@ import {
 } from "../types";
 import * as yup from "yup";
 import { AnySchema, ArraySchema, BooleanSchema, DateSchema, NumberSchema, ObjectSchema, StringSchema } from "yup";
-import { enumToObjectEntries } from "../core/util/enums";
-import { getValueInPath, hydrateRegExp, isPropertyBuilder } from "../core";
+import { enumToObjectEntries } from "../util/enums";
+import { getValueInPath, hydrateRegExp, isPropertyBuilder } from "../util";
 
 // Add custom unique function for array values
 declare module "yup" {

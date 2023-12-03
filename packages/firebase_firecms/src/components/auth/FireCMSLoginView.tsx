@@ -16,7 +16,7 @@ export interface FireCMSLoginViewProps {
  * Use this component to render a login view, that updates
  * the state of the {@link AuthController} based on the result
  * @constructor
- * @category Firebase
+ * @group Firebase
  */
 export function FireCMSLoginView({
                                   authController,
