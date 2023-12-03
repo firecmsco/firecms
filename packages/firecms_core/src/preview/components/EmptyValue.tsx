@@ -1,7 +1,7 @@
 import React from "react";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function EmptyValue() {
 

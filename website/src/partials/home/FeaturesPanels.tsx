@@ -26,7 +26,7 @@ function FeaturesPanels() {
             // className={ContainerMixin + " px-4 relative sm:px-6 py-16 md:py-28 text-text-primary"}
         >
 
-            <LinedSpace/>
+            <LinedSpace size={"medium"}/>
 
             <div
                 className={"flex items-center mb-4"}

@@ -16,7 +16,7 @@ function FirebaseIntro() {
                includeMargin={false}
                data-aos="fade-up">
 
-            <LinedSpace size={"xlarge"}/>
+            <LinedSpace size={"large"}/>
 
             <div className={clsx("relative flex justify-center mb-12 border-b border-0", defaultBorderMixin)}>
                 <div

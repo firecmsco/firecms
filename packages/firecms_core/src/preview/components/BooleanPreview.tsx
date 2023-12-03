@@ -2,7 +2,7 @@ import React from "react";
 import { Checkbox } from "../../ui/Checkbox";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function BooleanPreview({ value }: {
     value: boolean

@@ -1,5 +1,6 @@
-// Corresponds to 10 frames at 60 Hz.
-// A few bytes payload overhead when lodash/debounce is ~3 kB and debounce ~300 B.
+/**
+ * @ignore
+ */
 export function debounce<T extends (...args: any[]) => any>(func: T, wait = 166) {
     let timeout: ReturnType<typeof setTimeout>;
 
@@ -19,6 +20,9 @@ export function debounce<T extends (...args: any[]) => any>(func: T, wait = 166)
     return debounced as T & Cancelable;
 }
 
+/**
+ * @ignore
+ */
 export interface Cancelable {
     clear(): void;
 }

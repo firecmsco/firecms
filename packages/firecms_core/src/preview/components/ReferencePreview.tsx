@@ -24,7 +24,7 @@ export type ReferencePreviewProps = {
 };
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export const ReferencePreview = React.memo<ReferencePreviewProps>(function ReferencePreview(props: ReferencePreviewProps) {
     const reference = props.reference;

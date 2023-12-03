@@ -22,16 +22,12 @@ module.exports = {
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
-        // [
-        //     "docusaurus-plugin-typedoc",
-        //     {
-        //         entryPoints: [
-        //             "../packages/firebase_firecms/src/index.ts",
-        //         ],
-        //         tsconfig: "../packages/firebase_firecms/tsconfig.json",
-        //         watch: process.env.TYPEDOC_WATCH,
-        //     }
-        // ],
+        [
+            "docusaurus-plugin-typedoc",
+            {
+                watch: process.env.TYPEDOC_WATCH,
+            }
+        ],
         function fontainePlugin(_context, _options) {
             return {
                 name: "fontaine-plugin",

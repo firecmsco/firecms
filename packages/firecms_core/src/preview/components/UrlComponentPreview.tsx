@@ -9,7 +9,7 @@ import { DescriptionIcon, OpenInNewIcon } from "../../icons";
 import { EmptyValue } from "./EmptyValue";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function UrlComponentPreview({
                                         url,

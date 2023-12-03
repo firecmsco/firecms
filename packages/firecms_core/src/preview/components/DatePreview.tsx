@@ -7,7 +7,7 @@ import { useFireCMSContext } from "../../hooks";
 import { defaultDateFormat } from "../../util";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function DatePreview({
                                 date

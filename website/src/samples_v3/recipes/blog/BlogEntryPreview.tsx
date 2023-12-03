@@ -35,7 +35,7 @@ export function BlogEntryPreview({ modifiedValues }: EntityCustomViewParams<Blog
     return (
         <div>
 
-            {headerUrl && <img
+            {headerUrl && <img loading="lazy" 
                 alt={"Header"}
                 style={{
                     width: "100%",
@@ -103,7 +103,7 @@ export function StorageImage({ storagePath }: { storagePath: string }) {
     if (!storagePath)
         return <></>;
 
-    return (<img
+    return (<img loading="lazy" 
         alt={"Generic"}
         style={{
             objectFit: "contain",

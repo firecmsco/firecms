@@ -57,7 +57,7 @@ export function DeveloperFeatures() {
                     </SyntaxHighlighter>
                     <div
                         className={"p-1 flex justify-center"}>
-                        <img
+                        <img loading="lazy" 
                             className=""
                             src={pricePreview}
                             width="500"

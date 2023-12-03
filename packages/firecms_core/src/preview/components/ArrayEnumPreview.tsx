@@ -6,7 +6,7 @@ import { PreviewSize } from "../PropertyPreviewProps";
 import { ErrorBoundary } from "../../components";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function ArrayEnumPreview({
                                      name,

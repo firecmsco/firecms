@@ -10,7 +10,7 @@ import { User } from "./user";
  * Useful for adding your own logic or blocking the execution of the operation.
  * @group Models
  */
-export interface EntityCallbacks<M extends Record<string, any> = any, UserType extends User = User> {
+export type EntityCallbacks<M extends Record<string, any> = any, UserType extends User = User> = {
 
     /**
      * Callback used after fetching data

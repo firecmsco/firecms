@@ -1,5 +1,5 @@
 /**
- * @group Storage
+ * @group Models
  */
 export interface UploadFileProps {
     file: File,
@@ -9,7 +9,7 @@ export interface UploadFileProps {
 }
 
 /**
- * @group Storage
+ * @group Models
  */
 export interface UploadFileResult {
     /**
@@ -19,7 +19,7 @@ export interface UploadFileResult {
 }
 
 /**
- * @group Storage
+ * @group Models
  */
 export interface DownloadConfig {
     /**
@@ -64,7 +64,7 @@ export declare interface DownloadMetadata {
 }
 
 /**
- * @group Storage
+ * @group Models
  */
 export interface StorageSource {
     /**

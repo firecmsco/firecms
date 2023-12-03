@@ -6,7 +6,7 @@ import { IconButton, Tooltip } from "../../ui";
 import { ContentCopyIcon, OpenInNewIcon } from "../../icons";
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export interface ImagePreviewProps {
     size: PreviewSize,
@@ -14,7 +14,7 @@ export interface ImagePreviewProps {
 }
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function ImagePreview({
                                  size,

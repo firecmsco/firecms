@@ -12,7 +12,7 @@ export interface EnumValuesChipProps {
 }
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export function EnumValuesChip({
                                    enumValues,

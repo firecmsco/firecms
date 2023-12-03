@@ -86,7 +86,7 @@ name: {
 ```
 
 So it indicates a type error:
-<img
+<img loading="lazy" 
     style={{maxWidth: "400px"}}
     src={require('../static/img/config_error.png').default}
     alt="Configuration error"

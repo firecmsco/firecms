@@ -14,7 +14,7 @@ type StorageThumbnailProps = {
 };
 
 /**
- * @category Preview components
+ * @group Preview components
  */
 export const StorageThumbnail = React.memo<StorageThumbnailProps>(StorageThumbnailInternal, areEqual) as React.FunctionComponent<StorageThumbnailProps>;
 

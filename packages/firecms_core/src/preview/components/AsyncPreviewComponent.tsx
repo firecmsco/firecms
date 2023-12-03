@@ -10,7 +10,7 @@ export interface AsyncPreviewComponentProps {
  * Utility component used to render the result of an async execution.
  * It shows a loading indicator while at it.
  *
- * @category Preview components
+ * @group Preview components
  */
 export const AsyncPreviewComponent = React.memo(function AsyncPreviewComponentInternal<M extends Record<string, any>>(
         {

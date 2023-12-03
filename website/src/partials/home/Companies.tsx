@@ -37,7 +37,7 @@ export function Companies() {
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://medicalmotion.com"}>
-                <img src={isDarkTheme ? MMLogoDark : MMLogo}
+                <img loading="lazy"  src={isDarkTheme ? MMLogoDark : MMLogo}
                      alt="MedicalMotion Logo"
                      className="w-48 h-min aspect-auto m-4"/>
             </a>
@@ -45,7 +45,7 @@ export function Companies() {
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://www.proton-health.com"}>
-                <img src={ProtonLogo}
+                <img loading="lazy"  src={ProtonLogo}
                      alt="MedicalMotion Logo"
                      className="w-48 h-min aspect-auto m-4"/>
             </a>
@@ -53,7 +53,7 @@ export function Companies() {
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://www.somniosoftware.com/"}>
-                <img src={SomnioLogo}
+                <img loading="lazy"  src={SomnioLogo}
                      alt="Somnio Logo"
                      className="w-48 h-min aspect-auto m-4"/>
             </a>
