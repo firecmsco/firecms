@@ -16,6 +16,7 @@ export function LinedSpace({ position = "bottom", size = "small" }: {
 
     return (
         <div className={clsx(heightClass,
+            "w-full",
             "border-0",
             position === "top" ? "border-t" : "border-b",
             defaultBorderMixin)}/>

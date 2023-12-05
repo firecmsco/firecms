@@ -13,12 +13,12 @@ function FirebaseIntro() {
     return (
         <Panel color={"lighter"}
                includePadding={false}
-               includeMargin={false}
-               data-aos="fade-up">
+               includeMargin={false}>
 
             <LinedSpace size={"large"}/>
 
-            <div className={clsx("relative flex justify-center mb-12 border-b border-0", defaultBorderMixin)}>
+            <div className={clsx("relative flex justify-center mb-12 border-b border-0", defaultBorderMixin)}
+                 data-aos="fade-up">
                 <div
                     className="flex flex-row gap-8 md:gap-12 justify-center items-center p-4">
                     <ReactLogo
@@ -38,9 +38,9 @@ function FirebaseIntro() {
             </div>
 
             <div
-                className="max-w-5xl mx-auto text-center text-text-primary mb-12">
+                className="max-w-5xl mx-auto text-center mb-12">
                 <h2 className="h1 mb-4 mt-4">
-                    More than a CMS
+                    Much more than a CMS
                 </h2>
                 <p className="text-xl md:text-2xl">
                     <b>FireCMS</b> is an open source headless admin panel built by <b>developers

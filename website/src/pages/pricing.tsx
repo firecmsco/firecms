@@ -38,7 +38,7 @@ function FeaturesPage() {
                 // </a>}
             />
 
-            <VersionsToggle value={version} onSelect={setVersion}/>
+            {/*<VersionsToggle value={version} onSelect={setVersion}/>*/}
 
             {version === "cloud" && <FireCMSCloudVersions/>}
             {version === "self-hosted" && <SelfHosted/>}

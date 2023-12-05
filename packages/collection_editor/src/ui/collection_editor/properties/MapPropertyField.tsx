@@ -105,7 +105,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, custom
 
                     {empty &&
                         <Typography variant={"label"}
-                                    className="h-full flex items-center justify-center p-2">
+                                    className="h-full flex items-center justify-center p-4">
                             Add the first property to this group
                         </Typography>}
                 </Paper>

@@ -111,15 +111,17 @@ export function PropertyPreview<T extends CMSType>(props: PropertyPreviewProps<T
                     content = <ArrayPropertyPreview {...props}
                                                     value={value}
                                                     property={property as ResolvedArrayProperty}/>;
-                } else if (arrayProperty.of.dataType === "map") {
-                    content =
-                        <ArrayOfMapsPreview propertyKey={propertyKey}
-                                            property={property as ResolvedArrayProperty}
-                                            value={value as Record<string, any>[]} // This might be wrong
-                                            entity={entity}
-                                            size={size}
-                        />;
-                } else if (arrayProperty.of.dataType === "reference") {
+                }
+                // else if (arrayProperty.of.dataType === "map") {
+                //     content =
+                //         <ArrayOfMapsPreview propertyKey={propertyKey}
+                //                             property={property as ResolvedArrayProperty}
+                //                             value={value as Record<string, any>[]} // This might be wrong
+                //                             entity={entity}
+                //                             size={size}
+                //         />;
+                // }
+                else if (arrayProperty.of.dataType === "reference") {
                     content = <ArrayOfReferencesPreview {...props}
                                                         value={value}
                                                         property={property as ResolvedArrayProperty}/>;

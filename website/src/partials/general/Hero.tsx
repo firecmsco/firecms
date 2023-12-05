@@ -15,7 +15,7 @@ export function Hero({
 }) {
     return (
         <>
-            <div className={"w-full relative bg-blue-800"}>
+            <div className={"w-full relative bg-blue-800 -mt-20"}>
                 <PagesBackground color={color}/>
                 <Panel includeMargin={false}
                        includePadding={false}
@@ -35,9 +35,9 @@ export function Hero({
                 </Panel>
             </div>
 
-            <Panel includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
+            <Panel color={"transparent"} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
                 {subtitle &&
-                    <div className="text-xl  md:text-2xl">
+                    <div className="font-mono uppercase m-0 text-xl md:text-2xl">
                         {subtitle}
                     </div>}
                 {cta && <div

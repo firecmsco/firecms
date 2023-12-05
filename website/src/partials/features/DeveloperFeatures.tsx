@@ -7,7 +7,7 @@ import { useColorMode } from "@docusaurus/theme-common";
 
 // @ts-ignore
 import SyntaxHighlighter from "react-syntax-highlighter";
-import { atomOneLight, dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
+import { dracula } from "react-syntax-highlighter/dist/esm/styles/hljs";
 import { arrowIcon } from "../icons";
 
 import TickIcon from "@site/static/img/icons/check.svg";
@@ -22,9 +22,9 @@ export function DeveloperFeatures() {
     const isDarkTheme = colorMode === "dark";
 
     return (<>
-            <Panel color={"gray"} includeMargin={false} includePadding={false}>
+            <Panel color={"gray"} includeMargin={false} includePadding={true}>
 
-                <p className={clsx("text-center text-secondary uppercase font-mono font-bold p-8 border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
+                <p className={clsx("text-center text-secondary uppercase font-mono font-bold border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
                     For developers
                 </p>
 
@@ -32,14 +32,14 @@ export function DeveloperFeatures() {
                     reverseSmall={true}
                     animation={false}
                     left={<div
-                        className="p-8 relative flex-col font-mono">
+                        className="relative flex-col font-mono">
 
                         <SyntaxHighlighter
-                            className={clsx("max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
+                            className={clsx("p-4 max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
                             language={"typescript"}
                             showLineNumbers={false}
                             wrapLines={true}
-                            style={isDarkTheme ? dracula : atomOneLight}
+                            style={dracula}
                         >
                             {
                                 `const price = buildProperty({
@@ -48,8 +48,7 @@ export function DeveloperFeatures() {
     dataType: "number",
     validation: {
         required: true,
-        requiredMessage:
-         "You must set a price between 0 and 1000",
+        requiredMessage: "Price must be between 0 and 1000",
         min: 0,
         max: 1000
     }
@@ -108,11 +107,11 @@ export function DeveloperFeatures() {
                     }/>
             </Panel>
 
-            <Panel color={"gray"} includeMargin={false} includePadding={false}>
+            <Panel color={"gray"} includeMargin={false} includePadding={true}>
                 <TwoColumns
                     animation={false}
                     left={
-                        <div className={"p-8"}>
+                        <div>
                             <div className={"flex items-center mb-3"}>
 
                                 <div
@@ -141,12 +140,12 @@ export function DeveloperFeatures() {
                     } right={
                     <>
                         <div
-                            className="relative flex-col font-mono p-8">
+                            className="relative flex-col font-mono">
                             <SyntaxHighlighter
-                                className={clsx("max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
+                                className={clsx("p-4 max-w-xs overflow-x-auto sm:max-w-full overflow-y-hidden border border-solid", defaultBorderMixin)}
                                 language={"typescript"}
                                 showLineNumbers={false}
-                                style={isDarkTheme ? dracula : atomOneLight}
+                                style={dracula}
                             >
                                 {`const productCollection = buildCollection({
     name: "Product",

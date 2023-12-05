@@ -77,7 +77,7 @@ export default function LayoutWrapper(props) {
         <>
             <div
                 className={clsx("pointer-events-none fixed top-0 left-0 right-0 w-[84rem] h-full max-w-full mx-auto border-x border-y-0 border-solid", defaultBorderMixin)}/>
-            {isDocs() && <div className={"h-20"}/>}
+            {/*{isDocs() && <div className={"h-20"}/>}*/}
             <Layout {...props} />
         </>
     );

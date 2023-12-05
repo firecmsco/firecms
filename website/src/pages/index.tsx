@@ -10,11 +10,11 @@ import FirebaseTeaser from "../partials/home/OpenSourceDetails";
 import FirebaseIntro from "../partials/home/FirebaseIntro";
 import { Companies } from "../partials/home/Companies";
 import FeaturesTeaser from "../partials/home/FeaturesTeaser";
-import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
 import OpenAITeaser from "../partials/home/OpenAITeaser";
 import { SchemaEditorIntro } from "../partials/home/SchemaEditorIntro";
 import { DeveloperFeatures } from "../partials/features/DeveloperFeatures";
 import { UsageExamples } from "../partials/UsageExamples";
+import { QuotesSection } from "../partials/Quotes";
 
 function Home() {
 
@@ -25,37 +25,36 @@ function Home() {
             <Head>
                 <title>FireCMS - Firestore/Firebase headless CMS</title>
             </Head>
-            <div className="flex flex-col min-h-screen overflow-hidden">
 
-                <main className="flex-grow">
+            <HeroHome/>
 
-                    <HeroHome/>
+            <main>
 
-                    <UsageExamples/>
-                    <FirebaseIntro/>
+                <UsageExamples/>
 
+                <FirebaseIntro/>
 
-                    <ManageYour/>
+                <QuotesSection/>
 
-                    <FeaturesPanels/>
+                <ManageYour/>
 
-                    <Companies/>
+                <Companies/>
 
+                <FeaturesTeaser/>
 
-                    <FeaturesTeaser/>
+                <DeveloperFeatures/>
 
-                    <DeveloperFeatures/>
+                <TechSplash/>
 
-                    <TechSplash/>
+                <FeaturesPanels/>
 
-                    <SchemaEditorIntro/>
+                <SchemaEditorIntro/>
 
-                    <OpenAITeaser/>
-                    <FirebaseTeaser/>
+                <OpenAITeaser/>
+                <FirebaseTeaser/>
 
-                </main>
+            </main>
 
-            </div>
         </Layout>
     );
 }

@@ -73,7 +73,7 @@ export default function HeroNeatGradient({ color }: { color: "primary" | "second
             "waveAmplitude": getAmplitude(scrollRef.current),
             "shadows": 0,
             "highlights": 1,
-            "colorSaturation": 10,
+            "colorSaturation": 0,
             "wireframe": true,
             "colorBlending": 6,
             // "backgroundColor": "#0070F4",
@@ -87,7 +87,7 @@ export default function HeroNeatGradient({ color }: { color: "primary" | "second
 
     return (
         <canvas
-            className={color === "primary" ? "bg-blue-800" : "bg-rose-500"}
+            className={color === "primary" ? "bg-blue-600" : "bg-rose-500"}
             style={{
                 position: "absolute",
                 isolation: "isolate",

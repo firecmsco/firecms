@@ -2,16 +2,20 @@ import React from "react";
 import { ThreeColumns } from "../general/ThreeColumns";
 import {
     ContainerMixin,
-    CTAButtonMixin,
+    ContainerPaddingMixin,
     CTACaret,
-    CTAOutlinedButtonMixin, CTAOutlinedButtonWhiteMixin
+    CTAOutlinedButtonMixin,
+    CTAOutlinedButtonWhiteMixin,
+    defaultBorderMixin
 } from "../styles";
+import clsx from "clsx";
+import { LinedSpace } from "../layout/LinedSpace";
 
 export function FireCMSCloudVersions() {
 
     const freeTier = (
         <div
-            className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
+            className={clsx("h-full max-w-sm p-6 border rounded-lg shadow dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
 
             <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Free
@@ -40,7 +44,7 @@ export function FireCMSCloudVersions() {
 
     const plusTier = (
         <div
-            className="h-full max-w-sm p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent">
+            className={clsx("h-full max-w-sm p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
 
             <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300 text-primary"}>
                 Plus
@@ -68,7 +72,7 @@ export function FireCMSCloudVersions() {
 
     const proTier = (
         <div
-            className="h-full max-w-sm p-6 border border-solid border-gray-200 rounded-lg shadow dark:border-gray-700 flex flex-col">
+            className={clsx("h-full max-w-sm p-6 border rounded-lg shadow dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
 
             <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Pro
@@ -101,37 +105,41 @@ export function FireCMSCloudVersions() {
     );
 
     return <section
-        className={ContainerMixin + " flex flex-col items-center my-16 text-lg"}>
+        className={clsx(defaultBorderMixin, "flex flex-col items-center justify-center text-lg border-0 border-t")}>
+
+        <LinedSpace/>
+
+        <div className={clsx(ContainerMixin, ContainerPaddingMixin,)}>
+
+            <h2 className={"text-3xl md:text-4xl font-bold mb-4 text-center"}>
+                Full no-code/low-code solution
+            </h2>
+
+            <p>
+                <strong>FireCMS Cloud</strong> offers a complete, end-to-end
+                solution for businesses that require the highest level of
+                support and security. With dedicated hosting, advanced features, and
+                expert support, you'll have everything you need to take your project
+                to the next level.
+            </p>
 
 
-        <h2 className={"text-3xl md:text-4xl font-bold mb-4 text-center"}>
-            Full no-code solution
-        </h2>
+            <ThreeColumns
+                left={freeTier}
+                center={plusTier}
+                right={proTier}
+            />
 
-        <p>
-            <strong>FireCMS Cloud</strong> offers a complete, end-to-end
-            solution for businesses that require the highest level of
-            support and security. With dedicated hosting, advanced features, and
-            expert support, you'll have everything you need to take your project
-            to the next level.
-        </p>
-
-
-        <ThreeColumns
-            left={freeTier}
-            center={plusTier}
-            right={proTier}
-        />
-
-        <a
-            className={CTAOutlinedButtonWhiteMixin}
-            href="http://app.firecms.co"
-            rel="noopener noreferrer"
-            target="_blank"
-        >
-            Go to FireCMS Cloud
-            <CTACaret/>
-        </a>
+            <a
+                className={CTAOutlinedButtonWhiteMixin}
+                href="http://app.firecms.co"
+                rel="noopener noreferrer"
+                target="_blank"
+            >
+                Go to FireCMS Cloud
+                <CTACaret/>
+            </a>
+        </div>
     </section>;
 
 }

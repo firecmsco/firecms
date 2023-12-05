@@ -20,7 +20,7 @@ import {
     isPropertyBuilder,
     mergeDeep,
     Property,
-    PropertyConfig, PropertyOrBuilder,
+    PropertyConfig,
     Select,
     toSnakeCase,
     Typography
@@ -41,6 +41,7 @@ import { editableProperty } from "../../utils/entities";
 import { KeyValuePropertyField } from "./properties/KeyValuePropertyField";
 import { updatePropertyFromWidget } from "./utils/update_property_for_widget";
 import { PropertySelectItem } from "./PropertySelectItem";
+import { UrlPropertyField } from "./properties/UrlPropertyField";
 
 export type PropertyWithId = Property & {
     id?: string
@@ -361,12 +362,15 @@ function PropertyEditView({
     if (selectedFieldConfigId === "text_field" ||
         selectedFieldConfigId === "multiline" ||
         selectedFieldConfigId === "markdown" ||
-        selectedFieldConfigId === "url" ||
         selectedFieldConfigId === "email") {
         childComponent =
             <StringPropertyField widgetId={selectedFieldConfigId}
                                  disabled={disabled}
                                  showErrors={showErrors}/>;
+    } else if (selectedFieldConfigId === "url") {
+        childComponent =
+            <UrlPropertyField disabled={disabled}
+                              showErrors={showErrors}/>;
     } else if (selectedFieldConfigId === "select" ||
         selectedFieldConfigId === "number_select") {
         childComponent = <EnumPropertyField

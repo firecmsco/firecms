@@ -10,7 +10,7 @@ import {
     sortProperties,
     stripCollectionPath
 } from "@firecms/core";
-import { PersistedCollection, removeNonEditableProperties } from "@firecms/collection_editor";
+import { PersistedCollection } from "@firecms/collection_editor";
 
 export function buildCollectionPath(path: string, parentPathSegments?: string[]): string {
     if (!parentPathSegments)

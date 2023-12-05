@@ -52,7 +52,7 @@ export const Newsletter = () => {
                 <div
                     className="relative flex flex-col items-center px-6 py-16">
 
-                    {/*<h4 className="h2 mb-4 text-gray-900">*/}
+                    {/*<h4 className="h2 mb-4 text-text-primary">*/}
                     {/*    Stay in the loop*/}
                     {/*</h4>*/}
                     <div>

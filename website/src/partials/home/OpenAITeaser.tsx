@@ -1,12 +1,7 @@
 import React from "react";
-// @ts-ignore
-import ReactLogo from "@site/static/img/reactjs-icon.svg";
-// @ts-ignore
-import FirebaseLogo from "@site/static/img/firebase.svg";
-
 import { useColorMode } from "@docusaurus/theme-common";
 
-import { CTAButtonMixin, CTACaret, CTAOutlinedButtonMixin, defaultBorderMixin } from "../styles";
+import { CTAButtonMixin, CTACaret, defaultBorderMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import { TwoColumns } from "../general/TwoColumns";
 import useBaseUrl from "@docusaurus/useBaseUrl";
@@ -68,13 +63,9 @@ function OpenAITeaser() {
                             <a href={useBaseUrl("openai/")}
                                className={CTAButtonMixin}>
                                 Learn more
-                            </a>
-
-                            <a href={useBaseUrl("docs/openai/")}
-                               className={CTAOutlinedButtonMixin + " sm:ml-4 ml-2"}>
-                                Get started
                                 <CTACaret/>
                             </a>
+
                         </div>
                     </div>
                 }

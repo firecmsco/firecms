@@ -109,6 +109,18 @@ export function CollectionDetailsForm({
 
     const isSubcollection = !!parentCollection;
 
+    let customIdValue: "true" | "false" | "optional" | "code_defined" | undefined;
+    if (customIdValue) {
+        if (typeof values.customId === "object") {
+            customIdValue = "code_defined";
+        } else if (values.customId === true) {
+            customIdValue = "true";
+        } else if (values.customId === false) {
+            customIdValue = "false";
+        } else if (values.customId === "optional") {
+            customIdValue = "optional";
+        }
+    }
     return (
         <div className={"overflow-auto my-auto"}>
             <Container maxWidth={"4xl"} className={"flex flex-col gap-4 p-8 m-auto"}>
@@ -267,6 +279,45 @@ export function CollectionDetailsForm({
                                                 {value.toUpperCase()}
                                             </SelectItem>
                                         ))}
+                                    </Select>
+                                </div>
+                                <div className={"col-span-12"}>
+                                    <Select
+                                        name="customId"
+                                        label="ID generation"
+                                        position={"item-aligned"}
+                                        disabled={customIdValue === "code_defined"}
+                                        onValueChange={(v) => {
+                                            if (v === "code_defined")
+                                                throw new Error("This should not happen");
+                                            else if (v === "true")
+                                                setFieldValue("customId", true);
+                                            else if (v === "false")
+                                                setFieldValue("customId", false);
+                                            else if (v === "optional")
+                                                setFieldValue("customId", "optional");
+                                        }}
+                                        value={customIdValue ?? ""}
+                                        renderValue={(value: any) => {
+                                            if (value === "code_defined")
+                                                return "Code defined";
+                                            else if (value === "true")
+                                                return "Users must define an ID";
+                                            else if (value === "optional")
+                                                return "Users can define an ID, but it is not required";
+                                            else
+                                                return "ID is generated automatically";
+                                        }}
+                                    >
+                                        <SelectItem value={"false"}>
+                                            ID is generated automatically
+                                        </SelectItem>
+                                        <SelectItem value={"true"}>
+                                            Users must define an ID
+                                        </SelectItem>
+                                        <SelectItem value={"optional"}>
+                                            Users can define an ID, but it is not required
+                                        </SelectItem>
                                     </Select>
                                 </div>
                                 <div className={"col-span-12"}>

@@ -66,19 +66,20 @@ function HeroHome({}) {
     </>;
 
     return (
-        <div className={clsx("w-full relative border-0 border-b", defaultBorderMixin)}>
+        <div className={clsx("w-full relative border-0 border-b -mt-20 bg-gray-800 dark:bg-gray-900", defaultBorderMixin)}>
             <PagesBackground/>
-            <div className={"h-20 "}/>
-            <Panel includeMargin={false} includePadding={false} color={"transparent"} className={"border-t-0"}>
-                <div className={"w-full"}>
-                    <div className="flex flex-wrap">
-                        <div className={clsx("w-full lg:w-1/2 border-0 border-r", defaultBorderMixin)}>
-                            <LinedSpace/>
-                            {titleDiv}
-                        </div>
-                        <div className="w-full lg:w-1/2">
-                            {video}
-                        </div>
+            <Panel includeMargin={false}
+                   includePadding={false}
+                   color={"transparent"}
+                   className={"border-t-0"}>
+                <div className={"h-20 "}/>
+                <div className="flex flex-wrap w-full">
+                    <div className={clsx("w-full lg:w-1/2 border-0 border-r", defaultBorderMixin)}>
+                        <LinedSpace/>
+                        {titleDiv}
+                    </div>
+                    <div className="w-full lg:w-1/2">
+                        {video}
                     </div>
                 </div>
                 <LinedSpace position={"top"}/>

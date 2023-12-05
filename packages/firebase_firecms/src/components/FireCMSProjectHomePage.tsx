@@ -25,7 +25,7 @@ import { ADMIN_VIEWS } from "../utils";
 export function FireCMSProjectHomePage() {
 
     return <DefaultHomePage
-        additionalChildrenStart={<SubscriptionPlanWidget showForPlans={["free"]}/>}
+        // additionalChildrenStart={<SubscriptionPlanWidget showForPlans={["free"]}/>}
         additionalChildrenEnd={
             <NavigationGroup group={"ADMIN"}>
                 <div className={"grid grid-cols-12 gap-2"}>

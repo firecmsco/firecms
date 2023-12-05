@@ -20,11 +20,11 @@ function FeaturesPanels() {
 
     return (
         <Panel
-            color={"lighter"}
+            color={"transparent"}
             includePadding={false}
         >
 
-            <LinedSpace size={"medium"}/>
+            <LinedSpace size={"large"}/>
 
             <div
                 data-aos="fade-up"
@@ -47,7 +47,7 @@ function FeaturesPanels() {
 
                     </div>
 
-                    <p className={clsx("text-xl md:text-2xl text-text-primary px-8 py-4 md:px-8")}>
+                    <p className={clsx("text-xl md:text-2xl  px-8 py-4 md:px-8")}>
                         FireCMS provides all the flexibility you
                         need with the best UX.
                         Edit your collections and entities using
@@ -61,36 +61,36 @@ function FeaturesPanels() {
 
             <div
                 className="mx-auto grid md:grid-cols-2 lg:grid-cols-3 items-start text-xl gap-4 px-8">
-                <div className={"relative flex flex-col items-center p-6  rounded-2xl border border-solid"}>
+                <div className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {iconStars}
                     <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Consistent Data Management
                     </h4>
-                    <p className="text-text-primary text-center">
+                    <p className=" text-center">
                         Establish schemas for your data types and set
                         validation options
                     </p>
                 </div>
 
                 <div
-                    className="relative flex flex-col items-center p-6  rounded-2xl border border-solid ">
+                    className={clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin)}>
                     {gridIcon}
                     <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Sophisticated Editing Tools
                     </h4>
-                    <p className="text-text-primary text-center">
+                    <p className=" text-center">
                         Spreadsheet-style editing, robust forms,
                         file storage, entity references...
                     </p>
                 </div>
 
                 <div
-                    className="relative flex flex-col items-center p-6  rounded-2xl border border-solid ">
+                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
                     {iconDoor}
                     <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Role-Based System
                     </h4>
-                    <p className="text-text-primary text-center">
+                    <p className=" text-center">
                         Configure app settings according to the logged-in
                         user
                     </p>
@@ -98,35 +98,35 @@ function FeaturesPanels() {
 
 
                 <div
-                    className="relative flex flex-col items-center p-6  rounded-2xl border border-solid ">
+                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
                     {iconCards}
                     <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Flexible Customization
                     </h4>
-                    <p className="text-text-primary text-center">
+                    <p className=" text-center">
                         Incorporate custom form fields, hooks, and full views based on React
                     </p>
                 </div>
                 <div
-                    className="relative flex flex-col items-center p-6  rounded-2xl border border-solid ">
+                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
                     {iconArrows}
                     <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Subcollection Compatibility
                     </h4>
-                    <p className="text-text-primary text-center">
+                    <p className=" text-center">
                         Seamless navigation for collections within other entities
                     </p>
                 </div>
 
                 <div
-                    className="relative flex flex-col items-center p-6  rounded-2xl border border-solid ">
+                    className={ clsx("relative flex flex-col items-center p-6  rounded-2xl border border-solid", defaultBorderMixin) }>
 
                     {iconRadar}
 
                     <h4 className="text-xl font-bold leading-snug tracking-tight mb-1 text-center">
                         Real-Time Support
                     </h4>
-                    <p className="text-text-primary text-center">
+                    <p className=" text-center">
                         Live updates in every view of your CMS, ideal for background updates
                     </p>
                 </div>
@@ -142,6 +142,8 @@ function FeaturesPanels() {
                     <CTACaret/>
                 </a>
             </div>
+
+            <LinedSpace size={"larger"} position={"top"}/>
 
         </Panel>
     );

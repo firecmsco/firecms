@@ -42,7 +42,7 @@ export function ArrayPropertyPreview({
     const childSize: PreviewSize = size === "medium" ? "small" : "tiny";
 
     return (
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-2">
             {values &&
                 values.map((value, index) => {
                         const of: ResolvedProperty = property.resolvedProperties[index] ??

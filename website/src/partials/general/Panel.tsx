@@ -20,14 +20,14 @@ export function Panel({
     innerClassName?: string,
 }) {
 
-    const colorClass = color === "transparent" ? "text-text-primary" :
-        color === "white" ? "bg-white text-text-primary" :
-            color === "light" ? "bg-gray-100 text-text-primary" :
-                color === "lighter" ? "bg-gray-50 text-text-primary" :
-                    color === "light_gray" ? "bg-gray-600 text-white" :
-                        color === "gray" ? "bg-gray-800 text-white" :
-                            color === "primary" ? "bg-primary text-white" :
-                                color === "secondary" ? "bg-secondary text-white" : "";
+    const colorClass = color === "transparent" ? "text-inherit" :
+        color === "white" ? "bg-white text-text-primary dark:text-text-primary-dark" :
+            color === "light" ? "bg-gray-100 dark:bg-gray-800 dark:bg-opacity-30 text-text-primary dark:text-text-primary-dark" :
+                color === "lighter" ? "bg-gray-50 dark:bg-gray-900 dark:bg-opacity-80 text-text-primary dark:text-text-primary-dark" :
+                    color === "light_gray" ? "bg-gray-600 text-white dark:text-white" :
+                        color === "gray" ? "bg-gray-800 text-white dark:text-white" :
+                            color === "primary" ? "bg-primary text-white dark:text-white" :
+                                color === "secondary" ? "bg-secondary text-white dark:text-white" : "";
 
     return (
         <section

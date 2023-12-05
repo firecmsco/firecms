@@ -10,7 +10,7 @@ export function StringPropertyField({
                                         disabled,
                                         showErrors
                                     }: {
-    widgetId: "text_field" | "multiline" | "markdown" | "url" | "email";
+    widgetId: "text_field" | "multiline" | "markdown" | "email";
     disabled: boolean;
     showErrors: boolean;
 }) {
@@ -50,12 +50,6 @@ export function StringPropertyField({
                                                   min={true}
                                                   trim={true}
                                                   uppercase={true}
-                                                  showErrors={showErrors}/>}
-                    {widgetId === "url" &&
-                        <StringPropertyValidation disabled={disabled}
-                                                  max={true}
-                                                  min={true}
-                                                  trim={true}
                                                   showErrors={showErrors}/>}
 
                     {widgetId === "email" &&

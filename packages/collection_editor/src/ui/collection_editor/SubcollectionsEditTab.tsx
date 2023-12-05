@@ -179,7 +179,7 @@ export function SubcollectionsEditTab({
 
                         {totalEntityViews === 0 &&
                             <InfoLabel>
-                                COMING SOON: You can define your own custom views by uploading it with the CLI
+                                <b>COMING SOON</b> Define your own custom views by uploading it with the CLI
                             </InfoLabel>
                         }
 

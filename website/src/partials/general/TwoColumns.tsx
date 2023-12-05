@@ -32,14 +32,14 @@ export function TwoColumns({
             <div
                 className={"max-w-full flex flex-col lg:grid lg:grid-cols-12 lg:gap-10 " + flexDirection}>
                 <div
-                    className={"max-w-7xl lg:max-w-none lg:w-full mx-auto flex justify-center flex-col h-full my-8 lg:my-0 " + leftColumn}
+                    className={"max-w-7xl lg:max-w-none lg:w-full mx-auto flex justify-center flex-col h-full my-6 " + leftColumn}
                     data-aos={animation ? "fade-right" : undefined}
                 >
                     {left}
                 </div>
 
                 <div
-                    className={"max-w-7xl lg:max-w-none lg:w-full mx-auto lg:order-1 flex justify-center flex-col h-full my-8 lg:my-0 " + rightColumn}
+                    className={"max-w-7xl lg:max-w-none lg:w-full mx-auto lg:order-1 flex justify-center flex-col h-full my-6 " + rightColumn}
                     data-aos={animation ? "fade-left" : undefined}
                 >
                     {right}

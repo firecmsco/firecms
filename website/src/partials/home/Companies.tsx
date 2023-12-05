@@ -25,9 +25,9 @@ export function Companies() {
     const { colorMode } = useColorMode();
     const isDarkTheme = colorMode === "dark";
 
-    return <Panel color={"light_gray"}>
+    return <Panel color={"light"}>
 
-        <h2 className={"text-2xl text-center p-1 text-gray-500 dark:text-gray-400"}>
+        <h2 className={"text-2xl text-center text-gray-400"}>
             Trusted by
         </h2>
         <div
@@ -39,7 +39,7 @@ export function Companies() {
                 href={"https://medicalmotion.com"}>
                 <img loading="lazy"  src={isDarkTheme ? MMLogoDark : MMLogo}
                      alt="MedicalMotion Logo"
-                     className="w-48 h-min aspect-auto m-4"/>
+                     className="w-48 m-4"/>
             </a>
             <a
                 target="_blank"
@@ -47,36 +47,37 @@ export function Companies() {
                 href={"https://www.proton-health.com"}>
                 <img loading="lazy"  src={ProtonLogo}
                      alt="MedicalMotion Logo"
-                     className="w-48 h-min aspect-auto m-4"/>
+                     className="w-48 m-4"/>
             </a>
             <a
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://www.somniosoftware.com/"}>
-                <img loading="lazy"  src={SomnioLogo}
+                <img loading="lazy"
+                     src={SomnioLogo}
                      alt="Somnio Logo"
-                     className="w-48 h-min aspect-auto m-4"/>
+                     className="w-48 m-4"/>
             </a>
             <a
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://theplanetapp.com"}>
                 {isDarkTheme ?
-                    <TPALogoDark className="w-56 h-min aspect-auto m-4"/> :
+                    <TPALogoDark className="w-56 m-4"/> :
                     <TPALogo
-                        className="w-56 h-min aspect-auto m-4"/>}
+                        className="w-56 m-4"/>}
             </a>
             <a
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://socialincome.org"}>
-                <SocialIncomeLogo className="w-48 h-min aspect-auto m-4"/>
+                <SocialIncomeLogo className="w-48 h-auto m-4"/>
             </a>
             <a
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://oikosbrain.com"}>
-                <OikosLogo className="w-48 h-min aspect-auto m-4"/>
+                <OikosLogo className="w-48 m-4"/>
             </a>
             <a
                 target="_blank"
@@ -84,16 +85,16 @@ export function Companies() {
                 href={"https://www.mindswitch.me/"}>
                 {isDarkTheme ?
                     <MindSwitchLogoDark
-                        className="w-52 h-min aspect-auto m-4"/> :
+                        className="w-52 m-4"/> :
                     <MindSwitchLogo
-                        className="w-52 h-min aspect-auto m-4"/>}
+                        className="w-52 m-4"/>}
             </a>
             <a
                 target="_blank"
                 rel="noopener noreferrer"
                 href={"https://www.gearfocus.com/"}>
                 <GearFocusLogo
-                    className="w-52 h-min aspect-auto m-4"/>
+                    className="w-52 m-4"/>
             </a>
 
         </div>

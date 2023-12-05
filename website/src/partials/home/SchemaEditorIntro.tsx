@@ -7,7 +7,6 @@ import {
     ContainerPaddingMixin,
     CTACaret,
     CTAOutlinedButtonMixin,
-    CTAOutlinedLightButtonMixin,
     defaultBorderMixin
 } from "../styles";
 import clsx from "clsx";
@@ -16,9 +15,9 @@ export const SchemaEditorIntro = () => {
 
     return (
         <section
-            className="relative bg-lighter">
+            className="relative">
             <div
-                className={clsx("px-4 sm:px-6 mb-16 bg-light text-gray-900",
+                className={clsx("px-4 sm:px-6 mb-16 bg-light dark:bg-gray-700 text-text-primary dark:text-white",
                     "border-0 border-y",
                     defaultBorderMixin,)}>
                 <div
@@ -29,7 +28,7 @@ export const SchemaEditorIntro = () => {
                         "border-x border-y-0 ",
                         " flex flex-col py-20")}>
 
-                    <h2 className="h1 mb-4 text-gray-900 uppercase">
+                    <h2 className="h1 mb-4 uppercase">
                         The best data schema editor
                     </h2>
 
@@ -57,7 +56,7 @@ export const SchemaEditorIntro = () => {
 
                     <div className={"my-8 pb-16"}>
                         <a
-                            className={CTAOutlinedLightButtonMixin}
+                            className={CTAOutlinedButtonMixin}
                             href="http://app.firecms.co"
                             rel="noopener noreferrer"
                             target="_blank"

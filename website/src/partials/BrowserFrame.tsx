@@ -1,5 +1,6 @@
 import clsx from "clsx";
 import React from "react";
+import { defaultBorderMixin } from "./styles";
 
 export function BrowserFrame({ children, className, style, mode = "dark" }: {
     children: React.ReactNode,
@@ -9,7 +10,8 @@ export function BrowserFrame({ children, className, style, mode = "dark" }: {
 }) {
     return <div
         style={style}
-        className={clsx("rounded-lg mx-auto w-fit flex flex-col content-center justify-center border border-solid dark:border-gray-800 border-gray-200",
+        className={clsx("rounded-lg mx-auto w-fit flex flex-col content-center justify-center border",
+            defaultBorderMixin,
             className
         )}>
         <div
