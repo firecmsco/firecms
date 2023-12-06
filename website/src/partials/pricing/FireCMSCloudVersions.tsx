@@ -65,7 +65,7 @@ export function FireCMSCloudVersions() {
             </div>
             <div className={"text-center mt-4 w-full"}>
                 {/*<span className={"text-2xl block font-bold line-through"}>€11.99 user/month</span>*/}
-                <span className={"text-2xl font-bold text-primary"}>€10.99 user/month</span>
+                <span className={"text-2xl font-bold text-primary"}>€9.99 user/month</span>
             </div>
 
         </div>

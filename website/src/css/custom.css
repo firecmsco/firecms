@@ -165,7 +165,7 @@
     --ifm-code-font-size: 95%;
     --ifm-font-weight-bold: 600;
     --ifm-h1-font-size: 4rem;
-    --ifm-list-left-padding: 0rem;
+    /*--ifm-list-left-padding: 0rem;*/
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
     --ifm-border-color: #5d5d5f;
     --ifm-background-color: white;
@@ -384,4 +384,8 @@ html[data-theme="dark"] {
     --docsearch-hit-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
     --docsearch-key-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
     --docsearch-footer-shadow: 0px 0px 0px 0px rgba(0, 0, 0, 0.0);
+}
+
+.theme-doc-toc-desktop {
+    top: calc(var(--ifm-navbar-height) + 36px) !important;
 }
