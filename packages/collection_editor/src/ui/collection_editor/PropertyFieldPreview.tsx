@@ -34,9 +34,9 @@ export function PropertyFieldPreview({
     onClick?: () => void
 }) {
 
-    const { fields } = useFireCMSContext();
+    const { propertyConfigs } = useFireCMSContext();
 
-    const propertyConfig = getFieldConfig(property, fields);
+    const propertyConfig = getFieldConfig(property, propertyConfigs);
     const disabled = !editableProperty(property);
 
     const borderColorClass = hasError
@@ -116,9 +116,9 @@ export function NonEditablePropertyPreview({
     property?: PropertyOrBuilder
 }) {
 
-    const { fields } = useFireCMSContext();
+    const { propertyConfigs } = useFireCMSContext();
 
-    const propertyConfig = !isPropertyBuilder(property) && property ? getFieldConfig(property, fields) : undefined;
+    const propertyConfig = !isPropertyBuilder(property) && property ? getFieldConfig(property, propertyConfigs) : undefined;
 
     return (
         <div

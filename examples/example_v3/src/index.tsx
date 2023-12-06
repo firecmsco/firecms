@@ -3,6 +3,7 @@ import { testCollection } from "./collections/test_collection";
 import { productsCollection } from "./collections/products_collection";
 import { SampleEntityView } from "./custom_entity_view/SampleEntityView";
 import { colorPropertyConfig } from "./property_configs/color_property_config";
+import { pricePropertyConfig } from "./property_configs/property_config_builder";
 
 const appConfig: FireCMSAppConfig = {
     version: "1",
@@ -13,7 +14,30 @@ const appConfig: FireCMSAppConfig = {
         ]);
     },
     propertyConfigs: [
-        colorPropertyConfig
+        colorPropertyConfig,
+        pricePropertyConfig,
+        {
+            name: "Translated string",
+            key: "translated_string",
+            property: {
+                dataType: "map",
+                properties: {
+                    en: {
+                        dataType: "string",
+                        name: "English",
+                        editable: true
+                    },
+                    es: {
+                        dataType: "string",
+                        name: "Español"
+                    },
+                    it: {
+                        dataType: "string",
+                        name: "Italiano"
+                    }
+                },
+            },
+        }
     ],
     entityViews: [{
         key: "test",

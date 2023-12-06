@@ -374,7 +374,7 @@ function Mock3AppAuthenticated({
                         <FireCMS
                             collections={appConfig?.collections}
                             views={appConfig?.views}
-                            fields={{}} // TODO
+                            propertyConfigs={{}} // TODO
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
                             dateTimeFormat={dateTimeFormat}

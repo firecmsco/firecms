@@ -11,12 +11,18 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DoneIcon,
-    EntityCollection,
+    DoneIcon, EntityCollection,
     ErrorView,
     IconButton,
+    isPropertyBuilder,
     LoadingButton,
+    MapProperty,
+    mergeDeep,
     Properties,
+    PropertiesOrBuilders,
+    Property,
+    PropertyConfig,
+    PropertyOrBuilder,
     removeUndefined,
     Tab,
     Tabs,
@@ -32,7 +38,6 @@ import { YupSchema } from "./CollectionYupValidation";
 import { CollectionDetailsForm } from "./CollectionDetailsForm";
 import { CollectionPropertiesEditorForm } from "./CollectionPropertiesEditorForm";
 import { UnsavedChangesDialog } from "./UnsavedChangesDialog";
-import { PersistedCollection } from "../../types/persisted_collection";
 import { SubcollectionsEditTab } from "./SubcollectionsEditTab";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView";
@@ -42,6 +47,7 @@ import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
 import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMapping";
 import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview";
 import { cleanPropertiesFromImport } from "./import/clean_import_data";
+import { PersistedCollection } from "../../types/persisted_collection";
 
 export interface CollectionEditorDialogProps {
     open: boolean;
@@ -67,7 +73,7 @@ export interface CollectionEditorDialogProps {
     pathSuggestions?: (path?: string) => Promise<string[]>;
     getUser: (uid: string) => User | null;
     getData?: (path: string) => Promise<object[]>;
-    parentCollection?: EntityCollection;
+    parentCollection?: PersistedCollection;
 }
 
 export function CollectionEditorDialog(props: CollectionEditorDialogProps) {
@@ -150,7 +156,7 @@ export function CollectionEditorDialogInternal<M extends {
    }
 ) {
 
-    const { fields: customFields } = useFireCMSContext();
+    const { propertyConfigs } = useFireCMSContext();
     const navigation = useNavigationContext();
     const {
         topLevelNavigation,
@@ -226,11 +232,11 @@ export function CollectionEditorDialogInternal<M extends {
             });
     };
 
-    const initialValues: PersistedCollection<M> = collection ?? {
+    const initialValues: PersistedCollection<M> = collection ? applyPropertyConfigs(collection, propertyConfigs) : {
         path: initialValuesProp?.path ?? "",
         name: initialValuesProp?.name ?? "",
         group: initialValuesProp?.group ?? "",
-        properties: {} as Properties<M>,
+        properties: {} as PropertiesOrBuilders<M>,
         propertiesOrder: [],
         icon: coolIconKeys[Math.floor(Math.random() * coolIconKeys.length)],
         ownerId: authController.user?.uid ?? ""
@@ -285,7 +291,7 @@ export function CollectionEditorDialogInternal<M extends {
             };
 
             if (Object.keys(inferredCollection.properties ?? {}).length > 0) {
-                values.properties = inferredCollection.properties as Properties<M>;
+                values.properties = inferredCollection.properties as PropertiesOrBuilders<M>;
                 values.propertiesOrder = inferredCollection.propertiesOrder as Extract<keyof M, string>[];
             }
 
@@ -300,7 +306,7 @@ export function CollectionEditorDialogInternal<M extends {
                 values
             });
             return values;
-        } catch (e:any) {
+        } catch (e: any) {
             console.error(e);
             snackbarController.open({
                 type: "error",
@@ -399,11 +405,6 @@ export function CollectionEditorDialogInternal<M extends {
                   submitCount
               }) => {
 
-                console.debug({
-                    valuesPath: values.path,
-                    editedCollectionPath,
-                    fullPath
-                })
                 const path = values.path ?? editedCollectionPath;
                 const updatedFullPath = fullPath?.includes("/") ? fullPath?.split("/").slice(0, -1).join("/") + "/" + path : path; // TODO: this path is wrong
                 const resolvedPath = navigation.resolveAliasesFrom(updatedFullPath);
@@ -493,7 +494,7 @@ export function CollectionEditorDialogInternal<M extends {
                             {currentView === "import_data_mapping" && importConfig &&
                                 <CollectionEditorImportMapping importConfig={importConfig}
                                                                collectionEditable={collectionEditable}
-                                                               customFields={customFields}/>}
+                                                               propertyConfigs={propertyConfigs}/>}
 
                             {currentView === "import_data_preview" && importConfig &&
                                 <CollectionEditorImportDataPreview importConfig={importConfig}
@@ -543,7 +544,7 @@ export function CollectionEditorDialogInternal<M extends {
                                     getUser={getUser}
                                     getData={getDataWithPath}
                                     doCollectionInference={doCollectionInference}
-                                    customFields={customFields}
+                                    propertyConfigs={propertyConfigs}
                                     collectionEditable={collectionEditable}
                                     extraIcon={extraView?.icon &&
                                         <IconButton
@@ -654,5 +655,41 @@ export function CollectionEditorDialogInternal<M extends {
 
         </Formik>
     </DialogContent>
+
+}
+
+function applyPropertyConfigs<M extends Record<string, any> = any>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig<any>>):PersistedCollection<M> {
+    const { properties, ...rest } = collection;
+    const propertiesResult: PropertiesOrBuilders<any> = {};
+    Object.keys(properties).forEach((key) => {
+        propertiesResult[key] = applyPropertiesConfig(properties[key] as PropertyOrBuilder, propertyConfigs);
+    });
+
+    return { ...rest, properties: propertiesResult };
+}
+
+function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Record<string, PropertyConfig<any>>) {
+    let internalProperty = property;
+    if (propertyConfigs && typeof internalProperty === "object" && internalProperty.propertyConfig) {
+        const propertyConfig = propertyConfigs[internalProperty.propertyConfig];
+        if (isPropertyBuilder(propertyConfig.property)) {
+            internalProperty = propertyConfig.property;
+        } else {
+
+            if (propertyConfig) {
+                internalProperty = mergeDeep(propertyConfig.property, internalProperty);
+            }
+
+            if (internalProperty.dataType === "map" && internalProperty.properties) {
+                const properties: Record<string, PropertyOrBuilder> = {};
+                Object.keys(internalProperty.properties).forEach((key) => {
+                    properties[key] = applyPropertiesConfig(((internalProperty as MapProperty).properties as Properties)[key] as Property, propertyConfigs);
+                });
+                internalProperty = { ...internalProperty, properties };
+            }
+
+        }
+    }
+    return internalProperty;
 
 }

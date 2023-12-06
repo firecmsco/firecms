@@ -98,7 +98,6 @@ export type FireCMSAppConfig = {
     /**
      * Use this controller to return text search results as document ids, that
      * get then fetched from Firestore.
-     *
      */
     textSearchController?: FirestoreTextSearchController;
 

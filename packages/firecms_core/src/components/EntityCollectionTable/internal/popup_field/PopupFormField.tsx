@@ -100,7 +100,7 @@ export function PopupFormFieldInternal<M extends Record<string, any>>({
             path,
             values: internalValue,
             entityId,
-            fields: fireCMSContext.fields
+            fields: fireCMSContext.propertyConfigs
         })
         : undefined;
 

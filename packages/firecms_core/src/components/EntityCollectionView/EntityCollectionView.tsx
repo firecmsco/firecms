@@ -321,7 +321,7 @@ export const EntityCollectionView = React.memo(
         const resolvedCollection = useMemo(() => resolveCollection<M>({
             collection,
             path: fullPath,
-            fields: context.fields
+            fields: context.propertyConfigs
         }), [collection, fullPath]);
 
         const getPropertyFor = useCallback(({
@@ -344,9 +344,9 @@ export const EntityCollectionView = React.memo(
                 propertyValue,
                 values: entity.values,
                 entityId: entity.id,
-                fields: context.fields
+                fields: context.propertyConfigs
             });
-        }, [collection.properties, context.fields, fullPath, resolvedCollection.properties]);
+        }, [collection.properties, context.propertyConfigs, fullPath, resolvedCollection.properties]);
 
         const displayedColumnIds = useColumnIds(resolvedCollection, true);
 

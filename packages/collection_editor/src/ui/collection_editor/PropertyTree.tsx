@@ -33,7 +33,7 @@ export function PropertyTree<M extends {
        onPropertyRemove,
        className,
        inferredPropertyKeys,
-       collectionEditable
+       collectionEditable,
    }: {
     namespace?: string;
     selectedPropertyKey?: string;
@@ -137,7 +137,7 @@ export function PropertyTreeEntry({
                                       onPropertyMove,
                                       onPropertyRemove,
                                       inferredPropertyKeys,
-                                      collectionEditable
+                                      collectionEditable,
                                   }: {
     propertyKey: string;
     namespace?: string;
@@ -156,6 +156,7 @@ export function PropertyTreeEntry({
     const isPropertyInferred = inferredPropertyKeys?.includes(namespace ? `${namespace}.${propertyKey}` : propertyKey);
 
     const fullId = getFullId(propertyKey, namespace);
+
     let subtree;
     if (typeof propertyOrBuilder === "object") {
         const property = propertyOrBuilder;

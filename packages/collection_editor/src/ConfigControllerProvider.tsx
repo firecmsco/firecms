@@ -73,7 +73,7 @@ export const ConfigControllerProvider = React.memo(
         const navigation = useNavigationContext();
         const navigate = useNavigate();
         const snackbarController = useSnackbarController();
-        const { fields: customFields } = useFireCMSContext();
+        const { propertyConfigs: propertyConfigs } = useFireCMSContext();
 
         const {
             collections
@@ -317,7 +317,7 @@ export const ConfigControllerProvider = React.memo(
                         forceShowErrors={false}
                         existingPropertyKeys={[]}
                         allowDataInference={true}
-                        customFields={customFields}
+                        propertyConfigs={propertyConfigs}
                         property={currentPropertyDialog?.property}
                         propertyKey={currentPropertyDialog?.propertyKey}/>
 

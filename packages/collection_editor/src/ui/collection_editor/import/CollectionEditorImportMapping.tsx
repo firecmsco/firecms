@@ -16,8 +16,7 @@ import {
     PropertyConfig,
     Select,
     Tooltip,
-    Typography,
-    useFireCMSContext
+    Typography
 } from "@firecms/core";
 import React, { useState } from "react";
 import { OnPropertyChangedParams, PropertyFormDialog, PropertyWithId } from "../PropertyEditView";
@@ -30,12 +29,12 @@ import { buildPropertyFromData } from "@firecms/schema_inference";
 
 export function CollectionEditorImportMapping({
                                                   importConfig,
-                                                  customFields,
+                                                  propertyConfigs,
                                                   collectionEditable
                                               }:
                                                   {
                                                       importConfig: ImportConfig,
-                                                      customFields: Record<string, PropertyConfig>,
+                                                      propertyConfigs: Record<string, PropertyConfig>,
                                                       collectionEditable: boolean
                                                   }) {
 
@@ -181,7 +180,7 @@ export function CollectionEditorImportMapping({
                                                                                         importKey
                                                                                     })}
                                                                                     propertyKey={propertyKey}
-                                                                                    customFields={customFields}/>}
+                                                                                    propertyConfigs={propertyConfigs}/>}
                                               />;
                                           }}/>
             </Container>
@@ -203,7 +202,7 @@ export function CollectionEditorImportMapping({
                 }}
                 autoOpenTypeSelect={false}
                 existingProperty={false}
-                customFields={customFields}/>
+                propertyConfigs={propertyConfigs}/>
 
             <div style={{ height: "52px" }}/>
         </div>
@@ -215,7 +214,7 @@ function PropertySelect({
                             property,
                             onPropertyChanged,
                             propertyKey,
-                            customFields,
+                            propertyConfigs,
                             disabled
                         }: {
     property: Property | null,
@@ -226,13 +225,12 @@ function PropertySelect({
                             previousId,
                             namespace
                         }: OnPropertyChangedParams) => void,
-    customFields: Record<string, PropertyConfig>,
+    propertyConfigs: Record<string, PropertyConfig>,
     disabled?: boolean
 }) {
 
-    const { fields } = useFireCMSContext();
     const fieldId = property ? getFieldId(property) : null;
-    const widget = property ? getFieldConfig(property, fields) : null;
+    const widget = property ? getFieldConfig(property, propertyConfigs) : null;
 
     const [selectOpen, setSelectOpen] = useState(false);
 
@@ -253,7 +251,7 @@ function PropertySelect({
                 return <FieldConfigBadge propertyConfig={widget}/>
             }}
             onValueChange={(newSelectedWidgetId) => {
-                const newProperty = updatePropertyFromWidget(property, newSelectedWidgetId, customFields)
+                const newProperty = updatePropertyFromWidget(property, newSelectedWidgetId, propertyConfigs)
                 if (!propertyKey) return;
                 onPropertyChanged({
                     id: propertyKey,

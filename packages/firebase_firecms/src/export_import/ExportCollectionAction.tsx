@@ -54,7 +54,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
     const collection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection({
         collection: inputCollection,
         path,
-        fields: context.fields
+        fields: context.propertyConfigs
     }), [inputCollection, path]);
 
     const [dataLoading, setDataLoading] = React.useState<boolean>(false);

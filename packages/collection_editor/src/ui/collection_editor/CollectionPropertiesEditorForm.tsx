@@ -44,7 +44,7 @@ type CollectionEditorFormProps = {
     getUser: (uid: string) => User | null;
     getData?: () => Promise<object[]>;
     doCollectionInference: (collection: PersistedCollection) => Promise<EntityCollection | null> | undefined;
-    customFields: Record<string, PropertyConfig>;
+    propertyConfigs: Record<string, PropertyConfig>;
     collectionEditable: boolean;
 };
 
@@ -59,7 +59,7 @@ export function CollectionPropertiesEditorForm({
                                                    getUser,
                                                    getData,
                                                    doCollectionInference,
-                                                   customFields,
+                                                   propertyConfigs,
                                                    collectionEditable
                                                }: CollectionEditorFormProps) {
 
@@ -406,7 +406,7 @@ export function CollectionPropertiesEditorForm({
                                 forceShowErrors={showErrors}
                                 initialErrors={initialErrors}
                                 getData={getData}
-                                customFields={customFields}
+                                propertyConfigs={propertyConfigs}
                                 collectionEditable={collectionEditable}
                             />}
 
@@ -441,7 +441,7 @@ export function CollectionPropertiesEditorForm({
                 forceShowErrors={showErrors}
                 initialErrors={initialErrors}
                 getData={getData}
-                customFields={customFields}
+                propertyConfigs={propertyConfigs}
                 collectionEditable={collectionEditable}
                 onOkClicked={asDialog
                     ? closePropertyDialog
@@ -466,7 +466,7 @@ export function CollectionPropertiesEditorForm({
                 onPropertyChanged={onPropertyCreated}
                 getData={getData}
                 allowDataInference={!isNewCollection}
-                customFields={customFields}
+                propertyConfigs={propertyConfigs}
                 collectionEditable={collectionEditable}
                 existingPropertyKeys={values.propertiesOrder as string[]}/>
 

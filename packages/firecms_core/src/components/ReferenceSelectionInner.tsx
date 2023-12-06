@@ -251,8 +251,8 @@ export function ReferenceSelectionInner<M extends Record<string, any>>(
         collection: collection,
         path: fullPath,
         values: {},
-        fields: context.fields
-    }), [collection, context.fields, fullPath]);
+        fields: context.propertyConfigs
+    }), [collection, context.propertyConfigs, fullPath]);
 
     // eslint-disable-next-line react-hooks/rules-of-hooks
     const displayedColumnIds = useColumnIds(resolvedCollection, false);

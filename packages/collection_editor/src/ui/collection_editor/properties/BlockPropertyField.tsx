@@ -5,11 +5,11 @@ import { PropertyFormDialog } from "../PropertyEditView";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath } from "../util";
 import { PropertyTree } from "../PropertyTree";
 
-export function BlockPropertyField({ disabled, getData, allowDataInference, customFields, collectionEditable }: {
+export function BlockPropertyField({ disabled, getData, allowDataInference, propertyConfigs, collectionEditable }: {
     disabled: boolean;
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
-    customFields: Record<string, PropertyConfig>,
+    propertyConfigs: Record<string, PropertyConfig>,
     collectionEditable: boolean;
 }) {
 
@@ -128,7 +128,7 @@ export function BlockPropertyField({ disabled, getData, allowDataInference, cust
                 autoOpenTypeSelect={!selectedPropertyKey}
                 onPropertyChanged={onPropertyCreated}
                 existingPropertyKeys={selectedPropertyKey ? undefined : values.oneOf?.propertiesOrder}
-                customFields={customFields}/>}
+                propertyConfigs={propertyConfigs}/>}
 
         </>);
 }

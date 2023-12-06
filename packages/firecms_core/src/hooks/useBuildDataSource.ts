@@ -28,10 +28,10 @@ import { resolveCollection, updateDateAutoValues } from "../util";
  */
 export function useBuildDataSource({
                                        delegate,
-                                       customFields
+                                       propertyConfigs
                                    }: {
     delegate: DataSourceDelegate,
-    customFields: Record<string, PropertyConfig>;
+    propertyConfigs: Record<string, PropertyConfig>;
 }): DataSource {
 
     return {
@@ -196,7 +196,7 @@ export function useBuildDataSource({
                 collection,
                 path,
                 entityId,
-                fields: customFields
+                fields: propertyConfigs
             });
 
             const properties: ResolvedProperties<M> = resolvedCollection.properties;

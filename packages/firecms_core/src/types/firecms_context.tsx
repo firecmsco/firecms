@@ -106,7 +106,7 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
      * You can use the key to reference the custom field in
      * the `propertyConfig` prop of a property in a collection.
      */
-    fields: Record<string, PropertyConfig>;
+    propertyConfigs: Record<string, PropertyConfig>;
 
     /**
      * List of additional custom views for entities.
@@ -116,6 +116,7 @@ export type FireCMSContext<UserType extends User = User, AuthControllerType exte
      * You can also define an entity view from the UI.
      */
     entityViews?: EntityCustomView[];
+
 
     components?: {
 

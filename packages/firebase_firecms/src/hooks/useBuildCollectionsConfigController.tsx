@@ -8,7 +8,15 @@ import {
     PersistedCollection,
     SaveCollectionParams
 } from "@firecms/collection_editor";
-import { PermissionsBuilder, Property, removeFunctions, removeUndefined, User } from "@firecms/core";
+import {
+    PermissionsBuilder,
+    Property,
+    PropertyConfig,
+    removeFunctions,
+    removeUndefined,
+    useFireCMSContext,
+    User
+} from "@firecms/core";
 import {
     applyPermissionsFunction,
     buildCollectionPath,
@@ -34,6 +42,8 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
      */
     permissions?: PermissionsBuilder<EC, UserType>;
 
+    propertyConfigs?: PropertyConfig[]
+
 }
 
 /**
@@ -46,8 +56,17 @@ export interface CollectionConfigControllerProps<EC extends PersistedCollection,
 export function useBuildCollectionsConfigController<EC extends PersistedCollection, UserType extends User = User>({
                                                                                                                       firebaseApp,
                                                                                                                       projectId,
-                                                                                                                      permissions
+                                                                                                                      permissions,
+                                                                                                                      propertyConfigs
                                                                                                                   }: CollectionConfigControllerProps<EC, UserType>): CollectionsConfigController {
+
+    const propertyConfigsMap = useMemo(() => {
+        const map: Record<string, any> = {};
+        propertyConfigs?.forEach(field => {
+            map[field.key] = field;
+        });
+        return map;
+    }, [propertyConfigs]);
 
     const configPath = projectId ? `projects/${projectId}` : undefined;
 
@@ -105,7 +124,7 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
                                                                            parentPathSegments
                                                                        }: SaveCollectionParams<M>): Promise<void> => {
         if (!firestore || !configPath) throw Error("useFirestoreConfigurationPersistence Firestore not initialised");
-        const cleanedCollection = prepareCollectionForPersistence(collectionData);
+        const cleanedCollection = prepareCollectionForPersistence(collectionData, propertyConfigsMap);
         const strippedPath = buildCollectionPath(path, parentPathSegments);
         const previousStrippedPath = previousPath ? buildCollectionPath(previousPath, parentPathSegments) : undefined;
         const ref = doc(firestore, configPath, "collections", strippedPath);
@@ -123,7 +142,7 @@ export function useBuildCollectionsConfigController<EC extends PersistedCollecti
                 transaction.delete(previousRef);
             }
         });
-    }, [configPath, firestore]);
+    }, [configPath, firestore, propertyConfigsMap]);
 
     const collections = persistedCollections !== undefined ? applyPermissionsFunction(persistedCollections, permissions as PermissionsBuilder) : undefined;
 

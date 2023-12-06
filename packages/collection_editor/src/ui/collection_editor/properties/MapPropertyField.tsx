@@ -15,11 +15,11 @@ import { PropertyTree } from "../PropertyTree";
 import { getFullId, idToPropertiesPath, namespaceToPropertiesOrderPath, namespaceToPropertiesPath } from "../util";
 import { FieldHelperView } from "./FieldHelperView";
 
-export function MapPropertyField({ disabled, getData, allowDataInference, customFields, collectionEditable }: {
+export function MapPropertyField({ disabled, getData, allowDataInference, propertyConfigs, collectionEditable }: {
     disabled: boolean;
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
-    customFields: Record<string, PropertyConfig>,
+    propertyConfigs: Record<string, PropertyConfig>,
     collectionEditable: boolean;
 }) {
 
@@ -150,7 +150,7 @@ export function MapPropertyField({ disabled, getData, allowDataInference, custom
                 autoOpenTypeSelect={!selectedPropertyKey}
                 onPropertyChanged={onPropertyCreated}
                 existingPropertyKeys={selectedPropertyKey ? undefined : propertiesOrder}
-                customFields={customFields}
+                propertyConfigs={propertyConfigs}
             />
 
         </>);

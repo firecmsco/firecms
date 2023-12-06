@@ -111,10 +111,10 @@ function ReferencePreviewExisting<M extends Record<string, any> = any>({ referen
         collection,
         path: reference.path,
         values: usedEntity?.values,
-        fields: context.fields
+        fields: context.propertyConfigs
     }), [collection]);
 
-    const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, context.fields, previewProperties, size === "small" || size === "medium" ? 3 : 1),
+    const listProperties = useMemo(() => getReferencePreviewKeys(resolvedCollection, context.propertyConfigs, previewProperties, size === "small" || size === "medium" ? 3 : 1),
         [previewProperties, resolvedCollection, size]);
 
     let body: React.ReactNode;

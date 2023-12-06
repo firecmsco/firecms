@@ -145,7 +145,7 @@ export function isEmptyObject(obj: object) {
 }
 
 export function removePropsIfExisting(source: any, comparison: any) {
-    const isObject = (val: any) => typeof val === 'object' && val !== null;
+    const isObject = (val: any) => typeof val === "object" && val !== null;
     const isArray = (val: any) => Array.isArray(val);
 
     if (!isObject(source) || !isObject(comparison)) {
@@ -158,7 +158,7 @@ export function removePropsIfExisting(source: any, comparison: any) {
         if (key in res) {
             if (isObject(res[key]) && isObject(comparison[key])) {
                 res[key] = removePropsIfExisting(res[key], comparison[key]);
-            } else {
+            } else if (res[key] === comparison[key]) {
                 isArray(res) ? res.splice(key, 1) : delete res[key];
             }
         }

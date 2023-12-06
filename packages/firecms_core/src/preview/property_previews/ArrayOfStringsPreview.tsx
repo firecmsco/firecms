@@ -22,7 +22,7 @@ export function ArrayOfStringsPreview({
         propertyKey,
         property: inputProperty,
         propertyValue: value,
-        fields: fireCMSContext.fields
+        fields: fireCMSContext.propertyConfigs
     });
 
     if (Array.isArray(property.of)) {

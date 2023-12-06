@@ -28,7 +28,7 @@ export function ArrayCustomShapedFieldBinding<T extends Array<any>>({
                                                                         disabled
                                                                     }: FieldProps<T, any, any>) {
 
-    const { fields } = useFireCMSContext();
+    const { propertyConfigs } = useFireCMSContext();
     if (!Array.isArray(property.resolvedProperties))
         throw Error("ArrayCustomShapedFieldBinding misconfiguration. Property `of` not set");
 

@@ -21,7 +21,7 @@ export function RepeatPropertyField({
                                         disabled,
                                         getData,
                                         allowDataInference,
-                                        customFields,
+                                        propertyConfigs,
                                         collectionEditable
                                     }: {
     showErrors: boolean,
@@ -29,11 +29,9 @@ export function RepeatPropertyField({
     disabled: boolean,
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
-    customFields: Record<string, PropertyConfig>,
+    propertyConfigs: Record<string, PropertyConfig>,
     collectionEditable: boolean;
 }) {
-
-    const { fields } = useFireCMSContext();
 
     const {
         values,
@@ -52,7 +50,7 @@ export function RepeatPropertyField({
         setFieldValue("of", property);
     }, []);
 
-    const widget = ofProperty && getFieldConfig(ofProperty, fields);
+    const widget = ofProperty && getFieldConfig(ofProperty, propertyConfigs);
     return (
         <>
             <div className={"col-span-12"}>
@@ -97,7 +95,7 @@ export function RepeatPropertyField({
                                 includeIdAndName={false}
                                 onPropertyChanged={onPropertyChanged}
                                 forceShowErrors={showErrors}
-                                customFields={customFields}
+                                propertyConfigs={propertyConfigs}
                                 collectionEditable={collectionEditable}
                             />
                         </Paper>

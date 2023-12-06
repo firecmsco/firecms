@@ -25,7 +25,7 @@ export function ArrayOneOfPreview({
         propertyKey,
         property: inputProperty,
         propertyValue: value,
-        fields: fireCMSContext.fields
+        fields: fireCMSContext.propertyConfigs
     });
 
     if (property?.dataType !== "array")

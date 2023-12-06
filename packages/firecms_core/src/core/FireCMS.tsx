@@ -30,7 +30,6 @@ const DEFAULT_COLLECTION_PATH = "/c";
  * internal contexts and hooks.
  *
  * You only need to use this component if you are building a custom app.
- * In most cases you can just use the {@link FirebaseCMSApp} component.
  *
  * @constructor
  * @group Core
@@ -53,7 +52,7 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         baseCollectionPath = DEFAULT_COLLECTION_PATH,
         plugins,
         onAnalyticsEvent,
-        fields,
+        propertyConfigs,
         entityViews,
         components
     } = props;
@@ -83,9 +82,9 @@ export function FireCMS<UserType extends User, EC extends EntityCollection>(prop
         plugins,
         onAnalyticsEvent,
         entityViews: entityViews ?? [],
-        fields: fields ?? {},
+        propertyConfigs: propertyConfigs ?? {},
         components
-    }), [dateTimeFormat, locale, plugins, entityViews, fields, components]);
+    }), [dateTimeFormat, locale, plugins, entityViews, propertyConfigs, components]);
 
     if (navigation.navigationLoadingError) {
         return (

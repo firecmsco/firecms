@@ -157,7 +157,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         collection: inputCollection,
         path,
         values: entity?.values,
-        fields: context.fields
+        fields: context.propertyConfigs
     }), [entity?.values, path]);
 
     const mustSetCustomId: boolean = (status === "new" || status === "copy") &&
@@ -220,7 +220,7 @@ function EntityFormInternal<M extends Record<string, any>>({
         entityId,
         values: internalValues,
         previousValues: initialValues,
-        fields: context.fields
+        fields: context.propertyConfigs
     });
 
     const onIdUpdate = collection.callbacks?.onIdUpdate;
@@ -373,7 +373,7 @@ function EntityFormInternal<M extends Record<string, any>>({
                     collection: resolveCollection({
                         collection,
                         path,
-                        fields: context.fields
+                        fields: context.propertyConfigs
                     }),
                     entityId,
                     path,

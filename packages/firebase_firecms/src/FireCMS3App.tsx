@@ -275,7 +275,8 @@ export function FireCMS3ClientWithController({
     const configController = useBuildCollectionsConfigController({
         firebaseApp: fireCMSBackend.backendFirebaseApp,
         projectId,
-        permissions
+        permissions,
+        propertyConfigs: appConfig?.propertyConfigs
     });
 
     useEffect(() => {
@@ -452,7 +453,7 @@ function FireCMS3AppAuthenticated({
      */
     const dataSource = useBuildDataSource({
         delegate: firestoreDelegate,
-        customFields: propertyConfigsMap
+        propertyConfigs: propertyConfigsMap
     });
 
     /**
@@ -474,7 +475,7 @@ function FireCMS3AppAuthenticated({
                             views={appConfig?.views}
                             entityViews={appConfig?.entityViews}
                             locale={appConfig?.locale}
-                            fields={propertyConfigsMap}
+                            propertyConfigs={propertyConfigsMap}
                             authController={authController}
                             userConfigPersistence={userConfigPersistence}
                             dataSource={dataSource}

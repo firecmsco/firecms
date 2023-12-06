@@ -25,7 +25,7 @@ export function ArrayPropertyPreview({
         propertyKey,
         property: inputProperty,
         propertyValue: value,
-        fields: fireCMSContext.fields
+        fields: fireCMSContext.propertyConfigs
     });
 
     if (!property.of) {

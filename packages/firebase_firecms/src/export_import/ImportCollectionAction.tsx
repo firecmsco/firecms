@@ -98,7 +98,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
     const resolvedCollection = resolveCollection({
         collection,
         path,
-        fields: context.fields
+        fields: context.propertyConfigs
     });
 
     const properties = getPropertiesWithPropertiesOrder<M>(resolvedCollection.properties, resolvedCollection.propertiesOrder as Extract<keyof M, string>[]) as ResolvedProperties<M>;
@@ -326,8 +326,8 @@ export function PropertySelectEntry({
     level?: number;
 }) {
 
-    const { fields } = useFireCMSContext();
-    const widget = getFieldConfig(property, fields);
+    const { propertyConfigs } = useFireCMSContext();
+    const widget = getFieldConfig(property, propertyConfigs);
 
     return <div
         className="flex flex-row w-full text-start items-center h-full">

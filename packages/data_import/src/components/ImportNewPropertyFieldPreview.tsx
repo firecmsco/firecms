@@ -30,8 +30,8 @@ export function ImportNewPropertyFieldPreview({
     propertyTypeView?: React.ReactNode
 }) {
 
-    const { fields } = useFireCMSContext();
-    const widget = property ? getFieldConfig(property, fields) : null;
+    const { propertyConfigs } = useFireCMSContext();
+    const widget = property ? getFieldConfig(property, propertyConfigs) : null;
 
     return <ErrorBoundary>
         <div

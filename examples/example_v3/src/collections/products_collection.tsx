@@ -73,7 +73,7 @@ export const productsCollection = buildCollection<Product>({
     ],
     additionalFields: [
         {
-            id: "additional_field",
+            key: "additional_field",
             name: "Additional field",
             Builder: () => <div>Additional field</div>
         }

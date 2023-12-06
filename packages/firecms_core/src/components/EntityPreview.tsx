@@ -32,7 +32,7 @@ export function EntityPreview<M extends Record<string, any>>(
         path,
         entityId: entity.id,
         values: entity.values,
-        fields: context.fields
+        fields: context.propertyConfigs
     }), [collection, path, entity]);
 
     const appConfig: FireCMSContext | undefined = useFireCMSContext();

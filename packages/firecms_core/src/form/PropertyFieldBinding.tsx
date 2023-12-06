@@ -102,7 +102,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
                     values: fieldProps.form.values,
                     path: context.path,
                     entityId: context.entityId,
-                    fields: fireCMSContext.fields
+                    fields: fireCMSContext.propertyConfigs
                 });
 
                 if (resolvedProperty === null || isHidden(resolvedProperty)) {
@@ -114,9 +114,9 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
                         Component = resolvedProperty.Field as ComponentType<FieldProps<any>>;
                     }
                 } else {
-                    const propertyConfig = getFieldConfig(resolvedProperty, fireCMSContext.fields);
+                    const propertyConfig = getFieldConfig(resolvedProperty, fireCMSContext.propertyConfigs);
                     if (!propertyConfig) {
-                        console.log("INTERNAL: Could not find field config for property", { propertyKey, resolvedProperty, fields: fireCMSContext.fields, propertyConfig });
+                        console.log("INTERNAL: Could not find field config for property", { propertyKey, resolvedProperty, fields: fireCMSContext.propertyConfigs, propertyConfig });
                         throw new Error(`INTERNAL: Could not find field config for property ${propertyKey}`);
                     }
                     const configProperty = resolveProperty({
@@ -125,7 +125,7 @@ function PropertyFieldBindingInternal<T extends CMSType = CMSType, CustomProps =
                         values: fieldProps.form.values,
                         path: context.path,
                         entityId: context.entityId,
-                        fields: fireCMSContext.fields
+                        fields: fireCMSContext.propertyConfigs
                     });
                     Component = configProperty.Field as ComponentType<FieldProps<T>>;
                 }

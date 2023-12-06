@@ -5,7 +5,11 @@ import {
     makePropertiesEditable,
     PermissionsBuilder,
     Properties,
+    PropertiesOrBuilders,
+    Property,
+    PropertyConfig,
     removeFunctions,
+    removePropsIfExisting,
     removeUndefined,
     sortProperties,
     stripCollectionPath
@@ -22,6 +26,9 @@ export function setUndefinedToDelete(data: any): any {
     if (Array.isArray(data)) {
         return data.map(v => setUndefinedToDelete(v));
     } else if (typeof data === "object") {
+        if (Object.keys(data).length === 0) {
+            return deleteField();
+        }
         return Object.entries(data)
             .map(([key, value]) => ({ [key]: setUndefinedToDelete(value) }))
             .reduce((a, b) => ({ ...a, ...b }), {});
@@ -66,12 +73,17 @@ export const docToCollection = (doc: DocumentSnapshot): PersistedCollection => {
     return { ...data, properties: sortedProperties } as PersistedCollection;
 }
 
-export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: PersistedCollection<M>) {
-    const properties = setUndefinedToDelete(removeFunctions(collection.properties));
+export function prepareCollectionForPersistence<M extends { [Key: string]: CMSType }>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig>) {
+
+    const { properties: inputProperties, ...rest } = collection;
+    const cleanedProperties = cleanPropertyConfigs(inputProperties, propertyConfigs);
+    console.log("cleanedProperties", cleanedProperties)
+    const properties = setUndefinedToDelete(removeFunctions(cleanedProperties));
     const newCollection: PersistedCollection = {
-        ...removeUndefined(collection),
+        ...removeUndefined(rest),
         properties
     };
+
     if (newCollection.alias === "")
         delete newCollection.alias;
     delete newCollection.permissions;
@@ -93,6 +105,23 @@ export const applyPermissionsFunction = (collections: PersistedCollection[], per
     return collections.map(collection => ({
         ...collection,
         permissions: permissionsBuilder
-    }))
+    }));
+}
 
+function cleanPropertyConfigs(properties: PropertiesOrBuilders, propertyConfigs: Record<string, PropertyConfig>) {
+    const res: Record<string, Property> = {};
+    Object.entries(properties).forEach(([key, property]) => {
+        if (typeof property === "object" && "propertyConfig" in property) {
+            const config = property.propertyConfig ? propertyConfigs[property.propertyConfig] : undefined;
+
+            let cleanProperty: any;
+            if (config?.property) {
+                cleanProperty = removePropsIfExisting(property, config?.property);
+            } else {
+                cleanProperty = property;
+            }
+            res[key] = { ...cleanProperty };
+        }
+    });
+    return res;
 }

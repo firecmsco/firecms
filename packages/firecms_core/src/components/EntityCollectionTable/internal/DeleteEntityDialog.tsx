@@ -51,7 +51,7 @@ export function DeleteEntityDialog<M extends Record<string, any>>({
     const resolvedCollection = useMemo(() => resolveCollection<M>({
         collection,
         path,
-        fields: context.fields
+        fields: context.propertyConfigs
     }), [collection, path]);
 
     const handleCancel = useCallback(() => {

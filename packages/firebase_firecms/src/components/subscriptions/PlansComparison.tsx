@@ -7,7 +7,6 @@ import {
     Dialog,
     DialogContent,
     IconButton,
-    useAuthController,
     useNavigationContext
 } from "@firecms/core";
 import { useNavigate } from "react-router-dom";
@@ -126,7 +125,7 @@ export function PlansComparison() {
                 </ul>
             </div>
 
-            <span className={"text-2xl font-bold text-primary text-center my-8"}>€10.99 user/month</span>
+            <span className={"text-2xl font-bold text-primary text-center my-8"}>€9.99 user/month</span>
 
             {plusProduct && <div className={"flex items-center justify-center"}>
                 <ProductView
@@ -201,4 +200,3 @@ export function PlansComparison() {
     </div>;
 
 }
-

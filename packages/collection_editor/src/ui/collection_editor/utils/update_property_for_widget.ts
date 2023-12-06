@@ -12,7 +12,7 @@ import {
 
 export function updatePropertyFromWidget(propertyData: any,
                                          selectedWidgetId: string | undefined,
-                                         customFields: Record<string, PropertyConfig>): Property {
+                                         propertyConfigs: Record<string, PropertyConfig>): Property {
 
     let updatedProperty;
     if (selectedWidgetId === "text_field") {
@@ -260,9 +260,9 @@ export function updatePropertyFromWidget(propertyData: any,
                 }
             } satisfies ArrayProperty
         );
-    } else if (selectedWidgetId && customFields[selectedWidgetId]) {
+    } else if (selectedWidgetId && propertyConfigs[selectedWidgetId]) {
         updatedProperty = {
-            ...customFields[selectedWidgetId].property,
+            ...propertyConfigs[selectedWidgetId].property,
             propertyConfig: selectedWidgetId
         };
     }

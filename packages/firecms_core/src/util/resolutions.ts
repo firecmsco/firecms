@@ -180,7 +180,7 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
     if (resolvedProperty.propertyConfig && !isDefaultFieldConfigId(resolvedProperty.propertyConfig)) {
         const cmsFields = props.fields;
         if (!cmsFields) {
-            throw Error(`Trying to resolve a property with key ${resolvedProperty.propertyConfig} that inherits from a custom field but no custom fields were provided. Use the property 'fields' in your top level component to provide them`);
+            throw Error(`Trying to resolve a property with key ${resolvedProperty.propertyConfig} that inherits from a custom property config but no custom property configs were provided. Use the property 'fields' in your top level component to provide them`);
         }
         const customField: PropertyConfig<any> = cmsFields[resolvedProperty.propertyConfig];
         if (!customField)

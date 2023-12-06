@@ -135,7 +135,7 @@ export function ReferenceWidget<M extends Record<string, any>>({
         } else {
             if (validValue) {
 
-                const listProperties = getReferencePreviewKeys(collection, fireCMSContext.fields, previewProperties, 3);
+                const listProperties = getReferencePreviewKeys(collection, fireCMSContext.propertyConfigs, previewProperties, 3);
 
                 body = (
                     <div className="flex flex-col flex-grow ml-4 mr-4">

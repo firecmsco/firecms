@@ -73,7 +73,7 @@ export type PropertyFormProps = {
     allowDataInference: boolean;
     getData?: () => Promise<object[]>;
     getHelpers?: (formikProps: FormikProps<PropertyWithId>) => void;
-    customFields: Record<string, PropertyConfig>;
+    propertyConfigs: Record<string, PropertyConfig>;
     collectionEditable: boolean;
 };
 
@@ -97,7 +97,7 @@ export const PropertyForm = React.memo(
                               allowDataInference,
                               getHelpers,
                               getData,
-                              customFields,
+                              propertyConfigs,
                               collectionEditable
                           }: PropertyFormProps) {
 
@@ -184,7 +184,7 @@ export const PropertyForm = React.memo(
                     disabled={disabled}
                     getData={getData}
                     allowDataInference={allowDataInference}
-                    customFields={customFields}
+                    propertyConfigs={propertyConfigs}
                     collectionEditable={collectionEditable}
                     {...props}/>;
 
@@ -277,7 +277,7 @@ function PropertyEditView({
                               existingPropertyKeys,
                               getData,
                               allowDataInference,
-                              customFields,
+                              propertyConfigs,
                               collectionEditable
                           }: {
     includeIdAndTitle?: boolean;
@@ -294,7 +294,7 @@ function PropertyEditView({
     existingPropertyKeys?: string[];
     getData?: () => Promise<object[]>;
     allowDataInference: boolean;
-    customFields: Record<string, PropertyConfig>;
+    propertyConfigs: Record<string, PropertyConfig>;
     collectionEditable: boolean;
 } & FormikProps<PropertyWithId>) {
 
@@ -302,7 +302,7 @@ function PropertyEditView({
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [selectedFieldConfigId, setSelectedFieldConfigId] = useState<string | undefined>(values?.dataType ? getFieldId(values) : undefined);
 
-    const allSupportedFields = Object.entries(DEFAULT_FIELD_CONFIGS).concat(Object.entries(customFields));
+    const allSupportedFields = Object.entries(DEFAULT_FIELD_CONFIGS).concat(Object.entries(propertyConfigs));
 
     const displayedWidgets = inArray
         ? allSupportedFields.filter(([_, propertyConfig]) => !isPropertyBuilder(propertyConfig.property) && propertyConfig.property?.dataType !== "array")
@@ -351,7 +351,7 @@ function PropertyEditView({
 
     const onWidgetSelectChanged = (newSelectedWidgetId: FieldConfigId) => {
         setSelectedFieldConfigId(newSelectedWidgetId);
-        setValues(updatePropertyFromWidget(values, newSelectedWidgetId, customFields));
+        setValues(updatePropertyFromWidget(values, newSelectedWidgetId, propertyConfigs));
         // Ugly hack to autofocus the name field
         setTimeout(() => {
             nameFieldRef.current?.focus();
@@ -407,12 +407,12 @@ function PropertyEditView({
         childComponent =
             <MapPropertyField disabled={disabled} getData={getData} allowDataInference={allowDataInference}
                               collectionEditable={collectionEditable}
-                              customFields={customFields}/>;
+                              propertyConfigs={propertyConfigs}/>;
     } else if (selectedFieldConfigId === "block") {
         childComponent =
             <BlockPropertyField disabled={disabled} getData={getData} allowDataInference={allowDataInference}
                                 collectionEditable={collectionEditable}
-                                customFields={customFields}/>;
+                                propertyConfigs={propertyConfigs}/>;
     } else if (selectedFieldConfigId === "reference") {
         childComponent =
             <ReferencePropertyField showErrors={showErrors}
@@ -435,7 +435,7 @@ function PropertyEditView({
                                  allowDataInference={allowDataInference}
                                  disabled={disabled}
                                  collectionEditable={collectionEditable}
-                                 customFields={customFields}/>;
+                                 propertyConfigs={propertyConfigs}/>;
     } else if (selectedFieldConfigId === "key_value") {
         childComponent =
             <KeyValuePropertyField disabled={disabled}/>;
@@ -470,9 +470,9 @@ function PropertyEditView({
                                     widget</em>;
                             }
                             const key = value as FieldConfigId;
-                            const propertyConfig = DEFAULT_FIELD_CONFIGS[key] ?? customFields[key];
+                            const propertyConfig = DEFAULT_FIELD_CONFIGS[key] ?? propertyConfigs[key];
                             const baseProperty = propertyConfig.property;
-                            const baseFieldConfig = baseProperty && !isPropertyBuilder(baseProperty) ? getFieldConfig(baseProperty, customFields) : undefined;
+                            const baseFieldConfig = baseProperty && !isPropertyBuilder(baseProperty) ? getFieldConfig(baseProperty, propertyConfigs) : undefined;
                             const optionDisabled = isPropertyBuilder(baseProperty) || (existing && baseProperty.dataType !== values?.dataType);
                             const computedFieldConfig = baseFieldConfig ? mergeDeep(baseFieldConfig, propertyConfig) : propertyConfig;
                             return <div
