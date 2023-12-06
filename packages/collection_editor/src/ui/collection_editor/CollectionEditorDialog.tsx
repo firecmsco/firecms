@@ -266,39 +266,48 @@ export function CollectionEditorDialogInternal<M extends {
 
     const inferCollectionFromData = useCallback(async (newCollection: PersistedCollection<M>) => {
 
-        if (!doCollectionInference) {
-            setCollection(newCollection);
-            return Promise.resolve(newCollection);
-        }
+        try {
+            if (!doCollectionInference) {
+                setCollection(newCollection);
+                return Promise.resolve(newCollection);
+            }
 
-        setCurrentView("loading");
+            setCurrentView("loading");
 
-        const inferredCollection = await doCollectionInference?.(newCollection);
+            const inferredCollection = await doCollectionInference?.(newCollection);
 
-        if (!inferredCollection) {
-            setCollection(newCollection);
-            return Promise.resolve(newCollection);
-        }
-        const values = {
-            ...(newCollection ?? {}),
-        };
+            if (!inferredCollection) {
+                setCollection(newCollection);
+                return Promise.resolve(newCollection);
+            }
+            const values = {
+                ...(newCollection ?? {}),
+            };
 
-        if (Object.keys(inferredCollection.properties ?? {}).length > 0) {
-            values.properties = inferredCollection.properties as Properties<M>;
-            values.propertiesOrder = inferredCollection.propertiesOrder as Extract<keyof M, string>[];
-        }
+            if (Object.keys(inferredCollection.properties ?? {}).length > 0) {
+                values.properties = inferredCollection.properties as Properties<M>;
+                values.propertiesOrder = inferredCollection.propertiesOrder as Extract<keyof M, string>[];
+            }
 
-        if (!values.propertiesOrder) {
-            values.propertiesOrder = Object.keys(values.properties) as Extract<keyof M, string>[];
+            if (!values.propertiesOrder) {
+                values.propertiesOrder = Object.keys(values.properties) as Extract<keyof M, string>[];
+                return values;
+            }
+
+            setCollection(values);
+            console.log("Inferred collection", {
+                newCollection: newCollection ?? {},
+                values
+            });
             return values;
+        } catch (e:any) {
+            console.error(e);
+            snackbarController.open({
+                type: "error",
+                message: "Error inferring collection: " + (e.message ?? "Details in the console")
+            });
+            return newCollection;
         }
-
-        setCollection(values);
-        console.log("Inferred collection", {
-            newCollection: newCollection ?? {},
-            values
-        });
-        return values;
     }, [parentPathSegments, doCollectionInference]);
 
     const onSubmit = (newCollectionState: PersistedCollection<M>, formikHelpers: FormikHelpers<PersistedCollection<M>>) => {

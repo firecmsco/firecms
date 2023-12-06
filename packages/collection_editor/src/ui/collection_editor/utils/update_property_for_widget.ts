@@ -261,7 +261,10 @@ export function updatePropertyFromWidget(propertyData: any,
             } satisfies ArrayProperty
         );
     } else if (selectedWidgetId && customFields[selectedWidgetId]) {
-        updatedProperty = { ...customFields[selectedWidgetId].property, propertyConfig: selectedWidgetId };
+        updatedProperty = {
+            ...customFields[selectedWidgetId].property,
+            propertyConfig: selectedWidgetId
+        };
     }
 
     return updatedProperty;

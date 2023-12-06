@@ -129,7 +129,7 @@ export function CollectionDetailsForm({
                     <div
                         className="flex flex-row py-2 pt-3 items-center">
                         <Typography variant={!isNewCollection ? "h5" : "h4"} className={"flex-grow"}>
-                            {isNewCollection ? "New collection" : `${values.name} collection`}
+                            {isNewCollection ? "New collection" : `${values?.name} collection`}
                         </Typography>
                         <Tooltip title={"Change icon"}>
                             <IconButton

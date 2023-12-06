@@ -126,7 +126,7 @@ export function CollectionPropertiesEditorForm({
                     if (newPropertyKeys.length === 0) {
                         snackbarController.open({
                             type: "info",
-                            message: "No new properties found"
+                            message: "No new properties found in existing data"
                         });
                         return;
                     }
@@ -312,7 +312,7 @@ export function CollectionPropertiesEditorForm({
                             placeholder={"Collection name"}
                             size={"small"}
                             required
-                            error={Boolean(errors.name)}/>
+                            error={Boolean(errors?.name)}/>
 
                         {owner &&
                             <Typography variant={"body2"}
