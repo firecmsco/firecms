@@ -7,6 +7,7 @@ import { Permissions, PermissionsBuilder } from "./permissions";
 import { EnumValues, PropertiesOrBuilders } from "./properties";
 import { FormContext } from "./fields";
 import { EntityAction } from "./entity_actions";
+import { ExportConfig } from "./export_import";
 
 /**
  * This interface represents a view that includes a collection of entities.
@@ -74,6 +75,13 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      * Set of properties that compose an entity
      */
     properties: PropertiesOrBuilders<M>;
+
+    /**
+     * Can this collection be edited by the end user.
+     * Defaults to `false`.
+     * Keep in mind that you can also set this prop to individual properties.
+     */
+    editable?: boolean;
 
     /**
      * Order in which the properties are displayed.
@@ -264,6 +272,10 @@ export interface EntityCollection<M extends Record<string, any> = any, UserType 
      */
     formAutoSave?: boolean;
 
+    /**
+     *
+     */
+    exportable?: boolean | ExportConfig<UserType>;
 }
 
 /**

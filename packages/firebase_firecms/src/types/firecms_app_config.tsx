@@ -7,11 +7,10 @@ import {
     EntityCustomView,
     PropertyConfig,
     FireCMSAppBarProps,
-    Locale
+    Locale, EntityCollection
 } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
 import { FirestoreTextSearchController } from "./text_search";
-import { FirebaseCMSCollection } from "./collections";
 
 export type FireCMSAppConfig = {
 
@@ -26,7 +25,7 @@ export type FireCMSAppConfig = {
      * Each of the navigation entries in this field
      * generates an entry in the main menu.
      */
-    collections?: FirebaseCMSCollection[] | EntityCollectionsBuilder<FirebaseCMSCollection>;
+    collections?: EntityCollection[] | EntityCollectionsBuilder<EntityCollection>;
 
     /**
      * Custom additional views created by the developer, added to the main

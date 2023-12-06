@@ -117,6 +117,7 @@ export function PlansComparison() {
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in the free tier</li>
+                    <li className={"ml-8 list-disc"}>Custom fields and custom views</li>
                     <li className={"ml-8 list-disc"}>Unlimited users and roles</li>
                     <li className={"ml-8 list-disc"}>Unlimited data export</li>
                     <li className={"ml-8 list-disc"}>Theme and logo customization</li>
@@ -151,7 +152,6 @@ export function PlansComparison() {
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in PLUS</li>
-                    <li className={"ml-8 list-disc"}>Custom fields and custom views</li>
                     <li className={"ml-8 list-disc"}>SAML SSO</li>
                     <li className={"ml-8 list-disc"}>Custom domain</li>
                     <li className={"ml-8 list-disc"}>Priority support</li>
@@ -190,7 +190,7 @@ export function PlansComparison() {
 
             {/*three columns layout*/}
             <div
-                className="flex flex-col items-center lg:grid lg:grid-cols-3 gap-4 mt-8 w-full max-w-7xl mx-auto"
+                className="flex flex-col items-center lg:grid lg:grid-cols-3 gap-4 mt-8 w-full mx-auto"
             >
                 {freeTier}
                 {plusTier}

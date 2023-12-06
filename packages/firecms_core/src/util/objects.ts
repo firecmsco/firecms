@@ -143,3 +143,26 @@ export function isEmptyObject(obj: object) {
         Object.getPrototypeOf(obj) === Object.prototype &&
         Object.keys(obj).length === 0
 }
+
+export function removePropsIfExisting(source: any, comparison: any) {
+    const isObject = (val: any) => typeof val === 'object' && val !== null;
+    const isArray = (val: any) => Array.isArray(val);
+
+    if (!isObject(source) || !isObject(comparison)) {
+        return source;
+    }
+
+    const res = isArray(source) ? [...source] : { ...source };
+
+    Object.keys(comparison).forEach(key => {
+        if (key in res) {
+            if (isObject(res[key]) && isObject(comparison[key])) {
+                res[key] = removePropsIfExisting(res[key], comparison[key]);
+            } else {
+                isArray(res) ? res.splice(key, 1) : delete res[key];
+            }
+        }
+    });
+
+    return res;
+}

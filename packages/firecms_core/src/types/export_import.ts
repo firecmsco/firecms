@@ -1,4 +1,6 @@
-import { Entity, FireCMSContext, User } from "@firecms/core";
+import { User } from "./user";
+import { Entity } from "./entities";
+import { FireCMSContext } from "./firecms_context";
 
 /**
  * You can use this configuration to add additional fields to the data

@@ -4,7 +4,7 @@ import {
     BooleanProperty,
     CMSType,
     DateProperty,
-    EntityCallbacks,
+    EntityCallbacks, EntityCollection,
     EnumValueConfig,
     EnumValues,
     GeopointProperty,
@@ -18,7 +18,6 @@ import {
     StringProperty,
     User
 } from "@firecms/core";
-import { FirebaseCMSCollection } from "../types/collections";
 
 /**
  * Identity function we use to defeat the type system of Typescript and build
@@ -28,8 +27,8 @@ import { FirebaseCMSCollection } from "../types/collections";
  */
 export function buildCollection<M extends Record<string, any> = any,
     UserType extends User = User>(
-    collection: FirebaseCMSCollection<M, UserType>
-): FirebaseCMSCollection<M, UserType> {
+    collection: EntityCollection<M, UserType>
+): EntityCollection<M, UserType> {
     return collection;
 }
 

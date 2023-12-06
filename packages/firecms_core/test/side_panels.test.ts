@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, jest, test } from "@jest/globals";
 import { EntityCollection, EntitySidePanelProps } from "../src/types";
-import { buildSidePanelsFromUrl } from "../src/core/internal/useBuildSideEntityController";
+import { buildSidePanelsFromUrl } from "../src/internal/useBuildSideEntityController";
 
 describe('buildSidePanelsFromUrl', () => {
 

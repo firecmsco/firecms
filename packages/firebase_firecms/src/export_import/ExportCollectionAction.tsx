@@ -10,7 +10,7 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    Entity,
+    Entity, EntityCollection, ExportConfig,
     focusedMixin,
     GetAppIcon,
     IconButton,
@@ -26,8 +26,6 @@ import {
 import { downloadExport } from "./export";
 import { SubscriptionPlanWidget } from "../components";
 import { useProjectConfig } from "../hooks";
-import { ExportConfig } from "../types/export_import";
-import { FirebaseCMSCollection } from "../types/collections";
 
 const DOCS_LIMIT = 500;
 
@@ -35,7 +33,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                                                                                                  collection: inputCollection,
                                                                                                  path: inputPath,
                                                                                                  collectionEntitiesCount
-                                                                                             }: CollectionActionsProps<M, UserType, FirebaseCMSCollection<M, any>>) {
+                                                                                             }: CollectionActionsProps<M, UserType, EntityCollection<M, any>>) {
     const { canExport } = useProjectConfig();
 
     const exportConfig = typeof inputCollection.exportable === "object" ? inputCollection.exportable : undefined;
