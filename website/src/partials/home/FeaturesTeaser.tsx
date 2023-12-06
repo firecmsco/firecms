@@ -33,12 +33,12 @@ function FeaturesTeaser() {
     const isDarkTheme = colorMode === "dark";
 
     return (<>
-            <Panel>
+            <Panel >
 
                 <TwoColumns
                     includeBorder={false}
                     left={
-                        <div className={"text-text-primary"}>
+                        <div className={""}>
                             <div className={clsx("text-xl ")}>
 
                                 <div className={"flex items-center mb-3"}>
@@ -54,7 +54,7 @@ function FeaturesTeaser() {
 
                                 </div>
 
-                                <p className="text-xl md:text-2xl text-text-primary">
+                                <p className="text-xl md:text-2xl">
                                     FireCMS offers both flexibility and an excellent
                                     user experience. Edit your collections and
                                     entities
@@ -63,7 +63,7 @@ function FeaturesTeaser() {
                                     forms</b>.
                                 </p>
 
-                                <p className="text-text-primary">
+                                <p className="">
                                     FireCMS creates CRUD views based on your
                                     configurations with ease. It's simple to set up
                                     for
@@ -103,7 +103,7 @@ function FeaturesTeaser() {
                     </>}
                 />
             </Panel>
-            <Panel>
+            <Panel color={"light"}>
                 <TwoColumns
                     reverseSmall={true}
                     left={<>
@@ -125,7 +125,7 @@ function FeaturesTeaser() {
                         <div>
 
                             <div
-                                className={"flex items-center mb-3 text-text-primary"}>
+                                className={"flex items-center mb-3 "}>
 
                                 <div
                                     className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 ">
@@ -137,12 +137,12 @@ function FeaturesTeaser() {
 
                             </div>
 
-                            <p className="text-xl md:text-2xl text-text-primary">
+                            <p className="text-xl md:text-2xl ">
                                 FireCMS offers developers an easy way to adapt the
                                 platform to their specific needs while keeping the <b>initial setup simple</b>. Our
                                 practical defaults can be conveniently <b>overridden or expanded</b>.
                             </p>
-                            <p className="text-xl text-text-primary">
+                            <p className="text-xl ">
                                 Effortlessly integrate your custom form fields as
                                 React components and preview widgets. Moreover, you
                                 can create detailed views related to your entities

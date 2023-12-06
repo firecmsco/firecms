@@ -2,7 +2,7 @@
 id: building_a_blog
 title: Building a blog
 sidebar_label: Building a blog
-description: Build a highly customizable blog
+description: Use FireCMS to build a blog, including field customization and preview.
 image: /img/blog_example.png
 ---
 
@@ -10,8 +10,7 @@ image: /img/blog_example.png
 
 :::note
 In this tutorial we assume you have set up a Firebase project and a FireCMS
-instance. If you don't, check the [Quickstart](customization_quickstart.mdx) and
-[Firebase setup](firebase_setup.md) sections.
+instance. If you don't, check the [Quickstart](customization_quickstart.mdx) section.
 :::
 
 We don't need to explain the benefits of using a headless CMS instead of a
@@ -31,7 +30,8 @@ CMS with multiple apps and websites
 When you are done implementing the steps in this tutorial, you may want to check
 how to build a simple **next.js** frontend app (or any other frontend framework).
 We suggest next.js since it uses React, and it will make things easier.
-We are already providing many of the React components
+We are already providing many of the React components you could need in
+your frontend app, so you can focus on the business logic.
 :::
 
 ## Let's build a blog with FireCMS
@@ -71,11 +71,16 @@ type BlogEntryText = {
 
 type BlogEntryProducts = {
     type: "products";
-    value: Product[]; // The Product type is coming from the quickstart
+    value: object[]; // We use a generic object here, but feel free to define a type for your products
 }
 ```
 
 ### Create the collection
+
+:::tip
+You can create this same collection using a template in the FireCMS dashboard.
+
+:::
 
 Let's start by initialising our collection, without any properties:
 
@@ -282,7 +287,56 @@ You could also have more complex setup that sends your data to your SSR app
 through an API and render the result.
 
 You can find the code for `BlogEntryPreview` in
-[BlogEntryPreview](https://github.com/FireCMSco/firecms/blob/master/example/src/docs/recipes/blog/BlogEntryPreview.tsx)
+[BlogEntryPreview](https://github.com/FireCMSco/firecms/blob/master/example/src/docs/recipes/blog/BlogEntryPreview.tsx).
+
+When you have created your component, there are 2 ways you can add it to your component:
+
+#### Register it in the CMS
+
+The preferred way is to register it in the CMS, so that it is available in the view selector of
+the collection.
+
+In order to do so, you need to add it to the `entityViews` prop of the FireCMS main app config export:
+
+```tsx
+    import { FireCMSAppConfig } from "@firecms/firebase";
+const appConfig: FireCMSAppConfig = {
+    version: "1",
+    collections: [],
+    entityViews: [
+        {
+            key: "blog_preview",
+            name: "Preview",
+            Builder: BlogEntryPreview
+        }
+    ],
+}
+```
+
+
+#### Register it in the collection
+
+If you are defining your collection in code, you can also register it
+in the collection itself:
+
+
+```tsx
+import {buildCollection} from "@firecms/firebase";
+export const blogCollection = buildCollection<BlogEntry>({
+    name: "Blog entry",
+    path: "blog",
+    entityViews: [
+        {
+            key: "blog_preview",
+            name: "Preview",
+            Builder: BlogEntryPreview
+        }
+    ],
+    properties: {
+        // ...
+    }
+});
+```
 
 ## Complete code:
 

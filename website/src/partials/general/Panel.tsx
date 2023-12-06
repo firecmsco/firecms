@@ -4,7 +4,7 @@ import clsx from "clsx";
 
 export function Panel({
                           children,
-                          color = "white",
+                          color = "transparent",
                           centered = false,
                           includeMargin = false,
                           includePadding = true,
@@ -20,10 +20,10 @@ export function Panel({
     innerClassName?: string,
 }) {
 
-    const colorClass = color === "transparent" ? "text-inherit" :
-        color === "white" ? "bg-white text-text-primary dark:text-text-primary-dark" :
-            color === "light" ? "bg-gray-100 dark:bg-gray-800 dark:bg-opacity-30 text-text-primary dark:text-text-primary-dark" :
-                color === "lighter" ? "bg-gray-50 dark:bg-gray-900 dark:bg-opacity-80 text-text-primary dark:text-text-primary-dark" :
+    const colorClass = color === "transparent" ? "" :
+        color === "white" ? "bg-white dark:bg-gray-900 text-text-primary dark:text-text-primary-dark" :
+            color === "light" ? "bg-gray-100 dark:bg-gray-700 dark:bg-opacity-30 text-text-primary dark:text-text-primary-dark" :
+                color === "lighter" ? "bg-gray-50 dark:bg-gray-800 text-text-primary dark:text-text-primary-dark" :
                     color === "light_gray" ? "bg-gray-600 text-white dark:text-white" :
                         color === "gray" ? "bg-gray-800 text-white dark:text-white" :
                             color === "primary" ? "bg-primary text-white dark:text-white" :

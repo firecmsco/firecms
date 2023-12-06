@@ -15,7 +15,7 @@ export function FireCMSCloudVersions() {
 
     const freeTier = (
         <div
-            className={clsx("h-full max-w-sm p-6 border rounded-lg shadow dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
+            className={clsx("h-full mx-4 p-6 border rounded-lg dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
 
             <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Free
@@ -44,7 +44,7 @@ export function FireCMSCloudVersions() {
 
     const plusTier = (
         <div
-            className={clsx("h-full max-w-sm p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
+            className={clsx("h-full mx-4 p-6 rounded-lg flex flex-col outline-none ring-2 ring-primary ring-opacity-75 ring-offset-2 ring-offset-transparent")}>
 
             <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300 text-primary"}>
                 Plus
@@ -55,6 +55,7 @@ export function FireCMSCloudVersions() {
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in the free tier</li>
+                    <li className={"ml-8 list-disc"}>Custom fields and custom views</li>
                     <li className={"ml-8 list-disc"}>Unlimited users and roles</li>
                     <li className={"ml-8 list-disc"}>Unlimited data export</li>
                     <li className={"ml-8 list-disc"}>Theme and logo customization</li>
@@ -72,7 +73,7 @@ export function FireCMSCloudVersions() {
 
     const proTier = (
         <div
-            className={clsx("h-full max-w-sm p-6 border rounded-lg shadow dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
+            className={clsx("h-full mx-4 p-6 border rounded-lg  dark:border-gray-700 flex flex-col", defaultBorderMixin)}>
 
             <h3 className={"text-2xl md:text-4xl font-bold mb-4 text-center text-gray-700 dark:text-gray-300"}>
                 Pro
@@ -83,7 +84,6 @@ export function FireCMSCloudVersions() {
                 </p>
                 <ul>
                     <li className={"ml-8 list-disc"}>Everything in PLUS</li>
-                    <li className={"ml-8 list-disc"}>Custom fields and custom views</li>
                     <li className={"ml-8 list-disc"}>SAML SSO</li>
                     <li className={"ml-8 list-disc"}>Custom domain</li>
                     <li className={"ml-8 list-disc"}>Priority support</li>
@@ -105,9 +105,7 @@ export function FireCMSCloudVersions() {
     );
 
     return <section
-        className={clsx(defaultBorderMixin, "flex flex-col items-center justify-center text-lg border-0 border-t")}>
-
-        <LinedSpace/>
+        className={clsx(defaultBorderMixin, "flex flex-col items-center justify-center text-lg border-0 border-t bg-white dark:bg-gray-900")}>
 
         <div className={clsx(ContainerMixin, ContainerPaddingMixin,)}>
 
@@ -124,11 +122,19 @@ export function FireCMSCloudVersions() {
             </p>
 
 
-            <ThreeColumns
-                left={freeTier}
-                center={plusTier}
-                right={proTier}
-            />
+            <div
+                className="flex flex-col items-center lg:grid lg:grid-cols-3 gap-4 mt-8 w-full mx-auto"
+            >
+                {freeTier}
+                {plusTier}
+                {proTier}
+            </div>
+
+            {/*<ThreeColumns*/}
+            {/*    left={freeTier}*/}
+            {/*    center={plusTier}*/}
+            {/*    right={proTier}*/}
+            {/*/>*/}
 
             <a
                 className={CTAOutlinedButtonWhiteMixin}

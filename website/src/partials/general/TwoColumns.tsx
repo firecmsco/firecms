@@ -9,14 +9,16 @@ export function TwoColumns({
                                distribution,
                                reverseSmall,
                                animation = true,
-                               includeBorder
+                               includeBorder,
+                               className
                            }: {
     includeBorder?: boolean,
     left: React.ReactNode,
     right: React.ReactNode,
     distribution?: "bigLeft" | "bigRight",
     reverseSmall?: boolean,
-    animation?: boolean
+    animation?: boolean,
+    className?: string
 }) {
 
     const leftColumn = distribution === "bigLeft" ? "lg:col-span-7" : (distribution === "bigRight" ? "lg:col-span-5" : "lg:col-span-6");
@@ -28,7 +30,9 @@ export function TwoColumns({
             className={clsx(ContainerMixin,
                 "relative mx-auto",
                 includeBorder ? defaultBorderMixin : "",
-                includeBorder ? "border-x border-y-0 border-solid" : "")}>
+                includeBorder ? "border-x border-y-0 border-solid" : "",
+                className
+                )}>
             <div
                 className={"max-w-full flex flex-col lg:grid lg:grid-cols-12 lg:gap-10 " + flexDirection}>
                 <div

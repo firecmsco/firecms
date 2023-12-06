@@ -3,26 +3,23 @@ import { CTACaret, CTAOutlinedButtonMixin } from "../styles";
 import { Panel } from "../general/Panel";
 import useBaseUrl from "@docusaurus/useBaseUrl";
 
-export function SelfHosted() {
+export function CLIInstructions() {
 
-    return <Panel includeMargin={true} centered={false}>
+    return <Panel color={"gray"} includeMargin={false} centered={false}>
 
         <h2 className={"text-3xl md:text-4xl font-bold my-2"}>
-            Self-hosted mode
+            Start hacking today
         </h2>
 
-
-
         <p className={"text-lg"}>
-            With our self-hosted option, you'll have
-            access to all of our open-source core features at <b>no cost</b>.
-            Simply download and install on your own infrastructure,
-            and enjoy complete control and customization.
+            Use our <b>CLI</b> to create a new project and start
+            hacking right away.
         </p>
 
         <p className={"text-lg"}>
-            Self-hosted mode is perfect for developers who want to
-            build <b>custom features</b>.
+            If you are on paying plan you can use the CLI to initialize
+            your project with <b>custom fields</b> and <b>custom views</b>.
+            This way you can create a CMS tailored to your needs.
         </p>
 
         <div className={"flex gap-4"}>
@@ -39,13 +36,13 @@ export function SelfHosted() {
                 Docs
                 <CTACaret/>
             </a>
-            <a
-                className={CTAOutlinedButtonMixin}
-                href={"https://demo.firecms.co"}
-            >
-                See self-hosted demo
-                <CTACaret/>
-            </a>
+            {/*<a*/}
+            {/*    className={CTAOutlinedButtonMixin}*/}
+            {/*    href={"https://demo.firecms.co"}*/}
+            {/*>*/}
+            {/*    See self-hosted demo*/}
+            {/*    <CTACaret/>*/}
+            {/*</a>*/}
         </div>
     </Panel>;
 

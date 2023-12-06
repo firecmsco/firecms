@@ -46,7 +46,7 @@ export function UsageExamples() {
     console.log({ parallaxOffset, ref, currentTop, offsetHeight, scroll });
 
     return <div ref={ref}
-                className={clsx("overflow-hidden flex flex-col items-center justify-center", ContainerPaddingMixin)}>
+                className={clsx("overflow-hidden flex flex-col items-center justify-center bg-white dark:bg-gray-700", ContainerPaddingMixin)}>
 
 
         <LinedSpace position={"bottom"} size={"large"}/>

@@ -1,20 +1,20 @@
 ---
-id: advanced_forms
-title: Fields and forms customization
+id: medicalmotion
+title: FireCMS in MedicalMotion
 ---
 
-<div style={{height: "350px"}}/>
+<div style={{ height: "350px" }}/>
 
 
-# Fields and forms customization
+# FireCMS in MedicalMotion
+
+[MedicalMotion](https://www.medicalmotion.com/) is a platform that generates customized physiotherapy treatments. Physical therapists create exercises which are then assigned to patients using AI. The internal team manages the exercises collection using FireCMS.
 
 FireCMS provides around **20 default fields** which should suffice for most business logic. These fields range from simple text fields or selects to more complex ones like file uploaders, date pickers, or reference fields. There are also hundreds of validation options available, as well as the ability to create custom validators.
 
 However, sometimes you may need more complex editing forms and specific fields that the default ones don't cover. In these cases, you can create your own custom fields and use them in your entity collection.
 
 ## Custom fields to fit your needs
-
-[MedicalMotion](https://www.medicalmotion.com/) is a platform that generates customized physiotherapy treatments. Physical therapists create exercises which are then assigned to patients using AI. The internal team manages the exercises collection using FireCMS.
 
 MedicalMotion uses the same body selection component that end users see in their backend admin panel.
 
@@ -33,7 +33,11 @@ bodyParts: ["shoulder", "elbow"]
 
 The field is defined as a Component that receives `FieldProps` as a prop and is then assigned to the entity collection. More details can be found in [Custom fields](/docs/properties/custom_fields).
 
-<video style={{maxWidth: "100%", margin: "16px 0px 32px", alignSelf: "center"}}
+<video style={{
+    maxWidth: "100%",
+    margin: "16px 0px 32px",
+    alignSelf: "center"
+}}
        loop autoPlay muted>
     <source src="/img/custom_fields_dark_wide.mp4" type="video/mp4"/>
 </video>

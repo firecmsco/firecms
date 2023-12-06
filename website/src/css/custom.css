@@ -165,7 +165,10 @@
     --ifm-code-font-size: 95%;
     --ifm-font-weight-bold: 600;
     --ifm-h1-font-size: 4rem;
+    --ifm-list-left-padding: 0rem;
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
+    --ifm-border-color: #5d5d5f;
+    --ifm-background-color: white;
     /*--ifm-custom-navbar-background-color: rgba(255, 255, 255, 0.33);*/
     /*--ifm-heading-font-family: 'Spline Sans Mono', "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
     /*--ifm-font-family-base: 'IBM Plex Mono', 'Noto Sans', sans-serif,  Helvetica, Arial, "Segoe UI", Roboto, Ubuntu, Cantarell, "Noto Sans", sans-serif, system-ui, "Segoe UI",  sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
@@ -187,6 +190,7 @@ html[data-theme='dark'] {
     --ifm-custom-navbar-background-color: rgba(48, 49, 55, 0.33);
     /*--ifm-background-color: #ececec;*/
     --ifm-background-color: #242628;
+    --ifm-border-color: #141518;
     --ifm-background-surface-color: #232328;
     --ifm-color-emphasis-100: #232328;
     /*--ifm-background-surface-color: #242526;*/
@@ -196,6 +200,7 @@ article header {
     margin-top: 40px;
     margin-bottom: 16px;
 }
+
 article .theme-admonition {
     margin-top: 32px;
     margin-bottom: 32px;
@@ -335,7 +340,7 @@ article {
     font-size: 1.06rem;
 }
 
-article p  {
+article p {
     margin-top: 8px;
     margin-bottom: 8px;
 }
@@ -348,6 +353,11 @@ article img, video {
     border-radius: 8px;
 }
 
+
+.table-of-contents.table-of-contents__left-border {
+    background-color: var(--ifm-background-color);
+    border: 1px solid var(--ifm-border-color);
+}
 
 html[data-theme="dark"] {
     /*--docsearch-text-color: #f5f6f7;*/

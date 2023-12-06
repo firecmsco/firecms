@@ -22,7 +22,7 @@ export function DeveloperFeatures() {
     const isDarkTheme = colorMode === "dark";
 
     return (<>
-            <Panel color={"gray"} includeMargin={false} includePadding={true}>
+            <Panel color={"gray"} includeMargin={false} includePadding={false}>
 
                 <p className={clsx("text-center text-secondary uppercase font-mono font-bold border-0 border-b", ContainerInnerPaddingMixin, defaultBorderMixin)}>
                     For developers
@@ -31,6 +31,7 @@ export function DeveloperFeatures() {
                 <TwoColumns
                     reverseSmall={true}
                     animation={false}
+                    className={"p-8"}
                     left={<div
                         className="relative flex-col font-mono">
 
@@ -107,9 +108,10 @@ export function DeveloperFeatures() {
                     }/>
             </Panel>
 
-            <Panel color={"gray"} includeMargin={false} includePadding={true}>
+            <Panel color={"gray"} includeMargin={false} includePadding={false}>
                 <TwoColumns
                     animation={false}
+                    className={"p-8"}
                     left={
                         <div>
                             <div className={"flex items-center mb-3"}>

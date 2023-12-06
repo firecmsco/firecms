@@ -57,7 +57,7 @@ function Features() {
                     <div className={"flex items-center mb-4"}>
 
                         <div
-                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 mr-3">
+                            className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 mr-3">
                             <LightingIcon height={12} width={12}/>
                         </div>
 
@@ -182,7 +182,7 @@ function Features() {
                                 className={"flex items-center mb-3"}>
 
                                 <div
-                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-800 rounded-full shadow flex-shrink-0 ">
+                                    className="flex items-center justify-center text-white w-10 h-10 bg-gray-900 rounded-full shadow flex-shrink-0 ">
                                     <SettingsIcon/>
                                 </div>
                                 <h3 className="h3 m-0 ml-3 ">
@@ -208,14 +208,14 @@ function Features() {
 
                             <p className="text-xl ">
                                 You could add:
-                                <li> A dashboard for your client</li>
-                                <li> A preview of the blog article you are
+                                <li> A <b>dashboard</b> for your client</li>
+                                <li> A <b>preview</b> of the blog article you are
                                     writing
                                 </li>
                                 <li> A representation of how the content is
-                                    going to look like in your app or website.
+                                    going to look like in your <b>app or website</b>.
                                 </li>
-                                <li> And everything you can imagine.</li>
+                                <li> And <b>everything</b> you can imagine.</li>
                             </p>
 
                         </div>

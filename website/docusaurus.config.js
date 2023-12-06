@@ -119,10 +119,6 @@ module.exports = {
                             to: "/openai",
                         },
                         {
-                            label: "Advanced content editing",
-                            to: "/f/advanced_forms",
-                        },
-                        {
                             label: "The most powerful backend",
                             to: "/f/backend_extension",
                         },

@@ -35,7 +35,7 @@ export function Hero({
                 </Panel>
             </div>
 
-            <Panel color={"transparent"} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
+            <Panel color={"lighter"} includePadding={false} innerClassName={"py-8 md:py-12 p-4 md:p-8"}>
                 {subtitle &&
                     <div className="font-mono uppercase m-0 text-xl md:text-2xl">
                         {subtitle}

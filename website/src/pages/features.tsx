@@ -4,9 +4,10 @@ import Layout from "@theme/Layout";
 import Features from "../partials/features/Features";
 import { Hero } from "../partials/general/Hero";
 import HeroButtons from "../partials/home/HeroButtons";
-import { IntroText } from "../partials/home/IntroText";
 import { Panel } from "../partials/general/Panel";
 import EnterpriseTeaser from "../partials/home/EnterpriseTeaser";
+import { IntroText } from "../partials/features/IntroText";
+import { FormInfo } from "../partials/features/FormInfo";
 
 function FeaturesPage() {
 
@@ -41,6 +42,8 @@ function FeaturesPage() {
                     <Features/>
 
                     <IntroText/>
+
+                    <FormInfo/>
 
                     <Panel color={"gray"} includePadding={true}>
                         <HeroButtons/>

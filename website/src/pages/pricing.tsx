@@ -3,13 +3,10 @@ import React from "react";
 import Layout from "@theme/Layout";
 import { Hero } from "../partials/general/Hero";
 import { VersionsComparison } from "../partials/pricing/VersionsComparison";
-import { SelfHosted } from "../partials/pricing/SelfHosted";
+import { CLIInstructions } from "../partials/pricing/CLIInstructions";
 import { FireCMSCloudVersions } from "../partials/pricing/FireCMSCloudVersions";
-import { VersionsToggle } from "../partials/pricing/VersionsToggle";
 
 function FeaturesPage() {
-
-    const [version, setVersion] = React.useState<"cloud" | "self-hosted">("cloud");
 
     return (
         <Layout
@@ -40,11 +37,11 @@ function FeaturesPage() {
 
             {/*<VersionsToggle value={version} onSelect={setVersion}/>*/}
 
-            {version === "cloud" && <FireCMSCloudVersions/>}
-            {version === "self-hosted" && <SelfHosted/>}
+            <FireCMSCloudVersions/>
 
             <VersionsComparison/>
 
+            <CLIInstructions/>
 
         </Layout>
     );

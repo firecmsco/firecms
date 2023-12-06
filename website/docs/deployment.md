@@ -4,7 +4,7 @@ title: Deployment
 sidebar_label: Deployment
 ---
 
-## Deployment to FireCMS
+## Deployment to FireCMS Cloud
 
 FireCMS is unique among CMSs in that it allows to upload custom code to
 its Cloud version. This is a very advanced feature enables you to tailor
