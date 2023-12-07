@@ -1,5 +1,12 @@
 import React, { useCallback } from "react";
-import { EntityCollection, FireCMSPlugin, joinCollectionLists, makePropertiesEditable, User } from "@firecms/core";
+import {
+    EntityCollection,
+    FireCMSPlugin,
+    joinCollectionLists,
+    makePropertiesEditable,
+    Properties,
+    User
+} from "@firecms/core";
 import { ConfigControllerProvider } from "./ConfigControllerProvider";
 import { CollectionEditorPermissionsBuilder } from "./types/config_permissions";
 import { EditorCollectionAction } from "./ui/EditorCollectionAction";
@@ -74,7 +81,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
     const injectCollections = useCallback(
         (collections: EntityCollection[]) => {
             const markAsEditable = (c: PersistedCollection) => {
-                makePropertiesEditable(c.properties);
+                makePropertiesEditable(c.properties as Properties);
                 c.subcollections?.forEach(markAsEditable);
             };
             const editableCollections = collectionConfigController.collections ?? [];

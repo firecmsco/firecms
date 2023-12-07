@@ -52,7 +52,7 @@ import { Button, cn, IconButton, Markdown, Popover, TextField, Tooltip, Typograp
 import { Skeleton } from "../../ui/Skeleton";
 import { setIn } from "formik";
 import { getSubcollectionColumnId } from "../EntityCollectionTable/internal/common";
-import { KeyboardTabIcon, SearchIcon } from "../../icons";
+import { AddIcon, KeyboardTabIcon, SearchIcon } from "../../icons";
 import { useColumnIds } from "./useColumnsIds";
 import { PopupFormField } from "../EntityCollectionTable/internal/popup_field/PopupFormField";
 import { GetPropertyForProps } from "../EntityCollectionTable/EntityCollectionTableProps";
@@ -584,6 +584,7 @@ export const EntityCollectionView = React.memo(
                                 onClick={onNewClick}
                                 className="mt-4"
                             >
+                                <AddIcon/>
                                 Create your first entity
                             </Button>
                         </div>

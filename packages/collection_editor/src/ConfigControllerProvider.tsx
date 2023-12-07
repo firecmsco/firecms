@@ -73,7 +73,7 @@ export const ConfigControllerProvider = React.memo(
         const navigation = useNavigationContext();
         const navigate = useNavigate();
         const snackbarController = useSnackbarController();
-        const { propertyConfigs: propertyConfigs } = useFireCMSContext();
+        const { propertyConfigs } = useFireCMSContext();
 
         const {
             collections
@@ -91,7 +91,7 @@ export const ConfigControllerProvider = React.memo(
 
         const [currentDialog, setCurrentDialog] = React.useState<{
             isNewCollection: boolean,
-            parentCollection?: EntityCollection,
+            parentCollection?: PersistedCollection,
             editedCollectionPath?: string,
             fullPath?: string,
             parentPathSegments: string[],
@@ -107,7 +107,7 @@ export const ConfigControllerProvider = React.memo(
             propertyKey?: string,
             property?: Property,
             namespace?: string,
-            parentCollection?: EntityCollection,
+            parentCollection?: PersistedCollection,
             currentPropertiesOrder?: string[],
             editedCollectionPath: string,
             fullPath?: string,
@@ -130,7 +130,7 @@ export const ConfigControllerProvider = React.memo(
             path?: string,
             fullPath?: string,
             parentPathSegments: string[],
-            parentCollection?: EntityCollection
+            parentCollection?: PersistedCollection
         }) => {
             setCurrentDialog({
                 editedCollectionPath: path,
@@ -183,7 +183,7 @@ export const ConfigControllerProvider = React.memo(
                                                         redirect
                                                     }: {
             parentPathSegments: string[],
-            parentCollection?: EntityCollection
+            parentCollection?: PersistedCollection
             initialValues?: {
                 group?: string,
                 path?: string,

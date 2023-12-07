@@ -26,9 +26,6 @@ export function setUndefinedToDelete(data: any): any {
     if (Array.isArray(data)) {
         return data.map(v => setUndefinedToDelete(v));
     } else if (typeof data === "object") {
-        if (Object.keys(data).length === 0) {
-            return deleteField();
-        }
         return Object.entries(data)
             .map(([key, value]) => ({ [key]: setUndefinedToDelete(value) }))
             .reduce((a, b) => ({ ...a, ...b }), {});
@@ -108,10 +105,11 @@ export const applyPermissionsFunction = (collections: PersistedCollection[], per
     }));
 }
 
-function cleanPropertyConfigs(properties: PropertiesOrBuilders, propertyConfigs: Record<string, PropertyConfig>) {
+function cleanPropertyConfigs(properties: PropertiesOrBuilders<any>, propertyConfigs: Record<string, PropertyConfig>) {
     const res: Record<string, Property> = {};
     Object.entries(properties).forEach(([key, property]) => {
-        if (typeof property === "object" && "propertyConfig" in property) {
+        if (typeof property === "object") {
+
             const config = property.propertyConfig ? propertyConfigs[property.propertyConfig] : undefined;
 
             let cleanProperty: any;

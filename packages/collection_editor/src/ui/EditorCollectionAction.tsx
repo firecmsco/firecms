@@ -75,7 +75,7 @@ export function EditorCollectionAction({
             color={"primary"}
             disabled={!canEditCollection}
             onClick={canEditCollection
-                ? () => collectionEditorController?.editCollection({ path: collection.path, fullPath, parentPathSegments, parentCollection })
+                ? () => collectionEditorController?.editCollection({ path: collection.path, fullPath, parentPathSegments, parentCollection: parentCollection as PersistedCollection })
                 : undefined}>
             <SettingsIcon/>
         </IconButton>

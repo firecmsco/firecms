@@ -12,7 +12,7 @@ export interface CollectionEditorController {
         path?: string,
         fullPath?: string,
         parentPathSegments: string[],
-        parentCollection?: EntityCollection
+        parentCollection?: PersistedCollection
     }) => void;
 
     createCollection: (props: {

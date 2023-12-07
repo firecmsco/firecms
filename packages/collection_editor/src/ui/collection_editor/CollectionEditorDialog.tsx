@@ -11,7 +11,8 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    DoneIcon, EntityCollection,
+    DoneIcon,
+    EntityCollection,
     ErrorView,
     IconButton,
     isPropertyBuilder,
@@ -658,7 +659,7 @@ export function CollectionEditorDialogInternal<M extends {
 
 }
 
-function applyPropertyConfigs<M extends Record<string, any> = any>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig<any>>):PersistedCollection<M> {
+function applyPropertyConfigs<M extends Record<string, any> = any>(collection: PersistedCollection<M>, propertyConfigs: Record<string, PropertyConfig<any>>): PersistedCollection<M> {
     const { properties, ...rest } = collection;
     const propertiesResult: PropertiesOrBuilders<any> = {};
     Object.keys(properties).forEach((key) => {
@@ -672,7 +673,7 @@ function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Rec
     let internalProperty = property;
     if (propertyConfigs && typeof internalProperty === "object" && internalProperty.propertyConfig) {
         const propertyConfig = propertyConfigs[internalProperty.propertyConfig];
-        if (isPropertyBuilder(propertyConfig.property)) {
+        if (propertyConfig && isPropertyBuilder(propertyConfig.property)) {
             internalProperty = propertyConfig.property;
         } else {
 
@@ -680,7 +681,7 @@ function applyPropertiesConfig(property: PropertyOrBuilder, propertyConfigs: Rec
                 internalProperty = mergeDeep(propertyConfig.property, internalProperty);
             }
 
-            if (internalProperty.dataType === "map" && internalProperty.properties) {
+            if (!isPropertyBuilder(internalProperty) && internalProperty.dataType === "map" && internalProperty.properties) {
                 const properties: Record<string, PropertyOrBuilder> = {};
                 Object.keys(internalProperty.properties).forEach((key) => {
                     properties[key] = applyPropertiesConfig(((internalProperty as MapProperty).properties as Properties)[key] as Property, propertyConfigs);
