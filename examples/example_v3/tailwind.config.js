@@ -1,8 +1,4 @@
-/** @type {import("tailwindcss").Config} */
-// const fireCMSTailwindConfig = require("@firecms/firebase").fireCMSTailwindConfig;
-
-
-const fireCMSTailwindConfig = {
+export default {
     mode: "jit",
     darkMode: ["class", "[data-theme=\"dark\"]"],
     content: [
@@ -71,7 +67,4 @@ const fireCMSTailwindConfig = {
     variants: {
         extend: {}
     }
-};
-module.exports = {
-    ...fireCMSTailwindConfig
 };
