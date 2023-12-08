@@ -77,6 +77,7 @@ export function DefaultHomePage({
     }
 
     let additionalPluginChildrenStart: React.ReactNode | undefined;
+    let additionalPluginChildrenEnd: React.ReactNode | undefined;
     let additionalPluginSections: React.ReactNode | undefined;
     if (context.plugins) {
         const sectionProps: PluginGenericProps = {
@@ -99,6 +100,13 @@ export function DefaultHomePage({
             {context.plugins.filter(plugin => plugin.homePage?.additionalChildrenStart)
                 .map((plugin, i) => {
                     return <div key={`plugin_children_start_${i}`}>{plugin.homePage!.additionalChildrenStart}</div>;
+                })}
+        </div>;
+
+        additionalPluginChildrenEnd = <div className={"flex flex-col gap-2"}>
+            {context.plugins.filter(plugin => plugin.homePage?.additionalChildrenEnd)
+                .map((plugin, i) => {
+                    return <div key={`plugin_children_start_${i}`}>{plugin.homePage!.additionalChildrenEnd}</div>;
                 })}
         </div>;
     }
@@ -177,6 +185,8 @@ export function DefaultHomePage({
                 })}
 
                 {additionalPluginSections}
+
+                {additionalPluginChildrenEnd}
 
                 {additionalChildrenEnd}
 

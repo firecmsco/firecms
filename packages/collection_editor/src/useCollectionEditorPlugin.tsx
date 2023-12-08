@@ -86,7 +86,6 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             };
             const editableCollections = collectionConfigController.collections ?? [];
             editableCollections.forEach(markAsEditable);
-            console.debug("Injecting collections", { editableCollections, collections });
             return joinCollectionLists(editableCollections, collections);
         },
         [collectionConfigController.collections]);
@@ -112,7 +111,7 @@ export function useCollectionEditorPlugin<EC extends PersistedCollection = Persi
             }
         },
         homePage: {
-            additionalChildrenStart: <RootCollectionSuggestions/>,
+            additionalChildrenEnd: <RootCollectionSuggestions/>,
             CollectionActions: HomePageEditorCollectionAction,
             AdditionalCards: NewCollectionCard,
         },

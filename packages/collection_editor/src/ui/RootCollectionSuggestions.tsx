@@ -21,7 +21,7 @@ export function RootCollectionSuggestions() {
         in={showSuggestions}>
 
         <div
-            className={"flex flex-col gap-1 p-2"}>
+            className={"flex flex-col gap-1 p-2 my-4"}>
 
             <Typography variant={"body2"} color={"secondary"}>
                 Create a collection from your data:

@@ -17,10 +17,10 @@ programmatically, and you can use all the features of FireCMS.
 
 :::important
 You can have the same collection defined in both ways. In that case, the
-collection defined in code will take precedence.
+collection defined in the UI will take precedence.
 
-A deep merge is performed, so you can define some properties in the UI, and
-override them in code. For example, you can define an enum string property
+A deep merge is performed, so you can define some properties in the code, and
+override them in the UI. For example, you can define an enum string property
 and the values will be merged from both definitions.
 :::
 

@@ -77,6 +77,7 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
     homePage?: {
 
         additionalChildrenStart?: React.ReactNode;
+        additionalChildrenEnd?: React.ReactNode;
         /**
          * Use this component to add custom actions to the navigation card
          * in the home page.

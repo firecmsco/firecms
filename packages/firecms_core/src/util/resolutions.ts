@@ -180,11 +180,14 @@ export function resolveProperty<T extends CMSType = CMSType, M extends Record<st
     if (resolvedProperty.propertyConfig && !isDefaultFieldConfigId(resolvedProperty.propertyConfig)) {
         const cmsFields = props.fields;
         if (!cmsFields) {
-            throw Error(`Trying to resolve a property with key ${resolvedProperty.propertyConfig} that inherits from a custom property config but no custom property configs were provided. Use the property \`propertyConfigs\` in your top level component to provide them`);
+            throw Error(`Trying to resolve a property with key ${resolvedProperty.propertyConfig} that inherits from a custom property config but no custom property configs were provided. Use the property \`propertyConfigs\` in your app config to provide them`);
         }
         const customField: PropertyConfig<any> = cmsFields[resolvedProperty.propertyConfig];
-        if (!customField)
-            throw Error(`Trying to resolve a property that inherits from a 'propertyConfig' but no 'propertyConfig' with id ${resolvedProperty.propertyConfig} was found. Check the \`propertyConfigs\` in your top level component`);
+        if (!customField) {
+            console.warn(`Trying to resolve a property with key ${resolvedProperty.propertyConfig} that inherits from a custom property config but no custom property config with that key was found. Check the \`propertyConfigs\` in your app config`)
+            console.warn("Available property configs", cmsFields);
+            return null;
+        }
         if (customField.property) {
             const configPropertyOrBuilder = customField.property;
             if ("propertyConfig" in configPropertyOrBuilder) {

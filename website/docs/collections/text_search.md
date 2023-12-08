@@ -23,11 +23,6 @@ There is a full backend
 example included in the source code, which indexes documents with Cloud Functions. 
 There is also a Firebase extension for the very same purpose.
 
-:::note 
-Find all the available props
-for `FireCMS3App` [here](../navigation/app_config)
-:::
-
 We provide a utility method for performing searches in
 Algolia `performAlgoliaTextSearch`
 

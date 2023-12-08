@@ -3,10 +3,10 @@
   "private": true,
   "version": "3.0.0-alpha.35",
   "scripts": {
-    "dev": "vite --port 5001 --strictPort",
+    "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview --port 5001 --strictPort",
-    "serve": "vite preview --port 5001 --strictPort",
+    "preview": "vite preview",
+    "serve": "vite preview",
     "deploy": "firecms deploy"
   },
   "dependencies": {

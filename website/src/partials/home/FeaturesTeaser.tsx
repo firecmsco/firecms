@@ -116,7 +116,7 @@ function FeaturesTeaser() {
                                 }}
                                 width="100%" loop autoPlay muted>
                                 <source
-                                    src={isDarkTheme ? customFieldDarkVideo : customFieldVideo}
+                                    src={customFieldDarkVideo}
                                     type="video/mp4"/>
                             </video>
                         </div>
