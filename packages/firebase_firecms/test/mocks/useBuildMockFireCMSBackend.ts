@@ -49,7 +49,7 @@ export function useBuildMockFireCMSBackend(): FireCMSBackend {
         googleLogin,
         getBackendAuthToken,
         googleCredential,
-        availableProjects,
+        availableProjectIds: availableProjects,
         availableProjectsLoaded: true,
         availableProjectsLoading: false,
         availableProjectsError: undefined,

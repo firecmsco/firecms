@@ -1,6 +1,6 @@
-import { doc, Firestore, getFirestore, onSnapshot } from "firebase/firestore";
+import { doc, Firestore, getDoc, getFirestore, onSnapshot } from "firebase/firestore";
 
-import { FirebaseSignInOption, FirebaseSignInProvider, FireCMSBackend } from "../types";
+import { FirebaseSignInOption, FirebaseSignInProvider, FireCMSBackend, FireCMSProject } from "../types";
 import { FirebaseApp } from "firebase/app";
 import {
     getAuth,
@@ -35,18 +35,28 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
     const [authProviderError, setAuthProviderError] = useState<any>();
     const [permissionsNotGrantedError, setPermissionsNotGrantedError] = useState<boolean>(false);
 
-    const [availableProjects, setAvailableProjects] = useState<string[] | undefined>();
+    const [availableProjectIds, setAvailableProjectIds] = useState<string[] | undefined>();
     const [availableProjectsLoading, setAvailableProjectsLoading] = useState<boolean>(true);
     const [availableProjectsLoaded, setAvailableProjectsLoaded] = useState<boolean>(false);
     const [availableProjectsError, setAvailableProjectsError] = useState<Error | undefined>();
 
+    const [projects, setProjects] = useState<FireCMSProject[]>();
+
     const firestoreRef = useRef<Firestore>();
-    const firestore = firestoreRef.current;
 
     const updateFirebaseUser = useCallback(async (firebaseUser: FirebaseUser | null) => {
         onUserChange?.(firebaseUser);
         setLoggedUser(firebaseUser);
     }, []);
+
+    useEffect(() => {
+        if (availableProjectsLoaded && availableProjectIds) {
+            Promise.all(availableProjectIds.map((projectId) => getProject(projectId)))
+                .then((projectsRes) => {
+                    setProjects(projectsRes.filter(Boolean) as FireCMSProject[])
+                })
+        }
+    }, [availableProjectIds, availableProjectsLoaded]);
 
     useEffect(() => {
         if (!backendFirebaseApp) return;
@@ -68,11 +78,13 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
     }, [backendFirebaseApp, updateFirebaseUser]);
 
     useEffect(() => {
+
+        const firestore = firestoreRef.current;
         if (!firestore) {
             return;
         }
         if (!loggedUser) {
-            setAvailableProjects(undefined);
+            setAvailableProjectIds(undefined);
             setAvailableProjectsLoading(false);
             setAvailableProjectsLoaded(false);
             return;
@@ -82,7 +94,7 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
                 next: (snapshot) => {
                     const projectIds = snapshot.get("projects") ?? [];
                     setAvailableProjectsError(undefined);
-                    setAvailableProjects(projectIds);
+                    setAvailableProjectIds(projectIds);
                     setAvailableProjectsLoaded(true);
                     setAvailableProjectsLoading(false);
                 },
@@ -93,7 +105,7 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
                 }
             }
         );
-    }, [loggedUser, firestore]);
+    }, [loggedUser]);
 
     const googleLogin = useCallback((includeGoogleAdminScopes?: boolean) => {
         const provider = new GoogleAuthProvider();
@@ -140,6 +152,19 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
         return loggedUser.getIdToken();
     }, [loggedUser]);
 
+    const getProject = useCallback((projectId: string) => {
+        const firestore = firestoreRef.current;
+        if (!firestore)
+            throw Error("useFireCMSProjectsRepository error");
+        return getDoc(doc(firestore, "projects", projectId))
+            .then(doc => doc.exists() ? { projectId: doc.id, ...doc.data() } as FireCMSProject : null)
+            .catch((error) => {
+                console.error("Error getting project:", error);
+                return null;
+            });
+    }, []);
+
+
     const projectsApi = buildProjectsApi(backendApiHost, getBackendAuthToken);
 
     return {
@@ -149,7 +174,7 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
         googleLogin,
         getBackendAuthToken,
         googleCredential,
-        availableProjects,
+        availableProjectIds,
         availableProjectsLoaded,
         availableProjectsLoading,
         availableProjectsError,
@@ -158,7 +183,9 @@ export function useBuildFireCMSBackend({ backendApiHost, backendFirebaseApp, onU
         authProviderError,
         backendFirebaseApp,
         backendUid: loggedUser?.uid,
-        projectsApi
+        projectsApi,
+        getProject,
+        projects
     }
 
 }

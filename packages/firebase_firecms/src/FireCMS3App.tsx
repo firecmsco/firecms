@@ -172,12 +172,14 @@ export type FireCMS3ClientProps<ExtraAppbarProps = object> = {
 function FullLoadingView(props: {
     projectId: string,
     currentProjectController?: ProjectConfig,
+    FireCMSAppBarComponent?: React.ComponentType<FireCMSAppBarProps>,
     text?: string
 }) {
     return <Scaffold
         key={"project_scaffold_" + props.projectId}
         name={props.currentProjectController?.projectName ?? ""}
         logo={props.currentProjectController?.logo}
+        FireCMSAppBarComponent={props.FireCMSAppBarComponent}
         includeDrawer={false}>
         <CircularProgressCenter text={props.text}/>
     </Scaffold>;
@@ -198,6 +200,7 @@ export const FireCMS3Client = function FireCMS3Client({
     if (currentProjectController.loading || (!currentProjectController.clientFirebaseConfig && !currentProjectController.configError)) {
         return <FullLoadingView projectId={projectId}
                                 currentProjectController={currentProjectController}
+                                FireCMSAppBarComponent={props.FireCMSAppBarComponent}
                                 text={"Client loading"}/>;
     }
 
@@ -294,7 +297,7 @@ export function FireCMS3ClientWithController({
 
     let loadingOrErrorComponent;
     if (currentProjectController.loading) {
-        return <CircularProgressCenter text={"Project loading"}/>;
+        loadingOrErrorComponent = <CircularProgressCenter text={"Project loading"}/>;
     } else if (notValidUser) {
         console.warn("No user was found with email " + notValidUser.email);
         loadingOrErrorComponent = <NoAccessError authController={authController}/>
@@ -305,13 +308,12 @@ export function FireCMS3ClientWithController({
         loadingOrErrorComponent = <CenteredView fullScreen={true}>
             <Typography variant={"h4"}>Error delegating login</Typography>
             <ErrorView error={delegatedLoginError}/>
-            <Button variant="text" onClick={authController.signOut}>Sign out</Button>
         </CenteredView>;
     } else if (customizationLoading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Project customization loading"}/>;
     } else if (firebaseConfigLoading) {
         loadingOrErrorComponent = <CircularProgressCenter text={"Client config loading"}/>;
-    } else if (firebaseConfigError || !clientFirebaseApp) {
+    } else if (firebaseConfigError) {
         loadingOrErrorComponent = <CenteredView fullScreen={true}>
             <ErrorView error={firebaseConfigError ?? "Error fetching client Firebase config"}/>
         </CenteredView>;
@@ -504,7 +506,7 @@ function FireCMS3AppAuthenticated({
                                             includeDrawer={false}
                                             FireCMSAppBarComponent={FireCMSAppBarComponent}
                                             fireCMSAppBarComponentProps={appConfig?.fireCMSAppBarComponentProps}>
-                                            <CircularProgressCenter/>
+                                            <CircularProgressCenter text={"Almost there"}/>
                                         </Scaffold>;
                                 } else {
                                     component = (

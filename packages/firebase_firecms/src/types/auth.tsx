@@ -4,6 +4,7 @@ import { AuthController, DataSource, StorageSource, User } from "@firecms/core";
 import { Role } from "./roles";
 import { FirebaseApp } from "firebase/app";
 import { ProjectsApi } from "../api/projects";
+import { FireCMSProject } from "./projects";
 
 /**
  * @group Firebase
@@ -48,13 +49,16 @@ export type FireCMSBackend = {
 
     permissionsNotGrantedError: boolean;
 
-    availableProjects?: string[];
+    availableProjectIds?: string[];
     availableProjectsLoaded: boolean;
     availableProjectsLoading: boolean;
     availableProjectsError?: Error;
 
     authLoading: boolean;
     authProviderError?: any;
+
+    getProject: (projectId: string) => Promise<FireCMSProject | null>,
+    projects: FireCMSProject[] | undefined;
 }
 
 
