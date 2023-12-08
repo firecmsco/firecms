@@ -160,7 +160,7 @@ export const PropertyTableCell = React.memo<PropertyTableCellProps<any, any>>(
                 .catch((e) => {
                     setError(e);
                 });
-        }, [internalValue, validation]);
+        }, [internalValue, validation, propertyKey, property, entity]);
 
         const updateValue = (newValue: any | null) => {
 
@@ -454,6 +454,7 @@ function areEqual(prevProps: PropertyTableCellProps<any, any>, nextProps: Proper
         prevProps.width === nextProps.width &&
         equal(prevProps.property, nextProps.property) &&
         equal(prevProps.value, nextProps.value) &&
+        equal(prevProps.entity.id, nextProps.entity.id) &&
         equal(prevProps.entity.values, nextProps.entity.values)
         ;
 }

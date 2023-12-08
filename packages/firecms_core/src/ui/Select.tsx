@@ -179,8 +179,11 @@ export function Select({
             <SelectPrimitive.Portal>
                 <SelectPrimitive.Content
                     position={position}
-                    className="z-50 overflow-hidden relative border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg">
-                    <SelectPrimitive.Viewport>
+                    className="z-50 max-h-[var(--radix-select-content-available-height)] overflow-hidden relative border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-800 p-2 rounded-lg shadow-lg">
+                    <SelectPrimitive.Viewport
+                        className={"p-1 max-h-[var(--radix-select-content-available-height)]"}
+                        style={{
+                    }}>
                         {children}
                     </SelectPrimitive.Viewport>
                 </SelectPrimitive.Content>
@@ -254,11 +257,4 @@ export function SelectGroup({
 
         {children}
     </>;
-}
-
-function selectOnChangeEventAdapter(fn: (event: React.ChangeEvent<HTMLSelectElement>) => void): (value: string) => void {
-    return (value: string) => {
-        const event = { target: { value } } as React.ChangeEvent<HTMLSelectElement>;
-        fn(event);
-    };
 }
