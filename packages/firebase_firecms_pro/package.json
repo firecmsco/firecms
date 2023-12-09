@@ -1,0 +1,28 @@
+{
+  "version": "3.0.0-alpha.35",
+  "private": true,
+  "name": "@firecms/firebase_pro",
+  "packageManager": "yarn@3.2.3",
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "types": "dist/index.d.ts",
+  "source": "src/index.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dependencies": {
+    "@firecms/core": "^3.0.0-alpha.35",
+    "@types/node": "^20.8.9",
+    "firebase": "^10.4.0",
+    "typescript": "^5.2.2"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && tsc --emitDeclarationOnly"
+  },
+  "gitHead": "17bba2feea1f6c818c0d9d4b3d6c8e4dfd4e5b4b"
+}

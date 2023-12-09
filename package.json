@@ -8,7 +8,7 @@
     "packages/firecms_core",
     "packages/firecms_cli",
     "packages/create_firecms_app",
-    "packages/firebase_firecms_legacy",
+    "packages/firebase_firecms_pro",
     "packages/firebase_firecms",
     "packages/saas",
     "packages/collection_editor",
@@ -16,14 +16,15 @@
     "packages/data_import",
     "packages/schema_inference",
     "packages/data_enhancement",
-    "examples/example_v3"
+    "examples/example_v3",
+    "examples/example_pro"
   ],
   "scripts": {
-    "dev_v2": "cd examples/example && yarn dev",
+    "pro": "cd examples/example_pro && yarn dev",
     "dev": "cd examples/example_v3 && yarn dev",
     "saas": "cd packages/saas && yarn dev",
-    "deploy:demo": "cd examples/example && yarn deploy",
-    "preview": "cd examples/example && yarn preview",
+    "deploy:demo": "cd examples/example_pro && yarn deploy",
+    "preview": "cd examples/example_pro && yarn preview",
     "deploy:saas": "lerna run build && cd packages/saas && yarn deploy:staging",
     "deploy:saas:prod": "lerna run build && cd packages/saas && yarn deploy:prod",
     "web": "cd website && yarn dev",
