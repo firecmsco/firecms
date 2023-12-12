@@ -142,21 +142,6 @@ export type FirebaseCMSAppProps = {
     baseCollectionPath?: string;
 
     /**
-     * In case you need to override the home page.
-     * You may want to use {@link useNavigationContext} in order to get the resolved
-     * navigation.
-     */
-    HomePage?: React.ComponentType;
-
-    /**
-     * Additional props passed to the login view. You can use this props
-     * to disable registration in `password` mode, or to set up an additional
-     * message. Also, to add additional views to the login screen or disable
-     * the buttons.
-     */
-    LoginView?: React.ComponentType<FirebaseLoginViewProps>;
-
-    /**
      * Callback used to get analytics events from the CMS
      */
     onAnalyticsEvent?: (event: CMSAnalyticsEvent, data?: object) => void;
@@ -178,5 +163,17 @@ export type FirebaseCMSAppProps = {
      * for multiple fields in the CMS.
      */
     firestoreIndexesBuilder?: FirestoreIndexesBuilder;
+
+    components?: {
+        /**
+         * Component to be used to render the login view
+         */
+        LoginView?: React.ComponentType<FirebaseLoginViewProps>;
+
+        /**
+         * Component to be used to render the home page
+         */
+        HomePage?: React.ComponentType;
+    }
 
 };

@@ -22,10 +22,12 @@ import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import {
     FirebaseAuthController,
-    useFirebaseAuthController, useFirebaseStorageSource,
+    useFirebaseAuthController,
+    useFirebaseStorageSource,
     useFirestoreDelegate,
     useInitialiseFirebase,
-    useInitializeAppCheck, useValidateAuthenticator
+    useInitializeAppCheck,
+    useValidateAuthenticator
 } from "@firecms/firebase";
 
 const DEFAULT_SIGN_IN_OPTIONS = [
@@ -65,15 +67,14 @@ export function FirebaseCMSApp({
                                    appCheckOptions,
                                    dateTimeFormat,
                                    locale,
-                                   HomePage,
                                    basePath,
                                    baseCollectionPath,
-                                   LoginView,
                                    onAnalyticsEvent,
                                    propertyConfigs: propertyConfigsProp,
                                    plugins,
                                    autoOpenDrawer,
                                    firestoreIndexesBuilder,
+                                   components
                                }: FirebaseCMSAppProps) {
 
     /**
@@ -169,7 +170,6 @@ export function FirebaseCMSApp({
         </>;
     }
 
-
     return (
         <BrowserRouter basename={basePath}>
             <SnackbarProvider>
@@ -201,7 +201,7 @@ export function FirebaseCMSApp({
                             } else {
                                 const usedLogo = modeController.mode === "dark" && logoDark ? logoDark : logo;
                                 if (!canAccessMainView) {
-                                    const LoginViewUsed = LoginView ?? FirebaseLoginView;
+                                    const LoginViewUsed = components?.LoginView ?? FirebaseLoginView;
                                     component = (
                                         <LoginViewUsed
                                             logo={usedLogo}
@@ -221,7 +221,7 @@ export function FirebaseCMSApp({
                                             }}
                                             autoOpenDrawer={autoOpenDrawer}>
                                             <NavigationRoutes
-                                                HomePage={HomePage}/>
+                                                HomePage={components?.HomePage}/>
                                             <SideDialogs/>
                                         </Scaffold>
                                     );
