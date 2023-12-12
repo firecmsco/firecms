@@ -37,7 +37,7 @@ process of creating interactive and lightning-fast user interfaces. As such,
 integrating a React-based headless CMS into your projects unlocks multiple
 benefits, including:
 
-![blog_example](/img/blog_example.png)
+![blog_example](/img/blog_example.webp)
 
 ### 1. Reusable Components
 

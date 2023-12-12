@@ -8,11 +8,11 @@ import inlineEditing from "@site/static/img/inline_table_editing.mp4";
 import customFieldDarkVideo from "@site/static/img/custom_fields_dark.mp4";
 
 // @ts-ignore
-import MMApp from "@site/static/img/mm_app.png";
+import MMApp from "@site/static/img/mm_app.webp";
 // @ts-ignore
 import editorWhite from "@site/static/img/editor_white.png";
 // @ts-ignore
-import overlay from "@site/static/img/overlay.png";
+import overlay from "@site/static/img/overlay.webp";
 
 import { BrowserFrame } from "./BrowserFrame";
 import { PhoneFrame } from "./PhoneFrame";
@@ -42,8 +42,6 @@ export function UsageExamples() {
     const offsetHeight = ref.current?.offsetHeight ?? 0;
     const currentTop = ref.current?.getBoundingClientRect().top ?? 0;
     const parallaxOffset = easeInOut(Math.max(0, Math.min(1, (300 + currentTop) / offsetHeight))) * 2 - 1;
-
-    console.log({ parallaxOffset, ref, currentTop, offsetHeight, scroll });
 
     return <div ref={ref}
                 className={clsx("overflow-hidden flex flex-col items-center justify-center bg-white dark:bg-gray-700", ContainerPaddingMixin)}>

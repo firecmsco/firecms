@@ -18,7 +18,7 @@ import {
     useBuildModeController
 } from "@firecms/core";
 
-import { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
+import { FireCMSProAppProps } from "./FireCMSProAppProps";
 import { FirebaseLoginView } from "./components/FirebaseLoginView";
 import {
     FirebaseAuthController,
@@ -51,7 +51,7 @@ const DEFAULT_SIGN_IN_OPTIONS = [
  * @constructor
  * @category Firebase
  */
-export function FirebaseCMSApp({
+export function FireCMSProApp({
                                    name,
                                    logo,
                                    logoDark,
@@ -75,7 +75,7 @@ export function FirebaseCMSApp({
                                    autoOpenDrawer,
                                    firestoreIndexesBuilder,
                                    components
-                               }: FirebaseCMSAppProps) {
+                               }: FireCMSProAppProps) {
 
     /**
      * Update the browser title and icon

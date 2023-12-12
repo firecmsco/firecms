@@ -1,4 +1,4 @@
-import { FireCMSAppConfig } from "@firecms/firebase";
+import { FireCMSAppConfig } from "firecms";
 import { SampleEntityView } from "./entity_views/SampleEntityView";
 import { demoCollection } from "./collections/demo";
 

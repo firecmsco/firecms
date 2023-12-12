@@ -2,7 +2,7 @@ import { FirebaseApp } from "firebase/app";
 import { useCallback, useEffect, useState } from "react";
 import { getAuth, signInWithCustomToken, User as FirebaseUser } from "firebase/auth";
 import { ProjectsApi } from "../api/projects";
-import { cacheDelegatedLoginToken, getDelegatedLoginTokenFromCache } from "@firecms/firebase";
+import { cacheDelegatedLoginToken, getDelegatedLoginTokenFromCache } from "../utils";
 
 export type DelegatedLoginProps = {
     projectsApi: ProjectsApi;

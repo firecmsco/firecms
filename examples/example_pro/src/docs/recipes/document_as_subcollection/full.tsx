@@ -6,7 +6,7 @@ import {
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
-import { FirebaseCMSApp } from "@firecms/firebase_pro";
+import { FireCMSProApp } from "@firecms/firebase_pro";
 
 // TODO: Replace with your config
 const firebaseConfig = {
@@ -79,7 +79,7 @@ export default function App() {
         ]
     };
 
-    return <FirebaseCMSApp
+    return <FireCMSProApp
         name={"My learning app"}
         collections={collectionBuilder}
         firebaseConfig={firebaseConfig}

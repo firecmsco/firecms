@@ -5,7 +5,10 @@ import useBaseUrl from "@docusaurus/useBaseUrl";
 
 export function CLIInstructions() {
 
-    return <Panel color={"gray"} includeMargin={false} centered={false}>
+    return <Panel color={"gray"}
+                  includeMargin={false}
+                  centered={false}
+                  includePadding={true}>
 
         <h2 className={"text-3xl md:text-4xl font-bold my-2"}>
             Start hacking today

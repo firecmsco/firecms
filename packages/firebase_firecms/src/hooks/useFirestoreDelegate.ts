@@ -99,7 +99,7 @@ export function useFirestoreDelegate({
                                        limit: number | undefined,
                                        collectionGroup = false) => {
 
-        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
         const firestore = getFirestore(firebaseApp);
         const collectionReference: Query = collectionGroup ? collectionGroupClause(firestore, path) : collectionClause(firestore, path);
@@ -132,7 +132,7 @@ export function useFirestoreDelegate({
     const getAndBuildEntity = useCallback(<M extends Record<string, any>>(path: string,
                                                                           entityId: string
     ): Promise<Entity<M> | undefined> => {
-        if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+        if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
         const firestore = getFirestore(firebaseApp);
 
@@ -222,7 +222,7 @@ export function useFirestoreDelegate({
             return new FirestoreGeoPoint(geoPoint.latitude, geoPoint.longitude)
         },
         buildReference(reference: EntityReference): any {
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
             const firestore = getFirestore(firebaseApp);
             return doc(firestore, reference.path, reference.id);
         },
@@ -370,7 +370,7 @@ export function useFirestoreDelegate({
                 onUpdate,
                 onError
             }: ListenEntityProps<M>): () => void => {
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
             const firestore = getFirestore(firebaseApp);
 
@@ -404,7 +404,7 @@ export function useFirestoreDelegate({
                 status
             }: SaveEntityProps<M>): Promise<Entity<M>> => {
 
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
             const firestore = getFirestore(firebaseApp);
 
@@ -437,7 +437,7 @@ export function useFirestoreDelegate({
                 entity
             }: DeleteEntityProps<M>
         ): Promise<void> => {
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
             const firestore = getFirestore(firebaseApp);
 
@@ -461,7 +461,7 @@ export function useFirestoreDelegate({
             entityId?: string
         ): Promise<boolean> => {
 
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
             const firestore = getFirestore(firebaseApp);
 
@@ -479,7 +479,7 @@ export function useFirestoreDelegate({
         }, [firebaseApp]),
 
         generateEntityId: useCallback((path: string): string => {
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
             const firestore = getFirestore(firebaseApp);
             return doc(collectionClause(firestore, path)).id;
         }, [firebaseApp]),
@@ -497,7 +497,7 @@ export function useFirestoreDelegate({
             order?: "desc" | "asc",
             isCollectionGroup?: boolean
         }): Promise<number> => {
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
             const query = buildQuery(path, filter, orderBy, order, undefined, undefined, isCollectionGroup);
             const snapshot = await getCountFromServer(query);
             return snapshot.data().count;
@@ -514,7 +514,7 @@ export function useFirestoreDelegate({
             filterValues: FilterValues<any>,
             sortBy?: [string, "asc" | "desc"]
         }): boolean => {
-            if (!firebaseApp) throw Error("useFirestoreDataSource Firebase not initialised");
+            if (!firebaseApp) throw Error("useFirestoreDelegate Firebase not initialised");
 
             const indexes = firestoreIndexesBuilder?.({
                 path,

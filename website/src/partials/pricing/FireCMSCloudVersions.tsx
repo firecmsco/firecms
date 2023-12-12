@@ -87,6 +87,7 @@ export function FireCMSCloudVersions() {
                     <li className={"ml-8 list-disc"}>Custom authentication and access control</li>
                     <li className={"ml-8 list-disc"}>SAML SSO</li>
                     <li className={"ml-8 list-disc"}>Custom domain</li>
+                    <li className={"ml-8 list-disc"}>Full CMS components customization</li>
                     <li className={"ml-8 list-disc"}>Priority support</li>
                     <li className={"ml-8 list-disc"}>Roadmap prioritization</li>
                 </ul>
@@ -106,9 +107,9 @@ export function FireCMSCloudVersions() {
     );
 
     return <section
-        className={clsx(defaultBorderMixin, "flex flex-col items-center justify-center text-lg border-0 border-t bg-white dark:bg-gray-900")}>
+        className={clsx(defaultBorderMixin, "flex flex-col items-center justify-center text-lg border-0 border-t bg-white dark:bg-gray-800")}>
 
-        <div className={clsx(ContainerMixin, ContainerPaddingMixin,)}>
+        <div className={clsx(ContainerMixin, ContainerPaddingMixin, "flex flex-col items-center gap-8")}>
 
             <h2 className={"text-3xl md:text-4xl font-bold mb-4 text-center"}>
                 Full no-code/low-code solution
@@ -124,7 +125,7 @@ export function FireCMSCloudVersions() {
 
 
             <div
-                className="flex flex-col items-center lg:grid lg:grid-cols-3 gap-4 mt-8 w-full mx-auto"
+                className="flex flex-col items-center lg:grid lg:grid-cols-3 gap-4 w-full mx-auto"
             >
                 {freeTier}
                 {plusTier}

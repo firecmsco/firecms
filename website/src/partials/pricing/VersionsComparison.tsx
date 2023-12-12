@@ -111,29 +111,41 @@ const data = [{
         cloudPlus: "Yes",
         cloudPro: "Yes"
     }, {
+        feature: "Logo customisation",
+        selfHosted: "Yes",
+        cloud: "No",
+        cloudPlus: "Yes",
+        cloudPro: "Yes"
+    }, {
         feature: "Self-hosted version",
         selfHosted: "Yes",
         cloud: "No",
-        cloudPlus: "WIP",
-        cloudPro: "WIP"
+        cloudPlus: "No",
+        cloudPro: "Yes"
     }, {
         feature: "Custom login screen",
         selfHosted: "Yes",
         cloud: "No",
-        cloudPlus: "WIP",
-        cloudPro: "WIP"
+        cloudPlus: "No",
+        cloudPro: "Yes"
     }, {
-        feature: "Theme and logo customisation",
+        feature: "Full theme customization",
         selfHosted: "Yes",
         cloud: "No",
-        cloudPlus: "WIP",
-        cloudPro: "WIP"
+        cloudPlus: "No",
+        cloudPro: "Yes"
+    }, {
+        feature: "CMS components customization",
+        selfHosted: "Yes",
+        cloud: "No",
+        cloudPlus: "No",
+        cloudPro: "Yes"
     }, {
         feature: "Text search",
         selfHosted: "Dev managed",
         cloud: "No",
-        cloudPlus: "No",
-        cloudPro: "WIP"
+        cloudPlus: "Dev managed",
+        cloudPro: "Dev managed"
     }, {
         feature: "Custom domain",
         selfHosted: "No",
@@ -204,15 +216,15 @@ export function VersionsComparison() {
                             className="border-none rounded-lg md:px-6 py-6 invisible">
                         </th>
                         <th scope="col"
-                            className="border-none rounded-lg text-base md:px-6 md:py-4 text-center ">
+                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center w-[90px]">
                             Free
                         </th>
                         <th scope="col"
-                            className="border-none rounded-lg text-base md:px-6 md:py-4 text-center">
+                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center w-[90px]">
                             Plus
                         </th>
                         <th scope="col"
-                            className="border-none rounded-lg text-base md:px-6 md:py-4 text-center ">
+                            className="border-none rounded-lg text-base md:px-4 md:py-4 text-center w-[90px]">
                             Pro
                         </th>
                         {/*<th scope="col"*/}
@@ -227,7 +239,7 @@ export function VersionsComparison() {
                         (
                             <tr className="border-b ">
                                 <td scope="row"
-                                    className="bg-gray-50 mx-2 dark:bg-gray-900 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-300 font-bold">
+                                    className="bg-gray-50 mx-2 dark:bg-gray-900 border-none rounded-lg px-6 py-2 text-gray-800 dark:text-gray-300 font-bold">
                                     {row.feature}
                                 </td>
                                 <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.cloud)}>
@@ -239,7 +251,7 @@ export function VersionsComparison() {
                                 <td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.cloudPro)}>
                                     {getFeatureComponent(row.cloudPro)}
                                 </td>
-                                {/*<td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-4 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.selfHosted)}>*/}
+                                {/*<td className={"bg-gray-50 mx-2 dark:bg-gray-800 border-none rounded-lg px-6 py-2 text-gray-800 dark:text-gray-200 text-center " + getEntryClass(row.selfHosted)}>*/}
                                 {/*    {getFeatureComponent(row.selfHosted)}*/}
                                 {/*</td>*/}
                             </tr>
@@ -265,7 +277,7 @@ export function VersionsComparison() {
                             </a>
                         </th>
                         {/*<a*/}
-                        {/*    className={CTAOutlinedButtonMixin + " table-cell md:px-4"}*/}
+                        {/*    className={CTAOutlinedButtonMixin + " table-cell md:px-6"}*/}
                         {/*    href={useBaseUrl("docs/")}*/}
                         {/*>*/}
                         {/*    Self-hosted docs*/}

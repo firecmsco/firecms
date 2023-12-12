@@ -13,7 +13,7 @@ import {
 } from "firebase/auth";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { buildProjectsApi } from "../api/projects";
-import { clearDelegatedLoginTokensCache, FirebaseSignInOption, FirebaseSignInProvider } from "@firecms/firebase";
+import { clearDelegatedLoginTokensCache } from "../utils";
 
 const AUTH_SCOPES = [
     "https://www.googleapis.com/auth/cloud-platform"

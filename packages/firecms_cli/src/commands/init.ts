@@ -351,7 +351,6 @@ async function getProjects(env: "prod" | "dev", onErr?: (e: any) => void) {
             },
         });
 
-        console.log("status", response.status);
         if (response.status >= 400) {
             console.log(response.data.data?.message);
             return null;

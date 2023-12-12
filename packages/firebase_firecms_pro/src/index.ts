@@ -1,5 +1,5 @@
-export { FirebaseCMSApp } from "./FirebaseCMSApp";
-export type { FirebaseCMSAppProps } from "./FirebaseCMSAppProps";
+export { FireCMSProApp } from "./FireCMSProApp";
+export type { FireCMSProAppProps } from "./FireCMSProAppProps";
 
 export type { FirebaseLoginViewProps } from "./components/FirebaseLoginView";
 export { FirebaseLoginView, LoginButton } from "./components/FirebaseLoginView";

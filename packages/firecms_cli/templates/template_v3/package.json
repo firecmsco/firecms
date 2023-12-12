@@ -10,7 +10,7 @@
     "deploy": "run-s build && firecms deploy --project=[REPLACE_WITH_PROJECT_ID]"
   },
   "dependencies": {
-    "@firecms/firebase": "^3.0.0-alpha.23",
+    "firecms": "^3.0.0-alpha.36",
     "firebase": "^10.5.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

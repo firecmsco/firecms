@@ -1,5 +1,5 @@
 import React from "react"
-import { FireCMS3App } from "@firecms/firebase";
+import { FireCMS3App } from "firecms";
 import appConfig from "./index";
 
 function App() {

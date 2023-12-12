@@ -13,9 +13,8 @@ Firestore does not support native text search, so we need to rely on external
 solutions. If you specify a `textSearchEnabled` flag to the **collection**, you
 will see a search bar on top of the collection view.
 
-You need to define a `FirestoreTextSearchController` and pass it to your
-`FireCMS3App` component (or `useFirestoreDataSource` if you are building a
-custom app). Typically, you will want to index your entities in some external
+You need to define a `FirestoreTextSearchController` and pass it to your app config.
+Typically, you will want to index your entities in some external
 solution, such as Algolia. For this to work you need to set up an AlgoliaSearch
 account and manage the indexing of your documents. 
 

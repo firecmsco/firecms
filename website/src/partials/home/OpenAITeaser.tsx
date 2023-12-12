@@ -62,7 +62,7 @@ function OpenAITeaser() {
                             className="mt-5 sm:mt-8">
                             <a href={useBaseUrl("openai/")}
                                className={CTAButtonMixin}>
-                                Learn more
+                                About this integration
                                 <CTACaret/>
                             </a>
 

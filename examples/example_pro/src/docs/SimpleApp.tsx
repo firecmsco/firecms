@@ -2,7 +2,7 @@ import React, { useCallback } from "react";
 
 import { User as FirebaseUser } from "firebase/auth";
 import { buildCollection, buildProperty, EntityReference, } from "@firecms/core";
-import { Authenticator, FirebaseCMSApp } from "@firecms/firebase_pro";
+import { Authenticator, FireCMSProApp } from "@firecms/firebase_pro";
 
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
@@ -197,7 +197,7 @@ export default function App() {
         return true;
     }, []);
 
-    return <FirebaseCMSApp
+    return <FireCMSProApp
         name={"My Online Shop"}
         authentication={myAuthenticator}
         collections={[productsCollection]}

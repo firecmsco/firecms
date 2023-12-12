@@ -5,11 +5,11 @@ import {
     Entity,
     FetchCollectionProps,
     FetchEntityProps,
-    ResolvedProperty,
+    useBuildDataSource,
     SaveEntityProps,
 } from "@firecms/core";
 import { FirebaseApp } from "firebase/app";
-import { useFirestoreDataSource } from "@firecms/firebase_pro";
+import { useFirestoreDelegate } from "@firecms/firebase_pro";
 
 type CustomDataSourceProps = { firebaseApp?: FirebaseApp };
 
@@ -20,8 +20,12 @@ type CustomDataSourceProps = { firebaseApp?: FirebaseApp };
  */
 export function useCustomDatasource({ firebaseApp }: CustomDataSourceProps): DataSource {
 
-    const firestoreDataSource = useFirestoreDataSource({
-        firebaseApp
+    const firestoreDelegate = useFirestoreDelegate({
+        firebaseApp,
+    })
+
+    const firestoreDataSource = useBuildDataSource({
+        delegate: firestoreDelegate
     });
 
     return {

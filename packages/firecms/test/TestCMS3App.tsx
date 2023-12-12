@@ -32,26 +32,15 @@ import {
     PersistedCollection,
     useCollectionEditorPlugin
 } from "@firecms/collection_editor";
-import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
-import {
-    FireCMSBackEndProvider,
-    ProjectConfig,
-    ProjectConfigProvider,
-    useFirebaseStorageSource,
-    useFirestoreDataSource
-} from "../src/hooks";
+import { FireCMSBackEndProvider, ProjectConfig, ProjectConfigProvider } from "../src/hooks";
 
 import { FireCMS3AppProps } from "../src/FireCMS3AppProps";
 import {
-    FirebaseAuthController,
-    FirebaseSignInOption,
-    FirebaseSignInProvider,
-    FireCMSBackend,
     FireCMSAppConfig,
+    FireCMSBackend,
     FireCMSUser
 } from "../src/types";
-import { FirestoreTextSearchController } from "../src/types/text_search";
 import {
     ADMIN_VIEWS,
     getUserRoles,
@@ -59,10 +48,8 @@ import {
     resolveCollectionConfigPermissions,
     resolveUserRolePermissions
 } from "../src/utils";
-import { FireCMSDataEnhancementSubscriptionMessage, FireCMSDrawer, FireCMSLoginView } from "../src/components";
-import { buildCollectionInference } from "../src/collection_editor/infer_collection";
+import { FireCMSDrawer, FireCMSLoginView } from "../src/components";
 import { FireCMSProjectHomePage } from "../src/components/FireCMSProjectHomePage";
-import { getFirestoreDataInPath } from "../src/utils/database";
 import { useImportExportPlugin } from "../src/hooks/useImportExportPlugin";
 import { useBuildMockFireCMSBackend } from "./mocks/useBuildMockFireCMSBackend";
 import { useBuildMockProjectConfig } from "./mocks/useBuildMockProjectConfig";
@@ -71,6 +58,7 @@ import { useMockDelegatedLogin } from "./mocks/useDelegatedLogin";
 import { useBuildMockCollectionsConfigController } from "./mocks/useBuildMockCollectionsConfigController";
 import { useBuildMockDataSource } from "./mocks/useBuildMockDataSource";
 import { useBuildMockStorageSource } from "./mocks/useBuildMockStorageSource";
+import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, FirestoreTextSearchController } from "@firecms/firebase";
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services

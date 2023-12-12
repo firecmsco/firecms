@@ -26,7 +26,7 @@ import {
  * Main entry point that defines the CMS configuration
  * @category Firebase
  */
-export type FirebaseCMSAppProps = {
+export type FireCMSProAppProps = {
 
     /**
      * Name of the app, displayed as the main title and in the tab title

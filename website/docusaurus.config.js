@@ -22,12 +22,12 @@ module.exports = {
     plugins: [
         "docusaurus-tailwindcss-loader",
         "docusaurus-plugin-sass",
-        [
-            "docusaurus-plugin-typedoc",
-            {
-                watch: false,
-            }
-        ],
+        // [
+        //     "docusaurus-plugin-typedoc",
+        //     {
+        //         watch: false,
+        //     }
+        // ],
         function fontainePlugin(_context, _options) {
             return {
                 name: "fontaine-plugin",

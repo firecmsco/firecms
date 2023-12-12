@@ -7,17 +7,8 @@ import "@fontsource/roboto"
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { User as FirebaseUser } from "firebase/auth";
 
-import {
-    CMSView,
-    GitHubIcon,
-    IconButton,
-    Tooltip
-} from "@firecms/core";
-import {
-    Authenticator,
-    FirebaseCMSApp,
-    FirestoreIndexesBuilder,
-} from "@firecms/firebase_pro";
+import { CMSView, GitHubIcon, IconButton, Tooltip } from "@firecms/core";
+import { Authenticator, FireCMSProApp, FirestoreIndexesBuilder, } from "@firecms/firebase_pro";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
 
 import { firebaseConfig } from "../firebase_config";
@@ -149,7 +140,7 @@ function SampleApp() {
         return undefined;
     }
 
-    return <FirebaseCMSApp
+    return <FireCMSProApp
         name={"My Online Shop"}
         // appCheckOptions={appCheckOptions}
         authentication={myAuthenticator}
@@ -174,14 +165,16 @@ function SampleApp() {
         firebaseConfig={firebaseConfig}
         onFirebaseInit={onFirebaseInit}
         toolbarExtraWidget={githubLink}
-        LoginView={CustomLoginView}
+        components={{
+            LoginView: CustomLoginView
+        }}
         onAnalyticsEvent={onAnalyticsEvent}
         // autoOpenDrawer={true}
         propertyConfigs={[
             {
                 key: "test_custom_field",
                 name: "Test custom field",
-                property:{
+                property: {
                     dataType: "string",
                     Field: CustomColorTextField
                 }
