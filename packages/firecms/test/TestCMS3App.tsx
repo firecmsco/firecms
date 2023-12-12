@@ -50,7 +50,6 @@ import {
 } from "../src/utils";
 import { FireCMSDrawer, FireCMSLoginView } from "../src/components";
 import { FireCMSProjectHomePage } from "../src/components/FireCMSProjectHomePage";
-import { useImportExportPlugin } from "../src/hooks/useImportExportPlugin";
 import { useBuildMockFireCMSBackend } from "./mocks/useBuildMockFireCMSBackend";
 import { useBuildMockProjectConfig } from "./mocks/useBuildMockProjectConfig";
 import { useBuildMockAuthController } from "./mocks/useBuildMockAuthController";
@@ -59,6 +58,7 @@ import { useBuildMockCollectionsConfigController } from "./mocks/useBuildMockCol
 import { useBuildMockDataSource } from "./mocks/useBuildMockDataSource";
 import { useBuildMockStorageSource } from "./mocks/useBuildMockStorageSource";
 import { FirebaseAuthController, FirebaseSignInOption, FirebaseSignInProvider, FirestoreTextSearchController } from "@firecms/firebase";
+import { useImportExportPlugin } from "@firecms/data_import_export";
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services

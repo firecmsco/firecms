@@ -170,6 +170,7 @@ export function FireCMSProApp({
         </>;
     }
 
+
     return (
         <BrowserRouter basename={basePath}>
             <SnackbarProvider>

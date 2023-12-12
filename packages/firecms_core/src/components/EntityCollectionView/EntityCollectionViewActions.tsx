@@ -6,6 +6,7 @@ import { CollectionActionsProps, EntityCollection, SelectionController, TableCon
 import { Button, IconButton, Tooltip } from "../../ui";
 import { AddIcon, DeleteIcon } from "../../icons";
 import { toArray } from "../../util/arrays";
+import { ErrorBoundary } from "../ErrorBoundary";
 
 export type EntityCollectionViewActionsProps<M extends Record<string, any>> = {
     collection: EntityCollection<M>;
@@ -102,22 +103,25 @@ export function EntityCollectionViewActions<M extends Record<string, any>>({
         collectionEntitiesCount
     };
 
-    const allActions: React.ComponentType<any>[] = [];
-    allActions.push(...toArray(collection.Actions));
+    const actions = toArray(collection.Actions)
+        .map((Action, i) => (
+            <ErrorBoundary key={`actions_${i}`}>
+                <Action {...actionProps} />
+            </ErrorBoundary>
+        ));
+
     if (plugins) {
         plugins.forEach(plugin => {
             if (plugin.collections?.CollectionActions) {
-                allActions.push(...toArray(plugin.collections?.CollectionActions));
+                actions.push(...toArray(plugin.collections?.CollectionActions)
+                    .map((Action, i) => (
+                        <ErrorBoundary key={`plugin_actions_${i}`}>
+                            <Action {...actionProps} {...plugin.collections?.collectionActionsProps}/>
+                        </ErrorBoundary>
+                    )));
             }
         });
     }
-
-    const actions = <>
-            {allActions.map((Action, i) => (
-                <Action key={`actions_${i}`} {...actionProps} />
-            ))}
-        </>
-    ;
 
     return (
         <>

@@ -10,7 +10,9 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
-    Entity, EntityCollection, ExportConfig,
+    Entity,
+    EntityCollection,
+    ExportConfig,
     focusedMixin,
     GetAppIcon,
     IconButton,
@@ -24,17 +26,19 @@ import {
     User
 } from "@firecms/core";
 import { downloadExport } from "./export";
-import { SubscriptionPlanWidget } from "../components";
-import { useProjectConfig } from "../hooks";
 
 const DOCS_LIMIT = 500;
 
 export function ExportCollectionAction<M extends Record<string, any>, UserType extends User>({
                                                                                                  collection: inputCollection,
                                                                                                  path: inputPath,
-                                                                                                 collectionEntitiesCount
-                                                                                             }: CollectionActionsProps<M, UserType, EntityCollection<M, any>>) {
-    const { canExport } = useProjectConfig();
+                                                                                                 collectionEntitiesCount,
+                                                                                                 exportAllowed,
+                                                                                                 notAllowedView
+                                                                                             }: CollectionActionsProps<M, UserType, EntityCollection<M, any>> & {
+    exportAllowed?: (props: { collectionEntitiesCount: number, path: string, collection: EntityCollection }) => boolean;
+    notAllowedView?: React.ReactNode;
+}) {
 
     const exportConfig = typeof inputCollection.exportable === "object" ? inputCollection.exportable : undefined;
 
@@ -49,7 +53,13 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
 
     const path = navigationContext.resolveAliasesFrom(inputPath);
 
-    const exportNotAllowed = !canExport && collectionEntitiesCount > DOCS_LIMIT;
+    const canExport = !exportAllowed || exportAllowed({
+        collectionEntitiesCount,
+        path,
+        collection: inputCollection
+    });
+
+    console.log("canExport", canExport)
 
     const collection: ResolvedEntityCollection<M> = React.useMemo(() => resolveCollection({
         collection: inputCollection,
@@ -208,8 +218,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
                     onValueChange={setFlattenArrays}
                     label={"Flatten arrays"}/>
 
-                {exportNotAllowed && <SubscriptionPlanWidget showForPlans={["free"]}
-                                                             message={`Upgrade to export more than ${DOCS_LIMIT} entities`}/>}
+                {!canExport && notAllowedView}
 
             </DialogContent>
 
@@ -224,7 +233,7 @@ export function ExportCollectionAction<M extends Record<string, any>, UserType e
 
                 <Button variant="filled"
                         onClick={onOkClicked}
-                        disabled={dataLoading || exportNotAllowed}>
+                        disabled={dataLoading || !canExport}>
                     Download
                 </Button>
 

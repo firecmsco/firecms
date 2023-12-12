@@ -28,7 +28,7 @@ import { FirebaseCMSApp } from "@firecms/core";
 import "typeface-rubik";
 import "@fontsource/ibm-plex-mono";
 
-import { useDataImportPlugin } from "@firecms/data_import";
+import { useDataImportPlugin } from "@firecms/data_import_export";
 
 // TODO: Replace with your Firebase config
 const firebaseConfig = {

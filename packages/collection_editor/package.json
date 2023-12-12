@@ -14,7 +14,7 @@
     "./package.json": "./package.json"
   },
   "dependencies": {
-    "@firecms/data_import": "^3.0.0-alpha.37",
+    "@firecms/data_import_export": "^3.0.0-alpha.37",
     "@firecms/schema_inference": "^3.0.0-alpha.37",
     "json5": "^2.2.3",
     "prism-react-renderer": "^2.3.0"

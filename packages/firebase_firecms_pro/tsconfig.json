@@ -37,6 +37,9 @@
       ],
       "@firecms/core": [
         "../firecms_core/src/index.ts"
+      ],
+      "@firecms/data_import_export": [
+        "../data_import_export/src/index.ts"
       ]
     }
   },

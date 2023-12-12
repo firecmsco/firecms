@@ -14,7 +14,7 @@
     "packages/saas",
     "packages/collection_editor",
     "packages/user_management",
-    "packages/data_import",
+    "packages/data_import_export",
     "packages/schema_inference",
     "packages/data_enhancement",
     "examples/example_v3",

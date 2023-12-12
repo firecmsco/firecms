@@ -7,7 +7,7 @@
     "@firecms/collection_editor": "^3.0.0-alpha.37",
     "@firecms/core": "^3.0.0-alpha.37",
     "@firecms/data_enhancement": "^3.0.0-alpha.37",
-    "@firecms/data_import": "^3.0.0-alpha.37",
+    "@firecms/data_import_export": "^3.0.0-alpha.37",
     "@firecms/firebase_pro": "^3.0.0-alpha.37",
     "@firecms/schema_inference": "^3.0.0-alpha.37",
     "algoliasearch": "^4.17.1",

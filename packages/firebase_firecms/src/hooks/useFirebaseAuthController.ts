@@ -212,10 +212,6 @@ export const useFirebaseAuthController = ({
         doOauthLogin(auth, provider);
     }, [doOauthLogin, getProviderOptions]);
 
-    console.log({
-        authLoading,
-    })
-
     return {
         user: loggedUser ?? null,
         setUser: updateUser,

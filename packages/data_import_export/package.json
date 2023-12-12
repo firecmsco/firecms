@@ -1,5 +1,5 @@
 {
-  "name": "@firecms/data_import",
+  "name": "@firecms/data_import_export",
   "version": "3.0.0-alpha.37",
   "access": "public",
   "main": "./dist/index.umd.js",

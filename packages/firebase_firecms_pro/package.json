@@ -17,6 +17,7 @@
   "dependencies": {
     "@firecms/core": "^3.0.0-alpha.37",
     "@firecms/firebase": "^3.0.0-alpha.37",
+    "@firecms/data_import_export": "^3.0.0-alpha.37",
     "@types/node": "^20.8.9",
     "firebase": "^10.5.2",
     "typescript": "^5.2.2"

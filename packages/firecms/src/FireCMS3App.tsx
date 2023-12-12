@@ -54,9 +54,13 @@ import {
     resolveCollectionConfigPermissions,
     resolveUserRolePermissions
 } from "./utils";
-import { FireCMSDataEnhancementSubscriptionMessage, FireCMSDrawer, FireCMSLoginView } from "./components";
+import {
+    FireCMSDataEnhancementSubscriptionMessage,
+    FireCMSDrawer,
+    FireCMSLoginView,
+    SubscriptionPlanWidget
+} from "./components";
 import { FireCMSProjectHomePage } from "./components/FireCMSProjectHomePage";
-import { useImportExportPlugin } from "./hooks/useImportExportPlugin";
 import {
     buildCollectionInference,
     FirebaseAuthController,
@@ -66,6 +70,9 @@ import {
     useFirestoreDelegate,
     useInitialiseFirebase
 } from "@firecms/firebase";
+import { useImportExportPlugin } from "@firecms/data_import_export";
+
+const DOCS_LIMIT = 200;
 
 /**
  * This is the default implementation of a FireCMS app using the Firebase services
@@ -75,10 +82,6 @@ import {
  *
  * This component is in charge of initialising Firebase, with the given
  * configuration object.
- *
- * If you are building a larger app and need finer control, you can use
- * {@link FireCMS}, {@link Scaffold}, {@link SideDialogs}
- * and {@link NavigationRoutes} instead.
  *
  * @param props
  * @constructor
@@ -396,7 +399,14 @@ function FireCMS3AppAuthenticated({
         return map;
     }, [appConfig?.propertyConfigs]);
 
-    const importExportPlugin = useImportExportPlugin();
+    const importExportPlugin = useImportExportPlugin({
+        exportAllowed: ({ collectionEntitiesCount }) => {
+            console.log("collectionEntitiesCount", collectionEntitiesCount);
+            return currentProjectController.canExport || collectionEntitiesCount <= DOCS_LIMIT;
+        },
+        notAllowedView: <SubscriptionPlanWidget showForPlans={["free"]}
+                                                message={`Upgrade to export more than ${DOCS_LIMIT} entities`}/>
+    });
 
     const collectionEditorPlugin = useCollectionEditorPlugin<PersistedCollection, User>({
         collectionConfigController,
@@ -418,13 +428,6 @@ function FireCMS3AppAuthenticated({
         SubscriptionMessage: FireCMSDataEnhancementSubscriptionMessage,
         host: fireCMSBackend.backendApiHost,
     });
-
-    // const {
-    //     appCheckLoading,
-    // } = useInitializeAppCheck({
-    //     firebaseApp,
-    //     options: appConfig.appCheckOptions
-    // });
 
     /**
      * Update the browser title and icon

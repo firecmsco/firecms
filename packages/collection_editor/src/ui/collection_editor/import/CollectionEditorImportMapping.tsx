@@ -3,7 +3,7 @@ import {
     getInferenceType,
     ImportConfig,
     ImportNewPropertyFieldPreview
-} from "@firecms/data_import";
+} from "@firecms/data_import_export";
 import { getIn, useFormikContext } from "formik";
 
 import {

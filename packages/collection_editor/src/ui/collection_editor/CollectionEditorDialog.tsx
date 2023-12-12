@@ -43,7 +43,7 @@ import { SubcollectionsEditTab } from "./SubcollectionsEditTab";
 import { CollectionsConfigController } from "../../types/config_controller";
 import { CollectionEditorWelcomeView } from "./CollectionEditorWelcomeView";
 import { CollectionInference } from "../../types/collection_inference";
-import { getInferenceType, ImportSaveInProgress, useImportConfig } from "@firecms/data_import";
+import { getInferenceType, ImportSaveInProgress, useImportConfig } from "@firecms/data_import_export";
 import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
 import { CollectionEditorImportMapping } from "./import/CollectionEditorImportMapping";
 import { CollectionEditorImportDataPreview } from "./import/CollectionEditorImportDataPreview";

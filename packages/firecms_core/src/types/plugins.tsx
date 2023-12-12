@@ -13,7 +13,7 @@ import { ResolvedProperty } from "./resolved_entities";
  * NOTE: This is a work in progress and the API is not stable yet.
  * @group Core
  */
-export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection> = {
+export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollection = EntityCollection, COL_ACTIONS_PROPS = any> = {
 
     /**
      * Name of the plugin
@@ -41,7 +41,9 @@ export type FireCMSPlugin<PROPS = any, FORM_PROPS = any, EC extends EntityCollec
          * Use this component to add custom actions to the entity collections
          * toolbar.
          */
-        CollectionActions?: React.ComponentType<CollectionActionsProps<any, any, EC>> | React.ComponentType<CollectionActionsProps<any, any, EC>>[];
+        CollectionActions?: React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_PROPS> | React.ComponentType<CollectionActionsProps<any, any, EC> & COL_ACTIONS_PROPS>[];
+
+        collectionActionsProps?: COL_ACTIONS_PROPS;
 
     }
 

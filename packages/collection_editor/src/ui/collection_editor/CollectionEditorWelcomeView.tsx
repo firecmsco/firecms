@@ -17,7 +17,7 @@ import { useFormikContext } from "formik";
 import { productsCollectionTemplate } from "./templates/products_template";
 import { blogCollectionTemplate } from "./templates/blog_template";
 import { usersCollectionTemplate } from "./templates/users_template";
-import { ImportFileUpload } from "@firecms/data_import";
+import { ImportFileUpload } from "@firecms/data_import_export";
 
 export function CollectionEditorWelcomeView({
                                                 path,

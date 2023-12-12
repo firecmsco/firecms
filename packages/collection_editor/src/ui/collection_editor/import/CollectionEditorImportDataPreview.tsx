@@ -1,4 +1,4 @@
-import { convertDataToEntity, getPropertiesMapping, ImportConfig } from "@firecms/data_import";
+import { convertDataToEntity, getPropertiesMapping, ImportConfig } from "@firecms/data_import_export";
 import { EntityCollectionTable, Properties, Typography, useSelectionController } from "@firecms/core";
 import { useEffect } from "react";
 

@@ -1536,7 +1536,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@firecms/collection_editor@workspace:packages/collection_editor"
   dependencies:
-    "@firecms/data_import": ^3.0.0-alpha.37
+    "@firecms/data_import_export": ^3.0.0-alpha.37
     "@firecms/schema_inference": ^3.0.0-alpha.37
     "@jest/globals": ^29.7.0
     "@types/react": ^18.2.33
@@ -1685,9 +1685,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"@firecms/data_import@^3.0.0-alpha.37, @firecms/data_import@workspace:packages/data_import":
+"@firecms/data_import_export@^3.0.0-alpha.37, @firecms/data_import_export@workspace:packages/data_import_export":
   version: 0.0.0-use.local
-  resolution: "@firecms/data_import@workspace:packages/data_import"
+  resolution: "@firecms/data_import_export@workspace:packages/data_import_export"
   dependencies:
     "@firecms/core": ^3.0.0-alpha.37
     "@firecms/schema_inference": ^3.0.0-alpha.37
@@ -1730,7 +1730,7 @@ __metadata:
     "@firecms/collection_editor": ^3.0.0-alpha.37
     "@firecms/core": ^3.0.0-alpha.37
     "@firecms/data_enhancement": ^3.0.0-alpha.37
-    "@firecms/data_import": ^3.0.0-alpha.37
+    "@firecms/data_import_export": ^3.0.0-alpha.37
     "@firecms/schema_inference": ^3.0.0-alpha.37
     "@types/node": ^20.8.9
     "@types/react": ^18.2.33
@@ -8018,7 +8018,7 @@ __metadata:
     "@firecms/collection_editor": ^3.0.0-alpha.37
     "@firecms/core": ^3.0.0-alpha.37
     "@firecms/data_enhancement": ^3.0.0-alpha.37
-    "@firecms/data_import": ^3.0.0-alpha.37
+    "@firecms/data_import_export": ^3.0.0-alpha.37
     "@firecms/firebase_pro": ^3.0.0-alpha.37
     "@firecms/schema_inference": ^3.0.0-alpha.37
     "@types/react": ^18.2.8
@@ -8065,7 +8065,7 @@ __metadata:
     "@firecms/collection_editor": ^3.0.0-alpha.37
     "@firecms/core": ^3.0.0-alpha.37
     "@firecms/data_enhancement": ^3.0.0-alpha.37
-    "@firecms/data_import": ^3.0.0-alpha.37
+    "@firecms/data_import_export": ^3.0.0-alpha.37
     "@firecms/firebase": ^3.0.0-alpha.37
     "@firecms/schema_inference": ^3.0.0-alpha.37
     "@types/node": ^20.8.9
@@ -13506,7 +13506,7 @@ __metadata:
     "@firecms/collection_editor": ^3.0.0-alpha.37
     "@firecms/core": ^3.0.0-alpha.37
     "@firecms/data_enhancement": ^3.0.0-alpha.37
-    "@firecms/data_import": ^3.0.0-alpha.37
+    "@firecms/data_import_export": ^3.0.0-alpha.37
     "@firecms/firebase": ^3.0.0-alpha.37
     "@firecms/schema_inference": ^3.0.0-alpha.37
     "@fontsource/roboto": ^5.0.8

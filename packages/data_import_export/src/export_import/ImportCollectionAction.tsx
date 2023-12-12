@@ -27,17 +27,11 @@ import {
     useSelectionController,
     useSnackbarController
 } from "@firecms/core";
-import {
-    convertDataToEntity,
-    DataNewPropertiesMapping,
-    getInferenceType,
-    getPropertiesMapping,
-    ImportConfig,
-    ImportFileUpload,
-    ImportSaveInProgress,
-    useImportConfig
-} from "@firecms/data_import";
 import { buildEntityPropertiesFromData } from "@firecms/schema_inference";
+import { useImportConfig } from "../hooks";
+import { convertDataToEntity, getInferenceType, getPropertiesMapping } from "../utils";
+import { DataNewPropertiesMapping, ImportFileUpload, ImportSaveInProgress } from "../components";
+import { ImportConfig } from "../types";
 
 type ImportState = "initial" | "mapping" | "preview" | "import_data_saving";
 
@@ -105,6 +99,10 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
 
     const propertiesAndLevel = Object.entries(properties)
         .flatMap(([key, property]) => getPropertiesAndLevel(key, property, 0));
+    const propertiesOrder = (resolvedCollection.propertiesOrder ?? Object.keys(resolvedCollection.properties)) as Extract<keyof M, string>[];
+    if (collection.collectionGroup) {
+        return null;
+    }
     return <>
 
         <Tooltip title={"Import"}>
@@ -173,7 +171,7 @@ export function ImportCollectionAction<M extends Record<string, any>, UserType e
 
                 {step === "preview" && <ImportDataPreview importConfig={importConfig}
                                                           properties={properties as Properties<M>}
-                                                          propertiesOrder={resolvedCollection.propertiesOrder as Extract<keyof M, string>[]}/>}
+                                                          propertiesOrder={propertiesOrder}/>}
 
                 {step === "import_data_saving" && importConfig &&
                     <ImportSaveInProgress importConfig={importConfig}

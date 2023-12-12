@@ -10,6 +10,7 @@ import { User as FirebaseUser } from "firebase/auth";
 import { CMSView, GitHubIcon, IconButton, Tooltip } from "@firecms/core";
 import { Authenticator, FireCMSProApp, FirestoreIndexesBuilder, } from "@firecms/firebase_pro";
 import { useDataEnhancementPlugin } from "@firecms/data_enhancement";
+import { useImportExportPlugin } from "@firecms/data_import_export";
 
 import { firebaseConfig } from "../firebase_config";
 // import { publicRecaptchaKey } from "../appcheck_config";
@@ -116,6 +117,8 @@ function SampleApp() {
         }
     });
 
+    const importExportPlugin = useImportExportPlugin();
+
     const firestoreIndexesBuilder: FirestoreIndexesBuilder = ({ path }) => {
         if (path === "products") {
             return [
@@ -145,7 +148,7 @@ function SampleApp() {
         // appCheckOptions={appCheckOptions}
         authentication={myAuthenticator}
         allowSkipLogin={true}
-        plugins={[dataEnhancementPlugin]}
+        plugins={[importExportPlugin, dataEnhancementPlugin]}
         signInOptions={[
             "password",
             "google.com"
