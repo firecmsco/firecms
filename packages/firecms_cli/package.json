@@ -1,6 +1,6 @@
 {
   "name": "@firecms/cli",
-  "version": "3.0.0-alpha.36",
+  "version": "3.0.0-alpha.37",
   "description": "A CLI to perform FireCMS operations",
   "packageManager": "yarn@3.2.3",
   "main": "./build/index.js",
@@ -60,11 +60,11 @@
     "bin/",
     "build/",
     "src/",
-    "template/"
+    "templates/"
   ],
   "exclude": [
     "node_modules",
     "template/node_modules"
   ],
-  "gitHead": "f0f3ef616f13176166c193f98b8198f7fa53a1d2"
+  "gitHead": "80d437634caccc4400fa111504186eb13197bac1"
 }
